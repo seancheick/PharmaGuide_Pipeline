@@ -1,0 +1,4053 @@
+{
+  "provenance": "Field-projected current manifest-owned October29 2026 enriched/scored artifacts; exact row identities, quantities, label ledger and safety decisions retained. Not a scoring fixture or new clinical determination.",
+  "products": {
+    "252358": {
+      "enriched": {
+        "id": "252358",
+        "dsld_id": "252358",
+        "product_name": "EDTA Disodium",
+        "source_type": null,
+        "manual_product_provenance": null,
+        "display_ingredients": [
+          {
+            "raw_source_text": "EDTA Disodium",
+            "display_name": "EDTA Disodium",
+            "label_display_name": "EDTA Disodium",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": true,
+            "canonical_id": null,
+            "label_display_form": null,
+            "raw_source_path": "ingredientRows[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "500 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 0,
+            "serving_size_order": 1,
+            "serving_size_quantity": 500,
+            "serving_size_unit": "mg",
+            "raw_category": "non-nutrient/non-botanical",
+            "ingredient_group": "EDTA",
+            "children": [],
+            "is_label_context": false,
+            "display_disposition": "scored",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_disclosed",
+            "ledger_fingerprint": "db5d209a2914f266b4a1b0882e489415e8c77ea560f58aac9d057e8a2afb5480",
+            "mapped_to": {
+              "standard_name": "EDTA Disodium",
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[0]"
+            }
+          }
+        ],
+        "label_source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "EDTA Disodium",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "None",
+            "source_section": "inactiveIngredients"
+          }
+        ],
+        "ingredient_quality_data": {
+          "ingredients": [
+            {
+              "name": "EDTA Disodium",
+              "raw_source_text": "EDTA Disodium",
+              "standard_name": "EDTA Disodium",
+              "canonical_id": null,
+              "canonical_source_db": "unmapped",
+              "cleaner_match_method": null,
+              "matched_form": null,
+              "matched_forms": [],
+              "extracted_forms": [],
+              "skip_reason": "recognized_non_scorable",
+              "bio_score": null,
+              "notes": null,
+              "category": "unknown",
+              "quantity": 500.0,
+              "unit": "mg",
+              "unit_normalized": "mg",
+              "dailyValue": null,
+              "has_dose": true,
+              "is_blend_header": false,
+              "is_proprietary_blend": false,
+              "blend_total_weight_only": false,
+              "blend_disclosed_components_count": 0,
+              "is_excipient": true,
+              "never_promote_reason": "excipient_never_promote",
+              "recognition_source": "banned_recalled_ingredients",
+              "recognition_reason": "banned",
+              "recognition_type": "non_scorable",
+              "recognized_entry_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+              "recognized_entry_name": "Edetate Disodium",
+              "mapped": false,
+              "mapped_identity": false,
+              "scoreable_identity": false,
+              "role_classification": "active_unmapped",
+              "identity_confidence": 0.0,
+              "identity_decision_reason": "safety_recognition_without_primary_identity",
+              "safety_hits": [],
+              "certificates": [],
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[0]",
+              "cleaner_row_role": "active_scorable",
+              "score_eligible_by_cleaner": true,
+              "score_exclusion_reason": "recognized_non_scorable",
+              "dose_class": "therapeutic_mass",
+              "raw_taxonomy": {
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "EDTA",
+                "ingredientId": 281894,
+                "uniiCode": null,
+                "forms": [],
+                "parentBlend": null,
+                "isNestedIngredient": false,
+                "nested_depth": 0,
+                "quantityVariants": [
+                  {
+                    "quantity": 500.0,
+                    "unit": "mg",
+                    "index": 0,
+                    "operator": "=",
+                    "quantity_parsed": true,
+                    "serving_size_order": 1,
+                    "serving_size_quantity": 500,
+                    "serving_size_unit": "mg",
+                    "daily_value_target_group": "adult_4_plus",
+                    "selected_for_analysis": true
+                  }
+                ]
+              },
+              "plantPart": null,
+              "hierarchyType": null,
+              "form_extraction_used": false,
+              "is_dual_form": false,
+              "original_label": "EDTA Disodium",
+              "unmapped_forms": [],
+              "aggregation_method": null,
+              "final_form_bio_score": null,
+              "additional_forms": [],
+              "form_source": null,
+              "form_id": null,
+              "form_match_status": "n/a",
+              "matched_alias": null,
+              "matched_target": null,
+              "match_tier": null,
+              "fallback_class": "clinical_fail_safe",
+              "fallback_reason": "recognized_non_scorable",
+              "normalized_key": "edta_disodium",
+              "source_label_key": "label:edta disodium:edta disodium:500:mg",
+              "source_label_name": "EDTA Disodium",
+              "source_label_form": null,
+              "label_display_name": "EDTA Disodium",
+              "label_display_form": null,
+              "identity_disposition": "identity_conflict",
+              "canonical_id_before": null,
+              "canonical_id_after": null,
+              "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"EDTA Disodium\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"EDTA Disodium\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"EDTA\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"EDTA\"}]",
+              "identity_resolution_rationale": "Safety recognition does not establish a verified primary identity; the source ingredient remains unresolved.",
+              "identity_taxonomy_coherent": false,
+              "absorption": null,
+              "recognized_non_scorable": true,
+              "matched_entry_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+              "matched_entry_name": "Edetate Disodium",
+              "safety_identity_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+              "delivers_markers": []
+            }
+          ]
+        },
+        "activeIngredients": [
+          {
+            "ingredientId": 281894,
+            "uniiCode": null,
+            "order": 1,
+            "raw_category": "non-nutrient/non-botanical",
+            "raw_source_text": "EDTA Disodium",
+            "branded_token_extracted": null,
+            "canonical_id": null,
+            "canonical_source_db": "unmapped",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[0]",
+            "normalized_key": "edta_disodium",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": true,
+            "score_exclusion_reason": null,
+            "dose_class": "therapeutic_mass",
+            "raw_taxonomy": {
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "EDTA",
+              "ingredientId": 281894,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 500.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "operator": "=",
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 500,
+                  "serving_size_unit": "mg",
+                  "daily_value_target_group": "adult_4_plus",
+                  "selected_for_analysis": true
+                }
+              ]
+            },
+            "name": "EDTA Disodium",
+            "label_display_name": null,
+            "standardName": "EDTA Disodium",
+            "ingredientGroup": "EDTA",
+            "quantity": 500.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [],
+            "alternateNames": [],
+            "mapped": false,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": null,
+            "safety_flags": [
+              {
+                "entry_id": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+                "source_db": "banned_recalled_ingredients",
+                "status": "banned",
+                "severity": "critical",
+                "match_type": "alias",
+                "matched_variant": "EDTA Disodium",
+                "evidence_text": "EDTA Disodium",
+                "confidence": "high",
+                "jurisdictions": [
+                  {
+                    "region": "US",
+                    "level": "federal",
+                    "status": "not_lawful",
+                    "effective_date": "2016-02-02",
+                    "source": {
+                      "type": "fda_advisory",
+                      "citation": "FDA: no chelation product has ever been approved for over-the-counter use; FDA-approved chelation products require a prescription and clinical supervision.",
+                      "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+                      "accessed_date": "2026-09-21"
+                    },
+                    "jurisdiction_type": "country",
+                    "jurisdiction_code": "US",
+                    "last_verified_date": "2026-09-21"
+                  }
+                ],
+                "us_applicable": true,
+                "regional_advisories": []
+              }
+            ]
+          }
+        ],
+        "product_scoring_evidence": []
+      },
+      "scored": {
+        "dsld_id": "252358",
+        "product_name": "EDTA Disodium",
+        "brand_name": "BulkSupplements.com",
+        "evaluation_stage": "scored_v4",
+        "output_schema_version": "4.4.0",
+        "score_basis": "v4_six_pillar",
+        "delivery_data": {
+          "matched": false,
+          "systems": [],
+          "highest_tier": null
+        },
+        "not_scorable_reason": null,
+        "supplement_taxonomy": {
+          "primary_type": "general_supplement",
+          "secondary_type": null,
+          "percentile_category": "general_supplement",
+          "classification_confidence": 0.05,
+          "classification_reasons": [
+            "no quantified active ingredients",
+            "dsld_productType confirms: 'non-nutrient/non-botanical'"
+          ],
+          "classification_reason_codes": [
+            "no_quantified_active_evidence"
+          ],
+          "classification_input_source": "scoring_input_contract.quantified_label_active_rows",
+          "quantified_active_count": 0,
+          "distinct_active_identity_count": 0,
+          "quantified_active_row_count": 0,
+          "non_quantified_base_count": 0,
+          "category_breakdown": {},
+          "category_row_breakdown": {},
+          "dsld_product_type": "non-nutrient/non-botanical",
+          "classification_contract_version": "1.3.0",
+          "classification_input_contract": "quantified_label_actives",
+          "classification_row_evidence": [],
+          "unresolved_quantified_active_count": 0,
+          "quantified_label_active_count": 0,
+          "scorable_active_count": 0,
+          "is_single_scorable_active": false
+        },
+        "primary_type": "general_supplement",
+        "secondary_type": null,
+        "percentile_category": "general_supplement",
+        "category_percentile": {
+          "category_key": "general_supplement",
+          "category_label": "General Supplement"
+        },
+        "mapped_coverage": 0.0,
+        "unmapped_actives": [],
+        "unmapped_actives_total": 0,
+        "unmapped_actives_excluding_banned_exact_alias": 0,
+        "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+        "scoring_fallbacks_used": [],
+        "iqd_contract_diagnostics": {
+          "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+          "iqd_ingredients_fallback_used": false,
+          "ingredients_scorable_count": 0,
+          "scoring_rows_count": 0,
+          "rejected_rows_count": 0,
+          "rejected_rows": [],
+          "scoring_fallbacks_used": [],
+          "strict_contract_passed": true,
+          "strict_scoring_contract": {
+            "passed": true,
+            "findings": [],
+            "zero_scorable_reason": "no_strict_scoring_candidates"
+          },
+          "zero_scorable_reason": "no_strict_scoring_candidates",
+          "mapped_count": 0,
+          "unmapped_count": 0,
+          "mapped_coverage": 0.0,
+          "contract_findings": []
+        },
+        "strict_scoring_contract": {
+          "passed": true,
+          "findings": [],
+          "zero_scorable_reason": "no_strict_scoring_candidates"
+        },
+        "verdict": "BLOCKED",
+        "safety_verdict": "BLOCKED",
+        "blocking_reason": "NON_ROUTINE_CHELATOR",
+        "safety_signal_reason": "NON_ROUTINE_CHELATOR",
+        "safety_decision": {
+          "verdict": "BLOCKED",
+          "winning_rule": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+          "substance": "Edetate Disodium",
+          "matched_role": "active",
+          "matched_form": "EDTA Disodium",
+          "match_resolution": "confirmed",
+          "policy_basis": {
+            "status": "banned",
+            "legal_status": "not_lawful_as_supplement",
+            "ban_context": "substance",
+            "clinical_risk": "high",
+            "policy_verification_status": "verified",
+            "policy_verified_at": "2026-09-21"
+          },
+          "jurisdiction": "US",
+          "reason_code": "NON_ROUTINE_CHELATOR",
+          "verified_sources": [
+            {
+              "type": "fda_advisory",
+              "title": "Questions and Answers on Unapproved Chelation Products",
+              "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+              "date": "2016-02-02",
+              "evidence_grade": "R",
+              "evidence_summary": "FDA has never approved any chelation product for over-the-counter use for any health condition; all FDA-approved chelation products require a prescription.",
+              "supports_claims": [
+                "regulatory_status",
+                "policy_basis"
+              ]
+            },
+            {
+              "type": "fda_advisory",
+              "title": "FDA warns consumers about potential health risks from using Thorne Research's Captomer products",
+              "url": "https://www.fda.gov/drugs/drug-safety-and-availability/fda-warns-consumers-about-potential-health-risks-using-thorne-researchs-captomer-products",
+              "date": "2015-11-30",
+              "evidence_grade": "R",
+              "evidence_summary": "FDA advises consumers to avoid all products offered over the counter for chelation and states there are no FDA-approved OTC chelation products.",
+              "supports_claims": [
+                "regulatory_action"
+              ]
+            },
+            {
+              "jurisdiction": "US",
+              "last_verified_date": "2026-09-21",
+              "type": "fda_advisory",
+              "citation": "FDA: no chelation product has ever been approved for over-the-counter use; FDA-approved chelation products require a prescription and clinical supervision.",
+              "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+              "accessed_date": "2026-09-21"
+            }
+          ],
+          "source_db": "banned_recalled_ingredients"
+        },
+        "safety_review_records": [],
+        "flags": [],
+        "badges": [],
+        "quality_score_v4_100": null,
+        "quality_score_status": "suppressed_safety",
+        "quality_score_confidence": null,
+        "score_unavailable_reason": "blocked_by_safety_gate",
+        "route_decision": {
+          "module": "generic",
+          "reason_codes": [
+            "taxonomy:general_supplement"
+          ],
+          "confidence": "low",
+          "classifier_version": "1.3.2"
+        },
+        "route_confidence": "low",
+        "product_safety_status": "blocked",
+        "quality_assessment_status": "complete",
+        "assessment_readiness": {
+          "schema_version": "1.0.0",
+          "enforcement_mode": "enforced",
+          "input_contract_version": "1.0.0",
+          "enforced_dimensions": [
+            "dose",
+            "identity",
+            "route",
+            "verification"
+          ],
+          "catalog_disposition": {
+            "disposition": "requires_remediation",
+            "reason_code": "no_score_eligible_active_rows",
+            "evidence_paths": []
+          },
+          "identity": {
+            "readiness": "incomplete",
+            "reason_code": "no_score_eligible_active_rows",
+            "mapped_count": 0,
+            "unmapped_count": 0,
+            "mapped_coverage": 0.0,
+            "product_evidence_count": 0,
+            "mapped_product_evidence_count": 0,
+            "contract_findings": [],
+            "blocking_contract_findings": [],
+            "source_score_eligible_active_count": 0,
+            "source_mapped_count": 0,
+            "source_unmapped_count": 0,
+            "source_mapped_coverage": null,
+            "zero_scorable_reason": "no_strict_scoring_candidates",
+            "module": "generic",
+            "module_relevant_identity": true
+          },
+          "dose": {
+            "readiness": "not_applicable",
+            "reason_code": "no_score_eligible_active_rows",
+            "collection_status": null,
+            "assessment_count": 0,
+            "material_active_count": 0,
+            "material_exposure_count": 0,
+            "material_assessment_count": 0
+          },
+          "evidence": {
+            "readiness": "not_applicable",
+            "material_active_count": 0,
+            "individual_assessment_count": 0,
+            "applicability_counts": {},
+            "not_yet_evaluated_count": 0,
+            "not_yet_evaluated_row_refs": [],
+            "ingredient_assessments": [],
+            "resolved_evidence_match_count": 0,
+            "recovered_evidence_ids": []
+          },
+          "verification": {
+            "state": "verified_absent",
+            "readiness": "complete",
+            "reason_code": "registry_evaluated_no_match",
+            "matched_programs": [],
+            "registry_schema_version": "6.0.0",
+            "registry_source_count": 9
+          },
+          "route": {
+            "readiness": "complete",
+            "module": "generic",
+            "reason_codes": [
+              "taxonomy:general_supplement"
+            ],
+            "route_confidence": "low",
+            "classifier_version": "1.3.2"
+          },
+          "is_live_ready": false,
+          "unavailable_reasons": [
+            "identity_assessment_readiness"
+          ],
+          "shadow_incomplete_dimensions": [],
+          "release_assessment": {
+            "is_complete": false,
+            "blockers": [
+              "identity_assessment_incomplete"
+            ],
+            "unfinished_source_assessment": null
+          }
+        },
+        "dose_safety_evaluation": {
+          "state_counts": {},
+          "conversion_failures": 0,
+          "flags": [],
+          "caffeine": null,
+          "dose_ceiling": null
+        },
+        "quality_tier": null,
+        "quality_score_suppressed_reason": "NON_ROUTINE_CHELATOR",
+        "raw_score_v4_100": null,
+        "quality_pillars_v4": null,
+        "score_100_equivalent": null,
+        "display_100": "N/A",
+        "grade": null,
+        "scoring_metadata": {
+          "scoring_version": "4.8.1",
+          "scored_date": "2026-10-29T13:26:40.449723+00:00"
+        },
+        "_score_model_version": "v4",
+        "_v4_module": "generic",
+        "_v4_module_breakdown": null,
+        "_v4_inactive_penalty_details": [],
+        "_v4_confidence_detail": null,
+        "_v4_quality_version": "1.31.0-evidence-no-automatic-exceptional",
+        "_v4_clean_label_flags": null,
+        "_v4_safety_gate": {
+          "verdict": "BLOCKED",
+          "blocking_reason": "NON_ROUTINE_CHELATOR",
+          "matched_substance": "Edetate Disodium",
+          "safety_signals": [],
+          "needs_review": false,
+          "short_circuits_scoring": true,
+          "safety_decision": {
+            "verdict": "BLOCKED",
+            "winning_rule": "BANNED_NON_ROUTINE_CHELATOR_EDETATE_DISODIUM",
+            "substance": "Edetate Disodium",
+            "matched_role": "active",
+            "matched_form": "EDTA Disodium",
+            "match_resolution": "confirmed",
+            "policy_basis": {
+              "status": "banned",
+              "legal_status": "not_lawful_as_supplement",
+              "ban_context": "substance",
+              "clinical_risk": "high",
+              "policy_verification_status": "verified",
+              "policy_verified_at": "2026-09-21"
+            },
+            "jurisdiction": "US",
+            "reason_code": "NON_ROUTINE_CHELATOR",
+            "verified_sources": [
+              {
+                "type": "fda_advisory",
+                "title": "Questions and Answers on Unapproved Chelation Products",
+                "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+                "date": "2016-02-02",
+                "evidence_grade": "R",
+                "evidence_summary": "FDA has never approved any chelation product for over-the-counter use for any health condition; all FDA-approved chelation products require a prescription.",
+                "supports_claims": [
+                  "regulatory_status",
+                  "policy_basis"
+                ]
+              },
+              {
+                "type": "fda_advisory",
+                "title": "FDA warns consumers about potential health risks from using Thorne Research's Captomer products",
+                "url": "https://www.fda.gov/drugs/drug-safety-and-availability/fda-warns-consumers-about-potential-health-risks-using-thorne-researchs-captomer-products",
+                "date": "2015-11-30",
+                "evidence_grade": "R",
+                "evidence_summary": "FDA advises consumers to avoid all products offered over the counter for chelation and states there are no FDA-approved OTC chelation products.",
+                "supports_claims": [
+                  "regulatory_action"
+                ]
+              },
+              {
+                "jurisdiction": "US",
+                "last_verified_date": "2026-09-21",
+                "type": "fda_advisory",
+                "citation": "FDA: no chelation product has ever been approved for over-the-counter use; FDA-approved chelation products require a prescription and clinical supervision.",
+                "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+                "accessed_date": "2026-09-21"
+              }
+            ],
+            "source_db": "banned_recalled_ingredients"
+          },
+          "quarantine_required": false,
+          "quarantine_reason": null,
+          "review_records": [],
+          "ingredient_assessment_complete": true,
+          "ingredient_assessment_errors": [],
+          "clean_label_hits": []
+        },
+        "_v4_completeness_gate": {
+          "module": "generic",
+          "is_live_eligible": false,
+          "verdict": "NOT_SCORED",
+          "reason": "incomplete_product_data",
+          "missing_fields": [
+            "score_eligible_active_identity",
+            "active_identity",
+            "identity_assessment_readiness"
+          ],
+          "soft_missing": [
+            "dose_not_disclosed"
+          ],
+          "mapped_coverage": 0.0,
+          "dose_coverage": null,
+          "checked_fields": [
+            "product_status_active",
+            "form_factor",
+            "active_identity",
+            "mapped_coverage",
+            "micronutrient_source_amounts",
+            "dose_assessment_readiness",
+            "identity_assessment_readiness",
+            "evidence_assessment_readiness",
+            "verification_assessment_readiness",
+            "route_assessment_readiness",
+            "dose_with_unit"
+          ],
+          "score_cap": null,
+          "verdict_ceiling": null
+        },
+        "_v4_provenance": {
+          "scoring_engine_version": "4.8.1",
+          "classification_schema_version": "1.3.0",
+          "config_versions": {
+            "omega": {
+              "version": "2.3.1-dose-v41-references",
+              "fingerprint": "439adb25868a79fd"
+            },
+            "quality_score": {
+              "version": "1.31.0-evidence-no-automatic-exceptional",
+              "fingerprint": "98d2a9e17f873e46"
+            }
+          },
+          "module_route": "generic",
+          "mode": "production"
+        },
+        "_v4_config_fingerprint": "{\"omega\": {\"fingerprint\": \"439adb25868a79fd\", \"version\": \"2.3.1-dose-v41-references\"}, \"quality_score\": {\"fingerprint\": \"98d2a9e17f873e46\", \"version\": \"1.31.0-evidence-no-automatic-exceptional\"}}"
+      }
+    },
+    "252426": {
+      "enriched": {
+        "id": "252426",
+        "dsld_id": "252426",
+        "product_name": "Calcium Disodium EDTA",
+        "source_type": null,
+        "manual_product_provenance": null,
+        "display_ingredients": [
+          {
+            "raw_source_text": "Calcium Disodium EDTA",
+            "display_name": "Calcium Disodium EDTA",
+            "label_display_name": "Calcium Disodium EDTA",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": true,
+            "canonical_id": null,
+            "label_display_form": null,
+            "raw_source_path": "ingredientRows[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "500 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 0,
+            "serving_size_order": 1,
+            "serving_size_quantity": 500,
+            "serving_size_unit": "mg",
+            "raw_category": "non-nutrient/non-botanical",
+            "ingredient_group": "EDTA",
+            "children": [],
+            "is_label_context": false,
+            "display_disposition": "scored",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_disclosed",
+            "ledger_fingerprint": "fdb41d5d717cef8decab2ef07f42a562df1dac1ee42376cd9e8f9099250f531c",
+            "mapped_to": {
+              "standard_name": "Calcium Disodium EDTA",
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[0]"
+            }
+          }
+        ],
+        "label_source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Calcium Disodium EDTA",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "None",
+            "source_section": "inactiveIngredients"
+          }
+        ],
+        "ingredient_quality_data": {
+          "ingredients": [
+            {
+              "name": "Calcium Disodium EDTA",
+              "raw_source_text": "Calcium Disodium EDTA",
+              "standard_name": "Calcium Disodium EDTA",
+              "canonical_id": null,
+              "canonical_source_db": "unmapped",
+              "cleaner_match_method": null,
+              "matched_form": null,
+              "matched_forms": [],
+              "extracted_forms": [],
+              "skip_reason": "recognized_non_scorable",
+              "bio_score": null,
+              "notes": null,
+              "category": "minerals",
+              "quantity": 500.0,
+              "unit": "mg",
+              "unit_normalized": "mg",
+              "dailyValue": null,
+              "has_dose": true,
+              "is_blend_header": false,
+              "is_proprietary_blend": false,
+              "blend_total_weight_only": false,
+              "blend_disclosed_components_count": 0,
+              "is_excipient": true,
+              "never_promote_reason": "excipient_never_promote",
+              "recognition_source": "banned_recalled_ingredients",
+              "recognition_reason": "banned",
+              "recognition_type": "non_scorable",
+              "recognized_entry_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+              "recognized_entry_name": "Edetate Calcium Disodium",
+              "mapped": false,
+              "mapped_identity": false,
+              "scoreable_identity": false,
+              "role_classification": "active_unmapped",
+              "identity_confidence": 0.0,
+              "identity_decision_reason": "safety_recognition_without_primary_identity",
+              "safety_hits": [],
+              "certificates": [],
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[0]",
+              "cleaner_row_role": "active_scorable",
+              "score_eligible_by_cleaner": true,
+              "score_exclusion_reason": "recognized_non_scorable",
+              "dose_class": "therapeutic_mass",
+              "raw_taxonomy": {
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "EDTA",
+                "ingredientId": 9281,
+                "uniiCode": null,
+                "forms": [],
+                "parentBlend": null,
+                "isNestedIngredient": false,
+                "nested_depth": 0,
+                "quantityVariants": [
+                  {
+                    "quantity": 500.0,
+                    "unit": "mg",
+                    "index": 0,
+                    "operator": "=",
+                    "quantity_parsed": true,
+                    "serving_size_order": 1,
+                    "serving_size_quantity": 500,
+                    "serving_size_unit": "mg",
+                    "daily_value_target_group": "adult_4_plus",
+                    "selected_for_analysis": true
+                  }
+                ]
+              },
+              "plantPart": null,
+              "hierarchyType": null,
+              "form_extraction_used": false,
+              "is_dual_form": false,
+              "original_label": "Calcium Disodium EDTA",
+              "unmapped_forms": [],
+              "aggregation_method": null,
+              "final_form_bio_score": null,
+              "additional_forms": [],
+              "form_source": null,
+              "form_id": null,
+              "form_match_status": "n/a",
+              "matched_alias": null,
+              "matched_target": null,
+              "match_tier": null,
+              "fallback_class": "clinical_fail_safe",
+              "fallback_reason": "recognized_non_scorable",
+              "normalized_key": "calcium_disodium_edta",
+              "source_label_key": "label:calcium disodium edta:calcium disodium edta:500:mg",
+              "source_label_name": "Calcium Disodium EDTA",
+              "source_label_form": null,
+              "label_display_name": "Calcium Disodium EDTA",
+              "label_display_form": null,
+              "identity_disposition": "identity_conflict",
+              "canonical_id_before": null,
+              "canonical_id_after": null,
+              "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Calcium Disodium EDTA\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Calcium Disodium EDTA\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"EDTA\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"EDTA\"}]",
+              "identity_resolution_rationale": "Safety recognition does not establish a verified primary identity; the source ingredient remains unresolved.",
+              "identity_taxonomy_coherent": false,
+              "absorption": null,
+              "recognized_non_scorable": true,
+              "matched_entry_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+              "matched_entry_name": "Edetate Calcium Disodium",
+              "safety_identity_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+              "delivers_markers": []
+            }
+          ]
+        },
+        "activeIngredients": [
+          {
+            "ingredientId": 9281,
+            "uniiCode": null,
+            "order": 1,
+            "raw_category": "non-nutrient/non-botanical",
+            "raw_source_text": "Calcium Disodium EDTA",
+            "branded_token_extracted": null,
+            "canonical_id": null,
+            "canonical_source_db": "unmapped",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[0]",
+            "normalized_key": "calcium_disodium_edta",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": true,
+            "score_exclusion_reason": null,
+            "dose_class": "therapeutic_mass",
+            "raw_taxonomy": {
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "EDTA",
+              "ingredientId": 9281,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 500.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "operator": "=",
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 500,
+                  "serving_size_unit": "mg",
+                  "daily_value_target_group": "adult_4_plus",
+                  "selected_for_analysis": true
+                }
+              ]
+            },
+            "name": "Calcium Disodium EDTA",
+            "label_display_name": null,
+            "standardName": "Calcium Disodium EDTA",
+            "ingredientGroup": "EDTA",
+            "quantity": 500.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [],
+            "alternateNames": [],
+            "mapped": false,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": null,
+            "safety_flags": [
+              {
+                "entry_id": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+                "source_db": "banned_recalled_ingredients",
+                "status": "banned",
+                "severity": "critical",
+                "match_type": "alias",
+                "matched_variant": "Calcium Disodium EDTA",
+                "evidence_text": "Calcium Disodium EDTA",
+                "confidence": "high",
+                "jurisdictions": [
+                  {
+                    "region": "US",
+                    "level": "federal",
+                    "status": "not_lawful",
+                    "effective_date": "2016-02-02",
+                    "source": {
+                      "type": "fda_advisory",
+                      "citation": "FDA: no chelation product has ever been approved for over-the-counter use; FDA-approved chelation products require a prescription and clinical supervision.",
+                      "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+                      "accessed_date": "2026-09-21"
+                    },
+                    "jurisdiction_type": "country",
+                    "jurisdiction_code": "US",
+                    "last_verified_date": "2026-09-21"
+                  }
+                ],
+                "us_applicable": true,
+                "regional_advisories": []
+              }
+            ]
+          }
+        ],
+        "product_scoring_evidence": []
+      },
+      "scored": {
+        "dsld_id": "252426",
+        "product_name": "Calcium Disodium EDTA",
+        "brand_name": "BulkSupplements.com",
+        "evaluation_stage": "scored_v4",
+        "output_schema_version": "4.4.0",
+        "score_basis": "v4_six_pillar",
+        "delivery_data": {
+          "matched": false,
+          "systems": [],
+          "highest_tier": null
+        },
+        "not_scorable_reason": null,
+        "supplement_taxonomy": {
+          "primary_type": "general_supplement",
+          "secondary_type": "calcium",
+          "percentile_category": "general_supplement",
+          "classification_confidence": 0.05,
+          "classification_reasons": [
+            "no quantified active ingredients",
+            "dsld_productType confirms: 'non-nutrient/non-botanical'"
+          ],
+          "classification_reason_codes": [
+            "no_quantified_active_evidence"
+          ],
+          "classification_input_source": "scoring_input_contract.quantified_label_active_rows",
+          "quantified_active_count": 0,
+          "distinct_active_identity_count": 0,
+          "quantified_active_row_count": 0,
+          "non_quantified_base_count": 0,
+          "category_breakdown": {},
+          "category_row_breakdown": {},
+          "dsld_product_type": "non-nutrient/non-botanical",
+          "classification_contract_version": "1.3.0",
+          "classification_input_contract": "quantified_label_actives",
+          "classification_row_evidence": [],
+          "unresolved_quantified_active_count": 0,
+          "quantified_label_active_count": 0,
+          "scorable_active_count": 0,
+          "is_single_scorable_active": false
+        },
+        "primary_type": "general_supplement",
+        "secondary_type": "calcium",
+        "percentile_category": "general_supplement",
+        "category_percentile": {
+          "category_key": "general_supplement",
+          "category_label": "General Supplement"
+        },
+        "mapped_coverage": 0.0,
+        "unmapped_actives": [],
+        "unmapped_actives_total": 0,
+        "unmapped_actives_excluding_banned_exact_alias": 0,
+        "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+        "scoring_fallbacks_used": [],
+        "iqd_contract_diagnostics": {
+          "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+          "iqd_ingredients_fallback_used": false,
+          "ingredients_scorable_count": 0,
+          "scoring_rows_count": 0,
+          "rejected_rows_count": 0,
+          "rejected_rows": [],
+          "scoring_fallbacks_used": [],
+          "strict_contract_passed": true,
+          "strict_scoring_contract": {
+            "passed": true,
+            "findings": [],
+            "zero_scorable_reason": "no_strict_scoring_candidates"
+          },
+          "zero_scorable_reason": "no_strict_scoring_candidates",
+          "mapped_count": 0,
+          "unmapped_count": 0,
+          "mapped_coverage": 0.0,
+          "contract_findings": []
+        },
+        "strict_scoring_contract": {
+          "passed": true,
+          "findings": [],
+          "zero_scorable_reason": "no_strict_scoring_candidates"
+        },
+        "verdict": "BLOCKED",
+        "safety_verdict": "BLOCKED",
+        "blocking_reason": "NON_ROUTINE_CHELATOR",
+        "safety_signal_reason": "NON_ROUTINE_CHELATOR",
+        "safety_decision": {
+          "verdict": "BLOCKED",
+          "winning_rule": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+          "substance": "Edetate Calcium Disodium",
+          "matched_role": "active",
+          "matched_form": "Calcium Disodium EDTA",
+          "match_resolution": "confirmed",
+          "policy_basis": {
+            "status": "banned",
+            "legal_status": "not_lawful_as_supplement",
+            "ban_context": "substance",
+            "clinical_risk": "high",
+            "policy_verification_status": "verified",
+            "policy_verified_at": "2026-09-21"
+          },
+          "jurisdiction": "US",
+          "reason_code": "NON_ROUTINE_CHELATOR",
+          "verified_sources": [
+            {
+              "type": "fda_advisory",
+              "title": "Questions and Answers on Unapproved Chelation Products",
+              "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+              "date": "2016-02-02",
+              "evidence_grade": "R",
+              "evidence_summary": "FDA has never approved any chelation product for over-the-counter use for any health condition; all FDA-approved chelation products require a prescription.",
+              "supports_claims": [
+                "regulatory_status",
+                "policy_basis"
+              ]
+            },
+            {
+              "type": "fda_advisory",
+              "title": "FDA warns consumers about potential health risks from using Thorne Research's Captomer products",
+              "url": "https://www.fda.gov/drugs/drug-safety-and-availability/fda-warns-consumers-about-potential-health-risks-using-thorne-researchs-captomer-products",
+              "date": "2015-11-30",
+              "evidence_grade": "R",
+              "evidence_summary": "FDA advises consumers to avoid all products offered over the counter for chelation and states there are no FDA-approved OTC chelation products.",
+              "supports_claims": [
+                "regulatory_action"
+              ]
+            },
+            {
+              "jurisdiction": "US",
+              "last_verified_date": "2026-09-21",
+              "type": "fda_advisory",
+              "citation": "FDA: no chelation product has ever been approved for over-the-counter use; FDA-approved chelation products require a prescription and clinical supervision.",
+              "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+              "accessed_date": "2026-09-21"
+            }
+          ],
+          "source_db": "banned_recalled_ingredients"
+        },
+        "safety_review_records": [],
+        "flags": [],
+        "badges": [],
+        "quality_score_v4_100": null,
+        "quality_score_status": "suppressed_safety",
+        "quality_score_confidence": null,
+        "score_unavailable_reason": "blocked_by_safety_gate",
+        "route_decision": {
+          "module": "generic",
+          "reason_codes": [
+            "taxonomy:general_supplement"
+          ],
+          "confidence": "low",
+          "classifier_version": "1.3.2"
+        },
+        "route_confidence": "low",
+        "product_safety_status": "blocked",
+        "quality_assessment_status": "complete",
+        "assessment_readiness": {
+          "schema_version": "1.0.0",
+          "enforcement_mode": "enforced",
+          "input_contract_version": "1.0.0",
+          "enforced_dimensions": [
+            "dose",
+            "identity",
+            "route",
+            "verification"
+          ],
+          "catalog_disposition": {
+            "disposition": "requires_remediation",
+            "reason_code": "no_score_eligible_active_rows",
+            "evidence_paths": []
+          },
+          "identity": {
+            "readiness": "incomplete",
+            "reason_code": "no_score_eligible_active_rows",
+            "mapped_count": 0,
+            "unmapped_count": 0,
+            "mapped_coverage": 0.0,
+            "product_evidence_count": 0,
+            "mapped_product_evidence_count": 0,
+            "contract_findings": [],
+            "blocking_contract_findings": [],
+            "source_score_eligible_active_count": 0,
+            "source_mapped_count": 0,
+            "source_unmapped_count": 0,
+            "source_mapped_coverage": null,
+            "zero_scorable_reason": "no_strict_scoring_candidates",
+            "module": "generic",
+            "module_relevant_identity": true
+          },
+          "dose": {
+            "readiness": "not_applicable",
+            "reason_code": "no_score_eligible_active_rows",
+            "collection_status": null,
+            "assessment_count": 0,
+            "material_active_count": 0,
+            "material_exposure_count": 0,
+            "material_assessment_count": 0
+          },
+          "evidence": {
+            "readiness": "not_applicable",
+            "material_active_count": 0,
+            "individual_assessment_count": 0,
+            "applicability_counts": {},
+            "not_yet_evaluated_count": 0,
+            "not_yet_evaluated_row_refs": [],
+            "ingredient_assessments": [],
+            "resolved_evidence_match_count": 0,
+            "recovered_evidence_ids": []
+          },
+          "verification": {
+            "state": "verified_absent",
+            "readiness": "complete",
+            "reason_code": "registry_evaluated_no_match",
+            "matched_programs": [],
+            "registry_schema_version": "6.0.0",
+            "registry_source_count": 9
+          },
+          "route": {
+            "readiness": "complete",
+            "module": "generic",
+            "reason_codes": [
+              "taxonomy:general_supplement"
+            ],
+            "route_confidence": "low",
+            "classifier_version": "1.3.2"
+          },
+          "is_live_ready": false,
+          "unavailable_reasons": [
+            "identity_assessment_readiness"
+          ],
+          "shadow_incomplete_dimensions": [],
+          "release_assessment": {
+            "is_complete": false,
+            "blockers": [
+              "identity_assessment_incomplete"
+            ],
+            "unfinished_source_assessment": null
+          }
+        },
+        "dose_safety_evaluation": {
+          "state_counts": {},
+          "conversion_failures": 0,
+          "flags": [],
+          "caffeine": null,
+          "dose_ceiling": null
+        },
+        "quality_tier": null,
+        "quality_score_suppressed_reason": "NON_ROUTINE_CHELATOR",
+        "raw_score_v4_100": null,
+        "quality_pillars_v4": null,
+        "score_100_equivalent": null,
+        "display_100": "N/A",
+        "grade": null,
+        "scoring_metadata": {
+          "scoring_version": "4.8.1",
+          "scored_date": "2026-10-29T13:26:40.613469+00:00"
+        },
+        "_score_model_version": "v4",
+        "_v4_module": "generic",
+        "_v4_module_breakdown": null,
+        "_v4_inactive_penalty_details": [],
+        "_v4_confidence_detail": null,
+        "_v4_quality_version": "1.31.0-evidence-no-automatic-exceptional",
+        "_v4_clean_label_flags": null,
+        "_v4_safety_gate": {
+          "verdict": "BLOCKED",
+          "blocking_reason": "NON_ROUTINE_CHELATOR",
+          "matched_substance": "Edetate Calcium Disodium",
+          "safety_signals": [],
+          "needs_review": false,
+          "short_circuits_scoring": true,
+          "safety_decision": {
+            "verdict": "BLOCKED",
+            "winning_rule": "BANNED_NON_ROUTINE_CHELATOR_CALCIUM_DISODIUM_EDETATE",
+            "substance": "Edetate Calcium Disodium",
+            "matched_role": "active",
+            "matched_form": "Calcium Disodium EDTA",
+            "match_resolution": "confirmed",
+            "policy_basis": {
+              "status": "banned",
+              "legal_status": "not_lawful_as_supplement",
+              "ban_context": "substance",
+              "clinical_risk": "high",
+              "policy_verification_status": "verified",
+              "policy_verified_at": "2026-09-21"
+            },
+            "jurisdiction": "US",
+            "reason_code": "NON_ROUTINE_CHELATOR",
+            "verified_sources": [
+              {
+                "type": "fda_advisory",
+                "title": "Questions and Answers on Unapproved Chelation Products",
+                "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+                "date": "2016-02-02",
+                "evidence_grade": "R",
+                "evidence_summary": "FDA has never approved any chelation product for over-the-counter use for any health condition; all FDA-approved chelation products require a prescription.",
+                "supports_claims": [
+                  "regulatory_status",
+                  "policy_basis"
+                ]
+              },
+              {
+                "type": "fda_advisory",
+                "title": "FDA warns consumers about potential health risks from using Thorne Research's Captomer products",
+                "url": "https://www.fda.gov/drugs/drug-safety-and-availability/fda-warns-consumers-about-potential-health-risks-using-thorne-researchs-captomer-products",
+                "date": "2015-11-30",
+                "evidence_grade": "R",
+                "evidence_summary": "FDA advises consumers to avoid all products offered over the counter for chelation and states there are no FDA-approved OTC chelation products.",
+                "supports_claims": [
+                  "regulatory_action"
+                ]
+              },
+              {
+                "jurisdiction": "US",
+                "last_verified_date": "2026-09-21",
+                "type": "fda_advisory",
+                "citation": "FDA: no chelation product has ever been approved for over-the-counter use; FDA-approved chelation products require a prescription and clinical supervision.",
+                "url": "https://www.fda.gov/drugs/medication-health-fraud/questions-and-answers-unapproved-chelation-products",
+                "accessed_date": "2026-09-21"
+              }
+            ],
+            "source_db": "banned_recalled_ingredients"
+          },
+          "quarantine_required": false,
+          "quarantine_reason": null,
+          "review_records": [],
+          "ingredient_assessment_complete": true,
+          "ingredient_assessment_errors": [],
+          "clean_label_hits": []
+        },
+        "_v4_completeness_gate": {
+          "module": "generic",
+          "is_live_eligible": false,
+          "verdict": "NOT_SCORED",
+          "reason": "incomplete_product_data",
+          "missing_fields": [
+            "score_eligible_active_identity",
+            "active_identity",
+            "identity_assessment_readiness"
+          ],
+          "soft_missing": [
+            "dose_not_disclosed"
+          ],
+          "mapped_coverage": 0.0,
+          "dose_coverage": null,
+          "checked_fields": [
+            "product_status_active",
+            "form_factor",
+            "active_identity",
+            "mapped_coverage",
+            "micronutrient_source_amounts",
+            "dose_assessment_readiness",
+            "identity_assessment_readiness",
+            "evidence_assessment_readiness",
+            "verification_assessment_readiness",
+            "route_assessment_readiness",
+            "dose_with_unit"
+          ],
+          "score_cap": null,
+          "verdict_ceiling": null
+        },
+        "_v4_provenance": {
+          "scoring_engine_version": "4.8.1",
+          "classification_schema_version": "1.3.0",
+          "config_versions": {
+            "omega": {
+              "version": "2.3.1-dose-v41-references",
+              "fingerprint": "439adb25868a79fd"
+            },
+            "quality_score": {
+              "version": "1.31.0-evidence-no-automatic-exceptional",
+              "fingerprint": "98d2a9e17f873e46"
+            }
+          },
+          "module_route": "generic",
+          "mode": "production"
+        },
+        "_v4_config_fingerprint": "{\"omega\": {\"fingerprint\": \"439adb25868a79fd\", \"version\": \"2.3.1-dose-v41-references\"}, \"quality_score\": {\"fingerprint\": \"98d2a9e17f873e46\", \"version\": \"1.31.0-evidence-no-automatic-exceptional\"}}"
+      }
+    },
+    "252767": {
+      "enriched": {
+        "id": "252767",
+        "dsld_id": "252767",
+        "product_name": "Vitamin B12 (Cyanocobalamin)",
+        "source_type": null,
+        "manual_product_provenance": null,
+        "display_ingredients": [
+          {
+            "raw_source_text": "Vitamin B12",
+            "display_name": "Vitamin B12",
+            "label_display_name": "Vitamin B12",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": true,
+            "canonical_id": "vitamin_b12_cobalamin",
+            "label_display_form": "Cyanocobalamin",
+            "raw_source_path": "ingredientRows[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 0,
+            "serving_size_order": 1,
+            "serving_size_quantity": 0,
+            "serving_size_unit": "Not Present",
+            "raw_category": "vitamin",
+            "ingredient_group": "Vitamin B12",
+            "children": [
+              "Cyanocobalamin"
+            ],
+            "is_label_context": false,
+            "display_disposition": "scored",
+            "identity_integrity_state": "clean",
+            "form_display_state": "listed_not_assessed",
+            "ledger_fingerprint": "53d0be1c41fd8f830afacdec11760273ff3969f68b33d2dc3aeae096ce9cc209",
+            "folded_label_components": [
+              {
+                "label_display_name": "Cyanocobalamin",
+                "raw_source_text": "Cyanocobalamin",
+                "raw_source_path": "ingredientRows[0].forms[0]",
+                "parent_label": "Vitamin B12",
+                "exact_dose_text": "",
+                "score_included": false
+              }
+            ],
+            "mapped_to": {
+              "standard_name": "Vitamin B12",
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[0]"
+            }
+          }
+        ],
+        "label_source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Vitamin B12",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[0].forms[0]",
+            "raw_source_text": "Cyanocobalamin",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "None",
+            "source_section": "inactiveIngredients"
+          }
+        ],
+        "ingredient_quality_data": {
+          "ingredients": [
+            {
+              "name": "Vitamin B12",
+              "raw_source_text": "Vitamin B12",
+              "standard_name": "Vitamin B12",
+              "matched_form": "cyanocobalamin",
+              "canonical_id": "vitamin_b12_cobalamin",
+              "canonical_source_db": "ingredient_quality_map",
+              "matched_entry_id": null,
+              "canonical_redirect_from": null,
+              "canonical_redirect_source": null,
+              "form_id": "cyanocobalamin",
+              "match_tier": "exact",
+              "matched_alias": "cyanocobalamin",
+              "matched_target": "form_name",
+              "match_ambiguity_candidates": [],
+              "bio_score": 15.0,
+              "absorption": "synthetic; ~1-2% passive at 1000 mcg, requires conversion to methyl/adenosyl forms",
+              "notes": "Cyanocobalamin is the most clinically studied and commonly used supplemental B12 form. It is converted to active cobalamin forms after absorption. At equivalent supplemental doses, reviewed evidence does not establish inferior clinical efficacy or absorption versus other oral B12 forms. Evidence: NIH ODS Vitamin B12 fact sheet; PMID:18709891.",
+              "dosage_importance": 1.0,
+              "category": "vitamins",
+              "quantity": 0.0,
+              "unit": "NP",
+              "unit_normalized": "np",
+              "dailyValue": null,
+              "has_dose": false,
+              "is_blend_header": false,
+              "is_proprietary_blend": false,
+              "blend_total_weight_only": false,
+              "blend_disclosed_components_count": 0,
+              "is_excipient": false,
+              "never_promote_reason": null,
+              "certificates": [],
+              "mapped": true,
+              "mapped_identity": true,
+              "scoreable_identity": false,
+              "role_classification": "recognized_non_scorable",
+              "identity_confidence": 1.0,
+              "identity_decision_reason": "no_dose_evidence",
+              "safety_hits": [
+                {
+                  "rule_id": "RULE_IQM_VITAMIN_B12_COBALAMIN_TTC",
+                  "subject_ref": {
+                    "db": "ingredient_quality_map",
+                    "canonical_id": "vitamin_b12_cobalamin"
+                  },
+                  "source_bucket": "ingredients_skipped",
+                  "condition_hits": [
+                    {
+                      "condition_id": "ttc",
+                      "severity": "informational",
+                      "evidence_level": "theoretical",
+                      "mechanism": "Observational associations between B12 status and recurrent pregnancy loss do not establish a universal optimal level above 400 pg/mL or prove improved pregnancy outcomes from targeting it.",
+                      "action": "Discuss B12 testing or supplementation with your clinician if deficiency is suspected. Treat documented deficiency using clinical guidance rather than a registry-specific target above 400 pg/mL.",
+                      "sources": [
+                        "https://pubmed.ncbi.nlm.nih.gov/18636794/",
+                        "https://pubmed.ncbi.nlm.nih.gov/17693963/",
+                        "https://pubmed.ncbi.nlm.nih.gov/34036101/"
+                      ],
+                      "dose_threshold_evaluation": null,
+                      "dose_decision": null,
+                      "alert_headline": "B12 is recommended preconception",
+                      "alert_body": "Vitamin B12 used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin B12 with your clinician.",
+                      "informational_note": "Vitamin B12 is continued under clinician guidance \u2014 relevant to people planning pregnancy.",
+                      "warning_type": null,
+                      "direction": "beneficial",
+                      "materiality": "presence",
+                      "min_effective_dose": null,
+                      "dose_floor_status": null,
+                      "profile_gate": {
+                        "gate_type": "profile_flag",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [
+                            "trying_to_conceive"
+                          ]
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    },
+                    {
+                      "condition_id": "pregnancy",
+                      "dose_decision": null,
+                      "severity": "monitor",
+                      "evidence_level": "established",
+                      "mechanism": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+                      "action": "Monitoring is advised during pregnancy.",
+                      "sources": [
+                        "https://pubmed.ncbi.nlm.nih.gov/34036101/",
+                        "https://pubmed.ncbi.nlm.nih.gov/18636794/"
+                      ],
+                      "alert_headline": "Pregnancy: monitoring is advised",
+                      "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+                      "informational_note": null,
+                      "warning_type": null,
+                      "direction": "beneficial",
+                      "materiality": "presence",
+                      "profile_gate": {
+                        "gate_type": "profile_flag",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [
+                            "pregnant"
+                          ]
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    },
+                    {
+                      "condition_id": "lactation",
+                      "dose_decision": null,
+                      "severity": "monitor",
+                      "evidence_level": "established",
+                      "mechanism": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+                      "action": "Monitoring is advised during breastfeeding.",
+                      "sources": [
+                        "https://pubmed.ncbi.nlm.nih.gov/34036101/",
+                        "https://pubmed.ncbi.nlm.nih.gov/18636794/"
+                      ],
+                      "alert_headline": "Breastfeeding: monitoring is advised",
+                      "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+                      "informational_note": null,
+                      "warning_type": null,
+                      "direction": "beneficial",
+                      "materiality": "presence",
+                      "profile_gate": {
+                        "gate_type": "profile_flag",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [
+                            "breastfeeding"
+                          ]
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    }
+                  ],
+                  "drug_class_hits": [],
+                  "pregnancy_lactation": {
+                    "pregnancy_category": "monitor",
+                    "lactation_category": "monitor",
+                    "evidence_level": "established",
+                    "mechanism": "B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomocysteinemia. Standard prenatal vitamins contain B12; supplementation should continue throughout pregnancy and during breastfeeding.",
+                    "notes": "B12 supplementation during pregnancy is part of standard prenatal care. Vegans and those with malabsorption (pernicious anemia, gastric surgery, metformin use) need higher supplemental doses.",
+                    "sources": [
+                      "https://pubmed.ncbi.nlm.nih.gov/34036101/",
+                      "https://pubmed.ncbi.nlm.nih.gov/18636794/"
+                    ],
+                    "alert_headline": "Continue B12 under prenatal care",
+                    "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+                    "informational_note": "B12 is part of standard prenatal support \u2014 relevant to anyone pregnant or breastfeeding.",
+                    "profile_gate": {
+                      "gate_type": "profile_flag",
+                      "requires": {
+                        "conditions_any": [],
+                        "drug_classes_any": [],
+                        "profile_flags_any": [
+                          "pregnant",
+                          "breastfeeding"
+                        ]
+                      },
+                      "excludes": {
+                        "conditions_any": [],
+                        "drug_classes_any": [],
+                        "profile_flags_any": [],
+                        "product_forms_any": [],
+                        "nutrient_forms_any": []
+                      },
+                      "dose": null
+                    },
+                    "direction": "beneficial",
+                    "materiality": "presence"
+                  },
+                  "last_reviewed": "2026-04-09"
+                }
+              ],
+              "hierarchyType": null,
+              "source_section": "active",
+              "is_nested_ingredient": false,
+              "parent_blend": null,
+              "parent_blend_mass_mg": null,
+              "is_parent_total": false,
+              "form_extraction_used": true,
+              "is_dual_form": false,
+              "original_label": "Vitamin B12",
+              "extracted_forms": [
+                {
+                  "raw_form_text": "Cyanocobalamin",
+                  "match_candidates": [
+                    "Cyanocobalamin",
+                    "Vitamin B12 Cyanocobalamin"
+                  ],
+                  "display_form": "Cyanocobalamin",
+                  "percent_share": 1.0,
+                  "dsld_category": "vitamin",
+                  "dsld_prefix": null,
+                  "dsld_ingredient_group": "Vitamin B12",
+                  "dsld_unii_code": "P6YC3EG204",
+                  "keep_from_prefixed_form": false
+                }
+              ],
+              "matched_forms": [
+                {
+                  "form_key": "cyanocobalamin",
+                  "canonical_id": "vitamin_b12_cobalamin",
+                  "bio_score": 15.0,
+                  "match_method": "exact",
+                  "percent_share": 1.0,
+                  "raw_form_text": "Cyanocobalamin",
+                  "matched_candidate": "Cyanocobalamin"
+                }
+              ],
+              "unmapped_forms": [],
+              "aggregation_method": "single",
+              "final_form_bio_score": 15.0,
+              "additional_forms": [],
+              "form_source": null,
+              "raw_source_path": "ingredientRows[0]",
+              "cleaner_row_role": "active_scorable",
+              "score_eligible_by_cleaner": true,
+              "score_exclusion_reason": "recognized_non_scorable",
+              "dose_class": "therapeutic_mass",
+              "raw_taxonomy": {
+                "category": "vitamin",
+                "ingredientGroup": "Vitamin B12",
+                "ingredientId": 281279,
+                "uniiCode": "8406EY2OQA",
+                "forms": [
+                  {
+                    "name": "Cyanocobalamin",
+                    "ingredientId": 280323,
+                    "order": 1,
+                    "prefix": null,
+                    "percent": null,
+                    "category": "vitamin",
+                    "ingredientGroup": "Vitamin B12",
+                    "uniiCode": "P6YC3EG204"
+                  }
+                ],
+                "parentBlend": null,
+                "isNestedIngredient": false,
+                "nested_depth": 0,
+                "quantityVariants": [
+                  {
+                    "quantity": 0.0,
+                    "unit": "NP",
+                    "index": 0,
+                    "operator": "=",
+                    "quantity_parsed": true,
+                    "serving_size_order": 1,
+                    "serving_size_quantity": 0,
+                    "serving_size_unit": "Not Present",
+                    "selected_for_analysis": true
+                  }
+                ]
+              },
+              "plantPart": null,
+              "normalized_key": "vitamin_b12",
+              "recognition_source": "iqd_contract",
+              "recognition_type": "no_dose",
+              "recognition_reason": "no_dose_evidence",
+              "form_match_status": "mapped",
+              "delivers_markers": [],
+              "fallback_class": "clinical_fail_safe",
+              "fallback_reason": "no_dose_evidence",
+              "cleaner_match_method": "unii_form_exact_match",
+              "source_label_key": "label:vitamin_b12_cobalamin:vitamin b12:0:np",
+              "source_label_name": "Vitamin B12",
+              "source_label_form": "Cyanocobalamin",
+              "label_display_name": "Vitamin B12",
+              "label_display_form": "Cyanocobalamin",
+              "identity_disposition": "clean",
+              "canonical_id_before": "vitamin_b12_cobalamin",
+              "canonical_id_after": "vitamin_b12_cobalamin",
+              "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Vitamin B12\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Vitamin B12\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Vitamin B12\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Vitamin B12\"},{\"field\":\"label_nutrient_context\",\"kind\":\"structured_identity\",\"value\":\"vitamin b12\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"Cyanocobalamin\"}]",
+              "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+              "identity_taxonomy_coherent": true,
+              "recognized_non_scorable": true,
+              "score_included": false,
+              "skip_reason": "recognized_non_scorable"
+            }
+          ]
+        },
+        "activeIngredients": [
+          {
+            "ingredientId": 281279,
+            "uniiCode": "8406EY2OQA",
+            "order": 1,
+            "raw_category": "vitamin",
+            "raw_source_text": "Vitamin B12",
+            "branded_token_extracted": null,
+            "canonical_id": "vitamin_b12_cobalamin",
+            "canonical_source_db": "ingredient_quality_map",
+            "cleaner_match_method": "unii_form_exact_match",
+            "label_nutrient_context": "vitamin b12",
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[0]",
+            "normalized_key": "vitamin_b12",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": true,
+            "score_exclusion_reason": null,
+            "dose_class": "therapeutic_mass",
+            "raw_taxonomy": {
+              "category": "vitamin",
+              "ingredientGroup": "Vitamin B12",
+              "ingredientId": 281279,
+              "uniiCode": "8406EY2OQA",
+              "forms": [
+                {
+                  "name": "Cyanocobalamin",
+                  "ingredientId": 280323,
+                  "order": 1,
+                  "prefix": null,
+                  "percent": null,
+                  "category": "vitamin",
+                  "ingredientGroup": "Vitamin B12",
+                  "uniiCode": "P6YC3EG204"
+                }
+              ],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 0.0,
+                  "unit": "NP",
+                  "index": 0,
+                  "operator": "=",
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 0,
+                  "serving_size_unit": "Not Present",
+                  "selected_for_analysis": true
+                }
+              ]
+            },
+            "name": "Vitamin B12",
+            "label_display_name": null,
+            "standardName": "Vitamin B12",
+            "ingredientGroup": "Vitamin B12",
+            "quantity": 0.0,
+            "unit": "NP",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [
+              {
+                "name": "Cyanocobalamin",
+                "ingredientId": 280323,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "vitamin",
+                "ingredientGroup": "Vitamin B12",
+                "uniiCode": "P6YC3EG204"
+              }
+            ],
+            "alternateNames": [],
+            "mapped": true,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": null,
+            "safety_flags": []
+          }
+        ],
+        "product_scoring_evidence": []
+      },
+      "scored": {
+        "dsld_id": "252767",
+        "product_name": "Vitamin B12 (Cyanocobalamin)",
+        "brand_name": "BulkSupplements.com",
+        "evaluation_stage": "scored_v4",
+        "output_schema_version": "4.4.0",
+        "score_basis": "v4_six_pillar",
+        "delivery_data": {
+          "matched": false,
+          "systems": [],
+          "highest_tier": null
+        },
+        "not_scorable_reason": "incomplete_product_data",
+        "supplement_taxonomy": {
+          "primary_type": "general_supplement",
+          "secondary_type": null,
+          "percentile_category": "general_supplement",
+          "classification_confidence": 0.0,
+          "classification_reasons": [
+            "no quantified active ingredients"
+          ],
+          "classification_reason_codes": [
+            "no_quantified_active_evidence"
+          ],
+          "classification_input_source": "scoring_input_contract.quantified_label_active_rows",
+          "quantified_active_count": 0,
+          "distinct_active_identity_count": 0,
+          "quantified_active_row_count": 0,
+          "non_quantified_base_count": 0,
+          "category_breakdown": {},
+          "category_row_breakdown": {},
+          "dsld_product_type": "vitamin",
+          "classification_contract_version": "1.3.0",
+          "classification_input_contract": "quantified_label_actives",
+          "classification_row_evidence": [],
+          "unresolved_quantified_active_count": 0,
+          "quantified_label_active_count": 0,
+          "scorable_active_count": 0,
+          "is_single_scorable_active": false
+        },
+        "primary_type": "general_supplement",
+        "secondary_type": null,
+        "percentile_category": "general_supplement",
+        "category_percentile": {
+          "category_key": "general_supplement",
+          "category_label": "General Supplement"
+        },
+        "mapped_coverage": 0.0,
+        "unmapped_actives": [],
+        "unmapped_actives_total": 0,
+        "unmapped_actives_excluding_banned_exact_alias": 0,
+        "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+        "scoring_fallbacks_used": [],
+        "iqd_contract_diagnostics": {
+          "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+          "iqd_ingredients_fallback_used": false,
+          "ingredients_scorable_count": 0,
+          "scoring_rows_count": 0,
+          "rejected_rows_count": 0,
+          "rejected_rows": [],
+          "scoring_fallbacks_used": [],
+          "strict_contract_passed": true,
+          "strict_scoring_contract": {
+            "passed": true,
+            "findings": [],
+            "zero_scorable_reason": "no_strict_scoring_candidates"
+          },
+          "zero_scorable_reason": "no_strict_scoring_candidates",
+          "mapped_count": 0,
+          "unmapped_count": 0,
+          "mapped_coverage": 0.0,
+          "contract_findings": []
+        },
+        "strict_scoring_contract": {
+          "passed": true,
+          "findings": [],
+          "zero_scorable_reason": "no_strict_scoring_candidates"
+        },
+        "verdict": "NOT_SCORED",
+        "safety_verdict": "SAFE",
+        "blocking_reason": null,
+        "safety_signal_reason": null,
+        "safety_decision": null,
+        "safety_review_records": [],
+        "flags": [],
+        "badges": [],
+        "quality_score_v4_100": null,
+        "quality_score_status": "not_scored",
+        "quality_score_confidence": null,
+        "score_unavailable_reason": "blocked_by_completeness_gate",
+        "route_decision": {
+          "module": "generic",
+          "reason_codes": [
+            "taxonomy:general_supplement"
+          ],
+          "confidence": "low",
+          "classifier_version": "1.3.2"
+        },
+        "route_confidence": "low",
+        "product_safety_status": "no_known_catalog_concern",
+        "quality_assessment_status": "partial",
+        "assessment_readiness": {
+          "schema_version": "1.0.0",
+          "enforcement_mode": "enforced",
+          "input_contract_version": "1.0.0",
+          "enforced_dimensions": [
+            "dose",
+            "identity",
+            "route",
+            "verification"
+          ],
+          "catalog_disposition": {
+            "disposition": "requires_remediation",
+            "reason_code": "source_active_assessment_required",
+            "evidence_paths": []
+          },
+          "identity": {
+            "readiness": "complete",
+            "reason_code": "mapped_source_actives",
+            "mapped_count": 0,
+            "unmapped_count": 0,
+            "mapped_coverage": 0.0,
+            "product_evidence_count": 0,
+            "mapped_product_evidence_count": 0,
+            "contract_findings": [],
+            "blocking_contract_findings": [],
+            "source_score_eligible_active_count": 1,
+            "source_mapped_count": 1,
+            "source_unmapped_count": 0,
+            "source_mapped_coverage": 1.0,
+            "zero_scorable_reason": "no_strict_scoring_candidates",
+            "module": "generic",
+            "module_relevant_identity": true
+          },
+          "dose": {
+            "readiness": "incomplete",
+            "reason_code": "no_scoreable_active_dose",
+            "collection_status": "complete",
+            "assessment_count": 0,
+            "material_active_count": 0,
+            "material_exposure_count": 1,
+            "material_assessment_count": 0,
+            "incomplete_source_row_refs": [
+              "ingredientRows[0]"
+            ]
+          },
+          "evidence": {
+            "readiness": "complete",
+            "material_active_count": 1,
+            "individual_assessment_count": 0,
+            "applicability_counts": {
+              "nutrition_authority": 1
+            },
+            "not_yet_evaluated_count": 0,
+            "not_yet_evaluated_row_refs": [],
+            "ingredient_assessments": [
+              {
+                "source_row_ref": "ingredientRows[0]",
+                "canonical_id": "vitamin_b12_cobalamin",
+                "name": "Vitamin B12",
+                "role": "claim_prominent",
+                "material": true,
+                "source_value": 0.0,
+                "source_unit": "NP",
+                "dose_class": "therapeutic_mass",
+                "linked_rows": [],
+                "scoring_input_kind": null,
+                "evidence_type": null,
+                "state": "evaluated_supported",
+                "evidence_applicability": "nutrition_authority",
+                "reason_code": "established_dri_nutrition_authority",
+                "evidence_ids": []
+              }
+            ],
+            "resolved_evidence_match_count": 0,
+            "recovered_evidence_ids": []
+          },
+          "verification": {
+            "state": "verified_absent",
+            "readiness": "complete",
+            "reason_code": "registry_evaluated_no_match",
+            "matched_programs": [],
+            "registry_schema_version": "6.0.0",
+            "registry_source_count": 9
+          },
+          "route": {
+            "readiness": "complete",
+            "module": "generic",
+            "reason_codes": [
+              "taxonomy:general_supplement"
+            ],
+            "route_confidence": "low",
+            "classifier_version": "1.3.2"
+          },
+          "is_live_ready": false,
+          "unavailable_reasons": [
+            "dose_assessment_readiness"
+          ],
+          "shadow_incomplete_dimensions": [],
+          "release_assessment": {
+            "is_complete": false,
+            "blockers": [
+              "dose_assessment_incomplete"
+            ],
+            "unfinished_source_assessment": null
+          }
+        },
+        "dose_safety_evaluation": {
+          "state_counts": {},
+          "conversion_failures": 0,
+          "flags": [],
+          "caffeine": null,
+          "dose_ceiling": null
+        },
+        "quality_tier": null,
+        "quality_score_suppressed_reason": "NOT_SCORED",
+        "raw_score_v4_100": null,
+        "quality_pillars_v4": null,
+        "score_100_equivalent": null,
+        "display_100": "N/A",
+        "grade": null,
+        "scoring_metadata": {
+          "scoring_version": "4.8.1",
+          "scored_date": "2026-10-29T13:26:41.561621+00:00"
+        },
+        "_score_model_version": "v4",
+        "_v4_module": "generic",
+        "_v4_module_breakdown": null,
+        "_v4_inactive_penalty_details": [],
+        "_v4_confidence_detail": null,
+        "_v4_quality_version": "1.31.0-evidence-no-automatic-exceptional",
+        "_v4_clean_label_flags": null,
+        "_v4_safety_gate": {
+          "verdict": null,
+          "blocking_reason": null,
+          "matched_substance": null,
+          "safety_signals": [],
+          "needs_review": false,
+          "short_circuits_scoring": false,
+          "safety_decision": null,
+          "quarantine_required": false,
+          "quarantine_reason": null,
+          "review_records": [],
+          "ingredient_assessment_complete": true,
+          "ingredient_assessment_errors": [],
+          "clean_label_hits": []
+        },
+        "_v4_completeness_gate": {
+          "module": "generic",
+          "is_live_eligible": false,
+          "verdict": "NOT_SCORED",
+          "reason": "incomplete_product_data",
+          "missing_fields": [
+            "score_eligible_active_identity",
+            "active_identity",
+            "dose_assessment_readiness"
+          ],
+          "soft_missing": [
+            "dose_not_disclosed"
+          ],
+          "mapped_coverage": 0.0,
+          "dose_coverage": null,
+          "checked_fields": [
+            "product_status_active",
+            "form_factor",
+            "active_identity",
+            "mapped_coverage",
+            "micronutrient_source_amounts",
+            "dose_assessment_readiness",
+            "identity_assessment_readiness",
+            "evidence_assessment_readiness",
+            "verification_assessment_readiness",
+            "route_assessment_readiness",
+            "dose_with_unit"
+          ],
+          "score_cap": null,
+          "verdict_ceiling": null
+        },
+        "_v4_provenance": {
+          "scoring_engine_version": "4.8.1",
+          "classification_schema_version": "1.3.0",
+          "config_versions": {
+            "omega": {
+              "version": "2.3.1-dose-v41-references",
+              "fingerprint": "439adb25868a79fd"
+            },
+            "quality_score": {
+              "version": "1.31.0-evidence-no-automatic-exceptional",
+              "fingerprint": "98d2a9e17f873e46"
+            }
+          },
+          "module_route": "generic",
+          "mode": "production"
+        },
+        "_v4_config_fingerprint": "{\"omega\": {\"fingerprint\": \"439adb25868a79fd\", \"version\": \"2.3.1-dose-v41-references\"}, \"quality_score\": {\"fingerprint\": \"98d2a9e17f873e46\", \"version\": \"1.31.0-evidence-no-automatic-exceptional\"}}"
+      }
+    },
+    "246324": {
+      "enriched": {
+        "id": "246324",
+        "dsld_id": "246324",
+        "product_name": "CBD Mixed Berry",
+        "source_type": null,
+        "manual_product_provenance": null,
+        "display_ingredients": [
+          {
+            "raw_source_text": "Calories",
+            "display_name": "Calories",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [],
+            "raw_source_path": "ingredientRows[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "10 Calories",
+            "raw_category": "other",
+            "ingredient_group": "Calories",
+            "label_display_name": "Calories",
+            "label_order": 0,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "gummies",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "c162d28a4749ced86cd91ac8b7a676ffda7cc8257025feb393122a171670cb6b"
+          },
+          {
+            "raw_source_text": "Total Carbohydrates",
+            "display_name": "Total Carbohydrates",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [
+              "Total Sugars"
+            ],
+            "raw_source_path": "ingredientRows[1]",
+            "source_order": 2,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "2 g",
+            "dailyValue": 1.0,
+            "raw_category": "sugar",
+            "ingredient_group": "Carbohydrate",
+            "label_display_name": "Total Carbohydrates",
+            "label_order": 1,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "gummies",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "5f21f1e009100555b2f1bd3d6d69a121dc48c70b6277eca7398e5c15ae37a63f"
+          },
+          {
+            "raw_source_text": "Total Sugars",
+            "display_name": "Total Sugars",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [
+              "Added Sugars"
+            ],
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "source_order": 3,
+            "nested_depth": 1,
+            "parent_label": "Total Carbohydrates",
+            "parent_source_path": "ingredientRows[1]",
+            "exact_dose_text": "2 g",
+            "raw_category": "sugar",
+            "ingredient_group": "Sugar",
+            "label_display_name": "Total Sugars",
+            "label_order": 2,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "gummies",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "0c7f19fa823a52412b0a6658f9968211f0bfe75416a6cadd9dc46cd777c4db78"
+          },
+          {
+            "raw_source_text": "Added Sugars",
+            "display_name": "Added Sugars",
+            "source_section": "activeIngredients",
+            "display_type": "nutrition_fact",
+            "resolution_type": "display_only",
+            "score_included": false,
+            "children": [],
+            "raw_source_path": "ingredientRows[1].nestedRows[0].nestedRows[0]",
+            "source_order": 4,
+            "nested_depth": 2,
+            "parent_label": "Total Sugars",
+            "parent_source_path": "ingredientRows[1].nestedRows[0]",
+            "exact_dose_text": "2 g",
+            "dailyValue": 4.0,
+            "raw_category": "sugar",
+            "ingredient_group": "Sugar",
+            "label_display_name": "Added Sugars",
+            "label_order": 3,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "gummies",
+            "is_label_context": true,
+            "display_disposition": "label_context",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "1b9dc515a8ad29935f48f1f4f6c790830ad301e9cb5c450b9e09a7ee9213f439"
+          },
+          {
+            "raw_source_text": "Hemp extract",
+            "display_name": "Hemp extract",
+            "label_display_name": "Hemp extract",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": true,
+            "canonical_id": "NHA_HEMP_EXTRACT",
+            "label_display_form": "extract",
+            "raw_source_path": "ingredientRows[2]",
+            "source_order": 5,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "6 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 4,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "gummies",
+            "raw_category": "botanical",
+            "ingredient_group": "Hemp",
+            "children": [
+              "Cannabidiol"
+            ],
+            "is_label_context": false,
+            "display_disposition": "scored",
+            "identity_integrity_state": "clean",
+            "form_display_state": "listed_not_assessed",
+            "ledger_fingerprint": "960fc635eea3c48031f7e57d62c839ac490bb5a291c40548d95c67acd9cde2cb",
+            "mapped_to": {
+              "standard_name": "Hemp Extract",
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[2]"
+            }
+          },
+          {
+            "raw_source_text": "Cannabidiol",
+            "display_name": "Cannabidiol",
+            "label_display_name": "Cannabidiol",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": true,
+            "canonical_id": "NHA_CANNABIDIOL",
+            "label_display_form": null,
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "source_order": 6,
+            "nested_depth": 1,
+            "parent_label": "Hemp extract",
+            "parent_source_path": "ingredientRows[2]",
+            "exact_dose_text": "5 mg",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 5,
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "gummies",
+            "raw_category": "non-nutrient/non-botanical",
+            "ingredient_group": "Cannabidiol",
+            "children": [],
+            "is_label_context": false,
+            "display_disposition": "scored",
+            "identity_integrity_state": "clean",
+            "form_display_state": "not_disclosed",
+            "ledger_fingerprint": "28f7e157e2e9f51ef3c51452ccba0dd2937e4cec098468f307007ac3fbb4d3ba",
+            "mapped_to": {
+              "standard_name": "Cannabidiol",
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[2].nestedRows[0]"
+            }
+          },
+          {
+            "raw_source_text": "Glucose Syrup",
+            "display_name": "Glucose Syrup",
+            "label_display_name": "Glucose Syrup",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_GLUCOSE_LIQUID",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "source_order": 1,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 6,
+            "raw_category": "sugar",
+            "ingredient_group": "Glucose",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "2ee24af3843ba40e3f94469af81dac5798158a880de5950cdb907c8ac4f1677c",
+            "mapped_to": {
+              "standard_name": "Glucose (Liquid)",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[0]"
+            }
+          },
+          {
+            "raw_source_text": "Sugar",
+            "display_name": "Sugar",
+            "label_display_name": "Sugar",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_SUGAR_SWEETENERS",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "source_order": 2,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 7,
+            "raw_category": "sugar",
+            "ingredient_group": "Sugar",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "c66f5349ad6223bcdfb97909a251a8bd37d887f4893daa8fc3f8df0f24e6fd55",
+            "mapped_to": {
+              "standard_name": "Sugar & Natural Sweeteners",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[1]"
+            }
+          },
+          {
+            "raw_source_text": "Water",
+            "display_name": "Water",
+            "label_display_name": "Water",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_PURIFIED_WATER",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "source_order": 3,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 8,
+            "raw_category": "other",
+            "ingredient_group": "Water",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "d1cedd3813d4eff5d7e6b4b6c1d2c16730cb11bafc306140d51985643faf6501",
+            "mapped_to": {
+              "standard_name": "Purified Water",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[2]"
+            }
+          },
+          {
+            "raw_source_text": "Gelatin",
+            "display_name": "Gelatin",
+            "label_display_name": "Gelatin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_GELATIN_CAPSULE",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "source_order": 4,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 9,
+            "raw_category": "protein",
+            "ingredient_group": "Gelatin",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "eee37765ff1d198afeb95cd4ec65f169e03ef778bd0833612fc7a79120140eab",
+            "mapped_to": {
+              "standard_name": "Gelatin Capsule",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[3]"
+            }
+          },
+          {
+            "raw_source_text": "Less than 2% of:",
+            "display_name": "Less than 2% of:",
+            "source_section": "inactiveIngredients",
+            "display_type": "structural_container",
+            "resolution_type": "structural_parent",
+            "score_included": false,
+            "children": [
+              "Canola Lecithin",
+              "Citric Acid",
+              "Color",
+              "Fumaric Acid",
+              "Lactic Acid",
+              "Medium Chain Triglycerides",
+              "Natural Flavors",
+              "Pectin"
+            ],
+            "raw_source_path": "otheringredients.ingredients[4]",
+            "source_order": 5,
+            "nested_depth": 0,
+            "parent_label": null,
+            "parent_source_path": null,
+            "exact_dose_text": "",
+            "raw_category": "other",
+            "ingredient_group": "Header",
+            "label_display_name": "Less than 2% of:",
+            "label_order": 10,
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "f1a735ffde485b6f8abe359b3a0794576490487eb51c17722397d7ea9396b5cf"
+          },
+          {
+            "raw_source_text": "Canola Lecithin",
+            "display_name": "Canola Lecithin",
+            "label_display_name": "Canola Lecithin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_CANOLA_LECITHIN",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4].forms[0]",
+            "source_order": 1,
+            "nested_depth": 1,
+            "parent_label": "Less than 2% of:",
+            "parent_source_path": "otheringredients.ingredients[4]",
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 11,
+            "raw_category": "fat",
+            "ingredient_group": "lecithin",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "5a49b80e992a0d1a68fc7eb718a9391cfda958a2b9ab90475126f18232881878",
+            "mapped_to": {
+              "standard_name": "Canola Lecithin",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[4].forms[0]"
+            }
+          },
+          {
+            "raw_source_text": "Citric Acid",
+            "display_name": "Citric Acid",
+            "label_display_name": "Citric Acid",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_CITRIC_ACID",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4].forms[1]",
+            "source_order": 2,
+            "nested_depth": 1,
+            "parent_label": "Less than 2% of:",
+            "parent_source_path": "otheringredients.ingredients[4]",
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 12,
+            "raw_category": "non-nutrient/non-botanical",
+            "ingredient_group": "Citric Acid",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "661816bacaed5dd08e29225cfae77fd5346164765ae3ce9e87f8e326ce3dc429",
+            "mapped_to": {
+              "standard_name": "Citric Acid",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[4].forms[1]"
+            }
+          },
+          {
+            "raw_source_text": "Color",
+            "display_name": "Color",
+            "label_display_name": "Color",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_ARTIFICIAL_COLORS",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4].forms[2]",
+            "source_order": 3,
+            "nested_depth": 1,
+            "parent_label": "Less than 2% of:",
+            "parent_source_path": "otheringredients.ingredients[4]",
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 13,
+            "raw_category": "other",
+            "ingredient_group": "Color",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "f319ee50060028303c30f9a16aa2c72370b1114fc66bbd3543a3a020280a5d90",
+            "mapped_to": {
+              "standard_name": "colors (unspecified)",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[4].forms[2]"
+            }
+          },
+          {
+            "raw_source_text": "Fumaric Acid",
+            "display_name": "Fumaric Acid",
+            "label_display_name": "Fumaric Acid",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "OI_FUMARIC_ACID",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4].forms[3]",
+            "source_order": 4,
+            "nested_depth": 1,
+            "parent_label": "Less than 2% of:",
+            "parent_source_path": "otheringredients.ingredients[4]",
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 14,
+            "raw_category": "non-nutrient/non-botanical",
+            "ingredient_group": "Fumaric Acid",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "bce8b10fe59ae47a2048bf9797b364bcd91efb9ad948cfc836aff9c4f16684c7",
+            "mapped_to": {
+              "standard_name": "Fumaric Acid",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[4].forms[3]"
+            }
+          },
+          {
+            "raw_source_text": "Lactic Acid",
+            "display_name": "Lactic Acid",
+            "label_display_name": "Lactic Acid",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "PII_LACTIC_ACID",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4].forms[4]",
+            "source_order": 5,
+            "nested_depth": 1,
+            "parent_label": "Less than 2% of:",
+            "parent_source_path": "otheringredients.ingredients[4]",
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 15,
+            "raw_category": "non-nutrient/non-botanical",
+            "ingredient_group": "Lactic Acid",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "925967bf8508e80907f5b304981e03a141312872279f405dbb131e3781f29efb",
+            "mapped_to": {
+              "standard_name": "Lactic Acid",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[4].forms[4]"
+            }
+          },
+          {
+            "raw_source_text": "Medium Chain Triglycerides",
+            "display_name": "Medium Chain Triglycerides",
+            "label_display_name": "Medium Chain Triglycerides",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "mct_oil",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4].forms[5]",
+            "source_order": 6,
+            "nested_depth": 1,
+            "parent_label": "Less than 2% of:",
+            "parent_source_path": "otheringredients.ingredients[4]",
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 16,
+            "raw_category": "fat",
+            "ingredient_group": "Medium chain triglycerides (MCT)",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "9c0a1ca7d28eb19b62e5ba7866eeb98c5c1d281d70ffaa32208ea4da11e5f536",
+            "mapped_to": {
+              "standard_name": "MCT Oil",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[4].forms[5]"
+            }
+          },
+          {
+            "raw_source_text": "Natural Flavors",
+            "display_name": "Natural Flavors",
+            "label_display_name": "Natural Flavors",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_NATURAL_FLAVORS",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4].forms[6]",
+            "source_order": 7,
+            "nested_depth": 1,
+            "parent_label": "Less than 2% of:",
+            "parent_source_path": "otheringredients.ingredients[4]",
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 17,
+            "raw_category": "other",
+            "ingredient_group": "Flavor",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "2ba00f7cf749ed7c2e2d97b1d1c38c2328fd4f24b39ea9432fe4990c3825c08c",
+            "mapped_to": {
+              "standard_name": "Natural Flavors",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[4].forms[6]"
+            }
+          },
+          {
+            "raw_source_text": "Pectin",
+            "display_name": "Pectin",
+            "label_display_name": "Pectin",
+            "source_section": "inactiveIngredients",
+            "display_type": "inactive_ingredient",
+            "resolution_type": "inactive_mapped",
+            "score_included": false,
+            "canonical_id": "NHA_PECTIN",
+            "label_display_form": null,
+            "raw_source_path": "otheringredients.ingredients[4].forms[7]",
+            "source_order": 8,
+            "nested_depth": 1,
+            "parent_label": "Less than 2% of:",
+            "parent_source_path": "otheringredients.ingredients[4]",
+            "exact_dose_text": "",
+            "serving_variants": [],
+            "dose_data_quality": null,
+            "label_order": 18,
+            "raw_category": "fiber",
+            "ingredient_group": "Pectin",
+            "children": [],
+            "is_label_context": true,
+            "display_disposition": "other_ingredient",
+            "identity_integrity_state": "taxonomy_only",
+            "form_display_state": "not_applicable",
+            "ledger_fingerprint": "4ebf9f9701931e69ccd8fa0b7dbb7aff2ce02861c0d8876ed6e198e15d6aaa01",
+            "mapped_to": {
+              "standard_name": "Prebiotics",
+              "source_section": "inactive",
+              "raw_source_path": "otheringredients.ingredients[4].forms[7]"
+            }
+          }
+        ],
+        "label_source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Calories",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Total Carbohydrates",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "raw_source_text": "Total Sugars",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0].nestedRows[0]",
+            "raw_source_text": "Added Sugars",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Hemp extract",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "raw_source_text": "Cannabidiol",
+            "source_section": "activeIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "Glucose Syrup",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[1]",
+            "raw_source_text": "Sugar",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[2]",
+            "raw_source_text": "Water",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[3]",
+            "raw_source_text": "Gelatin",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4]",
+            "raw_source_text": "Less than 2% of:",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4].forms[0]",
+            "raw_source_text": "Canola Lecithin",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4].forms[1]",
+            "raw_source_text": "Citric Acid",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4].forms[2]",
+            "raw_source_text": "Color",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4].forms[3]",
+            "raw_source_text": "Fumaric Acid",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4].forms[4]",
+            "raw_source_text": "Lactic Acid",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4].forms[5]",
+            "raw_source_text": "Medium Chain Triglycerides",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4].forms[6]",
+            "raw_source_text": "Natural Flavors",
+            "source_section": "inactiveIngredients"
+          },
+          {
+            "raw_source_path": "otheringredients.ingredients[4].forms[7]",
+            "raw_source_text": "Pectin",
+            "source_section": "inactiveIngredients"
+          }
+        ],
+        "ingredient_quality_data": {
+          "ingredients": [
+            {
+              "name": "Hemp extract",
+              "raw_source_text": "Hemp extract",
+              "standard_name": "Hemp Extract",
+              "canonical_id": "NHA_HEMP_EXTRACT",
+              "canonical_source_db": "other_ingredients",
+              "cleaner_match_method": null,
+              "matched_form": null,
+              "matched_forms": [],
+              "extracted_forms": [],
+              "skip_reason": "recognized_non_scorable",
+              "bio_score": null,
+              "notes": null,
+              "category": "unknown",
+              "quantity": 6.0,
+              "unit": "mg",
+              "unit_normalized": "mg",
+              "dailyValue": null,
+              "has_dose": true,
+              "is_blend_header": false,
+              "is_proprietary_blend": false,
+              "blend_total_weight_only": false,
+              "blend_disclosed_components_count": 0,
+              "is_excipient": false,
+              "never_promote_reason": null,
+              "recognition_source": "other_ingredients",
+              "recognition_reason": "active_pending_relocation",
+              "recognition_type": "non_scorable",
+              "recognized_entry_id": "NHA_HEMP_EXTRACT",
+              "recognized_entry_name": "Hemp Extract",
+              "mapped": true,
+              "mapped_identity": true,
+              "scoreable_identity": false,
+              "role_classification": "recognized_non_scorable",
+              "identity_confidence": 1.0,
+              "identity_decision_reason": "active_pending_relocation",
+              "safety_hits": [],
+              "certificates": [],
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[2]",
+              "cleaner_row_role": "active_scorable",
+              "score_eligible_by_cleaner": true,
+              "score_exclusion_reason": "recognized_non_scorable",
+              "dose_class": "therapeutic_mass",
+              "raw_taxonomy": {
+                "category": "botanical",
+                "ingredientGroup": "Hemp",
+                "ingredientId": 269379,
+                "uniiCode": null,
+                "forms": [
+                  {
+                    "name": "extract",
+                    "source": "name_extraction"
+                  }
+                ],
+                "parentBlend": null,
+                "isNestedIngredient": false,
+                "nested_depth": 0,
+                "quantityVariants": [
+                  {
+                    "quantity": 6.0,
+                    "unit": "mg",
+                    "index": 0,
+                    "operator": "=",
+                    "quantity_parsed": true,
+                    "serving_size_order": 1,
+                    "serving_size_quantity": 1,
+                    "serving_size_unit": "Gummy(ies)",
+                    "daily_value_target_group": "adult_4_plus",
+                    "selected_for_analysis": true
+                  }
+                ]
+              },
+              "plantPart": null,
+              "hierarchyType": null,
+              "form_extraction_used": false,
+              "is_dual_form": false,
+              "original_label": "Hemp extract",
+              "unmapped_forms": [],
+              "aggregation_method": null,
+              "final_form_bio_score": null,
+              "additional_forms": [],
+              "form_source": null,
+              "form_id": null,
+              "form_match_status": "n/a",
+              "matched_alias": null,
+              "matched_target": null,
+              "match_tier": null,
+              "fallback_class": "clinical_fail_safe",
+              "fallback_reason": "recognized_non_scorable",
+              "normalized_key": "hemp_extract",
+              "source_label_key": "label:nha_hemp_extract:hemp extract:6:mg",
+              "source_label_name": "Hemp extract",
+              "source_label_form": "extract",
+              "label_display_name": "Hemp extract",
+              "label_display_form": "extract",
+              "identity_disposition": "clean",
+              "canonical_id_before": "NHA_HEMP_EXTRACT",
+              "canonical_id_after": "NHA_HEMP_EXTRACT",
+              "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Hemp extract\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Hemp extract\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Hemp\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Hemp\"},{\"field\":\"forms[0]\",\"kind\":\"source_form\",\"value\":\"extract\"}]",
+              "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+              "identity_taxonomy_coherent": false,
+              "absorption": null,
+              "recognized_non_scorable": true,
+              "matched_entry_id": "NHA_HEMP_EXTRACT",
+              "matched_entry_name": "Hemp Extract",
+              "score_included": false,
+              "delivers_markers": []
+            },
+            {
+              "name": "Cannabidiol",
+              "raw_source_text": "Cannabidiol",
+              "standard_name": "Cannabidiol",
+              "canonical_id": "NHA_CANNABIDIOL",
+              "canonical_source_db": "other_ingredients",
+              "cleaner_match_method": null,
+              "matched_form": null,
+              "matched_forms": [],
+              "extracted_forms": [],
+              "skip_reason": "recognized_non_scorable",
+              "bio_score": null,
+              "notes": null,
+              "category": "unknown",
+              "quantity": 5.0,
+              "unit": "mg",
+              "unit_normalized": "mg",
+              "dailyValue": null,
+              "has_dose": true,
+              "is_blend_header": false,
+              "is_proprietary_blend": false,
+              "blend_total_weight_only": false,
+              "blend_disclosed_components_count": 0,
+              "is_excipient": false,
+              "never_promote_reason": null,
+              "recognition_source": "banned_recalled_ingredients",
+              "recognition_reason": "banned",
+              "recognition_type": "non_scorable",
+              "recognized_entry_id": "BANNED_CBD_US",
+              "recognized_entry_name": "CBD (Cannabidiol)",
+              "mapped": true,
+              "mapped_identity": true,
+              "scoreable_identity": false,
+              "role_classification": "recognized_non_scorable",
+              "identity_confidence": 1.0,
+              "identity_decision_reason": "safety_identity_excluded_from_scoring",
+              "safety_hits": [
+                {
+                  "rule_id": "RULE_BANNED_CBD_INTERACTIONS",
+                  "subject_ref": {
+                    "db": "other_ingredients",
+                    "canonical_id": "NHA_CANNABIDIOL"
+                  },
+                  "source_bucket": "ingredients_skipped",
+                  "condition_hits": [
+                    {
+                      "condition_id": "liver_disease",
+                      "severity": "avoid",
+                      "evidence_level": "established",
+                      "mechanism": "Prescription cannabidiol can cause dose-related liver-enzyme elevations, with greater risk in some patients taking valproate or with elevated baseline enzymes. Hepatic impairment can also increase cannabidiol exposure. The EPIDIOLEX warning concerns its tested prescription formulation.",
+                      "action": "Use CBD only with clinician guidance if you have liver disease. Prescription EPIDIOLEX requires liver monitoring; its label directs discontinuation for transaminases above 3 times ULN together with bilirubin above 2 times ULN, or sustained transaminases above 5 times ULN. The prescribing clinician should manage treatment changes.",
+                      "sources": [
+                        "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+                        "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+                      ],
+                      "dose_threshold_evaluation": null,
+                      "dose_decision": {
+                        "evaluated": false,
+                        "evaluation_status": null,
+                        "clinical_severity": "avoid",
+                        "consumer_disposition": "block",
+                        "release_blocking": false,
+                        "dose_evaluation": null,
+                        "decision_rule": null
+                      },
+                      "alert_headline": "CBD may raise liver enzymes",
+                      "alert_body": "CBD is processed by the liver and can raise liver enzymes, especially at higher doses or with other liver-metabolized medicines. If you have liver disease, use only with clinician guidance.",
+                      "informational_note": "CBD is liver-metabolized \u2014 relevant to people with liver conditions.",
+                      "warning_type": null,
+                      "direction": "harmful",
+                      "materiality": "presence",
+                      "min_effective_dose": null,
+                      "dose_floor_status": null,
+                      "profile_gate": {
+                        "gate_type": "condition",
+                        "requires": {
+                          "conditions_any": [
+                            "liver_disease"
+                          ],
+                          "drug_classes_any": [],
+                          "profile_flags_any": []
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    },
+                    {
+                      "condition_id": "seizure_disorder",
+                      "severity": "caution",
+                      "evidence_level": "established",
+                      "mechanism": "CBD has anticonvulsant properties (FDA-approved for Lennox-Gastaut and Dravet syndromes). However, CBD supplements are not pharmaceutical-grade and have variable potency, contaminant profiles, and dosing. Interaction with existing anticonvulsant regimens (especially valproate) may cause hepatotoxicity or alter drug levels.",
+                      "action": "Use only pharmaceutical-grade CBD (Epidiolex) for seizure management. Supplement-grade CBD should not be substituted. Inform neurologist of any CBD use.",
+                      "sources": [
+                        "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
+                      ],
+                      "dose_threshold_evaluation": null,
+                      "dose_decision": null,
+                      "alert_headline": "CBD \u2014 seizure clinician guidance",
+                      "alert_body": "Prescription cannabidiol treats specific seizure disorders, but OTC CBD products vary in dose and purity. If you have seizures or take antiseizure medication, use CBD only with clinician guidance.",
+                      "informational_note": "CBD may affect seizure threshold \u2014 relevant to people with a seizure disorder.",
+                      "warning_type": null,
+                      "direction": "neutral",
+                      "materiality": "presence",
+                      "min_effective_dose": null,
+                      "dose_floor_status": null,
+                      "profile_gate": {
+                        "gate_type": "condition",
+                        "requires": {
+                          "conditions_any": [
+                            "seizure_disorder"
+                          ],
+                          "drug_classes_any": [],
+                          "profile_flags_any": []
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    },
+                    {
+                      "condition_id": "pregnancy",
+                      "severity": "avoid",
+                      "evidence_level": "probable",
+                      "mechanism": "FDA strongly advises against CBD use during pregnancy. Animal studies show potential risks to the developing fetus. No adequate human safety data exists for CBD during pregnancy.",
+                      "action": "Avoid CBD supplements during pregnancy. Consult healthcare provider.",
+                      "sources": [
+                        "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
+                      ],
+                      "dose_threshold_evaluation": null,
+                      "dose_decision": {
+                        "evaluated": false,
+                        "evaluation_status": null,
+                        "clinical_severity": "avoid",
+                        "consumer_disposition": "block",
+                        "release_blocking": false,
+                        "dose_evaluation": null,
+                        "decision_rule": null
+                      },
+                      "alert_headline": "FDA advises against use in pregnancy",
+                      "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+                      "informational_note": "CBD lacks pregnancy safety data \u2014 relevant to anyone pregnant or planning pregnancy.",
+                      "warning_type": null,
+                      "direction": "harmful",
+                      "materiality": "presence",
+                      "min_effective_dose": null,
+                      "dose_floor_status": null,
+                      "profile_gate": {
+                        "gate_type": "profile_flag",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [
+                            "pregnant"
+                          ]
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    },
+                    {
+                      "condition_id": "lactation",
+                      "dose_decision": {
+                        "evaluated": false,
+                        "evaluation_status": null,
+                        "clinical_severity": "avoid",
+                        "consumer_disposition": "block",
+                        "release_blocking": false,
+                        "dose_evaluation": null,
+                        "decision_rule": null
+                      },
+                      "severity": "avoid",
+                      "evidence_level": "probable",
+                      "mechanism": "FDA strongly advises against CBD during pregnancy and breastfeeding. Avoid CBD products and discuss any exposure with your clinician.",
+                      "action": "Avoid use during breastfeeding.",
+                      "sources": [
+                        "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
+                      ],
+                      "alert_headline": "Breastfeeding: avoid use",
+                      "alert_body": "FDA strongly advises against CBD during pregnancy and breastfeeding. Avoid CBD products and discuss any exposure with your clinician.",
+                      "informational_note": null,
+                      "warning_type": null,
+                      "direction": "harmful",
+                      "materiality": "presence",
+                      "profile_gate": {
+                        "gate_type": "profile_flag",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [
+                            "breastfeeding"
+                          ]
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    }
+                  ],
+                  "drug_class_hits": [
+                    {
+                      "drug_class_id": "anticonvulsants",
+                      "severity": "caution",
+                      "evidence_level": "established",
+                      "mechanism": "The EPIDIOLEX label reports increased exposure to N-desmethylclobazam during concomitant clobazam use and a higher liver-enzyme elevation risk with valproate. These findings apply to the studied prescription cannabidiol preparation and specific combinations; the label does not establish identical effects for every anticonvulsant.",
+                      "action": "Ask your neurologist before adding CBD. The prescriber should manage clobazam-related adverse effects, liver monitoring with valproate, and any medication adjustment.",
+                      "sources": [
+                        "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+                      ],
+                      "dose_threshold_evaluation": null,
+                      "dose_decision": null,
+                      "alert_headline": "May affect seizure medication",
+                      "alert_body": "CBD can influence how seizure medications work. If you take an anticonvulsant, talk to your neurologist before adding CBD.",
+                      "informational_note": "CBD may affect anticonvulsant therapy \u2014 relevant to people on seizure medications.",
+                      "warning_type": null,
+                      "direction": "harmful",
+                      "materiality": "presence",
+                      "min_effective_dose": null,
+                      "dose_floor_status": null,
+                      "profile_gate": {
+                        "gate_type": "drug_class",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [
+                            "anticonvulsants"
+                          ],
+                          "profile_flags_any": []
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    },
+                    {
+                      "drug_class_id": "immunosuppressants",
+                      "severity": "caution",
+                      "evidence_level": "established",
+                      "mechanism": "The EPIDIOLEX label advises monitoring and possible dose adjustment for susceptible oral P-glycoprotein substrates, including tacrolimus and sirolimus. This should not be generalized to clinically proven inhibition of all CYP3A4 substrates.",
+                      "action": "Monitor tacrolimus/sirolimus trough levels closely. Dose reduction for the immunosuppressant should be considered. Inform transplant team of CBD use.",
+                      "sources": [
+                        "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
+                      ],
+                      "dose_threshold_evaluation": null,
+                      "dose_decision": null,
+                      "alert_headline": "May increase exposure to some transplant drugs",
+                      "alert_body": "CBD can increase exposure to certain transplant drugs. Talk to your transplant prescriber before use; appropriate drug-level monitoring or prescribed dose adjustment may be needed.",
+                      "informational_note": "CBD affects immune function \u2014 relevant to people on immunosuppressants.",
+                      "warning_type": null,
+                      "direction": "harmful",
+                      "materiality": "presence",
+                      "min_effective_dose": null,
+                      "dose_floor_status": null,
+                      "profile_gate": {
+                        "gate_type": "drug_class",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [
+                            "immunosuppressants"
+                          ],
+                          "profile_flags_any": []
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    },
+                    {
+                      "drug_class_id": "anticoagulants",
+                      "severity": "caution",
+                      "evidence_level": "probable",
+                      "mechanism": "Case reports describe INR increases during cannabinoid use with warfarin. Evidence quality is low, and this does not establish a uniform anticoagulant-class effect or direct antiplatelet activity.",
+                      "action": "Monitor INR more frequently when starting or stopping CBD. Inform prescriber.",
+                      "sources": [
+                        "https://pubmed.ncbi.nlm.nih.gov/33016308/",
+                        "https://pubmed.ncbi.nlm.nih.gov/35012687/",
+                        "https://pubmed.ncbi.nlm.nih.gov/37740600/"
+                      ],
+                      "dose_threshold_evaluation": null,
+                      "dose_decision": null,
+                      "alert_headline": "May add to blood-thinner effects",
+                      "alert_body": "Case reports link cannabinoid use to INR changes with warfarin. Tell your anticoagulant prescriber about CBD use; warfarin users may need closer INR checks when use changes.",
+                      "informational_note": "CBD can affect clotting \u2014 relevant to people on anticoagulants.",
+                      "warning_type": null,
+                      "direction": "harmful",
+                      "materiality": "presence",
+                      "min_effective_dose": null,
+                      "dose_floor_status": null,
+                      "profile_gate": {
+                        "gate_type": "drug_class",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [
+                            "anticoagulants"
+                          ],
+                          "profile_flags_any": []
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    },
+                    {
+                      "drug_class_id": "sedatives",
+                      "severity": "caution",
+                      "evidence_level": "probable",
+                      "mechanism": "CBD has CNS depressant effects and may potentiate sedation when combined with benzodiazepines, opioids, or other sedatives.",
+                      "action": "Use caution with concurrent sedative medications. Monitor for excessive drowsiness.",
+                      "sources": [
+                        "https://www.nccih.nih.gov/health/cannabis-marijuana-and-cannabinoids-what-you-need-to-know"
+                      ],
+                      "dose_threshold_evaluation": null,
+                      "dose_decision": null,
+                      "alert_headline": "May add to sedative drowsiness",
+                      "alert_body": "CBD has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding CBD \u2014 the combination can increase drowsiness.",
+                      "informational_note": "CBD has sedative activity \u2014 relevant to people on sedatives or sleep medications.",
+                      "warning_type": null,
+                      "direction": "harmful",
+                      "materiality": "presence",
+                      "min_effective_dose": null,
+                      "dose_floor_status": null,
+                      "profile_gate": {
+                        "gate_type": "drug_class",
+                        "requires": {
+                          "conditions_any": [],
+                          "drug_classes_any": [
+                            "sedatives"
+                          ],
+                          "profile_flags_any": []
+                        },
+                        "excludes": {
+                          "conditions_any": [],
+                          "drug_classes_any": [],
+                          "profile_flags_any": [],
+                          "product_forms_any": [],
+                          "nutrient_forms_any": []
+                        },
+                        "dose": null
+                      }
+                    }
+                  ],
+                  "pregnancy_lactation": {
+                    "pregnancy_category": "avoid",
+                    "lactation_category": "avoid",
+                    "evidence_level": "probable",
+                    "notes": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
+                    "alert_headline": "Avoid CBD during pregnancy and breastfeeding",
+                    "alert_body": "FDA strongly advises against CBD during pregnancy and breastfeeding. Avoid CBD products and discuss any exposure with your clinician.",
+                    "informational_note": "CBD lacks pregnancy safety data \u2014 relevant to anyone pregnant or planning pregnancy.",
+                    "profile_gate": {
+                      "gate_type": "profile_flag",
+                      "requires": {
+                        "conditions_any": [],
+                        "drug_classes_any": [],
+                        "profile_flags_any": [
+                          "pregnant",
+                          "breastfeeding"
+                        ]
+                      },
+                      "excludes": {
+                        "conditions_any": [],
+                        "drug_classes_any": [],
+                        "profile_flags_any": [],
+                        "product_forms_any": [],
+                        "nutrient_forms_any": []
+                      },
+                      "dose": null
+                    },
+                    "direction": "harmful",
+                    "materiality": "presence",
+                    "sources": [
+                      "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
+                    ]
+                  },
+                  "last_reviewed": "2026-04-14"
+                }
+              ],
+              "certificates": [],
+              "source_section": "active",
+              "raw_source_path": "ingredientRows[2].nestedRows[0]",
+              "cleaner_row_role": "active_scorable",
+              "score_eligible_by_cleaner": true,
+              "score_exclusion_reason": "recognized_non_scorable",
+              "dose_class": "therapeutic_mass",
+              "raw_taxonomy": {
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "Cannabidiol",
+                "ingredientId": 124772,
+                "uniiCode": null,
+                "forms": [],
+                "parentBlend": "Hemp extract",
+                "isNestedIngredient": true,
+                "nested_depth": 1,
+                "quantityVariants": [
+                  {
+                    "quantity": 5.0,
+                    "unit": "mg",
+                    "index": 0,
+                    "operator": "=",
+                    "quantity_parsed": true,
+                    "serving_size_order": 1,
+                    "serving_size_quantity": 1,
+                    "serving_size_unit": "Gummy(ies)",
+                    "daily_value_target_group": "adult_4_plus",
+                    "selected_for_analysis": true
+                  }
+                ]
+              },
+              "plantPart": null,
+              "hierarchyType": null,
+              "form_extraction_used": false,
+              "is_dual_form": false,
+              "original_label": "Cannabidiol",
+              "unmapped_forms": [],
+              "aggregation_method": null,
+              "final_form_bio_score": null,
+              "additional_forms": [],
+              "form_source": null,
+              "form_id": null,
+              "form_match_status": "n/a",
+              "matched_alias": null,
+              "matched_target": null,
+              "match_tier": null,
+              "fallback_class": "clinical_fail_safe",
+              "fallback_reason": "recognized_non_scorable",
+              "normalized_key": "cannabidiol",
+              "source_label_key": "label:nha_cannabidiol:cannabidiol:5:mg",
+              "source_label_name": "Cannabidiol",
+              "source_label_form": null,
+              "label_display_name": "Cannabidiol",
+              "label_display_form": null,
+              "identity_disposition": "clean",
+              "canonical_id_before": "NHA_CANNABIDIOL",
+              "canonical_id_after": "NHA_CANNABIDIOL",
+              "identity_evidence": "[{\"field\":\"raw_source_text\",\"kind\":\"source_name\",\"value\":\"Cannabidiol\"},{\"field\":\"name\",\"kind\":\"source_name\",\"value\":\"Cannabidiol\"},{\"field\":\"ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Cannabidiol\"},{\"field\":\"raw_taxonomy.ingredientGroup\",\"kind\":\"structured_identity\",\"value\":\"Cannabidiol\"},{\"field\":\"alternateNames[0]\",\"kind\":\"structured_identity\",\"value\":\"CBD\"}]",
+              "identity_resolution_rationale": "Structured line identity agrees with the supplied canonical ID.",
+              "identity_taxonomy_coherent": false,
+              "absorption": null,
+              "recognized_non_scorable": true,
+              "matched_entry_id": "BANNED_CBD_US",
+              "matched_entry_name": "CBD (Cannabidiol)",
+              "safety_identity_id": "BANNED_CBD_US",
+              "score_included": false,
+              "delivers_markers": []
+            }
+          ]
+        },
+        "activeIngredients": [
+          {
+            "ingredientId": 269379,
+            "uniiCode": null,
+            "order": 5,
+            "raw_category": "botanical",
+            "raw_source_text": "Hemp extract",
+            "branded_token_extracted": null,
+            "canonical_id": "NHA_HEMP_EXTRACT",
+            "canonical_source_db": "other_ingredients",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[2]",
+            "normalized_key": "hemp_extract",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": true,
+            "score_exclusion_reason": null,
+            "dose_class": "therapeutic_mass",
+            "raw_taxonomy": {
+              "category": "botanical",
+              "ingredientGroup": "Hemp",
+              "ingredientId": 269379,
+              "uniiCode": null,
+              "forms": [
+                {
+                  "name": "extract",
+                  "source": "name_extraction"
+                }
+              ],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 6.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "operator": "=",
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Gummy(ies)",
+                  "daily_value_target_group": "adult_4_plus",
+                  "selected_for_analysis": true
+                }
+              ]
+            },
+            "name": "Hemp extract",
+            "label_display_name": null,
+            "standardName": "Hemp Extract",
+            "ingredientGroup": "Hemp",
+            "quantity": 6.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "alternateNames": [],
+            "mapped": true,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": null,
+            "isNestedIngredient": false,
+            "nestedIngredients": [],
+            "parentBlendMass": null,
+            "parentBlendUnit": null,
+            "hierarchyType": null,
+            "safety_flags": []
+          },
+          {
+            "ingredientId": 124772,
+            "uniiCode": null,
+            "order": 6,
+            "raw_category": "non-nutrient/non-botanical",
+            "raw_source_text": "Cannabidiol",
+            "branded_token_extracted": null,
+            "canonical_id": "NHA_CANNABIDIOL",
+            "canonical_source_db": "other_ingredients",
+            "cleaner_match_method": null,
+            "label_nutrient_context": null,
+            "source_section": "active",
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "normalized_key": "cannabidiol",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": true,
+            "score_exclusion_reason": null,
+            "dose_class": "therapeutic_mass",
+            "raw_taxonomy": {
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Cannabidiol",
+              "ingredientId": 124772,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": "Hemp extract",
+              "isNestedIngredient": true,
+              "nested_depth": 1,
+              "quantityVariants": [
+                {
+                  "quantity": 5.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "operator": "=",
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Gummy(ies)",
+                  "daily_value_target_group": "adult_4_plus",
+                  "selected_for_analysis": true
+                }
+              ]
+            },
+            "name": "Cannabidiol",
+            "label_display_name": null,
+            "standardName": "Cannabidiol",
+            "ingredientGroup": "Cannabidiol",
+            "quantity": 5.0,
+            "unit": "mg",
+            "dailyValue": null,
+            "quantityVariants": null,
+            "forms": [],
+            "alternateNames": [
+              "CBD"
+            ],
+            "mapped": true,
+            "proprietaryBlend": false,
+            "disclosureLevel": null,
+            "parentBlend": "Hemp extract",
+            "isNestedIngredient": true,
+            "nestedIngredients": [],
+            "parentBlendMass": 6,
+            "parentBlendUnit": "mg",
+            "hierarchyType": null,
+            "parent_source_path": "ingredientRows[2]",
+            "safety_flags": [
+              {
+                "entry_id": "BANNED_CBD_US",
+                "source_db": "banned_recalled_ingredients",
+                "status": "banned",
+                "severity": "critical",
+                "match_type": "alias",
+                "matched_variant": "cannabidiol",
+                "evidence_text": "Cannabidiol",
+                "confidence": "high",
+                "jurisdictions": [
+                  {
+                    "region": "US",
+                    "level": "federal",
+                    "status": "banned",
+                    "effective_date": "2018-12-20",
+                    "source": {
+                      "type": "fda_action",
+                      "citation": "FDA states that products containing CBD are excluded from the dietary supplement definition under the FD&C Act drug-exclusion provision.",
+                      "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+                      "accessed_date": "2026-08-20"
+                    },
+                    "jurisdiction_type": "country",
+                    "jurisdiction_code": "US",
+                    "last_verified_date": "2026-08-20"
+                  }
+                ],
+                "us_applicable": true,
+                "regional_advisories": []
+              }
+            ]
+          }
+        ],
+        "product_scoring_evidence": [
+          {
+            "evidence_type": "blend_anchor_mass",
+            "scoreable": true,
+            "scoreable_identity": true,
+            "score_eligible_by_cleaner": true,
+            "dose_class": "therapeutic_mass",
+            "dose_value": 6.0,
+            "dose_unit": "mg",
+            "source": "active",
+            "raw_source_path": "ingredientRows[2]",
+            "evidence_scope": "row_level",
+            "linked_rows": [
+              "ingredientRows[2]"
+            ],
+            "confidence": "medium",
+            "reason": "identity_bearing_active_anchor_mass",
+            "name": "Hemp extract",
+            "canonical_id": "nha_hemp_extract",
+            "clean_identity_id": "nha_hemp_extract",
+            "scoring_parent_id": "nha_hemp_extract",
+            "evidence_canonical_id": "nha_hemp_extract",
+            "canonical_source_db": "other_ingredients",
+            "evidence_origin": "compatibility_derived",
+            "source_section": "product",
+            "raw_taxonomy": {
+              "category": "botanical",
+              "ingredientGroup": "Hemp",
+              "ingredientId": 269379,
+              "uniiCode": null,
+              "forms": [
+                {
+                  "name": "extract",
+                  "source": "name_extraction"
+                }
+              ],
+              "parentBlend": null,
+              "isNestedIngredient": false,
+              "nested_depth": 0,
+              "quantityVariants": [
+                {
+                  "quantity": 6.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "operator": "=",
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Gummy(ies)",
+                  "daily_value_target_group": "adult_4_plus",
+                  "selected_for_analysis": true
+                }
+              ]
+            },
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "standardName": "Hemp Extract",
+            "raw_source_text": "Hemp extract",
+            "identity_contract_required": true,
+            "identity_disposition": "clean",
+            "identity_kind": "verified_ingredient",
+            "anchor_risk_class": "botanical_or_standardized",
+            "notes": null
+          },
+          {
+            "evidence_type": "blend_anchor_mass",
+            "scoreable": true,
+            "scoreable_identity": true,
+            "score_eligible_by_cleaner": true,
+            "dose_class": "therapeutic_mass",
+            "dose_value": 5.0,
+            "dose_unit": "mg",
+            "source": "active",
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "evidence_scope": "row_level",
+            "linked_rows": [
+              "ingredientRows[2].nestedRows[0]"
+            ],
+            "confidence": "medium",
+            "reason": "identity_bearing_active_anchor_mass",
+            "name": "Cannabidiol",
+            "canonical_id": "nha_cannabidiol",
+            "clean_identity_id": "nha_cannabidiol",
+            "scoring_parent_id": "nha_cannabidiol",
+            "evidence_canonical_id": "nha_cannabidiol",
+            "canonical_source_db": "other_ingredients",
+            "evidence_origin": "compatibility_derived",
+            "source_section": "product",
+            "raw_taxonomy": {
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Cannabidiol",
+              "ingredientId": 124772,
+              "uniiCode": null,
+              "forms": [],
+              "parentBlend": "Hemp extract",
+              "isNestedIngredient": true,
+              "nested_depth": 1,
+              "quantityVariants": [
+                {
+                  "quantity": 5.0,
+                  "unit": "mg",
+                  "index": 0,
+                  "operator": "=",
+                  "quantity_parsed": true,
+                  "serving_size_order": 1,
+                  "serving_size_quantity": 1,
+                  "serving_size_unit": "Gummy(ies)",
+                  "daily_value_target_group": "adult_4_plus",
+                  "selected_for_analysis": true
+                }
+              ]
+            },
+            "forms": [],
+            "standardName": "Cannabidiol",
+            "raw_source_text": "Cannabidiol",
+            "identity_contract_required": true,
+            "identity_disposition": "clean",
+            "identity_kind": "verified_ingredient",
+            "notes": null
+          }
+        ]
+      },
+      "scored": {
+        "dsld_id": "246324",
+        "product_name": "CBD Mixed Berry",
+        "brand_name": "vitafusion",
+        "evaluation_stage": "scored_v4",
+        "output_schema_version": "4.4.0",
+        "score_basis": "v4_six_pillar",
+        "delivery_data": {
+          "matched": false,
+          "systems": [],
+          "highest_tier": null
+        },
+        "not_scorable_reason": null,
+        "supplement_taxonomy": {
+          "primary_type": "general_supplement",
+          "secondary_type": null,
+          "percentile_category": "general_supplement",
+          "classification_confidence": 0.0,
+          "classification_reasons": [
+            "no quantified active ingredients"
+          ],
+          "classification_reason_codes": [
+            "no_quantified_active_evidence"
+          ],
+          "classification_input_source": "scoring_input_contract.quantified_label_active_rows",
+          "quantified_active_count": 0,
+          "distinct_active_identity_count": 0,
+          "quantified_active_row_count": 0,
+          "non_quantified_base_count": 0,
+          "category_breakdown": {},
+          "category_row_breakdown": {},
+          "dsld_product_type": "other combinations",
+          "classification_contract_version": "1.3.0",
+          "classification_input_contract": "quantified_label_actives",
+          "classification_row_evidence": [],
+          "unresolved_quantified_active_count": 0,
+          "quantified_label_active_count": 0,
+          "scorable_active_count": 0,
+          "is_single_scorable_active": false
+        },
+        "primary_type": "general_supplement",
+        "secondary_type": null,
+        "percentile_category": "general_supplement",
+        "category_percentile": {
+          "category_key": "general_supplement",
+          "category_label": "General Supplement"
+        },
+        "mapped_coverage": 1.0,
+        "unmapped_actives": [],
+        "unmapped_actives_total": 0,
+        "unmapped_actives_excluding_banned_exact_alias": 0,
+        "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable+product_scoring_evidence",
+        "scoring_fallbacks_used": [],
+        "iqd_contract_diagnostics": {
+          "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable+product_scoring_evidence",
+          "iqd_ingredients_fallback_used": false,
+          "ingredients_scorable_count": 2,
+          "scoring_rows_count": 2,
+          "rejected_rows_count": 0,
+          "rejected_rows": [],
+          "scoring_fallbacks_used": [],
+          "strict_contract_passed": true,
+          "strict_scoring_contract": {
+            "passed": true,
+            "findings": [],
+            "zero_scorable_reason": null
+          },
+          "zero_scorable_reason": null,
+          "mapped_count": 2,
+          "unmapped_count": 0,
+          "mapped_coverage": 1.0,
+          "contract_findings": []
+        },
+        "strict_scoring_contract": {
+          "passed": true,
+          "findings": [],
+          "zero_scorable_reason": null
+        },
+        "verdict": "BLOCKED",
+        "safety_verdict": "BLOCKED",
+        "blocking_reason": "banned_ingredient",
+        "safety_signal_reason": "banned_ingredient",
+        "safety_decision": {
+          "verdict": "BLOCKED",
+          "winning_rule": "BANNED_CBD_US",
+          "substance": "CBD (Cannabidiol)",
+          "matched_role": "active",
+          "matched_form": "Cannabidiol",
+          "match_resolution": "confirmed",
+          "policy_basis": {
+            "status": "banned",
+            "legal_status": "not_lawful_as_supplement",
+            "ban_context": "substance",
+            "clinical_risk": "high",
+            "policy_verification_status": "verified",
+            "policy_verified_at": "2026-08-20"
+          },
+          "jurisdiction": "US",
+          "reason_code": "banned_ingredient",
+          "verified_sources": [
+            {
+              "type": "fda_guidance",
+              "title": "FDA Regulation of Cannabis and Cannabis-Derived Products, Including CBD",
+              "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+              "evidence_grade": "R",
+              "evidence_summary": "FDA states THC/CBD products are excluded from dietary supplement definition under FD&C Act section 201(ff)(3)(B). Q&A9 distinguishes cannabis-derived ingredients without THC or CBD from the excluded THC/CBD substances; hemp or phytocannabinoid wording alone does not identify CBD.",
+              "supports_claims": [
+                "regulatory_status"
+              ]
+            },
+            {
+              "jurisdiction": "US",
+              "last_verified_date": "2026-08-20",
+              "type": "fda_action",
+              "citation": "FDA states that products containing CBD are excluded from the dietary supplement definition under the FD&C Act drug-exclusion provision.",
+              "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+              "accessed_date": "2026-08-20"
+            }
+          ],
+          "source_db": "banned_recalled_ingredients"
+        },
+        "safety_review_records": [],
+        "flags": [],
+        "badges": [],
+        "quality_score_v4_100": null,
+        "quality_score_status": "suppressed_safety",
+        "quality_score_confidence": null,
+        "score_unavailable_reason": "blocked_by_safety_gate",
+        "route_decision": {
+          "module": "generic",
+          "reason_codes": [
+            "taxonomy:general_supplement",
+            "scoring_rows_present"
+          ],
+          "confidence": "medium",
+          "classifier_version": "1.3.2"
+        },
+        "route_confidence": "medium",
+        "product_safety_status": "blocked",
+        "quality_assessment_status": "complete",
+        "assessment_readiness": {
+          "schema_version": "1.0.0",
+          "enforcement_mode": "enforced",
+          "input_contract_version": "1.0.0",
+          "enforced_dimensions": [
+            "dose",
+            "identity",
+            "route",
+            "verification"
+          ],
+          "catalog_disposition": {
+            "disposition": "score_candidate",
+            "reason_code": "strict_scoring_rows_present",
+            "evidence_paths": []
+          },
+          "identity": {
+            "readiness": "complete",
+            "reason_code": "mapped_scoring_actives",
+            "mapped_count": 2,
+            "unmapped_count": 0,
+            "mapped_coverage": 1.0,
+            "product_evidence_count": 0,
+            "mapped_product_evidence_count": 0,
+            "contract_findings": [],
+            "blocking_contract_findings": [],
+            "source_score_eligible_active_count": 0,
+            "source_mapped_count": 0,
+            "source_unmapped_count": 0,
+            "source_mapped_coverage": null,
+            "zero_scorable_reason": null,
+            "module": "generic",
+            "module_relevant_identity": true
+          },
+          "dose": {
+            "readiness": "complete",
+            "collection_status": "complete",
+            "assessment_count": 2,
+            "material_active_count": 2,
+            "material_exposure_count": 2,
+            "material_assessment_count": 2,
+            "assessment_source": "typed_dose_assessments"
+          },
+          "evidence": {
+            "readiness": "incomplete",
+            "material_active_count": 2,
+            "individual_assessment_count": 2,
+            "applicability_counts": {
+              "individual_ingredient": 2
+            },
+            "not_yet_evaluated_count": 2,
+            "not_yet_evaluated_row_refs": [
+              "ingredientRows[2]",
+              "ingredientRows[2].nestedRows[0]"
+            ],
+            "ingredient_assessments": [
+              {
+                "source_row_ref": "ingredientRows[2]",
+                "canonical_id": "nha_hemp_extract",
+                "name": "Hemp extract",
+                "role": "major",
+                "material": true,
+                "source_value": 6.0,
+                "source_unit": "mg",
+                "dose_class": "therapeutic_mass",
+                "linked_rows": [
+                  "ingredientRows[2]"
+                ],
+                "scoring_input_kind": "label_active_projection",
+                "evidence_type": "blend_anchor_mass",
+                "state": "not_yet_evaluated",
+                "evidence_applicability": "individual_ingredient",
+                "reason_code": "no_reviewed_evidence_assessment",
+                "evidence_ids": []
+              },
+              {
+                "source_row_ref": "ingredientRows[2].nestedRows[0]",
+                "canonical_id": "nha_cannabidiol",
+                "name": "Cannabidiol",
+                "role": "major",
+                "material": true,
+                "source_value": 5.0,
+                "source_unit": "mg",
+                "dose_class": "therapeutic_mass",
+                "linked_rows": [
+                  "ingredientRows[2].nestedRows[0]"
+                ],
+                "scoring_input_kind": "label_active_projection",
+                "evidence_type": "blend_anchor_mass",
+                "state": "not_yet_evaluated",
+                "evidence_applicability": "individual_ingredient",
+                "reason_code": "no_reviewed_evidence_assessment",
+                "evidence_ids": []
+              }
+            ],
+            "resolved_evidence_match_count": 0,
+            "recovered_evidence_ids": []
+          },
+          "verification": {
+            "state": "verified_absent",
+            "readiness": "complete",
+            "reason_code": "registry_evaluated_no_match",
+            "matched_programs": [],
+            "registry_schema_version": "6.0.0",
+            "registry_source_count": 9
+          },
+          "route": {
+            "readiness": "complete",
+            "module": "generic",
+            "reason_codes": [
+              "taxonomy:general_supplement",
+              "scoring_rows_present"
+            ],
+            "route_confidence": "medium",
+            "classifier_version": "1.3.2"
+          },
+          "is_live_ready": true,
+          "unavailable_reasons": [],
+          "shadow_incomplete_dimensions": [
+            "evidence"
+          ],
+          "release_assessment": {
+            "is_complete": false,
+            "blockers": [
+              "evidence_assessment_incomplete"
+            ],
+            "unfinished_source_assessment": null
+          }
+        },
+        "dose_safety_evaluation": {
+          "state_counts": {},
+          "conversion_failures": 0,
+          "flags": [],
+          "caffeine": null,
+          "dose_ceiling": null
+        },
+        "quality_tier": null,
+        "quality_score_suppressed_reason": "banned_ingredient",
+        "raw_score_v4_100": null,
+        "quality_pillars_v4": null,
+        "score_100_equivalent": null,
+        "display_100": "N/A",
+        "grade": null,
+        "scoring_metadata": {
+          "scoring_version": "4.8.1",
+          "scored_date": "2026-10-29T14:18:31.910052+00:00"
+        },
+        "_score_model_version": "v4",
+        "_v4_module": "generic",
+        "_v4_module_breakdown": null,
+        "_v4_inactive_penalty_details": [],
+        "_v4_confidence_detail": null,
+        "_v4_quality_version": "1.31.0-evidence-no-automatic-exceptional",
+        "_v4_clean_label_flags": null,
+        "_v4_safety_gate": {
+          "verdict": "BLOCKED",
+          "blocking_reason": "banned_ingredient",
+          "matched_substance": "CBD (Cannabidiol)",
+          "safety_signals": [],
+          "needs_review": false,
+          "short_circuits_scoring": true,
+          "safety_decision": {
+            "verdict": "BLOCKED",
+            "winning_rule": "BANNED_CBD_US",
+            "substance": "CBD (Cannabidiol)",
+            "matched_role": "active",
+            "matched_form": "Cannabidiol",
+            "match_resolution": "confirmed",
+            "policy_basis": {
+              "status": "banned",
+              "legal_status": "not_lawful_as_supplement",
+              "ban_context": "substance",
+              "clinical_risk": "high",
+              "policy_verification_status": "verified",
+              "policy_verified_at": "2026-08-20"
+            },
+            "jurisdiction": "US",
+            "reason_code": "banned_ingredient",
+            "verified_sources": [
+              {
+                "type": "fda_guidance",
+                "title": "FDA Regulation of Cannabis and Cannabis-Derived Products, Including CBD",
+                "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+                "evidence_grade": "R",
+                "evidence_summary": "FDA states THC/CBD products are excluded from dietary supplement definition under FD&C Act section 201(ff)(3)(B). Q&A9 distinguishes cannabis-derived ingredients without THC or CBD from the excluded THC/CBD substances; hemp or phytocannabinoid wording alone does not identify CBD.",
+                "supports_claims": [
+                  "regulatory_status"
+                ]
+              },
+              {
+                "jurisdiction": "US",
+                "last_verified_date": "2026-08-20",
+                "type": "fda_action",
+                "citation": "FDA states that products containing CBD are excluded from the dietary supplement definition under the FD&C Act drug-exclusion provision.",
+                "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+                "accessed_date": "2026-08-20"
+              }
+            ],
+            "source_db": "banned_recalled_ingredients"
+          },
+          "quarantine_required": false,
+          "quarantine_reason": null,
+          "review_records": [],
+          "ingredient_assessment_complete": true,
+          "ingredient_assessment_errors": [],
+          "clean_label_hits": []
+        },
+        "_v4_completeness_gate": {
+          "module": "generic",
+          "is_live_eligible": true,
+          "verdict": null,
+          "reason": null,
+          "missing_fields": [],
+          "soft_missing": [],
+          "mapped_coverage": 1.0,
+          "dose_coverage": null,
+          "checked_fields": [
+            "product_status_active",
+            "form_factor",
+            "active_identity",
+            "mapped_coverage",
+            "micronutrient_source_amounts",
+            "dose_assessment_readiness",
+            "identity_assessment_readiness",
+            "evidence_assessment_readiness",
+            "verification_assessment_readiness",
+            "route_assessment_readiness",
+            "dose_with_unit"
+          ],
+          "score_cap": null,
+          "verdict_ceiling": null
+        },
+        "_v4_provenance": {
+          "scoring_engine_version": "4.8.1",
+          "classification_schema_version": "1.3.0",
+          "config_versions": {
+            "omega": {
+              "version": "2.3.1-dose-v41-references",
+              "fingerprint": "439adb25868a79fd"
+            },
+            "quality_score": {
+              "version": "1.31.0-evidence-no-automatic-exceptional",
+              "fingerprint": "98d2a9e17f873e46"
+            }
+          },
+          "module_route": "generic",
+          "mode": "production"
+        },
+        "_v4_config_fingerprint": "{\"omega\": {\"fingerprint\": \"439adb25868a79fd\", \"version\": \"2.3.1-dose-v41-references\"}, \"quality_score\": {\"fingerprint\": \"98d2a9e17f873e46\", \"version\": \"1.31.0-evidence-no-automatic-exceptional\"}}"
+      }
+    }
+  }
+}
