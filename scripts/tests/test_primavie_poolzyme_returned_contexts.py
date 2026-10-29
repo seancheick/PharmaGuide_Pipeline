@@ -29,9 +29,14 @@ def test_primavie_returned_biomarker_scope_has_complete_source_context():
     assert 'symptomatic benefit' in ' '.join(context['limitations'])
 
 
-@pytest.mark.parametrize('claim', ['Libido Support', 'Fertility Support',
-    'Muscle Strength', 'Quality of Life Support', 'Longevity Support'])
-def test_primavie_biomarkers_do_not_transfer_to_symptomatic_claims(claim):
+@pytest.mark.parametrize('claim,status,reason', [
+    ('Libido Support', 'unresolved', 'label_claim_unclassified'),
+    ('Fertility Support', 'unresolved', 'label_claim_unclassified'),
+    ('Quality of Life Support', 'unresolved', 'label_claim_unclassified'),
+    ('Muscle Strength', 'not_applicable', 'label_purpose_evidence_mismatch'),
+    ('Longevity Support', 'not_applicable', 'label_purpose_evidence_mismatch'),
+])
+def test_primavie_biomarkers_do_not_transfer_to_symptomatic_claims(claim, status, reason):
     from clinical_applicability import assess_clinical_applicability
     record = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
     row = {'name': 'PrimaVie Shilajit', 'raw_source_text': 'PrimaVie Shilajit',
@@ -42,8 +47,8 @@ def test_primavie_biomarkers_do_not_transfer_to_symptomatic_claims(claim):
     match = {**record, 'matched_canonical_ids': ['shilajit'],
              'matched_source_row_refs': ['ingredientRows[0]']}
     result = assess_clinical_applicability(product, match)
-    assert result['status'] == 'not_applicable'
-    assert result['reason_code'] == 'label_purpose_evidence_mismatch'
+    assert result['status'] == status
+    assert result['reason_code'] == reason
 
 
 @pytest.mark.parametrize('title,claim', [('PrimaVie Capsules', ''),
@@ -64,6 +69,25 @@ def test_primavie_keeps_independently_qualified_testosterone_relationship(title,
     assert result['supported_outcomes'] == ['testosterone']
     assert result['population_applicability']['context_ids'] == [
         'brand_primavie_26395129_androgen_biomarkers']
+
+
+@pytest.mark.parametrize('record_id,name,canonical,title', [
+    ('BRAND_PRIMAVIE_SHILAJIT', 'PrimaVie Shilajit', 'shilajit',
+     'Testosterone Support for Diagnosed Hypogonadism'),
+    ('BRAND_KSM66', 'KSM-66 Ashwagandha Root Extract', 'ashwagandha',
+     'Perceived Stress and Testosterone Support'),
+])
+def test_exact_outcome_cannot_override_a_signed_record_exclusion(record_id, name, canonical, title):
+    from clinical_applicability import assess_clinical_applicability
+    record = reviewed_entries()[record_id]
+    row = {'name': name, 'raw_source_text': name, 'canonical_id': canonical,
+           'mapped': True, 'quantity': 500, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'product_name': title, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    match = {**record, 'matched_canonical_ids': [canonical],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability(product, match)
+    assert result == {'status': 'not_applicable', 'reason_code': 'label_purpose_evidence_mismatch'}
 
 
 def test_poolzyme_extraction_preserves_explicit_source_acceptance_hold():

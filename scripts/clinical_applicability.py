@@ -463,9 +463,12 @@ _POPULATION_WORDS = re.compile(
     r"prenatal|pregnan\w*|maternal|postnatal|postpartum|wom[ae]n'?s?|female|men'?s?|male)\b", re.I)
 
 
-# A product-level function sentence ("Supports normal enzyme activity"). A
-# general wellness phrase names no specific purpose, so it is no such claim.
-_POSITIONING_FUNCTION = re.compile(r"\b(?:supports?|promotes?|helps?|maintains?)\s+[a-z]", re.I)
+# Product-level function sentences and noun-form claim titles ("Libido
+# Support") remain claims even when no indication category places them.
+# General wellness phrases still name no specific purpose.
+_POSITIONING_FUNCTION = re.compile(
+    r"\b(?:supports?|promotes?|helps?|maintains?)\s+[a-z]"
+    r"|\b[a-z][a-z -]*\s+(?:support|booster|formula)\b", re.I)
 _GENERAL_WELLNESS = re.compile(
     r"\b(?:(?:overall|general|daily|good|optimal|total|everyday)\s+(?:health|wellness|well[- ]?being|nutrition)"
     r"|well[- ]?being|wellness|nutritional support)\b", re.I)
@@ -1067,6 +1070,8 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
     if policy.get("scope") != "ingredient":
         return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
+    if _excluded_claim_matches(product, policy):
+        return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
     # Every approved, source-bound context is a condition scope: no claim is
     # required, but its population and the label's claims decide whether it
     # may credit this product (October 28, 2026 rulings).
@@ -1085,13 +1090,6 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     # known material mismatch is preserved and passing rows retain provenance.
     if not reference.get("study_contexts") and not scope:
         scope = _assess_legacy_signed_scope(product, entry, reference, policy)
-    # As in the native claim owner, an independently qualified exact outcome
-    # retains only that relationship beside unrelated marketing. Exclusions
-    # still prevent an unsupported claim alone from borrowing the finding.
-    claim_alignment = scope.get("claim_alignment") or {}
-    exact = claim_alignment.get("sources") == ["affirmative_exact_source_condition_claim"]
-    if _excluded_claim_matches(product, policy) and not exact:
-        return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
         physical = physical.get("name")
