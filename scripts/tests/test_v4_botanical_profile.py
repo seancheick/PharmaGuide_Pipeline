@@ -1213,3 +1213,92 @@ def test_citrus_physical_exclusion_preserves_the_existing_approved_source_bytes(
     assert verified_reference_citations(record)
     assert record['reference_semantics']['source_ids'] == ['PMID:33141449']
     assert record['reference_semantics']['review_date'] == '2026-10-27'
+
+
+
+@pytest.fixture(scope="module")
+def registered_pollen_preparations():
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    fixtures = Path(__file__).parent / "fixtures"
+    return {pid: enricher.enrich_product(normalizer.normalize_product(
+        json.loads((fixtures / f"raw_graminex_{pid}.json").read_text())))[0]
+        for pid in ["328752", "232473"]}
+
+
+@pytest.mark.parametrize("pid", ["328752", "232473"])
+def test_registered_source_composition_has_a_disclosed_whole_preparation_dose(
+    registered_pollen_preparations, pid,
+):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    product = registered_pollen_preparations[pid]
+    row = _primary_botanical_active(product)
+    result = score_botanical_purpose_dose(product, row)
+    assert row["quantity"] == 378
+    assert result["band"] == "disclosed_no_reference"
+    assert result["metadata"]["benchmark"] == "absent"
+    assert result["score"] == _neutral()
+
+
+@pytest.mark.parametrize("change", [
+    "unmapped_parent", "unknown_form", "foreign_parent_ref", "minted_parent",
+    "duplicate_parent", "derived_parent", "missing_printed_parent", "fake_descriptor",
+    "active_child", "unknown_child_mass", "foreign_child_path", "foreign_parent_link",
+    "missing_source_ledger", "contradictory_child_total", "mixed_active_child",
+])
+def test_registered_source_preparation_requires_complete_current_source_proof(
+    registered_pollen_preparations, change,
+):
+    from copy import deepcopy
+    from scoring_v4.modules.botanical_profile import _resolved_preparation_row
+    product = deepcopy(registered_pollen_preparations["328752"])
+    row = _primary_botanical_active(product)
+    parent, child = product["activeIngredients"][:2]
+    if change == "unmapped_parent":
+        row["mapped"] = False
+    elif change == "unknown_form":
+        row["matched_form"] = "unreviewed material"
+    elif change == "foreign_parent_ref":
+        row["raw_source_path"] = "ingredientRows[99]"
+    elif change == "minted_parent":
+        product["activeIngredients"].remove(parent)
+    elif change == "duplicate_parent":
+        product["activeIngredients"].append(deepcopy(parent))
+    elif change == "derived_parent":
+        row["scoring_input_kind"] = "product_level_evidence"
+    elif change == "missing_printed_parent":
+        parent["raw_taxonomy"]["quantityVariants"] = []
+    elif change == "fake_descriptor":
+        child["raw_source_text"] = child["name"] = "Unregistered pollen ingredient"
+        product["label_source_rows"][1]["raw_source_text"] = child["raw_source_text"]
+    elif change == "active_child":
+        child["score_eligible_by_cleaner"] = True
+    elif change == "unknown_child_mass":
+        child["quantity"] = None
+    elif change == "foreign_child_path":
+        child["raw_source_path"] = "ingredientRows[99]"
+    elif change == "foreign_parent_link":
+        child["parent_source_path"] = "ingredientRows[99]"
+    elif change == "missing_source_ledger":
+        product["label_source_rows"] = []
+    elif change == "contradictory_child_total":
+        child["quantity"] = 370
+        child["raw_taxonomy"]["quantityVariants"][0]["quantity"] = 370
+    else:
+        extra = deepcopy(child)
+        extra.update(name="Unreviewed active", raw_source_text="Unreviewed active",
+                     raw_source_path="ingredientRows[0].nestedRows[2]",
+                     cleaner_row_role="active_scorable", score_eligible_by_cleaner=True)
+        product["activeIngredients"].append(extra)
+        product["label_source_rows"].append({"raw_source_path": extra["raw_source_path"],
+            "raw_source_text": extra["raw_source_text"], "source_section": "activeIngredients"})
+    assert not _resolved_preparation_row(product, row)
+
+
+def test_existing_named_preparation_physical_identity_remains_available():
+    from scoring_v4.modules.botanical_profile import _resolved_preparation_row
+    row = _botanical_ingredient()
+    assert _resolved_preparation_row(_botanical_product(row), row)

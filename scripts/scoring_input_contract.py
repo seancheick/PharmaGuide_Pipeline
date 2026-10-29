@@ -3271,6 +3271,76 @@ def _source_tree_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     return source_rows
 
 
+
+def _has_registered_preparation_sources(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    """Validate an input-owned prepared material, never classify new sources.
+
+    The cleaner owns source_descriptor. This join only admits its complete,
+    registered source composition on the parent's own printed amount.
+    """
+    from normalization import make_normalized_key
+
+    ref = str(row.get("raw_source_path") or "")
+    canonical = _norm(row.get("canonical_id"))
+    if (not ref.startswith("ingredientRows[") or row.get("mapped") is not True
+            or row.get("form_match_status") != "mapped" or is_lent_blend_mass(row)
+            or _norm(row.get("scoring_input_kind")) == "product_level_evidence"):
+        return False
+    registered = iqm_reference_entry(canonical) or {}
+    form = (registered.get("forms") or {}).get(row.get("matched_form")) or {}
+    aliases = {make_normalized_key(alias) for alias in form.get("source_form_aliases") or []}
+    if not aliases:
+        return False
+    sources = _source_tree_rows(product)
+    parents = [source for source in sources if source.get("raw_source_path") == ref]
+    if len(parents) != 1:
+        return False
+    parent = parents[0]
+    if (_norm(parent.get("canonical_id")) != canonical
+            or _norm(parent.get("canonical_source_db")) != "ingredient_quality_map"
+            or parent.get("score_eligible_by_cleaner") is not True
+            or not has_source_printed_amount(parent)
+            or not has_source_printed_amount(row)
+            or _role_mass_mg(row) != _role_mass_mg(parent)):
+        return False
+    ledger = [item for item in _safe_list(product.get("label_source_rows"))
+              if isinstance(item, dict)]
+    own_ledger = [item for item in ledger if item.get("raw_source_path") == ref]
+    if len(own_ledger) != 1 or own_ledger[0].get("raw_source_text") != parent.get("raw_source_text"):
+        return False
+    child_refs = {str(item.get("raw_source_path")) for item in ledger
+                  if item.get("raw_source_path") != ref
+                  and str(item.get("raw_source_path") or "").rsplit(".nestedRows[", 1)[0] == ref}
+    children = [source for source in sources
+                if source.get("raw_source_path") != ref
+                and str(source.get("raw_source_path") or "").rsplit(".nestedRows[", 1)[0] == ref]
+    if (not child_refs or len(children) != len(child_refs)
+            or {str(child.get("raw_source_path")) for child in children} != child_refs):
+        return False
+    parent_mass = _role_mass_mg(parent)
+    if parent_mass is None or parent_mass <= 0:
+        return False
+    total = 0.0
+    for child in children:
+        child_ref = str(child.get("raw_source_path") or "")
+        matches = [item for item in ledger if item.get("raw_source_path") == child_ref]
+        mass = _role_mass_mg(child)
+        if (len(matches) != 1 or matches[0].get("raw_source_text") != child.get("raw_source_text")
+                or _aggregate_parent_source_path(child) != ref
+                or child.get("isNestedIngredient") is not True
+                or _norm(child.get("canonical_id")) != canonical
+                or child.get("cleaner_row_role") != "source_descriptor"
+                or child.get("score_eligible_by_cleaner") is not False
+                or child.get("score_exclusion_reason") != "source_descriptor"
+                or child.get("dose_class") != "source_material_mass"
+                or make_normalized_key(child.get("raw_source_text")) not in aliases
+                or not has_source_printed_amount(child)
+                or mass is None or mass <= 0 or mass > parent_mass * (1 + 1e-9)):
+            return False
+        total += mass
+    return total <= parent_mass * (1 + 1e-9)
+
+
 def declared_protein_source_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
     """Project cleaner-owned source declarations, never independent doses.
 

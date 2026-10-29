@@ -186,12 +186,14 @@ def _resolved_preparation_row(product: Dict[str, Any], row: Dict[str, Any]) -> b
     if _explicit_botanical_identity_rejection(row, require_preparation=True):
         return False
     from evidence_resolver import is_reviewed_branded_material
+    from scoring_input_contract import _has_registered_preparation_sources
     return bool(
         (row.get("mapped") is True and row.get("matched_form")
          and row.get("form_match_status") in {None, "mapped"}
          and is_reviewed_branded_material(row.get("canonical_id"), row.get("name"),
                                           strict_material_spelling=True))
         or _standardized_match(product, row, require_named_material=True)
+        or _has_registered_preparation_sources(product, row)
     )
 
 
