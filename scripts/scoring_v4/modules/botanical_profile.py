@@ -916,11 +916,10 @@ def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any
                 and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
                 and (record.get("applicability") or {}).get("excluded_form_terms")):
             return "unresolved"
-        from dose_assessment import _identity_text, _source_dose_row
-        source = _source_dose_row(product, row)
-        literal = _identity_text((source or {}).get("raw_source_text"))
+        names = _row_names(row, source_only=True, product=product)
         candidates = [candidate for candidate in literature.values()
-                      if literal and literal in _record_names(candidate)
+                      if names & _record_names(candidate)
+                      and (candidate.get("reference_semantics") or {}).get("scope") == "exact_preparation"
                       and (candidate.get("applicability") or {}).get("require_source_label_form") is True
                       and (candidate.get("applicability") or {}).get("required_form_terms")]
         if len(candidates) != 1 or not _dose_source_preparation_matches(

@@ -41,6 +41,23 @@ def test_cordiart_reference_is_separately_dated_and_not_clinical_approval():
     assert not assess_clinical_source_review(record)['is_complete']
 
 
+def test_family_exclusion_requires_an_exact_dose_scope(citrus_binding_products):
+    """A general review's clinical form policy cannot replace an exact Dose decision."""
+    from evidence_resolver import _load_literature_evidence
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    from unittest.mock import patch
+
+    product = citrus_binding_products['60794']
+    row = next(r for r in product['ingredient_quality_data']['ingredients_scorable']
+               if r.get('canonical_id') == 'citrus_bioflavonoids')
+    records = deepcopy(_load_literature_evidence())
+    records['cordiart']['reference_semantics']['scope'] = 'General catalog Dose'
+    # Isolate scope selection from the separately tested citation digest gate.
+    with patch('evidence_resolver._load_literature_evidence', return_value=records), \
+         patch('dose_assessment.verified_reference_citations', return_value=True):
+        assert _botanical_benchmark(row, product=product) == 'unresolved'
+
+
 @pytest.mark.parametrize('change', ['generic', 'isolated', 'unverified', 'foreign_ref', 'derived', 'title_only',
  '80_percent', 'fruit', 'missing_spec', 'borrowed_spec'])
 def test_cordiart_reference_cannot_be_borrowed(citrus_binding_products, change):
