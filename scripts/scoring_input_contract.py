@@ -2931,6 +2931,24 @@ def _product_scoring_evidence_rows(
                        if item.get("reason") in {"explicit_complete_eaa_aggregate_owner", "explicit_complete_bcaa_aggregate_owner"}}
     valid_eaa_keys = {evidence_key(item) for item in derived_evidence_rows
                       if item.get("reason") in {"explicit_complete_eaa_aggregate_owner", "explicit_complete_bcaa_aggregate_owner"}}
+    # Enrich owns IQM form matching. Fresh composition remains authoritative,
+    # but replacing its cache must not erase an unchanged same-source reading.
+    form_fields = ("matched_form", "bio_score", "form_match_status", "unmapped_forms")
+    form_source_fields = ("name", "raw_source_text", "standardName", "standard_name", "raw_taxonomy",
+                          "forms", "linked_rows", "verified_child_canonicals")
+    current_panel_notes = {row.get("raw_source_path"): row.get("notes")
+                           for row in product.get("activeIngredients") or [] if isinstance(row, dict)}
+    for key in valid_eaa_keys:
+        current = derived_by_key[key]
+        readings = [{field: native[field] for field in form_fields}
+                    for native in native_evidence_rows if evidence_key(native) == key
+                    and all(field in native for field in form_fields)
+                    and "notes" in native
+                    and native["notes"] == current_panel_notes.get(current.get("raw_source_path"))
+                    and all(native.get(field) == current.get(field) for field in form_source_fields)]
+        if readings and all(reading == readings[0] for reading in readings):
+            current.update(deepcopy(readings[0]))
+
     context_fields = (
         "raw_taxonomy",
         "forms",

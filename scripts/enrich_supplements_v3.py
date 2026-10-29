@@ -17889,7 +17889,10 @@ class SupplementEnricherV3:
                          for row in enriched.get("activeIngredients") or [] if isinstance(row, dict)}
         for item in evidence:
             if item.get("evidence_type") == "blend_anchor_mass":
-                item.update(self._anchor_form_reading(item, notes_by_path.get(item.get("raw_source_path"))))
+                # Retain the exact panel-note input alongside its form reading;
+                # a later fresh composition projection must verify this input.
+                item["notes"] = notes_by_path.get(item.get("raw_source_path"))
+                item.update(self._anchor_form_reading(item, item["notes"]))
         probiotic_data = enriched.get("probiotic_data") if isinstance(enriched.get("probiotic_data"), dict) else {}
         try:
             total_cfu_value = float(probiotic_data.get("total_cfu") or 0)
