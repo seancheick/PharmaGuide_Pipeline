@@ -30146,18 +30146,68 @@
       "records_screened": 25,
       "qualifying_human_studies": [],
       "effect_direction": null,
-      "population_context": "standardized extract / therapeutic preparation lacking finished product trial",
+      "population_context": "Source-specific anxiety, adjustment-insomnia and pain cohorts using named or traditional preparations; no population or preparation equivalence is inferred for an unspecified retail extract.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Clinical research literature present for Eschscholzia californica aerial parts extract, but product-level applicability in dietary supplements remains unestablished without verified marker specification or finished formula trial.",
+      "applicability_decision": "Human reports concern specific preparations or fixed combinations, not affirmative efficacy of an unspecified California poppy extract. Exact raw-label preparation, purpose and population applicability remain unestablished. The separately completed general Dose reference review does not establish clinical benefit or a numerical benchmark.",
       "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
-        "retractions_found": false
+        "retractions_found": false,
+        "reference_citations": {
+          "source_sha256": "cd1a65ef8160f913b12eb0d44d13af1f77d4a095b4a525d466e518e7f0b3d677",
+          "source_ids": [
+            "PMID:14741074",
+            "PMID:32257874"
+          ],
+          "verified_at": "2026-10-29T00:38:28.038739+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:14741074",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Double-blind, randomised, placebo-controlled study to evaluate the efficacy and safety of a fixed combination containing two plant extracts (Crataegus oxyacantha and Eschscholtzia californica) and magnesium in mild-to-moderate anxiety disorders.",
+              "content_sha256": "8fba49b223e6db2eb722c25ad2f2548a970a1be2a2e213eb089ac3fd50cf9226",
+              "notes": "Codex manual source-content review 2026-10-28: actual live PubMed content retained unchanged; the automated literal California-poppy keyword screen is insufficient because these sources use Eschscholtzia californica. EMA assessment/monograph establish the species/common-name relationship; PMID32257874 full text PMC7109475 explicitly calls E.californica California poppy and describes the named flowering-aerial-parts/valerian preparation. PMID14741074 abstract and EMA assessment section4.2.2 describe its fixed hawthorn/Eschscholzia/Mg preparation. Verified as nontransferable preparation sources for general Dose review only, never clinical approval. EMA/PMC document hashes and exact source boundaries are in the existing research.md receipt. Existing verifier may retain this manual review only while the complete reference semantics and real article content hashes remain identical. Retained source hashes: EMA_assessment.pdf SHA256 fff8cabe258f09bdfdc8ca9a509e32a4b60fcb0750bea7fe2d7a345ea82a07c9, EMA_monograph.pdf SHA256 1a66324cb8ad1bbe6165e26c1bb912f140522afc2886e1810463ba178d1b876c, EMA_addendum2022.pdf SHA256 aadcad32b37903e133a80b34b5e3f58e2cf6d59debaa575c7fa86c36649dc87c, PMC7109475.xml SHA256 1199cfbc8cf049879dc201a0b787640fe92e5fed4edaa550bf3135582c38cf50."
+            },
+            {
+              "source_id": "PMID:32257874",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "A combination of Eschscholtzia californica Cham. and Valeriana officinalis L. extracts for adjustment insomnia: A prospective observational study.",
+              "content_sha256": "20fe349617c6e89f7b9877b98e6ccd95b7c65648a65508e35f1b1050fa335df0",
+              "notes": "Codex manual source-content review 2026-10-28: actual live PubMed content retained unchanged; the automated literal California-poppy keyword screen is insufficient because these sources use Eschscholtzia californica. EMA assessment/monograph establish the species/common-name relationship; PMID32257874 full text PMC7109475 explicitly calls E.californica California poppy and describes the named flowering-aerial-parts/valerian preparation. PMID14741074 abstract and EMA assessment section4.2.2 describe its fixed hawthorn/Eschscholzia/Mg preparation. Verified as nontransferable preparation sources for general Dose review only, never clinical approval. EMA/PMC document hashes and exact source boundaries are in the existing research.md receipt. Existing verifier may retain this manual review only while the complete reference semantics and real article content hashes remain identical. Retained source hashes: EMA_assessment.pdf SHA256 fff8cabe258f09bdfdc8ca9a509e32a4b60fcb0750bea7fe2d7a345ea82a07c9, EMA_monograph.pdf SHA256 1a66324cb8ad1bbe6165e26c1bb912f140522afc2886e1810463ba178d1b876c, EMA_addendum2022.pdf SHA256 aadcad32b37903e133a80b34b5e3f58e2cf6d59debaa575c7fa86c36649dc87c, PMC7109475.xml SHA256 1199cfbc8cf049879dc201a0b787640fe92e5fed4edaa550bf3135582c38cf50."
+            }
+          ]
+        }
       },
       "verification_result": "authoritative_pubmed_verified",
-      "reason_code": "crude_material_lacks_standardization"
+      "reason_code": "crude_material_lacks_standardization",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for the california_poppy canonical only. This is a completed general-reference review, not an absence-of-research conclusion or approval of clinical benefit. Specific traditional preparations and combination-study regimens remain descriptive and cannot establish a universal ingredient minimum, optimum or safety upper limit.",
+        "preparation": "Unspecified California poppy extract, including the 200 mg label amount in DSLD62820/62831. Plant part, extract ratio, solvent and marker specification are not supplied by those labels. Do not convert this mass into EMA powdered flowering-aerial-herb posology or into the named fixed-combination extracts.",
+        "purpose": "General catalog Dose only; sleep, anxiety and pain findings remain specific to the source preparation, formula, population and design, with no single-ingredient clinical approval inferred.",
+        "population": "Source-specific cohorts only: EMA traditional-use adults, the 2004 fixed-combination mild-to-moderate-anxiety cohort and the 2019 adjustment-insomnia combination cohort. No efficacy or safety inference for unstudied populations.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "As reported by each source; no inferred extract equivalence or concentration conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:14741074",
+          "PMID:32257874"
+        ],
+        "rationale": "Codex source-content review on 2026-10-28 applies the existing October18 DoseV4.1 completed-neutral policy; no entry-specific clinician approval is claimed. EMA/HMPC/680375/2013 sections4.2-4.4 report no dose-response data, uncontrolled preparation-specific observations and the fixed hawthorn/Eschscholzia/magnesium trial; the final EMA/HMPC/680372/2013 monograph is traditional-use powdered herb, not an unspecified extract. The 2022 addendum (EMA/HMPC/648153/2022) did not establish a new monotherapy basis. PMID14741074 evaluates Sympathyl, a fixed combination, not California poppy alone. PMID32257874/PMC7109475 section2.3 evaluates a named flowering-aerial-parts extract with valerian in an uncontrolled study. The 2026 publisher report DOI10.1016/j.sleepe.2026.100138 likewise studies a fixed Eschscholtzia/valerian combination, not an isolated dose-response or an interchangeable unspecified retail extract. These sources do not establish a universally applicable numerical adequacy curve or safety UL for this broad record. Their specific regimens are retained as source facts; no numerical benchmark is added. Evidence applicability remains unestablished and no affirmative benefit is authorized.",
+        "owner": "scripts/data/literature_evidence_records.json::california_poppy",
+        "review_date": "2026-10-28",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      },
+      "notes": "Codex 2026-10-28 general Dose source review completed under existing DoseV4.1 policy only. The historical empty qualifying-study list and bibliographic verification stamp did not establish this conclusion. EMA traditional powdered-herb posology and the nontransferable fixed-combination human reports were read separately; neither raw200mg extract nor a source regimen becomes an efficacy threshold. Exact extract composition remains unknown. Retain effect_direction=null, empty qualifying_human_studies/studied_dose_exposure and applicability_unestablished: this is no clinical-benefit clearance. Source methods, authoritative document URLs, hashes and limitations are retained in scripts/audits/literature_records_review_20261020/research.md."
     },
     {
       "canonical_id": "cleavers_herb",

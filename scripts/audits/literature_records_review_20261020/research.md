@@ -983,3 +983,104 @@ A011: complete official PMC indexed correctionbody now inspected despite directo
 A090: primary22909270confirmsbisglycinate identity. Additional2025sleep source40918053/PMC12412596 identified; source methods, endpoints, relevantresults, funding/disclosures inspected. Report records a small subjective sleep finding with exact magnesium/glycine co-exposure; no efficacy threshold, exactproductapproval or registrychange. [Primary study](https://pmc.ncbi.nlm.nih.gov/articles/PMC12412596/). A063abstract supports2caps/day400mgformula, not verifiedBIDtiming. PQQactualcorrectedTable4remainsunread. A146–A148full original sourceblocks existed allalong and are restored in the shortreport.
 
 Three independent research slices cover50+50+48items; parent verified new substantive assertions and reconciliation. NCCIH/ODS generalcautions checked directly; CDCfolicacidguidancechecked, directACOGaccessunavailable/notmisattributed. ExistingCSV155rows/frozenIDs preserved; addedresponse receipt fields andpartialMagteincorrectioninspection only. No approval/completenessfields changed. Documentation/reportonly: no pytest/CI or pipeline rerun. Raw signedattachmentURLs notcommitted; original unchanged andhashbound.
+
+
+## California poppy — bounded general Dose source review, October 28, 2026
+
+Owner: `scripts/data/literature_evidence_records.json::california_poppy` →
+`botanical_profile::_botanical_benchmark`; source proof:
+`verify_literature_records::verify_reference_citations` /
+`dose_assessment::verified_reference_citations`. Evidence: source-of-truth matrix Dose-reference
+semantics, GLOSSARY, `rg reference_semantics/california_poppy/no_benchmark`, existing source-proof
+and botanical callers. Will NOT create: registry, semantic/public field/status, numerical benchmark,
+clinical approval, helper, material identity or alternate scorer. Behavioral data change; root owns the
+combined CI/local checkpoint, final corpus and publication. Only this entry and named tests/fixture
+are changed; existing helpers and consumer fixtures are untouched.
+
+The real retained NIH raw MegaFood Dream Release62820 discloses California Poppy extract200mg
+per tablet, with one tablet as needed before bedtime. Plant part, DER/extract ratio, solvent and marker
+specification are absent. Its statement explicitly names California poppy with valerian for restlessness,
+tension and sleep. The purpose-specific botanical Dose owner therefore assesses this row before its
+fallback primary valerian300mg. Valerian's separately completed general reference cannot transfer.
+The old October27 register's nonwinning/outside classification did not establish a California-poppy
+source conclusion. Prior private review explicitly left it open; the vacuous historical bibliographic stamp
+and empty qualifying-study list were not sufficient source proof.
+
+Source content reviewed by **Codex**, not attributed to a clinician or an entry-specific October18
+signoff. This review applies the already accepted DoseV4.1 policy: source regimens remain descriptive;
+a completed review finding no generally applicable numerical curve uses existing neutral Dose, with
+no efficacy minimum, optimum, safety UL or new magnitude. It is not a claim that no research exists.
+
+| Source | Verified preparation/design and boundary |
+|---|---|
+| [EMA final assessment EMA/HMPC/680375/2013](https://www.ema.europa.eu/en/documents/herbal-report/final-assessment-report-eschscholzia-californica-cham-herba_en.pdf), pp20–22, sections4.2–4.4 | Explicitly no dose-response data. Describes an uncontrolled marketed2g sleep preparation, a fixed hawthorn/poppy/Mg trial, and a different standardized pain preparation. Concludes evidence does not meet well-established medicinal-use criteria. None establishes a universal dose scale for an unspecified200mg extract. |
+| [EMA final monograph EMA/HMPC/680372/2013](https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-eschscholzia-californica-cham-herba_en.pdf), pp2–3 | Traditional use of powdered flowering aerial parts. Its powdered-herb posology remains a specific reference; no powder-to-extract equivalence or transfer to unspecified retail extract. |
+| [EMA2022 addendum EMA/HMPC/648153/2022](https://www.ema.europa.eu/en/documents/herbal-report/addendum-assessment-report-eschscholzia-californica-cham-herba_en.pdf), review2015–June2022 | No new single-active-product/clinical basis requiring monograph revision. This is not an absence claim about combination research. |
+| [PMID14741074](https://pubmed.ncbi.nlm.nih.gov/14741074/), Hanus2004; live PubMed abstract and EMA assessment4.2.2 | Randomized fixed Sympathyl combination in264 adults with mild-to-moderate anxiety: each tablet contains75mg hawthorn extract,20mg dry aqueous Eschscholzia extract and75mg elemental Mg; two tablets twice daily. No isolated poppy dose-response or equivalence to Dream Release. Original full article was not available in this bounded check; EMA authoritatively supplies the exact preparation detail. |
+| [PMID32257874 / PMC7109475](https://pmc.ncbi.nlm.nih.gov/articles/PMC7109475/), sections1,2.1,2.3 | Open-label observational adjustment-insomnia study. Named Phytostandard combination:80mg flowering-aerial-parts Eschscholtzia extract plus32mg valerian extract per tablet, maximum four tablets nightly for one month. Full text explicitly links E.californica to California poppy. No monotherapy attribution, isolated threshold or transfer to an unspecified200mg extract. |
+| [Publisher DOI10.1016/j.sleepe.2026.100138](https://www.sciencedirect.com/science/article/pii/S2667343626000119), available publisher abstract reviewedOctober28 | Four-week randomized fixed Eschscholtzia/valerian combination,847mg+353mg daily, for insomnia with anxiety; a combination comparison does not isolate a universal poppy benchmark. Direct full-page/PDF retrieval returned403; publisher-indexed abstract was accessible. Preparation details beyond that abstract were not assumed. No new efficacy grade is assigned. |
+
+Official EMA PDFs were retrieved directly despite the web reader's429 response; durable copies,
+extracted text and live PubMed articles are under
+`~/pg_quality/condition_scope_20261028/california_poppy_sources/`. Source hashes:
+
+- EMA assessment: `fff8cabe258f09bdfdc8ca9a509e32a4b60fcb0750bea7fe2d7a345ea82a07c9`.
+- EMA monograph: `1a66324cb8ad1bbe6165e26c1bb912f140522afc2886e1810463ba178d1b876c`.
+- EMA2022 addendum: `aadcad32b37903e133a80b34b5e3f58e2cf6d59debaa575c7fa86c36649dc87c`.
+- PMC7109475 full-text XML: `1199cfbc8cf049879dc201a0b787640fe92e5fed4edaa550bf3135582c38cf50`.
+
+The existing manual exact-content source-proof path is deliberate and tested by
+`test_reference_recheck_preserves_reviewed_scope_only_for_identical_source`. The literal automated
+California-poppy keyword screen cannot establish the Latin-named study relation. Actual API content
+is not altered. Codex manually reviewed the identity/preparation relation using full text and EMA;
+proof notes retain that attribution, limitations and document hashes. Subsequent machine recheck
+preserves the reviewed source relationship only if the complete reference semantics and real article
+content hashes remain identical; changed content invalidates it. No API-returned common-name text,
+clinical approval, correction clearance or retraction flag was invented.
+
+Decision: completed **general Dose no-applicable-universal-benchmark** review for this canonical,
+using the existing `approved_existing_neutral_dose_v41_source_review` policy status. This names the
+existing neutral policy, not a new clinician or Sean scientific signoff. Specific traditional and study
+preparations are retained descriptively. Exact retail composition remains unknown; no concentration
+conversion is made. `qualifying_human_studies=[]`, `effect_direction=null`, `studied_dose_exposure={}`
+and `applicability_unestablished` remain. No affirmative Evidence credit is authorized.
+
+Fail-first record and real raw→Clean→Enrich→public-score regressions reproduced the unresolved
+reference before this entry change; both now pass. The test checks the configured archetype-neutral
+Dose through its existing helper, with other pillar scores and safety unchanged. Named owner slice:
+413 passed (`california_poppy/owner_slice.log`); final two source/public nodes also pass after prose
+qualification (`focused_final.log`). Python correctness0new/11existing, diff check clean. Exact data
+check since2bb61ca7: `literature_evidence_records[619]` (california_poppy),1changed entry/0problems.
+The generic citation CLI has no configuration for this file; the dedicated literature verifier was used.
+It fetched both PubMed sources live, validates2/2 reference-citation proofs and records no retraction.
+Its sole clinical-screen finding remains `no_studies_to_verify`, because the qualifying-study list is
+intentionally empty. That is not a failed Dose-source proof and is not hidden or changed into a clinical
+approval. Overall clinical-verifier success is not claimed.
+
+Clean pre-edit five-label baseline at2bb61ca7 is retained in `california_poppy/baseline.jsonl` with
+source_unchanged=true. Frozen affected62820/62831 plus module controls306237/19055/182730 use
+one manifest. Candidate measurement and fresh review follow the clean source commit; no combined
+readiness or corpus qualification is inferred from these targeted tests.
+
+
+Bounded measurement completed on clean source
+`9afc2a00ddc2acb6bf40ee85c2b71b0c81fc7083`, five products/source_unchanged=true,
+against clean2bb61ca7 with the identical frozen manifest/raw hashes. Both affected Dream Release
+labels62820/62831 move Dose0→11.4 (the existing configured neutral), total49.2→60.6,
+Poor→Needs improvement; controls306237/19055/182730 stay unchanged. Every other pillar,
+route/subroute/profile/status, safety gate, Dose-safety and captured readiness projection is unchanged.
+The benchmark disposition changes unresolved→absent. Receipts:
+`california_poppy/candidate.jsonl[.meta.json]`, `delta.json`, `movement.txt`.
+
+The complementary real public-artifact probe (`public_release_source_probe.json`) directly confirms
+`unfinished_source_assessment` changes `dose_benchmark_identity_unresolved`→null for both labels.
+Evidence remains0; no concern/warning or other pillar changes. Overall assessment remains partial on
+this lane's source because the separate Evidence review is not cleared by Dose. Root owns combined
+Evidence/readiness qualification; this is not an all-six-pillars or release-completion claim. The exact
+existing backlog row is reconciled now; its frozen workload counts and product IDs are preserved.
+Independent pregnancy_check review of9afc2a00 cleared the data/source interpretation: three named
+policy/raw-preservation/manual-recheck tests pass; exact entry data check has0problems. Reviewer
+independently matched all four retained EMA/PMC document hashes, verified the2004 fixed-combination
+source and the2026 official publisher-indexed abstract's847mg+353mg methods. No source blocker
+remains in this bounded batch. Root's combined CI/local, final artifact generation and release
+qualification remain. No broad suite, corpus, branch push, main action or publication occurred.
