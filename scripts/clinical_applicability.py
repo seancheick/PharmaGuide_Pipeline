@@ -468,7 +468,7 @@ _POPULATION_WORDS = re.compile(
 # General wellness phrases still name no specific purpose.
 _POSITIONING_FUNCTION = re.compile(
     r"\b(?:supports?|promotes?|helps?|maintains?)\s+[a-z]"
-    r"|\b[a-z][a-z -]*\s+(?:support|booster|formula)\b", re.I)
+    r"|\b(?:libido|fertility|quality of life)\s+(?:support|booster|formula)\b", re.I)
 _GENERAL_WELLNESS = re.compile(
     r"\b(?:(?:overall|general|daily|good|optimal|total|everyday)\s+(?:health|wellness|well[- ]?being|nutrition)"
     r"|well[- ]?being|wellness|nutritional support)\b", re.I)

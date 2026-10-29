@@ -52,6 +52,8 @@ def test_primavie_biomarkers_do_not_transfer_to_symptomatic_claims(claim, status
 
 
 @pytest.mark.parametrize('title,claim', [('PrimaVie Capsules', ''),
+    ('PrimaVie Formula', ''), ('Ginger Root Formula', ''), ('Nutritional Formula', ''),
+    ('Daily Support', ''),
     ('Testosterone Support', ''), ('Libido Support', 'PrimaVie supports testosterone.')])
 def test_primavie_keeps_independently_qualified_testosterone_relationship(title, claim):
     from clinical_applicability import assess_clinical_applicability
