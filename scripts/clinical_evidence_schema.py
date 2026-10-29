@@ -380,13 +380,25 @@ def validate_frozen_context(
             errors.append("dose.source_review_incomplete")
         if dose.get("duration_basis") == "extraction_pending":
             errors.append("dose.duration_review_incomplete")
+        # An approved aggregate may explicitly report no single assigned
+        # regimen. Its empty delivery list is a reporting limitation, not a
+        # missing trial extraction or permission to invent a dosage form.
+        no_single_regimen = (
+            context.get("evidence_role") in REVIEW_ROLES
+            and dose.get("dose_status") == "source_not_reported"
+            and dose.get("dose_basis") == "not_applicable"
+            and dose.get("values") == []
+            and dose.get("duration_basis") == "not_recorded"
+            and dose.get("duration_days") is None
+        )
         frequency = dose.get("administration_frequency")
-        if (not _nonempty_text(frequency)
+        if ((not _nonempty_text(frequency) and not (no_single_regimen and frequency is None))
                 or frequency in {"extraction_pending", "conflicting_source_values", "unresolved", "unknown"}):
             errors.append("dose.frequency_review_incomplete")
         if not _text_list(dose.get("co_therapies"), allow_empty=True):
             errors.append("dose.cotherapies_review_incomplete")
-        if not _text_list(dose.get("dosage_forms")):
+        if (not _text_list(dose.get("dosage_forms"))
+                and not (no_single_regimen and dose.get("dosage_forms") == [])):
             errors.append("dose.delivery_required_for_complete_review")
         # A source that did not report a regimen is a reviewed limitation, not
         # an instruction to invent an amount. It still needs a source locator.

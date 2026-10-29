@@ -177,7 +177,12 @@
             "co_therapies": [],
             "dose_status": "source_not_reported",
             "dose_basis": "not_applicable",
-            "duration_basis": "not_recorded"
+            "duration_basis": "not_recorded",
+            "source_provenance": {
+              "pmid": "40702885",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40702885/",
+              "location": "Abstract; accepted aggregate reporting limitation in docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json: no single assigned regimen or exposure duration"
+            }
           },
           "outcomes": [
             {
@@ -8290,17 +8295,19 @@
             "values": [
               1000000000.0
             ],
-            "dosage_forms": [],
+            "dosage_forms": [
+              "oral drops"
+            ],
             "duration_days": 28,
             "co_therapies": [],
             "dose_status": "verified",
             "dose_basis": "per_strain_daily",
             "duration_basis": "fixed_protocol",
-            "administration_frequency": "once_daily",
+            "administration_frequency": "Six drops once daily",
             "source_provenance": {
               "pmid": "31797399",
-              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31797399/",
-              "location": "abstract"
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6973258/",
+              "location": "Methods: intervention (BB-12 DSM 15954, six drops once daily, 28 days); retained source extraction in scripts/audits/held_source_closure_20261028/patches/STRAIN_BB12.json"
             }
           },
           "outcomes": [
