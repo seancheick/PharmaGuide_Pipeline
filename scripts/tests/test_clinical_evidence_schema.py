@@ -93,9 +93,23 @@ def test_bb12_infant_colic_uses_its_own_retained_delivery_source() -> None:
     assert context["dose"]["dosage_forms"] == ["oral drops"]
     assert context["dose"]["administration_frequency"] == "Six drops once daily"
     assert "PMC6973258" in context["dose"]["source_provenance"]["source_url"]
-    # The separate Chengdu trial cannot inherit this trial's delivery fact.
-    assert "dose.delivery_required_for_complete_review" in validate_frozen_context(
-        contexts["bb12_infant_colic_chengdu_34550055"], require_complete_review=True)
+    assert context["dose"]["duration_days"] == 28
+    # Independently retrieved Chengdu Methods (printed p533) describe an oral
+    # sunflower-oil suspension. Its own source and 21-day protocol stay distinct.
+    chengdu = contexts["bb12_infant_colic_chengdu_34550055"]
+    assert validate_frozen_context(chengdu, require_complete_review=True) == []
+    assert chengdu["dose"]["dosage_forms"] == ["oral drops"]
+    assert chengdu["dose"]["administration_frequency"] == "Six drops once daily"
+    assert chengdu["dose"]["duration_days"] == 21
+    assert chengdu["dose"]["source_provenance"]["pmid"] == "34550055"
+    assert chengdu["dose"]["source_provenance"]["source_url"] == "https://doi.org/10.3920/BM2020.0233"
+    assert "533" in chengdu["dose"]["source_provenance"]["location"]
+    assert "ResearchGate" in chengdu["dose"]["source_provenance"]["location"]
+    from clinical_applicability import assess_context_population
+    assert assess_context_population({"product_name": "Adult Daily Probiotic",
+        "targetGroups": ["Adults (18+)"]}, chengdu) == "special_targeting_absent"
+    assert assess_context_population({"product_name": "Baby Probiotic Drops",
+        "targetGroups": ["Infants/Baby (0 - 1 Year)"]}, chengdu) == "eligible"
 
 
 def test_verified_dose_requires_same_pmid_and_location() -> None:
