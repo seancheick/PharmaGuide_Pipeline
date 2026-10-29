@@ -1,11 +1,11 @@
 # PharmaGuide master completion plan
 
-### October 28 final integration — Codex takeover
+### October 28–29 final integration — Codex takeover
 
 - [x] Establish one integrator: Sean assigned Codex integration/merges and confirmed Claude editing/autofix paused; fetch current main and preserve unique lane/user artifacts.
 - [x] Finish independently reproduced clinical-source, purpose, material-standardization, repeated-preparation lineage and safety consumer defects; apply Sean's Testofen pillar-independence and bitter-orange no-cutoff rulings. Source-bound checks, bounded raw measurements and independent reviews are recorded in the existing LEDGER; this is source qualification, not rebuilt delivery.
-- [ ] Qualify completed combined pipeline source, integrate and verify all planned lane ancestry. Paired Flutter PR164 is integrated atcb1ffc39 with exacted151752 CI40790156049 green; pipeline source 444a2d8b has independent 473+3 raw qualification, 33/33 canaries and source/test reviews; exact whole-fast CI and a stable local checkpoint remain pending.
-- [ ] Inspect final-main stage fingerprints and hand the verified source back to Sean, who reserved the pipeline run to himself on October29. Catalog and installed-app acceptance follow that rebuild; source integration does not claim release delivery.
+- [x] Qualify completed combined source and verify every planned lane in main. Pipeline PR #286 merged at `9ce45dd6c`; exact candidate `c8180a169` passed CI 40834705294 (25,615 tests, all skip guards and Merge readiness), stable local 546/24 declared opt-ins, 473+3 raw comparisons and 33/33 canaries. Paired Flutter PR #164 is integrated at `cb1ffc39` with exact `ed151752` CI 40790156049 green.
+- [x] Inspect final-main fingerprints and hand the verified source back to Sean, who reserved the pipeline run to himself on October 29. All 38 manifests per stage require regeneration from Clean; the safe pipeline-only command is in the existing LEDGER. All original lane heads are contained and their PRs merged or closed; 12 unique local files are preserved. Catalog and installed-app acceptance follow the rebuild, with no release delivery claimed.
 
 Owner: existing canonical clinical/material/safety/release and Flutter consumers — evidence and current receipts in the [existing LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create a second scorer, semantic owner, registry, approval or execution register. Policy approval, measured source, integration and release acceptance remain separate.
 
