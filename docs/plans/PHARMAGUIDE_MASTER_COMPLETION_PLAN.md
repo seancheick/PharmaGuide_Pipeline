@@ -1,13 +1,15 @@
 # PharmaGuide master completion plan
 
-### October29 fresh-corpus release qualification
+### October 29 fresh-corpus release qualification
 
-- [x] Verify Sean's completed38-dataset Clean/Enrich/Score run on91fe and114current manifests/upstreambindings;15,437unique products. Local546passes24declaredexternaloptins. HighEvidence1457allnutritional authority.
-- [x] Reproduce canonical snapshot failure before assembly/promotion and distinguish release-proof defects, actual held-credit leaks, scheduled manufacturer aging and genuine source limitations. No publication occurred.
-- [ ] Finish bounded repair, raw/source controls, independent combined review and exact-candidate CI/local qualification. Current source work/limits are in the existing LEDGER; prior integration CI does not qualify this later batch.
-- [ ] Integrate qualified batch, select earliest stale stage from actual fingerprints, give Sean one regeneration command, then validate gated export/release/app candidate. Sean runs pipeline and publication. Do not mark release ready while exact preparation dependencies or release gates remain unresolved. Chengdu Methods are now verified; the separate exact Cordiart Dose ruling is approved and being implemented.
+- [x] Verify Sean's completed 38-dataset Clean/Enrich/Score run on `91fef328e`: 114 then-current manifests/upstream bindings and 15,437 unique products. Strict local: 546 passed / 24 declared external opt-ins. All 1,457 high-Evidence products have nutritional authority.
+- [x] Reproduce snapshot failure before assembly/promotion and separate release-proof defects, held-credit leaks, manufacturer aging and genuine source limitations. No publication occurred.
+- [x] Finish and integrate the bounded source repair in PR #288 at `657c4edab`. Exact source `78f53b296` passed CI 40955702861 (25,841 tests / 192 declared skips, all guards and Merge readiness), strict local 546/24, 266 named owner/consumer checks, independent review and 164 frozen raw controls. All five review threads have explicit accepted/deferred/rejected dispositions in the existing LEDGER; no valid assertion was weakened.
+- [x] Sync canonical main while preserving all ten untracked user files; verify source containment before deleting the completed branch. Inspect actual final fingerprints: all 38 manifests in each of Clean, Enrich and Score are stale; Clean is the earliest required stage.
+- [ ] Close demonstrated publication/source-integrity blockers before asking Sean for the single necessary rebuild. The bounded sample still has 149 Dose dependencies across 70 label-assertion groups / 25 subjects; these are not 70 new signature requests. The retained-Evidence policy already accepts ten sample cases. The Cascara species discrepancy remains open. Cordiart's narrow approval is implemented; Chengdu Methods are verified. Do not reopen completed rulings or invent preparation equivalence.
+- [ ] After source blockers close, Sean runs the required-stage pipeline once. Qualify fresh whole-corpus snapshot/release output, catalog parity and installed Flutter behavior. Sean retains publication execution; release readiness is not established by merged source CI.
 
-Owner: existing readiness/publication, clinical source/context, manufacturer age and export owners — evidence in the [existing LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create another scorer, semantic owner, registry or clinical approval.
+Owner: existing source identity, Dose, clinical context, readiness/publication and export owners — evidence in the [existing LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create another scorer, semantic owner, registry, blanket clinical approval or execution register.
 
 ### October 28–29 final integration — Codex takeover
 
