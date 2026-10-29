@@ -2419,3 +2419,93 @@ def test_known_null_primary_is_preserved_beside_unresolved_secondary_hierarchy()
     assert [(row['name'], row['direction']) for row in outcomes] == [('sleep_quality', 'null')]
     assert held is False
     assert evaluated_purpose_outcomes(context) == outcomes
+
+
+def _repeated_preparation_product(monkeypatch, *, policy=None):
+    """Two printed declarations of one explicitly reviewed synthetic material."""
+    import clinical_applicability as owner
+    from test_evidence_resolver import _approved_test_source
+    name = "Hydrolyzed Collagen Type 1 & 3"
+    source = _approved_test_source({
+        "id": "TEST_REPEATED_PREPARATION", "ingredient": name, "standard_name": name,
+        "study_type": "rct_single", "evidence_level": "ingredient-human",
+        "effect_direction": "positive_strong", "total_enrollment": 30,
+        "applicability": policy or {"scope": "ingredient"}}, name=name)
+    current = owner.reviewed_entries()
+    monkeypatch.setattr(owner, "reviewed_entries", lambda: {**current, source["id"]: source})
+    refs = ["ingredientRows[1].forms[0]", "ingredientRows[2]"]
+    rows = [{"name": name, "canonical_id": "collagen", "mapped": True,
+             "quantity": amount, "unit": "g", "raw_source_path": ref,
+             "collagen_subtype": "peptides_i_iii"} for amount, ref in zip((6, 6.6), refs)]
+    match = {**source, "matched_source_row_refs": refs, "matched_canonical_ids": ["collagen"]}
+    product = {"product_name": "Hydrolyzed Collagen Type 1 & 3", "form_factor": "capsule",
+        "ingredient_quality_data": {"ingredients_scorable": rows},
+        "servingSizes": [{"minDailyServings": 1, "maxDailyServings": 1}],
+        "evidence_data": {"clinical_matches": [match]}}
+    return product, match, rows
+
+
+@pytest.mark.parametrize("reverse_rows", [False, True])
+def test_same_preparation_explicit_declarations_keep_all_qualified_source_refs(monkeypatch, reverse_rows):
+    from assessment_readiness import evaluate_assessment_readiness
+    product, match, rows = _repeated_preparation_product(monkeypatch)
+    if reverse_rows:
+        rows.reverse()
+    expected = {row["raw_source_path"] for row in rows}
+    decision = assess_clinical_applicability(product, match)
+    assert decision["status"] == "applicable"
+    assert set(decision.get("matched_source_row_refs", [])) == expected
+    accepted, _ = resolved_clinical_matches(product, owner_scoped=True)
+    assert len(accepted) == 1
+    assert set(accepted[0]["matched_source_row_refs"]) == expected
+    assert evaluate_assessment_readiness(product, module="generic")["evidence"]["readiness"] == "complete"
+    assert score_evidence(product)["score"] == 2.16  # One RCT; declarations do not duplicate evidence.
+
+
+@pytest.mark.parametrize("difference", ["name", "form", "source_form", "subtype", "canonical", "implicit_refs"])
+def test_repeated_refs_do_not_merge_different_or_implicitly_linked_preparations(monkeypatch, difference):
+    product, match, rows = _repeated_preparation_product(monkeypatch)
+    if difference == "name":
+        rows[1]["name"] = "Gelatin"
+    elif difference == "form":
+        rows[1]["matched_form"] = "gelatin"
+    elif difference == "source_form":
+        rows[1]["form"] = "gelatin"
+    elif difference == "subtype":
+        rows[1]["collagen_subtype"] = "gelatin"
+    elif difference == "canonical":
+        rows[1]["canonical_id"] = "gelatin"
+    else:
+        match.pop("matched_source_row_refs")
+    decision = assess_clinical_applicability(product, match)
+    assert decision["status"] == "applicable"
+    assert decision["source_row_ref"] == rows[0]["raw_source_path"]
+    assert "matched_source_row_refs" not in decision
+
+
+def test_repeated_preparation_daily_constraint_keeps_only_the_passing_source_row(monkeypatch):
+    product, match, rows = _repeated_preparation_product(monkeypatch, policy={
+        "scope": "ingredient", "dose_unit": "mg", "minimum_daily_dose": 6500})
+    decision = assess_clinical_applicability(product, match)
+    assert decision["status"] == "applicable"
+    assert decision["source_row_ref"] == rows[1]["raw_source_path"]
+    assert "matched_source_row_refs" not in decision
+
+
+def test_repeated_preparation_form_constraint_preserves_specific_row_binding(monkeypatch):
+    product, match, rows = _repeated_preparation_product(monkeypatch, policy={
+        "scope": "ingredient", "required_form_terms": ["hydrolyzed collagen"]})
+    decision = assess_clinical_applicability(product, match)
+    assert decision["status"] == "applicable"
+    assert decision["source_row_ref"] == rows[0]["raw_source_path"]
+    assert "matched_source_row_refs" not in decision
+
+
+def test_repeated_preparation_cannot_restore_a_held_source(monkeypatch):
+    from assessment_readiness import evaluate_assessment_readiness
+    product, match, _ = _repeated_preparation_product(monkeypatch)
+    # The source owner and match share this reference; both retain the hold.
+    match["references_structured"][0]["scoring_eligible"] = False
+    assert assess_clinical_applicability(product, match)["status"] == "unresolved"
+    assert resolved_clinical_matches(product, owner_scoped=True)[0] == []
+    assert evaluate_assessment_readiness(product, module="generic")["evidence"]["readiness"] == "incomplete"

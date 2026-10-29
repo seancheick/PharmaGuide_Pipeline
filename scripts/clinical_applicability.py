@@ -1091,19 +1091,30 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         from form_factor_normalizer import canonicalize_form_factor
         dosage_form = _key(canonicalize_form_factor(physical)) if physical else ""
     excluded_canonicals = {_key(value) for value in policy.get("excluded_canonical_ids", [])}
-    exclusion_only = bool(excluded_canonicals or policy.get("excluded_form_terms")) and not any(
-        policy.get(field) for field in (
+    row_constraints = any(policy.get(field) for field in (
             "required_form_terms", "require_source_label_form", "dosage_forms",
             "minimum_daily_dose", "maximum_daily_dose", "dose_unit",
-        )
-    )
+        ))
+    exclusion_only = bool(excluded_canonicals or policy.get("excluded_form_terms")) and not row_constraints
     # Preparation-only judgments have no exposure prerequisite. A caller
     # asking for dose checks must still own a real reviewed amount constraint;
     # an undosed named material remains eligible for its form/literature review.
     exposure_required = assess_amount and policy.get("dose_unit") is not None
     applicable_rows = []
-    for row in _linked_rows(product, entry, source_only=source_only, evidence_only=not exposure_required,
-                            discriminating_terms=policy.get("required_form_terms")):
+    linked_rows = _linked_rows(product, entry, source_only=source_only, evidence_only=not exposure_required,
+                               discriminating_terms=policy.get("required_form_terms"))
+    explicit_refs = entry.get("matched_source_row_refs") or []
+    # Explicit repeated declarations may share review provenance only when
+    # their resolved physical identity is identical and no row constraint binds
+    # the decision to a particular form, delivery or daily exposure.
+    repeated_material = (not row_constraints and isinstance(explicit_refs, list)
+        and all(isinstance(ref, str) and ref.strip() for ref in explicit_refs)
+        and len(set(explicit_refs)) > 1
+        and {row.get("raw_source_path") or row.get("source_row_ref") for row in linked_rows} == set(explicit_refs)
+        and len({(_key(row.get("canonical_id")), _row_text(row), _key(row.get("form")), _key(row.get("collagen_subtype")))
+                 for row in linked_rows}) == 1
+        and all(_key(row.get("canonical_id")) and _row_text(row).strip() for row in linked_rows))
+    for row in linked_rows:
         text = _row_text(row, source_only=source_only)
         if allowed and not (allowed & ({dosage_form} | _source_delivery_forms(product, row, policy.get("excluded_form_terms", [])))):
             reasons.append("clinical_delivery_mismatch")
@@ -1153,7 +1164,7 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             if maximum is not None and amount * upper > float(maximum):
                 reasons.append("above_applicable_clinical_dose")
                 continue
-        if exclusion_only:
+        if exclusion_only or repeated_material:
             applicable_rows.append(row)
             continue
         if source_block or scope.get("status"):
@@ -1170,9 +1181,9 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             if row.get("raw_source_path") or row.get("source_row_ref")))}
     if applicable_rows:
         # Exclusion rejects identities/preparations, not legitimate siblings.
-        # Preserve every passing row rather than making label order choose
-        # the numerator later consumed by Evidence and Dose. Scoped form/dose
-        # decisions above retain their existing single-source binding.
+        # Preserve every independently passing exclusion-only row or explicit
+        # declaration of the same physical material. Scoped form/dose decisions
+        # above retain their existing single-source binding.
         return {"status": "applicable", "reason_code": "reviewed_scope_match",
                 "matched_source_row_refs": list(dict.fromkeys(
                     row.get("raw_source_path") or row.get("source_row_ref")
