@@ -458,6 +458,16 @@ def test_cordiart_declared_citrus_source_preserves_preparation_form(
     scored = build_scored_artifact(enriched)
     assert scored["quality_score_status"] == "scored"
     assert scored["quality_pillars_v4"]["evidence"]["score"] == 0
+    from build_final_db import build_detail_blob
+
+    blob = build_detail_blob(enriched, scored)
+    exported = next(item for item in blob["ingredients"]
+                    if "Cordiart" in str(item.get("name") or item.get("raw_source_text")))
+    copy = " ".join(str(exported.get(key) or "")
+                    for key in ("form_note", "form_note_preview", "notes")).casefold()
+    for unsupported in ("naringin", "quercetin", "synergistically", "capillary strength",
+                        "anti-inflammatory", "rather than one purified compound"):
+        assert unsupported not in copy
 
 
 

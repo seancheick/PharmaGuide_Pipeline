@@ -11802,12 +11802,12 @@
       "citrus bioflavonoids complex": {
         "bio_score": 9,
         "absorption": "low (bioflavonoid class-poor; extensive glucuronidation)",
-        "consumer_note": "Citrus-bioflavonoid complex is a mixture of citrus-derived flavonoids rather than one purified compound.",
+        "consumer_note": "Citrus-derived flavonoid preparations vary in composition. Refer to the specific product label for named compounds and declared marker content.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex — factual form copy only; not clinical approval",
+          "date": "2026-10-29"
         },
-        "notes": "A natural blend of flavonoid compounds from citrus fruits — typically including hesperidin, naringin, rutin, and quercetin. These compounds work synergistically with vitamin C, enhancing its absorption and extending its antioxidant activity. Traditionally known as 'Vitamin P.' Supports capillary strength, circulation, and anti-inflammatory pathways. B28 audit 2026-04-25: bioflavonoid class-poor (B19 framework).",
+        "notes": "Citrus-derived flavonoid preparations vary in composition and standardization. Refer to the specific product label for named compounds, source materials, and declared marker content.",
         "aliases": [
           "bitter orange citrus bioflavonoids",
           "bitter orange citrus bioflavonoid",
