@@ -20614,7 +20614,7 @@ class SupplementEnricherV3:
                 marker_target = re.fullmatch(
                     r"(mcg|mg|g)\s+(.+)", threshold_unit
                 )
-                if marker_target is not None:
+                if marker_target is not None and convert_reason != "form_unknown":
                     convert_reason = "marker_amount_unknown"
                 details["thresholds_checked"].append({
                     "evaluated": False,

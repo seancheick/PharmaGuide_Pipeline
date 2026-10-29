@@ -1025,3 +1025,34 @@ def test_shared_bitter_orange_serialized_presence_warnings_match_producer():
         hit = next(h for a in profile["ingredient_alerts"] for h in a["condition_hits"] if h["condition_id"] == "pregnancy")
         assert case["warning"]["dose_decision"] == compact_dose_decision(hit["dose_decision"])
         assert case["warning"]["severity"] == hit["severity"]
+
+
+@pytest.mark.parametrize(
+    "ingredient,status,disposition",
+    [
+        ({"quantity": 9000, "unit": "mcg"}, "form_unknown", "review"),
+        ({"quantity": None, "unit": "mcg"}, "amount_unknown", "good_to_know"),
+        ({"quantity": 3000, "unit": "mcg"}, "below_threshold", "suppress"),
+        ({"quantity": 3001, "unit": "mcg", "matched_form": "retinyl palmitate"},
+         "above_threshold", "block"),
+    ],
+)
+def test_activity_unit_form_uncertainty_retains_its_authored_disposition(
+    ingredient, status, disposition
+):
+    # RAE is an activity unit, not a missing marker declaration. Distinct
+    # presentation policies expose which existing decision branch owns it.
+    threshold = {
+        **_vitamin_d_threshold(), "target_id": "pregnancy", "value": 3000,
+        "unit": "mcg RAE", "unknown_form_disposition": "review",
+        "amount_missing_disposition": "good_to_know",
+        "consumer_disposition_if_met": "block",
+    }
+    _, decision = SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+        [threshold], "condition", "pregnancy",
+        {"name": "Vitamin A", "standard_name": "Vitamin A", **ingredient},
+        1.0, "monitor",
+    )
+    assert decision["evaluation_status"] == status
+    assert decision["consumer_disposition"] == disposition
+    assert decision["release_blocking"] is False
