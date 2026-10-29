@@ -991,3 +991,82 @@ def test_named_poolzyme_source_still_requires_source_context_review():
     assert record.get("study_contexts") == []
     assert record["scoring_eligible"] is False
     assert "clinical_source_contexts_missing" in review["errors"]
+
+
+@pytest.fixture(scope="module")
+def bamboo_label_normalizer():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    return EnhancedDSLDNormalizer()
+
+
+@pytest.mark.parametrize(
+    "product_id,source_name,raw_notes,ratio",
+    [
+        ("252349", "Bamboo extract", "", ""),
+        ("253304", "Bamboo extract", "", ""),
+        ("253309", "Bamboo extract", "", ""),
+        ("253312", "Bamboo extract", "", ""),
+        ("310922", "Bamboo extract", "", ""),
+        ("310927", "Bamboo extract", "", ""),
+        ("310921", "Bamboo Leaf, Stem Extract", "", ""),
+        ("310924", "Bamboo Leaf, Stem Extract", "", ""),
+        ("330290", "Bamboo Leaf, Stem Extract", "30:1", "30:1"),
+        ("330291", "Bamboo Leaf, Stem Extract", "30:1", "30:1"),
+        ("330292", "Bamboo Leaf, Stem Extract", "30:1", "30:1"),
+        ("330293", "Bamboo Leaf, Stem Extract", "30:1", "30:1"),
+    ],
+)
+def test_bamboo_exact_label_restores_only_printed_species_and_parts(
+    bamboo_label_normalizer, product_id, source_name, raw_notes, ratio
+):
+    """Official label omits neither species nor tissue; API working notes do."""
+    from copy import deepcopy
+
+    raw = [{"name": source_name, "notes": raw_notes, "forms": [],
+            "quantity": [{"quantity": 500, "unit": "mg"}]}]
+    before = deepcopy(raw)
+    bamboo_label_normalizer._stamp_raw_source_paths(raw, "ingredientRows")
+    result = bamboo_label_normalizer._apply_label_corrections(raw, product_id)
+    row = result[0]
+    assert "Bambusa vulgaris" in row["notes"]
+    assert "PlantPart: stem and leaves" in row["notes"]
+    assert ("30:1" in row["notes"]) is bool(ratio)
+    assert row["_pre_correction_notes"] == raw_notes
+    assert row["name"] == source_name
+    assert row["forms"] == before[0]["forms"]
+    assert row["quantity"] == before[0]["quantity"]
+    assert row["raw_source_path"] == "ingredientRows[0]"
+    assert "silica" not in row["notes"].lower()
+    assert "%" not in row["notes"]
+    corrected = deepcopy(result)
+    assert bamboo_label_normalizer._apply_label_corrections(result, product_id) == corrected
+
+
+@pytest.mark.parametrize("changed_field", ["name", "notes", "quantity", "raw_source_path"])
+def test_bamboo_exact_label_correction_rejects_changed_source_binding(
+    bamboo_label_normalizer, changed_field
+):
+    from copy import deepcopy
+
+    row = {"name": "Bamboo extract", "notes": "", "raw_source_path": "ingredientRows[0]",
+           "quantity": [{"quantity": 500, "unit": "mg"}]}
+    replacement = {"name": "Bamboo root extract", "notes": "new source edition",
+                   "quantity": [{"quantity": 600, "unit": "mg"}],
+                   "raw_source_path": "ingredientRows[1]"}
+    row[changed_field] = replacement[changed_field]
+    before = deepcopy(row)
+    with pytest.raises(ValueError, match="Reviewed note attribution changed"):
+        bamboo_label_normalizer._apply_label_corrections([row], "252349")
+    assert row == before
+
+
+@pytest.mark.parametrize("product_id", ["unreviewed-label", "294422", "331010"])
+def test_bamboo_exact_label_facts_are_not_copied_to_unverified_siblings(
+    bamboo_label_normalizer, product_id
+):
+    from copy import deepcopy
+
+    raw = [{"name": "Bamboo extract", "notes": "", "quantity": [{"quantity": 500, "unit": "mg"}]}]
+    before = deepcopy(raw)
+    assert bamboo_label_normalizer._apply_label_corrections(raw, product_id) == before

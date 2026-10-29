@@ -186,12 +186,14 @@ def _resolved_preparation_row(product: Dict[str, Any], row: Dict[str, Any]) -> b
     if _explicit_botanical_identity_rejection(row, require_preparation=True):
         return False
     from evidence_resolver import is_reviewed_branded_material
+    from scoring_input_contract import _has_registered_preparation_sources
     return bool(
         (row.get("mapped") is True and row.get("matched_form")
          and row.get("form_match_status") in {None, "mapped"}
          and is_reviewed_branded_material(row.get("canonical_id"), row.get("name"),
                                           strict_material_spelling=True))
         or _standardized_match(product, row, require_named_material=True)
+        or _has_registered_preparation_sources(product, row)
     )
 
 
@@ -830,7 +832,7 @@ def score_botanical_purpose_dose(
     if not _is_botanical_active(row):
         return None
 
-    benchmark = _botanical_benchmark(row)
+    benchmark = _botanical_benchmark(row, product=product)
     disclosure = dose_disclosure_status(row)
     # The strict input owner's lent-mass classification proves that the label
     # gives a total but not this child's share. A bare aggregate flag or broad
@@ -869,22 +871,15 @@ def score_botanical_purpose_dose(
     return unassessed_amount_band("disclosed_no_reference", benchmark)
 
 
-def _botanical_benchmark(row: Dict[str, Any]) -> str:
+def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any]] = None) -> str:
     """Return a completed absent general benchmark or unresolved review."""
     if _explicit_botanical_identity_rejection(row):
         return "unresolved"
     entry = _dosing_entry_for(row)
     if entry is not None:
-        semantics = entry.get("reference_semantics") or {}
-        if str(semantics.get("owner") or "").startswith("scripts/data/backed_clinical_studies.json::"):
-            from dose_assessment import verified_reference_citations
-            if not verified_reference_citations(entry):
-                return "unresolved"
-        if (semantics.get("curve") == "completed_no_benchmark_neutral"
-                and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")):
-            return "absent"
-        # A source/preparation still awaiting review is not completed neutral.
-        return "unresolved"
+        return _completed_botanical_reference(product, row, entry,
+            source_proof_required=str((entry.get("reference_semantics") or {}).get("owner") or "").startswith(
+                "scripts/data/backed_clinical_studies.json::"), no_benchmark_required=False)
     # A source-owned completed no-benchmark review is not an identity gap.
     # This does not promote all positive literature to botanical eligibility:
     # only the exact canonical, verified record with the approved neutral
@@ -892,18 +887,65 @@ def _botanical_benchmark(row: Dict[str, Any]) -> str:
     # descriptive and an unreadable amount still fails the strict input gate.
     from evidence_resolver import _load_literature_evidence
 
-    record = _load_literature_evidence().get(_norm(row.get("canonical_id"))) or {}
+    literature = _load_literature_evidence()
+    canonical = _norm(row.get("canonical_id"))
+    record = literature.get(canonical) or {}
     semantics = record.get("reference_semantics") or {}
-    from dose_assessment import verified_reference_citations
+    from dose_assessment import (_dose_source_preparation_matches, _record_names, _row_names,
+                                 verified_reference_citations)
 
-    if (
-        verified_reference_citations(record)
-        and semantics.get("reference_type") == "no_benchmark"
-        and semantics.get("curve") == "completed_no_benchmark_neutral"
-        and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
-    ):
-        return "absent"
-    # Recognizing the ingredient completes identity, not the scientific search
-    # for an applicable benchmark. Only the reviewed owners above can establish
-    # a completed no-benchmark conclusion (and therefore neutral Dose credit).
-    return "unresolved"
+    if canonical not in literature and product is not None:
+        # Canonical identity can be broader than an already reviewed physical
+        # source. Require one exact alias and original same-row preparation;
+        # a present but rejected direct owner never falls through to this path.
+        names = _row_names(row, source_only=True, product=product)
+        candidates = [candidate for candidate in literature.values()
+                      if names & _record_names(candidate)]
+        if len(candidates) != 1 or not _dose_source_preparation_matches(product, row, candidates[0]):
+            return "unresolved"
+        record = candidates[0]
+        semantics = record.get("reference_semantics") or {}
+    elif (product is not None and record.get("applicability") is not None
+          and not _dose_source_preparation_matches(product, row, record)):
+        # A verified broad family owner can exclude a defined preparation.
+        # Only an independently approved exact original-source reference may
+        # resolve that exclusion; an empty, held or stale direct owner cannot.
+        if not (verified_reference_citations(record)
+                and semantics.get("reference_type") == "no_benchmark"
+                and semantics.get("curve") == "completed_no_benchmark_neutral"
+                and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
+                and (record.get("applicability") or {}).get("excluded_form_terms")):
+            return "unresolved"
+        names = _row_names(row, source_only=True, product=product)
+        candidates = [candidate for candidate in literature.values()
+                      if names & _record_names(candidate)
+                      and (candidate.get("reference_semantics") or {}).get("scope") == "exact_preparation"
+                      and (candidate.get("applicability") or {}).get("require_source_label_form") is True
+                      and (candidate.get("applicability") or {}).get("required_form_terms")]
+        if len(candidates) != 1 or not _dose_source_preparation_matches(
+                product, row, candidates[0]):
+            return "unresolved"
+        record = candidates[0]
+        semantics = record.get("reference_semantics") or {}
+
+    return _completed_botanical_reference(product, row, record, source_proof_required=True)
+
+
+def _completed_botanical_reference(product: Optional[Dict[str, Any]], row: Dict[str, Any],
+                                   record: Dict[str, Any], *, source_proof_required: bool,
+                                   no_benchmark_required: bool = True) -> str:
+    """One completion gate for every selected Dose reference and lookup path."""
+    from dose_assessment import _dose_source_preparation_matches, verified_reference_citations
+    semantics = record.get("reference_semantics") or {}
+    if (semantics.get("curve") != "completed_no_benchmark_neutral"
+            or not str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")):
+        return "unresolved"
+    exact_preparation = semantics.get("scope") == "exact_preparation"
+    if (no_benchmark_required or exact_preparation) and semantics.get("reference_type") != "no_benchmark":
+        return "unresolved"
+    if (source_proof_required or exact_preparation) and not verified_reference_citations(record):
+        return "unresolved"
+    if semantics.get("scope") == "exact_preparation" and (
+            product is None or not _dose_source_preparation_matches(product, row, record)):
+        return "unresolved"
+    return "absent"

@@ -4955,7 +4955,7 @@ class EnhancedDSLDNormalizer:
             name = ing.get("name", "")
             nested = ing.get("nestedRows", [])
 
-            self._mark_enzyme_source_descriptors(ing, nested)
+            self._mark_preparation_source_descriptors(ing, nested)
 
             # DSLD explicitly marks structural section headings with
             # ingredientGroup="Header". The heading is label context, not an
@@ -5174,7 +5174,7 @@ class EnhancedDSLDNormalizer:
                         ing,
                         source_path=ing.get("raw_source_path") or "activeIngredients",
                     )
-                    self._mark_enzyme_source_descriptors(ing, form_rows)
+                    self._mark_preparation_source_descriptors(ing, form_rows)
                     flattened.extend(form_rows)
                 # BUT: Still extract nestedRows from skipped parents (e.g., "Total Omega Oil")
                 if nested:
@@ -5293,6 +5293,82 @@ class EnhancedDSLDNormalizer:
     # A parent that also declares live cultures keeps its organisms as cultures.
     _LIVE_CULTURE_PARENT_RE = re.compile(r"\bprobiotics?\b|\bcultures?\b|\bcfu\b", re.I)
 
+    def _mark_preparation_source_descriptors(self, ing: Dict[str, Any], children: List[Any]) -> None:
+        """Retain registered material fractions as composition of their parent.
+
+        Exact parent-local source aliases establish the relation, never shared
+        botanical taxonomy or a matching sum. The sum is only a conflict guard.
+        Existing enzyme provenance handling remains independent.
+        """
+        self._mark_enzyme_source_descriptors(ing, children)
+        raw_children = ing.get("nestedRows") or []
+        parent_path = str(ing.get("raw_source_path") or "")
+        if not raw_children or not parent_path or ing.get("_label_scoring_disposition"):
+            return
+        names = [str(ing.get("name") or "")]
+        parent_id, parent_db = self._resolve_canonical_identity("", raw_name=names[0])
+        declared_forms = ing.get("forms") or []
+        if parent_id is None and len(declared_forms) == 1 and isinstance(declared_forms[0], dict):
+            form_name = str(declared_forms[0].get("name") or "")
+            parent_id, parent_db = self._resolve_canonical_identity("", raw_name=form_name)
+            names.append(form_name)
+        elif parent_id is not None:
+            names.extend(str(form.get("name") or "") for form in declared_forms
+                         if isinstance(form, dict))
+        if parent_db != "ingredient_quality_map":
+            return
+        parent = self.ingredient_map.get(parent_id) or {}
+        registered_sources = {
+            norm_module.make_normalized_key(alias)
+            for form in (parent.get("forms") or {}).values()
+            for alias in form.get("source_form_aliases") or []
+        }
+        if norm_module.make_normalized_key(ing.get("name")) in registered_sources:
+            return
+        selected = []
+        for form_name, form in (parent.get("forms") or {}).items():
+            sources = {norm_module.make_normalized_key(alias)
+                       for alias in form.get("source_form_aliases") or []}
+            material_names = {norm_module.make_normalized_key(alias)
+                              for alias in [form_name, *(form.get("aliases") or [])]}
+            if any(norm_module.make_normalized_key(name) in material_names - sources
+                   for name in names):
+                selected.append(sources)
+        if len(selected) != 1 or not selected[0]:
+            return
+        parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
+        factor = self._MASS_UNIT_TO_MG.get(str(parent_unit or "").strip().lower())
+        if (not isinstance(parent_mass, (int, float)) or not math.isfinite(parent_mass)
+                or parent_mass <= 0 or factor is None):
+            return
+        fractions = []
+        for child in children:
+            if (not isinstance(child, dict)
+                    or not any(child is raw for raw in raw_children)
+                    or norm_module.make_normalized_key(child.get("name")) not in selected[0]):
+                continue
+            child_id, _ = self._resolve_canonical_identity("", raw_name=str(child.get("name") or ""))
+            if child_id is not None and child_id != parent_id:
+                # A registered source-form alias can also name a distinct
+                # active (BCAA leucine, for example). Its disclosed amount
+                # remains its own dose, not parent-material provenance.
+                continue
+            child_path = str(child.get("raw_source_path") or "")
+            mass, unit = self._extract_primary_mass_unit(child)
+            child_factor = self._MASS_UNIT_TO_MG.get(str(unit or "").strip().lower())
+            if (child_path.rsplit(".nestedRows[", 1)[0] != parent_path
+                    or not child_path.endswith("]") or child.get("nestedRows") or child.get("forms")
+                    or child.get("_label_scoring_disposition")
+                    or not isinstance(mass, (int, float)) or not math.isfinite(mass)
+                    or child_factor is None
+                    or not self._marker_fits_inside_parent(mass, unit, parent_mass, parent_unit)):
+                return
+            fractions.append((child, mass * child_factor))
+        if sum(mass for _, mass in fractions) > parent_mass * factor * (1 + 1e-9):
+            return
+        for child, _ in fractions:
+            child["_label_scoring_disposition"] = "source_descriptor"
+
     def _mark_enzyme_source_descriptors(self, ing: Dict[str, Any], children: List[Any]) -> None:
         """Mark an enzyme preparation's source organisms as provenance.
 
@@ -5366,11 +5442,11 @@ class EnhancedDSLDNormalizer:
                 nested_ing,
                 source_path=nested_ing.get("raw_source_path") or "activeIngredients",
             )
-            self._mark_enzyme_source_descriptors(nested_ing, form_rows)
+            self._mark_preparation_source_descriptors(nested_ing, form_rows)
             rescued.extend(form_rows)
         if not grand_nested:
             return rescued
-        self._mark_enzyme_source_descriptors(nested_ing, grand_nested)
+        self._mark_preparation_source_descriptors(nested_ing, grand_nested)
         logger.debug(
             "Extracting %d nestedRows from skipped nested parent: %s",
             len(grand_nested), nested_name,
@@ -7401,7 +7477,7 @@ class EnhancedDSLDNormalizer:
                     ing,
                     source_path=ing.get("raw_source_path") or "activeIngredients",
                 )
-                self._mark_enzyme_source_descriptors(ing, form_rows)
+                self._mark_preparation_source_descriptors(ing, form_rows)
                 for form_ing in form_rows:
                     processed_form = self._process_single_ingredient_enhanced(
                         form_ing,
@@ -7423,7 +7499,7 @@ class EnhancedDSLDNormalizer:
             # (e.g., "Total Omega Oil" is skipped, but Omega-3/6/9 nested rows are real data)
             if nested_rows:
                 logger.debug(f"Processing {len(nested_rows)} nestedRows from skipped parent: {name}")
-                self._mark_enzyme_source_descriptors(ing, nested_rows)
+                self._mark_preparation_source_descriptors(ing, nested_rows)
                 nested_results = []
                 for nested_ing in self._lift_decomposition_members(nested_rows):
                     if self._is_chemical_decomposition_leaf(nested_ing):

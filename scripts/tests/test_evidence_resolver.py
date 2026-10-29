@@ -197,6 +197,24 @@ def test_clinical_aggregates_keep_verified_direction_and_no_fabricated_counts():
     assert by_id["BRAND_SUNFIBER"]["total_enrollment"] == 121
 
 
+@pytest.mark.parametrize("record_id", ["INGR_SPIRULINA", "BRAND_SYTRINOL"])
+def test_signed_unresolved_source_holds_cannot_supply_affirmative_credit(record_id):
+    import json
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+
+    receipt = json.loads((SCRIPTS_ROOT / "audits/held_source_closure_20261028/patches"
+                          / f"{record_id}.json").read_text())
+    record = reviewed_entries()[record_id]
+    assert receipt["decision"].startswith("held:")
+    assert record.get("scoring_eligible") is False
+    assert not er.clinical_record_sources_eligible(record)
+    # Withheld credit does not conclude that the actual research was negative,
+    # or that its unfinished source assessment has become complete.
+    assert not assess_clinical_source_review(record)["is_complete"]
+    assert record["effect_direction"] == "mixed"
+    assert record["references_structured"]
+
+
 def test_owner_capability_map_completeness():
     """Every required authoritative owner is registered with complete metadata."""
     required_owners = {

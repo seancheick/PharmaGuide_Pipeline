@@ -498,3 +498,128 @@ def test_dha_title_does_not_synthesize_missing_omega_identity_from_sunflower_oil
         row.get("rescued_from_otheringredients_active_identity") is not True
         for row in cleaned.get("activeIngredients") or []
     )
+
+
+
+def _graminex_raw(product_id="328752"):
+    import json
+    return json.loads((Path(__file__).parent / "fixtures" /
+                       f"raw_graminex_{product_id}.json").read_text())
+
+
+def test_registered_nested_material_fractions_retain_one_whole_preparation_dose():
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+    enricher = SupplementEnricherV3()
+    for product_id in ("328752", "232473"):
+        cleaned = _clean(_graminex_raw(product_id))
+        parent, *fractions = cleaned["activeIngredients"]
+        assert parent["canonical_id"] == "flower_pollen"
+        assert parent["quantity"] == 378
+        assert parent["score_eligible_by_cleaner"] is True
+        assert [r["quantity"] for r in fractions] == [360, 18]
+        assert [r["name"] for r in fractions] == ["Graminex G60", "Graminex NAX"]
+        for row in fractions:
+            assert row["cleaner_row_role"] == "source_descriptor"
+            assert row["score_eligible_by_cleaner"] is False
+            assert row["canonical_id"] == "flower_pollen"
+            assert not row.get("isAdditive")
+            assert row["dose_class"] == "source_material_mass"
+            assert row["raw_source_path"].startswith("ingredientRows[0].nestedRows[")
+        enriched, _ = enricher.enrich_product(cleaned)
+        scored = build_scored_artifact(enriched)
+        blob = build_detail_blob(enriched, scored)
+        for item in blob["ingredients"]:
+            text = " ".join(str(item.get(key) or "")
+                            for key in ("notes", "form_note", "form_note_preview")).casefold()
+            assert "contains amino acids and phytosterols" not in text
+            assert "prostate and urinary health support" not in text
+
+
+def test_fraction_source_role_requires_registered_parent_and_actual_nested_mass():
+    import copy
+    cases = []
+    for parent_name in ("Unknown Preparation", "Cernilton", "Whey Protein Isolate",
+                        "Graminex G60"):
+        raw = _graminex_raw()
+        parent = raw["ingredientRows"][0]
+        parent.update(name=parent_name, forms=[])
+        cases.append(raw)
+    # A registered fraction cannot become a whole preparation through its generic source form.
+    raw = _graminex_raw()
+    raw["ingredientRows"][0]["name"] = "Graminex G60"
+    cases.append(raw)
+    # A known parent cannot hide an unregistered fraction or inconsistent mass.
+    for change in ("other_fraction", "over_parent", "over_total", "unknown_mass"):
+        raw = _graminex_raw()
+        parent = raw["ingredientRows"][0]
+        if change == "other_fraction":
+            for child in parent["nestedRows"]:
+                child["name"] = "Other Brand Pollen Fraction"
+        elif change == "over_parent":
+            parent["nestedRows"][0]["quantity"][0]["quantity"] = 400
+        elif change == "over_total":
+            parent["nestedRows"][1]["quantity"][0]["quantity"] = 30
+        else:
+            parent["quantity"] = []
+        cases.append(raw)
+    # DSLD forms are not an actual nested-row relation, even with matching names.
+    raw = _graminex_raw()
+    child = copy.deepcopy(raw["ingredientRows"][0]["nestedRows"][0])
+    raw["ingredientRows"] = [child]
+    cases.append(raw)
+    for raw in cases:
+        cleaned = _clean(raw)
+        for row in cleaned["activeIngredients"]:
+            if row.get("name") in {"Graminex G60", "Graminex NAX",
+                                    "Other Brand Pollen Fraction"}:
+                assert row.get("cleaner_row_role") != "source_descriptor"
+
+
+def test_disclosed_nested_whey_form_is_not_a_material_source_descriptor():
+    raw = {"id": "whey-nested-form", "fullName": "Whey Protein",
+           "ingredientRows": [{"name": "Whey Protein", "category": "protein",
+              "quantity": [{"quantity": 1000, "unit": "mg"}],
+              "nestedRows": [{"name": "Whey Protein Isolate", "category": "protein",
+                 "quantity": [{"quantity": 500, "unit": "mg"}], "nestedRows": [],
+                 "forms": []}], "forms": []}]}
+    cleaned = _clean(raw)
+    assert all(row.get("cleaner_row_role") != "source_descriptor"
+               for row in cleaned["activeIngredients"])
+
+
+
+def test_standalone_pollen_fractions_do_not_borrow_whole_material_dose_review():
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    import copy
+
+    enricher = SupplementEnricherV3()
+    for label in ("Graminex G60", "Graminex NAX", "Graminex flower pollen extract"):
+        raw = _graminex_raw()
+        fraction = copy.deepcopy(raw["ingredientRows"][0]["nestedRows"][0])
+        fraction["name"] = label
+        raw.update(fullName="Pollen preparation", ingredientRows=[fraction])
+        cleaned = _clean(raw)
+        assert cleaned["activeIngredients"][0]["cleaner_row_role"] != "source_descriptor"
+        enriched, _ = enricher.enrich_product(cleaned)
+        scored = build_scored_artifact(enriched)
+        dose = scored["quality_pillars_v4"]["dose"]["score"]
+        if label == "Graminex flower pollen extract":
+            assert dose > 0  # Existing signed whole-material reference remains available.
+        else:
+            assert dose == 0
+        assert scored["quality_pillars_v4"]["evidence"]["score"] == 0
+
+
+
+def test_generic_pollen_does_not_claim_one_human_absolute_absorption_fraction():
+    import json
+    data = json.loads((SCRIPTS / "data" / "ingredient_quality_map.json").read_text())
+    form = data["flower_pollen"]["forms"]["flower pollen extract"]
+    assert form["bio_score"] == 7  # Existing form grade is independent of a PK fraction.
+    assert "55%" not in form["absorption"]
+    assert form["absorption_structured"] == {
+        "value": None, "range_low": None, "range_high": None, "quality": "unknown",
+    }

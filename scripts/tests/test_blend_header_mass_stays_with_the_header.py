@@ -178,3 +178,25 @@ def test_overlapping_constituents_do_not_reconcile_a_partly_disclosed_preparatio
     # quality (plant part is a Transparency fact since V4.1 Step 4).
     assert components.get("recognized_botanical_identity", 0) > 0
     assert components.get("extract_not_whole_herb", 0) > 0
+
+
+def test_disclosed_bcaa_children_keep_their_distinct_cleaner_identities():
+    """Source-form recognition cannot hide an explicitly dosed amino acid."""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads((FIXTURES / "bcaa_59952_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    children = {row["raw_source_path"]: row for row in cleaned["activeIngredients"]
+                if ".nestedRows[" in row["raw_source_path"]}
+    assert [(children[f"ingredientRows[0].nestedRows[{i}]"]["canonical_id"],
+             children[f"ingredientRows[0].nestedRows[{i}]"]["quantity"],
+             children[f"ingredientRows[0].nestedRows[{i}]"]["cleaner_row_role"])
+            for i in range(3)] == [
+        ("l_leucine", 250.0, "active_scorable"),
+        ("l_isoleucine", 125.0, "active_scorable"),
+        ("l_valine", 125.0, "active_scorable"),
+    ]
+    assert [(row["quantity"], row["unit"], row["raw_source_path"])
+            for row in cleaned["activeIngredients"]
+            if row["canonical_id"] == "branched_chain_amino_acids"] == [
+        (500.0, "mg", "ingredientRows[0]")]

@@ -759,6 +759,46 @@ def _scoring_enriched_source(scored_path: Path, pid: str, cache: dict) -> dict |
     return products[0] if len(products) == 1 else None
 
 
+def _release_assessment_export_contained(
+    scored: dict, enriched: dict, *, completion_only: bool,
+    warning_only: set[str], blocked_warning_only: set[str], quarantines: dict,
+) -> bool:
+    """Reuse export policy without claiming the unfinished assessment completed.
+
+    Preflight may defer only a valid warning label or canonical quarantine.
+    The final audit additionally requires checksum-validated publication or
+    catalog/blob absence proof from the actual candidate.
+    """
+    status = scored.get("quality_score_status")
+    verdict = str(scored.get("verdict") or "").upper()
+    blocked = (status == "suppressed_safety" and verdict in {"BLOCKED", "UNSAFE"}
+               and is_confirmed_ban_or_recall(scored))
+    if not (blocked or (status == "not_scored" and verdict == "NOT_SCORED")):
+        return False
+    if (scored.get("quality_score_v4_100") is not None
+            or scored.get("score_100_equivalent") is not None):
+        return False
+    release = _safe_dict(_safe_dict(scored.get("assessment_readiness")).get("release_assessment"))
+    if (release.get("is_complete") is not False
+            or not isinstance(release.get("blockers"), list)
+            or not release.get("blockers")
+            or any(not isinstance(reason, str) or not reason for reason in release["blockers"])
+            or (release.get("unfinished_source_assessment") is not None
+                and not isinstance(release.get("unfinished_source_assessment"), str))):
+        return False
+    from build_final_db import validate_export_contract, _classify_export_contract_issues
+
+    issues = validate_export_contract(enriched, scored)
+    pid = product_identity(scored)
+    if not issues:
+        return completion_only or pid in (blocked_warning_only if blocked else warning_only - blocked_warning_only)
+    # A confirmed ban/recall must remain visible; even a canonical quarantine
+    # cannot make its exclusion a publishable candidate.
+    if blocked or _classify_export_contract_issues(issues, scored=scored) != "excluded_by_gate":
+        return False
+    return completion_only or set(issues) <= set(quarantines.get(pid, ()))
+
+
 def audit_scoring(args: argparse.Namespace) -> list[Finding]:
     files = collect_product_files(args, prefer_enriched=False)
     findings: list[Finding] = []
@@ -804,7 +844,13 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                       or release["unfinished_source_assessment"] is not None):
                     from assessment_readiness import _retained_evidence_is_publishable
                     enriched = _scoring_enriched_source(file_path, pid, source_cache)
-                    if enriched is None or not _retained_evidence_is_publishable(product, enriched):
+                    if enriched is None or not (
+                            _retained_evidence_is_publishable(product, enriched)
+                            or _release_assessment_export_contained(
+                                product, enriched, completion_only=completion_only,
+                                warning_only=warning_only, blocked_warning_only=blocked_warning_only,
+                                quarantines=quarantines,
+                            )):
                         findings.append(Finding("SCORING_RELEASE_ASSESSMENT_INCOMPLETE",
                             f"{pid}: unfinished release assessment: {release['blockers']}; "
                             "retained-science eligibility is unproven", str(file_path)))

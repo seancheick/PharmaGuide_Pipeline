@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.1",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.1",
@@ -177,7 +177,12 @@
             "co_therapies": [],
             "dose_status": "source_not_reported",
             "dose_basis": "not_applicable",
-            "duration_basis": "not_recorded"
+            "duration_basis": "not_recorded",
+            "source_provenance": {
+              "pmid": "40702885",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40702885/",
+              "location": "Abstract; accepted aggregate reporting limitation in docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json: no single assigned regimen or exposure duration"
+            }
           },
           "outcomes": [
             {
@@ -8290,17 +8295,19 @@
             "values": [
               1000000000.0
             ],
-            "dosage_forms": [],
+            "dosage_forms": [
+              "oral drops"
+            ],
             "duration_days": 28,
             "co_therapies": [],
             "dose_status": "verified",
             "dose_basis": "per_strain_daily",
             "duration_basis": "fixed_protocol",
-            "administration_frequency": "once_daily",
+            "administration_frequency": "Six drops once daily",
             "source_provenance": {
               "pmid": "31797399",
-              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31797399/",
-              "location": "abstract"
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6973258/",
+              "location": "Methods: intervention (BB-12 DSM 15954, six drops once daily, 28 days); retained source extraction in scripts/audits/held_source_closure_20261028/patches/STRAIN_BB12.json"
             }
           },
           "outcomes": [
@@ -8379,17 +8386,19 @@
             "values": [
               1000000000.0
             ],
-            "dosage_forms": [],
+            "dosage_forms": [
+              "oral drops"
+            ],
             "duration_days": 21,
             "co_therapies": [],
             "dose_status": "verified",
             "dose_basis": "per_strain_daily",
             "duration_basis": "fixed_protocol",
-            "administration_frequency": "once_daily",
+            "administration_frequency": "Six drops once daily",
             "source_provenance": {
               "pmid": "34550055",
-              "source_url": "https://pubmed.ncbi.nlm.nih.gov/34550055/",
-              "location": "abstract"
+              "source_url": "https://doi.org/10.3920/BM2020.0233",
+              "location": "Materials and methods: Study conduct and study product, printed p533 (PDF p3): BB-12 sunflower-oil suspension, oral six drops once daily for 21 days. Full primary PDF retrieved 2026-10-29 from ResearchGate copy https://www.researchgate.net/publication/354772539_Efficacy_of_Bifidobacterium_animalis_subsp_lactis_BB-12R_on_infant_colic_-_a_randomised_double-blinded_placebo-controlled_study/fulltext/63604d5a96e83c26eb6ef20c/Efficacy-of-Bifidobacterium-animalis-subsp-lactis-BB-12R-on-infant-colic-a-randomised-double-blinded-placebo-controlled-study.pdf"
             }
           },
           "outcomes": [

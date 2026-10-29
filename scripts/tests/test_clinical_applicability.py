@@ -2125,7 +2125,8 @@ def test_claim_absence_does_not_turn_unqualified_outcomes_into_affirmative_credi
     ('testosterone', ['Women'], 'not_applicable'),
     ('testosterone', ['Children (4 - 8 Years)'], 'unresolved'),
 ])
-def test_legacy_signed_scope_uses_same_claim_and_population_owner(claim, targets, status):
+def test_legacy_signed_scope_uses_same_claim_and_population_owner(monkeypatch, claim, targets, status):
+    import clinical_applicability as ca
     from evidence_resolver import evidence_record_matches_declared_purpose
     row = {'name': 'PrimaVie Shilajit', 'raw_source_text': 'PrimaVie Shilajit',
            'canonical_id': 'shilajit', 'raw_source_path': 'ingredientRows[0]',
@@ -2134,7 +2135,12 @@ def test_legacy_signed_scope_uses_same_claim_and_population_owner(claim, targets
                'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]},
                'targetGroups': targets,
                'statements': [{'type': 'Formula re: Contains', 'notes': f'Shilajit supports {claim}.'}] if claim else []}
-    source = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
+    current = reviewed_entries()
+    source = deepcopy(current['BRAND_PRIMAVIE_SHILAJIT'])
+    # Exercise the legacy scope seam explicitly; the real PrimaVie source now
+    # has its accepted source-specific biomarker context.
+    source.pop('study_contexts', None)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {**current, source['id']: source})
     assert not source.get('study_contexts')
     entry = {**source, 'matched_canonical_ids': ['shilajit'], 'matched_source_row_refs': ['ingredientRows[0]']}
     assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == status
@@ -2149,6 +2155,7 @@ def test_legacy_signed_scope_uses_same_claim_and_population_owner(claim, targets
 def test_legacy_scope_cannot_accept_missing_or_changed_review_provenance(monkeypatch, change):
     import clinical_applicability as ca
     source = deepcopy(reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT'])
+    source.pop('study_contexts', None)
     source['applicability'].update(change)
     monkeypatch.setattr(ca, 'reviewed_entries', lambda: {source['id']: source})
     row = {'name': 'PrimaVie Shilajit', 'canonical_id': 'shilajit', 'raw_source_text': 'PrimaVie Shilajit',

@@ -551,9 +551,8 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
               'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]},
               'evidence_data': {'clinical_matches': [{'id': rid, 'ingredient': row['name'],
                   'matched_canonical_ids': [row['canonical_id']], 'matched_source_row_refs': [row['raw_source_path']]}]}}
-    evidence = {'score': 0.0, 'max': 18.0, 'penalties': {}, 'components': {'clinical_evidence_pipeline': 0.0, 'depth_bonus': 0.0},
-                'metadata': {'evidence_result_state': 'clinical_review_not_covered',
-                             'ingredient_points': {}, 'contributing_record_assessments': []}}
+    from scoring_v4.modules.generic_evidence import score_evidence
+    evidence = score_evidence(source, apply_primary_floor=True, owner_scoped=True)
     product = _scored(dsld_id=pid, quality_assessment_status='partial',
                       _v4_safety_gate={'ingredient_assessment_complete': True, 'ingredient_assessment_errors': [],
                                       'short_circuits_scoring': False, 'quarantine_required': False},
@@ -620,6 +619,55 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
             {'canonical_id': row['canonical_id'], 'state': 'not_yet_evaluated',
              'source_row_ref': f'ingredientRows[{i}]', 'material': True, 'evidence_ids': []}
             for i, row in enumerate(source['ingredient_quality_data']['ingredients_scorable'])]
+    if pid in {'omega_zero', 'b_panel', 'multi_fractional', 'multi_zero', 'weighted', 'authority_zero'}:
+        from copy import deepcopy
+        if pid == 'omega_zero':
+            row.update(name='Fish Oil', canonical_id='fish_oil', quantity=1000)
+            source.update(product_name='Fish Oil', evidence_data={'clinical_matches': []})
+            from scoring_v4.modules.omega_evidence import score_evidence
+            payload = score_evidence(source)
+            product['_v4_module_breakdown']['module'] = 'omega'
+        elif pid == 'b_panel':
+            from test_v4_b_complex_module import _ideal_b_complex
+            from scoring_v4.modules.b_complex import _score_evidence
+            source = {**_ideal_b_complex(), 'id': pid}
+            payload = _score_evidence(source)
+            product['_v4_module_breakdown']['module'] = 'b_complex'
+        elif pid.startswith('multi_'):
+            from scoring_v4.modules.multi_prenatal_dose import CORE_MULTI_ANCHORS
+            from scoring_v4.modules.multi_prenatal_evidence import score_evidence
+            keys = CORE_MULTI_ANCHORS[:-1] if pid == 'multi_fractional' else ['unreviewed_test_active']
+            rows = [{**deepcopy(row), 'canonical_id': key, 'name': key.replace('_', ' '),
+                     'raw_source_path': f'ingredientRows[{i}]'} for i, key in enumerate(keys)]
+            source.update(product_name='Daily Multivitamin', activeIngredients=rows,
+                          ingredient_quality_data={'ingredients_scorable': rows, 'ingredients': rows},
+                          evidence_data={'clinical_matches': []})
+            payload = score_evidence(source)
+            product['_v4_module_breakdown']['module'] = 'multi_or_prenatal'
+        else:
+            from scoring_v4.modules.generic_evidence import score_evidence
+            if pid == 'weighted':
+                # Isolate the existing weighted path; floor qualification has
+                # separate signed-source and applicability regressions below.
+                monkeypatch.setattr('scoring_v4.modules.generic_evidence.PRIMARY_FLOOR_ENABLED', False)
+            key = 'ginger' if pid == 'weighted' else 'silicon'
+            row.update(name='Ginger' if pid == 'weighted' else 'Silica', canonical_id=key)
+            source.update(product_name=row['name'], evidence_data={'clinical_matches': []})
+            if pid == 'weighted':
+                rows, matches = [], []
+                for i, (canonical, rid) in enumerate([('ginger', 'INGR_GINGER'),
+                                                     ('cranberry', 'INGR_CRANBERRY'),
+                                                     ('vitamin_c', 'INGR_VITAMIN_C')]):
+                    item = {**deepcopy(row), 'canonical_id': canonical, 'name': canonical,
+                            'raw_source_text': canonical, 'raw_source_path': f'ingredientRows[{i}]'}
+                    rows.append(item)
+                    matches.append({**deepcopy(reviewed_entries()[rid]), 'matched_canonical_ids': [canonical],
+                                    'matched_source_row_refs': [item['raw_source_path']]})
+                source.update(product_name='Daily Blend', activeIngredients=rows,
+                              ingredient_quality_data={'ingredients_scorable': rows, 'ingredients': rows},
+                              evidence_data={'clinical_matches': matches})
+            payload = score_evidence(source, apply_primary_floor=True, owner_scoped=True)
+        evidence.clear(); evidence.update(payload)
     from assessment_readiness import evaluate_release_assessment
     product['assessment_readiness']['release_assessment'] = evaluate_release_assessment(
         source, product['assessment_readiness'], product['_v4_module_breakdown'], unfinished_source=None)
@@ -629,7 +677,7 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
     from scoring_v4.quality_score_config import config
     cfg = config()
     archetype = product['_v4_module_breakdown']['module'] if product['_v4_module_breakdown']['module'] in {
-        'probiotic', 'multi_or_prenatal'} else 'generic_single_molecule'
+        'probiotic', 'multi_or_prenatal', 'omega', 'b_complex'} else 'generic_single_molecule'
     pillar = _pillar_evidence(evidence, 20, archetype, cfg)
     pillar['receipt'] = _normalized_receipt('evidence', pillar, evidence, 20,
         lambda dim: _pillar_evidence(dim, 20, archetype, cfg))
@@ -649,6 +697,88 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
     inputs = {**stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])}
     write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints=inputs)
     return source, product, enriched, scored
+
+
+@pytest.mark.parametrize('pid', ['omega_zero', 'b_panel', 'multi_fractional', 'multi_zero', 'weighted', 'authority_zero'])
+def test_retained_evidence_uses_the_current_selected_numerical_owner(tmp_path, pid, monkeypatch):
+    from copy import deepcopy
+    from assessment_readiness import _retained_evidence_is_publishable
+    source, product, _, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
+    if pid == 'weighted':
+        evidence = product['_v4_module_breakdown']['dimensions']['evidence']
+        assert evidence['score'] > 0
+        assert evidence['metadata']['primary_evidence_floor_decisive'] is False
+    original = deepcopy(source)
+    assert _retained_evidence_is_publishable(product, source)
+    assert source == original
+    assert audit_scoring(_args(scored)) == []
+    assert product['quality_assessment_status'] == 'partial'
+    assert product['assessment_readiness']['release_assessment']['is_complete'] is False
+
+
+@pytest.mark.parametrize('pid', ['omega_zero', 'b_panel', 'multi_fractional', 'multi_zero', 'weighted', 'authority_zero'])
+@pytest.mark.parametrize('change', ['inflated_score', 'stale_lineage', 'changed_component'])
+def test_retained_evidence_owner_proof_rejects_changed_credit_or_lineage(tmp_path, pid, change, monkeypatch):
+    source, product, enriched, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
+    evidence = product['_v4_module_breakdown']['dimensions']['evidence']
+    if change == 'stale_lineage':
+        enriched.write_text(enriched.read_text() + '\n')
+    elif change == 'inflated_score':
+        evidence['score'] += 1
+        evidence['max'] = max(evidence['max'], evidence['score'])
+        key = next(iter(evidence['components']), 'clinical_evidence')
+        evidence['components'][key] = evidence['components'].get(key, 0) + 1
+    else:
+        evidence['components'] = {'clinical_evidence': evidence['score']}
+    if change != 'stale_lineage':
+        # Keep the public arithmetic internally consistent: the canonical
+        # source proof, rather than a stale display receipt, must reject it.
+        from scoring_v4.quality_score import _normalized_receipt, _pillar_evidence
+        from scoring_v4.quality_score_config import config
+        cfg = config()
+        archetype = product['quality_pillars_v4']['evidence']['components']['archetype']
+        pillar = _pillar_evidence(evidence, 20, archetype, cfg)
+        pillar['receipt'] = _normalized_receipt('evidence', pillar, evidence, 20,
+            lambda dim: _pillar_evidence(dim, 20, archetype, cfg))
+        product['quality_pillars_v4']['evidence'] = pillar
+        _write(scored, product)
+        from assessment_readiness import _retained_evidence_is_publishable
+        assert not _retained_evidence_is_publishable(product, source)
+        from pipeline_freshness import DATA_FINGERPRINT_KEY, stage_data_fingerprint, stage_input_fingerprints
+        from stage_manifest import write_stage_manifest
+        write_stage_manifest(scored.parent, 'score', [scored], input_fingerprints={
+            **stage_input_fingerprints(REPO_ROOT, 'score'),
+            DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])})
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(_args(scored))}
+
+
+def test_weighted_retained_evidence_cannot_keep_credit_when_a_winning_source_is_held(tmp_path, monkeypatch):
+    from copy import deepcopy
+    import clinical_applicability as owner
+    from assessment_readiness import _retained_evidence_is_publishable
+    source, product, _, scored = _held_scoring_pair(tmp_path, 'weighted', monkeypatch=monkeypatch)
+    assert _retained_evidence_is_publishable(product, source)
+    records = deepcopy(owner.reviewed_entries())
+    for context in records['INGR_CRANBERRY']['study_contexts']:
+        context['scoring_eligible'] = False
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: records)
+    assert not _retained_evidence_is_publishable(product, source)
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(_args(scored))}
+
+
+def test_current_evidence_receipt_uses_the_production_scoring_identity_view():
+    from copy import deepcopy
+    from assessment_readiness import _current_evidence_dimension_receipt
+    from scoring_input_contract import NON_SCORING_IDENTITY_RATIONALE, score_eligible_identity_view
+    from scoring_v4.modules.b_complex import _score_evidence
+    from test_v4_b_complex_module import _ideal_b_complex
+    source = _ideal_b_complex()
+    source['ingredient_quality_data']['ingredients_scorable'][0]['identity_resolution_rationale'] = NON_SCORING_IDENTITY_RATIONALE
+    original = deepcopy(source)
+    expected = _score_evidence(score_eligible_identity_view(source))
+    assert expected['score'] < 20
+    assert _current_evidence_dimension_receipt(source, 'b_complex', expected)
+    assert source == original
 
 
 @pytest.mark.parametrize('pid', ['321405', '336337', '306381', '19067', '307621', '180290',

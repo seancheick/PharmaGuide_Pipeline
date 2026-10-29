@@ -707,7 +707,7 @@ def test_completed_no_benchmark_accepts_printed_volume_without_inventing_mass():
 
 def test_disclosed_volume_does_not_complete_unresolved_benchmark(monkeypatch):
     import scoring_v4.modules.botanical_profile as owner
-    monkeypatch.setattr(owner, "_botanical_benchmark", lambda row: "unresolved")
+    monkeypatch.setattr(owner, "_botanical_benchmark", lambda row, **kwargs: "unresolved")
     row = _botanical_ingredient(quantity=0.2, unit="mL")
     result = score_botanical_dose(_botanical_product(ingredient=row))
     assert result["score"] == 0
@@ -1016,3 +1016,291 @@ def test_backed_reference_owner_corruption_cannot_bypass_dose_proof(monkeypatch)
     record['reference_semantics'].pop('owner')
     monkeypatch.setattr('evidence_resolver._backed_studies_index', lambda: {'sytrinol': [record]})
     assert _botanical_benchmark({'canonical_id': 'sytrinol', 'name': 'Sytrinol'}) == 'unresolved'
+
+
+@pytest.fixture(scope='module')
+def ginseng_binding_products():
+    import json
+    import logging
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    logging.disable(logging.INFO)
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    fixtures = Path(__file__).parent / 'fixtures'
+    return {pid: enricher.enrich_product(normalizer.normalize_product(
+        json.loads((fixtures / f'raw_ginseng_{pid}.json').read_text())))[0]
+        for pid in ['40590', '219043', '239741', '241914', '310646', '312858', '312543']}
+
+
+def _ginseng_first_row(product):
+    return next(row for row in product['ingredient_quality_data']['ingredients_scorable']
+                if row['raw_source_path'] == 'ingredientRows[0]')
+
+
+@pytest.mark.parametrize('pid', ['40590', '219043'])
+def test_exact_source_korean_root_extract_reuses_existing_completed_dose_owner(ginseng_binding_products, pid):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    product = ginseng_binding_products[pid]
+    row = _ginseng_first_row(product)
+    assert row['canonical_id'] == 'ginseng'
+    actual = score_botanical_purpose_dose(product, row)
+    assert actual['metadata']['benchmark'] == 'absent'
+    assert actual['score'] == _neutral()
+
+
+@pytest.mark.parametrize('pid', ['239741', '241914', '310646', '312858', '312543'])
+def test_source_specific_ginseng_binding_does_not_cross_part_species_or_processing(ginseng_binding_products, pid):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    product = ginseng_binding_products[pid]
+    actual = score_botanical_purpose_dose(product, _ginseng_first_row(product))
+    assert actual['metadata']['benchmark'] == 'unresolved'
+    assert actual['score'] == 0
+
+
+@pytest.mark.parametrize('change', ['missing_part', 'derived_part', 'title_part', 'sibling_part', 'parent_part', 'missing_source',
+    'duplicate_ref', 'foreign_ref', 'canonical_conflict', 'mixed_part', 'red_note', 'steamed_note',
+    'fermented_note', 'american_note', 'leaf_note', 'rhizome_note', 'gs15_note', 'negated_then_red'])
+def test_source_ginseng_dose_binding_rejects_unproven_or_contradictory_material(ginseng_binding_products, change):
+    from copy import deepcopy
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    product = deepcopy(ginseng_binding_products['40590'])
+    source = next(row for row in product['activeIngredients'] if row['raw_source_path'] == 'ingredientRows[0]')
+    row = _ginseng_first_row(product)
+    if change == 'missing_source':
+        product['activeIngredients'] = []
+    elif change == 'parent_part':
+        source.update(raw_source_path='ingredientRows[99].nestedRows[0]', plantPart=None, notes='')
+        row['raw_source_path'] = source['raw_source_path']
+        product['activeIngredients'].append({'name': 'Ginseng Root Blend', 'raw_source_path': 'ingredientRows[99]',
+                                            'plantPart': 'root', 'nestedIngredients': [source]})
+    elif change in {'missing_part', 'derived_part', 'title_part', 'sibling_part'}:
+        source['plantPart'] = None
+        source['notes'] = ''
+        if change == 'title_part':
+            product['product_name'] = 'Korean Ginseng Root Extract'
+        elif change == 'sibling_part':
+            product['activeIngredients'].append({**deepcopy(source), 'raw_source_path': 'ingredientRows[99]',
+                                                'plantPart': 'root'})
+        elif change == 'derived_part':
+            row['plantPart'] = 'root'
+            row['matched_form'] = 'Korean Ginseng Root Extract'
+    elif change == 'duplicate_ref':
+        product['activeIngredients'].append({**deepcopy(source), 'plantPart': 'leaf'})
+    elif change == 'foreign_ref':
+        row['raw_source_path'] = 'ingredientRows[99]'
+    elif change == 'canonical_conflict':
+        row['canonical_id'] = 'unknown_ginseng_identity'
+    elif change == 'mixed_part':
+        source['plantPart'] = 'stem, root'
+    else:
+        source['notes'] = {'red_note': 'Red Korean ginseng', 'steamed_note': 'Steamed root',
+            'fermented_note': 'Fermented extract', 'american_note': 'American Panax quinquefolius',
+            'leaf_note': 'Includes leaf material', 'rhizome_note': 'Rhizome extract',
+            'gs15_note': 'GS15-4', 'negated_then_red': 'Not fermented. Red root extract'}[change]
+    actual = score_botanical_purpose_dose(product, row)
+    assert actual['metadata']['benchmark'] == 'unresolved'
+    assert actual['score'] == 0
+
+
+def test_ginseng_source_binding_does_not_read_iqm_bio_notes(ginseng_binding_products):
+    from copy import deepcopy
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    product = deepcopy(ginseng_binding_products['40590'])
+    row = _ginseng_first_row(product)
+    row['notes'] = 'Fermented red American leaf: curated IQM bio context, not a source statement'
+    assert score_botanical_purpose_dose(product, row)['metadata']['benchmark'] == 'absent'
+
+
+@pytest.mark.parametrize('change', ['ambiguous_alias', 'direct_owner_rejected', 'empty_direct_owner', 'missing_citation_proof'])
+def test_ginseng_source_binding_never_bypasses_ambiguous_or_unverified_owners(ginseng_binding_products, monkeypatch, change):
+    from copy import deepcopy
+    import evidence_resolver
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    records = deepcopy(evidence_resolver._load_literature_evidence())
+    owner = records['ginseng_root_panax']
+    if change == 'ambiguous_alias':
+        records['unapproved_competing_owner'] = {**deepcopy(owner), 'canonical_id': 'unapproved_competing_owner'}
+    elif change == 'direct_owner_rejected':
+        records['ginseng'] = {'canonical_id': 'ginseng'}
+    elif change == 'empty_direct_owner':
+        records['ginseng'] = {}
+    else:
+        owner['verification_provenance'].pop('reference_citations')
+    monkeypatch.setattr(evidence_resolver, '_load_literature_evidence', lambda: records)
+    product = ginseng_binding_products['40590']
+    assert score_botanical_purpose_dose(product, _ginseng_first_row(product))['metadata']['benchmark'] == 'unresolved'
+
+
+def test_ginseng_qualified_aliases_preserve_approved_reference_and_direct_consumers():
+    from dose_assessment import reference_semantics_sha256, verified_reference_citations
+    from evidence_resolver import _load_literature_evidence
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    record = _load_literature_evidence()['ginseng_root_panax']
+    assert reference_semantics_sha256(record['reference_semantics']) == '25969182334c9f2294c7ce1a91f7b23881d168ba3630e181a837c12516099ae8'
+    assert verified_reference_citations(record)
+    assert record['reference_semantics']['review_date'] == '2026-10-27'
+    for name in ['Botalys', 'Korean Ginseng powder', 'raw Korean Ginseng powder']:
+        assert _botanical_benchmark({'canonical_id': 'ginseng_root_panax', 'name': name}) == 'absent'
+
+
+@pytest.fixture(scope='module')
+def citrus_binding_products():
+    import json
+    import logging
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    logging.disable(logging.INFO)
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    fixtures = Path(__file__).parent / 'fixtures'
+    return {pid: enricher.enrich_product(normalizer.normalize_product(
+        json.loads((fixtures / f'raw_citrus_scope_{pid}.json').read_text())))[0]
+        for pid in ['60794', '74011', '74583', '239332']}
+
+
+@pytest.mark.parametrize('pid', ['60794', '74011'])
+def test_defined_cordiart_source_does_not_borrow_a_crude_citrus_dose_review(citrus_binding_products, pid):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = citrus_binding_products[pid]
+    row = next(row for row in product['ingredient_quality_data']['ingredients_scorable']
+               if row.get('canonical_id') == 'citrus_bioflavonoids')
+    material = score_botanical_purpose_dose(product, row)
+    from dose_assessment import _dose_source_preparation_matches
+    from evidence_resolver import _load_literature_evidence
+    assert not _dose_source_preparation_matches(product, row, _load_literature_evidence()['citrus_bioflavonoids'])
+    assert material['metadata']['benchmark'] == 'absent'
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_score_status'] == 'scored'
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    # The new October29 exact whole-preparation ruling is separate from the
+    # unchanged October27 crude-citrus owner; NitroVasc keeps its pomegranate.
+    assert artifact['quality_pillars_v4']['dose']['score'] == 11.4
+    assert 'dose_benchmark_identity_unresolved' not in artifact['assessment_readiness']['release_assessment']['blockers']
+
+
+@pytest.mark.parametrize('pid', ['74583', '239332'])
+def test_existing_citrus_and_unrelated_controls_keep_their_dose(citrus_binding_products, pid):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(citrus_binding_products[pid])
+    assert artifact['quality_score_status'] == 'scored'
+    assert artifact['quality_pillars_v4']['dose']['score'] == {'74583': 11.4, '239332': 20}[pid]
+    assert 'dose_benchmark_identity_unresolved' not in artifact['assessment_readiness']['release_assessment']['blockers']
+
+
+def test_physical_dose_constraints_cannot_supply_clinical_approval(ginseng_binding_products, citrus_binding_products):
+    from clinical_applicability import _valid_policy, assess_clinical_applicability, assess_clinical_source_review
+    from dose_assessment import _dose_source_preparation_matches
+    from evidence_resolver import _load_literature_evidence
+    for product, canonical in [(ginseng_binding_products['40590'], 'ginseng_root_panax'),
+                               (citrus_binding_products['239332'], 'citrus_bioflavonoids')]:
+        record = _load_literature_evidence()[canonical]
+        row = next(row for row in product['ingredient_quality_data']['ingredients_scorable']
+                   if row.get('canonical_id') in {'ginseng', 'citrus_bioflavonoids'})
+        assert _valid_policy(record['applicability'])
+        assert _dose_source_preparation_matches(product, row, record)
+        clinical = assess_clinical_applicability(product, {**record, 'ingredient': row['raw_source_text'],
+            'matched_source_row_refs': [row['raw_source_path']], 'matched_canonical_ids': [row['canonical_id']]},
+            assess_amount=False)
+        assert clinical['status'] == 'unresolved'
+        assert not assess_clinical_source_review(record)['is_complete']
+
+
+def test_citrus_physical_exclusion_preserves_the_existing_approved_source_bytes():
+    from dose_assessment import reference_semantics_sha256, verified_reference_citations
+    from evidence_resolver import _load_literature_evidence
+    record = _load_literature_evidence()['citrus_bioflavonoids']
+    assert reference_semantics_sha256(record['reference_semantics']) == '51084137814247092d92ab16a470609373e875fe99229a8ed12f17bec865d696'
+    assert verified_reference_citations(record)
+    assert record['reference_semantics']['source_ids'] == ['PMID:33141449']
+    assert record['reference_semantics']['review_date'] == '2026-10-27'
+
+
+
+@pytest.fixture(scope="module")
+def registered_pollen_preparations():
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    fixtures = Path(__file__).parent / "fixtures"
+    return {pid: enricher.enrich_product(normalizer.normalize_product(
+        json.loads((fixtures / f"raw_graminex_{pid}.json").read_text())))[0]
+        for pid in ["328752", "232473"]}
+
+
+@pytest.mark.parametrize("pid", ["328752", "232473"])
+def test_registered_source_composition_has_a_disclosed_whole_preparation_dose(
+    registered_pollen_preparations, pid,
+):
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    product = registered_pollen_preparations[pid]
+    row = _primary_botanical_active(product)
+    result = score_botanical_purpose_dose(product, row)
+    assert row["quantity"] == 378
+    assert result["band"] == "disclosed_no_reference"
+    assert result["metadata"]["benchmark"] == "absent"
+    assert result["score"] == _neutral()
+
+
+@pytest.mark.parametrize("change", [
+    "unmapped_parent", "unknown_form", "foreign_parent_ref", "minted_parent",
+    "duplicate_parent", "derived_parent", "missing_printed_parent", "fake_descriptor",
+    "active_child", "unknown_child_mass", "foreign_child_path", "foreign_parent_link",
+    "missing_source_ledger", "contradictory_child_total", "mixed_active_child",
+])
+def test_registered_source_preparation_requires_complete_current_source_proof(
+    registered_pollen_preparations, change,
+):
+    from copy import deepcopy
+    from scoring_v4.modules.botanical_profile import _resolved_preparation_row
+    product = deepcopy(registered_pollen_preparations["328752"])
+    row = _primary_botanical_active(product)
+    parent, child = product["activeIngredients"][:2]
+    if change == "unmapped_parent":
+        row["mapped"] = False
+    elif change == "unknown_form":
+        row["matched_form"] = "unreviewed material"
+    elif change == "foreign_parent_ref":
+        row["raw_source_path"] = "ingredientRows[99]"
+    elif change == "minted_parent":
+        product["activeIngredients"].remove(parent)
+    elif change == "duplicate_parent":
+        product["activeIngredients"].append(deepcopy(parent))
+    elif change == "derived_parent":
+        row["scoring_input_kind"] = "product_level_evidence"
+    elif change == "missing_printed_parent":
+        parent["raw_taxonomy"]["quantityVariants"] = []
+    elif change == "fake_descriptor":
+        child["raw_source_text"] = child["name"] = "Unregistered pollen ingredient"
+        product["label_source_rows"][1]["raw_source_text"] = child["raw_source_text"]
+    elif change == "active_child":
+        child["score_eligible_by_cleaner"] = True
+    elif change == "unknown_child_mass":
+        child["quantity"] = None
+    elif change == "foreign_child_path":
+        child["raw_source_path"] = "ingredientRows[99]"
+    elif change == "foreign_parent_link":
+        child["parent_source_path"] = "ingredientRows[99]"
+    elif change == "missing_source_ledger":
+        product["label_source_rows"] = []
+    elif change == "contradictory_child_total":
+        child["quantity"] = 370
+        child["raw_taxonomy"]["quantityVariants"][0]["quantity"] = 370
+    else:
+        extra = deepcopy(child)
+        extra.update(name="Unreviewed active", raw_source_text="Unreviewed active",
+                     raw_source_path="ingredientRows[0].nestedRows[2]",
+                     cleaner_row_role="active_scorable", score_eligible_by_cleaner=True)
+        product["activeIngredients"].append(extra)
+        product["label_source_rows"].append({"raw_source_path": extra["raw_source_path"],
+            "raw_source_text": extra["raw_source_text"], "source_section": "activeIngredients"})
+    assert not _resolved_preparation_row(product, row)
+
+
+def test_existing_named_preparation_physical_identity_remains_available():
+    from scoring_v4.modules.botanical_profile import _resolved_preparation_row
+    row = _botanical_ingredient()
+    assert _resolved_preparation_row(_botanical_product(row), row)

@@ -777,9 +777,12 @@ def test_mirtogenol_keeps_complete_preparation_without_borrowed_bilberry_floor()
     assert _evidence(product)["metadata"]["primary_evidence_floor"] == 0.0
 
 
-def test_lent_identity_projection_inherits_declared_container_prominence_without_dose():
+def test_lent_identity_projection_inherits_declared_container_prominence_without_dose(monkeypatch):
+    from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
     from evidence_resolver import evidence_owner_canonicals, evidence_prominent_row_keys
     from scoring_input_contract import get_evidence_subject_rows, is_lent_blend_mass
+    from tests.test_v4_generic_evidence_p133 import _use_approved_mechanics_sources
 
     product = _enrich("prominence_blend_members_327407_raw.json")
     subject = next(row for row in get_evidence_subject_rows(product) if row.get("canonical_id") == "spirulina")
@@ -787,9 +790,51 @@ def test_lent_identity_projection_inherits_declared_container_prominence_without
     assert subject["evidence_scope"] == "blend_level"
     assert "spirulina" in evidence_owner_canonicals(product)
     assert (subject["raw_source_path"], "spirulina") in evidence_prominent_row_keys(product)
+    # The real source is held. Keep that clinical decision separate from this
+    # positive lineage/prominence mechanism, using a distinct synthetic record.
+    assert reviewed_entries()['INGR_SPIRULINA']['scoring_eligible'] is False
+    source, = _use_approved_mechanics_sources(monkeypatch, _match(
+        id='INGR_SPIRULINA_MECHANICS_TEST', ingredient='Spirulina', standard_name='Spirulina',
+        canonical_id='spirulina',
+        applicability={'scope': 'ingredient', 'required_form_terms': ['spirulina']}),
+        outcome='Synthetic general-health symptom burden', condition='general_health')
+    context = source['study_contexts'][0]
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert assess_clinical_source_review(source)['is_complete']
+    assert source['applicability'] == {'scope': 'ingredient', 'required_form_terms': ['spirulina']}
+    product = deepcopy(product)
+    product['evidence_data']['clinical_matches'] = [{**source,
+        'matched_canonical_ids': ['spirulina'], 'matched_source_row_refs': [subject['raw_source_path']]}]
+    decision = assess_clinical_applicability(product, product['evidence_data']['clinical_matches'][0], assess_amount=False)
+    assert decision['status'] == 'applicable'
+    assert decision['matched_canonical_ids'] == ['spirulina']
+    from dose_assessment import positive_clinical_benchmark
+    assert positive_clinical_benchmark(product, subject) is None
     evidence = _evidence(product)
     assert evidence["metadata"]["ingredient_points"]["spirulina"] > 0
     assert evidence["metadata"]["primary_evidence_floor"] == 0
+    assert reviewed_entries()['INGR_SPIRULINA']['scoring_eligible'] is False
+    source['applicability']['required_form_terms'] = ['unrelated synthetic preparation']
+    assert _evidence(product)['metadata']['ingredient_points'].get('spirulina', 0) == 0
+
+
+def test_real_lent_spirulina_projection_retains_its_hold_without_borrowing_a_dose():
+    from clinical_applicability import reviewed_entries
+    from evidence_resolver import evidence_owner_canonicals, evidence_prominent_row_keys
+    from scoring_input_contract import get_evidence_subject_rows, is_lent_blend_mass
+
+    product = _enrich('prominence_blend_members_327407_raw.json')
+    subject = next(row for row in get_evidence_subject_rows(product) if row.get('canonical_id') == 'spirulina')
+    assert is_lent_blend_mass(subject)
+    assert subject['evidence_scope'] == 'blend_level'
+    assert 'spirulina' in evidence_owner_canonicals(product)
+    assert (subject['raw_source_path'], 'spirulina') in evidence_prominent_row_keys(product)
+    assert reviewed_entries()['INGR_SPIRULINA']['scoring_eligible'] is False
+    evidence = _evidence(product)
+    assert evidence['metadata']['ingredient_points'].get('spirulina', 0) == 0
+    assert evidence['metadata']['primary_evidence_floor'] == 0
+    assert all(row['id'] != 'INGR_SPIRULINA'
+               for row in evidence['metadata']['contributing_record_assessments'])
 
 
 @pytest.mark.parametrize("path,parent_path,lent,links,expected", [

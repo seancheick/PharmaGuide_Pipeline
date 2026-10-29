@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "total_entries": 738,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -2594,9 +2594,6 @@
       "standard_name": "Brand Complex Descriptor",
       "aliases": [
         "ap-bio",
-        "cordiart flavonoid glycoside",
-        "graminex g60",
-        "graminex nax",
         "keranat",
         "mbp",
         "musclepharm",
@@ -2664,7 +2661,7 @@
       "external_ids": {},
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C1269100 ('Eosinophilic major basic protein' — unrelated). This is a proprietary brand-complex label descriptor (ap-bio, Brain Shield, graminex g60, cordiart, etc.); no single UMLS concept exists for a branded multi-ingredient placeholder. Null per null-CUI policy for proprietary descriptors.",
+      "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C1269100 ('Eosinophilic major basic protein' — unrelated). This is a proprietary brand-complex label descriptor (ap-bio, Brain Shield, etc.); no single UMLS concept exists for a branded multi-ingredient placeholder. Null per null-CUI policy for proprietary descriptors.",
       "functional_roles": [],
       "is_label_descriptor": true
     },

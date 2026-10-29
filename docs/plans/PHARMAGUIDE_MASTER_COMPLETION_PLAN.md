@@ -1,5 +1,14 @@
 # PharmaGuide master completion plan
 
+### October29 fresh-corpus release qualification
+
+- [x] Verify Sean's completed38-dataset Clean/Enrich/Score run on91fe and114current manifests/upstreambindings;15,437unique products. Local546passes24declaredexternaloptins. HighEvidence1457allnutritional authority.
+- [x] Reproduce canonical snapshot failure before assembly/promotion and distinguish release-proof defects, actual held-credit leaks, scheduled manufacturer aging and genuine source limitations. No publication occurred.
+- [ ] Finish bounded repair, raw/source controls, independent combined review and exact-candidate CI/local qualification. Current source work/limits are in the existing LEDGER; prior integration CI does not qualify this later batch.
+- [ ] Integrate qualified batch, select earliest stale stage from actual fingerprints, give Sean one regeneration command, then validate gated export/release/app candidate. Sean runs pipeline and publication. Do not mark release ready while exact preparation dependencies or release gates remain unresolved. Chengdu Methods are now verified; the separate exact Cordiart Dose ruling is approved and being implemented.
+
+Owner: existing readiness/publication, clinical source/context, manufacturer age and export owners — evidence in the [existing LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create another scorer, semantic owner, registry or clinical approval.
+
 ### October 28–29 final integration — Codex takeover
 
 - [x] Establish one integrator: Sean assigned Codex integration/merges and confirmed Claude editing/autofix paused; fetch current main and preserve unique lane/user artifacts.

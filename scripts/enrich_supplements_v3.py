@@ -15062,32 +15062,32 @@ class SupplementEnricherV3:
                 ):
                     non_opaque_source_fields.add(f"{section}[{index}]")
 
+        # Detector and cleaner evidence must read the same complete source
+        # membership after flattening. An empty header is not proof that its
+        # physically linked, separately disclosed members hide their amounts.
+        def with_linked_source_children(row):
+            if row.get("nestedIngredients"):
+                return row
+            ref = str(row.get("raw_source_path") or "")
+            declared = {path for path in source_inventory
+                        if ref and re.fullmatch(re.escape(ref) + r"\.(?:nestedRows|forms)\[\d+\]", path)}
+            children = children_by_parent.get(ref) or []
+            if (not declared or len(children) != len(declared)
+                    or {child.get("raw_source_path") for child in children} != declared):
+                return row
+            return {**row, "nestedIngredients": children}
+
+        disclosure_product = dict(product)
+        for section, rows in (("activeIngredients", active_ingredients),
+                              ("inactiveIngredients", inactive_ingredients)):
+            disclosure_product[section] = [with_linked_source_children(row) for row in rows]
+
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
         if self.blend_detector:
             # A detector failure fails the product (enrich_product records it);
             # dropping its blends would silently skip the B5 penalty.
-            # The cleaner may flatten nestedRows. Restore only physically
-            # linked members for the detector; never infer membership by name
-            # or co-occurrence, and never change the input product.
-            detector_product = dict(product)
-            for section, rows in (("activeIngredients", active_ingredients),
-                                  ("inactiveIngredients", inactive_ingredients)):
-                detector_product[section] = [
-                    {**row, "nestedIngredients": children_by_parent[row["raw_source_path"]]}
-                    if (not row.get("nestedIngredients")
-                        and row.get("raw_source_path") in children_by_parent
-                        # A retained subset cannot become a sole-component
-                        # proof when the physical inventory names a lost child.
-                        and not any(
-                            path.startswith(row["raw_source_path"])
-                            and _RAW_CHILD_ROW.fullmatch(path[len(row["raw_source_path"]):])
-                            and path not in source_paths
-                            for path in source_inventory
-                        ))
-                    else row for row in rows
-                ]
-            result = self.blend_detector.analyze_product(detector_product)
+            result = self.blend_detector.analyze_product(disclosure_product)
             for blend in result.blends_detected:
                 if (blend.source_field in non_opaque_source_fields
                         or label_source_refs.get(blend.source_field) in source_only_preparations):
@@ -15163,8 +15163,8 @@ class SupplementEnricherV3:
             return with_amounts, without_amounts
 
         for source_name, ingredient_list in (
-            ("activeIngredients", active_ingredients),
-            ("inactiveIngredients", inactive_ingredients),
+            ("activeIngredients", disclosure_product["activeIngredients"]),
+            ("inactiveIngredients", disclosure_product["inactiveIngredients"]),
         ):
             # The cleaner owns structural disclosure on the parent header.
             # Flattened children carry the relationship, but their own
@@ -15495,7 +15495,8 @@ class SupplementEnricherV3:
             cleaning_blends.append(group)
 
         # Step 3: Merge and dedupe using union-of-evidence
-        merged_blends = self._merge_blend_evidence(detector_blends, cleaning_blends)
+        merged_blends = self._merge_blend_evidence(
+            detector_blends, cleaning_blends, source_row_refs=label_source_refs)
 
         # Any merged record still without a tier (e.g. a detector-only blend)
         # gets one from its own children and printed total; consumers read
@@ -15598,7 +15599,8 @@ class SupplementEnricherV3:
     def _merge_blend_evidence(
         self,
         detector_blends: List[Dict],
-        cleaning_blends: List[Dict]
+        cleaning_blends: List[Dict],
+        source_row_refs: Optional[Dict[str, str]] = None,
     ) -> List[Dict]:
         """
         Merge detector and cleaning blend evidence with deduplication.
@@ -15663,7 +15665,13 @@ class SupplementEnricherV3:
                 # evidence than matching those names. Conflicting totals stay
                 # separate rather than silently choosing an amount.
                 dt, ct = detector.get("total_weight"), cleaner.get("total_weight")
-                if dt is not None and ct is not None and (
+                unknown_zero_totals = (
+                    isinstance(dt, (int, float)) and not isinstance(dt, bool) and dt == 0
+                    and isinstance(ct, (int, float)) and not isinstance(ct, bool) and ct == 0
+                    and str(detector.get("unit") or "").casefold() in {"", "np"}
+                    and str(cleaner.get("unit") or "").casefold() in {"", "np"}
+                )
+                if not unknown_zero_totals and dt is not None and ct is not None and (
                     dt != ct or str(detector.get("unit") or "").casefold()
                     != str(cleaner.get("unit") or "").casefold()
                 ):
@@ -15731,7 +15739,7 @@ class SupplementEnricherV3:
                     if path:
                         merged_source_paths.add(path)
                 existing["source_fields"] = sorted(merged_source_paths)
-                if existing.get("source_fields"):
+                if existing.get("source_fields") and not existing.get("source_row_ref"):
                     existing["source_field"] = existing["source_fields"][0]
                     existing["source_path"] = existing["source_fields"][0]
                 # Prefer cleaning name for UI (label-facing, more specific)
@@ -15754,6 +15762,12 @@ class SupplementEnricherV3:
                     existing["hidden_count"] = cleaning_blend.get("hidden_count", existing.get("hidden_count", 0))
                     cleaning_evidence = cleaning_blend.get("evidence") or {}
                     existing_evidence = existing.get("evidence") or {}
+                    if "source_fields" in existing_evidence or "source_fields" in cleaning_evidence:
+                        existing_evidence["source_fields"] = sorted(
+                            set(existing_evidence.get("source_fields") or [])
+                            | set(cleaning_evidence.get("source_fields") or [])
+                            | merged_source_paths
+                        )
                     existing_evidence["ingredients_with_amounts"] = cleaning_evidence.get(
                         "ingredients_with_amounts",
                         existing_evidence.get("ingredients_with_amounts", []),
@@ -15802,6 +15816,21 @@ class SupplementEnricherV3:
                 consolidated.extend(disclosed)  # drop 0-child header(s)
             else:
                 consolidated.append(group[0])  # collapse all-opaque duplicates to one
+        # A sorted provenance union includes members; its first array index
+        # does not identify the physical header (11 sorts before 6). Keep a
+        # proved primary or bind the unique current alias of the authored owner.
+        source_row_refs = source_row_refs or {}
+        for blend in consolidated:
+            owner = blend.get("source_row_ref")
+            if not owner:
+                continue
+            primary = blend.get("source_field")
+            if source_row_refs.get(primary) != owner:
+                headers = [field for field, ref in source_row_refs.items() if ref == owner]
+                primary = headers[0] if len(headers) == 1 else owner
+            blend["source_field"] = blend["source_path"] = primary
+            if isinstance(blend.get("evidence"), dict):
+                blend["evidence"]["source_field"] = primary
         return consolidated
 
     def _extract_strain_ids_from_product(self, product: Dict) -> List[str]:

@@ -63,6 +63,8 @@ def test_botanical_blend_projection_preserves_only_cleaner_owned_child_part(keep
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
     from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_input_contract import is_lent_blend_mass
+    from scoring_v4.modules.generic_helpers import has_usable_individual_dose
 
     raw = json.loads((FIXTURES / "plant_part_204571_raw.json").read_text())
     cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
@@ -71,12 +73,39 @@ def test_botanical_blend_projection_preserves_only_cleaner_owned_child_part(keep
         for row in cleaned["activeIngredients"]:
             row.pop("plantPart", None)
     enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    # The complete four-member source inventory owns this mixed preparation.
+    # A flattened array position is not its physical source identity.
+    [blend] = [row for row in enriched["proprietary_blends"]
+               if row.get("source_row_ref") == "ingredientRows[6]"]
+    source_refs = {f"activeIngredients[{index}]": row["raw_source_path"]
+                   for index, row in enumerate(cleaned["activeIngredients"])}
+    [header_field] = [field for field, ref in source_refs.items()
+                      if ref == blend["source_row_ref"]]
+    assert blend["source_field"] == blend["source_path"] == header_field
+    assert all(source_refs.get(field, field) == blend["source_row_ref"]
+               or source_refs.get(field, field).startswith(blend["source_row_ref"] + ".nestedRows[")
+               for field in blend["source_fields"])
+    assert [(row["name"], row["amount"]) for row in blend["child_ingredients"]] == [
+        ("organic Schisandra (Schisandra chinensis) berry extract", 330),
+        ("organic Rhodiola rosea root extract", 300),
+        ("organic Ashwagandha root extract", 150),
+        ("organic Eleuthero (Siberian ginseng) root extract", 70),
+    ]
+    [leaf] = [row for row in enriched["ingredient_quality_data"]["ingredients"]
+              if row.get("raw_source_path") == "ingredientRows[6].nestedRows[2]"]
+    assert leaf["canonical_id"] == "ashwagandha_root"
+    assert (leaf["quantity"], leaf["unit"]) == (150, "mg")
+    assert leaf.get("plantPart") == ("root" if keep_part else None)
     projection = next(row for row in enriched["product_scoring_evidence"]
                       if row.get("canonical_id") == "ashwagandha"
-                      and row.get("raw_source_path") == "activeIngredients[6]")
+                      and row.get("reason") == "proprietary_blend_total_from_botanical_child"
+                      and row.get("raw_source_path") == header_field)
+    assert set(blend["source_fields"]) <= set(projection["linked_rows"])
     assert projection.get("plantPart") == ("root" if keep_part else None)
     assert projection["dose_value"] == 850
     assert projection["evidence_scope"] == "blend_level"
+    assert is_lent_blend_mass(projection)
+    assert not has_usable_individual_dose(projection)
     artifact = build_scored_artifact(enriched)
     assert artifact["_v4_provenance"]["module_route"] == "generic"
     # This mixed product uses the generic profile; source disclosure does not
@@ -105,3 +134,38 @@ def test_blend_projection_cannot_borrow_another_childs_plant_part(case, expected
     assert rows[0].get("plantPart") == expected
     assert rows[0]["dose_value"] == 850
     assert rows[0]["evidence_scope"] == "blend_level"
+
+
+@pytest.mark.parametrize("case,expected", [
+    ("valid_primary", "activeIngredients[6]"),
+    ("child_primary", "activeIngredients[6]"),
+    ("foreign_header", "ingredientRows[6]"),
+    ("ambiguous_header", "ingredientRows[6]"),
+    ("legacy_unanchored", "activeIngredients[11]"),
+])
+def test_blend_primary_field_joins_its_physical_header_not_sorted_children(case, expected):
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    blend = {"name": "Organic Adrenal Blend", "total_weight": 850, "unit": "mg",
+             "nested_count": 4, "disclosure_level": "full",
+             "source_row_ref": "ingredientRows[6]", "source_field": "activeIngredients[11]",
+             "source_path": "activeIngredients[11]",
+             "source_fields": ["activeIngredients[11]", "activeIngredients[6]", "activeIngredients[12]"],
+             "evidence": {"source_field": "activeIngredients[11]"}}
+    refs = {"activeIngredients[6]": "ingredientRows[6]",
+            "activeIngredients[11]": "ingredientRows[6].nestedRows[3]",
+            "activeIngredients[12]": "ingredientRows[7]"}
+    if case == "valid_primary":
+        blend["source_field"] = "activeIngredients[6]"
+    elif case == "foreign_header":
+        refs["activeIngredients[6]"] = "ingredientRows[7]"
+    elif case == "ambiguous_header":
+        refs["activeIngredients[12]"] = "ingredientRows[6]"
+    elif case == "legacy_unanchored":
+        blend.pop("source_row_ref")
+    [merged] = SupplementEnricherV3()._merge_blend_evidence([], [blend], source_row_refs=refs)
+    assert merged["source_field"] == expected
+    assert merged["source_path"] == expected
+    if case != "legacy_unanchored":
+        assert merged["evidence"]["source_field"] == expected
+    assert merged["source_fields"] == blend["source_fields"]

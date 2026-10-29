@@ -88,8 +88,45 @@ def test_dim_projection_reaches_its_reviewed_record(enriched):
     assert "diindolylmethane" in _matches(enriched["251549"]).get("PRECLIN_DIM", set())
 
 
-def test_branded_projection_reaches_its_branded_record(enriched):
-    assert "sytrinol" in _matches(enriched["54775"]).get("BRAND_SYTRINOL", set())
+def test_branded_projection_reaches_its_branded_record(enricher, enriched, monkeypatch):
+    from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    from tests.test_v4_generic_evidence_p133 import _match, _use_approved_mechanics_sources
+
+    product = enriched['54775']
+    subject = next(row for row in get_evidence_subject_rows(product) if row.get('canonical_id') == 'sytrinol')
+    assert reviewed_entries()['BRAND_SYTRINOL']['scoring_eligible'] is False
+    source, = _use_approved_mechanics_sources(monkeypatch, _match(
+        id='BRAND_SYTRINOL_MECHANICS_TEST', ingredient='Sytrinol', standard_name='Sytrinol',
+        canonical_id='sytrinol', evidence_level='branded-rct',
+        applicability={'scope': 'ingredient', 'required_form_terms': ['sytrinol']}),
+        outcome='Synthetic cardiovascular symptom burden', condition='cardiovascular')
+    assert validate_ingredient_context(source['study_contexts'][0], require_complete_review=True) == []
+    assert assess_clinical_source_review(source)['is_complete']
+    assert source['applicability'] == {'scope': 'ingredient', 'required_form_terms': ['sytrinol']}
+    monkeypatch.setitem(enricher.databases, 'backed_clinical_studies', {'backed_clinical_studies': [source]})
+    evidence = enricher._collect_evidence_data(product, ingredient_quality_data=product['ingredient_quality_data'])
+    match = next(row for row in evidence['clinical_matches'] if row['id'] == source['id'])
+    assert 'sytrinol' in match['matched_canonical_ids']
+    assert subject['raw_source_path'] in match['matched_source_row_refs']
+    decision = assess_clinical_applicability(product, match, assess_amount=False)
+    assert decision['status'] == 'applicable'
+    assert decision['matched_canonical_ids'] == ['sytrinol']
+    assert reviewed_entries()['BRAND_SYTRINOL']['scoring_eligible'] is False
+    source['applicability']['required_form_terms'] = ['unrelated synthetic preparation']
+    outside_scope = enricher._collect_evidence_data(product, ingredient_quality_data=product['ingredient_quality_data'])
+    assert all(row['id'] != source['id'] for row in outside_scope['clinical_matches'])
+
+
+def test_real_sytrinol_projection_retains_its_source_hold(enriched):
+    from clinical_applicability import reviewed_entries
+
+    product = enriched['54775']
+    subjects = get_evidence_subject_rows(product)
+    assert 'sytrinol' in evidence_owner_canonicals(product)
+    assert 'sytrinol' in _canonicals(subjects)
+    assert reviewed_entries()['BRAND_SYTRINOL']['scoring_eligible'] is False
+    assert 'BRAND_SYTRINOL' not in _matches(product)
 
 
 def test_a_branded_blend_reaches_its_record_through_the_member(enriched):

@@ -463,9 +463,12 @@ _POPULATION_WORDS = re.compile(
     r"prenatal|pregnan\w*|maternal|postnatal|postpartum|wom[ae]n'?s?|female|men'?s?|male)\b", re.I)
 
 
-# A product-level function sentence ("Supports normal enzyme activity"). A
-# general wellness phrase names no specific purpose, so it is no such claim.
-_POSITIONING_FUNCTION = re.compile(r"\b(?:supports?|promotes?|helps?|maintains?)\s+[a-z]", re.I)
+# Product-level function sentences and noun-form claim titles ("Libido
+# Support") remain claims even when no indication category places them.
+# General wellness phrases still name no specific purpose.
+_POSITIONING_FUNCTION = re.compile(
+    r"\b(?:supports?|promotes?|helps?|maintains?)\s+[a-z]"
+    r"|\b(?:libido|fertility|quality of life)\s+(?:support|booster|formula)\b", re.I)
 _GENERAL_WELLNESS = re.compile(
     r"\b(?:(?:overall|general|daily|good|optimal|total|everyday)\s+(?:health|wellness|well[- ]?being|nutrition)"
     r"|well[- ]?being|wellness|nutritional support)\b", re.I)

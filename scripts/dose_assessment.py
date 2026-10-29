@@ -295,14 +295,51 @@ def _record_names(record: Dict[str, Any]) -> set[str]:
     }
 
 
-def _row_names(row: Dict[str, Any], *, source_only: bool = False) -> set[str]:
+def _source_dose_row(product: Dict[str, Any], row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Bind material facts to one original active row, never a borrowed total."""
+    from clinical_applicability import _linked_rows
+    from scoring_input_contract import _source_tree_rows, is_lent_blend_mass
+
+    ref = row.get("raw_source_path") or row.get("source_row_ref")
+    if not isinstance(ref, str) or not ref.strip() or is_lent_blend_mass(row):
+        return None
+    originals = [source for source in _source_tree_rows(product)
+                 if (source.get("raw_source_path") or source.get("source_row_ref")) == ref]
+    if len(originals) != 1:
+        return None
+    linked = _linked_rows(product, {"matched_source_row_refs": [ref]}, source_only=True)
+    if len(linked) != 1:
+        return None
+    source = originals[0]
+    literal = source.get("raw_source_text")
+    if not isinstance(literal, str) or not literal.strip():
+        return None
+    if (source.get("canonical_id") and row.get("canonical_id")
+            and _identity_text(source["canonical_id"]) != _identity_text(row["canonical_id"])):
+        return None
+    return source
+
+
+def _row_names(row: Dict[str, Any], *, source_only: bool = False,
+               product: Optional[Dict[str, Any]] = None) -> set[str]:
+    qualified = set()
+    if source_only and product is not None:
+        source = _source_dose_row(product, row)
+        if source is None:
+            return set()
+        # plantPart here belongs to the original source row. The enriched
+        # matched form, another row and the product title cannot supply it.
+        part = source.get("plantPart")
+        if isinstance(part, str) and part.strip():
+            qualified.add(_identity_text(source["raw_source_text"] + " " + part))
+        row = {"canonical_id": row.get("canonical_id"), "raw_source_text": source["raw_source_text"]}
     if source_only:
         # Preparation binding uses printed source identity, not an enriched
         # matched form or a parent/product name that could lend a brand.
         row = {"canonical_id": row.get("canonical_id"),
                "name": row.get("raw_source_text") or row.get("name"),
                "standard_name": row.get("source_label_name") or row.get("name")}
-    return {
+    return qualified | {
         text for text in (
             _identity_text(row.get("canonical_id")),
             _identity_text(row.get("standard_name") or row.get("standardName")),
@@ -310,6 +347,52 @@ def _row_names(row: Dict[str, Any], *, source_only: bool = False) -> set[str]:
             _identity_text(row.get("matched_form")),
         ) if text
     }
+
+
+def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any], record: Dict[str, Any]) -> bool:
+    """Apply source physical constraints under the selected Dose reference scope."""
+    from clinical_applicability import _row_text, _valid_policy
+    from normalization import find_affirmative_label_match, normalize_text
+    import re
+
+    source = _source_dose_row(product, row)
+    if source is None:
+        return False
+    exact_preparation = (record.get("reference_semantics") or {}).get("scope") == "exact_preparation"
+    policy = record.get("applicability")
+    if policy is None:
+        return not exact_preparation
+    if not _valid_policy(policy) or policy.get("scope") != "ingredient":
+        return False
+    if exact_preparation and (
+            policy.get("require_source_label_form") is not True
+            or not policy.get("required_form_terms")
+            or _identity_text(source["raw_source_text"]) not in _record_names(record)):
+        return False
+    # Notes on IQM rows are curated bio context. Only the original linked
+    # row's notes and source taxonomy can contradict a literal preparation.
+    text = "; ".join(normalize_text(str(value or "")) for value in (
+        _row_text(source, source_only=True, preserve_punctuation=True), source.get("notes"),
+        source.get("plantPart"), source.get("genus"), source.get("species")))
+    def present(term: str) -> bool:
+        return bool(find_affirmative_label_match(
+            re.compile(r"(?<!\w)" + re.escape(normalize_text(term)) + r"(?!\w)", re.I), text))
+
+    if any(present(term) for term in policy.get("excluded_form_terms", [])):
+        return False
+    # Existing required_form_terms is an OR of complete source assertions.
+    # Curated IQM biology and a product title cannot supply physical facts.
+    # Clinical preparation restrictions and a general Dose determination are
+    # separate policies. Only explicit Dose exact_preparation scope requires
+    # this record's complete source assertions on every selection path.
+    required = (policy.get("required_form_terms") or []) if exact_preparation else []
+    # "std." is a label abbreviation, not a sentence boundary. Preserve
+    # measurement punctuation (especially %) when matching material assertions.
+    required_text = text.replace("std.", "std")
+    return not required or any(find_affirmative_label_match(
+        re.compile(r"(?<!\w)" + re.escape(normalize_text(term).replace("std.", "std"))
+                   + r"(?!\w)", re.I), required_text) for term in required)
+
 
 
 def positive_clinical_benchmark(

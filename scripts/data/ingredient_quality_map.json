@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12291,
+      "total_form_aliases": 12295,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -11802,12 +11802,12 @@
       "citrus bioflavonoids complex": {
         "bio_score": 9,
         "absorption": "low (bioflavonoid class-poor; extensive glucuronidation)",
-        "consumer_note": "Citrus-bioflavonoid complex is a mixture of citrus-derived flavonoids rather than one purified compound.",
+        "consumer_note": "Citrus-derived flavonoid preparations vary in composition. Refer to the specific product label for named compounds and declared marker content.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex — factual form copy only; not clinical approval",
+          "date": "2026-10-29"
         },
-        "notes": "A natural blend of flavonoid compounds from citrus fruits — typically including hesperidin, naringin, rutin, and quercetin. These compounds work synergistically with vitamin C, enhancing its absorption and extending its antioxidant activity. Traditionally known as 'Vitamin P.' Supports capillary strength, circulation, and anti-inflammatory pathways. B28 audit 2026-04-25: bioflavonoid class-poor (B19 framework).",
+        "notes": "Citrus-derived flavonoid preparations vary in composition and standardization. Refer to the specific product label for named compounds, source materials, and declared marker content.",
         "aliases": [
           "bitter orange citrus bioflavonoids",
           "bitter orange citrus bioflavonoid",
@@ -11852,7 +11852,8 @@
           "Citrus Bioflavanoids",
           "microbiomex",
           "flavanones",
-          "polymethoxyflavones"
+          "polymethoxyflavones",
+          "Cordiart Flavonoid Glycoside"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11865,7 +11866,8 @@
           "Bitter Orange",
           "Citrus aurantium",
           "Citrus aurantium L.",
-          "Citrus aurantium Fruit Extract"
+          "Citrus aurantium Fruit Extract",
+          "Sweet Orange"
         ]
       },
       "hesperidin": {
@@ -26793,8 +26795,6 @@
           "fermented panax ginseng",
           "high-potency red ginseng",
           "bioactive red ginseng",
-          "standardized korean ginseng extract",
-          "korean ginseng extract",
           "GS15-4"
         ],
         "dosage_importance": 1.0,
@@ -26988,10 +26988,10 @@
         ],
         "bio_score": 8,
         "absorption": "low (ginsenoside biotransformation-dependent)",
-        "consumer_note": "This label names ginseng without identifying species, plant part, processing, or ginsenoside standardization.",
+        "consumer_note": "Generic ginseng names alone cannot establish a specific processing method or equivalence to another ginseng preparation.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex source-label wording review",
+          "date": "2026-10-29"
         },
         "notes": "Form not specified on the label. Ginseng products span multiple species (Panax ginseng, P. quinquefolius, Eleutherococcus), processing methods (white, red, black, fermented), and ginsenoside profiles. Bioavailability and effects vary substantially by form. Scored conservatively until species and preparation are confirmed. B33 audit 2026-04-25: ginsenoside biotransformation-dep.",
         "aliases": [
@@ -26999,7 +26999,9 @@
           "red chinese ginseng",
           "american white ginseng",
           "panax ginseng leaf, stem extract",
-          "Asian Ginseng (4:1) - Manchurian"
+          "Asian Ginseng (4:1) - Manchurian",
+          "standardized korean ginseng extract",
+          "korean ginseng extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -54982,23 +54984,30 @@
       },
       "flower pollen extract": {
         "bio_score": 7,
-        "absorption": "moderate (~55%)",
-        "consumer_note": "Flower pollen extract is a concentrated material derived from collected pollen. The exact botanical mix can vary, so a label naming the pollen source provides additional form detail.",
+        "absorption": "unknown (a single applicable human absolute absorption fraction is not established for this multi-component material)",
+        "consumer_note": "Flower-pollen preparations differ in source and extraction. Refer to the product label for any named fractions and their amounts.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex — factual material copy only; not clinical approval",
+          "date": "2026-10-29"
         },
-        "notes": "Generic flower pollen extract. Contains amino acids and phytosterols. Used for prostate and urinary health support.",
+        "notes": "Flower-pollen preparations may be whole extracts or separated fractions. Refer to the source label for the material identity, fractions, and declared amounts.",
         "aliases": [
-          "pollen extract"
+          "pollen extract",
+          "Graminex G60",
+          "Graminex NAX",
+          "Graminex flower pollen extract"
         ],
         "dosage_importance": 0.9,
         "absorption_structured": {
-          "value": 0.55,
-          "range_low": 0.44,
-          "range_high": 0.66,
-          "quality": "moderate"
-        }
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
+        },
+        "source_form_aliases": [
+          "Graminex G60",
+          "Graminex NAX"
+        ]
       }
     },
     "match_rules": {

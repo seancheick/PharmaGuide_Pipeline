@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions. Existing canonical PG_SUB_ product identities may use this same exact-product correction owner. Reviewed physicalState metadata binds its original object and permits only explicit name/langualCodeDescription strings; it does not rewrite an approval or infer a dosage form.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-10-26",
-    "total_entries": 144,
+    "last_updated": "2026-10-29",
+    "total_entries": 156,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -8583,6 +8583,270 @@
           "upcSku": "X001FYWVWV"
         }
       }
+    },
+    "252349": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "raw_ingredient_text": "Bamboo extract",
+      "corrected_ingredient_text": "Bamboo extract",
+      "raw_notes": "",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "evidence": "Official NIH DSLD label image explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API row omits species and tissue from its notes. Restore only those printed source descriptors; the label declares no extract ratio or silica percentage. Other Ingredients: None. Do not infer elemental silicon, silica content, clinical equivalence, benchmark or approval. Preserve the original API name, amount, forms and source path. PDF SHA256 fd197abd95a93a48de2879774aff5a7e12c7dec545c58b77854d4f10aa3cf6a9.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/252349.pdf"
+      ]
+    },
+    "310921": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "raw_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "corrected_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "raw_notes": "",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "evidence": "Official NIH DSLD label image explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API name/forms retain leaf and stem but omit the printed species. Restore species and the exact label tissue wording in working notes; the label declares no extract ratio or silica percentage. Other Ingredients: None. Do not infer elemental silicon, silica content, clinical equivalence, benchmark or approval. Preserve the original API name, amount, forms and source path. PDF SHA256 7ea8c552d48d813c95e69a3646f363cd5cae4e82dfdb5e6a3317bb0c5b192cce.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/310921.pdf"
+      ]
+    },
+    "330290": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "raw_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "corrected_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "raw_notes": "30:1",
+      "corrected_notes": "Bamboo Extract 30:1 (Bambusa vulgaris) PlantPart: stem and leaves",
+      "evidence": "Official NIH DSLD label image explicitly prints Bamboo Extract 30:1 (Bambusa vulgaris) (Stem and Leaves), 500 mg. The API retains the 30:1 note and leaf/stem forms but omits the printed species. Restore species and tissue wording while retaining the declared ratio. Other Ingredients: Maltodextrin; it is not the active bamboo. No silica percentage or elemental silicon is stated. Do not infer a silica conversion, clinical equivalence, benchmark or approval. Preserve the original API name, amount, forms and source path. PDF SHA256 d7fb48e115fcc60a92fea0c7698320379ddca50221e161198f8c9ab142be4825.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330290.pdf"
+      ]
+    },
+    "253304": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo extract",
+      "corrected_ingredient_text": "Bamboo extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 253304 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 052e750b596f6f91ac3c235632623f66b7507e2ebe4e5998625baf5b9e2846c7.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/253304.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "253309": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo extract",
+      "corrected_ingredient_text": "Bamboo extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 253309 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 23451fb040f6f1b6ecef8c5004ffdbb8f6d8185bea152ee6207a4a4a45c1d76a.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/253309.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "253312": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo extract",
+      "corrected_ingredient_text": "Bamboo extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 253312 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 520a2a0b5a056747d18b9c3b394185a4ca526fdff09a0646f071c9985d78b2fe.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/253312.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "310922": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo extract",
+      "corrected_ingredient_text": "Bamboo extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 310922 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 3b9d8f60981eb19c89966a85e8145a257963f9ecacf06710ba428854868995aa.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/310922.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "310924": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "corrected_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 310924 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 dafd29083ee846e58c84cdbf5711011c9215843bd5973131b3612b15ebf57e79.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/310924.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "310927": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo extract",
+      "corrected_ingredient_text": "Bamboo extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 310927 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 a4b3347a1443be62068643f4c28030d8b9fd5e4efa0e0ca240e456bb9f41beb6.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/310927.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "330291": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "corrected_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "30:1",
+      "corrected_notes": "Bamboo Extract 30:1 (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 330291 explicitly prints Bamboo Extract 30:1 (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only and preserve the printed 30:1 ratio. Other Ingredients: Maltodextrin. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 c141c6ff935112bdb679bfce1626f60779e906d35d016f52d4d0dcb64ac72ed4.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330291.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "330292": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "corrected_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "30:1",
+      "corrected_notes": "Bamboo Extract 30:1 (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 330292 explicitly prints Bamboo Extract 30:1 (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only and preserve the printed 30:1 ratio. Other Ingredients: Maltodextrin. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 281e55373520ed498edd5d4df0d19ea229af54957042b5e107560c03fee8e47b.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330292.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "330293": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Bamboo Extract",
+      "raw_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "corrected_ingredient_text": "Bamboo Leaf, Stem Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "30:1",
+      "corrected_notes": "Bamboo Extract 30:1 (Bambusa vulgaris) PlantPart: stem and leaves",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified official NIH DSLD label image 330293 explicitly prints Bamboo Extract 30:1 (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only and preserve the printed 30:1 ratio. Other Ingredients: Maltodextrin. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 59d405d6e56ace26505e31d83d6fd92bc1791480d41135448923fc9ab43b0485.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330293.pdf"
+      ],
+      "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
     }
   }
 }

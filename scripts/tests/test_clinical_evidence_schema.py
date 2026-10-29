@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import copy
+import json
 import sys
 from pathlib import Path
 
@@ -61,6 +62,54 @@ def _context() -> dict:
 
 def test_frozen_context_accepts_the_canonical_vocabularies() -> None:
     assert validate_frozen_context(_context(), known_component_ids={"STRAIN_LGG"}) == []
+
+
+def test_signed_lgg_aggregate_keeps_its_no_single_regimen_reporting_limit() -> None:
+    registry = json.loads((ROOT / "scripts/data/clinically_relevant_strains.json").read_text())
+    strain = next(row for row in registry["clinically_relevant_strains"] if row["id"] == "STRAIN_LGG")
+    context = next(row for row in strain["study_contexts"]
+                   if row["context_id"] == "lgg_gi_respiratory_outcomes_meta_40702885")
+    assert validate_frozen_context(context, require_complete_review=True) == []
+    assert context["dose"]["values"] == []
+    assert context["dose"]["dosage_forms"] == []
+    assert context["dose"]["dose_status"] == "source_not_reported"
+    assert context["dose"]["dose_basis"] == "not_applicable"
+    # The aggregate exception cannot complete an unextracted direct trial,
+    # or a review with an unresolved dose or source locator.
+    for field, value in (("evidence_role", "direct_rct"),
+                         ("dose_status", "extraction_pending"),
+                         ("source_provenance", {})):
+        pending = copy.deepcopy(context)
+        (pending if field == "evidence_role" else pending["dose"])[field] = value
+        assert validate_frozen_context(pending, require_complete_review=True)
+
+
+def test_bb12_infant_colic_uses_its_own_retained_delivery_source() -> None:
+    registry = json.loads((ROOT / "scripts/data/clinically_relevant_strains.json").read_text())
+    strain = next(row for row in registry["clinically_relevant_strains"] if row["id"] == "STRAIN_LACTIS_BB12")
+    contexts = {row["context_id"]: row for row in strain["study_contexts"]}
+    context = contexts["bb12_infant_colic_breastfed_31797399"]
+    assert validate_frozen_context(context, require_complete_review=True) == []
+    assert context["dose"]["dosage_forms"] == ["oral drops"]
+    assert context["dose"]["administration_frequency"] == "Six drops once daily"
+    assert "PMC6973258" in context["dose"]["source_provenance"]["source_url"]
+    assert context["dose"]["duration_days"] == 28
+    # Independently retrieved Chengdu Methods (printed p533) describe an oral
+    # sunflower-oil suspension. Its own source and 21-day protocol stay distinct.
+    chengdu = contexts["bb12_infant_colic_chengdu_34550055"]
+    assert validate_frozen_context(chengdu, require_complete_review=True) == []
+    assert chengdu["dose"]["dosage_forms"] == ["oral drops"]
+    assert chengdu["dose"]["administration_frequency"] == "Six drops once daily"
+    assert chengdu["dose"]["duration_days"] == 21
+    assert chengdu["dose"]["source_provenance"]["pmid"] == "34550055"
+    assert chengdu["dose"]["source_provenance"]["source_url"] == "https://doi.org/10.3920/BM2020.0233"
+    assert "533" in chengdu["dose"]["source_provenance"]["location"]
+    assert "ResearchGate" in chengdu["dose"]["source_provenance"]["location"]
+    from clinical_applicability import assess_context_population
+    assert assess_context_population({"product_name": "Adult Daily Probiotic",
+        "targetGroups": ["Adults (18+)"]}, chengdu) == "special_targeting_absent"
+    assert assess_context_population({"product_name": "Baby Probiotic Drops",
+        "targetGroups": ["Infants/Baby (0 - 1 Year)"]}, chengdu) == "eligible"
 
 
 def test_verified_dose_requires_same_pmid_and_location() -> None:

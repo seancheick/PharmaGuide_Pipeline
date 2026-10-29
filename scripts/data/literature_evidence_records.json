@@ -3,11 +3,11 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-28",
-    "total_entries": 816,
+    "last_updated": "2026-10-29",
+    "total_entries": 817,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
-    "verified_studies_count": 279,
-    "verified_records_count": 808
+    "verified_studies_count": 280,
+    "verified_records_count": 809
   },
   "literature_evidence_records": [
     {
@@ -505,6 +505,12 @@
     },
     {
       "canonical_id": "citrus_bioflavonoids",
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "cordiart"
+        ]
+      },
       "material_form": "Citrus fruit extract / crude bioflavonoid complex",
       "search_query": "(\"Citrus bioflavonoids\"[tiab] OR \"citrus flavonoids\"[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
       "search_date": "2026-09-17",
@@ -18098,7 +18104,14 @@
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
       "notes": "Superseded source-inventory wording retained for traceability: Generic flower pollen lacks Graminex/Cernilton standardized water/fat soluble extract bioequivalence. Exact current source-labelled subjects: Graminex; Graminex flower pollen extract. Do not treat an extract as a culinary powder or assume a whole fruit is its isolated marker. Historical material_form must be reconciled against these source-bound occurrences before calling exact preparation equivalent.",
-      "reason_code": "broad_umbrella_or_proprietary_complex"
+      "reason_code": "broad_umbrella_or_proprietary_complex",
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "Graminex G60",
+          "Graminex NAX"
+        ]
+      }
     },
     {
       "canonical_id": "licorice_root",
@@ -19205,6 +19218,26 @@
     },
     {
       "canonical_id": "ginseng_root_panax",
+      "aliases": [
+        "Korean Ginseng extract root",
+        "standardized Korean Ginseng extract root"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "red",
+          "steamed",
+          "fermented",
+          "leaf",
+          "leaves",
+          "stem",
+          "stems",
+          "rhizome",
+          "American",
+          "quinquefolius",
+          "GS15-4"
+        ]
+      },
       "material_form": "Panax ginseng whole root",
       "search_query": "ginseng_root_panax randomized controlled trial standardized extract",
       "search_date": "2026-09-20",
@@ -37517,6 +37550,98 @@
         "owner": "scripts/data/literature_evidence_records.json::nha_cranberry_extract",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      }
+    },
+    {
+      "canonical_id": "cordiart",
+      "standard_name": "Cordiart Flavonoid Glycoside",
+      "aliases": [
+        "Cordiart Flavonoid Glycoside"
+      ],
+      "material_form": "Whole branded Cordiart preparation; exact source-label preparation only",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Immature Sweet Orange (Form: std. to 90% Rutinoside) PlantPart: peel"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "fruit",
+          "leaf",
+          "root",
+          "stem",
+          "rhizome",
+          "seed"
+        ]
+      },
+      "search_query": "PMID 27797708 exact primary Methods material review",
+      "search_date": "2026-10-29",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 1,
+      "qualifying_human_studies": [
+        {
+          "pmid": "27797708",
+          "title": "Randomized clinical trial on the efficacy of hesperidin 2S on validated cardiovascular biomarkers in healthy overweight individuals.",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 68,
+          "outcome": "No significant overall fasting or postprandial FMD improvement; subgroup findings exploratory and unadjusted for multiplicity.",
+          "effect_direction": "null",
+          "scoring_eligible": false,
+          "applicability_status": null
+        }
+      ],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "Healthy overweight adults",
+      "studied_dose_exposure": {
+        "description": "500 mg/day whole Cordiart for six weeks, supplying 450 mg hesperidin in the study; descriptive only."
+      },
+      "applicability_decision": "New Sean October29 exact-preparation Dose ruling only. No completed clinical-benefit applicability approval; no marker or isomer equivalence and no numerical minimum.",
+      "verification_result": "authoritative_pubmed_verified",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Whole Cordiart Flavonoid Glycoside preparation from immature Sweet Orange peel, labelled std. to 90% Rutinoside; no inference of labelled hesperidin content or isomer ratio.",
+        "purpose": "General Dose reference completeness only; no clinical benefit, safety, interaction, contraindication or allergen approval.",
+        "population": "General catalog Dose; the retained study population was healthy overweight adults.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Label-declared whole preparation mass only; no marker, rutinoside or isomer conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:27797708"
+        ],
+        "rationale": "Sean explicitly approved on October 29, 2026: completed-no-general-benchmark Dose treatment for the exact whole branded Cordiart preparations documented in products 60794 and 74011. The study used 500 mg/day whole Cordiart for six weeks, providing 450 mg hesperidin; this is a studied exposure, not a minimum or efficacy threshold. Overall primary vascular findings were not statistically significant; exploratory subgroup findings do not establish a validated threshold. This ruling closes only the exact preparation Dose dependency. Evidence credit remains zero and all safety assessments remain independent. It does not extend the separate crude-citrus approval or authorize whole-corpus release.",
+        "owner": "scripts/data/literature_evidence_records.json::cordiart",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      },
+      "verification_provenance": {
+        "verified_by": "Codex manual primary Methods/source correspondence, 2026-10-29",
+        "verified_at": "2026-10-29T18:03:39.664211+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false,
+        "reference_citations": {
+          "source_sha256": "d245c757f4f899e2c4383927c6afd7ab77f2624129eca39efa673ca9fd8cac55",
+          "source_ids": [
+            "PMID:27797708"
+          ],
+          "verified_at": "2026-10-29T18:03:39.664211+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:27797708",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Randomized clinical trial on the efficacy of hesperidin 2S on validated cardiovascular biomarkers in healthy overweight individuals.",
+              "content_sha256": "699a1f52dd8b2669fcac240bc958295f61b1c1f0a396020380d99fb749541dbf",
+              "notes": "Manual primary-source material verification by Codex, October29, 2026: DOI10.3945/ajcn.116.136960, printed p1525 Hesperidin and placebo (PDFp3), identifies Cordiart/BioActor and whole500mg regimen. Primary full text https://magistralbr.caldic.com/storage/product-files/280108629.pdf matches PubMed title/DOI. Automated abstract-only canonical topic match is false because Cordiart is named in full-text Methods; not represented as an automated verification pass. No Evidence approval. Reverified unchanged primary content for explicit exact_preparation Dose scope; original two-label boundaries and Sean October29 ruling unchanged."
+            }
+          ]
+        }
       }
     }
   ]
