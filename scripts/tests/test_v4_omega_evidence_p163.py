@@ -459,3 +459,41 @@ def test_omega_nutrition_readiness_consumes_the_shared_authority_decision():
     assert evidence["readiness"] == "complete"
     assert all(row["state"] == "evaluated_supported" for row in evidence["ingredient_assessments"])
     assert all(row["evidence_applicability"] == "nutrition_authority" for row in evidence["ingredient_assessments"])
+
+
+def test_generic_omega_authority_has_a_release_receipt_without_a_clinical_claim():
+    from assessment_readiness import evaluate_release_assessment, evaluate_assessment_readiness
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _epa_dha_product(name="Fish Oil Blend")
+    evidence = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert evidence["metadata"]["contributing_record_assessments"] == []
+    assert evidence["metadata"]["selected_nutrition_authority"] == "omega_3"
+    readiness = evaluate_assessment_readiness(product, module="generic")
+    release = evaluate_release_assessment(product, readiness,
+        {"module": "generic", "dimensions": {"evidence": evidence}}, unfinished_source=None)
+    assert "contributing_evidence_receipts_missing" not in release["blockers"]
+
+
+@pytest.mark.parametrize('change', ['references', 'score', 'dose', 'population', 'carrier_only', 'not_decisive'])
+def test_generic_omega_release_receipt_rejects_stale_or_inflated_authority(change):
+    from assessment_readiness import _current_omega_authority_receipt
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _epa_dha_product(name='Fish Oil Blend')
+    evidence = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert _current_omega_authority_receipt(product, evidence)
+    if change == 'references':
+        evidence['metadata']['source_references'] = []
+    elif change == 'score':
+        evidence['score'] = evidence['metadata']['primary_evidence_floor'] = 18
+        evidence['components']['primary_evidence_floor'] = 18
+    elif change == 'dose':
+        for row in product['ingredient_quality_data']['ingredients_scorable']:
+            row['quantity'] = 0
+    elif change == 'population':
+        product['product_name'] = 'Children Fish Oil'
+    elif change == 'carrier_only':
+        product['ingredient_quality_data']['ingredients_scorable'] = [
+            {'name': 'Fish Oil', 'canonical_id': 'fish_oil', 'quantity': 1000, 'unit': 'mg'}]
+    else:
+        evidence['metadata']['primary_evidence_floor_decisive'] = False
+    assert not _current_omega_authority_receipt(product, evidence)

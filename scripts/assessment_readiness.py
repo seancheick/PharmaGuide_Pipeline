@@ -1412,6 +1412,28 @@ def evaluate_assessment_readiness(
     }
 
 
+def _current_omega_authority_receipt(product: Mapping, evidence: Mapping) -> bool:
+    """Validate the existing shared omega nutrition result, not a clinical receipt."""
+    from evidence_resolver import resolve_omega_evidence_standard
+    from scoring_v4.quality_score_config import config
+
+    meta = _safe_dict(evidence.get("metadata"))
+    if meta.get("selected_nutrition_authority") != "omega_3":
+        return False
+    resolved = resolve_omega_evidence_standard(product)
+    cfg = config()
+    expected = round(resolved["score"] * cfg["evidence_subscale"]["archetype_reference"]["generic_single_molecule"]
+                     / cfg["pillars"]["evidence"]["weight"], 4)
+    return bool(resolved["applicability_qualified"] and expected > 0
+        and meta.get("selected_nutrition_authority") == "omega_3"
+        and meta.get("nutrition_authority_canonical") == "omega_3"
+        and meta.get("nutrition_authority_floor_applied") is True
+        and meta.get("primary_evidence_floor_decisive") is True
+        and evidence.get("score") == meta.get("primary_evidence_floor") == expected
+        and _safe_dict(evidence.get("components")).get("primary_evidence_floor") == expected
+        and meta.get("source_references") == resolved["source_references"])
+
+
 def evaluate_release_assessment(
     product: Mapping[str, Any], readiness: Mapping[str, Any],
     module_breakdown: Mapping[str, Any], *, unfinished_source: str | None,
@@ -1525,6 +1547,8 @@ def evaluate_release_assessment(
                     and evidence_meta.get("primary_evidence_floor_decisive") is True
                     and evidence_meta.get("nutrition_authority_canonical") == authority
                 )
+                selected_authority = selected_authority or _current_omega_authority_receipt(
+                    product, _safe_dict(dimensions.get("evidence")))
                 if (not receipts and float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0
                         and not selected_authority):
                     blockers.append("contributing_evidence_receipts_missing")
@@ -1733,6 +1757,8 @@ def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> boo
     if any(_number(value) > 0 and _canonical_text(key) not in eligible_keys for key, value in points.items()):
         return False
     authority = meta.get("selected_nutrition_authority")
+    if authority == "omega_3":
+        return not records and _current_omega_authority_receipt(enriched, evidence)
     if authority:
         from scoring_v4.modules.generic_evidence import _purpose_essential_canonical, NUTRITION_AUTHORITY_FLOOR
         from evidence_resolver import evidence_owner_canonicals

@@ -607,6 +607,19 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
             payload = score_evidence(source)
             product['_v4_module_breakdown']['module'] = 'multi_or_prenatal'
         evidence.clear(); evidence.update(payload)
+    if pid == 'omega_generic':
+        from test_v4_omega_evidence_p163 import _epa_dha_product
+        from scoring_v4.modules.generic_evidence import score_evidence
+        source = {**_epa_dha_product(name='Fish Oil Blend'), 'id': pid}
+        source['ingredient_quality_data']['ingredients_scorable'].append({
+            'name': 'Unreviewed companion', 'canonical_id': 'unreviewed_test_active',
+            'quantity': 10, 'unit': 'mg', 'mapped': True})
+        evidence.clear()
+        evidence.update(score_evidence(source, apply_primary_floor=True, owner_scoped=True))
+        product['assessment_readiness']['evidence']['ingredient_assessments'] = [
+            {'canonical_id': row['canonical_id'], 'state': 'not_yet_evaluated',
+             'source_row_ref': f'ingredientRows[{i}]', 'material': True, 'evidence_ids': []}
+            for i, row in enumerate(source['ingredient_quality_data']['ingredients_scorable'])]
     from assessment_readiness import evaluate_release_assessment
     product['assessment_readiness']['release_assessment'] = evaluate_release_assessment(
         source, product['assessment_readiness'], product['_v4_module_breakdown'], unfinished_source=None)
@@ -639,7 +652,7 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
 
 
 @pytest.mark.parametrize('pid', ['321405', '336337', '306381', '19067', '307621', '180290',
-                               '239729', '272720', '177500', '233218', '287810', '182627'])
+                               '239729', '272720', '177500', '233218', '287810', '182627', 'omega_generic'])
 def test_current_lineage_allows_only_truthful_held_evidence_without_clearing_completion(tmp_path, pid, monkeypatch):
     _, product, _, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
     args = _args(scored)
