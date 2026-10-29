@@ -81,13 +81,19 @@ def _use_approved_mechanics_sources(monkeypatch, *entries, outcome="Perceived St
         context = source["study_contexts"][0]
         context["condition"] = condition
         if source["study_type"] == "systematic_review_meta":
-            context["evidence_role"] = "pooled_synthesis"
+            context["evidence_role"] = "meta_analysis"
+            # Opaque identities reused from the existing synthetic review fixture;
+            # this is not an extraction of a real review's trial membership.
+            context["included_study_pmids"] = ["23439798", "26791805"]
             context["study_design"] = "Synthetic pooled mechanics fixture; no clinical claim"
         if source["effect_direction"] == "mixed":
             context["outcomes"].append({**context["outcomes"][0], "name": outcome + " null endpoint", "direction": "null"})
         sources.append(source)
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {
         **current, **{row["id"]: row for row in sources}})
+    for source in sources:
+        review = clinical_applicability.assess_clinical_source_review({"id": source["id"]})
+        assert review["is_complete"], review["errors"]
     return sources
 
 

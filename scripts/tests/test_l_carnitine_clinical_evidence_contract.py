@@ -46,12 +46,19 @@ def eligible_carnitine_sources(monkeypatch, enricher, clinical_entries):
         context = source["study_contexts"][0]
         context["condition"] = "muscle_recovery"
         if source["study_type"] == "systematic_review_meta":
-            context["evidence_role"] = "pooled_synthesis"
+            native_review = next(review for review in original["study_contexts"]
+                                 if review.get("evidence_role") in {"systematic_review", "meta_analysis"})
+            context["evidence_role"] = native_review["evidence_role"]
+            context["included_study_pmids"] = deepcopy(native_review["included_study_pmids"])
+            context["study_design"] = "Synthetic synthesis mechanics fixture; no clinical claim"
         if source["effect_direction"] == "mixed":
             context["outcomes"].append({**context["outcomes"][0], "name": "Muscle recovery null endpoint", "direction": "null"})
         sources[source_id] = source
     current = clinical_applicability.reviewed_entries()
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {**current, **sources})
+    for source_id in sources:
+        review = clinical_applicability.assess_clinical_source_review({"id": source_id})
+        assert review["is_complete"], review["errors"]
     verified = generic_evidence._verified_ingredient_human_evidence_entries()
     monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries",
         lambda: tuple(row for row in verified if row["id"] not in sources) + tuple(
@@ -64,6 +71,15 @@ def eligible_carnitine_sources(monkeypatch, enricher, clinical_entries):
         "backed_clinical_studies": [sources.get(row["id"], row) for row in payload["backed_clinical_studies"]]})
     return sources
 
+
+
+def test_synthetic_carnitine_fixture_has_complete_source_review(eligible_carnitine_sources):
+    from clinical_applicability import assess_clinical_source_review
+    for source_id, source in eligible_carnitine_sources.items():
+        review = assess_clinical_source_review({"id": source_id})
+        assert review["is_complete"] is True
+        assert review["errors"] == []
+        assert review["context_ids"] == [context["context_id"] for context in source["study_contexts"]]
 
 def test_generic_l_carnitine_record_is_mixed_and_dose_scoped(
     clinical_entries: dict[str, dict],

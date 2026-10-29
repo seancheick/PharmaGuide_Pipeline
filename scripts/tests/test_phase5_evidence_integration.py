@@ -381,12 +381,18 @@ def _reviewed_blend_child_source(monkeypatch, product):
     entry = product["evidence_data"]["clinical_matches"][0]
     source = _approved_test_source(entry, name="Ashwagandha Extract")
     context = source["study_contexts"][0]
-    context["evidence_role"] = "pooled_synthesis"
+    context["evidence_role"] = "meta_analysis"
+    # Opaque identities reused from the existing synthetic review fixture;
+    # this is not an extraction of a real review's trial membership.
+    context["included_study_pmids"] = ["23439798", "26791805"]
+    context["study_design"] = "Synthetic synthesis mechanics fixture; no clinical claim"
     context["dose"]["values"] = [300]
     context["dose"]["reported_regimen"] = "Synthetic 300 mg daily; not a benchmark"
     current = clinical_applicability.reviewed_entries()
     monkeypatch.setattr(clinical_applicability, "reviewed_entries",
                         lambda: {**current, source["id"]: source})
+    review = clinical_applicability.assess_clinical_source_review({"id": source["id"]})
+    assert review["is_complete"], review["errors"]
     product["evidence_data"]["clinical_matches"] = [source]
 
 

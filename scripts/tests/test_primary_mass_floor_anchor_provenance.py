@@ -154,11 +154,17 @@ def _floor_for(direction, score_evidence, monkeypatch):
     entry = product["evidence_data"]["clinical_matches"][0]
     source = _approved_test_source(entry, name="Ashwagandha")
     context = source["study_contexts"][0]
-    context["evidence_role"] = "pooled_synthesis"
+    context["evidence_role"] = "meta_analysis"
+    # Opaque identities reused from the existing synthetic review fixture;
+    # this is not an extraction of a real review's trial membership.
+    context["included_study_pmids"] = ["23439798", "26791805"]
+    context["study_design"] = "Synthetic synthesis mechanics fixture; no clinical claim"
     if direction in {"null", "negative"}:
         context["outcomes"][0]["direction"] = direction
     elif direction == "mixed":
         context["outcomes"].append({**context["outcomes"][0], "name": "Perceived Stress Scale null endpoint", "direction": "null"})
     current = ca.reviewed_entries()
     monkeypatch.setattr(ca, "reviewed_entries", lambda: {**current, source["id"]: source})
+    review = ca.assess_clinical_source_review({"id": source["id"]})
+    assert review["is_complete"], review["errors"]
     return score_evidence(product, apply_primary_floor=True)["metadata"]["primary_evidence_floor"]

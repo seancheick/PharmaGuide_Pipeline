@@ -32,9 +32,15 @@ def _approved_scope_source(monkeypatch, entry):
     pmids = (entry.get("applicability") or {}).get("source_pmids") or ["28661438"]
     source = _approved_test_source(entry, name=entry.get("standard_name", "Green Tea Extract"),
         pmid=pmids[0], outcome="Body weight change")
-    source["study_contexts"][0].update(condition="modest_weight_change", evidence_role="pooled_synthesis")
+    # Included identities are synthetic mechanics provenance, not a claim
+    # about the actual green-tea review's included trials.
+    source["study_contexts"][0].update(condition="modest_weight_change", evidence_role="meta_analysis",
+        included_study_pmids=["23439798", "26791805"],
+        study_design="Synthetic synthesis mechanics fixture; no clinical claim")
     current = clinical_applicability.reviewed_entries()
     monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {**current, source["id"]: source})
+    review = clinical_applicability.assess_clinical_source_review({"id": source["id"]})
+    assert review["is_complete"], review["errors"]
     return source
 
 
