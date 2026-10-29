@@ -15062,32 +15062,32 @@ class SupplementEnricherV3:
                 ):
                     non_opaque_source_fields.add(f"{section}[{index}]")
 
+        # Detector and cleaner evidence must read the same complete source
+        # membership after flattening. An empty header is not proof that its
+        # physically linked, separately disclosed members hide their amounts.
+        def with_linked_source_children(row):
+            if row.get("nestedIngredients"):
+                return row
+            ref = str(row.get("raw_source_path") or "")
+            declared = {path for path in source_inventory
+                        if ref and re.fullmatch(re.escape(ref) + r"\.(?:nestedRows|forms)\[\d+\]", path)}
+            children = children_by_parent.get(ref) or []
+            if (not declared or len(children) != len(declared)
+                    or {child.get("raw_source_path") for child in children} != declared):
+                return row
+            return {**row, "nestedIngredients": children}
+
+        disclosure_product = dict(product)
+        for section, rows in (("activeIngredients", active_ingredients),
+                              ("inactiveIngredients", inactive_ingredients)):
+            disclosure_product[section] = [with_linked_source_children(row) for row in rows]
+
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
         if self.blend_detector:
             # A detector failure fails the product (enrich_product records it);
             # dropping its blends would silently skip the B5 penalty.
-            # The cleaner may flatten nestedRows. Restore only physically
-            # linked members for the detector; never infer membership by name
-            # or co-occurrence, and never change the input product.
-            detector_product = dict(product)
-            for section, rows in (("activeIngredients", active_ingredients),
-                                  ("inactiveIngredients", inactive_ingredients)):
-                detector_product[section] = [
-                    {**row, "nestedIngredients": children_by_parent[row["raw_source_path"]]}
-                    if (not row.get("nestedIngredients")
-                        and row.get("raw_source_path") in children_by_parent
-                        # A retained subset cannot become a sole-component
-                        # proof when the physical inventory names a lost child.
-                        and not any(
-                            path.startswith(row["raw_source_path"])
-                            and _RAW_CHILD_ROW.fullmatch(path[len(row["raw_source_path"]):])
-                            and path not in source_paths
-                            for path in source_inventory
-                        ))
-                    else row for row in rows
-                ]
-            result = self.blend_detector.analyze_product(detector_product)
+            result = self.blend_detector.analyze_product(disclosure_product)
             for blend in result.blends_detected:
                 if (blend.source_field in non_opaque_source_fields
                         or label_source_refs.get(blend.source_field) in source_only_preparations):
@@ -15163,8 +15163,8 @@ class SupplementEnricherV3:
             return with_amounts, without_amounts
 
         for source_name, ingredient_list in (
-            ("activeIngredients", active_ingredients),
-            ("inactiveIngredients", inactive_ingredients),
+            ("activeIngredients", disclosure_product["activeIngredients"]),
+            ("inactiveIngredients", disclosure_product["inactiveIngredients"]),
         ):
             # The cleaner owns structural disclosure on the parent header.
             # Flattened children carry the relationship, but their own
