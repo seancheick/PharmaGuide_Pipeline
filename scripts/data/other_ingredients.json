@@ -2594,8 +2594,6 @@
       "standard_name": "Brand Complex Descriptor",
       "aliases": [
         "ap-bio",
-        "graminex g60",
-        "graminex nax",
         "keranat",
         "mbp",
         "musclepharm",
@@ -2663,7 +2661,7 @@
       "external_ids": {},
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C1269100 ('Eosinophilic major basic protein' — unrelated). This is a proprietary brand-complex label descriptor (ap-bio, Brain Shield, graminex g60, etc.); no single UMLS concept exists for a branded multi-ingredient placeholder. Null per null-CUI policy for proprietary descriptors.",
+      "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C1269100 ('Eosinophilic major basic protein' — unrelated). This is a proprietary brand-complex label descriptor (ap-bio, Brain Shield, etc.); no single UMLS concept exists for a branded multi-ingredient placeholder. Null per null-CUI policy for proprietary descriptors.",
       "functional_roles": [],
       "is_label_descriptor": true
     },

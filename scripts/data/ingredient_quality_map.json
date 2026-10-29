@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12292,
+      "total_form_aliases": 12295,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -54984,23 +54984,30 @@
       },
       "flower pollen extract": {
         "bio_score": 7,
-        "absorption": "moderate (~55%)",
-        "consumer_note": "Flower pollen extract is a concentrated material derived from collected pollen. The exact botanical mix can vary, so a label naming the pollen source provides additional form detail.",
+        "absorption": "unknown (a single applicable human absolute absorption fraction is not established for this multi-component material)",
+        "consumer_note": "Flower-pollen preparations differ in source and extraction. Refer to the product label for any named fractions and their amounts.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex — factual material copy only; not clinical approval",
+          "date": "2026-10-29"
         },
-        "notes": "Generic flower pollen extract. Contains amino acids and phytosterols. Used for prostate and urinary health support.",
+        "notes": "Flower-pollen preparations may be whole extracts or separated fractions. Refer to the source label for the material identity, fractions, and declared amounts.",
         "aliases": [
-          "pollen extract"
+          "pollen extract",
+          "Graminex G60",
+          "Graminex NAX",
+          "Graminex flower pollen extract"
         ],
         "dosage_importance": 0.9,
         "absorption_structured": {
-          "value": 0.55,
-          "range_low": 0.44,
-          "range_high": 0.66,
-          "quality": "moderate"
-        }
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown"
+        },
+        "source_form_aliases": [
+          "Graminex G60",
+          "Graminex NAX"
+        ]
       }
     },
     "match_rules": {

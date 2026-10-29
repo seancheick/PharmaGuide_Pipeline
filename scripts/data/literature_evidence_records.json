@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "total_entries": 816,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 279,
@@ -18104,7 +18104,14 @@
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
       "notes": "Superseded source-inventory wording retained for traceability: Generic flower pollen lacks Graminex/Cernilton standardized water/fat soluble extract bioequivalence. Exact current source-labelled subjects: Graminex; Graminex flower pollen extract. Do not treat an extract as a culinary powder or assume a whole fruit is its isolated marker. Historical material_form must be reconciled against these source-bound occurrences before calling exact preparation equivalent.",
-      "reason_code": "broad_umbrella_or_proprietary_complex"
+      "reason_code": "broad_umbrella_or_proprietary_complex",
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "Graminex G60",
+          "Graminex NAX"
+        ]
+      }
     },
     {
       "canonical_id": "licorice_root",

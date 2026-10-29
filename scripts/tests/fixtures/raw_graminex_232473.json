@@ -1,0 +1,337 @@
+{
+  "brandIpSymbol": "\u00ae",
+  "brandName": "Life Extension",
+  "bundleName": "",
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "contacts": [
+    {
+      "contactId": 7744,
+      "text": "Manufactured for",
+      "types": [
+        "Distributor"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_3.json",
+        "id": 7744,
+        "name": "Quality Supplements and Vitamins, Inc.",
+        "streetAddress": "",
+        "city": "Ft. Lauderdale",
+        "state": "FL",
+        "country": "",
+        "zipCode": "33309",
+        "phoneNumber": "1-866-280-2852",
+        "email": "",
+        "webAddress": "LifeExtension.com"
+      }
+    }
+  ],
+  "entryDate": "2020-08-23",
+  "events": [
+    {
+      "date": "2020-08-23",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "fullName": "Triple Strength ProstaPollen",
+  "hasOuterCarton": false,
+  "id": 232473,
+  "ingredientRows": [
+    {
+      "order": 1,
+      "ingredientId": 146574,
+      "description": null,
+      "notes": "Graminex flower pollen extract (Form: from Rye) PlantPart: flower pollen Note: triple strength concentrated blend providing: ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 378,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Softgel(s)"
+        }
+      ],
+      "nestedRows": [
+        {
+          "order": 2,
+          "ingredientId": 146576,
+          "description": null,
+          "notes": "Graminex G60 Note: water soluble fraction ",
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 1,
+              "operator": "=",
+              "quantity": 360,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Softgel(s)"
+            }
+          ],
+          "nestedRows": [],
+          "name": "Graminex G60",
+          "category": "botanical",
+          "ingredientGroup": "Perennial Ryegrass",
+          "uniiCode": null,
+          "alternateNames": [],
+          "forms": []
+        },
+        {
+          "order": 3,
+          "ingredientId": 146578,
+          "description": null,
+          "notes": "Graminex NAX Note: lipid-soluble fraction ",
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 1,
+              "operator": "=",
+              "quantity": 18,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Softgel(s)"
+            }
+          ],
+          "nestedRows": [],
+          "name": "Graminex NAX",
+          "category": "botanical",
+          "ingredientGroup": "Perennial Ryegrass",
+          "uniiCode": null,
+          "alternateNames": [],
+          "forms": []
+        }
+      ],
+      "name": "Graminex flower pollen extract",
+      "category": "botanical",
+      "ingredientGroup": "Perennial Ryegrass",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 146575,
+          "prefix": "from",
+          "percent": null,
+          "name": "Rye",
+          "category": "botanical",
+          "ingredientGroup": "Rye",
+          "uniiCode": null
+        }
+      ]
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 59543
+    },
+    {
+      "type": "Image difference, same product",
+      "labelId": 182199
+    }
+  ],
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 30,
+      "unit": "Softgel(s)",
+      "display": "30 Softgel(s)"
+    }
+  ],
+  "nhanesId": "",
+  "offMarket": 0,
+  "otheringredients": {
+    "text": null,
+    "ingredients": [
+      {
+        "order": 1,
+        "ingredientId": 5668,
+        "name": "extra virgin Olive Oil",
+        "category": "fat",
+        "ingredientGroup": "Olive Oil",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 2,
+        "ingredientId": 146582,
+        "name": "Softgel",
+        "category": "other",
+        "ingredientGroup": "capsule",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": [
+          {
+            "order": 1,
+            "ingredientId": 52742,
+            "prefix": null,
+            "percent": null,
+            "name": "Carob color",
+            "category": "other",
+            "ingredientGroup": "Color",
+            "uniiCode": null
+          },
+          {
+            "order": 2,
+            "ingredientId": 3715,
+            "prefix": null,
+            "percent": null,
+            "name": "Gelatin",
+            "category": "protein",
+            "ingredientGroup": "Gelatin",
+            "uniiCode": null
+          },
+          {
+            "order": 3,
+            "ingredientId": 3985,
+            "prefix": null,
+            "percent": null,
+            "name": "Glycerin",
+            "category": "other",
+            "ingredientGroup": "Glycerol",
+            "uniiCode": null
+          },
+          {
+            "order": 4,
+            "ingredientId": 3777,
+            "prefix": null,
+            "percent": null,
+            "name": "purified Water",
+            "category": "other",
+            "ingredientGroup": "Water",
+            "uniiCode": null
+          }
+        ]
+      },
+      {
+        "order": 3,
+        "ingredientId": 10413,
+        "name": "Soy Lecithin",
+        "category": "fat",
+        "ingredientGroup": "lecithin",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 4,
+        "ingredientId": 3832,
+        "name": "yellow Beeswax",
+        "category": "animal part or source",
+        "ingredientGroup": "Beeswax",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ]
+  },
+  "pdf": "",
+  "percentDvFootnote": "Not Present",
+  "physicalState": {
+    "langualCode": "E0161",
+    "langualCodeDescription": "Softgel Capsule"
+  },
+  "productType": {
+    "langualCode": "A1306",
+    "langualCodeDescription": "Botanical"
+  },
+  "productVersionCode": "L01909C",
+  "servingSizes": [
+    {
+      "order": 1,
+      "minQuantity": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "unit": "Softgel(s)",
+      "inSFB": true
+    }
+  ],
+  "servingsPerContainer": null,
+  "src": "api/label/232473",
+  "statements": [
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Read the entire label and follow the directions carefully prior to use.\nDirections: Take one (1) softgel daily with or without food, or as recommended by a healthcare practitioner. Can be used in addition to Ultra Prostate Formula."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store tightly closed in a cool, dry place."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Warnings:\nKeep out of reach of children."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do not exceed recommended dose.\nDo not purchase if outer seal is broken or damaged."
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "When using nutritional supplements, please consult with your physician if you are undergoing treatment for a medical condition or if you are pregnant or lactating."
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "Graminex is a registered trademark of Graminex LLC."
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Graminex flower pollen extract for complementary prostate support"
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "Dietary Supplement"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "1 Daily"
+    },
+    {
+      "type": "Precautions re: Allergies",
+      "notes": "Contains soybeans."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "To report a serious adverse event or obtain product information, contact 1-866-280-2852."
+    },
+    {
+      "type": "Formula re: Type",
+      "notes": "Graminex flower pollen extract for complementary prostate support"
+    }
+  ],
+  "targetGroups": [
+    "Adult Male (18-50 Years)"
+  ],
+  "thumbnail": "",
+  "upcSku": "7 37870 19093 6",
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "_source": "api"
+}
