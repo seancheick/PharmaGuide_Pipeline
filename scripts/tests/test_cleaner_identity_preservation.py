@@ -420,3 +420,52 @@ def test_cordiart_alias_does_not_change_generic_brand_descriptor(normalizer):
     }, is_active=True)
     assert row["canonical_id"] == "PII_BRAND_COMPLEX_DESCRIPTOR"
     assert row["isAdditive"] is True
+
+
+@pytest.mark.parametrize("source_name,prefix", [
+    ("Immature Sweet Orange", "from"),
+    ("Sweet Orange", "from immature"),
+])
+def test_cordiart_declared_citrus_source_preserves_preparation_form(
+    normalizer, source_name, prefix,
+):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = {
+        "id": "cordiart-source-form", "fullName": "NitroVasc with Cordiart",
+        "brandName": "Life Extension",
+        "servingSizes": [{"minQuantity": 1, "maxQuantity": 1,
+                          "minDailyServings": 1, "maxDailyServings": 1,
+                          "unit": "Capsule(s)"}],
+        "ingredientRows": [{
+            "name": "Cordiart Flavonoid Glycoside",
+            "category": "non-nutrient/non-botanical",
+            "ingredientGroup": "Flavonoid (mixture)",
+            "notes": "from immature Sweet Orange peel; std. to 90% Rutinoside",
+            "quantity": [{"quantity": 500, "unit": "mg"}],
+            "forms": [{"name": source_name, "prefix": prefix,
+                       "category": "botanical", "ingredientGroup": "Sweet Orange"}],
+            "nestedRows": [],
+        }],
+    }
+    enriched, _ = SupplementEnricherV3().enrich_product(normalizer.normalize_product(raw))
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert row["canonical_id"] == "citrus_bioflavonoids"
+    assert row["form_match_status"] == "mapped"
+    assert row["matched_form"] == "citrus bioflavonoids complex"
+    assert row["quantity"] == 500
+    scored = build_scored_artifact(enriched)
+    assert scored["quality_score_status"] == "scored"
+    assert scored["quality_pillars_v4"]["evidence"]["score"] == 0
+
+
+
+def test_cordiart_parent_local_source_alias_does_not_convert_orange_to_flavonoids(normalizer):
+    row = normalizer._process_single_ingredient_enhanced({
+        "name": "Sweet Orange", "category": "botanical",
+        "ingredientGroup": "Sweet Orange",
+        "quantity": [{"quantity": 500, "unit": "mg"}], "forms": [],
+    }, is_active=True)
+    assert row.get("canonical_id") != "citrus_bioflavonoids"
+    assert row["quantity"] == 500
