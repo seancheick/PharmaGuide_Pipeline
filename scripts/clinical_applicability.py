@@ -239,7 +239,7 @@ def _rows(product: Mapping, *, source_only: bool = False, evidence_only: bool = 
 
 
 def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False, evidence_only: bool = False,
-                 discriminating_terms: Any = ()):
+                 discriminating_terms: Any = (), source_preparation: bool = False):
     source_refs = entry.get("matched_source_row_refs")
     if source_refs is not None and (
         not isinstance(source_refs, list)
@@ -275,6 +275,12 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
                             and _key(r.get("canonical_id")) in canonicals
                             and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
                 if len(children) == 1:
+                    # Preparation may be printed on this exact provider-owned
+                    # heading. Keep its retained source separate from the child
+                    # that owns exclusions, delivery and exposure; no sibling or
+                    # product-wide text can establish this lineage.
+                    if source_preparation:
+                        return exact_refs
                     return children
         return exact_refs
     exact = [r for r in rows if name and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
@@ -1103,6 +1109,10 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     applicable_rows = []
     linked_rows = _linked_rows(product, entry, source_only=source_only, evidence_only=not exposure_required,
                                discriminating_terms=policy.get("required_form_terms"))
+    preparation_rows = (_linked_rows(
+        product, entry, source_only=True, evidence_only=True,
+        discriminating_terms=policy.get("required_form_terms"), source_preparation=True,
+    ) if source_only and not exposure_required else [])
     explicit_refs = entry.get("matched_source_row_refs") or []
     # Explicit repeated declarations may share review provenance only when
     # their resolved physical identity is identical and no row constraint binds
@@ -1137,11 +1147,22 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             reasons.append("clinical_form_excluded")
             continue
         forms = policy.get("required_form_terms") or []
-        literal_source = normalize_text(_row_text(row, source_only=source_only, preserve_punctuation=True))
+        preparation_text = _row_text(row, source_only=source_only, preserve_punctuation=True)
+        if len(linked_rows) == len(preparation_rows) == 1:
+            heading = preparation_rows[0]
+            heading_ref = heading.get("raw_source_path") or heading.get("source_row_ref")
+            row_ref = row.get("raw_source_path") or row.get("source_row_ref")
+            if (isinstance(heading_ref, str) and isinstance(row_ref, str)
+                    and row_ref.startswith(heading_ref + ".")):
+                preparation_text += " " + _row_text(heading, source_only=True, preserve_punctuation=True)
+        literal_source = normalize_text(preparation_text)
+        preparation_key = " " + _key(preparation_text).replace(" as ", " ") + " "
         if forms and not any(
             find_affirmative_label_match(
                 re.compile(r"(?<!\w)" + re.escape(normalize_text(form)) + r"(?!\w)", re.I), literal_source
-            ) if "+" in form else " " + _key(form) + " " in text
+            ) if "+" in form else find_affirmative_label_match(
+                re.compile(r"(?<!\w)" + re.escape(_key(form)) + r"(?!\w)", re.I), preparation_key
+            )
             for form in forms
         ):
             reasons.append("clinical_form_mismatch")

@@ -116,3 +116,63 @@ def test_generic_identity_or_another_row_cannot_supply_exact_brand_scope(record_
     assert assess_clinical_applicability(product, entry, assess_amount=False)['reason_code'] == 'clinical_form_mismatch'
     exact = {**entry, 'matched_source_row_refs': ['ingredientRows[1]']}
     assert assess_clinical_applicability(product, exact, assess_amount=False)['status'] == 'applicable'
+
+
+@pytest.mark.parametrize('case, expected', [
+    ('exact_heading', True),
+    ('generic_heading', False),
+    ('negated_heading', False),
+    ('unrelated_brand_row', False),
+    ('quantified_child', False),
+])
+def test_ucii_source_preparation_heading_is_bound_to_its_undosed_member(case, expected):
+    """The physical owner may name its child; another row cannot lend that name."""
+    import copy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from clinical_applicability import assess_clinical_applicability
+
+    raw = json.loads((FIXTURES / 'evidence_subject_321604_raw.json').read_text())
+    heading = raw['ingredientRows'][0]
+    if case in {'generic_heading', 'unrelated_brand_row'}:
+        heading['name'] = 'Proprietary Cartilage Blend'
+    if case == 'negated_heading':
+        heading['name'] = 'Proprietary Cartilage Blend, not UC-II'
+    if case == 'unrelated_brand_row':
+        unrelated = copy.deepcopy(raw['ingredientRows'][1])
+        unrelated.update(name='UC-II', forms=[], ingredientGroup='Other')
+        raw['ingredientRows'].append(unrelated)
+    if case == 'quantified_child':
+        heading['nestedRows'][0]['quantity'][0].update(quantity=10, unit='mg')
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    matches = [m for m in product['evidence_data']['clinical_matches'] if m.get('id') == 'BRAND_UCII']
+    # An unrelated explicit UC-II row may qualify itself, never the generic member.
+    member_matches = [m for m in matches if 'ingredientRows[0]' in m.get('matched_source_row_refs', [])]
+    assert bool(member_matches) is expected
+    if case in {'generic_heading', 'negated_heading', 'quantified_child'}:
+        assert matches == []
+    if expected:
+        match = member_matches[0]
+        assessment = match['applicability_assessment']
+        assert assessment['source_row_ref'] == 'ingredientRows[0].nestedRows[0]'
+        assert assessment.get('daily_dose') is None
+        foreign = {**match, 'matched_source_row_refs': ['ingredientRows[99]']}
+        assert assess_clinical_applicability(product, foreign, assess_amount=False)['status'] != 'applicable'
+
+
+@pytest.mark.parametrize('record_id, canonical, label', [
+    ('BRAND_UCII', 'collagen_type_ii', 'Undenatured collagen, not UC-II'),
+    ('BRAND_MAGTEIN', 'magnesium', 'Magnesium L-Threonate, not Magtein'),
+])
+def test_negated_exact_brand_does_not_establish_source_preparation(record_id, canonical, label):
+    from clinical_applicability import assess_clinical_applicability
+    from test_green_tea_evidence_identity import _source_product
+    product = _source_product(label)
+    row = product['activeIngredients'][0]
+    row.update(canonical_id=canonical, raw_source_text=label, forms=[])
+    row['raw_taxonomy']['forms'] = []
+    entry = {'id': record_id, 'matched_source_row_refs': ['ingredientRows[0]'],
+             'matched_canonical_ids': [canonical]}
+    decision = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert decision['status'] == 'not_applicable'
+    assert decision['reason_code'] == 'clinical_form_mismatch'
