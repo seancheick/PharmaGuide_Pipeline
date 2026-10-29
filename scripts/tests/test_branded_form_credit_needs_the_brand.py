@@ -1,11 +1,8 @@
-"""The branded clinically-studied form credit follows the enricher's brand check.
+"""Exact material identity and verified standardization are separate facts.
 
-`botanical_profile` gave full standardization (4), +3 "branded clinically studied"
-and studied-dose status to any row whose names met a BRAND_ entry's aliases. Aliases
-are the discovery surface and some are generic ("black pepper extract"), so a plain
-BulkSupplements black pepper extract (311167) scored Formulation 20/20 as if it were
-BioPerine. Whether a label names the brand is decided once, by
-`enrich_supplements_v3._brand_mentioned`, and recorded on the row's clinical match.
+Generic aliases cannot establish a proprietary material. Naming a reviewed
+brand likewise cannot invent its marker specification or depend on clinical
+benefit eligibility; the existing standardization projection owns that trait.
 """
 import json
 import logging
@@ -27,10 +24,9 @@ def _botanical_formulation(name):
     return (formulation.get("metadata") or {}).get("botanical_formulation") or {}
 
 
-# V4.1 Step 4: a brand name earns no separate Formulation award (it is an
-# Evidence fact). A recognized branded studied extract is standardized by
-# definition, so the brand still decides the full standardization tier (3.2),
-# and only when the label actually names the brand.
+# Sean/team,2026-10-28: physical brand identity alone earns no marker credit.
+# KSM-66 has an independently verified material specification; Sytrinol's
+# clinical identity cannot substitute for an absent standardization projection.
 
 
 def test_plain_black_pepper_extract_is_not_bioperine():
@@ -45,13 +41,13 @@ def test_a_label_naming_ksm66_keeps_the_full_standardization_tier():
     assert components.get("marker_standardization_declared") == 3.2
 
 
-def test_a_brand_named_blend_total_keeps_the_full_standardization_tier():
-    """54775 prints one "Sytrinol" total over its two extracts. The row scored is a
-    label-level projection the enricher's evidence matcher never assesses, so its
-    own label name is what names the brand."""
+def test_a_brand_named_blend_total_cannot_invent_a_standardization_tier():
+    """54775 names Sytrinol, but that identity is not marker-specification proof."""
     components = _botanical_formulation("branded_form_sytrinol_54775_raw.json")
     assert "branded_clinically_studied_extract" not in components
-    assert components.get("marker_standardization_declared") == 3.2
+    assert components.get("marker_standardization_declared", 0) == 0
+    from evidence_resolver import is_reviewed_branded_material
+    assert is_reviewed_branded_material("sytrinol", "Sytrinol", strict_material_spelling=True)
 
 
 def test_reviewed_preparation_recognition_does_not_follow_a_shared_container_path():

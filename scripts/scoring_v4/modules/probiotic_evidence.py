@@ -32,6 +32,7 @@ _EM = _cfg_block("evidence_magnitudes", "probiotic")["probiotic"]
 
 CAP_EVIDENCE = _EM["cap_evidence"]
 
+from clinical_applicability import NON_EFFICACY_OUTCOME_ROLES as _NON_EFFICACY_OUTCOME_ROLES
 from evidence_resolver import evidence_indication_categories as _categories_from_text
 
 
@@ -68,29 +69,14 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         probiotic_owned=owned, assessment=family_assessment,
         relevance=relevance, settings=_EM, formula=formula,
     )
-    alignment = (1.0 if formula.get("status") == "assessed_studied_formula"
-                 else _EM["alignment_weights"].get(relevance["level"], 0.0))
-    applicability = alignment * family["identity_weight"] if family["certainty"] > 0 else 0.0
-    consistency = _independent_consistency(family_assessment, relevance)
-    # Certainty and confirmation describe research that must first apply to this
-    # product; without applicability they earn nothing (V4.1, October 15, 2026).
-    # The result state still describes the research found, before that gate.
-    research = {
-        "evidence_family_certainty": round(_EM["certainty_cap"] * family["certainty"], 4),
-        "product_applicability": round(_EM["applicability_cap"] * applicability, 4),
-        "independent_replication_consistency": round(_EM["replication_cap"] * consistency["credit"], 4),
-    }
-    research_score = min(CAP_EVIDENCE, sum(research.values()))
-    applies = research["product_applicability"] > 0
-    components = {key: value if applies or key == "product_applicability" else 0.0
-                  for key, value in research.items()}
-    score = min(CAP_EVIDENCE, sum(components.values()))
+    consistency = _independent_consistency(family_assessment)
+    components, score, research_score = _family_component_points(family, formula, relevance, consistency)
     completeness_gap = evidence_completeness_gap(product)
     strain_review_open = formula.get("status") != "assessed_studied_formula" and (
         assessment["native_context_review"]["status"] == "pending_clinical_review"
         or any(row["status"] == "strain_identity_or_review_unresolved"
                for row in assessment["strain_assessments"]))
-    eligible = _eligible_native_contexts(family_assessment, relevance)
+    eligible = _eligible_native_contexts(family_assessment)
     # The shared assessment inventories research, including legacy reference
     # citations. Report scoring provenance from the family that actually won
     # this pillar; inventory sources must not masquerade as awarded evidence.
@@ -180,6 +166,43 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     }
 
 
+def _family_component_points(family: dict, formula: dict, relevance: dict, consistency: dict) -> tuple:
+    """The existing family arithmetic, shared with receipt validation."""
+    alignment = _applicability_weight(family, formula, relevance)
+    applicability = alignment * family["identity_weight"] if family["certainty"] > 0 else 0.0
+    # Certainty and confirmation earn nothing without applicability. Research
+    # state still describes the findings before that gate (V4.1 Step4).
+    research = {
+        "evidence_family_certainty": round(_EM["certainty_cap"] * family["certainty"], 4),
+        "product_applicability": round(_EM["applicability_cap"] * applicability, 4),
+        "independent_replication_consistency": round(_EM["replication_cap"] * consistency["credit"], 4),
+    }
+    research_score = min(CAP_EVIDENCE, sum(research.values()))
+    applies = research["product_applicability"] > 0
+    components = {key: value if applies or key == "product_applicability" else 0.0
+                  for key, value in research.items()}
+    return components, min(CAP_EVIDENCE, sum(components.values())), research_score
+
+
+def _applicability_weight(family: dict, formula: dict, relevance: dict) -> float:
+    """Product applicability from the shared scientific decision, never from marketing.
+
+    Sean, October 28, 2026 (PR #280): an aligned claim and no claim earn the
+    same points for the same eligible research. A studied formula, an approved
+    native context or a registry record the shared applicability owner accepted
+    applies in full. A legacy record whose eligibility was never reviewed keeps
+    the claim-independent broad weight; an unrelated positioning still earns
+    nothing. Claim alignment stays explanation metadata.
+    """
+    weights = _EM["alignment_weights"]
+    if formula.get("status") == "assessed_studied_formula" or family.get("source") == "native_context":
+        return weights["direct"]
+    if (family.get("source") == "registry"
+            and (family.get("decision") or {}).get("status") == "applicable"):
+        return weights["direct"]
+    return 0.0 if relevance["level"] == "none" else weights["broad"]
+
+
 def _strongest_single_family_certainty(
     *, probiotic_owned: list[dict], assessment: dict, relevance: dict, settings: dict,
     formula: dict,
@@ -194,6 +217,7 @@ def _strongest_single_family_certainty(
         ),
         "family": row.get("id"), "source": "registry",
         "design": row.get("study_type"), "direction": row.get("effect_direction"),
+        "decision": row.get("applicability_assessment"),
     } for row in probiotic_owned]
     families += [{
         "certainty": _single_native_family_certainty(context, settings),
@@ -202,7 +226,7 @@ def _strongest_single_family_certainty(
         "source": "native_context", "design": context.get("study_design"),
         "context": context,
         "direction": sorted({o.get("direction") for o in _qualifying_outcomes(context)}),
-    } for _, context in _eligible_native_contexts(assessment, relevance)]
+    } for _, context in _eligible_native_contexts(assessment)]
     return max(families, key=lambda row: (row["certainty"], row["identity_weight"]), default={
         "certainty": 0.0, "identity_weight": 0.0, "family": None,
         "source": None, "design": None, "direction": None,
@@ -265,9 +289,9 @@ def _single_family_certainty(*, design: str | None, effect: str | None, settings
     return min(1.0, max(0.0, design_weight * effect_weight))
 
 
-def _independent_consistency(assessment: dict, relevance: dict) -> dict:
+def _independent_consistency(assessment: dict) -> dict:
     """Grade confirmation and disclose applicable contradictory families."""
-    return _consistency_from_contexts(_eligible_native_contexts(assessment, relevance))
+    return _consistency_from_contexts(_eligible_native_contexts(assessment))
 
 
 def _consistency_from_contexts(contexts: list[tuple[str, dict]]) -> dict:
@@ -357,29 +381,17 @@ def _consistency_from_contexts(contexts: list[tuple[str, dict]]) -> dict:
     }
 
 
-_NON_EFFICACY_OUTCOME_ROLES = {
-    "within_group_change", "post_hoc_subgroup",
-    "companion_reported_context", "network_ranking",
-}
 
 
 def _qualifying_outcomes(context: dict) -> list[dict]:
-    if context.get("outcome_role") in _NON_EFFICACY_OUTCOME_ROLES:
-        return []
-    return [
-        outcome for outcome in context.get("outcomes") or []
-        if isinstance(outcome, dict)
-        and outcome.get("hierarchy") == "primary"
-        and outcome.get("kind") == "patient_important"
-        and outcome.get("outcome_role") not in _NON_EFFICACY_OUTCOME_ROLES
-    ]
+    from clinical_applicability import qualifying_purpose_outcomes
+    outcomes, _ = qualifying_purpose_outcomes(context, include_nonpositive=True)
+    return [outcome for outcome in outcomes if outcome.get("kind") == "patient_important"]
 
 
-def _eligible_native_contexts(assessment: dict, relevance: dict) -> list[tuple[str, dict]]:
+def _eligible_native_contexts(assessment: dict) -> list[tuple[str, dict]]:
     """Return valid, exact-strain contexts applicable to this product's purpose."""
     result = []
-    matched_categories = set(relevance.get("matched_categories") or [])
-    product_categories = set(relevance.get("product_categories") or [])
     for strain in assessment.get("strain_assessments") or []:
         if strain.get("research_accepted") is False or strain.get("status") in {
             "strain_context_mismatch", "strain_context_unresolved", "strain_identity_mismatch",
@@ -394,31 +406,18 @@ def _eligible_native_contexts(assessment: dict, relevance: dict) -> list[tuple[s
                     or not valid_native_study_context(context, clinical_id)
                     or not _qualifying_outcomes(context)):
                 continue
-            if (context.get("purpose") in {"treatment", "challenge"}
-                    and context.get("claimed_purpose_assessment", {}).get("status") != "applicable"):
-                continue
-            context_text = " ".join([
-                str(context.get("condition") or ""),
-                *(str(outcome.get("name") or "") for outcome in _qualifying_outcomes(context)),
-            ])
-            context_categories = set(_categories_from_text(context_text))
-            if not context_categories.intersection(matched_categories):
-                continue
-            if not _native_context_population_applies(context, product_categories):
+            # The shared applicability owner decided claim and population on
+            # this label: no claim is required, an unrelated claim or a
+            # special population without targeting keeps the context out.
+            if not _native_context_applies(context):
                 continue
             result.append((clinical_id, context))
     return result
 
 
-def _native_context_population_applies(context: dict, product_categories: Set[str]) -> bool:
-    """Share the existing native population restriction with purpose fallback."""
-    population = context.get("population") or {}
-    required = set(_categories_from_text(str(population.get("description") or ""))).intersection(
-        {"infant", "prenatal", "women"}
-    )
-    if population.get("age_group") in {"infant", "child"}:
-        required.add("infant")
-    return not required or bool(required.intersection(product_categories))
+def _native_context_applies(context: dict) -> bool:
+    return (context.get("claimed_purpose_assessment", {}).get("status") == "applicable"
+            and context.get("population_applicability") == "eligible")
 
 
 def _human_research_reviewed(uncredited_row: Dict[str, Any], assessment: Dict[str, Any]) -> bool:
@@ -434,8 +433,9 @@ def _human_research_reviewed(uncredited_row: Dict[str, Any], assessment: Dict[st
 
 
 def _claim_alignment(product: Dict[str, Any], assessment: Dict[str, Any]) -> Dict[str, Any]:
-    product_categories = _product_positioning_categories(product)
-    strain_categories = _strain_indication_categories(assessment, product_categories)
+    from clinical_applicability import native_product_positioning_categories
+    product_categories = native_product_positioning_categories(product)
+    strain_categories = _strain_indication_categories(assessment)
     matched = product_categories & strain_categories
     partial = {
         b
@@ -484,16 +484,7 @@ def _is_strain_match(match: dict) -> bool:
             or str(match.get("evidence_level", "")).replace("_", "-") == "strain-clinical")
 
 
-def _product_positioning_categories(product: Dict[str, Any]) -> Set[str]:
-    from clinical_applicability import native_product_positioning_texts
-    text_parts = native_product_positioning_texts(product)
-    categories = _categories_from_text(" ".join(text_parts))
-    # "Probiotic" by itself is generic class text, not a targeted claim.
-    categories.discard("probiotic")
-    return categories
-
-
-def _strain_indication_categories(assessment: Dict[str, Any], product_categories: Set[str]) -> Set[str]:
+def _strain_indication_categories(assessment: Dict[str, Any]) -> Set[str]:
     """Use current registry copy from the same assessment that owns credit."""
     categories: Set[str] = set()
     for strain in assessment["strain_assessments"]:
@@ -508,7 +499,7 @@ def _strain_indication_categories(assessment: Dict[str, Any], product_categories
                 if (context.get("identity_scope") == "exact_strain"
                         and context_accepted_for_scoring(context)
                         and valid_native_study_context(context, strain.get("clinical_id"))
-                        and _native_context_population_applies(context, product_categories)):
+                        and _native_context_applies(context)):
                     text = " ".join([str(context.get("condition") or ""),
                         *(str(outcome.get("name") or "") for outcome in _qualifying_outcomes(context))])
                     if _qualifying_outcomes(context):

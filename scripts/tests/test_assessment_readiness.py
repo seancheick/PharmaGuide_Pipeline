@@ -117,12 +117,16 @@ def _zero_scorable_product(*statement_notes: str) -> dict:
 
 def test_positive_human_evidence_marks_material_active_supported() -> None:
     from assessment_readiness import evaluate_assessment_readiness
+    from clinical_applicability import reviewed_entries
 
-    row = _row("Ashwagandha", "ashwagandha")
-    result = evaluate_assessment_readiness(
-        _product(row, matches=[_match(row, "positive_strong")]),
-        module="generic",
-    )
+    row = _row("Beta-Alanine", "beta_alanine", quantity=3000)
+    product = _product(row, matches=[{**reviewed_entries()['INGR_BETA_ALANINE'],
+            'effect_direction': 'positive_strong',
+            'ingredient': row['name'], 'matched_canonical_ids': ['beta_alanine'],
+            'matched_source_row_refs': ['ingredientRows[0]']}])
+    product['serving_basis'] = {'min_servings_per_day': 1, 'max_servings_per_day': 1,
+                                'servings_per_day_source': 'label'}
+    result = evaluate_assessment_readiness(product, module="sports")
 
     assessment = result["evidence"]["ingredient_assessments"][0]
     assert assessment["material"] is True
@@ -432,7 +436,9 @@ def test_mixed_or_null_evidence_is_evaluated_without_becoming_supported() -> Non
 
     assessment = result["evidence"]["ingredient_assessments"][0]
     assert assessment["state"] == "evaluated_limited_or_negative"
-    assert assessment["reason_code"] == "reviewed_evidence_limited_or_negative"
+    # The actual curated source is reference-only. A caller's mixed stamp
+    # cannot replace that source-owned conclusion.
+    assert assessment["reason_code"] == "reference_only_clinical_record"
     assert result["evidence"]["readiness"] == "complete"
     assert result["is_live_ready"] is True
 
@@ -1537,7 +1543,7 @@ def _install_completed_release_context(monkeypatch, dose_status='verified'):
     import clinical_applicability
     from test_clinical_evidence_schema_ingredient import _context
     context = _context()
-    context.update(review_status='clinician_approved', study_design='rct', purpose='treatment',
+    context.update(review_status='clinician_approved', scoring_eligible=True, study_design='rct', purpose='treatment',
                    clinical_review={'reviewer': 'Synthetic reviewer', 'reviewed_at': '2026-01-01T00:00:00Z',
                                     'scope': 'identity_dose_outcome_applicability'})
     context['dose']['dose_status'] = dose_status
@@ -1573,6 +1579,7 @@ def test_zero_native_credit_does_not_close_unreviewed_purpose_transfer():
     from assessment_readiness import evaluate_release_assessment
     product = strain_product(clinical_id='STRAIN_PLANTARUM_299V',
                              name='Lactobacillus plantarum 299v', dose=1e10)
+    product['product_name'] = 'Sleep support probiotic'  # Unrelated to the IBS context.
     evidence = score_evidence(product)
     assert evidence['score'] == 0
     assert evidence['metadata']['evidence_result_state'] == 'research_present_applicability_unestablished'

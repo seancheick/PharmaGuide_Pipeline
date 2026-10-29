@@ -10,9 +10,9 @@ from copy import deepcopy
 
 import pytest
 
-from clinical_applicability import filter_clinical_matches, reviewed_entries
+from clinical_applicability import assess_clinical_source_review, filter_clinical_matches, reviewed_entries
 from enrich_supplements_v3 import SupplementEnricherV3
-from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+from scoring_v4.modules.generic_evidence import resolved_clinical_matches, score_evidence
 from test_botanical_evidence_reachability import _product
 
 
@@ -53,6 +53,23 @@ def test_source_declared_plant_part_reaches_its_reviewed_family_evidence(
         assert study_id not in {m["id"] for m in product["evidence_data"]["clinical_matches"]}
         assert {m.get("id"): m.get("reason_code") for m in product["evidence_data"]["rejected_clinical_matches"]
                 }.get(study_id) == "reference_only_clinical_record"
+        return
+    if study_id == "INGR_ASTRAGALUS":
+        # The root still joins its family source, but that source has no
+        # approved contexts. Identity reachability cannot establish eligibility.
+        review = assess_clinical_source_review(reviewed_entries()[study_id])
+        assert review["is_complete"] is False
+        assert review["errors"] == ["clinical_source_contexts_missing"]
+        reasons = {item.get("id"): item.get("reason_code")
+                   for item in product["evidence_data"]["rejected_clinical_matches"]}
+        assert reasons[study_id] == "clinical_source_contexts_missing"
+        matches, _ = resolved_clinical_matches(product)
+        assert study_id not in {item["id"] for item in matches}
+        evidence = score_evidence(product)
+        assert evidence["score"] == 0
+        assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
+        from assessment_readiness import evaluate_assessment_readiness
+        assert evaluate_assessment_readiness(product, module="generic")["evidence"]["readiness"] == "incomplete"
         return
     matches, _ = resolved_clinical_matches(product)
     match = next((item for item in matches if item["id"] == study_id), None)
@@ -95,14 +112,18 @@ def test_ceylon_denial_is_recorded_on_the_real_label_path(enricher, product_id, 
     assert reasons.get("INGR_CINNAMON_EXTRACT") == "clinical_identity_excluded"
 
 
-def test_cassia_cinnamon_preparation_keeps_its_evidence():
+def test_cassia_cinnamon_preparation_cannot_bypass_missing_source_approval():
     source = _product("cassia-scope", "Cinnamon bark extract", "Cinnamon", "cinnamon_bark",
                       "Cinnamon Bark", 500.0, "ingredientRows[0]")
     match = {"id": "INGR_CINNAMON_EXTRACT", "ingredient": "Cinnamon bark extract",
              "matched_source_row_refs": ["ingredientRows[0]"]}
     accepted, rejected = filter_clinical_matches(source, [match])
-    assert rejected == []
-    assert [item["id"] for item in accepted] == ["INGR_CINNAMON_EXTRACT"]
+    assert accepted == []
+    [rejection] = rejected
+    assert rejection["status"] == "unresolved"
+    assert rejection["reason_code"] == "clinical_sources_ineligible"
+    assert rejection["matched_source_row_refs"] == ["ingredientRows[0]"]
+    assert assess_clinical_source_review(reviewed_entries()["INGR_CINNAMON_EXTRACT"])["errors"] == ["clinical_source_contexts_missing"]
 
 
 @pytest.mark.parametrize("study_id,labels", [
@@ -163,13 +184,18 @@ def test_bare_boswellia_serrata_row_stays_denied_until_source_proves_extract():
     assert rejected[0]["reason_code"] == "clinical_form_mismatch"
 
 
-def test_misspelled_generic_cinnamon_label_keeps_family_evidence():
+def test_misspelled_generic_cinnamon_label_retains_the_unapproved_family_disposition():
     # 62194 Spring Valley prints "Cinnammon"; the cleaner mapped it correctly.
+    # The eligible identity does not invent a missing approved clinical context.
     source = _scoped_source("Cinnammon", "Cinnamon", "cinnamon", "Cinnamon", 1000.0, [])
     match = {"id": "INGR_CINNAMON_EXTRACT", "ingredient": "Cinnammon", "matched_source_row_refs": ["ingredientRows[0]"]}
     accepted, rejected = filter_clinical_matches(source, [match])
-    assert rejected == []
-    assert [item["id"] for item in accepted] == ["INGR_CINNAMON_EXTRACT"]
+    assert accepted == []
+    [rejection] = rejected
+    assert rejection["status"] == "unresolved"
+    assert rejection["reason_code"] == "clinical_sources_ineligible"
+    assert rejection["matched_source_row_refs"] == ["ingredientRows[0]"]
+    assert assess_clinical_source_review(reviewed_entries()["INGR_CINNAMON_EXTRACT"])["errors"] == ["clinical_source_contexts_missing"]
 
 
 @pytest.mark.parametrize("product_id,label,quantity", [

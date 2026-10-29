@@ -1,5 +1,14 @@
 # PharmaGuide master completion plan
 
+### October 28 final integration — Codex takeover
+
+- [x] Establish one integrator: Sean assigned Codex integration/merges and confirmed Claude editing/autofix paused; fetch current main and preserve unique lane/user artifacts.
+- [x] Finish independently reproduced clinical-source, purpose, material-standardization, repeated-preparation lineage and safety consumer defects; apply Sean's Testofen pillar-independence and bitter-orange no-cutoff rulings. Source-bound checks, bounded raw measurements and independent reviews are recorded in the existing LEDGER; this is source qualification, not rebuilt delivery.
+- [ ] Qualify completed combined pipeline source, integrate and verify all planned lane ancestry. Paired Flutter PR164 is integrated atcb1ffc39 with exacted151752 CI40790156049 green; pipeline source 444a2d8b has independent 473+3 raw qualification, 33/33 canaries and source/test reviews; exact whole-fast CI and a stable local checkpoint remain pending.
+- [ ] Inspect final-main stage fingerprints and hand the verified source back to Sean, who reserved the pipeline run to himself on October29. Catalog and installed-app acceptance follow that rebuild; source integration does not claim release delivery.
+
+Owner: existing canonical clinical/material/safety/release and Flutter consumers — evidence and current receipts in the [existing LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Will NOT create a second scorer, semantic owner, registry, approval or execution register. Policy approval, measured source, integration and release acceptance remain separate.
+
 ### Accepted scoring/safety audit remediation — October28
 
 - [x] Implement all eight bounded findings through existing owners, including Sean's explicit retirement of the historically approved dormant pediatric modifier. Preserve current species/clinical holds, source-backed interactions, public compatibility fields and active score magnitudes.

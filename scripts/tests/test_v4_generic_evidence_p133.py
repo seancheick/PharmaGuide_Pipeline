@@ -69,6 +69,34 @@ def _match(
     return row
 
 
+def _use_approved_mechanics_sources(monkeypatch, *entries, outcome="Perceived Stress Scale", condition="perceived_stress", pmid="28661438"):
+    """Install only named synthetic sources; production holds remain untouched."""
+    import clinical_applicability
+    from test_evidence_resolver import _approved_test_source
+
+    current = clinical_applicability.reviewed_entries()
+    sources = []
+    for entry in entries:
+        source = _approved_test_source(entry, name=entry["standard_name"], outcome=outcome, pmid=pmid)
+        context = source["study_contexts"][0]
+        context["condition"] = condition
+        if source["study_type"] == "systematic_review_meta":
+            context["evidence_role"] = "meta_analysis"
+            # Opaque identities reused from the existing synthetic review fixture;
+            # this is not an extraction of a real review's trial membership.
+            context["included_study_pmids"] = ["23439798", "26791805"]
+            context["study_design"] = "Synthetic pooled mechanics fixture; no clinical claim"
+        if source["effect_direction"] == "mixed":
+            context["outcomes"].append({**context["outcomes"][0], "name": outcome + " null endpoint", "direction": "null"})
+        sources.append(source)
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {
+        **current, **{row["id"]: row for row in sources}})
+    for source in sources:
+        review = clinical_applicability.assess_clinical_source_review({"id": source["id"]})
+        assert review["is_complete"], review["errors"]
+    return sources
+
+
 def _product(
     *,
     ingredients: list | None = None,
@@ -156,9 +184,13 @@ def test_magnesium_style_meta_analysis_scores_6_48() -> None:
     assert payload["metadata"]["ingredient_points"]["magnesium"] == 6.48
 
 
-def test_title_owner_prevents_incidental_ingredient_breadth_from_owning_evidence() -> None:
+def test_title_owner_prevents_incidental_ingredient_breadth_from_owning_evidence(monkeypatch) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
+    _use_approved_mechanics_sources(monkeypatch,
+        _match(id="SYNTHETIC_MEL", ingredient="Melatonin", standard_name="Melatonin", study_type="rct_single"),
+        _match(id="SYNTHETIC_LEU", ingredient="L-Leucine", standard_name="L-Leucine"),
+        outcome="Sleep quality", condition="sleep_quality")
     product = _product(
         product_name="Sleep Melatonin",
         ingredients=[
@@ -166,9 +198,9 @@ def test_title_owner_prevents_incidental_ingredient_breadth_from_owning_evidence
             _ingredient(name="L-Leucine", canonical_id="l_leucine", quantity=100),
         ],
         matches=[
-            _match(id="MEL", ingredient="Melatonin", standard_name="Melatonin",
+            _match(id="SYNTHETIC_MEL", ingredient="Melatonin", standard_name="Melatonin",
                    study_type="rct_single", total_enrollment=30),
-            _match(id="LEU", ingredient="L-Leucine", standard_name="L-Leucine",
+            _match(id="SYNTHETIC_LEU", ingredient="L-Leucine", standard_name="L-Leucine",
                    total_enrollment=8563),
         ],
     )
@@ -333,25 +365,20 @@ def test_nested_creatine_identity_alone_cannot_claim_blend_dose() -> None:
 def test_disclosed_bcaa_aggregate_recovers_its_mixture_evidence() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
-    bcaa = _ingredient(
-        name="Branched-Chain Amino Acids",
-        canonical_id="branched_chain_amino_acids",
-        quantity=7,
-        unit="g",
-    )
-    bcaa.update(
-        evidence_type="blend_anchor_mass",
-        scoring_input_kind="product_level_evidence",
-    )
-    product = _product(
-        product_name="BCAA 2:1:1",
-        ingredients=[bcaa, _ingredient(name="Calcium", canonical_id="calcium", quantity=65)],
-        matches=[_match(id="CAL", ingredient="Calcium", standard_name="Calcium")],
-    )
+    # This mechanic needs the complete declared source mixture, not merely a
+    # synthetic canonical/name that supplies no composition or lineage proof.
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    raw = json.loads((Path(__file__).parent / "fixtures/brand_generic_295064_raw.json").read_text())
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    product["evidence_data"]["clinical_matches"] = [_match(id="CAL", ingredient="Calcium", standard_name="Calcium")]
 
     payload = score_evidence(product, owner_scoped=True)
 
-    assert payload["metadata"]["evidence_owner_canonicals"] == ["branched_chain_amino_acids"]
+    assert set(payload["metadata"]["evidence_owner_canonicals"]) == {
+        "branched_chain_amino_acids", "l_leucine", "l_isoleucine", "l_valine"}
     assert payload["metadata"]["recovered_matches"] == ["INGR_BRANCHED_CHAIN_AMINO_ACIDS"]
     assert payload["score"] > 0.0
 
@@ -545,31 +572,25 @@ def test_marker_confidence_scale_reduces_secondary_marker_credit() -> None:
     assert payload["score"] == 3.24
 
 
-def test_duplicate_entries_are_counted_once() -> None:
+def test_duplicate_entries_are_counted_once(monkeypatch) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
-    m = _match(id="DUP")
+    m = _match(id="SYNTHETIC_DUP")
+    _use_approved_mechanics_sources(monkeypatch, m)
     payload = score_evidence(_product(matches=[m, dict(m)]))
 
     assert payload["score"] == 6.48
     assert payload["metadata"]["matched_entries"] == 1
 
 
-def test_top_n_weights_apply_after_per_ingredient_cap() -> None:
+def test_top_n_weights_apply_after_per_ingredient_cap(monkeypatch) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
-    payload = score_evidence(
-        _product(
-            matches=[
-                _match(id="A", ingredient="A", standard_name="A", evidence_level="product-human"),
-                _match(id="B", ingredient="B", standard_name="B", evidence_level="product-human"),
-                _match(id="C", ingredient="C", standard_name="C", evidence_level="product-human"),
-                _match(id="D", ingredient="D", standard_name="D", evidence_level="product-human"),
-                _match(id="E", ingredient="E", standard_name="E", evidence_level="product-human"),
-            ]
-        ),
-        owner_scoped=False,
-    )
+    rows = [_ingredient(name=name, canonical_id=name.lower()) for name in "ABCDE"]
+    matches = [_match(id="SYNTHETIC_" + name, ingredient=name, standard_name=name,
+                      evidence_level="product-human") for name in "ABCDE"]
+    _use_approved_mechanics_sources(monkeypatch, *matches)
+    payload = score_evidence(_product(ingredients=rows, matches=matches), owner_scoped=False)
 
     # Each ingredient caps at 7; top-N weights [1.0, 0.7, 0.5, 0.3],
     # fifth ignored. 7 * 2.5 = 17.5.
@@ -597,19 +618,27 @@ def test_depth_bonus_ignores_registry_completed_trials() -> None:
 
 
 def _use_synthetic_eligible_collagen_source(monkeypatch):
-    """Exercise recovery mechanics without asserting real collagen efficacy."""
+    """Explicit approved peptide fixture for recovery; no real efficacy claim."""
     import clinical_applicability
     import evidence_resolver
     from scoring_v4.modules import generic_evidence
 
-    source = _match(
+    # Keep real content-shaped collagen citation metadata, but synthetic review
+    # and findings: this fixture grants no approval to the production record.
+    reference = dict(clinical_applicability.reviewed_entries()["INGR_COLLAGEN_PEPTIDES"]["references_structured"][0])
+    source, = _use_approved_mechanics_sources(monkeypatch, _match(
         id="INGR_COLLAGEN_PEPTIDES", ingredient="collagen",
         standard_name="Collagen Peptides", total_enrollment=73,
-        scoring_eligible=True, references_structured=[],
-    )
-    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: {source["id"]: source})
-    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries", lambda: (source,))
-    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {"collagen": [source]})
+        primary_outcome="Skin hydration", health_goals_supported=["Skin, Hair & Nails"],
+        references_structured=[reference],
+        applicability={"scope": "ingredient", "required_form_terms": ["collagen peptides"]}),
+        outcome="Skin hydration", condition="skin_health", pmid=reference["pmid"])
+    verified = generic_evidence._verified_ingredient_human_evidence_entries()
+    index = evidence_resolver._backed_studies_index()
+    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries",
+        lambda: tuple(row for row in verified if row["id"] != source["id"]) + (source,))
+    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {
+        **index, "collagen": [source]})
     return source
 
 
@@ -953,8 +982,8 @@ def test_folate_mcg_dfe_gets_nutrition_authority_floor() -> None:
 def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> None:
     """Vitamin D evidence matching treats 1,000 IU as the supported 25 mcg.
 
-    This reconciles label-unit variants only. Both products use the same
-    ingredient-human evidence row; neither claims exact-product evidence.
+    The respiratory clinical contexts are held. Unit variants retain the
+    same independent nutrition authority and cannot revive clinical credit.
     """
     from scoring_v4.modules.generic_evidence import score_evidence
 
@@ -967,9 +996,9 @@ def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> N
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 14.0
+    assert iu_payload["score"] == mcg_payload["score"] == 10.0
     assert iu_payload["components"] == mcg_payload["components"]
-    assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin d3"
+    assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin_d"
     assert iu_payload["metadata"]["recovered_matches"] == []
 
 
@@ -1011,7 +1040,7 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
     iu_payload = score(1000, "IU")
     mcg_payload = score(25, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 14.0
+    assert iu_payload["score"] == mcg_payload["score"] == 10.0
     assert iu_payload["metadata"]["flags"] == mcg_payload["metadata"]["flags"]
     assert iu_payload["metadata"]["flags"] == []
     assert (
@@ -1019,11 +1048,11 @@ def test_vitamin_d_iu_and_mcg_have_amount_independent_evidence() -> None:
         == mcg_payload["metadata"]["sub_clinical_canonicals"]
     )
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 10.0
 
 
 def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
-    """2,000 IU and 50 mcg both satisfy a 50 mcg evidence threshold."""
+    """Neither a studied amount nor an IU conversion overrides the clinical hold."""
     from scoring_v4.modules.generic_evidence import score_evidence
 
     def score(quantity: float, unit: str) -> dict:
@@ -1035,16 +1064,20 @@ def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
     iu_payload = score(2000, "IU")
     mcg_payload = score(50, "mcg")
 
-    assert iu_payload["score"] == mcg_payload["score"] == 14.0
+    assert iu_payload["score"] == mcg_payload["score"] == 10.0
     assert iu_payload["metadata"]["flags"] == []
     assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
-    assert iu_payload["components"]["primary_evidence_floor"] == 14.0
+    assert iu_payload["components"]["primary_evidence_floor"] == 10.0
 
 
-def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
+def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel(monkeypatch) -> None:
     """IU conversion is nutrient-specific; arbitrary IU rows stay unresolved."""
     from scoring_v4.modules.generic_evidence import score_evidence
 
+    from scoring_v4.modules.generic_evidence import _evidence_matching_mass_mg
+    assert _evidence_matching_mass_mg(_ingredient(canonical_id="vitamin_a", quantity=1000, unit="IU")) is None
+    _use_approved_mechanics_sources(monkeypatch, _match(
+        id="SYNTHETIC_VITAMIN_A", ingredient="Vitamin A", standard_name="Vitamin A"))
     payload = score_evidence(
         _product(
             ingredients=[
@@ -1058,7 +1091,7 @@ def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
             ],
             matches=[
                 _match(
-                    id="INGR_VITAMIN_A_TEST",
+                    id="SYNTHETIC_VITAMIN_A",
                     ingredient="Vitamin A",
                     standard_name="Vitamin A",
                     study_type="systematic_review_meta",
@@ -1075,7 +1108,7 @@ def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
 
     assert payload["score"] == 14.0
     assert payload["components"]["primary_evidence_floor"] == 14.0
-    assert payload["metadata"]["nutrition_authority_canonical"] is None
+    assert payload["metadata"]["selected_nutrition_authority"] is None
     assert payload["metadata"]["flags"] == []
 
 
@@ -1155,15 +1188,17 @@ def test_shadow_wires_evidence_dimension() -> None:
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
 
-def test_primary_floor_mirrors_mixed_effect_multiplier() -> None:
+def test_primary_floor_mirrors_mixed_effect_multiplier(monkeypatch) -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
     # P5: use a NON-essential primary (ashwagandha) so the clinical effect-multiplier
     # is tested in isolation from the DRI nutrition-authority floor (essentials -> 10).
+    _use_approved_mechanics_sources(monkeypatch, _match(
+        id="SYNTHETIC_MIXED_ASHWAGANDHA", ingredient="Ashwagandha", standard_name="Ashwagandha", effect_direction="mixed"))
     payload = score_evidence(
         _product(
             ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
-            matches=[_match(id="TEST_ELIGIBLE_ASHWAGANDHA", ingredient="Ashwagandha",
+            matches=[_match(id="SYNTHETIC_MIXED_ASHWAGANDHA", ingredient="Ashwagandha",
                             standard_name="Ashwagandha", effect_direction="mixed")],
         ),
         apply_primary_floor=True,
@@ -1232,10 +1267,10 @@ def test_joint_support_caps_branded_primary_evidence_floor(monkeypatch) -> None:
                    study_type="rct_multiple", evidence_level="branded-rct",
                    effect_direction="positive_strong", total_enrollment=200)
     match.update(matched_source_row_refs=["ingredientRows[0]"], matched_canonical_ids=["msm"])
-    # This test owns the joint cap: raise the strong floor above the cap so
-    # there is something to cap (1.31.0 has no automatic floor above 14).
+    # This test owns the joint cap: the one qualifying OptiMSM trial uses
+    # the moderate floor. Raise that test-only floor to exercise the cap.
     from scoring_v4.modules import generic_evidence
-    monkeypatch.setattr(generic_evidence, "PRIMARY_FLOOR_STRONG", 18.0)
+    monkeypatch.setattr(generic_evidence, "PRIMARY_FLOOR_MODERATE", 18.0)
     product = _product(supplement_taxonomy={"primary_type": "joint_support"},
                        ingredients=[ingredient], matches=[match])
     product["activeIngredients"] = [dict(ingredient)]
@@ -1315,15 +1350,19 @@ def test_named_whey_source_is_not_replaced_by_its_constituent_proteins():
     assert score_evidence(product, owner_scoped=True)["metadata"]["recovered_matches"] == ["INGR_WHEY_PROTEIN"]
 
 
-def test_generic_module_uses_existing_purpose_owner_scope():
+def test_generic_module_uses_existing_purpose_owner_scope(monkeypatch):
     from scoring_v4.modules.generic import score_generic
+    _use_approved_mechanics_sources(monkeypatch,
+        _match(id="SYNTHETIC_MEL", ingredient="Melatonin", standard_name="Melatonin", study_type="rct_single"),
+        _match(id="SYNTHETIC_LEU", ingredient="L-Leucine", standard_name="L-Leucine"),
+        outcome="Sleep quality", condition="sleep_quality")
     product = _product(
         product_name='Sleep Melatonin',
         ingredients=[_ingredient(name='Melatonin', canonical_id='melatonin', quantity=5),
                      _ingredient(name='L-Leucine', canonical_id='l_leucine', quantity=100)],
-        matches=[_match(id='MEL', ingredient='Melatonin', standard_name='Melatonin',
+        matches=[_match(id='SYNTHETIC_MEL', ingredient='Melatonin', standard_name='Melatonin',
                         study_type='rct_single', total_enrollment=30),
-                 _match(id='LEU', ingredient='L-Leucine', standard_name='L-Leucine')],
+                 _match(id='SYNTHETIC_LEU', ingredient='L-Leucine', standard_name='L-Leucine')],
     )
     evidence = score_generic(product).dimensions['evidence']
     assert evidence.metadata['ingredient_points'] == {'melatonin': 2.16}
@@ -1469,9 +1508,10 @@ def test_explicit_claim_cannot_borrow_evidence_for_another_purpose():
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
 
 
-def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
+def test_explicit_purposes_are_order_independent_and_not_oxidative_stress(monkeypatch):
     import json
     from copy import deepcopy
+    import clinical_applicability
     from scoring_v4.scored_artifact import build_scored_artifact
     product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
     scores = []
@@ -1484,9 +1524,23 @@ def test_explicit_purposes_are_order_independent_and_not_oxidative_stress():
         control['statements'] = [{'type': 'Formula re: Contains', 'notes': notes}]
         scores.append(build_scored_artifact(control)['quality_pillars_v4']['evidence']['score'])
     assert scores[0] == scores[1] == scores[2] > 0
+    # Item 12 (Sean, 2026-10-28): the curated record's reviewed scope owns the
+    # supported purpose. Rewriting an enriched match's descriptive text (here to
+    # an oxidative-stress biomarker) can neither add nor remove a purpose.
     for entry in product['evidence_data']['clinical_matches']:
         entry.update(primary_outcome='Reduced oxidative stress biomarkers',
             health_goals_supported=[], endpoint_relevance_tags=[], key_endpoints=[])
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == scores[0]
+    # Reviewed condition scopes own the purpose decision: restate them as an
+    # oxidative-stress outcome at that owner, not only on the enriched match.
+    records = deepcopy(clinical_applicability.reviewed_entries())
+    for entry in product['evidence_data']['clinical_matches']:
+        record = records.get(entry['id'])
+        if record and isinstance(record.get('applicability'), dict):
+            record['applicability']['supported_outcomes'] = ['reduced_oxidative_stress_biomarkers']
+            for context in record.get('study_contexts') or []:
+                context['condition'] = 'reduced_oxidative_stress_biomarkers'
+    monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: records)
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
 
 
@@ -1494,12 +1548,8 @@ def test_contributing_receipt_follows_authority_floor_not_unused_legacy_match():
     from scoring_v4.modules.generic_evidence import score_evidence
     product = _product(matches=[_match(id='UNREVIEWED_SYNTHETIC', study_type='rct_single', effect_direction='positive_weak')])
     base = score_evidence(product)
-    receipts = base['metadata']['contributing_record_assessments']
-    assert len(receipts) == 1
-    assert receipts[0]['id'] == 'UNREVIEWED_SYNTHETIC'
-    assert receipts[0]['status'] == 'not_curated'
-    assert receipts[0]['reason_code'] == 'no_reviewed_scope_constraints'
-    assert receipts[0]['scope_qualification_complete'] is False
+    assert base['score'] == 0
+    assert base['metadata']['contributing_record_assessments'] == []
     authority = score_evidence(product, apply_primary_floor=True)
     assert authority['metadata']['nutrition_authority_floor_applied'] is True
     assert authority['metadata']['primary_evidence_floor_decisive'] is True

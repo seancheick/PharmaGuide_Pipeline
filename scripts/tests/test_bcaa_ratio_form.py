@@ -17,6 +17,7 @@ BCAA form absorbs to the same extent, so each scores 15 and the unspecified form
 the lowest eligible named score minus 1 (IQM unknown-form rule), 14.
 """
 import json
+from copy import deepcopy
 import logging
 from pathlib import Path
 
@@ -89,6 +90,80 @@ def test_a_label_that_states_2_1_1_keeps_the_ratio_form(enricher):
 
     assert ('bcaa 2:1:1', 15.0) in _bcaa_readings(enriched)
     assert _scored_bcaa_bio(enriched) == {15.0}
+
+
+@pytest.mark.parametrize('current_notes', [None, 'Supports muscle recovery'])
+def test_cached_ratio_from_panel_notes_cannot_outlive_its_same_source_notes(enricher, current_notes):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / 'bcaa_270253_raw.json').read_text())
+    raw['ingredientRows'][0].update(name='Branched-Chain Amino Acids', notes='2:1:1')
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert _scored_bcaa_bio(product) == {15.0}
+    assert next(row for row in product['product_scoring_evidence']
+                if row.get('canonical_id') == BCAA)['notes'] == '2:1:1'
+    for row in [*product['activeIngredients'], *product['ingredient_quality_data']['ingredients'],
+                *product['ingredient_quality_data']['ingredients_scorable']]:
+        if row.get('raw_source_path') == 'ingredientRows[0]':
+            if current_notes is None:
+                row.pop('notes', None)
+            else:
+                row['notes'] = current_notes
+    # A retained old reading cannot name a ratio after its matcher input changed.
+    assert _scored_bcaa_bio(product) == {None}
+    if current_notes is None:
+        raw['ingredientRows'][0].pop('notes')
+    else:
+        raw['ingredientRows'][0]['notes'] = current_notes
+    fresh, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert _scored_bcaa_bio(fresh) == {14.0}
+    assert (UNSPECIFIED, 14.0) in _bcaa_readings(fresh)
+
+
+@pytest.fixture(scope='module')
+def ratio_bcaa_product(enricher):
+    return _enrich(enricher, 'bcaa_270253_raw.json')
+
+
+@pytest.mark.parametrize('mutation, expected', [
+    ('none', 15.0), ('foreign_ref', None), ('foreign_source_text', None),
+    ('foreign_forms', None), ('foreign_standard_name', None),
+    ('stale_composition', None), ('conflicting_readings', None),
+    ('legacy_missing_notes', None),
+])
+def test_fresh_composition_retains_only_its_exact_source_form_reading(ratio_bcaa_product, mutation, expected):
+    from scoring_input_contract import get_scoring_ingredients
+    product = deepcopy(ratio_bcaa_product)
+    native = next(row for row in product['product_scoring_evidence']
+                  if row.get('canonical_id') == BCAA)
+    if mutation == 'foreign_ref':
+        native['raw_source_path'] = 'ingredientRows[99]'
+    elif mutation == 'foreign_source_text':
+        native['raw_source_text'] = '4:1:1 BCAA'
+    elif mutation == 'foreign_forms':
+        native['forms'] = [{'name': 'BCAA Peptides'}]
+    elif mutation == 'foreign_standard_name':
+        native['standardName'] = 'Different material reading'
+    elif mutation == 'stale_composition':
+        native['verified_child_canonicals'].remove('l_valine')
+    elif mutation == 'legacy_missing_notes':
+        native.pop('notes', None)
+    elif mutation == 'conflicting_readings':
+        other = deepcopy(native)
+        other['matched_form'] = 'bcaa 4:1:1'
+        product['product_scoring_evidence'].append(other)
+    rows = [row for row in get_scoring_ingredients(product, strict=True).rows
+            if row.get('canonical_id') == BCAA]
+    assert len(rows) == 1
+    assert _scored_bcaa_bio(product) == {expected}
+    assert rows[0].get('matched_form') == ('bcaa 2:1:1' if expected else None)
+    # The fresh composition/amount/ref owner survives; a stale cached form
+    # cannot replace that source or supply a new ratio reading in Score.
+    assert rows[0]['raw_source_path'] == 'ingredientRows[0]'
+    assert rows[0]['quantity'] == 6000
+    assert rows[0]['unit'] == 'mg'
+    assert set(rows[0]['verified_child_canonicals']) == {'l_leucine', 'l_isoleucine', 'l_valine'}
+    assert rows[0]['linked_rows'] == ['ingredientRows[0]', *[
+        f'ingredientRows[0].nestedRows[{index}]' for index in range(3)]]
 
 
 @pytest.mark.parametrize('name', [

@@ -147,13 +147,14 @@ def test_botanical_product_detected_by_taxonomy():
 
 def test_standardized_botanical_identity_routes_even_when_taxonomy_category_drifted():
     row = {
-        "name": "Curcumin Phytosome",
+        "name": "Meriva Curcumin Phytosome",
         "standard_name": "Curcumin",
         "canonical_id": "curcumin",
         "matched_form": "Meriva curcumin phytosome",
         "quantity": 500,
         "unit": "mg",
         "mapped": True,
+        "raw_source_path": "ingredientRows[0]",
         "raw_taxonomy": {"category": "non-nutrient/non-botanical", "forms": []},
     }
     product = {
@@ -162,13 +163,15 @@ def test_standardized_botanical_identity_routes_even_when_taxonomy_category_drif
         "ingredient_quality_data": {"ingredients_scorable": [row], "ingredients": [row]},
         "formulation_data": {
             "standardized_botanicals": [{
-                "name": "Meriva",
+                "name": "Meriva Curcumin Phytosome",
+                "raw_source_path": "ingredientRows[0]",
                 "botanical_id": "curcumin",
                 "standard_name": "Curcumin",
                 "markers": ["curcuminoids"],
-                "percentage_found": 95.0,
-                "min_threshold": 95,
+                "percentage_found": 0.0,
+                "min_threshold": None,
                 "meets_threshold": True,
+                "evidence_source": "branded_form",
             }]
         },
     }
@@ -185,7 +188,7 @@ def test_standardized_botanical_identity_routes_even_when_taxonomy_category_drif
 
 def test_standardized_botanical_parent_complex_total_is_dose_evaluable():
     row = {
-        "name": "Curcumin Phytosome",
+        "name": "Meriva Curcumin Phytosome",
         "standard_name": "Curcumin",
         "canonical_id": "curcumin",
         "matched_form": "Meriva curcumin phytosome",
@@ -207,14 +210,14 @@ def test_standardized_botanical_parent_complex_total_is_dose_evaluable():
         "ingredient_quality_data": {"ingredients_scorable": [row], "ingredients": [row]},
         "formulation_data": {
             "standardized_botanicals": [{
-                "name": "Curcumin Phytosome",
+                "name": "Meriva Curcumin Phytosome",
                 "botanical_id": "turmeric",
                 "standard_name": "Turmeric",
                 "markers": ["curcuminoids"],
                 "percentage_found": 0.0,
                 "min_threshold": 95,
                 "meets_threshold": True,
-                "evidence_source": "marker_word_match",
+                "evidence_source": "branded_form",
             }]
         },
     }
@@ -678,13 +681,13 @@ def test_primary_botanical_tie_break_reads_form_quality_through_its_owner():
     through generic_helpers.bio_score_of (the one owner). bio_score is the only
     form-quality value (c3afa98b): a row carrying only the retired IQM `score`
     has no form quality and never outranks a scored row."""
-    current = _botanical_ingredient(bio_score=6)
+    current = _botanical_ingredient(name="Ashwagandha Extract", bio_score=6)
     rhodiola = dict(name="Rhodiola Extract", standard_name="Rhodiola",
                     canonical_id="rhodiola", form="Rhodiola Root Extract", quantity=600)
     better = _botanical_ingredient(**rhodiola, bio_score=12)
     retired_only = _botanical_ingredient(**rhodiola, score=12)
 
-    product = _botanical_product(current)
+    product = _botanical_product(current, standardized=False)
     product["ingredient_quality_data"]["ingredients_scorable"] = [current, better]
     product["ingredient_quality_data"]["ingredients"] = [current, better]
     assert _primary_botanical_active(product)["canonical_id"] == "rhodiola"

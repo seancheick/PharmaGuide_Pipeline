@@ -56,8 +56,8 @@
     },
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.1",
-    "last_updated": "2026-10-26",
-    "total_entries": 180,
+    "last_updated": "2026-10-28",
+    "total_entries": 181,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -84,7 +84,7 @@
       "fatty_acid_amide": 1,
       "fermentate": 1,
       "fruit": 8,
-      "herb": 89,
+      "herb": 90,
       "herb_root_bark": 9,
       "hormone_analog": 1,
       "leaf": 3,
@@ -103,10 +103,10 @@
       "vegetable_greens": 2
     },
     "statistics": {
-      "total_aliases": 850,
-      "entries_with_threshold": 108,
-      "high_priority": 68,
-      "medium_priority": 170
+      "total_aliases": 849,
+      "entries_with_threshold": 151,
+      "high_priority": 51,
+      "medium_priority": 129
     },
     "pipeline_integration": "Used by cleaning script to standardize botanical ingredient names and by enrichment script to identify quality markers",
     "sources": [
@@ -5475,17 +5475,14 @@
       "standard_name": "Slendesta",
       "id": "slendesta",
       "aliases": [
-        "slendesta",
-        "potato protein extract",
-        "proteinase inhibitor II",
-        "PI2"
+        "slendesta"
       ],
       "markers": [
         "proteinase inhibitor II"
       ],
       "category": "tuber",
       "priority": "medium",
-      "notes": "Patented potato protein extract that promotes satiety by triggering CCK release. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "notes": "Patented potato protein extract that promotes satiety by triggering CCK release. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis). [2026-10-28 material identity review] Generic potato protein extract, PI2 and proteinase inhibitor II describe source/constituent facts, not proof of the Slendesta proprietary material; retain them as marker descriptions, not identity aliases.",
       "last_updated": "2026-09-26",
       "external_ids": {
         "unii": "2A8I57T4MX"
@@ -5501,7 +5498,7 @@
       "bonus_rationale": "Slendesta® (Kemin Industries) is a potato protein extract (Solanum tuberosum) standardized to the PI2 (proteinase inhibitor II) bioactive fraction. Clinical literature on satiety / cholecystokinin elevation / appetite endpoints. branded_extract basis: bonus is granted when the label names the Slendesta® brand. Runtime gate: meets_threshold + has_standardized_botanical.",
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/28485429/",
-        "https://www.kemin.com/na/en-us/markets/human/products/slendesta"
+        "https://www.kemin.com/na/en-us/markets/human-nutrition/products/slendesta"
       ]
     },
     {
@@ -6334,6 +6331,37 @@
       "priority": "low",
       "last_updated": "2026-06-04",
       "notes": "Allium sativum (Amaryllidaceae) bulb. Standardized to alliin (USP NLT 0.3%) / allicin potential. Added v3.7.0 Phase 5 (was MISSING; identity in botanical_ingredients.garlic_bulb). CUI/UNII deferred to verified sweep."
+    },
+    {
+      "id": "testofen",
+      "standard_name": "Testofen",
+      "aliases": [
+        "Testofen fenugreek",
+        "Testofen fenugreek seed extract"
+      ],
+      "category": "herb",
+      "markers": [
+        "furostanol saponin glycosides",
+        "saponins"
+      ],
+      "marker_compounds": [
+        "furostanol saponin glycosides"
+      ],
+      "min_threshold": 50,
+      "priority": "high",
+      "last_updated": "2026-10-28",
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "bonus_rationale": "ANVISA Parecer 7/2022, process 25351.711676/2019-91, records the manufacturer specification: Indus Biotech manufactures Testofen for trademark owner Gencor with not less than 50% saponins. Fenusides denotes the proprietary furostanol saponin glycoside matrix, not a single chemical. Exact material identity is required; this specification is not a printed label percentage, batch certificate or clinical-benefit approval.",
+      "notes": "Exact Testofen fenugreek seed extract material. Supplier specification is NLT 50% saponins; percentage_found must continue to report only label-derived values. Material/Formulation proof is independent of the held clinical-benefit record.",
+      "sources": [
+        "https://anexosportal.datalegis.net/arquivos/1876554.pdf",
+        "https://antigo.anvisa.gov.br/documents/10181/6777786/Parecer_tarjado_Extrato_de_semente_de_Trigonella_foenum___graecum_L.___25351.7116762019_91.pdf/51ca47eb-c3b1-449b-b23b-e2ea837fbce2?version=1.0"
+      ],
+      "attributes": {
+        "iqm_parent_id": "fenugreek"
+      }
     }
   ]
 }

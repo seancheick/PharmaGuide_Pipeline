@@ -66,10 +66,13 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "digestive": {
         "digestive", "digestion", "gut", "bowel", "regularity", "constipation",
         "diarrhea", "ibs", "irritable", "bloating", "gastro", "colic", "gi",
+        "stool", "stools", "reflux", "heartburn", "gastrointestinal", "intestinal",
+        "abdominal", "lactose",
     },
     "immune": {
         "immune", "immunity", "respiratory", "cold", "allergy", "allergic",
-        "rhinitis", "eczema", "atopic",
+        "rhinitis", "eczema", "atopic", "infection", "infections", "infectious",
+        "pneumonia", "rhinovirus", "rhinosinusitis",
     },
     "women": {
         "women", "woman", "womens", "female", "vaginal", "urogenital",
@@ -83,11 +86,15 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
         "infant", "infants", "baby", "babies", "pediatric", "children", "child", "kids",
         "toddler", "toddlers", "preterm", "neonatal", "neonates",
     },
-    "oral": {"oral", "dental", "teeth", "gum", "gingivitis", "plaque", "caries", "halitosis"},
-    "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat"},
-    "mood": {"mood", "stress", "anxiety", "psychobiotic", "sleep",
-             "relax", "relaxation", "cortisol"},
-    "bone": {"bone", "density"},
+    "oral": {"oral", "dental", "teeth", "gums", "gingivitis", "plaque", "caries", "halitosis"},
+    "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat",
+                  "diabetes", "glycemia", "insulin"},
+    "mood": {"mood", "stress", "anxiety", "psychobiotic",
+             "relax", "relaxation", "cortisol", "depression",
+             "depressive", "distress"},
+    # Sleep is its own outcome: stress research does not authorize a sleep claim.
+    "sleep": {"sleep", "asleep", "insomnia"},
+    "bone": {"bone", "bones", "density"},
     # Existing clinical-indication vocabulary; shared by source claims and
     # reviewed study outcomes. These categories never imply efficacy.
     "hormonal_endocrine": {"testosterone", "androgen", "androgens", "dheas"},
@@ -95,8 +102,44 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "aging_longevity": {"longevity", "antiaging", "antiageing"},
     "cognitive_neurological": {"attention", "alertness", "memory", "focus", "cognition", "cognitive"},
     "skin_hair_collagen": {"skin"},
-    "eye_health": {"eye", "eyes", "vision"},
+    "eye_health": {"eye", "eyes", "vision", "ocular", "macular", "retina"},
+    # Outcome families named by reviewed study contexts (October 28, 2026
+    # rulings). A shared category only finds candidate research or an
+    # unrelated claim; the reviewed context alone authorizes credit, so a
+    # heart-health claim never becomes heart-failure or lipid evidence.
+    "cardiovascular": {"cardiovascular", "cardiometabolic", "cardiac", "hypertension", "cvd",
+                       "endothelial", "vascular"},
+    "lipid": {"cholesterol", "ldl", "hdl", "triglyceride", "triglycerides",
+              "dyslipidemia", "hypercholesterolemia"},
+    "joint": {"joint", "joints", "knee", "knees", "osteoarthritis"},
+    "thyroid": {"thyroid", "thyroiditis", "hashimoto"},
+    "nausea": {"nausea", "vomiting"},
+    "migraine": {"migraine", "migraines"},
+    "menstrual_cycle": {"menstrual", "menstruation", "pcos"},
+    "endurance": {"endurance"},
+    "muscle_recovery": {"soreness"},
 }
+
+# Indications named only by a phrase: a bare word ("blood", "strength",
+# "regularity", "mass") states no purpose on its own.
+_INDICATION_PHRASES = (
+    ("eye_health", r"\b(?:visual (?:performance|acuity)|contrast sensitivity|disability glare)\b"),
+    ("cardiovascular", r"\b(?:heart (?:health|function|failure)|healthy heart|blood pressure|blood flow)\b"),
+    ("metabolic", r"\bblood sugar\b"),
+    # "Gum" alone is a resin, thickener or chewing gum, not the gums.
+    ("oral", r"\bgum (?:health|disease|tissue)\b"),
+    ("cognitive_neurological", r"\bmental clarity\b"),
+    ("menstrual_cycle", r"\b(?:polycystic ovar(?:y|ian)|(?:menstrual|cycle) regularity)\b"),
+    ("lipid", r"\b(?:blood lipids|lipid (?:profile|levels?))\b"),
+    ("endurance", r"\bexercise capacity\b"),
+    ("muscle_recovery", r"\bmuscle (?:damage|soreness|recovery)\b"),
+    ("muscle_strength_mass", r"\b(?:lean|muscle) mass\b|\blean muscle\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
+                             r"|\bbuild(?:s|ing)? muscle\b|\bmuscularity\b"),
+    # A bare "muscle" claim names neither family; it is related to both.
+    ("muscle_strength_mass", r"\bmuscles?\b"),
+    ("muscle_recovery", r"\bmuscles?\b"),
+)
+
 
 def evidence_indication_categories(text: str) -> Set[str]:
     """Shared label/clinical indication categories; never proof of efficacy."""
@@ -105,15 +148,24 @@ def evidence_indication_categories(text: str) -> Set[str]:
     # categorizer must not transfer antioxidant or manufacturing evidence to
     # a mood claim merely because both contain the word "stress".
     normalized = re.sub(r"\b(?:oxidative|cellular|mechanical|thermal|osmotic|endoplasmic reticulum) stress\b", " ", normalized)
-    # Packaging energy procurement is not a physiological product purpose.
-    normalized = re.sub(r"\brenewable energy\b", " ", normalized)
+    # Packaging energy procurement is not a physiological product purpose,
+    # and "sold by weight" is a fill statement, not a weight claim.
+    normalized = re.sub(r"\brenewable energy\b|\bsold by weight\b", " ", normalized)
+    # "Gluten-free", "lactose free": an absence statement, not a purpose.
+    normalized = re.sub(r"\b(?:gluten|dairy|lactose|soy|sugar|cholesterol|fat|gmo|caffeine|stimulant|egg|nut|"
+                        r"wheat|yeast|corn|sodium|preservative|artificial|allergen) free\b", " ", normalized)
     words = set(normalized.split())
     categories = {category for category, keywords in INDICATION_KEYWORDS.items() if words & keywords}
+    categories.update(category for category, phrase in _INDICATION_PHRASES if re.search(phrase, normalized))
+    # Menstrual-cycle regularity is not bowel regularity.
+    if ("menstrual_cycle" in categories and "regularity" in words
+            and not (words & (INDICATION_KEYWORDS["digestive"] - {"regularity"}))):
+        categories.discard("digestive")
     # Age can qualify the population/context of a memory claim; it does not
     # itself assert an anti-aging outcome. Keep explicit aging-purpose phrases.
     if re.search(r"\b(?:healthy|anti) (?:aging|ageing)\b", normalized):
         categories.add("aging_longevity")
-    if "bone" in categories and "bone" not in words:
+    if "bone" in categories and not words & {"bone", "bones"}:
         categories.discard("bone")  # density alone may describe a capsule
     if "metabolic" in categories and not (words & (INDICATION_KEYWORDS["metabolic"] - {"fat"})):
         if not re.search(r"\b(?:body|visceral) fat\b", normalized):
@@ -243,6 +295,13 @@ class ProductEvidenceResolution:
     owner_contributions: Dict[str, int]
 
 
+_OMEGA_EVIDENCE_CANONICALS = {
+    "epa", "dha", "epa_dha", "fish_oil", "fish_liver_oil", "cod_liver_oil",
+    "krill_oil", "algal_oil", "algae_oil", "omega3", "omega_3",
+    "omega_3_fatty_acids", "omega_fatty_acid_blend",
+}
+
+
 def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Resolve the reviewed omega purpose record without judging its amount.
 
@@ -305,16 +364,11 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         normalized_title,
     ))
 
-    omega_owner_ids = {
-        "epa", "dha", "epa_dha", "fish_oil", "fish_liver_oil", "cod_liver_oil",
-        "krill_oil", "algal_oil", "algae_oil", "omega3", "omega_3",
-        "omega_3_fatty_acids", "omega_fatty_acid_blend",
-    }
     try:
         owners = evidence_owner_canonicals(prod, module="omega")
     except (KeyError, TypeError, ValueError):
         owners = set()
-    mixed_purpose = bool(owners and any(owner not in omega_owner_ids for owner in owners))
+    mixed_purpose = bool(owners and any(owner not in _OMEGA_EVIDENCE_CANONICALS for owner in owners))
 
     claim_segments = [title] + [
         str(statement.get("notes") or statement.get("text") or "")
@@ -379,6 +433,8 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         "score": round(score, 4),
         "record_id": selected.get("id") if selected is not None else None,
         "record_source_pmids": list(selected.get("source_pmids") or []) if selected is not None else [],
+        "source_references": list(selected.get("references_structured") or []) if selected is not None else [],
+        "evidence_result_state": "evaluated_authority" if selected is not None else "applicability_unestablished",
         "minimum_daily_epa_dha_mg": round(minimum, 4),
         "maximum_daily_epa_dha_mg": round(maximum, 4),
         "minimum_daily_dha_mg": round(dha_minimum, 4),
@@ -398,15 +454,34 @@ def _norm(val: Any) -> str:
     return str(val or "").strip().lower()
 
 
-def clinical_record_sources_eligible(entry: Mapping[str, Any]) -> bool:
-    """Honor source-integrity holds at the shared clinical-credit seam."""
-    if entry.get("scoring_eligible") is False:
+def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, source_pmids=None) -> bool:
+    """Honor source holds, joined to the context and optional signed source scope."""
+    if entry.get("scoring_eligible") is False or is_reference_only(entry):
         return False
-    if is_reference_only(entry):
-        return False
-    references = entry.get("references_structured")
-    # Legacy records without structured references retain their existing
-    # eligibility; this guard contains explicit holds, not a new review policy.
+    references = entry.get("references_structured") or []
+    if context is not None:
+        from probiotic_measurements import context_accepted_for_scoring
+        if not context_accepted_for_scoring(context):
+            return False
+        declared = {str(pmid) for pmid in entry.get("published_studies") or []
+                    if re.fullmatch(r"[1-9][0-9]*", str(pmid))}
+        declared.update(str(ref["pmid"]) for ref in references
+                        if isinstance(ref, Mapping) and ref.get("pmid"))
+        excluded = {str(ref["pmid"]) for ref in references
+                    if isinstance(ref, Mapping) and ref.get("pmid")
+                    and not clinical_record_sources_eligible({"references_structured": [ref]})}
+        eligible = declared - excluded
+        if source_pmids is not None:
+            eligible &= {str(pmid) for pmid in source_pmids}
+        sources = {str(pmid) for pmid in context.get("source_pmids") or []}
+        return bool(sources and not (sources - declared) and sources & eligible)
+    contexts = entry.get("study_contexts")
+    if contexts:
+        # Approval and an eligible reference must belong to the same context.
+        # An unrelated sibling cannot lend source eligibility to a held trial.
+        return any(clinical_record_sources_eligible(entry, context=context) for context in contexts)
+    # Legacy records without contexts keep their existing source-only behavior.
+    # Missing-context legacy reconciliation belongs to the existing PR278 owner.
     if not references:
         return True
     return any(
@@ -488,10 +563,16 @@ def _backed_studies_index() -> Dict[str, List[Dict[str, Any]]]:
 
 def is_reviewed_branded_material(
     canonical: Any, name: Any = None, *, preparation_name: Any = None,
+    strict_material_spelling: bool = False,
 ) -> bool:
     """True when a curated branded clinical record (``BRAND_*`` in
     backed_clinical_studies, the evidence owner) names this identity: a studied
-    material such as Sytrinol or Tesnor, not a marketing blend name."""
+    material such as Sytrinol or Tesnor, not a marketing blend name.
+
+    Strict material spelling requires the retained name to contain a curated
+    brand spelling, rather than a generic discovery alias. Neither mode reads
+    clinical eligibility or benefit outcomes.
+    """
     idx = _backed_studies_index()
     keys = {
         variant
@@ -515,6 +596,14 @@ def is_reviewed_branded_material(
     return any(
         _norm(study.get("id")).startswith("brand_")
         and (printed_ids is None or study.get("id") in printed_ids)
+        and (not strict_material_spelling or any(
+            token and re.search(r"(?<!\w)" + re.escape(token) + r"(?!\w)",
+                                _canonical_text(name if name is not None else canonical))
+            for token in map(_canonical_text, [
+                *(study.get("brand_tokens") or [study.get("standard_name")]),
+                _norm(study.get("id")).removeprefix("brand_").replace("_", " "),
+            ])
+        ))
         for key in keys
         for study in idx.get(key, [])
     )
@@ -884,6 +973,24 @@ def resolve_evidence_for_row(
             )
 
     # 6. Check Nutrition Authority (DRI/RDA/AI benchmarks for essential nutrients)
+    if product and canonical in _OMEGA_EVIDENCE_CANONICALS:
+        omega = resolve_omega_evidence_standard(product)
+        if omega["applicability_qualified"]:
+            matched_owners.append("nutrition_authority")
+            owner_facts["nutrition_authority"] = {
+                "nutrient": canonical,
+                "authority": omega["record_id"],
+                "source_references": omega["source_references"],
+            }
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESOLVED_BY_AUTHORITY.value,
+                points_eligible=False,
+                applicability_status="applicable",
+                reason_code="dietary_reference_intake_authority_established",
+                owner_facts=owner_facts,
+            )
     nutr_entry = rda_ul_reference_entry(canonical_id=canonical, name=name)
     if nutr_entry and is_essential_dietary_nutrient(canonical, name, iqm_entry):
         matched_owners.append("nutrition_authority")
@@ -977,18 +1084,6 @@ def resolve_evidence_for_row(
                 reason_code="clinical_sources_ineligible", owner_facts=owner_facts,
                 blocking_reasons=["clinical_sources_ineligible"],
             )
-        claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
-        if claimed_purposes:
-            valid_studies = [study for study in valid_studies if claimed_purposes & _evidence_entry_purposes(study)]
-            if not valid_studies:
-                return EvidenceResolution(
-                    canonical_id=canonical, ingredient_name=name,
-                    matched_owners=matched_owners,
-                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                    points_eligible=False, applicability_status="applicability_unestablished",
-                    reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
-                    blocking_reasons=["label_purpose_evidence_mismatch"],
-                )
         owner_facts["backed_clinical_studies"] = _clinical_owner_facts(valid_studies)
 
         # Check applicability: preparation/form only. Amount adequacy is owned
@@ -999,6 +1094,7 @@ def resolve_evidence_for_row(
         source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
         record_states = []
         unresolved_reasons = []
+        inapplicable_reasons = []
         for study in valid_studies:
             scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
             if source_ref:
@@ -1008,15 +1104,49 @@ def resolve_evidence_for_row(
                 record_states.append("unresolved")
                 unresolved_reasons.append(decision["reason_code"])
                 continue
-            if decision["status"] not in {"applicable", "not_curated"}:
-                record_states.append("form_mismatch")
+            if decision["reason_code"] == "label_purpose_evidence_mismatch":
+                record_states.append("purpose_mismatch")
+                continue
+            if (decision["reason_code"] == "clinical_outcome_not_qualified"
+                    and decision.get("population_applicability", {}).get("state") == "eligible"
+                    and decision.get("population_applicability", {}).get("context_ids")):
+                record_states.append("reviewed_nonpositive")
+                continue
+            if decision["status"] != "applicable":
+                if decision["reason_code"] in {
+                    "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
+                    "clinical_preparation_mismatch", "clinical_identity_excluded",
+                }:
+                    record_states.append("form_mismatch")
+                else:
+                    record_states.append("not_applicable")
+                    inapplicable_reasons.append(decision["reason_code"])
                 continue
             record_states.append("applicable")
         # A second record's higher dose or different form cannot veto an
         # applicable record. The scorer assesses each clinical record too.
         has_applicable = "applicable" in record_states
-        is_form_excluded = bool(record_states) and all(state == "form_mismatch" for state in record_states)
+        is_form_excluded = bool(record_states) and all(
+            state in {"form_mismatch", "purpose_mismatch"} for state in record_states)
 
+        if not has_applicable and "reviewed_nonpositive" in record_states and not unresolved_reasons:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
+                points_eligible=False, applicability_status="reviewed_null_evidence",
+                reason_code="clinical_outcome_not_qualified", owner_facts=owner_facts,
+            )
+
+        if record_states and set(record_states) == {"purpose_mismatch"}:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
+                blocking_reasons=["label_purpose_evidence_mismatch"],
+            )
         if not has_applicable and unresolved_reasons:
             return EvidenceResolution(
                 canonical_id=canonical, ingredient_name=name,
@@ -1025,6 +1155,15 @@ def resolve_evidence_for_row(
                 points_eligible=False, applicability_status="applicability_unestablished",
                 reason_code=unresolved_reasons[0], owner_facts=owner_facts,
                 blocking_reasons=list(dict.fromkeys(unresolved_reasons)),
+            )
+        if not has_applicable and inapplicable_reasons:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code=inapplicable_reasons[0], owner_facts=owner_facts,
+                blocking_reasons=list(dict.fromkeys(inapplicable_reasons)),
             )
 
         if is_form_excluded:
@@ -1516,19 +1655,40 @@ def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] =
 
 
 def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
-    """Only stated endpoints/goals describe the record's supported purpose."""
-    scope = entry.get("applicability") or {}
-    outcomes = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
-    if isinstance(outcomes, list) and outcomes:
-        # A reviewed scope outranks prose that may describe null outcomes or
-        # special study populations. Those words are not supported purposes.
-        return evidence_indication_categories(" ".join(str(value) for value in outcomes))
-    parts = [str(entry.get("primary_outcome") or "")]
-    for key in ("health_goals_supported", "endpoint_relevance_tags", "key_endpoints"):
-        values = entry.get(key)
-        if isinstance(values, list):
-            parts.extend(str(value) for value in values)
-    return evidence_indication_categories(" ".join(parts))
+    """Purposes a clinical record supports, from reviewed sources only.
+
+    Approved, scoring-eligible contexts supply qualifying outcome names; a
+    signed applicability scope may narrow those names within its sources.
+    Consumer goals, relevance tags, endpoint prose and
+    primary_outcome describe a record; they never establish a supported
+    purpose on their own (Sean, 2026-10-28). An enriched clinical match is
+    judged by its curated record, which owns the contexts.
+    """
+    from clinical_applicability import reviewed_entries, qualifying_purpose_outcomes
+    from probiotic_measurements import context_accepted_for_scoring
+    from scoring_v4.modules.generic_evidence import _clinical_source_id
+    registry_backed = bool(entry.get("id") or entry.get("study_id") or entry.get("source_data"))
+    # A registry-backed match (recovered matches included) is judged only by its
+    # curated record; a missing record is an unresolved source. A literature
+    # record is its own owner.
+    record = reviewed_entries().get(_clinical_source_id(dict(entry))) if registry_backed else entry
+    if record is None:
+        return set()
+    scope = record.get("applicability") or {}
+    sources = set(map(str, scope.get("source_pmids") or [])) if isinstance(scope, Mapping) else set()
+    reviewed = []
+    for context in record.get("study_contexts") or []:
+        if not context_accepted_for_scoring(context):
+            continue
+        if sources and not sources.intersection(map(str, context.get("source_pmids") or [])):
+            continue
+        outcomes, _ = qualifying_purpose_outcomes(context)
+        reviewed.extend(str(outcome.get("name") or "") for outcome in outcomes)
+    purposes = evidence_indication_categories(" ".join(reviewed))
+    signed = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
+    if signed:
+        purposes &= evidence_indication_categories(" ".join(map(str, signed)))
+    return purposes
 
 
 def evidence_record_matches_declared_purpose(
@@ -1542,9 +1702,26 @@ def evidence_record_matches_declared_purpose(
     purpose, the record must support at least one of those same indication
     categories before Evidence or Dose may use it.
     """
-    canonical = _norm(row.get("canonical_id"))
-    claimed = _evidence_claim_purposes(product).get(canonical)
-    return not claimed or bool(claimed & _evidence_entry_purposes(entry))
+    from clinical_applicability import assess_clinical_applicability
+    # The applicability owner evaluates preparation, population and qualifying
+    # source outcomes together. A lack of label claims never waives review.
+    scoped = dict(entry)
+    if row.get("canonical_id"):
+        scoped.setdefault("matched_canonical_ids", [row["canonical_id"]])
+    source = row.get("raw_source_path") or row.get("source_row_ref")
+    if source:
+        scoped.setdefault("matched_source_row_refs", [source])
+    scoped.setdefault("ingredient", row.get("name") or row.get("standard_name"))
+    decision = assess_clinical_applicability(product, scoped, assess_amount=False)
+    # A fresh reference projection retains what the source evaluated, never
+    # affirmative eligibility. Its source, population and claim were still
+    # checked by the same canonical owner above.
+    return decision["status"] == "applicable" or bool(
+        is_reference_only(entry)
+        and decision.get("reason_code") == "clinical_outcome_not_qualified"
+        and decision.get("population_applicability", {}).get("state") == "eligible"
+        and decision.get("population_applicability", {}).get("context_ids")
+    )
 
 
 def resolve_product_evidence(

@@ -78,8 +78,12 @@ def test_reviewed_ksm66_regimen_does_not_borrow_plain_ashwagandha_powder(
     assert exposure.per_serving_amount == 100.0
     assert exposure.benchmark_amount == 100.0
     assert exposure.frequency_defaulted is True
-    assert dose['score']==unbenchmarked_dose_credit()
-    assert dose['metadata']['botanical_dose']=={'benchmark':'absent'}
+    # A plain-powder companion has no completed general benchmark review.
+    # The branded extract's completed review cannot complete its sibling.
+    assert dose["score"] == (0.0 if with_powder else unbenchmarked_dose_credit())
+    assert dose["metadata"]["botanical_dose"] == {
+        "benchmark": "unresolved" if with_powder else "absent"
+    }
 
 
 

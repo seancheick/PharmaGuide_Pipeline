@@ -18,10 +18,11 @@ Pins the single canonical probiotic Evidence owner contract:
      may be 'evaluated_applicable' only when source review is complete. Missing
      companion-source review remains 'clinical_review_not_covered'; the component disposition in
      metadata['probiotic_component_evidence'] is strictly preserved.
-   - The digestive-enzyme labels (232295, 209440, 208587) are such products: their
-     named Bromelain blend member is an Evidence subject
-     (``get_evidence_subject_rows``, 0d69eeb0 and 06b00bb3) and earns INGR_BROMELAIN
-     points, while the probiotic component stays at 0.0.
+   - The digestive-enzyme labels (232295, 209440, 208587) retain Bromelain as an
+     Evidence subject, but its native record has no reviewed clinical contexts.
+     Subject identity alone earns no points or floor; the probiotic component
+     independently stays at 0.0. A separate synthetic eligible companion tests
+     positive composition without changing the native hold.
 5. Invariants:
    - Zero exact-strain credit granted to species-only.
    - Zero species->strain transfer.
@@ -41,7 +42,7 @@ from studied_formulas import assess_probiotic_component_disposition
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from scoring_v4.modules.fiber_digestive import score_fiber_digestive
 from scoring_v4.modules.sports import score_sports
-from tests.test_v4_generic_evidence_p133 import _ingredient, _match, _product
+from tests.test_v4_generic_evidence_p133 import _ingredient, _match, _product, _use_approved_mechanics_sources
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -84,28 +85,33 @@ def _assert_companion_points_only(product: dict, ev, *, pending_source_review: b
     label notes. The shared subject provider owns both the named member and
     its activity projection; the old inactive_non_scorable mirror is not the
     source-section or Evidence decision. No mass is inferred from activity.
-    The product total may be raised only by Bromelain's separately declared
-    evidence-strength floor; Dose still owns the missing amount assessment.
+    A pending companion review earns neither points nor an evidence-strength
+    floor. The positive helper controls use synthetic eligible credit; Dose
+    independently owns any missing amount assessment.
     """
     rows = (product.get("ingredient_quality_data") or {}).get("ingredients", [])
     probiotic_ids = {r.get("canonical_id") for r in rows if is_probiotic_source_identity(r)}
     points = ev.metadata["ingredient_points"]
     assert probiotic_ids and not probiotic_ids & set(points)
-    assert set(points) == {"bromelain"}
     assert "bromelain" in {r.get("canonical_id") for r in get_evidence_subject_rows(product)}
-    assert points["bromelain"] > 0.0
     floor = ev.metadata.get("primary_evidence_floor") or 0.0
-    assert ev.score == pytest.approx(max(points["bromelain"], floor))
-    if floor > points["bromelain"]:
-        assert ev.metadata["primary_evidence_floor_canonical"] == "bromelain"
-        assert ev.metadata["primary_evidence_floor_decisive"] is True
     if pending_source_review:
+        from clinical_applicability import assess_clinical_source_review
+        review = assess_clinical_source_review({"id": "INGR_BROMELAIN"})
+        assert review["is_complete"] is False
+        assert "clinical_source_contexts_missing" in review["errors"]
+        assert points == {}
+        assert ev.score == 0.0 and floor == 0.0
         assert ev.metadata["evidence_result_state"] == "clinical_review_not_covered"
-        assessments = ev.metadata["contributing_record_assessments"]
-        companion = next(row for row in assessments if row["id"] == "INGR_BROMELAIN")
-        assert companion["source_review"]["is_complete"] is False
-        assert "clinical_source_contexts_missing" in companion["source_review"]["errors"]
+        assert not any(row["id"] == "INGR_BROMELAIN"
+                       for row in ev.metadata["contributing_record_assessments"])
     else:
+        assert set(points) == {"bromelain"}
+        assert points["bromelain"] > 0.0
+        assert ev.score == pytest.approx(max(points["bromelain"], floor))
+        if floor > points["bromelain"]:
+            assert ev.metadata["primary_evidence_floor_canonical"] == "bromelain"
+            assert ev.metadata["primary_evidence_floor_decisive"] is True
         assert ev.metadata["evidence_result_state"] == "evaluated_applicable"
     component = ev.metadata["probiotic_component_evidence"]
     assert component["disposition_state"] == "research_present_applicability_unestablished"
@@ -193,8 +199,8 @@ class TestCrossModuleExactStrainDisposition:
         assert disp["disposition_state"] == "research_present_applicability_unestablished"
         assert disp["evidence_score"] == 0.0
 
-        # Evaluated through fiber_digestive: Bromelain, a member of the enzyme
-        # blend, earns the points.
+        # Bromelain remains a blend-member subject, but its native source
+        # review is incomplete and cannot award points or a floor.
         res = score_fiber_digestive(p)
         _assert_companion_points_only(p, res.dimensions["evidence"], pending_source_review=True)
 
@@ -211,8 +217,8 @@ class TestCrossModuleSpeciesOnlyDisposition:
         assert disp["disposition_state"] == "research_present_applicability_unestablished"
         assert disp["evidence_score"] == 0.0
 
-        # Evaluated through fiber_digestive: Bromelain, a member of the enzyme
-        # blend, earns the points.
+        # Bromelain remains a blend-member subject, but its native source
+        # review is incomplete and cannot award points or a floor.
         res = score_fiber_digestive(p)
         _assert_companion_points_only(p, res.dimensions["evidence"], pending_source_review=True)
 
@@ -245,7 +251,7 @@ class TestCrossModuleSpeciesOnlyDisposition:
 class TestProductLevelCompanionComposition:
     """Verify companion active points do not erase probiotic component disposition in metadata."""
 
-    def test_companion_points_preserve_probiotic_component_state(self):
+    def test_companion_points_preserve_probiotic_component_state(self, monkeypatch):
         """Product with Vitamin C (earns points) + species-only Bacillus subtilis."""
         vit_c = _ingredient(name="Vitamin C", canonical_id="vitamin_c", quantity=500.0, unit="mg")
         prob = {
@@ -256,11 +262,13 @@ class TestProductLevelCompanionComposition:
             "mapped": True,
             "category": "probiotic",
         }
-        # A synthetic record keeps this a test of disposition preservation: the
-        # real INGR_VITAMIN_C credit is scoped to cold severity (2026-10-28) and
-        # no longer reaches a claim-free vitamin C row.
+        # A named synthetic source isolates disposition preservation from the
+        # real Vitamin C clinical scope. Claim absence never bypasses source
+        # review; eligible research earns the same credit without a claim.
         match_c = _match(
             id="SYNTHETIC_TIER1_VITAMIN_C_RECORD",
+            ingredient="Vitamin C",
+            standard_name="Vitamin C",
             canonical_ids=["vitamin_c"],
             score_contribution="tier_1",
             effect_direction="positive_strong",
@@ -281,8 +289,14 @@ class TestProductLevelCompanionComposition:
                 ],
             },
         )
+        unreviewed = score_generic_evidence(product)
+        assert unreviewed["score"] == 0.0
+        assert unreviewed["metadata"]["ingredient_points"] == {}
+        from clinical_applicability import assess_clinical_source_review
+        assert assess_clinical_source_review(match_c)["is_complete"] is False
+        _use_approved_mechanics_sources(monkeypatch, match_c)
         ev = score_generic_evidence(product)
-        # Vitamin C earned points
+        # Only the explicitly reviewed synthetic companion earns points.
         assert ev["score"] > 0.0
         assert ev["metadata"]["evidence_result_state"] == "evaluated_applicable"
 

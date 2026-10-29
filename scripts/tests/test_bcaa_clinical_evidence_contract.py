@@ -49,7 +49,15 @@ def _active(canonical_id: str, quantity_mg: float) -> dict:
 
 
 def _enrichment_product(name: str, rows: list[dict]) -> dict:
-    return {"fullName": name, "product_name": name, "activeIngredients": rows}
+    source_rows = [{**row, "raw_source_path": f"ingredientRows[{index}]",
+                    "source_section": "active", "cleaner_row_role": "active_scorable",
+                    "score_eligible_by_cleaner": True, "scoreable_identity": True,
+                    "identity_disposition": "clean", "role_classification": "active_scorable",
+                    "dose_class": "therapeutic_mass",
+                    "raw_taxonomy": {"category": row["raw_category"], "forms": []}}
+                   for index, row in enumerate(rows)]
+    return {"fullName": name, "product_name": name, "activeIngredients": source_rows,
+            "ingredient_quality_data": {"ingredients": source_rows, "ingredients_scorable": source_rows}}
 
 
 def _bcaa_matches(enricher: SupplementEnricherV3, name: str, rows: list[dict]) -> list[dict]:

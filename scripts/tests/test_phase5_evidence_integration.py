@@ -373,7 +373,30 @@ def test_fixture_c_exact_finished_formula_with_formula_evidence(monkeypatch):
     assert ev["metadata"]["matched_entries"] >= 1
 
 
-def test_fixture_d_named_child_with_disclosed_adequate_dose():
+def _reviewed_blend_child_source(monkeypatch, product):
+    """Explicit synthetic source qualification; no real botanical approval."""
+    import clinical_applicability
+    from test_evidence_resolver import _approved_test_source
+
+    entry = product["evidence_data"]["clinical_matches"][0]
+    source = _approved_test_source(entry, name="Ashwagandha Extract")
+    context = source["study_contexts"][0]
+    context["evidence_role"] = "meta_analysis"
+    # Opaque identities reused from the existing synthetic review fixture;
+    # this is not an extraction of a real review's trial membership.
+    context["included_study_pmids"] = ["23439798", "26791805"]
+    context["study_design"] = "Synthetic synthesis mechanics fixture; no clinical claim"
+    context["dose"]["values"] = [300]
+    context["dose"]["reported_regimen"] = "Synthetic 300 mg daily; not a benchmark"
+    current = clinical_applicability.reviewed_entries()
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries",
+                        lambda: {**current, source["id"]: source})
+    review = clinical_applicability.assess_clinical_source_review({"id": source["id"]})
+    assert review["is_complete"], review["errors"]
+    product["evidence_data"]["clinical_matches"] = [source]
+
+
+def test_fixture_d_named_child_with_disclosed_adequate_dose(monkeypatch):
     """Fixture D: named child with disclosed adequate dose.
     -> normal applicability/scoring route
     """
@@ -416,16 +439,21 @@ def test_fixture_d_named_child_with_disclosed_adequate_dose():
         }]
     }
 
+    _reviewed_blend_child_source(monkeypatch, prod)
+    from clinical_applicability import assess_clinical_applicability
+    applicability = assess_clinical_applicability(
+        prod, prod["evidence_data"]["clinical_matches"][0], assess_amount=True)
     res = resolve_product_evidence(prod)
     assert res.is_assessment_complete is True
 
     ev = score_evidence(prod)
+    assert applicability["status"] == "applicable"
     assert ev["score"] > 0.0
     assert ev["metadata"]["evidence_result_state"] == "evaluated_applicable"
     assert ev["metadata"]["matched_entries"] >= 1
 
 
-def test_fixture_e_named_child_with_disclosed_subclinical_dose():
+def test_fixture_e_named_child_with_disclosed_subclinical_dose(monkeypatch):
     """Fixture E: named child with disclosed subclinical dose.
     -> normal below-dose applicability result
     """
@@ -449,6 +477,7 @@ def test_fixture_e_named_child_with_disclosed_subclinical_dose():
         "mapped": True,
     }
     prod = _wrap_product([blend_header, ashwagandha])
+    prod["serving_basis"] = {"min_servings_per_day": 1, "max_servings_per_day": 1}
     prod["evidence_data"] = {
         "clinical_matches": [{
             "id": "INGR_ASHWAGANDHA_STUDY",
@@ -466,10 +495,15 @@ def test_fixture_e_named_child_with_disclosed_subclinical_dose():
         }]
     }
 
+    _reviewed_blend_child_source(monkeypatch, prod)
+    from clinical_applicability import assess_clinical_applicability
+    applicability = assess_clinical_applicability(
+        prod, prod["evidence_data"]["clinical_matches"][0], assess_amount=True)
     res = resolve_product_evidence(prod)
     assert res.is_assessment_complete is True
 
     ev = score_evidence(prod)
+    assert applicability["reason_code"] == "below_applicable_clinical_dose"
     assert ev["score"] == 0.0
     assert ev["metadata"]["evidence_result_state"] == "applicability_unestablished"
     display = evidence_display_state(ev["metadata"]["evidence_result_state"])

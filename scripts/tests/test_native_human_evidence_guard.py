@@ -23,9 +23,11 @@ def test_nonhuman_native_reference_does_not_earn_human_clinical_credit(clinical_
     NCFM's are null, Bl-04's are one positive RCT and one null."""
     product = strain_product(clinical_id=clinical_id, name=name)
     if clinical_id == "STRAIN_ACIDOPHILUS_NCFM":
-        # A null IBS trial is not a completed negative review for every daily
-        # probiotic purpose. Establish its exact claimed scope for this guard.
-        assert score_evidence(product)["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+        # No claim is required, so the null IBS trial is the scoped finding for
+        # a claim-free label; an unrelated label keeps it out entirely.
+        assert score_evidence(product)["metadata"]["evidence_result_state"] == "evaluated_null"
+        unrelated = {**product, "product_name": "Sleep support probiotic"}
+        assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
         product["statements"] = [{"type": "Formulation re: Other",
                                   "notes": "Support for irritable bowel syndrome"}]
     result = score_evidence(product)
@@ -68,6 +70,25 @@ def test_native_nonhuman_reference_cannot_supply_dose_applicability_points(monke
     assert "dose_applicability" not in result["components"]
 
 
+def _approved_independent_backbone(monkeypatch, *, clinical_id, name, effect="positive_strong"):
+    """An explicit synthetic RCT, separate from native registry source facts."""
+    import clinical_applicability
+    from test_evidence_resolver import _approved_test_source
+    from test_v4_probiotic_evidence_p23 import _match
+    source = _approved_test_source(_match(id=clinical_id, ingredient=name, standard_name=name,
+        study_type="rct_single", evidence_level="ingredient-human", effect_direction=effect),
+        name=name, outcome="Diarrhea symptom severity")
+    context = source["study_contexts"][0]
+    context["condition"] = "gastrointestinal_symptoms"
+    if effect in {"null", "negative"}:
+        context["outcomes"][0]["direction"] = effect
+    elif effect == "mixed":
+        context["outcomes"].append({**context["outcomes"][0], "name": "Diarrhea duration", "direction": "null"})
+    records = {**reviewed_entries(), source["id"]: source}
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: records)
+    return {**source, "matched_source_row_refs": ["ingredientRows[0]"]}
+
+
 @pytest.mark.parametrize("native_source", ["nonhuman", "unreviewed"])
 def test_native_source_gap_does_not_silence_independent_backbone_match(monkeypatch, native_source):
     registry = deepcopy(studied_formulas._clinical_strain_registry())
@@ -85,44 +106,48 @@ def test_native_source_gap_does_not_silence_independent_backbone_match(monkeypat
     # Dr. Pham, 2026-10-28 (fifth ruling set): the strain registry is the one
     # scoring owner and the backed STRAIN_LGG record is research-only. The real
     # backed record therefore supplies no backbone credit ...
-    import clinical_applicability
     real = deepcopy(reviewed_entries()["STRAIN_LGG"])
     assert real["study_type"] == real["evidence_level"] == "reference"
     product = strain_product()
     product["evidence_data"] = {"clinical_matches": [deepcopy(real)]}
     assert score_generic_evidence(product)["score"] == 0
-    # ... so the independent-backbone path is exercised with a credit-path copy
-    # of that same record (pre-ruling study_type/evidence_level restored).
-    owners = deepcopy(reviewed_entries())
-    owners["STRAIN_LGG"].update(study_type="clinical_strain", evidence_level="strain-clinical")
-    monkeypatch.setattr(clinical_applicability, "reviewed_entries", lambda: owners)
+    # A separate synthetic approved RCT exercises the independent path;
+    # changing a real research-only record's legacy type cannot grant approval.
+    source = _approved_independent_backbone(monkeypatch, clinical_id="STRAIN_LGG",
+        name="Lactobacillus rhamnosus GG")
     product = strain_product()
-    product["evidence_data"] = {"clinical_matches": [deepcopy(owners["STRAIN_LGG"])]}
+    product["evidence_data"] = {"clinical_matches": [source]}
     generic_score = score_generic_evidence(product)["score"]
     assert generic_score > 0
     result = score_evidence(product)
     assert result["metadata"]["evidence_assessment"]["strain_assessments"][0]["human_evidence"] is False
     assert result["metadata"]["uncredited_strain_match_ids"] == []
-    assert result["components"] == {"evidence_family_certainty": 6.6667,
-        "product_applicability": 1.5, "independent_replication_consistency": 0.0}
-    assert result["score"] == 8.1667
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    [accepted], _ = resolved_clinical_matches(product, assess_amount=False)
+    assert accepted["study_type"] == "rct_single"
+    assert result["components"] == {"evidence_family_certainty": 10.0,
+        "product_applicability": 3.0, "independent_replication_consistency": 0.0}
+    assert result["score"] == 13.0
 
 
 @pytest.mark.parametrize("effect", ["positive_weak", "mixed", "null", "negative"])
-def test_nonhuman_native_fallback_cannot_overrule_independent_match_effect(effect):
-    # Synthetic accepted matches exercise direction without creating new sources.
-    from test_v4_probiotic_evidence_p23 import _match
-
+def test_nonhuman_native_fallback_cannot_overrule_independent_match_effect(monkeypatch, effect):
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    registry["STRAIN_ACIDOPHILUS_NCFM"]["study_contexts"] = []
+    monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
+    source = _approved_independent_backbone(monkeypatch, clinical_id="STRAIN_ACIDOPHILUS_NCFM",
+        name="Lactobacillus acidophilus NCFM", effect=effect)
     product = strain_product(clinical_id="STRAIN_ACIDOPHILUS_NCFM",
                              name="Lactobacillus acidophilus NCFM")
-    product["evidence_data"] = {"clinical_matches": [_match(
-        id="STRAIN_ACIDOPHILUS_NCFM", ingredient="Lactobacillus acidophilus NCFM",
-        standard_name="Lactobacillus acidophilus NCFM", effect_direction=effect)]}
+    product["evidence_data"] = {"clinical_matches": [source]}
     result = score_evidence(product)
-    assert result["score"] == pytest.approx({"positive_weak": 7.1667, "mixed": 5.5, "null": 0, "negative": 0}[effect])
+    assert result["score"] == pytest.approx({"positive_weak": 11.5, "mixed": 9.0, "null": 0, "negative": 0}[effect])
+    assert result["metadata"]["evidence_assessment"]["strain_assessments"][0]["human_evidence"] is False
     assert result["components"]["independent_replication_consistency"] == 0
     if effect == "negative":
         assert result["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
+    elif effect == "null":
+        assert result["metadata"]["evidence_result_state"] == "evaluated_null"
 
 
 @pytest.mark.parametrize("direction", ["null", "mixed", "negative"])

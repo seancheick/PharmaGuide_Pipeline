@@ -50,8 +50,13 @@ def test_declared_inulin_preparation_preserves_botanical_source(pipeline):
     assert any(x['canonical_id'] == 'inulin' for x in get_scoring_ingredients(enriched).rows)
     assert artifact['quality_score_status'] == 'scored'
     matches = enriched['evidence_data']['clinical_matches']
-    assert any(x.get('id') == 'INGR_INULIN' and x.get('effect_direction') == 'mixed' for x in matches)
-    assert artifact['quality_pillars_v4']['evidence']['score'] == 7.3
+    assert not any(x.get('id') == 'INGR_INULIN' for x in matches)
+    rejected = next(x for x in enriched['evidence_data']['rejected_clinical_matches']
+                    if x['id'] == 'INGR_INULIN')
+    assert rejected['reason_code'] == 'clinical_sources_ineligible'
+    assert rejected['matched_source_row_refs'] == [active['raw_source_path']]
+    # Physical inulin identity cannot override its explicitly unqualified context.
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0.0
 
 @pytest.mark.parametrize('forms', [[], [dict(name='Inulin', category='fiber', percent=20)],
                                    [dict(name='Inulin', category='fiber'),dict(name='Pectin', category='fiber')]])

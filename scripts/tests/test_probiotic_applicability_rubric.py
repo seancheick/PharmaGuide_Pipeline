@@ -259,8 +259,12 @@ def test_registry_medium_support_is_not_lost():
     assessment = studied_formulas.assess_probiotic_evidence(p)["strain_assessments"][0]
     assert assessment["research_accepted"] is True
     assert assessment["support_level"] == "moderate"
-    # A reviewed summary does not replace qualifying applicable primary outcomes.
-    assert score_evidence(p)["score"] == 0
+    # The credit comes from the approved IBS context (scoped, no claim
+    # required), not from the reviewed summary.
+    result = score_evidence(p)
+    assert result["score"] == 16
+    assert [c["context_id"] for c in result["metadata"]["contributing_native_contexts"]] == [
+        "p299v_ibs_rome3_22912552"]
 
 
 def test_unfavorable_strain_does_not_hide_a_separate_supported_record():
@@ -280,7 +284,9 @@ def test_unfavorable_strain_does_not_hide_a_separate_supported_record():
 def test_evidence_copy_distinguishes_missing_applicability_from_poor_quality():
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
-    dim = score_evidence(strain_product())
+    product = strain_product()
+    product["product_name"] = "Sleep support probiotic"  # Unrelated to every LGG context.
+    dim = score_evidence(product)
     result = _pillar_evidence(dim, 20, "probiotic", config())
     assert "preparation, purpose and population" in result["reason"]
     assert dim["score"] == 0
@@ -290,21 +296,35 @@ def test_evidence_copy_distinguishes_missing_applicability_from_poor_quality():
     assert "dose" not in result["reason"].lower()
 
 
-def test_unfavorable_research_is_not_described_as_missing_research():
+def test_unfavorable_research_is_not_described_as_missing_research(monkeypatch):
+    import clinical_applicability as ca
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
     from test_v4_probiotic_evidence_p23 import _match
+    from test_evidence_resolver import _approved_test_source
 
     p = strain_product()
+    p["product_name"] = "Sleep support probiotic"  # Keeps LGG's native contexts out.
     # Synthetic accepted match (the helper's own id): the real backed STRAIN_LGG
     # record is research-only since Dr. Pham's 2026-10-28 ruling (the strain
     # registry is the one scoring owner), so it cannot carry this direction.
-    p["evidence_data"] = {"clinical_matches": [_match(effect_direction="negative")]}
+    source = _approved_test_source(_match(effect_direction="negative"),
+                                  name="Lactobacillus rhamnosus GG", outcome="Sleep quality")
+    source["study_contexts"][0]["outcomes"][0]["direction"] = "negative"
+    records = {**ca.reviewed_entries(), source["id"]: source}
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: records)
+    p["evidence_data"] = {"clinical_matches": [{**source,
+        "matched_canonical_ids": ["lactobacillus_rhamnosus_gg"],
+        "matched_source_row_refs": ["ingredientRows[0]"]}]}
     dim = score_evidence(p)
     assert dim["score"] == 0
     assert dim["metadata"]["evidence_result_state"] == "evaluated_unfavorable"
     assert "unfavorable" in _pillar_evidence(dim, 20, "probiotic", config())["reason"]
     assert "distinct from missing research" in _pillar_evidence(dim, 20, "probiotic", config())["reason"]
+    source["study_contexts"][0]["scoring_eligible"] = False
+    held = score_evidence(p)
+    assert held["score"] == 0
+    assert held["metadata"]["evidence_result_state"] not in {"evaluated_null", "evaluated_unfavorable"}
     # A stale stamp under the research-only real id is discarded, and the
     # result still reads as recorded research, never as missing research.
     p["evidence_data"] = {"clinical_matches": [_match(id="STRAIN_LGG", effect_direction="negative")]}
@@ -412,7 +432,7 @@ def test_evidence_explanation_never_reintroduces_amount_ownership(amount):
 
 
 @pytest.mark.parametrize('dose', [None, 1e10])
-@pytest.mark.parametrize('claim', ['Digestive Health Probiotic', 'IBS Probiotic',
+@pytest.mark.parametrize('claim', ['Digestive Health Probiotic',
     'Not for irritable bowel syndrome. Digestive Health Probiotic'])
 def test_299v_treatment_context_does_not_transfer_from_broad_or_negated_label_purpose(dose, claim):
     product = strain_product(dose=dose, clinical_id='STRAIN_PLANTARUM_299V',
@@ -435,8 +455,18 @@ def test_exact_source_condition_is_a_claim_match_not_patient_membership(dose):
     assert len(used) == 1
     assert used[0]['claimed_purpose_assessment'] == {
         'status': 'applicable', 'reason_code': 'affirmative_exact_source_condition_claim',
-        'condition': 'irritable_bowel_syndrome'}
+        'condition': 'irritable_bowel_syndrome',
+        'claim_alignment': {'state': 'aligned', 'sources': ['affirmative_exact_source_condition_claim']}}
     assert 'patient' not in used[0]['claimed_purpose_assessment']
+    # An abbreviated aligned claim and a claim-free label reach the same
+    # context for the same points: no marketing-claim bonus (Sean, PR #280).
+    product['product_name'] = 'IBS Probiotic'
+    assert score_evidence(product)['score'] == 16
+    product['product_name'] = 'Daily Probiotic'
+    claim_free = score_evidence(product)
+    assert claim_free['score'] == 16
+    assert [c['context_id'] for c in claim_free['metadata']['contributing_native_contexts']] == [
+        used[0]['context_id']]
 
 
 @pytest.mark.parametrize('purpose', ['prevention', 'physiology', 'challenge'])
@@ -455,7 +485,8 @@ def test_native_prevention_controls_do_not_require_a_treatment_condition_claim(m
                              name='Lactobacillus plantarum 299v')
     product['product_name'] = 'Digestive Health Probiotic'
     result = score_evidence(product)
-    assert result['score'] == (0 if purpose == 'challenge' else 16)
+    # One claim rule for every purpose, challenge included (October 28 rulings).
+    assert result['score'] == 16
 
 
 def test_exact_condition_claim_cannot_override_special_population_guard(monkeypatch):
@@ -468,3 +499,67 @@ def test_exact_condition_claim_cannot_override_special_population_guard(monkeypa
                              name='Lactobacillus plantarum 299v')
     product['product_name'] = 'Irritable Bowel Syndrome Probiotic'
     assert score_evidence(product)['score'] == 0
+
+
+# Sean's ruling on PR #280 (October 28, 2026): no probiotic marketing-claim
+# bonus. Product applicability comes from the shared scientific decision.
+
+def _p299v(product_name='Daily Probiotic', name='Lactobacillus plantarum 299v', clinical_id='STRAIN_PLANTARUM_299V'):
+    product = strain_product(dose=1e10, clinical_id=clinical_id, name=name)
+    product['product_name'] = product_name
+    return product
+
+
+def test_299v_with_and_without_an_ibs_claim_earns_identical_evidence():
+    claim_free, claimed = score_evidence(_p299v()), score_evidence(_p299v('IBS Probiotic'))
+    assert claim_free['components'] == claimed['components']
+    assert claim_free['score'] == claimed['score'] == 16.0
+    used = lambda e: [c['context_id'] for c in e['metadata']['contributing_native_contexts']]
+    assert used(claim_free) == used(claimed) == ['p299v_ibs_rome3_22912552']
+    # Marketing alignment stays explanation metadata only.
+    assert (claim_free['metadata']['indication_relevance_level'],
+            claimed['metadata']['indication_relevance_level']) == ('broad', 'direct')
+
+
+def test_an_unrelated_attributable_claim_earns_no_ibs_study_credit():
+    result = score_evidence(_p299v('Sleep support probiotic'))
+    assert result['score'] == 0
+    assert result['metadata']['contributing_native_contexts'] == []
+
+
+def test_research_certainty_and_replication_ignore_marketing_copy():
+    claim_free = score_evidence(_p299v())
+    for name in ('IBS Probiotic', 'Digestive balance for irritable bowel syndrome', 'Probiotic 50 Billion'):
+        components = score_evidence(_p299v(name))['components']
+        assert components['evidence_family_certainty'] == claim_free['components']['evidence_family_certainty']
+        assert (components['independent_replication_consistency']
+                == claim_free['components']['independent_replication_consistency'])
+
+
+def test_identity_requirements_still_decide_eligibility_without_a_claim():
+    species_only = score_evidence(_p299v(name='Lactobacillus plantarum', clinical_id=None))
+    assert species_only['score'] == 0
+
+
+@pytest.mark.parametrize('change', ['pending', 'rejected', 'source_integrity_hold'])
+def test_unapproved_or_held_research_earns_no_new_points_without_a_claim(monkeypatch, change):
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    for context in registry['STRAIN_PLANTARUM_299V']['study_contexts']:
+        if change == 'pending':
+            context.update(review_status='source_verified_pending_clinical_review', scoring_eligible=False)
+        elif change == 'rejected':
+            context.update(review_status='rejected_source', scoring_eligible=False)
+        else:
+            context['scoring_eligible'] = False
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    for name in ('Daily Probiotic', 'IBS Probiotic'):
+        assert score_evidence(_p299v(name))['score'] == 0
+
+
+def test_scoped_evidence_never_presumes_the_shopper_has_the_studied_condition():
+    result = score_evidence(_p299v())
+    context = result['metadata']['contributing_native_contexts'][0]
+    assert context['condition'] == 'irritable_bowel_syndrome'
+    assert set(context['claimed_purpose_assessment']) == {'status', 'reason_code', 'condition', 'claim_alignment'}
+    assert context['claimed_purpose_assessment']['reason_code'] == 'no_label_claim_required'
+    assert not any('patient' in key or 'diagnos' in key for key in context['claimed_purpose_assessment'])

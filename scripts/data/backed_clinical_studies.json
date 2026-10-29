@@ -1548,6 +1548,7 @@
           "condition": "knee_osteoarthritis",
           "purpose": "treatment",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
           "context_id": "bcm95_knee_oa_30975196",
@@ -1632,6 +1633,7 @@
           "condition": "knee_osteoarthritis",
           "purpose": "treatment",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
           "context_id": "bcm95_knee_oa_33516238",
@@ -6946,6 +6948,33 @@
             "scope": "identity_dose_outcome_applicability"
           }
         }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "supported_outcomes": [
+          "knee_osteoarthritis",
+          "exercise_related_knee_discomfort"
+        ],
+        "excluded_form_terms": [
+          "hydrolyzed",
+          "hydrolysed",
+          "collagen peptides"
+        ],
+        "studied_population": "Adults 40-75 with knee osteoarthritis (180 days) or healthy adults 30-65 with exercise-related knee discomfort (120 days), taking 40 mg/day UC-II material.",
+        "source_pmids": [
+          "26822714",
+          "24153020"
+        ],
+        "reviewed_at": "2026-10-28",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "uc-ii",
+          "ucii"
+        ]
+      },
+      "brand_tokens": [
+        "uc-ii",
+        "ucii"
       ]
     },
     {
@@ -13274,12 +13303,18 @@
         {
           "id": "omega_reviewed_weak",
           "purpose": "general_omega_3",
-          "effect_direction": "positive_weak",
-          "source_pmids": [
-            "31567003",
-            "32951855"
+          "source_pmids": [],
+          "references_structured": [
+            {
+              "type": "authority",
+              "authority": "EFSA NDA Panel",
+              "doi": "10.2903/j.efsa.2010.1461",
+              "title": "Scientific Opinion on Dietary Reference Values for fats, including saturated fatty acids, polyunsaturated fatty acids, monounsaturated fatty acids, trans fatty acids, and cholesterol",
+              "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1461",
+              "published_date": "2010-03-25"
+            }
           ],
-          "rationale": "Cardiovascular outcome evidence is mixed across reviews and trials. PMID 31567003 reports studied doses of 376-4000 mg/day; 376 mg is the lowest included exposure, not a demonstrated efficacy cutoff. PMID 32951855 reports reduced risks for several coronary outcomes, but not the overall cardiovascular-event composite. Applicability boundaries and numerical credit are editorial policy in quality_score.json."
+          "rationale": "EPA and DHA nutritional authority, not retail heart-event prevention: EFSA sets an adult adequate intake of 250 mg/day EPA plus DHA. This is total dietary intake guidance, not an RDA, disease-prevention claim, supplement efficacy threshold or clinical dose-response curve. Fish, krill and algae qualify when EPA and DHA are disclosed. The compatibility ID is retained; amount-independent numerical credit and applicability boundaries remain editorial policy in quality_score.json (Dr. Pham ruling, 2026-10-28)."
         },
         {
           "id": "triglyceride_strong",
@@ -30498,6 +30533,7 @@
           "component_registration_status": "fully_registered",
           "purpose": "physiology",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "corrected",
           "clinical_review": {
@@ -30589,6 +30625,7 @@
           "component_registration_status": "fully_registered",
           "purpose": "physiology",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "corrected",
           "clinical_review": {
@@ -30743,7 +30780,17 @@
             }
           }
         }
-      ]
+      ],
+      "brand_tokens": [
+        "magtein"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "magtein"
+        ]
+      }
     },
     {
       "id": "BRAND_SUNFIBER",
@@ -37188,6 +37235,7 @@
           "condition": "irritable_bowel_syndrome",
           "purpose": "treatment",
           "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
           "clinical_review": {

@@ -70,7 +70,13 @@ def test_natural_trace_matrix_is_source_material_without_fabricated_elements(ass
     assert not any(b.get('source_row_ref') == 'ingredientRows[5]' for b in enriched['proprietary_data']['blends'])
     assert blob['proprietary_blend_detail']['has_proprietary_blends'] is False
     blockers = scored['assessment_readiness']['release_assessment']['blockers']
-    assert 'clinical_applicability_unreviewed:INGR_CALCIUM' in blockers
+    assert 'clinical_applicability_unreviewed:INGR_CALCIUM' not in blockers
+    calcium = next(row for row in scored['assessment_readiness']['evidence']['ingredient_assessments']
+                   if row['canonical_id'] == 'calcium')
+    assert calcium['source_row_ref'] == 'ingredientRows[0]'
+    assert calcium['evidence_applicability'] == 'nutrition_authority'
+    assert calcium['reason_code'] == 'established_dri_nutrition_authority'
+    assert calcium['evidence_ids'] == []  # Authority, not a fabricated clinical finding.
     # INGR_MAGNESIUM_GENERIC now has a reviewed applicability scope (Dr. Pham,
     # 2026-10-28: blood pressure), so it is no longer an unreviewed blocker.
     assert not any('INGR_MAGNESIUM_GENERIC' in blocker for blocker in blockers)

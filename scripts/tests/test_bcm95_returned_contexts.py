@@ -231,18 +231,24 @@ def test_hyaluronan_source_limitation_is_complete_without_generic_material_trans
     assert c['dose']['duration_days'] == 84
     assert c['identity']['branded_material'] == 'Hyabest (S) LF-P'
     assert assess_clinical_source_review(record)['is_complete'] is True
-    for name, amount, expected in [('Hyaluronic acid', 120, 'not_applicable'),
-                                   ('Hyabest S LF-P Hyaluronic Acid', 120, 'applicable'),
-                                   ('Hyabest S LF-P Hyaluronic Acid', 60, 'not_applicable')]:
+    # A complete review and exact material do not turn a mixed cosmetic
+    # surrogate into an independently positive qualifying endpoint.
+    assert c['outcomes'][0]['direction'] == 'mixed'
+    assert c['outcomes'][0]['kind'] == 'surrogate'
+    for name, amount, reason in [('Hyaluronic acid', 120, 'clinical_form_mismatch'),
+                                 ('Hyabest S LF-P Hyaluronic Acid', 120, 'clinical_outcome_not_qualified'),
+                                 ('Hyabest S LF-P Hyaluronic Acid', 60, 'below_applicable_clinical_dose')]:
         row = {'name': name, 'raw_source_text': name, 'canonical_id': 'hyaluronic_acid',
                'quantity': amount, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
         product = {'activeIngredients': [row], 'physicalState': {'name': 'Capsule'},
                    'serving_basis': {'min_servings_per_day': 1, 'max_servings_per_day': 1,
                                      'servings_per_day_source': 'directions'},
                    'ingredient_quality_data': {'ingredients_scorable': [row]}}
-        assert assess_clinical_applicability(product, {'id': record['id'],
+        decision = assess_clinical_applicability(product, {'id': record['id'],
             'matched_source_row_refs': ['ingredientRows[0]'],
-            'matched_canonical_ids': ['hyaluronic_acid']})['status'] == expected
+            'matched_canonical_ids': ['hyaluronic_acid']})
+        assert decision['status'] == 'not_applicable'
+        assert decision['reason_code'] == reason
 
 
 def test_reviewed_disease_only_reference_is_complete_but_never_healthy_focus_credit():
@@ -364,8 +370,11 @@ def test_an_adult_only_source_cannot_qualify_the_same_material_for_children():
 
 def test_preparation_plus_sign_is_not_erased_or_rescued_by_a_negated_name(monkeypatch):
     import clinical_applicability
-    policy = {'id': 'TEST_PLUS_FORM', 'applicability': {'scope': 'ingredient',
-              'require_source_label_form': True, 'required_form_terms': ['Levagen+']}}
+    from test_evidence_resolver import _approved_test_source
+    policy = _approved_test_source({'id': 'TEST_PLUS_FORM', 'standard_name': 'Levagen+',
+        'study_type': 'rct_single', 'evidence_level': 'ingredient-human', 'effect_direction': 'positive_strong',
+        'applicability': {'scope': 'ingredient', 'require_source_label_form': True,
+                          'required_form_terms': ['Levagen+']}}, name='Levagen+')
     monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {policy['id']: policy})
     for name, expected in [('Levagen+', 'applicable'), ('Levagen®+', 'applicable'), ('Levagen', 'not_applicable'),
                            ('not Levagen+', 'not_applicable')]:

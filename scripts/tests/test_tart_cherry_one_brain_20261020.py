@@ -80,14 +80,14 @@ def test_juice_trials_do_not_credit_a_dry_extract(pipeline, pid):
     assert artifact["quality_pillars_v4"]["evidence"]["score"] == 0.0
 
 
-@pytest.mark.parametrize("text, status", [
-    ("Tart Cherry Juice Concentrate", "applicable"),
-    ("Montmorency Tart Cherry Juice", "applicable"),
-    ("Tart Cherry Juice Powder", "not_applicable"),
-    ("Tart Cherry Extract", "not_applicable"),
-    ("Tart Cherry", "not_applicable"),
+@pytest.mark.parametrize("text, status, reason", [
+    ("Tart Cherry Juice Concentrate", "unresolved", "invalid_applicability_contract"),
+    ("Montmorency Tart Cherry Juice", "unresolved", "invalid_applicability_contract"),
+    ("Tart Cherry Juice Powder", "not_applicable", "clinical_form_excluded"),
+    ("Tart Cherry Extract", "not_applicable", "clinical_form_excluded"),
+    ("Tart Cherry", "not_applicable", "clinical_form_mismatch"),
 ])
-def test_ingr_tart_cherry_applies_to_juice_only(text, status):
+def test_ingr_tart_cherry_applies_to_juice_only(text, status, reason):
     from clinical_applicability import assess_clinical_applicability
     row = {"name": text, "raw_source_text": text, "canonical_id": "tart_cherry",
            "raw_source_path": "ingredientRows[0]", "quantity": 30, "unit": "mL", "mapped": True}
@@ -95,7 +95,11 @@ def test_ingr_tart_cherry_applies_to_juice_only(text, status):
                "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
     entry = {"id": "INGR_TART_CHERRY", "ingredient": "Tart Cherry", "matched_canonical_ids": ["tart_cherry"],
              "matched_source_row_refs": ["ingredientRows[0]"]}
-    assert assess_clinical_applicability(product, entry, assess_amount=False)["status"] == status
+    decision = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert decision["status"] == status
+    # Exact juice preparation still needs a qualified reviewed outcome. A
+    # preparation mismatch remains independently disqualifying.
+    assert decision["reason_code"] == reason
 
 
 def test_gnc_cherry_puree_powder_is_no_longer_called_sweet_cherry(pipeline):

@@ -494,3 +494,36 @@ def test_cli_unresolved_retrieval_is_not_success(monkeypatch):
     monkeypatch.setattr(vac, 'verify_file', lambda *a: {
         'file': 'timing_rules.json', 'not_found': 1, 'entries': []})
     assert vac.main() == 1
+
+
+
+def test_standardized_botanical_marker_topic_is_not_a_proprietary_identity_alias():
+    config = next(c for c in vac.FILE_CONFIGS if c['file'] == 'standardized_botanicals.json')
+    entry = {'standard_name': 'Slendesta', 'aliases': ['Slendesta'],
+             'markers': ['proteinase inhibitor II'],
+             'marker_compounds': ['PI2 (proteinase inhibitor II)', 'potato protein fraction']}
+    words = vac.extract_topic_words(entry, config)
+    # PMID28485429 abstract names PI2; its full methods name Slendesta/Kemin.
+    article = {'title': 'Potato protease inhibitor II suppresses postprandial appetite in healthy women',
+               'abstract': 'A capsule containing potato extract standardized to 15 or 30 mg PI2.'}
+    assert vac.content_matches(article, words)[0] in {'match', 'partial'}
+    assert 'PI2' not in entry['aliases']
+    for wrong in [{'title': 'Protease inhibitors in HIV treatment', 'abstract': 'Generic enzyme inhibitor research.'},
+                  {'title': 'PI20 protease inhibitors in HIV treatment', 'abstract': 'An unrelated numbered protein.'},
+                  {'title': 'PI2alpha protease inhibitor research', 'abstract': 'An unrelated extended identifier.'},
+                  {'title': 'PI2A protease inhibitor research', 'abstract': 'An unrelated extended identifier.'},
+                  {'title': 'Vitamin D and skeletal outcomes', 'abstract': 'An unrelated nutrient trial.'}]:
+        assert vac.content_matches(wrong, words)[0] == 'mismatch'
+
+
+@pytest.mark.parametrize('article_text, expected', [
+    ('Academic outcomes in healthy adults', 'mismatch'),
+    ('ACACA fatty-acid synthesis', 'mismatch'),
+    ('ACA2 marker analogue', 'mismatch'),
+    ('A botanical preparation containing ACA.', 'partial'),
+])
+def test_short_alphabetic_marker_requires_an_identifier_boundary(article_text, expected):
+    config = next(c for c in vac.FILE_CONFIGS if c['file'] == 'standardized_botanicals.json')
+    entry = {'standard_name': 'EnXtra', 'aliases': ['EnXtra'], 'markers': ['ACA']}
+    assert vac.content_matches({'title': article_text, 'abstract': ''},
+                               vac.extract_topic_words(entry, config))[0] == expected

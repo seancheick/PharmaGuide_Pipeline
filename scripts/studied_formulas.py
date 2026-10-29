@@ -13,7 +13,7 @@ from copy import deepcopy
 from functools import lru_cache
 from pathlib import Path
 
-from clinical_applicability import reviewed_entries, assess_native_claimed_purpose
+from clinical_applicability import reviewed_entries, assess_context_population, assess_native_claimed_purpose
 from clinical_evidence_schema import OUTCOME_HIERARCHIES
 from identity_integrity import has_nonlive_microbial_derivative_evidence
 from normalization import normalize_text
@@ -1209,6 +1209,7 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             "source_row_ref": row.get("source_row_ref"),
             "delivery_comparison": delivery_comparison,
             "claimed_purpose_assessment": assess_native_claimed_purpose(product, context),
+            "population_applicability": assess_context_population(product, context),
             "clinical_applicability": applicability,
             "applicability_reason": reason})
     return result

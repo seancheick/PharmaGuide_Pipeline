@@ -143,13 +143,12 @@ def test_failure_fixture_scores_below_its_ideal_pair(
     ]
 
 
-def test_ideal_fixtures_reach_their_evidence_reference() -> None:
-    """quality_score 1.1.3-achievable-ceilings: each archetype reference is the
-    ceiling its engine can actually reach. Before 2026-09-13 these references
-    sat above the ceiling (generic 19 over an 18-point engine). Since 1.31.0 no
-    automatic floor exceeds the strong base, so a focused single-molecule
-    product tops out at 14 raw (15.6/20); the 18 reference stays the generic
-    engine's arithmetic ceiling (per-ingredient cap x top-N weights + depth)."""
+def test_context_free_ideal_matches_cannot_manufacture_clinical_floors() -> None:
+    """Arithmetic ceilings do not approve a context-free clinical source.
+
+    Magnesium's nutritional authority remains; complete B panels retain their
+    native authority ceiling. Explicit reviewed floor arithmetic lives in P8.
+    """
     from scoring_v4.modules import generic_evidence as ge
 
     validation = _validation_module()
@@ -160,8 +159,9 @@ def test_ideal_fixtures_reach_their_evidence_reference() -> None:
 
     engine_ceiling = ge.CAP_PER_INGREDIENT * sum(ge.TOP_N_WEIGHTS) + max(v for _, v in ge.DEPTH_BONUS_BANDS)
     assert engine_ceiling == generic["normalization_references"]["evidence"] == 18.0
-    assert generic["raw_dimensions"]["evidence"] == ge.PRIMARY_FLOOR_STRONG == 14.0
-    assert generic["pillars"]["evidence"] == 15.6
+    assert generic["raw_dimensions"]["evidence"] == 10.0
+    assert generic["raw_dimensions"]["evidence"] < ge.PRIMARY_FLOOR_STRONG == 14.0
+    assert generic["pillars"]["evidence"] == 11.1
     # Complete B panels earn the native 20-point authority score; no
     # denominator compression is needed to manufacture attainability.
     assert b_complex["raw_dimensions"]["evidence"] == 20.0
@@ -189,9 +189,10 @@ def test_category_fixture_contracts() -> None:
     assert probiotic["raw_dimensions"]["formulation"] == 11.0
     assert probiotic["normalization_references"]["formulation"] == 15.0
     assert probiotic["pillars"]["formulation"] == 14.7
-    # Unspecified clinical study design earns 6.6667 certainty plus 3
-    # applicability; extra strain names do not establish trial replication.
-    assert probiotic["raw_dimensions"]["evidence"] == 9.6667
+    # The digestive label reaches LGG's approved GI/respiratory meta-analysis
+    # (10 certainty, direct 6 applicability); extra strain names do not
+    # establish trial replication.
+    assert probiotic["raw_dimensions"]["evidence"] == 16.0
     # Omega raw dose tops out at 20 now that the EPA:DHA ratio bonus is gone
     # (quality_score 1.2.0); the reference equals that ceiling because the rubric
     # gives full band credit at 2 g/day. A complete prenatal essential-nutrient
@@ -298,9 +299,9 @@ def test_single_creatine_fixture_does_not_treat_derived_identity_as_source_form(
     assert actual["pillars"]["evidence"] == 0.0
     assert actual["raw_dimensions"]["evidence"] == 0.0
     ideal = validation.evaluate_fixture(suite.by_id("sports_single__ideal")).actual
-    # 1.31.0: no automatic floor above the strong base (14 raw).
-    assert ideal["pillars"]["evidence"] == 15.6
-    assert ideal["quality_score_v4_100"] == 95.6
+    # Printed source identity does not approve a context-free clinical stamp.
+    assert ideal["pillars"]["evidence"] == 0.0
+    assert ideal["quality_score_v4_100"] == 80.0
 
 
 def test_preworkout_formulation_pin_follows_corrected_citrulline_parent():
@@ -325,7 +326,7 @@ def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
     artifact = validation.build_scored_artifact(validation.load_fixture_suite().by_id("sports_protein__ideal").product)
     pending = {row["canonical_id"] for row in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
                if row["state"] == "not_yet_evaluated"}
-    assert pending == {"l_isoleucine", "l_valine"}
+    assert pending == {"whey_protein", "l_isoleucine", "l_valine"}
     assert artifact["quality_score_confidence"] == "moderate"
-    assert artifact["quality_score_v4_100"] == 95.6
+    assert artifact["quality_score_v4_100"] == 80.0
     assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False

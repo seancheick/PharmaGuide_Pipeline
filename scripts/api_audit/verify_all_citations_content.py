@@ -396,6 +396,18 @@ def extract_topic_words(entry: dict, config: dict) -> list[str]:
                 "medications",
             }:
                 words.add(word)
+    if config.get("file") == "standardized_botanicals.json":
+        # Marker phrases describe citation content, not proprietary identity.
+        # Keep phrases intact: generic words such as "inhibitor" or "protein"
+        # cannot make an unrelated paper pass this preparation-content check.
+        for field in ("markers", "marker_compounds"):
+            for marker in entry.get(field) or []:
+                if not isinstance(marker, str):
+                    continue
+                for phrase in re.split(r"[()]", marker.lower()):
+                    phrase = phrase.strip()
+                    if len(phrase) > 2 and any(char.isalpha() for char in phrase):
+                        words.add(phrase)
     return list(words)
 
 
@@ -437,7 +449,9 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
 
     matches = [w for w in topic_words if (
         bool(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?![0-9])", text))
-        if _SHORT_COMPOUND_IDENTITY.fullmatch(w) else w in text)]
+        if _SHORT_COMPOUND_IDENTITY.fullmatch(w) else
+        bool(re.search(r"(?<![a-z0-9])" + re.escape(w) + r"(?![a-z0-9])", text))
+        if re.fullmatch(r"[a-z]{1,3}[0-9]+|[a-z]{1,4}", w) else w in text)]
     ratio = len(matches) / max(len(topic_words), 1)
 
     if len(matches) >= 2:

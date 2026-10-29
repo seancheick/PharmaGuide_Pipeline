@@ -92,7 +92,8 @@ def test_proprietary_blend_with_children_ignores_header_and_assesses_children():
     assert result["metadata"]["evidence_result_state"] == "applicability_unestablished"
 
 
-def test_proprietary_blend_with_child_evidence_earns_credit():
+@pytest.mark.parametrize("qualified", [True, False])
+def test_proprietary_blend_with_child_evidence_earns_credit(monkeypatch, qualified):
     """When a child active inside a proprietary blend has matching clinical evidence,
     the child's evidence is credited and state is 'evaluated_applicable'."""
     blend_header = {
@@ -124,10 +125,16 @@ def test_proprietary_blend_with_child_evidence_earns_credit():
         effect_direction="positive_strong",
         total_enrollment=500,
     )
-    product = _product(ingredients=[blend_header, ashwagandha], matches=[match])
+    from tests.test_v4_generic_evidence_p133 import _use_approved_mechanics_sources
+    source, = _use_approved_mechanics_sources(monkeypatch, match)
+    source["study_contexts"][0]["scoring_eligible"] = qualified
+    product = _product(ingredients=[blend_header, ashwagandha], matches=[source])
     result = score_evidence(product)
-    assert result["score"] > 0
-    assert result["metadata"]["evidence_result_state"] == "evaluated_applicable"
+    assert (result["score"] > 0) is qualified
+    if qualified:
+        assert result["metadata"]["evidence_result_state"] == "evaluated_applicable"
+    else:
+        assert result["score"] == 0
 
 
 def test_blend_headers_excluded_from_competing_active_rows():

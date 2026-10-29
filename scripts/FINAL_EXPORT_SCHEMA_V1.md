@@ -905,6 +905,12 @@ ambiguity.
 - `dose_threshold_evaluation` is always `null` in shipped blobs: the compact `dose_decision`
   replaced the raw evaluation payload (the examples above show the pre-compaction shape). The
   key stays for 2.5.0 compatibility; the app reads `dose_decision` first.
+- Presence-based `avoid` or `contraindicated` interaction precautions without a numeric
+  threshold or floor retain `dose_decision.consumer_disposition: "block"`. Their
+  `evaluation_status`, comparison, amount and `decision_rule` are null; the internal
+  `evaluated` flag is false. This is an unevaluated presence precaution, not a dose
+  exceedance. Quantified ingredient/marker exposure remains on its existing owner.
+  Authored threshold and floor decisions take precedence over this projection.
 - `score_bonuses` lists every positive scoring factor. Each entry has:
   `{id, label, score, detail?}`. The `id` is a section sub-score key (e.g. `"A2"`, `"A3"`,
   `"B4a"`, `"probiotic"`). `detail` is optional and present only on A3 (delivery tier name).

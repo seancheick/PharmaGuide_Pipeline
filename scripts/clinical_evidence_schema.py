@@ -353,6 +353,10 @@ def validate_frozen_context(
         errors.append("context.uncontrolled_intervention_must_not_be_scoring_eligible")
     if "scoring_eligible" in context and not isinstance(context.get("scoring_eligible"), bool):
         errors.append("context.scoring_eligible_invalid")
+    if (context.get("review_status") == "clinician_approved"
+            and not isinstance(context.get("scoring_eligible"), bool)):
+        # An omitted flag is not a signed scoring decision (Sean, 2026-10-28).
+        errors.append("review.approved_scoring_eligible_required")
     errors.extend(_dose_errors(context, known_component_ids))
     errors.extend(_outcome_errors(context))
     if require_complete_review:

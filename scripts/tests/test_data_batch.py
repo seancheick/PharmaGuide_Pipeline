@@ -169,3 +169,14 @@ def test_recount_fixes_a_drifted_derived_count():
     changes = db.recount("banned_recalled_ingredients.json", blob)
     assert changes == {"risk_breakdown": ({"high": 9}, {"critical": 1, "high": 1})}
     assert db.recount("banned_recalled_ingredients.json", blob) == {}
+
+
+
+def test_standardized_botanical_statistics_recount_priority_and_thresholds():
+    blob = {'_metadata': {'statistics': {'high_priority': 99, 'medium_priority': 99,
+                                      'entries_with_threshold': 99}},
+            'standardized_botanicals': [{'priority': 'high', 'min_threshold': 50},
+                                       {'priority': 'medium', 'min_threshold': None}]}
+    db.recount('standardized_botanicals.json', blob)
+    assert blob['_metadata']['statistics'] == {'high_priority': 1, 'medium_priority': 1,
+                                               'entries_with_threshold': 1}

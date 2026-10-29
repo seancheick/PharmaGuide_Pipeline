@@ -84,3 +84,27 @@ def test_explicit_authored_marker_percentage_retains_credit(enricher):
     found = enricher._collect_standardized_botanicals(product)
     assert found[0]["percentage_found"] == 2.5
     assert found[0]["meets_threshold"] is True
+
+
+def test_material_vocabulary_is_reused_until_a_reference_collection_is_replaced(monkeypatch):
+    from copy import deepcopy
+    owner = SupplementEnricherV3()
+    original = owner._brand_mentioned
+    calls = []
+    def count_reference_match(*args, **kwargs):
+        # This reference identity is unrelated to the Amla label and is
+        # visited only while the shared vocabulary is built.
+        if args[:3] == ('', [], {}) and kwargs.get('label_text') == 'Acai':
+            calls.append(kwargs.get('label_text'))
+        return original(*args, **kwargs)
+    monkeypatch.setattr(owner, '_brand_mentioned', count_reference_match)
+    first = owner._collect_standardized_botanicals(_amla_product())
+    first_calls = len(calls)
+    assert first_calls > 0
+    assert owner._collect_standardized_botanicals(_amla_product()) == first
+    assert len(calls) == first_calls
+    for collection in ('standardized_botanicals', 'backed_clinical_studies'):
+        owner.databases[collection] = deepcopy(owner.databases[collection])
+        assert owner._collect_standardized_botanicals(_amla_product()) == first
+        assert len(calls) > first_calls
+        first_calls = len(calls)

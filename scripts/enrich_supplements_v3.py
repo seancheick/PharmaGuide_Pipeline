@@ -908,9 +908,6 @@ class SupplementEnricherV3:
 
     VERSION = "3.1.0"
     COMPATIBLE_SCORING_VERSIONS = ["3.0.0", "3.0.1", "3.1.0", "3.2.0", "3.3.0"]
-    _BCAA_EVIDENCE_CANONICALS = frozenset(
-        {"l_leucine", "l_isoleucine", "l_valine"}
-    )
     # Allowlist/denylist patterns for banned matching are loaded from config.
 
     # Required fields for product validation
@@ -1270,7 +1267,7 @@ class SupplementEnricherV3:
         }
         for row in subject_rows:
             canonical = str(row.get("canonical_id") or "").strip().lower()
-            if canonical in owners and canonical not in covered:
+            if (canonical in owners or row.get("verified_child_canonicals")) and canonical not in covered:
                 covered.add(canonical)
                 ingredients.append(self._active_ingredient_from_scoring_row(row))
         return ingredients
@@ -1441,6 +1438,7 @@ class SupplementEnricherV3:
             "forms": row.get("forms") or [],
             "matched_form": row.get("matched_form"),
             "dose_data_quality": row.get("dose_data_quality"),
+            "verified_child_canonicals": row.get("verified_child_canonicals"),
         }
 
     def _load_config(self, config_path: str) -> Dict:
@@ -11385,6 +11383,27 @@ class SupplementEnricherV3:
 
         active_ingredients = self._primary_active_ingredients_for_enrichment(product)
         all_text = self._get_all_product_text(product)
+        # Reuse curated brand spellings as identity vocabulary only. Clinical
+        # eligibility, outcomes and references never authorize this material trait.
+        studies_db = self.databases.get("backed_clinical_studies", {})
+        cached = getattr(self, "_standardized_material_terms_cache", None)
+        if (cached is None or cached[0] is not self.databases
+                or cached[1] is not botanicals_db or cached[2] is not studies_db):
+            studies = studies_db.get("backed_clinical_studies", [])
+            material_terms = {}
+            for botanical in botanicals_list:
+                name = botanical.get("standard_name", "")
+                terms = [name, botanical.get("id", "").replace("_", " ")]
+                for study in studies:
+                    if not str(study.get("id", "")).startswith("BRAND_"):
+                        continue
+                    identity_terms = study.get("brand_tokens") or [study.get("standard_name", "")]
+                    if self._brand_mentioned("", [], {}, brand_tokens=identity_terms, label_text=name):
+                        terms.extend(identity_terms)
+                material_terms[botanical.get("id")] = terms
+            cached = (self.databases, botanicals_db, studies_db, material_terms)
+            self._standardized_material_terms_cache = cached
+        material_terms = cached[3]
 
         found_botanicals = []
 
@@ -11403,7 +11422,22 @@ class SupplementEnricherV3:
                 else None
             )
 
-            for botanical in botanicals_list:
+            # Exact named materials precede a generic parent match. The generic
+            # fenugreek threshold must not swallow a verified Testofen material.
+            material_names = [ing_name]
+            material_names.extend(form.get("name", "") for form in ingredient.get("forms") or []
+                                  if isinstance(form, dict))
+            material_text = " ".join(str(name) for name in material_names if name)
+            def named_material(item):
+                return self._brand_mentioned("", [], {},
+                    brand_tokens=material_terms[item.get("id")], label_text=material_text)
+            candidates = sorted(botanicals_list, key=lambda item: (
+                not (named_material(item) if item.get("branded_form") else
+                     any(self._exact_match(name, item.get("standard_name", ""), item.get("aliases", []))
+                         for name in material_names if name)),
+                not bool(item.get("branded_form")),
+            ))
+            for botanical in candidates:
                 # A retained identity is not a verified standardization claim.
                 # Existing explicit registry holds must precede both brand and
                 # percentage credit; missing legacy flags retain their meaning.
@@ -11412,8 +11446,18 @@ class SupplementEnricherV3:
                     continue
                 bot_name = botanical.get('standard_name', '')
                 bot_aliases = botanical.get('aliases', [])
+                if botanical.get("branded_form"):
+                    expected_parent = (botanical.get("attributes") or {}).get("iqm_parent_id")
+                    if (expected_parent and ingredient.get("canonical_id")
+                            and ingredient["canonical_id"] not in {expected_parent, botanical.get("id")}):
+                        continue
+                    if (ingredient.get("identity_disposition") == "ambiguous"
+                            or (ingredient.get("match_ambiguity_candidates")
+                                and ingredient.get("identity_disposition") != "clean")):
+                        continue
 
-                if (resolved_iqm_id and resolved_iqm_id == botanical.get('id')) or \
+                if (botanical.get("branded_form") and named_material(botanical)) or \
+                   (resolved_iqm_id and resolved_iqm_id == botanical.get('id')) or \
                    self._exact_match(ing_name, bot_name, bot_aliases) or \
                    self._exact_match(std_name, bot_name, bot_aliases):
 
@@ -11494,10 +11538,16 @@ class SupplementEnricherV3:
                     evidence_source = "none"
                     tier = "none"
                     ratio = 0.0
-                    is_branded = bool(botanical.get("branded_form"))
+                    is_branded = bool(
+                        botanical.get("branded_form") and named_material(botanical)
+                        and botanical.get("bonus_eligible") is True and basis == "branded_extract"
+                        and (botanical.get("marker_compounds") or markers)
+                        and botanical.get("sources")
+                    )
                     if is_branded:
-                        # Branded standardized extracts (KSM-66, Cran-Max, FloraGLO,
-                        # Meriva, ...) guarantee standardization by trademark.
+                        # The curated exact-material specification authorizes
+                        # this trait, independently of clinical study outcomes.
+                        # Keep percentage_found label-derived, including zero.
                         evidence_source = "branded_form"
                         tier = "full"
                     elif min_threshold is not None and is_percent_unit:
@@ -11537,6 +11587,7 @@ class SupplementEnricherV3:
 
                     found_botanicals.append({
                         "name": ing_name,
+                        **({"raw_source_path": ingredient["raw_source_path"]} if ingredient.get("raw_source_path") else {}),
                         "botanical_id": botanical.get('id', ''),
                         "standard_name": bot_name,
                         "markers": markers,
@@ -16012,82 +16063,9 @@ class SupplementEnricherV3:
         return "indirect"
 
     @classmethod
-    def _has_bcaa_mixture_evidence_identity(
-        cls,
-        product: Dict,
-        active_ingredients: List[Dict],
-    ) -> bool:
-        """Require a complete disclosed BCAA triad and reject broader EAA routing."""
-        canonical_ids = set()
-        for row in active_ingredients:
-            if not isinstance(row, dict):
-                continue
-            canonical_id = str(
-                row.get("canonical_id")
-                or row.get("parent_key")
-                or row.get("normalized_key")
-                or ""
-            ).strip().lower()
-            if not canonical_id:
-                canonical_id = norm_module.make_normalized_key(
-                    str(
-                        row.get("standardName")
-                        or row.get("standard_name")
-                        or row.get("name")
-                        or ""
-                    )
-                )
-            if canonical_id:
-                canonical_ids.add(canonical_id)
-        if not cls._BCAA_EVIDENCE_CANONICALS.issubset(canonical_ids):
-            return False
-
-        product_text = " ".join(
-            str(product.get(field) or "")
-            for field in ("fullName", "product_name", "name")
-        ).lower()
-        product_text = re.sub(r"[-_/]+", " ", product_text)
-        if re.search(r"(?<![a-z0-9])eaa(?:s)?(?![a-z0-9])", product_text):
-            return False
-        if re.search(
-            r"(?<![a-z0-9])essential\s+amino\s+acids?(?![a-z0-9])",
-            product_text,
-        ):
-            return False
-
-        explicit_bcaa = bool(
-            re.search(
-                r"(?<![a-z0-9])bcaa(?:s)?(?![a-z0-9])"
-                r"|(?<![a-z0-9])branched\s+chain\s+amino\s+acids?(?![a-z0-9])",
-                product_text,
-            )
-        )
-        if explicit_bcaa:
-            return True
-
-        amino_acid_canonicals = set()
-        has_unidentified_amino_acid = False
-        for row in active_ingredients:
-            if not isinstance(row, dict):
-                continue
-            raw_category = str(row.get("raw_category") or "").lower()
-            ingredient_group = str(row.get("ingredientGroup") or "").lower()
-            if "amino acid" not in raw_category and "amino acid" not in ingredient_group:
-                continue
-            canonical_id = str(
-                row.get("canonical_id")
-                or row.get("parent_key")
-                or row.get("normalized_key")
-                or ""
-            ).strip().lower()
-            if canonical_id:
-                amino_acid_canonicals.add(canonical_id)
-            else:
-                has_unidentified_amino_acid = True
-        return (
-            not has_unidentified_amino_acid
-            and amino_acid_canonicals == cls._BCAA_EVIDENCE_CANONICALS
-        )
+    def _has_bcaa_mixture_evidence_identity(cls, product: Dict, active_ingredients: List[Dict]) -> bool:
+        from scoring_input_contract import bcaa_mixture_identity_eligible
+        return bcaa_mixture_identity_eligible(product, active_ingredients)
 
     def _collect_evidence_data(
         self, product: Dict, ingredient_quality_data: Optional[Dict] = None
@@ -16223,7 +16201,6 @@ class SupplementEnricherV3:
             product,
             active_ingredients,
         )
-        bcaa_aggregate_candidate_added = False
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
@@ -16269,18 +16246,13 @@ class SupplementEnricherV3:
                     for value in candidate_names
                     if self._normalize_text(value) != "ala"
                 ]
-            if (
-                has_bcaa_mixture
-                and not bcaa_aggregate_candidate_added
-                and ingredient_canonical_id in self._BCAA_EVIDENCE_CANONICALS
-            ):
-                candidate_names.append("Branched Chain Amino Acids")
-                bcaa_aggregate_candidate_added = True
             for study in self._candidate_clinical_studies(candidate_names, studies):
                 if (
                     study.get("id") == "INGR_BRANCHED_CHAIN_AMINO_ACIDS"
                     and study.get("aggregate_canonical_ids")
                     and not has_bcaa_mixture
+                    and set(ingredient.get("verified_child_canonicals") or [])
+                        != set(study["aggregate_canonical_ids"])
                 ):
                     continue
                 study_name = study.get('standard_name', '')
@@ -16310,7 +16282,26 @@ class SupplementEnricherV3:
                                 brand_tokens=study.get("brand_tokens"),
                             )
                         ):
-                            continue
+                            # Discovery must also read the retained row that
+                            # owns this candidate. Product titles need not
+                            # repeat a brand printed on that exact source row.
+                            # The applicability owner still qualifies material,
+                            # outcome and population before any credit.
+                            from clinical_applicability import _linked_rows, _row_text
+                            source_rows = _linked_rows(
+                                product,
+                                {"matched_source_row_refs": [ingredient.get("raw_source_path")],
+                                 "matched_canonical_ids": [ingredient_canonical_id]},
+                                source_only=True, evidence_only=True, source_preparation=True,
+                            )
+                            if not self._brand_mentioned(
+                                study_name, study_aliases, {},
+                                brand_tokens=study.get("brand_tokens"),
+                                label_text=" ".join(_row_text(
+                                    row, source_only=True, preserve_punctuation=True,
+                                ) for row in source_rows),
+                            ):
+                                continue
 
                     if study_id in seen_study_ids:
                         existing_match = matches_by_study_id.get(study_id)
@@ -16480,15 +16471,17 @@ class SupplementEnricherV3:
         aliases: List[str],
         product: Dict,
         brand_tokens: Optional[List[str]] = None,
+        label_text: Optional[str] = None,
     ) -> bool:
         """Return whether the label explicitly names the studied brand.
 
         ``aliases`` remains the identity-discovery surface and may legitimately
         contain a generic ingredient name. A BRAND_ study instead gates on its
         curated ``brand_tokens`` when present. Older records fall back to their
-        study name/aliases, with every match token bounded.
+        study name/aliases, with every match token bounded. ``label_text``
+        narrows identity checks to retained source-row names/forms when supplied.
         """
-        all_text = self._get_all_product_text_lower(product)
+        all_text = label_text.lower() if label_text is not None else self._get_all_product_text_lower(product)
         terms = brand_tokens if brand_tokens else [study_name, *aliases]
         for term in terms:
             normalized = str(term or "").strip().lower()
@@ -17896,7 +17889,10 @@ class SupplementEnricherV3:
                          for row in enriched.get("activeIngredients") or [] if isinstance(row, dict)}
         for item in evidence:
             if item.get("evidence_type") == "blend_anchor_mass":
-                item.update(self._anchor_form_reading(item, notes_by_path.get(item.get("raw_source_path"))))
+                # Retain the exact panel-note input alongside its form reading;
+                # a later fresh composition projection must verify this input.
+                item["notes"] = notes_by_path.get(item.get("raw_source_path"))
+                item.update(self._anchor_form_reading(item, item["notes"]))
         probiotic_data = enriched.get("probiotic_data") if isinstance(enriched.get("probiotic_data"), dict) else {}
         try:
             total_cfu_value = float(probiotic_data.get("total_cfu") or 0)
@@ -19011,6 +19007,7 @@ class SupplementEnricherV3:
         parsed_from_directions = False
 
         # First check labelText.parsed.directions
+        directions_text = ""
         label_text = product.get('labelText', {})
         if isinstance(label_text, dict):
             parsed = label_text.get('parsed', {})
@@ -19040,6 +19037,46 @@ class SupplementEnricherV3:
                         parsed_from_directions = True
                         break
 
+        if min_servings_per_day is None and max_servings_per_day is None:
+            # "Consume one serving daily" already counts servings; dividing
+            # by the serving size (as for tablet counts) would misread it.
+            # Only one stated regimen is used: separate age-group regimens
+            # ("4-8 years, one serving; 9-12 years, two") are not one range.
+            serving_count_directions = [directions_text] if directions_text else [
+                statement.get('text') or statement.get('notes') or ''
+                for statement in statements
+                if isinstance(statement, dict)
+                and 'direction' in str(statement.get('type') or '').lower()
+            ]
+            serving_counts = [
+                regimen for text in serving_count_directions
+                for regimen in self._parse_serving_counts_from_directions(text)
+            ]
+            if serving_counts:
+                # A second age regimen may count tablets rather than
+                # servings. Compare those explicit daily counts on the same
+                # Facts basis before accepting one serving frequency.
+                for text in serving_count_directions:
+                    for clause in re.split(r"(?<=[.!?;])\s+|[\r\n]+", str(text)):
+                        if re.search(r"\bservings?\b", clause, re.IGNORECASE):
+                            continue
+                        if not re.search(r"\b(?:daily|per day|a day|each day)\b", clause, re.IGNORECASE):
+                            continue
+                        dose = self._parse_dosage_from_directions(clause)
+                        if dose:
+                            low = self._serving_units_to_servings(dose.get("min"), basis_count)
+                            high = self._serving_units_to_servings(dose.get("max"), basis_count)
+                            if low is not None and high is not None:
+                                serving_counts.append((low, high))
+            serving_counts = list(dict.fromkeys(serving_counts))
+            if len(serving_counts) == 1:
+                min_servings_per_day, max_servings_per_day = serving_counts[0]
+                servings_per_day_source = "directions"
+            elif len(serving_counts) > 1:
+                # Age-specific regimens cannot become one tablet-count
+                # frequency. Keep the existing unknown/default daily use.
+                min_recommended = max_recommended = None
+                parsed_from_directions = False
         if min_servings_per_day is None and max_servings_per_day is None and parsed_from_directions:
             if min_recommended is not None or max_recommended is not None:
                 min_servings_per_day = self._serving_units_to_servings(
@@ -19146,6 +19183,34 @@ class SupplementEnricherV3:
         'one': 1, 'two': 2, 'three': 3, 'four': 4, 'five': 5,
         'six': 6, 'seven': 7, 'eight': 8, 'nine': 9, 'ten': 10
     }
+
+    def _parse_serving_counts_from_directions(self, text: str) -> List[Tuple[float, float]]:
+        """Daily regimens stated as servings: "Consume 1-2 servings per day" -> (1, 2).
+
+        One (min, max) pair per stated regimen. Ceilings and conditional
+        clauses ("Do not exceed 3 servings daily", "up to 2 servings per day",
+        "consult your physician before taking 2 servings daily") are not a
+        directed regimen and are dropped. Fractions and decimals are left to
+        the existing paths rather than misread ("1/2" is not 2).
+        """
+        number = r"(?<![\d./])(\d+|" + "|".join(self.WORD_TO_NUM) + r")(?![\d./])"
+        pattern = re.compile(
+            rf"\b{number}(?:\s*(?:-|to|or)\s*{number})?\s+servings?\s+"
+            r"(?:daily|per day|a day|each day)\b"
+        )
+        ceiling = re.compile(
+            r"\b(?:exceed|more than|up to|limit|maximum|before (?:taking|using|consuming))\b"
+        )
+        regimens: List[Tuple[float, float]] = []
+        for clause in re.split(r"(?<=[.!?;])\s+|[\r\n]+", str(text).lower()):
+            if ceiling.search(clause):
+                continue
+            for match in pattern.finditer(clause):
+                low, high = (float(self.WORD_TO_NUM.get(value, value))
+                             for value in (match.group(1), match.group(2) or match.group(1)))
+                if 0 < low <= high:
+                    regimens.append((low, high))
+        return regimens
 
     def _parse_dosage_from_directions(self, text: str) -> Optional[Dict]:
         """Parse min/max dosage from directions text.
@@ -20150,6 +20215,77 @@ class SupplementEnricherV3:
             return None, "unit_not_comparable", None
         return None, "no_conversion_rule", None
 
+    def _ul_exposure_bounds_for_threshold(
+        self,
+        amount: float,
+        from_unit: str,
+        target_unit: str,
+        ingredient_name: str,
+        standard_name: str,
+    ) -> Optional[Tuple[float, float]]:
+        """UL-exposure range in a threshold's unit for a form-dependent row, or None.
+
+        Vitamin E: authored mass thresholds are exposure limits (the pregnancy
+        rule is the adult UL), so they compare the converter's UL mass, not
+        nutritional activity. Alpha-tocopherol IU and parent "Vitamin E" mg
+        rows span natural to synthetic; a family mass without established
+        activity (mixed tocopherols, tocotrienols) spans none of it to all of it.
+
+        Vitamin A of unspecified form: the only rules that reach it are
+        preformed-UL rules (test_unspecified_vitamin_a_reaches_only_preformed_rules),
+        and the preformed share is 0 to all of it. It is never assumed to be
+        retinol; only its upper bound can show it within a limit.
+        """
+        tgt = self._normalize_threshold_unit(target_unit)
+        if not self.unit_converter:
+            return None
+        conversion = self.unit_converter.convert_nutrient(
+            nutrient=standard_name or ingredient_name,
+            amount=amount,
+            from_unit=from_unit,
+            ingredient_name=ingredient_name,
+            measured_name=ingredient_name,
+        )
+        src = self._normalize_threshold_unit(from_unit)
+        if conversion.conversion_rule_id == "vitamin_a_unknown":
+            # A plain mass (1.5 mg) is the same quantity in mcg.
+            mcg = self._convert_mass(amount, src, "mcg") if src in {"mg", "g"} else None
+            as_retinol = self.unit_converter.convert_nutrient(
+                nutrient="Vitamin A",
+                amount=amount if mcg is None else mcg,
+                from_unit=from_unit if mcg is None else "mcg",
+                to_unit=target_unit,
+                ingredient_name="Vitamin A as retinol",
+            )
+            converted_unit = self._normalize_threshold_unit(as_retinol.converted_unit)
+            if not as_retinol.success or as_retinol.converted_value is None:
+                return None
+            if converted_unit != tgt:
+                return None
+            return 0.0, float(as_retinol.converted_value)
+        if not self._is_mass_unit(tgt):
+            return None
+        iu = src == "iu"
+        if conversion.conversion_rule_id == "vitamin_e_unknown" and not iu:
+            # A family mass (mixed tocopherols, tocotrienols) bounds its
+            # alpha-tocopherol from above; it may contain none.
+            mass = self._convert_mass(amount, src, tgt)
+            return None if mass is None else (0.0, mass)
+        if not (
+            conversion.has_established_vitamin_e_activity
+            or conversion.conversion_rule_id == "vitamin_e_unknown"
+        ):
+            return None
+        bounds = self.unit_converter._ul_exposure_bounds(
+            conversion, measured_name=ingredient_name
+        )
+        if bounds is None:
+            return None
+        low, high = (self._convert_mass(value, "mg", tgt) for value in bounds)
+        if low is None or high is None:
+            return None
+        return low, high
+
     @staticmethod
     def _conversion_form_context(ingredient: Dict[str, Any]) -> str:
         """Unit-conversion context for a row: its matched form, or, when the
@@ -20381,7 +20517,31 @@ class SupplementEnricherV3:
                 serving_multiplier,
             )
             convert_reason = None
-            if converted_amount is None:
+            ul_bounds = (
+                self._ul_exposure_bounds_for_threshold(
+                    amount=amount_basis,
+                    from_unit=unit,
+                    target_unit=threshold_unit,
+                    ingredient_name=conversion_name,
+                    standard_name=standard_name,
+                )
+                if converted_amount is None
+                else None
+            )
+            if ul_bounds is not None:
+                # An outcome every possible form agrees on is not uncertain;
+                # only a range straddling the threshold is form_unknown. The
+                # exported amount is the proven minimum: stack totals sum it
+                # across products, so a bound must never stand in for exposure.
+                low, high = ul_bounds
+                if self._compare_threshold(
+                    low, comparator, threshold_value
+                ) == self._compare_threshold(high, comparator, threshold_value):
+                    converted_amount = low
+                    conversion_method = "ul_exposure_bound" if low != high else "ul_exposure"
+                else:
+                    convert_reason = "form_unknown"
+            elif converted_amount is None:
                 converted_amount, convert_reason, conversion_method = (
                     self._convert_amount_to_target_unit_with_evidence(
                         amount=amount_basis,
@@ -20395,7 +20555,7 @@ class SupplementEnricherV3:
                 marker_target = re.fullmatch(
                     r"(mcg|mg|g)\s+(.+)", threshold_unit
                 )
-                if marker_target is not None:
+                if marker_target is not None and convert_reason != "form_unknown":
                     convert_reason = "marker_amount_unknown"
                 details["thresholds_checked"].append({
                     "evaluated": False,
@@ -20645,6 +20805,7 @@ class SupplementEnricherV3:
         ingredient: Dict[str, Any],
         servings_per_day_max: float,
         clinical_severity: str,
+        materiality: Optional[str] = None,
     ) -> Optional[Dict[str, Any]]:
         """Return the three-axis consumer decision for an authored dose floor.
 
@@ -20655,6 +20816,12 @@ class SupplementEnricherV3:
         per-serving exposure without inventing a conversion.
         """
         if not isinstance(min_effective_dose, dict) or not min_effective_dose:
+            if (str(materiality or "").strip().lower() == "presence"
+                    and str(clinical_severity or "").strip().lower() in {"avoid", "contraindicated"}):
+                # Presence establishes the precaution, not a numeric comparison.
+                return {"evaluated": False, "evaluation_status": None,
+                        "clinical_severity": clinical_severity, "consumer_disposition": "block",
+                        "release_blocking": False, "dose_evaluation": None, "decision_rule": None}
             return None
 
         severity = str(clinical_severity or "").strip().lower()
@@ -20839,6 +21006,33 @@ class SupplementEnricherV3:
             raw_ingredients = []
         if not isinstance(raw_skipped, list):
             raw_skipped = []
+
+        # A label row's banned/recalled safety matches are subjects too: a row
+        # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
+        # still meets the rules authored on its safety record.
+        safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
+        label_rows_by_path: Dict[str, Dict] = {}
+        for section_key in ("activeIngredients", "inactiveIngredients"):
+            for label_row in enriched.get(section_key) or []:
+                if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
+                    continue
+                label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
+                for flag in label_row.get("safety_flags") or []:
+                    if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
+                        safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
+                            (self._normalize_interaction_db_key(flag["source_db"]), str(flag["entry_id"]))
+                        )
+
+        def interaction_subject(row: Dict) -> Optional[Dict[str, str]]:
+            # A row with no identity of its own (bitter orange nested in a
+            # non-therapeutic bitters blend, 285635) is still named by its
+            # label row's safety match, and meets that record's rules.
+            subject = self._derive_interaction_subject_ref(row)
+            refs = safety_subjects_by_path.get(row.get("raw_source_path"), [])
+            if subject or not refs:
+                return subject
+            return {"db": refs[0][0], "canonical_id": refs[0][1]}
+
         if isinstance(scorable, list):
             ingredients = [row for row in scorable if isinstance(row, dict)]
             # A rule written on a banned, botanical, additive or other-ingredient
@@ -20863,11 +21057,14 @@ class SupplementEnricherV3:
                 if not isinstance(row, dict) or id(row) in scanned:
                     continue
                 scanned.add(id(row))
-                subject_db = (self._derive_interaction_subject_ref(row) or {}).get("db")
+                subject_db = (interaction_subject(row) or {}).get("db")
                 if subject_db is None:
                     continue
                 if subject_db != "ingredient_quality_map":
-                    skipped.append(row)
+                    key = self._interaction_row_key(row)
+                    if key not in scanned_keys:
+                        scanned_keys.add(key)
+                        skipped.append(row)
                 elif self._is_interaction_label_row(row) and (
                     str(row.get("raw_source_path") or "") not in restated_headers
                 ):
@@ -20882,7 +21079,7 @@ class SupplementEnricherV3:
             skipped += deferred_headers
             label_rows = {
                 id(row) for row in skipped
-                if (self._derive_interaction_subject_ref(row) or {}).get("db") == "ingredient_quality_map"
+                if (interaction_subject(row) or {}).get("db") == "ingredient_quality_map"
             }
         else:
             ingredients = [row for row in raw_ingredients if isinstance(row, dict)]
@@ -20975,22 +21172,6 @@ class SupplementEnricherV3:
         highest_weight = -1.0
         highest_severity: Optional[str] = None
 
-        # A label row's banned/recalled safety matches are subjects too: a row
-        # with an IQM identity (7-keto DHEA, bitter orange citrus bioflavonoids)
-        # still meets the rules authored on its safety record.
-        safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
-        label_rows_by_path: Dict[str, Dict] = {}
-        for section_key in ("activeIngredients", "inactiveIngredients"):
-            for label_row in enriched.get(section_key) or []:
-                if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
-                    continue
-                label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
-                for flag in label_row.get("safety_flags") or []:
-                    if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
-                        safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
-                            (self._normalize_interaction_db_key(flag["source_db"]), str(flag["entry_id"]))
-                        )
-
         all_ingredient_rows: List[Tuple[str, Dict]] = []
         for row in ingredients:
             if isinstance(row, dict):
@@ -21016,7 +21197,15 @@ class SupplementEnricherV3:
                         repeat_checked_rows.add(id(marker_row))
 
         for source_bucket, ingredient in all_ingredient_rows:
-            subject = self._derive_interaction_subject_ref(ingredient)
+            safety_refs = (
+                safety_subjects_by_path.get(ingredient.get("raw_source_path"), [])
+                if source_bucket != "derived_marker" else []
+            )
+            subject = (
+                self._derive_interaction_subject_ref(ingredient)
+                if source_bucket == "derived_marker"
+                else interaction_subject(ingredient)
+            )
             if not subject:
                 continue
             # A blend header's amount is the blend's, never its named
@@ -21033,10 +21222,6 @@ class SupplementEnricherV3:
             # -> garlic); each rule's own form_scope still decides.
             matched_rules = []
             seen_rule_ids: set = set()
-            safety_refs = (
-                safety_subjects_by_path.get(ingredient.get("raw_source_path"), [])
-                if source_bucket != "derived_marker" else []
-            )
             for subject_ref in [*interaction_subject_refs(subject["db"], subject["canonical_id"]), *safety_refs]:
                 for candidate in rule_index.get(subject_ref, []):
                     if id(candidate) not in seen_rule_ids:
@@ -21122,6 +21307,7 @@ class SupplementEnricherV3:
                         dose_row,
                         servings_per_day_max,
                         severity,
+                        materiality=cond_rule.get("materiality"),
                     )
                     sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
@@ -21203,6 +21389,9 @@ class SupplementEnricherV3:
                             }
                             condition_hits.append({
                                 "condition_id": cond_key,
+                                "dose_decision": self._evaluate_min_effective_dose_decision(
+                                    None, dose_row, servings_per_day_max, severity,
+                                    materiality=pregnancy_block.get("materiality")),
                                 "severity": severity,
                                 "evidence_level": str(pregnancy_block.get("evidence_level") or "").strip().lower() or None,
                                 "mechanism": target_reason,
@@ -21250,6 +21439,7 @@ class SupplementEnricherV3:
                         dose_row,
                         servings_per_day_max,
                         severity,
+                        materiality=drug_rule.get("materiality"),
                     )
                     sources = [str(s).strip() for s in (drug_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
@@ -22645,6 +22835,7 @@ class SupplementEnricherV3:
         shown_amount: Optional[float] = None,
         shown_unit: Optional[str] = None,
         unresolved_reason: Optional[str] = None,
+        food_matrix: bool = False,
     ) -> Optional[Dict[str, Any]]:
         """One child upper-limit note for a label that names children, or None.
 
@@ -22666,6 +22857,10 @@ class SupplementEnricherV3:
             return None
         note = {"nutrient": label_name, "reference_nutrient": nutrient,
                 "canonical_id": canonical_id, "ul_population": scope}
+        if food_matrix and canonical_id == "magnesium" and record.get("ul_basis") == "supplemental_only":
+            child_amount = self._convert_mass(float(amount), unit, record.get("unit")) if amount is not None and unit else None
+            if child_amount is not None and child_ul is not None and child_amount > child_ul:
+                unresolved_reason = "supplemental_magnesium_fraction_unknown"
         if unresolved_reason is not None or amount is None or not unit:
             return {**note, "status": "not_assessable",
                     "reason": unresolved_reason or "ul_exposure_unresolved"}
@@ -22714,6 +22909,21 @@ class SupplementEnricherV3:
         """
         active_ingredients = self._dose_active_ingredients_for_enrichment(product)
         special_use_flags = self._collect_special_use_flags(active_ingredients)
+        # A food-format serving whose Facts panel declares protein has a food
+        # matrix, so a bare nutrient total on it can include intrinsic food
+        # minerals. A tablet or capsule declaring a gram of protein does not.
+        serving = self._select_canonical_serving(product.get("servingSizes") or [], []) or {}
+        serving_unit = self._normalize_serving_unit_label(serving.get("unit"))
+        physical_state = self._physical_state_description(product)
+        dosage_forms = {
+            serving_unit,
+            self._normalize_form_factor(physical_state) if physical_state else None,
+        }
+        declares_food_matrix = bool(
+            (self._collect_nutrition_summary(product).get("protein_g") or 0) > 0
+            and not dosage_forms & {
+                "tablet", "caplet", "capsule", "softgel", "gummy", "chewable", "lozenge"}
+        )
         ul_population = self._ul_screening_population(product)
         pediatric_age_groups = self._ul_screening_pediatric_age_groups(product)
         quality_identity_rows = [
@@ -23735,10 +23945,37 @@ class SupplementEnricherV3:
                         skip_ul_reason = (
                             "worst_case_compound_mass_within_ul"
                         )
+                    # The magnesium UL covers supplemental magnesium only. A
+                    # total on a food-matrix panel also counts intrinsic food
+                    # magnesium (Re-Built Mass XP 244288: 540 mg from whey,
+                    # grains, cocoa and a 2.5 g magnesium-creatine chelate). A
+                    # named source does not partition it: the Facts amount is
+                    # the total nutrient, food magnesium included. A total at
+                    # or below the UL bounds the added share; above it, without
+                    # a proven partition the supplemental exposure is unresolved.
+                    magnesium_ul_screening = None
+                    if (
+                        not skip_ul_check
+                        and safety_over_ul
+                        and declares_food_matrix
+                        and resolved_canonical_id == "magnesium"
+                        and _nutrient_record.get("ul_basis") == "supplemental_only"
+                        and ul_exposure.get("ul_gate_eligible") is True
+                    ):
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = "supplemental_magnesium_fraction_unknown"
+                        magnesium_ul_screening = {
+                            "screening_amount": ul_amount,
+                            "screening_unit": ul_unit,
+                            "screening_ul": safety_ul,
+                            "potential_pct_ul": safety_pct_ul,
+                            "screening_basis": "declared_total_including_food_magnesium",
+                        }
                     if skip_ul_check and ul_only_skip:
                         potential_pct_ul = (
-                            folate_ul_screening.get("potential_pct_ul")
-                            if folate_ul_screening
+                            (folate_ul_screening or magnesium_ul_screening).get("potential_pct_ul")
+                            if folate_ul_screening or magnesium_ul_screening
                             else None
                         )
                         potential_ul_concern = bool(
@@ -23909,8 +24146,10 @@ class SupplementEnricherV3:
                         is_indeterminate_folate = (
                             skip_ul_reason == "unknown_folate_form_lineage"
                         )
+                        is_indeterminate_magnesium = magnesium_ul_screening is not None
                         is_indeterminate_ul = (
                             is_indeterminate_folate
+                            or is_indeterminate_magnesium
                             or skip_ul_reason == "unknown_vitamin_form"
                             or skip_ul_reason
                             == "mixed_vitamin_a_preformed_fraction_unknown"
@@ -24038,6 +24277,15 @@ class SupplementEnricherV3:
                                         "the synthetic folic-acid contribution is not identified."
                                     ]
                                     if is_indeterminate_folate
+                                    else [
+                                        f"The {float(magnesium_ul_screening['screening_ul']):g} "
+                                        f"{magnesium_ul_screening['screening_unit']} magnesium upper "
+                                        "limit applies to supplemental magnesium only. This label's "
+                                        "magnesium total may include magnesium from food ingredients "
+                                        "and does not state the supplemental amount, so supplemental "
+                                        "magnesium could exceed that limit; this is not confirmed."
+                                    ]
+                                    if is_indeterminate_magnesium
                                     else []
                                 ),
                                 "skip_ul_check": True,
@@ -24114,6 +24362,14 @@ class SupplementEnricherV3:
                                 "assessment_status": "indeterminate",
                                 "reason": skip_ul_reason,
                                 **folate_ul_screening,
+                                "review_required": True,
+                            })
+                        if is_indeterminate_magnesium:
+                            ul_review_flags.append({
+                                "nutrient": "Magnesium",
+                                "assessment_status": "indeterminate",
+                                "reason": skip_ul_reason,
+                                **magnesium_ul_screening,
                                 "review_required": True,
                             })
                     elif skip_ul_check:
@@ -24305,6 +24561,7 @@ class SupplementEnricherV3:
                             amount=amount_for_ul if _child_resolved else None,
                             unit=converted_unit, form_name=matched_form,
                             shown_amount=ul_amount, shown_unit=ul_unit,
+                            food_matrix=declares_food_matrix,
                             unresolved_reason=None if _child_resolved else (
                                 skip_ul_reason
                                 or ul_exposure.get("ul_gate_ineligible_reason")
@@ -24587,6 +24844,29 @@ class SupplementEnricherV3:
                                     "warnings": [],
                                 })
 
+                    if (
+                        agg_adequacy.over_ul
+                        and cid == "magnesium"
+                        and declares_food_matrix
+                        and (agg_adequacy.reference or {}).get("ul_basis") == "supplemental_only"
+                        and all(row.get("ul_gate_eligible") is True for row in group["rows"])
+                    ):
+                        # Each total may be below the UL while their sum is
+                        # above it. Summing does not establish a supplemental
+                        # partition any more than a single food-matrix row.
+                        ul_review_flags.append({
+                            "nutrient": "Magnesium",
+                            "assessment_status": "indeterminate",
+                            "reason": "supplemental_magnesium_fraction_unknown",
+                            "screening_amount": group["total_amount"],
+                            "screening_unit": group["unit"],
+                            "screening_ul": agg_adequacy.ul,
+                            "potential_pct_ul": agg_adequacy.pct_ul,
+                            "screening_basis": "declared_total_including_food_magnesium",
+                            "review_required": True,
+                        })
+                        continue
+
                     if agg_adequacy.over_ul:
                         pct_ul_val = agg_adequacy.pct_ul or 0.0
                         over_ul_amount = agg_adequacy.over_ul_amount or 0.0
@@ -24672,9 +24952,11 @@ class SupplementEnricherV3:
                             group["std_name"], group["std_name"], cid, pediatric_age_groups,
                             amount=None if unresolved else group["total_amount"], unit=group["unit"],
                             form_name=group["form_name"], unresolved_reason=unresolved,
+                            food_matrix=declares_food_matrix,
                         )
                         # An unresolved sum cannot erase a known row exceedance.
-                        if summed is None or summed.get("status") == "over_limit":
+                        if (summed is None or summed.get("status") == "over_limit"
+                                or summed.get("reason") == "supplemental_magnesium_fraction_unknown"):
                             _child_summed.add(cid)
                         if summed:
                             if summed.get("warning"):

@@ -40,7 +40,7 @@ def _as_float(value: Any, default: float = 0.0) -> float:
 def _evidence_result_state(resolved: Dict[str, Any]) -> str:
     """Translate the omega resolver's decision into the shared Evidence state."""
     reason = str(resolved.get("applicability_reason") or "")
-    if reason == "prenatal_dha_intake_authority":
+    if resolved.get("evidence_result_state") == "evaluated_authority":
         return "evaluated_authority"
     if bool(resolved.get("applicability_qualified")):
         return "evaluated_applicable"
@@ -95,6 +95,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "applicability_qualified": bool(resolved.get("applicability_qualified")),
         "evidence_standard": resolved.get("record_id"),
         "evidence_source_pmids": list(resolved.get("record_source_pmids") or []),
+        "source_references": list(resolved.get("source_references") or []),
         "prenatal_outcome_credit_awarded": bool(resolved.get("prenatal_outcome_credit_awarded")),
         "indication_relevance_awarded": prenatal_authority,
         "indication_relevance_reason": "prenatal_dha_intake_authority" if prenatal_authority else "none",

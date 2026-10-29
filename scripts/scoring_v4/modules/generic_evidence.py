@@ -212,8 +212,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         accepted_ids = {_entry_id(entry) for entry in accepted_matches}
         matches = [entry for entry in matches if _entry_id(entry) in accepted_ids]
         recovered_matches = [entry for entry in recovered_matches if _entry_id(entry) in accepted_ids]
-    from evidence_resolver import evidence_owner_canonicals, _evidence_claim_purposes, _evidence_entry_purposes
-    claim_purposes = _evidence_claim_purposes(product) if owner_scoped else {}
+    from evidence_resolver import evidence_owner_canonicals, evidence_record_matches_declared_purpose
     owner_canonicals = (
         evidence_owner_canonicals(product)
         if owner_scoped
@@ -245,7 +244,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         )
         if owner_canonicals and matched_owner not in owner_canonicals:
             continue
-        if matched_owner in claim_purposes and not (claim_purposes[matched_owner] & _evidence_entry_purposes(entry)):
+        if owner_scoped and not evidence_record_matches_declared_purpose(
+                product, {"canonical_id": matched_owner}, entry):
             _append_once(flags, "LABEL_PURPOSE_EVIDENCE_MISMATCH:" + str(matched_owner))
             continue
 
@@ -307,32 +307,30 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         # with established RDA/AI has evidence of necessity even without a strong
         # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a strong clinical 14 stays 14).
-        explicit_purpose_canonicals = {canonical for _, canonical in prominent}
-        if not explicit_purpose_canonicals:
-            # A label with one assessable active still has an unambiguous
-            # Evidence subject even when the shared role owner has no title or
-            # claim signal to mark prominent.  Multiple active identities stay
-            # unresolved here: Evidence must not recreate the removed
-            # heaviest-mass fallback to choose among them.
-            subject_canonicals = {
-                str(row.get("canonical_id") or "").strip().lower()
-                for row in _competing_active_rows(product)
-                if isinstance(row, dict)
-                and str(row.get("canonical_id") or "").strip()
-                and not is_lent_blend_mass(row)
-            }
-            if len(subject_canonicals) == 1:
-                explicit_purpose_canonicals = subject_canonicals
-        auth_canon = _purpose_essential_canonical(
-            product,
-            owner_canonicals=explicit_purpose_canonicals if explicit_purpose_canonicals else set(),
-        )
+        auth_canon = _purpose_essential_canonical(product)
         if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
                 and primary_floor < NUTRITION_AUTHORITY_FLOOR):
             primary_floor = NUTRITION_AUTHORITY_FLOOR
             nutrition_authority_canonical = auth_canon
             if not floor_canonical:
                 floor_canonical = auth_canon
+
+    # The shared omega owner separates disclosed EPA/DHA nutrition from held
+    # heart-event research. Reuse its applicability and configured public score;
+    # this engine's raw units use the existing generic public-score reference.
+    omega_authority = None
+    if apply_primary_floor:
+        from evidence_resolver import resolve_omega_evidence_standard
+        from scoring_v4.quality_score_config import config
+        resolved_omega = resolve_omega_evidence_standard(product)
+        if resolved_omega["applicability_qualified"]:
+            cfg = config()
+            reference = cfg["evidence_subscale"]["archetype_reference"]["generic_single_molecule"]
+            authority_floor = resolved_omega["score"] * reference / cfg["pillars"]["evidence"]["weight"]
+            if authority_floor > primary_floor:
+                primary_floor = authority_floor
+                floor_canonical = nutrition_authority_canonical = "omega_3"
+                omega_authority = resolved_omega
 
     total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
     immune_cap = immune_support_evidence_cap(product)
@@ -415,6 +413,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
 
     metadata = {
         "contributing_record_assessments": receipts,
+        "source_references": (list(omega_authority.get("source_references") or [])
+            if omega_authority and primary_floor_decisive else []),
         "selected_nutrition_authority": (nutrition_authority_canonical
             if total > 0 and primary_floor_decisive else None),
         "phase": PHASE_MARKER,
@@ -1555,10 +1555,16 @@ def _matched_active_canonical(
     if use_structured_identity or reviewed_identity:
         for canonical_id in _matched_canonical_ids(entry):
             direct = str(canonical_id or "").strip().lower()
-            if direct in canon_index.values() and (
-                not reviewed_identity or not owner_canonicals or direct in owner_canonicals
-            ):
-                return direct
+            candidates = {actual for actual in canon_index.values()
+                          if _canonical_text(actual) == _canonical_text(direct)
+                          and (not reviewed_identity or not owner_canonicals
+                               or actual in owner_canonicals)}
+            if len(candidates) == 1:
+                return next(iter(candidates))
+            if len(candidates) > 1:
+                # Normalized IDs must still name one actual active identity.
+                # Never revive a reviewed ambiguity through ingredient aliases.
+                return ""
         if reviewed_identity:
             # An accepted source identity set (even an empty one) is final.
             # Legacy alias text cannot revive an identity applicability rejected.
@@ -1579,6 +1585,17 @@ def _purpose_essential_canonical(
     The shared role owner supplies ``owner_canonicals``. Amount adequacy and
     excess are independent Dose/Safety judgments and do not decide Evidence.
     """
+    if owner_canonicals is None:
+        from evidence_resolver import evidence_prominent_row_keys
+        owner_canonicals = {canonical for _, canonical in evidence_prominent_row_keys(product)}
+        if not owner_canonicals:
+            # Preserve the existing single-subject fallback; multiple active
+            # identities never get a heaviest-mass authority anchor.
+            subjects = {str(row.get("canonical_id") or "").strip().lower()
+                        for row in _competing_active_rows(product) if isinstance(row, dict)
+                        and str(row.get("canonical_id") or "").strip() and not is_lent_blend_mass(row)}
+            if len(subjects) == 1:
+                owner_canonicals = subjects
     candidates = set()
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):

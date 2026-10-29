@@ -127,6 +127,7 @@ _UNRESOLVED_FORM_REASONS = {
     "unknown_folate_form_lineage",
     "unknown_vitamin_form",
     "mixed_vitamin_a_preformed_fraction_unknown",
+    "supplemental_magnesium_fraction_unknown",
 }
 _UNRESOLVED_UNIT_REASONS = {
     "label_unit_conflict",
