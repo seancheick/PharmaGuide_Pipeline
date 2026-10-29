@@ -1935,6 +1935,9 @@ def _derive_blend_header_anchor_from_nested_child(
     if child_path and child_path not in item["linked_rows"]:
         item["linked_rows"].append(child_path)
     item["canonical_source_db"] = child.get("canonical_source_db") or item["canonical_source_db"]
+    # The anchor may be minted from a taxonomy label. Only the child's
+    # actual canonical identity can establish verified ingredient provenance.
+    item["clean_identity_id"] = child.get("canonical_id")
     _stamp_evidence_identity_contract(item, child, include_source_context=True)
     if _is_botanical_or_standardized_anchor(child):
         item["anchor_risk_class"] = "botanical_or_standardized"
