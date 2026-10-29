@@ -1434,3 +1434,29 @@ def test_standardized_korean_root_raw_pipeline_does_not_invent_fermentation(
     artifact = build_scored_artifact(enriched)
     assert artifact['product_safety_status'] == 'no_known_catalog_concern'
     assert 'dose_benchmark_identity_unresolved' in artifact['assessment_readiness']['release_assessment']['blockers']
+
+
+@pytest.mark.parametrize('pid,percent', [('40590', 7), ('219043', 8)])
+def test_generic_ginseng_consumer_note_does_not_deny_declared_root_or_marker(
+    normalizer, enricher, pid, percent,
+):
+    from build_final_db import build_detail_blob
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((FIXTURES / f'raw_ginseng_{pid}.json').read_text())
+    enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+    row = enriched['ingredient_quality_data']['ingredients'][0]
+    assert row['plantPart'].lower() == 'root'
+    assert row['raw_taxonomy']['forms'][0]['percent'] == percent
+    assert row['matched_form'] == 'ginseng (unspecified)'
+    scored = build_scored_artifact(enriched)
+    blob = build_detail_blob(enriched, scored)
+    ingredient = next(item for item in blob['ingredients']
+                      if item.get('canonical_id') == 'ginseng')
+    assert ingredient['form_note'] == (
+        'Generic ginseng names alone cannot establish a specific processing '
+        'method or equivalence to another ginseng preparation.'
+    )
+    assert 'without identifying species' not in ingredient['form_note']
+    assert ingredient['form_note_preview'] == ingredient['form_note']
+    assert enriched['ingredient_quality_data']['ingredients'][0]['raw_source_text'] == raw['ingredientRows'][0]['name']

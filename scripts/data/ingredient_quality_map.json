@@ -26986,10 +26986,10 @@
         ],
         "bio_score": 8,
         "absorption": "low (ginsenoside biotransformation-dependent)",
-        "consumer_note": "This label names ginseng without identifying species, plant part, processing, or ginsenoside standardization.",
+        "consumer_note": "Generic ginseng names alone cannot establish a specific processing method or equivalence to another ginseng preparation.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex source-label wording review",
+          "date": "2026-10-29"
         },
         "notes": "Form not specified on the label. Ginseng products span multiple species (Panax ginseng, P. quinquefolius, Eleutherococcus), processing methods (white, red, black, fermented), and ginsenoside profiles. Bioavailability and effects vary substantially by form. Scored conservatively until species and preparation are confirmed. B33 audit 2026-04-25: ginsenoside biotransformation-dep.",
         "aliases": [
