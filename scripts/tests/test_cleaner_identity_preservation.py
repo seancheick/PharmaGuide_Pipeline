@@ -27,6 +27,52 @@ def normalizer():
     return EnhancedDSLDNormalizer()
 
 
+def test_printed_davurica_cannot_acquire_purshiana_form_or_score(normalizer):
+    import json
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+
+    raw = json.loads((Path(__file__).parent / 'fixtures/raw_cascara_252441.json').read_text())
+    cleaned = normalizer.normalize_product(raw)
+    source = cleaned['activeIngredients'][0]
+    assert source['raw_source_text'] == 'Cascara Sagrada extract'
+    assert 'Rhamnus davurica' in source['notes']
+    assert (source['quantity'], source['unit']) == (500, 'mg')
+    assert source['canonical_id'] is None
+    enriched, errors = SupplementEnricherV3().enrich_product(cleaned)
+    assert not errors
+    row = enriched['ingredient_quality_data']['ingredients'][0]
+    assert row['canonical_id'] is None
+    assert row['canonical_id_before'] is None
+    assert row['identity_disposition'] == 'identity_conflict'
+    assert row['scoreable_identity'] is False
+    assert row.get('bio_score') is None
+    artifact = build_scored_artifact(enriched)
+    assert artifact['quality_score_status'] == 'not_scored'
+    assert artifact['quality_score_v4_100'] is None
+    assert artifact['product_safety_status'] == 'caution'
+    blob = build_detail_blob(enriched, artifact)
+    assert not any('purshiana' in str(item.get('form_note') or '').lower()
+                   for item in blob['ingredients'])
+    hits = enriched['interaction_profile']['ingredient_alerts']
+    uncertainty = [h for h in hits if h['rule_id'] == 'RULE_CASCARA_UNRESOLVED_IDENTITY']
+    assert len(uncertainty) == 1
+    conditions = {h['condition_id']: h for h in uncertainty[0]['condition_hits']}
+    assert set(conditions) == {'pregnancy', 'lactation', 'liver_disease', 'kidney_disease'}
+    assert conditions['pregnancy']['severity'] == conditions['lactation']['severity'] == 'avoid'
+    assert all(h['direction'] == 'unknown' for h in conditions.values())
+    assert not uncertainty[0]['drug_class_hits']
+    assert len(blob['warnings']) == 5
+    assert sum(w.get('title') == 'Ingredient identity needs review' for w in blob['warnings']) == 1
+    visible = str(blob['warnings']) + str(blob['ingredients'])
+    assert 'identity is unresolved' in visible
+    assert 'any medicine' in visible
+    for unsupported in ('electrolyte', 'digoxin', 'breast milk', 'liver injury', 'cascaroside'):
+        assert unsupported not in visible.lower()
+
+
+
 # Each row: (label, expected_substring_in_standard_name, reason)
 # expected_substring is matched case-insensitively against the cleaner output.
 SOURCE_BOTANICAL_CASES = [

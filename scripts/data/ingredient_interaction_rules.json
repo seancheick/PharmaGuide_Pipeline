@@ -3,10 +3,10 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-10-28",
-    "total_entries": 154,
+    "last_updated": "2026-10-29",
+    "total_entries": 155,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 154,
+    "total_rules": 155,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -24300,6 +24300,203 @@
       },
       "last_reviewed": "2026-10-20",
       "review_owner": "Source-content review (agent), 2026-10-20; explicit Senactiv applicability uncertainty approved by Sean"
+    },
+    {
+      "id": "RULE_CASCARA_UNRESOLVED_IDENTITY",
+      "subject_ref": {
+        "db": "banned_recalled_ingredients",
+        "canonical_id": "ADD_CASCARA_SAGRADA"
+      },
+      "_identity_conflict_only": [
+        "rhamnus davurica",
+        "rhamnus dahurica"
+      ],
+      "notes": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "insufficient",
+          "mechanism": "The labeled Rhamnus davurica identity does not match the purshiana species in standard cascara references. No species-specific harm or interaction is established by these identity sources.",
+          "action": "Avoid during pregnancy pending identity clarification.",
+          "sources": [
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/252441.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253399.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253403.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253404.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311301.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311302.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311303.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311304.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330523.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330524.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330525.pdf",
+            "https://powo.science.kew.org/taxon/718301-1",
+            "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:317386-2"
+          ],
+          "alert_headline": "Unresolved ingredient identity — avoid",
+          "alert_body": "Avoid during pregnancy pending identity clarification.",
+          "informational_note": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "unknown",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "avoid",
+          "evidence_level": "insufficient",
+          "mechanism": "The labeled Rhamnus davurica identity does not match the purshiana species in standard cascara references. No species-specific harm or interaction is established by these identity sources.",
+          "action": "Avoid during breastfeeding pending identity clarification.",
+          "sources": [
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/252441.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253399.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253403.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253404.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311301.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311302.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311303.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311304.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330523.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330524.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330525.pdf",
+            "https://powo.science.kew.org/taxon/718301-1",
+            "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:317386-2"
+          ],
+          "alert_headline": "Unresolved ingredient identity — avoid",
+          "alert_body": "Avoid during breastfeeding pending identity clarification.",
+          "informational_note": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "unknown",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "liver_disease",
+          "severity": "caution",
+          "evidence_level": "insufficient",
+          "mechanism": "The labeled Rhamnus davurica identity does not match the purshiana species in standard cascara references. No species-specific harm or interaction is established by these identity sources.",
+          "action": "Obtain professional review before use with this medical condition because ingredient identity is unresolved.",
+          "sources": [
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/252441.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253399.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253403.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253404.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311301.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311302.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311303.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311304.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330523.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330524.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330525.pdf",
+            "https://powo.science.kew.org/taxon/718301-1",
+            "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:317386-2"
+          ],
+          "alert_headline": "Unresolved ingredient identity — professional review",
+          "alert_body": "Obtain professional review before use with this medical condition because ingredient identity is unresolved.",
+          "informational_note": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "liver_disease"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "unknown",
+          "materiality": "presence"
+        },
+        {
+          "condition_id": "kidney_disease",
+          "severity": "caution",
+          "evidence_level": "insufficient",
+          "mechanism": "The labeled Rhamnus davurica identity does not match the purshiana species in standard cascara references. No species-specific harm or interaction is established by these identity sources.",
+          "action": "Obtain professional review before use with this medical condition because ingredient identity is unresolved.",
+          "sources": [
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/252441.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253399.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253403.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/253404.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311301.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311302.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311303.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/311304.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330523.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330524.pdf",
+            "https://api.ods.od.nih.gov/dsld/s3/pdf/330525.pdf",
+            "https://powo.science.kew.org/taxon/718301-1",
+            "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:317386-2"
+          ],
+          "alert_headline": "Unresolved ingredient identity — professional review",
+          "alert_body": "Obtain professional review before use with this medical condition because ingredient identity is unresolved.",
+          "informational_note": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "kidney_disease"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "unknown",
+          "materiality": "presence"
+        }
+      ],
+      "drug_class_rules": [],
+      "last_reviewed": "2026-10-29",
+      "review_owner": "Sean — approved identity-uncertainty precaution scope, 2026-10-29"
     }
   ]
 }

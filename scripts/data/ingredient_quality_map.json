@@ -68666,7 +68666,11 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
-      "confidence": "high"
+      "confidence": "high",
+      "negative_match_terms": [
+        "rhamnus davurica",
+        "rhamnus dahurica"
+      ]
     },
     "rxcui_note": "RxCUI 66869 is the RxNorm ingredient 'cascara sagrada' (tty IN, ATC A06AB07); 1350209 'Frangula purshiana bark extract' is the narrower extract concept. Verified on RxNav 2026-09-26."
   },

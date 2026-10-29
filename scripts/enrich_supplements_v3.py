@@ -9318,6 +9318,12 @@ class SupplementEnricherV3:
                 cleaner_canonical_id=cleaner_canonical_id,
                 source_context=source_context,
             )
+            parent = (match or {}).get("canonical_id")
+            if negative_match_terms_veto(
+                [ing_name, row_notes],
+                ((quality_map.get(parent) or {}).get("match_rules") or {}).get("negative_match_terms", []),
+            ):
+                return None
             return self._read_form_in_row_notes(
                 match, row_notes.strip(), quality_map, ing_name, cleaned_forms, cleaner_canonical_id)
         try:
@@ -19939,6 +19945,20 @@ class SupplementEnricherV3:
         return form_ids
 
     def _interaction_rule_applies(self, rule: Dict, ingredient: Dict) -> bool:
+        if rule.get("_identity_conflict_only"):
+            subject = rule.get("subject_ref") or {}
+            if (ingredient.get("identity_disposition") != "identity_conflict"
+                    or ingredient.get("canonical_id") or ingredient.get("canonical_id_after")
+                    or ingredient.get("recognition_source") != subject.get("db")
+                    or not subject.get("canonical_id")
+                    or ingredient.get("recognized_entry_id") != subject.get("canonical_id")):
+                return False
+            required_terms = rule.get("_identity_conflict_only")
+            if isinstance(required_terms, list) and not any(
+                str(term).casefold() in str(ingredient.get("notes") or "").casefold()
+                for term in required_terms if str(term).strip()
+            ):
+                return False
         form_scope = rule.get("form_scope")
         if form_scope is None:
             return True
@@ -21276,6 +21296,11 @@ class SupplementEnricherV3:
             )
 
             for rule in matched_rules:
+                if rule.get("_identity_conflict_only"):
+                    # The original row owns its printed species; an IQM
+                    # recognition row may omit those source notes.
+                    source_row = label_rows_by_path.get(ingredient.get("raw_source_path")) or {}
+                    scope_row = {**scope_row, "notes": source_row.get("notes")}
                 if not self._interaction_rule_applies(rule, scope_row):
                     continue
                 dose_row = base_dose_row
@@ -21339,6 +21364,9 @@ class SupplementEnricherV3:
                         materiality=cond_rule.get("materiality"),
                     )
                     sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
+                    if rule.get("_identity_conflict_only"):
+                        label_url = f"https://api.ods.od.nih.gov/dsld/s3/pdf/{enriched.get('dsld_id')}.pdf"
+                        sources = [src for src in sources if "/dsld/s3/pdf/" not in src or src == label_url]
                     for src in sources:
                         source_set.add(src)
                     tier_copy = (threshold_eval or {}).get("matched_copy") or {}

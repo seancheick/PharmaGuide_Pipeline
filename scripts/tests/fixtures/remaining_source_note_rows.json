@@ -1,0 +1,1346 @@
+{
+  "294422": {
+    "row": {
+      "order": 1,
+      "ingredientId": 325156,
+      "description": "",
+      "notes": "Standardized to contain greater than or equal to 7% Silica",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1000,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Horsetail Whole Herb Extract",
+      "category": "botanical",
+      "ingredientGroup": "Horsetail",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 293311,
+          "prefix": null,
+          "percent": null,
+          "name": "Silica",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "uniiCode": "ETJ7Z6XBU4"
+        }
+      ]
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Horsetail Extract (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+    "pdf_sha256": "03e99222ec764f06c3b9256572e3836c148f942f7c5ce3111762447cc9827eca",
+    "product_name": "Horsetail Extract",
+    "brand": "BulkSupplements.com"
+  },
+  "294424": {
+    "row": {
+      "order": 1,
+      "ingredientId": 325156,
+      "description": "",
+      "notes": "Standardized to contain greater than or equal to 7% Silica",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1000,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Horsetail Whole Herb Extract",
+      "category": "botanical",
+      "ingredientGroup": "Horsetail",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 293311,
+          "prefix": null,
+          "percent": null,
+          "name": "Silica",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "uniiCode": "ETJ7Z6XBU4"
+        }
+      ]
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Horsetail Extract (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+    "pdf_sha256": "c1e4d733f8fe358de1ab3d014de4efa5d0dc96944e9772d57ca95f4f5351d08b",
+    "product_name": "Horsetail Extract",
+    "brand": "BulkSupplements.com"
+  },
+  "312021": {
+    "row": {
+      "order": 1,
+      "ingredientId": 325156,
+      "description": null,
+      "notes": "Standardized to contain greater than or equal to 7% Silica",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1000,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Horsetail Whole Herb Extract",
+      "category": "botanical",
+      "ingredientGroup": "Horsetail",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 293311,
+          "prefix": null,
+          "percent": null,
+          "name": "Silica",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "uniiCode": "ETJ7Z6XBU4"
+        }
+      ]
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Horsetail Extract (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+    "pdf_sha256": "69c2d4682b2998f7000437ba307f0ea69f6c2b5acd20cff954371dcbcb248531",
+    "product_name": "Horsetail Extract",
+    "brand": "BulkSupplements.com"
+  },
+  "312023": {
+    "row": {
+      "order": 1,
+      "ingredientId": 325156,
+      "description": null,
+      "notes": "Standardized to contain greater than or equal to 7% Silica",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1000,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Horsetail Whole Herb Extract",
+      "category": "botanical",
+      "ingredientGroup": "Horsetail",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 293311,
+          "prefix": null,
+          "percent": null,
+          "name": "Silica",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "uniiCode": "ETJ7Z6XBU4"
+        }
+      ]
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Horsetail Extract (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+    "pdf_sha256": "79aea01e3667212729990478f0a1979595b11d51fa3702117a46733d5e492141",
+    "product_name": "Horsetail Extract",
+    "brand": "BulkSupplements.com"
+  },
+  "331010": {
+    "row": {
+      "order": 1,
+      "ingredientId": 325156,
+      "description": "",
+      "notes": "4:1, Standardized to contain greater than or equal to 7% Silica",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1000,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Horsetail Whole Herb Extract",
+      "category": "botanical",
+      "ingredientGroup": "Horsetail",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 293311,
+          "prefix": null,
+          "percent": null,
+          "name": "Silica",
+          "category": "mineral",
+          "ingredientGroup": "Silicon",
+          "uniiCode": "ETJ7Z6XBU4"
+        }
+      ]
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Horsetail Extract 4:1 (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+    "pdf_sha256": "2eabd9587a96dab9424e0ae4440e0ec8c72cab9774cc6c2a98b6edddb85fbe49",
+    "product_name": "Horsetail Extract Powder 1000 mg",
+    "brand": "BulkSupplements.com"
+  },
+  "252562": {
+    "row": {
+      "order": 1,
+      "ingredientId": 282157,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 500,
+          "operator": "=",
+          "quantity": 500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Kelp extract",
+      "category": "other",
+      "ingredientGroup": "Laminaria",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Kelp Extract (Laminaria japonica) PlantPart: whole grass",
+    "pdf_sha256": "367ace7abe0eb290eff2976fb4790b0ab8fc68544f3195477cdbc43e453d7d60",
+    "product_name": "Kelp Extract",
+    "brand": "BulkSupplements.com"
+  },
+  "255054": {
+    "row": {
+      "order": 1,
+      "ingredientId": 282157,
+      "description": null,
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 500,
+          "operator": "=",
+          "quantity": 500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Kelp extract",
+      "category": "other",
+      "ingredientGroup": "Laminaria",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Kelp Extract (Laminaria japonica) PlantPart: whole grass",
+    "pdf_sha256": "f8311012b4ccd70bf76bc8aa6393fb4fd3334cd1c327ccdec9a4e9af109e6450",
+    "product_name": "Kelp Extract",
+    "brand": "BulkSupplements.com"
+  },
+  "255055": {
+    "row": {
+      "order": 1,
+      "ingredientId": 282157,
+      "description": null,
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 500,
+          "operator": "=",
+          "quantity": 500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Kelp extract",
+      "category": "other",
+      "ingredientGroup": "Laminaria",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Kelp Extract (Laminaria japonica) PlantPart: whole grass",
+    "pdf_sha256": "d7205d754eaaa69e5071a520046fd4a3b2804c08a295638640d6ef351e08ec10",
+    "product_name": "Kelp Extract",
+    "brand": "BulkSupplements.com"
+  },
+  "255057": {
+    "row": {
+      "order": 1,
+      "ingredientId": 282157,
+      "description": null,
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 500,
+          "operator": "=",
+          "quantity": 500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Kelp extract",
+      "category": "other",
+      "ingredientGroup": "Laminaria",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Kelp Extract (Laminaria japonica) PlantPart: whole grass",
+    "pdf_sha256": "3f504b3f488051085727ab987465dbdff95ebc314329ebfeb0df28b708cb5881",
+    "product_name": "Kelp Extract",
+    "brand": "BulkSupplements.com"
+  },
+  "79598": {
+    "row": {
+      "order": 1,
+      "ingredientId": 46286,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 960,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value (DV) Not Established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "White Oak",
+      "category": "botanical",
+      "ingredientGroup": "White Oak",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "White Oak (Quercus alba) PlantPart: bark",
+    "pdf_sha256": "a26be66d12334db3267c7783e19f90fa1054b8e577166d484bdb340386340710",
+    "product_name": "White Oak Bark 480 mg",
+    "brand": "Nature's Way"
+  },
+  "326238": {
+    "row": {
+      "order": 9,
+      "ingredientId": 318269,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 0,
+          "unit": "NP",
+          "dailyValueTargetGroup": [],
+          "servingSizeUnit": "Gummie(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Raspberry, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Raspberry (unspecified)",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[4].nestedRows[1]",
+    "expected_notes": "Raspberry fruit powder PlantPart: fruit Note: member of Organic VitaBerry six-fruit blend (strawberry, raspberry, blueberry, tart cherry, elderberry, cranberry); individual amount not declared",
+    "pdf_sha256": "50524256eb99ba69d25816d085364d5e6c0423df5a6dafd6a1dfb3ea7e7525c3",
+    "product_name": "Biotin + Vitamin C Natural Berry Flavor",
+    "brand": "SR Sports Research"
+  },
+  "312858": {
+    "row": {
+      "order": 1,
+      "ingredientId": 342540,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Veg Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "American Ginseng Leaf Extract",
+      "category": "botanical",
+      "ingredientGroup": "American Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "American Ginseng Extract (Panax quinquefolius) PlantPart: leaf",
+    "pdf_sha256": "3865eba2f72bd6be122ce65bc83d5a48d9e0209d34f0e67b969e175cc04d1c1d",
+    "product_name": "American Ginseng Extract 1000 mg Veg Capsules",
+    "brand": "BulkSupplements.com"
+  },
+  "232035": {
+    "row": {
+      "order": 2,
+      "ingredientId": 146375,
+      "description": null,
+      "notes": null,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 55,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Vegetarian Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "GS15-4 Fermented Asian Ginseng extract",
+      "category": "botanical",
+      "ingredientGroup": "Oriental Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[1]",
+    "expected_notes": "GS15-4 Fermented Asian ginseng extract PlantPart: root",
+    "pdf_sha256": "79d65a52b058a99cea20524246449c47c5267d1be9524f1b4d3692cbb232ff29",
+    "product_name": "Asian Energy Boost",
+    "brand": "Life Extension"
+  },
+  "251494": {
+    "row": {
+      "order": 1,
+      "ingredientId": 66799,
+      "description": null,
+      "notes": null,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 1.1,
+          "unit": "Gram(s)",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value (DV) Not Established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "American Ginseng",
+      "category": "botanical",
+      "ingredientGroup": "American Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "American Ginseng PlantPart: root",
+    "pdf_sha256": "570890a47c3fa8c3d59e52305577cc8699970e77dca90dbd99c0c88dc9800553",
+    "product_name": "American Ginseng 1,100 mg",
+    "brand": "Nature's Way"
+  },
+  "269558": {
+    "row": {
+      "order": 1,
+      "ingredientId": 172305,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Korean Red Ginseng",
+      "category": "botanical",
+      "ingredientGroup": "Oriental Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Korean Red Ginseng (Panax ginseng) PlantPart: root",
+    "pdf_sha256": "1db78ee7252a0e74f22d65d47d533f646f9fc2892f6adb370b2f5023123fff9f",
+    "product_name": "Korean Red Ginseng 1,000 mg",
+    "brand": "Nutricost"
+  },
+  "269748": {
+    "row": {
+      "order": 1,
+      "ingredientId": 293966,
+      "description": "",
+      "notes": "standardized to 1% ginsenosides",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value (DV) Not Established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Panax ginseng extract",
+      "category": "botanical",
+      "ingredientGroup": "Oriental Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 4513,
+          "prefix": null,
+          "percent": null,
+          "name": "Ginsenosides",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Ginsenosides",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Panax Ginseng Extract PlantPart: root Note: standardized to 1% ginsenosides",
+    "pdf_sha256": "e89809579b97266bd96dc8850125274e53792970cd14a231bbb6b632e7bd822f",
+    "product_name": "Panax Ginseng 1,000 mg",
+    "brand": "Nutricost"
+  },
+  "205266": {
+    "row": {
+      "order": 7,
+      "ingredientId": 33483,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 100,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Gummy(ies)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "American Ginseng extract",
+      "category": "botanical",
+      "ingredientGroup": "American Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[4]",
+    "expected_notes": "American Ginseng Extract (Panax quinquefolius) PlantPart: root",
+    "pdf_sha256": "e8a90b95d1f0fbb948514e1e110f2f22414b2fee8eac3e2f9982adf1bedfc10d",
+    "product_name": "Laser Focus Berry Tangy Tangerine",
+    "brand": "OLLY"
+  },
+  "278018": {
+    "row": {
+      "order": 1,
+      "ingredientId": 314729,
+      "description": "",
+      "notes": "standardized to contain 12% total ginsenosides",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 250,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value (DV) Not Established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Asian Ginseng Root Extract",
+      "category": "botanical",
+      "ingredientGroup": "Oriental Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 56358,
+          "prefix": null,
+          "percent": null,
+          "name": "total Ginsenosides",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Ginsenosides",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Asian Ginseng Extract (Panax ginseng) PlantPart: root Note: standardized to 12% TOTAL ginsenosides",
+    "pdf_sha256": "b481c3852da88673b8efbf8108a5ac5e328d4308ad1c1e1857e122f9b9746366",
+    "product_name": "Panax Ginseng",
+    "brand": "Pure Encapsulations"
+  },
+  "214060": {
+    "row": {
+      "order": 2,
+      "ingredientId": 131167,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 260,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value (DV) Not Established"
+            }
+          ],
+          "servingSizeUnit": "Vegetable Capsule(s)"
+        }
+      ],
+      "nestedRows": [
+        {
+          "order": 3,
+          "ingredientId": 296542,
+          "description": "",
+          "notes": "10%",
+          "quantity": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 1,
+              "operator": "=",
+              "quantity": 26,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Vegetable Capsule(s)"
+            }
+          ],
+          "nestedRows": [],
+          "name": "Ginsenosides",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Ginsenosides",
+          "uniiCode": "3K198YD54P",
+          "alternateNames": [],
+          "forms": []
+        }
+      ],
+      "name": "American Ginseng root extract",
+      "category": "botanical",
+      "ingredientGroup": "American Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[1]",
+    "expected_notes": "American Ginseng Extract (Panax quinquefolius) PlantPart: root Note: ginsenosides 26 mg [10%]",
+    "pdf_sha256": "4e9c44067c44ac6eac64613c23de0e1344e86045ce9a8cc29b45e186e4623c6c",
+    "product_name": "American Ginseng Root",
+    "brand": "Solgar"
+  },
+  "216622": {
+    "row": {
+      "order": 2,
+      "ingredientId": 241047,
+      "description": "",
+      "notes": "standardized American Ginseng extract (Form: 10% Ginsenosides Note: 10 mg) PlantPart: root ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 100,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value (DV) Not Established"
+            }
+          ],
+          "servingSizeUnit": "Vegetable Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "standardized American Ginseng extract",
+      "category": "botanical",
+      "ingredientGroup": "American Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 241048,
+          "prefix": null,
+          "percent": 10,
+          "name": "Ginsenosides",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Ginsenosides",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[1]",
+    "expected_notes": "Standardized American Ginseng Extract (Panax quinquefolium) PlantPart: root Note: ginsenosides 10 mg [10%]",
+    "pdf_sha256": "17a3d297cfed742bc83798406c41d685b42716e9ca9f6028a7849f8fc0c79ead",
+    "product_name": "American Ginseng Root Extract",
+    "brand": "Solgar"
+  },
+  "68956": {
+    "row": {
+      "order": 1,
+      "ingredientId": 151438,
+      "description": null,
+      "notes": "American Ginseng root extract (Form: 3% Ginsenosides Note: = 6 mg) PlantPart: root Genus: Panax Species: quinquefolius ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 200,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Light Brown Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "American Ginseng root extract",
+      "category": "botanical",
+      "ingredientGroup": "American Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 151405,
+          "prefix": null,
+          "percent": 3,
+          "name": "Ginsenosides",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Ginsenosides",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "American Ginseng Root Extract (Panax quinquefolium) PlantPart: root Note: 3% ginsenosides = 6 mg",
+    "pdf_sha256": "a8b762f2aa0ad84565617c0848be1df6e5eec45fe019c1042d008c66c267d65e",
+    "product_name": "Triple Ginsa Rush",
+    "brand": "GNC Mega Men"
+  },
+  "329949": {
+    "row": {
+      "order": 1,
+      "ingredientId": 316639,
+      "description": "",
+      "notes": "organic",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 2,
+          "unit": "Gram(s)",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Ashwagandha, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Ashwagandha",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Organic Ashwagandha Powder (Withania somnifera) PlantPart: root",
+    "pdf_sha256": "310b260237009e0dc9aa3abbe990a57095b05bd8ddd7cfe446543a7c55f54f1f",
+    "product_name": "Organic Ashwagandha Powder 2g",
+    "brand": "BulkSupplements.com"
+  },
+  "329950": {
+    "row": {
+      "order": 1,
+      "ingredientId": 316639,
+      "description": "",
+      "notes": "organic",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 2,
+          "unit": "Gram(s)",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Ashwagandha, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Ashwagandha",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Organic Ashwagandha Powder (Withania somnifera) PlantPart: root",
+    "pdf_sha256": "1082aa6f8e145666d37b799e39f34b3b88c9fd1d622465dfafb0f4ea95ef91d9",
+    "product_name": "Organic Ashwagandha Powder 2 g",
+    "brand": "BulkSupplements.com"
+  },
+  "329951": {
+    "row": {
+      "order": 1,
+      "ingredientId": 316639,
+      "description": "",
+      "notes": "organic",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 2,
+          "unit": "Gram(s)",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Gram(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Ashwagandha, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Ashwagandha",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Organic Ashwagandha Powder (Withania somnifera) PlantPart: root",
+    "pdf_sha256": "9aec53e0da30f13a798e59c4259ca0f7a133b838d7911fc463e5f661476b6aa4",
+    "product_name": "Organic Ashwagandha Powder 2 g",
+    "brand": "BulkSupplements.com"
+  },
+  "329958": {
+    "row": {
+      "order": 1,
+      "ingredientId": 355968,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2000,
+          "operator": "=",
+          "quantity": 2000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established."
+            }
+          ],
+          "servingSizeUnit": "Milligram(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Ginkgo biloba, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Ginkgo ",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Organic Ginkgo Biloba Powder (Ginkgo biloba L.) PlantPart: leaves",
+    "pdf_sha256": "af9714930ddac9ea9b2cb1a92b7bc94396dcb90e500a2828db9781d0489f7f0c",
+    "product_name": "Organic Ginkgo Biloba Powder 2000 mg",
+    "brand": "BulkSupplements.com"
+  },
+  "329959": {
+    "row": {
+      "order": 1,
+      "ingredientId": 355968,
+      "description": "",
+      "notes": "organic",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2000,
+          "operator": "=",
+          "quantity": 2000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Ginkgo biloba, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Ginkgo ",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Organic Ginkgo Biloba Powder (Ginkgo biloba L.) PlantPart: leaves",
+    "pdf_sha256": "73be8aee10425183ec7e54da37c7d8f5f1ba133ccb9a886c212fa7dd21a72122",
+    "product_name": "Organic Ginkgo Biloba Powder 2000 mg",
+    "brand": "BulkSupplements.com"
+  },
+  "329960": {
+    "row": {
+      "order": 1,
+      "ingredientId": 355968,
+      "description": "",
+      "notes": "organic",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2000,
+          "operator": "=",
+          "quantity": 2000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Ginkgo biloba, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Ginkgo ",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Organic Ginkgo Biloba Powder (Ginkgo biloba L.) PlantPart: leaves",
+    "pdf_sha256": "a047529b87abbe3bd98a4fb2168fc063d8cb795652479da6c5ab6cd1d8082ca3",
+    "product_name": "Organic Ginkgo Biloba Powder 2000 mg",
+    "brand": "BulkSupplements.com"
+  },
+  "329961": {
+    "row": {
+      "order": 1,
+      "ingredientId": 355968,
+      "description": "",
+      "notes": "organic",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2000,
+          "operator": "=",
+          "quantity": 2000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Ginkgo biloba, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Ginkgo ",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Organic Ginkgo Biloba Powder (Ginkgo biloba L.) PlantPart: leaves",
+    "pdf_sha256": "e0c168a4912aba2d18898b061c651c18c524a49a559b9b661d34cd023ad51f09",
+    "product_name": "Organic Ginkgo Biloba Powder 2000 mg",
+    "brand": "BulkSupplements.com"
+  },
+  "12869": {
+    "row": {
+      "order": 2,
+      "ingredientId": 50503,
+      "description": null,
+      "notes": null,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 180,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Reishi Mushroom Mycelia Powder",
+      "category": "other",
+      "ingredientGroup": "Reishi mushroom",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[1]",
+    "expected_notes": "Reishi Mushroom Mycelia Powder (Ganoderma lucidum) PlantPart: mycelia",
+    "pdf_sha256": "0fc1c8c3943b608f45d8a78da027972c25cbf765aa981696fd9734c093faf4d5",
+    "product_name": "Mushroom Complex",
+    "brand": "GNC Herbal Plus Formula"
+  },
+  "18313": {
+    "row": {
+      "order": 1,
+      "ingredientId": 66649,
+      "description": null,
+      "notes": null,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Cascara Sagrada bark powder",
+      "category": "botanical",
+      "ingredientGroup": "Cascara Sagrada",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Cascara Sagrada Bark Powder (Rhamnus purshiana) PlantPart: bark",
+    "pdf_sha256": "9df3f823c097af40726068a4e3eafe9500cf2754397debe2abf0403f4c59d6d0",
+    "product_name": "Cascara Sagrada",
+    "brand": "GNC Herbal Plus Whole Herb"
+  },
+  "17149": {
+    "row": {
+      "order": 1,
+      "ingredientId": 3894,
+      "description": null,
+      "notes": null,
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 450,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Cascara Sagrada",
+      "category": "botanical",
+      "ingredientGroup": "Cascara Sagrada",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "path": "ingredientRows[0]",
+    "expected_notes": "Cascara Sagrada (Rhamnus purshiana) PlantPart: bark Note: milled whole herb powder",
+    "pdf_sha256": "f27d483a842eab85103175416c13ec8070cc857cb282b4dec01e3a5cfe5ebeb2",
+    "product_name": "Natural Whole Herb Cascara Sagrada 450 mg",
+    "brand": "Nature's Bounty"
+  },
+  "1627": {
+    "row": {
+      "order": 2,
+      "ingredientId": 7166,
+      "description": null,
+      "notes": "Panax Ginseng Root Extract (Form: 3% ginsenosides) PlantPart: Panax Genus: ginseng Note: 3% Ginsenodsides =  6mg ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 200,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Panax Ginseng Root Extract",
+      "category": "botanical",
+      "ingredientGroup": "Oriental Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 4513,
+          "prefix": null,
+          "percent": 3,
+          "name": "Ginsenosides",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Ginsenosides",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[1]",
+    "expected_notes": "Panax Ginseng Root Extract (Panax ginseng) PlantPart: root Genus: Panax Species: ginseng Note: 3% Ginsenosides = 6 mg",
+    "pdf_sha256": "d8ee622da515bfbd78d84455af376793961a54365bcc53a23cd1a1c1231f44e8",
+    "product_name": "Triple Ginsa Rush",
+    "brand": "GNC Herbal Plus Standardized"
+  }
+}
