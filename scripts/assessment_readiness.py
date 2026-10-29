@@ -1565,19 +1565,61 @@ def evaluate_release_assessment(
             "unfinished_source_assessment": unfinished_source}
 
 
+def _current_evidence_dimension_receipt(enriched: Mapping, module: str, evidence: Mapping) -> bool:
+    """Validate only the retained dimension through its existing numerical owner.
+
+    This does not assemble a product score or change any result. Calling the
+    owner on an isolated source copy also checks its current winning dependency
+    receipts, including source holds, scope and numerical caps, without copying
+    those policies into publication. Native generic audit metadata cannot earn
+    native credit.
+    """
+    from copy import deepcopy
+    import json
+    from scoring_input_contract import score_eligible_identity_view
+
+    if module not in {"generic", "sports", "fiber_digestive", "omega", "b_complex", "multi_or_prenatal"}:
+        return False
+    # The public scorer enters through this same projection: identities kept
+    # only for interactions must not become Evidence owners during validation.
+    source = score_eligible_identity_view(deepcopy(dict(enriched)))
+    if module in {"generic", "sports", "fiber_digestive"}:
+        from scoring_v4.modules.generic_evidence import score_evidence
+        current = score_evidence(source, apply_primary_floor=True, owner_scoped=True)
+    elif module == "omega":
+        from scoring_v4.modules.omega_evidence import score_evidence
+        current = score_evidence(source)
+        # This extension proves withheld native science only. Positive omega
+        # authority already has its completed native release assessment.
+        if current.get("score") != 0:
+            return False
+    elif module == "b_complex":
+        from scoring_v4.modules.b_complex import _score_evidence
+        current = _score_evidence(source)
+    elif module == "multi_or_prenatal":
+        from scoring_v4.modules.multi_prenatal_evidence import score_evidence
+        current = score_evidence(source)
+    else:
+        return False
+    # ModuleResult serializes these fields; phase is metadata, not a second
+    # dimension field. JSON equality preserves bool/number distinctions.
+    fields = ("score", "max", "components", "penalties", "metadata")
+    return json.dumps({key: current.get(key) for key in fields}, sort_keys=True) == json.dumps(
+        {key: evidence.get(key) for key in fields}, sort_keys=True)
+
+
 def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> bool:
     """Validate retained science against a current, lineage-verified source.
 
     Completion remains false. Only the missing Evidence review may remain open;
     this consumes the existing applicability and numerical-path receipts, never
-    runs a scorer or grants an implicit clinical approval.
+    assembles a product score or grants an implicit clinical approval.
     """
     from scoring_v4.scored_artifact import unfinished_source_assessment
     from scoring_v4.gate_safety import safety_resolvers_failed
-    from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review, reviewed_entries, _number
+    from clinical_applicability import _number
     from clinical_evidence_schema import is_reference_only
-    from scoring_v4.modules.generic_evidence import (_canonical_text, _canonical_from_entry, _matched_canonical_ids,
-        _clinical_source_id, _active_canonical_index, _matched_active_canonical)
+    from scoring_v4.modules.generic_evidence import _clinical_source_id
 
     readiness = _safe_dict(scored.get("assessment_readiness"))
     release = _safe_dict(readiness.get("release_assessment"))
@@ -1586,6 +1628,8 @@ def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> boo
     meta = _safe_dict(evidence.get("metadata"))
     safety = _safe_dict(scored.get("_v4_safety_gate"))
     allowed_blockers = {"evidence_assessment_incomplete", "probiotic_evidence_assessment_incomplete"}
+    if module.get("module") == "omega":
+        allowed_blockers.add("omega_evidence_assessment_incomplete")
     if module.get("module") == "probiotic":
         allowed_blockers |= {"probiotic_contributing_context_incomplete:" + str(row.get("context_id"))
                              for row in meta.get("contributing_native_contexts") or [] if isinstance(row, Mapping)}
@@ -1611,7 +1655,8 @@ def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> boo
            or _safe_dict(readiness.get(name)).get("migration_inference") is True
            for name in ENFORCED_READINESS_DIMENSIONS):
         return False
-    records = meta.get("contributing_record_assessments", [] if module.get("module") == "multi_or_prenatal" else None)
+    records = meta.get("contributing_record_assessments", [] if module.get("module") in {
+        "multi_or_prenatal", "b_complex", "omega"} else None)
     if not isinstance(records, list) or any(not isinstance(row, Mapping) for row in records):
         return False
     fresh = evaluate_release_assessment(enriched, readiness, module,
@@ -1644,18 +1689,13 @@ def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> boo
         return False
     if replay != pillar["receipt"]:
         return False
+    current_receipt = _current_evidence_dimension_receipt(enriched, str(module.get("module") or ""), evidence)
+    if module.get("module") != "probiotic":
+        return current_receipt
     # Generic Evidence retains signed clinical exposure constraints. Native
     # probiotic record qualification deliberately uses its amount-free seam.
     matches, _ = resolved_clinical_matches(dict(enriched), owner_scoped=module.get("module") != "probiotic",
                                           assess_amount=module.get("module") != "probiotic")
-    if module.get("module") in {"generic", "sports", "fiber_digestive"}:
-        from evidence_resolver import evidence_owner_canonicals, evidence_record_matches_declared_purpose
-        owners = evidence_owner_canonicals(enriched)
-        index = _active_canonical_index(dict(enriched))
-        matches = [row for row in matches if (
-            (not owners or _matched_active_canonical(row, index, use_structured_identity=True, owner_canonicals=owners) in owners)
-            and evidence_record_matches_declared_purpose(enriched, {"canonical_id": _matched_active_canonical(
-                row, index, use_structured_identity=True, owner_canonicals=owners)}, row))]
     accepted = {_clinical_source_id(row): row for row in matches if not is_reference_only(row)}
     points = meta.get("ingredient_points", {} if module.get("module") in {"probiotic", "multi_or_prenatal"} else None)
     if not isinstance(points, Mapping) or any(_number(value) is None for value in points.values()):
@@ -1734,59 +1774,4 @@ def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> boo
             if validate_frozen_context({**context, "outcomes": outcomes}, require_complete_review=True):
                 return False
         return True
-    if module.get("module") == "multi_or_prenatal":
-        from scoring_v4.modules.multi_prenatal_evidence import _panel_contract, CAP_EVIDENCE
-        from scoring_v4.modules.multi_prenatal_dose import _nutrient_key
-        from evidence_resolver import resolve_authority_panel_evidence
-        mode, expected, count = _panel_contract(dict(enriched))
-        authority = resolve_authority_panel_evidence(enriched, expected_keys=expected, full_score=CAP_EVIDENCE,
-            full_count=count, row_key=lambda row: _nutrient_key(row.get("canonical_id") or row.get("standard_name") or row.get("name")))
-        return bool(not records and meta.get("method") == "essential_nutrient_panel_authority_coverage"
-            and meta.get("panel_mode") == mode and score == authority["score"]
-            and meta.get("authority_full_count") == count
-            and meta.get("authority_covered_count") == len(authority["covered_keys"])
-            and all(meta.get("authority_" + key) == authority[key] for key in
-                    ("covered_keys", "expected_keys", "unresolved_keys", "resolution_reasons")))
-    if (module.get("module") not in {"generic", "sports", "fiber_digestive"}
-            or meta.get("primary_evidence_floor_decisive") is not True
-            or score <= 0 or score != _number(meta.get("primary_evidence_floor"))
-            or score != _number(_safe_dict(evidence.get("components")).get("primary_evidence_floor"))):
-        return False
-    eligible_keys = {_canonical_text(value) for row in accepted.values()
-                     for value in [_canonical_from_entry(row), *_matched_canonical_ids(row)]}
-    if any(_number(value) > 0 and _canonical_text(key) not in eligible_keys for key, value in points.items()):
-        return False
-    authority = meta.get("selected_nutrition_authority")
-    if authority == "omega_3":
-        return not records and _current_omega_authority_receipt(enriched, evidence)
-    if authority:
-        from scoring_v4.modules.generic_evidence import _purpose_essential_canonical, NUTRITION_AUTHORITY_FLOOR
-        from evidence_resolver import evidence_owner_canonicals
-        return bool(not records and authority in DRI_ESSENTIAL_NUTRIENTS
-            and authority == _purpose_essential_canonical(dict(enriched))
-            and authority in evidence_owner_canonicals(enriched)
-            and meta.get("nutrition_authority_canonical") == authority
-            and meta.get("nutrition_authority_floor_applied") is True and score == NUTRITION_AUTHORITY_FLOOR)
-    if len(records) != 1:
-        return False
-    from scoring_v4.modules.generic_evidence import _primary_mass_floor
-    from evidence_resolver import evidence_prominent_row_keys
-    floor_receipt = {}
-    expected_floor, _ = _primary_mass_floor(dict(enriched), list(accepted.values()),
-        prominent=evidence_prominent_row_keys(enriched), receipt=floor_receipt)
-    if (score != expected_floor or not floor_receipt.get("entry")
-            or _clinical_source_id(floor_receipt["entry"]) != records[0].get("id")):
-        return False
-    receipt = records[0]
-    if not isinstance(receipt, Mapping) or receipt.get("id") not in accepted:
-        return False
-    entry = accepted[receipt["id"]]
-    decision = assess_clinical_applicability(enriched, entry, assess_amount=False)
-    review = assess_clinical_source_review(entry)
-    reference = reviewed_entries().get(receipt["id"], {})
-    return bool(receipt.get("status") == decision.get("status") == "applicable"
-                and receipt.get("scope_qualification_complete") is True
-                and review["is_complete"] and receipt.get("source_review") == review
-                and receipt.get("supported_outcomes") == decision.get("supported_outcomes")
-                and receipt.get("studied_population") == decision.get("studied_population")
-                and receipt.get("source_references") == reference.get("references_structured"))
+    return False
