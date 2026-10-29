@@ -599,7 +599,10 @@ def is_reviewed_branded_material(
         and (not strict_material_spelling or any(
             token and re.search(r"(?<!\w)" + re.escape(token) + r"(?!\w)",
                                 _canonical_text(name if name is not None else canonical))
-            for token in map(_canonical_text, study.get("brand_tokens") or [study.get("standard_name")])
+            for token in map(_canonical_text, [
+                *(study.get("brand_tokens") or [study.get("standard_name")]),
+                _norm(study.get("id")).removeprefix("brand_").replace("_", " "),
+            ])
         ))
         for key in keys
         for study in idx.get(key, [])

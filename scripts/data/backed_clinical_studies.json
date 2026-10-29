@@ -6952,7 +6952,8 @@
       "applicability": {
         "scope": "ingredient",
         "supported_outcomes": [
-          "Joint & Bone Health"
+          "knee_osteoarthritis",
+          "exercise_related_knee_discomfort"
         ],
         "excluded_form_terms": [
           "hydrolyzed",
@@ -6964,8 +6965,17 @@
           "26822714",
           "24153020"
         ],
-        "reviewed_at": "2026-10-28"
-      }
+        "reviewed_at": "2026-10-28",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "uc-ii",
+          "ucii"
+        ]
+      },
+      "brand_tokens": [
+        "uc-ii",
+        "ucii"
+      ]
     },
     {
       "id": "BRAND_BIOCELL",
@@ -30770,7 +30780,17 @@
             }
           }
         }
-      ]
+      ],
+      "brand_tokens": [
+        "magtein"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "magtein"
+        ]
+      }
     },
     {
       "id": "BRAND_SUNFIBER",

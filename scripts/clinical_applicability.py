@@ -1225,7 +1225,8 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
         if decision["status"] == "applicable":
             scoped_entry = {**entry, "applicability_assessment": decision}
             if decision.get("qualifying_study_type"):
-                reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
+                from scoring_v4.modules.generic_evidence import _clinical_source_id
+                reference = reviewed_entries().get(_clinical_source_id(dict(entry)), {})
                 qualified_ids = decision.get("population_applicability", {}).get("context_ids", [])
                 if (scoped_entry.get("study_type") != decision["qualifying_study_type"]
                         or len(qualified_ids) < len(reference.get("study_contexts") or [])):

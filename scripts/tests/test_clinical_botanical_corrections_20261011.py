@@ -181,8 +181,10 @@ def test_real_testofen_material_spec_keeps_clinical_hold_and_earns_only_formulat
     assert formulation['components']['marker_standardization_declared'] == bp.STANDARDIZATION_TIER_FULL
     entries = artifact['quality_pillars_v4']['formulation']['receipt']['entries']
     assert len([entry for entry in entries if entry['id'] == 'marker_standardization_declared']) == 1
-    assert not any(m['id'] == 'BRAND_TESTOFEN' for m in enriched['evidence_data']['clinical_matches'])
-    assert artifact['quality_pillars_v4']['evidence']['score'] == 10.4
+    # Neither the held material study nor unqualified generic fenugreek can earn benefit credit.
+    assert not {'BRAND_TESTOFEN', 'INGR_FENUGREEK'} & {
+        m['id'] for m in enriched['evidence_data']['clinical_matches']}
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0.0
 
 
 @pytest.mark.parametrize('clinical_state', ['approved', 'held', 'null', 'retracted'])
@@ -265,7 +267,7 @@ def test_exact_testofen_source_form_carries_material_spec_without_label_percent(
     assert bp._standardization_tier_credit(product, owner) == bp.STANDARDIZATION_TIER_FULL
     item = next(x for x in product['formulation_data']['standardized_botanicals'] if x['botanical_id'] == 'testofen')
     assert item['percentage_found'] == 0 and item['percentage_source'] is None
-    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 10.4
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0.0
 
 
 def test_generic_slendesta_alias_cannot_claim_the_proprietary_material_spec(collector):
@@ -392,3 +394,32 @@ def test_legacy_projection_cannot_borrow_a_different_reviewed_brand():
     assert bp._standardization_tier_credit(product, row) == 0
     assert not bp._is_named_botanical_preparation(product, {**row, 'is_parent_total': True,
                                                           'name': 'Generic Ashwagandha'})
+
+
+
+def test_strict_material_identity_accepts_exact_sensoril_id_without_spec_credit():
+    from evidence_resolver import is_reviewed_branded_material
+    assert is_reviewed_branded_material('ashwagandha', 'Sensoril', strict_material_spelling=True)
+    assert not is_reviewed_branded_material('ashwagandha', 'Ashwagandha leaf root extract',
+                                           strict_material_spelling=True)
+    assert not is_reviewed_branded_material('ashwagandha', 'Sensorilized extract',
+                                           strict_material_spelling=True)
+    assert not is_reviewed_branded_material('fenugreek', 'Torabolic', preparation_name='Testofen',
+                                           strict_material_spelling=True)
+    row = {'name': 'Sensoril', 'canonical_id': 'ashwagandha', 'matched_form': 'sensoril ashwagandha',
+           'mapped': True, 'form_match_status': 'mapped', 'identity_disposition': 'clean'}
+    assert bp._resolved_preparation_row({}, row)
+    assert bp._standardization_tier_credit({}, row) == 0
+
+
+def test_real_sensoril_primary_is_not_displaced_by_an_opaque_mushroom_blend(collector):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / 'fixtures/botanical_blend_321944_raw.json').read_text())
+    product, errors = collector.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    primary = bp._primary_botanical_active(product)
+    assert primary['canonical_id'] == 'ashwagandha'
+    assert primary['raw_source_path'] == 'ingredientRows[3]'
+    assert primary['quantity'] == 250
+    assert bp.score_botanical_dose(product)['band'] == 'disclosed_no_reference'
+    assert bp._standardization_tier_credit(product, primary) == 0

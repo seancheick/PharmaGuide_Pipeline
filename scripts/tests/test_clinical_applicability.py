@@ -2487,3 +2487,57 @@ def test_repeated_preparation_cannot_restore_a_held_source(monkeypatch):
     assert assess_clinical_applicability(product, match)["status"] == "unresolved"
     assert resolved_clinical_matches(product, owner_scoped=True)[0] == []
     assert evaluate_assessment_readiness(product, module="generic")["evidence"]["readiness"] == "incomplete"
+
+
+@pytest.mark.parametrize("recovered", [False, True])
+def test_same_design_subset_cannot_keep_aggregate_enrollment_through_a_recovered_id(recovered):
+    record = reviewed_entries()["INGR_GINGER"]
+    row = _row("ginger", "Ginger root extract", quantity=1000)
+    product = {"product_name": "Ginger Root", "ingredient_quality_data": {"ingredients_scorable": [row]}}
+    entry = {**record, "study_type": "rct_single", "ingredient": row["name"],
+             "matched_source_row_refs": [row["raw_source_path"]]}
+    if recovered:
+        entry.update(id="RECOVERED_GINGER_ENROLLMENT_TEST", evidence_origin="scoring_contract_recovery",
+                     source_data="backed_clinical_studies:INGR_GINGER")
+    [accepted], rejected = filter_clinical_matches(product, [entry], assess_amount=False)
+    assert rejected == []
+    assert accepted["study_type"] == "rct_single"
+    assert accepted["applicability_assessment"]["population_applicability"]["context_ids"] == [
+        "ingr_ginger_21818642_acute_cin"]
+    assert "total_enrollment" not in accepted
+
+
+@pytest.mark.parametrize("recovered", [False, True])
+def test_full_qualified_source_preserves_its_own_enrollment_with_canonical_or_recovered_id(monkeypatch, recovered):
+    source = _install_scoped_test_source(monkeypatch, {
+        "id": "TEST_FULL_ENROLLMENT", "ingredient": "Reviewed Test Material",
+        "standard_name": "Reviewed Test Material", "study_type": "rct_single",
+        "evidence_level": "ingredient-human", "effect_direction": "positive_strong",
+        "total_enrollment": 250}, "Reviewed Test Material")
+    row = _row("test_material", "Reviewed Test Material", quantity=400)
+    product = {"ingredient_quality_data": {"ingredients_scorable": [row]}}
+    entry = {**source, "matched_source_row_refs": [row["raw_source_path"]]}
+    if recovered:
+        entry.update(id="RECOVERED_FULL_ENROLLMENT_TEST", evidence_origin="scoring_contract_recovery",
+                     source_data="backed_clinical_studies:TEST_FULL_ENROLLMENT")
+    [accepted], rejected = filter_clinical_matches(product, [entry], assess_amount=False)
+    assert rejected == []
+    assert accepted["study_type"] == "rct_single"
+    assert accepted["total_enrollment"] == 250
+
+
+@pytest.mark.parametrize("claim,expected", [(None, "applicable"), ("Supports knee comfort", "applicable"),
+                                           ("Supports bone health", "not_applicable")])
+def test_ucii_signed_knee_scope_cannot_become_bone_only_credit(claim, expected):
+    row = _row("collagen", "UC-II Undenatured Type II Collagen", quantity=40)
+    row["raw_source_text"] = row["name"]
+    product = {"product_name": "UC-II", "activeIngredients": [row],
+               "ingredient_quality_data": {"ingredients_scorable": [row]}}
+    if claim:
+        product["statements"] = [{"type": "Formulation re: Other", "notes": claim}]
+    entry = {**reviewed_entries()["BRAND_UCII"], "ingredient": row["name"],
+             "matched_source_row_refs": [row["raw_source_path"]], "matched_canonical_ids": ["collagen"]}
+    decision = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert decision["status"] == expected
+    if expected == "not_applicable":
+        assert decision["reason_code"] == "label_purpose_evidence_mismatch"
