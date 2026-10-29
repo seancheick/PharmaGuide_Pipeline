@@ -15495,7 +15495,8 @@ class SupplementEnricherV3:
             cleaning_blends.append(group)
 
         # Step 3: Merge and dedupe using union-of-evidence
-        merged_blends = self._merge_blend_evidence(detector_blends, cleaning_blends)
+        merged_blends = self._merge_blend_evidence(
+            detector_blends, cleaning_blends, source_row_refs=label_source_refs)
 
         # Any merged record still without a tier (e.g. a detector-only blend)
         # gets one from its own children and printed total; consumers read
@@ -15598,7 +15599,8 @@ class SupplementEnricherV3:
     def _merge_blend_evidence(
         self,
         detector_blends: List[Dict],
-        cleaning_blends: List[Dict]
+        cleaning_blends: List[Dict],
+        source_row_refs: Optional[Dict[str, str]] = None,
     ) -> List[Dict]:
         """
         Merge detector and cleaning blend evidence with deduplication.
@@ -15737,7 +15739,7 @@ class SupplementEnricherV3:
                     if path:
                         merged_source_paths.add(path)
                 existing["source_fields"] = sorted(merged_source_paths)
-                if existing.get("source_fields"):
+                if existing.get("source_fields") and not existing.get("source_row_ref"):
                     existing["source_field"] = existing["source_fields"][0]
                     existing["source_path"] = existing["source_fields"][0]
                 # Prefer cleaning name for UI (label-facing, more specific)
@@ -15814,6 +15816,21 @@ class SupplementEnricherV3:
                 consolidated.extend(disclosed)  # drop 0-child header(s)
             else:
                 consolidated.append(group[0])  # collapse all-opaque duplicates to one
+        # A sorted provenance union includes members; its first array index
+        # does not identify the physical header (11 sorts before 6). Keep a
+        # proved primary or bind the unique current alias of the authored owner.
+        source_row_refs = source_row_refs or {}
+        for blend in consolidated:
+            owner = blend.get("source_row_ref")
+            if not owner:
+                continue
+            primary = blend.get("source_field")
+            if source_row_refs.get(primary) != owner:
+                headers = [field for field, ref in source_row_refs.items() if ref == owner]
+                primary = headers[0] if len(headers) == 1 else owner
+            blend["source_field"] = blend["source_path"] = primary
+            if isinstance(blend.get("evidence"), dict):
+                blend["evidence"]["source_field"] = primary
         return consolidated
 
     def _extract_strain_ids_from_product(self, product: Dict) -> List[str]:
