@@ -775,7 +775,7 @@ def test_recognized_identity_without_benchmark_review_stays_unfinished(monkeypat
     """Identity recognition cannot certify that a benchmark search completed."""
     import scoring_v4.modules.botanical_profile as owner
     import evidence_resolver
-    monkeypatch.setattr(owner, "_dosing_entry_for", lambda row: None)
+    monkeypatch.setattr(owner, "_dosing_entry_for", lambda row, **kwargs: None)
     monkeypatch.setattr(evidence_resolver, "_load_literature_evidence", lambda: {})
     product = _botanical_product()
     assert owner._recognized_botanical_identity(_primary_botanical_active(product)) is True
@@ -1004,7 +1004,7 @@ def test_backed_dose_proof_cannot_be_replaced_by_evidence_verification(monkeypat
     from scoring_v4.modules import botanical_profile as profile
     record = copy.deepcopy(next(r for r in _backed_studies_index()['sytrinol'] if r['id'] == 'BRAND_SYTRINOL'))
     record['verification_provenance'].pop('reference_citations', None)
-    monkeypatch.setattr(profile, '_dosing_entry_for', lambda row: record)
+    monkeypatch.setattr(profile, '_dosing_entry_for', lambda row, **kwargs: record)
     assert profile._botanical_benchmark({'canonical_id': 'sytrinol'}) == 'unresolved'
 
 
@@ -1304,3 +1304,132 @@ def test_existing_named_preparation_physical_identity_remains_available():
     from scoring_v4.modules.botanical_profile import _resolved_preparation_row
     row = _botanical_ingredient()
     assert _resolved_preparation_row(_botanical_product(row), row)
+
+
+def _general_dose_source_fixture():
+    from copy import deepcopy
+    from scoring_v4.modules.botanical_profile import _dosing_index
+    record = deepcopy(_dosing_index()["maca"])
+    row = _botanical_ingredient(
+        name="Maca root powder", standard_name="Maca", canonical_id="maca", form="powder",
+        raw_source_text="Maca root powder", raw_source_path="ingredientRows[0]",
+        canonical_source_db="ingredient_quality_map", cleaner_row_role="active_scorable",
+        score_eligible_by_cleaner=True, plantPart="root")
+    product = _botanical_product(row, standardized=False)
+    product["activeIngredients"] = [deepcopy(row)]
+    return record, product, row
+
+
+@pytest.mark.parametrize("display_name", ["Maca Root Extract", "Maca Root"])
+def test_scoped_general_no_benchmark_is_not_decided_by_display_extract_word(monkeypatch, display_name):
+    from scoring_v4.modules import botanical_profile as owner
+    record, product, row = _general_dose_source_fixture()
+    record["standard_name"] = display_name
+    monkeypatch.setattr(owner, "_dosing_index", lambda: {"maca": record})
+    assert owner._botanical_benchmark(row, product=product) == "absent"
+    assert row["quantity"] == product["activeIngredients"][0]["quantity"] == 600
+
+
+@pytest.mark.parametrize("change", [
+    "source_color", "source_color_notes", "missing_source", "duplicate_source",
+    "foreign_identity", "lent_total", "malformed_policy", "pending_approval",
+    "missing_source_ids", "discrete_reference", "unscoped_reference",
+])
+def test_scoped_general_no_benchmark_keeps_source_and_scope_failures_unresolved(monkeypatch, change):
+    from copy import deepcopy
+    from scoring_v4.modules import botanical_profile as owner
+    record, product, row = _general_dose_source_fixture()
+    if change == "source_color":
+        product["activeIngredients"][0]["name"] = "Black Maca root powder"
+        product["activeIngredients"][0]["raw_source_text"] = "Black Maca root powder"
+    elif change == "source_color_notes":
+        product["activeIngredients"][0]["notes"] = "Black maca root powder"
+    elif change == "missing_source":
+        product["activeIngredients"] = []
+    elif change == "duplicate_source":
+        product["activeIngredients"].append(deepcopy(product["activeIngredients"][0]))
+    elif change == "foreign_identity":
+        product["activeIngredients"][0]["canonical_id"] = "unrelated_plant"
+    elif change == "lent_total":
+        row.update(evidence_type="blend_anchor_mass", evidence_scope="blend_level",
+                   reason="identity_bearing_blend_header_mass_from_nested_child")
+    elif change == "malformed_policy":
+        record["applicability"]["excluded_form_terms"] = "black"
+    elif change == "pending_approval":
+        record["reference_semantics"]["approval_status"] = "pending"
+    elif change == "missing_source_ids":
+        record["reference_semantics"]["source_ids"] = []
+    elif change == "discrete_reference":
+        record["reference_semantics"]["reference_type"] = "discrete_studied_regimen"
+    else:
+        record.pop("applicability")
+    monkeypatch.setattr(owner, "_dosing_index", lambda: {"maca": record})
+    assert owner._botanical_benchmark(row, product=product) == "unresolved"
+
+
+def test_scoped_general_no_benchmark_does_not_read_curated_iqm_color_notes(monkeypatch):
+    from scoring_v4.modules import botanical_profile as owner
+    record, product, row = _general_dose_source_fixture()
+    row["notes"] = "Black maca; curated research context only"
+    monkeypatch.setattr(owner, "_dosing_index", lambda: {"maca": record})
+    assert owner._botanical_benchmark(row, product=product) == "absent"
+
+
+@pytest.mark.parametrize("canonical,name", [
+    ("ashwagandha", "Ashwagandha Powder"),
+    ("ginkgo", "Ginkgo biloba Powder"),
+    ("reishi", "Reishi Mushroom Mycelia Powder"),
+])
+def test_unscoped_powders_do_not_inherit_other_preparation_general_reviews(canonical, name):
+    from copy import deepcopy
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    row = _botanical_ingredient(name=name, standard_name=canonical, canonical_id=canonical,
+                                form="powder", raw_source_text=name, raw_source_path="ingredientRows[0]")
+    product = _botanical_product(row, standardized=False)
+    product["activeIngredients"] = [deepcopy(row)]
+    assert _botanical_benchmark(row, product=product) == "unresolved"
+
+
+@pytest.mark.parametrize("change", [
+    "none", "held_direct", "empty_direct", "explicit_rejected_direct", "manual_review_direct",
+    "ambiguous_alias", "stale_proof", "conflicting_source", "conflicting_literal",
+    "missing_source", "canonical_only", "unapproved_alias",
+])
+def test_descriptive_clinical_record_does_not_mask_exact_approved_dose_owner(monkeypatch, change):
+    from copy import deepcopy
+    import evidence_resolver
+    from scoring_v4.modules import botanical_profile as owner
+    records = deepcopy(evidence_resolver._load_literature_evidence())
+    approved = records["watermelon"]
+    approved["aliases"] = [*approved.get("aliases", []), "Watermelon Juice, Powder"]
+    row = _botanical_ingredient(name="Watermelon Juice, Powder", standard_name="Juice Concentrates",
+        canonical_id="nha_juice_concentrates", form="powder", raw_source_text="Watermelon Juice, Powder",
+        raw_source_path="ingredientRows[0]")
+    product = _botanical_product(row, standardized=False)
+    product["activeIngredients"] = [deepcopy(row)]
+    direct = records["nha_juice_concentrates"]
+    if change == "held_direct":
+        direct["applicability_status"] = "held"
+    elif change == "empty_direct":
+        records["nha_juice_concentrates"] = {}
+    elif change == "explicit_rejected_direct":
+        direct["reference_semantics"] = {"approval_status": "rejected"}
+    elif change == "manual_review_direct":
+        direct["manual_review"] = {"status": "pending"}
+    elif change == "ambiguous_alias":
+        records["another_owner"] = deepcopy(approved)
+    elif change == "stale_proof":
+        approved["reference_semantics"]["review_date"] = "1900-01-01"
+    elif change == "conflicting_source":
+        product["activeIngredients"][0]["canonical_id"] = "unrelated_juice"
+    elif change == "conflicting_literal":
+        product["activeIngredients"][0]["raw_source_text"] = "Pomegranate Juice Powder"
+    elif change == "missing_source":
+        product["activeIngredients"] = []
+    elif change == "canonical_only":
+        approved["aliases"] = ["nha_juice_concentrates"]
+    elif change == "unapproved_alias":
+        approved["reference_semantics"]["approval_status"] = "pending"
+    monkeypatch.setattr(owner, "_dosing_index", lambda: {})
+    monkeypatch.setattr(evidence_resolver, "_load_literature_evidence", lambda: records)
+    assert owner._botanical_benchmark(row, product=product) == ("absent" if change == "none" else "unresolved")
