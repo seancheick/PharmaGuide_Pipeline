@@ -28,26 +28,12 @@ def eligible_collagen_source(monkeypatch):
     exclusions and stale positive matches are checked independently in
     test_returned_collagen_contexts.
     """
-    import clinical_applicability as applicability
-    import evidence_resolver
-    from scoring_v4.modules import generic_evidence
-
-    current = applicability.reviewed_entries()
-    source = deepcopy(current["INGR_COLLAGEN_PEPTIDES"])
-    source.update(scoring_eligible=True, effect_direction="positive_strong",
-                  total_enrollment=250, primary_outcome="Skin, Hair & Nails")
-    # This isolated legacy-mechanics fixture does not reuse the real source's
-    # explicitly ineligible contexts as an affirmative relationship.
-    source['study_contexts'] = []
-    verified = generic_evidence._verified_ingredient_human_evidence_entries()
-    index = evidence_resolver._backed_studies_index()
-    monkeypatch.setattr(applicability, "reviewed_entries", lambda: {**current, source["id"]: source})
-    monkeypatch.setattr(generic_evidence, "_verified_ingredient_human_evidence_entries",
-                        lambda: tuple(row for row in verified if row["id"] != source["id"]) + (source,))
-    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {
-        key: [source if row.get("id") == source["id"] else row for row in rows]
-        for key, rows in index.items()
-    })
+    from tests.test_v4_generic_evidence_p133 import _use_synthetic_eligible_collagen_source
+    source = _use_synthetic_eligible_collagen_source(monkeypatch)
+    # These cases isolate the recovery owner's physical-preparation classifier,
+    # including its structured peptide subtype. A second text-only restriction
+    # would reject that valid subtype and mask incorrect plain-collagen recovery.
+    source["applicability"] = {"scope": "ingredient"}
     return source
 
 
@@ -163,10 +149,12 @@ def test_evidence_strength_not_relative_mass_selects_between_declared_purposes()
 
     payload = _scored(product)
 
-    # Vitamin D's respiratory contexts are held; calcium's independently
-    # eligible research and nutrient authority remain available.
+    # Held Vitamin D and unreviewed calcium trial matches cannot supply
+    # clinical credit. The independently established nutrient authority remains.
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "calcium"
-    assert payload["metadata"]["primary_evidence_floor"] == 11.0
+    assert payload["metadata"]["primary_evidence_floor"] == 10.0
+    assert payload["metadata"]["nutrition_authority_canonical"] == "calcium"
+    assert payload["components"]["clinical_evidence_pipeline"] == 0
 
 
 def test_a_declared_purpose_keeps_evidence_credit_independent_of_amount():
@@ -253,8 +241,10 @@ def test_ingredient_recovery_is_independent_of_relative_mass(primary_mg, monkeyp
     import clinical_applicability
     from scoring_v4.modules import generic_evidence
     current = reviewed_entries()
-    source = deepcopy(current['INGR_L_CARNITINE'])
-    source['study_contexts'] = []  # synthetic legacy recovery control, not source approval
+    from tests.test_evidence_resolver import _approved_test_source
+    source = _approved_test_source({**deepcopy(current['INGR_L_CARNITINE']),
+        'references_structured': [{'pmid': '28661438', 'retracted': False}]},
+        name='L-Carnitine')
     verified = generic_evidence._verified_ingredient_human_evidence_entries()
     monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {**current, source['id']: source})
     monkeypatch.setattr(generic_evidence, '_verified_ingredient_human_evidence_entries',
@@ -365,18 +355,24 @@ def test_real_210555_disclosed_members_of_the_title_named_blend_anchor_the_floor
     ("blend_2219_raw.json", "creatine_monohydrate"),             # one of ten in a 3.1 g creatine module
 ])
 def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, member):
-    """The member stays an Evidence owner and keeps its research points, but its
-    own amount is not on the label, so the blend total cannot anchor a floor."""
+    """The member remains an owner; only qualified research may earn points.
+    An undisclosed member amount can never borrow the blend total for a floor.
+    """
     evidence = _evidence(_enrich(fixture))
     assert member in evidence["metadata"]["evidence_owner_canonicals"]
     assert evidence["metadata"]["primary_evidence_floor"] == 0.0
-    assert evidence["components"]["clinical_evidence_pipeline"] > 0
+    if member == "psyllium":
+        from clinical_applicability import reviewed_entries
+        assert not reviewed_entries()["INGR_PSYLLIUM_HUSK"].get("study_contexts")
+        assert evidence["components"]["clinical_evidence_pipeline"] == 0
+    else:
+        assert evidence["components"]["clinical_evidence_pipeline"] > 0
 
 
 @pytest.mark.parametrize("fixture,floor_canonical,floor", [
     # Removing amount from Evidence lets the stronger applicable Sensoril
     # record win over the co-active Relora record.
-    ("prominence_branded_heading_293928_raw.json", "sensoril ashwagandha", 14.0),
+    ("prominence_branded_heading_293928_raw.json", "sensoril ashwagandha", 11.0),
     # "UC-II Proprietary Cartilage Blend 401 mg"
     ("evidence_subject_321604_raw.json", "uc ii undenatured type ii collagen", 14.0),
 ])
@@ -384,9 +380,15 @@ def test_real_heading_that_names_its_brand_anchors_that_brands_floor(fixture, fl
     """A blend heading's printed total is not a member's dose, but when the
     heading itself names a verified branded record, that total is the studied
     intervention's amount. The prominent label row keeps that record's floor."""
-    evidence = _evidence(_enrich(fixture))
+    product = _enrich(fixture)
+    evidence = _evidence(product)
     assert evidence["metadata"]["primary_evidence_floor_canonical"] == floor_canonical
     assert evidence["components"]["primary_evidence_floor"] == floor
+    if floor_canonical == "sensoril ashwagandha":
+        from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+        sensoril = next(row for row in resolved_clinical_matches(product)[0]
+                        if row["id"] == "BRAND_SENSORIL")
+        assert sensoril["study_type"] == "rct_single"
 
 
 @pytest.mark.parametrize("fixture,recovered,evidence", [
@@ -498,16 +500,22 @@ def test_real_authority_floor_does_not_use_relative_mass(fixture):
         # total is never treated as that row's amount.
         assert evidence["metadata"]["nutrition_authority_canonical"] == "magnesium"
     else:
-        assert evidence["metadata"]["nutrition_authority_canonical"] is None
+        # Calcium is independently disclosed and the shared owner includes it,
+        # irrespective of the heavier fiber/BHB row. No carrier mass is lent.
+        assert "calcium" in evidence["metadata"]["evidence_owner_canonicals"]
+        assert evidence["metadata"]["nutrition_authority_canonical"] == "calcium"
+        assert evidence["metadata"]["primary_evidence_floor"] == 10.0
 
 
 def test_real_authority_floor_reads_purpose_by_identity_not_by_row():
     """Calcium Ascorbate 1 g (306193): the title names the "Calcium Ascorbate"
     row, while the heaviest vitamin C row is the "Vitamin C 900 mg" line. The
-    owner's purpose is vitamin C either way, so the authority floor stands."""
+    shared owner includes both declared nutrients, so authority remains
+    independent of which physical row is heaviest."""
     evidence = _evidence(_enrich("prominence_authority_compound_row_306193_raw.json"))
     assert "vitamin_c" in evidence["metadata"]["evidence_owner_canonicals"]
-    assert evidence["components"]["primary_evidence_floor"] == 14.0
+    assert evidence["components"]["primary_evidence_floor"] == 10.0
+    assert evidence["metadata"]["nutrition_authority_canonical"] == "calcium"
 
 
 def test_a_title_naming_a_brand_never_lends_a_blend_total_to_that_member():
@@ -590,8 +598,8 @@ def test_a_single_branded_intervention_nested_under_its_own_heading_keeps_its_fl
     # then granted none.
     match = next(m for m in product["evidence_data"]["clinical_matches"] if m["id"] == "BRAND_SENSORIL")
     assert match["matched_source_row_refs"] == ["ingredientRows[1]"]
-    # 1.31.0: the strong floor, not the retired branded 18.
-    assert evidence["metadata"]["primary_evidence_floor"] == 14.0
+    # The currently qualified single RCT supplies the moderate floor.
+    assert evidence["metadata"]["primary_evidence_floor"] == 11.0
 
 
 def test_real_nested_enzyme_member_has_one_physical_source_link():
@@ -615,7 +623,7 @@ def test_a_named_whole_preparation_is_not_its_mapped_component(pid):
                if row.get("reason") == "identity_bearing_blend_header_mass"]
     assert headers, "A named preparation must retain its own blend-level amount"
     assert not any(is_lent_blend_mass(row) for row in headers)
-    assert _evidence(product)["metadata"]["primary_evidence_floor"] == 14.0
+    assert _evidence(product)["metadata"]["primary_evidence_floor"] == 11.0
 
 
 @pytest.mark.parametrize("peptide_quantity,peptide_unit", [(2, "g"), (2000, "mg")])
