@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""UC-II clinical evidence matching regression.
+"""UC-II discovery and qualified material attribution.
 
-DSLD 182041 ("Bio-Collagen with Patented UC-II 40 mg") already resolves
-to the collagen / undenatured collagen IQM form. The matching gap is
-Section C: the branded clinical record BRAND_UCII exists in
-backed_clinical_studies.json but was not attached because the evidence
-matcher only compared exact ingredient aliases and did not extract the
-UC-II brand token from the collagen row context.
+The May 26 matcher fix discovers a branded candidate from compatible product
+context. Discovery does not prove that a generic cartilage row is the exact
+UC-II preparation. Current clinical applicability requires a source-bound
+material relationship; it has no title-to-generic-row preparation proof.
+Actual DSLD182041 names UC-II on its retained ingredient row and stays positive.
 """
 
 from __future__ import annotations
 
 import sys
+import json
+from copy import deepcopy
 from pathlib import Path
 
 import pytest
@@ -46,6 +47,7 @@ def _ucii_product(active_name: str = "UC-II standardized Cartilage") -> dict:
                 "cleaner_row_role": "active_scorable",
                 "score_eligible_by_cleaner": True,
                 "raw_source_text": active_name,
+                "raw_source_path": "ingredientRows[0]",
                 "quantity": 40.0,
                 "unit": "mg",
                 "forms": [{"name": "standardized", "source": "name_extraction"}],
@@ -84,10 +86,58 @@ def test_182041_ucii_attaches_brand_clinical_evidence(enricher):
     assert "BRAND_UCII" in _clinical_ids(enriched)
 
 
-def test_product_name_ucii_token_can_apply_to_collagen_row(enricher):
-    """Some labels put UC-II in the product name while the active row says
-    only collagen/cartilage. Product-context extraction should still attach
-    BRAND_UCII, but only because the row is collagen-compatible."""
-    enriched, _ = enricher.enrich_product(_ucii_product("Chicken Cartilage"))
+def test_title_ucii_discovers_candidate_but_does_not_prove_generic_cartilage_material(enricher):
+    """Keep contextual discovery, without treating its global token as a
+    verified title-to-row material relationship. No ruling bans titles; this
+    owner's existing source contract supplies no such preparation proof."""
+    product = _ucii_product("Chicken Cartilage")
+    row = product["activeIngredients"][0]
+    token = enricher._product_context_branded_token_for_ingredient(
+        product["product_name"], row, row["name"], row["standardName"])
+    assert token == "UC-II"
+    enriched, _ = enricher.enrich_product(product)
+    assert "BRAND_UCII" not in _clinical_ids(enriched)
+    rejected = next(m for m in enriched["evidence_data"]["rejected_clinical_matches"]
+                    if m.get("id") == "BRAND_UCII")
+    assert rejected["reason_code"] == "clinical_form_mismatch"
 
+
+def test_real_182041_retained_source_qualifies_exact_ucii_material(enricher):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / "fixtures/ucii_182041_raw.json").read_text())
+    assert raw["ingredientRows"][0]["name"] == "UC-II standardized Cartilage"
+    enriched, errors = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
     assert "BRAND_UCII" in _clinical_ids(enriched)
+    match = next(m for m in enriched["evidence_data"]["clinical_matches"] if m.get("id") == "BRAND_UCII")
+    assert match["matched_source_row_refs"] == ["ingredientRows[0]"]
+    assert match["ingredient"] == raw["ingredientRows"][0]["name"]
+    assert match["applicability_assessment"]["status"] == "applicable"
+
+
+@pytest.mark.parametrize("shape", ["generic", "wrong_material", "multiple_generic"])
+def test_title_ucii_cannot_lend_material_identity_to_unproven_rows(enricher, shape):
+    product = _ucii_product("Undenatured Collagen II")
+    if shape == "wrong_material":
+        product["activeIngredients"][0].update(name="Calcium carbonate", standardName="Calcium",
+            raw_source_text="Calcium carbonate", canonical_id="calcium", forms=[])
+    if shape == "multiple_generic":
+        companion = deepcopy(product["activeIngredients"][0])
+        companion.update(name="Chicken Cartilage", raw_source_text="Chicken Cartilage",
+                         raw_source_path="ingredientRows[1]", quantity=200)
+        product["activeIngredients"].append(companion)
+    enriched, _ = enricher.enrich_product(product)
+    assert "BRAND_UCII" not in _clinical_ids(enriched)
+
+
+def test_exact_ucii_source_remains_qualified_beside_generic_cartilage(enricher):
+    product = _ucii_product()
+    companion = deepcopy(product["activeIngredients"][0])
+    companion.update(name="Chicken Cartilage", raw_source_text="Chicken Cartilage",
+                     raw_source_path="ingredientRows[1]", quantity=200)
+    product["activeIngredients"].append(companion)
+    enriched, _ = enricher.enrich_product(product)
+    assert "BRAND_UCII" in _clinical_ids(enriched)
+    match = next(m for m in enriched["evidence_data"]["clinical_matches"] if m.get("id") == "BRAND_UCII")
+    assert match["matched_source_row_refs"] == ["ingredientRows[0]"]
+    assert match["ingredient"] == "UC-II standardized Cartilage"
