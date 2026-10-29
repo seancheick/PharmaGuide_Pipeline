@@ -532,3 +532,50 @@ def test_related_human_sources_replace_false_absence_without_clinical_clearance(
     result = resolve_evidence_for_canonical(canonical)
     assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert result.points_eligible is False
+
+
+
+def test_california_poppy_general_dose_review_is_not_clinical_approval(records):
+    from dose_assessment import verified_reference_citations
+    record = records['california_poppy']
+    reference = record.get('reference_semantics') or {}
+    assert reference.get('reference_type') == 'no_benchmark'
+    assert reference.get('curve') == 'completed_no_benchmark_neutral'
+    assert reference.get('approval_status') == 'approved_existing_neutral_dose_v41_source_review'
+    assert verified_reference_citations(record)
+    assert record['qualifying_human_studies'] == []
+    assert record['effect_direction'] is None
+    assert record['applicability_status'] == 'applicability_unestablished'
+    assert record['studied_dose_exposure'] == {}
+    from evidence_resolver import resolve_evidence_for_canonical
+    assert resolve_evidence_for_canonical('california_poppy').points_eligible is False
+    assert not any(key in reference for key in ['min_dose', 'max_dose', 'minimum_daily_dose', 'maximum_daily_dose'])
+    assert 'Codex' in reference['rationale'] and 'unspecified' in reference['preparation'].lower()
+
+
+def test_real_dream_release_completed_dose_review_preserves_evidence_and_safety(records, monkeypatch):
+    from copy import deepcopy
+    import evidence_resolver
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from scoring_v4.modules.generic_helpers import unbenchmarked_dose_credit, dose_reference_scope
+    raw = json.loads((Path(__file__).parent / 'fixtures/california_poppy_62820_raw.json').read_text())
+    product, errors = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    actual = evidence_resolver._load_literature_evidence()
+    unreviewed = deepcopy(actual)
+    unreviewed['california_poppy'].pop('reference_semantics', None)
+    monkeypatch.setattr(evidence_resolver, '_load_literature_evidence', lambda: unreviewed)
+    before = build_scored_artifact(deepcopy(product))
+    monkeypatch.setattr(evidence_resolver, '_load_literature_evidence', lambda: actual)
+    after = build_scored_artifact(deepcopy(product))
+    dose = after['_v4_module_breakdown']['dimensions']['dose']
+    assert dose['metadata']['botanical_dose']['benchmark'] == 'absent'
+    assert dose['metadata']['botanical_dose_band'] == 'disclosed_no_reference'
+    with dose_reference_scope(after['quality_pillars_v4']['dose']['components']['reference']):
+        assert dose['score'] == pytest.approx(unbenchmarked_dose_credit())
+    assert before['_v4_module_breakdown']['dimensions']['dose']['score'] == 0
+    for pillar in ['formulation', 'evidence', 'transparency', 'verification', 'safety_hygiene']:
+        assert before['quality_pillars_v4'][pillar]['score'] == after['quality_pillars_v4'][pillar]['score']
+    assert before['_v4_safety_gate'] == after['_v4_safety_gate']
