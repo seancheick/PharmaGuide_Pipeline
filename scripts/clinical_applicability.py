@@ -282,6 +282,11 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
                     if source_preparation:
                         return exact_refs
                     return children
+                if len(exact_refs) == 1:
+                    # Several provider identities may share a blend reference.
+                    # This match names one exact anchor; use that identity, not
+                    # another member at the same heading or a raw missing ID.
+                    return [{**exact_refs[0], "canonical_id": anchor["canonical_id"]}]
         return exact_refs
     exact = [r for r in rows if name and name in {_key(r.get("name")), _key(r.get("raw_source_text"))}]
     if exact:
@@ -1189,15 +1194,21 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
             applicable_rows.append(row)
             continue
         if source_block or scope.get("status"):
-            return {**(source_block or scope), "matched_source_row_refs": [ref for ref in (
-                row.get("raw_source_path") or row.get("source_row_ref"),) if ref]}
+            return {**(source_block or scope),
+                    "matched_canonical_ids": [row["canonical_id"]] if row.get("canonical_id") else [],
+                    "matched_source_row_refs": [ref for ref in (
+                        row.get("raw_source_path") or row.get("source_row_ref"),) if ref]}
         return {"status": "applicable", "reason_code": "reviewed_scope_match",
                 "source_row_ref": row.get("raw_source_path") or row.get("source_row_ref"),
+                "matched_canonical_ids": [row["canonical_id"]] if row.get("canonical_id") else [],
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
                 "scope": "ingredient", **scope}
     if applicable_rows and (source_block or scope.get("status")):
-        return {**(source_block or scope), "matched_source_row_refs": list(dict.fromkeys(
+        return {**(source_block or scope),
+                "matched_canonical_ids": list(dict.fromkeys(
+                    row["canonical_id"] for row in applicable_rows if row.get("canonical_id"))),
+                "matched_source_row_refs": list(dict.fromkeys(
             row.get("raw_source_path") or row.get("source_row_ref") for row in applicable_rows
             if row.get("raw_source_path") or row.get("source_row_ref")))}
     if applicable_rows:
@@ -1228,6 +1239,22 @@ def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amo
     accepted, rejected = [], []
     for entry in matches:
         decision = assess_clinical_applicability(product, entry, assess_amount=assess_amount)
+        # Discovery may have coalesced aliases across unrelated ingredients.
+        # The actual passing source rows own both clinical identity and its UI
+        # attribution, including when a provider heading retains its reference.
+        passing_refs = set(decision.get("matched_source_row_refs") or [])
+        if decision.get("source_row_ref"):
+            passing_refs.add(decision["source_row_ref"])
+        if passing_refs and "matched_canonical_ids" in decision:
+            entry = {**entry, "matched_canonical_ids": decision["matched_canonical_ids"]}
+            names = {row.get("name") for row in _rows(product, source_only=True, evidence_only=True)
+                     if (row.get("raw_source_path") or row.get("source_row_ref")) in passing_refs
+                     and row.get("name")}
+            if len(names) == 1:
+                entry["ingredient"] = names.pop()
+            elif names and entry.get("ingredient") not in names:
+                entry["ingredient"] = (entry.get("standard_name") or entry.get("study_name")
+                                       or ", ".join(sorted(names)))
         if (decision.get("reason_code") == "clinical_outcome_not_qualified"
                 and decision.get("population_applicability", {}).get("state") == "eligible"
                 and decision.get("population_applicability", {}).get("context_ids")

@@ -176,3 +176,34 @@ def test_negated_exact_brand_does_not_establish_source_preparation(record_id, ca
     decision = assess_clinical_applicability(product, entry, assess_amount=False)
     assert decision['status'] == 'not_applicable'
     assert decision['reason_code'] == 'clinical_form_mismatch'
+
+
+@pytest.mark.parametrize('reverse_rows', [False, True])
+def test_ucii_clinical_source_cannot_be_attributed_to_leucine(reverse_rows):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((FIXTURES / 'brand_generic_76848_raw.json').read_text())
+    if reverse_rows:
+        raw['ingredientRows'].reverse()
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    match = next(m for m in product['evidence_data']['clinical_matches'] if m.get('id') == 'BRAND_UCII')
+    assert match['ingredient'] == 'UC-II standardized Cartilage'
+    assert match['matched_canonical_ids'] == ['collagen']
+    assert match['applicability_assessment']['matched_canonical_ids'] == ['collagen']
+    artifact = build_scored_artifact(product)
+    evidence = artifact['_v4_module_breakdown']['dimensions']['evidence']
+    assert 'l_leucine' not in evidence['metadata'].get('ingredient_points', {})
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0.0
+
+
+@pytest.mark.parametrize('canon_index, expected', [
+    ({'beta alanine': 'beta-alanine'}, 'beta-alanine'),
+    ({'unknown': 'taurine'}, ''),
+    ({'beta alanine': 'beta-alanine', 'beta alanine alias': 'beta_alanine'}, ''),
+])
+def test_reviewed_source_identity_matches_only_a_unique_actual_canonical(canon_index, expected):
+    from scoring_v4.modules.generic_evidence import _matched_active_canonical
+    entry = {'ingredient': 'Taurine', 'matched_canonical_ids': ['beta-alanine'],
+             'applicability_assessment': {'matched_canonical_ids': ['beta-alanine']}}
+    assert _matched_active_canonical(entry, canon_index, owner_canonicals=set(canon_index.values())) == expected

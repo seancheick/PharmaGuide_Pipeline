@@ -1555,10 +1555,16 @@ def _matched_active_canonical(
     if use_structured_identity or reviewed_identity:
         for canonical_id in _matched_canonical_ids(entry):
             direct = str(canonical_id or "").strip().lower()
-            if direct in canon_index.values() and (
-                not reviewed_identity or not owner_canonicals or direct in owner_canonicals
-            ):
-                return direct
+            candidates = {actual for actual in canon_index.values()
+                          if _canonical_text(actual) == _canonical_text(direct)
+                          and (not reviewed_identity or not owner_canonicals
+                               or actual in owner_canonicals)}
+            if len(candidates) == 1:
+                return next(iter(candidates))
+            if len(candidates) > 1:
+                # Normalized IDs must still name one actual active identity.
+                # Never revive a reviewed ambiguity through ingredient aliases.
+                return ""
         if reviewed_identity:
             # An accepted source identity set (even an empty one) is final.
             # Legacy alias text cannot revive an identity applicability rejected.
