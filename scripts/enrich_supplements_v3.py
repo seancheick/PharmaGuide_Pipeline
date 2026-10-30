@@ -102,6 +102,7 @@ from inactive_ingredient_resolver import (
 )
 from serving_frequency import (
     resolve_facts_panel_serving_basis,
+    resolve_daily_serving_ceiling,
     resolve_daily_serving_multiplier,
     resolve_daily_serving_range,
     select_canonical_serving,
@@ -18838,9 +18839,9 @@ class SupplementEnricherV3:
                     **entry, "quantity": entry.get("amount"),
                     "quantity_operator": entry.get("operator"),
                 }, basis="per_use", unit="g")
-                if not exposure.exact:
-                    # Printed qualifiers remain in the source ledger. A flat
-                    # summary has no place to represent them as an exact mass.
+                if not exposure.exact and entry.get("operator") not in norm_module.QUANTITY_OPERATORS:
+                    # Only a printed bound ("<1 g") keeps its stated amount;
+                    # quantity_operators below discloses that it is not exact.
                     return None
             return _amount(key, declared_gram_value=True)
 
@@ -23000,7 +23001,8 @@ class SupplementEnricherV3:
         self,
         product: Dict,
         min_servings_per_day: Optional[float] = None,
-        max_servings_per_day: Optional[float] = None
+        max_servings_per_day: Optional[float] = None,
+        frequency_defaulted: bool = False,
     ) -> Dict:
         """
         Collect RDA/UL reference data for user profile scoring (Section E).
@@ -23150,7 +23152,19 @@ class SupplementEnricherV3:
         except (TypeError, ValueError):
             servings_max = None
 
-        servings_estimated = False
+        # A printed daily ceiling is the label's limit, not its direction:
+        # name it as the exposure source in every UL sentence.
+        label_ceiling = resolve_daily_serving_ceiling(product)
+        if label_ceiling is not None and servings_max is not None and math.isclose(servings_max, label_ceiling):
+            # Name the number the label prints; exposure may be rebased onto
+            # the Facts-panel amount basis.
+            printed = (select_canonical_serving(product.get("servingSizes")) or {}).get("ceilingDailyServings")
+            max_exposure_label = f"at the label's stated maximum of {float(printed):g} servings a day"
+        else:
+            max_exposure_label = "at maximum directed daily use"
+        # A defaulted directed range stays an estimate even when a printed
+        # ceiling supplies the exposure maximum.
+        servings_estimated = bool(frequency_defaulted)
         if servings_min is None or servings_min <= 0:
             servings_min = 1
             servings_estimated = True
@@ -24631,7 +24645,7 @@ class SupplementEnricherV3:
                                     (safety_ul_population or {}).get("label") or "general adult",
                                     ul_basis=(adequacy_dict.get("reference") or {}).get("ul_basis"),
                                     exposure_label=("At the assessed daily amount" if servings_estimated
-                                                    else "At maximum directed daily use"),
+                                                    else max_exposure_label[:1].upper() + max_exposure_label[1:]),
                                 ),
                                 "severity": ul_display_severity(pct_ul_val),
                                 "reference": adequacy_dict.get("reference"),
@@ -25012,7 +25026,7 @@ class SupplementEnricherV3:
                                     (agg_adequacy.ul_population or {}).get("label") or "general adult",
                                     ul_basis=(agg_adequacy.reference or {}).get("ul_basis"),
                                     exposure_label=("at the assessed daily amount" if servings_estimated
-                                                    else "at maximum directed daily use"),
+                                                    else max_exposure_label),
                                 )
                             ),
                             "severity": ul_display_severity(pct_ul_val),
@@ -25650,11 +25664,17 @@ class SupplementEnricherV3:
                 # Same canonical policy as the interaction thresholds. %RDA and
                 # UL comparisons are per-day, so a derived serving frequency
                 # would misreport tolerable-upper-limit proximity.
-                servings_min, servings_max, frequency_defaulted = resolve_daily_serving_range(enriched)
+                # The UL screen uses conservative exposure: a printed daily
+                # ceiling ("not to exceed") when the label has one. Adequacy
+                # stays at the minimum directed use.
+                servings_min, _servings_max, frequency_defaulted = resolve_daily_serving_range(enriched)
+                label_ceiling = resolve_daily_serving_ceiling(enriched)
                 enriched["rda_ul_data"] = self._collect_rda_ul_data(
                     enriched,
                     min_servings_per_day=servings_min,
-                    max_servings_per_day=None if frequency_defaulted else servings_max
+                    max_servings_per_day=(None if frequency_defaulted and label_ceiling is None
+                                          else resolve_daily_serving_multiplier(enriched)),
+                    frequency_defaulted=frequency_defaulted,
                 )
                 if isinstance(enriched["rda_ul_data"], dict):
                     enriched["rda_ul_data"]["collection_enabled"] = True

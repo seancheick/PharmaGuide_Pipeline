@@ -207,27 +207,41 @@ def test_normalizer_does_not_flag_true_unknown_as_recognized():
     assert not detail.get("recognized_non_identity")
 
 
+def _nested_probiotic_row(name: str, group: str) -> dict:
+    return {
+        "name": name,
+        "standardName": name,
+        "category": "bacteria",
+        "ingredientGroup": group,
+        "quantity": None,
+        "unit": "NP",
+        "parentBlend": "Probiotic Blend",
+        "isNestedIngredient": True,
+    }
+
+
 def test_normalizer_marks_nested_display_only_unmapped_as_non_scoreable():
     n = EnhancedDSLDNormalizer()
     row = n._process_single_ingredient_enhanced(
-        {
-            "name": "B. lactis BS01",
-            "standardName": "B. lactis BS01",
-            "category": "bacteria",
-            "ingredientGroup": "Bifidobacterium animalis lactis",
-            "quantity": None,
-            "unit": "NP",
-            "parentBlend": "Probiotic Blend",
-            "isNestedIngredient": True,
-        },
-        is_active=True,
+        _nested_probiotic_row("Zzqx Culture 7", "Zzqx Culture"), is_active=True,
     )
 
     assert row["cleaner_row_role"] == "nested_display_only"
-    detail = n.unmapped_details["B. lactis BS01"]
+    detail = n.unmapped_details["Zzqx Culture 7"]
     assert detail["non_scoreable_cleaner_row"] is True
     assert detail["cleaner_row_role"] == "nested_display_only"
     assert detail["score_exclusion_reason"] == "nested_display_only"
+
+
+def test_nested_strain_in_an_iqm_probiotic_alias_group_is_mapped_not_reported():
+    """B. lactis BS01 was this file's unmapped example until the group fallback
+    admitted the IQM probiotic alias "Bifidobacterium animalis lactis"."""
+    n = EnhancedDSLDNormalizer()
+    row = n._process_single_ingredient_enhanced(
+        _nested_probiotic_row("B. lactis BS01", "Bifidobacterium animalis lactis"), is_active=True,
+    )
+    assert row["canonical_id"] == "bifidobacterium_lactis"
+    assert "B. lactis BS01" not in n.unmapped_details
 
 
 def test_unmapped_delta_counts_a_repeated_name_in_the_next_product():

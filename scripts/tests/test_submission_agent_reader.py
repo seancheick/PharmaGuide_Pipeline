@@ -99,6 +99,22 @@ def test_save_never_writes_over_a_review_the_reviewer_has_started() -> None:
     assert save_refusal(draft, label, submission, {"draft": {"payload": label}}) is None
 
 
+def test_a_revised_label_may_replace_the_agents_own_last_save() -> None:
+    # After `record` again, the server still holds the agent's previous save,
+    # which matches neither the new label nor the new draft. It is the agent's,
+    # not the reviewer's, when it is exactly what `save` last wrote.
+    draft, label, submission = _saveable()
+    previous = {"brandName": "Acme", "notes": "agent's earlier save"}
+    review = {"draft": {"payload": previous}}
+    assert "edited" in save_refusal(draft, label, submission, review)
+    assert save_refusal(draft, label, submission, review, last_saved=previous) is None
+    # Anything else the server holds is still the reviewer's work.
+    assert "edited" in save_refusal(draft, label, submission, review,
+                                    last_saved={"brandName": "Acme"})
+    ticked = {**review, "verifications": [{"field": "brand", "live": True}]}
+    assert "ticked" in save_refusal(draft, label, submission, ticked, last_saved=previous)
+
+
 def test_a_photo_added_after_fetch_asks_for_fetch_not_a_traceback(tmp_path) -> None:
     import json
     (tmp_path / "photos.json").write_text(json.dumps([{"photo_id": PHOTO, "file": "a.jpg"}]))

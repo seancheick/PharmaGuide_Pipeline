@@ -76,7 +76,9 @@ def _evidence_rows(product: dict) -> list[dict]:
 PROTEIN_DSLD = "180692"
 OMEGA_DSLD = "13801"
 ENZYME_DSLD = "293966"
-BLEND_DSLD = "309492"
+# Airborne Kids: identity-bearing blend header masses. 309492 (Quercefit) is a
+# one-constituent DSLD blend that e91e6b90f correctly reads as its ingredient.
+BLEND_DSLD = "180572"
 
 GOLDEN_IDS = [PROTEIN_DSLD, OMEGA_DSLD, ENZYME_DSLD, BLEND_DSLD]
 
@@ -129,12 +131,12 @@ def test_clean_identity_id_traces_to_row_canonical() -> None:
         assert row["scoring_parent_id"] == row["evidence_canonical_id"]
 
 
-def test_identity_chain_can_represent_clean_to_scoring_semantic_shift() -> None:
-    """The contract must not collapse clean identity into the scoring key.
+def test_identity_chain_never_collapses_a_source_identity_into_the_scoring_key() -> None:
+    """Clean identity, evidence identity and scoring parent stay explicit.
 
-    Protein products often clean to a specific source identity such as
-    whey_protein while v4 scores the normalized protein macro. That semantic
-    shift is expected, but it must be explicit in the evidence row.
+    Since 47baba9dd (Oct 18) whey ingredient mass never stands in for protein
+    grams: protein comes only from the declared Nutrition Facts row, and the
+    whey row keeps its own identity rather than being relabelled "protein".
     """
     product = {
         "product_name": "Whey Protein",
@@ -149,14 +151,21 @@ def test_identity_chain_can_represent_clean_to_scoring_semantic_shift() -> None:
             }
         ],
         "ingredient_quality_data": {"ingredients_scorable": []},
+        "nutrition_summary": {"protein_g": 22.0},
+        "display_ingredients": [{"raw_source_text": "Protein", "source_section": "activeIngredients",
+                                 "display_type": "nutrition_fact", "raw_source_path": "ingredientRows[1]",
+                                 "exact_dose_text": "22 g"}],
     }
-    shifted_rows = derive_product_scoring_evidence(product)
+    rows = {row["raw_source_path"]: row for row in derive_product_scoring_evidence(product)}
 
-    assert shifted_rows, "Expected at least one explicit clean->evidence identity shift"
-    for row in shifted_rows:
-        assert row["clean_identity_id"] == "whey_protein"
-        assert row["evidence_canonical_id"] == "protein"
-        assert row["scoring_parent_id"] == "protein"
+    protein = rows["ingredientRows[1]"]
+    assert protein["reason"] == "declared_nutrition_protein_mass"
+    assert (protein["clean_identity_id"], protein["evidence_canonical_id"],
+            protein["scoring_parent_id"]) == ("protein", "protein", "protein")
+    whey = rows["activeIngredients[0]"]
+    assert (whey["clean_identity_id"], whey["evidence_canonical_id"],
+            whey["scoring_parent_id"]) == ("whey_protein", "whey_protein", "whey_protein")
+    assert whey.get("quantity") is None
 
 
 @pytest.mark.parametrize("dsld_id", GOLDEN_IDS)

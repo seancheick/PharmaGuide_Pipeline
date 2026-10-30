@@ -1231,6 +1231,24 @@ class EnhancedDSLDNormalizer:
                     "priority": 4
                 }
                 add_group_exact(value, self._fast_exact_lookup[key])
+        # DSLD probiotic groups use reclassified genera (Limosilactobacillus
+        # reuteri) and subspecies (Bifidobacterium infantis) that the IQM holds
+        # as aliases. Admit a probiotic alias only when the name lookup already
+        # resolves it to the same parent; other categories' aliases stay out.
+        for entry in self.ingredient_map.values():
+            if not isinstance(entry, dict) or entry.get("category") != "probiotics":
+                continue
+            parent = self._group_exact_lookup.get(
+                norm_module.normalize_text(entry.get("standard_name", "")))
+            if not parent:
+                continue
+            literals = list(entry.get("aliases") or [])
+            for form_name, form in (entry.get("forms") or {}).items():
+                literals += [form_name, *(form.get("aliases") or [])]
+            for literal in literals:
+                if self.ingredient_alias_lookup.get(
+                        self.matcher.preprocess_text(literal)) == parent["standard_name"]:
+                    add_group_exact(literal, parent)
 
         # PRIORITY 5: Add STANDARDIZED BOTANICALS lookups
         standardized_botanicals = self.standardized_botanicals.get("standardized_botanicals", [])
@@ -10454,6 +10472,10 @@ class EnhancedDSLDNormalizer:
                 "servingQuantitySource": "label" if qty_from_label else "default",
                 "dailyServingsSource": "label" if daily_from_label else "default",
             })
+            # A printed "not to exceed" daily maximum is a limit, not a
+            # direction; serving_frequency reads it as exposure only.
+            if serving.get("ceilingDailyServings") is not None:
+                processed[-1]["ceilingDailyServings"] = daily_count(serving["ceilingDailyServings"])
 
         return processed
     def _generate_label_text(self, active_ingredients: List[Dict], 

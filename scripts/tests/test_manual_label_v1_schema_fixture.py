@@ -15,7 +15,7 @@ FIXTURE_PATH = (
     / "fixtures"
     / "manual_label_v1_cases.json"
 )
-FIXTURE_SHA256 = "f46307dabfa23d187656d0b5de3c3ba869fb49c78297bbcc39fd1fd9f388753c"
+FIXTURE_SHA256 = "25d0904d4d811688b9e82d6a2a449ea50730af6589a1f18ab6ea5f7f40fa3803"
 
 
 def test_manual_label_v1_fixture_contract_stays_checksum_pinned() -> None:

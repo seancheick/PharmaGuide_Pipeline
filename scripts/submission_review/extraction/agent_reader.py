@@ -507,14 +507,21 @@ def recorded_label_disagreements(saved: Any, extraction: Mapping[str, Any]) -> l
     return reading_changes(to_manual_label(draft).payload, saved)
 
 
-def save_refusal(draft: dict, label: dict, submission: dict, review: dict) -> str | None:
-    """Why `save` must not write this label as the review, or None."""
+def save_refusal(draft: dict, label: dict, submission: dict, review: dict,
+                 last_saved: dict | None = None) -> str | None:
+    """Why `save` must not write this label as the review, or None.
+
+    `last_saved` is the label this agent's `save` last wrote for the
+    submission. A server review identical to it is the agent's own, so a
+    revised label may replace it; any other difference is the reviewer's.
+    """
     if draft.get("evidence_revision") != submission.get("evidence_revision"):
         return "the photos changed after `record`; run `fetch` and `record` again"
     if any(entry.get("live") for entry in review.get("verifications") or []):
         return "the reviewer has already ticked fields; the review is theirs now"
     saved = (review.get("draft") or {}).get("payload")
-    if saved and not is_blank_label(saved) and saved not in (label, to_manual_label(draft).payload):
+    if (saved and not is_blank_label(saved) and saved != last_saved
+            and saved not in (label, to_manual_label(draft).payload)):
         return "the reviewer has edited the saved review; the review is theirs now"
     return None
 
@@ -568,13 +575,19 @@ def cmd_save(api: Reviewer, alias: str) -> int:
         return 1
     submission = api.submission(_resolve(alias))
     review = api.call("load_review", submission_id=submission["id"]).get("review") or {}
-    refusal = save_refusal(draft, label, submission, review)
+    saved_copy = directory / "saved_label.json"
+    last_saved = json.loads(saved_copy.read_text()) if saved_copy.exists() else None
+    refusal = save_refusal(draft, label, submission, review, last_saved)
     if refusal:
         print(f"{alias}: not saved; {refusal}")
         return 1
     api.call("save_review", submission_id=submission["id"], payload=label,
              expected_evidence_revision=submission["evidence_revision"],
              evidence_manifest_sha256=submission["evidence_manifest_sha256"])
+    # Replace atomically: a later save reads this copy to recognize its own work.
+    partial = saved_copy.with_name(saved_copy.name + ".tmp")
+    partial.write_text(json.dumps(label, indent=1, ensure_ascii=False) + "\n")
+    partial.replace(saved_copy)
     print(f"{alias}: saved. In the console: open it, compare each field with its crop, "
           f"tick the five fields, approve.")
     return 0

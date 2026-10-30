@@ -86,8 +86,8 @@ _MANUAL_LABEL_FORM_FIELDS = frozenset({
     "prefix", "uniiCode",
 })
 _MANUAL_LABEL_SERVING_FIELDS = frozenset({
-    "inSFB", "maxDailyServings", "maxQuantity", "minDailyServings",
-    "minQuantity", "notes", "order", "unit",
+    "ceilingDailyServings", "inSFB", "maxDailyServings", "maxQuantity",
+    "minDailyServings", "minQuantity", "notes", "order", "unit",
 })
 _MANUAL_LABEL_STATEMENT_FIELDS = frozenset({"notes", "type"})
 _MANUAL_LABEL_CLASSIFICATION_FIELDS = frozenset({

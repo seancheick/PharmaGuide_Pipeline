@@ -20,7 +20,7 @@ FIXTURE_PATH = (
     / "label_draft_v1_cases.json"
 )
 FIXTURE_SHA256 = "849eb10a21f5f4901b579a3f7be070c0eaf861bb72551c30f27bebbe1cb04c15"
-MUTATIONS_SHA256 = "a4b24d91433ab34e7c4eef22e8f75e09d9fddc37dddf637d0fe06ade8050c0c4"
+MUTATIONS_SHA256 = "4e72ee1884ed9b941281bc4977288f77ca0d44180d11de3be969769a86300761"
 
 
 def _fixture() -> dict:

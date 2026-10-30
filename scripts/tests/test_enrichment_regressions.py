@@ -16,6 +16,27 @@ from enrich_supplements_v3 import SupplementEnricherV3
 from constants import SKIP_REASON_RECOGNIZED_NON_SCORABLE
 from supplement_taxonomy import classify_supplement
 
+
+def _reviewed_studies(monkeypatch, *studies):
+    """Synthetic clinical records, each with one clinician-approved,
+    scoring-eligible context tied to a declared source. Since 2026-10-28 a
+    record without reviewed contexts never scores
+    (clinical_applicability: clinical_source_contexts_missing), and the
+    applicability owner reads records from the registry, so the synthetic
+    records are registered there too."""
+    import clinical_applicability
+    reviewed = [{**study, "published_studies": ["1"], "study_contexts": [{
+        "review_status": "clinician_approved", "scoring_eligible": True,
+        "clinical_review": {"reviewer": "Synthetic test reviewer", "reviewed_at": "2026-10-28",
+                            "scope": "identity_dose_outcome_applicability"},
+        "source_pmids": ["1"], "condition": "general_health",
+        "population": {"description": "healthy adults"},
+        "outcomes": [{"name": "Primary outcome", "hierarchy": "primary", "direction": "positive"}],
+    }]} for study in studies]
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries",
+                        lambda: {study["id"]: study for study in reviewed})
+    return reviewed
+
 # Mega-file: full SupplementEnricherV3 boot per test class (loads all 26
 # reference databases). Marked slow so `pytest -m "not slow"` skips for
 # tight dev loops. Default `pytest` still runs everything.
@@ -2528,10 +2549,10 @@ class TestPrimaryActiveContractForBlendChildren:
 
         assert clusters == []
 
-    def test_evidence_ignores_recognized_blend_children(self, enricher):
+    def test_evidence_ignores_recognized_blend_children(self, enricher, monkeypatch):
         product = self._product_with_blend_children()
         enricher.databases["backed_clinical_studies"] = {
-            "backed_clinical_studies": [
+            "backed_clinical_studies": _reviewed_studies(monkeypatch, *[
                 {
                     "id": "VITAMIN_D_STUDY",
                     "standard_name": "Vitamin D3",
@@ -2546,7 +2567,7 @@ class TestPrimaryActiveContractForBlendChildren:
                     "evidence_level": "ingredient-human",
                     "study_type": "rct_single",
                 },
-            ]
+            ])
         }
 
         result = enricher._collect_evidence_data(
@@ -2981,7 +3002,7 @@ class TestEvidenceMultiMatch:
     def enricher(self):
         return SupplementEnricherV3()
 
-    def test_evidence_collects_multiple_studies_per_ingredient(self, enricher):
+    def test_evidence_collects_multiple_studies_per_ingredient(self, enricher, monkeypatch):
         """An ingredient matching multiple clinical studies should collect all matches."""
         study_a = {
             "id": "VIT_D_BONE",
@@ -3006,7 +3027,7 @@ class TestEvidenceMultiMatch:
 
         original_db = enricher.databases.get('backed_clinical_studies', {})
         enricher.databases['backed_clinical_studies'] = {
-            'backed_clinical_studies': [study_a, study_b]
+            'backed_clinical_studies': _reviewed_studies(monkeypatch, study_a, study_b)
         }
 
         product = {
@@ -3061,7 +3082,7 @@ class TestEvidenceMultiMatch:
         ids = [m['id'] for m in result['clinical_matches']]
         assert len(ids) == len(set(ids)), "Duplicate study IDs found for the same ingredient"
 
-    def test_deduped_evidence_match_tracks_every_supported_active(self, enricher):
+    def test_deduped_evidence_match_tracks_every_supported_active(self, enricher, monkeypatch):
         """One omega review can support EPA and DHA without scoring it twice."""
         study = {
             "id": "INGR_OMEGA_FIXTURE",
@@ -3076,7 +3097,7 @@ class TestEvidenceMultiMatch:
         }
         original_db = enricher.databases.get("backed_clinical_studies", {})
         enricher.databases["backed_clinical_studies"] = {
-            "backed_clinical_studies": [study]
+            "backed_clinical_studies": _reviewed_studies(monkeypatch, study)
         }
         product = {
             "id": "omega-evidence-ownership",
@@ -3105,7 +3126,7 @@ class TestEvidenceMultiMatch:
             "dha",
         ]
 
-    def test_generic_standard_name_suffix_does_not_hide_reviewed_evidence(self, enricher):
+    def test_generic_standard_name_suffix_does_not_hide_reviewed_evidence(self, enricher, monkeypatch):
         study = {
             "id": "INGR_GENERIC_SUFFIX_FIXTURE",
             "standard_name": "Ashwagandha (Generic)",
@@ -3119,7 +3140,7 @@ class TestEvidenceMultiMatch:
         }
         original_db = enricher.databases.get("backed_clinical_studies", {})
         enricher.databases["backed_clinical_studies"] = {
-            "backed_clinical_studies": [study]
+            "backed_clinical_studies": _reviewed_studies(monkeypatch, study)
         }
         product = {
             "id": "generic-suffix-evidence",
@@ -4567,7 +4588,17 @@ class TestClinicalEvidenceUsesMatchedFormIdentity:
             "inactiveIngredients": [],
         }
 
-        assert "INGR_IRON_BISGLYCINATE" in self._evidence_ids(enricher, product)
+        enriched, issues = enricher.enrich_product(product)
+        assert issues == []
+        evidence = enriched["evidence_data"]
+        # The chelate routes to the bisglycinate record, not generic iron. That
+        # record has no reviewed study contexts yet, so it is withheld from
+        # clinical credit (clinical_applicability, 2026-10-28).
+        assert ("INGR_IRON_BISGLYCINATE", "clinical_source_contexts_missing") in {
+            (m.get("id"), m.get("reason_code"))
+            for m in evidence["rejected_clinical_matches"]}
+        assert "INGR_IRON_BISGLYCINATE" not in {
+            m.get("id") for m in evidence["clinical_matches"]}
 
     def test_row_level_ksm66_gets_brand_evidence(self, enricher):
         product = {

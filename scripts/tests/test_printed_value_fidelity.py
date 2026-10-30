@@ -105,9 +105,21 @@ def test_nutrition_summary_keeps_scoring_numbers_and_discloses_the_bound() -> No
     # The numeric summary contract is unchanged: scoring/routing read it.
     assert summary["protein_g"] == 1.0
     assert summary["total_carbohydrates_g"] == 4.0
-    # A typed sugar bound is not an exact mass, the same as a DSLD one.
-    assert summary["total_sugars_g"] is None
+    # A printed sugar bound keeps its stated amount beside its operator, so
+    # the app shows "<1 g" rather than dropping the Total Sugars line.
+    assert summary["total_sugars_g"] == 1.0
     assert summary["quantity_operators"] == {"protein_g": "<", "total_sugars_g": "<"}
+
+
+def test_sugar_amount_that_is_not_a_printed_bound_stays_out_of_the_summary() -> None:
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    summary = SupplementEnricherV3()._collect_nutrition_summary({"nutritionalInfo": {
+        "sugars": {"amount": 1.0, "unit": "g", "quantityVariants": [
+            {"selected_for_analysis": True, "quantity_parsed": False}]},
+    }})
+    assert summary["total_sugars_g"] is None
+    assert summary["quantity_operators"] == {}
 
 
 def test_export_nutrition_detail_carries_the_operator_and_printed_servings_text() -> None:
