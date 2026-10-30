@@ -298,12 +298,12 @@ def _record_names(record: Dict[str, Any]) -> set[str]:
 def _source_dose_row(product: Dict[str, Any], row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """Bind material facts to one original active row, never a borrowed total."""
     from clinical_applicability import _linked_rows
-    from scoring_input_contract import _source_tree_rows, is_lent_blend_mass
+    from scoring_input_contract import active_label_rows, is_lent_blend_mass
 
     ref = row.get("raw_source_path") or row.get("source_row_ref")
     if not isinstance(ref, str) or not ref.strip() or is_lent_blend_mass(row):
         return None
-    originals = [source for source in _source_tree_rows(product)
+    originals = [source for source in active_label_rows(product.get("activeIngredients"))
                  if (source.get("raw_source_path") or source.get("source_row_ref")) == ref]
     if len(originals) != 1:
         return None

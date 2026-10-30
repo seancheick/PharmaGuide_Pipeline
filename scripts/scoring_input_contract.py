@@ -3257,18 +3257,50 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
     )
 
 
-def _source_tree_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Flatten the product's original active-ingredient tree, parents first."""
-    source_rows = [row for row in _safe_list(product.get("activeIngredients"))
-                   if isinstance(row, dict)]
-    seen_objects = {id(row) for row in source_rows}
-    for row in source_rows:
-        for field in ("nestedIngredients", "nested_ingredients"):
-            for child in _safe_list(row.get(field)):
-                if isinstance(child, dict) and id(child) not in seen_objects:
-                    seen_objects.add(id(child))
-                    source_rows.append(child)
-    return source_rows
+def active_label_rows(active_ingredients: Any) -> List[Dict[str, Any]]:
+    """Project the active label tree into one row ledger, parents first.
+
+    Cleaning owns label identity and hierarchy; every consumer that must read
+    disclosed blend children (scoring, dose, enrichment, the safety gate and
+    export) walks the tree through this one function. Indexed source paths are
+    stable row identities. Some legacy/direct-normalizer rows only carry the
+    section-level path, so label identity is included to prevent distinct rows
+    from collapsing.
+    """
+    flattened: List[Dict[str, Any]] = []
+    seen: set[tuple[Any, ...]] = set()
+
+    def visit(rows: Any) -> None:
+        if not isinstance(rows, list):
+            return
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            source_path = str(row.get("raw_source_path") or "").strip()
+            label_identity = str(
+                row.get("raw_source_text")
+                or row.get("name")
+                or row.get("standardName")
+                or ""
+            ).strip().casefold()
+            identity = (
+                (
+                    "source_path",
+                    source_path,
+                    label_identity,
+                    str(row.get("quantity") or row.get("dose") or ""),
+                )
+                if source_path
+                else ("object", id(row))
+            )
+            if identity in seen:
+                continue
+            seen.add(identity)
+            flattened.append(row)
+            visit(row.get("nestedIngredients"))
+
+    visit(active_ingredients)
+    return flattened
 
 
 
@@ -3291,7 +3323,7 @@ def _has_registered_preparation_sources(product: Dict[str, Any], row: Dict[str, 
     aliases = {make_normalized_key(alias) for alias in form.get("source_form_aliases") or []}
     if not aliases:
         return False
-    sources = _source_tree_rows(product)
+    sources = active_label_rows(product.get("activeIngredients"))
     parents = [source for source in sources if source.get("raw_source_path") == ref]
     if len(parents) != 1:
         return False
@@ -3384,7 +3416,7 @@ def required_identity_conflicts(product: Dict[str, Any]) -> Dict[str, Dict[str, 
     explicit structural, inactive and non-scorable dispositions stay excluded.
     """
     iqd = _safe_dict(product.get("ingredient_quality_data"))
-    source_rows = _source_tree_rows(product)
+    source_rows = active_label_rows(product.get("activeIngredients"))
     source_by_key = {scoring_row_key(row, index): row
                      for index, row in enumerate(source_rows)}
     conflicts: Dict[str, Dict[str, Any]] = {}
@@ -3783,7 +3815,7 @@ def get_assessable_evidence_ingredients(
     eligible_sources = set()
     if source_bound and isinstance(data.get("activeIngredients"), list):
         current_sources = {}
-        source_rows = _source_tree_rows(data)
+        source_rows = active_label_rows(data.get("activeIngredients"))
         for source_row in source_rows:
             key = (str(source_row.get("raw_source_path") or ""), _norm(source_row.get("canonical_id")))
             current_sources.setdefault(key, []).append(source_row)
@@ -5841,7 +5873,7 @@ def profile_owner_candidate_rows(
         # the outer blend, even when its numbers happen to add to the total.
         declared_rows = list(label_rows)
         if product is not None:
-            declared_rows += _source_tree_rows(product)
+            declared_rows += active_label_rows(product.get("activeIngredients"))
             declared_rows += [row for row in _safe_list(
                 _safe_dict(product.get("ingredient_quality_data")).get("ingredients")
             ) if isinstance(row, dict)]
@@ -5963,7 +5995,7 @@ def primary_mass_competitor_rows(
     iqd = _safe_dict(product.get("ingredient_quality_data"))
     quantified_by_path: Dict[str, bool] = {}
     for collection in (
-        _source_tree_rows(product),
+        active_label_rows(product.get("activeIngredients")),
         _safe_list(iqd.get("ingredients")),
         _safe_list(iqd.get("ingredients_skipped")),
         _safe_list(iqd.get("ingredients_scorable")),
@@ -6077,7 +6109,7 @@ def source_linked_rows(
     seen: set = set()
     for collection in (
         _safe_list(rows),
-        _source_tree_rows(product),
+        active_label_rows(product.get("activeIngredients")),
         _safe_list(iqd.get("ingredients")),
         _safe_list(iqd.get("ingredients_skipped")),
         _safe_list(iqd.get("ingredients_scorable")),

@@ -107,6 +107,7 @@ from serving_frequency import (
     select_canonical_serving,
 )
 from scoring_input_contract import (
+    active_label_rows,
     disclosed_source_amount,
     build_scoring_classification,
     has_source_printed_amount,
@@ -1300,7 +1301,7 @@ class SupplementEnricherV3:
             for row in product.get("activeIngredients", [])
             if isinstance(row, dict)
         ]
-        flattened = self._flatten_active_ingredients_for_analysis(active_tree)
+        flattened = active_label_rows(active_tree)
         iqd = product.get("ingredient_quality_data")
         if not isinstance(iqd, dict) or not isinstance(
             iqd.get("ingredients_scorable"), list
@@ -4699,54 +4700,6 @@ class SupplementEnricherV3:
             }
         )
 
-    @staticmethod
-    def _flatten_active_ingredients_for_analysis(
-        active_ingredients: List[Dict[str, Any]],
-    ) -> List[Dict[str, Any]]:
-        """Project the label tree into one analysis ledger.
-
-        Cleaning owns label identity and hierarchy. Enrichment must evaluate
-        every cleaner-classified active row, including disclosed blend
-        children, without changing the nested label representation. Indexed
-        source paths are stable row identities. Some legacy/direct-normalizer
-        rows only carry the section-level path, so label identity is included
-        to prevent distinct rows from collapsing.
-        """
-        flattened: List[Dict[str, Any]] = []
-        seen: set[tuple[Any, ...]] = set()
-
-        def visit(rows: Any) -> None:
-            if not isinstance(rows, list):
-                return
-            for row in rows:
-                if not isinstance(row, dict):
-                    continue
-                source_path = str(row.get("raw_source_path") or "").strip()
-                label_identity = str(
-                    row.get("raw_source_text")
-                    or row.get("name")
-                    or row.get("standardName")
-                    or ""
-                ).strip().casefold()
-                identity = (
-                    (
-                        "source_path",
-                        source_path,
-                        label_identity,
-                        str(row.get("quantity") or row.get("dose") or ""),
-                    )
-                    if source_path
-                    else ("object", id(row))
-                )
-                if identity in seen:
-                    continue
-                seen.add(identity)
-                flattened.append(row)
-                visit(row.get("nestedIngredients"))
-
-        visit(active_ingredients)
-        return flattened
-
     def _collect_ingredient_quality_data(self, product: Dict) -> Dict:
         """
         Collect ingredient quality data for scoring Section A1-A2.
@@ -4763,7 +4716,7 @@ class SupplementEnricherV3:
         quality_map = self.databases.get('ingredient_quality_map', {})
         botanicals_db = self.databases.get('standardized_botanicals', {})
         active_ingredient_tree = product.get('activeIngredients', [])
-        active_ingredients = self._flatten_active_ingredients_for_analysis(
+        active_ingredients = active_label_rows(
             active_ingredient_tree
         )
         inactive_ingredients = product.get('inactiveIngredients', [])
@@ -11086,7 +11039,7 @@ class SupplementEnricherV3:
         # Preparation disclosure is source evidence even when its mass is NP
         # or owned by a blend. Dose eligibility must not erase label wording.
         for index, ingredient in enumerate(
-            self._flatten_active_ingredients_for_analysis(product.get("activeIngredients") or [])
+            active_label_rows(product.get("activeIngredients") or [])
         ):
             if not isinstance(ingredient, dict):
                 continue
@@ -12351,7 +12304,7 @@ class SupplementEnricherV3:
         active_tagged = [
             {**ing, '_source_section': 'active', '_source_index': idx}
             for idx, ing in enumerate(
-                self._flatten_active_ingredients_for_analysis(
+                active_label_rows(
                     product.get('activeIngredients', [])
                 )
             )
@@ -12382,7 +12335,7 @@ class SupplementEnricherV3:
         screened, so nested blend children receive their own flags.
         """
         rows_by_section = {
-            "active": self._flatten_active_ingredients_for_analysis(
+            "active": active_label_rows(
                 product.get("activeIngredients", []) or []
             ),
             "inactive": product.get("inactiveIngredients", []) or [],
@@ -17163,7 +17116,7 @@ class SupplementEnricherV3:
         # representation happened to reach the CFU collector. Empty subheaders
         # keep the parent unresolved; a declared total is metadata, not an
         # unnamed strain container. A sibling prebiotic never becomes a strain.
-        source_rows = self._flatten_active_ingredients_for_analysis(active_ingredients)
+        source_rows = active_label_rows(active_ingredients)
         source_rows_by_ref = {_row_path(row): row for row in source_rows if _row_path(row)}
 
         def _belongs_to_owner(row: Dict, owner_ref: str) -> bool:
@@ -21093,7 +21046,7 @@ class SupplementEnricherV3:
         # Nested blend children carry their own safety flags (see
         # _attach_banned_safety_flags_to_ingredients), so read the same ledger.
         for label_row in (
-            self._flatten_active_ingredients_for_analysis(
+            active_label_rows(
                 enriched.get("activeIngredients") or []
             )
             + list(enriched.get("inactiveIngredients") or [])
