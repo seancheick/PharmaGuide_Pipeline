@@ -360,8 +360,14 @@ def test_a_stimulant_word_outside_the_matched_phrase_on_a_printed_row_still_fire
     assert _has_undisclosed_stimulant_blend(product) is True
 
 
-def test_unresolved_printed_wording_keeps_the_category_name():
-    assert _has_undisclosed_stimulant_blend(_detector_only("Stimulant Blends", "focus blend")) is True
+def test_unresolved_printed_wording_does_not_turn_a_category_into_a_warning():
+    assert _has_undisclosed_stimulant_blend(_detector_only("Stimulant Blends", "focus blend")) is False
+
+
+def test_unrelated_row_note_does_not_rename_the_printed_blend():
+    product = _detector_only("Stimulant Blends", "focus blend", row="Focus Blend")
+    product["activeIngredients"][0]["notes"] = "No stimulant ingredients added."
+    assert _has_undisclosed_stimulant_blend(product) is False
 
 
 def test_a_cleaner_named_blend_keeps_its_printed_name():

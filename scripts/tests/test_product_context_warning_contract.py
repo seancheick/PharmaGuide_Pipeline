@@ -108,9 +108,13 @@ def test_source_supported_recall_without_enforcement_number_is_retained(enricher
     assert result['total_deduction_applied'] == -9
 
 def test_real_siluetaya_event_keeps_lot_scope_without_duplicate_deduction(enricher):
+    event_rows = [row for row in enricher.databases['manufacturer_violations']['manufacturer_violations']
+                  if row.get('fda_recall_id') == 'H-0647-2026']
+    assert len(event_rows) == 2  # curated and openFDA records of the same event
+    assert len({row['total_deduction_applied'] for row in event_rows}) == 1
     assessment = enricher._check_violations('SiluetaYa', 'Siluetaya, LLC')
     assert len(assessment['violations']) == 1
-    assert assessment['total_deduction_applied'] == -23
+    assert assessment['total_deduction_applied'] == event_rows[0]['total_deduction_applied']
     assert 'US1220' in assessment['violations'][0]['product']
     assert '7500464462411' in assessment['violations'][0]['product']
     assert '06/2027' in assessment['violations'][0]['product']
