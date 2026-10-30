@@ -2647,16 +2647,24 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
 
     const qtyCell = document.createElement('td');
     const qtyInput = document.createElement('input');
-    qtyInput.type = 'number';
-    qtyInput.step = 'any';
-    qtyInput.placeholder = 'Amount';
+    qtyInput.inputMode = 'decimal';
+    qtyInput.placeholder = 'Amount or <1';
     qtyInput.setAttribute?.('aria-label', 'Amount');
-    qtyInput.value = row.quantity?.[0]?.quantity ?? '';
+    const printed = row.quantity?.[0];
+    qtyInput.value = printed?.operator && printed.operator !== '='
+      ? `${printed.operator}${printed.quantity}` : printed?.quantity ?? '';
+    // A printed bound ("<1") keeps its operator through every edit.
+    const readQuantity = (unit) => {
+      const raw = qtyInput.value.trim();
+      const bound = raw === '' ? null : parsePrintedAmount(raw);
+      return {
+        quantity: raw === '' ? null : bound ? bound.amount : Number(raw),
+        unit,
+        ...(bound?.operator ? { operator: bound.operator } : {}),
+      };
+    };
     qtyInput.addEventListener('input', () => {
-      row.quantity = [{
-        quantity: qtyInput.value.trim() === '' ? null : Number(qtyInput.value),
-        unit: row.quantity?.[0]?.unit ?? '',
-      }];
+      row.quantity = [readQuantity(row.quantity?.[0]?.unit ?? '')];
       updateShaPreview();
     });
     qtyCell.append(qtyInput);
@@ -2667,10 +2675,7 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     unitInput.setAttribute?.('aria-label', 'Unit');
     unitInput.value = row.quantity?.[0]?.unit ?? '';
     unitInput.addEventListener('input', () => {
-      row.quantity = [{
-        quantity: qtyInput.value.trim() === '' ? null : Number(qtyInput.value),
-        unit: unitInput.value,
-      }];
+      row.quantity = [readQuantity(unitInput.value)];
       updateShaPreview();
     });
     unitCell.append(unitInput);
@@ -2827,11 +2832,15 @@ function parsePrintedAmount(raw) {
 // the number from it); a plain count stays a number.
 function parseServingsPerContainer(raw) {
   const text = raw.trim();
-  if (/^(about|approximately|approx\.?|~)\s*\d[\d,]*(\.\d+)?$/i.test(text)) return text;
+  const approximate = /^(?:about|approximately|approx\.?|~)\s*(\d[\d,]*(?:\.\d+)?)$/i.exec(text);
+  const numeric = approximate ? approximate[1] : text;
   // A comma is thousands grouping only; "1,5" may be a decimal comma.
-  if (text.includes(',') && !/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(text)) return null;
-  const count = Number(text.replace(/,/g, ''));
-  return count > 0 ? count : null;
+  if (numeric.includes(',') && !/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(numeric)) return null;
+  const count = Number(numeric.replace(/,/g, ''));
+  if (!(count > 0)) return null;
+  // An approximate count is a whole number of servings ("about 17").
+  if (approximate) return Number.isInteger(count) ? text : null;
+  return count;
 }
 
 function syncFieldsFromPayload() {
