@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.31.2-held-label-fidelity",
+    "version": "1.31.3-source-bound-release-holds",
     "schema_version": "1.0.0",
-    "last_updated": "2026-10-29",
+    "last_updated": "2026-10-30",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0 (Dose V4.1, Sean 2026-10-17): Dose adequacy uses the minimum directed daily use and safety the maximum on every route; the per-nutrient UL bands and B7 subtraction are replaced by one product-level Dose ceiling (dose_safety_ceiling). Ordinary-adult magnesium (84 mg) and calcium (260 mg) contribution-policy targets and the potassium completed neutral are in dose_magnitudes.generic (Dose V4.1 section 3.1). Sports adequacy plateaus above former studied ranges; total daily caffeine feeds the product-level ceiling (dose_safety_ceiling.caffeine); sports co-primaries and probiotic strains average, hidden or unbenchmarked strains taking the shared neutral; evidence certainty no longer caps ATP, betaine or taurine Dose. Hidden amounts and completed no-reference conclusions take the shared Dose neutral on every route (section 2.3); config-owned Dose anchors carry reference semantics validated by schemas/dose_reference_semantics.schema.json. Above a highest studied dose adequacy plateaus (the above-studied-range credit is retired); immune zinc and vitamin D at their ULs are reduced only by the product-level ceiling; hidden botanical and collagen amounts take the neutral. 1.29.0: Sean approved revised43reference decisions and six-member prenatal critical group inside existing5-pointbudget on2026-10-18. One shared nutritional curve; unsupported discrete-dose extrapolations completed neutral; sports contribution targets are policy, not clinical minima; generic quarter-RDA/clinical-anchor shortcuts and sports composition credit retired. 1.29.1 integrates the reviewed omega marketing Evidence and molecular-form safeguards while retaining Dose V4.1 minimum-directed-daily exposure and native omega reference ownership. 1.31.0 (Dr Pham framework, 2026-10-28): no automatic generic Evidence floor exceeds the strong base (14 raw = 15.6/20). The branded (branded-rct level or BRAND_ id) and ingredient-allowlist 18-raw tier and the branded single-RCT 17-raw tier are retired; one trial is the moderate floor. No automatic floor reaches the exceptional band (19-20); a single ingredient goes above the strong floor only with a recorded clinician determination of its evidence body. The additive multi-ingredient pipeline is unchanged. Public bands: exceptional 19-20, strong 15-18, moderate 11-14, limited 6-10, preliminary 1-5; nutrition authority, Dose, Transparency, Verification and safety are unchanged.",
     "phase": "scoring_fairness_recalibration"
   },
@@ -1914,6 +1914,1078 @@
           "dose_benchmark_identity_unresolved",
           "evidence_assessment_incomplete"
         ]
+      },
+      "59635": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "d626bdbb74ec8a3b5a59a316821e2741491c43bd9b88d4b57af106830c9b4ea9",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[4].nestedRows[0]",
+            "raw_source_text": "Dietary Fiber",
+            "quantity": 0.0,
+            "unit": "Gram(s)",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[6]",
+            "raw_source_text": "Probiotic Blend",
+            "quantity": 10.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[6].nestedRows[0]",
+            "raw_source_text": "GanedenBC30",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[6].nestedRows[1]",
+            "raw_source_text": "Streptococcus salivarius K12",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": "Streptococcus salivarius K12 Genus: Streptococcus Species: salivarius Note: supplying 575 million CFU at time of manufacture ",
+            "forms": [],
+            "plantPart": null,
+            "genus": "Streptococcus",
+            "species": "salivarius"
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its probiotic Evidence applicability assessment is unfinished; no inferred strain-specific benefit or strain dose.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/59635.pdf",
+        "blockers": [
+          "probiotic_evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
+      },
+      "231921": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "7f53b6297bcb235a5ec3aed8f2b6a127c6e88232342b5d0562cd35e32475ce54",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Meratrim Proprietary Blend",
+            "quantity": 400.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "Sphaeranthus indicus extract",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[1]",
+            "raw_source_text": "Garcinia mangostana extract",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Integra-Lean African Mango (Irvingia gabonensis) Proprietary extract",
+            "quantity": 150.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its documented Dose and Evidence source assessments remain unfinished; no transferred preparation benchmark or clinical benefit.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/231921.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "232921": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "173fccbade8cebf54a53135087979fbc36d51be99c0d4c7f288e26e6aa49a7dd",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Broad Spectrum Hemp extract blend",
+            "quantity": 947.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "organic MCT Oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": "organic MCT Oil (Form: from Coconut) ",
+            "forms": [
+              {
+                "name": "Coconut",
+                "ingredientId": 6647,
+                "order": 1,
+                "prefix": "from",
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Coconut",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[1]",
+            "raw_source_text": "Hemp extract",
+            "quantity": 37.5,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Entourage Effect Blend",
+            "quantity": 1.1,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "raw_source_text": "Essence of organic Peppermint (flower, leaf, stem) oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "leaf",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[1]",
+            "raw_source_text": "Essence of organic Orange (peel) oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "peel",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[2]",
+            "raw_source_text": "Essence of organic Lavandin (flower & stem) oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "flower",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[3]",
+            "raw_source_text": "Essence of organic Frankincense (resin) oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "resin",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its documented Dose and Evidence source assessments remain unfinished; no transferred preparation benchmark or clinical benefit.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/232921.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "232928": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "f5a9554680d8744388d02649dceb008373508132ff9ed95bb1521576019417c8",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Broad Spectrum Hemp extract blend",
+            "quantity": 947.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "organic MCT Oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": "organic MCT Oil (Form: from Coconut) ",
+            "forms": [
+              {
+                "name": "Coconut",
+                "ingredientId": 6647,
+                "order": 1,
+                "prefix": "from",
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Coconut",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[1]",
+            "raw_source_text": "Hemp extract",
+            "quantity": 12.5,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Entourage Effect Blend",
+            "quantity": 1.1,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "raw_source_text": "Essence of organic Peppermint (flower, leaf, stem) oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "leaf",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[1]",
+            "raw_source_text": "Essence of organic Orange (peel) oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "peel",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[2]",
+            "raw_source_text": "Essence of organic Lavandin (flower & stem) oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "flower",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[3]",
+            "raw_source_text": "Essence of organic Frankincense (resin) oil",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "resin",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its documented Dose and Evidence source assessments remain unfinished; no transferred preparation benchmark or clinical benefit.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/232928.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "251616": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "c8090e0f2024e2329e04d58a3cc554e93d2c7cd662d070137ef96819f340abe1",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail",
+            "quantity": 440.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/251616.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "252704": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "37a2cd0b0e543d3bf9d46a171af3ce44ded4fbdba4c4be9bec5356eec55d2a0a",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail P.E.",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "organic Silica",
+            "quantity": 110.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/252704.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "254795": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "37a2cd0b0e543d3bf9d46a171af3ce44ded4fbdba4c4be9bec5356eec55d2a0a",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail P.E.",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "organic Silica",
+            "quantity": 110.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/254795.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "254796": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "37a2cd0b0e543d3bf9d46a171af3ce44ded4fbdba4c4be9bec5356eec55d2a0a",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail P.E.",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "organic Silica",
+            "quantity": 110.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/254796.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "254797": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "37a2cd0b0e543d3bf9d46a171af3ce44ded4fbdba4c4be9bec5356eec55d2a0a",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail P.E.",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "organic Silica",
+            "quantity": 110.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/254797.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "269718": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "def9666f0d809ddcf093e37e631b9c1aabc53e61862ff1991b89c85c735dfa45",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail",
+            "quantity": 450.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Bromelain",
+            "quantity": 400.0,
+            "unit": "mg",
+            "notes": "600 GDU",
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Go-Less Proprietary Blend",
+            "quantity": 300.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "raw_source_text": "Pumpkin seed extract",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "seed",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2].nestedRows[1]",
+            "raw_source_text": "Isoflavone Glycosides",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Soy Germ Extract",
+                "ingredientId": 305771,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Soy",
+                "uniiCode": "JBW2VHD14M"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its documented Dose and Evidence source assessments remain unfinished; no transferred preparation benchmark or clinical benefit.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/269718.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "294273": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "621e4e562c8ae18b8f26822e0879e714618d2241be00485c02b5cce363a83783",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Whey Protein",
+            "quantity": 30.0,
+            "unit": "Gram(s)",
+            "notes": "grass-fed",
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored: the label declares 30 g whey ingredient, not measured nutritional protein grams. Supersedes the former numeric 63.9 partial score; no protein-purity inference.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/294273.pdf",
+        "blockers": [
+          "dose_amount_unread"
+        ],
+        "unfinished_source_assessment": "dose_amount_unread"
+      },
+      "311852": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "621e4e562c8ae18b8f26822e0879e714618d2241be00485c02b5cce363a83783",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Whey Protein",
+            "quantity": 30.0,
+            "unit": "Gram(s)",
+            "notes": "grass-fed",
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored: the label declares 30 g whey ingredient, not measured nutritional protein grams. Supersedes the former numeric 63.9 partial score; no protein-purity inference.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/311852.pdf",
+        "blockers": [
+          "dose_amount_unread"
+        ],
+        "unfinished_source_assessment": "dose_amount_unread"
+      },
+      "312024": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "e3629b11c7c4f8c960ca288d49e21a1cf65c495d8351378b978a4d03246ff493",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail, Powder",
+            "quantity": 450.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/312024.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "312025": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "e3629b11c7c4f8c960ca288d49e21a1cf65c495d8351378b978a4d03246ff493",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail, Powder",
+            "quantity": 450.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/312025.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "312026": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "e3629b11c7c4f8c960ca288d49e21a1cf65c495d8351378b978a4d03246ff493",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail, Powder",
+            "quantity": 450.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/312026.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "312027": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "e3629b11c7c4f8c960ca288d49e21a1cf65c495d8351378b978a4d03246ff493",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail, Powder",
+            "quantity": 450.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/312027.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "312355": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "621e4e562c8ae18b8f26822e0879e714618d2241be00485c02b5cce363a83783",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Whey Protein",
+            "quantity": 30.0,
+            "unit": "Gram(s)",
+            "notes": "grass-fed",
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored: the label declares 30 g whey ingredient, not measured nutritional protein grams. Supersedes the former numeric 63.9 partial score; no protein-purity inference.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/312355.pdf",
+        "blockers": [
+          "dose_amount_unread"
+        ],
+        "unfinished_source_assessment": "dose_amount_unread"
+      },
+      "312356": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "621e4e562c8ae18b8f26822e0879e714618d2241be00485c02b5cce363a83783",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Whey Protein",
+            "quantity": 30.0,
+            "unit": "Gram(s)",
+            "notes": "grass-fed",
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored: the label declares 30 g whey ingredient, not measured nutritional protein grams. Supersedes the former numeric 63.9 partial score; no protein-purity inference.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/312356.pdf",
+        "blockers": [
+          "dose_amount_unread"
+        ],
+        "unfinished_source_assessment": "dose_amount_unread"
+      },
+      "312357": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "621e4e562c8ae18b8f26822e0879e714618d2241be00485c02b5cce363a83783",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Whey Protein",
+            "quantity": 30.0,
+            "unit": "Gram(s)",
+            "notes": "grass-fed",
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored: the label declares 30 g whey ingredient, not measured nutritional protein grams. Supersedes the former numeric 63.9 partial score; no protein-purity inference.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/312357.pdf",
+        "blockers": [
+          "dose_amount_unread"
+        ],
+        "unfinished_source_assessment": "dose_amount_unread"
+      },
+      "327984": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "3770eeff110021bbb03d043be390f063160fa664791bc2b13cd69776cc07b0c7",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail",
+            "quantity": 440.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Horsetail",
+                "ingredientId": 69688,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Horsetail",
+                "uniiCode": null
+              },
+              {
+                "name": "Horsetail",
+                "ingredientId": 36187,
+                "order": 2,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Horsetail",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/327984.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "328831": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "8f11af584a9bbee88e36721e46ec16f2f72a46cb675fd44e247395ccab4306b1",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Greek Mountain Tea Aerial Parts Extract",
+            "quantity": 475.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Sideritis scardica Aerial Parts Extract",
+                "ingredientId": 358189,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "TBD",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "aerial parts",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Botalys",
+            "quantity": 420.0,
+            "unit": "mg",
+            "notes": "This product uses BOTALYS red ginseng.",
+            "forms": [
+              {
+                "name": "Korean Red Ginseng Root Extract",
+                "ingredientId": 358190,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "root",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Lion's Mane Fruiting Body Extract",
+            "quantity": 400.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Hericium erinaceus Fruiting Body Extract",
+                "ingredientId": 297739,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Hericium mushroom",
+                "uniiCode": "BU6Y4J4C2E"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its documented Dose and Evidence source assessments remain unfinished; no transferred preparation benchmark or clinical benefit.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/328831.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "331202": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "e3629b11c7c4f8c960ca288d49e21a1cf65c495d8351378b978a4d03246ff493",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Horsetail, Powder",
+            "quantity": 450.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact NIH DSLD edition remains Not Scored while its preparation-specific Dose benchmark identity is unresolved; no generic horsetail threshold, new efficacy or safety conclusion.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/331202.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
       }
     }
   }

@@ -260,8 +260,8 @@ def _held_assessment_label(product: Dict[str, Any], release: Optional[Dict[str, 
     from scoring_v4.quality_score_config import config
 
     if release is not None and (release.get("is_complete") is not False
-            or release.get("unfinished_source_assessment") != "dose_benchmark_identity_unresolved"
-            or "dose_benchmark_identity_unresolved" not in (release.get("blockers") or [])):
+            or not isinstance(release.get("blockers"), list)
+            or not release["blockers"]):
         return {}
     entries = _safe_dict(_safe_dict(config().get("suppression")).get("held_assessment_labels"))
     entry = _safe_dict(entries.get(str(product.get("dsld_id") or "")))
@@ -269,6 +269,9 @@ def _held_assessment_label(product: Dict[str, Any], release: Optional[Dict[str, 
             "reviewer", "review_date", "review_scope", "source_url", "source_rows")):
         return {}
     if release is not None and set(release.get("blockers") or []) != set(entry.get("blockers") or []):
+        return {}
+    if (release is not None and "unfinished_source_assessment" in entry
+            and release.get("unfinished_source_assessment") != entry["unfinished_source_assessment"]):
         return {}
     try:
         label = build_label_record_contract(product, product.get("display_ingredients"))
