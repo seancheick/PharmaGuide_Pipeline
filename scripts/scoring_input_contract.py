@@ -3400,6 +3400,16 @@ def _has_registered_preparation_sources(product: Dict[str, Any], row: Dict[str, 
     return total <= parent_mass * (1 + 1e-9)
 
 
+def source_row_has_matching_label_ledger(product: Mapping[str, Any], source_row: Mapping[str, Any]) -> bool:
+    """Confirm one original source row still matches its label ledger text."""
+    ref = source_row.get("raw_source_path")
+    if not isinstance(ref, str) or not ref:
+        return False
+    matches = [entry for entry in _safe_list(product.get("label_source_rows"))
+               if isinstance(entry, dict) and entry.get("raw_source_path") == ref]
+    return len(matches) == 1 and matches[0].get("raw_source_text") == source_row.get("raw_source_text")
+
+
 def declared_protein_source_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
     """Project cleaner-owned source declarations, never independent doses.
 

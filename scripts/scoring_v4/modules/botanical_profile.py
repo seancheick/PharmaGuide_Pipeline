@@ -845,16 +845,14 @@ def score_botanical_purpose_dose(
             and row.get("evidence_scope") == "blend_level"
             and row.get("reason") == "identity_bearing_blend_header_mass"
             and not _is_named_botanical_preparation(product, row)):
-        from scoring_input_contract import _source_tree_rows, has_source_printed_amount
+        from scoring_input_contract import (_source_tree_rows, has_source_printed_amount,
+                                            source_row_has_matching_label_ledger)
         ref = row.get("raw_source_path")
         originals = [source for source in _source_tree_rows(product)
                      if isinstance(ref, str) and ref and source.get("raw_source_path") == ref]
-        ledger = [source for source in product.get("label_source_rows") or []
-                  if isinstance(source, dict) and source.get("raw_source_path") == ref]
         original = originals[0] if len(originals) == 1 else None
         mass = _mass_mg(original) if original is not None else None
-        if (original is not None and len(ledger) == 1
-                and ledger[0].get("raw_source_text") == original.get("raw_source_text")
+        if (original is not None and source_row_has_matching_label_ledger(product, original)
                 and "canonical_id" in original
                 and original["canonical_id"] is None
                 and original.get("cleaner_row_role") == "blend_header_total"
