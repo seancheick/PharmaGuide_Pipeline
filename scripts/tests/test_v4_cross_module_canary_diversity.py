@@ -45,23 +45,27 @@ GENERIC_CANARIES = {
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
         # Native module rubric, not the final six-pillar export. The label's
-        # 1 g complex and two daily servings mean 2,000 mg/day, above the
-        # existing 500–1,000 mg studied-preparation window. Keep that source
-        # exposure and component attribution pinned instead of the old
-        # per-serving/interim total. Meriva/phytosome is already the form;
-        # independent-delivery policy removes the duplicate3. Formulation9−1.5=7.5.
+        # 1 g complex and two daily servings mean 2,000 mg/day. Meriva/phytosome
+        # is already the form; independent-delivery policy removes the duplicate 3.
         # V4.1 Step 4: the profile keeps only the neutral identity (7.2); the
-        # printed amount is a Transparency fact. Above range stays 12 (ref 21).
-        "score_range": (59.2, 59.2),
+        # printed amount is a Transparency fact. Since d2d4128c9 there is no
+        # studied curcumin window, so Dose is the shared neutral (11.97 raw).
+        # a78f78bf9 (Oct 28, Dr Pham's signed held-source rulings): the Meriva
+        # record's sources are held, so Evidence 14 -> 0 and 59.2 -> 45.2
+        # (re-pinned 2026-10-30 from a frozen raw replay at each commit).
+        "score_range": (45.2, 45.2),
         "traits": {
             "trust_high": True,
             "dimension_scores": {
-                "formulation": 7.2, "dose": 12.0,
-                "evidence": 14.0, "transparency": 10.0,
+                # d2d4128c9 (Oct 18) restates Dose on the shared reference: 12.0 -> 11.97.
+                "formulation": 7.2, "dose": 11.97,
+                "evidence": 0.0, "transparency": 10.0,
             },
-            "botanical_dose": {"dose_mg": 2000.0, "range_mg": [500.0, 1000.0],
-                               "measurement_daily_max": 2000.0},
-            "botanical_dose_band": "above_studied_range",
+            # d2d4128c9: curcumin_from_turmeric is a completed no-benchmark
+            # assessment (DOSE_V41_REFERENCE_DECISIONS: Meriva/BCM95/Longvida and
+            # native curcumin are not interchangeable; no cited 500-1000 mg window).
+            "botanical_dose": {"benchmark": "absent"},
+            "botanical_dose_band": "disclosed_no_reference",
         },
     },
     # Disclosed but unbenchmarked purpose: gets limited-assessability fallback,
@@ -85,7 +89,11 @@ GENERIC_CANARIES = {
         # Re-baseline 2026-07-19: committed generic calibration drift (~+1.3).
         # Mass-bearing sole active, so the pending mass-less evidence-floor change
         # is inert here.
-        "score_range": (54.7, 54.7),
+        # d2d4128c9 (Oct 18, approved source-qualified reference policy): no
+        # source-qualified glutathione reference, so Dose takes the neutral
+        # (22 -> 12.54): 54.7 -> 45.3. cf5ec623f (Oct 28): its held Setria
+        # relationship earns no Evidence (9.35 -> 0): 45.3 -> 35.9.
+        "score_range": (35.9, 35.9),
         "traits": {},
     },
 }
@@ -100,9 +108,12 @@ SPORTS_CANARIES = {
         # V4.1 Step 4: the +1 stack-support presence credit is retired.
         # Dose V4.1: creatine and HMB are both named co-primaries and average
         # (creatine 20, HMB below its 3 g band 16 -> Dose 18).
-        "score_range": (76.2, 76.2),
+        # d2d4128c9 (Oct 18, source-qualified references): creatine 20 and HMB
+        # 10 average to Dose 15: 76.2 -> 73.2. 37d74d5b1 (Oct 28): the
+        # near-perfect Evidence floor needs a replicated reviewed body (18 -> 14): 69.2.
+        "score_range": (69.2, 69.2),
         "traits": {"trust_positive": True,
-                   "dimension_scores": {"formulation": 14.25, "dose": 18.0},
+                   "dimension_scores": {"formulation": 14.25, "dose": 15.0},
                    "form_components": {"A1_bio_score": 11.25, "A3_delivery_system": 0.0,
                                        "A4_absorption_enhancer": 3.0}},
     },
@@ -120,9 +131,11 @@ PROBIOTIC_CANARIES = {
         # Dose as measured adequacy only (per-strain disclosure is Transparency's).
         # Dose V4.1: the four strains average; the two without a strain
         # benchmark take the neutral (5.0 -> 6.78).
-        "score_range": (45.8, 45.8),
+        # d2d4128c9 (Oct 18): no general strain benchmark is a completed
+        # assessment, so every strain takes the neutral (6.78 -> 8.55): 45.8 -> 47.5.
+        "score_range": (47.5, 47.5),
         "traits": {"trust_positive": True,
-                   "dimension_scores": {"formulation": 9.0, "dose": 6.78, "evidence": 0.0, "transparency": 15.0},
+                   "dimension_scores": {"formulation": 9.0, "dose": 8.55, "evidence": 0.0, "transparency": 15.0},
                    "identity_counts": (2, 4), "evidence_state": "evaluated_null"},
     },
     # Low end of current probiotic score distribution.
@@ -159,8 +172,9 @@ PROBIOTIC_CANARIES = {
         # V4.1 Step 4: measured adequacy (5) stays; per-strain disclosure moves
         # to Transparency and Formulation is the unrated neutral.
         # Dose V4.1: strains without a benchmark join the average at the
-        # neutral (5.0 -> 6.78).
-        "score_range": (36.3, 36.3),
+        # neutral (5.0 -> 6.78). d2d4128c9 (Oct 18): with no general strain
+        # benchmark every strain takes the neutral (6.78 -> 8.55): 36.3 -> 38.0.
+        "score_range": (38.0, 38.0),
         "traits": {"dose_positive": True, "trust_zero": True, "no_independent_delivery": True},
     },
     # Per-strain CFU + positive Trust path.
@@ -410,7 +424,8 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
         assert meta["total_strain_count"] == want["total_strain_count"]
         assert meta["per_strain_cfu_disclosed_count"] == 0
         assert meta["cfu_adequacy_basis"] == "aggregate_cfu_disclosed_only"
-        assert meta["reference_basis"] == "industry_potency_not_trial_efficacy"
+        # d2d4128c9 (Oct 18): no general strain benchmark is a completed result.
+        assert meta["reference_basis"] == "completed_no_general_strain_benchmark"
         guarantee = meta["cfu_guarantee"]
         assert guarantee["reason"] == want["cfu_guarantee_reason"]
         assert guarantee["applied"] is False  # nothing measured to discount
