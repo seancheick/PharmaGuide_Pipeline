@@ -10885,6 +10885,7 @@ def load_reference_data(script_dir: str) -> List[tuple]:
             public_ids = {r["id"] for r in public_rules}
             data["interaction_rules"] = [r for r in data["interaction_rules"] if r["id"] in public_ids]
             data["_metadata"]["total_entries"] = len(public_rules)
+            data["_metadata"]["total_rules"] = len(public_rules)
         version = "unknown"
         if isinstance(data, dict):
             meta = data.get("_metadata", {})

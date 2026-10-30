@@ -1936,3 +1936,4 @@ def test_core_reference_data_does_not_export_unqualified_private_identity_rules(
     assert 'RULE_CASCARA_UNRESOLVED_IDENTITY' not in {r['id'] for r in payload['interaction_rules']}
     assert 'RULE_IQM_CASCARA_SAGRADA_PREGNANCY' in {r['id'] for r in payload['interaction_rules']}
     assert payload['_metadata']['total_entries'] == len(payload['interaction_rules'])
+    assert payload['_metadata']['total_rules'] == len(payload['interaction_rules'])
