@@ -18833,9 +18833,9 @@ class SupplementEnricherV3:
                     **entry, "quantity": entry.get("amount"),
                     "quantity_operator": entry.get("operator"),
                 }, basis="per_use", unit="g")
-                if not exposure.exact:
-                    # Printed qualifiers remain in the source ledger. A flat
-                    # summary has no place to represent them as an exact mass.
+                if not exposure.exact and entry.get("operator") not in norm_module.QUANTITY_OPERATORS:
+                    # Only a printed bound ("<1 g") keeps its stated amount;
+                    # quantity_operators below discloses that it is not exact.
                     return None
             return _amount(key, declared_gram_value=True)
 
