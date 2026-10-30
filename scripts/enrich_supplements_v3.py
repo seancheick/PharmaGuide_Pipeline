@@ -17212,15 +17212,25 @@ class SupplementEnricherV3:
             and _is_probiotic_identity(ingredient)
         }
 
+        nested_cfu_children: Dict[str, List[Dict]] = {}
         for ingredient in active_ingredients:
             # Check for probiotic indicators (including abbreviated forms and
             # strain names) using bounded terms. Substring matching made
             # "casein decapeptide" look like L. casei and polluted route
             # classification with false probiotic_data.
             ingredient_source_path = ingredient.get("raw_source_path") or "activeIngredients"
+            # Strain rows decide a header, whether Clean flattened them or
+            # kept them nested; the header's marketing name never does.
             is_probiotic = _is_probiotic_identity(ingredient) or (
                 _is_blend_header_total(ingredient)
-                and ingredient_source_path in flattened_child_parent_paths
+                and (
+                    ingredient_source_path in flattened_child_parent_paths
+                    or any(
+                        _is_probiotic_identity(row)
+                        and _row_path(row) not in source_header_refs
+                        for row in source_descendants.get(ingredient_source_path, [])
+                    )
+                )
             )
 
             if is_probiotic:
@@ -17260,12 +17270,23 @@ class SupplementEnricherV3:
                     if isinstance(form, dict)
                     and _is_probiotic_identity(form)
                 ] if is_blend_header and not nested else []
+                # An enzyme or prebiotic sharing the blend is not a strain.
                 strain_rows = [
                     row for row in (nested or form_strains)
                     if not has_nonlive_microbial_derivative_evidence(row)
                     and not _is_blend_header_total(row)
                     and _row_path(row) not in source_header_refs
+                    and _is_probiotic_identity(row)
                 ]
+                if ingredient.get("nestedIngredients") and is_blend_header:
+                    # Children Clean kept nested never become blends of their
+                    # own; their counts and printed totals reach the header
+                    # total through the same subtree rule as flattened rows.
+                    nested_cfu_children[ingredient_source_path] = [
+                        row for row in source_descendants.get(ingredient_source_path, [])
+                        if id(row) in {id(strain) for strain in strain_rows}
+                        or row.get("dose_role") == "declared_total"
+                    ]
                 # A header is not a strain. Its source-derived components
                 # cannot turn it into an organism through the header name.
                 if is_blend_header and not strain_rows and (
@@ -17575,6 +17596,23 @@ class SupplementEnricherV3:
             if parent:
                 child_blends_by_parent.setdefault(parent, []).append(blend)
                 grouped_paths.add(path)
+        blend_paths = {str(blend.get("raw_source_path") or "") for blend in probiotic_blends}
+        for parent, rows in nested_cfu_children.items():
+            if parent not in header_blends:
+                continue
+            for row in rows:
+                path = _row_path(row)
+                if not path or path in blend_paths:
+                    continue
+                child_blends_by_parent.setdefault(parent, []).append({
+                    "raw_source_path": path,
+                    "cfu_data": self._extract_cfu(
+                        (row.get("harvestMethod") or "") + " " + (row.get("notes") or ""),
+                        ingredient=row,
+                        source_path=path,
+                        evidence_scope="row_level",
+                    ),
+                })
 
         def _add_cfu_source(cfu_data: Dict, blend: Dict) -> None:
             nonlocal has_cfu, cfu_source, cfu_raw_source_path, cfu_evidence_scope
