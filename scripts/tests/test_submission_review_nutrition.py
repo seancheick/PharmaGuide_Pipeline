@@ -134,3 +134,35 @@ def test_reopening_a_submission_repopulates_the_typed_amounts():
       out.carb=document.getElementById('n-total-carb').value;
     })()""")
     assert out == {"calories": 10, "fat": 1, "carb": ""}
+
+
+def test_a_printed_bound_is_typed_as_a_bound_not_an_exact_amount():
+    # S19 ARMRA prints "Total Carbohydrates <1g"; that is not exactly 1 g.
+    out = _exercise("""(()=>{
+      document.getElementById('n-total-carb').value='<1';
+      document.getElementById('n-protein').value='less than 1';
+      document.getElementById('n-poly-fat').value='0.5';
+      document.getElementById('n-sugars').value='<about';
+      syncNutritionFields();
+      out.info=state.payload.nutritionalInfo;
+      syncFieldsFromPayload();
+      out.carb=document.getElementById('n-total-carb').value;
+    })()""")
+    assert out["info"] == {
+        "polyunsaturatedFat": {"amount": 0.5, "unit": "g"},
+        "totalCarbohydrates": {"amount": 1, "unit": "g", "operator": "<"},
+        "protein": {"amount": 1, "unit": "g", "operator": "<"},
+    }
+    assert out["carb"] == "<1"
+
+
+def test_approximate_servings_per_container_keep_their_printed_wording():
+    out = _exercise("""(()=>{
+      const field=document.getElementById('p-servings-count');
+      field.value='about 17'; syncScalarFields(); out.about=state.payload.servingsPerContainer;
+      field.value='60'; syncScalarFields(); out.exact=state.payload.servingsPerContainer;
+      field.value='17ish'; syncScalarFields(); out.bad=state.payload.servingsPerContainer;
+      field.value='1,5'; syncScalarFields(); out.comma=state.payload.servingsPerContainer;
+      field.value='1,000'; syncScalarFields(); out.grouped=state.payload.servingsPerContainer;
+    })()""")
+    assert out == {"about": "about 17", "exact": 60, "bad": None, "comma": None, "grouped": 1000}

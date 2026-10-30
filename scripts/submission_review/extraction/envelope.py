@@ -19,6 +19,8 @@ import math
 import re
 from typing import Any
 
+from normalization import QUANTITY_OPERATORS
+
 SCHEMA_VERSION = "label_draft_v1"
 
 # Keys a model output may never contain at any depth: these are identity,
@@ -162,8 +164,11 @@ _SHAPES = {
                              "region": _ref("region", nullable=True)}, optional=("supporting_text", "region")),
     "field": _field_shape({"type": ["string", "number", "null"]}),
     "numeric_field": _field_shape({"type": ["number", "null"], "minimum": 0}),
+    # "operator" is a printed qualifier ("<1 g" is value 1, unit "g", "<").
     "amount_value": _object_shape({"value": {"type": ["number", "null"], "minimum": 0},
-                                    "unit_text": {"type": ["string", "null"]}}),
+                                    "unit_text": {"type": ["string", "null"]},
+                                    "operator": {"enum": [*sorted(QUANTITY_OPERATORS), None]}},
+                                   optional=("operator",)),
     "amount_field": _field_shape(_ref("amount_value", nullable=True)),
     "identity": _object_shape({"brand": _ref("field"), "product_name": _ref("field"),
                                "barcode_digits_seen": _ref("field", nullable=True)}),
@@ -497,6 +502,8 @@ def _amount(value: Any, path: str, snapshot: dict[str, str]) -> None:
             _text(amount.get("unit_text"), f"{path}.value.unit_text", MAX_SHORT, required=True)
         if amount.get("value") is None and amount.get("unit_text") is None:
             raise LabelDraftError(f"{path}.value", "partial amount needs a number or printed unit")
+        if amount.get("operator") is not None:
+            _enum(amount["operator"], QUANTITY_OPERATORS, f"{path}.value.operator")
         if not sources:
             raise LabelDraftError(f"{path}.sources", f"{status} amount requires a source")
     else:

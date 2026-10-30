@@ -80,7 +80,8 @@ def _amount(entry: object) -> dict[str, Any] | None:
 
     Printed units cross unchanged. "mcg DFE", "billion CFU" and "IU" are what
     the label says, and normalising them here would quietly discard the only
-    record of it.
+    record of it. A printed qualifier ("<1 g") crosses as the quantity's
+    operator, so a bound never arrives as an exact amount.
     """
     value = _field_value(entry)
     if not isinstance(value, Mapping):
@@ -91,7 +92,10 @@ def _amount(entry: object) -> dict[str, Any] | None:
         return None
     if not isinstance(unit, str) or not unit.strip():
         return None
-    return {"quantity": float(quantity), "unit": unit.strip()}
+    amount = {"quantity": float(quantity), "unit": unit.strip()}
+    if value.get("operator"):
+        amount["operator"] = value["operator"]
+    return amount
 
 
 def to_manual_label(draft: Mapping[str, Any]) -> ManualLabelSkeleton:
