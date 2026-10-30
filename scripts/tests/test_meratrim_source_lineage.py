@@ -34,6 +34,12 @@ def _parent_and_child(canonical=None):
 def test_blend_projection_preserves_actual_child_identity_provenance(canonical, kind):
     parent, child = _parent_and_child(canonical)
     row = _derive_blend_header_anchor_from_nested_child({}, parent, [child])
+    if canonical is None:
+        # An unmapped member's label taxonomy cannot turn the whole blend
+        # mass into its own scored preparation or Dose benchmark subject.
+        assert row is None
+        assert (child['quantity'], child['unit']) == (0, 'NP')
+        return
     assert row['clean_identity_id'] == canonical
     assert row['identity_kind'] == kind
     assert row['dose_value'] == parent['quantity'] == 400
