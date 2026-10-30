@@ -102,6 +102,7 @@ from inactive_ingredient_resolver import (
 )
 from serving_frequency import (
     resolve_facts_panel_serving_basis,
+    resolve_daily_serving_ceiling,
     resolve_daily_serving_multiplier,
     resolve_daily_serving_range,
     select_canonical_serving,
@@ -23075,6 +23076,13 @@ class SupplementEnricherV3:
         except (TypeError, ValueError):
             servings_max = None
 
+        # A printed daily ceiling is the label's limit, not its direction:
+        # name it as the exposure source in every UL sentence.
+        label_ceiling = resolve_daily_serving_ceiling(product)
+        if label_ceiling is not None and servings_max is not None and math.isclose(servings_max, label_ceiling):
+            max_exposure_label = f"at the label's stated maximum of {label_ceiling:g} servings a day"
+        else:
+            max_exposure_label = "at maximum directed daily use"
         servings_estimated = False
         if servings_min is None or servings_min <= 0:
             servings_min = 1
@@ -24556,7 +24564,7 @@ class SupplementEnricherV3:
                                     (safety_ul_population or {}).get("label") or "general adult",
                                     ul_basis=(adequacy_dict.get("reference") or {}).get("ul_basis"),
                                     exposure_label=("At the assessed daily amount" if servings_estimated
-                                                    else "At maximum directed daily use"),
+                                                    else max_exposure_label[:1].upper() + max_exposure_label[1:]),
                                 ),
                                 "severity": ul_display_severity(pct_ul_val),
                                 "reference": adequacy_dict.get("reference"),
@@ -24937,7 +24945,7 @@ class SupplementEnricherV3:
                                     (agg_adequacy.ul_population or {}).get("label") or "general adult",
                                     ul_basis=(agg_adequacy.reference or {}).get("ul_basis"),
                                     exposure_label=("at the assessed daily amount" if servings_estimated
-                                                    else "at maximum directed daily use"),
+                                                    else max_exposure_label),
                                 )
                             ),
                             "severity": ul_display_severity(pct_ul_val),
@@ -25575,11 +25583,16 @@ class SupplementEnricherV3:
                 # Same canonical policy as the interaction thresholds. %RDA and
                 # UL comparisons are per-day, so a derived serving frequency
                 # would misreport tolerable-upper-limit proximity.
-                servings_min, servings_max, frequency_defaulted = resolve_daily_serving_range(enriched)
+                # The UL screen uses conservative exposure: a printed daily
+                # ceiling ("not to exceed") when the label has one. Adequacy
+                # stays at the minimum directed use.
+                servings_min, _servings_max, frequency_defaulted = resolve_daily_serving_range(enriched)
+                label_ceiling = resolve_daily_serving_ceiling(enriched)
                 enriched["rda_ul_data"] = self._collect_rda_ul_data(
                     enriched,
                     min_servings_per_day=servings_min,
-                    max_servings_per_day=None if frequency_defaulted else servings_max
+                    max_servings_per_day=(None if frequency_defaulted and label_ceiling is None
+                                          else resolve_daily_serving_multiplier(enriched))
                 )
                 if isinstance(enriched["rda_ul_data"], dict):
                     enriched["rda_ul_data"]["collection_enabled"] = True

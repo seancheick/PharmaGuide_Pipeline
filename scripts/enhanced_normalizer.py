@@ -10376,6 +10376,10 @@ class EnhancedDSLDNormalizer:
                 "servingQuantitySource": "label" if qty_from_label else "default",
                 "dailyServingsSource": "label" if daily_from_label else "default",
             })
+            # A printed "not to exceed" daily maximum is a limit, not a
+            # direction; serving_frequency reads it as exposure only.
+            if serving.get("ceilingDailyServings") is not None:
+                processed[-1]["ceilingDailyServings"] = daily_count(serving["ceilingDailyServings"])
 
         return processed
     def _generate_label_text(self, active_ingredients: List[Dict], 

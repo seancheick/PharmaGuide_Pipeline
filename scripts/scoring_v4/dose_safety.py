@@ -39,7 +39,7 @@ from typing import Any, Dict, Iterator, List, Mapping, Optional
 
 from scoring_v4.modules.generic_helpers import _as_float, _norm_text, _safe_list
 from scoring_v4.quality_score_config import block as _cfg_block
-from serving_frequency import resolve_daily_serving_range
+from serving_frequency import resolve_daily_serving_multiplier, resolve_daily_serving_range
 
 _CEILING = _cfg_block("dose_safety_ceiling", "zero_at_pct")
 _FLAG_REFERENCE_FIELDS = {"unit": "ul_unit"}
@@ -141,6 +141,10 @@ class DoseSafetyFlag:
     reason: Optional[str] = None
     # The same exposure at minimum directed use; keep full precision for policy.
     pct_ul_at_minimum: Optional[float] = None
+    # The same exposure at maximum directed use. Equal to pct_ul unless the
+    # label prints a daily ceiling above its directions: flags are screened at
+    # that ceiling, while Dose judges directed use (Sean 2026-10-29).
+    pct_ul_at_directed_maximum: Optional[float] = None
     # The reference nutrient whose limit applies (the label text is `nutrient`).
     reference_nutrient: Optional[str] = None
     # The upper limit compared against and whose population it is (D2).
@@ -206,17 +210,25 @@ class DoseSafetyResult:
         }
 
     def _ul_ceiling(self) -> Optional[Dict[str, Any]]:
+        # Dose is judged at directed use. An exceedance reached only at a
+        # printed daily ceiling stays a disclosed safety flag, never a Dose
+        # deduction: the ceiling is a limit, not a regimen (Sean 2026-10-29).
+        def directed(flag: DoseSafetyFlag) -> Any:
+            return flag.pct_ul if flag.pct_ul_at_directed_maximum is None else flag.pct_ul_at_directed_maximum
+
         confirmed = [flag for flag in self.flags
-                     if flag.state == CONFIRMED_OVER_THRESHOLD and isinstance(flag.pct_ul, (int, float))
-                     and flag.pct_ul > float(_CEILING["exceeds_above_pct"])]
+                     if flag.state == CONFIRMED_OVER_THRESHOLD and isinstance(directed(flag), (int, float))
+                     and directed(flag) > float(_CEILING["exceeds_above_pct"])]
         if not confirmed:
             return None
         driver = max(confirmed, key=lambda flag: (
             flag.pct_ul_at_minimum is None or flag.pct_ul_at_minimum > float(_CEILING["exceeds_above_pct"]),
-            flag.pct_ul, _norm_text(flag.nutrient)))
+            directed(flag), _norm_text(flag.nutrient)))
         zero_at = float(_CEILING["zero_at_pct"])
-        cap = 0.0 if driver.pct_ul >= zero_at else float(_CEILING["partial_ceiling_public"])
+        cap = 0.0 if directed(driver) >= zero_at else float(_CEILING["partial_ceiling_public"])
         minimum = driver.pct_ul_at_minimum
+        ceiling_context = ({"pct_ul_at_label_ceiling": driver.pct_ul}
+                           if directed(driver) != driver.pct_ul else {})
         return {
             "cap_public": cap,
             "kind": "established_upper_limit",
@@ -226,7 +238,8 @@ class DoseSafetyResult:
             "ul_population": driver.ul_population or "general adult",
             "nutrient": driver.reference_nutrient or driver.nutrient,
             "canonical_id": driver.canonical_id,
-            "pct_ul": driver.pct_ul,
+            "pct_ul": directed(driver),
+            **ceiling_context,
             "pct_ul_at_minimum": minimum,
             "minimum_exceeds": (minimum > float(_CEILING["exceeds_above_pct"])) if minimum is not None else None,
             "frequency_defaulted": self.frequency_defaulted,
@@ -497,7 +510,8 @@ def _resolve_pct_ul(flag: Dict[str, Any]) -> tuple[Optional[float], Optional[str
     return value, None
 
 
-def _classify(flag: Dict[str, Any], minimum_share: float = 1.0) -> DoseSafetyFlag:
+def _classify(flag: Dict[str, Any], minimum_share: float = 1.0,
+              directed_ratio: tuple[float, float] = (1.0, 1.0)) -> DoseSafetyFlag:
     nutrient = flag.get("nutrient")
     canonical_id = flag.get("canonical_id")
     pct_ul, failure_reason = _resolve_pct_ul(flag)
@@ -558,6 +572,7 @@ def _classify(flag: Dict[str, Any], minimum_share: float = 1.0) -> DoseSafetyFla
         canonical_id=canonical_id,
         pct_ul=pct_ul,
         pct_ul_at_minimum=pct_ul * minimum_share,
+        pct_ul_at_directed_maximum=pct_ul * directed_ratio[0] / directed_ratio[1],
         reference_nutrient=str(flag.get("reference_nutrient") or "") or None,
         ul=_as_float(flag.get("ul"), None),
         # The flag's own reference unit, projected from the rda_ul_data record.
@@ -620,13 +635,18 @@ def evaluate_dose_safety(product: Dict[str, Any]) -> DoseSafetyResult:
     flags: List[DoseSafetyFlag] = []
     ignored: List[Dict[str, Any]] = []
     conversion_failures = 0
-    low, high, defaulted = resolve_daily_serving_range(product if isinstance(product, dict) else {})
-    minimum_share = (low / high) if high else 1.0
+    record = product if isinstance(product, dict) else {}
+    low, high, defaulted = resolve_daily_serving_range(record)
+    # Flags are screened at conservative exposure: the label's printed daily
+    # ceiling when it has one, else the directed maximum (the same number).
+    exposure = resolve_daily_serving_multiplier(record)
+    minimum_share = (low / exposure) if exposure else 1.0
 
     for raw in raw_flags:
         if not isinstance(raw, dict):
             continue
-        classified = _classify(raw, minimum_share)
+        # Unit ratio without a ceiling, so those flags keep their exact values.
+        classified = _classify(raw, minimum_share, (high, exposure) if exposure and exposure != high else (1.0, 1.0))
         flags.append(classified)
         if classified.state == CONVERSION_FAILED:
             conversion_failures += 1

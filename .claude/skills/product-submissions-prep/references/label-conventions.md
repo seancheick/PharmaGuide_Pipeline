@@ -150,10 +150,16 @@ names, never change a reading value (fix the reading and record again).
   daily" → 1/2). They count **servings**, not tablets: with "Serving Size 2
   Tablets", "Take 2 tablets daily" is one serving → 1/1 (as on the approved
   Seed, Ritual and Youtheory labels). Recording 2/2 there doubles every daily
-  exposure figure; S19's first reading made exactly that mistake. When the label prints a ceiling ("not to exceed 5 servings
-  per day"), the ceiling is the maximum: it is the most a user is told they
-  may take, and this number multiplies every interaction dose threshold, so
-  under-stating it under-warns. Flag the choice in your report either way.
+  exposure figure; S19's first reading made exactly that mistake. The two
+  fields are the **directed range**: lowest to highest use the directions
+  recommend, optional uses included ("1-2 for general health, 2-3 for intense
+  exercise" → 1/3). A printed ceiling ("not to exceed 5 servings per day")
+  goes in `ceilingDailyServings` (→ 5), **never** in `maxDailyServings`: the
+  pipeline screens interactions and upper limits at the ceiling, but would
+  otherwise tell the user to take it. Omit `ceilingDailyServings` when the
+  label prints none. Daily servings come from the label only; a manufacturer
+  web page or another formula edition is not a source (leave them out and
+  say so in your report). Flag the choice in your report either way.
 - **statements[].type**: replace `Label statement` with the DSLD type that
   fits; the pipeline parses some types (allergens read "Formula re:
   Contains"):
