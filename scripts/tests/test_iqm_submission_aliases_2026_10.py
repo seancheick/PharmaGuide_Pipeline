@@ -42,3 +42,13 @@ def test_printed_submission_forms_resolve(enricher, row, canonical, form):
     got = scorable[0]
     assert got.get("canonical_id") == canonical
     assert got.get("matched_form") == form
+
+
+@pytest.mark.parametrize("label", ["Ligilactobacillus salivarius", "Lactobacillus salivarius strain"])
+def test_generic_salivarius_names_do_not_claim_the_ha118_strain(enricher, label):
+    # A species name, or an unnamed "strain", is not evidence of strain HA-118.
+    product = {"activeIngredients": [{"name": label, "quantity": 1, "unit": "Billion CFU"}],
+               "inactiveIngredients": []}
+    rows = enricher._collect_ingredient_quality_data(product).get("ingredients") or []
+    assert rows and rows[0].get("canonical_id") == "lactobacillus_salivarius"
+    assert rows[0].get("matched_form") == "generic lactobacillus salivarius"
