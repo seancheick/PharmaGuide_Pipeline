@@ -26,6 +26,8 @@ def test_exact_approved_held_label_is_unscored_and_exportable(pairs, pid):
     from scoring_v4.scored_artifact import assemble_scored_artifact
     from build_final_db import validate_export_contract
     enriched, v4 = pairs[pid]
+    if pid == '80302':
+        assert enriched['display_ingredients'][0]['exact_dose_text'] == '<1 g'
     before = deepcopy(enriched)
     scored = assemble_scored_artifact(enriched, deepcopy(v4))
     assert scored['quality_score_status'] == 'not_scored'
