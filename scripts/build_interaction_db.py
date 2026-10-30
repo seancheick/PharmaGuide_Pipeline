@@ -176,7 +176,10 @@ def load_profile_warning_rules(
         ids.append(rule_id)
     if len(ids) != len(set(ids)):
         raise ValueError("profile warning rule ids must be unique")
-    return version, sorted(rules, key=lambda rule: str(rule["id"]))
+    # Internal source-identity rules need pipeline proof unavailable to an
+    # offline rule lookup. Their evaluated warnings travel in detail blobs.
+    return version, sorted((r for r in rules if not r.get("_identity_conflict_only")),
+                           key=lambda rule: str(rule["id"]))
 
 
 def load_research_pairs(path: Path) -> list[dict[str, Any]]:

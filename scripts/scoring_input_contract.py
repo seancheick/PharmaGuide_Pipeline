@@ -1913,6 +1913,11 @@ def _derive_blend_header_anchor_from_nested_child(
     if not child or _positive_quantity(child) is not None:
         # A child with its own amount is its own dose; the blend mass is not.
         return None
+    if not _verified_anchor_canonical(child):
+        # A label taxonomy name can identify the undisclosed member for
+        # display, but cannot turn the parent's total into that member's
+        # scored material. Preserve the separate blend-total anchor below.
+        return None
     anchor_canonical, anchor_name = _anchor_identity(child)
     if not anchor_canonical:
         return None
@@ -3393,6 +3398,16 @@ def _has_registered_preparation_sources(product: Dict[str, Any], row: Dict[str, 
             return False
         total += mass
     return total <= parent_mass * (1 + 1e-9)
+
+
+def source_row_has_matching_label_ledger(product: Mapping[str, Any], source_row: Mapping[str, Any]) -> bool:
+    """Confirm one original source row still matches its label ledger text."""
+    ref = source_row.get("raw_source_path")
+    if not isinstance(ref, str) or not ref:
+        return False
+    matches = [entry for entry in _safe_list(product.get("label_source_rows"))
+               if isinstance(entry, dict) and entry.get("raw_source_path") == ref]
+    return len(matches) == 1 and matches[0].get("raw_source_text") == source_row.get("raw_source_text")
 
 
 def declared_protein_source_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]]:

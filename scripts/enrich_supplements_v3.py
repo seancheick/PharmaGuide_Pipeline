@@ -9271,6 +9271,12 @@ class SupplementEnricherV3:
                 cleaner_canonical_id=cleaner_canonical_id,
                 source_context=source_context,
             )
+            parent = (match or {}).get("canonical_id")
+            if negative_match_terms_veto(
+                [ing_name, row_notes],
+                ((quality_map.get(parent) or {}).get("match_rules") or {}).get("negative_match_terms", []),
+            ):
+                return None
             return self._read_form_in_row_notes(
                 match, row_notes.strip(), quality_map, ing_name, cleaned_forms, cleaner_canonical_id)
         try:
@@ -19958,6 +19964,20 @@ class SupplementEnricherV3:
         return form_ids
 
     def _interaction_rule_applies(self, rule: Dict, ingredient: Dict) -> bool:
+        if rule.get("_identity_conflict_only"):
+            subject = rule.get("subject_ref") or {}
+            if (ingredient.get("identity_disposition") != "identity_conflict"
+                    or ingredient.get("canonical_id") or ingredient.get("canonical_id_after")
+                    or ingredient.get("recognition_source") != subject.get("db")
+                    or not subject.get("canonical_id")
+                    or ingredient.get("recognized_entry_id") != subject.get("canonical_id")):
+                return False
+            required_terms = rule.get("_identity_conflict_only")
+            if isinstance(required_terms, list) and not any(
+                str(term).casefold() in str(ingredient.get("notes") or "").casefold()
+                for term in required_terms if str(term).strip()
+            ):
+                return False
         form_scope = rule.get("form_scope")
         if form_scope is None:
             return True
@@ -21284,6 +21304,28 @@ class SupplementEnricherV3:
             if not matched_rules:
                 continue
 
+            # An exact reviewed label may name a safety subject while omitting
+            # the species needed by its usual mechanism-specific rule. Reuse
+            # the uncertainty rule, with the bound label's own qualification.
+            from scoring_v4.scored_artifact import _held_assessment_label
+            held = _held_assessment_label(enriched)
+            qualified = None
+            if (held.get("safety_identity_id")
+                    and ingredient.get("raw_source_path") in held.get("safety_source_paths", [])):
+                template = next((r for r in raw_rules if r.get("_identity_conflict_only")
+                                 and (r.get("subject_ref") or {}).get("canonical_id") == held["safety_identity_id"]), None)
+                if template:
+                    qualified = copy.deepcopy(template)
+                    qualified["notes"] = held["notes"]
+                    for condition in qualified.get("condition_rules", []):
+                        condition["mechanism"] = held["notes"]
+                        condition["informational_note"] = held["notes"]
+                        condition["sources"] = [held["source_url"]]
+                    subject_ids = {subject["canonical_id"], held["safety_identity_id"]}
+                    matched_rules = [r for r in matched_rules
+                                     if (r.get("subject_ref") or {}).get("canonical_id") not in subject_ids]
+                    matched_rules.append(qualified)
+
             ingredient_name = ingredient.get("raw_source_text") or ingredient.get("name") or ingredient.get("standard_name") or "unknown"
             # A botanical twin is its declared IQM part (nettle root) for
             # rules scoped by plant part.
@@ -21301,7 +21343,12 @@ class SupplementEnricherV3:
             )
 
             for rule in matched_rules:
-                if not self._interaction_rule_applies(rule, scope_row):
+                if rule.get("_identity_conflict_only"):
+                    # The original row owns its printed species; an IQM
+                    # recognition row may omit those source notes.
+                    source_row = label_rows_by_path.get(ingredient.get("raw_source_path")) or {}
+                    scope_row = {**scope_row, "notes": source_row.get("notes")}
+                if rule is not qualified and not self._interaction_rule_applies(rule, scope_row):
                     continue
                 dose_row = base_dose_row
                 declared_owner = compound_exposure_owners.get(id(ingredient))
@@ -21364,6 +21411,9 @@ class SupplementEnricherV3:
                         materiality=cond_rule.get("materiality"),
                     )
                     sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
+                    if rule.get("_identity_conflict_only"):
+                        label_url = f"https://api.ods.od.nih.gov/dsld/s3/pdf/{enriched.get('dsld_id')}.pdf"
+                        sources = [src for src in sources if "/dsld/s3/pdf/" not in src or src == label_url]
                     for src in sources:
                         source_set.add(src)
                     tier_copy = (threshold_eval or {}).get("matched_copy") or {}

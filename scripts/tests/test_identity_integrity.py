@@ -32,6 +32,35 @@ def fake_resolver(candidate: str) -> str | None:
     return CANONICALS.get(normalize_label_display(candidate).casefold())
 
 
+@pytest.mark.parametrize("field", ["notes", "raw_source_text", "forms"])
+def test_authored_species_exclusion_beats_stale_common_name_identity(field):
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "cascara_sagrada": {"standard_name": "Cascara Sagrada", "forms": {},
+            "match_rules": {"negative_match_terms": ["rhamnus davurica"]}}}})
+    row = {"name": "Cascara Sagrada", "ingredientGroup": "Cascara Sagrada",
+           "raw_source_text": "Cascara Sagrada", "notes": ""}
+    row[field] = ([{"name": "Rhamnus davurica"}] if field == "forms"
+                  else "Cascara Sagrada (Rhamnus davurica) (bark)")
+    decision = resolve_identity(row, "cascara_sagrada", lambda _: "cascara_sagrada",
+        taxonomy_coherent=True, canonical_registry=registry)
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert not decision.scoreable_identity
+    assert "authored" in decision.rationale.lower()
+
+
+@pytest.mark.parametrize("notes", ["", "Rhamnus purshiana bark", "Frangula purshiana bark"])
+def test_species_exclusion_does_not_reject_common_name_or_accepted_species(notes):
+    registry = build_canonical_identity_registry({"ingredient_quality_map": {
+        "cascara_sagrada": {"standard_name": "Cascara Sagrada", "forms": {},
+            "match_rules": {"negative_match_terms": ["rhamnus davurica"]}}}})
+    decision = resolve_identity({"name": "Cascara Sagrada", "ingredientGroup": "Cascara Sagrada",
+                                "notes": notes}, "cascara_sagrada", lambda _: "cascara_sagrada",
+                                taxonomy_coherent=True, canonical_registry=registry)
+    assert decision.canonical_id == "cascara_sagrada"
+    assert decision.scoreable_identity
+
+
 def test_canonical_identity_registry_has_one_priority_and_ambiguity_contract():
     registry = build_canonical_identity_registry(
         {

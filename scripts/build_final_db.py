@@ -2958,7 +2958,9 @@ def build_decision_highlights(enriched: Dict, scored: Dict) -> Dict[str, Any]:
     # section_scores.C — keeps the user-facing string aligned with the shipped score.
     v4_evidence = safe_float(safe_dict(safe_dict(scored.get("quality_pillars_v4")).get("evidence")).get("score"), 0)
 
-    if safe_bool(enriched.get("is_trusted_manufacturer")) and safe_bool(enriched.get("has_full_disclosure")):
+    if scored.get("quality_score_status") == "not_scored":
+        positive = "Quality score unavailable; review the label information and recorded safety warnings."
+    elif safe_bool(enriched.get("is_trusted_manufacturer")) and safe_bool(enriched.get("has_full_disclosure")):
         positive = "Trusted manufacturer with full label disclosure."
     elif v4_evidence >= 12:
         positive = "Backed by meaningful clinical evidence."
@@ -3485,7 +3487,25 @@ def _warning_only_identity_labels(
     ):
         return {}
     rows = safe_list(safe_dict(enriched.get("ingredient_quality_data")).get("ingredients"))
-    paths = set() if known_unscored else safety_only_conflict_paths(rows)
+    paths = safety_only_conflict_paths(rows)
+    if known_unscored:
+        from normalization import preprocess_text
+        # A known label may retain an unresolved active with an independently
+        # recognized safety advisory. Prove the current same-label safety
+        # record; an arbitrary safety id cannot waive an identity defect.
+        lookup = build_contaminant_lookup(enriched)
+        paths = {
+            row["raw_source_path"] for row in rows
+            if isinstance(row, dict) and row.get("raw_source_path") in paths
+            and row.get("recognition_source") == "banned_recalled_ingredients"
+            and (safety := _resolve_active_safety_contract(
+                None, {}, matching_contaminant_hits(lookup, row.get("raw_source_text")),
+                name_terms=_active_banned_recall_terms(
+                    row.get("raw_source_text"), preprocess_text(safe_str(row.get("raw_source_text")))),
+                banned_recalled_index=_get_active_banned_recalled_index(),
+            )).get("is_safety_concern") is True
+            and safety.get("matched_rule_id") == row.get("safety_identity_id")
+        }
     labels = {
         row["raw_source_path"]: row["label_display_name"]
         for row in rows
@@ -6859,6 +6879,86 @@ def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str,
     return {}
 
 
+@lru_cache(maxsize=1)
+def _identity_uncertainty_rules() -> Dict[str, Dict]:
+    """Internal matching rules; public warnings carry their already-bound result."""
+    path = Path(__file__).parent / "data" / "ingredient_interaction_rules.json"
+    return {r["id"]: r for r in json.loads(path.read_text())["interaction_rules"]
+            if r.get("_identity_conflict_only")}
+
+
+def _qualify_identity_uncertainty_copy(enriched: Dict, ingredients: List[Dict],
+                                      warnings: List[Dict]) -> None:
+    """Replace species-specific copy only for an evaluated unresolved subject."""
+    rules = _identity_uncertainty_rules()
+    from scoring_v4.scored_artifact import _held_assessment_label
+    held = _held_assessment_label(enriched)
+    rows = safe_list(safe_dict(enriched.get("ingredient_quality_data")).get("ingredients"))
+    sources_by_path = {r.get("raw_source_path"): r for section in ("activeIngredients", "inactiveIngredients")
+                       for r in safe_list(enriched.get(section)) if isinstance(r, dict) and r.get("raw_source_path")}
+    for alert in safe_list(safe_dict(enriched.get("interaction_profile")).get("ingredient_alerts")):
+        rule = rules.get(alert.get("rule_id"))
+        if not rule:
+            continue
+        subject = rule["subject_ref"]["canonical_id"]
+        held_subject = held.get("safety_identity_id") == subject
+        bound = ([r for r in rows if r.get("raw_source_path") in held.get("safety_source_paths", [])]
+                 if held_subject else [r for r in rows if r.get("identity_disposition") == "identity_conflict"
+                 and not r.get("canonical_id") and not r.get("canonical_id_after")
+                 and r.get("recognized_entry_id") == subject
+                 and any(str(term).casefold() in str(sources_by_path.get(r.get("raw_source_path"), {}).get("notes") or "").casefold()
+                         for term in rule["_identity_conflict_only"])])
+        if not bound:
+            continue
+        names = {str(r.get(k) or "") for r in bound
+                 for k in ("name", "raw_source_text", "recognized_entry_name")}
+        paths = {r.get("raw_source_path") for r in bound if r.get("raw_source_path")}
+        notice = held["notes"] if held_subject else rule["notes"]
+        sources = ([held["source_url"]] if held_subject else sorted({src for h in rule.get("condition_rules", []) for src in h.get("sources", [])
+                          if "/pdf/" not in src or f"/{enriched.get('dsld_id')}.pdf" in src}))
+        for ingredient in ingredients:
+            if ingredient.get("raw_source_path") not in paths:
+                continue
+            for key in ("safety_reason", "safety_warning"):
+                if key in ingredient:
+                    ingredient[key] = notice
+            if "safety_warning_one_liner" in ingredient:
+                ingredient["safety_warning_one_liner"] = "Ingredient identity needs clarification before use."
+            ingredient["jurisdictions"] = []
+        # A separately resolved source may legitimately own the original
+        # species-specific advisory on a mixed label. Keep that advisory;
+        # profile alerts still carry the unresolved row's qualified precaution.
+        resolved_subject_present = not held_subject and any(
+            r.get("canonical_id") and any(
+                flag.get("entry_id") == subject
+                for flag in safe_list(sources_by_path.get(r.get("raw_source_path"), {}).get("safety_flags"))
+                if isinstance(flag, dict)
+            ) for r in rows
+        )
+        if resolved_subject_present:
+            warnings.append({"type": "high_risk_ingredient", "severity": "caution",
+                             "title": "Ingredient identity needs review", "detail": notice,
+                             "safety_warning": notice,
+                             "safety_warning_one_liner": "Ingredient identity needs clarification before use.",
+                             "source": "interaction_rules", "matched_rule_id": rule["id"],
+                             "ingredient_name": alert.get("ingredient_name"), "sources": sources,
+                             "display_mode_default": "informational"})
+            continue
+        # Profile rules retain their own source-qualified action. Only generic
+        # recognition copy for this label is replaced, never independent hazards.
+        for warning in warnings:
+            if warning.get("matched_rule_id") != subject or (not held_subject and warning.get("ingredient_name") not in names):
+                continue
+            warning.update(detail=notice, safety_warning=notice,
+                           safety_warning_one_liner="Ingredient identity needs clarification before use.",
+                           title="Ingredient identity needs review", sources=sources,
+                           source="interaction_rules", matched_rule_id=rule["id"],
+                           ingredient_name=alert.get("ingredient_name"), jurisdictions=[])
+            if held_subject:
+                warning["source_urls"] = sources
+                warning["identifiers"] = {}
+
+
 def build_detail_blob(
     enriched: Dict,
     scored: Dict,
@@ -7941,6 +8041,7 @@ def build_detail_blob(
             warnings.append(warning_entry)
 
     warnings.extend(_product_context_warnings(enriched))
+    _qualify_identity_uncertainty_copy(enriched, ingredients, warnings)
 
     # Build the profile-gated subset — warnings whose default treatment is
     # NOT "suppress". This is what Flutter should render by default when
@@ -10662,7 +10763,7 @@ def build_core_row(
         # Scores (export schema v2.0.0 — canonical /100; legacy /80 columns dropped)
         safe_str(effective_scored.get("display_100")),
         score_100,
-        safe_str(effective_scored.get("grade")),
+        safe_str(effective_scored.get("grade")) or None,
         safe_str(effective_scored.get("verdict")),
         safe_str(effective_scored.get("safety_verdict")),
         safe_float(effective_scored.get("mapped_coverage")),
@@ -10811,6 +10912,13 @@ def load_reference_data(script_dir: str) -> List[tuple]:
             continue
         with open(fpath, "r", encoding="utf-8") as f:
             data = json.load(f)
+        if key == "interaction_rules":
+            from build_interaction_db import load_profile_warning_rules
+            _, public_rules = load_profile_warning_rules(Path(fpath))
+            public_ids = {r["id"] for r in public_rules}
+            data["interaction_rules"] = [r for r in data["interaction_rules"] if r["id"] in public_ids]
+            data["_metadata"]["total_entries"] = len(public_rules)
+            data["_metadata"]["total_rules"] = len(public_rules)
         version = "unknown"
         if isinstance(data, dict):
             meta = data.get("_metadata", {})

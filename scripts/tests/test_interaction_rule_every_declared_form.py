@@ -42,3 +42,32 @@ def test_real_mixed_vitamin_a_labels_get_the_pregnancy_rule(enricher, pid):
     rules = {h.get('rule_id') for r in product['ingredient_quality_data']['ingredients'] if r.get('canonical_id') == 'vitamin_a'
              for h in r.get('safety_hits') or []}
     assert 'RULE_IQM_VITAMIN_A_PREGNANCY_DOSE' in rules
+
+
+@pytest.mark.parametrize('row, expected', [
+    ({'identity_disposition': 'identity_conflict', 'canonical_id': None,
+      'recognition_source': 'banned_recalled_ingredients', 'recognized_entry_id': 'ADD_CASCARA_SAGRADA'}, True),
+    ({'identity_disposition': 'identity_conflict', 'canonical_id': 'cascara_sagrada',
+      'recognition_source': 'banned_recalled_ingredients', 'recognized_entry_id': 'ADD_CASCARA_SAGRADA'}, False),
+    ({'identity_disposition': 'resolved', 'canonical_id': 'cascara_sagrada'}, False),
+    ({'identity_disposition': 'identity_conflict', 'canonical_id': None,
+      'recognition_source': 'banned_recalled_ingredients', 'recognized_entry_id': 'OTHER'}, False),
+    ({'identity_disposition': 'identity_conflict', 'canonical_id': None}, False),
+])
+def test_uncertainty_rule_requires_its_unresolved_safety_subject(enricher, row, expected):
+    rule = {'_identity_conflict_only': True, 'subject_ref': {
+        'db': 'banned_recalled_ingredients', 'canonical_id': 'ADD_CASCARA_SAGRADA'}}
+    assert enricher._interaction_rule_applies(rule, row) is expected
+
+
+@pytest.mark.parametrize('notes, expected', [
+    ('Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark', True),
+    ('Rhamnus purshiana bark', False), ('', False),
+])
+def test_uncertainty_rule_requires_its_printed_conflicting_species(enricher, notes, expected):
+    rule = next(r for r in json.loads((Path(__file__).parents[1] / 'data/ingredient_interaction_rules.json').read_text())['interaction_rules']
+                if r['id'] == 'RULE_CASCARA_UNRESOLVED_IDENTITY')
+    row = {'identity_disposition': 'identity_conflict', 'canonical_id': None,
+           'recognition_source': 'banned_recalled_ingredients',
+           'recognized_entry_id': 'ADD_CASCARA_SAGRADA', 'notes': notes}
+    assert enricher._interaction_rule_applies(rule, row) is expected

@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions. Existing canonical PG_SUB_ product identities may use this same exact-product correction owner. Reviewed physicalState metadata binds its original object and permits only explicit name/langualCodeDescription strings; it does not rewrite an approval or infer a dosage form. Reviewed nutritionalInfo metadata binds the whole original typed object and may add printed Nutrition Facts entries of amount/unit with an optional printed qualifier operator (<, <=, >, >=, ~); a metadata-only repair keeps the source serving rows unchanged.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-10-29",
-    "total_entries": 158,
+    "total_entries": 216,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -8600,8 +8600,8 @@
       "raw_ingredient_text": "Bamboo extract",
       "corrected_ingredient_text": "Bamboo extract",
       "raw_notes": "",
-      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
-      "evidence": "Official NIH DSLD label image explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API row omits species and tissue from its notes. Restore only those printed source descriptors; the label declares no extract ratio or silica percentage. Other Ingredients: None. Do not infer elemental silicon, silica content, clinical equivalence, benchmark or approval. Preserve the original API name, amount, forms and source path. PDF SHA256 fd197abd95a93a48de2879774aff5a7e12c7dec545c58b77854d4f10aa3cf6a9.",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label",
+      "evidence": "Official NIH DSLD label image explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API row omits species and tissue from its notes. Restore only those printed source descriptors; the label declares no extract ratio or silica percentage. Other Ingredients: None. Do not infer elemental silicon, silica content, clinical equivalence, benchmark or approval. Preserve the original API name, amount, forms and source path. PDF SHA256 fd197abd95a93a48de2879774aff5a7e12c7dec545c58b77854d4f10aa3cf6a9. Independently inspected the complete single-page official PDF on 2026-10-29: no extract ratio (DER) is declared; this absence does not establish a ratio or chemical equivalence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/252349.pdf"
       ]
@@ -8622,8 +8622,8 @@
       "raw_ingredient_text": "Bamboo Leaf, Stem Extract",
       "corrected_ingredient_text": "Bamboo Leaf, Stem Extract",
       "raw_notes": "",
-      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
-      "evidence": "Official NIH DSLD label image explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API name/forms retain leaf and stem but omit the printed species. Restore species and the exact label tissue wording in working notes; the label declares no extract ratio or silica percentage. Other Ingredients: None. Do not infer elemental silicon, silica content, clinical equivalence, benchmark or approval. Preserve the original API name, amount, forms and source path. PDF SHA256 7ea8c552d48d813c95e69a3646f363cd5cae4e82dfdb5e6a3317bb0c5b192cce.",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label",
+      "evidence": "Official NIH DSLD label image explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API name/forms retain leaf and stem but omit the printed species. Restore species and the exact label tissue wording in working notes; the label declares no extract ratio or silica percentage. Other Ingredients: None. Do not infer elemental silicon, silica content, clinical equivalence, benchmark or approval. Preserve the original API name, amount, forms and source path. PDF SHA256 7ea8c552d48d813c95e69a3646f363cd5cae4e82dfdb5e6a3317bb0c5b192cce. Independently inspected the complete single-page official PDF on 2026-10-29: no extract ratio (DER) is declared; this absence does not establish a ratio or chemical equivalence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/310921.pdf"
       ]
@@ -8657,13 +8657,13 @@
       "corrected_ingredient_text": "Bamboo extract",
       "raw_source_path": "ingredientRows[0]",
       "raw_notes": "",
-      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label",
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
         "notes.source_composition"
       ],
-      "evidence": "Individually verified official NIH DSLD label image 253304 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 052e750b596f6f91ac3c235632623f66b7507e2ebe4e5998625baf5b9e2846c7.",
+      "evidence": "Individually verified official NIH DSLD label image 253304 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 052e750b596f6f91ac3c235632623f66b7507e2ebe4e5998625baf5b9e2846c7. Independently inspected the complete single-page official PDF on 2026-10-29: no extract ratio (DER) is declared; this absence does not establish a ratio or chemical equivalence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/253304.pdf"
       ],
@@ -8679,13 +8679,13 @@
       "corrected_ingredient_text": "Bamboo extract",
       "raw_source_path": "ingredientRows[0]",
       "raw_notes": "",
-      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label",
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
         "notes.source_composition"
       ],
-      "evidence": "Individually verified official NIH DSLD label image 253309 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 23451fb040f6f1b6ecef8c5004ffdbb8f6d8185bea152ee6207a4a4a45c1d76a.",
+      "evidence": "Individually verified official NIH DSLD label image 253309 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 23451fb040f6f1b6ecef8c5004ffdbb8f6d8185bea152ee6207a4a4a45c1d76a. Independently inspected the complete single-page official PDF on 2026-10-29: no extract ratio (DER) is declared; this absence does not establish a ratio or chemical equivalence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/253309.pdf"
       ],
@@ -8701,13 +8701,13 @@
       "corrected_ingredient_text": "Bamboo extract",
       "raw_source_path": "ingredientRows[0]",
       "raw_notes": "",
-      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label",
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
         "notes.source_composition"
       ],
-      "evidence": "Individually verified official NIH DSLD label image 253312 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 520a2a0b5a056747d18b9c3b394185a4ca526fdff09a0646f071c9985d78b2fe.",
+      "evidence": "Individually verified official NIH DSLD label image 253312 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 520a2a0b5a056747d18b9c3b394185a4ca526fdff09a0646f071c9985d78b2fe. Independently inspected the complete single-page official PDF on 2026-10-29: no extract ratio (DER) is declared; this absence does not establish a ratio or chemical equivalence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/253312.pdf"
       ],
@@ -8723,13 +8723,13 @@
       "corrected_ingredient_text": "Bamboo extract",
       "raw_source_path": "ingredientRows[0]",
       "raw_notes": "",
-      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label",
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
         "notes.source_composition"
       ],
-      "evidence": "Individually verified official NIH DSLD label image 310922 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 3b9d8f60981eb19c89966a85e8145a257963f9ecacf06710ba428854868995aa.",
+      "evidence": "Individually verified official NIH DSLD label image 310922 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 3b9d8f60981eb19c89966a85e8145a257963f9ecacf06710ba428854868995aa. Independently inspected the complete single-page official PDF on 2026-10-29: no extract ratio (DER) is declared; this absence does not establish a ratio or chemical equivalence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/310922.pdf"
       ],
@@ -8745,13 +8745,13 @@
       "corrected_ingredient_text": "Bamboo Leaf, Stem Extract",
       "raw_source_path": "ingredientRows[0]",
       "raw_notes": "",
-      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label",
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
         "notes.source_composition"
       ],
-      "evidence": "Individually verified official NIH DSLD label image 310924 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 dafd29083ee846e58c84cdbf5711011c9215843bd5973131b3612b15ebf57e79.",
+      "evidence": "Individually verified official NIH DSLD label image 310924 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 dafd29083ee846e58c84cdbf5711011c9215843bd5973131b3612b15ebf57e79. Independently inspected the complete single-page official PDF on 2026-10-29: no extract ratio (DER) is declared; this absence does not establish a ratio or chemical equivalence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/310924.pdf"
       ],
@@ -8767,13 +8767,13 @@
       "corrected_ingredient_text": "Bamboo extract",
       "raw_source_path": "ingredientRows[0]",
       "raw_notes": "",
-      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves",
+      "corrected_notes": "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label",
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
         "notes.source_composition"
       ],
-      "evidence": "Individually verified official NIH DSLD label image 310927 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 a4b3347a1443be62068643f4c28030d8b9fd5e4efa0e0ca240e456bb9f41beb6.",
+      "evidence": "Individually verified official NIH DSLD label image 310927 explicitly prints Bamboo Extract (Bambusa vulgaris) (Stem and leaves), 500 mg. The API omits printed species/tissue descriptors from working notes. Restore these descriptors only; no extract ratio is declared. Other Ingredients: None. No silica percentage or elemental silicon amount is stated. Do not infer silica content/conversion, clinical equivalence, benchmark or approval. Preserve the API name, amount, forms and source path. PDF SHA256 a4b3347a1443be62068643f4c28030d8b9fd5e4efa0e0ca240e456bb9f41beb6. Independently inspected the complete single-page official PDF on 2026-10-29: no extract ratio (DER) is declared; this absence does not establish a ratio or chemical equivalence.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/310927.pdf"
       ],
@@ -8844,6 +8844,1434 @@
         "https://api.ods.od.nih.gov/dsld/s3/pdf/330293.pdf"
       ],
       "reviewer": "Codex independent official NIH label image verification; no clinical or scoring approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "252441": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 252441 prints Rhamnus davurica bark and 500 mg whole extract. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 be6be692881b38e358c42effeafe58fa7d4f1757d7b0d2ad59fb8cc6c4c0f81f.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/252441.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "253399": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 253399 prints Rhamnus davurica bark and 500 mg whole extract. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 5db517c871933c114f219e1ab588c143eb34457bf5e58510a0953f170c2b90d4.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/253399.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "253403": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 253403 prints Rhamnus davurica bark and 500 mg whole extract. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 ecd211893496d638a1f08c02759787db7f1fd76d4056a93a4075316e31f93dc4.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/253403.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "253404": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 253404 prints Rhamnus davurica bark and 500 mg whole extract. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 27beacc69a0ea1e1b3e5761724133463dfe7a8dca24cda20be70a355c19276ad.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/253404.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "311301": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 311301 prints Rhamnus davurica bark and 500 mg whole extract. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 81a5611e7ed97d69b1fed48bd66afdcc4a0bb53965953f571ca74228aa111ec7.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/311301.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "311302": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 311302 prints Rhamnus davurica bark and 500 mg whole extract. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 919abbc06180affd9765ef59d7529737cab75ed44cac6598e25aaeaf0f534e3b.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/311302.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "311303": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 311303 prints Rhamnus davurica bark and 500 mg whole extract. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 0c7ed64b845c132f27854687aa62cc3c2d07bf842a614aeec0357b9e06a2f33c.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/311303.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "311304": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Cascara Sagrada Extract (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 311304 prints Rhamnus davurica bark and 500 mg whole extract. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 71819ecbcd934b47b291f14491023e6e2e012d16d7b7414ea3ffd107b8347620.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/311304.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "330523": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract Powder 500 mg",
+      "raw_ingredient_text": "Cascara Sagrada Bark Extract",
+      "corrected_ingredient_text": "Cascara Sagrada Bark Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "10:1",
+      "corrected_notes": "Cascara Sagrada Extract 10:1 (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 330523 prints Rhamnus davurica bark and 500 mg whole extract, 10:1 ratio. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 567b863c68f8380ae70d8fd0cb1e37a5d310b84a6c8713b0659d25bf5028cebd.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330523.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "330524": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract Powder 500 mg",
+      "raw_ingredient_text": "Cascara Sagrada extract",
+      "corrected_ingredient_text": "Cascara Sagrada extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "10:1",
+      "corrected_notes": "Cascara Sagrada Extract 10:1 (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 330524 prints Rhamnus davurica bark and 500 mg whole extract, 10:1 ratio. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 452af7f80168d6203d890a4932fe45e7da8ceefeaf53259f1a75e8effe014686.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330524.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "330525": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Cascara Sagrada Extract Powder 500 mg",
+      "raw_ingredient_text": "Cascara Sagrada Bark Extract",
+      "corrected_ingredient_text": "Cascara Sagrada Bark Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "10:1",
+      "corrected_notes": "Cascara Sagrada Extract 10:1 (Rhamnus davurica) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original NIH DSLD label 330525 prints Rhamnus davurica bark and 500 mg whole extract, 10:1 ratio. Restore only the omitted printed species and part; do not substitute Rhamnus/Frangula purshiana, infer anthranoid/cascaroside content, species equivalence, clinical applicability or a Dose reference. Preserve the original API name, quantities, units, forms and source path. PDF SHA256 607a16df13875714394b7293867a6e0c701cb5ce7b2e069d88fbc3bbec33e29d.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330525.pdf"
+      ],
+      "reviewer": "Codex official NIH source-label verification; taxonomy mismatch retained, no clinical approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "252787": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Yohimbe Extract (2% Yohimbine)",
+      "raw_ingredient_text": "Yohimbe extract",
+      "corrected_ingredient_text": "Yohimbe extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Yohimbe Extract (Pausinystalia yohimbe) PlantPart: bark Note: standardized to contain >=2% Yohimbine; DER and extraction solvent not declared on label",
+      "raw_quantity_value": 250,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact official NIH DSLD PDF 252787, Supplement Facts original Yohimbe row, individually visually verified in retained seventeen-label source receipt. Restore printed species spelling, bark, assay wording and explicitly declared9mg only where printed; no marker mass computation, species equivalence or whole-extract conversion. Complete one-page label declares no DER or extraction solvent. Preserve whole source amount and existing safety. PDF SHA256 207932291ba21a52c9d9bff996dfd0d918cb2bb09af5b8d2f5f424f3d6e1dc58.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/252787.pdf"
+      ],
+      "reviewer": "Codex source transcription; existing individually verified official-label receipt, no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "254734": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Yohimbe Extract (2% Yohimbine)",
+      "raw_ingredient_text": "Yohimbe extract",
+      "corrected_ingredient_text": "Yohimbe extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Yohimbe Extract (Pausinystalia yohimbe) PlantPart: bark Note: standardized to contain >=2% Yohimbine; DER and extraction solvent not declared on label",
+      "raw_quantity_value": 250,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact official NIH DSLD PDF 254734, Supplement Facts original Yohimbe row, individually visually verified in retained seventeen-label source receipt. Restore printed species spelling, bark, assay wording and explicitly declared9mg only where printed; no marker mass computation, species equivalence or whole-extract conversion. Complete one-page label declares no DER or extraction solvent. Preserve whole source amount and existing safety. PDF SHA256 a15d25ee067d5f5d8182744275a02c7027004145145afb3b80955e1e5c4b77cb.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/254734.pdf"
+      ],
+      "reviewer": "Codex source transcription; existing individually verified official-label receipt, no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "254735": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Yohimbe Extract (2% Yohimbine)",
+      "raw_ingredient_text": "Yohimbe extract",
+      "corrected_ingredient_text": "Yohimbe extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Yohimbe Extract (Pausinystalia yohimbe) PlantPart: bark Note: standardized to contain >=2% Yohimbine; DER and extraction solvent not declared on label",
+      "raw_quantity_value": 250,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact official NIH DSLD PDF 254735, Supplement Facts original Yohimbe row, individually visually verified in retained seventeen-label source receipt. Restore printed species spelling, bark, assay wording and explicitly declared9mg only where printed; no marker mass computation, species equivalence or whole-extract conversion. Complete one-page label declares no DER or extraction solvent. Preserve whole source amount and existing safety. PDF SHA256 f6bdefe070ce072136d33fb13fce1ca9ba2c8e0cbb5d4b86edc35758972ed1b5.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/254735.pdf"
+      ],
+      "reviewer": "Codex source transcription; existing individually verified official-label receipt, no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "254738": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Yohimbe Extract (2% Yohimbine)",
+      "raw_ingredient_text": "Yohimbe extract",
+      "corrected_ingredient_text": "Yohimbe extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Yohimbe Extract (Pausinystalia yohimbe) PlantPart: bark Note: standardized to contain >=2% Yohimbine; DER and extraction solvent not declared on label",
+      "raw_quantity_value": 250,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact official NIH DSLD PDF 254738, Supplement Facts original Yohimbe row, individually visually verified in retained seventeen-label source receipt. Restore printed species spelling, bark, assay wording and explicitly declared9mg only where printed; no marker mass computation, species equivalence or whole-extract conversion. Complete one-page label declares no DER or extraction solvent. Preserve whole source amount and existing safety. PDF SHA256 ee3c32f55bc4bb06d3fb531ed0393f4866966ac0e0ba550b67300e670ff6449a.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/254738.pdf"
+      ],
+      "reviewer": "Codex source transcription; existing individually verified official-label receipt, no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "74661": {
+      "brand": "GNC Herbal Plus",
+      "product_name": "Yohimbe Extract 450 mg",
+      "raw_ingredient_text": "Yohimbe bark extract",
+      "corrected_ingredient_text": "Yohimbe bark extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "Yohimbe bark extract (Form: 2% Yohimbe Alkaloids Note: = 9 mg) PlantPart: bark Genus: Pausinystalia Species: yohimbe ",
+      "corrected_notes": "Yohimbe Bark Extract (Pausinystalia yohimbe) PlantPart: bark Note: 2% Yohimbine Alkaloids = 9 mg; DER and extraction solvent not declared on label",
+      "raw_quantity_value": 450,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition",
+        "forms.source_transcription"
+      ],
+      "evidence": "Exact official NIH DSLD PDF 74661, Supplement Facts original Yohimbe row, individually visually verified in retained seventeen-label source receipt. Restore printed species spelling, bark, assay wording and explicitly declared9mg only where printed; no marker mass computation, species equivalence or whole-extract conversion. Complete one-page label declares no DER or extraction solvent. Preserve whole source amount and existing safety. PDF SHA256 68a134f245e2d729b850dd6fded6490cfdb423c152e414d79393733d7d801d0c.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/74661.pdf"
+      ],
+      "reviewer": "Codex source transcription; existing individually verified official-label receipt, no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 166022,
+          "prefix": null,
+          "percent": 2,
+          "name": "Yohimbe Alkaloids",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 166022,
+          "prefix": null,
+          "percent": 2,
+          "name": "Yohimbine Alkaloids",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ]
+    },
+    "29242": {
+      "brand": "Nature's Bounty",
+      "product_name": "Power V",
+      "raw_ingredient_text": "Yohimbe Extract",
+      "corrected_ingredient_text": "Yohimbe Extract",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_notes": "Yohimbe Extract (Form: Standardized to contain 2% Yohimbine) PlantPart: bark Genus: Pausinystalia Species: yohimbe ",
+      "corrected_notes": "Yohimbe Extract (Pausinystalia johimbe) PlantPart: bark Note: standardized to contain 2% Yohimbine; DER and extraction solvent not declared on label",
+      "raw_quantity_value": 750,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact official NIH DSLD PDF 29242, Supplement Facts original Yohimbe row, individually visually verified in retained seventeen-label source receipt. Restore printed species spelling, bark, assay wording and explicitly declared9mg only where printed; no marker mass computation, species equivalence or whole-extract conversion. Complete one-page label declares no DER or extraction solvent. Preserve whole source amount and existing safety. PDF SHA256 db7464e3b41c991f423a44f915353ed451a56ed36da4b7a58100ceef09586b2e.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/29242.pdf"
+      ],
+      "reviewer": "Codex source transcription; existing individually verified official-label receipt, no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "270831": {
+      "brand": "Nutricost",
+      "product_name": "Yohimbe Bark Extract",
+      "raw_ingredient_text": "Yohimbe Bark Extract",
+      "corrected_ingredient_text": "Yohimbe Bark Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Yohimbe Bark Extract (Pausinystalia johimbe) PlantPart: bark Note: 2% Yohimbine Alkaloids = 9 mg; DER and extraction solvent not declared on label",
+      "raw_quantity_value": 450,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact official NIH DSLD PDF 270831, Supplement Facts original Yohimbe row, individually visually verified in retained seventeen-label source receipt. Restore printed species spelling, bark, assay wording and explicitly declared9mg only where printed; no marker mass computation, species equivalence or whole-extract conversion. Complete one-page label declares no DER or extraction solvent. Preserve whole source amount and existing safety. PDF SHA256 ce345cc4945fcf685ef1b063881649c5ebaec2701e7e3673abb805d33249dfbe.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/270831.pdf"
+      ],
+      "reviewer": "Codex source transcription; existing individually verified official-label receipt, no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "294422": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Horsetail Extract",
+      "raw_ingredient_text": "Horsetail Whole Herb Extract",
+      "corrected_ingredient_text": "Horsetail Whole Herb Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "Standardized to contain greater than or equal to 7% Silica",
+      "corrected_notes": "Horsetail Extract (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 03e99222ec764f06c3b9256572e3836c148f942f7c5ce3111762447cc9827eca.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/294422.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "294424": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Horsetail Extract",
+      "raw_ingredient_text": "Horsetail Whole Herb Extract",
+      "corrected_ingredient_text": "Horsetail Whole Herb Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "Standardized to contain greater than or equal to 7% Silica",
+      "corrected_notes": "Horsetail Extract (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 c1e4d733f8fe358de1ab3d014de4efa5d0dc96944e9772d57ca95f4f5351d08b.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/294424.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "312021": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Horsetail Extract",
+      "raw_ingredient_text": "Horsetail Whole Herb Extract",
+      "corrected_ingredient_text": "Horsetail Whole Herb Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "Standardized to contain greater than or equal to 7% Silica",
+      "corrected_notes": "Horsetail Extract (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 69c2d4682b2998f7000437ba307f0ea69f6c2b5acd20cff954371dcbcb248531.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/312021.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "312023": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Horsetail Extract",
+      "raw_ingredient_text": "Horsetail Whole Herb Extract",
+      "corrected_ingredient_text": "Horsetail Whole Herb Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "Standardized to contain greater than or equal to 7% Silica",
+      "corrected_notes": "Horsetail Extract (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 79aea01e3667212729990478f0a1979595b11d51fa3702117a46733d5e492141.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/312023.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "331010": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Horsetail Extract Powder 1000 mg",
+      "raw_ingredient_text": "Horsetail Whole Herb Extract",
+      "corrected_ingredient_text": "Horsetail Whole Herb Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "4:1, Standardized to contain greater than or equal to 7% Silica",
+      "corrected_notes": "Horsetail Extract 4:1 (Equisetum arvense L.) PlantPart: whole herb Note: standardized to contain >=7% Silica",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 2eabd9587a96dab9424e0ae4440e0ec8c72cab9774cc6c2a98b6edddb85fbe49.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/331010.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "252562": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Kelp Extract",
+      "raw_ingredient_text": "Kelp extract",
+      "corrected_ingredient_text": "Kelp extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Kelp Extract (Laminaria japonica) PlantPart: whole grass",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition",
+        "category.source_classification",
+        "forms.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 367ace7abe0eb290eff2976fb4790b0ab8fc68544f3195477cdbc43e453d7d60. Source category other and empty forms omit the printed whole botanical preparation. Restore botanical category and a single complete Laminaria japonica Whole Grass Extract source form (the same whole500mg declaration), using existing botanical_ingredients.kombu identity only. This is not Ascophyllum nodosum kelp powder, an isolated constituent, or an extract-to-powder equivalence; no amount or marker is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/252562.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "corrected_category": "botanical",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "Laminaria japonica Whole Grass Extract",
+          "category": "botanical",
+          "ingredientGroup": "Laminaria japonica"
+        }
+      ]
+    },
+    "255054": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Kelp Extract",
+      "raw_ingredient_text": "Kelp extract",
+      "corrected_ingredient_text": "Kelp extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Kelp Extract (Laminaria japonica) PlantPart: whole grass",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition",
+        "category.source_classification",
+        "forms.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 f8311012b4ccd70bf76bc8aa6393fb4fd3334cd1c327ccdec9a4e9af109e6450. Source category other and empty forms omit the printed whole botanical preparation. Restore botanical category and a single complete Laminaria japonica Whole Grass Extract source form (the same whole500mg declaration), using existing botanical_ingredients.kombu identity only. This is not Ascophyllum nodosum kelp powder, an isolated constituent, or an extract-to-powder equivalence; no amount or marker is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/255054.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "corrected_category": "botanical",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "Laminaria japonica Whole Grass Extract",
+          "category": "botanical",
+          "ingredientGroup": "Laminaria japonica"
+        }
+      ]
+    },
+    "255055": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Kelp Extract",
+      "raw_ingredient_text": "Kelp extract",
+      "corrected_ingredient_text": "Kelp extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Kelp Extract (Laminaria japonica) PlantPart: whole grass",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition",
+        "category.source_classification",
+        "forms.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 d7205d754eaaa69e5071a520046fd4a3b2804c08a295638640d6ef351e08ec10. Source category other and empty forms omit the printed whole botanical preparation. Restore botanical category and a single complete Laminaria japonica Whole Grass Extract source form (the same whole500mg declaration), using existing botanical_ingredients.kombu identity only. This is not Ascophyllum nodosum kelp powder, an isolated constituent, or an extract-to-powder equivalence; no amount or marker is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/255055.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "corrected_category": "botanical",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "Laminaria japonica Whole Grass Extract",
+          "category": "botanical",
+          "ingredientGroup": "Laminaria japonica"
+        }
+      ]
+    },
+    "255057": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Kelp Extract",
+      "raw_ingredient_text": "Kelp extract",
+      "corrected_ingredient_text": "Kelp extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Kelp Extract (Laminaria japonica) PlantPart: whole grass",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition",
+        "category.source_classification",
+        "forms.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 3f504b3f488051085727ab987465dbdff95ebc314329ebfeb0df28b708cb5881. Source category other and empty forms omit the printed whole botanical preparation. Restore botanical category and a single complete Laminaria japonica Whole Grass Extract source form (the same whole500mg declaration), using existing botanical_ingredients.kombu identity only. This is not Ascophyllum nodosum kelp powder, an isolated constituent, or an extract-to-powder equivalence; no amount or marker is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/255057.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "corrected_category": "botanical",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "Laminaria japonica Whole Grass Extract",
+          "category": "botanical",
+          "ingredientGroup": "Laminaria japonica"
+        }
+      ]
+    },
+    "79598": {
+      "brand": "Nature's Way",
+      "product_name": "White Oak Bark 480 mg",
+      "raw_ingredient_text": "White Oak",
+      "corrected_ingredient_text": "White Oak",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "White Oak (Quercus alba) PlantPart: bark",
+      "raw_quantity_value": 960,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Full official label identifies White Oak as Quercus alba in the same product narrative and bark on its sole active row; species is not printed in the Facts row. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 a26be66d12334db3267c7783e19f90fa1054b8e577166d484bdb340386340710.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/79598.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "326238": {
+      "brand": "SR Sports Research",
+      "product_name": "Biotin + Vitamin C Natural Berry Flavor",
+      "raw_ingredient_text": "Raspberry, Powder",
+      "corrected_ingredient_text": "Raspberry, Powder",
+      "raw_source_path": "ingredientRows[4].nestedRows[1]",
+      "raw_notes": "",
+      "corrected_notes": "Raspberry fruit powder PlantPart: fruit Note: member of Organic VitaBerry six-fruit blend (strawberry, raspberry, blueberry, tart cherry, elderberry, cranberry); individual amount not declared",
+      "raw_quantity_value": 0,
+      "raw_quantity_unit": "NP",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Official Facts panel prints Raspberry among the six fruit powders in Organic VitaBerry blend. Its25mg belongs to the whole blend; the child amount remains undeclared. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 50524256eb99ba69d25816d085364d5e6c0423df5a6dafd6a1dfb3ea7e7525c3.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/326238.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "312858": {
+      "brand": "BulkSupplements.com",
+      "product_name": "American Ginseng Extract 1000 mg Veg Capsules",
+      "raw_ingredient_text": "American Ginseng Leaf Extract",
+      "corrected_ingredient_text": "American Ginseng Leaf Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "American Ginseng Extract (Panax quinquefolius) PlantPart: leaf",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 3865eba2f72bd6be122ce65bc83d5a48d9e0209d34f0e67b969e175cc04d1c1d.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/312858.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "232035": {
+      "brand": "Life Extension",
+      "product_name": "Asian Energy Boost",
+      "raw_ingredient_text": "GS15-4 Fermented Asian Ginseng extract",
+      "corrected_ingredient_text": "GS15-4 Fermented Asian Ginseng extract",
+      "raw_source_path": "ingredientRows[1]",
+      "raw_notes": null,
+      "corrected_notes": "GS15-4 Fermented Asian ginseng extract PlantPart: root",
+      "raw_quantity_value": 55,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 79d65a52b058a99cea20524246449c47c5267d1be9524f1b4d3692cbb232ff29.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/232035.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "251494": {
+      "brand": "Nature's Way",
+      "product_name": "American Ginseng 1,100 mg",
+      "raw_ingredient_text": "American Ginseng",
+      "corrected_ingredient_text": "American Ginseng",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": null,
+      "corrected_notes": "American Ginseng PlantPart: root",
+      "raw_quantity_value": 1.1,
+      "raw_quantity_unit": "Gram(s)",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 570890a47c3fa8c3d59e52305577cc8699970e77dca90dbd99c0c88dc9800553.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/251494.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "269558": {
+      "brand": "Nutricost",
+      "product_name": "Korean Red Ginseng 1,000 mg",
+      "raw_ingredient_text": "Korean Red Ginseng",
+      "corrected_ingredient_text": "Korean Red Ginseng",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Korean Red Ginseng (Panax ginseng) PlantPart: root",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 1db78ee7252a0e74f22d65d47d533f646f9fc2892f6adb370b2f5023123fff9f.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/269558.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "269748": {
+      "brand": "Nutricost",
+      "product_name": "Panax Ginseng 1,000 mg",
+      "raw_ingredient_text": "Panax ginseng extract",
+      "corrected_ingredient_text": "Panax ginseng extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "standardized to 1% ginsenosides",
+      "corrected_notes": "Panax Ginseng Extract PlantPart: root Note: standardized to 1% ginsenosides",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 e89809579b97266bd96dc8850125274e53792970cd14a231bbb6b632e7bd822f.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/269748.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "205266": {
+      "brand": "OLLY",
+      "product_name": "Laser Focus Berry Tangy Tangerine",
+      "raw_ingredient_text": "American Ginseng extract",
+      "corrected_ingredient_text": "American Ginseng extract",
+      "raw_source_path": "ingredientRows[4]",
+      "raw_notes": "",
+      "corrected_notes": "American Ginseng Extract (Panax quinquefolius) PlantPart: root",
+      "raw_quantity_value": 100,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 e8a90b95d1f0fbb948514e1e110f2f22414b2fee8eac3e2f9982adf1bedfc10d.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/205266.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "278018": {
+      "brand": "Pure Encapsulations",
+      "product_name": "Panax Ginseng",
+      "raw_ingredient_text": "Asian Ginseng Root Extract",
+      "corrected_ingredient_text": "Asian Ginseng Root Extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "standardized to contain 12% total ginsenosides",
+      "corrected_notes": "Asian Ginseng Extract (Panax ginseng) PlantPart: root Note: standardized to 12% TOTAL ginsenosides",
+      "raw_quantity_value": 250,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 b481c3852da88673b8efbf8108a5ac5e328d4308ad1c1e1857e122f9b9746366.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/278018.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "214060": {
+      "brand": "Solgar",
+      "product_name": "American Ginseng Root",
+      "raw_ingredient_text": "American Ginseng root extract",
+      "corrected_ingredient_text": "American Ginseng root extract",
+      "raw_source_path": "ingredientRows[1]",
+      "raw_notes": "",
+      "corrected_notes": "American Ginseng Extract (Panax quinquefolius) PlantPart: root Note: ginsenosides 26 mg [10%]",
+      "raw_quantity_value": 260,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 4e9c44067c44ac6eac64613c23de0e1344e86045ce9a8cc29b45e186e4623c6c.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/214060.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "216622": {
+      "brand": "Solgar",
+      "product_name": "American Ginseng Root Extract",
+      "raw_ingredient_text": "standardized American Ginseng extract",
+      "corrected_ingredient_text": "standardized American Ginseng extract",
+      "raw_source_path": "ingredientRows[1]",
+      "raw_notes": "standardized American Ginseng extract (Form: 10% Ginsenosides Note: 10 mg) PlantPart: root ",
+      "corrected_notes": "Standardized American Ginseng Extract (Panax quinquefolium) PlantPart: root Note: ginsenosides 10 mg [10%]",
+      "raw_quantity_value": 100,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 17a3d297cfed742bc83798406c41d685b42716e9ca9f6028a7849f8fc0c79ead. The same original PDF independently prints the separate Supplement Facts row Raw American Ginseng Powder (whole root) 200 mg; restore whole-root tissue only on ingredientRows[2]. The extract row and its 10 mg [10%] ginsenosides remain separate; no powder assay, extraction or Latin name is inferred.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/216622.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029",
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "raw American Ginseng powder",
+          "corrected_ingredient_text": "raw American Ginseng powder",
+          "raw_source_path": "ingredientRows[2]",
+          "raw_notes": "",
+          "raw_forms": [],
+          "raw_quantity_value": 200,
+          "raw_quantity_unit": "mg",
+          "corrected_notes": "Raw American Ginseng Powder PlantPart: whole root",
+          "correction_fields": [
+            "notes.source_composition"
+          ]
+        }
+      ]
+    },
+    "68956": {
+      "brand": "GNC Mega Men",
+      "product_name": "Triple Ginsa Rush",
+      "raw_ingredient_text": "American Ginseng root extract",
+      "corrected_ingredient_text": "American Ginseng root extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "American Ginseng root extract (Form: 3% Ginsenosides Note: = 6 mg) PlantPart: root Genus: Panax Species: quinquefolius ",
+      "corrected_notes": "American Ginseng Root Extract (Panax quinquefolium) PlantPart: root Note: 3% ginsenosides = 6 mg",
+      "raw_quantity_value": 200,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 a8b762f2aa0ad84565617c0848be1df6e5eec45fe019c1042d008c66c267d65e.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/68956.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329949": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Organic Ashwagandha Powder 2g",
+      "raw_ingredient_text": "Ashwagandha, Powder",
+      "corrected_ingredient_text": "Ashwagandha, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "organic",
+      "corrected_notes": "Organic Ashwagandha Powder (Withania somnifera) PlantPart: root",
+      "raw_quantity_value": 2,
+      "raw_quantity_unit": "Gram(s)",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually viewed complete original official NIH label 329949 on2026-10-29: restore printed species and tissue only for its original powder row. Preserve original mass/unit/form/nesting. No extraction, marker amount, fruiting-body equivalence or clinical applicability inferred. PDF SHA256 310b260237009e0dc9aa3abbe990a57095b05bd8ddd7cfe446543a7c55f54f1f.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329949.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329950": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Organic Ashwagandha Powder 2 g",
+      "raw_ingredient_text": "Ashwagandha, Powder",
+      "corrected_ingredient_text": "Ashwagandha, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "organic",
+      "corrected_notes": "Organic Ashwagandha Powder (Withania somnifera) PlantPart: root",
+      "raw_quantity_value": 2,
+      "raw_quantity_unit": "Gram(s)",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually viewed complete original official NIH label 329950 on2026-10-29: restore printed species and tissue only for its original powder row. Preserve original mass/unit/form/nesting. No extraction, marker amount, fruiting-body equivalence or clinical applicability inferred. PDF SHA256 1082aa6f8e145666d37b799e39f34b3b88c9fd1d622465dfafb0f4ea95ef91d9.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329950.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329951": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Organic Ashwagandha Powder 2 g",
+      "raw_ingredient_text": "Ashwagandha, Powder",
+      "corrected_ingredient_text": "Ashwagandha, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "organic",
+      "corrected_notes": "Organic Ashwagandha Powder (Withania somnifera) PlantPart: root",
+      "raw_quantity_value": 2,
+      "raw_quantity_unit": "Gram(s)",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually viewed complete original official NIH label 329951 on2026-10-29: restore printed species and tissue only for its original powder row. Preserve original mass/unit/form/nesting. No extraction, marker amount, fruiting-body equivalence or clinical applicability inferred. PDF SHA256 9aec53e0da30f13a798e59c4259ca0f7a133b838d7911fc463e5f661476b6aa4.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329951.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329958": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Organic Ginkgo Biloba Powder 2000 mg",
+      "raw_ingredient_text": "Ginkgo biloba, Powder",
+      "corrected_ingredient_text": "Ginkgo biloba, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Organic Ginkgo Biloba Powder (Ginkgo biloba L.) PlantPart: leaves",
+      "raw_quantity_value": 2000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually viewed complete original official NIH label 329958 on2026-10-29: restore printed species and tissue only for its original powder row. Preserve original mass/unit/form/nesting. No extraction, marker amount, fruiting-body equivalence or clinical applicability inferred. PDF SHA256 af9714930ddac9ea9b2cb1a92b7bc94396dcb90e500a2828db9781d0489f7f0c.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329958.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329959": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Organic Ginkgo Biloba Powder 2000 mg",
+      "raw_ingredient_text": "Ginkgo biloba, Powder",
+      "corrected_ingredient_text": "Ginkgo biloba, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "organic",
+      "corrected_notes": "Organic Ginkgo Biloba Powder (Ginkgo biloba L.) PlantPart: leaves",
+      "raw_quantity_value": 2000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually viewed complete original official NIH label 329959 on2026-10-29: restore printed species and tissue only for its original powder row. Preserve original mass/unit/form/nesting. No extraction, marker amount, fruiting-body equivalence or clinical applicability inferred. PDF SHA256 73be8aee10425183ec7e54da37c7d8f5f1ba133ccb9a886c212fa7dd21a72122.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329959.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329960": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Organic Ginkgo Biloba Powder 2000 mg",
+      "raw_ingredient_text": "Ginkgo biloba, Powder",
+      "corrected_ingredient_text": "Ginkgo biloba, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "organic",
+      "corrected_notes": "Organic Ginkgo Biloba Powder (Ginkgo biloba L.) PlantPart: leaves",
+      "raw_quantity_value": 2000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually viewed complete original official NIH label 329960 on2026-10-29: restore printed species and tissue only for its original powder row. Preserve original mass/unit/form/nesting. No extraction, marker amount, fruiting-body equivalence or clinical applicability inferred. PDF SHA256 a047529b87abbe3bd98a4fb2168fc063d8cb795652479da6c5ab6cd1d8082ca3.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329960.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329961": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Organic Ginkgo Biloba Powder 2000 mg",
+      "raw_ingredient_text": "Ginkgo biloba, Powder",
+      "corrected_ingredient_text": "Ginkgo biloba, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "organic",
+      "corrected_notes": "Organic Ginkgo Biloba Powder (Ginkgo biloba L.) PlantPart: leaves",
+      "raw_quantity_value": 2000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually viewed complete original official NIH label 329961 on2026-10-29: restore printed species and tissue only for its original powder row. Preserve original mass/unit/form/nesting. No extraction, marker amount, fruiting-body equivalence or clinical applicability inferred. PDF SHA256 e0c168a4912aba2d18898b061c651c18c524a49a559b9b661d34cd023ad51f09.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329961.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "12869": {
+      "brand": "GNC Herbal Plus Formula",
+      "product_name": "Mushroom Complex",
+      "raw_ingredient_text": "Reishi Mushroom Mycelia Powder",
+      "corrected_ingredient_text": "Reishi Mushroom Mycelia Powder",
+      "raw_source_path": "ingredientRows[1]",
+      "raw_notes": null,
+      "corrected_notes": "Reishi Mushroom Mycelia Powder (Ganoderma lucidum) PlantPart: mycelia",
+      "raw_quantity_value": 180,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Individually viewed complete original official NIH label 12869 on2026-10-29: restore printed species and tissue only for its original powder row. Preserve original mass/unit/form/nesting. No extraction, marker amount, fruiting-body equivalence or clinical applicability inferred. PDF SHA256 0fc1c8c3943b608f45d8a78da027972c25cbf765aa981696fd9734c093faf4d5.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/12869.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "18313": {
+      "brand": "GNC Herbal Plus Whole Herb",
+      "product_name": "Cascara Sagrada",
+      "raw_ingredient_text": "Cascara Sagrada bark powder",
+      "corrected_ingredient_text": "Cascara Sagrada bark powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": null,
+      "corrected_notes": "Cascara Sagrada Bark Powder (Rhamnus purshiana) PlantPart: bark",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete exact official NIH PDF 183132026-10-29: printed species/part restored only to this original physical row. Purshiana bark identity is printed; no hydroxyanthracene/cascaroside concentration declared and no bark-mass-to-marker conversion established. Original quantities, forms and nesting retained. PDF SHA256 9df3f823c097af40726068a4e3eafe9500cf2754397debe2abf0403f4c59d6d0.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/18313.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "17149": {
+      "brand": "Nature's Bounty",
+      "product_name": "Natural Whole Herb Cascara Sagrada 450 mg",
+      "raw_ingredient_text": "Cascara Sagrada",
+      "corrected_ingredient_text": "Cascara Sagrada",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": null,
+      "corrected_notes": "Cascara Sagrada (Rhamnus purshiana) PlantPart: bark Note: milled whole herb powder",
+      "raw_quantity_value": 450,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete exact official NIH PDF 171492026-10-29: printed species/part restored only to this original physical row. Purshiana bark identity is printed; no hydroxyanthracene/cascaroside concentration declared and no bark-mass-to-marker conversion established. Original quantities, forms and nesting retained. PDF SHA256 f27d483a842eab85103175416c13ec8070cc857cb282b4dec01e3a5cfe5ebeb2.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/17149.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "1627": {
+      "brand": "GNC Herbal Plus Standardized",
+      "product_name": "Triple Ginsa Rush",
+      "raw_ingredient_text": "Panax Ginseng Root Extract",
+      "corrected_ingredient_text": "Panax Ginseng Root Extract",
+      "raw_source_path": "ingredientRows[1]",
+      "raw_notes": "Panax Ginseng Root Extract (Form: 3% ginsenosides) PlantPart: Panax Genus: ginseng Note: 3% Ginsenodsides =  6mg ",
+      "corrected_notes": "Panax Ginseng Root Extract (Panax ginseng) PlantPart: root Genus: Panax Species: ginseng Note: 3% Ginsenosides = 6 mg",
+      "raw_quantity_value": 200,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete exact official NIH PDF 16272026-10-29: printed species/part restored only to this original physical row. The second Panax200mg row prints Panax ginseng, root,3%ginsenosides=6mg; remove the API field-order corruption PlantPart:Panax Genus:ginseng. The separate American ginseng row remains unchanged; no sibling approval transfer. Original quantities, forms and nesting retained. PDF SHA256 d8ee622da515bfbd78d84455af376793961a54365bcc53a23cd1a1c1231f44e8.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/1627.pdf"
+      ],
+      "reviewer": "Codex individually verified original official-label source facts; no clinical benefit approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329925": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Black Maca Root Powder 3500 mg",
+      "raw_ingredient_text": "Black Maca, Powder",
+      "corrected_ingredient_text": "Black Maca, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Black Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+      "raw_quantity_value": 3500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete original official NIH DSLD PDF 329925 on2026-10-29. Supplement Facts explicitly names the color, Lepidium meyenii, powder and Root. Restore only the omitted printed source tissue/species facts. No gelatinization/raw-processing claim, extract ratio, marker concentration, clinical applicability or color equivalence is inferred. Original API name, amount, unit, forms and source path retained. Live NIH API ingredientRows independently retrieved and equal frozen raw. PDF SHA256 5df83188979b6f7490e8ed3d584a606d74692f253a765fb965485d8312ee46ba.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329925.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no scientific Dose approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329926": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Black Maca Root Powder 3500 mg",
+      "raw_ingredient_text": "Black Maca, Powder",
+      "corrected_ingredient_text": "Black Maca, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Black Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+      "raw_quantity_value": 3500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete original official NIH DSLD PDF 329926 on2026-10-29. Supplement Facts explicitly names the color, Lepidium meyenii, powder and Root. Restore only the omitted printed source tissue/species facts. No gelatinization/raw-processing claim, extract ratio, marker concentration, clinical applicability or color equivalence is inferred. Original API name, amount, unit, forms and source path retained. Live NIH API ingredientRows independently retrieved and equal frozen raw. PDF SHA256 9b49cb4b25ce261530c5dd0b4977d172dffa2bc3889d86512848bcb941099152.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329926.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no scientific Dose approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329927": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Black Maca Powder 3500 mg",
+      "raw_ingredient_text": "Black Maca, Powder",
+      "corrected_ingredient_text": "Black Maca, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Black Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+      "raw_quantity_value": 3500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete original official NIH DSLD PDF 329927 on2026-10-29. Supplement Facts explicitly names the color, Lepidium meyenii, powder and Root. Restore only the omitted printed source tissue/species facts. No gelatinization/raw-processing claim, extract ratio, marker concentration, clinical applicability or color equivalence is inferred. Original API name, amount, unit, forms and source path retained. Live NIH API ingredientRows independently retrieved and equal frozen raw. PDF SHA256 ca136498167f9f70708a690254d85bc139d54c5052e31812b91985303b676074.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329927.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no scientific Dose approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "329928": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Black Maca Root Veg Capsules 5000 mg",
+      "raw_ingredient_text": "Black Maca, Powder",
+      "corrected_ingredient_text": "Black Maca, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Black Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+      "raw_quantity_value": 5000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete original official NIH DSLD PDF 329928 on2026-10-29. Supplement Facts explicitly names the color, Lepidium meyenii, powder and Root. Restore only the omitted printed source tissue/species facts. No gelatinization/raw-processing claim, extract ratio, marker concentration, clinical applicability or color equivalence is inferred. Original API name, amount, unit, forms and source path retained. Live NIH API ingredientRows independently retrieved and equal frozen raw. PDF SHA256 e6857ea4bbc623851ada23cc1dc1de467e0e28b2c5ffa90e30aca420f5fe008d.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/329928.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no scientific Dose approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "330068": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Red Maca Root Powder 3500 mg",
+      "raw_ingredient_text": "Red Maca, Powder",
+      "corrected_ingredient_text": "Red Maca, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Red Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+      "raw_quantity_value": 3500,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete original official NIH DSLD PDF 330068 on2026-10-29. Supplement Facts explicitly names the color, Lepidium meyenii, powder and Root. Restore only the omitted printed source tissue/species facts. No gelatinization/raw-processing claim, extract ratio, marker concentration, clinical applicability or color equivalence is inferred. Original API name, amount, unit, forms and source path retained. Live NIH API ingredientRows independently retrieved and equal frozen raw. PDF SHA256 3f22a7fd8b6e31f3cf4225edbfac741e95e530b71442094f13115db38e25229b.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330068.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no scientific Dose approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "330069": {
+      "brand": "BulkSupplements.com",
+      "product_name": "Red Maca Root Veg Capsules 5000 mg",
+      "raw_ingredient_text": "Red Maca, Powder",
+      "corrected_ingredient_text": "Red Maca, Powder",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "",
+      "corrected_notes": "Red Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+      "raw_quantity_value": 5000,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Independently viewed complete original official NIH DSLD PDF 330069 on2026-10-29. Supplement Facts explicitly names the color, Lepidium meyenii, powder and Root. Restore only the omitted printed source tissue/species facts. No gelatinization/raw-processing claim, extract ratio, marker concentration, clinical applicability or color equivalence is inferred. Original API name, amount, unit, forms and source path retained. Live NIH API ingredientRows independently retrieved and equal frozen raw. PDF SHA256 0bb5b736da0324f21462e8c7b7a0446a4720f612a45bcdfe304ab1b20d06f97f.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/330069.pdf"
+      ],
+      "reviewer": "Codex individually verified official-label source facts; no scientific Dose approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "231929": {
+      "brand": "Life Extension",
+      "product_name": "AppleWise 600 mg",
+      "raw_ingredient_text": "Apple (Malus domestica) extract",
+      "corrected_ingredient_text": "Apple (Malus domestica) extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "Apple (Malus domestica) extract (Form: std. to 50% Polyphenols, and 5% Phloridzin, from organically grown Apples) PlantPart: fruit and skin Genus: Malus Species: domestica ",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 152955,
+          "prefix": "from",
+          "percent": null,
+          "name": "organically grown Apples",
+          "category": "botanical",
+          "ingredientGroup": "Apple",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "ingredientId": 152771,
+          "prefix": "and",
+          "percent": 5,
+          "name": "Phloridzin",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Phlorizin",
+          "uniiCode": null
+        },
+        {
+          "order": 3,
+          "ingredientId": 4102,
+          "prefix": "std. to",
+          "percent": 50,
+          "name": "Polyphenols",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Polyphenol (unspecified)",
+          "uniiCode": null
+        }
+      ],
+      "corrected_notes": "Apple (Malus domestica) extract (Form: std. to 50% Polyphenols, and 5% Phloridzin, from organically grown Apples) PlantPart: fruit and skin Genus: Malus Species: domestica Note: Sole active source row of manufacturer-linked AppleWise finished product item #01625, NIH edition L01625F; AppleWise is product-level manufacturer linkage, not an ingredient trademark printed in the NIH ingredient row.",
+      "raw_quantity_value": 600,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact original NIH PDF 231929, edition L01625F, UPC 7 37870 16253 7, and live NIH API identify one active:600mg apple(Malus domestica) fruit/skin extract standardized50%polyphenols5%phloridzin. Original PDF SHA256 b8bb37db92fa9248d58a4b6a5f4e91a9096da99e81923d649987c31398118a4a. Life Extension's May2012 magazine PDF page101 independently links AppleWise finished product item#01625 to30 capsules/600mg/300mgpolyphenols; SHA256 2e4ed03fd7c13e9ee61d550727d168a563483249ede74a9fdb89ae1488749dea. Official Life Extension Europe product#01625 independently prints the same sole600mg50%/5% fruit/skin extract composition and capsule excipients; HTML SHA256 a931b68f534bd36b2893cc52b59ee78580db2c382505dbe5cf5b1e664b504ab7. This is an attributed product-level commercial/material linkage for these exact source rows, NOT a claim that AppleWise is an ingredient trademark printed in the NIH row, an interchangeable generic apple extract, a clinical efficacy correspondence or a Dose approval. The source name, whole amount, forms and original assay statements remain unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/231929.pdf",
+        "https://www.lifeextension.com/-/media/lifeextension/pdf/magazine/2012/5.pdf?rev=58a3604097d44089adf15ef4fcfe4827",
+        "https://www.lifeextensioneurope.co.uk/applewise"
+      ],
+      "reviewer": "Codex primary-source product/material linkage only; no scientific Dose approval",
+      "review_date": "2026-10-29",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_source_correction_20261029"
+    },
+    "232062": {
+      "brand": "Life Extension",
+      "product_name": "AppleWise 600 mg",
+      "raw_ingredient_text": "Apple (Malus domestica) extract",
+      "corrected_ingredient_text": "Apple (Malus domestica) extract",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_notes": "Apple (Malus domestica) extract (Form: std. to 50% Polyphenols, and 5% Phloridzin, from organically grown Apples) PlantPart: fruit and skin Genus: Malus Species: domestica ",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 152955,
+          "prefix": "from",
+          "percent": null,
+          "name": "organically grown Apples",
+          "category": "botanical",
+          "ingredientGroup": "Apple",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "ingredientId": 152771,
+          "prefix": "and",
+          "percent": 5,
+          "name": "Phloridzin",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Phlorizin",
+          "uniiCode": null
+        },
+        {
+          "order": 3,
+          "ingredientId": 4102,
+          "prefix": "std. to",
+          "percent": 50,
+          "name": "Polyphenols",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Polyphenol (unspecified)",
+          "uniiCode": null
+        }
+      ],
+      "corrected_notes": "Apple (Malus domestica) extract (Form: std. to 50% Polyphenols, and 5% Phloridzin, from organically grown Apples) PlantPart: fruit and skin Genus: Malus Species: domestica Note: Sole active source row of manufacturer-linked AppleWise finished product item #01625, NIH edition L01625CD; AppleWise is product-level manufacturer linkage, not an ingredient trademark printed in the NIH ingredient row.",
+      "raw_quantity_value": 600,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "notes.source_composition"
+      ],
+      "evidence": "Exact original NIH PDF 232062, edition L01625CD, UPC 7 37870 16250 6, and live NIH API identify one active:600mg apple(Malus domestica) fruit/skin extract standardized50%polyphenols5%phloridzin. Original PDF SHA256 a3de883d3eb90adce7590271de155a0fd884cf1d55d1c4a3ec75169eb45eddc7. Life Extension's May2012 magazine PDF page101 independently links AppleWise finished product item#01625 to30 capsules/600mg/300mgpolyphenols; SHA256 2e4ed03fd7c13e9ee61d550727d168a563483249ede74a9fdb89ae1488749dea. Official Life Extension Europe product#01625 independently prints the same sole600mg50%/5% fruit/skin extract composition and capsule excipients; HTML SHA256 a931b68f534bd36b2893cc52b59ee78580db2c382505dbe5cf5b1e664b504ab7. This is an attributed product-level commercial/material linkage for these exact source rows, NOT a claim that AppleWise is an ingredient trademark printed in the NIH row, an interchangeable generic apple extract, a clinical efficacy correspondence or a Dose approval. The source name, whole amount, forms and original assay statements remain unchanged.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/232062.pdf",
+        "https://www.lifeextension.com/-/media/lifeextension/pdf/magazine/2012/5.pdf?rev=58a3604097d44089adf15ef4fcfe4827",
+        "https://www.lifeextensioneurope.co.uk/applewise"
+      ],
+      "reviewer": "Codex primary-source product/material linkage only; no scientific Dose approval",
       "review_date": "2026-10-29",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_source_correction_20261029"
