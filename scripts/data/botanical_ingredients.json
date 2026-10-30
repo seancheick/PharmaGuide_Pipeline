@@ -365,7 +365,8 @@
         "panax quinquefolius",
         "american ginseng root extract",
         "panax quinquefolius root",
-        "american ginseng extract"
+        "american ginseng extract",
+        "American Ginseng root"
       ],
       "category": "adaptogen",
       "notes": "Plain identity (relocated from standardized_botanicals.json via MO-1, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for ginsenosides. Commonly used in dietary supplements.",

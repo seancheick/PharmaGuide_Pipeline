@@ -3090,12 +3090,26 @@ class EnhancedDSLDNormalizer:
             part = str(details.get("plantPart") or "").strip()
             if part and not ingredient.get("nestedRows"):
                 qualified = re.sub(r"\bextract\b", part + " extract", str(ingredient.get("name") or ""), flags=re.I)
+                if qualified == str(ingredient.get("name") or ""):
+                    qualified = qualified + " " + part
                 exact = self._exact_ingredient_group_lookup(qualified)
                 if exact.get("type") in {"botanical", "standardized_botanical"}:
                     standard = exact["standard_name"]
-                    canonical, source = self._resolve_canonical_identity(standard, raw_name=qualified)
-                    if canonical and source in {"botanical_ingredients", "standardized_botanicals"}:
-                        return standard, canonical, source
+                    # The exact botanical owner can be more specific than an
+                    # IQM family form sharing its vernacular alias. Preserve
+                    # that authored owner only for this source-part match.
+                    source = ("botanical_ingredients" if exact["type"] == "botanical"
+                              else "standardized_botanicals")
+                    entries = (self.botanical_ingredients.get(source, [])
+                               if source == "botanical_ingredients"
+                               else self.standardized_botanicals.get(source, []))
+                    owners = [entry for entry in entries
+                              if entry.get("standard_name") == standard
+                              and norm_module.normalize_text(qualified) in {
+                                  norm_module.normalize_text(name) for name in
+                                  [entry.get("standard_name") or "", *entry.get("aliases", [])]}]
+                    if len(owners) == 1:
+                        return standard, owners[0]["id"], source
         if any(not isinstance(form, dict) for form in raw_forms):
             return None
         forms = []

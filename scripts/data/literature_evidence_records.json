@@ -29473,11 +29473,11 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "605c5c02a1ac1fc421b6628b04df9908f4ef155d53986f058465219688045417",
+          "source_sha256": "023e43e37c3c7bab651adc4ee9303aa01a80d49dfd7db95ff96e5d8fe1780d34",
           "source_ids": [
             "PMID:10761967"
           ],
-          "verified_at": "2026-10-27T22:38:13.265370+00:00",
+          "verified_at": "2026-10-30T01:33:37.981834+00:00",
           "is_complete": true,
           "results": [
             {
@@ -29495,7 +29495,7 @@
       "verification_result": "authoritative_pubmed_verified",
       "reference_semantics": {
         "reference_type": "no_benchmark",
-        "scope": "General catalog Dose; source regimen amounts remain descriptive research exposures",
+        "scope": "exact_preparation",
         "preparation": "Panax quinquefolius capsules; extract standardization not established in the inspected abstract",
         "purpose": "General Dose assessment; retain each source-specific endpoint as descriptive evidence",
         "population": "Adults with and without type 2 diabetes in an acute glucose challenge",
@@ -29509,7 +29509,30 @@
         "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
-      }
+      },
+      "aliases": [
+        "American Ginseng"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "PlantPart: root"
+        ],
+        "excluded_form_terms": [
+          "extract",
+          "rhizome",
+          "leaf",
+          "stem",
+          "red",
+          "fermented",
+          "GS15-4"
+        ],
+        "dosage_forms": [
+          "capsule"
+        ]
+      },
+      "notes": "Source-binding repair, 2026-10-29: original NIH251494 prints American Ginseng(root),1.1g in capsules. This uses the existing October18 capsule conclusion (General catalog Dose; source regimen amounts remain descriptive research exposures); its scientific approval/date and study population remain unchanged. Root/capsule source facts are mandatory; no label Latin, extract equivalence or daily regimen is inferred."
     },
     {
       "canonical_id": "serrapeptase",
