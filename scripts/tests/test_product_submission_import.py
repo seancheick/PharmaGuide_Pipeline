@@ -2163,3 +2163,21 @@ def test_v2_gtin_review_accepts_reviewed_reason_without_package():
     row['approved_payload_canonical'] = _canonical(value)
     row['payload_sha256'] = hashlib.sha256(row['approved_payload_canonical'].encode()).hexdigest()
     assert build_manual_label(row)['upcSku'] == '050428381397'
+
+
+@pytest.mark.parametrize("product_id, expected", [
+    # "Adults take 2 capsules once daily"; Serving Size 2 capsules -> one serving a day.
+    ("PG_SUB_8800C6CBB6F14B79A73D599B126C8636", [(1, 1)]),
+    # "SUGGESTED USE: Take one softgel daily with food."
+    ("PG_SUB_F580FBD60E574699B47D0982663F17DD", [(1, 1)]),
+    # "Directions: Adults, take one softgel and one tablet daily with food."
+    ("PG_SUB_7283A83B3FC7467F808C02667CCBFE06", [(1, 1), (1, 1)]),
+])
+def test_printed_daily_directions_reach_clean_as_label_sourced(product_id, expected):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    root = Path(__file__).resolve().parents[2] / "manual_labels/product_submissions"
+    raw = json.loads((root / f"{product_id}.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    servings = sorted(cleaned["servingSizes"], key=lambda s: s["order"])
+    assert [s["dailyServingsSource"] for s in servings] == ["label"] * len(expected)
+    assert [(s["minDailyServings"], s["maxDailyServings"]) for s in servings] == expected
