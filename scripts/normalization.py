@@ -72,6 +72,9 @@ QUANTITY_OPERATORS = frozenset({"<", "<=", ">", ">=", "~"})
 
 _APPROXIMATE_COUNT_RE = re.compile(
     r"(?:about|approximately|approx\.?|~)\s*([0-9][0-9,]*(?:\.[0-9]+)?)", re.IGNORECASE)
+# A comma is accepted only as US thousands grouping: "1,5" may be a decimal
+# comma (1.5) and is never read as 15.
+_GROUPED_COUNT_RE = re.compile(r"[0-9]{1,3}(?:,[0-9]{3})+(?:\.[0-9]+)?")
 
 
 def parse_servings_per_container(value: Any) -> Tuple[Optional[float], Optional[str]]:
@@ -90,7 +93,11 @@ def parse_servings_per_container(value: Any) -> Tuple[Optional[float], Optional[
         match = _APPROXIMATE_COUNT_RE.fullmatch(stripped)
         if match:
             text, value = stripped, match.group(1)
-        value = str(value).replace(",", "")
+        value = str(value).strip()
+        if "," in value:
+            if not _GROUPED_COUNT_RE.fullmatch(value):
+                return None, None
+            value = value.replace(",", "")
     try:
         number = float(value)
     except (TypeError, ValueError):

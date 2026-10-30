@@ -162,5 +162,7 @@ def test_approximate_servings_per_container_keep_their_printed_wording():
       field.value='about 17'; syncScalarFields(); out.about=state.payload.servingsPerContainer;
       field.value='60'; syncScalarFields(); out.exact=state.payload.servingsPerContainer;
       field.value='17ish'; syncScalarFields(); out.bad=state.payload.servingsPerContainer;
+      field.value='1,5'; syncScalarFields(); out.comma=state.payload.servingsPerContainer;
+      field.value='1,000'; syncScalarFields(); out.grouped=state.payload.servingsPerContainer;
     })()""")
-    assert out == {"about": "about 17", "exact": 60, "bad": None}
+    assert out == {"about": "about 17", "exact": 60, "bad": None, "comma": None, "grouped": 1000}

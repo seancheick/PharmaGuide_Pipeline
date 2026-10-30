@@ -2828,6 +2828,8 @@ function parsePrintedAmount(raw) {
 function parseServingsPerContainer(raw) {
   const text = raw.trim();
   if (/^(about|approximately|approx\.?|~)\s*\d[\d,]*(\.\d+)?$/i.test(text)) return text;
+  // A comma is thousands grouping only; "1,5" may be a decimal comma.
+  if (text.includes(',') && !/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(text)) return null;
   const count = Number(text.replace(/,/g, ''));
   return count > 0 ? count : null;
 }

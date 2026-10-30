@@ -166,7 +166,7 @@ def test_servings_per_container_parser(printed, number, text) -> None:
     assert parse_servings_per_container(printed) == (number, text)
 
 
-@pytest.mark.parametrize("printed", ["about", "17ish", "about -3", "about 0", "", True, "nan"])
+@pytest.mark.parametrize("printed", ["about", "17ish", "about -3", "about 0", "", True, "nan", "1,5", "about 1,5", "10,00"])
 def test_servings_per_container_parser_rejects_unreadable_values(printed) -> None:
     assert parse_servings_per_container(printed) == (None, None)
 
