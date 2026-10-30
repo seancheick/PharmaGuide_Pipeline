@@ -1879,3 +1879,61 @@ def test_unscored_label_cannot_inherit_safety_only_identity_exception(replace_li
     if replace_literal:
         row.update(source_label_name="Different Ingredient", label_display_name="Different Ingredient")
     assert validate_export_contract(enriched, scored)
+
+
+@pytest.mark.parametrize("defect", ["unknown_safety_id", "unrecognized_label", "competing_identity"])
+def test_known_unscored_safety_visibility_requires_actual_same_label_recognition(defect):
+    from build_final_db import _warning_only_identity_labels
+    enriched, scored = _known_unscored_unmapped_preparation()
+    row = enriched["ingredient_quality_data"]["ingredients"][0]
+    row.update(raw_source_text="Cascara Sagrada extract", name="Cascara Sagrada extract",
+               source_label_name="Cascara Sagrada extract", label_display_name="Cascara Sagrada extract",
+               identity_decision_reason="safety_recognition_without_primary_identity",
+               recognition_source="banned_recalled_ingredients", safety_identity_id="ADD_CASCARA_SAGRADA")
+    if defect == "unknown_safety_id":
+        row["safety_identity_id"] = "ADD_UNKNOWN"
+    elif defect == "unrecognized_label":
+        row.update(raw_source_text="Unverified Botanical", source_label_name="Unverified Botanical",
+                   label_display_name="Unverified Botanical")
+    else:
+        row["canonical_id_before"] = "cascara_sagrada"
+    assert _warning_only_identity_labels(enriched, scored) == {}
+
+
+@pytest.mark.parametrize('source_notes, resolved_peer', [('', False), ('Rhamnus davurica bark', True)])
+def test_uncertainty_copy_never_rewrites_a_foreign_or_resolved_source(source_notes, resolved_peer):
+    from build_final_db import _qualify_identity_uncertainty_copy
+    subject = 'ADD_CASCARA_SAGRADA'
+    row = {'identity_disposition': 'identity_conflict', 'canonical_id': None,
+           'recognized_entry_id': subject, 'raw_source_path': 'ingredientRows[0]',
+           'raw_source_text': 'Cascara', 'recognized_entry_name': 'Cascara'}
+    source = {'raw_source_path': row['raw_source_path'], 'notes': source_notes}
+    enriched = {'dsld_id': '252441', 'activeIngredients': [source],
+                'ingredient_quality_data': {'ingredients': [row]},
+                'interaction_profile': {'ingredient_alerts': [{'rule_id': 'RULE_CASCARA_UNRESOLVED_IDENTITY', 'ingredient_name': 'Cascara'}]}}
+    if resolved_peer:
+        enriched['ingredient_quality_data']['ingredients'].append({'canonical_id': 'cascara_sagrada','raw_source_path': 'ingredientRows[1]'})
+        enriched['activeIngredients'].append({'raw_source_path': 'ingredientRows[1]', 'safety_flags': [{'entry_id': subject}]})
+    warnings = [{'matched_rule_id': subject, 'ingredient_name': 'Cascara', 'detail': 'Independently sourced purshiana advisory'}]
+    ingredients = [{'raw_source_path': row['raw_source_path'], 'safety_reason': 'original'}]
+    _qualify_identity_uncertainty_copy(enriched, ingredients, warnings)
+    assert warnings[0]['detail'] == 'Independently sourced purshiana advisory'
+    if resolved_peer:
+        assert len(warnings) == 2
+        assert 'identity is unresolved' in warnings[1]['detail']
+    else:
+        assert ingredients[0]['safety_reason'] == 'original'
+        assert len(warnings) == 1
+
+
+def test_core_reference_data_does_not_export_unqualified_private_identity_rules():
+    from build_final_db import load_reference_data
+    import json
+    from pathlib import Path
+    rows = load_reference_data(str(Path(__file__).resolve().parents[1]))
+    payload = json.loads(next(row[2] for row in rows if row[0] == 'interaction_rules'))
+    assert all(not r.get('_identity_conflict_only') for r in payload['interaction_rules'])
+    assert 'RULE_CASCARA_UNRESOLVED_IDENTITY' not in {r['id'] for r in payload['interaction_rules']}
+    assert 'RULE_IQM_CASCARA_SAGRADA_PREGNANCY' in {r['id'] for r in payload['interaction_rules']}
+    assert payload['_metadata']['total_entries'] == len(payload['interaction_rules'])
+    assert payload['_metadata']['total_rules'] == len(payload['interaction_rules'])

@@ -1,0 +1,210 @@
+{
+  "brandIpSymbol": "\u00ae",
+  "brandName": "BulkSupplements.com",
+  "bundleName": "",
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "contacts": [
+    {
+      "contactId": 22143,
+      "text": "Distributed exclusively by",
+      "types": [
+        "Distributor"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_4.json",
+        "id": 22143,
+        "name": "BulkSupplements.com",
+        "streetAddress": "7511 Eastgate Rd",
+        "city": "Henderson",
+        "state": "NV",
+        "country": "USA",
+        "zipCode": "89011",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "BulkSupplements.com"
+      }
+    }
+  ],
+  "entryDate": "2025-04-24",
+  "events": [
+    {
+      "date": "2025-04-24",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "fullName": "American Ginseng Extract 4000 mg",
+  "hasOuterCarton": null,
+  "id": 329914,
+  "ingredientRows": [
+    {
+      "order": 1,
+      "ingredientId": 355935,
+      "description": "",
+      "notes": "4:1",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 1000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Veg Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "American Ginseng Rhizome Extract",
+      "category": "botanical",
+      "ingredientGroup": "American Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 354841,
+          "prefix": null,
+          "percent": null,
+          "name": "Panax quinquefolius Rhizome Extract",
+          "category": "botanical",
+          "ingredientGroup": "Ginseng",
+          "uniiCode": null
+        }
+      ]
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Package size difference, same product",
+      "labelId": 312858
+    }
+  ],
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 240,
+      "unit": "Veg Capsule(s)",
+      "display": "240 Veg Capsule(s)"
+    }
+  ],
+  "nhanesId": "",
+  "offMarket": 0,
+  "otheringredients": {
+    "text": null,
+    "ingredients": [
+      {
+        "order": 1,
+        "ingredientId": 79187,
+        "name": "Hypromellose",
+        "category": "other",
+        "ingredientGroup": "Hypromellose",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 2,
+        "ingredientId": 4481,
+        "name": "Dextrin",
+        "category": "sugar",
+        "ingredientGroup": "Dextrin (unspecified)",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ]
+  },
+  "pdf": "329914_document.pdf",
+  "percentDvFootnote": "Not Present",
+  "physicalState": {
+    "langualCode": "E0159",
+    "langualCodeDescription": "Capsule"
+  },
+  "productType": {
+    "langualCode": "A1306",
+    "langualCodeDescription": "Botanical"
+  },
+  "productVersionCode": "002",
+  "servingSizes": [
+    {
+      "order": 1,
+      "minQuantity": 2,
+      "maxQuantity": 2,
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "unit": "Veg Capsule(s)",
+      "notes": "",
+      "inSFB": true
+    }
+  ],
+  "servingsPerContainer": "120",
+  "src": "api/label/329914",
+  "statements": [
+    {
+      "type": "Formula re: Contains",
+      "notes": "American Ginseng Extract 4000 mg equivalent"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Suggested use: As a dietary supplement, take 2 capsules once daily, or as directed by a physician."
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Free of: added sugar, soy, dairy, yeast, gluten"
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a dry, cool place"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Scan me"
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "Warning:\r\nThis product is not intended to diagnose, treat, cure, or prevent any disease."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Always consult a physician before taking any dietary supplement."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of reach of children."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "New"
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)",
+    "Gluten Free",
+    "Dairy Free"
+  ],
+  "thumbnail": "329914_thumbnail.jpg",
+  "upcSku": "X003HTI6JJ",
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "_source": "api"
+}

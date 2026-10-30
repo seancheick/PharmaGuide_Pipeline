@@ -405,11 +405,20 @@ class ProprietaryBlendDetector:
         if isinstance(ingredient, dict):
             name = ingredient.get("name", "") or ingredient.get("ingredient", "")
             description = ingredient.get("description", "") or ingredient.get("notes", "")
-            text_to_search = f"{name} {description}".strip()
-
             # Check for sub-ingredients (indicates a blend)
             sub_ingredients = (ingredient.get("ingredients", []) or ingredient.get("subIngredients", [])
                                or ingredient.get("nestedIngredients", []))
+            parent_ref = str(ingredient.get("parent_source_path") or "")
+            source_ref = str(ingredient.get("raw_source_path") or "")
+            if (ingredient.get("cleaner_row_role") == "nested_display_only"
+                    and parent_ref and source_ref.startswith(parent_ref + ".nestedRows[")
+                    and not sub_ingredients and not ingredient.get("proprietaryBlend")):
+                # The cleaner already identifies this physical row as a
+                # constituent, not a second header. Its provenance may name
+                # the parent blend; that annotation cannot declare another
+                # container. A blend named on this row still matches below.
+                description = ""
+            text_to_search = f"{name} {description}".strip()
         elif isinstance(ingredient, str):
             text_to_search = ingredient
             sub_ingredients = []

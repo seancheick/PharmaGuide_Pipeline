@@ -1,0 +1,204 @@
+{
+  "brandIpSymbol": "\u00ae",
+  "brandName": "GNC Ginsa Gold",
+  "bundleName": "",
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "contacts": [
+    {
+      "contactId": 1334,
+      "text": "Distributed by:",
+      "types": [
+        "Distributor"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_1.json",
+        "id": 1334,
+        "name": "General Nutrition Corporation",
+        "streetAddress": "",
+        "city": "Pittsburgh",
+        "state": "PA",
+        "country": "USA",
+        "zipCode": "15222",
+        "phoneNumber": "1-888-462-2548",
+        "email": "",
+        "webAddress": "gnc.com"
+      }
+    }
+  ],
+  "entryDate": "2011-10-26",
+  "events": [
+    {
+      "date": "2011-10-26",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "fullName": "Standardized Panax Ginseng Herbal Supplement 600 mg",
+  "hasOuterCarton": false,
+  "id": 1628,
+  "ingredientRows": [
+    {
+      "order": 1,
+      "ingredientId": 7164,
+      "description": null,
+      "notes": "Panax Ginseng Root Extract (Form: 3% ginsenosides) Note: 3% Ginsenodsides = 18mg ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 600,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Panax Ginseng Root Extract",
+      "category": "botanical",
+      "ingredientGroup": "Oriental Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 4513,
+          "prefix": null,
+          "percent": 3,
+          "name": "Ginsenosides",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Ginsenosides",
+          "uniiCode": null
+        }
+      ]
+    }
+  ],
+  "labelRelationships": [],
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 100,
+      "unit": "Capsule(s)",
+      "display": "100 Capsule(s)"
+    }
+  ],
+  "nhanesId": "",
+  "offMarket": 0,
+  "otheringredients": {
+    "text": null,
+    "ingredients": [
+      {
+        "order": 1,
+        "ingredientId": 3715,
+        "name": "Gelatin",
+        "category": "protein",
+        "ingredientGroup": "Gelatin",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ]
+  },
+  "pdf": "",
+  "percentDvFootnote": "Not Present",
+  "physicalState": {
+    "langualCode": "E0159",
+    "langualCodeDescription": "Capsule"
+  },
+  "productType": {
+    "langualCode": "A1306",
+    "langualCodeDescription": "Botanical"
+  },
+  "productVersionCode": "CODE 374811 DGG ",
+  "servingSizes": [
+    {
+      "order": 1,
+      "minQuantity": 1,
+      "maxQuantity": 2,
+      "minDailyServings": 1,
+      "maxDailyServings": 1,
+      "unit": "Capsule(s)",
+      "inSFB": true
+    }
+  ],
+  "servingsPerContainer": null,
+  "src": "api/label/1628",
+  "statements": [
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "This statement has not been evaluated by the Food and Drug Administration.  This product is not intended to diagnose, treat, cure, or prevent any disease."
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "No Sugar, No Artificial Colors, No Artificial Flavors, Sodium Free, No Wheat, No Gluten, No Soy, No Dairy, Yeast Free"
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "KEEP OUT OF REACH OF CHILDREN"
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "WARNING:  Consult your physician prior to using this product if you are pregnant, nursing, taking medication, or have a medical condition.  Discontinue use two weeks prior to surgery."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place."
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "CODE 374811   DGG"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "For More Information 1-888-462-2548"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Ginseng is traditionally used to support vitality and overall well-being. + It supplies naturally occuring active ingredients called Ginsenosides."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Made in the USA"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Potency verified by GNC procedure #5131.  Conforms to USP <2091> for weight.  Meets USP <2040> disintegration."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Visit us at www.gnc.com"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "DIRECTIONS:  As a dietary supplement, take one or two capsules daily"
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)"
+  ],
+  "thumbnail": "",
+  "upcSku": "0 48107 07044 1",
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "_source": "api"
+}

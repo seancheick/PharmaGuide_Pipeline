@@ -1,0 +1,189 @@
+{
+  "brandIpSymbol": "\u00ae",
+  "brandName": "BulkSupplements.com",
+  "bundleName": "",
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "contacts": [
+    {
+      "contactId": 23005,
+      "text": "Distributed exclusively by",
+      "types": [
+        "Distributor"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_4.json",
+        "id": 23005,
+        "name": "BulkSupplements.com",
+        "streetAddress": "7511 Eastgate Rd",
+        "city": "Henderson",
+        "state": "NV",
+        "country": "USA",
+        "zipCode": "89011",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "BulkSupplements.com"
+      }
+    }
+  ],
+  "entryDate": "2021-06-23",
+  "events": [
+    {
+      "date": "2021-06-23",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "fullName": "Cascara Sagrada Extract",
+  "hasOuterCarton": false,
+  "id": 252441,
+  "ingredientRows": [
+    {
+      "order": 1,
+      "ingredientId": 282013,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 500,
+          "operator": "=",
+          "quantity": 500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Cascara Sagrada extract",
+      "category": "botanical",
+      "ingredientGroup": "Cascara Sagrada",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    }
+  ],
+  "labelRelationships": [],
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 1,
+      "unit": "KG(s)",
+      "display": "1 KG(s)"
+    },
+    {
+      "order": 2,
+      "quantity": 35.3,
+      "unit": "Ounce(s)",
+      "display": "35.3 Ounce(s)"
+    }
+  ],
+  "nhanesId": "",
+  "offMarket": 0,
+  "otheringredients": {
+    "text": null,
+    "ingredients": [
+      {
+        "order": 1,
+        "ingredientId": 25620,
+        "name": "None",
+        "category": "other",
+        "ingredientGroup": "None",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ]
+  },
+  "pdf": "",
+  "percentDvFootnote": "Not Present",
+  "physicalState": {
+    "langualCode": "E0162",
+    "langualCodeDescription": "Powder"
+  },
+  "productType": {
+    "langualCode": "A1306",
+    "langualCodeDescription": "Botanical"
+  },
+  "productVersionCode": "001",
+  "servingSizes": [
+    {
+      "order": 1,
+      "minQuantity": 500,
+      "maxQuantity": 500,
+      "minDailyServings": 1,
+      "maxDailyServings": 2,
+      "unit": "mg",
+      "notes": "about 1/5 tsp",
+      "inSFB": true
+    }
+  ],
+  "servingsPerContainer": "2000",
+  "src": "api/label/252441",
+  "statements": [
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Clean & pure bulk supplements"
+    },
+    {
+      "type": "Formulation re: Other",
+      "notes": "Color may vary"
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "Warning: This product is not intended to diagnose, treat, cure, or prevent any disease."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Always consult a physician before taking any dietary supplement."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of reach of children."
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "Free Of: Added sugar, soy, dairy, yeast, additives"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Suggested Use: As a dietary supplement, take 500 mg (about 1/5 tsp) once or twice daily, or as directed by a physician."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a dry, cool place"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Bulksupplements CAscara Sagrada Extract Powder (1 Kilogram)\nNewItem"
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)",
+    "Dairy Free"
+  ],
+  "thumbnail": "",
+  "upcSku": "X0019Q3OJJ",
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "_source": "api"
+}

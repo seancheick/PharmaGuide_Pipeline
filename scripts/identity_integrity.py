@@ -6,7 +6,7 @@ import re
 import unicodedata
 from collections import Counter
 from collections.abc import Callable, Iterable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Literal
 
 from identity.interaction import INTERACTION_SUBJECT_FAMILY
@@ -118,6 +118,7 @@ class CanonicalIdentityRegistry:
     canonical_redirects: Mapping[tuple[str, str], tuple[str, str]]
     standard_names: Mapping[tuple[str, str], str]
     source_form_aliases: Mapping[tuple[str, str], frozenset[str]]
+    negative_match_terms: Mapping[str, tuple[Any, ...]] = field(default_factory=dict)
 
     @staticmethod
     def _key(value: Any) -> str:
@@ -196,6 +197,7 @@ def build_canonical_identity_registry(
     candidates: dict[str, set[str]] = {}
     standard_names: dict[tuple[str, str], str] = {}
     source_form_aliases: dict[tuple[str, str], set[str]] = {}
+    negative_match_terms: dict[str, tuple[Any, ...]] = {}
     source_priority = {
         "ingredient_quality_map": 0,
         "standardized_botanicals": 1,
@@ -285,6 +287,9 @@ def build_canonical_identity_registry(
                 "deprecated_in_favor_of"
             ):
                 continue
+            if isinstance(match_rules, Mapping) and match_rules.get("negative_match_terms"):
+                canonical, _ = canonical_owner(str(canonical_id), "ingredient_quality_map")
+                negative_match_terms[canonical] = tuple(match_rules["negative_match_terms"])
             put(
                 entry.get("standard_name") or canonical_id,
                 canonical_id,
@@ -363,6 +368,7 @@ def build_canonical_identity_registry(
         canonical_redirects=dict(canonical_redirects),
         standard_names=standard_names,
         source_form_aliases={key: frozenset(values) for key, values in source_form_aliases.items()},
+        negative_match_terms=negative_match_terms,
     )
 
 
@@ -1507,6 +1513,23 @@ def resolve_identity(
         disposition = "identity_conflict"
         canonical_after = None
         rationale = "The external taxonomy confidence contract was not satisfied."
+
+    # Authored source exclusions constrain every resolution path, including
+    # stale aliases, structured groups and authoritative UNII matches. Notes
+    # may veto an identity but never establish a replacement species.
+    if canonical_after and canonical_registry is not None:
+        from identity.safety import negative_match_terms_veto
+
+        source_notes = tuple(_text_values(row.get("notes")))
+        if negative_match_terms_veto(
+            [item.value for item in evidence if item.kind in {"source_name", "source_form"}]
+            + list(source_notes),
+            canonical_registry.negative_match_terms.get(canonical_after, ()),
+        ):
+            disposition = "identity_conflict"
+            canonical_after = None
+            rationale = "An authored source exclusion contradicts the proposed canonical identity."
+            evidence += tuple(LabelEvidence("notes", note, "source_form") for note in source_notes)
 
     # A provisional taxonomy match must not replace the literal preparation
     # after the final decision declines to establish its identity. Keep the

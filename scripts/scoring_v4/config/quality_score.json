@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.31.0-evidence-no-automatic-exceptional",
+    "version": "1.31.2-held-label-fidelity",
     "schema_version": "1.0.0",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0 (Dose V4.1, Sean 2026-10-17): Dose adequacy uses the minimum directed daily use and safety the maximum on every route; the per-nutrient UL bands and B7 subtraction are replaced by one product-level Dose ceiling (dose_safety_ceiling). Ordinary-adult magnesium (84 mg) and calcium (260 mg) contribution-policy targets and the potassium completed neutral are in dose_magnitudes.generic (Dose V4.1 section 3.1). Sports adequacy plateaus above former studied ranges; total daily caffeine feeds the product-level ceiling (dose_safety_ceiling.caffeine); sports co-primaries and probiotic strains average, hidden or unbenchmarked strains taking the shared neutral; evidence certainty no longer caps ATP, betaine or taurine Dose. Hidden amounts and completed no-reference conclusions take the shared Dose neutral on every route (section 2.3); config-owned Dose anchors carry reference semantics validated by schemas/dose_reference_semantics.schema.json. Above a highest studied dose adequacy plateaus (the above-studied-range credit is retired); immune zinc and vitamin D at their ULs are reduced only by the product-level ceiling; hidden botanical and collagen amounts take the neutral. 1.29.0: Sean approved revised43reference decisions and six-member prenatal critical group inside existing5-pointbudget on2026-10-18. One shared nutritional curve; unsupported discrete-dose extrapolations completed neutral; sports contribution targets are policy, not clinical minima; generic quarter-RDA/clinical-anchor shortcuts and sports composition credit retired. 1.29.1 integrates the reviewed omega marketing Evidence and molecular-form safeguards while retaining Dose V4.1 minimum-directed-daily exposure and native omega reference ownership. 1.31.0 (Dr Pham framework, 2026-10-28): no automatic generic Evidence floor exceeds the strong base (14 raw = 15.6/20). The branded (branded-rct level or BRAND_ id) and ingredient-allowlist 18-raw tier and the branded single-RCT 17-raw tier are retired; one trial is the moderate floor. No automatic floor reaches the exceptional band (19-20); a single ingredient goes above the strong floor only with a recorded clinician determination of its evidence body. The additive multi-ingredient pipeline is unchanged. Public bands: exceptional 19-20, strong 15-18, moderate 11-14, limited 6-10, preliminary 1-5; nutrition authority, Dose, Transparency, Verification and safety are unchanged.",
     "phase": "scoring_fairness_recalibration"
   },
@@ -1480,6 +1480,441 @@
     ],
     "not_scored_verdicts": [
       "NOT_SCORED"
-    ]
+    ],
+    "held_assessment_labels": {
+      "232035": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "fcd2b29e8f47de1402571477fe407de0ed71566724e1e0c2cb17c6836aa1b340",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Cordyceps (Paecilomyces hepiali) powder",
+            "quantity": 333.34,
+            "unit": "mg",
+            "notes": "Cordyceps (Paecilomyces hepiali) powder (Form: std. to 7% Cordycepic Acid) PlantPart: mycelia Genus: Paecilomyces Species: hepiali ",
+            "forms": [
+              {
+                "name": "Cordycepic Acid",
+                "ingredientId": 59601,
+                "order": 1,
+                "prefix": "std. to",
+                "percent": 7,
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "Cordycepic acid",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "mycelia",
+            "genus": "Paecilomyces",
+            "species": "hepiali"
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "GS15-4 Fermented Asian Ginseng extract",
+            "quantity": 55.0,
+            "unit": "mg",
+            "notes": "GS15-4 Fermented Asian ginseng extract PlantPart: root",
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "root",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-29",
+        "review_scope": "Withhold quality assessment only while exact-source Dose material correspondence remains unresolved; retain all safety/allergens and factual release blockers. No clinical approval or source-fact resolution.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/232035.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ]
+      },
+      "229932": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "760ab61d6c1b369e94e210d968e535f8ffad3ff3ae486ccdfd36afdb6d1e7734",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Cascara Sagrada",
+            "quantity": 270.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-29",
+        "review_scope": "Withhold quality assessment only while exact-source Dose material correspondence remains unresolved; retain all safety/allergens and factual release blockers. No clinical approval or source-fact resolution.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/229932.pdf",
+        "safety_identity_id": "ADD_CASCARA_SAGRADA",
+        "safety_source_paths": [
+          "ingredientRows[0]"
+        ],
+        "notes": "Ingredient species is unresolved: this original label names Cascara Sagrada but does not declare its species. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; species-specific effects or drug interactions have not been established for this labeled material.",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ]
+      },
+      "251528": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "760ab61d6c1b369e94e210d968e535f8ffad3ff3ae486ccdfd36afdb6d1e7734",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Cascara Sagrada",
+            "quantity": 270.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-29",
+        "review_scope": "Withhold quality assessment only while exact-source Dose material correspondence remains unresolved; retain all safety/allergens and factual release blockers. No clinical approval or source-fact resolution.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/251528.pdf",
+        "safety_identity_id": "ADD_CASCARA_SAGRADA",
+        "safety_source_paths": [
+          "ingredientRows[0]"
+        ],
+        "notes": "Ingredient species is unresolved: this original label names Cascara Sagrada but does not declare its species. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; species-specific effects or drug interactions have not been established for this labeled material.",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ]
+      },
+      "327907": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "bd459999bece474f5d8bad11ab18484d28e79a0bbe7bde729074bc7f4ce63a36",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Cascara Sagrada",
+            "quantity": 270.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-29",
+        "review_scope": "Withhold quality assessment only while exact-source Dose material correspondence remains unresolved; retain all safety/allergens and factual release blockers. No clinical approval or source-fact resolution.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/327907.pdf",
+        "safety_identity_id": "ADD_CASCARA_SAGRADA",
+        "safety_source_paths": [
+          "ingredientRows[0]"
+        ],
+        "notes": "Ingredient species is unresolved: this original label names Cascara Sagrada but does not declare its species. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; species-specific effects or drug interactions have not been established for this labeled material.",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ]
+      },
+      "332909": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "bd459999bece474f5d8bad11ab18484d28e79a0bbe7bde729074bc7f4ce63a36",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Cascara Sagrada",
+            "quantity": 270.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-29",
+        "review_scope": "Withhold quality assessment only while exact-source Dose material correspondence remains unresolved; retain all safety/allergens and factual release blockers. No clinical approval or source-fact resolution.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/332909.pdf",
+        "safety_identity_id": "ADD_CASCARA_SAGRADA",
+        "safety_source_paths": [
+          "ingredientRows[0]"
+        ],
+        "notes": "Ingredient species is unresolved: this original label names Cascara Sagrada but does not declare its species. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; species-specific effects or drug interactions have not been established for this labeled material.",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ]
+      },
+      "295107": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "2c883d99f53a7a239701988bf9c22a203cc2fad556ab0c624381c2511b018d65",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Proprietary Blend",
+            "quantity": 410.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "Cascara Sagrada",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[1]",
+            "raw_source_text": "Butternut",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[2]",
+            "raw_source_text": "Fennel",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[3]",
+            "raw_source_text": "Ginger",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[4]",
+            "raw_source_text": "Raspberry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[5]",
+            "raw_source_text": "Peppermint",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-29",
+        "review_scope": "Withhold quality assessment only while exact-source Dose material correspondence remains unresolved; retain all safety/allergens and factual release blockers. No clinical approval or source-fact resolution.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/295107.pdf",
+        "safety_identity_id": "ADD_CASCARA_SAGRADA",
+        "safety_source_paths": [
+          "ingredientRows[0].nestedRows[0]"
+        ],
+        "notes": "Ingredient species is unresolved: this original label names Cascara Sagrada but does not declare its species. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; species-specific effects or drug interactions have not been established for this labeled material.",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ]
+      },
+      "80302": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "0f27e977e23e65d49a1cb7ffd941a21a05c63ec7abf9be95fb8ac52192d07e8b",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Proprietary Blend",
+            "quantity": 1.78,
+            "unit": "Gram(s)",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "raw_source_text": "Cascara Sagrada",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[1]",
+            "raw_source_text": "Barberry root",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": "root",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[2]",
+            "raw_source_text": "Fennel",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[3]",
+            "raw_source_text": "Ginger",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[4]",
+            "raw_source_text": "Goldenseal",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[5]",
+            "raw_source_text": "Raspberry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[6]",
+            "raw_source_text": "Turkey Rhubarb",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[7]",
+            "raw_source_text": "Cayenne Pepper",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-29",
+        "review_scope": "Withhold quality assessment only while exact-source Dose material correspondence remains unresolved; retain all safety/allergens and factual release blockers. No clinical approval or source-fact resolution.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/80302.pdf",
+        "safety_identity_id": "ADD_CASCARA_SAGRADA",
+        "safety_source_paths": [
+          "ingredientRows[1].nestedRows[0]"
+        ],
+        "notes": "Ingredient species is unresolved: this original label names Cascara Sagrada but does not declare its species. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; species-specific effects or drug interactions have not been established for this labeled material.",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ]
+      },
+      "220046": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "23ea6e415af782f008f15c96b3001c79476de3dc9ce89b053ee7af1b941949e6",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Maitake Mushroom powder",
+            "quantity": 240.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Reishi Mushroom powder",
+            "quantity": 180.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Shiitake Mushroom powder",
+            "quantity": 180.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-29",
+        "review_scope": "Withhold quality assessment only while exact-source Dose material correspondence remains unresolved; retain all safety/allergens and factual release blockers. No clinical approval or source-fact resolution.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/220046.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ]
+      }
+    }
   }
 }

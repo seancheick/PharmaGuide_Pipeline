@@ -193,6 +193,12 @@ def test_clean_keeps_the_number_and_the_printed_qualifier() -> None:
     assert "servingsPerContainerText" not in exact
 
 
+def test_clean_does_not_turn_decimal_comma_into_an_exact_count() -> None:
+    cleaned = _clean(servingsPerContainer="1,5")
+    assert cleaned["servingsPerContainer"] is None
+    assert "servingsPerContainerText" not in cleaned
+
+
 # ── import, draft and correction owners ────────────────────────────────────
 
 def _approved_payload(**overrides):

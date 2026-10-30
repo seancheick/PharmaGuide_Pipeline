@@ -92,7 +92,7 @@ def test_missing_captured_amount_never_becomes_completed_neutral(identity, categ
 def test_botanical_preparation_review_pending_stays_incomplete(monkeypatch):
     from scoring_v4.modules import botanical_profile
     row = _botanical_ingredient(quantity=300)
-    monkeypatch.setattr(botanical_profile, '_dosing_entry_for', lambda row: {
+    monkeypatch.setattr(botanical_profile, '_dosing_entry_for', lambda row, **kwargs: {
         'id': 'ashwagandha_root_extract', 'reference_semantics': {'reference_type': 'unfinished_review'}})
     result = botanical_profile.score_botanical_purpose_dose(_botanical_product(row), row)
     assert result['metadata']['benchmark'] == 'unresolved'

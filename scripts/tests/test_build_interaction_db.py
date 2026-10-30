@@ -1026,3 +1026,21 @@ def test_approved_pairwise_predicates_are_inserted_in_native_database(build_ctx)
         assert json.loads(exceptions) == rows[0]['medication_exceptions']
     finally:
         con.close()
+
+
+def test_source_identity_rules_export_only_their_evaluated_blob_result(build_ctx):
+    path = build_ctx.profile_warning_rules_path
+    payload = json.loads(path.read_text())
+    internal = dict(payload['interaction_rules'][0], id='RULE_INTERNAL_IDENTITY',
+                    _identity_conflict_only=['exact source species'])
+    payload['interaction_rules'].append(internal)
+    payload['_metadata']['total_entries'] = 2
+    path.write_text(json.dumps(payload))
+    _build(build_ctx)
+    con = _conn(build_ctx.output_db)
+    try:
+        rows = con.execute('SELECT rule_id, rule_json FROM profile_warning_rules').fetchall()
+    finally:
+        con.close()
+    assert [r['rule_id'] for r in rows] == ['RULE_TEST_MAGNESIUM_DIABETES']
+    assert '_identity_conflict_only' not in rows[0]['rule_json']

@@ -1,0 +1,227 @@
+{
+  "brandIpSymbol": "\u00ae",
+  "brandName": "GNC Herbal Plus",
+  "bundleName": "",
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "contacts": [
+    {
+      "contactId": 9074,
+      "text": "Distributed by:",
+      "types": [
+        "Distributor"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_3.json",
+        "id": 9074,
+        "name": "General Nutrition Corporation",
+        "streetAddress": "",
+        "city": "Pittsburgh",
+        "state": "PA",
+        "country": "",
+        "zipCode": "15222",
+        "phoneNumber": "1-888-462-2548",
+        "email": "",
+        "webAddress": "www.gnc.com"
+      }
+    }
+  ],
+  "entryDate": "2017-08-22",
+  "events": [
+    {
+      "date": "2017-08-22",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "fullName": "Panax Ginseng 600 mg",
+  "hasOuterCarton": false,
+  "id": 74799,
+  "ingredientRows": [
+    {
+      "order": 1,
+      "ingredientId": 151444,
+      "description": null,
+      "notes": "Panax ginseng root extract (Form: 3% Ginsenosides Note: = 18 mg) PlantPart: root Genus: Panax Species: ginseng ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 600,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Panax ginseng root extract",
+      "category": "botanical",
+      "ingredientGroup": "Oriental Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 151445,
+          "prefix": null,
+          "percent": 3,
+          "name": "Ginsenosides",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Ginsenosides",
+          "uniiCode": null
+        }
+      ]
+    }
+  ],
+  "labelRelationships": [
+    {
+      "type": "Image difference, same product",
+      "labelId": 63937
+    }
+  ],
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 100,
+      "unit": "Capsule(s)",
+      "display": "100 Capsule(s)"
+    }
+  ],
+  "nhanesId": "",
+  "offMarket": 0,
+  "otheringredients": {
+    "text": null,
+    "ingredients": [
+      {
+        "order": 1,
+        "ingredientId": 3715,
+        "name": "Gelatin",
+        "category": "protein",
+        "ingredientGroup": "Gelatin",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 2,
+        "ingredientId": 9747,
+        "name": "Cellulose",
+        "category": "fiber",
+        "ingredientGroup": "Cellulose",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 3,
+        "ingredientId": 285558,
+        "name": "Stearic Acid",
+        "category": "fatty acid",
+        "ingredientGroup": "Stearic Acid",
+        "uniiCode": "4ELV7Z65AP",
+        "alternateNames": [
+          "C18:0"
+        ],
+        "forms": []
+      }
+    ]
+  },
+  "pdf": "",
+  "percentDvFootnote": "Not Present",
+  "physicalState": {
+    "langualCode": "E0159",
+    "langualCodeDescription": "Capsule"
+  },
+  "productType": {
+    "langualCode": "A1306",
+    "langualCodeDescription": "Botanical"
+  },
+  "productVersionCode": "CODE 374812 ARG",
+  "servingSizes": [
+    {
+      "order": 1,
+      "minQuantity": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 1,
+      "maxDailyServings": 2,
+      "unit": "Capsule(s)",
+      "inSFB": true
+    }
+  ],
+  "servingsPerContainer": null,
+  "src": "api/label/74799",
+  "statements": [
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of reach of children."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place."
+    },
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "Herbal Supplement"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Supports vitality"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Standardized extract"
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "CODE 374812 ARG"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "Directions: As a dietary supplement, take one to two capsules daily."
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "Warning: Consult your physician prior to using this product if you are pregnant, nursing, taking medication, or have a medical condition."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Discontinue use two weeks prior to surgery."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Potency verified by GNC procedure #5131. Conforms to USP <2091> for weight. Meets USP <2040> disintegration."
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "This statement has not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease."
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)"
+  ],
+  "thumbnail": "",
+  "upcSku": "0 48107 16144 6",
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "_source": "api"
+}

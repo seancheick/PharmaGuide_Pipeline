@@ -284,11 +284,11 @@ def _scoring_inputs(artifact):
 @pytest.mark.parametrize("dsld_id,expected", [
     # The Coptis owner stays; its reviewed general Dose adds11.4 without clinical credit.
     (252567, {"score": 57.1, "status": "partial", "evidence_owners": ["coptis_rhizome"], "dose_credits": [11.97]}),
-    # 50.6 before 2026-10-28: Dr. Pham's GABA ruling (very limited stress
-    # evidence, no points until the calibration batch) makes INGR_GABA
-    # reference-only. Owners and Dose are unchanged; only Evidence moves.
-    (315814, {"score": 43.3, "status": "partial", "evidence_owners": ["gaba", "maca", "oat_straw", "yohimbe"],
-              "dose_credits": [12.54]}),
+    # The printed Maca member has 0/NP inside a 100 mg blend. Its identity
+    # remains available for safety, but it cannot borrow the parent mass for
+    # Evidence or Dose. GABA's separate clinical hold also remains intact.
+    (315814, {"score": 37.3, "status": "partial", "evidence_owners": ["gaba", "oat_straw", "yohimbe"],
+              "dose_credits": [11.97]}),
     # A kept coffeeberry row is invisible to scoring, never re-matched as coffee.
     # Since "Fruit" no longer names Apple (title owner), vitamin C is a major owner and
     # the vitamins are the Dose panel (60.7 and [12.54] on main).
@@ -308,6 +308,13 @@ def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id,
     product = enrich(dsld_id)
     artifact = build_scored_artifact(product)
     assert _scoring_inputs(artifact) == expected
+    if dsld_id == 315814:
+        from scoring_input_contract import get_scoring_ingredients
+        source = next(row for row in product["activeIngredients"]
+                      if row.get("raw_source_path") == "ingredientRows[0].nestedRows[2]")
+        assert (source["canonical_id"], source["quantity"], source["unit"]) == ("maca", 0, "NP")
+        assert not any(row.get("canonical_id") == "maca"
+                       for row in get_scoring_ingredients(product, strict=True).rows)
     if dsld_id in {327402, 328104}:
         assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
     if dsld_id == 40089:

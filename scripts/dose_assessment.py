@@ -364,6 +364,24 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
         return not exact_preparation
     if not _valid_policy(policy) or policy.get("scope") != "ingredient":
         return False
+    if exact_preparation and policy.get("dosage_forms"):
+        from form_factor_normalizer import FORM_FACTOR_UNKNOWN, canonicalize_form_factor
+        # Delivery is an original product fact, separate from the ingredient's
+        # same-row identity. A title or an enrichment guess cannot supply it.
+        physical = product.get("physicalState")
+        if not isinstance(physical, (dict, str)):
+            return False
+        description = ((physical.get("langualCodeDescription") or physical.get("name"))
+                       if isinstance(physical, dict) else physical)
+        code = physical.get("langualCode") if isinstance(physical, dict) else None
+        by_code = canonicalize_form_factor(None, langual_code=code)
+        by_text = canonicalize_form_factor(description)
+        if by_code != FORM_FACTOR_UNKNOWN and by_text != FORM_FACTOR_UNKNOWN and by_code != by_text:
+            return False
+        delivery = canonicalize_form_factor(description, langual_code=code)
+        allowed = {canonicalize_form_factor(value) for value in policy["dosage_forms"]}
+        if FORM_FACTOR_UNKNOWN in allowed or delivery == FORM_FACTOR_UNKNOWN or delivery not in allowed:
+            return False
     if exact_preparation and (
             policy.get("require_source_label_form") is not True
             or not policy.get("required_form_terms")
@@ -371,9 +389,34 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
         return False
     # Notes on IQM rows are curated bio context. Only the original linked
     # row's notes and source taxonomy can contradict a literal preparation.
-    text = "; ".join(normalize_text(str(value or "")) for value in (
-        _row_text(source, source_only=True, preserve_punctuation=True), source.get("notes"),
-        source.get("plantPart"), source.get("genus"), source.get("species")))
+    # Original whole-row quantity may qualify a finished-material source
+    # bridge. This private assertion is not a daily dose or efficacy bound.
+    quantity_text = ""
+    try:
+        quantity = float(source.get("quantity"))
+        unit = canonicalize_mass_unit(str(source.get("unit") or ""))
+        if math.isfinite(quantity) and quantity > 0 and unit:
+            quantity_text = f"Quantity: {quantity:g} {unit}"
+    except (TypeError, ValueError, OverflowError):
+        pass
+    text = "; ".join(normalize_text(str(value)) for value in (
+        _row_text(source, source_only=True, preserve_punctuation=True), source.get("notes"), quantity_text,
+        "PlantPart: " + str(source["plantPart"]) if source.get("plantPart") else "",
+        "Genus: " + str(source["genus"]) if source.get("genus") else "",
+        "Species: " + str(source["species"]) if source.get("species") else "") if value)
+    # A no-DER scope excludes every affirmative declared ratio, not a
+    # finite list of ratios seen during review. Keep this feature private to
+    # source matching and preserve the shared clause-negation semantics.
+    ratio_pattern = re.compile(r"(?<![\w.])\d+(?:\.\d+)?\s*:\s*\d+(?:\.\d+)?(?![\w.])")
+    ratio_feature = "declared extraction ratio"
+    has_declared_ratio = False
+    for ratio in ratio_pattern.finditer(text):
+        marked = text[:ratio.start()] + ratio_feature + text[ratio.end():]
+        if find_affirmative_label_match(re.compile(re.escape(ratio_feature), re.I), marked):
+            text += "; " + ratio_feature
+            has_declared_ratio = True
+            break
+
     def present(term: str) -> bool:
         return bool(find_affirmative_label_match(
             re.compile(r"(?<!\w)" + re.escape(normalize_text(term)) + r"(?!\w)", re.I), text))
@@ -389,9 +432,47 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
     # "std." is a label abbreviation, not a sentence boundary. Preserve
     # measurement punctuation (especially %) when matching material assertions.
     required_text = text.replace("std.", "std")
-    return not required or any(find_affirmative_label_match(
-        re.compile(r"(?<!\w)" + re.escape(normalize_text(term).replace("std.", "std"))
-                   + r"(?!\w)", re.I), required_text) for term in required)
+    def required_present(term: str) -> bool:
+        # Policy assertions use the cleaner's existing structured-note syntax.
+        # Parse the policy, never reparse source notes to refill a missing fact.
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+        for clause in term.split(";"):
+            if clause.lstrip().partition(":")[0].lower() not in {"plantpart", "genus", "species"}:
+                # A literal nested form may describe its own source tissue
+                # (e.g. orange peel within Cordiart), not the parent's part.
+                continue
+            expected = EnhancedDSLDNormalizer._parse_botanical_details(clause)
+            # A literal mixed-part statement can be retained without a typed
+            # part. An independently supplied conflicting typed part cannot
+            # override that same-row source assertion.
+            if (clause.lstrip().partition(":")[0].lower() == "plantpart"
+                    and "plantPart" not in expected and source.get("plantPart")
+                    and normalize_text(str(source["plantPart"])) != normalize_text(clause.partition(":")[2])):
+                return False
+            if any(normalize_text(str(source.get(field) or "")) != normalize_text(str(expected[field]))
+                   for field in ("plantPart", "genus", "species") if field in expected):
+                return False
+        assertion = normalize_text(term).replace("std.", "std")
+        if has_declared_ratio and re.search(r"\bder not declared\b", assertion):
+            # An explicit absence assertion cannot coexist with a declared
+            # ratio. A separate approved ratio-specific OR branch may match.
+            return False
+        # Semicolons join required facts on this one original source row;
+        # they are not a demand that the label printed fields consecutively.
+        # Each material clause still uses the canonical negation owner.
+        for raw_clause in assertion.split(";"):
+            clause = raw_clause.strip()
+            pattern = re.compile(r"(?<!\w)" + re.escape(clause) + r"(?!\w)", re.I)
+            if not clause or not find_affirmative_label_match(pattern, required_text):
+                return False
+            # A second, negated assertion is a conflict, not proof supplied
+            # by an earlier affirmative occurrence elsewhere on the same row.
+            for context in re.split(r"[.;!?\r\n]+|\b(?:but|however)\b", required_text, flags=re.I):
+                if pattern.search(context) and not find_affirmative_label_match(pattern, context):
+                    return False
+        return True
+
+    return not required or any(required_present(term) for term in required)
 
 
 

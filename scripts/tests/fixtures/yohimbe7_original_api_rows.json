@@ -1,0 +1,317 @@
+{
+  "252787": {
+    "row": {
+      "order": 1,
+      "ingredientId": 282062,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 250,
+          "operator": "=",
+          "quantity": 250,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Yohimbe extract",
+      "category": "botanical",
+      "ingredientGroup": "Yohimbe",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 8463,
+          "prefix": "standardized to contain greater than or equal to",
+          "percent": 2,
+          "name": "Yohimbine",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]"
+  },
+  "254734": {
+    "row": {
+      "order": 1,
+      "ingredientId": 282062,
+      "description": null,
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 250,
+          "operator": "=",
+          "quantity": 250,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Yohimbe extract",
+      "category": "botanical",
+      "ingredientGroup": "Yohimbe",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 8463,
+          "prefix": "standardized to contain greater than or equal to",
+          "percent": 2,
+          "name": "Yohimbine",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]"
+  },
+  "254735": {
+    "row": {
+      "order": 1,
+      "ingredientId": 282062,
+      "description": null,
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 250,
+          "operator": "=",
+          "quantity": 250,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Milligram(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Yohimbe extract",
+      "category": "botanical",
+      "ingredientGroup": "Yohimbe",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 8463,
+          "prefix": "standardized to contain greater than or equal to",
+          "percent": 2,
+          "name": "Yohimbine",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]"
+  },
+  "254738": {
+    "row": {
+      "order": 1,
+      "ingredientId": 282062,
+      "description": null,
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 250,
+          "operator": "=",
+          "quantity": 250,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Yohimbe extract",
+      "category": "botanical",
+      "ingredientGroup": "Yohimbe",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 8463,
+          "prefix": "standardized to contain greater than or equal to",
+          "percent": 2,
+          "name": "Yohimbine",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]"
+  },
+  "74661": {
+    "row": {
+      "order": 1,
+      "ingredientId": 166021,
+      "description": null,
+      "notes": "Yohimbe bark extract (Form: 2% Yohimbe Alkaloids Note: = 9 mg) PlantPart: bark Genus: Pausinystalia Species: yohimbe ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 450,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Yohimbe bark extract",
+      "category": "botanical",
+      "ingredientGroup": "Yohimbe",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 166022,
+          "prefix": null,
+          "percent": 2,
+          "name": "Yohimbe Alkaloids",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]"
+  },
+  "29242": {
+    "row": {
+      "order": 3,
+      "ingredientId": 44446,
+      "description": null,
+      "notes": "Yohimbe Extract (Form: Standardized to contain 2% Yohimbine) PlantPart: bark Genus: Pausinystalia Species: yohimbe ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 2,
+          "operator": "=",
+          "quantity": 750,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Tablet(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Yohimbe Extract",
+      "category": "botanical",
+      "ingredientGroup": "Yohimbe",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 44447,
+          "prefix": "Standardized to contain",
+          "percent": 2,
+          "name": "Yohimbine",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[2]"
+  },
+  "270831": {
+    "row": {
+      "order": 1,
+      "ingredientId": 4444,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 450,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value (DV) Not Established"
+            }
+          ],
+          "servingSizeUnit": "Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Yohimbe Bark Extract",
+      "category": "botanical",
+      "ingredientGroup": "Yohimbe",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 4445,
+          "prefix": null,
+          "percent": 2,
+          "name": "Yohimbine Alkaloids",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Yohimbine",
+          "uniiCode": null
+        }
+      ]
+    },
+    "path": "ingredientRows[0]"
+  }
+}

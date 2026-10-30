@@ -1069,4 +1069,236 @@ def test_bamboo_exact_label_facts_are_not_copied_to_unverified_siblings(
 
     raw = [{"name": "Bamboo extract", "notes": "", "quantity": [{"quantity": 500, "unit": "mg"}]}]
     before = deepcopy(raw)
-    assert bamboo_label_normalizer._apply_label_corrections(raw, product_id) == before
+    if product_id in {"294422", "331010"}:
+        # These exact IDs now have independently verified Horsetail source
+        # corrections. A substituted Bamboo row must fail their original-row
+        # attribution guard, rather than acquire either product's facts.
+        with pytest.raises(ValueError, match="Reviewed note attribution changed"):
+            bamboo_label_normalizer._apply_label_corrections(raw, product_id)
+        assert raw == before
+    else:
+        assert bamboo_label_normalizer._apply_label_corrections(raw, product_id) == before
+
+
+@pytest.mark.parametrize("pid,name,ratio,unit", [
+    ("252441", "Cascara Sagrada extract", "", "mg"),
+    ("253399", "Cascara Sagrada extract", "", "mg"),
+    ("253403", "Cascara Sagrada extract", "", "mg"),
+    ("253404", "Cascara Sagrada extract", "", "mg"),
+    ("311301", "Cascara Sagrada extract", "", "mg"),
+    ("311302", "Cascara Sagrada extract", "", "mg"),
+    ("311303", "Cascara Sagrada extract", "", "mg"),
+    ("311304", "Cascara Sagrada extract", "", "mg"),
+    ("330523", "Cascara Sagrada Bark Extract", "10:1", "mg"),
+    ("330524", "Cascara Sagrada extract", "10:1", "mg"),
+    ("330525", "Cascara Sagrada Bark Extract", "10:1", "mg"),
+])
+def test_exact_cascara_label_keeps_printed_davurica_without_species_equivalence(
+    bamboo_label_normalizer, pid, name, ratio, unit,
+):
+    from copy import deepcopy
+    rows = [{"name": name, "notes": ratio, "raw_source_path": "ingredientRows[0]",
+             "quantity": [{"quantity": 500, "unit": unit}], "forms": []}]
+    before = deepcopy(rows)
+    result = bamboo_label_normalizer._apply_label_corrections(rows, pid)
+    assert "Rhamnus davurica" in result[0]["notes"]
+    assert "PlantPart: bark" in result[0]["notes"]
+    assert ("10:1" in result[0]["notes"]) is bool(ratio)
+    assert "purshiana" not in result[0]["notes"].lower()
+    assert result[0]["quantity"] == before[0]["quantity"]
+    assert result[0]["forms"] == []
+    assert result[0]["name"] == name
+
+
+@pytest.mark.parametrize('pid', ['252787','254734','254735','254738','270831','29242','74661'])
+def test_exact_yohimbe_source_facts_preserve_whole_mass(bamboo_label_normalizer, pid):
+    from copy import deepcopy
+    fixture = json.loads((Path(__file__).parent / 'fixtures/yohimbe7_original_api_rows.json').read_text())[pid]
+    row = deepcopy(fixture['row'])
+    row['raw_source_path'] = fixture['path']
+    before = deepcopy(row)
+    corrected = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
+    species = 'johimbe' if pid in {'29242','270831'} else 'yohimbe'
+    assert f'Pausinystalia {species}' in corrected['notes']
+    assert 'PlantPart: bark' in corrected['notes']
+    assert 'DER and extraction solvent not declared on label' in corrected['notes']
+    assert corrected['quantity'] == before['quantity']
+    assert corrected['name'] == before['name']
+    assert corrected['raw_source_path'] == before['raw_source_path']
+    if pid in {'74661','270831'}:
+        assert '2% Yohimbine Alkaloids = 9 mg' in corrected['notes']
+    elif pid == '29242':
+        assert 'standardized to contain 2% Yohimbine' in corrected['notes']
+    else:
+        assert 'standardized to contain >=2% Yohimbine' in corrected['notes']
+    if pid == '74661':
+        assert corrected['forms'][0]['name'] == 'Yohimbine Alkaloids'
+    else:
+        assert corrected['forms'] == before['forms']
+
+
+@pytest.mark.parametrize('pid,part', [(p,'bark') for p in ['252787','254734','254735','254738','270831','29242','74661']]+[(p,'stem and leaves') for p in ['252349','253304','253309','253312','310921','310922','310924','310927']])
+def test_verified_source_notes_keep_plant_part_separate_from_assay_and_der(bamboo_label_normalizer, overrides, pid, part):
+    details = bamboo_label_normalizer._parse_botanical_details(overrides['corrections'][pid]['corrected_notes'])
+    assert details['plantPart'] == part
+
+
+def test_existing_source_notes_keep_their_physical_part(bamboo_label_normalizer):
+    assert bamboo_label_normalizer._parse_botanical_details('Peppermint leaf essential oil PlantPart: leaf Genus: Mentha Species: piperita')['plantPart'] == 'leaf'
+
+
+_SOURCE_NOTE_ROWS = json.loads((Path(__file__).parent / 'fixtures/remaining_source_note_rows.json').read_text())
+
+@pytest.mark.parametrize('pid', sorted(_SOURCE_NOTE_ROWS))
+def test_individually_verified_remaining_source_facts_keep_original_amount_and_role(bamboo_label_normalizer, pid):
+    from copy import deepcopy
+    fixture = _SOURCE_NOTE_ROWS[pid]
+    row = deepcopy(fixture['row'])
+    row['raw_source_path'] = fixture['path']
+    before = deepcopy(row)
+    if pid == '216622':
+        # The owner validates both exact source repairs before touching either.
+        rows = deepcopy(json.loads((Path(__file__).parent / 'fixtures/raw_american_ginseng_216622.json').read_text())['ingredientRows'])
+        for index, source_row in enumerate(rows):
+            source_row['raw_source_path'] = f'ingredientRows[{index}]'
+        corrected = bamboo_label_normalizer._apply_label_corrections(rows, pid)
+        result = next(item for item in corrected if item['raw_source_path'] == fixture['path'])
+    else:
+        result = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
+    assert result['notes'] == fixture['expected_notes']
+    for field in ['quantity','name','nestedRows','raw_source_path']:
+        assert result.get(field) == before.get(field)
+    if pid in {'252562','255054','255055','255057'}:
+        assert before['forms'] == []
+        assert result['category'] == 'botanical'
+        assert result['forms'] == [{'name': 'Laminaria japonica Whole Grass Extract',
+                                   'category': 'botanical', 'ingredientGroup': 'Laminaria japonica'}]
+    else:
+        assert result.get('forms') == before.get('forms')
+    if pid == '326238':
+        assert result['quantity'][0]['quantity'] == 0
+        assert result['quantity'][0]['unit'] == 'NP'
+        assert 'individual amount not declared' in result['notes']
+    part = bamboo_label_normalizer._parse_botanical_details(result['notes']).get('plantPart')
+    assert part in {'root','leaf','leaves','whole herb','whole grass','bark','fruit','mycelia'}
+
+
+@pytest.mark.parametrize('pid', ['329925','329926','329927','329928','330068','330069'])
+def test_exact_colored_maca_source_fact_does_not_infer_processing_or_mass(bamboo_label_normalizer, pid):
+    from copy import deepcopy
+    fixture = json.loads((Path(__file__).parent / 'fixtures/maca6_original_api_rows.json').read_text())[pid]
+    row = deepcopy(fixture['row'])
+    row['raw_source_path'] = fixture['raw_source_path']
+    before = deepcopy(row)
+    result = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
+    assert result['notes'] == fixture['expected_note']
+    assert bamboo_label_normalizer._parse_botanical_details(result['notes']) == {
+        'plantPart': 'root', 'genus': 'Lepidium', 'species': 'meyenii', 'form': 'powder'}
+    for key in ['name','forms','quantity','raw_source_path','nestedRows']:
+        assert result.get(key) == before.get(key)
+    assert not any(term in result['notes'].lower() for term in ['gelatinized','raw powder','extract','standardized'])
+    wrong = deepcopy(before)
+    wrong['quantity'][0]['quantity'] += 1
+    with pytest.raises(ValueError, match='Reviewed note attribution changed'):
+        bamboo_label_normalizer._apply_label_corrections([wrong], pid)
+    assert wrong['notes'] == before['notes']
+
+
+@pytest.mark.parametrize('pid', ['231929','232062'])
+def test_exact_applewise_linkage_is_product_level_and_original_row_bound(bamboo_label_normalizer, pid):
+    from copy import deepcopy
+    fixture = json.loads((Path(__file__).parent / 'fixtures/applewise2_original_api_rows.json').read_text())[pid]
+    row = deepcopy(fixture['row'])
+    row['raw_source_path'] = 'ingredientRows[0]'
+    before = deepcopy(row)
+    result = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
+    assert result['notes'] == fixture['expected_notes']
+    assert 'product-level manufacturer linkage' in result['notes']
+    assert 'not an ingredient trademark printed in the NIH ingredient row' in result['notes']
+    for key in ['name','forms','quantity','raw_source_path']:
+        assert result.get(key) == before.get(key)
+    wrong = deepcopy(before)
+    wrong['forms'][1]['percent'] = 6
+    wrong_before = deepcopy(wrong)
+    assert bamboo_label_normalizer._apply_label_corrections([wrong], pid) == [wrong_before]
+    assert 'manufacturer-linked AppleWise' not in wrong['notes']
+    other_label = deepcopy(before)
+    assert bamboo_label_normalizer._apply_label_corrections([other_label], 'unreviewed-apple-marker-match') == [before]
+
+
+@pytest.mark.parametrize('pid', ['231929','232062'])
+def test_real_applewise_linkage_changes_no_non_dose_assessment(pid):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / f'fixtures/raw_applewise_{pid}.json').read_text())
+    before_owner, after_owner = EnhancedDSLDNormalizer(), EnhancedDSLDNormalizer()
+    before_owner._label_corrections_by_dsld_id.pop(pid)
+    before = before_owner.normalize_product(deepcopy(raw))
+    after = after_owner.normalize_product(deepcopy(raw))
+    fields = ['canonical_id','canonical_source_db','quantity','unit','forms','raw_source_text','raw_source_path','cleaner_row_role']
+    assert {k: before['activeIngredients'][0].get(k) for k in fields} == {
+        k: after['activeIngredients'][0].get(k) for k in fields}
+    enricher = SupplementEnricherV3()
+    left, errors = enricher.enrich_product(before)
+    assert not errors
+    right, errors = enricher.enrich_product(after)
+    assert not errors
+    a, b = build_scored_artifact(left), build_scored_artifact(right)
+    for pillar in ['formulation','evidence','transparency','verification','safety_hygiene']:
+        assert a['quality_pillars_v4'][pillar]['score'] == b['quality_pillars_v4'][pillar]['score'], pillar
+        assert a['quality_pillars_v4'][pillar].get('components') == b['quality_pillars_v4'][pillar].get('components'), pillar
+    assert a['product_safety_status'] == b['product_safety_status']
+    assert a['_v4_safety_gate'] == b['_v4_safety_gate']
+    identity_fields = ['canonical_id','canonical_source_db','canonical_id_before','canonical_id_after','identity_disposition','scoreable_identity']
+    assert [{k:r.get(k) for k in identity_fields} for r in left['ingredient_quality_data']['ingredients']] == [
+        {k:r.get(k) for k in identity_fields} for r in right['ingredient_quality_data']['ingredients']]
+
+
+def test_216622_original_powder_row_restores_only_printed_whole_root(bamboo_label_normalizer):
+    from copy import deepcopy
+    raw = json.loads((Path(__file__).parent / 'fixtures/raw_american_ginseng_216622.json').read_text())
+    rows = deepcopy(raw['ingredientRows'])
+    for i, row in enumerate(rows):
+        row['raw_source_path'] = f'ingredientRows[{i}]'
+    before = deepcopy(rows)
+    corrected = bamboo_label_normalizer._apply_label_corrections(rows, '216622')
+    assert corrected[2]['notes'] == 'Raw American Ginseng Powder PlantPart: whole root'
+    for field in ['name', 'forms', 'quantity', 'raw_source_path']:
+        assert corrected[2][field] == before[2][field]
+    assert 'ginsenosides 10 mg [10%]' in corrected[1]['notes']
+    for field in ['name', 'forms', 'quantity', 'raw_source_path']:
+        assert corrected[1][field] == before[1][field]
+    assert corrected[0] == before[0]
+    wrong = deepcopy(before)
+    wrong[2]['quantity'][0]['quantity'] = 201
+    with pytest.raises(ValueError, match='Reviewed note attribution changed'):
+        bamboo_label_normalizer._apply_label_corrections(wrong, '216622')
+    assert wrong[1]['notes'] == before[1]['notes']
+    assert wrong[2]['notes'] == before[2]['notes']
+
+
+def test_216622_whole_root_source_fact_preserves_other_pillars_and_safety():
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures/raw_american_ginseng_216622.json').read_text())
+    left_owner, right_owner = EnhancedDSLDNormalizer(), EnhancedDSLDNormalizer()
+    left_owner._label_corrections_by_dsld_id['216622'].pop('additional_row_corrections')
+    before = left_owner.normalize_product(deepcopy(raw))
+    after = right_owner.normalize_product(deepcopy(raw))
+    for a, b in zip(before['activeIngredients'], after['activeIngredients'], strict=True):
+        for key in ['canonical_id', 'canonical_source_db', 'quantity', 'unit', 'forms', 'raw_source_path', 'cleaner_row_role']:
+            assert a.get(key) == b.get(key), key
+    enricher = SupplementEnricherV3()
+    left, errors = enricher.enrich_product(before)
+    assert not errors
+    right, errors = enricher.enrich_product(after)
+    assert not errors
+    a, b = build_scored_artifact(left), build_scored_artifact(right)
+    for pillar in ['formulation', 'evidence', 'transparency', 'verification', 'safety_hygiene']:
+        assert a['quality_pillars_v4'][pillar]['score'] == b['quality_pillars_v4'][pillar]['score'], pillar
+    assert a['_v4_safety_gate'] == b['_v4_safety_gate']
+    assert a['product_safety_status'] == b['product_safety_status']

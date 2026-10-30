@@ -1774,6 +1774,15 @@ class EnhancedDSLDNormalizer:
             # A DSLD blend group lists its constituents as forms; none of
             # them is the identity of the whole row.
             return None
+        if (str(ingredient_data.get("category") or "").casefold() == "botanical"
+                and isinstance(forms, list)
+                and self._parent_is_standardized_botanical_extract(" ".join(
+                    str(ingredient_data.get(key) or "") for key in ("name", "notes")))
+                and any(isinstance(form, dict) and form.get("category") == "mineral"
+                        and norm_module.normalize_unii(form.get("uniiCode")) for form in forms)):
+            # A mineral standardization marker identifies the constituent,
+            # never the whole botanical extract or its printed parent mass.
+            return None
         if (
             str(ingredient_data.get("category") or "").lower() == "botanical"
             and isinstance(forms, list)
@@ -3100,12 +3109,31 @@ class EnhancedDSLDNormalizer:
             part = str(details.get("plantPart") or "").strip()
             if part and not ingredient.get("nestedRows"):
                 qualified = re.sub(r"\bextract\b", part + " extract", str(ingredient.get("name") or ""), flags=re.I)
+                if qualified == str(ingredient.get("name") or ""):
+                    qualified = qualified + " " + part
                 exact = self._exact_ingredient_group_lookup(qualified)
                 if exact.get("type") in {"botanical", "standardized_botanical"}:
                     standard = exact["standard_name"]
-                    canonical, source = self._resolve_canonical_identity(standard, raw_name=qualified)
-                    if canonical and source in {"botanical_ingredients", "standardized_botanicals"}:
-                        return standard, canonical, source
+                    if re.search(r"\bextract\b", str(ingredient.get("name") or ""), re.I):
+                        canonical, source = self._resolve_canonical_identity(standard, raw_name=qualified)
+                        if canonical and source in {"botanical_ingredients", "standardized_botanicals"}:
+                            return standard, canonical, source
+                        return None
+                    # The exact botanical owner can be more specific than an
+                    # IQM family form sharing its vernacular alias. Preserve
+                    # that authored owner only for this source-part match.
+                    source = ("botanical_ingredients" if exact["type"] == "botanical"
+                              else "standardized_botanicals")
+                    entries = (self.botanical_ingredients.get(source, [])
+                               if source == "botanical_ingredients"
+                               else self.standardized_botanicals.get(source, []))
+                    owners = [entry for entry in entries
+                              if entry.get("standard_name") == standard
+                              and norm_module.normalize_text(qualified) in {
+                                  norm_module.normalize_text(name) for name in
+                                  [entry.get("standard_name") or "", *entry.get("aliases", [])]}]
+                    if len(owners) == 1:
+                        return standard, owners[0]["id"], source
         if any(not isinstance(form, dict) for form in raw_forms):
             return None
         forms = []
@@ -8344,7 +8372,7 @@ class EnhancedDSLDNormalizer:
                 "negative_match_terms", []
             )
             if negative_match_terms_veto(
-                [name] + (
+                [name, ing.get("notes") or ""] + (
                     [botanical_details.get("plantPart", "")]
                     if canonical_source_db == "other_ingredients" else []
                 ) + (
@@ -9979,10 +10007,8 @@ class EnhancedDSLDNormalizer:
         """The count used for arithmetic; an approximation keeps its number."""
         if value is None:
             return None
-        number, printed_text = parse_servings_per_container(value)
-        if printed_text is not None:
-            return int(number)
-        return self._safe_int(value)
+        number, _ = parse_servings_per_container(value)
+        return int(number) if number is not None else None
 
     def _safe_int(self, value: Any, field_name: str = "value", default: int = 0) -> int:
         """
@@ -10500,7 +10526,8 @@ class EnhancedDSLDNormalizer:
         # Join all text
         return " ".join(text_parts).strip()
 
-    def _parse_botanical_details(self, notes: str) -> Dict[str, Any]:
+    @staticmethod
+    def _parse_botanical_details(notes: str) -> Dict[str, Any]:
         """
         Parse botanical details from ingredient notes field.
         Extracts: plantPart, genus, species, harvestMethod, form
