@@ -319,3 +319,29 @@ def test_nested_caffeine_subtotal_mismatch_retains_high_dose_warning(pipeline, s
     scored = build_scored_artifact(enriched)
     assert scored['product_safety_status'] == expected_safety
     assert ('STIMULANT_CAFFEINE_HIGH_DOSE' in scored['flags']) is (subtotal > 400)
+
+
+def _detector_only(category, matched_text):
+    """A blend only the pattern detector saw: ``name`` is the registry category, the label's own
+    wording is ``evidence.matched_text`` (DSLD 323062: 'Proprietary Focus Blend' of taurine,
+    inositol and L-theanine, re-found by the whole-label scan as 'Stimulant Blends')."""
+    return {"proprietary_blends": [{
+        "name": category, "detector_group": category, "sources": ["detector"],
+        "disclosure_level": "none", "blend_total_mg": None, "child_ingredients": [],
+        "evidence": {"matched_text": matched_text},
+    }]}
+
+
+def test_a_registry_category_is_not_a_printed_stimulant_name():
+    assert _has_undisclosed_stimulant_blend(_detector_only("Stimulant Blends", "focus blend")) is False
+
+
+@pytest.mark.parametrize("matched_text", ["thermogenic blend", "stimulant complex", "pre-workout matrix"])
+def test_a_printed_stimulant_name_found_only_by_the_detector_still_fires(matched_text):
+    assert _has_undisclosed_stimulant_blend(_detector_only("Stimulant Blends", matched_text)) is True
+
+
+def test_a_cleaner_named_blend_keeps_its_printed_name():
+    product = _detector_only("Stimulant Blends", "stimulant blend")
+    product["proprietary_blends"][0].update(name="Thermogenic Stimulant Blend", sources=["cleaning", "detector"])
+    assert _has_undisclosed_stimulant_blend(product) is True
