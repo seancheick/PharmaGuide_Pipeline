@@ -9744,14 +9744,29 @@
       "correction_fields": [
         "notes.source_composition"
       ],
-      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 17a3d297cfed742bc83798406c41d685b42716e9ca9f6028a7849f8fc0c79ead.",
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 17a3d297cfed742bc83798406c41d685b42716e9ca9f6028a7849f8fc0c79ead. The same original PDF independently prints the separate Supplement Facts row Raw American Ginseng Powder (whole root) 200 mg; restore whole-root tissue only on ingredientRows[2]. The extract row and its 10 mg [10%] ginsenosides remain separate; no powder assay, extraction or Latin name is inferred.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/216622.pdf"
       ],
       "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
       "review_date": "2026-10-29",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_source_correction_20261029"
+      "provenance_tag": "official_label_source_correction_20261029",
+      "additional_row_corrections": [
+        {
+          "raw_ingredient_text": "raw American Ginseng powder",
+          "corrected_ingredient_text": "raw American Ginseng powder",
+          "raw_source_path": "ingredientRows[2]",
+          "raw_notes": "",
+          "raw_forms": [],
+          "raw_quantity_value": 200,
+          "raw_quantity_unit": "mg",
+          "corrected_notes": "Raw American Ginseng Powder PlantPart: whole root",
+          "correction_fields": [
+            "notes.source_composition"
+          ]
+        }
+      ]
     },
     "68956": {
       "brand": "GNC Mega Men",

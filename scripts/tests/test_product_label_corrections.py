@@ -1156,7 +1156,15 @@ def test_individually_verified_remaining_source_facts_keep_original_amount_and_r
     row = deepcopy(fixture['row'])
     row['raw_source_path'] = fixture['path']
     before = deepcopy(row)
-    result = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
+    if pid == '216622':
+        # The owner validates both exact source repairs before touching either.
+        rows = deepcopy(json.loads((Path(__file__).parent / 'fixtures/raw_american_ginseng_216622.json').read_text())['ingredientRows'])
+        for index, source_row in enumerate(rows):
+            source_row['raw_source_path'] = f'ingredientRows[{index}]'
+        corrected = bamboo_label_normalizer._apply_label_corrections(rows, pid)
+        result = next(item for item in corrected if item['raw_source_path'] == fixture['path'])
+    else:
+        result = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
     assert result['notes'] == fixture['expected_notes']
     for field in ['quantity','name','nestedRows','raw_source_path']:
         assert result.get(field) == before.get(field)
@@ -1246,3 +1254,51 @@ def test_real_applewise_linkage_changes_no_non_dose_assessment(pid):
     identity_fields = ['canonical_id','canonical_source_db','canonical_id_before','canonical_id_after','identity_disposition','scoreable_identity']
     assert [{k:r.get(k) for k in identity_fields} for r in left['ingredient_quality_data']['ingredients']] == [
         {k:r.get(k) for k in identity_fields} for r in right['ingredient_quality_data']['ingredients']]
+
+
+def test_216622_original_powder_row_restores_only_printed_whole_root(bamboo_label_normalizer):
+    from copy import deepcopy
+    raw = json.loads((Path(__file__).parent / 'fixtures/raw_american_ginseng_216622.json').read_text())
+    rows = deepcopy(raw['ingredientRows'])
+    for i, row in enumerate(rows):
+        row['raw_source_path'] = f'ingredientRows[{i}]'
+    before = deepcopy(rows)
+    corrected = bamboo_label_normalizer._apply_label_corrections(rows, '216622')
+    assert corrected[2]['notes'] == 'Raw American Ginseng Powder PlantPart: whole root'
+    for field in ['name', 'forms', 'quantity', 'raw_source_path']:
+        assert corrected[2][field] == before[2][field]
+    assert 'ginsenosides 10 mg [10%]' in corrected[1]['notes']
+    for field in ['name', 'forms', 'quantity', 'raw_source_path']:
+        assert corrected[1][field] == before[1][field]
+    assert corrected[0] == before[0]
+    wrong = deepcopy(before)
+    wrong[2]['quantity'][0]['quantity'] = 201
+    with pytest.raises(ValueError, match='Reviewed note attribution changed'):
+        bamboo_label_normalizer._apply_label_corrections(wrong, '216622')
+    assert wrong[1]['notes'] == before[1]['notes']
+    assert wrong[2]['notes'] == before[2]['notes']
+
+
+def test_216622_whole_root_source_fact_preserves_other_pillars_and_safety():
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures/raw_american_ginseng_216622.json').read_text())
+    left_owner, right_owner = EnhancedDSLDNormalizer(), EnhancedDSLDNormalizer()
+    left_owner._label_corrections_by_dsld_id['216622'].pop('additional_row_corrections')
+    before = left_owner.normalize_product(deepcopy(raw))
+    after = right_owner.normalize_product(deepcopy(raw))
+    for a, b in zip(before['activeIngredients'], after['activeIngredients'], strict=True):
+        for key in ['canonical_id', 'canonical_source_db', 'quantity', 'unit', 'forms', 'raw_source_path', 'cleaner_row_role']:
+            assert a.get(key) == b.get(key), key
+    enricher = SupplementEnricherV3()
+    left, errors = enricher.enrich_product(before)
+    assert not errors
+    right, errors = enricher.enrich_product(after)
+    assert not errors
+    a, b = build_scored_artifact(left), build_scored_artifact(right)
+    for pillar in ['formulation', 'evidence', 'transparency', 'verification', 'safety_hygiene']:
+        assert a['quality_pillars_v4'][pillar]['score'] == b['quality_pillars_v4'][pillar]['score'], pillar
+    assert a['_v4_safety_gate'] == b['_v4_safety_gate']
+    assert a['product_safety_status'] == b['product_safety_status']
