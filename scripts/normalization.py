@@ -65,6 +65,41 @@ def extract_enzyme_activity(text, quantity=None, unit=None):
         return value, unit_text
     return None, None
 
+# Printed quantity qualifiers DSLD carries on a quantity's ``operator`` ("<1 g",
+# "~33 mg"); "=" is an exact amount. The draft, console, importer and Clean
+# accept only these, so a bound is never stored or shown as an exact amount.
+QUANTITY_OPERATORS = frozenset({"<", "<=", ">", ">=", "~"})
+
+_APPROXIMATE_COUNT_RE = re.compile(
+    r"(?:about|approximately|approx\.?|~)\s*([0-9][0-9,]*(?:\.[0-9]+)?)", re.IGNORECASE)
+
+
+def parse_servings_per_container(value: Any) -> Tuple[Optional[float], Optional[str]]:
+    """Read a printed servings-per-container value.
+
+    Returns ``(number, printed_text)``: the number is used for arithmetic, and
+    ``printed_text`` keeps an approximation's wording ("about 17") so it is
+    never presented as exact; it is None for a plain count. ``(None, None)``
+    means the value cannot be read as a positive count.
+    """
+    if isinstance(value, bool):
+        return None, None
+    text = None
+    if isinstance(value, str):
+        stripped = value.strip()
+        match = _APPROXIMATE_COUNT_RE.fullmatch(stripped)
+        if match:
+            text, value = stripped, match.group(1)
+        value = str(value).replace(",", "")
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None, None
+    if not math.isfinite(number) or number <= 0:
+        return None, None
+    return number, text
+
+
 _MASS_UNIT_ALIASES = {
     "g": "g",
     "gm": "g",

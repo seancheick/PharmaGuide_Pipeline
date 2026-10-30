@@ -68,6 +68,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from unmapped_ingredient_tracker import UnmappedIngredientTracker
 from functional_grouping_handler import FunctionalGroupingHandler
 import normalization as norm_module  # Single-source normalization
+from normalization import QUANTITY_OPERATORS, parse_servings_per_container
 from unit_converter import get_converter
 from serving_frequency import select_canonical_serving
 from proprietary_blend_detector import disclosure_tier, sole_component_is_single_source
@@ -4223,6 +4224,7 @@ class EnhancedDSLDNormalizer:
         quantity = row.get("quantity")
         if isinstance(quantity, list):
             quantity = next((item for item in quantity if isinstance(item, dict)), None)
+        operator = ""
         if isinstance(quantity, dict):
             for key in ("display", "amountDisplay", "quantityDisplay"):
                 value = quantity.get(key)
@@ -4230,6 +4232,9 @@ class EnhancedDSLDNormalizer:
                     return value.strip()
             amount = quantity.get("quantity", quantity.get("amount", quantity.get("value")))
             unit = quantity.get("unit") or row.get("unit")
+            # A printed bound ("<1 g") is not an exact amount; keep its qualifier.
+            if quantity.get("operator") in QUANTITY_OPERATORS:
+                operator = quantity["operator"]
         else:
             amount = quantity
             unit = row.get("unit")
@@ -4237,7 +4242,7 @@ class EnhancedDSLDNormalizer:
         unit_text = self._normalize_label_unit(unit)
         if not amount_text or not unit_text or unit_text.lower() in {"np", "unspecified"}:
             return self._activity_dose_from_notes(row.get("notes"))
-        return f"{amount_text} {unit_text}"
+        return f"{operator}{amount_text} {unit_text}"
 
     @staticmethod
     def _label_form_distinct_from_identity(form_text: Any, row: Dict[str, Any]) -> bool:
@@ -6239,7 +6244,7 @@ class EnhancedDSLDNormalizer:
         # original values for fields outside the panel/statement digest.
         original_fields = repair.get("raw_product_fields", {})
         corrected_fields = repair.get("corrected_product_fields", {})
-        allowed = {"servingsPerContainer", "targetGroups", "physicalState", "upcSku"}
+        allowed = {"servingsPerContainer", "targetGroups", "physicalState", "upcSku", "nutritionalInfo"}
         if (not isinstance(original_fields, dict) or not isinstance(corrected_fields, dict)
                 or set(original_fields) != set(corrected_fields)
                 or set(corrected_fields) - allowed
@@ -6259,6 +6264,16 @@ class EnhancedDSLDNormalizer:
                     or set(state) != {"name", "langualCodeDescription"}
                     or not all(isinstance(value, str) and value.strip() for value in state.values())):
                 raise ValueError("Reviewed physical state requires explicit label form strings")
+        if "nutritionalInfo" in corrected_fields:
+            # Printed Nutrition Facts in DSLD's typed shape; Clean's typed
+            # merge (normalize_product) owns which entries become values.
+            facts = corrected_fields["nutritionalInfo"]
+            if (not isinstance(facts, dict)
+                    or not all(isinstance(entry, dict)
+                               and set(entry) <= {"amount", "unit", "operator"}
+                               and entry.get("operator") in QUANTITY_OPERATORS | {None}
+                               for entry in facts.values())):
+                raise ValueError("Reviewed nutrition facts require printed amount/unit/operator entries")
         statements = repair.get("corrected_statements")
         if statements is not None and (
                 not isinstance(statements, list)
@@ -6272,6 +6287,10 @@ class EnhancedDSLDNormalizer:
         if statements is not None:
             working["statements"] = deepcopy(statements)
         servings = repair.get("serving_sizes")
+        if (servings is None and corrected_fields and not repair.get("quantity_column_orders")
+                and repair.get("quantity_serving_basis") is None):
+            # A metadata-only repair keeps the source serving rows unchanged.
+            return working
         if not isinstance(servings, list) or not servings:
             raise ValueError("Reviewed serving correction requires serving rows")
         by_order = {s["order"]: s for s in servings}
@@ -6438,9 +6457,11 @@ class EnhancedDSLDNormalizer:
             # Capture nutritional info from ALL ingredients
             nutritional_info = self._extract_nutritional_info(flattened_ingredients + other_ingredients_raw)
             # A reviewer can type printed Nutrition Facts values in the
-            # submission console (DSLD's raw {amount, unit} shape). Keep each
-            # one the printed rows did not supply; a printed row always wins.
-            # An undosed printed row (unit "unspecified") supplies nothing.
+            # submission console (DSLD's raw {amount, unit} shape, plus the
+            # printed "operator" of a bound such as "<1 g"). Keep each one the
+            # printed rows did not supply; a printed row always wins. An
+            # undosed printed row (unit "unspecified") supplies nothing, and an
+            # unknown operator is never guessed into an exact amount.
             typed = raw_data.get("nutritionalInfo")
             for key, entry in (typed.items() if isinstance(typed, dict) else ()):
                 printed = nutritional_info.get(key)
@@ -6449,10 +6470,14 @@ class EnhancedDSLDNormalizer:
                 if not isinstance(entry, dict):
                     continue
                 amount, unit = entry.get("amount"), entry.get("unit")
+                operator = entry.get("operator")
                 if (isinstance(amount, (int, float)) and not isinstance(amount, bool)
                         and math.isfinite(amount) and amount >= 0
-                        and isinstance(unit, str) and unit.strip()):
+                        and isinstance(unit, str) and unit.strip()
+                        and operator in QUANTITY_OPERATORS | {None, "="}):
                     nutritional_info[key] = {"amount": float(amount), "unit": unit.strip()}
+                    if operator in QUANTITY_OPERATORS:
+                        nutritional_info[key]["operator"] = operator
 
             active_ingredients = self._process_ingredients_enhanced(flattened_ingredients, is_active=True)
 
@@ -6947,7 +6972,7 @@ class EnhancedDSLDNormalizer:
                 "offMarket": off_market,
 
                 # Product details
-                "servingsPerContainer": self._safe_int(raw_data.get("servingsPerContainer")) if raw_data.get("servingsPerContainer") is not None else None,
+                "servingsPerContainer": self._servings_per_container(raw_data.get("servingsPerContainer")),
                 "netContents": self._extract_net_contents(raw_data.get("netContents", [])),
                 "targetGroups": raw_data.get("targetGroups", []) or [],
                 "userGroups": raw_data.get("userGroups", []) or [],  # PRESERVE userGroups with Langual codes
@@ -7040,6 +7065,10 @@ class EnhancedDSLDNormalizer:
                 and isinstance(lineage_metadata, dict)
             ):
                 cleaned["label_record_metadata"] = dict(lineage_metadata)
+            # "about 17" is disclosed as printed; the count above stays numeric.
+            _, servings_text = parse_servings_per_container(raw_data.get("servingsPerContainer"))
+            if servings_text is not None:
+                cleaned["servingsPerContainerText"] = servings_text
 
             return cleaned
             
@@ -7056,6 +7085,7 @@ class EnhancedDSLDNormalizer:
         default_unit: str,
         *,
         source_priority: int = 0,
+        operator: Any = None,
     ) -> bool:
         """Record one Nutrition-Facts panel field (single source of truth).
 
@@ -7076,8 +7106,16 @@ class EnhancedDSLDNormalizer:
             if bool(existing_unit) and existing_unit != "unspecified":
                 return False  # keep the real value; don't let a placeholder erase it
         info[key] = {"amount": quantity, "unit": unit or default_unit}
+        if operator in QUANTITY_OPERATORS:
+            info[key]["operator"] = operator
         priorities[key] = source_priority
         return True
+
+    @staticmethod
+    def _selected_quantity_operator(quantity_variants: List[Dict]) -> Optional[str]:
+        """The printed qualifier of the quantity column chosen for analysis."""
+        return next((v.get("operator") for v in quantity_variants or []
+                     if isinstance(v, dict) and v.get("selected_for_analysis")), None)
 
     def _extract_nutritional_info(self, ingredient_rows: List[Dict]) -> Dict[str, Any]:
         """Extract nutritional information (Calories, Carbs, Sugar, etc.) from ingredients"""
@@ -7114,6 +7152,7 @@ class EnhancedDSLDNormalizer:
                 quantity_data["unit"] = ing.get("unit")
 
             quantity, unit, _, quantity_variants = self._process_quantity(quantity_data)
+            operator = self._selected_quantity_operator(quantity_variants)
 
             # Capture nutritional facts. Every panel field records through the
             # single _record_nutrition_fact authority (C6: identity-bound match +
@@ -7121,13 +7160,13 @@ class EnhancedDSLDNormalizer:
             # are identity-bound via fullmatch so ingredient rows ("Cane Sugar",
             # "Sodium Benzoate", "Calories from Fat") cannot hijack the panel field.
             if re.fullmatch(r"(?:total\s+)?calories?", nutrient_name):
-                self._record_nutrition_fact(nutritional_info, "calories", quantity, unit, "kcal")
+                self._record_nutrition_fact(nutritional_info, "calories", quantity, unit, "kcal", operator=operator)
             elif "total carbohydrate" in name or "carbohydrates" in name:
-                self._record_nutrition_fact(nutritional_info, "totalCarbohydrates", quantity, unit, "g")
+                self._record_nutrition_fact(nutritional_info, "totalCarbohydrates", quantity, unit, "g", operator=operator)
             elif re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nutrient_name):
                 accepted = self._record_nutrition_fact(
                     nutritional_info, "sugars", quantity, unit, "g",
-                    source_priority=_sugar_summary_priority(nutrient_name),
+                    source_priority=_sugar_summary_priority(nutrient_name), operator=operator,
                 )
                 if accepted:
                     nutritional_info["sugars"].update({
@@ -7135,21 +7174,23 @@ class EnhancedDSLDNormalizer:
                         "raw_source_path": ing.get("raw_source_path") or f"ingredientRows[{row_index}]",
                     })
             elif re.fullmatch(r"(?:total\s+)?fat", nutrient_name):
-                self._record_nutrition_fact(nutritional_info, "totalFat", quantity, unit, "g")
+                self._record_nutrition_fact(nutritional_info, "totalFat", quantity, unit, "g", operator=operator)
             elif re.fullmatch(r"saturated\s+fat", nutrient_name):
-                self._record_nutrition_fact(nutritional_info, "saturatedFat", quantity, unit, "g")
+                self._record_nutrition_fact(nutritional_info, "saturatedFat", quantity, unit, "g", operator=operator)
             elif re.fullmatch(r"trans\s+fat", nutrient_name):
-                self._record_nutrition_fact(nutritional_info, "transFat", quantity, unit, "g")
+                self._record_nutrition_fact(nutritional_info, "transFat", quantity, unit, "g", operator=operator)
+            elif re.fullmatch(r"polyunsaturated\s+fat", nutrient_name):
+                self._record_nutrition_fact(nutritional_info, "polyunsaturatedFat", quantity, unit, "g", operator=operator)
             elif re.fullmatch(r"cholesterol", nutrient_name):
-                self._record_nutrition_fact(nutritional_info, "cholesterol", quantity, unit, "mg")
+                self._record_nutrition_fact(nutritional_info, "cholesterol", quantity, unit, "mg", operator=operator)
             elif re.fullmatch(r"(?:total\s+)?protein", nutrient_name):
-                self._record_nutrition_fact(nutritional_info, "protein", quantity, unit, "g")
+                self._record_nutrition_fact(nutritional_info, "protein", quantity, unit, "g", operator=operator)
             elif re.fullmatch(r"sodium(?:\s*\([^)]*\))?", nutrient_name):
-                self._record_nutrition_fact(nutritional_info, "sodium", quantity, unit, "mg")
+                self._record_nutrition_fact(nutritional_info, "sodium", quantity, unit, "mg", operator=operator)
             elif re.fullmatch(fiber_panel_pattern, nutrient_name):
                 accepted = self._record_nutrition_fact(
                     nutritional_info, "dietaryFiber", quantity, unit, "g",
-                    source_priority=_fiber_summary_priority(nutrient_name),
+                    source_priority=_fiber_summary_priority(nutrient_name), operator=operator,
                 )
                 if accepted:
                     nutritional_info["dietaryFiber"].update({
@@ -7172,12 +7213,13 @@ class EnhancedDSLDNormalizer:
                     nested_qty_data["unit"] = nested.get("unit")
 
                 nested_qty, nested_unit, _, nested_variants = self._process_quantity(nested_qty_data)
+                nested_operator = self._selected_quantity_operator(nested_variants)
 
                 # Extract sugar from nested row (only if not already found at top level)
                 if re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nested_name.strip()):
                     accepted = self._record_nutrition_fact(
                         nutritional_info, "sugars", nested_qty, nested_unit, "g",
-                        source_priority=_sugar_summary_priority(nested_name),
+                        source_priority=_sugar_summary_priority(nested_name), operator=nested_operator,
                     )
                     if accepted:
                         nutritional_info["sugars"].update({
@@ -7191,7 +7233,7 @@ class EnhancedDSLDNormalizer:
                 if re.fullmatch(fiber_panel_pattern, nested_name.strip()):
                     accepted = self._record_nutrition_fact(
                         nutritional_info, "dietaryFiber", nested_qty, nested_unit, "g",
-                        source_priority=_fiber_summary_priority(nested_name),
+                        source_priority=_fiber_summary_priority(nested_name), operator=nested_operator,
                     )
                     if accepted:
                         nutritional_info["dietaryFiber"].update({
@@ -9913,6 +9955,15 @@ class EnhancedDSLDNormalizer:
 
     # Include all other methods from the original normalizer
     # (I'll keep the existing methods for compatibility)
+
+    def _servings_per_container(self, value: Any) -> Optional[int]:
+        """The count used for arithmetic; an approximation keeps its number."""
+        if value is None:
+            return None
+        number, printed_text = parse_servings_per_container(value)
+        if printed_text is not None:
+            return int(number)
+        return self._safe_int(value)
 
     def _safe_int(self, value: Any, field_name: str = "value", default: int = 0) -> int:
         """

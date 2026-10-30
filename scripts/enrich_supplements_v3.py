@@ -18828,6 +18828,7 @@ class SupplementEnricherV3:
                 from scoring_v4.exposure import row_exposure
                 exposure = row_exposure(product, {
                     **entry, "quantity": entry.get("amount"),
+                    "quantity_operator": entry.get("operator"),
                 }, basis="per_use", unit="g")
                 if not exposure.exact:
                     # Printed qualifiers remain in the source ledger. A flat
@@ -18835,6 +18836,14 @@ class SupplementEnricherV3:
                     return None
             return _amount(key, declared_gram_value=True)
 
+        fields = {
+            "calories_per_serving": "calories",
+            "total_carbohydrates_g": "totalCarbohydrates",
+            "total_fat_g": "totalFat",
+            "protein_g": "protein",
+            "dietary_fiber_g": "dietaryFiber",
+            "total_sugars_g": "sugars",
+        }
         return {
             "calories_per_serving": _amount("calories"),
             "total_carbohydrates_g": _gram_amount("totalCarbohydrates"),
@@ -18843,6 +18852,12 @@ class SupplementEnricherV3:
             "dietary_fiber_g": _gram_amount("dietaryFiber"),
             "dietary_fiber_source": dict(ni["dietaryFiber"]) if isinstance(ni.get("dietaryFiber"), dict) else None,
             "total_sugars_g": _gram_amount("sugars"),
+            # Clean's printed qualifier per field ("<1 g"): the numbers above
+            # stay the stated amount; display must not present them as exact.
+            "quantity_operators": {
+                field: ni[key]["operator"] for field, key in fields.items()
+                if isinstance(ni.get(key), dict) and ni[key].get("operator")
+            },
         }
 
     def _normalize_serving_unit_label(self, unit: Any) -> str:
