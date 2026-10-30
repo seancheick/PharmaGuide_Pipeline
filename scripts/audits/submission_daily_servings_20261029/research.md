@@ -3,7 +3,9 @@
 Batch: label-sourced daily servings for approved submission labels whose import carried no
 min/maxDailyServings, so Clean fell back to a default regimen that daily-exposure consumers treat as
 unknown (`serving_frequency.py`, `enrich_supplements_v3.py`). Owner: `product_label_corrections.json`
-`serving_basis_correction`, bound to the raw approved bytes' SHA-256. Raw approved files unchanged.
+`serving_basis_correction`, bound to the SHA-256 of the canonical JSON of the approved file's
+`ingredientRows`, `servingSizes` and `statements` (`_apply_reviewed_serving_basis`); an edit to those
+fields fails closed, edits elsewhere in the file are not covered. Raw approved files unchanged.
 Reviewer: agent review (Claude Opus 5.5) of the approved submission photographs.
 
 | Entry | Printed directions (photo) | Serving size | Daily | Verdict |
