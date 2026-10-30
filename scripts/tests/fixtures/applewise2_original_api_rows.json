@@ -1,0 +1,138 @@
+{
+  "231929": {
+    "row": {
+      "order": 1,
+      "ingredientId": 152383,
+      "description": null,
+      "notes": "Apple (Malus domestica) extract (Form: std. to 50% Polyphenols, and 5% Phloridzin, from organically grown Apples) PlantPart: fruit and skin Genus: Malus Species: domestica ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 600,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Vegetarian Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Apple (Malus domestica) extract",
+      "category": "botanical",
+      "ingredientGroup": "Apple",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 152955,
+          "prefix": "from",
+          "percent": null,
+          "name": "organically grown Apples",
+          "category": "botanical",
+          "ingredientGroup": "Apple",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "ingredientId": 152771,
+          "prefix": "and",
+          "percent": 5,
+          "name": "Phloridzin",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Phlorizin",
+          "uniiCode": null
+        },
+        {
+          "order": 3,
+          "ingredientId": 4102,
+          "prefix": "std. to",
+          "percent": 50,
+          "name": "Polyphenols",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Polyphenol (unspecified)",
+          "uniiCode": null
+        }
+      ]
+    },
+    "expected_notes": "Apple (Malus domestica) extract (Form: std. to 50% Polyphenols, and 5% Phloridzin, from organically grown Apples) PlantPart: fruit and skin Genus: Malus Species: domestica Note: Sole active source row of manufacturer-linked AppleWise finished product item #01625, NIH edition L01625F; AppleWise is product-level manufacturer linkage, not an ingredient trademark printed in the NIH ingredient row.",
+    "version": "L01625F",
+    "upc": "7 37870 16253 7",
+    "pdf_sha256": "b8bb37db92fa9248d58a4b6a5f4e91a9096da99e81923d649987c31398118a4a"
+  },
+  "232062": {
+    "row": {
+      "order": 1,
+      "ingredientId": 152383,
+      "description": null,
+      "notes": "Apple (Malus domestica) extract (Form: std. to 50% Polyphenols, and 5% Phloridzin, from organically grown Apples) PlantPart: fruit and skin Genus: Malus Species: domestica ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 600,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Vegetarian Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Apple (Malus domestica) extract",
+      "category": "botanical",
+      "ingredientGroup": "Apple",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 152955,
+          "prefix": "from",
+          "percent": null,
+          "name": "organically grown Apples",
+          "category": "botanical",
+          "ingredientGroup": "Apple",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "ingredientId": 152771,
+          "prefix": "and",
+          "percent": 5,
+          "name": "Phloridzin",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Phlorizin",
+          "uniiCode": null
+        },
+        {
+          "order": 3,
+          "ingredientId": 4102,
+          "prefix": "std. to",
+          "percent": 50,
+          "name": "Polyphenols",
+          "category": "non-nutrient/non-botanical",
+          "ingredientGroup": "Polyphenol (unspecified)",
+          "uniiCode": null
+        }
+      ]
+    },
+    "expected_notes": "Apple (Malus domestica) extract (Form: std. to 50% Polyphenols, and 5% Phloridzin, from organically grown Apples) PlantPart: fruit and skin Genus: Malus Species: domestica Note: Sole active source row of manufacturer-linked AppleWise finished product item #01625, NIH edition L01625CD; AppleWise is product-level manufacturer linkage, not an ingredient trademark printed in the NIH ingredient row.",
+    "version": "L01625CD",
+    "upc": "7 37870 16250 6",
+    "pdf_sha256": "a3de883d3eb90adce7590271de155a0fd884cf1d55d1c4a3ec75169eb45eddc7"
+  }
+}

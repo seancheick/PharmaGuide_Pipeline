@@ -1194,3 +1194,55 @@ def test_exact_colored_maca_source_fact_does_not_infer_processing_or_mass(bamboo
     with pytest.raises(ValueError, match='Reviewed note attribution changed'):
         bamboo_label_normalizer._apply_label_corrections([wrong], pid)
     assert wrong['notes'] == before['notes']
+
+
+@pytest.mark.parametrize('pid', ['231929','232062'])
+def test_exact_applewise_linkage_is_product_level_and_original_row_bound(bamboo_label_normalizer, pid):
+    from copy import deepcopy
+    fixture = json.loads((Path(__file__).parent / 'fixtures/applewise2_original_api_rows.json').read_text())[pid]
+    row = deepcopy(fixture['row'])
+    row['raw_source_path'] = 'ingredientRows[0]'
+    before = deepcopy(row)
+    result = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
+    assert result['notes'] == fixture['expected_notes']
+    assert 'product-level manufacturer linkage' in result['notes']
+    assert 'not an ingredient trademark printed in the NIH ingredient row' in result['notes']
+    for key in ['name','forms','quantity','raw_source_path']:
+        assert result.get(key) == before.get(key)
+    wrong = deepcopy(before)
+    wrong['forms'][1]['percent'] = 6
+    wrong_before = deepcopy(wrong)
+    assert bamboo_label_normalizer._apply_label_corrections([wrong], pid) == [wrong_before]
+    assert 'manufacturer-linked AppleWise' not in wrong['notes']
+    other_label = deepcopy(before)
+    assert bamboo_label_normalizer._apply_label_corrections([other_label], 'unreviewed-apple-marker-match') == [before]
+
+
+@pytest.mark.parametrize('pid', ['231929','232062'])
+def test_real_applewise_linkage_changes_no_non_dose_assessment(pid):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / f'fixtures/raw_applewise_{pid}.json').read_text())
+    before_owner, after_owner = EnhancedDSLDNormalizer(), EnhancedDSLDNormalizer()
+    before_owner._label_corrections_by_dsld_id.pop(pid)
+    before = before_owner.normalize_product(deepcopy(raw))
+    after = after_owner.normalize_product(deepcopy(raw))
+    fields = ['canonical_id','canonical_source_db','quantity','unit','forms','raw_source_text','raw_source_path','cleaner_row_role']
+    assert {k: before['activeIngredients'][0].get(k) for k in fields} == {
+        k: after['activeIngredients'][0].get(k) for k in fields}
+    enricher = SupplementEnricherV3()
+    left, errors = enricher.enrich_product(before)
+    assert not errors
+    right, errors = enricher.enrich_product(after)
+    assert not errors
+    a, b = build_scored_artifact(left), build_scored_artifact(right)
+    for pillar in ['formulation','evidence','transparency','verification','safety_hygiene']:
+        assert a['quality_pillars_v4'][pillar]['score'] == b['quality_pillars_v4'][pillar]['score'], pillar
+        assert a['quality_pillars_v4'][pillar].get('components') == b['quality_pillars_v4'][pillar].get('components'), pillar
+    assert a['product_safety_status'] == b['product_safety_status']
+    assert a['_v4_safety_gate'] == b['_v4_safety_gate']
+    identity_fields = ['canonical_id','canonical_source_db','canonical_id_before','canonical_id_after','identity_disposition','scoreable_identity']
+    assert [{k:r.get(k) for k in identity_fields} for r in left['ingredient_quality_data']['ingredients']] == [
+        {k:r.get(k) for k in identity_fields} for r in right['ingredient_quality_data']['ingredients']]
