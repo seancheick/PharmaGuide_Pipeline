@@ -5,6 +5,17 @@ from pathlib import Path
 import pytest
 
 IDS = ['232035','229932','251528','327907','332909','295107','80302','220046']
+NEW_IDS = ['251616', '252704', '254795', '254796', '254797', '327984',
+           '312024', '312025', '312026', '312027', '331202',
+           '294273', '311852', '312355', '312356', '312357',
+           '269718', '232921', '232928', '231921', '328831', '59635']
+NEW_BLOCKERS = {
+    **{pid: ['dose_benchmark_identity_unresolved'] for pid in NEW_IDS[:11]},
+    **{pid: ['dose_amount_unread'] for pid in NEW_IDS[11:16]},
+    **{pid: ['dose_benchmark_identity_unresolved', 'evidence_assessment_incomplete']
+       for pid in NEW_IDS[16:21]},
+    '59635': ['probiotic_evidence_assessment_incomplete'],
+}
 
 @pytest.fixture(scope='module')
 def pairs():
@@ -20,6 +31,128 @@ def pairs():
         assert not errors
         result[pid] = enriched, score_product_v4(score_eligible_identity_view(enriched))
     return result
+
+
+@pytest.fixture(scope='module')
+def newly_approved_pairs():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import score_eligible_identity_view
+    from score_supplements_v4 import score_product_v4
+    owner, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    result = {}
+    for pid in NEW_IDS:
+        raw = json.loads((Path(__file__).parent/'fixtures'/f'raw_held_assessment_{pid}.json').read_text())
+        enriched, errors = enricher.enrich_product(owner.normalize_product(raw))
+        assert not errors, pid
+        result[pid] = enriched, score_product_v4(score_eligible_identity_view(enriched))
+    return result
+
+
+@pytest.mark.parametrize('pid', NEW_IDS)
+def test_newly_approved_raw_label_remains_held_without_public_quality(newly_approved_pairs, pid):
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+    from build_final_db import build_core_row, build_detail_blob, validate_export_contract
+    from core_export_model import PRODUCTS_CORE_COLUMNS
+    enriched, v4 = newly_approved_pairs[pid]
+    before = deepcopy(enriched)
+    scored = assemble_scored_artifact(enriched, deepcopy(v4))
+    release = scored['assessment_readiness']['release_assessment']
+    assert release['is_complete'] is False
+    assert release['blockers'] == NEW_BLOCKERS[pid]
+    assert scored['quality_score_status'] == 'not_scored'
+    assert scored['verdict'] == 'NOT_SCORED'
+    assert scored['score_unavailable_reason'] == 'release_assessment_incomplete'
+    for key in ['quality_score_v4_100', 'score_100_equivalent', 'score_display_100_equivalent',
+                'quality_tier', 'quality_pillars_v4']:
+        assert scored.get(key) is None, (pid, key)
+    assert scored['_v4_safety_gate'] == v4['v4_breakdown']['safety_gate']
+    assert enriched == before
+    assert validate_export_contract(enriched, scored) == []
+    blob = build_detail_blob(enriched, scored)
+    assert blob['label_record']['source_record_id'] == pid
+    core = dict(zip(PRODUCTS_CORE_COLUMNS,
+                    build_core_row(enriched, scored, '2026-10-30', detail_blob=blob), strict=True))
+    assert core['quality_score_status'] == 'not_scored'
+    assert core['verdict'] == 'NOT_SCORED'
+    for key in ['quality_score_v4_100', 'score_100_equivalent', 'quality_tier',
+                'pillar_formulation_v4', 'pillar_dose_v4', 'pillar_evidence_v4',
+                'pillar_transparency_v4', 'pillar_verification_v4', 'pillar_safety_hygiene_v4']:
+        assert core[key] is None, (pid, key)
+    if pid in NEW_IDS[11:16]:
+        assert any(a['allergen_id'] == 'ALLERGEN_MILK' for a in blob['allergens'])
+
+
+@pytest.mark.parametrize('pid', NEW_IDS)
+def test_new_hold_does_not_change_safety_or_allergen_blob(newly_approved_pairs, pid, monkeypatch):
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+    from scoring_v4 import quality_score_config
+    from build_final_db import build_detail_blob
+    enriched, v4 = newly_approved_pairs[pid]
+    held = assemble_scored_artifact(enriched, deepcopy(v4))
+    held_blob = build_detail_blob(enriched, held)
+    cfg = deepcopy(quality_score_config.config())
+    del cfg['suppression']['held_assessment_labels'][pid]
+    monkeypatch.setattr(quality_score_config, 'config', lambda: cfg)
+    prior = assemble_scored_artifact(enriched, deepcopy(v4))
+    prior_blob = build_detail_blob(enriched, prior)
+    for key in ['warnings', 'warnings_profile_gated', 'allergens', 'warning_rule_refs']:
+        assert held_blob.get(key) == prior_blob.get(key), (pid, key)
+    assert held['product_safety_status'] == prior['product_safety_status']
+
+
+@pytest.mark.parametrize('pid', NEW_IDS)
+def test_new_hold_rejects_stale_source_fingerprint(newly_approved_pairs, pid, monkeypatch):
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+    from scoring_v4 import quality_score_config
+    cfg = deepcopy(quality_score_config.config())
+    cfg['suppression']['held_assessment_labels'][pid]['formula_fingerprint'] = 'stale'
+    monkeypatch.setattr(quality_score_config, 'config', lambda: cfg)
+    enriched, v4 = deepcopy(newly_approved_pairs[pid])
+    scored = assemble_scored_artifact(enriched, v4)
+    assert scored['quality_score_status'] == 'scored'
+    assert scored['assessment_readiness']['release_assessment']['is_complete'] is False
+
+
+def test_new_whey_hold_rejects_changed_printed_quantity(newly_approved_pairs):
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+    enriched, v4 = deepcopy(newly_approved_pairs['294273'])
+    enriched['activeIngredients'][0]['quantity'] += 1
+    scored = assemble_scored_artifact(enriched, v4)
+    assert scored['quality_score_status'] == 'scored'
+    assert scored['assessment_readiness']['release_assessment']['is_complete'] is False
+
+
+@pytest.mark.parametrize('change', ['completed', 'unrelated_blocker', 'failed_safety'])
+def test_new_hold_cannot_hide_other_release_states(newly_approved_pairs, monkeypatch, change):
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+    import assessment_readiness
+    enriched, v4 = deepcopy(newly_approved_pairs['59635'])
+    if change == 'failed_safety':
+        v4['v4_breakdown']['safety_gate']['ingredient_assessment_complete'] = False
+        v4['v4_breakdown']['safety_gate']['ingredient_assessment_errors'] = ['resolver unavailable']
+    else:
+        owner = assessment_readiness.evaluate_release_assessment
+
+        def changed_release(*args, **kwargs):
+            result = owner(*args, **kwargs)
+            if change == 'completed':
+                return {**result, 'is_complete': True, 'blockers': [],
+                        'unfinished_source_assessment': None}
+            return {**result, 'blockers': result['blockers'] + ['verification_assessment_incomplete']}
+
+        monkeypatch.setattr(assessment_readiness, 'evaluate_release_assessment', changed_release)
+    scored = assemble_scored_artifact(enriched, v4)
+    assert scored['quality_score_status'] == 'scored'
+
+
+def test_new_hold_rejects_invalid_numeric_export(newly_approved_pairs):
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+    from build_final_db import validate_export_contract
+    enriched, v4 = newly_approved_pairs['294273']
+    scored = assemble_scored_artifact(enriched, deepcopy(v4))
+    scored['quality_score_v4_100'] = 63.9
+    assert validate_export_contract(enriched, scored)
 
 @pytest.mark.parametrize('pid', IDS)
 def test_exact_approved_held_label_is_unscored_and_exportable(pairs, pid):
@@ -115,6 +248,34 @@ def test_completed_dose_does_not_keep_old_unavailable_disposition(pairs):
     scored = assemble_scored_artifact(enriched, v4)
     assert 'dose_benchmark_identity_unresolved' not in scored['assessment_readiness']['release_assessment']['blockers']
     assert scored['quality_score_status'] == 'scored'
+
+
+@pytest.mark.parametrize('blockers,unfinished', [
+    (['dose_amount_unread'], 'dose_amount_unread'),
+    (['probiotic_evidence_assessment_incomplete'], None),
+    (['dose_benchmark_identity_unresolved', 'evidence_assessment_incomplete'],
+     'dose_benchmark_identity_unresolved'),
+])
+def test_exact_approved_hold_uses_its_recorded_blockers(pairs, monkeypatch, blockers, unfinished):
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+    from scoring_v4 import quality_score_config
+    import assessment_readiness
+    enriched, v4 = deepcopy(pairs['229932'])
+    cfg = deepcopy(quality_score_config.config())
+    cfg['suppression']['held_assessment_labels']['229932']['blockers'] = blockers
+    monkeypatch.setattr(quality_score_config, 'config', lambda: cfg)
+    owner = assessment_readiness.evaluate_release_assessment
+
+    def with_exact_hold(*args, **kwargs):
+        result = owner(*args, **kwargs)
+        return {**result, 'is_complete': False, 'blockers': blockers,
+                'unfinished_source_assessment': unfinished}
+
+    monkeypatch.setattr(assessment_readiness, 'evaluate_release_assessment', with_exact_hold)
+    scored = assemble_scored_artifact(enriched, v4)
+    assert scored['quality_score_status'] == 'not_scored'
+    assert scored['quality_score_v4_100'] is None
+    assert scored['assessment_readiness']['release_assessment']['blockers'] == blockers
 
 @pytest.mark.parametrize('verdict', ['BLOCKED','UNSAFE'])
 def test_held_label_never_overrides_hard_safety_precedence(pairs, verdict):
