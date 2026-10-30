@@ -1046,10 +1046,10 @@ def test_raw_total_cultures_is_metadata_not_nutrition_or_a_strain(enricher):
     import json
     from pathlib import Path
     from enhanced_normalizer import EnhancedDSLDNormalizer
-    from scoring_input_contract import get_evidence_subject_rows
+    from scoring_input_contract import active_label_rows, get_evidence_subject_rows
     raw = json.loads((Path(__file__).parent / 'fixtures' / 'probiotic_cfu_total_297668_raw.json').read_text())
     cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
-    total = next(row for row in enricher._flatten_active_ingredients_for_analysis(cleaned['activeIngredients'])
+    total = next(row for row in active_label_rows(cleaned['activeIngredients'])
                  if row.get('raw_source_path') == 'ingredientRows[1].nestedRows[16]')
     assert total['cleaner_row_role'] == 'blend_header_total'
     assert total['score_eligible_by_cleaner'] is False
