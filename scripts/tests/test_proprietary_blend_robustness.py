@@ -193,3 +193,36 @@ def test_distinct_physical_or_conflicting_positive_headers_remain_separate():
         else:
             detector.update(total_weight=400, unit="mg")
         assert len(enricher._merge_blend_evidence([detector], [cleaner])) == 2, change
+
+
+def test_real_raspberry_child_provenance_is_not_a_second_blend_header():
+    import json
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    raw = json.loads((Path(__file__).parent / 'fixtures/raw_raspberry_blend_326238.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    raspberry = next(r for r in cleaned['activeIngredients'] if r['raw_source_path'] == 'ingredientRows[4].nestedRows[1]')
+    assert raspberry['cleaner_row_role'] == 'nested_display_only'
+    assert raspberry['quantity'] == 0 and raspberry['unit'] == 'NP'
+    assert 'six-fruit blend' in raspberry['notes']
+    enriched, errors = SupplementEnricherV3().enrich_product(cleaned)
+    assert not errors
+    [blend] = enriched['proprietary_data']['blends']
+    assert blend['source_row_ref'] == 'ingredientRows[4]'
+    assert blend['total_weight'] == 25
+    assert blend['nested_count'] == blend['hidden_count'] == 6
+    assert all(c['amount'] is None for c in blend['child_ingredients'])
+    assert build_scored_artifact(enriched)['quality_pillars_v4']['transparency']['score'] == 6
+
+
+def test_member_provenance_does_not_hide_a_named_or_structural_blend():
+    detector = ProprietaryBlendDetector()
+    member = {'name': 'Raspberry Powder', 'notes': 'member of six-fruit blend',
+              'cleaner_row_role': 'nested_display_only', 'parent_source_path': 'ingredientRows[0]',
+              'raw_source_path': 'ingredientRows[0].nestedRows[0]', 'quantity': 0, 'unit': 'NP'}
+    assert not detector.analyze_product({'activeIngredients': [member]}).blends_detected
+    for change in [dict(name='Fruit Blend'), dict(parent_source_path=None),
+                   dict(nestedIngredients=[{'name':'Raspberry'},{'name':'Strawberry'}])]:
+        genuine = {**member, **change}
+        assert detector.analyze_product({'activeIngredients': [genuine]}).blends_detected
