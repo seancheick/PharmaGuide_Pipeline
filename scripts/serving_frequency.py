@@ -1,7 +1,8 @@
 """Canonical daily-serving-frequency policy.
 
-How many servings a day a label directs. One implementation, consumed by both
-pipeline stages:
+How many servings a day a label directs, and the printed daily ceiling it may
+add (`ceilingDailyServings`, exposure only; see `resolve_daily_serving_ceiling`).
+One implementation, consumed by both pipeline stages:
 
   enrich_supplements_v3._collect_interaction_profile  (per-day dose thresholds)
   scoring_v4.modules.generic_helpers.daily_serving_range  (v4 dimension scorers)
@@ -30,6 +31,8 @@ from typing import Any, Dict, Optional, Tuple
 
 __all__ = [
     "format_daily_frequency",
+    "format_daily_frequency_range",
+    "resolve_daily_serving_ceiling",
     "resolve_daily_serving_range",
     "resolve_daily_serving_multiplier",
     "select_canonical_serving",
@@ -407,13 +410,42 @@ def resolve_daily_serving_range(record: Dict[str, Any]) -> Tuple[float, float, b
     return 1.0, 1.0, True
 
 
-def resolve_daily_serving_multiplier(record: Dict[str, Any]) -> float:
-    """Servings per day for risk: the top of `resolve_daily_serving_range`,
-    the maximum directed daily use, which interaction dose thresholds and
-    safety checks compare against. Adequacy credit reads the bottom of the
-    same range (`scoring_v4.modules.generic_helpers.daily_serving_multiplier`).
+def resolve_daily_serving_ceiling(record: Dict[str, Any]) -> Optional[float]:
+    """The label's printed daily maximum ("not to exceed 5 servings per day").
+
+    `ceilingDailyServings` on the canonical serving row is a limit, not a
+    direction (Sean, 2026-10-29): `minDailyServings`/`maxDailyServings` stay
+    the directed range (recommended and optional use), so adequacy, Dose and
+    the dosing summary never read the ceiling. It is returned only when it
+    raises exposure above the directed maximum; a smaller value cannot lower
+    exposure and is ignored.
     """
-    return resolve_daily_serving_range(record)[1]
+    serving = select_canonical_serving(record.get("servingSizes"))
+    if not isinstance(serving, dict):
+        return None
+    ceiling = _positive_float(serving.get("ceilingDailyServings"))
+    if ceiling is None:
+        return None
+    # The ceiling counts printed servings. When the directed range was rebased
+    # onto the Facts-panel amount basis, rebase the ceiling the same way.
+    facts_panel = resolve_facts_panel_serving_basis(record)
+    printed_max = _positive_float(serving.get("maxDailyServings"))
+    if facts_panel is not None and "max_servings_per_day" in facts_panel and printed_max is not None:
+        ceiling *= facts_panel["max_servings_per_day"] / printed_max
+    return ceiling if ceiling > resolve_daily_serving_range(record)[1] else None
+
+
+def resolve_daily_serving_multiplier(record: Dict[str, Any]) -> float:
+    """Servings per day for risk: the conservative daily exposure.
+
+    That is the label's printed ceiling when it has one, otherwise the top of
+    `resolve_daily_serving_range` (the maximum directed daily use). Interaction
+    dose thresholds and the UL screen compare against it. Adequacy credit reads
+    the bottom of the directed range
+    (`scoring_v4.modules.generic_helpers.daily_serving_multiplier`).
+    """
+    ceiling = resolve_daily_serving_ceiling(record)
+    return ceiling if ceiling is not None else resolve_daily_serving_range(record)[1]
 
 
 def format_daily_frequency(servings_per_day: Any) -> str:
@@ -441,3 +473,16 @@ def format_daily_frequency(servings_per_day: Any) -> str:
         return "four times daily"
     formatted = f"{count:g}"
     return f"{formatted} times daily"
+
+
+def format_daily_frequency_range(low: Any, high: Any) -> str:
+    """Render a directed range ("1-3 times daily") rather than only its top.
+
+    Whole-count ranges only; anything else keeps the single-frequency wording
+    of the top so fractional schedules are never flattened into a range.
+    """
+    lo, hi = _positive_float(low), _positive_float(high)
+    if (lo is None or hi is None or math.isclose(lo, hi) or lo > hi or lo < 1
+            or not float(lo).is_integer() or not float(hi).is_integer()):
+        return format_daily_frequency(high)
+    return f"{lo:g}-{hi:g} times daily"

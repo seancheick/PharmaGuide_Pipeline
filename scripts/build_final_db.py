@@ -104,7 +104,7 @@ from scoring_input_contract import (
 )
 from serving_frequency import (
     select_canonical_serving,
-    format_daily_frequency,
+    format_daily_frequency_range,
     resolve_daily_serving_range,
 )
 from label_record_contract import build_label_record_contract
@@ -10189,8 +10189,9 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
     # How many servings a day is a separate axis from how big a serving is, and
     # it has one owner pipeline-wide. Deriving it here from servingSizes[0]
     # printed the child regimen on products that declare both a child and an
-    # adult serving row.
-    _, max_daily, frequency_defaulted = resolve_daily_serving_range(enriched)
+    # adult serving row. The cadence is the directed range; a printed daily
+    # ceiling ("not to exceed") is exposure, never an instruction to take it.
+    min_daily, max_daily, frequency_defaulted = resolve_daily_serving_range(enriched)
 
     # Serving size comes from the same canonical owner as scoring.
     sb = safe_dict(enriched.get("serving_basis"))
@@ -10244,17 +10245,17 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
                 verb, noun_singular, noun_plural = _derive_serving_verb_and_noun(intake_unit, form_factor)
                 qty_text = _format_quantity(low) if low == high else f"{_format_quantity(low)}-{_format_quantity(high)}"
                 noun = noun_singular if low == high == 1 else noun_plural
-                cadence = format_daily_frequency(max(cadence_values))
+                cadence = format_daily_frequency_range(min(cadence_values), max(cadence_values))
                 summary = f"{verb} {qty_text} {noun} {cadence}".strip()
         elif min_qty == max_qty:
             qty_text = _format_quantity(min_qty)
             noun = noun_singular if min_qty == 1 else noun_plural
-            cadence = format_daily_frequency(max_daily)
+            cadence = format_daily_frequency_range(min_daily, max_daily)
             summary = f"{verb} {qty_text} {noun} {cadence}".strip()
         else:
             qty_text = f"{_format_quantity(min_qty)}-{_format_quantity(max_qty)}"
             noun = noun_plural
-            cadence = format_daily_frequency(max_daily)
+            cadence = format_daily_frequency_range(min_daily, max_daily)
             summary = f"{verb} {qty_text} {noun} {cadence}".strip()
 
     # Limit length defensively.

@@ -150,7 +150,8 @@ def test_dosing_instruction_uses_the_adult_row_not_serving_sizes_zero() -> None:
     DSLD 317115's shape: a 5 mL child row at 1-3/day and a 10 mL adult row at
     1-4/day. `generate_dosing_summary` derived its cadence from element zero
     whenever serving_basis was absent, printing "three times daily" for a label
-    directing up to four.
+    directing up to four. Since 2026-10-29 the cadence is the directed range,
+    so the adult row reads 1-4 (the child row would read 1-3).
     """
     from build_final_db import generate_dosing_summary
 
@@ -171,7 +172,7 @@ def test_dosing_instruction_uses_the_adult_row_not_serving_sizes_zero() -> None:
         ],
     }
 
-    assert "four times daily" in generate_dosing_summary(record)["dosing_summary"]
+    assert generate_dosing_summary(record)["dosing_summary"] == "Take 10 mL 1-4 times daily"
 
 
 def test_rda_adequacy_resolves_the_same_range_as_the_thresholds() -> None:

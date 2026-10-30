@@ -107,6 +107,7 @@ _ALLOWED_FORM_FIELDS = frozenset(
 )
 _ALLOWED_SERVING_FIELDS = frozenset(
     {
+        "ceilingDailyServings",
         "inSFB",
         "maxDailyServings",
         "maxQuantity",
@@ -347,13 +348,18 @@ def _validate_serving_size(value: object, path: str) -> None:
     _required_string(value.get("unit"), f"{path}.unit", max_length=80)
     _optional_positive_integer(value.get("order"), f"{path}.order")
     _optional_string(value.get("notes"), f"{path}.notes", max_length=1000)
-    for field in ("minDailyServings", "maxDailyServings"):
+    for field in ("minDailyServings", "maxDailyServings", "ceilingDailyServings"):
         if value.get(field) is not None:
             _finite_number(
                 value[field],
                 f"{path}.{field}",
                 minimum=_POSITIVE_NUMBER_MINIMUM,
             )
+    directed = [value[field] for field in ("minDailyServings", "maxDailyServings")
+                if value.get(field) is not None]
+    if value.get("ceilingDailyServings") is not None and directed and value["ceilingDailyServings"] < max(directed):
+        # A printed "not to exceed" limit below the directions is a misreading.
+        raise SubmissionImportError(f"{path}.ceilingDailyServings must be >= the directed daily servings")
     if value.get("inSFB") is not None and not isinstance(value["inSFB"], bool):
         raise SubmissionImportError(f"{path}.inSFB must be a boolean")
     if max_quantity < min_quantity:
