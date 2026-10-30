@@ -231,3 +231,38 @@ def test_ceiling_is_rebased_with_a_facts_panel_basis():
     }
     assert resolve_daily_serving_range(product) == (0.5, 1.0, False)
     assert resolve_daily_serving_ceiling(product) == pytest.approx(1.5)
+
+
+def test_ul_wording_names_the_printed_ceiling_after_a_facts_panel_rebase(enricher):
+    # 2 tablets, 1-2 times daily, not to exceed 3; Facts amounts are per 4
+    # tablets, so exposure is 1.5 Facts servings. The label printed 3.
+    variant = {"serving_size_quantity": 4, "serving_size_unit": "Tablet(s)"}
+    product = {
+        "activeIngredients": [{"name": "Zinc", "standardName": "Zinc", "canonical_id": "zinc",
+                               "canonical_source_db": "ingredient_quality_map",
+                               "quantity": 40, "unit": "mg",
+                               "raw_taxonomy": {"quantityVariants": [variant]}}],
+        "inactiveIngredients": [],
+        "servingSizes": [{"order": 1, "minQuantity": 2, "maxQuantity": 2, "unit": "Tablet(s)",
+                          "minDailyServings": 1, "maxDailyServings": 2, "ceilingDailyServings": 3,
+                          "dailyServingsSource": "label"}],
+    }
+    result = enricher._collect_rda_ul_data(
+        product, min_servings_per_day=0.5, max_servings_per_day=resolve_daily_serving_multiplier(product))
+    flags = [flag for flag in result["safety_flags"] if flag.get("canonical_id") == "zinc"
+             or "zinc" in str(flag.get("nutrient") or "").lower()]
+    assert len(flags) == 1 and flags[0]["pct_ul"] == pytest.approx(150.0)
+    assert "label's stated maximum of 3 servings a day" in flags[0]["warning"]
+    assert "1.5 servings" not in flags[0]["warning"]
+
+
+def test_ceiling_alone_keeps_the_defaulted_minimum_marked_estimated(enricher):
+    # No directions, only "not to exceed 4": the one-serving minimum is a
+    # default, so the RDA output must not present it as label-declared.
+    product = _zinc_product(20, None, None, 4)
+    product["servingSizes"][0].pop("dailyServingsSource")
+    enriched, _ = enricher.enrich_product({"id": "ceiling_only", "fullName": "Zinc", **product})
+    rows = [row for row in enriched["rda_ul_data"]["adequacy_results"]
+            if "zinc" in str(row.get("nutrient") or "").lower()]
+    assert rows and all(row["is_servings_estimated"] is True for row in rows)
+    assert enriched["rda_ul_data"]["safety_flags"][0]["pct_ul"] == pytest.approx(200.0)

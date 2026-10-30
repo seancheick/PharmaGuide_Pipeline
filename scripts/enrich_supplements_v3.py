@@ -22951,7 +22951,8 @@ class SupplementEnricherV3:
         self,
         product: Dict,
         min_servings_per_day: Optional[float] = None,
-        max_servings_per_day: Optional[float] = None
+        max_servings_per_day: Optional[float] = None,
+        frequency_defaulted: bool = False,
     ) -> Dict:
         """
         Collect RDA/UL reference data for user profile scoring (Section E).
@@ -23105,10 +23106,15 @@ class SupplementEnricherV3:
         # name it as the exposure source in every UL sentence.
         label_ceiling = resolve_daily_serving_ceiling(product)
         if label_ceiling is not None and servings_max is not None and math.isclose(servings_max, label_ceiling):
-            max_exposure_label = f"at the label's stated maximum of {label_ceiling:g} servings a day"
+            # Name the number the label prints; exposure may be rebased onto
+            # the Facts-panel amount basis.
+            printed = (select_canonical_serving(product.get("servingSizes")) or {}).get("ceilingDailyServings")
+            max_exposure_label = f"at the label's stated maximum of {float(printed):g} servings a day"
         else:
             max_exposure_label = "at maximum directed daily use"
-        servings_estimated = False
+        # A defaulted directed range stays an estimate even when a printed
+        # ceiling supplies the exposure maximum.
+        servings_estimated = bool(frequency_defaulted)
         if servings_min is None or servings_min <= 0:
             servings_min = 1
             servings_estimated = True
@@ -25617,7 +25623,8 @@ class SupplementEnricherV3:
                     enriched,
                     min_servings_per_day=servings_min,
                     max_servings_per_day=(None if frequency_defaulted and label_ceiling is None
-                                          else resolve_daily_serving_multiplier(enriched))
+                                          else resolve_daily_serving_multiplier(enriched)),
+                    frequency_defaulted=frequency_defaulted,
                 )
                 if isinstance(enriched["rda_ul_data"], dict):
                     enriched["rda_ul_data"]["collection_enabled"] = True

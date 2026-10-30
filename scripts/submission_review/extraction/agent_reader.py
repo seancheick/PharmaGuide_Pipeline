@@ -584,7 +584,10 @@ def cmd_save(api: Reviewer, alias: str) -> int:
     api.call("save_review", submission_id=submission["id"], payload=label,
              expected_evidence_revision=submission["evidence_revision"],
              evidence_manifest_sha256=submission["evidence_manifest_sha256"])
-    saved_copy.write_text(json.dumps(label, indent=1, ensure_ascii=False) + "\n")
+    # Replace atomically: a later save reads this copy to recognize its own work.
+    partial = saved_copy.with_name(saved_copy.name + ".tmp")
+    partial.write_text(json.dumps(label, indent=1, ensure_ascii=False) + "\n")
+    partial.replace(saved_copy)
     print(f"{alias}: saved. In the console: open it, compare each field with its crop, "
           f"tick the five fields, approve.")
     return 0

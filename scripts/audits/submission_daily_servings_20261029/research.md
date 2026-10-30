@@ -21,7 +21,9 @@ scores/pillars/verdicts unchanged; cleaned `servingSizes[*].dailyServingsSource`
 entries; enriched `dosage_normalization.serving_basis.confidence` low→high (8800C6CB, F580FBD6); controls
 (C926B40D, 3D5877FE) byte-identical. Receipts: ~/pg_quality/submission_daily_20261029/.
 
-Out of scope (owner cannot represent; no shipped consumer impact found), from the same photo audit:
-54970EAA "Total Carbohydrate less than 1g" (typed nutritionalInfo has no operator), F580FBD6
-Polyunsaturated Fat 0.5 g, 7283A83B tablet ingredient grouping (Clean flattens inactives),
-5871249A creatine listed as other ingredient (Clean already drops the duplicate inactive).
+Repaired later in the same correction file by #297 (printed-value fidelity), from the same photo
+audit: 54970EAA "Total Carbohydrate less than 1g" (typed nutritionalInfo operator `<`) and F580FBD6
+Polyunsaturated Fat 0.5 g. F580FBD6's daily range and its fat repair share one entry and one source
+binding (merged in #300). Out of scope, no shipped consumer impact found: 7283A83B tablet ingredient
+grouping (Clean flattens inactives), 5871249A creatine listed as other ingredient (Clean already drops
+the duplicate inactive).
