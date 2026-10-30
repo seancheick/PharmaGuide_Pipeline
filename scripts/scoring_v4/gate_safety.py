@@ -999,7 +999,10 @@ def _is_stimulant_context(product: Dict[str, Any]) -> bool:
     for blend in _safe_list(product.get("proprietary_blends")):
         if not isinstance(blend, dict):
             continue
-        blend_text = " ".join(_norm(blend.get(field)) for field in ("name", "raw_name", "purpose"))
+        blend_text = " ".join([
+            _printed_blend_name(blend, product),
+            *(_norm(blend.get(field)) for field in ("raw_name", "purpose")),
+        ])
         if any(token in blend_text for token in ("energy", "stimulant", "pre workout", "pre-workout", "thermogenic")):
             return True
     return False
