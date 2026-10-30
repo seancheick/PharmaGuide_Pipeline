@@ -7907,8 +7907,9 @@ class EnhancedDSLDNormalizer:
         if dose_data_quality:
             quantity = dose_data_quality["corrected_amount"]
             unit = dose_data_quality["corrected_unit"]
-        is_structural_active_blend_total = (
-            is_active and self._is_dsld_active_blend_total_row(ing)
+        is_structural_active_blend_total = is_active and (
+            self._is_dsld_active_blend_total_row(ing)
+            or self._is_probiotic_cfu_total_row(ing)
         )
         unit_norm_for_unmapped = str(unit or "").strip().lower()
         nested_without_individual_dose_for_report = (
@@ -12587,9 +12588,19 @@ class EnhancedDSLDNormalizer:
         Enrichment owns CFU parsing. This identifies the label's structural
         total only; it creates neither a strain identity nor a member dose.
         """
-        return (
-            self.matcher.preprocess_text(ing.get("name") or "") == "total probiotic cultures"
-            and self._is_dsld_active_blend_total_row(ing)
+        name = self.matcher.preprocess_text(ing.get("name") or "")
+        if name == "total probiotic cultures" and self._is_dsld_active_blend_total_row(ing):
+            return True
+        # A printed culture total that carries its own amount ("Total
+        # Bifidobacterium Cultures 2 Billion CFU") is the same structural
+        # total whichever cultures it names. DSLD's NP totals keep the rule
+        # above; their counts live in notes.
+        quantity, unit = self._extract_primary_mass_unit(ing)
+        return bool(
+            re.fullmatch(r"total\b.*\bcultures", name)
+            and not ing.get("nestedRows")
+            and quantity is not None
+            and str(unit or "").strip().upper() != "NP"
         )
 
     def _is_dsld_active_blend_total_row(self, ing: Dict[str, Any]) -> bool:
