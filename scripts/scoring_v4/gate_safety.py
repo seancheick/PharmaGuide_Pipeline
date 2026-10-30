@@ -35,6 +35,7 @@ The signal SOURCE is shared with v3, but the verdict policy here is v4-owned.
 from __future__ import annotations
 
 import json
+import re
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import asdict, dataclass, field, replace
@@ -1038,25 +1039,40 @@ def _blend_children_text(blend: Dict[str, Any], *, undisclosed_only: bool = Fals
     return " ".join(parts)
 
 
-def _printed_blend_name(product: Dict[str, Any], blend: Dict[str, Any]) -> str:
+def _printed_blend_name(blend: Dict[str, Any], product: Dict[str, Any]) -> str:
     """The label's wording for a blend. A blend only the pattern detector saw keeps the
     registry category in ``name`` ("Stimulant Blends" for a printed "Focus Blend"); a
-    category is our classification, not a printed stimulant name."""
-    if ("cleaning" not in _safe_list(blend.get("sources"))
-            and blend.get("detector_group")
-            and blend.get("name") == blend.get("detector_group")):
-        source_field = str(blend.get("source_field") or "")
-        for collection in ("activeIngredients", "supplementFacts", "ingredients"):
-            prefix = f"{collection}["
-            if source_field.startswith(prefix) and source_field.endswith("]"):
-                index = source_field[len(prefix):-1]
-                rows = _safe_list(product.get(collection))
-                if index.isdigit() and int(index) < len(rows):
-                    row = rows[int(index)]
-                    if isinstance(row, dict) and row.get("name"):
-                        return _norm(row["name"])
-        return _norm((blend.get("evidence") or {}).get("matched_text"))
-    return _norm(blend.get("name"))
+    category is our classification, not a printed stimulant name. Its wording is the
+    printed row the detector scanned, or for a statement the clause that ends at the
+    match, so a stimulant word beside the matched phrase ("Thermogenic Focus Blend")
+    still counts. Unresolved wording stays at the matched phrase, never the category."""
+    name = _norm(blend.get("name"))
+    if ("cleaning" in _safe_list(blend.get("sources"))
+            or not blend.get("detector_group")
+            or blend.get("name") != blend.get("detector_group")):
+        return name
+    matched = _norm((blend.get("evidence") or {}).get("matched_text"))
+    field, _, index = str(blend.get("source_field") or "").partition("[")
+    if not matched:
+        return ""
+    if field == "statements":
+        # The detector scans each statement on its own, so every statement
+        # source reads statements[0]; find the printed clauses instead.
+        clauses = []
+        for statement in _safe_list(product.get("statements")):
+            text = _norm(statement.get("text") or statement.get("notes")
+                         if isinstance(statement, dict) else statement)
+            for match in re.finditer(re.escape(matched), text):
+                clauses.append(re.split(r"[.;:!?*\n]", text[:match.end()])[-1])
+        return " ".join(clauses) or matched
+    rows = _safe_list(product.get(field))
+    position = int(index.rstrip("]")) if index.rstrip("]").isdigit() else -1
+    row = rows[position] if 0 <= position < len(rows) else None
+    if isinstance(row, dict):
+        printed_name = _norm(row.get("name") or row.get("ingredient"))
+        if matched in printed_name:
+            return printed_name
+    return matched
 
 
 def _has_undisclosed_stimulant_blend(product: Dict[str, Any]) -> bool:
@@ -1072,7 +1088,7 @@ def _has_undisclosed_stimulant_blend(product: Dict[str, Any]) -> bool:
             continue
         if _norm(blend.get("disclosure_level")) not in ("none", "partial"):
             continue
-        name = _printed_blend_name(product, blend)
+        name = _printed_blend_name(blend, product)
         kids = _blend_children_text(blend)
         if any(token in name for token in _STRONG_STIM_BLEND_NAMES):
             return True
