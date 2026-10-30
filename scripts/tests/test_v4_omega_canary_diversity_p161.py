@@ -77,9 +77,11 @@ CANARY_TARGETS = {
     "288740": ('omega', 'undefined', 6.57, 6.57, 'Nordic Naturals Ultimate Omega + CoQ10 Lemon'),
     # --- Low band: plain fish oil, no molecular form, low concentration ---
     "179447": ('omega', 'undefined', 5.57, 5.57, 'Nature Made Fish Oil 1200 mg'),
-    # Low tier without any penalty: no rated molecular form and no EPA/DHA
-    # concentration credit (replaces 179447, whose 0 came from additive charges).
-    "314032": ('omega', 'undefined', 0.0, 0.0, 'GNC Kids Gummy DHA for Kids 2-12 Raspberry Lemon'),
+    # Low tier without any penalty or concentration credit (replaces 179447,
+    # whose 0 came from additive charges). 567234047 (Oct 19) keeps the DHA row's
+    # printed identity, earning the undefined-form tier (0 -> 8.57); 27e025d65
+    # (Oct 20) excludes constituent summaries from carrier oil mass (-> 4.57).
+    "314032": ('omega', 'undefined', 4.57, 4.57, 'GNC Kids Gummy DHA for Kids 2-12 Raspberry Lemon'),
 }
 
 
