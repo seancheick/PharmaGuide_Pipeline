@@ -41,7 +41,7 @@ def _golden_index() -> dict:
     # Scan the enriched corpus ONCE for every golden product (early-exit once all
     # are found) instead of re-parsing the whole corpus per parametrized call.
     # sorted() makes the scan deterministic (glob order is FS-dependent).
-    wanted = set(GOLDEN_IDS)
+    wanted = set(GOLDEN_IDS) | {QUERCEFIT_DSLD}
     index: dict[str, dict] = {}
     for path in sorted((SCRIPTS_ROOT / "products").glob("output_*_enriched/enriched/*.json")):
         payload = json.loads(path.read_text())
@@ -76,9 +76,11 @@ def _evidence_rows(product: dict) -> list[dict]:
 PROTEIN_DSLD = "180692"
 OMEGA_DSLD = "13801"
 ENZYME_DSLD = "293966"
-# Airborne Kids: identity-bearing blend header masses. 309492 (Quercefit) is a
-# one-constituent DSLD blend that e91e6b90f correctly reads as its ingredient.
+# Airborne Kids: identity-bearing blend header masses.
 BLEND_DSLD = "180572"
+# Quercefit: a one-constituent DSLD blend row that e91e6b90f reads as its
+# ingredient. Kept as its own canary (below), no longer a blend golden.
+QUERCEFIT_DSLD = "309492"
 
 GOLDEN_IDS = [PROTEIN_DSLD, OMEGA_DSLD, ENZYME_DSLD, BLEND_DSLD]
 
@@ -211,3 +213,13 @@ def test_label_active_projection_retains_its_source_provenance() -> None:
         assert row["raw_source_path"]
         assert row["evidence_origin"] == "compatibility_derived"
         assert row["clean_identity_id"] == row["scoring_parent_id"]
+
+
+def test_one_constituent_blend_row_scores_as_its_ingredient() -> None:
+    """Quercefit 300 mg (DSLD category blend, one form) is the ingredient
+    itself, not a blend total: one direct quercetin row, no derived evidence."""
+    product = _load_product(QUERCEFIT_DSLD)
+    rows = get_scoring_ingredients(product, strict=True).rows
+    assert [(r.get("canonical_id"), r.get("raw_source_path"), r.get("quantity"), r.get("unit"))
+            for r in rows] == [("quercetin", "ingredientRows[0]", 300.0, "mg")]
+    assert not _evidence_rows(product)

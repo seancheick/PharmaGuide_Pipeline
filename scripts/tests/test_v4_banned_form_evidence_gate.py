@@ -330,9 +330,10 @@ def _target_banned_rule(product: dict, resolver) -> str | None:
     return None
 
 
-# Scores every PHO label in the whole enriched corpus: 111-133 s measured
-# alone on October 30, over pytest's 120 s default.
-@pytest.mark.timeout(600)
+# Scores every PHO label in the whole enriched corpus. Measured alone on
+# October 30: 111 s (candidate) and 133 s (main), over pytest's 120 s default;
+# 300 s is about 2.3x the slowest measurement.
+@pytest.mark.timeout(300)
 def test_corpus_pho_products_are_v4_native_blocked() -> None:
     enriched = _load_enriched_corpus()
     if not enriched:

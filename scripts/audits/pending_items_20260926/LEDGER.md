@@ -1,3 +1,15 @@
+## October 30 — slow-profile canaries re-pinned by cause; one invariant open (Claude)
+
+**Class:** tests only, plus one safety-walker hardening with no corpus output change. The fast CI rung never runs `SLOW_TEST_FILES`. On main, 21 slow tests had failed since October 18–28. Each movement was replayed from frozen raw labels at its commit and parent. Receipts are in `~/pg_quality/canary_fresh_20261030` and `canary_fresh2_20261030`. Every movement is an approved, merged change: d2d4128c9, a78f78bf9, cf5ec623f, 37d74d5b1, 82d4e845e, 4c443cec0, 2ba45cac1, 63ad40e71, 97c471f8a, 567234047 and 27e025d65. Each re-pin names its cause in the test. 309492 stays as a real canary, now as a one-constituent blend read as quercetin (e91e6b90f). 180572 is the blend-header golden.
+
+**Walker (team audit of #298).** `active_label_rows` lists a repeated row once but still visits its children, so a distinct child under a repeated parent is screened. The corpus census found 0 of 15,437 products with a repeated key and 0 with the legacy `nested_ingredients` spelling, so no output changes. The regression is `test_a_repeated_parent_never_hides_a_distinct_child`.
+
+**Timeout.** The PHO corpus sweep measured 111 s (candidate) and 133 s (main) alone, against a 120 s default. It now has 300 s. Its verdicts were already correct: every PHO label is BLOCKED.
+
+**Open — genuine, not forced.** `test_v4_omega_canary_diversity_p161.py::test_canary_set_covers_score_ranges` requires a low-tier omega canary, Formulation ≤ 4 against a ceiling of 12. Its anchor, 314032, now honestly earns 4.57. The only zero-scoring candidates found are labels without amounts (260262) or TG-form gummies scoring 0 (220343, 220662, 223405, 223408), which are unexplained. Next: explain those gummies' zero at the omega Formulation owner. Pin one only if it is a complete label scoring low for a sourced reason. Do not substitute an incomplete label.
+
+**Not done here.** These re-pins check the stale corpus and frozen replays. Sean's corpus run plus the post-run audit remain the release gate.
+
 ## October 29 — fresh-corpus source repair integrated; release still gated
 
 Owner: existing source identity/roles/provenance, Dose references, clinical applicability, assessment readiness/publication and Flutter consumers — evidence: source matrix, named regression/consumer checks and durable receipts in `/Users/seancheick/pg_quality/condition_scope_20261028/qualification_retry`. Will NOT create another scorer, registry, public state/field, invented benchmark or clinical approval.

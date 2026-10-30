@@ -3300,10 +3300,12 @@ def active_label_rows(active_ingredients: Any) -> List[Dict[str, Any]]:
                 if source_path
                 else ("object", id(row))
             )
-            if identity in seen:
-                continue
-            seen.add(identity)
-            flattened.append(row)
+            if identity not in seen:
+                seen.add(identity)
+                flattened.append(row)
+            # A repeated row is listed once, but its children are still
+            # visited: each child dedupes on its own identity, so a distinct
+            # child under a repeated parent is never left unscreened.
             visit(row.get("nestedIngredients"))
 
     visit(active_ingredients)

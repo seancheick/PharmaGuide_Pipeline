@@ -82,10 +82,6 @@ CANARY_TARGETS = {
     # printed identity, earning the undefined-form tier (0 -> 8.57); 27e025d65
     # (Oct 20) excludes constituent summaries from carrier oil mass (-> 4.57).
     "314032": ('omega', 'undefined', 4.57, 4.57, 'GNC Kids Gummy DHA for Kids 2-12 Raspberry Lemon'),
-    # The low-tier anchor since 314032 earns form credit: the label prints no
-    # EPA/DHA amounts (NP) and no molecular form, so nothing is credited and
-    # nothing is penalized.
-    "260262": ('omega', 'undefined', 0.0, 0.0, 'GNC Fish Oil Lemon'),
 }
 
 

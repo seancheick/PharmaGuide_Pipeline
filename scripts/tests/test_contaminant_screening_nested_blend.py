@@ -218,3 +218,20 @@ def test_export_safety_and_interaction_carriers_read_nested_children(runs) -> No
     assert {"ephedra", "titanium_dioxide"} <= nested["tags"]
     assert "Ephedra" in nested["search_text"]
     assert nested == flat
+
+
+def test_a_repeated_parent_never_hides_a_distinct_child():
+    # Team audit of #298: two representations of one source row (same path,
+    # name, amount) with different children. The parent is listed once; every
+    # distinct child is still in the ledger that safety screening reads.
+    # The October 30 corpus census found no such record (0 of 15,437).
+    from scoring_input_contract import active_label_rows
+
+    def parent(child, index):
+        return {"name": "Energy Blend", "raw_source_path": "ingredientRows[0]", "quantity": 500,
+                "unit": "mg", "nestedIngredients": [
+                    {"name": child, "raw_source_path": f"ingredientRows[0].nestedRows[{index}]"}]}
+
+    rows = active_label_rows([parent("Green Tea Extract", 0), parent("Yohimbe", 1),
+                              parent("Green Tea Extract", 0)])
+    assert [row["name"] for row in rows] == ["Energy Blend", "Green Tea Extract", "Yohimbe"]
