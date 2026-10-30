@@ -2490,11 +2490,11 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "e2efefe48b58db8540bb6927b9fa04a1e835af8276509da5b755a85f93bd9519",
+          "source_sha256": "d29fda4ac4fb69e3227e110f16ab99c461d6f0b61407fe06fb492c127730f74d",
           "source_ids": [
             "PMID:24723963"
           ],
-          "verified_at": "2026-10-27T22:38:13.265370+00:00",
+          "verified_at": "2026-10-30T01:08:42.661258+00:00",
           "is_complete": true,
           "results": [
             {
@@ -2504,14 +2504,15 @@
               "expression_of_concern": false,
               "has_erratum": false,
               "article_title": "Randomized, Double-Blind Clinical Trial to Assess the Acute Diuretic Effect of Equisetum arvense (Field Horsetail) in Healthy Volunteers.",
-              "content_sha256": "0ab5713232b4b2c8fbc24090d1cf77c09a575f767ea499d9477ab870f5740b55"
+              "content_sha256": "0ab5713232b4b2c8fbc24090d1cf77c09a575f767ea499d9477ab870f5740b55",
+              "notes": "Existing Equisetum arvense extract source content rechecked2026-10-29 after narrower source-identity binding. The900mg/day acute diuretic study does not establish a universal minimum, silica percentage equivalence, elemental-silicon quantity or efficacy/safety transfer to these labels. Original scientific approval date remains2026-10-27."
             }
           ]
         }
       },
       "reference_semantics": {
         "reference_type": "no_benchmark",
-        "scope": "General catalog Dose for identified horsetail only. Existing source-specific exposures remain descriptive; no universal minimum, optimal interval, preparation conversion or safety ceiling is established by them. This is not absence of research or universal null efficacy.",
+        "scope": "exact_preparation",
         "preparation": "Equisetum arvense extract",
         "purpose": "General catalog Dose only; exact clinical purpose, Evidence determination and independent safety applicability remain with existing owners.",
         "population": "healthy volunteers",
@@ -2525,7 +2526,18 @@
         "owner": "scripts/data/literature_evidence_records.json::horsetail",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      }
+      },
+      "aliases": [
+        "Horsetail Whole Herb Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "Equisetum arvense"
+        ]
+      },
+      "notes": "Source-binding refinement2026-10-29: retain the existing2026-10-27 Equisetum arvense extract approval and require that exact species on the original linked source row. The exact-mode selector is a narrower implementation of the existing preparation boundary, not a new benchmark/approval or silica conversion. Previous descriptive scope: General catalog Dose for identified horsetail only. Existing source-specific exposures remain descriptive; no universal minimum, optimal interval, preparation conversion or safety ceiling is established by them. This is not absence of research or universal null efficacy."
     },
     {
       "canonical_id": "ginger_extract",

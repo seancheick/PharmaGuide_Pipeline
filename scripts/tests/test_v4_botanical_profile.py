@@ -951,7 +951,10 @@ def test_completed_source_specific_review_does_not_require_an_invented_general_d
     assert semantics['curve'] == 'completed_no_benchmark_neutral'
     assert semantics['source_ids']
     assert semantics['owner'] == f"scripts/data/literature_evidence_records.json::{record['canonical_id']}"
-    assert _botanical_benchmark({'canonical_id': canonical, 'name': canonical}) == 'absent'
+    # A completed exact preparation still needs original-source facts. A bare
+    # canonical cannot prove the species/preparation of the scanned label.
+    expected = 'unresolved' if semantics.get('scope') == 'exact_preparation' else 'absent'
+    assert _botanical_benchmark({'canonical_id': canonical, 'name': canonical}) == expected
 
 
 @pytest.mark.parametrize('kind,band', [('label_active_projection', 'disclosed_no_reference'),

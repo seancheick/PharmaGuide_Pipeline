@@ -1755,6 +1755,15 @@ class EnhancedDSLDNormalizer:
             # A DSLD blend group lists its constituents as forms; none of
             # them is the identity of the whole row.
             return None
+        if (str(ingredient_data.get("category") or "").casefold() == "botanical"
+                and isinstance(forms, list)
+                and self._parent_is_standardized_botanical_extract(" ".join(
+                    str(ingredient_data.get(key) or "") for key in ("name", "notes")))
+                and any(isinstance(form, dict) and form.get("category") == "mineral"
+                        and norm_module.normalize_unii(form.get("uniiCode")) for form in forms)):
+            # A mineral standardization marker identifies the constituent,
+            # never the whole botanical extract or its printed parent mass.
+            return None
         if (
             str(ingredient_data.get("category") or "").lower() == "botanical"
             and isinstance(forms, list)

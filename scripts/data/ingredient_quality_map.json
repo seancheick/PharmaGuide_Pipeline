@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12295,
+      "total_form_aliases": 12296,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -54167,10 +54167,10 @@
       "horsetail extract (unspecified)": {
         "bio_score": 7,
         "absorption": "unknown",
-        "consumer_note": "This label names horsetail extract without identifying plant part, silica standardization, or extract ratio.",
+        "consumer_note": "Horsetail extracts can differ in plant part, standardization and extraction method.",
         "consumer_note_review": {
-          "by": "Product owner approval",
-          "date": "2026-08-08"
+          "by": "Codex source-fact wording review under Sean instruction",
+          "date": "2026-10-29"
         },
         "notes": "Equisetum arvense botanical extract; identity mapped with conservative scoring pending form standardization. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=7 → low-mod) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -54185,7 +54185,8 @@
           "Horsetail Grass",
           "Springtime Horsetail extract",
           "Spring Horsetail",
-          "horsetail"
+          "horsetail",
+          "Horsetail Whole Herb Extract"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
