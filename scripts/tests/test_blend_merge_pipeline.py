@@ -19,6 +19,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from enrich_supplements_v3 import SupplementEnricherV3
+from scoring_v4.scored_artifact import build_scored_artifact
 
 
 class TestBlendMergePipeline:
@@ -148,6 +149,51 @@ class TestBlendMergePipeline:
 
         assert result['has_proprietary_blends'] is True
         assert result['blend_count'] >= 1
+
+    def test_statement_repeating_printed_blend_is_not_a_second_blend(self, enricher):
+        product = {
+            'id': '323062',
+            'activeIngredients': [{
+                'name': 'Proprietary Focus Blend', 'proprietaryBlend': True,
+                'quantity': 2.1, 'unit': 'Gram(s)',
+                'raw_source_path': 'ingredientRows[2]',
+                'nestedIngredients': [
+                    {'name': 'Inositol', 'quantity': 0, 'unit': 'NP'},
+                    {'name': 'L-Theanine', 'quantity': 0, 'unit': 'NP'},
+                    {'name': 'Taurine', 'quantity': 0, 'unit': 'NP'},
+                ],
+            }],
+            'inactiveIngredients': [],
+            'statements': [{'notes': 'Our proprietary focus blend supports calm.'}],
+        }
+
+        result = enricher._collect_proprietary_data(product)
+
+        assert result['blend_count'] == 1
+        assert [blend['name'] for blend in result['blends']] == ['Proprietary Focus Blend']
+        assert result['blends'][0]['source_row_ref'] == 'ingredientRows[2]'
+        product['proprietary_data'] = result
+        product['proprietary_blends'] = result['blends']
+        scored = build_scored_artifact(product)
+        assert 'STIMULANT_UNDISCLOSED_BLEND' not in scored['flags']
+
+    def test_distinct_statement_blend_is_still_retained(self, enricher):
+        product = {
+            'id': 'distinct_statement',
+            'activeIngredients': [{
+                'name': 'Energy Blend', 'proprietaryBlend': True,
+                'quantity': 500, 'unit': 'mg',
+            }],
+            'inactiveIngredients': [],
+            'statements': [{'notes': 'Contains a proprietary stimulant complex.'}],
+        }
+
+        result = enricher._collect_proprietary_data(product)
+
+        assert result['blend_count'] == 2
+        assert {blend['evidence']['matched_text'].lower() for blend in result['blends']} == {
+            'energy blend', 'proprietary stimulant complex',
+        }
 
     def test_inactive_delivery_marketing_match_is_ignored(self, enricher):
         product = {

@@ -15059,7 +15059,18 @@ class SupplementEnricherV3:
             # A detector failure fails the product (enrich_product records it);
             # dropping its blends would silently skip the B5 penalty.
             result = self.blend_detector.analyze_product(disclosure_product)
+            physical_blend_terms = {
+                self._normalize_exclusion_text(blend.matched_text)
+                for blend in result.blends_detected
+                if blend.source_field.startswith(("supplementFacts[", "activeIngredients[", "ingredients["))
+            }
             for blend in result.blends_detected:
+                # Label statements can repeat a blend already present as a
+                # physical Facts row. They describe that row; they do not add
+                # another opaque blend or an unprinted safety identity.
+                if (blend.source_field.startswith("statements[")
+                        and self._normalize_exclusion_text(blend.matched_text) in physical_blend_terms):
+                    continue
                 if (blend.source_field in non_opaque_source_fields
                         or label_source_refs.get(blend.source_field) in source_only_preparations):
                     continue
