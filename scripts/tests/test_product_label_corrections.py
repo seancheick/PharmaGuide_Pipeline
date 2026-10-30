@@ -1173,3 +1173,24 @@ def test_individually_verified_remaining_source_facts_keep_original_amount_and_r
         assert 'individual amount not declared' in result['notes']
     part = bamboo_label_normalizer._parse_botanical_details(result['notes']).get('plantPart')
     assert part in {'root','leaf','leaves','whole herb','whole grass','bark','fruit','mycelia'}
+
+
+@pytest.mark.parametrize('pid', ['329925','329926','329927','329928','330068','330069'])
+def test_exact_colored_maca_source_fact_does_not_infer_processing_or_mass(bamboo_label_normalizer, pid):
+    from copy import deepcopy
+    fixture = json.loads((Path(__file__).parent / 'fixtures/maca6_original_api_rows.json').read_text())[pid]
+    row = deepcopy(fixture['row'])
+    row['raw_source_path'] = fixture['raw_source_path']
+    before = deepcopy(row)
+    result = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
+    assert result['notes'] == fixture['expected_note']
+    assert bamboo_label_normalizer._parse_botanical_details(result['notes']) == {
+        'plantPart': 'root', 'genus': 'Lepidium', 'species': 'meyenii', 'form': 'powder'}
+    for key in ['name','forms','quantity','raw_source_path','nestedRows']:
+        assert result.get(key) == before.get(key)
+    assert not any(term in result['notes'].lower() for term in ['gelatinized','raw powder','extract','standardized'])
+    wrong = deepcopy(before)
+    wrong['quantity'][0]['quantity'] += 1
+    with pytest.raises(ValueError, match='Reviewed note attribution changed'):
+        bamboo_label_normalizer._apply_label_corrections([wrong], pid)
+    assert wrong['notes'] == before['notes']

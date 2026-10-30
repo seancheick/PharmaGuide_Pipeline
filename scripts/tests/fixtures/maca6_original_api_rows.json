@@ -1,0 +1,262 @@
+{
+  "329925": {
+    "row": {
+      "order": 1,
+      "ingredientId": 314620,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 3500,
+          "operator": "=",
+          "quantity": 3500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Black Maca, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Maca",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 303594,
+          "prefix": null,
+          "percent": null,
+          "name": "Lepidium meyenii, Powder",
+          "category": "botanical",
+          "ingredientGroup": "Maca",
+          "uniiCode": "HP7119212T"
+        }
+      ]
+    },
+    "raw_source_path": "ingredientRows[0]",
+    "expected_note": "Black Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+    "pdf_sha256": "5df83188979b6f7490e8ed3d584a606d74692f253a765fb965485d8312ee46ba"
+  },
+  "329926": {
+    "row": {
+      "order": 1,
+      "ingredientId": 314620,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 3500,
+          "operator": "=",
+          "quantity": 3500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Black Maca, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Maca",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 303594,
+          "prefix": null,
+          "percent": null,
+          "name": "Lepidium meyenii, Powder",
+          "category": "botanical",
+          "ingredientGroup": "Maca",
+          "uniiCode": "HP7119212T"
+        }
+      ]
+    },
+    "raw_source_path": "ingredientRows[0]",
+    "expected_note": "Black Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+    "pdf_sha256": "9b49cb4b25ce261530c5dd0b4977d172dffa2bc3889d86512848bcb941099152"
+  },
+  "329927": {
+    "row": {
+      "order": 1,
+      "ingredientId": 314620,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 3500,
+          "operator": "=",
+          "quantity": 3500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "mg"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Black Maca, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Maca",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 303594,
+          "prefix": null,
+          "percent": null,
+          "name": "Lepidium meyenii, Powder",
+          "category": "botanical",
+          "ingredientGroup": "Maca",
+          "uniiCode": "HP7119212T"
+        }
+      ]
+    },
+    "raw_source_path": "ingredientRows[0]",
+    "expected_note": "Black Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+    "pdf_sha256": "ca136498167f9f70708a690254d85bc139d54c5052e31812b91985303b676074"
+  },
+  "329928": {
+    "row": {
+      "order": 1,
+      "ingredientId": 314620,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 7,
+          "operator": "=",
+          "quantity": 5000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Veg Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Black Maca, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Maca",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": [
+        {
+          "order": 1,
+          "ingredientId": 303594,
+          "prefix": null,
+          "percent": null,
+          "name": "Lepidium meyenii, Powder",
+          "category": "botanical",
+          "ingredientGroup": "Maca",
+          "uniiCode": "HP7119212T"
+        }
+      ]
+    },
+    "raw_source_path": "ingredientRows[0]",
+    "expected_note": "Black Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+    "pdf_sha256": "e6857ea4bbc623851ada23cc1dc1de467e0e28b2c5ffa90e30aca420f5fe008d"
+  },
+  "330068": {
+    "row": {
+      "order": 1,
+      "ingredientId": 356091,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 3500,
+          "operator": "=",
+          "quantity": 3500,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Milligram(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Red Maca, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Maca",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "raw_source_path": "ingredientRows[0]",
+    "expected_note": "Red Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+    "pdf_sha256": "3f22a7fd8b6e31f3cf4225edbfac741e95e530b71442094f13115db38e25229b"
+  },
+  "330069": {
+    "row": {
+      "order": 1,
+      "ingredientId": 356091,
+      "description": "",
+      "notes": "",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 7,
+          "operator": "=",
+          "quantity": 5000,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Veg Capsule(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Red Maca, Powder",
+      "category": "botanical",
+      "ingredientGroup": "Maca",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    },
+    "raw_source_path": "ingredientRows[0]",
+    "expected_note": "Red Maca Powder (Lepidium meyenii) PlantPart: root Genus: Lepidium Species: meyenii",
+    "pdf_sha256": "0bb5b736da0324f21462e8c7b7a0446a4720f612a45bcdfe304ab1b20d06f97f"
+  }
+}
