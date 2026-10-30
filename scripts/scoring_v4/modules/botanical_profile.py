@@ -842,6 +842,34 @@ def score_botanical_purpose_dose(
     if not _is_botanical_active(row):
         return None
 
+    if (row.get("scoring_input_kind") == "product_level_evidence"
+            and row.get("evidence_scope") == "blend_level"
+            and row.get("reason") == "identity_bearing_blend_header_mass"
+            and not _is_named_botanical_preparation(product, row)):
+        from scoring_input_contract import _source_tree_rows, has_source_printed_amount
+        ref = row.get("raw_source_path")
+        originals = [source for source in _source_tree_rows(product)
+                     if isinstance(ref, str) and ref and source.get("raw_source_path") == ref]
+        ledger = [source for source in product.get("label_source_rows") or []
+                  if isinstance(source, dict) and source.get("raw_source_path") == ref]
+        original = originals[0] if len(originals) == 1 else None
+        mass = _mass_mg(original) if original is not None else None
+        if (original is not None and len(ledger) == 1
+                and ledger[0].get("raw_source_text") == original.get("raw_source_text")
+                and "canonical_id" in original
+                and original["canonical_id"] is None
+                and original.get("cleaner_row_role") == "blend_header_total"
+                and original.get("score_eligible_by_cleaner") is False
+                and original.get("score_exclusion_reason") == "blend_header_total"
+                and original.get("dose_class") == "blend_total_weight"
+                and has_source_printed_amount(original)
+                and mass is not None and mass > 0 and _mass_mg(row) == mass):
+            # The source owner identifies a structural total, not a botanical
+            # preparation. Keep its zero/opacity result without minting an
+            # ingredient identity and a scientific benchmark obligation.
+            return {"score": 0.0, "band": "blend_total_only",
+                    "metadata": {"assessment_status": "not_applicable"}}
+
     benchmark = _botanical_benchmark(row, product=product)
     disclosure = dose_disclosure_status(row)
     # The strict input owner's lent-mass classification proves that the label
