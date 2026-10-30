@@ -21279,6 +21279,28 @@ class SupplementEnricherV3:
             if not matched_rules:
                 continue
 
+            # An exact reviewed label may name a safety subject while omitting
+            # the species needed by its usual mechanism-specific rule. Reuse
+            # the uncertainty rule, with the bound label's own qualification.
+            from scoring_v4.scored_artifact import _held_assessment_label
+            held = _held_assessment_label(enriched)
+            qualified = None
+            if (held.get("safety_identity_id")
+                    and ingredient.get("raw_source_path") in held.get("safety_source_paths", [])):
+                template = next((r for r in raw_rules if r.get("_identity_conflict_only")
+                                 and (r.get("subject_ref") or {}).get("canonical_id") == held["safety_identity_id"]), None)
+                if template:
+                    qualified = copy.deepcopy(template)
+                    qualified["notes"] = held["notes"]
+                    for condition in qualified.get("condition_rules", []):
+                        condition["mechanism"] = held["notes"]
+                        condition["informational_note"] = held["notes"]
+                        condition["sources"] = [held["source_url"]]
+                    subject_ids = {subject["canonical_id"], held["safety_identity_id"]}
+                    matched_rules = [r for r in matched_rules
+                                     if (r.get("subject_ref") or {}).get("canonical_id") not in subject_ids]
+                    matched_rules.append(qualified)
+
             ingredient_name = ingredient.get("raw_source_text") or ingredient.get("name") or ingredient.get("standard_name") or "unknown"
             # A botanical twin is its declared IQM part (nettle root) for
             # rules scoped by plant part.
@@ -21301,7 +21323,7 @@ class SupplementEnricherV3:
                     # recognition row may omit those source notes.
                     source_row = label_rows_by_path.get(ingredient.get("raw_source_path")) or {}
                     scope_row = {**scope_row, "notes": source_row.get("notes")}
-                if not self._interaction_rule_applies(rule, scope_row):
+                if rule is not qualified and not self._interaction_rule_applies(rule, scope_row):
                     continue
                 dose_row = base_dose_row
                 declared_owner = compound_exposure_owners.get(id(ingredient))

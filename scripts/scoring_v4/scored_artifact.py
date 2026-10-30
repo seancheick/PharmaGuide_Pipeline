@@ -248,6 +248,44 @@ def _quality_assessment_status(
     return "failed"
 
 
+def _held_assessment_label(product: Dict[str, Any], release: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    """Match an approved unavailable assessment to its intact source edition.
+
+    With release facts, this qualifies score unavailability, never completion.
+    Without them, consumers may only qualify the source-bound precaution copy;
+    they cannot infer that a release or safety assessment succeeded.
+    """
+    from label_record_contract import build_label_record_contract
+    from scoring_input_contract import _source_tree_rows
+    from scoring_v4.quality_score_config import config
+
+    if release is not None and (release.get("is_complete") is not False
+            or release.get("unfinished_source_assessment") != "dose_benchmark_identity_unresolved"
+            or "dose_benchmark_identity_unresolved" not in (release.get("blockers") or [])):
+        return {}
+    entries = _safe_dict(_safe_dict(config().get("suppression")).get("held_assessment_labels"))
+    entry = _safe_dict(entries.get(str(product.get("dsld_id") or "")))
+    if not entry or not all(entry.get(key) for key in (
+            "reviewer", "review_date", "review_scope", "source_url", "source_rows")):
+        return {}
+    if release is not None and set(release.get("blockers") or []) != set(entry.get("blockers") or []):
+        return {}
+    try:
+        label = build_label_record_contract(product, product.get("display_ingredients"))
+    except ValueError:
+        return {}
+    if (label.get("source_record_id") != str(product.get("dsld_id") or "")
+            or label.get("source_name") != entry.get("source_name")
+            or not label.get("formula_fingerprint")
+            or label["formula_fingerprint"] != entry.get("formula_fingerprint")):
+        return {}
+    # Bind original physical assertions too: display identity alone cannot
+    # establish an unchanged species, tissue, assay or preparation edition.
+    fields = ("raw_source_path", "raw_source_text", "quantity", "unit", "notes",
+              "forms", "plantPart", "genus", "species")
+    return entry if [{key: row.get(key) for key in fields} for row in _source_tree_rows(product)] == entry["source_rows"] else {}
+
+
 def assemble_scored_artifact(
     enriched_product: Dict[str, Any],
     v4: Dict[str, Any],
@@ -319,6 +357,18 @@ def assemble_scored_artifact(
         enriched_product, assessment_readiness, _safe_dict(module_breakdown),
         unfinished_source=unfinished,
     )}
+    if (status == "scored" and safety_gate.get("verdict") not in {"BLOCKED", "UNSAFE"}
+            and safety_gate.get("ingredient_assessment_complete") is True
+            and not safety_resolvers_failed(safety_gate.get("ingredient_assessment_errors"))
+            and safety_gate.get("quarantine_required") is not True
+            and _held_assessment_label(enriched_product, assessment_readiness["release_assessment"])):
+        # Reuse the public score owner's existing unavailable branch rather
+        # than manufacturing a second set of score/mirror/tier nulling rules.
+        from scoring_v4.quality_score import assemble_quality_score
+        v4 = assemble_quality_score({**v4, "raw_score_v4_100": None,
+                                    "v4_verdict": "NOT_SCORED"})
+        status = v4["quality_score_status"]
+        score_unavailable_reason = "release_assessment_incomplete"
     # The release owner distinguishes a completed negative answer from an
     # unresolved source review. A provisional calculation must render the
     # same completeness conclusion without recomputing that policy here.
