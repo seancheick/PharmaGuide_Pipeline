@@ -29,6 +29,7 @@ from typing import Any, Callable, Iterable
 from uuid import UUID
 
 import env_loader  # noqa: F401  # Load the project .env without overriding shell vars.
+from normalization import QUANTITY_OPERATORS, parse_servings_per_container
 from PIL import Image, ImageOps
 from submission_review.gtin import (
     canonical_normalized_gtin14,
@@ -235,7 +236,8 @@ def _validate_quantity(value: object, path: str) -> None:
             f"{path}.servingSizeQuantity",
             minimum=0,
         )
-    _optional_string(value.get("operator"), f"{path}.operator", max_length=20)
+    if value.get("operator") not in QUANTITY_OPERATORS | {None, "="}:
+        raise SubmissionImportError(f"{path}.operator is not a printed qualifier")
     _optional_string(
         value.get("servingSizeUnit"),
         f"{path}.servingSizeUnit",
@@ -391,27 +393,24 @@ def _validate_statements(value: object) -> None:
 
 
 def _validate_servings_per_container(value: object) -> None:
-    if isinstance(value, bool):
+    """A positive count, as a number or the printed text ("60", "about 17")."""
+    if isinstance(value, str):
+        _required_string(value, "servingsPerContainer", max_length=40)
+    elif isinstance(value, bool) or not isinstance(value, (int, float)):
         raise SubmissionImportError("servingsPerContainer must be positive")
-    if isinstance(value, (int, float)):
-        _finite_number(
-            value,
-            "servingsPerContainer",
-            minimum=_POSITIVE_NUMBER_MINIMUM,
-        )
-        return
-    text = _required_string(value, "servingsPerContainer", max_length=40)
-    try:
-        parsed = float(text)
-    except ValueError as exc:
-        raise SubmissionImportError(
-            "servingsPerContainer must be positive"
-        ) from exc
-    _finite_number(
-        parsed,
-        "servingsPerContainer",
-        minimum=_POSITIVE_NUMBER_MINIMUM,
-    )
+    number, _ = parse_servings_per_container(value)
+    if number is None:
+        raise SubmissionImportError("servingsPerContainer must be positive")
+    _finite_number(number, "servingsPerContainer", minimum=_POSITIVE_NUMBER_MINIMUM)
+
+
+def _validate_nutritional_info(value: object) -> None:
+    """Typed Nutrition Facts: Clean owns the values; a qualifier must be known."""
+    if not isinstance(value, dict):
+        raise SubmissionImportError("nutritionalInfo must be an object")
+    for key, entry in value.items():
+        if isinstance(entry, dict) and entry.get("operator") not in QUANTITY_OPERATORS | {None, "="}:
+            raise SubmissionImportError(f"nutritionalInfo.{key}.operator is not a printed qualifier")
 
 
 def _validate_label_payload(payload: object) -> dict[str, Any]:
@@ -473,10 +472,8 @@ def _validate_label_payload(payload: object) -> dict[str, Any]:
         _validate_classification(payload["productType"], "productType")
     if payload.get("statements") is not None:
         _validate_statements(payload["statements"])
-    if payload.get("nutritionalInfo") is not None and not isinstance(
-        payload["nutritionalInfo"], dict
-    ):
-        raise SubmissionImportError("nutritionalInfo must be an object")
+    if payload.get("nutritionalInfo") is not None:
+        _validate_nutritional_info(payload["nutritionalInfo"])
 
     disclosure = _required_string(
         payload.get("otherIngredientsDisclosure"),

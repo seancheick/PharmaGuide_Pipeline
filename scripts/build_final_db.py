@@ -8049,6 +8049,9 @@ def build_detail_blob(
             "max_servings_per_day": serving.get("max_servings_per_day"),
             "servings_per_day_source": serving.get("servings_per_day_source"),
             "basis_reason": serving.get("basis_reason"),
+            # Printed approximation ("about 17"); null for an exact count.
+            # The core servings_per_container column keeps the number.
+            "servings_per_container_text": safe_str(enriched.get("servingsPerContainerText")) or None,
         },
         "manufacturer_detail": {
             "brand_name": brand_identity.display_brand,
@@ -8343,9 +8346,17 @@ def build_detail_blob(
         "calories_per_serving": safe_float(ns.get("calories_per_serving")),
         "total_carbohydrates_g": safe_float(ns.get("total_carbohydrates_g")),
         "total_fat_g": safe_float(ns.get("total_fat_g")),
+        "polyunsaturated_fat_g": safe_float(ns.get("polyunsaturated_fat_g")),
         "protein_g": safe_float(ns.get("protein_g")),
         "dietary_fiber_g": safe_float(ns.get("dietary_fiber_g")),
         "total_sugars_g": safe_float(ns.get("total_sugars_g")),
+    }
+    # Printed qualifier per field ("<" for "<1 g"); the app prefixes it so a
+    # bound never reads as an exact amount. Empty when every value is exact.
+    blob["nutrition_detail"]["quantity_operators"] = {
+        field: safe_str(operator)
+        for field, operator in sorted(safe_dict(ns.get("quantity_operators")).items())
+        if field in blob["nutrition_detail"] and safe_str(operator)
     }
 
     # v1.3.2: Unmapped actives — transparency panel ("X ingredients could not be mapped")
