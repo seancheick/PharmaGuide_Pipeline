@@ -164,5 +164,29 @@ def test_approximate_servings_per_container_keep_their_printed_wording():
       field.value='17ish'; syncScalarFields(); out.bad=state.payload.servingsPerContainer;
       field.value='1,5'; syncScalarFields(); out.comma=state.payload.servingsPerContainer;
       field.value='1,000'; syncScalarFields(); out.grouped=state.payload.servingsPerContainer;
+      field.value='about 1,5'; syncScalarFields(); out.aboutComma=state.payload.servingsPerContainer;
+      field.value='about 1.5'; syncScalarFields(); out.aboutFraction=state.payload.servingsPerContainer;
+      field.value='about 1,000'; syncScalarFields(); out.aboutGrouped=state.payload.servingsPerContainer;
     })()""")
-    assert out == {"about": "about 17", "exact": 60, "bad": None, "comma": None, "grouped": 1000}
+    assert out == {"about": "about 17", "exact": 60, "bad": None, "comma": None, "grouped": 1000,
+                   "aboutComma": None, "aboutFraction": None, "aboutGrouped": "about 1,000"}
+
+
+def test_editing_an_ingredient_row_keeps_its_printed_bound():
+    # A draft row "<1 g" must not become an exact 1 g when the reviewer edits it.
+    out = _exercise("""(()=>{
+      const row={name:'Total Carbohydrate',quantity:[{quantity:1,unit:'g',operator:'<'}],forms:[],nestedRows:[]};
+      const tbody=document.createElement('tbody');
+      renderIngredientRow(row,[row],0,0,tbody);
+      const inputs=[];
+      const walk=n=>{if(!n||typeof n!=='object')return; if(n.listeners&&n.listeners.input&&'placeholder' in n)inputs.push(n); (n.children||[]).forEach(walk);};
+      walk(tbody);
+      const qty=inputs.find(n=>n.placeholder==='Amount or <1');
+      const unit=inputs.find(n=>n.placeholder==='mg, mcg, IU…');
+      out.shown=qty.value;
+      unit.value='Gram(s)'; unit.listeners.input(); out.afterUnit=row.quantity;
+      qty.value='2'; qty.listeners.input(); out.afterExact=row.quantity;
+    })()""")
+    assert out["shown"] == "<1"
+    assert out["afterUnit"] == [{"quantity": 1, "unit": "Gram(s)", "operator": "<"}]
+    assert out["afterExact"] == [{"quantity": 2, "unit": "Gram(s)"}]

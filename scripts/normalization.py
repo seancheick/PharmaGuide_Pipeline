@@ -104,6 +104,10 @@ def parse_servings_per_container(value: Any) -> Tuple[Optional[float], Optional[
         return None, None
     if not math.isfinite(number) or number <= 0:
         return None, None
+    # An approximation is a whole count ("about 17"); "about 1.5" is not read
+    # as 1, and the integer export column never truncates it.
+    if text is not None and not number.is_integer():
+        return None, None
     return number, text
 
 
