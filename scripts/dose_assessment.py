@@ -364,6 +364,24 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
         return not exact_preparation
     if not _valid_policy(policy) or policy.get("scope") != "ingredient":
         return False
+    if exact_preparation and policy.get("dosage_forms"):
+        from form_factor_normalizer import FORM_FACTOR_UNKNOWN, canonicalize_form_factor
+        # Delivery is an original product fact, separate from the ingredient's
+        # same-row identity. A title or an enrichment guess cannot supply it.
+        physical = product.get("physicalState")
+        if not isinstance(physical, (dict, str)):
+            return False
+        description = ((physical.get("langualCodeDescription") or physical.get("name"))
+                       if isinstance(physical, dict) else physical)
+        code = physical.get("langualCode") if isinstance(physical, dict) else None
+        by_code = canonicalize_form_factor(None, langual_code=code)
+        by_text = canonicalize_form_factor(description)
+        if by_code != FORM_FACTOR_UNKNOWN and by_text != FORM_FACTOR_UNKNOWN and by_code != by_text:
+            return False
+        delivery = canonicalize_form_factor(description, langual_code=code)
+        allowed = {canonicalize_form_factor(value) for value in policy["dosage_forms"]}
+        if FORM_FACTOR_UNKNOWN in allowed or delivery == FORM_FACTOR_UNKNOWN or delivery not in allowed:
+            return False
     if exact_preparation and (
             policy.get("require_source_label_form") is not True
             or not policy.get("required_form_terms")
@@ -371,9 +389,11 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
         return False
     # Notes on IQM rows are curated bio context. Only the original linked
     # row's notes and source taxonomy can contradict a literal preparation.
-    text = "; ".join(normalize_text(str(value or "")) for value in (
+    text = "; ".join(normalize_text(str(value)) for value in (
         _row_text(source, source_only=True, preserve_punctuation=True), source.get("notes"),
-        source.get("plantPart"), source.get("genus"), source.get("species")))
+        "PlantPart: " + str(source["plantPart"]) if source.get("plantPart") else "",
+        "Genus: " + str(source["genus"]) if source.get("genus") else "",
+        "Species: " + str(source["species"]) if source.get("species") else "") if value)
     def present(term: str) -> bool:
         return bool(find_affirmative_label_match(
             re.compile(r"(?<!\w)" + re.escape(normalize_text(term)) + r"(?!\w)", re.I), text))
@@ -389,9 +409,47 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
     # "std." is a label abbreviation, not a sentence boundary. Preserve
     # measurement punctuation (especially %) when matching material assertions.
     required_text = text.replace("std.", "std")
-    return not required or any(find_affirmative_label_match(
-        re.compile(r"(?<!\w)" + re.escape(normalize_text(term).replace("std.", "std"))
-                   + r"(?!\w)", re.I), required_text) for term in required)
+    def required_present(term: str) -> bool:
+        # Policy assertions use the cleaner's existing structured-note syntax.
+        # Parse the policy, never reparse source notes to refill a missing fact.
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+        for clause in term.split(";"):
+            if clause.lstrip().partition(":")[0].lower() not in {"plantpart", "genus", "species"}:
+                # A literal nested form may describe its own source tissue
+                # (e.g. orange peel within Cordiart), not the parent's part.
+                continue
+            expected = EnhancedDSLDNormalizer._parse_botanical_details(clause)
+            if any(normalize_text(str(source.get(field) or "")) != normalize_text(str(expected[field]))
+                   for field in ("plantPart", "genus", "species") if field in expected):
+                return False
+        assertion = normalize_text(term).replace("std.", "std")
+        pattern = re.compile(r"(?<!\w)" + re.escape(assertion) + r"(?!\w)", re.I)
+        if ";" not in assertion:
+            return bool(find_affirmative_label_match(pattern, required_text))
+        # A complete source assertion may span the source owner's field
+        # separators. Match it contiguously on this one original row, then
+        # ask the shared negation owner about each exact clause occurrence.
+        # An earlier positive occurrence cannot rescue a negated later one.
+        for match in pattern.finditer(required_text):
+            offset = 0
+            for raw_clause in assertion.split(";"):
+                clause = raw_clause.strip()
+                start = match.start() + offset + len(raw_clause) - len(raw_clause.lstrip())
+                end = start + len(clause)
+                left = required_text.rfind(";", 0, start) + 1
+                right = required_text.find(";", end)
+                context = required_text[left:right if right >= 0 else None]
+                prefix = required_text[left:start]
+                occurrence = re.compile(r"(?<=\A" + re.escape(prefix) + r")"
+                                        + re.escape(clause) + r"(?!\w)", re.I)
+                if not clause or not find_affirmative_label_match(occurrence, context):
+                    break
+                offset += len(raw_clause) + 1
+            else:
+                return True
+        return False
+
+    return not required or any(required_present(term) for term in required)
 
 
 

@@ -4,7 +4,7 @@
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
     "last_updated": "2026-10-29",
-    "total_entries": 817,
+    "total_entries": 826,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
     "verified_records_count": 809
@@ -13007,7 +13007,7 @@
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
-      "notes": "Superseded source-inventory wording retained for traceability: Culinary edible sea vegetable food matrix; not scorable as an isolated therapeutic dietary supplement active. Exact current source-labelled subjects: Kelp Thallus Extract; Kelp Whole Grass Extract. Do not treat an extract as a culinary powder or assume a whole fruit is its isolated marker. Historical material_form must be reconciled against these source-bound occurrences before calling exact preparation equivalent.",
+      "notes": "Superseded source-inventory wording retained for traceability: Culinary edible sea vegetable food matrix; not scorable as an isolated therapeutic dietary supplement active. Exact current source-labelled subjects: Kelp Thallus Extract; Kelp Whole Grass Extract. Do not treat an extract as a culinary powder or assume a whole fruit is its isolated marker. Historical material_form must be reconciled against these source-bound occurrences before calling exact preparation equivalent.\nSean confirmed on2026-10-29 that exact source-qualified Whole Grass Extract labels252562,255054,255055,255057 have completed general Dose treatment. The existing2026-10-27 source-owned scope already explicitly includes Kelp Thallus Extract and Kelp Whole Grass Extract; its approval, source proof and preparation boundaries are unchanged. No powder, iodine, alginate, clinical efficacy or safety equivalence is inferred.",
       "applicability_status": "not_efficacy_relevant"
     },
     {
@@ -15217,7 +15217,10 @@
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
       "notes": "Superseded source-inventory wording retained for traceability: Watermelon fruit juice / powder is a culinary food powder, nutrient base, or flavor/carrier matrix; not scored for therapeutic clinical efficacy. Exact current source-labelled subjects: Watermelon Fruit Juice, Powder. Do not treat an extract as a culinary powder or assume a whole fruit is its isolated marker. Historical material_form must be reconciled against these source-bound occurrences before calling exact preparation equivalent.",
-      "reason_code": "food_powder_or_flavor_matrix"
+      "reason_code": "food_powder_or_flavor_matrix",
+      "aliases": [
+        "Watermelon Juice, Powder"
+      ]
     },
     {
       "canonical_id": "barley_grass",
@@ -26438,10 +26441,66 @@
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
-        "retractions_found": false
+        "retractions_found": false,
+        "reference_citations": {
+          "source_sha256": "4c11e7df86c4efa16e28569d963a9f900f6ea25413dcb185698a9951d9aa3e71",
+          "source_ids": [
+            "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A%2841536845+OR+31630959+OR+21148876+OR+28547493+OR+39289725+OR+38705139+OR+37364182+OR+36129577+OR+31118466+OR+22414933+OR+21535622+OR+18754759+OR+17444655+OR+16637699+OR+14664527+OR+12241996+OR+12221895+OR+9677139+OR+1456413+OR+1961201+OR+2754148%29+AND+SRC%3AMED&resultType=core&format=json&pageSize=100"
+          ],
+          "verified_at": "2026-10-30T00:17:49.917353+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A%2841536845+OR+31630959+OR+21148876+OR+28547493+OR+39289725+OR+38705139+OR+37364182+OR+36129577+OR+31118466+OR+22414933+OR+21535622+OR+18754759+OR+17444655+OR+16637699+OR+14664527+OR+12241996+OR+12221895+OR+9677139+OR+1456413+OR+1961201+OR+2754148%29+AND+SRC%3AMED&resultType=core&format=json&pageSize=100",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Bounded Quercus alba bark/human-query record-screening receipt (not an article)",
+              "content_sha256": "a218647b512d90cffe892fcbc698eacd58e5421e6e9331e7a99f806b7d21c9b3",
+              "notes": "The retained21 unique indexed title/abstract records from the two documented PubMed queries were independently screened and refreshed transparently via EuropePMC MED after NIH429. The relevant bark studies are laboratory assays and sensory studies concern wood; none establishes the oral unstandardized-bark human dose-response target. Not exhaustive absence of research and no European Quercus transfer. This is a search/screening collection, not qualifying human efficacy evidence; article-specific alert flags are not applicable."
+            }
+          ]
+        }
       },
       "verification_result": "authoritative_pubmed_verified",
-      "reason_code": "no_qualifying_trials_found"
+      "reason_code": "no_qualifying_trials_found",
+      "standard_name": "Quercus alba bark",
+      "aliases": [
+        "White Oak"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "White Oak (Quercus alba) PlantPart: bark; PlantPart: bark"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "leaves",
+          "wood",
+          "pollen",
+          "acorn"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Exact source-labelled Quercus alba bark, unstandardized; no transfer from European oak species, wood, pollen, acorn or topical laboratory preparations.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=EXT_ID%3A%2841536845+OR+31630959+OR+21148876+OR+28547493+OR+39289725+OR+38705139+OR+37364182+OR+36129577+OR+31118466+OR+22414933+OR+21535622+OR+18754759+OR+17444655+OR+16637699+OR+14664527+OR+12241996+OR+12221895+OR+9677139+OR+1456413+OR+1961201+OR+2754148%29+AND+SRC%3AMED&resultType=core&format=json&pageSize=100"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for the exact unstandardized Q.alba bark. The bounded negative title/abstract screen is not universal absence or null efficacy. No imported European-oak benchmark, clinical approval, tannin conversion or safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::white_oak",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 79598. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
     },
     {
       "canonical_id": "alkaloids",
@@ -29527,10 +29586,70 @@
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
-        "retractions_found": false
+        "retractions_found": false,
+        "reference_citations": {
+          "source_sha256": "7d4c30d2ae761ad25b323a0da791b04d8bb512d631c6538df254536e2fca6086",
+          "source_ids": [
+            "PMID:25352453"
+          ],
+          "verified_at": "2026-10-29T23:45:17.161273+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:25352453",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Plant-based nutraceutical interventions against cognitive impairment and dementia: meta-analytic evidence of efficacy of a standardized Gingko biloba extract.",
+              "content_sha256": "198bc4a46a30aae7f571ebb6040a8fb0f9de0bf3d22876ecb69a80d6e11f9157",
+              "notes": "Independently content-verified indexed source concerns standardized EGb761, including descriptive240mg/day subgroup findings. This does not identify the inspected retail24%-flavone-only material as EGb761 or establish a general minimum. No clinical-benefit, solvent or terpene equivalence is transferred."
+            }
+          ]
+        }
       },
       "verification_result": "authoritative_pubmed_verified",
-      "reason_code": "crude_material_lacks_standardization"
+      "reason_code": "crude_material_lacks_standardization",
+      "standard_name": "Ginkgo Leaf Extract",
+      "aliases": [
+        "Ginkgo Leaf Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "24% Ginkgo Flavone Glycosides; PlantPart: leaf"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "root",
+          "bark",
+          "fruit",
+          "seed",
+          "powder",
+          "EGb761",
+          "EGb 761",
+          "6% terpene",
+          "6% terpenes"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled Ginkgo leaf extract24% Ginkgo Flavone Glycosides only; solvent, DER, EGb761 identity and6% terpene-lactone content not established.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:25352453"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for the source-labelled leaf extract declaring24% flavone glycosides only. No EGb761/6% terpene/solvent equivalence or240mg minimum; no efficacy credit. Existing bleeding and medication warnings remain independent and unchanged.",
+        "owner": "scripts/data/literature_evidence_records.json::ginkgo_biloba",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original inspected label IDs: 306223. IDs document the source-reviewed cohort; matching remains based on original same-row physical preparation, not an ID allowlist. Existing clinical Evidence and independent safety determinations are unchanged."
     },
     {
       "canonical_id": "holy_basil",
@@ -29602,10 +29721,70 @@
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
-        "retractions_found": false
+        "retractions_found": false,
+        "reference_citations": {
+          "source_sha256": "f272b86a09380ad9b418316ee93edabfea102ce2e5c0d041edb70204f86d1941",
+          "source_ids": [
+            "PMID:31780016"
+          ],
+          "verified_at": "2026-10-29T23:45:17.161273+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:31780016",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Vitex agnus-castus in premenstrual syndrome: A meta-analysis of double-blind randomised controlled trials.",
+              "content_sha256": "9d9c2f151d4fe806bc61c61906da5fcbf34db7d43a1ff4ed15b292a1b983b2fb",
+              "notes": "Independently content-verified indexed meta-analysis: included properly characterized Ze440/BNO1095 extracts. It does not establish these retail10:1 extracts as equivalent or supply their general minimum. Source used for the preparation boundary; no positive clinical finding is transferred."
+            }
+          ]
+        }
       },
       "verification_result": "authoritative_pubmed_verified",
-      "reason_code": "crude_material_lacks_standardization"
+      "reason_code": "crude_material_lacks_standardization",
+      "standard_name": "Chaste Tree Fruit Extract",
+      "aliases": [
+        "Chasteberry Fruit Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "10:1; PlantPart: fruit"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "root",
+          "bark",
+          "stem",
+          "powder",
+          "Ze440",
+          "Ze 440",
+          "BNO1095",
+          "BNO 1095"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled chasteberry fruit extract10:1; extraction solvent and proprietary Ze440/BNO1095 identity unestablished.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:31780016"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for the three source-labelled fruit10:1 extracts. No Ze440/BNO1095 equivalence or4–40mg target; no efficacy credit and no change to independent safety assessment.",
+        "owner": "scripts/data/literature_evidence_records.json::chaste_tree",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original inspected label IDs: 330565, 330567, 330568. IDs document the source-reviewed cohort; matching remains based on original same-row physical preparation, not an ID allowlist. Existing clinical Evidence and independent safety determinations are unchanged."
     },
     {
       "canonical_id": "reishi_mushroom",
@@ -37643,6 +37822,686 @@
           ]
         }
       }
+    },
+    {
+      "canonical_id": "yohimbe",
+      "material_form": "The three individually source-verified bark-extract assay groups: >=2% Yohimbine; 2% Yohimbine; or label-declared 2% alkaloids with 9 mg. DER and extraction solvent not declared. Printed Latin spellings remain source statements, not newly asserted taxonomic equivalence.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "10cc9f90798c3b1ee11f1eaa236d25271373397ebbd74c82a20aac9718f176f8",
+          "source_ids": [
+            "https://www.nccih.nih.gov/health/yohimbe"
+          ],
+          "verified_at": "2026-10-29T23:45:17.161273+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.nccih.nih.gov/health/yohimbe",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Yohimbe: Usefulness and Safety | NCCIH",
+              "content_sha256": "57321aed408dfd462f36e63fffe0924e89f082429fa973429edc53e607c25bb9",
+              "notes": "Manual content review of official NCCIH page, updated May2025; exact retained HTML hash. Source is an authority webpage, not a PubMed article. It distinguishes bark supplements from prescription yohimbine, reports insufficient effectiveness evidence and variable content, and retains serious risks. No assay equivalence, isolated-alkaloid conversion, clinical approval or safety clearance. Article-specific alert fields are not applicable to this webpage; no article verification is claimed."
+            }
+          ]
+        }
+      },
+      "standard_name": "Yohimbe Bark Extract",
+      "aliases": [
+        "Yohimbe extract",
+        "Yohimbe Bark Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Yohimbe Extract (Pausinystalia yohimbe) PlantPart: bark Note: standardized to contain >=2% Yohimbine; DER and extraction solvent not declared on label; PlantPart: bark",
+          "Yohimbe Bark Extract Pausinystalia yohimbe bark extract; standardized to contain greater than or equal to 2% Yohimbine; PlantPart: bark",
+          "Yohimbe Bark Extract Genus: Pausinystalia Species: yohimba Note: 2% Yohimbine Alkaloid = 9 mg; PlantPart: bark; Genus: Pausinystalia; Species: yohimba",
+          "Yohimbe Bark Extract (Form: 2% Yohimbine Alkaloids Note: = 9mg) Genus: Pausinystalia Species: yohimba; PlantPart: bark; Genus: Pausinystalia; Species: yohimba",
+          "Yohimbe bark extract (Form: 2% Yohimbe Alkaloid Note: = 9 mg) PlantPart: bark Genus: Pausinystalia Species: yohimbe; PlantPart: bark; Genus: Pausinystalia; Species: yohimbe",
+          "Yohimbe Bark Extract (Pausinystalia yohimbe) PlantPart: bark Note: 2% Yohimbine Alkaloids = 9 mg; DER and extraction solvent not declared on label; PlantPart: bark",
+          "Yohimbe Bark Extract (Pausinystalia johimbe) PlantPart: bark Note: 2% Yohimbine Alkaloids = 9 mg; DER and extraction solvent not declared on label; PlantPart: bark",
+          "Yohimbe Extract (Pausinystalia johimbe) PlantPart: bark Note: standardized to contain 2% Yohimbine; DER and extraction solvent not declared on label; PlantPart: bark"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "root",
+          "seed",
+          "whole bark powder",
+          "yohimbine hydrochloride",
+          "yohimbine hcl"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "The three individually source-verified bark-extract assay groups: >=2% Yohimbine; 2% Yohimbine; or label-declared 2% alkaloids with 9 mg. DER and extraction solvent not declared. Printed Latin spellings remain source statements, not newly asserted taxonomic equivalence.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.nccih.nih.gov/health/yohimbe"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for the 17 individually verified bark-extract labels in these three separately retained assay groups. No yohimbine minimum, prescription regimen transfer, extract-to-alkaloid equivalence or efficacy credit. Existing high-risk, pregnancy/breastfeeding, cardiovascular and medication assessments remain independent and unchanged.",
+        "owner": "scripts/data/literature_evidence_records.json::yohimbe",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "search_query": "Bounded official NCCIH Yohimbe supplement source review; not an exhaustive absence-of-research claim.",
+      "databases_searched": [
+        "NCCIH"
+      ],
+      "records_screened": 1,
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original inspected label IDs: 252787, 254734, 254735, 254738, 311909, 311910, 311911, 311912, 331262, 331263, 331264, 5821, 703, 74634, 74661, 270831, 29242. IDs document the source-reviewed cohort; matching remains based on original same-row physical preparation, not an ID allowlist. Existing clinical Evidence and independent safety determinations are unchanged."
+    },
+    {
+      "canonical_id": "bamboo_stem_leaf_extract",
+      "material_form": "Bambusa vulgaris whole stem-and-leaves extracts: DER not declared on eight inspected labels, or explicitly 30:1 on four. No silica percentage or elemental silicon quantity is established.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "2d8510a3c600a17fc38ca26b802813234eee62828ec41aa564bc728cce66c158",
+          "source_ids": [
+            "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%22Bambusa+vulgaris%22%5Btiab%5D%29+AND+%28humans%5Bmh%5D+OR+human%2A%5Btiab%5D+OR+clinical%5Btiab%5D+OR+randomized%5Btiab%5D%29&retmode=json&retmax=100"
+          ],
+          "verified_at": "2026-10-29T23:45:17.161273+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%22Bambusa+vulgaris%22%5Btiab%5D%29+AND+%28humans%5Bmh%5D+OR+human%2A%5Btiab%5D+OR+clinical%5Btiab%5D+OR+randomized%5Btiab%5D%29&retmode=json&retmax=100",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Bounded PubMed human-study search receipt: Bambusa vulgaris (not an article)",
+              "content_sha256": "2345f8f00abef5c749542bb974c7b0c69386e5cb4035487ab8129011d6efb414",
+              "notes": "Actual NCBI esearch result retained with query, retrieval time and all14 abstract-screening exclusions in qualification_retry/dose_primary_sources_20261029/bamboo_exact_scope_bounded_search_20261029.json. None of these14 abstracts establishes a human whole stem-and-leaf extract dose benchmark. Not exhaustive absence, not an article, not efficacy evidence; article-specific retraction/erratum flags are not applicable to a search response. Individual official NIH PDFs establish the twelve label materials separately. Sean supplied the exact scope ruling; no isolated-silicon or rat-leaf study is used as a Dose reference."
+            }
+          ]
+        }
+      },
+      "standard_name": "Bambusa vulgaris stem and leaves extract",
+      "aliases": [
+        "Bamboo extract",
+        "Bamboo Leaf, Stem Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Bamboo Extract (Bambusa vulgaris) PlantPart: stem and leaves Note: DER not declared on label; PlantPart: stem and leaves",
+          "Bamboo Extract 30:1 (Bambusa vulgaris) PlantPart: stem and leaves; PlantPart: stem and leaves"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "root",
+          "rhizome",
+          "shoot",
+          "seed",
+          "leaf-only",
+          "isolated silica",
+          "silicon dioxide",
+          "orthosilicic acid"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Bambusa vulgaris whole stem-and-leaves extracts: DER not declared on eight inspected labels, or explicitly 30:1 on four. No silica percentage or elemental silicon quantity is established.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=%28%22Bambusa+vulgaris%22%5Btiab%5D%29+AND+%28humans%5Bmh%5D+OR+human%2A%5Btiab%5D+OR+clinical%5Btiab%5D+OR+randomized%5Btiab%5D%29&retmode=json&retmax=100"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose only for the two exact individually verified whole stem-and-leaves extract groups, eight with DER undeclared and four30:1. No silica/elemental-silicon conversion, nutritional adequacy, efficacy or safety clearance. Existing reproductive and other safety warnings remain independent and unchanged.",
+        "owner": "scripts/data/literature_evidence_records.json::bamboo_stem_leaf_extract",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "search_query": "(\"Bambusa vulgaris\"[tiab]) AND (humans[mh] OR human*[tiab] OR clinical[tiab] OR randomized[tiab])",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 14,
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original inspected label IDs: 252349, 253304, 253309, 253312, 310921, 310922, 310924, 310927, 330290, 330291, 330292, 330293. IDs document the source-reviewed cohort; matching remains based on original same-row physical preparation, not an ID allowlist. Existing clinical Evidence and independent safety determinations are unchanged."
+    },
+    {
+      "canonical_id": "cascara_sagrada",
+      "material_form": "Source-labelled Rhamnus purshiana bark powder or milled whole-herb bark; HAD/cascaroside standardization not quantified on either inspected label.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "129c0b27bd782290de3046f9464469c73b3be9f3675a6e52c4e934f8d8466b84",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T00:17:49.917353+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "European Union herbal monograph on Rhamnus purshiana DC., cortex, revision1 (2020)",
+              "content_sha256": "41d8b4e83e6bcb5a0e15db90728b243e7dfed759b6644ab13a2c9cf8b5cac92a",
+              "notes": "Sections2 and4.2 retain the valid10-30mg hydroxyanthracene-derivative reference expressed as cascarosideA, once at night, short-term occasional constipation, at most one week. These labels disclose only450/500mg whole bark; constituent exposure is unquantifiable. Bark mass is not HAD mass. Existing contraindications/precautions are separate owners. Regulatory/source document, not a human efficacy trial; article-specific alert flags are not applicable. Exact source content was manually read; no clinical approval or personal-safety conclusion is supplied."
+            }
+          ]
+        }
+      },
+      "standard_name": "Rhamnus purshiana bark mass",
+      "aliases": [
+        "Cascara Sagrada bark powder",
+        "Cascara Sagrada"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Cascara Sagrada Bark Powder (Rhamnus purshiana) PlantPart: bark; PlantPart: bark",
+          "Cascara Sagrada (Rhamnus purshiana) PlantPart: bark Note: milled whole herb powder; PlantPart: bark"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "extract",
+          "cascaroside",
+          "cascarosides",
+          "hydroxyanthracene",
+          "standardized"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled Rhamnus purshiana bark powder or milled whole-herb bark; HAD/cascaroside standardization not quantified on either inspected label.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-rhamnus-purshiana-dc-cortex-revision-1_en.pdf"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed general Dose treatment for the two exact bark-mass-only labels. The EMA10-30mg HAD reference calculated as cascarosideA remains valid; it is unquantifiable from these labels, not nonexistent. No bark-to-HAD conversion or numerical bark minimum is established. No efficacy or safety approval and no change to source-specific duration/contraindication obligations.",
+        "owner": "scripts/data/literature_evidence_records.json::cascara_sagrada",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 18313, 17149. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
+    },
+    {
+      "canonical_id": "american_ginseng_root_extract_capsule",
+      "material_form": "Source-labelled American ginseng root extracts in capsules, with the separately retained3%,10% or undeclared marker statements. No extraction ratio, solvent, dried-root conversion or marker equivalence is inferred.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "eb8ef5ee7a05c45685e0cd8b565c9a96edb9560628d186203f1832b21bba53b7",
+          "source_ids": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+          ],
+          "verified_at": "2026-10-30T00:17:49.917353+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Health Canada natural health product monograph: Ginseng - American, January30 2026",
+              "content_sha256": "bb30e6084f1dd1559a70285f8cf12a3b15c3e2b6e92277cd0b1571daa6147181",
+              "notes": "Content-verified source specifies Panax quinquefolius root/dry materials, purpose- and preparation-specific dried-root ranges and ethanol/water restrictions; foods/food-like dosage forms are excluded. It does not establish standardized-extract mass equivalence, a universal efficacy minimum or gummy eligibility. Regulatory/source document, not a human efficacy trial; article-specific alert flags are not applicable. Exact source content was manually read; no clinical approval or personal-safety conclusion is supplied."
+            }
+          ]
+        }
+      },
+      "standard_name": "American Ginseng root extract capsules",
+      "aliases": [
+        "American Ginseng root extract",
+        "standardized American Ginseng extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "American Ginseng root extract (Form: 3% Ginsenosides) PlantPart: root Genus: Panax Species: quinquefolium Note: 3% Ginsenodsides = 6mg; PlantPart: root; Genus: Panax; Species: quinquefolium",
+          "American Ginseng Root Extract (Panax quinquefolium) PlantPart: root Note: 3% ginsenosides = 6 mg; PlantPart: root",
+          "American Ginseng root extract (Form: 3% Ginsenosides Note: = 6 mg) PlantPart: root Genus: Panax Species: quinquefolius; PlantPart: root; Genus: Panax; Species: quinquefolius",
+          "American Ginseng Root Extract extract; PlantPart: root",
+          "American Ginseng Extract (Panax quinquefolius) PlantPart: root Note: ginsenosides 26 mg [10%]; PlantPart: root",
+          "Standardized American Ginseng Extract (Panax quinquefolium) PlantPart: root Note: ginsenosides 10 mg [10%]; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "leaves",
+          "rhizome",
+          "stem",
+          "red",
+          "fermented",
+          "GS15-4"
+        ],
+        "dosage_forms": [
+          "capsule"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled American ginseng root extracts in capsules, with the separately retained3%,10% or undeclared marker statements. No extraction ratio, solvent, dried-root conversion or marker equivalence is inferred.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for seven source-qualified root-extract capsules. The label marker groups remain distinct and the Health Canada dried-root, purpose/preparation-specific regimes are not extract-mass minima or clinical efficacy thresholds. This does not amend the older American-root capsule study approval or authorize leaf/rhizome/fermented preparations.",
+        "owner": "scripts/data/literature_evidence_records.json::american_ginseng_root_extract_capsule",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 1627, 68956, 74766, 74768, 316119, 214060, 216622. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
+    },
+    {
+      "canonical_id": "american_ginseng_root_extract_gummy",
+      "material_form": "Source-labelled American ginseng root extract in gummy delivery; no capsule, dried-root, solvent, extraction-ratio or constituent equivalence.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "61fcacdc806f31f49b566ba912e862fd397071841769b369c8e80184e87ca819",
+          "source_ids": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+          ],
+          "verified_at": "2026-10-30T00:17:49.917353+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Health Canada natural health product monograph: Ginseng - American, January30 2026",
+              "content_sha256": "bb30e6084f1dd1559a70285f8cf12a3b15c3e2b6e92277cd0b1571daa6147181",
+              "notes": "Content-verified source specifies Panax quinquefolius root/dry materials, purpose- and preparation-specific dried-root ranges and ethanol/water restrictions; foods/food-like dosage forms are excluded. It does not establish standardized-extract mass equivalence, a universal efficacy minimum or gummy eligibility. Regulatory/source document, not a human efficacy trial; article-specific alert flags are not applicable. Exact source content was manually read; no clinical approval or personal-safety conclusion is supplied."
+            }
+          ]
+        }
+      },
+      "standard_name": "American Ginseng root extract gummy",
+      "aliases": [
+        "American Ginseng extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "American Ginseng Extract (Panax quinquefolius) PlantPart: root; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "leaves",
+          "rhizome",
+          "stem",
+          "red",
+          "fermented",
+          "GS15-4"
+        ],
+        "dosage_forms": [
+          "gummy"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled American ginseng root extract in gummy delivery; no capsule, dried-root, solvent, extraction-ratio or constituent equivalence.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for the exact root-extract gummy as a separate delivery group. Health Canada excludes food-like forms; its dried-root quantities are not transferred to this gummy. Sean supplied this bounded general Dose ruling, not a claim that the gummy meets a monograph efficacy regimen. No Evidence or safety credit.",
+        "owner": "scripts/data/literature_evidence_records.json::american_ginseng_root_extract_gummy",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 205266. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
+    },
+    {
+      "canonical_id": "red_panax_ginseng_root",
+      "material_form": "Source-labelled Korean red ginseng (Panax ginseng) root; extract/powder process, steaming method, DER, solvent and marker content unestablished.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "a47e118d720c391d9deccd602344d752cd5e30dfa1ed94c9bb115458dbf67f48",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+            "PMID:35509826"
+          ],
+          "verified_at": "2026-10-30T00:17:49.917353+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "European Union herbal monograph on Panax ginseng C.A.Mey., radix, revision1 (2024)",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary monograph distinguishes white/red root and preparation-specific powdered-root/extract regimens. The inspected retail label does not establish the corresponding process, DER/solvent or white-root equivalence. Regulatory/source document, not a human efficacy trial; article-specific alert flags are not applicable. Exact source content was manually read; no clinical approval or personal-safety conclusion is supplied."
+            },
+            {
+              "source_id": "PMID:35509826",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Effects of Panax ginseng on hyperglycemia, hypertension, and hyperlipidemia: A systematic review and meta-analysis.",
+              "content_sha256": "15619a7804dbaa5d33e41016525d88b885898e536463aba3d7971b4d7054fd4f",
+              "notes": "Indexed meta-analysis includes heterogeneous Panax ginseng and Korean red-ginseng products, doses200mg-8g, durations4-24weeks and different populations. It is not an interchangeable retail-root mass minimum or exact preparation proof."
+            }
+          ]
+        }
+      },
+      "standard_name": "Korean red ginseng root",
+      "aliases": [
+        "Korean Red Ginseng"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Korean Red Ginseng (Panax ginseng) PlantPart: root; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "leaves",
+          "stem",
+          "stems",
+          "rhizome",
+          "American",
+          "quinquefolius",
+          "fermented",
+          "GS15-4"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled Korean red ginseng (Panax ginseng) root; extract/powder process, steaming method, DER, solvent and marker content unestablished.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+          "PMID:35509826"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for the exact source-labelled red root. White/red roots, extract/powder processing and unknown DER/solvent remain distinct; no universal minimum, clinical efficacy, ginsenoside conversion or safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::red_panax_ginseng_root",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 269558. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
+    },
+    {
+      "canonical_id": "ashwagandha_root_powder",
+      "material_form": "Source-labelled Withania somnifera root powder; no standardized-extract or leaf equivalence.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "9903a2a06424357b52e23a06e998edeaa28781654359c49acf7fe27abc5af280",
+          "source_ids": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ashwagandha2&lang=eng"
+          ],
+          "verified_at": "2026-10-30T00:17:49.917353+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ashwagandha2&lang=eng",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Health Canada natural health product monograph: Ashwagandha, February28 2025",
+              "content_sha256": "38f13d5f07e8b4139a0f631d5d21fa1ef612cc834f5ea6b8e0c32eb55c47140b",
+              "notes": "Traditional Ayurvedic dry/powder root2-6g/day and adaptogen2.5-6.5g/day are distinct claim/preparation contexts, not universal proven efficacy minima. A printed2g serving is not assumed to be daily use; actual minimum/maximum directed use remains with the serving-frequency owner. Regulatory/source document, not a human efficacy trial; article-specific alert flags are not applicable. Exact source content was manually read; no clinical approval or personal-safety conclusion is supplied."
+            }
+          ]
+        }
+      },
+      "standard_name": "Withania somnifera root powder",
+      "aliases": [
+        "Ashwagandha, Powder"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Organic Ashwagandha Powder (Withania somnifera) PlantPart: root; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "leaves",
+          "extract",
+          "KSM-66",
+          "Sensoril",
+          "Shoden"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled Withania somnifera root powder; no standardized-extract or leaf equivalence.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ashwagandha2&lang=eng"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for three exact root powders. Health Canada traditional and adaptogen contexts remain distinct; comparisons to2g/day apply only when daily intake is independently established. Neither traditional lower boundary nor adaptogen range becomes a scoring threshold, extract equivalence, Evidence grade or safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::ashwagandha_root_powder",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 329949, 329950, 329951. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
+    },
+    {
+      "canonical_id": "ginkgo_leaf_powder",
+      "material_form": "Source-labelled Ginkgo biloba L. leaf powder, separate from refined standardized extracts.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "f2e09b9a7e9b9ccf8bb9a41345df90413680a9a34a852f55beb0fd657a04f610",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-ginkgo-biloba-l-folium_en.pdf"
+          ],
+          "verified_at": "2026-10-30T00:17:49.917353+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-ginkgo-biloba-l-folium_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "European Union herbal monograph on Ginkgo biloba L., folium (2015)",
+              "content_sha256": "c9a638ea0a54d8cb04800aa5af939386bd2153721acb16fe3971e118036fd95d",
+              "notes": "Primary monograph separately lists powdered herbal substance for traditional use at250-360mg single/750mg daily and refined quantified extract240mg daily for well-established use. These are distinct preparations/indications;750mg is not a safety UL or universal efficacy minimum. Printed2g per serving does not establish daily intake. Regulatory/source document, not a human efficacy trial; article-specific alert flags are not applicable. Exact source content was manually read; no clinical approval or personal-safety conclusion is supplied."
+            }
+          ]
+        }
+      },
+      "standard_name": "Ginkgo biloba leaf powder",
+      "aliases": [
+        "Ginkgo biloba, Powder"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "PlantPart: leaves"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "root",
+          "bark",
+          "seed",
+          "extract",
+          "EGb761",
+          "EGb 761"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled Ginkgo biloba L. leaf powder, separate from refined standardized extracts.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-ginkgo-biloba-l-folium_en.pdf"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for four exact leaf powders. Actual minimum/maximum directed daily exposure remains source-owned; a2g/day comparison is conditional on independently verified daily use. EMA traditional powder quantities are descriptive and are not scoring or safety thresholds; no refined-extract equivalence, clinical efficacy or safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::ginkgo_leaf_powder",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 329958, 329959, 329960, 329961. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
+    },
+    {
+      "canonical_id": "reishi_mycelia_powder",
+      "material_form": "Exact source-labelled Ganoderma lucidum mycelia powder; no fruiting-body, spore or unspecified-tissue equivalence.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "3394af93d21219de42c6a723b6cc37f220aa3d40d60ecbbe19064ce154fc4b3b",
+          "source_ids": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=mushrooms.champignons"
+          ],
+          "verified_at": "2026-10-30T00:17:49.917353+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=mushrooms.champignons",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Health Canada natural health product monograph: Mushrooms, October31 2025",
+              "content_sha256": "59e93814b38a8b40cfb62643c754aa610bb66599298254d9951d62e45023671d",
+              "notes": "Source identifies Ganoderma lucidum mycelium and fruiting body as separate materials. Herbal adaptogen/liver-tonic dry or specified ethanolic contexts use1.5-6g/day; TCM dry/powder1.5-6g context is fruiting-body only. Neither is a proven universal mycelia efficacy minimum for a label printing180mg; actual daily use remains source-owned. Regulatory/source document, not a human efficacy trial; article-specific alert flags are not applicable. Exact source content was manually read; no clinical approval or personal-safety conclusion is supplied."
+            }
+          ]
+        }
+      },
+      "standard_name": "Ganoderma lucidum mycelia powder",
+      "aliases": [
+        "Reishi Mushroom Mycelia Powder"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Reishi Mushroom Mycelia Powder (Ganoderma lucidum) PlantPart: mycelia; PlantPart: mycelia"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "fruiting body",
+          "spore",
+          "spores",
+          "extract"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Exact source-labelled Ganoderma lucidum mycelia powder; no fruiting-body, spore or unspecified-tissue equivalence.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=mushrooms.champignons"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for the exact mycelia preparation. Preserve HC claim/preparation-specific context and TCM fruiting-body-only restriction; no minimum derived from it, no fruiting-body/spore equivalence, Evidence grade or safety clearance. Product220046 tissue remains unspecified and held, including its independent wheat warning.",
+        "owner": "scripts/data/literature_evidence_records.json::reishi_mycelia_powder",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 12869. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
     }
   ]
 }

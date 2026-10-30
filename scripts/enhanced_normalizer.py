@@ -10426,7 +10426,8 @@ class EnhancedDSLDNormalizer:
         # Join all text
         return " ".join(text_parts).strip()
 
-    def _parse_botanical_details(self, notes: str) -> Dict[str, Any]:
+    @staticmethod
+    def _parse_botanical_details(notes: str) -> Dict[str, Any]:
         """
         Parse botanical details from ingredient notes field.
         Extracts: plantPart, genus, species, harvestMethod, form
