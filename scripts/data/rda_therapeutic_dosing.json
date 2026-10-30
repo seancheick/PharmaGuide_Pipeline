@@ -3,7 +3,7 @@
     "description": "Reviewed dose-reference decisions for non-RDA supplement actives routed through the botanical, collagen and documented probiotic/marker Dose paths",
     "purpose": "Hold the source-attributed reference decision (reference_semantics) for supplement actives not covered by RDA/UL standards. Records carry no general dose range, serving size, efficacy grade or safety ceiling; established ULs belong to rda_optimal_uls.json.",
     "schema_version": "5.1.0",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "total_entries": 44,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
@@ -766,6 +766,14 @@
         "owner": "scripts/data/rda_therapeutic_dosing.json::maca_root_extract",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_neutral_2026_10_18"
+      },
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "red",
+          "black",
+          "yellow"
+        ]
       }
     },
     {

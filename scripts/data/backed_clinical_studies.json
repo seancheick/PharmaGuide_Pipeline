@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-10-29",
     "total_entries": 210,
     "changelog": [
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
@@ -18233,7 +18233,8 @@
       "aliases": [
         "momordica charantia",
         "karela",
-        "bitter gourd"
+        "bitter gourd",
+        "Bitter Melon Fruit Extract"
       ],
       "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
