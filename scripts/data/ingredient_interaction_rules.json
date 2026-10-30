@@ -24316,7 +24316,7 @@
         {
           "condition_id": "pregnancy",
           "severity": "avoid",
-          "evidence_level": "insufficient",
+          "evidence_level": "no_data",
           "mechanism": "The labeled Rhamnus davurica identity does not match the purshiana species in standard cascara references. No species-specific harm or interaction is established by these identity sources.",
           "action": "Avoid during pregnancy pending identity clarification.",
           "sources": [
@@ -24335,8 +24335,8 @@
             "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:317386-2"
           ],
           "alert_headline": "Unresolved ingredient identity — avoid",
-          "alert_body": "Avoid during pregnancy pending identity clarification.",
-          "informational_note": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+          "alert_body": "If you are pregnant, avoid this product until its botanical identity is clarified. Standard cascara sources do not establish its species.",
+          "informational_note": "Botanical identity is unresolved; specific purshiana effects cannot be assigned to this label.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -24361,7 +24361,7 @@
         {
           "condition_id": "lactation",
           "severity": "avoid",
-          "evidence_level": "insufficient",
+          "evidence_level": "no_data",
           "mechanism": "The labeled Rhamnus davurica identity does not match the purshiana species in standard cascara references. No species-specific harm or interaction is established by these identity sources.",
           "action": "Avoid during breastfeeding pending identity clarification.",
           "sources": [
@@ -24380,8 +24380,8 @@
             "https://powo.science.kew.org/taxon/urn:lsid:ipni.org:names:317386-2"
           ],
           "alert_headline": "Unresolved ingredient identity — avoid",
-          "alert_body": "Avoid during breastfeeding pending identity clarification.",
-          "informational_note": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+          "alert_body": "If you are breastfeeding, avoid this product until its botanical identity is clarified. Standard cascara sources do not establish its species.",
+          "informational_note": "Botanical identity is unresolved; specific purshiana effects cannot be assigned to this label.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -24406,7 +24406,7 @@
         {
           "condition_id": "liver_disease",
           "severity": "caution",
-          "evidence_level": "insufficient",
+          "evidence_level": "no_data",
           "mechanism": "The labeled Rhamnus davurica identity does not match the purshiana species in standard cascara references. No species-specific harm or interaction is established by these identity sources.",
           "action": "Obtain professional review before use with this medical condition because ingredient identity is unresolved.",
           "sources": [
@@ -24426,7 +24426,7 @@
           ],
           "alert_headline": "Unresolved ingredient identity — professional review",
           "alert_body": "Obtain professional review before use with this medical condition because ingredient identity is unresolved.",
-          "informational_note": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+          "informational_note": "Botanical identity is unresolved; specific purshiana effects cannot be assigned to this label.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -24451,7 +24451,7 @@
         {
           "condition_id": "kidney_disease",
           "severity": "caution",
-          "evidence_level": "insufficient",
+          "evidence_level": "no_data",
           "mechanism": "The labeled Rhamnus davurica identity does not match the purshiana species in standard cascara references. No species-specific harm or interaction is established by these identity sources.",
           "action": "Obtain professional review before use with this medical condition because ingredient identity is unresolved.",
           "sources": [
@@ -24471,7 +24471,7 @@
           ],
           "alert_headline": "Unresolved ingredient identity — professional review",
           "alert_body": "Obtain professional review before use with this medical condition because ingredient identity is unresolved.",
-          "informational_note": "Ingredient identity is unresolved: this label names Rhamnus davurica as Cascara Sagrada, which is distinct from the purshiana species used in standard cascara references. Avoid during pregnancy or breastfeeding pending identity clarification. If you take any medicine or have a relevant medical condition, obtain professional review before use. This precaution reflects uncertain identity; specific purshiana effects and drug interactions have not been established for this labeled material.",
+          "informational_note": "Botanical identity is unresolved; specific purshiana effects cannot be assigned to this label.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -24494,6 +24494,17 @@
           "materiality": "presence"
         }
       ],
+      "pregnancy_lactation": {
+        "pregnancy_category": "avoid",
+        "lactation_category": "avoid",
+        "evidence_level": "no_data",
+        "notes": "Botanical identity is unresolved; the avoid disposition is precautionary, not a proven species-specific harm claim.",
+        "alert_headline": "Unresolved botanical identity",
+        "alert_body": "If you are pregnant or breastfeeding, avoid use until the botanical identity is clarified. Obtain professional review before using this product.",
+        "informational_note": "Botanical identity is unresolved; specific purshiana effects cannot be assigned to this label.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
       "drug_class_rules": [],
       "last_reviewed": "2026-10-29",
       "review_owner": "Sean — approved identity-uncertainty precaution scope, 2026-10-29"
