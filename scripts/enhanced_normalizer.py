@@ -9989,10 +9989,8 @@ class EnhancedDSLDNormalizer:
         """The count used for arithmetic; an approximation keeps its number."""
         if value is None:
             return None
-        number, printed_text = parse_servings_per_container(value)
-        if printed_text is not None:
-            return int(number)
-        return self._safe_int(value)
+        number, _ = parse_servings_per_container(value)
+        return int(number) if number is not None else None
 
     def _safe_int(self, value: Any, field_name: str = "value", default: int = 0) -> int:
         """
