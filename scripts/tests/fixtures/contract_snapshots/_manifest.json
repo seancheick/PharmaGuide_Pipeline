@@ -207,6 +207,16 @@
   ],
   "changelog": [
     {
+      "date": "2026-10-30",
+      "phase": "Final release candidate: exact approved Dose scope snapshot reconciliation",
+      "source_commit": "4e54a0e340449ad775a879ded51ddf5d2647818a",
+      "products_updated": [
+        270831,
+        239741
+      ],
+      "notes": "Fresh 38-dataset Clean/Enrich/Score output and independent raw-label replay agree. The source-bound October 29 Dose approvals for Yohimbe Bark Extract 270831 and mixed stem/root Panax extract 239741 add the existing completed-no-general-benchmark neutral Dose 11.4 points, without a clinical efficacy threshold or Evidence credit. Yohimbe stays CAUTION with B0_HIGH_RISK_SUBSTANCE and partial Evidence assessment; ginseng becomes complete and Needs improvement. Product identities, other pillars, safety statuses, verdicts and flags are unchanged. Only these two obsolete frozen snapshots were updated."
+    },
+    {
       "date": "2026-10-28",
       "phase": "Condition-scoped Evidence, held clinical source containment and independent nutrition authority",
       "source_commit": "1e9a688159707d70243a4aeb23e47678a5a6e6f2",
