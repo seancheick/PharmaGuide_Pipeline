@@ -24502,6 +24502,22 @@
         "alert_headline": "Unresolved botanical identity",
         "alert_body": "If you are pregnant or breastfeeding, avoid use until the botanical identity is clarified. Obtain professional review before using this product.",
         "informational_note": "Botanical identity is unresolved; specific purshiana effects cannot be assigned to this label.",
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": ["pregnant", "breastfeeding"]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        },
         "direction": "unknown",
         "materiality": "presence"
       },
