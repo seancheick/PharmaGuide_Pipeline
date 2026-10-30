@@ -40291,12 +40291,8 @@
         "notes": "Specific strain with oral and gut health benefits. Produces bacteriocins with antimicrobial properties. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C9 sign-off: bio_score 12 → 7. Strain-specific pending.",
         "aliases": [
           "l. salivarius ha-118",
-          "ligilactobacillus salivarius",
-          "lactobacillus salivarius strain",
           "lactobacillus salivarius ha-118 supplement",
-          "l. salivarius ha-118 supplement",
-          "ligilactobacillus salivarius supplement",
-          "lactobacillus salivarius strain supplement"
+          "l. salivarius ha-118 supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40319,7 +40315,11 @@
           "lactobacillus salivarius",
           "l. salivarius",
           "lactobacillus salivarius supplement",
-          "l. salivarius supplement"
+          "l. salivarius supplement",
+          "ligilactobacillus salivarius",
+          "ligilactobacillus salivarius supplement",
+          "lactobacillus salivarius strain",
+          "lactobacillus salivarius strain supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
