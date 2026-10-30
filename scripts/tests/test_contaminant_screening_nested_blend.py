@@ -4,7 +4,7 @@ Clean flattens a blend whose header group is generic ("Proprietary Blend
 (Combination)") but keeps the children under ``nestedIngredients`` when the
 header's ``ingredientGroup`` is its own name (DSLD does this, and so does
 submission transcription). Scoring, dose, IQD and interactions already read
-nested children through ``_flatten_active_ingredients_for_analysis``;
+nested children through ``scoring_input_contract.active_label_rows``;
 ``_collect_contaminant_data`` read only top-level ``activeIngredients``, so a
 nested Ephedra or Yohimbe child was never screened and the product shipped
 ``no_known_catalog_concern`` instead of BLOCKED.
@@ -166,3 +166,55 @@ def test_rules_on_a_nested_childs_safety_record_still_fire(runs) -> None:
 
     assert "RULE_BANNED_YOHIMBE_CONTRA" in rule_ids("nested")
     assert rule_ids("nested") == rule_ids("flattened")
+
+
+def test_scorer_safety_gate_reads_nested_children(runs) -> None:
+    from scoring_v4.gate_safety import (
+        _iter_resolver_clean_label_hits,
+        _iter_resolver_safety_hits,
+    )
+
+    def rule_ids(hits) -> set:
+        return {hit.get("matched_rule_id") for hit in hits}
+
+    flat, nested = runs["flattened"]["enriched"], runs["nested"]["enriched"]
+    assert "BANNED_EPHEDRA" in rule_ids(_iter_resolver_safety_hits(nested))
+    assert rule_ids(_iter_resolver_safety_hits(nested)) == rule_ids(
+        _iter_resolver_safety_hits(flat)
+    )
+    assert "BANNED_ADD_TITANIUM_DIOXIDE" in rule_ids(_iter_resolver_clean_label_hits(nested))
+    assert rule_ids(_iter_resolver_clean_label_hits(nested)) == rule_ids(
+        _iter_resolver_clean_label_hits(flat)
+    )
+
+
+def test_export_safety_and_interaction_carriers_read_nested_children(runs) -> None:
+    import build_final_db as export
+    from core_export_model import PRODUCTS_CORE_COLUMNS
+
+    def carriers(label: str) -> dict:
+        enriched = copy.deepcopy(runs[label]["enriched"])
+        scored = copy.deepcopy(runs[label]["scored"])
+        blob = export.build_detail_blob(copy.deepcopy(enriched), copy.deepcopy(scored))
+        core = dict(zip(
+            PRODUCTS_CORE_COLUMNS,
+            export.build_core_row(enriched, scored, "2026-10-29T00:00:00Z", detail_blob=blob),
+        ))
+        return {
+            "banned_bridge": export._resolver_status_in(enriched, ("banned",)),
+            "banned_flags": {
+                flag.get("entry_id")
+                for flag in export.safety_flag_status_matches(enriched, "banned", "recalled")
+            },
+            "tags": set(
+                export.classify_product_categories(enriched, scored)["key_ingredient_tags"]
+            ),
+            "core_tags": core["key_ingredient_tags"],
+            "search_text": core["ingredients_text"],
+        }
+
+    flat, nested = carriers("flattened"), carriers("nested")
+    assert nested["banned_bridge"] is True
+    assert {"ephedra", "titanium_dioxide"} <= nested["tags"]
+    assert "Ephedra" in nested["search_text"]
+    assert nested == flat
