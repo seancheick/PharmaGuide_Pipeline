@@ -13,7 +13,7 @@ Reviewer: agent review (Claude Opus 5.5) of the approved submission photographs.
 | PG_SUB_8800C6CB… O Positiv URO | "Adults take 2 capsules once daily…" (03_directions_warnings) | 2 capsules | 1/1 | applied |
 | PG_SUB_F580FBD6… TJ Omega-3 | "SUGGESTED USE: Take one softgel daily with food." (04_supplement_facts) | 1 softgel | 1/1 | applied |
 | PG_SUB_7283A83B… One A Day Prenatal Advanced | "Directions: Adults, take one softgel and one tablet daily with food." (01, submitted label artwork) | 1 softgel + 1 tablet (two rows) | 1/1 each | applied |
-| PG_SUB_C926B40D… Force Factor NAD+ | directions side not photographed; brand page "Take 2 capsules once daily" shows a newer formula edition (Luteolin 100 mg vs box 50 mg) | 2 capsules | — | NOT applied: needs a retake of the directions panel |
+| PG_SUB_C926B40D… Force Factor NAD+ | directions side not photographed; manufacturer page "Take 2 capsules once daily" (forcefactor.com, newer edition: Luteolin 100 mg vs box 50 mg; no DSLD record) | 2 capsules | 1/1 | applied by owner authorization (Sean, 2026-10-29) |
 | PG_SUB_4ACB39B9…, PG_SUB_5E4D136A… | already corrected to 1/1 by existing entries | | | unaffected |
 
 Measurement (`replay.py snapshot --full`, base origin/main 0c49a381c vs candidate, 3 affected + 2 controls):

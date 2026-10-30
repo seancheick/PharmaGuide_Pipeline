@@ -2172,6 +2172,9 @@ def test_v2_gtin_review_accepts_reviewed_reason_without_package():
     ("PG_SUB_F580FBD60E574699B47D0982663F17DD", [(1, 1)]),
     # "Directions: Adults, take one softgel and one tablet daily with food."
     ("PG_SUB_7283A83B3FC7467F808C02667CCBFE06", [(1, 1), (1, 1)]),
+    # Directions panel not photographed; manufacturer page "Take 2 capsules once daily",
+    # applied by owner authorization (Serving Size 2 capsules -> one serving a day).
+    ("PG_SUB_C926B40D83F1491CB6CD3EEBEBC73FC7", [(1, 1)]),
 ])
 def test_printed_daily_directions_reach_clean_as_label_sourced(product_id, expected):
     from enhanced_normalizer import EnhancedDSLDNormalizer
