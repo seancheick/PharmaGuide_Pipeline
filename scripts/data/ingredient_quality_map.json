@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 655,
       "total_forms": 1475,
-      "total_form_aliases": 12295,
+      "total_form_aliases": 12300,
       "parents_with_parent_aliases": 150,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -4529,7 +4529,8 @@
           "(6S)-N5-Methyltetrahydrofolic Acid Calcium Salt",
           "N5-Methyltetrahydrofolic Acid Calcium Salt",
           "(6s)-5-methyltetrahydrofolic acid calcium salt",
-          "(6s)-5-methyltetrahydrofolate acid calcium salt"
+          "(6s)-5-methyltetrahydrofolate acid calcium salt",
+          "6S-5-Methyltetrahydrofolate calcium salt"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -12144,7 +12145,9 @@
           "NO creatine",
           "creatine nitrate supplement",
           "nitrate-bound creatine supplement",
-          "NO creatine supplement"
+          "NO creatine supplement",
+          "NO3-T",
+          "NO3-T creatine nitrate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -29672,7 +29675,9 @@
           "l-citrulline malate supplement",
           "citrulline malate supplement",
           "citrulline dl-malate supplement",
-          "l-citrulline dl-malate supplement"
+          "l-citrulline dl-malate supplement",
+          "citrulline malate 2:1",
+          "l-citrulline malate 2:1"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
