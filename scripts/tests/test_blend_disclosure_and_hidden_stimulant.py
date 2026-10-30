@@ -319,3 +319,69 @@ def test_nested_caffeine_subtotal_mismatch_retains_high_dose_warning(pipeline, s
     scored = build_scored_artifact(enriched)
     assert scored['product_safety_status'] == expected_safety
     assert ('STIMULANT_CAFFEINE_HIGH_DOSE' in scored['flags']) is (subtotal > 400)
+
+
+
+def _detector_only(category, matched_text, *, statement=None, row=None):
+    """A blend only the pattern detector saw: ``name`` is the registry category. Its printed
+    wording is the row or statement the detector scanned (DSLD 323062: "We also feature our
+    proprietary focus blend", re-found by the whole-label scan as 'Stimulant Blends')."""
+    product = {"proprietary_blends": [{
+        "name": category, "detector_group": category, "sources": ["detector"],
+        "disclosure_level": "none", "blend_total_mg": None, "child_ingredients": [],
+        "source_field": "statements[0]" if statement is not None else "activeIngredients[0]",
+        "evidence": {"matched_text": matched_text},
+    }]}
+    if statement is not None:
+        # The detector reports every statement as statements[0]; the clause is found by text.
+        product["statements"] = [{"type": "Other", "notes": "Take daily."}, {"type": "Other", "notes": statement}]
+    if row is not None:
+        product["activeIngredients"] = [{"name": row}]
+    return product
+
+
+def test_a_registry_category_is_not_a_printed_stimulant_name():
+    product = _detector_only("Stimulant Blends", "focus blend",
+                             statement="We also feature our proprietary focus blend with L-theanine.")
+    assert _has_undisclosed_stimulant_blend(product) is False
+
+
+@pytest.mark.parametrize("statement,matched", [
+    ("Contains a clinically proven, proprietary thermogenic blend shown to burn calories.", "thermogenic blend"),
+    ("Our Proprietary Thermogenic Focus Blend supports energy.", "focus blend"),
+])
+def test_a_stimulant_word_in_the_printed_statement_clause_still_fires(statement, matched):
+    assert _has_undisclosed_stimulant_blend(
+        _detector_only("Stimulant Blends", matched, statement=statement)) is True
+
+
+def test_a_stimulant_word_outside_the_matched_phrase_on_a_printed_row_still_fires():
+    product = _detector_only("Stimulant Blends", "focus blend", row="Thermogenic Focus Blend")
+    assert _has_undisclosed_stimulant_blend(product) is True
+
+
+def test_unresolved_printed_wording_keeps_the_category_name():
+    assert _has_undisclosed_stimulant_blend(_detector_only("Stimulant Blends", "focus blend")) is True
+
+
+def test_a_cleaner_named_blend_keeps_its_printed_name():
+    product = _detector_only("Stimulant Blends", "stimulant blend")
+    product["proprietary_blends"][0].update(name="Thermogenic Stimulant Blend", sources=["cleaning", "detector"])
+    assert _has_undisclosed_stimulant_blend(product) is True
+
+
+def test_detector_only_thermogenic_focus_blend_keeps_its_caution_end_to_end():
+    """Enricher -> gate: a printed opaque 'proprietary thermogenic focus blend' statement must
+    not shrink to the matched 'focus blend' and lose its stimulant word."""
+    product = {
+        "id": "x", "product_name": "x", "fullName": "x", "inactiveIngredients": [],
+        "activeIngredients": [{"name": "Magnesium", "standardName": "Magnesium", "raw_source_text": "Magnesium",
+                               "order": 1, "quantity": 100, "unit": "mg", "forms": []}],
+        "statements": [{"type": "Other", "notes": "Contains our proprietary thermogenic focus blend."}],
+        "servingSizes": [{"order": 1, "minQuantity": 1, "maxQuantity": 1, "unit": "Capsule(s)",
+                          "minDailyServings": 1, "maxDailyServings": 1}],
+    }
+    enriched, _ = SupplementEnricherV3().enrich_product(product)
+    detected = [b for b in enriched.get("proprietary_blends", []) if "detector" in b.get("sources", [])]
+    assert [b["evidence"]["matched_text"].lower() for b in detected] == ["focus blend"], detected
+    assert _has_undisclosed_stimulant_blend(enriched) is True
