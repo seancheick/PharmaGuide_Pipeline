@@ -74,3 +74,46 @@ def test_exact_l_reuteri_dsm17938_aliases_do_not_live_on_unspecified_row() -> No
     for alias in {"dsm 17938", "protectis", "biogaia"}:
         assert alias not in unspecified_aliases
         assert alias in dsm_aliases
+
+
+SALIVARIUS_SPECIES_ALIASES = [
+    # Zheng et al. 2020 (PMID 32293557) renamed the species; GSRS UNII
+    # 7A4S6N2EG2 names it Ligilactobacillus salivarius. No strain code.
+    "ligilactobacillus salivarius",
+    "ligilactobacillus salivarius supplement",
+    "lactobacillus salivarius strain",
+    "lactobacillus salivarius strain supplement",
+]
+
+
+def test_salivarius_species_names_are_not_aliases_of_the_ha118_strain() -> None:
+    forms = _iqm()["lactobacillus_salivarius"]["forms"]
+    strain = {a.lower() for a in forms["lactobacillus salivarius ha-118"]["aliases"]}
+    generic = {a.lower() for a in forms["generic lactobacillus salivarius"]["aliases"]}
+    for alias in SALIVARIUS_SPECIES_ALIASES:
+        assert alias not in strain
+        assert alias in generic
+
+
+def test_species_only_salivarius_label_selects_the_generic_form() -> None:
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    enricher = SupplementEnricherV3()
+
+    def form_of(name: str) -> tuple:
+        row = {"name": name, "raw_source_text": name, "standardName": "Lactobacillus Salivarius",
+               "canonical_id": "lactobacillus_salivarius", "canonical_source_db": "ingredient_quality_map",
+               "ingredientGroup": "Lactobacillus salivarius", "raw_source_path": "ingredientRows[0]",
+               "quantity": 1, "unit": "Billion CFU", "forms": [], "source_section": "active",
+               "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True}
+        product, issues = enricher.enrich_product({"id": "salivarius", "fullName": "t",
+                                                   "activeIngredients": [row], "inactiveIngredients": []})
+        assert product, issues
+        iqd = product["ingredient_quality_data"]
+        out = (iqd["ingredients"] + iqd.get("ingredients_skipped", []))[0]
+        return out.get("form_id") or out.get("matched_form"), out.get("bio_score")
+
+    for name in ("Ligilactobacillus salivarius", "Lactobacillus salivarius strain"):
+        assert form_of(name) == ("generic lactobacillus salivarius", 6)
+    # The named strain keeps its own form.
+    assert form_of("Lactobacillus salivarius HA-118") == ("lactobacillus salivarius ha-118", 7)
