@@ -48,7 +48,11 @@ V4_CANARIES = {
     # separate substance warning must remain CAUTION rather than become SAFE.
     "241706": {
         "label": "HUM Ripped Rooster", "module": "generic", "verdict": "CAUTION",
-        "confidence": "moderate", "score_unavailable_reason": None, "score": 45.2,
+        "confidence": "moderate", "score_unavailable_reason": None,
+        # 4c443cec0 (Oct 28, legacy clinical scope unified): the green tea and
+        # chromium picolinate records have no reviewed applicability scope, so
+        # Evidence 9.4 -> 0 and 45.2 -> 35.8 (re-pinned 2026-10-30, fresh raw replay).
+        "score": 35.8,
         "safety_verdict": "CAUTION", "completeness_ready": True,
         # Two independent repairs: retain the explicitly printed50%-EGCG form,
         # and read Contains No: as a negative list. Existing enriched corpus is
@@ -63,8 +67,9 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "low",
         "score_unavailable_reason": None,
-        # Already 40.0 on the stored corpus at 5fb2be1ca (stale pin, not V4.1).
-        "score": 40.0,
+        # 82d4e845e (Oct 28): the bromelain record has no clinician-approved
+        # study contexts, so it no longer scores: Evidence 9.4 -> 0, 40.0 -> 30.6.
+        "score": 30.6,
         "unevaluated_canonicals": set(),
     },
     # No total CFU and no demonstrated dose applicability: dose remains zero.
@@ -75,7 +80,9 @@ V4_CANARIES = {
         "verdict": "SAFE",
         "confidence": "low",
         # Dose V4.1: hidden per-strain amounts take the neutral (Dose 0 -> 8.55).
-        "score_range": (40.6, 40.6),
+        # 2ba45cac1 (Oct 27, reviewed negative assessments): its strain records
+        # are reviewed reference-only or negative: Evidence 7 -> 0, 40.6 -> 33.6.
+        "score_range": (33.6, 33.6),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -128,9 +135,13 @@ V4_CANARIES = {
         "label": "Triple Chlorophyll (GNC)",
         "module": "generic",
         "verdict": "SAFE",
-        "confidence": "moderate",
+        # 63ad40e71 (Oct 24, source-backed blend disclosure): DSLD files
+        # "Chlorophyll Complex 60 mg" as a blend with no disclosed members, so
+        # B5 opacity applies (Transparency 10 -> 3.16), 34.7 -> 27.9, and the
+        # opacity lowers confidence to low.
+        "confidence": "low",
         "score_unavailable_reason": None,
-        "score": 34.7,
+        "score": 27.9,
         "no_primary_evidence_floor": True,
         "evidence_driver": "evidence_review_complete_limited_or_negative",
         "unevaluated_canonicals": set(),
@@ -146,7 +157,9 @@ V4_CANARIES = {
         "score_unavailable_reason": None,
         # Already 55.0 on the stored corpus at 5fb2be1ca (stale pin, not V4.1).
         "score": 55.0,
-        "limited_canonicals": {"paba", "fo_ti"},
+        # 97c471f8a (Oct 24): an empty automated source receipt is not a
+        # completed review, so PABA and Fo-Ti are honestly not yet evaluated.
+        "unevaluated_canonicals": {"paba", "fo_ti"},
     },
     # Typed confidence high on the probiotic module.
     "230149": {
@@ -177,7 +190,9 @@ V4_CANARIES = {
         # Dose ceiling caps it once (public Dose 10 unchanged).
         # 1.31.0: the vitamin D ingredient allowlist is retired, so Evidence
         # takes the strong floor (18 -> 14 raw): 78.3 -> 74.3.
-        "score_range": (74.3, 74.3),
+        # cf5ec623f (Oct 28): the vitamin D3 record's sources are held, so only
+        # the nutrition-authority floor remains (14 -> 10 raw): 74.3 -> 70.3.
+        "score_range": (70.3, 70.3),
         "safety_verdict": "CAUTION",
     },
     "206362": {
