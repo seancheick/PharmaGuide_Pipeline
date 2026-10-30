@@ -9390,16 +9390,27 @@
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
-        "notes.source_composition"
+        "notes.source_composition",
+        "category.source_classification",
+        "forms.source_composition"
       ],
-      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 367ace7abe0eb290eff2976fb4790b0ab8fc68544f3195477cdbc43e453d7d60.",
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 367ace7abe0eb290eff2976fb4790b0ab8fc68544f3195477cdbc43e453d7d60. Source category other and empty forms omit the printed whole botanical preparation. Restore botanical category and a single complete Laminaria japonica Whole Grass Extract source form (the same whole500mg declaration), using existing botanical_ingredients.kombu identity only. This is not Ascophyllum nodosum kelp powder, an isolated constituent, or an extract-to-powder equivalence; no amount or marker is inferred.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/252562.pdf"
       ],
       "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
       "review_date": "2026-10-29",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_source_correction_20261029"
+      "provenance_tag": "official_label_source_correction_20261029",
+      "corrected_category": "botanical",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "Laminaria japonica Whole Grass Extract",
+          "category": "botanical",
+          "ingredientGroup": "Laminaria japonica"
+        }
+      ]
     },
     "255054": {
       "brand": "BulkSupplements.com",
@@ -9412,16 +9423,27 @@
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
-        "notes.source_composition"
+        "notes.source_composition",
+        "category.source_classification",
+        "forms.source_composition"
       ],
-      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 f8311012b4ccd70bf76bc8aa6393fb4fd3334cd1c327ccdec9a4e9af109e6450.",
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 f8311012b4ccd70bf76bc8aa6393fb4fd3334cd1c327ccdec9a4e9af109e6450. Source category other and empty forms omit the printed whole botanical preparation. Restore botanical category and a single complete Laminaria japonica Whole Grass Extract source form (the same whole500mg declaration), using existing botanical_ingredients.kombu identity only. This is not Ascophyllum nodosum kelp powder, an isolated constituent, or an extract-to-powder equivalence; no amount or marker is inferred.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/255054.pdf"
       ],
       "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
       "review_date": "2026-10-29",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_source_correction_20261029"
+      "provenance_tag": "official_label_source_correction_20261029",
+      "corrected_category": "botanical",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "Laminaria japonica Whole Grass Extract",
+          "category": "botanical",
+          "ingredientGroup": "Laminaria japonica"
+        }
+      ]
     },
     "255055": {
       "brand": "BulkSupplements.com",
@@ -9434,16 +9456,27 @@
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
-        "notes.source_composition"
+        "notes.source_composition",
+        "category.source_classification",
+        "forms.source_composition"
       ],
-      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 d7205d754eaaa69e5071a520046fd4a3b2804c08a295638640d6ef351e08ec10.",
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 d7205d754eaaa69e5071a520046fd4a3b2804c08a295638640d6ef351e08ec10. Source category other and empty forms omit the printed whole botanical preparation. Restore botanical category and a single complete Laminaria japonica Whole Grass Extract source form (the same whole500mg declaration), using existing botanical_ingredients.kombu identity only. This is not Ascophyllum nodosum kelp powder, an isolated constituent, or an extract-to-powder equivalence; no amount or marker is inferred.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/255055.pdf"
       ],
       "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
       "review_date": "2026-10-29",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_source_correction_20261029"
+      "provenance_tag": "official_label_source_correction_20261029",
+      "corrected_category": "botanical",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "Laminaria japonica Whole Grass Extract",
+          "category": "botanical",
+          "ingredientGroup": "Laminaria japonica"
+        }
+      ]
     },
     "255057": {
       "brand": "BulkSupplements.com",
@@ -9456,16 +9489,27 @@
       "raw_quantity_value": 500,
       "raw_quantity_unit": "mg",
       "correction_fields": [
-        "notes.source_composition"
+        "notes.source_composition",
+        "category.source_classification",
+        "forms.source_composition"
       ],
-      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 3f504b3f488051085727ab987465dbdff95ebc314329ebfeb0df28b708cb5881.",
+      "evidence": "Individually verified original official NIH label source facts; preserve the literal printed species spelling and tissue. No inference of cross-species, extract/powder, whole/marker or clinical equivalence. Original whole/child quantity, unit, name, forms and source path retained. PDF SHA256 3f504b3f488051085727ab987465dbdff95ebc314329ebfeb0df28b708cb5881. Source category other and empty forms omit the printed whole botanical preparation. Restore botanical category and a single complete Laminaria japonica Whole Grass Extract source form (the same whole500mg declaration), using existing botanical_ingredients.kombu identity only. This is not Ascophyllum nodosum kelp powder, an isolated constituent, or an extract-to-powder equivalence; no amount or marker is inferred.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/s3/pdf/255057.pdf"
       ],
       "reviewer": "Codex individually verified official-label source facts; no new clinical benefit approval",
       "review_date": "2026-10-29",
       "scope": "dsld_id_only",
-      "provenance_tag": "official_label_source_correction_20261029"
+      "provenance_tag": "official_label_source_correction_20261029",
+      "corrected_category": "botanical",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "name": "Laminaria japonica Whole Grass Extract",
+          "category": "botanical",
+          "ingredientGroup": "Laminaria japonica"
+        }
+      ]
     },
     "79598": {
       "brand": "Nature's Way",

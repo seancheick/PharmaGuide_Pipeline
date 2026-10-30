@@ -1158,8 +1158,15 @@ def test_individually_verified_remaining_source_facts_keep_original_amount_and_r
     before = deepcopy(row)
     result = bamboo_label_normalizer._apply_label_corrections([row], pid)[0]
     assert result['notes'] == fixture['expected_notes']
-    for field in ['quantity','name','forms','nestedRows','raw_source_path']:
+    for field in ['quantity','name','nestedRows','raw_source_path']:
         assert result.get(field) == before.get(field)
+    if pid in {'252562','255054','255055','255057'}:
+        assert before['forms'] == []
+        assert result['category'] == 'botanical'
+        assert result['forms'] == [{'name': 'Laminaria japonica Whole Grass Extract',
+                                   'category': 'botanical', 'ingredientGroup': 'Laminaria japonica'}]
+    else:
+        assert result.get('forms') == before.get('forms')
     if pid == '326238':
         assert result['quantity'][0]['quantity'] == 0
         assert result['quantity'][0]['unit'] == 'NP'
