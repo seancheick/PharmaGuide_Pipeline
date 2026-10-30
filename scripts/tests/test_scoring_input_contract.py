@@ -1131,6 +1131,23 @@ def test_blend_header_mass_with_mapped_nested_child_emits_conservative_anchor():
     assert row["evidence_scope"] == "blend_level"
 
 
+@pytest.mark.parametrize("pid,total", [("176190", 900.0), ("232084", 450.0)])
+def test_unmapped_grapefruit_blend_child_cannot_own_parent_mass(pid, total):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    raw = json.loads((Path(__file__).parent / "fixtures" /
+                      f"raw_blend_grapefruit_{pid}.json").read_text())
+    product, _ = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = get_scoring_ingredients(product, strict=True).rows
+    assert any(row.get("reason") == "identity_bearing_blend_header_mass"
+               and row.get("dose_value") == total for row in rows)
+    assert not any(row.get("reason") == "identity_bearing_blend_header_mass_from_nested_child"
+                   and row.get("canonical_id") == "grapefruit"
+                   and row.get("dose_value") == total for row in rows)
+
+
 def _eaa_child(canonical_id: str, index: int) -> dict:
     return {
         "name": canonical_id.replace("_", " ").title(),

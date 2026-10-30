@@ -1913,6 +1913,11 @@ def _derive_blend_header_anchor_from_nested_child(
     if not child or _positive_quantity(child) is not None:
         # A child with its own amount is its own dose; the blend mass is not.
         return None
+    if not _verified_anchor_canonical(child):
+        # A label taxonomy name can identify the undisclosed member for
+        # display, but cannot turn the parent's total into that member's
+        # scored material. Preserve the separate blend-total anchor below.
+        return None
     anchor_canonical, anchor_name = _anchor_identity(child)
     if not anchor_canonical:
         return None
