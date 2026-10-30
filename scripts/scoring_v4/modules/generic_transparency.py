@@ -703,7 +703,7 @@ def _is_trivial_non_safety_micro_blend(
     # keep the normal opacity penalty unless the label fully discloses them.
     if blend_class == "sports_active":
         return False
-    names = [str(blend.get("name") or "")]
+    names = [_b5_scoring_name(blend)]
     names.extend(str(name or "") for name in children_without_amounts)
     children_with_amounts, _ = _blend_child_payload(blend)
     names.extend(str(child.get("name") or "") for child in children_with_amounts)
@@ -773,7 +773,7 @@ def _is_b5_scoreable_blend(blend: Dict[str, Any]) -> bool:
 
     if source_prefix == "activeingredients":
         return (
-            _looks_like_blend_container_name(blend.get("name"))
+            _looks_like_blend_container_name(_b5_scoring_name(blend))
             or has_total_amount
             or has_child_evidence
             or hidden_count > 0
@@ -877,6 +877,18 @@ def _is_detector_placeholder_blend(blend: Dict[str, Any]) -> bool:
     return bool(sources) and sources == {"detector"}
 
 
+def _b5_scoring_name(blend: Dict[str, Any]) -> str:
+    """Use detector classification for existing B5 decisions, not display text.
+
+    Enrich's ``name`` is the printed label name; ``detector_group`` preserves
+    the same category B5 used before that display correction. Cleaner-owned
+    blends continue to use their label-facing name.
+    """
+    if _is_detector_placeholder_blend(blend) and blend.get("detector_group"):
+        return str(blend["detector_group"])
+    return str(blend.get("name") or "")
+
+
 def _effective_blend_disclosure_level(blend: Dict[str, Any]) -> str:
     level = _norm_text(blend.get("disclosure_level")) or "none"
     if level == "none":
@@ -911,7 +923,7 @@ def _blend_dedupe_keys(
 
 
 def _blend_name_total_key(blend: Dict[str, Any]) -> Optional[Tuple[str, ...]]:
-    name_key = _canon_key(blend.get("name"))
+    name_key = _canon_key(_b5_scoring_name(blend))
     blend_total_mg, _ = _blend_total_mg(blend)
     if not name_key or blend_total_mg is None:
         return None
@@ -931,7 +943,7 @@ def _blend_total_mg(blend: Dict[str, Any]) -> Tuple[Optional[float], bool]:
 
 
 def _blend_dedupe_fingerprint(blend: Dict[str, Any]) -> Tuple[str, Tuple[str, ...], str, str]:
-    name_key = _canon_key(blend.get("name"))
+    name_key = _canon_key(_b5_scoring_name(blend))
     children_with, children_without = _blend_child_payload(blend)
     child_names = sorted(
         {
