@@ -24507,7 +24507,10 @@
           "requires": {
             "conditions_any": [],
             "drug_classes_any": [],
-            "profile_flags_any": ["pregnant", "breastfeeding"]
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
           },
           "excludes": {
             "conditions_any": [],
