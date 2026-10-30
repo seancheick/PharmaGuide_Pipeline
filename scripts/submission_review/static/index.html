@@ -192,20 +192,21 @@
       <div class="group-head"><h3>Serving</h3>
         <div class="group-confirm"><span id="verify-slot-serving" class="verify-slot"></span></div></div>
       <div class="field-grid">
-        <label>Servings per container <input id="p-servings-count" type="number" min="1" inputmode="numeric"></label>
+        <label>Servings per container <input id="p-servings-count" placeholder="60 or about 17"></label>
         <label>Serving size <input id="p-serving-qty" type="number" step="any" min="0" inputmode="decimal"></label>
         <label>Serving unit <input id="p-serving-unit" placeholder="Capsule(s)"></label>
       </div>
 
       <div class="group-head"><h3>Nutrition Facts <span class="muted">(only if the label has this panel)</span></h3></div>
       <div class="field-grid">
-        <label>Calories (kcal) <input id="n-calories" type="number" step="any" min="0" inputmode="decimal"></label>
-        <label>Total Fat (g) <input id="n-total-fat" type="number" step="any" min="0" inputmode="decimal"></label>
-        <label>Total Carbohydrate (g) <input id="n-total-carb" type="number" step="any" min="0" inputmode="decimal"></label>
-        <label>Dietary Fiber (g) <input id="n-fiber" type="number" step="any" min="0" inputmode="decimal"></label>
-        <label>Total Sugars (g) <input id="n-sugars" type="number" step="any" min="0" inputmode="decimal"></label>
-        <label>Protein (g) <input id="n-protein" type="number" step="any" min="0" inputmode="decimal"></label>
-        <label>Sodium (mg) <input id="n-sodium" type="number" step="any" min="0" inputmode="decimal"></label>
+        <label>Calories (kcal) <input id="n-calories" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Total Fat (g) <input id="n-total-fat" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Polyunsaturated Fat (g) <input id="n-poly-fat" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Total Carbohydrate (g) <input id="n-total-carb" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Dietary Fiber (g) <input id="n-fiber" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Total Sugars (g) <input id="n-sugars" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Protein (g) <input id="n-protein" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Sodium (mg) <input id="n-sodium" inputmode="decimal" placeholder="10 or <1"></label>
       </div>
       <p class="muted step-footnote">
         Most supplements don't print a Nutrition Facts panel — leave every row
@@ -214,7 +215,7 @@
         sugars, protein or sodium line printed inside a Supplement Facts panel
         may stay as an ingredient row: the pipeline files it under Nutrition
         Facts, not as an ingredient. Keep it in one place; a printed row wins
-        over a typed value.
+        over a typed value. Type a bound as printed: "&lt;1" for "less than 1 g".
       </p>
 
       <div class="group-head"><h3>Ingredient rows</h3>

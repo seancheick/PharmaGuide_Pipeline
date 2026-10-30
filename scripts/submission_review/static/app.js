@@ -2647,16 +2647,24 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
 
     const qtyCell = document.createElement('td');
     const qtyInput = document.createElement('input');
-    qtyInput.type = 'number';
-    qtyInput.step = 'any';
-    qtyInput.placeholder = 'Amount';
+    qtyInput.inputMode = 'decimal';
+    qtyInput.placeholder = 'Amount or <1';
     qtyInput.setAttribute?.('aria-label', 'Amount');
-    qtyInput.value = row.quantity?.[0]?.quantity ?? '';
+    const printed = row.quantity?.[0];
+    qtyInput.value = printed?.operator && printed.operator !== '='
+      ? `${printed.operator}${printed.quantity}` : printed?.quantity ?? '';
+    // A printed bound ("<1") keeps its operator through every edit.
+    const readQuantity = (unit) => {
+      const raw = qtyInput.value.trim();
+      const bound = raw === '' ? null : parsePrintedAmount(raw);
+      return {
+        quantity: raw === '' ? null : bound ? bound.amount : Number(raw),
+        unit,
+        ...(bound?.operator ? { operator: bound.operator } : {}),
+      };
+    };
     qtyInput.addEventListener('input', () => {
-      row.quantity = [{
-        quantity: qtyInput.value.trim() === '' ? null : Number(qtyInput.value),
-        unit: row.quantity?.[0]?.unit ?? '',
-      }];
+      row.quantity = [readQuantity(row.quantity?.[0]?.unit ?? '')];
       updateShaPreview();
     });
     qtyCell.append(qtyInput);
@@ -2667,10 +2675,7 @@ function renderIngredientRow(row, owner, index, depth, tbody) {
     unitInput.setAttribute?.('aria-label', 'Unit');
     unitInput.value = row.quantity?.[0]?.unit ?? '';
     unitInput.addEventListener('input', () => {
-      row.quantity = [{
-        quantity: qtyInput.value.trim() === '' ? null : Number(qtyInput.value),
-        unit: unitInput.value,
-      }];
+      row.quantity = [readQuantity(unitInput.value)];
       updateShaPreview();
     });
     unitCell.append(unitInput);
@@ -2801,12 +2806,42 @@ function renderStatements() {
 const NUTRITION_FIELDS = {
   'n-calories': { key: 'calories', unit: 'kcal' },
   'n-total-fat': { key: 'totalFat', unit: 'g' },
+  'n-poly-fat': { key: 'polyunsaturatedFat', unit: 'g' },
   'n-total-carb': { key: 'totalCarbohydrates', unit: 'g' },
   'n-fiber': { key: 'dietaryFiber', unit: 'g' },
   'n-sugars': { key: 'sugars', unit: 'g' },
   'n-protein': { key: 'protein', unit: 'g' },
   'n-sodium': { key: 'sodium', unit: 'mg' },
 };
+
+// A printed bound stays a bound: "<1" or "less than 1" is {amount: 1,
+// operator: '<'}, never an exact 1 (normalization.py QUANTITY_OPERATORS).
+const PRINTED_OPERATORS = { '<': '<', '<=': '<=', '>': '>', '>=': '>=', '~': '~',
+  '≤': '<=', '≥': '>=', 'less than': '<' };
+
+function parsePrintedAmount(raw) {
+  const match = /^(<=|>=|<|>|~|≤|≥|less than)?\s*(\d*\.?\d+)$/i.exec(raw.trim());
+  if (!match) return null;
+  const amount = Number(match[2]);
+  if (!Number.isFinite(amount)) return null;
+  const operator = match[1] ? PRINTED_OPERATORS[match[1].toLowerCase()] : null;
+  return operator ? { amount, operator } : { amount };
+}
+
+// "about 17" servings keeps its printed wording (the importer and Clean read
+// the number from it); a plain count stays a number.
+function parseServingsPerContainer(raw) {
+  const text = raw.trim();
+  const approximate = /^(?:about|approximately|approx\.?|~)\s*(\d[\d,]*(?:\.\d+)?)$/i.exec(text);
+  const numeric = approximate ? approximate[1] : text;
+  // A comma is thousands grouping only; "1,5" may be a decimal comma.
+  if (numeric.includes(',') && !/^\d{1,3}(,\d{3})+(\.\d+)?$/.test(numeric)) return null;
+  const count = Number(numeric.replace(/,/g, ''));
+  if (!(count > 0)) return null;
+  // An approximate count is a whole number of servings ("about 17").
+  if (approximate) return Number.isInteger(count) ? text : null;
+  return count;
+}
 
 function syncFieldsFromPayload() {
   $('p-brand').value = state.payload.brandName ?? '';
@@ -2818,7 +2853,8 @@ function syncFieldsFromPayload() {
   $('p-serving-unit').value = state.payload.servingSizes?.[0]?.unit ?? '';
   const nutritionalInfo = state.payload.nutritionalInfo ?? {};
   for (const [id, { key }] of Object.entries(NUTRITION_FIELDS)) {
-    $(id).value = nutritionalInfo[key]?.amount ?? '';
+    const entry = nutritionalInfo[key];
+    $(id).value = entry?.operator ? `${entry.operator}${entry.amount}` : entry?.amount ?? '';
   }
   $('other-disclosure').value =
     state.payload.otherIngredientsDisclosure ?? '';
@@ -2837,9 +2873,10 @@ function syncNutritionFields() {
   for (const [id, { key, unit }] of Object.entries(NUTRITION_FIELDS)) {
     const raw = $(id).value.trim();
     if (raw === '') continue;
-    const amount = Number(raw);
-    if (!Number.isFinite(amount)) continue;
-    nutritionalInfo[key] = { amount, unit };
+    const printed = parsePrintedAmount(raw);
+    if (printed === null) continue;
+    nutritionalInfo[key] = { amount: printed.amount, unit,
+      ...(printed.operator ? { operator: printed.operator } : {}) };
   }
   if (Object.keys(nutritionalInfo).length > 0) {
     state.payload.nutritionalInfo = nutritionalInfo;
@@ -2859,8 +2896,7 @@ function syncScalarFields() {
   else delete state.payload.productType;
   if (physicalState) state.payload.physicalState = { name: physicalState };
   else delete state.payload.physicalState;
-  const servings = Number($('p-servings-count').value || 0);
-  state.payload.servingsPerContainer = servings > 0 ? servings : null;
+  state.payload.servingsPerContainer = parseServingsPerContainer($('p-servings-count').value || '');
   const quantity = $('p-serving-qty').value.trim() === '' ? null : Number($('p-serving-qty').value);
   const unit = $('p-serving-unit').value;
   const existingServingSizes = Array.isArray(state.payload.servingSizes)
