@@ -1444,3 +1444,56 @@ def test_flattened_actual_members_repair_marketing_header_projection(enricher, m
     identity = probiotic_label_identity_summary(product)
     assert identity['total_strain_count'] == len(members)
     assert identity['per_strain_cfu_disclosed_count'] == (1 if len(members) == 1 else 0)
+
+
+def _brand_named_nested_probiotic_raw(header_name):
+    # Submission S14 (RenewLife Debloat Probiotic Ultimate Flora), trimmed: the
+    # printed panel lists strains, an enzyme and three printed culture totals
+    # under a brand-named header that Clean keeps nested.
+    def child(name, quantity=None, unit=None):
+        return {'name': name, 'ingredientGroup': name, 'forms': [], 'nestedRows': [],
+                'quantity': [{'quantity': quantity, 'unit': unit}] if quantity else []}
+    return {
+        'id': 'brand-named-nested-probiotic', 'brandName': 'RenewLife',
+        'fullName': 'Debloat Probiotic Ultimate Flora',
+        'servingSizes': [{'minQuantity': 1.0, 'maxQuantity': 1.0, 'unit': 'Capsule', 'order': 1,
+                          'minDailyServings': 1, 'maxDailyServings': 1}],
+        'statements': [{'type': 'FDA Statement of Identity', 'notes': 'Probiotic Supplement'}],
+        'physicalState': {'name': 'Capsule', 'langualCodeDescription': 'Capsule'},
+        'ingredientRows': [
+            {'name': 'Vitamin B-12 (as Methylcobalamin)', 'order': 1, 'ingredientGroup': 'Vitamin B12',
+             'quantity': [{'quantity': 1000.0, 'unit': 'mcg'}], 'forms': [{'name': 'Methylcobalamin'}],
+             'nestedRows': []},
+            {'name': header_name, 'order': 2, 'ingredientGroup': header_name, 'forms': [],
+             'quantity': [{'quantity': 15.0, 'unit': 'mg'}],
+             'nestedRows': [
+                 child('Alpha Galactosidase', 300.0, 'GalU'),
+                 child('Bifidobacterium lactis (UF-12, UF-50, UF-26)'),
+                 child('Bifidobacterium longum UF-536'),
+                 child('Total Bifidobacterium Cultures', 2.0, 'Billion CFU'),
+                 child('Lactobacillus rhamnosus (GG, UF-11)'),
+                 child('Streptococcus thermophilus UF-336'),
+                 child('Total Lactobacillus, Lactococcus and Streptococcus Cultures', 1.0, 'Billion CFU'),
+                 child('Total Probiotic & Postbiotic Cultures', 3.0, 'Billion CFU'),
+             ]},
+        ],
+    }
+
+
+@pytest.mark.parametrize('header_name', [
+    'Ultimate Flora™ Debloat & Digestive Support Blend',
+    'Probiotic Blend',
+])
+def test_nested_strain_rows_decide_probiotic_identity_and_printed_total_owns_cfu(enricher, header_name):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    cleaned = EnhancedDSLDNormalizer().normalize_product(_brand_named_nested_probiotic_raw(header_name))
+    data = enricher.enrich_product(cleaned)[0]['probiotic_data']
+    assert data['is_probiotic_product'] is True
+    strains = [s for blend in data['probiotic_blends'] for s in blend['strains']]
+    assert strains == [
+        'Bifidobacterium lactis (UF-12, UF-50, UF-26)', 'Bifidobacterium longum UF-536',
+        'Lactobacillus rhamnosus (GG, UF-11)', 'Streptococcus thermophilus UF-336',
+    ]
+    # The printed overall total is the exposure; subtotals are not added to it.
+    assert data['total_cfu'] == 3e9
+    assert 'ingredientRows[1].nestedRows[7]' in data['cfu_linked_rows']
