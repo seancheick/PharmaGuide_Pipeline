@@ -1038,13 +1038,23 @@ def _blend_children_text(blend: Dict[str, Any], *, undisclosed_only: bool = Fals
     return " ".join(parts)
 
 
-def _printed_blend_name(blend: Dict[str, Any]) -> str:
+def _printed_blend_name(product: Dict[str, Any], blend: Dict[str, Any]) -> str:
     """The label's wording for a blend. A blend only the pattern detector saw keeps the
     registry category in ``name`` ("Stimulant Blends" for a printed "Focus Blend"); a
     category is our classification, not a printed stimulant name."""
     if ("cleaning" not in _safe_list(blend.get("sources"))
             and blend.get("detector_group")
             and blend.get("name") == blend.get("detector_group")):
+        source_field = str(blend.get("source_field") or "")
+        for collection in ("activeIngredients", "supplementFacts", "ingredients"):
+            prefix = f"{collection}["
+            if source_field.startswith(prefix) and source_field.endswith("]"):
+                index = source_field[len(prefix):-1]
+                rows = _safe_list(product.get(collection))
+                if index.isdigit() and int(index) < len(rows):
+                    row = rows[int(index)]
+                    if isinstance(row, dict) and row.get("name"):
+                        return _norm(row["name"])
         return _norm((blend.get("evidence") or {}).get("matched_text"))
     return _norm(blend.get("name"))
 
@@ -1062,7 +1072,7 @@ def _has_undisclosed_stimulant_blend(product: Dict[str, Any]) -> bool:
             continue
         if _norm(blend.get("disclosure_level")) not in ("none", "partial"):
             continue
-        name = _printed_blend_name(blend)
+        name = _printed_blend_name(product, blend)
         kids = _blend_children_text(blend)
         if any(token in name for token in _STRONG_STIM_BLEND_NAMES):
             return True

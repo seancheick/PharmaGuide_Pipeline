@@ -345,3 +345,10 @@ def test_a_cleaner_named_blend_keeps_its_printed_name():
     product = _detector_only("Stimulant Blends", "stimulant blend")
     product["proprietary_blends"][0].update(name="Thermogenic Stimulant Blend", sources=["cleaning", "detector"])
     assert _has_undisclosed_stimulant_blend(product) is True
+
+
+def test_detector_uses_full_physical_blend_name_when_match_is_only_a_phrase():
+    product = _detector_only("Stimulant Blends", "focus blend")
+    product["activeIngredients"] = [{"name": "Thermogenic Focus Blend"}]
+    product["proprietary_blends"][0]["source_field"] = "activeIngredients[0]"
+    assert _has_undisclosed_stimulant_blend(product) is True
