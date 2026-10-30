@@ -12352,9 +12352,15 @@ class SupplementEnricherV3:
         # scoring can apply context-aware penalties (active ingredients
         # that match harmful_additives get suppressed for low/moderate
         # severity — the IQM quality score is the correct signal there).
+        # Actives are screened through the analysis ledger so blend children
+        # Clean keeps nested are screened too; ``_source_index`` indexes it.
         active_tagged = [
             {**ing, '_source_section': 'active', '_source_index': idx}
-            for idx, ing in enumerate(product.get('activeIngredients', []))
+            for idx, ing in enumerate(
+                self._flatten_active_ingredients_for_analysis(
+                    product.get('activeIngredients', [])
+                )
+            )
         ]
         inactive_tagged = [
             {**ing, '_source_section': 'inactive', '_source_index': idx}
@@ -12376,24 +12382,29 @@ class SupplementEnricherV3:
         product: Dict[str, Any],
         banned_substances: Dict[str, Any],
     ) -> None:
-        """Project canonical banned/recalled safety flags onto ingredient rows."""
-        for section_key in ("activeIngredients", "inactiveIngredients"):
-            for ing in product.get(section_key, []) or []:
+        """Project canonical banned/recalled safety flags onto ingredient rows.
+
+        Active hits index the analysis ledger ``_collect_contaminant_data``
+        screened, so nested blend children receive their own flags.
+        """
+        rows_by_section = {
+            "active": self._flatten_active_ingredients_for_analysis(
+                product.get("activeIngredients", []) or []
+            ),
+            "inactive": product.get("inactiveIngredients", []) or [],
+        }
+        for rows in rows_by_section.values():
+            for ing in rows:
                 if isinstance(ing, dict):
                     ing.setdefault("safety_flags", [])
 
         for hit in (banned_substances or {}).get("substances", []) or []:
             if not isinstance(hit, dict) or not isinstance(hit.get("safety_flag"), dict):
                 continue
-            source_section = hit.get("source_section")
+            rows = rows_by_section.get(hit.get("source_section"))
             source_index = hit.get("ingredient_index")
-            section_key = {
-                "active": "activeIngredients",
-                "inactive": "inactiveIngredients",
-            }.get(source_section)
-            if section_key is None or not isinstance(source_index, int):
+            if rows is None or not isinstance(source_index, int):
                 continue
-            rows = product.get(section_key, []) or []
             if source_index < 0 or source_index >= len(rows):
                 continue
             target = rows[source_index]
@@ -17218,15 +17229,25 @@ class SupplementEnricherV3:
             and _is_probiotic_identity(ingredient)
         }
 
+        nested_cfu_children: Dict[str, List[Dict]] = {}
         for ingredient in active_ingredients:
             # Check for probiotic indicators (including abbreviated forms and
             # strain names) using bounded terms. Substring matching made
             # "casein decapeptide" look like L. casei and polluted route
             # classification with false probiotic_data.
             ingredient_source_path = ingredient.get("raw_source_path") or "activeIngredients"
+            # Strain rows decide a header, whether Clean flattened them or
+            # kept them nested; the header's marketing name never does.
             is_probiotic = _is_probiotic_identity(ingredient) or (
                 _is_blend_header_total(ingredient)
-                and ingredient_source_path in flattened_child_parent_paths
+                and (
+                    ingredient_source_path in flattened_child_parent_paths
+                    or any(
+                        _is_probiotic_identity(row)
+                        and _row_path(row) not in source_header_refs
+                        for row in source_descendants.get(ingredient_source_path, [])
+                    )
+                )
             )
 
             if is_probiotic:
@@ -17266,12 +17287,23 @@ class SupplementEnricherV3:
                     if isinstance(form, dict)
                     and _is_probiotic_identity(form)
                 ] if is_blend_header and not nested else []
+                # An enzyme or prebiotic sharing the blend is not a strain.
                 strain_rows = [
                     row for row in (nested or form_strains)
                     if not has_nonlive_microbial_derivative_evidence(row)
                     and not _is_blend_header_total(row)
                     and _row_path(row) not in source_header_refs
+                    and _is_probiotic_identity(row)
                 ]
+                if ingredient.get("nestedIngredients") and is_blend_header:
+                    # Children Clean kept nested never become blends of their
+                    # own; their counts and printed totals reach the header
+                    # total through the same subtree rule as flattened rows.
+                    nested_cfu_children[ingredient_source_path] = [
+                        row for row in source_descendants.get(ingredient_source_path, [])
+                        if id(row) in {id(strain) for strain in strain_rows}
+                        or row.get("dose_role") == "declared_total"
+                    ]
                 # A header is not a strain. Its source-derived components
                 # cannot turn it into an organism through the header name.
                 if is_blend_header and not strain_rows and (
@@ -17581,6 +17613,23 @@ class SupplementEnricherV3:
             if parent:
                 child_blends_by_parent.setdefault(parent, []).append(blend)
                 grouped_paths.add(path)
+        blend_paths = {str(blend.get("raw_source_path") or "") for blend in probiotic_blends}
+        for parent, rows in nested_cfu_children.items():
+            if parent not in header_blends:
+                continue
+            for row in rows:
+                path = _row_path(row)
+                if not path or path in blend_paths:
+                    continue
+                child_blends_by_parent.setdefault(parent, []).append({
+                    "raw_source_path": path,
+                    "cfu_data": self._extract_cfu(
+                        (row.get("harvestMethod") or "") + " " + (row.get("notes") or ""),
+                        ingredient=row,
+                        source_path=path,
+                        evidence_scope="row_level",
+                    ),
+                })
 
         def _add_cfu_source(cfu_data: Dict, blend: Dict) -> None:
             nonlocal has_cfu, cfu_source, cfu_raw_source_path, cfu_evidence_scope
@@ -21061,16 +21110,22 @@ class SupplementEnricherV3:
         # still meets the rules authored on its safety record.
         safety_subjects_by_path: Dict[str, List[Tuple[str, str]]] = {}
         label_rows_by_path: Dict[str, Dict] = {}
-        for section_key in ("activeIngredients", "inactiveIngredients"):
-            for label_row in enriched.get(section_key) or []:
-                if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
-                    continue
-                label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
-                for flag in label_row.get("safety_flags") or []:
-                    if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
-                        safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
-                            (self._normalize_interaction_db_key(flag["source_db"]), str(flag["entry_id"]))
-                        )
+        # Nested blend children carry their own safety flags (see
+        # _attach_banned_safety_flags_to_ingredients), so read the same ledger.
+        for label_row in (
+            self._flatten_active_ingredients_for_analysis(
+                enriched.get("activeIngredients") or []
+            )
+            + list(enriched.get("inactiveIngredients") or [])
+        ):
+            if not isinstance(label_row, dict) or not label_row.get("raw_source_path"):
+                continue
+            label_rows_by_path.setdefault(label_row["raw_source_path"], label_row)
+            for flag in label_row.get("safety_flags") or []:
+                if isinstance(flag, dict) and flag.get("entry_id") and flag.get("source_db"):
+                    safety_subjects_by_path.setdefault(label_row["raw_source_path"], []).append(
+                        (self._normalize_interaction_db_key(flag["source_db"]), str(flag["entry_id"]))
+                    )
 
         def interaction_subject(row: Dict) -> Optional[Dict[str, str]]:
             # A row with no identity of its own (bitter orange nested in a
