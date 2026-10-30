@@ -508,6 +508,7 @@ Added in v1.3.2. Always present (even when all values are `null` — no null-che
 | `protein_g`             | float or null | grams                                                        |
 | `dietary_fiber_g`       | float or null | grams                                                        |
 | `total_sugars_g`        | float or null | grams; null when the label prints a bound (not an exact mass) |
+| `polyunsaturated_fat_g` | float or null | grams; a Nutrition Facts value, never an active or quality credit. Added 2026-10-29. |
 | `quantity_operators`    | object        | Printed qualifier per key above, e.g. `{"protein_g": "<"}` for "Protein <1 g" (one of `<`, `<=`, `>`, `>=`, `~`). Empty when every value is exact. The number stays the printed amount; display must prefix the operator and never show a bound as exact. Added 2026-10-29. |
 
 Source: `enriched.nutrition_summary` ← `product.nutritionalInfo.*`.amount` (and `.operator`). Not scored — transparency only.

@@ -139,9 +139,17 @@ def test_polyunsaturated_fat_is_a_nutrition_fact_not_an_active() -> None:
     assert "Polyunsaturated Fat" not in [row.get("name") for row in cleaned["activeIngredients"]]
 
 
-def test_typed_polyunsaturated_fat_survives_clean() -> None:
+def test_typed_polyunsaturated_fat_survives_clean_and_reaches_export() -> None:
+    from build_final_db import build_detail_blob
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from test_export_gate import _base_enriched, _base_scored
+
     cleaned = _clean(nutritionalInfo={"polyunsaturatedFat": {"amount": 0.5, "unit": "g"}})
     assert cleaned["nutritionalInfo"]["polyunsaturatedFat"] == {"amount": 0.5, "unit": "g"}
+    summary = SupplementEnricherV3()._collect_nutrition_summary(cleaned)
+    assert summary["polyunsaturated_fat_g"] == 0.5
+    blob = build_detail_blob(_base_enriched(nutrition_summary=summary), _base_scored())
+    assert blob["nutrition_detail"]["polyunsaturated_fat_g"] == 0.5
 
 
 # ── 3. approximate servings per container ──────────────────────────────────

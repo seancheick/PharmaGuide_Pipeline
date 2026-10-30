@@ -8333,6 +8333,7 @@ def build_detail_blob(
         "calories_per_serving": safe_float(ns.get("calories_per_serving")),
         "total_carbohydrates_g": safe_float(ns.get("total_carbohydrates_g")),
         "total_fat_g": safe_float(ns.get("total_fat_g")),
+        "polyunsaturated_fat_g": safe_float(ns.get("polyunsaturated_fat_g")),
         "protein_g": safe_float(ns.get("protein_g")),
         "dietary_fiber_g": safe_float(ns.get("dietary_fiber_g")),
         "total_sugars_g": safe_float(ns.get("total_sugars_g")),
