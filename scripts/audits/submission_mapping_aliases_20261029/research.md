@@ -15,11 +15,3 @@ Result on this branch: S22 not_scored → scored 58.6; S23 not_scored → scored
 Corpus blast radius: 0 cleaned corpus products contain any of the new alias strings.
 Not in this batch: S14 (RenewLife) strain identities and printed CFU totals — handed to the
 probiotic-detection session (brand-named blend headers).
-
-## Related defect fixed in the same batch (separate commit)
-`lactobacillus_salivarius`: the generic names `ligilactobacillus salivarius` (current genus name, Zheng et
-al. 2020) and `lactobacillus salivarius strain` (+ their `supplement` variants) were aliases of the
-strain-specific form `lactobacillus salivarius ha-118` (bio 7), so a label naming only the species would
-receive HA-118 strain credit. Moved to `generic lactobacillus salivarius` (bio 6). HA-118's own record and its
-clinician-signoff pin are unchanged. Enriched corpus scan: no row currently resolves through these aliases
-(probiotic rows score at species level), so no shipped score moves.
