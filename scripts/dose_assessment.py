@@ -389,8 +389,18 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
         return False
     # Notes on IQM rows are curated bio context. Only the original linked
     # row's notes and source taxonomy can contradict a literal preparation.
+    # Original whole-row quantity may qualify a finished-material source
+    # bridge. This private assertion is not a daily dose or efficacy bound.
+    quantity_text = ""
+    try:
+        quantity = float(source.get("quantity"))
+        unit = canonicalize_mass_unit(str(source.get("unit") or ""))
+        if math.isfinite(quantity) and quantity > 0 and unit:
+            quantity_text = f"Quantity: {quantity:g} {unit}"
+    except (TypeError, ValueError, OverflowError):
+        pass
     text = "; ".join(normalize_text(str(value)) for value in (
-        _row_text(source, source_only=True, preserve_punctuation=True), source.get("notes"),
+        _row_text(source, source_only=True, preserve_punctuation=True), source.get("notes"), quantity_text,
         "PlantPart: " + str(source["plantPart"]) if source.get("plantPart") else "",
         "Genus: " + str(source["genus"]) if source.get("genus") else "",
         "Species: " + str(source["species"]) if source.get("species") else "") if value)
@@ -419,35 +429,31 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
                 # (e.g. orange peel within Cordiart), not the parent's part.
                 continue
             expected = EnhancedDSLDNormalizer._parse_botanical_details(clause)
+            # A literal mixed-part statement can be retained without a typed
+            # part. An independently supplied conflicting typed part cannot
+            # override that same-row source assertion.
+            if (clause.lstrip().partition(":")[0].lower() == "plantpart"
+                    and "plantPart" not in expected and source.get("plantPart")
+                    and normalize_text(str(source["plantPart"])) != normalize_text(clause.partition(":")[2])):
+                return False
             if any(normalize_text(str(source.get(field) or "")) != normalize_text(str(expected[field]))
                    for field in ("plantPart", "genus", "species") if field in expected):
                 return False
         assertion = normalize_text(term).replace("std.", "std")
-        pattern = re.compile(r"(?<!\w)" + re.escape(assertion) + r"(?!\w)", re.I)
-        if ";" not in assertion:
-            return bool(find_affirmative_label_match(pattern, required_text))
-        # A complete source assertion may span the source owner's field
-        # separators. Match it contiguously on this one original row, then
-        # ask the shared negation owner about each exact clause occurrence.
-        # An earlier positive occurrence cannot rescue a negated later one.
-        for match in pattern.finditer(required_text):
-            offset = 0
-            for raw_clause in assertion.split(";"):
-                clause = raw_clause.strip()
-                start = match.start() + offset + len(raw_clause) - len(raw_clause.lstrip())
-                end = start + len(clause)
-                left = required_text.rfind(";", 0, start) + 1
-                right = required_text.find(";", end)
-                context = required_text[left:right if right >= 0 else None]
-                prefix = required_text[left:start]
-                occurrence = re.compile(r"(?<=\A" + re.escape(prefix) + r")"
-                                        + re.escape(clause) + r"(?!\w)", re.I)
-                if not clause or not find_affirmative_label_match(occurrence, context):
-                    break
-                offset += len(raw_clause) + 1
-            else:
-                return True
-        return False
+        # Semicolons join required facts on this one original source row;
+        # they are not a demand that the label printed fields consecutively.
+        # Each material clause still uses the canonical negation owner.
+        for raw_clause in assertion.split(";"):
+            clause = raw_clause.strip()
+            pattern = re.compile(r"(?<!\w)" + re.escape(clause) + r"(?!\w)", re.I)
+            if not clause or not find_affirmative_label_match(pattern, required_text):
+                return False
+            # A second, negated assertion is a conflict, not proof supplied
+            # by an earlier affirmative occurrence elsewhere on the same row.
+            for context in re.split(r"[.;!?\r\n]+|\b(?:but|however)\b", required_text, flags=re.I):
+                if pattern.search(context) and not find_affirmative_label_match(pattern, context):
+                    return False
+        return True
 
     return not required or any(required_present(term) for term in required)
 

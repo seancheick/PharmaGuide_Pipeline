@@ -14,6 +14,8 @@ CASES = [
     ("bamboo", "330290", "silica", "bamboo_stem_leaf_extract"),
     ("chaste", "330565", "chaste_tree", "chaste_tree"),
     ("ginkgo", "306223", "ginkgo_biloba", "ginkgo_biloba"),
+    ("applewise", "231929", "apple_fruit", "applewise_fruit_skin_extract"),
+    ("applewise", "232062", "apple_fruit", "applewise_fruit_skin_extract"),
     ('cascara', '18313', 'cascara_sagrada', 'cascara_sagrada'),
     ('cascara', '17149', 'cascara_sagrada', 'cascara_sagrada'),
     ('american_capsule', '1627', 'ginseng', 'american_ginseng_root_extract_capsule'),
@@ -111,14 +113,19 @@ def test_exact_dose_scope_cannot_borrow_another_material_or_enriched_fact(
     assert _botanical_benchmark(row, product=product) == "unresolved"
 
 
-def test_applewise_product_title_cannot_supply_unproven_source_row_brand(exact_scope_products):
+@pytest.mark.parametrize("pid",["231929","232062"])
+@pytest.mark.parametrize("change",["title_only","brand_only","wrong_quantity","foreign_row"])
+def test_applewise_requires_exact_material_and_manufacturer_bridge(exact_scope_products,pid,change):
     from scoring_v4.modules.botanical_profile import _botanical_benchmark
-    product = exact_scope_products["231929"]
-    row, source = _source_pair(product, "apple_fruit")
+    product=deepcopy(exact_scope_products[pid]);row,source=_source_pair(product,"apple_fruit")
     assert "AppleWise" in product["product_name"]
-    assert "applewise" not in str(source.get("notes") or "").lower()
-    assert "50%" in source["notes"] and "5%" in source["notes"]
-    assert _botanical_benchmark(row, product=product) == "unresolved"
+    if change=="title_only": source["notes"]=source["notes"].split(" Note: Sole active source row")[0]
+    elif change=="brand_only":
+        source["notes"]="Sole active source row of manufacturer-linked AppleWise finished product item #01625"
+        source["raw_taxonomy"]["forms"]=[];source["plantPart"]=None
+    elif change=="wrong_quantity": source["quantity"]=300
+    else: row["raw_source_path"]="ingredientRows[999]"
+    assert _botanical_benchmark(row,product=product)=="unresolved"
 
 
 @pytest.mark.parametrize("family,pid,canonical,owner", CASES)

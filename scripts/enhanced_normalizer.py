@@ -3095,6 +3095,11 @@ class EnhancedDSLDNormalizer:
                 exact = self._exact_ingredient_group_lookup(qualified)
                 if exact.get("type") in {"botanical", "standardized_botanical"}:
                     standard = exact["standard_name"]
+                    if re.search(r"\bextract\b", str(ingredient.get("name") or ""), re.I):
+                        canonical, source = self._resolve_canonical_identity(standard, raw_name=qualified)
+                        if canonical and source in {"botanical_ingredients", "standardized_botanicals"}:
+                            return standard, canonical, source
+                        return None
                     # The exact botanical owner can be more specific than an
                     # IQM family form sharing its vernacular alias. Preserve
                     # that authored owner only for this source-part match.

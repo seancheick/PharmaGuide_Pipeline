@@ -762,8 +762,7 @@ def _dosing_entry_for(row: Dict[str, Any], *, product: Optional[Dict[str, Any]] 
                     # An explicitly scoped, completed general conclusion is
                     # not an extract-mass curve. Its original source and
                     # authored physical exclusions decide applicability.
-                    return entry if _completed_botanical_reference(
-                        product, row, entry, source_proof_required=False) == "absent" else {}
+                    return entry
                 # Whole-herb mass is not the extract mass studied by this
                 # reference. Assess it as a disclosed amount without a
                 # benchmark rather than inventing a concentration ratio or
@@ -914,6 +913,22 @@ def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any
     if _explicit_botanical_identity_rejection(row):
         return "unresolved"
     entry = _dosing_entry_for(row, product=product)
+    if (entry is not None and product is not None
+            and str((entry.get("reference_semantics") or {}).get("owner") or "").startswith(
+                "scripts/data/rda_therapeutic_dosing.json::")
+            and (entry.get("applicability") or {}).get("excluded_form_terms")):
+        from dose_assessment import _dose_source_preparation_matches
+        semantics = entry.get("reference_semantics") or {}
+        # A recorded generic physical exclusion remains in force. Only a
+        # separately approved, verified exact source owner may assess that
+        # material; no clinical curve or incomplete owner falls through.
+        if (semantics.get("reference_type") == "no_benchmark"
+                and semantics.get("curve") == "completed_no_benchmark_neutral"
+                and semantics.get("source_ids")
+                and str(semantics.get("approval_status") or "").startswith("approved_existing_neutral_")
+                and not _dose_source_preparation_matches(product, row, entry)):
+            from evidence_resolver import _load_literature_evidence
+            return _exact_botanical_source_reference(product, row, _load_literature_evidence())
     if entry is not None:
         return _completed_botanical_reference(product, row, entry,
             source_proof_required=str((entry.get("reference_semantics") or {}).get("owner") or "").startswith(
@@ -938,17 +953,20 @@ def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any
         # a present but rejected direct owner never falls through to this path.
         names = _row_names(row, source_only=True, product=product)
         candidates = [candidate for candidate in literature.values()
-                      if names & _record_names(candidate)]
+                      if names & _record_names(candidate)
+                      and _dose_source_preparation_matches(product, row, candidate)]
         if len(candidates) != 1 or not _dose_source_preparation_matches(product, row, candidates[0]):
             return "unresolved"
         record = candidates[0]
         semantics = record.get("reference_semantics") or {}
     elif (product is not None and record.get("canonical_id") == canonical
           and "reference_semantics" not in record and "manual_review" not in record
-          and record.get("applicability_status") == "applicability_unestablished"
           and record.get("verification_result") == "authoritative_pubmed_verified"
           and isinstance(record.get("qualifying_human_studies"), list)
-          and record["qualifying_human_studies"]):
+          and ((record.get("applicability_status") == "applicability_unestablished"
+                and record["qualifying_human_studies"])
+               or (record.get("applicability_status") == "not_efficacy_relevant"
+                   and record.get("reason_code") == "food_powder_or_flavor_matrix"))):
         # A descriptive clinical review has no Dose disposition to override.
         # Its broader canonical cannot mask a separate approved reference for
         # the exact printed preparation. Empty, held and explicit Dose owners
@@ -956,7 +974,8 @@ def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any
         names = (_row_names(row, source_only=True, product=product)
                  - _record_names({"standard_name": canonical}))
         candidates = [candidate for candidate in literature.values()
-                      if candidate is not record and names & _record_names(candidate)]
+                      if candidate is not record and names & _record_names(candidate)
+                      and _dose_source_preparation_matches(product, row, candidate)]
         if len(candidates) != 1 or not _dose_source_preparation_matches(
                 product, row, candidates[0]):
             return "unresolved"
@@ -978,7 +997,8 @@ def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any
                       if names & _record_names(candidate)
                       and (candidate.get("reference_semantics") or {}).get("scope") == "exact_preparation"
                       and (candidate.get("applicability") or {}).get("require_source_label_form") is True
-                      and (candidate.get("applicability") or {}).get("required_form_terms")]
+                      and (candidate.get("applicability") or {}).get("required_form_terms")
+                      and _dose_source_preparation_matches(product, row, candidate)]
         if len(candidates) != 1 or not _dose_source_preparation_matches(
                 product, row, candidates[0]):
             return "unresolved"
@@ -986,6 +1006,20 @@ def _botanical_benchmark(row: Dict[str, Any], *, product: Optional[Dict[str, Any
         semantics = record.get("reference_semantics") or {}
 
     return _completed_botanical_reference(product, row, record, source_proof_required=True)
+
+
+def _exact_botanical_source_reference(product: Dict[str, Any], row: Dict[str, Any],
+                                      literature: Dict[str, Any]) -> str:
+    """Resolve a generic physical exclusion through one approved exact owner."""
+    from dose_assessment import _dose_source_preparation_matches, _record_names, _row_names
+    names = _row_names(row, source_only=True, product=product)
+    candidates = [record for record in literature.values()
+                  if (record.get("reference_semantics") or {}).get("scope") == "exact_preparation"
+                  and names & _record_names(record)
+                  and _dose_source_preparation_matches(product, row, record)]
+    if len(candidates) != 1:
+        return "unresolved"
+    return _completed_botanical_reference(product, row, candidates[0], source_proof_required=True)
 
 
 def _completed_botanical_reference(product: Optional[Dict[str, Any]], row: Dict[str, Any],

@@ -1052,13 +1052,33 @@ def test_exact_source_korean_root_extract_reuses_existing_completed_dose_owner(g
     assert actual['score'] == _neutral()
 
 
-@pytest.mark.parametrize('pid', ['239741', '241914', '310646', '312858', '312543'])
-def test_source_specific_ginseng_binding_does_not_cross_part_species_or_processing(ginseng_binding_products, pid):
+@pytest.mark.parametrize('pid,owner', [
+    ('239741', 'panax_mixed_stem_root_extract'), ('241914', 'red_panax_leaf_stem_extract'),
+    ('310646', 'american_ginseng_rhizome_extract_unspecified'),
+    ('312858', 'american_ginseng_leaf_extract'), ('312543', 'panax_root_extract_unspecified'),
+])
+def test_source_specific_ginseng_binding_does_not_cross_part_species_or_processing(
+        ginseng_binding_products, monkeypatch, pid, owner):
+    from dose_assessment import _dose_source_preparation_matches, _record_names, _row_names
+    from evidence_resolver import _load_literature_evidence
     from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
     product = ginseng_binding_products[pid]
-    actual = score_botanical_purpose_dose(product, _ginseng_first_row(product))
-    assert actual['metadata']['benchmark'] == 'unresolved'
-    assert actual['score'] == 0
+    row = _ginseng_first_row(product)
+    records = _load_literature_evidence()
+    # The older Korean-root owner cannot supply these source preparations.
+    # Name correspondence and physical eligibility are both required.
+    assert (not (_row_names(row, source_only=True, product=product)
+                 & _record_names(records['ginseng_root_panax']))
+            or not _dose_source_preparation_matches(product, row, records['ginseng_root_panax']))
+    assert _dose_source_preparation_matches(product, row, records[owner])
+    actual = score_botanical_purpose_dose(product, row)
+    assert actual['metadata']['benchmark'] == 'absent'
+    assert actual['score'] == _neutral()
+    monkeypatch.setattr('evidence_resolver._load_literature_evidence',
+                        lambda: {key: value for key, value in records.items() if key != owner})
+    without_own_approval = score_botanical_purpose_dose(product, row)
+    assert without_own_approval['metadata']['benchmark'] == 'unresolved'
+    assert without_own_approval['score'] == 0
 
 
 @pytest.mark.parametrize('change', ['missing_part', 'derived_part', 'title_part', 'sibling_part', 'parent_part', 'missing_source',

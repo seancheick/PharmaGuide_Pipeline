@@ -4,7 +4,7 @@
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
     "last_updated": "2026-10-29",
-    "total_entries": 826,
+    "total_entries": 841,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
     "verified_records_count": 809
@@ -38537,6 +38537,1110 @@
         "approval_status": "approved_existing_neutral_2026_10_29"
       },
       "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 12869. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
+    },
+    {
+      "canonical_id": "panax_root_extract_unspecified",
+      "material_form": "panax root extract unspecified; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "f8de5571b52cfc73fc2e2fecc0595f35577583671ecb553d4f7ef3d1aab7b652",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "panax root extract unspecified",
+      "aliases": [
+        "Ginseng Root Extract",
+        "Asian Ginseng Root Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Panax ginseng Root Extract; PlantPart: root",
+          "Asian Ginseng Root Extract; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem",
+          "rhizome",
+          "red",
+          "berry",
+          "1%",
+          "2%",
+          "3%",
+          "7%",
+          "12%",
+          "4:1",
+          "ginsenoside",
+          "ginsenosides"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "panax root extract unspecified; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::panax_root_extract_unspecified",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 312543, 312544, 312545, 312546, 312547, 327872, 332892. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "panax_root_extract_3pct",
+      "material_form": "panax root extract 3pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "2c346c3ca36b9d8449f703ba1bc18d1b2e62eb69952af3e1eac4c7652c4437a0",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "panax root extract 3pct",
+      "aliases": [
+        "Panax Ginseng Root Extract",
+        "Panax Ginseng root extract",
+        "Panax ginseng root extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "3% Ginsenosides; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem",
+          "rhizome",
+          "red",
+          "berry"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "panax root extract 3pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::panax_root_extract_3pct",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 1628, 1630, 18276, 63928, 74798, 74799. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "panax_root_extract_2pct",
+      "material_form": "panax root extract 2pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "ce01a4fa549253432b3380edbab120a161b05dd5000e9941a4b19927f8590bef",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "panax root extract 2pct",
+      "aliases": [
+        "Panax ginseng extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "2% Ginsenosides; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem",
+          "rhizome",
+          "red",
+          "berry"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "panax root extract 2pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::panax_root_extract_2pct",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 239074. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "panax_root_extract_4to1",
+      "material_form": "panax root extract 4to1; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "17c707ea8a8e82e49e667d38cf443cf60be2b5230bacb10304c8e6c0582e4ff7",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "panax root extract 4to1",
+      "aliases": [
+        "Asian Ginseng (4:1) - Manchurian"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "4:1; PlantPart: root; Genus: Panax; Species: ginseng"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem",
+          "rhizome",
+          "red",
+          "berry"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "panax root extract 4to1; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::panax_root_extract_4to1",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 3752. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "panax_root_extract_7pct",
+      "material_form": "panax root extract 7pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "6f6fe8b496d14ac44df8c7e5e0e78729d02d2986fcf6c72464f42f5e453d306e",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "panax root extract 7pct",
+      "aliases": [
+        "Asian Ginseng root extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "7% Ginsenosides; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem",
+          "rhizome",
+          "red",
+          "berry"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "panax root extract 7pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::panax_root_extract_7pct",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 259593. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "panax_root_extract_1pct",
+      "material_form": "panax root extract 1pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "2be1dd7d7388b0de8c6b888923b9ad5a30256db502494165993ed9c9f50e1801",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "panax root extract 1pct",
+      "aliases": [
+        "Panax ginseng extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "1% ginsenosides; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem",
+          "rhizome",
+          "red",
+          "berry"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "panax root extract 1pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::panax_root_extract_1pct",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 269748. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "panax_root_extract_12pct",
+      "material_form": "panax root extract 12pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "9389c3325c9cd0631f76e0b5eb49bd2a2173d3f296c5d48ac4026779e54bb88d",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "panax root extract 12pct",
+      "aliases": [
+        "Asian Ginseng Root Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "12% TOTAL ginsenosides; PlantPart: root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem",
+          "rhizome",
+          "red",
+          "berry"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "panax root extract 12pct; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::panax_root_extract_12pct",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 278018. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "american_ginseng_rhizome_extract_unspecified",
+      "material_form": "american ginseng rhizome extract unspecified; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "14e32bc2f052e007921e73306b6c8cd0b8bd5773ef53b098a1dde22e760c41f1",
+          "source_ids": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Health Canada Ginseng-American monograph, January30 2026",
+              "content_sha256": "bb30e6084f1dd1559a70285f8cf12a3b15c3e2b6e92277cd0b1571daa6147181",
+              "notes": "Root/dry purpose- and preparation-specific regimens do not establish rhizome/leaf extract equivalence or their general efficacy minimum. This source documents the boundary; it is not supporting efficacy evidence for these different tissues. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "american ginseng rhizome extract unspecified",
+      "aliases": [
+        "American Ginseng Rhizome Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Panax quinquefolium; PlantPart: rhizome"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "root",
+          "red",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem",
+          "1%",
+          "2%",
+          "3%",
+          "7%",
+          "12%",
+          "4:1",
+          "ginsenoside",
+          "ginsenosides"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "american ginseng rhizome extract unspecified; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::american_ginseng_rhizome_extract_unspecified",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 310646, 310647, 310648, 310649. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "american_ginseng_rhizome_extract_4to1",
+      "material_form": "american ginseng rhizome extract 4to1; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "c9b31e64f4c0e33220d4f154f91dab498201e0b65b12adce3e46a873e2f1269c",
+          "source_ids": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Health Canada Ginseng-American monograph, January30 2026",
+              "content_sha256": "bb30e6084f1dd1559a70285f8cf12a3b15c3e2b6e92277cd0b1571daa6147181",
+              "notes": "Root/dry purpose- and preparation-specific regimens do not establish rhizome/leaf extract equivalence or their general efficacy minimum. This source documents the boundary; it is not supporting efficacy evidence for these different tissues. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "american ginseng rhizome extract 4to1",
+      "aliases": [
+        "American Ginseng Rhizome Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Panax quinquefolius; PlantPart: rhizome; 4:1"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "root",
+          "red",
+          "fermented",
+          "GS15-4",
+          "leaf",
+          "leaves",
+          "stem"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "american ginseng rhizome extract 4to1; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::american_ginseng_rhizome_extract_4to1",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 329914. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "american_ginseng_leaf_extract",
+      "material_form": "american ginseng leaf extract; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "d3b3eee5444f1a3d3d93018f410b03ca3b3f66d7d13986dac13237048d9e3981",
+          "source_ids": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Health Canada Ginseng-American monograph, January30 2026",
+              "content_sha256": "bb30e6084f1dd1559a70285f8cf12a3b15c3e2b6e92277cd0b1571daa6147181",
+              "notes": "Root/dry purpose- and preparation-specific regimens do not establish rhizome/leaf extract equivalence or their general efficacy minimum. This source documents the boundary; it is not supporting efficacy evidence for these different tissues. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "american ginseng leaf extract",
+      "aliases": [
+        "American Ginseng Leaf Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Panax quinquefolius; PlantPart: leaf"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "root",
+          "red",
+          "fermented",
+          "GS15-4",
+          "rhizome",
+          "stem"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "american ginseng leaf extract; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::american_ginseng_leaf_extract",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 312858. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "panax_mixed_stem_root_extract",
+      "material_form": "panax mixed stem root extract; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "8c424ce6922900acdc554ff6b5f0567a7f389c746bd59699db6b8d7ead0aa0a2",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "panax mixed stem root extract",
+      "aliases": [
+        "Korean Ginseng extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "PlantPart: stem, root; Genus: Panax; Species: ginseng; 7% Ginsenosides"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "panax mixed stem root extract; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::panax_mixed_stem_root_extract",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 239741. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "red_panax_leaf_stem_extract",
+      "material_form": "red panax leaf stem extract; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "fc3acae1abf9e34e58bdb0abb45bcb279d54e077449b85a3bdde925befec3ba7",
+          "source_ids": [
+            "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "EMA Panax ginseng radix monograph, revision1, 2024",
+              "content_sha256": "27b315a297e44a9893caa86691ee7fad8dbd513b998a66b6f84769891bb360a9",
+              "notes": "The primary source distinguishes white/red root and preparation-specific powder/extract regimens. It does not establish a universal retail extract minimum or equivalence across assay, DER, solvent, leaf/stem/rhizome or fermented materials. Leaf/stem scopes are outside the root monograph, not efficacy-supported by it. Primary regulatory boundary document, not a qualifying human efficacy trial. Article-alert flags are not applicable."
+            }
+          ]
+        }
+      },
+      "standard_name": "red panax leaf stem extract",
+      "aliases": [
+        "Korean Red Panax Ginseng Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "10% Ginsenosides; PlantPart: leaf and stem; Genus: Panax; Species: ginseng"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "American",
+          "quinquefolius",
+          "quinquefolium",
+          "fermented",
+          "GS15-4"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "red panax leaf stem extract; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ema.europa.eu/en/documents/herbal-monograph/final-european-union-herbal-monograph-panax-ginseng-camey-radix-revision-1_en.pdf"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::red_panax_leaf_stem_extract",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 241914. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "black_maca_root_powder",
+      "material_form": "black maca root powder; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "666a1d86f11559fe8206513cf2b16df7601d8a5ba7cf3406ce0488305b59b914",
+          "source_ids": [
+            "PMID:27621241"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:27621241",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "The use of maca (Lepidium meyenii) to improve semen quality: A systematic review.",
+              "content_sha256": "c84f9636ad7b16e13c61f5022c5b28258a28aaac1269baf8ab1a1922007b55ad",
+              "notes": "Existing content-verified maca source retained as a preparation-specific comparator. Sean attests prior Dr Pham approval separately for source-qualified black/red root powders. This citation is not proof of colored-powder, gelatinized, spray-dried or extract equivalence and supplies no new efficacy or safety conclusion."
+            }
+          ]
+        }
+      },
+      "standard_name": "black maca root powder",
+      "aliases": [
+        "Black Maca, Powder"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Black Maca Powder (Lepidium meyenii); PlantPart: root; Genus: Lepidium; Species: meyenii"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "extract",
+          "gelatinized",
+          "spray-dried",
+          "spray dried",
+          "yellow",
+          "red"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "black maca root powder; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:27621241"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::black_maca_root_powder",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 329925, 329926, 329927, 329928. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "red_maca_root_powder",
+      "material_form": "red maca root powder; exact source assertions retained separately from other assay/DER/color/tissue groups",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "94c8a01ba4c4f7299c0a8231d3924f4980f548da887aa60d842078d91408a1bc",
+          "source_ids": [
+            "PMID:27621241"
+          ],
+          "verified_at": "2026-10-30T01:37:25.412788+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:27621241",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "The use of maca (Lepidium meyenii) to improve semen quality: A systematic review.",
+              "content_sha256": "c84f9636ad7b16e13c61f5022c5b28258a28aaac1269baf8ab1a1922007b55ad",
+              "notes": "Existing content-verified maca source retained as a preparation-specific comparator. Sean attests prior Dr Pham approval separately for source-qualified black/red root powders. This citation is not proof of colored-powder, gelatinized, spray-dried or extract equivalence and supplies no new efficacy or safety conclusion."
+            }
+          ]
+        }
+      },
+      "standard_name": "red maca root powder",
+      "aliases": [
+        "Red Maca, Powder"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Red Maca Powder (Lepidium meyenii); PlantPart: root; Genus: Lepidium; Species: meyenii"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "extract",
+          "gelatinized",
+          "spray-dried",
+          "spray dried",
+          "yellow",
+          "black"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "red maca root powder; exact source assertions retained separately from other assay/DER/color/tissue groups",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:27621241"
+        ],
+        "rationale": "Sean's2026-10-29 attestation records Dr Pham's prior approval of this exact completed-no-general-benchmark scope. Dr Pham's original review date was not supplied. No new physician signature or review date is asserted. completed-no-general-benchmark Dose only for this exact physical group. No numerical efficacy minimum, constituent conversion, preparation equivalence, clinical Evidence credit or independent safety clearance.",
+        "owner": "scripts/data/literature_evidence_records.json::red_maca_root_powder",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean recorded/confirmed Dr Pham's prior approval on2026-10-29; Dr Pham's original review date was not supplied. Exact source-reviewed cohort: 330068, 330069. IDs document inspected sources, not runtime eligibility. Source-specific monograph regimens remain descriptive context; no clinical or safety transfer. Unspecified processing, solvents and gelatinization remain unknown."
+    },
+    {
+      "canonical_id": "applewise_fruit_skin_extract",
+      "material_form": "Manufacturer-linked AppleWise item01625 sole600mg Malus domestica fruit-and-skin extract,50%polyphenols/5%phloridzin. The NIH ingredient row does not print an ingredient trademark; the exact finished-product link is attributed in retained source notes.",
+      "search_date": "2026-10-29",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "750318268ac5bee7f4d422c3ea4a06b3b2ab5ce788fcac84585bd995061c0da8",
+          "source_ids": [
+            "https://www.lifeextension.com/-/media/lifeextension/pdf/magazine/2012/5.pdf?rev=58a3604097d44089adf15ef4fcfe4827"
+          ],
+          "verified_at": "2026-10-30T01:43:07.195543+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.lifeextension.com/-/media/lifeextension/pdf/magazine/2012/5.pdf?rev=58a3604097d44089adf15ef4fcfe4827",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Life Extension May2012 manufacturer magazine,item01625,p101 (material identification, not efficacy evidence)",
+              "content_sha256": "2e4ed03fd7c13e9ee61d550727d168a563483249ede74a9fdb89ae1488749dea",
+              "notes": "Content-verified original manufacturer item01625/600mg/30caps/300mgpolyphenols linked by exact NIH editionsL01625F/CD and official regional item01625 composition. This source proves the product/material bridge only; its marketing efficacy text is not accepted as scientific evidence. No human dose-response benchmark or clinical efficacy is inferred. General Dose no-benchmark completeness is separately Sean/team-approved2026-10-29; no Appl'In/DIANA drink or generic apple-extract equivalence. Article-alert flags not applicable to a manufacturer document."
+            }
+          ]
+        }
+      },
+      "standard_name": "AppleWise manufacturer-linked fruit and skin extract",
+      "aliases": [
+        "Apple (Malus domestica) extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "Sole active source row of manufacturer-linked AppleWise finished product item #01625; 50% Polyphenols; 5% Phloridzin; PlantPart: fruit and skin; Genus: Malus; Species: domestica; Quantity: 600 mg"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "root",
+          "seed",
+          "Appl'In",
+          "DIANA"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Manufacturer-linked AppleWise item01625 sole600mg Malus domestica fruit-and-skin extract,50%polyphenols/5%phloridzin. The NIH ingredient row does not print an ingredient trademark; the exact finished-product link is attributed in retained source notes.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.lifeextension.com/-/media/lifeextension/pdf/magazine/2012/5.pdf?rev=58a3604097d44089adf15ef4fcfe4827"
+        ],
+        "rationale": "Sean directly approved on October 29, 2026: completed-no-general-benchmark Dose for the two exact manufacturer-linked item01625 source rows, retaining original600mg,fruit+skin,50%polyphenols and5%phloridzin. No general apple-extract approval, Appl'In/DIANA-drink equivalence,numerical efficacy minimum,clinical Evidence or safety credit.",
+        "owner": "scripts/data/literature_evidence_records.json::applewise_fruit_skin_extract",
+        "review_date": "2026-10-29",
+        "approval_status": "approved_existing_neutral_2026_10_29"
+      },
+      "notes": "Sean directly approved this exact no-general-benchmark Dose scope on2026-10-29. Official NIH231929/L01625F and232062/L01625CD and source-owner correction evidence establish the sole-row manufacturer linkage. Product title alone never establishes the source material. Manufacturer identity documentation is not qualifying human efficacy evidence."
     }
   ]
 }

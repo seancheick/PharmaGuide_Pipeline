@@ -1,0 +1,313 @@
+{
+  "brandIpSymbol": "\u00ae",
+  "brandName": "Nature's Bounty",
+  "bundleName": "",
+  "claims": [
+    {
+      "langualCode": "P0115",
+      "langualCodeDescription": "All Other"
+    },
+    {
+      "langualCode": "P0265",
+      "langualCodeDescription": "Structure/Function"
+    }
+  ],
+  "contacts": [
+    {
+      "contactId": 2212,
+      "text": "For educational health tips and to join our money saving Healthy Rewards(TM)program, visit",
+      "types": [
+        "Other"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_1.json",
+        "id": 2212,
+        "name": "",
+        "streetAddress": "",
+        "city": "",
+        "state": "",
+        "country": "",
+        "zipCode": "",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": "www.NaturesBounty.com"
+      }
+    },
+    {
+      "contactId": 2214,
+      "text": "Carefully Manufactured by",
+      "types": [
+        "Manufacturer"
+      ],
+      "contactDetails": {
+        "src": "01-raw/2025-09-25/data/contact_1.json",
+        "id": 2214,
+        "name": "Nature's Bounty, Inc.",
+        "streetAddress": "",
+        "city": "Bohemia",
+        "state": "NY",
+        "country": "USA",
+        "zipCode": "11716",
+        "phoneNumber": "",
+        "email": "",
+        "webAddress": ""
+      }
+    }
+  ],
+  "entryDate": "2011-12-23",
+  "events": [
+    {
+      "date": "2011-12-23",
+      "type": "Date entered into DSLD"
+    }
+  ],
+  "fullName": "Manchurian Ginseng 250 mg",
+  "hasOuterCarton": false,
+  "id": 3752,
+  "ingredientRows": [
+    {
+      "order": 1,
+      "ingredientId": 20738,
+      "description": null,
+      "notes": "Asian Ginseng (4:1) - Manchurian PlantPart: root Genus: Panax Species: ginseng Note: from 62.5 mg of a 4:1 extract ",
+      "quantity": [
+        {
+          "servingSizeOrder": 1,
+          "servingSizeQuantity": 1,
+          "operator": "=",
+          "quantity": 250,
+          "unit": "mg",
+          "dailyValueTargetGroup": [
+            {
+              "name": "Adults and children 4 or more years of age",
+              "operator": null,
+              "percent": null,
+              "footnote": "Daily Value not established"
+            }
+          ],
+          "servingSizeUnit": "Softgel(s)"
+        }
+      ],
+      "nestedRows": [],
+      "name": "Asian Ginseng (4:1) - Manchurian",
+      "category": "botanical",
+      "ingredientGroup": "Oriental Ginseng",
+      "uniiCode": null,
+      "alternateNames": [],
+      "forms": []
+    }
+  ],
+  "labelRelationships": [],
+  "netContents": [
+    {
+      "order": 1,
+      "quantity": 50,
+      "unit": "Softgel(s)",
+      "display": "50 Softgel(s)"
+    }
+  ],
+  "nhanesId": "",
+  "offMarket": 0,
+  "otheringredients": {
+    "text": null,
+    "ingredients": [
+      {
+        "order": 1,
+        "ingredientId": 3793,
+        "name": "Soybean Oil",
+        "category": "fat",
+        "ingredientGroup": "Soybean Oil",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 2,
+        "ingredientId": 3715,
+        "name": "Gelatin",
+        "category": "protein",
+        "ingredientGroup": "Gelatin",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 3,
+        "ingredientId": 3812,
+        "name": "Vegetable Glycerin",
+        "category": "other",
+        "ingredientGroup": "Glycerol",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 4,
+        "ingredientId": 18333,
+        "name": "Soy Lecithin",
+        "category": "fat",
+        "ingredientGroup": "lecithin",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 5,
+        "ingredientId": 3832,
+        "name": "yellow Beeswax",
+        "category": "animal part or source",
+        "ingredientGroup": "Beeswax",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 6,
+        "ingredientId": 3743,
+        "name": "natural Caramel color",
+        "category": "other",
+        "ingredientGroup": "Color",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      },
+      {
+        "order": 7,
+        "ingredientId": 3803,
+        "name": "Titanium Dioxide color",
+        "category": "other",
+        "ingredientGroup": "Titanium Dioxide",
+        "uniiCode": null,
+        "alternateNames": [],
+        "forms": []
+      }
+    ]
+  },
+  "pdf": "",
+  "percentDvFootnote": "Not Present",
+  "physicalState": {
+    "langualCode": "E0161",
+    "langualCodeDescription": "Softgel Capsule"
+  },
+  "productType": {
+    "langualCode": "A1306",
+    "langualCodeDescription": "Botanical"
+  },
+  "productVersionCode": "Prod. No. 1270 07D B1271",
+  "servingSizes": [
+    {
+      "order": 1,
+      "minQuantity": 1,
+      "maxQuantity": 1,
+      "minDailyServings": 4,
+      "maxDailyServings": 4,
+      "unit": "Softgel(s)",
+      "inSFB": true
+    }
+  ],
+  "servingsPerContainer": null,
+  "src": "api/label/3752",
+  "statements": [
+    {
+      "type": "FDA Statement of Identity",
+      "notes": "HERBAL SUPPLEMENT"
+    },
+    {
+      "type": "Suggested/Recommended/Usage/Directions",
+      "notes": "DIRECTIONS: For adults, take one (1) softgel four times daily, preferably with meals."
+    },
+    {
+      "type": "Precautions re: Children",
+      "notes": "Keep out of reach of children."
+    },
+    {
+      "type": "FDA Disclaimer Statement",
+      "notes": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+    },
+    {
+      "type": "Storage",
+      "notes": "Store in a cool, dry place."
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "Each softgel contains 250 mg Manchurian Ginseng in a base of natural vegetable oil, hermetically sealed in gelatin to insure freshness and preservation of potency."
+    },
+    {
+      "type": "Formula re: Contains",
+      "notes": "NATURAL WHOLE HERB?"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "?Nature\u2019s Bounty\u2019s Natural Whole Herb products utilize ground plant parts to provide the natural components in the amounts found in nature."
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Ginseng contains ginsenosides and flavonoids - bioactive factors that help promote physical performance.* Ginseng is also known to have a positive effect on the immune system.*"
+    },
+    {
+      "type": "General: Product/Version Code",
+      "notes": "Prod. No. 1270 07D B1271"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "Promotes Immune Function & Physical Performance*"
+    },
+    {
+      "type": "General Statements: All Other Content",
+      "notes": "RAPID RELEASE LIQUID SOFTGEL"
+    },
+    {
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+      "notes": "WARNING: Not intended for use by pregnant or nursing women."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "\u00a9 2010 Nature\u2019s Bounty, Inc."
+    },
+    {
+      "type": "Brand IP Statement(s) re: (c), (TM), (SM)",
+      "notes": "Nutrition Questions or Comments?\nCall NutraPhone(R) 1-800-433-2990\nMon. - Fri. 9 AM - 7 PM ET"
+    },
+    {
+      "type": "Formulation re: Does NOT Contain",
+      "notes": "No Artificial Flavor or Sweetener, No Preservatives, No Sugar, No Milk, No Lactose, No Gluten, No Wheat, No Yeast, No Fish. Sodium Free."
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "(recycle)\nHealthy you\nHealthy earth"
+    },
+    {
+      "type": "Seals/Symbols",
+      "notes": "LABORATORY TESTED GUARANTEED QUALITY"
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Discontinue use and consult your doctor if any adverse reactions occur."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Do not use if seal under cap is broken or missing."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "If you are taking any medications consult your doctor before use."
+    },
+    {
+      "type": "Precautions re: All Other",
+      "notes": "Not intended for use by persons under the age of 18."
+    }
+  ],
+  "targetGroups": [
+    "Adult (18 - 50 Years)"
+  ],
+  "thumbnail": "",
+  "upcSku": "0 74312 01270 9",
+  "userGroups": [
+    {
+      "dailyValueTargetGroupName": "Adults and children 4 or more years of age",
+      "langualCode": "P0250",
+      "langualCodeDescription": "Adults and Children 4 years and above"
+    }
+  ],
+  "_source": "api"
+}
