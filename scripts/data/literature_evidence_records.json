@@ -29511,13 +29511,15 @@
         "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
       },
       "aliases": [
-        "American Ginseng"
+        "American Ginseng",
+        "raw American Ginseng powder"
       ],
       "applicability": {
         "scope": "ingredient",
         "require_source_label_form": true,
         "required_form_terms": [
-          "PlantPart: root"
+          "PlantPart: root",
+          "PlantPart: whole root"
         ],
         "excluded_form_terms": [
           "extract",
@@ -29532,7 +29534,7 @@
           "capsule"
         ]
       },
-      "notes": "Source-binding repair, 2026-10-29: original NIH251494 prints American Ginseng(root),1.1g in capsules. This uses the existing October18 capsule conclusion (General catalog Dose; source regimen amounts remain descriptive research exposures); its scientific approval/date and study population remain unchanged. Root/capsule source facts are mandatory; no label Latin, extract equivalence or daily regimen is inferred."
+      "notes": "Source-binding repair, 2026-10-29: original NIH251494 prints American Ginseng(root),1.1g in capsules. This uses the existing October18 capsule conclusion (General catalog Dose; source regimen amounts remain descriptive research exposures); its scientific approval/date and study population remain unchanged. Root/capsule source facts are mandatory; no label Latin, extract equivalence or daily regimen is inferred. Original NIH216622 independently prints raw American Ginseng powder (whole root),200mg in capsules, separately from its100mg10% extract. The source-qualified whole-root powder uses the same existing root-capsule preparation; it does not borrow the extract amount or standardization. Oct18 approval/proof/date remain unchanged."
     },
     {
       "canonical_id": "serrapeptase",
@@ -38601,7 +38603,8 @@
           "12%",
           "4:1",
           "ginsenoside",
-          "ginsenosides"
+          "ginsenosides",
+          "declared extraction ratio"
         ]
       },
       "reference_semantics": {
@@ -39132,7 +39135,8 @@
           "12%",
           "4:1",
           "ginsenoside",
-          "ginsenosides"
+          "ginsenosides",
+          "declared extraction ratio"
         ]
       },
       "reference_semantics": {

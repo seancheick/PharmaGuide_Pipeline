@@ -100,3 +100,18 @@ def test_colored_powder_scope_does_not_transfer_to_other_processing(products,pid
     p=deepcopy(products[pid]);row,source=pair(p,pid)
     source['notes']+='; '+processing
     assert _botanical_benchmark(row,product=p)=='unresolved'
+
+@pytest.mark.parametrize('pid',['312543','310646'])
+@pytest.mark.parametrize('ratio',['8:1','20:1'])
+def test_undeclared_der_scope_rejects_any_new_original_ratio(products,pid,ratio):
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    p=deepcopy(products[pid]);row,source=pair(p,pid)
+    source['notes']=(source.get('notes') or '')+'; DER '+ratio
+    assert _botanical_benchmark(row,product=p)=='unresolved'
+
+@pytest.mark.parametrize('pid',['312543','310646'])
+def test_negated_ratio_does_not_establish_extraction_ratio(products,pid):
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    p=deepcopy(products[pid]);row,source=pair(p,pid)
+    source['notes']=(source.get('notes') or '')+'; not a 20:1 extract'
+    assert _botanical_benchmark(row,product=p)=='absent'

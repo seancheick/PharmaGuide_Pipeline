@@ -311,3 +311,11 @@ def test_exact_kelp_extracts_reuse_the_existing_explicit_preparation_scope(exact
     assert record['reference_semantics']['preparation']=='Source-labeled preparations: Kelp Thallus Extract; Kelp Whole Grass Extract'
     assert reference_semantics_sha256(record['reference_semantics'])=='63f0bfd253ecc35653fba4bd4b6b9526042795bbc2aab3c11a972db0645980d4'
     assert verified_reference_citations(record)
+
+@pytest.mark.parametrize('ratio',['8:1','20:1'])
+def test_bamboo_undeclared_der_branch_cannot_ignore_new_ratio(exact_scope_products,ratio):
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    product=deepcopy(exact_scope_products['252349']);row,source=_source_pair(product,'silica')
+    assert 'DER not declared' in source['notes']
+    source['notes']+='; DER '+ratio
+    assert _botanical_benchmark(row,product=product)=='unresolved'

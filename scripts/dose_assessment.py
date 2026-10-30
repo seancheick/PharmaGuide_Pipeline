@@ -404,6 +404,19 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
         "PlantPart: " + str(source["plantPart"]) if source.get("plantPart") else "",
         "Genus: " + str(source["genus"]) if source.get("genus") else "",
         "Species: " + str(source["species"]) if source.get("species") else "") if value)
+    # A no-DER scope excludes every affirmative declared ratio, not a
+    # finite list of ratios seen during review. Keep this feature private to
+    # source matching and preserve the shared clause-negation semantics.
+    ratio_pattern = re.compile(r"(?<![\w.])\d+(?:\.\d+)?\s*:\s*\d+(?:\.\d+)?(?![\w.])")
+    ratio_feature = "declared extraction ratio"
+    has_declared_ratio = False
+    for ratio in ratio_pattern.finditer(text):
+        marked = text[:ratio.start()] + ratio_feature + text[ratio.end():]
+        if find_affirmative_label_match(re.compile(re.escape(ratio_feature), re.I), marked):
+            text += "; " + ratio_feature
+            has_declared_ratio = True
+            break
+
     def present(term: str) -> bool:
         return bool(find_affirmative_label_match(
             re.compile(r"(?<!\w)" + re.escape(normalize_text(term)) + r"(?!\w)", re.I), text))
@@ -440,6 +453,10 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
                    for field in ("plantPart", "genus", "species") if field in expected):
                 return False
         assertion = normalize_text(term).replace("std.", "std")
+        if has_declared_ratio and re.search(r"\bder not declared\b", assertion):
+            # An explicit absence assertion cannot coexist with a declared
+            # ratio. A separate approved ratio-specific OR branch may match.
+            return False
         # Semicolons join required facts on this one original source row;
         # they are not a demand that the label printed fields consecutively.
         # Each material clause still uses the canonical negation owner.
