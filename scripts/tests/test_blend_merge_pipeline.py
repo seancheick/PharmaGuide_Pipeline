@@ -149,6 +149,31 @@ class TestBlendMergePipeline:
 
         assert result['has_proprietary_blends'] is True
         assert result['blend_count'] >= 1
+        for blend in result['blends']:
+            if blend['sources'] == ['detector']:
+                assert blend['name'].casefold() == blend['evidence']['matched_text'].casefold()
+                assert blend['detector_group'] != blend['name']
+
+    def test_detector_only_physical_blend_uses_printed_name(self, enricher):
+        # Reduced from DSLD 79397: the registry classifies this as
+        # Digestive Enzyme Blends, but the label prints the specific name.
+        product = {
+            'id': '79397',
+            'activeIngredients': [{
+                'name': 'Concentrated Enzyme Blend',
+                'raw_source_text': 'Concentrated Enzyme Blend',
+                'quantity': 0, 'unit': 'NP', 'proprietaryBlend': None,
+                'nestedIngredients': [
+                    {'name': 'Amylase', 'quantity': 0, 'unit': 'NP'},
+                    {'name': 'Protease', 'quantity': 0, 'unit': 'NP'},
+                ],
+            }],
+            'inactiveIngredients': [],
+        }
+        blends = enricher._collect_proprietary_data(product)['blends']
+        assert [(b['name'], b['detector_group']) for b in blends] == [
+            ('Concentrated Enzyme Blend', 'Digestive Enzyme Blends')
+        ]
 
     def test_statement_repeating_printed_blend_is_not_a_second_blend(self, enricher):
         product = {

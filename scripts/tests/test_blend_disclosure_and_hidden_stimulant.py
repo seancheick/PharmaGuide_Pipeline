@@ -360,6 +360,12 @@ def test_a_stimulant_word_outside_the_matched_phrase_on_a_printed_row_still_fire
     assert _has_undisclosed_stimulant_blend(product) is True
 
 
+def test_detector_only_printed_name_does_not_hide_the_actual_stimulant_row():
+    product = _detector_only("Stimulant Blends", "focus blend", row="Thermogenic Focus Blend")
+    product["proprietary_blends"][0]["name"] = "Thermogenic Focus Blend"
+    assert _has_undisclosed_stimulant_blend(product) is True
+
+
 def test_unresolved_printed_wording_does_not_turn_a_category_into_a_warning():
     assert _has_undisclosed_stimulant_blend(_detector_only("Stimulant Blends", "focus blend")) is False
 

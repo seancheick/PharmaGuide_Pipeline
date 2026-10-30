@@ -15091,8 +15091,22 @@ class SupplementEnricherV3:
                     }
                     for name in detector_without_amounts
                 ]
+                # A detector category classifies the blend; it is never the
+                # printed, label-facing name. Prefer the scanned physical row
+                # when its name contains the match, otherwise use the exact
+                # matched phrase (including for statement-only evidence).
+                printed_name = blend.matched_text
+                field_match = re.fullmatch(r"(activeIngredients|inactiveIngredients|supplementFacts|ingredients)\[(\d+)\]", blend.source_field)
+                if field_match:
+                    source_rows = disclosure_product.get(field_match.group(1)) or []
+                    row_index = int(field_match.group(2))
+                    if row_index < len(source_rows) and isinstance(source_rows[row_index], dict):
+                        row_name = str(source_rows[row_index].get("name") or source_rows[row_index].get("ingredient") or "")
+                        if blend.matched_text.casefold() in row_name.casefold():
+                            printed_name = row_name
                 detector_blends.append({
-                    "name": blend.blend_name,
+                    "name": printed_name,
+                    "detector_group": blend.blend_name,
                     "disclosure_level": blend.disclosure_level,
                     "nested_count": blend.blend_ingredient_count,
                     "total_weight": blend.blend_total_amount,
@@ -15680,7 +15694,7 @@ class SupplementEnricherV3:
             key = dedupe_key(blend)
             blend_copy = blend.copy()
             # Store detector's classification as detector_group for audit
-            blend_copy["detector_group"] = blend.get("name")
+            blend_copy["detector_group"] = blend.get("detector_group") or blend.get("name")
             merged[key] = blend_copy
 
         # Merge cleaning blends (may add new or enrich existing)
