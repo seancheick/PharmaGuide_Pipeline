@@ -96,7 +96,12 @@ from identity_integrity import (
     normalize_label_display,
     safety_only_conflict_paths,
 )
-from scoring_input_contract import DOSE_NOT_PROVIDED_UNITS, dose_disclosure_status, get_scoring_ingredients
+from scoring_input_contract import (
+    DOSE_NOT_PROVIDED_UNITS,
+    active_label_rows,
+    dose_disclosure_status,
+    get_scoring_ingredients,
+)
 from serving_frequency import (
     select_canonical_serving,
     format_daily_frequency,
@@ -275,6 +280,14 @@ def normalize_upc(value: Any) -> str:
 
 def safe_list(value: Any) -> list:
     return value if isinstance(value, list) else []
+
+
+def _label_rows(enriched: Dict, src_key: str) -> list:
+    """One label section for safety and identity carriers; actives include
+    the blend children Clean keeps nested, as the scorer's safety gate does."""
+    if src_key == "activeIngredients":
+        return active_label_rows(safe_dict(enriched).get("activeIngredients"))
+    return safe_list(enriched.get(src_key))
 
 
 def safe_dict(value: Any) -> dict:
@@ -982,7 +995,7 @@ def safety_flag_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
         if source == "banned_recalled_ingredients" and safety_flag_matches_status(flag, statuses):
             matches.append(flag)
     for src_key in ("activeIngredients", "inactiveIngredients"):
-        for ing in safe_list(enriched.get(src_key)):
+        for ing in _label_rows(enriched, src_key):
             if not isinstance(ing, dict):
                 continue
             for flag in safe_list(ing.get("safety_flags")):
@@ -1163,7 +1176,7 @@ def _resolver_status_in(
         )
         raise
     for src_key in ("activeIngredients", "inactiveIngredients"):
-        for ing in safe_list(enriched.get(src_key)):
+        for ing in _label_rows(enriched, src_key):
             if not isinstance(ing, dict):
                 continue
             terms = _active_banned_recall_evidence_terms(
@@ -1180,7 +1193,7 @@ def _resolver_status_in(
                 # for one duplicate child also dropped its banned siblings.
                 surviving = safety_terms_without_active_form_duplicates(
                     inactive_resolver,
-                    active_ingredients=safe_list(enriched.get("activeIngredients")),
+                    active_ingredients=_label_rows(enriched, "activeIngredients"),
                     raw_name=safe_str(
                         ing.get("name") or ing.get("raw_source_text")
                     ),
@@ -7237,7 +7250,7 @@ def build_detail_blob(
             # ingredients[] while still proving that an Other Ingredients row
             # is its declared source form (for example Boron + Sodium
             # Tetraborate). The scorer already uses this complete context.
-            active_ingredients=safe_list(enriched.get("activeIngredients")),
+            active_ingredients=_label_rows(enriched, "activeIngredients"),
             raw_name=name or raw,
             standard_name=std_name_ing,
             additional_terms=form_terms,
@@ -7245,7 +7258,7 @@ def build_detail_blob(
         active_form_candidate = (
             active_form_duplicate_candidate(
                 inactive_resolver,
-                active_ingredients=safe_list(enriched.get("activeIngredients")),
+                active_ingredients=_label_rows(enriched, "activeIngredients"),
                 raw_name=name or raw,
                 additional_terms=form_terms,
             )
@@ -8894,7 +8907,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     # rice, vinpocetine, and botanical source identities). These canonicals are
     # still required by Flutter interaction lookup and stack storage, so export
     # them into the core carrier as well.
-    for ing in safe_list(enriched.get("activeIngredients")):
+    for ing in _label_rows(enriched, "activeIngredients"):
         if not isinstance(ing, dict):
             continue
         if not _active_row_allowed_for_primary_export(ing, active_export_contract):
@@ -10590,7 +10603,7 @@ def build_core_row(
     # Active ingredients can be recognized by the resolver yet absent from IQM
     # scoring rows (banned/not-lawful actives, non-scorable botanical source
     # identities, etc.). FTS must still expose those names and canonicals.
-    for ing in safe_list(enriched.get("activeIngredients")):
+    for ing in _label_rows(enriched, "activeIngredients"):
         if not isinstance(ing, dict):
             continue
         if not _active_row_allowed_for_primary_export(ing, active_export_contract):

@@ -3257,8 +3257,62 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
     )
 
 
+def active_label_rows(active_ingredients: Any) -> List[Dict[str, Any]]:
+    """Project the active label tree into one row ledger, parents first.
+
+    Cleaning owns label identity and hierarchy; enrichment, the scorer's
+    safety gate and export read disclosed blend children through this one
+    ledger, so a nested child is screened alike everywhere. Source-contract
+    checks that must see a duplicated row use ``_source_tree_rows`` instead.
+
+    Indexed source paths are stable row identities. Some legacy/direct-normalizer
+    rows only carry the section-level path, so label identity is included to
+    prevent distinct rows from collapsing.
+    """
+    flattened: List[Dict[str, Any]] = []
+    seen: set[tuple[Any, ...]] = set()
+
+    def visit(rows: Any) -> None:
+        if not isinstance(rows, list):
+            return
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            source_path = str(row.get("raw_source_path") or "").strip()
+            label_identity = str(
+                row.get("raw_source_text")
+                or row.get("name")
+                or row.get("standardName")
+                or ""
+            ).strip().casefold()
+            identity = (
+                (
+                    "source_path",
+                    source_path,
+                    label_identity,
+                    str(row.get("quantity") or row.get("dose") or ""),
+                )
+                if source_path
+                else ("object", id(row))
+            )
+            if identity in seen:
+                continue
+            seen.add(identity)
+            flattened.append(row)
+            visit(row.get("nestedIngredients"))
+
+    visit(active_ingredients)
+    return flattened
+
+
 def _source_tree_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Flatten the product's original active-ingredient tree, parents first."""
+    """Flatten the product's original active-ingredient tree, parents first.
+
+    The source-contract walker: it keeps every row object, so a duplicated
+    source row stays visible for provenance checks to reject.
+    ``active_label_rows`` is the analysis ledger that screens a repeated
+    printed row once.
+    """
     source_rows = [row for row in _safe_list(product.get("activeIngredients"))
                    if isinstance(row, dict)]
     seen_objects = {id(row) for row in source_rows}

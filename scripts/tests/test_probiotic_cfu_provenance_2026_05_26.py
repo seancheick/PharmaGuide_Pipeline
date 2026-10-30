@@ -1046,10 +1046,10 @@ def test_raw_total_cultures_is_metadata_not_nutrition_or_a_strain(enricher):
     import json
     from pathlib import Path
     from enhanced_normalizer import EnhancedDSLDNormalizer
-    from scoring_input_contract import get_evidence_subject_rows
+    from scoring_input_contract import active_label_rows, get_evidence_subject_rows
     raw = json.loads((Path(__file__).parent / 'fixtures' / 'probiotic_cfu_total_297668_raw.json').read_text())
     cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
-    total = next(row for row in enricher._flatten_active_ingredients_for_analysis(cleaned['activeIngredients'])
+    total = next(row for row in active_label_rows(cleaned['activeIngredients'])
                  if row.get('raw_source_path') == 'ingredientRows[1].nestedRows[16]')
     assert total['cleaner_row_role'] == 'blend_header_total'
     assert total['score_eligible_by_cleaner'] is False
@@ -1444,3 +1444,56 @@ def test_flattened_actual_members_repair_marketing_header_projection(enricher, m
     identity = probiotic_label_identity_summary(product)
     assert identity['total_strain_count'] == len(members)
     assert identity['per_strain_cfu_disclosed_count'] == (1 if len(members) == 1 else 0)
+
+
+def _brand_named_nested_probiotic_raw(header_name):
+    # Submission S14 (RenewLife Debloat Probiotic Ultimate Flora), trimmed: the
+    # printed panel lists strains, an enzyme and three printed culture totals
+    # under a brand-named header that Clean keeps nested.
+    def child(name, quantity=None, unit=None):
+        return {'name': name, 'ingredientGroup': name, 'forms': [], 'nestedRows': [],
+                'quantity': [{'quantity': quantity, 'unit': unit}] if quantity else []}
+    return {
+        'id': 'brand-named-nested-probiotic', 'brandName': 'RenewLife',
+        'fullName': 'Debloat Probiotic Ultimate Flora',
+        'servingSizes': [{'minQuantity': 1.0, 'maxQuantity': 1.0, 'unit': 'Capsule', 'order': 1,
+                          'minDailyServings': 1, 'maxDailyServings': 1}],
+        'statements': [{'type': 'FDA Statement of Identity', 'notes': 'Probiotic Supplement'}],
+        'physicalState': {'name': 'Capsule', 'langualCodeDescription': 'Capsule'},
+        'ingredientRows': [
+            {'name': 'Vitamin B-12 (as Methylcobalamin)', 'order': 1, 'ingredientGroup': 'Vitamin B12',
+             'quantity': [{'quantity': 1000.0, 'unit': 'mcg'}], 'forms': [{'name': 'Methylcobalamin'}],
+             'nestedRows': []},
+            {'name': header_name, 'order': 2, 'ingredientGroup': header_name, 'forms': [],
+             'quantity': [{'quantity': 15.0, 'unit': 'mg'}],
+             'nestedRows': [
+                 child('Alpha Galactosidase', 300.0, 'GalU'),
+                 child('Bifidobacterium lactis (UF-12, UF-50, UF-26)'),
+                 child('Bifidobacterium longum UF-536'),
+                 child('Total Bifidobacterium Cultures', 2.0, 'Billion CFU'),
+                 child('Lactobacillus rhamnosus (GG, UF-11)'),
+                 child('Streptococcus thermophilus UF-336'),
+                 child('Total Lactobacillus, Lactococcus and Streptococcus Cultures', 1.0, 'Billion CFU'),
+                 child('Total Probiotic & Postbiotic Cultures', 3.0, 'Billion CFU'),
+             ]},
+        ],
+    }
+
+
+@pytest.mark.parametrize('header_name', [
+    'Ultimate Flora™ Debloat & Digestive Support Blend',
+    'Probiotic Blend',
+])
+def test_nested_strain_rows_decide_probiotic_identity_and_printed_total_owns_cfu(enricher, header_name):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    cleaned = EnhancedDSLDNormalizer().normalize_product(_brand_named_nested_probiotic_raw(header_name))
+    data = enricher.enrich_product(cleaned)[0]['probiotic_data']
+    assert data['is_probiotic_product'] is True
+    strains = [s for blend in data['probiotic_blends'] for s in blend['strains']]
+    assert strains == [
+        'Bifidobacterium lactis (UF-12, UF-50, UF-26)', 'Bifidobacterium longum UF-536',
+        'Lactobacillus rhamnosus (GG, UF-11)', 'Streptococcus thermophilus UF-336',
+    ]
+    # The printed overall total is the exposure; subtotals are not added to it.
+    assert data['total_cfu'] == 3e9
+    assert 'ingredientRows[1].nestedRows[7]' in data['cfu_linked_rows']

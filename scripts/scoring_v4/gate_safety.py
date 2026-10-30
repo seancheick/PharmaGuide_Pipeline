@@ -62,7 +62,11 @@ from identity.safety import (
     safety_severity_for_status,
 )
 from rda_ul_calculator import get_actionable_ul_review_signals
-from scoring_input_contract import get_source_score_eligible_active_rows, profile_owner_candidate_rows
+from scoring_input_contract import (
+    active_label_rows,
+    get_source_score_eligible_active_rows,
+    profile_owner_candidate_rows,
+)
 from scoring_v4.dose_safety import (
     CONFIRMED_OVER_THRESHOLD,
     MATERIAL_BUT_UNRESOLVED,
@@ -216,6 +220,13 @@ def _safe_list(value: Any) -> list:
 
 def _safe_dict(value: Any) -> dict:
     return value if isinstance(value, dict) else {}
+
+
+def _label_rows(product: Optional[Dict[str, Any]], source_key: str) -> list:
+    """One label section for safety review; actives include nested blend children."""
+    if source_key == "activeIngredients":
+        return active_label_rows((product or {}).get("activeIngredients"))
+    return _safe_list((product or {}).get(source_key))
 
 
 def _norm(value: Any) -> str:
@@ -415,7 +426,7 @@ def _product_policy_evidence(product: Dict[str, Any], signal: SafetySignal) -> L
         "unknown": ("activeIngredients", "inactiveIngredients"),
     }.get(signal.subject_role, ("activeIngredients", "inactiveIngredients"))
     for section_name in section_names:
-        for row in _safe_list(product.get(section_name)):
+        for row in _label_rows(product, section_name):
             if not isinstance(row, dict):
                 continue
             values.extend(
@@ -703,7 +714,7 @@ def _iter_resolver_safety_hits(
         ("activeIngredients", "active"),
         ("inactiveIngredients", "inactive"),
     ):
-        for index, ingredient in enumerate(_safe_list((product or {}).get(source_key))):
+        for index, ingredient in enumerate(_label_rows(product, source_key)):
             if not isinstance(ingredient, dict):
                 continue
             raw_name, standard_name, extra_terms = _ingredient_safety_terms(ingredient)
@@ -712,9 +723,7 @@ def _iter_resolver_safety_hits(
             if role == "inactive":
                 surviving = safety_terms_without_active_form_duplicates(
                     resolver,
-                    active_ingredients=_safe_list(
-                        (product or {}).get("activeIngredients")
-                    ),
+                    active_ingredients=_label_rows(product, "activeIngredients"),
                     raw_name=raw_name,
                     standard_name=standard_name,
                     additional_terms=extra_terms,
@@ -788,7 +797,7 @@ def _clean_label_candidate_terms(
     if role == "inactive" and form_terms:
         surviving = safety_terms_without_active_form_duplicates(
             resolver,
-            active_ingredients=_safe_list((product or {}).get("activeIngredients")),
+            active_ingredients=_label_rows(product, "activeIngredients"),
             raw_name=raw_name,
             standard_name=standard_name,
             additional_terms=form_terms,
@@ -840,7 +849,7 @@ def _iter_resolver_clean_label_hits(
         ("activeIngredients", "active"),
         ("inactiveIngredients", "inactive"),
     ):
-        for index, ingredient in enumerate(_safe_list((product or {}).get(source_key))):
+        for index, ingredient in enumerate(_label_rows(product, source_key)):
             if not isinstance(ingredient, dict):
                 continue
             for raw_name, standard_name in _clean_label_candidate_terms(
