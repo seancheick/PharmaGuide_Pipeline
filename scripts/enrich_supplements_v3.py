@@ -15053,6 +15053,15 @@ class SupplementEnricherV3:
                               ("inactiveIngredients", inactive_ingredients)):
             disclosure_product[section] = [with_linked_source_children(row) for row in rows]
 
+        physical_blend_parent_refs = {
+            str(row.get("raw_source_path"))
+            for row in active_ingredients
+            if row.get("raw_source_path") and (
+                row.get("proprietaryBlend") is True
+                or row.get("cleaner_row_role") == "blend_header_total"
+            )
+        }
+
         # Step 1: Collect detector blends (pattern-based)
         detector_blends = []
         if self.blend_detector:
@@ -15091,8 +15100,39 @@ class SupplementEnricherV3:
                     }
                     for name in detector_without_amounts
                 ]
+                source_ref = str(label_source_refs.get(blend.source_field) or "")
+                source_section, _, source_index = blend.source_field.partition("[")
+                source_rows = disclosure_product.get(source_section) or []
+                source_position = source_index.rstrip("]")
+                source_row = (source_rows[int(source_position)]
+                              if source_position.isdigit() and int(source_position) < len(source_rows)
+                              and isinstance(source_rows[int(source_position)], dict) else {})
+                if (source_ref
+                        and any(source_ref.startswith(parent + ".nestedRows[")
+                                for parent in physical_blend_parent_refs)
+                        and source_row.get("cleaner_row_role") != "blend_header_total"
+                        and source_row.get("proprietaryBlend") is not True
+                        and not detector_children
+                        and not blend.blend_total_amount
+                        and not re.search(r"\b(?:blend|complex|matrix|formula)\b",
+                                          blend.matched_text, re.IGNORECASE)):
+                    # A detected constituent inside an already established
+                    # physical blend is not a second opaque container. Keep a
+                    # genuinely named nested blend, or one with its own
+                    # members/total, for independent assessment.
+                    continue
+                # A detector category classifies the blend; it is never the
+                # printed, label-facing name. Prefer the scanned physical row
+                # when its name contains the match, otherwise use the exact
+                # matched phrase (including for statement-only evidence).
+                printed_name = blend.matched_text
+                if source_section in {"activeIngredients", "inactiveIngredients", "supplementFacts", "ingredients"}:
+                    row_name = str(source_row.get("name") or source_row.get("ingredient") or "")
+                    if blend.matched_text and blend.matched_text.casefold() in row_name.casefold():
+                        printed_name = row_name
                 detector_blends.append({
-                    "name": blend.blend_name,
+                    "name": printed_name,
+                    "detector_group": blend.blend_name,
                     "disclosure_level": blend.disclosure_level,
                     "nested_count": blend.blend_ingredient_count,
                     "total_weight": blend.blend_total_amount,
@@ -15680,7 +15720,7 @@ class SupplementEnricherV3:
             key = dedupe_key(blend)
             blend_copy = blend.copy()
             # Store detector's classification as detector_group for audit
-            blend_copy["detector_group"] = blend.get("name")
+            blend_copy["detector_group"] = blend.get("detector_group") or blend.get("name")
             merged[key] = blend_copy
 
         # Merge cleaning blends (may add new or enrich existing)

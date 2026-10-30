@@ -149,6 +149,106 @@ class TestBlendMergePipeline:
 
         assert result['has_proprietary_blends'] is True
         assert result['blend_count'] >= 1
+        for blend in result['blends']:
+            if blend['sources'] == ['detector']:
+                assert blend['name'].casefold() == blend['evidence']['matched_text'].casefold()
+                assert blend['detector_group'] != blend['name']
+
+    def test_detector_only_physical_blend_uses_printed_name(self, enricher):
+        # Reduced from DSLD 79397: the registry classifies this as
+        # Digestive Enzyme Blends, but the label prints the specific name.
+        product = {
+            'id': '79397',
+            'activeIngredients': [{
+                'name': 'Concentrated Enzyme Blend',
+                'raw_source_text': 'Concentrated Enzyme Blend',
+                'quantity': 0, 'unit': 'NP', 'proprietaryBlend': None,
+                'nestedIngredients': [
+                    {'name': 'Amylase', 'quantity': 0, 'unit': 'NP'},
+                    {'name': 'Protease', 'quantity': 0, 'unit': 'NP'},
+                ],
+            }],
+            'inactiveIngredients': [],
+        }
+        blends = enricher._collect_proprietary_data(product)['blends']
+        assert [(b['name'], b['detector_group']) for b in blends] == [
+            ('Concentrated Enzyme Blend', 'Digestive Enzyme Blends')
+        ]
+
+    def test_detected_child_is_not_a_second_opaque_blend(self, enricher):
+        # DSLD 29295 prints one 520 mg enzyme blend; its disclosed Protease
+        # child mentions "Protease SP" in notes. The detector must not turn
+        # that constituent into a second opaque blend/B5 deduction.
+        product = {
+            'id': '29295',
+            'activeIngredients': [
+                {
+                    'name': 'Proprietary Enzyme Blend',
+                    'raw_source_path': 'ingredientRows[0]',
+                    'quantity': 520, 'unit': 'mg', 'proprietaryBlend': True,
+                    'nestedIngredients': [{
+                        'name': 'Protease',
+                        'raw_source_path': 'ingredientRows[0].nestedRows[0]',
+                        'parentBlend': 'Proprietary Enzyme Blend',
+                        'quantity': 100000, 'unit': 'HUT',
+                    }],
+                },
+                {
+                    'name': 'Protease', 'notes': 'Protease SP',
+                    'raw_source_path': 'ingredientRows[0].nestedRows[0]',
+                    'parentBlend': 'Proprietary Enzyme Blend',
+                    'quantity': 100000, 'unit': 'HUT',
+                    'proprietaryBlend': False,
+                },
+            ],
+            'inactiveIngredients': [],
+            'label_source_rows': [
+                {'raw_source_path': 'ingredientRows[0]', 'name': 'Proprietary Enzyme Blend'},
+                {'raw_source_path': 'ingredientRows[0].nestedRows[0]', 'name': 'Protease SP'},
+            ],
+        }
+        blends = enricher._collect_proprietary_data(product)['blends']
+        assert [(b['name'], b['source_row_ref']) for b in blends] == [
+            ('Proprietary Enzyme Blend', 'ingredientRows[0]')
+        ]
+
+    def test_nested_physical_blend_header_is_not_suppressed(self, enricher):
+        # DSLD 31064 has a separately identified Aminogen header nested
+        # under Amino Acceleration System. Its header role is source evidence
+        # of a distinct preparation even without an individual amount.
+        product = {
+            'id': '31064',
+            'activeIngredients': [
+                {
+                    'name': 'Amino Acceleration System',
+                    'raw_source_path': 'ingredientRows[12]',
+                    'quantity': 0, 'unit': 'NP', 'proprietaryBlend': True,
+                    'cleaner_row_role': 'blend_header_total',
+                    'nestedIngredients': [{
+                        'name': 'Aminogen',
+                        'raw_source_path': 'ingredientRows[12].nestedRows[1]',
+                        'cleaner_row_role': 'blend_header_total',
+                        'quantity': 0, 'unit': 'NP',
+                    }],
+                },
+                {
+                    'name': 'Aminogen',
+                    'raw_source_path': 'ingredientRows[12].nestedRows[1]',
+                    'parentBlend': 'Amino Acceleration System',
+                    'quantity': 0, 'unit': 'NP', 'proprietaryBlend': False,
+                    'cleaner_row_role': 'blend_header_total',
+                },
+            ],
+            'inactiveIngredients': [],
+            'label_source_rows': [
+                {'raw_source_path': 'ingredientRows[12]', 'name': 'Amino Acceleration System'},
+                {'raw_source_path': 'ingredientRows[12].nestedRows[1]', 'name': 'Aminogen'},
+            ],
+        }
+        blends = enricher._collect_proprietary_data(product)['blends']
+        assert {b['source_row_ref'] for b in blends} == {
+            'ingredientRows[12]', 'ingredientRows[12].nestedRows[1]'
+        }
 
     def test_statement_repeating_printed_blend_is_not_a_second_blend(self, enricher):
         product = {

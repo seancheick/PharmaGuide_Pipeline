@@ -999,7 +999,10 @@ def _is_stimulant_context(product: Dict[str, Any]) -> bool:
     for blend in _safe_list(product.get("proprietary_blends")):
         if not isinstance(blend, dict):
             continue
-        blend_text = " ".join(_norm(blend.get(field)) for field in ("name", "raw_name", "purpose"))
+        blend_text = " ".join([
+            _printed_blend_name(blend, product),
+            *(_norm(blend.get(field)) for field in ("raw_name", "purpose")),
+        ])
         if any(token in blend_text for token in ("energy", "stimulant", "pre workout", "pre-workout", "thermogenic")):
             return True
     return False
@@ -1041,15 +1044,15 @@ def _blend_children_text(blend: Dict[str, Any], *, undisclosed_only: bool = Fals
 
 def _printed_blend_name(blend: Dict[str, Any], product: Dict[str, Any]) -> str:
     """The label's wording for a blend. A blend only the pattern detector saw keeps the
-    registry category in ``name`` ("Stimulant Blends" for a printed "Focus Blend"); a
-    category is our classification, not a printed stimulant name. Its wording is the
+    registry category is ``detector_group`` ("Stimulant Blends" for a printed
+    "Focus Blend"); a category is our classification, not a printed stimulant
+    name. Its wording is the
     printed row the detector scanned, or for a statement the clause that ends at the
     match, so a stimulant word beside the matched phrase ("Thermogenic Focus Blend")
     still counts. Unresolved wording stays at the matched phrase, never the category."""
     name = _norm(blend.get("name"))
     if ("cleaning" in _safe_list(blend.get("sources"))
-            or not blend.get("detector_group")
-            or blend.get("name") != blend.get("detector_group")):
+            or not blend.get("detector_group")):
         return name
     matched = _norm((blend.get("evidence") or {}).get("matched_text"))
     field, _, index = str(blend.get("source_field") or "").partition("[")

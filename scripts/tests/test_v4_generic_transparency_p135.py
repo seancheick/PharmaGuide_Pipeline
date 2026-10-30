@@ -563,6 +563,24 @@ def test_b5_dedupes_detector_placeholder_when_cleaned_blend_exists() -> None:
     assert payload["penalties"]["B5_proprietary_blend_opacity"] == pytest.approx(-1.69)
 
 
+def test_detector_display_name_does_not_change_existing_b5_classification() -> None:
+    """DSLD 29295: the printed Protease SP name is not a new B5 policy."""
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    old = {
+        "name": "Digestive Enzyme Blends", "detector_group": "Digestive Enzyme Blends",
+        "sources": ["detector"], "source_field": "activeIngredients[2]",
+        "source_path": "activeIngredients[2]", "disclosure_level": "none",
+        "evidence": {"matched_text": "Protease SP"},
+    }
+    printed = {**old, "name": "Protease SP"}
+    before = score_transparency(_product(blends=[old]))
+    after = score_transparency(_product(blends=[printed]))
+    assert before["penalties"]["B5_proprietary_blend_opacity"] < 0
+    assert after["penalties"]["B5_proprietary_blend_opacity"] == before["penalties"]["B5_proprietary_blend_opacity"]
+    assert after["metadata"]["B5_blend_evidence"][0]["blend_name"] == "Protease SP"
+
+
 def test_b5_dedupes_parent_and_child_rows_for_same_blend_total() -> None:
     from scoring_v4.modules.generic_transparency import score_transparency
 

@@ -20,7 +20,7 @@ import pytest
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from enrich_supplements_v3 import SupplementEnricherV3
 from proprietary_blend_detector import disclosure_tier
-from scoring_v4.gate_safety import _has_undisclosed_stimulant_blend
+from scoring_v4.gate_safety import _has_undisclosed_stimulant_blend, _is_stimulant_context
 from scoring_v4.scored_artifact import build_scored_artifact
 
 FIXTURES = Path(__file__).resolve().parent / "fixtures"
@@ -358,6 +358,21 @@ def test_a_stimulant_word_in_the_printed_statement_clause_still_fires(statement,
 def test_a_stimulant_word_outside_the_matched_phrase_on_a_printed_row_still_fires():
     product = _detector_only("Stimulant Blends", "focus blend", row="Thermogenic Focus Blend")
     assert _has_undisclosed_stimulant_blend(product) is True
+
+
+def test_detector_only_printed_name_does_not_hide_the_actual_stimulant_row():
+    product = _detector_only("Stimulant Blends", "focus blend", row="Thermogenic Focus Blend")
+    product["proprietary_blends"][0]["name"] = "Thermogenic Focus Blend"
+    assert _has_undisclosed_stimulant_blend(product) is True
+
+
+def test_unknown_caffeine_context_uses_the_full_printed_statement_clause():
+    product = _detector_only("Stimulant Blends", "focus blend",
+                             statement="Contains our proprietary thermogenic focus blend.")
+    product["proprietary_blends"][0]["name"] = "focus blend"
+    assert _is_stimulant_context(product) is True
+    product["statements"][1]["notes"] = "Contains our proprietary focus blend."
+    assert _is_stimulant_context(product) is False
 
 
 def test_unresolved_printed_wording_does_not_turn_a_category_into_a_warning():
