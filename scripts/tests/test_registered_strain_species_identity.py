@@ -76,3 +76,38 @@ def test_strain_gets_the_species_an_unregistered_name_in_its_group_gets(normaliz
 @pytest.mark.parametrize("name", ["Lactobacillus reuteri NCIMB 302420", "Lactobacillus plantarum Lp-1150"])
 def test_cleaner_does_not_shorten_an_unregistered_strain_code(normalizer, name):
     assert normalizer._match_probiotic_strain(normalizer.matcher.preprocess_text(name)) is None
+
+
+@pytest.mark.parametrize(
+    "name, group, canonical",
+    [
+        # S14 RenewLife Debloat: DSLD-style groups that use the 2020 genus
+        # names or a subspecies the IQM holds as an alias of its parent.
+        ("Bifidobacterium infantis UF-019", "Bifidobacterium infantis", "bifidobacterium_longum"),
+        ("Lactobacillus paracasei UF-19", "Lacticaseibacillus paracasei", "lactobacillus_paracasei"),
+        ("Lactobacillus reuteri UF-14", "Limosilactobacillus reuteri", "lactobacillus_reuteri"),
+        ("Lactobacillus brevis UF-35", "Levilactobacillus brevis", "lactobacillus_brevis"),
+        ("Lactobacillus salivarius UF-862", "Ligilactobacillus salivarius", "lactobacillus_salivarius"),
+    ],
+)
+def test_unregistered_strain_maps_through_a_probiotic_alias_group(normalizer, name, group, canonical) -> None:
+    """The group fallback resolves a probiotic alias group to the parent its
+    name lookup already gives; the strain code itself is not registered."""
+    out = _process(normalizer, _row(name, group))
+    assert out["canonical_id"] == canonical
+    assert out["canonical_source_db"] == "ingredient_quality_map"
+
+
+@pytest.mark.parametrize("group, standard_name", [
+    ("Probiotic Bacteria", "Probiotics"),  # two IQM parents list it; the name lookup decides
+    ("Lacticaseibacillus paracasei", "Lactobacillus Paracasei"),
+])
+def test_probiotic_alias_group_resolves_as_the_name_lookup_does(normalizer, group, standard_name) -> None:
+    assert normalizer._exact_ingredient_group_lookup(group).get("standard_name") == standard_name
+    assert normalizer.ingredient_alias_lookup[normalizer.matcher.preprocess_text(group)] == standard_name
+
+
+@pytest.mark.parametrize("group", ["L-5-Methyltetrahydrofolate", "Pyridoxal 5'-Phosphate", "Niacinamide"])
+def test_non_probiotic_iqm_aliases_stay_out_of_the_group_index(normalizer, group) -> None:
+    """Admitting every IQM alias would reach ~21,000 DSLD rows; only probiotics are admitted."""
+    assert not normalizer._exact_ingredient_group_lookup(group).get("mapped")
