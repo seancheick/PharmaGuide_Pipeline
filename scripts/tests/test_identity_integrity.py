@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from dataclasses import FrozenInstanceError
+from dataclasses import FrozenInstanceError, replace
+import json
+from pathlib import Path
 
 import pytest
 
@@ -1244,6 +1246,78 @@ def test_structured_group_still_repairs_an_identity_the_label_spells_out():
 
     assert decision.disposition == "repaired"
     assert decision.canonical_id == "ginger"
+
+
+def test_verified_submission_gingever_keeps_ginger_identity_and_interactions():
+    """The named ginger extract form cannot erase the source row's ginger identity."""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((Path(__file__).parents[2] / "manual_labels/product_submissions"
+                      / "PG_SUB_C29FA5677C794795B2B3FC2185790AA7.json").read_text())
+    enricher = SupplementEnricherV3()
+    enriched, errors = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    ginger = next(row for row in enriched["activeIngredients"]
+                  if row.get("raw_source_path") == "ingredientRows[2]")
+    assert ginger["canonical_id"] == "ginger"
+    assert ginger["mapped"] is True
+    assert "RULE_IQM_GINGER_BLEEDING" in enricher._interaction_rule_ids_of(ginger["canonical_id"])
+    scored = build_scored_artifact(enriched)
+    assert scored["assessment_readiness"]["release_assessment"]["is_complete"] is True
+    assert scored["quality_score_status"] == "scored"
+
+
+@pytest.mark.parametrize("change", ["missing_unii", "different_unii", "form_only_rule", "fraction"])
+def test_botanical_form_parent_identity_requires_same_plant_and_intact_safety(change):
+    iqm = json.loads((Path(__file__).parents[1] / "data/ingredient_quality_map.json").read_text())
+    standardized = json.loads((Path(__file__).parents[1] / "data/standardized_botanicals.json").read_text())
+    registry = build_canonical_identity_registry({
+        "ingredient_quality_map": iqm, "standardized_botanicals": standardized,
+    })
+    row = {
+        "raw_source_text": "Ginger (root) extract", "name": "Ginger (root) extract",
+        "ingredientGroup": "Ginger", "raw_taxonomy": {"category": "botanical"},
+        "forms": [{"name": "Gingever", "category": "botanical"}],
+    }
+    rules = lambda _: frozenset()
+    if change == "missing_unii":
+        registry = replace(registry, verified_uniis={
+            **registry.verified_uniis, "ginger_extract": frozenset(),
+        })
+    elif change == "different_unii":
+        registry = replace(registry, verified_uniis={
+            **registry.verified_uniis, "ginger_extract": frozenset({"OTHER_UNII"}),
+        })
+    elif change == "form_only_rule":
+        rules = lambda cid: frozenset({"FORM_ONLY_WARNING"}) if cid == "ginger_extract" else frozenset()
+    else:
+        row["forms"][0]["percent"] = 50
+    decision = resolve_identity(row, "ginger", registry.resolve_unambiguous,
+                                canonical_registry=registry, interaction_rules_of=rules)
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+
+
+def test_ginkgo_form_with_its_own_pregnancy_rule_keeps_form_identity():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    iqm = json.loads((Path(__file__).parents[1] / "data/ingredient_quality_map.json").read_text())
+    botanicals = json.loads((Path(__file__).parents[1] / "data/botanical_ingredients.json").read_text())
+    registry = build_canonical_identity_registry({
+        "ingredient_quality_map": iqm, "botanical_ingredients": botanicals,
+    })
+    rules = SupplementEnricherV3()._interaction_rule_ids_of
+    row = {
+        "raw_source_text": "Ginkgo leaf extract", "name": "Ginkgo leaf extract",
+        "ingredientGroup": "Ginkgo", "raw_taxonomy": {"category": "botanical"},
+        "forms": [{"name": "Ginkgo biloba leaf", "category": "botanical"}],
+    }
+    decision = resolve_identity(row, "ginkgo", registry.resolve_unambiguous,
+                                canonical_registry=registry, interaction_rules_of=rules)
+    assert decision.canonical_id == "ginkgo_biloba_leaf"
+    assert "RULE_BOTAN_GINKGO_PREGNANCY" in rules(decision.canonical_id)
 
 
 def test_a_role_record_is_not_protected_from_a_specific_group():

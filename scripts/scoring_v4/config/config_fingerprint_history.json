@@ -82,7 +82,8 @@
       "1.31.0-evidence-no-automatic-exceptional": "98d2a9e17f873e46",
       "1.31.1-held-assessment-publication": "d123bd959b30cb0f",
       "1.31.2-held-label-fidelity": "fa11e86a5d44bb38",
-      "1.31.3-source-bound-release-holds": "b892863cc5c8bacf"
+      "1.31.3-source-bound-release-holds": "b892863cc5c8bacf",
+      "1.31.4-submission-source-bound-holds": "8df0b454002e0869"
     }
   }
 }

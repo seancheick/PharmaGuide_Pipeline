@@ -9,7 +9,7 @@ from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass, field
 from typing import Any, Literal
 
-from identity.interaction import INTERACTION_SUBJECT_FAMILY
+from identity.interaction import BOTANICAL_INTERACTION_TWIN, INTERACTION_SUBJECT_FAMILY
 from normalization import strip_label_identity_qualifiers
 from probiotic_measurements import is_probiotic_source_header as _is_structural_blend_header
 
@@ -119,6 +119,7 @@ class CanonicalIdentityRegistry:
     standard_names: Mapping[tuple[str, str], str]
     source_form_aliases: Mapping[tuple[str, str], frozenset[str]]
     negative_match_terms: Mapping[str, tuple[Any, ...]] = field(default_factory=dict)
+    verified_uniis: Mapping[str, frozenset[str]] = field(default_factory=dict)
 
     @staticmethod
     def _key(value: Any) -> str:
@@ -198,6 +199,13 @@ def build_canonical_identity_registry(
     standard_names: dict[tuple[str, str], str] = {}
     source_form_aliases: dict[tuple[str, str], set[str]] = {}
     negative_match_terms: dict[str, tuple[Any, ...]] = {}
+    verified_uniis: dict[str, set[str]] = {}
+
+    def record_unii(canonical_id: str, entry: Mapping[str, Any]) -> None:
+        external_ids = entry.get("external_ids")
+        unii = external_ids.get("unii") if isinstance(external_ids, Mapping) else None
+        if isinstance(unii, str) and unii.strip():
+            verified_uniis.setdefault(str(canonical_id), set()).add(unii.strip().upper())
     source_priority = {
         "ingredient_quality_map": 0,
         "standardized_botanicals": 1,
@@ -211,6 +219,7 @@ def build_canonical_identity_registry(
         for canonical_id, entry in quality_map.items():
             if str(canonical_id).startswith("_") or not isinstance(entry, Mapping):
                 continue
+            record_unii(str(canonical_id), entry)
             match_rules = entry.get("match_rules")
             target_id = (
                 match_rules.get("target_id")
@@ -343,6 +352,7 @@ def build_canonical_identity_registry(
                 continue
             standard_name = str(entry.get("standard_name") or "").strip()
             canonical_id = entry.get("id") or standard_name.lower().replace(" ", "_")
+            record_unii(str(canonical_id), entry)
             put(standard_name, canonical_id, source_db, 0)
             for alias in entry.get(alias_key) or ():
                 put(alias, canonical_id, source_db, 1)
@@ -369,6 +379,7 @@ def build_canonical_identity_registry(
         standard_names=standard_names,
         source_form_aliases={key: frozenset(values) for key, values in source_form_aliases.items()},
         negative_match_terms=negative_match_terms,
+        verified_uniis={key: frozenset(values) for key, values in verified_uniis.items()},
     )
 
 
@@ -1113,6 +1124,29 @@ def resolve_identity(
                 named = canonical_registry.resolve_verified_preferred(strip_label_identity_qualifiers(literal))
             if named and not canonical_registry.is_role_record(named[0]):
                 botanical_form_ids.append(named[0])
+    # A named extract may refine a generic source row without contradicting its
+    # botanical identity. Keep the established parent only when the curated
+    # interaction twin and an identical, unambiguous UNII agree on the plant;
+    # this does not establish extract equivalence or infer marker content.
+    botanical_form_same_material = bool(
+        canonical_registry and canonical_before and botanical_form_ids
+        and raw_canonical in {None, canonical_before}
+        and len(declared_forms) == 1
+        and all(
+            cid == canonical_before or (
+                BOTANICAL_INTERACTION_TWIN.get(cid) == canonical_before
+                and len(canonical_registry.verified_uniis.get(cid, ())) == 1
+                and canonical_registry.verified_uniis.get(cid)
+                == canonical_registry.verified_uniis.get(canonical_before)
+                and interaction_rules_of is not None
+                and interaction_rules_of(cid) <= interaction_rules_of(canonical_before)
+            ) for cid in botanical_form_ids
+        )
+        and declared_forms[0].get("percent") in {None, 100, "100"}
+        and declared_forms[0].get("quantity") in (None, [])
+        and declared_forms[0].get("amount") is None
+        and str(declared_forms[0].get("prefix") or "").strip().casefold() in {"", "as"}
+    )
     botanical_form_conflict = bool(
         canonical_before and botanical_form_ids
         # Nutrient/marker plus source-plant rows are not whole botanical
@@ -1122,6 +1156,7 @@ def resolve_identity(
                 for form in declared_forms)
         and str(row.get("category") or (row.get("raw_taxonomy") or {}).get("category") or "").casefold() == "botanical"
         and any(cid != canonical_before for cid in botanical_form_ids)
+        and not botanical_form_same_material
         and not _is_blend_header_row(row)
         and not allow_unscoreable_taxonomy_only
     )

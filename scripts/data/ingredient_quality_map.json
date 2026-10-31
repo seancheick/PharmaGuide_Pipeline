@@ -33,7 +33,7 @@
       "total_parents": 655,
       "total_forms": 1475,
       "total_form_aliases": 12301,
-      "parents_with_parent_aliases": 150,
+      "parents_with_parent_aliases": 151,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -41826,7 +41826,9 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [
+      "Ginger (root) extract"
+    ]
   },
   "lions_mane": {
     "standard_name": "Lion's Mane",
