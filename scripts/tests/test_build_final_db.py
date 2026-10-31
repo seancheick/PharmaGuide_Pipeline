@@ -1708,6 +1708,34 @@ def test_core_row_exports_scored_caution_safety_signal_reason_separately():
     assert row["safety_signal_reason"] == "B0_HIGH_RISK_SUBSTANCE"
 
 
+@pytest.mark.parametrize("status", ["not_scored", "suppressed_safety"])
+def test_unavailable_quality_has_null_public_score_mirrors(status):
+    scored = make_scored(verdict="BLOCKED" if status == "suppressed_safety" else "SAFE")
+    scored.update({
+        "display_100": "N/A",
+        "score_100_equivalent": None,
+        "quality_score_v4_100": None,
+        "quality_score_status": status,
+        "quality_tier": None,
+        "quality_pillars_v4": None,
+        "verdict": "BLOCKED" if status == "suppressed_safety" else "NOT_SCORED",
+    })
+
+    row = row_as_dict(build_core_row(make_enriched(), scored, "2026-03-17T19:00:00Z"))
+
+    assert row["quality_score_status"] == status
+    assert row["score_display_100_equivalent"] is None
+    assert row["score_100_equivalent"] is None
+    assert row["quality_score_v4_100"] is None
+    assert row["quality_tier"] is None
+
+
+def test_scored_quality_retains_its_public_display_mirror():
+    row = row_as_dict(build_core_row(make_enriched(), make_scored(), "2026-03-17T19:00:00Z"))
+    assert row["score_display_100_equivalent"] == "75.0/100"
+    assert row["quality_score_v4_100"] == 75
+
+
 def test_detail_blob_includes_optional_rda_and_evidence_sections_when_present():
     blob = build_detail_blob(make_enriched(), make_scored())
 
