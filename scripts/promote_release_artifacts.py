@@ -21,6 +21,19 @@ from audits.run_verification_gate import (
 )
 
 
+# Test harness edits require new CI and release checks, but cannot change the
+# catalog bytes that snapshot assembly produces. Source-gate receipts retain
+# their broader input set; only the catalog build receipt excludes these paths.
+CATALOG_NONPRODUCER_PATHS = (
+    'scripts/test.sh',
+    'scripts/tests/*',
+    'scripts/test_profiles.py',
+    'scripts/test_lock.py',
+    'scripts/test_shard_plan.py',
+    'scripts/ci_skip_guard.py',
+)
+
+
 def _raw_label_fingerprint(raw_root: Path) -> dict:
     """Content of every raw DSLD label the snapshot's raw-to-final gate reads."""
     if not raw_root.is_dir():
@@ -40,7 +53,7 @@ def catalog_input_binding(repo: Path) -> str:
             *RELEASE_SOURCE_INPUTS,
             'scripts/products/*_scored/scored/*.json',
             'manual_labels/**/*.json',
-        )),
+        ), exclude_paths=CATALOG_NONPRODUCER_PATHS),
         'raw_labels': _raw_label_fingerprint(brand_dataset_root()),
     })
 

@@ -19,6 +19,7 @@ import subprocess
 import sys
 import time
 from datetime import datetime, timezone
+from fnmatch import fnmatchcase
 from pathlib import Path
 from typing import Sequence
 
@@ -95,7 +96,10 @@ def run_gate(
                          input_globs=input_globs, max_age_seconds=max_age_seconds)
 
 
-def _input_binding(cwd: Path, command: Sequence[str], patterns: Sequence[str]) -> str:
+def _input_binding(
+    cwd: Path, command: Sequence[str], patterns: Sequence[str],
+    *, exclude_paths: Sequence[str] = (),
+) -> str:
     # Never persist credentials or environment values. The fingerprint binds
     # effective configuration, not shell bookkeeping or the per-run lock token.
     ignored = {'_', 'PWD', 'OLDPWD', 'SHLVL', 'SHELL_PID',
@@ -110,9 +114,12 @@ def _input_binding(cwd: Path, command: Sequence[str], patterns: Sequence[str]) -
         entries = []
         for path in sorted(cwd.glob(pattern)):
             if path.is_file():
+                relative = str(path.relative_to(cwd))
+                if any(fnmatchcase(relative, excluded) for excluded in exclude_paths):
+                    continue
                 if path not in digests:
                     digests[path] = _sha256(path)
-                entries.append((str(path.relative_to(cwd)), digests[path]))
+                entries.append((relative, digests[path]))
         files[pattern] = entries
     executable = shutil.which(str(command[0]))
     return _canonical_sha256({

@@ -142,6 +142,9 @@ def test_disk_headroom_fails_before_assembly(tmp_path, monkeypatch):
     'scripts/data/absorption_enhancers.json',
     'scripts/data/rda_optimal_uls.json',
     'scripts/scoring_v4/pillar_explanations.py',
+    'scripts/build_final_db.py',
+    'scripts/audit_raw_to_final.py',
+    'scripts/rebuild_dashboard_snapshot.sh',
 ])
 def test_catalog_receipt_invalidates_on_safety_formulation_and_exporter_changes(tmp_path, relative):
     binding = _assembly(tmp_path)
@@ -178,3 +181,22 @@ def test_catalog_receipt_binds_the_raw_labels_the_line_gate_compared(tmp_path, m
     assert promotion.catalog_build_is_current(repo)
     monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(tmp_path / 'absent'))
     assert not promotion.catalog_build_is_current(repo)
+
+
+@pytest.mark.parametrize('relative', [
+    'scripts/test.sh',
+    'scripts/tests/test_release_gate.py',
+    'scripts/tests/fixtures/release_case.json',
+    'scripts/test_profiles.py',
+    'scripts/test_lock.py',
+    'scripts/test_shard_plan.py',
+    'scripts/ci_skip_guard.py',
+])
+def test_catalog_receipt_ignores_test_only_changes(tmp_path, relative):
+    binding = _assembly(tmp_path)
+    promotion.record_catalog_build(tmp_path, binding)
+    path = tmp_path / relative
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text('test infrastructure changed')
+    assert promotion.catalog_build_is_current(tmp_path)
+    promotion.require_catalog_inputs(tmp_path, binding)
