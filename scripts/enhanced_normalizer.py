@@ -10650,7 +10650,7 @@ class EnhancedDSLDNormalizer:
         "Butcher's Broom Leaf Extract" resolved as a label row but not as a
         form, and 111 single-organism rows lost their identity (October 27,
         2026). The probe row shares the row's group and never reaches the
-        unmapped report.
+        unmapped report or the product's display rows.
         """
         probe = {
             "name": form.get("name"), "ingredientGroup": ing.get("ingredientGroup"),
@@ -10660,6 +10660,7 @@ class EnhancedDSLDNormalizer:
         }
         unmapped_counts = dict(self.unmapped_ingredients)
         unmapped_details = dict(self.unmapped_details)
+        display_buffer = list(getattr(self, "_display_ingredients_buffer", []))
         try:
             resolved = self._process_single_ingredient_enhanced(probe, True)
         finally:
@@ -10667,6 +10668,7 @@ class EnhancedDSLDNormalizer:
             self.unmapped_ingredients.update(unmapped_counts)
             self.unmapped_details.clear()
             self.unmapped_details.update(unmapped_details)
+            self._display_ingredients_buffer = display_buffer
         if isinstance(resolved, list):
             resolved = resolved[0] if resolved and isinstance(resolved[0], dict) else None
         if not isinstance(resolved, dict):

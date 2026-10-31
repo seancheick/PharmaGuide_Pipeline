@@ -1523,3 +1523,16 @@ def test_row_mapped_by_the_multi_part_branch_is_not_reported_unmapped():
     assert row["canonical_id"] == "stinging_nettle"
     assert normalizer.unmapped_ingredients.get("Nettle Leaf, Root Extract", 0) == before.get("Nettle Leaf, Root Extract", 0)
     assert "Nettle Leaf, Root Extract" not in normalizer.unmapped_details
+
+
+@pytest.mark.parametrize("form_name", ["Softgels", "Total Omega"])
+def test_declared_source_probe_leaves_no_display_row(form_name):
+    # A probed form on the skip list queues a display row with no source path
+    # (PR #318 review); the probe must leave the product's display buffer as it found it.
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._display_ingredients_buffer = [{"raw_source_text": "existing"}]
+    row = _raw_row(1, "Butcher's Broom Leaf, Stem Extract", "Butcher's Broom", quantity=500, unit="mg")
+    assert normalizer._declared_source_form_identity({"name": form_name, "category": "botanical"}, row) == (None, None)
+    assert normalizer._display_ingredients_buffer == [{"raw_source_text": "existing"}]
