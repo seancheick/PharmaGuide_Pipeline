@@ -1476,6 +1476,12 @@ def test_single_organism_multi_part_row_keeps_its_organism_identity(pipeline, na
     # though that group would let it resolve on its own.
     ("Dandelion Root and Ashwagandha Leaf Extract", "Dandelion",
      ("Taraxacum officinale Root Extract", "Ashwagandha Leaf Extract")),
+    # One form naming two organisms: "turmeric" is a curated name, not a
+    # species epithet of ginger (fresh-context review, October 31).
+    ("Ginger Turmeric Root, Rhizome Extract", "Ginger",
+     ("Ginger Turmeric Root Extract", "Ginger Turmeric Rhizome Extract")),
+    # Bare preparation forms attribute nothing by their own words.
+    ("Butcher's Broom Leaf, Stem Extract", "Butcher's Broom", ("Leaf Extract", "Stem Extract")),
 ])
 def test_multi_part_rows_without_one_named_organism_stay_unmapped(pipeline, name, group, forms):
     raw = _raw_product(991041, [_raw_row(1, name, group, quantity=500, unit="mg", forms=forms)])
@@ -1490,11 +1496,30 @@ def test_declared_source_probe_leaves_no_trace_in_the_unmapped_report(pipeline):
     from enhanced_normalizer import EnhancedDSLDNormalizer
 
     normalizer = EnhancedDSLDNormalizer()
-    before = dict(normalizer.unmapped_ingredients)
+    before_counts = dict(normalizer.unmapped_ingredients)
+    before_details = dict(normalizer.unmapped_details)
+    # Bare "Leaf Extract" / "Stem Extract" probes fail on their own words and
+    # are recorded during the probe; only the label row itself may remain.
     normalizer.normalize_product(_raw_product(991042, [_raw_row(
-        1, "Broccoli Floret, Seed, Sprout Extract, Powder", "Broccoli", quantity=500, unit="mg",
-        forms=("Broccoli Floret Extract, Powder", "Broccoli Seed Extract, Powder", "Broccoli Sprout Extract, Powder"),
+        1, "Butcher's Broom Leaf, Stem Extract", "Butcher's Broom", quantity=500, unit="mg",
+        forms=("Leaf Extract", "Stem Extract"),
     )]))
-    probed = {name for name in normalizer.unmapped_ingredients if name not in before}
-    # Only the label row itself may be reported, never the per-form probes.
-    assert probed <= {"Broccoli Floret, Seed, Sprout Extract, Powder"}
+    new_counts = {k: v for k, v in normalizer.unmapped_ingredients.items() if v != before_counts.get(k, 0)}
+    new_details = {k for k in normalizer.unmapped_details if k not in before_details}
+    assert set(new_counts) == {"Butcher's Broom Leaf, Stem Extract"}
+    assert new_details == {"Butcher's Broom Leaf, Stem Extract"}
+
+
+def test_row_mapped_by_the_multi_part_branch_is_not_reported_unmapped():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    before = dict(normalizer.unmapped_ingredients)
+    cleaned = normalizer.normalize_product(_raw_product(991043, [_raw_row(
+        1, "Nettle Leaf, Root Extract", "Nettle", quantity=500, unit="mg",
+        forms=("Stinging Nettle Leaf Extract", "Stinging Nettle Root Extract"),
+    )]))
+    row = cleaned["activeIngredients"][0]
+    assert row["canonical_id"] == "stinging_nettle"
+    assert normalizer.unmapped_ingredients.get("Nettle Leaf, Root Extract", 0) == before.get("Nettle Leaf, Root Extract", 0)
+    assert "Nettle Leaf, Root Extract" not in normalizer.unmapped_details

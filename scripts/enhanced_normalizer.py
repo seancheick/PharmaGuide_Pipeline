@@ -8125,6 +8125,7 @@ class EnhancedDSLDNormalizer:
 
         # Track unmapped ingredients only if not found in any database
         # AND not a nutrition fact/label phrase
+        recorded_unmapped_row = False
         if (
             not is_mapped
             and not is_structural_active_blend_total
@@ -8142,6 +8143,7 @@ class EnhancedDSLDNormalizer:
                 cleaner_row_role=unmapped_cleaner_row_role,
                 score_exclusion_reason=unmapped_cleaner_row_role,
             )
+            recorded_unmapped_row = True
 
         # Preserve forms with full structure from DSLD (PRESERVE EVERYTHING).
         # Schematic fields are required for downstream enrichment:
@@ -8281,6 +8283,11 @@ class EnhancedDSLDNormalizer:
                     (shared_db, shared_id), name,
                 )
                 is_mapped = True
+                if recorded_unmapped_row:
+                    # The row resolved after the early report entry; a mapped
+                    # row must not be listed as a curation gap.
+                    self._forget_unmapped_ingredient(name)
+                    recorded_unmapped_row = False
             else:
                 group_id, group_db = self._resolve_canonical_identity(
                     ingredient_group, raw_name=ingredient_group,
@@ -8316,9 +8323,22 @@ class EnhancedDSLDNormalizer:
                         (group_db, group_id), name,
                     )
                     is_mapped = True
+                    if recorded_unmapped_row:
+                        self._forget_unmapped_ingredient(name)
+                        recorded_unmapped_row = False
                 else:
                     canonical_id, canonical_source_db = None, "unmapped"
                     standard_name, is_mapped = name, False
+                    if not recorded_unmapped_row:
+                        # A row this branch refuses is a curation gap the
+                        # report must show; 19 products lost their score
+                        # silently in October 2026 because it did not.
+                        self._record_unmapped_ingredient(
+                            name, forms, is_active=True,
+                            cleaner_row_role=unmapped_cleaner_row_role,
+                            score_exclusion_reason=unmapped_cleaner_row_role,
+                        )
+                        recorded_unmapped_row = True
         # A generated preparation alias cannot overrule a reviewed broader
         # label group. The shared registry requires literal declared specificity.
         if is_active and canonical_id:
@@ -10739,8 +10759,13 @@ class EnhancedDSLDNormalizer:
             before, after = match.groups()
             after = re.sub(r"^\s+var(?:iety)?\s+[a-z]+(?=\s|$)", " ", after)
             if " " not in organism.strip():
-                # A registered genus followed by one Latin species epithet.
-                after = re.sub(r"^\s+[a-z]{4,}(?=\s|$)", " ", after, count=1)
+                # A registered genus followed by one Latin species epithet:
+                # a word that is nobody's curated name ("sagittatum"), never
+                # another organism's common name ("turmeric" after "ginger").
+                epithet = re.match(r"^\s+([a-z]{4,})(?=\s|$)", after)
+                if epithet and not self._canonical_identity_registry.candidates_index.get(
+                        self._canonical_identity_registry._key(epithet.group(1))):
+                    after = after[epithet.end():]
             remainder = (before + " " + after).split()
             if all(token in qualifiers for token in remainder):
                 return True
@@ -12289,6 +12314,14 @@ class EnhancedDSLDNormalizer:
             score_exclusion_reason=score_exclusion_reason,
         )
     
+    def _forget_unmapped_ingredient(self, name: str) -> None:
+        """Withdraw one report entry for a row that resolved after being recorded."""
+        if self.unmapped_ingredients.get(name, 0) > 1:
+            self.unmapped_ingredients[name] -= 1
+            return
+        self.unmapped_ingredients.pop(name, None)
+        self.unmapped_details.pop(name, None)
+
     def process_and_save_unmapped_tracking(self, processed_count_override: Optional[int] = None):
         """Process unmapped ingredients and save separate active/inactive tracking files"""
         if not self.unmapped_tracker:
