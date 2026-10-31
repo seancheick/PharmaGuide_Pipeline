@@ -814,6 +814,38 @@ def test_reviewed_bamboo_note_audit_uses_the_original_source_path():
         _corrected_source_paths(changed, "252349")
 
 
+def test_reviewed_correction_audit_rejects_changed_product_source():
+    from audit_raw_to_final import _corrected_source_paths
+
+    sources = json.loads((SCRIPTS / "tests/fixtures/batch12_label_source_raw.json").read_text())
+    raw = sources["268493"]
+    assert _corrected_source_paths(raw, "268493")
+
+    changed = copy.deepcopy(raw)
+    changed["statements"].append({"type": "Warning", "notes": "changed source edition"})
+    with pytest.raises(ValueError, match="Reviewed serving source changed"):
+        _corrected_source_paths(changed, "268493")
+
+
+def test_display_audit_matches_moved_reviewed_row_by_immutable_source_path():
+    from audit_raw_to_final import _check_display_label_collapse
+
+    raw = json.loads((SCRIPTS / "tests/fixtures/batch12_label_source_raw.json").read_text())["268493"]
+    blob = {"display_ingredients": [{
+        "raw_source_path": "ingredientRows[4].forms[1]",
+        "raw_source_text": "Coconut Oil",
+        "label_display_name": "Medium Chain Triglycerides",
+        "canonical_name": "Medium Chain Triglycerides",
+    }]}
+    record = ProductRecord("268493", None, None, None)
+    _check_display_label_collapse(record, blob, raw)
+    assert not any(f.code == "DISPLAY_LABEL_COLLAPSES_TO_CANONICAL" for f in record.findings)
+
+    unrelated = ProductRecord("999", None, None, None)
+    _check_display_label_collapse(unrelated, blob, raw)
+    assert any(f.code == "DISPLAY_LABEL_COLLAPSES_TO_CANONICAL" for f in unrelated.findings)
+
+
 def test_reviewed_new_form_still_requires_its_exact_source_label():
     from audit_raw_to_final import _check_line_integrity
     raw = {"id": "1179", "ingredientRows": [{"name": "vitamin B", "forms": [], "nestedRows": []}]}
