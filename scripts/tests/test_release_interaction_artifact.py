@@ -698,7 +698,14 @@ def test_interaction_receipt_failed_validation_cannot_seal(freshness_tree, monke
 def test_interaction_receipt_binds_runtime_and_rejects_offline(freshness_tree, monkeypatch):
     repo, suppai, dist = freshness_tree
     ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
-    monkeypatch.setenv('INTERACTION_TEST_CONFIG', 'changed')
+    # The binding covers configuration the pipeline reads (PG_*, PYTHON*, ...),
+    # not shell bookkeeping such as PYTHONUNBUFFERED (PR #318).
+    monkeypatch.setenv('PYTHONUNBUFFERED', '1')
+    assert ria.interaction_build_is_current(repo, suppai, dist)
+    monkeypatch.setenv('PG_INTERACTION_TEST_CONFIG', 'changed')
+    assert not ria.interaction_build_is_current(repo, suppai, dist)
+    ria.seal_interaction_build(repo, suppai, dist, ria.interaction_build_inputs(repo, suppai))
+    monkeypatch.setenv('PYTHONOPTIMIZE', '1')
     assert not ria.interaction_build_is_current(repo, suppai, dist)
     ria.seal_interaction_build(repo, suppai, dist,
         ria.interaction_build_inputs(repo, suppai, offline=True), offline=True)

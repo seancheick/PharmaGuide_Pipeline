@@ -132,10 +132,13 @@ def run_gate(
 # PYTHONUNBUFFERED=1 and the corpus runner exports PHARMAGUIDE_DATASET_ROOT, so a
 # catalog built by the standalone snapshot was never "current" for the release
 # that followed, and every full run assembled the catalog twice (2026-10-31).
-BOUND_ENVIRONMENT_PREFIXES = ('PG_', 'PHARMAGUIDE_', 'SUPABASE_', 'FLUTTER_', 'SKIP_')
+# PYTHON* covers the interpreter selector and every interpreter behaviour
+# switch (PYTHONPATH, PYTHONOPTIMIZE, PYTHONWARNINGS, PYTHONUTF8 ...); LC_*,
+# LANG and TZ set default text encoding and local time.
+BOUND_ENVIRONMENT_PREFIXES = ('PG_', 'PHARMAGUIDE_', 'SUPABASE_', 'FLUTTER_', 'SKIP_',
+                              'PYTHON', 'LC_')
 BOUND_ENVIRONMENT_NAMES = frozenset({
-    'PATH', 'PYTHON', 'PYTHONPATH', 'PYTHONHASHSEED', 'PYTHONSAFEPATH',
-    'VIRTUAL_ENV', 'PYENV_VERSION', 'HOME',
+    'PATH', 'LANG', 'TZ', 'VIRTUAL_ENV', 'PYENV_VERSION', 'HOME',
     'UMLS_API_KEY', 'PUBMED_API_KEY', 'PUBMED_TOOL', 'PUBMED_EMAIL',
     'NCBI_API_KEY', 'NCBI_TOOL', 'NCBI_EMAIL', 'USDA_API_KEY', 'FDC_API_KEY',
     'OPENFDA_API_KEY', 'COMPTOX_API_KEY', 'VALYU_API_KEY',

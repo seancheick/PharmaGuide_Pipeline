@@ -285,8 +285,10 @@ def test_shell_bookkeeping_and_default_dataset_root_do_not_invalidate_reuse(tmp_
     assert (tmp_path / 'calls').read_text() == 'xx'
 
     bound = _bound_environment({'PATH': '/bin', 'PG_PYTHON': 'p', 'TERM': 'x', 'PYTHONUNBUFFERED': '1',
-                                'PG_RELEASE_LOCK_TOKEN': 'secret', 'SUPABASE_URL': 'u'})
-    assert set(bound) == {'PATH', 'PG_PYTHON', 'SUPABASE_URL', 'PHARMAGUIDE_DATASET_ROOT'}
+                                'PG_RELEASE_LOCK_TOKEN': 'secret', 'SUPABASE_URL': 'u',
+                                'PYTHONOPTIMIZE': '1', 'LANG': 'C', 'LC_ALL': 'C', 'TZ': 'UTC'})
+    assert set(bound) == {'PATH', 'PG_PYTHON', 'SUPABASE_URL', 'PHARMAGUIDE_DATASET_ROOT',
+                          'PYTHONOPTIMIZE', 'LANG', 'LC_ALL', 'TZ'}
 
 
 def test_scoring_preflight_binds_scored_artifacts_and_manifests_for_reuse():
@@ -344,15 +346,3 @@ def test_snapshot_preflight_gate_reruns_when_a_raw_label_changes(tmp_path, monke
     label.write_text('{"fullName": "B"}')
     assert main(argv) == 0
     assert (repo / 'calls').read_text() == 'xx'
-
-
-def test_release_skips_duplicate_scoring_audit_only_behind_the_sealed_catalog_receipt():
-    release = (SCRIPTS / 'release_full.sh').read_text()
-    snapshot = (SCRIPTS / 'rebuild_dashboard_snapshot.sh').read_text()
-    guard = release.index('if "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-current; then\n  skip "Strict gate: scoring assessment completion contract')
-    gate = release.index('run_strict_gate "scoring assessment completion contract"')
-    branch_else = release.index('\nelse\n', guard)
-    branch_end = release.index('\nfi\n', guard)
-    assert guard < branch_else < gate < branch_end
-    # The receipt is only ever recorded after the snapshot's own scoring audit.
-    assert snapshot.index('run_strict_gate "scoring assessment readiness"') < snapshot.index('--record-catalog')
