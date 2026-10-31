@@ -1685,8 +1685,10 @@ def _unscored_known_label_fixture():
     return enriched, scored
 
 
-def test_known_label_with_unfinished_form_remains_visible_without_a_score():
+@pytest.mark.parametrize("form_reason", ["disclosed_form_unmapped", "form_quality_unassessed"])
+def test_known_label_with_unfinished_form_remains_visible_without_a_score(form_reason):
     enriched, scored = _unscored_known_label_fixture()
+    scored["strict_scoring_contract"]["findings"] = [form_reason]
     assert validate_export_contract(enriched, scored) == []
     row = _row_dict(enriched, scored)
     assert row["quality_score_status"] == "not_scored"
@@ -1695,9 +1697,11 @@ def test_known_label_with_unfinished_form_remains_visible_without_a_score():
     assert row["quality_tier"] is None
 
 
+@pytest.mark.parametrize("form_reason", ["disclosed_form_unmapped", "form_quality_unassessed"])
 @pytest.mark.parametrize("defect", ["missing_label", "unknown_source", "numeric_score", "numeric_mirror", "quality_tier", "other_contract_failure"])
-def test_unscored_visibility_does_not_excuse_invalid_matching_or_a_published_score(defect):
+def test_unscored_visibility_does_not_excuse_invalid_matching_or_a_published_score(defect, form_reason):
     enriched, scored = _unscored_known_label_fixture()
+    scored["strict_scoring_contract"]["findings"] = [form_reason]
     if defect == "missing_label": enriched["display_ingredients"] = []
     elif defect == "unknown_source": enriched["dsld_id"] = "UNKNOWN"
     elif defect == "numeric_score": scored["quality_score_v4_100"] = 50
