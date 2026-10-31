@@ -353,7 +353,11 @@ def test_scoring_gate_accepts_dose_hold_but_not_inferred_or_unrelated_failures(g
     assert any(f.code == "SCORING_STRICT_CONTRACT_FAILED" for f in audit_scoring(args))
 
 
-def test_scoring_gate_contains_verified_unmapped_form_backlog(good_release_dir):
+@pytest.mark.parametrize("form_reason", [
+    "disclosed_form_unmapped",
+    "form_quality_unassessed",
+])
+def test_scoring_gate_contains_verified_unmapped_form_backlog(good_release_dir, form_reason):
     from audit_source_of_truth_contract import audit_scoring
     from test_scoring_source_of_truth_audit import _args, _scored, _write
 
@@ -378,7 +382,7 @@ def test_scoring_gate_contains_verified_unmapped_form_backlog(good_release_dir):
         score_unavailable_reason="blocked_by_completeness_gate",
         strict_scoring_contract={
             "passed": False,
-            "findings": ["disclosed_form_unmapped"],
+            "findings": [form_reason],
         },
         _v4_completeness_gate={
             "is_live_eligible": False,
@@ -391,7 +395,7 @@ def test_scoring_gate_contains_verified_unmapped_form_backlog(good_release_dir):
     ]
     product["assessment_readiness"]["identity"]["readiness"] = "incomplete"
     product["assessment_readiness"]["identity"]["contract_findings"] = [
-        "disclosed_form_unmapped"
+        form_reason
     ]
     path = good_release_dir.parent / "held-form-scored.json"
     args = _args(path)
@@ -407,7 +411,7 @@ def test_scoring_gate_contains_verified_unmapped_form_backlog(good_release_dir):
         for finding in audit_scoring(args)
     )
 
-    product["strict_scoring_contract"]["findings"] = ["disclosed_form_unmapped"]
+    product["strict_scoring_contract"]["findings"] = [form_reason]
     product["quality_score_v4_100"] = 50.0
     _write(path, product)
     assert any(

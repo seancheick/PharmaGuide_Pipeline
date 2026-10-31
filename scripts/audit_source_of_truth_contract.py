@@ -1085,7 +1085,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 and product.get("quality_score_v4_100") is None
                 and product.get("score_100_equivalent") is None
                 and strict_contract.get("passed") is False
-                and strict_reasons == ["disclosed_form_unmapped"]
+                and strict_reasons in (["disclosed_form_unmapped"], ["form_quality_unassessed"])
                 and (
                     pid in unscored_warning_only
                     or (
