@@ -42,6 +42,17 @@ def _named(name, canonical, text):
     # A registered descriptor-only name ("leaf and root extract") names nothing.
     ("Ashwagandha Leaf, Root Extract", "ashwagandha", "stress & gut health"),
     ("Sensoril", "ashwagandha", "carbcrave complex"),
+    # A registry alias cut to one generic word names nothing (review, Oct 31).
+    ("Fish Oil", "fish_oil", "marine collagen peptides"),
+    ("Fish Oil", "fish_oil", "omega joint"),
+    ("Wheatgrass", "wheatgrass", "wheat germ oil"),
+    ("Black Seed Oil", "black_seed_oil", "black cohosh 40 mg"),
+    # A genus one registry gives to several species names none of them.
+    ("Yuzu", "yuzu", "citrus bergamot 500"),
+    ("Wormwood", "wormwood", "artemisia annua"),
+    # Connectors are never identity words.
+    ("Selenium (as L-selenomethionine)", "selenium", "as l-theanine for calm"),
+    ("Vitamin E (as d-alpha tocopheryl acetate)", "vitamin_e", "supports immunity with nutrients such as d and k"),
     ("organic sprouted Brown Rice Protein", "rice_protein", "raw protein vanilla spiced chai"),
 ])
 def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
@@ -74,8 +85,13 @@ def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
     ("Curcumin C3 Complex Turmeric Extract", "curcumin", "extra strength turmeric extract 1400 mg"),
     ("Relora Proprietary Patented Blend", "relora_proprietary_patented_blend", "relora"),
     ("Tinofend (Tinospora cordifolia) extract", "tinospora_cordifolia", "immune modulator with tinofend"),
-    ("Total Probiotic CFU", "probiotic_cfu_total", "probiotic pearls adult 50+"),
     ("Micronized Creatine Matrix Blend", "creatine_blend", "amplified creatine xxx blue raspberry"),
+    # The label's own word that a registry lists as a whole name, even one
+    # a registry gives to more than one identity.
+    ("Total Probiotic CFU", "probiotic_cfu_total", "probiotic pearls adult 50+"),
+    ("Probiotic", "probiotics", "probiotic tropical mango"),
+    # A non-plural -s word keeps itself while a plural title word is read singular.
+    ("Citrus Bioflavonoid", None, "citrus bioflavonoids 1000 mg"),
 ])
 def test_identity_phrase_or_registered_name_names_the_ingredient(name, canonical, text):
     assert _named(name, canonical, text)

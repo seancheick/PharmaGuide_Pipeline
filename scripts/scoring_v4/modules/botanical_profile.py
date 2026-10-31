@@ -765,7 +765,8 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "name": blend.get("name"),
                 "amount_mg": _mass_mg(blend),
                 "separately_identified": any(
-                    other is not row and other.get("mapped_identity") is True
+                    other.get("raw_source_path") != row.get("raw_source_path")
+                    and other.get("mapped_identity") is True
                     for other in _scoring_actives(product)),
             }
         return {"score": round(score, 4), "max": BOTANICAL_FORMULATION_CAP,

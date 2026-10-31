@@ -34,6 +34,7 @@ from constants import (
 from scoring_reference_resolver import (
     has_therapeutic_reference,
     iqm_reference_entry,
+    iqm_reference_index,
     is_known_botanical,
 )
 
@@ -6808,24 +6809,97 @@ def _role_is_probiotic_strain(row: Dict[str, Any]) -> bool:
     return is_probiotic_source_identity(row)
 
 
+# Connectors join identity words but are never one ("Energy & Metabolism"
+# is "Energy and Metabolism"; "Selenium (as L-selenomethionine)").
+_ROLE_TITLE_CONNECTORS = frozenset({"and", "as", "of", "from"})
+
+
+def _title_tokens(text: str) -> List[str]:
+    return [token for token in re.split(r"[^a-z0-9]+", text) if token]
+
+
+def _title_token_forms(token: str) -> frozenset:
+    # A plural title word ("Tocotrienols 50 mg", "Vitamin C with
+    # Bioflavonoids") also names the singular ingredient; the word itself
+    # stays ("Citrus" is not "Citru").
+    if token.endswith("s") and not token.endswith("ss") and len(token) >= 5:
+        return frozenset({token, token[:-1]})
+    return frozenset({token})
+
+
+def _phrase_in_title(phrase: List[str], title_forms: List[frozenset]) -> bool:
+    return any(
+        all(word in title_forms[index + offset] for offset, word in enumerate(phrase))
+        for index in range(len(title_forms) - len(phrase) + 1)
+    )
+
+
+@lru_cache(maxsize=1)
+def _single_word_identity_index() -> tuple:
+    """Who each single word names, read from the identity registries.
+
+    Returns (standalone, spread): standalone maps a word to the identities
+    each registry lists it for as a whole name, per registry; spread maps a
+    word to every identity whose names contain it. A word one registry gives
+    to two identities ("Citrus", "Panax") names neither unless the label
+    itself uses it.
+    """
+    standalone: Dict[str, Dict[str, set]] = {}
+    spread: Dict[str, set] = {}
+
+    def record(registry: str, identity: str, names: List[Any]) -> None:
+        for name in names:
+            tokens = _title_tokens(_norm(name))
+            if len(tokens) == 1:
+                standalone.setdefault(tokens[0], {}).setdefault(registry, set()).add(identity)
+            for token in set(tokens):
+                spread.setdefault(token, set()).add(f"{registry}:{identity}")
+
+    for key, entry in iqm_reference_index().items():
+        if not isinstance(entry, dict):
+            continue
+        names = [entry.get("standard_name")] + _safe_list(entry.get("aliases"))
+        for form_name, form in (entry.get("forms") or {}).items():
+            names.append(form_name)
+            if isinstance(form, dict):
+                names.extend(_safe_list(form.get("aliases")))
+        record("iqm", str(key), names)
+    try:
+        raw = json.loads((_DATA_DIR / "botanical_ingredients.json").read_text())
+    except Exception:  # pragma: no cover - absence only reduces title matching
+        raw = {}
+    for entry in _safe_list(raw.get("botanical_ingredients")):
+        if isinstance(entry, dict) and entry.get("id"):
+            key = str(entry["id"])
+            latin = _norm(entry.get("latin_name"))
+            names = [key.replace("_", " "), entry.get("standard_name"), latin] + _safe_list(entry.get("aliases"))
+            if " " in latin:
+                names.append(latin.split(" ", 1)[0])
+            record("botanical", key, names)
+    return standalone, spread
+
+
+def _single_word_names(word: str, *, label_word: bool) -> bool:
+    standalone, spread = _single_word_identity_index()
+    owners = standalone.get(word) or {}
+    if label_word:
+        # The label's own word names its row when a registry lists it as a
+        # whole name ("Echinacea", "Probiotic", "Krill") or no other identity
+        # uses it ("Waterex", "Tinofend"); never a shared modifier ("Black"
+        # of "Black Seed Oil", "Fish" of "Fish Oil").
+        return bool(owners) or len(spread.get(word, ())) <= 1
+    # A registry alias names the row by one word only when no registry gives
+    # that word to two identities: a genus ("Citrus" of yuzu, "Artemisia" of
+    # wormwood) or a fragment ("Marine" of "Marine Oil") names nothing.
+    return bool(owners) and all(len(identities) == 1 for identities in owners.values())
+
+
 def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     if not title_norm:
         return False
-    if _names_identity_phrase(row, title_norm):
-        return True
-    # A plural title word ("Tocotrienols 50 mg", "Vitamin C with
-    # Bioflavonoids") names the singular ingredient.
-    singular = " ".join(token[:-1] if token.endswith("s") and len(token) >= 5 else token
-                        for token in re.split(r"[^a-z0-9]+", title_norm) if token)
-    return singular != title_norm and _names_identity_phrase(row, singular)
-
-
-def _names_identity_phrase(row: Dict[str, Any], title_norm: str) -> bool:
     # Whole-token match, NOT substring: "iron" must not match inside
     # "environmental". (CR-01)
-    ordered_title_tokens = [
-        tok for tok in re.split(r"[^a-z0-9]+", title_norm) if tok
-    ]
+    ordered_title_tokens = _title_tokens(title_norm)
     title_tokens = set(ordered_title_tokens)
     canonical = _norm(row.get("canonical_id"))
     if (
@@ -6866,61 +6940,52 @@ def _names_identity_phrase(row: Dict[str, Any], title_norm: str) -> bool:
     if any(_norm(alias) in title_tokens for alias in curated_aliases):
         return True
     candidates.extend(curated_aliases)
-    candidates.extend(_registered_identity_names(canonical, tuple(candidates)))
+    candidates.extend(_registered_identity_names(canonical, tuple(sorted(label_names)), tuple(candidates)))
+    title_forms = [_title_token_forms(token) for token in ordered_title_tokens]
+    joined_forms = [forms for token, forms in zip(ordered_title_tokens, title_forms)
+                    if token not in _ROLE_TITLE_CONNECTORS]
     for cand in candidates:
-        candidate_tokens = [
-            token for token in re.split(r"[^a-z0-9]+", cand) if token
-        ]
-        if all(token in _ROLE_TITLE_STOPWORDS for token in candidate_tokens):
-            continue
-        # A title names an ingredient by an identity phrase: the whole name,
-        # or the name without its descriptor words ("Devil's Claw" of
-        # "Devil's Claw root extract"). One word of a longer name is not an
-        # identity ("Green" of "Green Tea extract" in "Ultra Mega Green",
-        # 67032); a short name such as "Carnitine" or "Omega-3" counts only
-        # when the identity registry lists it for this ingredient.
-        if any(
-            ordered_title_tokens[index:index + len(candidate_tokens)] == candidate_tokens
-            for index in range(len(ordered_title_tokens) - len(candidate_tokens) + 1)
-        ) and (len(candidate_tokens) > 1 or len(candidate_tokens[0]) >= 3):
-            # The whole name; a one-token name of three letters ("MSM",
-            # 182940) matches the same title token.
-            return True
+        candidate_tokens = _title_tokens(cand)
         core_tokens = [token for token in candidate_tokens
-                       if token not in _ROLE_TITLE_STOPWORDS and token != "and"]
+                       if token not in _ROLE_TITLE_STOPWORDS and token not in _ROLE_TITLE_CONNECTORS]
         if not core_tokens:
             # Only descriptors ("Leaf and Root Extract") name nothing.
             continue
+        is_label_name = cand in label_names
+        # A title names an ingredient by an identity phrase: the whole name,
+        # or the name without its descriptor words ("Camellia sinensis leaf
+        # extract" in "Camellia Sinensis 500 mg"). One word of a longer name is
+        # not an identity ("Green" of "Green Tea extract" in "Ultra Mega
+        # Green", 67032); a single word names the row only when the registries
+        # give it to this identity alone ("MSM", "Ashwagandha", "DIM").
+        if len(candidate_tokens) > 1 and _phrase_in_title(candidate_tokens, title_forms):
+            return True
         if len(core_tokens) == 1:
-            if len(core_tokens[0]) >= 4 and core_tokens[0] in title_tokens:
+            word = core_tokens[0]
+            min_len = 3 if len(candidate_tokens) == 1 else 4
+            if len(word) >= min_len and any(
+                word in forms and any(_single_word_names(form, label_word=is_label_name) for form in forms)
+                for forms in title_forms
+            ):
                 return True
             continue
-        joined_title = [token for token in ordered_title_tokens if token != "and"]
-        if any(
-            joined_title[index:index + len(core_tokens)] == core_tokens
-            for index in range(len(joined_title) - len(core_tokens) + 1)
-        ):
-            # The whole name without its descriptors ("Camellia sinensis
-            # leaf extract" in "Camellia Sinensis 500 mg").
+        if _phrase_in_title(core_tokens, joined_forms):
             return True
-        # Two or more consecutive identity words of the label's own name name
-        # it, with "and" read like "&" ("CoffeeGenic Green Coffee extract" in
-        # "Green Coffee Extract CoffeeGenic"; "Energy & Metabolism Blend" in
-        # "Energy and Metabolism"). A registry alias names it only whole: two
-        # words of "Liver Health Silymarin" are marketing, not milk thistle.
-        if cand not in label_names:
-            continue
-        if any(
-            joined_title[index:index + 2] == core_tokens[start:start + 2]
+        # Two consecutive identity words of the label's own name name it
+        # ("CoffeeGenic Green Coffee extract" in "Green Coffee Extract
+        # CoffeeGenic"; "Energy & Metabolism Blend" in "Energy and
+        # Metabolism"). A registry alias names it only whole: two words of
+        # "Liver Health Silymarin" are marketing, not milk thistle.
+        if is_label_name and any(
+            _phrase_in_title(core_tokens[start:start + 2], joined_forms)
             for start in range(len(core_tokens) - 1)
-            for index in range(len(joined_title) - 1)
         ):
             return True
     return False
 
 
 @lru_cache(maxsize=4096)
-def _registered_identity_names(canonical: str, names: tuple) -> tuple:
+def _registered_identity_names(canonical: str, label_names: tuple, names: tuple) -> tuple:
     """Names the identity owners register for this ingredient.
 
     The IQM entry (standard name, aliases, forms and their aliases) and the
@@ -6937,15 +7002,15 @@ def _registered_identity_names(canonical: str, names: tuple) -> tuple:
                 registered.add(_norm(form_name))
                 registered.update(_norm(alias) for alias in _safe_list(form.get("aliases")))
         # The source whose active this is ("active_in": curcumin in turmeric)
-        # names the row only where the row's own name carries it
+        # names the row only where the label's own name carries it
         # ("Curcumin C3 Complex Turmeric Extract" in "Turmeric Extract").
-        own_names = [" " + " ".join(re.split(r"[^a-z0-9]+", name)).strip() + " " for name in names if name]
+        own_names = [f" {' '.join(_title_tokens(name))} " for name in label_names]
         for relationship in _safe_list(entry.get("relationships")):
             if not isinstance(relationship, dict) or relationship.get("type") != "active_in":
                 continue
             source = iqm_reference_entry(_norm(relationship.get("target_id")))
             for source_name in [(source or {}).get("standard_name")] + _safe_list((source or {}).get("aliases")):
-                phrase = " ".join(token for token in re.split(r"[^a-z0-9]+", _norm(source_name)) if token)
+                phrase = " ".join(_title_tokens(_norm(source_name)))
                 if phrase and any(f" {phrase} " in own for own in own_names):
                     registered.add(phrase)
     alias_index = _botanical_title_alias_index()
