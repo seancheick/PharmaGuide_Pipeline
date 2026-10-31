@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Architecture
 
-> Last verified: 2026-09-18
+> Batch/release and NOT_SCORED export paths checked against code: 2026-10-31
 > Version truth lives in code, not this header: `EXPORT_SCHEMA_VERSION` and `PIPELINE_VERSION`
 > (build_final_db.py), `PRODUCTS_CORE_COLUMNS` (core_export_model.py); `SCHEMA_VERSION`
 > (stage_manifest.py) versions the stage manifests.
@@ -154,6 +154,10 @@ producing:
 
 Ranking/dedup use only v4-scored products. Deprecated `/80` export columns are
 absent.
+Verified source labels with a documented unfinished assessment may
+remain in the catalog as `NOT_SCORED`: their public quality score, mirrors,
+pillars and tier are null, while the assessment limitation and applicable
+warnings remain visible. Unverified or invalid payloads are quarantined.
 
 ## 4. Stage ownership and stale-output containment
 
@@ -193,7 +197,9 @@ If any brand fails, snapshot and release are skipped and the batch exits
 non-zero.
 
 Targeted runs default to pipeline-only. Full-corpus runs continue to Snapshot
-and Release unless explicitly stopped.
+and Release unless explicitly stopped. `--pre-check` adds aggregate preparation
+before the corpus; it does not replace the strict per-stage, snapshot or release
+gates. The batch script loads the pinned Python environment itself.
 
 ## 6. Snapshot architecture
 

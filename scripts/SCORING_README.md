@@ -1,6 +1,6 @@
 # PharmaGuide Scoring README
 
-> Operational summary | Last verified against code: 2026-10-03 | Engine 4.5.0
+> Operational summary | Score/status and verification guidance checked against code: 2026-10-31. Read the engine version from `score_supplements_v4.py`.
 
 ## The short version
 
@@ -76,17 +76,17 @@ cross-stage regression test.
 2. The safety gate consumes canonical safety signals.
 3. BLOCKED or UNSAFE short-circuits numeric scoring.
 4. CAUTION is carried forward while score math continues.
-5. The completeness gate excludes rows without a usable product/ingredient
-   contract; missing disclosure that can be represented honestly remains soft
-   debt instead of being invented.
+5. The completeness gate withholds a score for unusable product/ingredient
+   contracts; missing disclosure that can be represented honestly remains soft
+   debt instead of being invented. Export separately checks whether a verified
+   label with a documented assessment limitation may publish as `NOT_SCORED`.
 6. One category module computes its rubric result.
 7. Confidence and provenance are attached.
 8. The six public pillars and tier are assembled.
 9. `scored_artifact.py` projects the result, shared coverage, strict diagnostics,
    compatibility mirrors, safety precedence, and provenance exactly once.
 10. `build_final_db.py` consumes that artifact without rescoring, validates the
-    frozen export, and quarantines products
-    that cannot ship truthfully.
+    frozen export, and quarantines products that cannot ship truthfully.
 
 ## Module routing
 
@@ -121,6 +121,7 @@ Evidence caps.
 |---|---|---|
 | Confirmed banned or recalled safety condition | `suppressed_safety` | null |
 | Required identity/payload is unusable | `not_scored` | null and quarantined |
+| Verified label with a documented unfinished assessment | `not_scored` | null; may remain discoverable with assessment reason and warnings after export validation |
 | Scoreable SAFE, POOR, or CAUTION product | `scored` | finite `/100` |
 
 Verdict precedence is:
@@ -191,9 +192,12 @@ applies no CAERS penalty.
 2. Add a focused regression test and confirm it fails for the intended reason.
 3. Make the smallest owner-level change.
 4. Run the focused test through `scripts/test.sh fast`.
-5. Run `scripts/test.sh fast` at the phase boundary.
-6. For a release candidate, run `scripts/test.sh release` and then the required
-   full profile.
+5. Wait for green whole-fast CI on the completed candidate; run whole-fast
+   locally only if CI is unavailable. For behavioral pipeline/data changes, also
+   run `scripts/test.sh local` against the relevant corpus.
+6. After the final necessary corpus run, run the release profile against its
+   current artifacts; run `full` only when that backstop is required, never
+   alongside the corpus job.
 7. Rebuild only through the canonical snapshot/release workflow.
 8. Review per-product score, status, verdict, safety, module, and pillar deltas.
 9. Re-freeze `test_scoring_snapshot_v1.py` only for named, reviewed changes.
@@ -204,10 +208,10 @@ clinical or classification drift.
 ## Supported verification commands
 
 ```bash
-scripts/test.sh fast -k scoring_v4
+scripts/test.sh fast scripts/tests/test_v4_scored_artifact.py
 scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
+scripts/test.sh local
 scripts/test.sh release
-scripts/test.sh full
 ```
 
 Operational pipeline, snapshot, and release commands are documented in
