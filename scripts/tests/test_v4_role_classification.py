@@ -401,10 +401,13 @@ def test_real_218600_lineage_owned_complex_never_demotes_its_active():
     product = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))[0]
     rows = get_scoring_ingredients(product, strict=True).rows
     roles = {
-        (row.get("raw_source_path"), row.get("canonical_id")): role["role"]
+        (row.get("raw_source_path"), row.get("canonical_id")): role
         for row, role in zip(rows, classify_ingredient_roles(product, rows=rows))
     }
-    assert roles[("ingredientRows[2]", "phosphatidylserine")] == "major"
+    role = roles[("ingredientRows[2]", "phosphatidylserine")]
+    # The title "Phosphatidyl Serine 200 mg" names this active by its
+    # registered IQM spelling, so it is claim-prominent, never a mass adjunct.
+    assert (role["role"], role["role_reason"]) == ("claim_prominent", "named_in_product_title")
 
 
 def test_amino_mixture_title_abbreviations_use_the_existing_canonical_alias_owner():
