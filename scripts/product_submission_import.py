@@ -1746,14 +1746,26 @@ def copy_approved_product_images(
                 skipped += 1
                 continue
             try:
-                response = rpc(
-                    "get_approved_product_submission_image",
-                    {
+                payload_hash = receipt.get("approval_payload_sha256")
+                if payload_hash:
+                    lookup: dict[str, object] = {
                         "p_submission_id": submission_id,
                         "p_approval_revision": int(receipt["approval_revision"]),
-                        "p_payload_sha256": str(receipt["approval_payload_sha256"]),
-                    },
-                )
+                        "p_payload_sha256": str(payload_hash),
+                    }
+                elif (int(receipt.get("promoted_approval_revision") or 0)
+                        >= int(receipt.get("approval_revision") or 0)):
+                    # Receipts written before the revision-aware importer
+                    # recorded no payload hash. Their approvals are promoted
+                    # and immutable on the server, which derives the exact
+                    # revision and hash itself and still runs the same
+                    # approval assertion before returning the image.
+                    lookup = {"p_submission_id": submission_id}
+                else:
+                    raise SubmissionImportError(
+                        f"import receipt {submission_id} has no approval payload hash"
+                    )
+                response = rpc("get_approved_product_submission_image", lookup)
                 if (
                     not isinstance(response, list)
                     or len(response) != 1
@@ -2007,6 +2019,73 @@ def mark_released_submissions_promoted(
     return promoted
 
 
+def check_import_receipts(*, output_dir: str | Path) -> dict[str, int]:
+    """Prove offline that every receipt can carry its label through a release.
+
+    The copy-images and promotion steps run hours into a release. This check
+    runs at preflight, reads nothing from the network, and fails on exactly the
+    receipt states those steps cannot handle: a malformed row, a label file
+    that drifted from its receipt, or an unpromoted approval without the exact
+    payload hash the server lookups require. Promoted receipts written before
+    the revision-aware importer carry no hash; they are reported, not refused,
+    because the server derives their exact approval itself.
+    """
+    destination = Path(output_dir)
+    receipts = _read_receipts(destination / RECEIPT_FILE)["submissions"]
+    problems: list[str] = []
+    counts = {"rows": 0, "promoted": 0, "pending": 0, "legacy_without_payload_hash": 0}
+    for submission_id, receipt in sorted(receipts.items()):
+        counts["rows"] += 1
+        if not isinstance(receipt, dict):
+            problems.append(f"{submission_id}: receipt row is not an object")
+            continue
+        product_id = str(receipt.get("product_id") or "")
+        if not re.fullmatch(r"[0-9]{1,30}|PG_SUB_[0-9A-F]{32}", product_id):
+            problems.append(f"{submission_id}: product_id is malformed")
+        try:
+            approval_revision = int(receipt.get("approval_revision") or 0)
+            promoted_revision = int(receipt.get("promoted_approval_revision") or 0)
+        except (TypeError, ValueError):
+            problems.append(f"{submission_id}: approval revisions are not integers")
+            continue
+        if approval_revision < 1 or promoted_revision < 0:
+            problems.append(f"{submission_id}: approval revisions are out of range")
+        output_file = receipt.get("output_file")
+        label_sha256 = receipt.get("label_sha256")
+        if (
+            not isinstance(output_file, str)
+            or Path(output_file).name != output_file
+            or not output_file.endswith(".json")
+            or not isinstance(label_sha256, str)
+            or not re.fullmatch(r"[0-9a-f]{64}", label_sha256)
+        ):
+            problems.append(f"{submission_id}: output_file or label_sha256 is malformed")
+        else:
+            label_path = destination / output_file
+            if not label_path.is_file():
+                problems.append(f"{submission_id}: label file {output_file} is missing")
+            elif hashlib.sha256(label_path.read_bytes()).hexdigest() != label_sha256:
+                problems.append(f"{submission_id}: label file {output_file} changed after import")
+        payload_hash = receipt.get("approval_payload_sha256")
+        if payload_hash is not None and not (
+            isinstance(payload_hash, str) and re.fullmatch(r"[0-9a-f]{64}", payload_hash)
+        ):
+            problems.append(f"{submission_id}: approval_payload_sha256 is malformed")
+        if promoted_revision >= approval_revision:
+            counts["promoted"] += 1
+            if payload_hash is None:
+                counts["legacy_without_payload_hash"] += 1
+        else:
+            counts["pending"] += 1
+            if payload_hash is None:
+                problems.append(f"{submission_id}: unpromoted approval has no approval payload hash")
+    if problems:
+        raise SubmissionImportError(
+            "import receipts cannot carry a release: " + "; ".join(problems)
+        )
+    return counts
+
+
 def verify_current_approval_revisions(
     *,
     output_dir: str | Path,
@@ -2058,6 +2137,7 @@ def main(argv: list[str] | None = None) -> int:
     source.add_argument("--copy-images", action="store_true")
     source.add_argument("--mark-promoted", action="store_true")
     source.add_argument("--verify-current-approvals", action="store_true")
+    source.add_argument("--check-receipts", action="store_true")
     parser.add_argument(
         "--output-dir",
         type=Path,
@@ -2082,6 +2162,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
+        if args.check_receipts:
+            counts = check_import_receipts(output_dir=args.output_dir)
+            print(json.dumps(counts, sort_keys=True))
+            return 0
         if args.verify_current_approvals:
             checked = verify_current_approval_revisions(output_dir=args.output_dir)
             print(json.dumps({"verified": checked}, sort_keys=True))
