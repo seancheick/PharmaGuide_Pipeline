@@ -145,6 +145,12 @@ def test_disk_headroom_fails_before_assembly(tmp_path, monkeypatch):
     'scripts/build_final_db.py',
     'scripts/audit_raw_to_final.py',
     'scripts/rebuild_dashboard_snapshot.sh',
+    # The release skips its scoring completion audit behind this receipt, and
+    # that audit joins cleaned artifacts and every stage manifest (PR #318).
+    'scripts/products/a/cleaned/cleaned_batch_1.json',
+    'scripts/products/a/cleaned/cleaned_batch_1.jsonl',
+    'scripts/products/a/cleaned/.stage_manifest.json',
+    'scripts/products/a_scored/scored/.stage_manifest.json',
 ])
 def test_catalog_receipt_invalidates_on_safety_formulation_and_exporter_changes(tmp_path, relative):
     binding = _assembly(tmp_path)

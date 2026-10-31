@@ -35,13 +35,23 @@ REUSABLE_RELEASE_GATES = frozenset({
 # Read-only source/corpus gates that also read scored artifacts and stage
 # manifests bind those too. The scoring completeness preflight took ~17 min on
 # every snapshot (2026-10-31) although nothing it reads had changed between runs.
+# The raw DSLD labels live outside the repository; this input names their
+# content fingerprint (raw_label_fingerprint) in place of a repository glob.
+RAW_DSLD_LABELS = '<raw DSLD labels>'
+
+# The scoring audit joins scored, enriched and cleaned (*.json, *.jsonl) stage
+# files, every stage manifest and the raw labels the clean manifest fingerprints.
+SCORING_AUDIT_CORPUS_INPUTS = (
+    'scripts/products/*_scored/scored/*.json',
+    'scripts/products/*/cleaned/*.json',
+    'scripts/products/*/cleaned/*.jsonl',
+    'scripts/products/*/*/.stage_manifest.json',
+    'manual_labels/**/*.json',
+    RAW_DSLD_LABELS,
+)
+
 RELEASE_GATE_EXTRA_INPUTS = {
-    'scoring assessment completeness preflight': (
-        'scripts/products/*_scored/scored/*.json',
-        'scripts/products/*/cleaned/*.json',
-        'scripts/products/*/*/.stage_manifest.json',
-        'manual_labels/**/*.json',
-    ),
+    'scoring assessment completeness preflight': SCORING_AUDIT_CORPUS_INPUTS,
 }
 
 
@@ -139,16 +149,9 @@ UNBOUND_ENVIRONMENT_NAMES = frozenset({
 })
 
 
-def _bound_environment(environ) -> dict:
-    bound = {
-        key: value for key, value in environ.items()
-        if key not in UNBOUND_ENVIRONMENT_NAMES
-        and (key in BOUND_ENVIRONMENT_NAMES or key.startswith(BOUND_ENVIRONMENT_PREFIXES))
-    }
-    # The dataset root binds by its resolved path, so exporting the default
-    # value equals leaving it unset. The resolver is the existing owner in
-    # scripts/dataset_paths.py; a copy of this runner without it binds the raw
-    # override only.
+def _dataset_root(environ) -> Path | None:
+    # The resolver is the existing owner in scripts/dataset_paths.py; a copy of
+    # this runner without it reads the raw override only.
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     try:
         from dataset_paths import brand_dataset_root
@@ -157,13 +160,31 @@ def _bound_environment(environ) -> dict:
     finally:
         sys.path.pop(0)
     if brand_dataset_root is not None:
-        root = brand_dataset_root(environ=environ)
-    elif environ.get('PHARMAGUIDE_DATASET_ROOT'):
-        root = Path(environ['PHARMAGUIDE_DATASET_ROOT'])
-    else:
-        root = None
+        return brand_dataset_root(environ=environ).expanduser().resolve()
+    if environ.get('PHARMAGUIDE_DATASET_ROOT'):
+        return Path(environ['PHARMAGUIDE_DATASET_ROOT']).expanduser().resolve()
+    return None
+
+
+def raw_label_fingerprint(raw_root: Path | None) -> dict:
+    """Content of every raw DSLD label the raw-to-final and scoring audits read."""
+    if raw_root is None or not raw_root.is_dir():
+        return {'root': str(raw_root), 'missing': True}
+    return {'root': str(raw_root), 'labels': [
+        (str(path.relative_to(raw_root)), _sha256(path)) for path in sorted(raw_root.rglob('*.json'))]}
+
+
+def _bound_environment(environ) -> dict:
+    bound = {
+        key: value for key, value in environ.items()
+        if key not in UNBOUND_ENVIRONMENT_NAMES
+        and (key in BOUND_ENVIRONMENT_NAMES or key.startswith(BOUND_ENVIRONMENT_PREFIXES))
+    }
+    # The dataset root binds by its resolved path, so exporting the default
+    # value equals leaving it unset.
+    root = _dataset_root(environ)
     if root is not None:
-        bound['PHARMAGUIDE_DATASET_ROOT'] = str(root.expanduser().resolve())
+        bound['PHARMAGUIDE_DATASET_ROOT'] = str(root)
     return bound
 
 
@@ -179,6 +200,9 @@ def _input_binding(
     # the before/after verification boundary or a later publication check.
     digests = {}
     for pattern in patterns:
+        if pattern == RAW_DSLD_LABELS:
+            files[pattern] = raw_label_fingerprint(_dataset_root(os.environ))
+            continue
         entries = []
         for path in sorted(cwd.glob(pattern)):
             if path.is_file():

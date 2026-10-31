@@ -296,6 +296,8 @@ def test_scoring_preflight_binds_scored_artifacts_and_manifests_for_reuse():
     assert set(RELEASE_SOURCE_INPUTS) <= set(bound)
     assert 'scripts/products/*_scored/scored/*.json' in bound
     assert 'scripts/products/*/*/.stage_manifest.json' in bound
+    # The audit selects cleaned stage files by both patterns it reads.
+    assert {'scripts/products/*/cleaned/*.json', 'scripts/products/*/cleaned/*.jsonl'} <= set(bound)
     for name in REUSABLE_RELEASE_GATES:
         assert release_gate_input_globs(name) == tuple(RELEASE_SOURCE_INPUTS)
     # Artifact, live and publication gates never bind.
@@ -321,11 +323,36 @@ def test_snapshot_preflight_gate_reuses_until_a_scored_artifact_changes(tmp_path
     assert (tmp_path / 'calls').read_text() == 'xx'
 
 
+def test_snapshot_preflight_gate_reruns_when_a_raw_label_changes(tmp_path, monkeypatch):
+    """The audit compares the clean manifest with the raw labels, so their content binds too."""
+    from audits.run_verification_gate import main
+    raw = tmp_path / 'raw' / 'Olly'
+    raw.mkdir(parents=True)
+    label = raw / '1.json'
+    label.write_text('{"fullName": "A"}')
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(tmp_path / 'raw'))
+    repo = tmp_path / 'repo'
+    (repo / 'scripts').mkdir(parents=True)
+    probe = repo / 'scripts/probe.py'
+    probe.write_text("from pathlib import Path\np=Path('calls')\np.write_text(p.read_text()+'x' if p.exists() else 'x')\n")
+    argv = ['--name', 'scoring assessment completeness preflight', '--receipt-dir', str(repo),
+            '--cwd', str(repo), '--release-check', '--', sys.executable, str(probe)]
+    assert main(argv) == 0
+    os.utime(label, None)
+    assert main(argv) == 0
+    assert (repo / 'calls').read_text() == 'x'
+    label.write_text('{"fullName": "B"}')
+    assert main(argv) == 0
+    assert (repo / 'calls').read_text() == 'xx'
+
+
 def test_release_skips_duplicate_scoring_audit_only_behind_the_sealed_catalog_receipt():
     release = (SCRIPTS / 'release_full.sh').read_text()
     snapshot = (SCRIPTS / 'rebuild_dashboard_snapshot.sh').read_text()
     guard = release.index('if "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-current; then\n  skip "Strict gate: scoring assessment completion contract')
     gate = release.index('run_strict_gate "scoring assessment completion contract"')
-    assert guard < gate < release.index('fi', gate)
+    branch_else = release.index('\nelse\n', guard)
+    branch_end = release.index('\nfi\n', guard)
+    assert guard < branch_else < gate < branch_end
     # The receipt is only ever recorded after the snapshot's own scoring audit.
     assert snapshot.index('run_strict_gate "scoring assessment readiness"') < snapshot.index('--record-catalog')
