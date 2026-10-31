@@ -179,9 +179,11 @@ the batch exits non-zero and full release is not started; the last good live
 snapshot remains in place.
 
 Finish the source batch before starting snapshot assembly, then keep that
-checkout fixed until assembly exits. Its input-stability guard covers Python
-and shell source, including dashboard code and tests, as well as the product
-inputs. A dashboard-only change can leave Clean/Enrich/Score fingerprints
+checkout fixed until assembly exits. Its input-stability guard covers catalog
+producer Python and shell source, raw labels, scored products and reference
+data. Test-runner and test-fixture edits require their own CI/release checks,
+but do not make the catalog bytes stale. A dashboard-only change can leave
+Clean/Enrich/Score fingerprints
 unchanged while still invalidating an assembly already in progress. Do not
 merge, fast-forward, or edit that checkout during the build; a PR merge can
 also update the local checkout. A rejected candidate is discarded, not
