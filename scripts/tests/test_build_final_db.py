@@ -5448,11 +5448,18 @@ def _omega_label_ledger_enriched():
         "Total Omega-3 Fatty Acids",
     ]
     score_included = [True, False, True, True, False]
+    source_paths = [
+        "ingredientRows[0]",
+        "ingredientRows[0].nestedRows[0]",
+        "ingredientRows[0].nestedRows[0].nestedRows[0]",
+        "ingredientRows[0].nestedRows[0].nestedRows[1]",
+        "ingredientRows[0].nestedRows[0].nestedRows[2]",
+    ]
     enriched["display_ingredients"] = [
         {
             "label_display_name": name,
             "raw_source_text": name,
-            "raw_source_path": f"label[{index}]",
+            "raw_source_path": source_paths[index],
             "label_order": index,
             "nested_depth": depths[index],
             "parent_label": parents[index],
@@ -5682,6 +5689,21 @@ def test_final_ledger_retains_text_fallback_for_unpathed_legacy_analysis():
     )
 
     assert rows[0]["analysis"]["canonical_id"] == "protease"
+
+
+def test_pathless_display_row_cannot_consume_later_pathed_analysis():
+    rows = _build_canonical_label_ledger(
+        [
+            {"raw_source_text": "Protease", "label_display_name": "Protease"},
+            {"raw_source_path": "ingredientRows[0]", "raw_source_text": "Protease"},
+        ],
+        [{"raw_source_path": "ingredientRows[0]", "raw_source_text": "Protease",
+          "canonical_id": "protease"}],
+        [],
+    )
+
+    assert rows[0]["analysis"] is None
+    assert rows[1]["analysis"]["canonical_id"] == "protease"
 
 
 def test_final_ledger_preserves_vitamin_totals_with_nested_label_components():
@@ -6308,7 +6330,7 @@ def test_final_builder_rejects_duplicate_upstream_label_source_paths(
     collection_name,
 ):
     enriched = _omega_label_ledger_enriched()
-    duplicate_path = "label[0]"
+    duplicate_path = "ingredientRows[0]"
     if collection_name == "display_ingredients":
         enriched[collection_name].append(dict(enriched[collection_name][0]))
     elif collection_name == "label_ledger_omissions":
@@ -6340,7 +6362,7 @@ def test_final_builder_rejects_duplicate_upstream_label_source_paths(
 
     with pytest.raises(
         ValueError,
-        match=rf"duplicate upstream {collection_name} raw_source_path: label\[0\]",
+        match=rf"duplicate upstream {collection_name} raw_source_path: ingredientRows\[0\]",
     ):
         build_detail_blob(enriched, make_scored())
 

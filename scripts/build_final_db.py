@@ -4749,9 +4749,9 @@ def _build_canonical_label_ledger(
                     return candidate
         if raw_text:
             for index, candidate in enumerate(candidates):
-                # Older analysis rows may lack paths. A different explicit
-                # path is a different label row, even when names repeat.
-                if source_path and safe_str(candidate.get("raw_source_path")):
+                # Older analysis rows may lack paths. An explicit path may
+                # only match its own source row, even when names repeat.
+                if safe_str(candidate.get("raw_source_path")):
                     continue
                 candidate_text = safe_str(
                     candidate.get("raw_source_text")
