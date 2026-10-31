@@ -15,6 +15,11 @@ plain `bash batch_run_all_datasets.sh` follows the same full compute and release
 path with essential startup checks. Neither command builds or uploads a phone app.
 Both commands can publish to Supabase and update the Flutter bundle after gates
 pass, so use `--pipeline-only` or `--skip-release` when publication is not intended.
+Both full commands run `scripts/release_full.sh --preflight-only` before corpus
+work. A run that may publish needs a pipeline checkout with no tracked changes
+and `HEAD` at the freshly fetched `origin/main`; release checks the Flutter
+checkout the same way. `--pipeline-only` and `--skip-release` skip this release
+preflight.
 For the direct Python maintenance commands later in this guide, first run
 `source scripts/python_env.sh` in that terminal; the batch and test wrappers
 load it for themselves.

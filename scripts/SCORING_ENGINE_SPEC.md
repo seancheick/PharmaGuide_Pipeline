@@ -463,8 +463,9 @@ Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 1
 
 `build_final_db.py` owns final schema validation and quarantine.
 
-- Read the current export schema and supported import versions from
-  `build_final_db.py::EXPORT_SCHEMA_VERSION` and `core_export_model.py`.
+- Read the current export schema version from
+  `build_final_db.py::EXPORT_SCHEMA_VERSION` and the supported export schema
+  versions from `export_schema.py::SUPPORTED_EXPORT_SCHEMA_VERSIONS`.
 - Read current `products_core` columns and app/server projections from
   `core_export_model.py::PRODUCTS_CORE_COLUMNS`; do not pin a drifting count here.
 - Ranking and dedup use `quality_score_v4_100` only for status `scored`.
