@@ -23,3 +23,24 @@ Agent research (Claude); no clinician review is claimed. One receipt per entry.
 | Change | Two parent-scoped `source_form_aliases` on that form: "panax quinquefolius rhizome extract", "panax quinquefolius root extract". Per `GLOSSARY.md`, these act only after the parent is established and are absent from global identity indexes, so cleaner identity and the botanical `american_ginseng` owner are untouched. |
 | Identity | The label's own Latin binomial names the species (identity by organism). Rhizome and root are both Panax quinquefolius material; no part-specific claim is added and the leaf row (312858) is not given the species form. |
 | Not changed | Interaction subjects: `american_ginseng` already twins to IQM `ginseng` (`identity/interaction.py`). Evidence: no Panax ginseng record applies (replay). |
+
+## Batch 3 — enricher recognition kept the cleaner's part-matched botanical identity (code)
+
+| Field | Finding and result |
+|---|---|
+| Two owners | Cleaner (`EnhancedDSLDNormalizer._resolve_canonical_identity`) resolves "Butcher's Broom Leaf Extract" / "Leaf, Stem Extract" to part-less `standardized_botanicals::butcher_s_broom`. Enricher fast-path recognition (`SupplementEnricherV3._is_recognized_non_scorable`) indexes normalized names to the first-written record; `botanical_ingredients::butchers_broom_root` carries the part-less alias "butcher's broom" and is indexed first, so `_restamp_recognized_non_scorable_identity` overwrote the cleaner's identity with a root entry for a leaf/stem row. |
+| Change | In `_restamp_recognized_non_scorable_identity`, when both identities are botanical, they differ, and the recognized record names a plant part the row did not declare (`_names_undeclared_plant_part`), the row keeps its cleaner botanical identity. Organs are compared, not spellings (leaves = leaf, berry = fruit). |
+| Not changed | Part-less rows (251524 "Butcher's Broom", plantPart none) and root rows keep `butchers_broom_root`. No data file changed; no part-specific credit added (`butcher_s_broom` and the root entry both lack qualifying studies). |
+| Blast radius | Census over 2,761 cleaned botanical rows with a declared plantPart: 0 rows change identity outside the butcher's broom leaf/stem rows (ginkgo leaves and schisandra fruit false positives were removed by the organ normalization before commit). |
+
+## Bamboo — no data change (recorded honest state)
+
+- Sean's October 29 exact Dose scope keys bamboo stem/leaf extract to IQM `silica` form "bamboo silica" (literature record `bamboo_stem_leaf_extract`, pinned by `test_exact_approved_botanical_dose_scopes.py`). Moving bamboo to a new organism owner would orphan that approved scope.
+- GSRS has only species-specific bamboo substances (for example Bambusa vulgaris leaf, UNII EMY54R518C; Phyllostachys edulis whole) and no generic "bamboo" substance. Most labels print no species, so a generic bamboo organism entry would be identity by name. Not created.
+- Honest state: the cleaner leaves organism-named bamboo rows unmapped under the multi-part organism rule (a constituent such as silica establishes no organism identity), while the IQD row uses the approved `silica` bamboo form. Decision for Sean if an organism owner is wanted: a species-specific entry needs a labelled species.
+
+## Sensoril — no data change
+
+- Already registered: IQM `ashwagandha` form "sensoril ashwagandha" (bio 11) and `backed_clinical_studies::BRAND_SENSORIL` (PMIDs 27647541, 38732539) supply its Formulation and Evidence; the brand is not unmapped at the IQM layer.
+- A KSM-66-style `standardized_botanicals` branded_extract bonus entry was not added. PubMed abstracts of 27647541 and 38732539 describe a standardized aqueous root-plus-leaf extract but print no standardization percentage, and BRAND_SENSORIL notes record unresolved preparation overlap. A bonus would be unsupported Formulation credit.
+- Finding, not fixed here: the Sensoril IQM form carries generic aliases ("leaf and root extract", "low odor ashwagandha", "high withanolide ashwagandha", "patented ashwagandha", "bioactive ashwagandha", "stress-relief ashwagandha"). Probe: unbranded "Ashwagandha Leaf, Root Extract" resolves to the Sensoril form, so an unbranded label can borrow the brand form's bio 11.

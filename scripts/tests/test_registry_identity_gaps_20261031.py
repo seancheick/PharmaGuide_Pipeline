@@ -173,3 +173,18 @@ def test_partless_butchers_broom_row_on_a_root_product_is_unchanged(pipeline):
     # existing root recognition is a separate question and is not moved here.
     _, enriched = pipeline(_fixture("251524"))
     assert {r["canonical_id"] for r in _iqd(enriched, "Butcher's Broom")} == {"butchers_broom_root"}
+
+
+@pytest.mark.parametrize("declared,entry_name,expected", [
+    ("leaf and stem", "Butcher's Broom Root", True),
+    ("leaf", "Butcher's Broom Root", True),
+    ("root", "Butcher's Broom Root", False),
+    (None, "Butcher's Broom Root", False),           # part-less row: no evidence against
+    ("leaf and stem", "Butcher's Broom", False),     # part-less record
+    ("leaves", "Ginkgo Biloba Leaf", False),         # plural of the same organ
+    ("fruit", "Schisandra Berry", False),            # a berry is the fruit
+    ("root and rhizome", "Ginseng Root (Panax)", False),
+])
+def test_undeclared_part_guard_compares_organs_not_spellings(declared, entry_name, expected):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    assert SupplementEnricherV3._names_undeclared_plant_part(declared, entry_name) is expected
