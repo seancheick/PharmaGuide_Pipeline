@@ -33,7 +33,9 @@ For a team-facing explanation of all six pillars, category differences, exact om
 1. `quality_score_v4_100` is the only canonical public score.
 2. `quality_score_status` governs whether a numeric score may ship.
 3. BLOCKED/UNSAFE products never ship a rankable score.
-4. NOT_SCORED products never enter the live catalog as ordinary products.
+4. NOT_SCORED products never receive a public quality number or tier. Export
+   may retain a verified source label with a documented unfinished
+   assessment and visible warnings; unusable identity/payload is quarantined.
 5. `raw_score_v4_100` is audit-only and never fills a suppressed public field.
 6. `score_100_equivalent` and its display field mirror v4; they are not a
    conversion of the legacy score.
@@ -169,7 +171,8 @@ Hard completeness failure:
 - emits `v4_verdict=NOT_SCORED`
 - emits `quality_score_status=not_scored`
 - emits no public score or pillars
-- is quarantined by the final export gate
+- is reviewed by the final export gate for verified-label publication or
+  quarantine; the completeness result alone cannot authorize publication
 
 Soft missing evidence can include dose, CFU, EPA/DHA detail, form factor, or
 coverage debt. It is represented in the breakdown/confidence/pillar result and
@@ -460,11 +463,15 @@ Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 1
 
 `build_final_db.py` owns final schema validation and quarantine.
 
-- Export schema is `2.5.0` (2.4.0 remains importable).
-- `products_core` currently has 117 columns (`PRODUCTS_CORE_COLUMNS` in `core_export_model.py`; 91 ship to the app, 26 are server-only).
+- Read the current export schema and supported import versions from
+  `build_final_db.py::EXPORT_SCHEMA_VERSION` and `core_export_model.py`.
+- Read current `products_core` columns and app/server projections from
+  `core_export_model.py::PRODUCTS_CORE_COLUMNS`; do not pin a drifting count here.
 - Ranking and dedup use `quality_score_v4_100` only for status `scored`.
 - Suppressed safety rows may ship with null score and visible verdict/evidence.
-- NOT_SCORED rows are quarantined.
+- Verified NOT_SCORED labels may publish with null quality
+  score, mirrors, pillars and tier, a truthful assessment reason, and applicable
+  warnings; invalid or unverified payloads are quarantined.
 - Detail blobs emit `quality_pillars_v4`, score status, provenance, typed
   `v4_dose_safety`, safety-gate state, confidence, and category explanations.
 - Deprecated `/80` export columns are forbidden.
