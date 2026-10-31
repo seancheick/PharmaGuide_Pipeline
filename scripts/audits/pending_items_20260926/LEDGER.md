@@ -4064,3 +4064,11 @@ A single word counts only when a registry lists it as that identity's whole name
 - A label's own two words, "Liver Health Silymarin", still match "Liver Health Formula".
 - The loose matcher keeps its pre-existing compacted-phrase fallback ("Flaxseed" against "Flax Seed").
 - CI: `pipeline-tests` runs only on PRs into main, so #320 qualifies after #318 merges and GitHub retargets it.
+
+## October 31 — integration of PR #317, #319 and #320 (branch `claude/integrate-20261031`)
+
+**Why one branch:** main requires each PR to be up to date, so sequential merges cost three CI rounds, and AGENTS.md asks for one checkpoint on the exact combined candidate. This branch merges main (with PR #318), the docs PR #317 (plus its two CodeRabbit fixes, `d5f602914`), PR #319 and PR #320; the only conflict was the two appended LEDGER sections, kept in order.
+
+**19435 "Comfort" (open question from PR #320), decided by existing doctrine:** `.claude/rules/scoring.md` says materiality comes from semantic roles, not raw mass. The base product already routed `taxonomy:collagen`; only the false "Comfort" title match made the opaque Acacia catechu + skullcap blend its scoring subject, which zeroed Formulation and Dose (42.4). With the fix the 40 mg UC-II collagen is the subject: Formulation 0 → 14.2, Dose 0 → 11.4; Evidence 15.6, Transparency 9.8, Verification 8.0, Safety/Hygiene 9.0 and `product_safety_status` unchanged (68.0). A mass rule would be new policy (Sean's to set); none is created.
+
+**Checks on the combined candidate:** L-cystine identifiers re-verified live (PubChem CID 67678 / CAS 56-89-3 → CID 67678; GSRS 48TCX9A1VT = cystine with CAS 56-89-3, RXCUI 3036, PubChem 67678; RxNorm 3036 = cystine; UMLS C0010682 = cystine). Combined focused slice (both PRs' test files + identity splits, cleaner preservation, identity integrity): 717 passed. The final corpus pass is Sean's run after this merges.
