@@ -10768,7 +10768,10 @@ def build_core_row(
         ),
         st_str,
         # Scores (export schema v2.0.0 — canonical /100; legacy /80 columns dropped)
-        safe_str(effective_scored.get("display_100")),
+        # This compatibility mirror describes a shipped numeric score. Stage-3
+        # uses "N/A" internally for unavailable assessments; do not export it
+        # as a public score value when the canonical score is null.
+        safe_str(effective_scored.get("display_100")) if score_100 is not None else None,
         score_100,
         safe_str(effective_scored.get("grade")) or None,
         safe_str(effective_scored.get("verdict")),
