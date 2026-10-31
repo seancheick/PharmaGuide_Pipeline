@@ -9569,9 +9569,12 @@ class SupplementEnricherV3:
 
         def organ(word: str) -> str:
             # "leaves" is a leaf and a berry is the fruit ("Schisandra Berry"
-            # for a fruit-declared row); only a different organ counts.
+            # for a fruit-declared row); only a different organ counts. A
+            # "root" record is the underground organ and covers a rhizome row
+            # (butchers_broom_root is the Ruscus rhizome; PR #319 review).
             word = {"leaves": "leaf", "berries": "fruit", "berry": "fruit"}.get(word, word)
-            return word[:-1] if word.endswith("s") and word != "parts" else word
+            word = word[:-1] if word.endswith("s") and word != "parts" else word
+            return {"rhizome": "root"}.get(word, word)
 
         def parts(text: Any) -> set:
             text = str(text or "").lower()

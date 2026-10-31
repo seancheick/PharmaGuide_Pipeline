@@ -88,6 +88,16 @@ def test_cysteine_and_nac_keep_their_own_identity(pipeline, name, group, expecte
     assert {r["canonical_id"] for r in _iqd(enriched, name)} == {expected}
 
 
+@pytest.mark.parametrize("name", ["D-Cystine", "DL-Cystine"])
+def test_other_cystine_stereoisomers_never_take_the_l_cystine_identity(pipeline, name):
+    # l_cystine is the L-isomer (CID 67678); D- and DL- are other substances
+    # (PR #319 review), so the stereo prefix is kept and the row stays unmapped.
+    cleaned, enriched = pipeline(_raw_product(990504, [
+        _raw_row(1, name, "Cystine", category="amino acid", quantity=500, unit="mg")]))
+    ids = {r.get("canonical_id") for r in _active(cleaned, name) + _iqd(enriched, name)}
+    assert "l_cystine" not in ids and "l_cysteine" not in ids
+
+
 def test_acetylated_cystine_misprint_is_not_l_cystine(pipeline):
     # GNC 78327 prints "N-Acetyl-L-Cystine": neither cystine nor, by its own
     # words, NAC. It stays unresolved rather than borrow either identity.
@@ -161,7 +171,10 @@ def test_single_part_aerial_butchers_broom_is_not_root(pipeline, name):
     assert "butchers_broom_root" not in {r["canonical_id"] for r in _iqd(enriched, name)}
 
 
-@pytest.mark.parametrize("name", ["Butcher's Broom root powder", "Butcher's Broom Root Extract"])
+@pytest.mark.parametrize("name", [
+    "Butcher's Broom root powder", "Butcher's Broom Root Extract",
+    "Butcher's Broom Rhizome Extract",   # the Ruscus root record is its rhizome
+])
 def test_root_butchers_broom_keeps_the_root_identity(pipeline, name):
     _, enriched = pipeline(_raw_product(990522, [
         _raw_row(1, name, "Butcher's Broom", quantity=500, unit="mg")]))
@@ -179,6 +192,7 @@ def test_partless_butchers_broom_row_on_a_root_product_is_unchanged(pipeline):
     ("leaf and stem", "Butcher's Broom Root", True),
     ("leaf", "Butcher's Broom Root", True),
     ("root", "Butcher's Broom Root", False),
+    ("rhizome", "Butcher's Broom Root", False),      # rhizome is the root record's organ
     (None, "Butcher's Broom Root", False),           # part-less row: no evidence against
     ("leaf and stem", "Butcher's Broom", False),     # part-less record
     ("leaves", "Ginkgo Biloba Leaf", False),         # plural of the same organ
