@@ -744,6 +744,11 @@ def _is_reciprocal_display_remap(
 def _check_display_label_collapse(rec: ProductRecord, blob: dict, raw: Mapping[str, Any] | None = None) -> None:
     """Invariant #1 from test_label_fidelity_contract.py."""
     corrected = _corrected_source_paths(raw, rec.dsld_id) if raw else {}
+    corrected_by_source_path = {
+        row.get("raw_source_path"): row
+        for row in corrected.values()
+        if isinstance(row, dict) and row.get("raw_source_path")
+    }
     rows = _app_active_rows(blob)
     for ing in rows:
         display = _app_display_label(ing)
@@ -758,7 +763,7 @@ def _check_display_label_collapse(rec: ProductRecord, blob: dict, raw: Mapping[s
         source = (ing.get("raw_source_text") or ing.get("name") or "").strip()
         if not display or not canonical or not source:
             continue
-        correction = corrected.get(ing.get("raw_source_path")) or {}
+        correction = corrected_by_source_path.get(ing.get("raw_source_path")) or {}
         if (correction.get("_label_correction_applied")
                 and source == correction.get("_pre_correction_name")
                 and display == correction.get("name")):
@@ -1114,9 +1119,13 @@ def _corrected_source_paths(raw: Mapping[str, Any], product_id: str) -> dict[str
     owner = _label_correction_owner()
     if str(product_id) not in owner._label_corrections_by_dsld_id:
         return {}
-    corrected = dict(raw)
+    corrected = owner._apply_reviewed_serving_basis(deepcopy(dict(raw)))
+    rows = corrected.get("ingredientRows") or []
+    # Clean stamps immutable source paths before applying reviewed corrections.
+    # Audit the same guarded correction against a copy of those source rows.
+    owner._stamp_raw_source_paths(rows, "ingredientRows")
     corrected["ingredientRows"] = owner._apply_label_corrections(
-        deepcopy(raw.get("ingredientRows") or []), str(product_id))
+        rows, str(product_id))
     return _raw_paths(corrected)
 
 
