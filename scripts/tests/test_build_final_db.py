@@ -5640,6 +5640,50 @@ def test_final_ledger_uses_unmapped_analysis_over_stale_assessed_form_state():
     assert rows[0]["analysis"]["form_display_state"] == "listed_not_assessed"
 
 
+def test_final_ledger_does_not_steal_a_same_named_siblings_analysis():
+    # Real labels 182908/184300 print three Protease children. The first is
+    # omitted from primary export; the other two have different identities.
+    display_rows = [
+        {
+            "raw_source_path": f"ingredientRows[0].nestedRows[{index}]",
+            "raw_source_text": "Protease",
+            "label_display_name": "Protease",
+            "canonical_id": canonical,
+            "source_section": "activeIngredients",
+        }
+        for index, canonical in enumerate(
+            ("protease", "digestive_enzymes", "protease")
+        )
+    ]
+    analysis_rows = [
+        {
+            "raw_source_path": f"ingredientRows[0].nestedRows[{index}]",
+            "raw_source_text": "Protease",
+            "canonical_id": canonical,
+        }
+        for index, canonical in ((1, "digestive_enzymes"), (2, "protease"))
+    ]
+
+    rows = _build_canonical_label_ledger(display_rows, analysis_rows, [])
+
+    assert [row["canonical_id"] for row in rows] == [
+        "protease", "digestive_enzymes", "protease"
+    ]
+    assert [
+        (row.get("analysis") or {}).get("canonical_id") for row in rows
+    ] == [None, "digestive_enzymes", "protease"]
+
+
+def test_final_ledger_retains_text_fallback_for_unpathed_legacy_analysis():
+    rows = _build_canonical_label_ledger(
+        [{"raw_source_path": "ingredientRows[0]", "raw_source_text": "Protease"}],
+        [{"raw_source_text": "Protease", "canonical_id": "protease"}],
+        [],
+    )
+
+    assert rows[0]["analysis"]["canonical_id"] == "protease"
+
+
 def test_final_ledger_preserves_vitamin_totals_with_nested_label_components():
     from build_final_db import _build_canonical_label_ledger
 
