@@ -96,16 +96,63 @@ def run_gate(
                          input_globs=input_globs, max_age_seconds=max_age_seconds)
 
 
+# Only variables the pipeline, release scripts and interpreter actually read
+# bind a result. The whole shell environment once did: release_full.sh exports
+# PYTHONUNBUFFERED=1 and the corpus runner exports PHARMAGUIDE_DATASET_ROOT, so a
+# catalog built by the standalone snapshot was never "current" for the release
+# that followed, and every full run assembled the catalog twice (2026-10-31).
+BOUND_ENVIRONMENT_PREFIXES = ('PG_', 'PHARMAGUIDE_', 'SUPABASE_', 'FLUTTER_', 'SKIP_')
+BOUND_ENVIRONMENT_NAMES = frozenset({
+    'PATH', 'PYTHON', 'PYTHONPATH', 'PYTHONHASHSEED', 'PYTHONSAFEPATH',
+    'VIRTUAL_ENV', 'PYENV_VERSION', 'HOME',
+    'UMLS_API_KEY', 'PUBMED_API_KEY', 'PUBMED_TOOL', 'PUBMED_EMAIL',
+    'NCBI_API_KEY', 'NCBI_TOOL', 'NCBI_EMAIL', 'USDA_API_KEY', 'FDC_API_KEY',
+    'OPENFDA_API_KEY', 'COMPTOX_API_KEY', 'VALYU_API_KEY',
+    'WADA_LAST_UPDATED', 'ALLOW_CURATED_CONFLICTS', 'ENRICH_DEBUG_AMBIGUITY',
+    'SAFETY_ALERT_DISPATCH_SECRET', 'KEY_NAME', 'SUPABASE_DRY_RUN',
+})
+# Bookkeeping the shell or a tool call sets per process; never configuration.
+UNBOUND_ENVIRONMENT_NAMES = frozenset({
+    'PG_RELEASE_LOCK_TOKEN', 'PG_RELEASE_LOCK_WRAPPED', 'PYTHONUNBUFFERED',
+    'PHARMAGUIDE_DATASET_ROOT',
+})
+
+
+def _bound_environment(environ) -> dict:
+    bound = {
+        key: value for key, value in environ.items()
+        if key not in UNBOUND_ENVIRONMENT_NAMES
+        and (key in BOUND_ENVIRONMENT_NAMES or key.startswith(BOUND_ENVIRONMENT_PREFIXES))
+    }
+    # The dataset root binds by its resolved path, so exporting the default
+    # value equals leaving it unset. The resolver is the existing owner in
+    # scripts/dataset_paths.py; a copy of this runner without it binds the raw
+    # override only.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    try:
+        from dataset_paths import brand_dataset_root
+    except ImportError:
+        brand_dataset_root = None
+    finally:
+        sys.path.pop(0)
+    if brand_dataset_root is not None:
+        root = brand_dataset_root(environ=environ)
+    elif environ.get('PHARMAGUIDE_DATASET_ROOT'):
+        root = Path(environ['PHARMAGUIDE_DATASET_ROOT'])
+    else:
+        root = None
+    if root is not None:
+        bound['PHARMAGUIDE_DATASET_ROOT'] = str(root.expanduser().resolve())
+    return bound
+
+
 def _input_binding(
     cwd: Path, command: Sequence[str], patterns: Sequence[str],
     *, exclude_paths: Sequence[str] = (),
 ) -> str:
     # Never persist credentials or environment values. The fingerprint binds
     # effective configuration, not shell bookkeeping or the per-run lock token.
-    ignored = {'_', 'PWD', 'OLDPWD', 'SHLVL', 'SHELL_PID',
-               'PG_RELEASE_LOCK_TOKEN', 'PG_RELEASE_LOCK_WRAPPED',
-               'CODEX_TOOL_CALL_ID'}
-    environment = {key: value for key, value in os.environ.items() if key not in ignored}
+    environment = _bound_environment(os.environ)
     files = {}
     # This cache lives for one content pass only. Never carry hashes across
     # the before/after verification boundary or a later publication check.

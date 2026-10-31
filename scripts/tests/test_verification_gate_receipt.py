@@ -256,3 +256,34 @@ def test_receipt_reports_binding_overhead_separately(tmp_path):
     payload = json.loads(args['receipt_path'].read_text())
     assert payload['input_binding_duration_seconds'] >= 0
     assert payload['log_bytes'] == args['log_path'].stat().st_size
+
+
+def test_shell_bookkeeping_and_default_dataset_root_do_not_invalidate_reuse(tmp_path, monkeypatch):
+    """The snapshot and the release must agree on one catalog binding.
+
+    release_full.sh exports PYTHONUNBUFFERED=1 and batch_run_all_datasets.sh
+    exports the default dataset root; neither changes any gate's inputs.
+    """
+    from audits.run_verification_gate import _bound_environment
+    from dataset_paths import brand_dataset_root
+
+    args = _reusable_probe(tmp_path)
+    assert run_gate(**args) == 0
+    monkeypatch.setenv('PYTHONUNBUFFERED', '1')
+    monkeypatch.setenv('TERM', 'xterm-256color-changed')
+    monkeypatch.setenv('SHLVL', '7')
+    monkeypatch.setenv('COLUMNS', '333')
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(brand_dataset_root()))
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'x'
+
+    # A dataset root that resolves elsewhere is configuration and still binds.
+    other_root = tmp_path / 'other-brands'
+    other_root.mkdir()
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(other_root))
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'xx'
+
+    bound = _bound_environment({'PATH': '/bin', 'PG_PYTHON': 'p', 'TERM': 'x', 'PYTHONUNBUFFERED': '1',
+                                'PG_RELEASE_LOCK_TOKEN': 'secret', 'SUPABASE_URL': 'u'})
+    assert set(bound) == {'PATH', 'PG_PYTHON', 'SUPABASE_URL', 'PHARMAGUIDE_DATASET_ROOT'}
