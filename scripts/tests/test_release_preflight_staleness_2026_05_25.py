@@ -1,15 +1,4 @@
-"""Wave 6.Z release-hardening test: verify scripts/test.sh release prepends
-an actionable staleness preflight check.
-
-The preflight detects 4 stale-pipeline layers and emits a clear "fix:"
-command for each, then exits non-zero. Layer 1 compares the reference-data and
-stage-code fingerprints every stage manifest records, so an iCloud/git mtime
-change cannot falsely block a release; layers 2-4 retain their downstream
-artifact timestamp checks.
-
-Tests use synthetic tmpdir layouts with controlled content and mtimes — no real
-artifact is touched.
-"""
+"""Exercise the release preflight against synthetic stage and catalog layouts."""
 
 import os
 import shutil
@@ -47,57 +36,15 @@ def _stamp_stage_inputs(repo_dir: Path) -> None:
 
 
 def _run_preflight(repo_dir: Path, flutter_dir: Path) -> tuple[int, str, str]:
-    """Invoke the preflight logic (mirrors scripts/test.sh).
-    Returns (exit_code, stdout, stderr)."""
+    """Execute test.sh's actual preflight Python, not a copied approximation."""
     _stamp_stage_inputs(repo_dir)
-    py = r'''
-import sys, os, glob
-from pathlib import Path
-
-REPO = Path(os.environ.get("REPO_ROOT", "."))
-FLUTTER = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
-sys.path.insert(0, os.environ["PIPELINE_SCRIPTS"])
-
-from pipeline_freshness import stage_freshness_issues
-
-def newest(paths):
-    mtimes = [Path(p).stat().st_mtime for p in paths if Path(p).exists()]
-    return max(mtimes) if mtimes else 0
-
-stale = []
-
-enriched = glob.glob(str(REPO / "scripts/products/output_*_enriched/enriched/*.json"))
-if stage_freshness_issues(REPO):
-    print("STALE: inputs_vs_outputs", file=sys.stderr)
-    stale.append("inputs_vs_outputs")
-
-scored = glob.glob(str(REPO / "scripts/products/output_*_scored/scored/*.json"))
-if enriched and scored:
-    if newest(enriched) > newest(scored):
-        print("STALE: enriched_vs_scored", file=sys.stderr)
-        stale.append("enriched_vs_scored")
-
-catalog_db = REPO / "scripts/dist/pharmaguide_core.db"
-if scored and catalog_db.exists():
-    if newest(scored) > catalog_db.stat().st_mtime:
-        print("STALE: scored_vs_dist", file=sys.stderr)
-        stale.append("scored_vs_dist")
-
-flutter_db = FLUTTER / "assets/db/pharmaguide_core.db"
-if catalog_db.exists() and flutter_db.exists():
-    if catalog_db.stat().st_mtime > flutter_db.stat().st_mtime:
-        print("STALE: dist_vs_flutter", file=sys.stderr)
-        stale.append("dist_vs_flutter")
-
-if stale:
-    sys.exit(1)
-print("OK", file=sys.stderr)
-sys.exit(0)
-'''
+    source = (SCRIPTS_DIR / "test.sh").read_text()
+    function = source[source.index("release_preflight_staleness_check() {"):]
+    py = function.split("<<'PY' || {", 1)[1].split("\nPY", 1)[0]
     env = os.environ.copy()
     env["REPO_ROOT"] = str(repo_dir)
     env["FLUTTER_REPO"] = str(flutter_dir)
-    env["PIPELINE_SCRIPTS"] = str(SCRIPTS_DIR)
+    env["PYTHONPATH"] = str(SCRIPTS_DIR)
     r = subprocess.run(
         [sys.executable, "-c", py],
         env=env, capture_output=True, text=True,
@@ -198,7 +145,7 @@ def test_scored_newer_than_dist_flags_layer3(tmplayout):
     assert "scored_vs_dist" in err
 
 
-def test_dist_newer_than_flutter_flags_layer4(tmplayout):
+def test_prepublication_accepts_older_flutter_bundle(tmplayout):
     repo, flutter = tmplayout
     t = 1000000.0
     _touch(repo / "scripts/data/x.json", t)
@@ -207,8 +154,8 @@ def test_dist_newer_than_flutter_flags_layer4(tmplayout):
     _touch(repo / "scripts/dist/pharmaguide_core.db", t + 100)
     _touch(flutter / "assets/db/pharmaguide_core.db", t)  # older
     code, _, err = _run_preflight(repo, flutter)
-    assert code == 1
-    assert "dist_vs_flutter" in err
+    assert code == 0, err
+    assert "dist_vs_flutter" not in err
 
 
 def test_multiple_stale_layers_reported_together(tmplayout):
@@ -231,9 +178,8 @@ def test_multiple_stale_layers_reported_together(tmplayout):
     # Test layer 1 fires; broader detection covered by individual tests.
 
 
-def test_missing_flutter_db_does_not_false_positive(tmplayout):
-    """Layer 4 (dist vs flutter) only fires if BOTH files exist. A fresh
-    checkout without Flutter mounted should pass."""
+def test_prepublication_does_not_require_flutter_db(tmplayout):
+    """The app bundle is imported and checked later in the release flow."""
     repo, flutter = tmplayout
     t = 1000000.0
     _touch(repo / "scripts/data/x.json", t)
