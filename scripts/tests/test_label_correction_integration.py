@@ -1208,21 +1208,26 @@ def test_solgar_cystine_is_not_the_misattributed_alpha_glucan(normalizer):
     assert row["name"] == "L-Cystine"
     assert row["quantity"] == 500 and row["unit"] == "mg"
     assert row["uniiCode"] is None
-    assert row["canonical_id"] not in {"l_cysteine", "NHA_ALPHA_GLUCAN_OLIGOSACCHARIDE"}
+    # The corrected printed identity reaches its own chemistry owner (cystine,
+    # the cysteine disulfide; October 31 registry batch), never L-cysteine or
+    # the misattributed alpha-glucan.
+    assert row["canonical_id"] == "l_cystine"
     assert row["source_correction"]["provenance_tag"] == "official_source_identity_correction"
 
-    # Known printed identity is preserved, but no reviewed canonical owner or
-    # cysteine clinical credit is fabricated to make the export pass.
+    # No cysteine clinical credit is borrowed: Dose has no benchmark (neutral)
+    # and Evidence has no reviewed cystine record.
     from enrich_supplements_v3 import SupplementEnricherV3
     from scoring_v4.scored_artifact import build_scored_artifact
     from build_final_db import build_detail_blob
     enriched, _ = SupplementEnricherV3().enrich_product(cleaned)
+    iqd = enriched["ingredient_quality_data"]["ingredients"][0]
+    assert iqd["canonical_id"] == "l_cystine"
     artifact = build_scored_artifact(enriched)
-    assert artifact["quality_score_status"] == "not_scored"
-    assert artifact["quality_pillars_v4"] is None
+    assert artifact["quality_score_status"] == "scored"
+    assert artifact["quality_pillars_v4"]["evidence"]["score"] == 0
     blob = build_detail_blob(enriched, artifact)
-    assert blob["v4_score_provenance"]["quality_score_status"] == "not_scored"
-    assert blob["quality_pillars_v4"] is None
+    assert blob["v4_score_provenance"]["quality_score_status"] == "scored"
+    assert "l_cysteine" not in json.dumps(blob["quality_pillars_v4"])
     assert cleaned["label_source_rows"][0]["raw_source_text"] == "Alpha-Glucan Oligosaccharide"
 
 

@@ -6237,6 +6237,20 @@ class SupplementEnricherV3:
                 source_id, source_db, source_name = declared_source
                 recognition = {**recognition, "recognition_source": source_db,
                                "matched_entry_id": source_id, "matched_entry_name": source_name}
+        elif (ingredient.get("canonical_source_db") in BOTANICAL_CANONICAL_SOURCE_DBS
+                and recognition.get("recognition_source") in BOTANICAL_CANONICAL_SOURCE_DBS
+                and recognition.get("matched_entry_id") != ingredient.get("canonical_id")
+                and self._names_undeclared_plant_part(
+                    ingredient.get("plantPart"), recognition.get("matched_entry_name"))):
+            # The recognition index keys part-less names to whichever record
+            # wrote them first ("butcher's broom" -> the root entry). A row
+            # whose declared part the recognized record does not cover keeps
+            # the cleaner's botanical identity (Butcher's Broom Leaf, Stem).
+            declared_source = self._botanical_source_identity(ingredient)
+            if declared_source:
+                source_id, source_db, source_name = declared_source
+                recognition = {**recognition, "recognition_source": source_db,
+                               "matched_entry_id": source_id, "matched_entry_name": source_name}
         elif (recognition.get("recognition_source") == "other_ingredients"
                 and is_identity_scoreable(decision.disposition)
                 and self._current_canonical_identity_registry().canonicalize(
@@ -9542,6 +9556,31 @@ class SupplementEnricherV3:
             if parent_key in delivers and f" {botanical_id.replace('_', ' ')} " in padded:
                 return True
         return False
+
+    @staticmethod
+    def _names_undeclared_plant_part(declared_part: Any, entry_name: Any) -> bool:
+        """A record name that adds a plant part the row did not declare.
+
+        Both sides use the cleaner's plant-part vocabulary. No declared part,
+        or a record name without one, never counts: a part-less row is not
+        evidence against a part-specific record.
+        """
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+
+        def organ(word: str) -> str:
+            # "leaves" is a leaf and a berry is the fruit ("Schisandra Berry"
+            # for a fruit-declared row); only a different organ counts.
+            word = {"leaves": "leaf", "berries": "fruit", "berry": "fruit"}.get(word, word)
+            return word[:-1] if word.endswith("s") and word != "parts" else word
+
+        def parts(text: Any) -> set:
+            text = str(text or "").lower()
+            return {organ(word) for token in EnhancedDSLDNormalizer._PLANT_PART_TOKENS
+                    if re.search(r"\b" + re.escape(token) + r"\b", text)
+                    for word in token.split() if word not in {"and", "whole", "herb"}}
+
+        declared, named = parts(declared_part), parts(entry_name)
+        return bool(declared and named and not named <= declared)
 
     @staticmethod
     def _restates_identity(token: str, parent_names: set) -> bool:

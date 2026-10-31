@@ -279,6 +279,7 @@ def test_b34_no_residual_unintended_null(iqm):
      'oat_bran': ['oat bran (unspecified)'],
      'epigallocatechin': ['epigallocatechin (unspecified)'],
      'l_aspartic_acid': ['l-aspartic acid (unspecified)'],
+     'l_cystine': ['l-cystine (unspecified)'],
      'salacia': ['salacia (unspecified)'],
      'touchi_extract': ['touchi extract (unspecified)'],
      'chitosan': ['chitosan (unspecified)'],
