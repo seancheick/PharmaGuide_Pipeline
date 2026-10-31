@@ -223,11 +223,9 @@ release_preflight_corpus_check() {
 }
 
 release_preflight_staleness_check() {
-  # Wave 6.Z release hardening: emit BIG actionable messages when the
-  # pipeline chain is stale. The downstream audits (FRESHNESS_PRODUCTS_NEWER_
-  # THAN_DIST etc.) DO catch these, but their messages are technical and
-  # easy to miss. This preflight surfaces the exact next command BEFORE
-  # any pytest runs — so a stale-Flutter-bundle ship never surprises you.
+  # Check pipeline and catalog inputs before the prepublication suite.
+  # Flutter is imported later by release_full.sh and its checksum parity is
+  # verified after import; its older bundle is expected at this point.
   #
   # Skip with: SKIP_STALENESS_CHECK=1 bash scripts/test.sh release
   if [[ -n "$RELEASE_CANDIDATE_ROOT" ]]; then
@@ -243,7 +241,6 @@ import sys, os, glob
 from pathlib import Path
 
 REPO = Path(os.environ.get("REPO_ROOT", "."))
-FLUTTER = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
 sys.path.insert(0, str(REPO / "scripts"))
 
 from pipeline_freshness import RERUN_STAGES, STAGES, stage_freshness_issues
@@ -317,21 +314,10 @@ if scored and catalog_db.exists():
         )
         stale.append("scored_vs_dist")
 
-# Layer 4: dist/ vs Flutter bundle (only when Flutter repo mounted)
-flutter_db = FLUTTER / "assets/db/pharmaguide_core.db"
-if catalog_db.exists() and flutter_db.exists():
-    if catalog_db.stat().st_mtime > flutter_db.stat().st_mtime:
-        warn(
-            "dist/ catalog newer than Flutter bundle",
-            "Flutter app is shipping an older catalog than dist/",
-            "bash scripts/release_full.sh   # re-runs Flutter import step",
-        )
-        stale.append("dist_vs_flutter")
-
 if stale:
     print(f"\nPREFLIGHT FAILED: {len(stale)} stale layer(s): {stale}", file=sys.stderr)
     sys.exit(1)
-print("Preflight staleness check: OK (all artifacts in sync)", file=sys.stderr)
+print("Preflight staleness check: OK (pipeline and catalog layers current)", file=sys.stderr)
 PY
     echo ""
     echo "scripts/test.sh release: STALE ARTIFACT(S) DETECTED — see actionable fix(es) above." >&2
@@ -374,7 +360,7 @@ run_release_artifact_gates() {
     --output scripts/reports/evidence_match_reachability_latest.json \
     --strict
   release_gate artifact "$PG_PYTHON" scripts/audit_source_of_truth_contract.py "${freshness_args[@]}"
-  if [[ "${PG_GATE_MODE:-}" == "inventory" || ( -z "$RELEASE_CANDIDATE_ROOT" && -d "$FLUTTER_REPO" ) ]]; then
+  if [[ "${PG_GATE_MODE:-}" == "inventory" || "${PG_RELEASE_PHASE:-prepublish}" == "postimport" ]]; then
     release_gate artifact "$PG_PYTHON" scripts/audit_source_of_truth_contract.py flutter \
       --dist-dir "$RELEASE_DIST_DIR" \
       --flutter-repo "$FLUTTER_REPO" \
@@ -515,9 +501,16 @@ case "$PROFILE" in
     "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}" "${parallel_args[@]+"${parallel_args[@]}"}"
     ;;
   release)
-    # Wave 6.Z release hardening: actionable staleness preflight runs
-    # BEFORE pytest so a stale Flutter bundle never sneaks through with
-    # only a technical-finding-code warning. Skip via SKIP_STALENESS_CHECK=1.
+    # The default phase checks the new local catalog before Flutter import.
+    # The optional postimport phase adds content-based Flutter parity.
+    case "${PG_RELEASE_PHASE:-prepublish}" in
+      prepublish|postimport) ;;
+      *) echo "scripts/test.sh release: PG_RELEASE_PHASE must be prepublish or postimport" >&2; exit 2 ;;
+    esac
+    if [[ "${PG_RELEASE_PHASE:-prepublish}" == "postimport" && -n "$RELEASE_CANDIDATE_ROOT" ]]; then
+      echo "scripts/test.sh release: postimport requires the promoted catalog, not a preserved candidate" >&2
+      exit 2
+    fi
     release_artifact_dirs
     release_preflight_corpus_check
     REPO_ROOT="$REPO_ROOT" FLUTTER_REPO="$FLUTTER_REPO" \

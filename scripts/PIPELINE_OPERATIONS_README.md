@@ -439,13 +439,20 @@ Use only the supported test runner:
 ```bash
 scripts/test.sh fast scripts/tests/test_release_full_catalog_path.py
 scripts/test.sh local     # Required corpus checks for a completed behavioral batch
-scripts/test.sh release   # Release validation against current generated artifacts
+scripts/test.sh release   # Prepublication validation of the current catalog
 scripts/test.sh full      # Post-pipeline backstop, never alongside a corpus run
 ```
 
 Use named files/nodes while fixing a defect. Whole-fast validation normally runs
 in CI; run it locally only when CI is unavailable. Do not run broad local/release/
 full suites alongside an active corpus job.
+
+The default release test runs before `release_full.sh` imports the catalog into
+Flutter. An older app bundle is expected then and does not make the pipeline
+stale. `release_full.sh` imports the bundle and verifies catalog/interaction
+checksum parity afterward. To repeat the release suite after import, use
+`PG_RELEASE_PHASE=postimport scripts/test.sh release`; that phase adds Flutter
+parity and fails on content differences, regardless of file timestamps.
 
 For a fresh artifact audit, first build through the snapshot owner. Then use
 the pinned runtime:

@@ -30,7 +30,7 @@ def test_candidate_release_uses_candidate_freshness_without_flutter_parity() -> 
 
     assert 'release_preflight_candidate_check' in text
     assert '--skip-interaction-inputs' in text
-    assert '( -z "$RELEASE_CANDIDATE_ROOT" && -d "$FLUTTER_REPO" )' in text
+    assert '"${PG_RELEASE_PHASE:-prepublish}" == "postimport"' in text
     assert '"${PG_GATE_MODE:-}" == "inventory"' in text
 
 
@@ -130,3 +130,31 @@ def test_release_gate_execution_cannot_be_disabled_by_inherited_inventory_enviro
     assert 'scripts/iqm_form_evidence.py audit' in commands
     assert 'scripts/coverage_gate_functional_roles.py' in commands
     assert not any(command.startswith('-c ') for command in commands)
+
+
+@pytest.mark.parametrize("phase,expect_flutter", [
+    ("prepublish", False),
+    ("postimport", True),
+])
+def test_release_flutter_parity_is_checked_only_after_import(tmp_path, phase, expect_flutter):
+    import os
+    import subprocess
+
+    text = _runner_text()
+    functions = text[text.index('release_gate() {'):text.index('\nfast_test_files()')]
+    calls = tmp_path / 'calls'
+    fake_python = tmp_path / 'python'
+    fake_python.write_text('#!/bin/bash\nprintf "%s\\n" "$*" >> "$GATE_CALL_LOG"\n')
+    fake_python.chmod(0o755)
+    flutter = tmp_path / 'flutter'
+    flutter.mkdir()
+    script = functions + '\nPG_PYTHON="$FAKE_GATE_PYTHON"\nRELEASE_DIST_DIR=dist\nRELEASE_FINAL_DB_DIR=final\nRELEASE_CANDIDATE_ROOT=""\nFLUTTER_REPO="$FAKE_FLUTTER"\nrun_release_artifact_gates\n'
+    result = subprocess.run(['bash', '-c', script], env=dict(os.environ,
+        PG_RELEASE_PHASE=phase, SKIP_LIVE_IDENTITY_GATES='1',
+        GATE_CALL_LOG=str(calls), FAKE_GATE_PYTHON=str(fake_python),
+        FAKE_FLUTTER=str(flutter)), capture_output=True, text=True)
+    assert result.returncode == 0, result.stderr
+    commands = calls.read_text().splitlines()
+    assert any('audit_source_of_truth_contract.py freshness' in command for command in commands)
+    assert any('audit_source_of_truth_contract.py flutter' in command
+               for command in commands) is expect_flutter
