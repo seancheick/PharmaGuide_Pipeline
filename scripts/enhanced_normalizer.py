@@ -8125,6 +8125,7 @@ class EnhancedDSLDNormalizer:
 
         # Track unmapped ingredients only if not found in any database
         # AND not a nutrition fact/label phrase
+        recorded_unmapped_row = False
         if (
             not is_mapped
             and not is_structural_active_blend_total
@@ -8142,6 +8143,7 @@ class EnhancedDSLDNormalizer:
                 cleaner_row_role=unmapped_cleaner_row_role,
                 score_exclusion_reason=unmapped_cleaner_row_role,
             )
+            recorded_unmapped_row = True
 
         # Preserve forms with full structure from DSLD (PRESERVE EVERYTHING).
         # Schematic fields are required for downstream enrichment:
@@ -8257,47 +8259,86 @@ class EnhancedDSLDNormalizer:
                 and len(self._declared_botanical_parts(forms_structured)) > 1):
             # Name aliases can repeat the same narrowing as a partial form
             # UNII. The existing broad botanical group owns the whole source.
-            group_id, group_db = self._resolve_canonical_identity(
-                ingredient_group, raw_name=ingredient_group,
-            )
-            group_parent = self.ingredient_map.get(group_id, {})
             declared_sources = [form for form in forms_structured
                                 if form.get("category") in {None, "", "botanical"}
                                 and str(form.get("name") or "").strip().lower()
                                 not in self._PLANT_PART_TOKENS]
-            source_aliases = {
-                norm_module.make_normalized_key(alias)
-                for form in (group_parent.get("forms") or {}).values()
-                for alias in form.get("source_form_aliases") or []
-            }
-            group_is_botanical = (
-                group_db == "botanical_ingredients" or (
-                    group_db == "ingredient_quality_map"
-                    and str(group_parent.get("category") or "").lower()
-                    in {"herbs", "herb", "botanical", "botanicals"}
-                )
-            ) and bool(declared_sources) and all(
-                (form_id := self._resolve_canonical_identity("", raw_name=form.get("name"))[0]) == group_id
-                or (group_id, form_id) in self._canonical_parent_relationships
-                or norm_module.make_normalized_key(form.get("name")) in source_aliases
-                or (group_db == "botanical_ingredients" and self._mixed_source_names_registered_organism(
-                    form.get("name"), group_id,
-                ))
-                for form in declared_sources
+            # A curated literal name of the whole row keeps its reviewed
+            # identity; otherwise every declared source must resolve, the way
+            # a single-part row does, to one botanical organism whose own
+            # material scope admits every declared part.
+            shared_id, shared_db = (
+                (canonical_id, canonical_source_db)
+                if (canonical_id
+                    and canonical_source_db in {"botanical_ingredients", "standardized_botanicals"}
+                    and self._canonical_identity_registry.names_identity(raw_name or name, canonical_id))
+                else self._shared_declared_source_identity(declared_sources, ing)
             )
-            if group_db == "botanical_ingredients":
-                group_is_botanical = group_is_botanical and self._mixed_source_parts_match_parent(
-                    forms_structured, group_id,
-                )
-            if group_is_botanical and group_id:
-                canonical_id, canonical_source_db = group_id, group_db
+            if shared_id and not self._botanical_material_scope_admits(
+                    shared_id, shared_db, forms_structured):
+                shared_id, shared_db = None, None
+            if shared_id:
+                canonical_id, canonical_source_db = shared_id, shared_db
                 standard_name = self._canonical_identity_registry.standard_names.get(
-                    (group_db, group_id), name,
+                    (shared_db, shared_id), name,
                 )
                 is_mapped = True
+                if recorded_unmapped_row:
+                    # The row resolved after the early report entry; a mapped
+                    # row must not be listed as a curation gap.
+                    self._forget_unmapped_ingredient(name)
+                    recorded_unmapped_row = False
             else:
-                canonical_id, canonical_source_db = None, "unmapped"
-                standard_name, is_mapped = name, False
+                group_id, group_db = self._resolve_canonical_identity(
+                    ingredient_group, raw_name=ingredient_group,
+                )
+                group_parent = self.ingredient_map.get(group_id, {})
+                source_aliases = {
+                    norm_module.make_normalized_key(alias)
+                    for form in (group_parent.get("forms") or {}).values()
+                    for alias in form.get("source_form_aliases") or []
+                }
+                group_is_botanical = (
+                    group_db == "botanical_ingredients" or (
+                        group_db == "ingredient_quality_map"
+                        and str(group_parent.get("category") or "").lower()
+                        in {"herbs", "herb", "botanical", "botanicals"}
+                    )
+                ) and bool(declared_sources) and all(
+                    (form_id := self._resolve_canonical_identity("", raw_name=form.get("name"))[0]) == group_id
+                    or (group_id, form_id) in self._canonical_parent_relationships
+                    or norm_module.make_normalized_key(form.get("name")) in source_aliases
+                    or (group_db == "botanical_ingredients" and self._mixed_source_names_registered_organism(
+                        form.get("name"), group_id,
+                    ))
+                    for form in declared_sources
+                )
+                if group_db == "botanical_ingredients":
+                    group_is_botanical = group_is_botanical and self._mixed_source_parts_match_parent(
+                        forms_structured, group_id,
+                    )
+                if group_is_botanical and group_id:
+                    canonical_id, canonical_source_db = group_id, group_db
+                    standard_name = self._canonical_identity_registry.standard_names.get(
+                        (group_db, group_id), name,
+                    )
+                    is_mapped = True
+                    if recorded_unmapped_row:
+                        self._forget_unmapped_ingredient(name)
+                        recorded_unmapped_row = False
+                else:
+                    canonical_id, canonical_source_db = None, "unmapped"
+                    standard_name, is_mapped = name, False
+                    if not recorded_unmapped_row:
+                        # A row this branch refuses is a curation gap the
+                        # report must show; 19 products lost their score
+                        # silently in October 2026 because it did not.
+                        self._record_unmapped_ingredient(
+                            name, forms, is_active=True,
+                            cleaner_row_role=unmapped_cleaner_row_role,
+                            score_exclusion_reason=unmapped_cleaner_row_role,
+                        )
+                        recorded_unmapped_row = True
         # A generated preparation alias cannot overrule a reviewed broader
         # label group. The shared registry requires literal declared specificity.
         if is_active and canonical_id:
@@ -10598,6 +10639,150 @@ class EnhancedDSLDNormalizer:
         "bulb", "tuber", "resin", "wood", "whole", "herb", "skin",
     )
 
+    _BOTANICAL_IQM_CATEGORIES = frozenset({"herbs", "herb", "botanical", "botanicals"})
+
+    def _declared_source_form_identity(
+        self, form: Dict[str, Any], ing: Dict[str, Any],
+    ) -> "Tuple[Optional[str], Optional[str]]":
+        """Resolve one declared source form exactly as a single-part row resolves.
+
+        The multi-part branch once consulted the raw reverse index only, so
+        "Butcher's Broom Leaf Extract" resolved as a label row but not as a
+        form, and 111 single-organism rows lost their identity (October 27,
+        2026). The probe row shares the row's group and never reaches the
+        unmapped report or the product's display rows.
+        """
+        probe = {
+            "name": form.get("name"), "ingredientGroup": ing.get("ingredientGroup"),
+            "category": form.get("category") or "botanical", "uniiCode": form.get("uniiCode"),
+            "ingredientId": form.get("ingredientId"), "order": ing.get("order"),
+            "forms": [], "nestedRows": [], "alternateNames": [], "quantity": [],
+        }
+        unmapped_counts = dict(self.unmapped_ingredients)
+        unmapped_details = dict(self.unmapped_details)
+        display_buffer = list(getattr(self, "_display_ingredients_buffer", []))
+        try:
+            resolved = self._process_single_ingredient_enhanced(probe, True)
+        finally:
+            self.unmapped_ingredients.clear()
+            self.unmapped_ingredients.update(unmapped_counts)
+            self.unmapped_details.clear()
+            self.unmapped_details.update(unmapped_details)
+            self._display_ingredients_buffer = display_buffer
+        if isinstance(resolved, list):
+            resolved = resolved[0] if resolved and isinstance(resolved[0], dict) else None
+        if not isinstance(resolved, dict):
+            return None, None
+        return resolved.get("canonical_id"), resolved.get("canonical_source_db")
+
+    def _is_botanical_registry_identity(self, canonical_id: Optional[str], source_db: Optional[str]) -> bool:
+        if not canonical_id:
+            return False
+        if source_db in {"botanical_ingredients", "standardized_botanicals"}:
+            return True
+        return (source_db == "ingredient_quality_map"
+                and str(self.ingredient_map.get(canonical_id, {}).get("category") or "").lower()
+                in self._BOTANICAL_IQM_CATEGORIES)
+
+    def _shared_declared_source_identity(
+        self, declared_sources: List[Dict[str, Any]], ing: Dict[str, Any],
+    ) -> "Tuple[Optional[str], Optional[str]]":
+        """The one botanical organism every declared source form names, or none.
+
+        Forms that resolve to one identity share it; forms that resolve to a
+        reviewed broad identity and its registered narrower children share the
+        broad one. Different organisms, an unresolved source, or a constituent
+        (silica for bamboo) establish nothing.
+        """
+        identities = [self._declared_source_form_identity(form, ing) for form in declared_sources]
+        if not identities or any(identity[0] is None for identity in identities):
+            return None, None
+        ids = {identity[0] for identity in identities}
+        if len(ids) == 1:
+            shared_id = ids.pop()
+            databases = [db for _, db in identities]
+            group_id, group_db = self._resolve_canonical_identity(
+                ing.get("ingredientGroup") or "", raw_name=ing.get("ingredientGroup") or "",
+            )
+            shared_db = group_db if group_id == shared_id and group_db in databases else databases[0]
+        else:
+            parents = [candidate for candidate in ids if all(
+                other == candidate or (candidate, other) in self._canonical_parent_relationships
+                for other in ids
+            )]
+            if len(parents) != 1:
+                return None, None
+            shared_id = parents[0]
+            shared_db = next(db for cid, db in identities if cid == shared_id)
+        if not self._is_botanical_registry_identity(shared_id, shared_db):
+            return None, None
+        # The row's DSLD group let each probe resolve; the form's own words
+        # must still name that organism, or a foreign source ("Ashwagandha
+        # leaf" under a Ginseng group) would borrow the group identity.
+        if not all(self._declared_source_names_identity(form, shared_id, ing)
+                   for form in declared_sources):
+            return None, None
+        return shared_id, shared_db
+
+    def _registered_identity_names(self, canonical_id: str) -> "Tuple[str, ...]":
+        """Every curated name of an identity across the owned registries."""
+        cache = self.__dict__.setdefault("_registered_identity_names_cache", {})
+        if canonical_id not in cache:
+            cache[canonical_id] = tuple(sorted(
+                key for key, candidates in self._canonical_identity_registry.candidates_index.items()
+                if canonical_id in candidates
+            ))
+        return cache[canonical_id]
+
+    def _declared_source_names_identity(
+        self, form: Dict[str, Any], canonical_id: str, ing: Dict[str, Any],
+    ) -> bool:
+        """A declared source form names this organism by itself.
+
+        Either its own words resolve to the identity (or a registered narrower
+        child) without the row's group, or they are a curated name of the
+        identity plus only part, preparation, variety or species qualifiers
+        ("Epimedium sagittatum Leaf Extract" names the registered genus).
+        """
+        own_id, _ = self._declared_source_form_identity(form, {**ing, "ingredientGroup": ""})
+        if own_id == canonical_id or (canonical_id, own_id) in self._canonical_parent_relationships:
+            return True
+        literal = norm_module.make_normalized_key(form.get("name")).replace("_", " ")
+        qualifiers = {token for part in self._PLANT_PART_TOKENS for token in part.split()}
+        qualifiers.update({"and", "plus", "whole", "extract", "extracts", "powder", "juice",
+                           "concentrate", "dried", "organic"})
+        for registered in self._registered_identity_names(canonical_id):
+            organism = norm_module.make_normalized_key(registered).replace("_", " ")
+            if not organism:
+                continue
+            match = re.fullmatch(r"(.*?)\b" + re.escape(organism) + r"\b(.*)", literal)
+            if not match:
+                continue
+            before, after = match.groups()
+            after = re.sub(r"^\s+var(?:iety)?\s+[a-z]+(?=\s|$)", " ", after)
+            if " " not in organism.strip():
+                # A registered genus followed by one Latin species epithet:
+                # a word that is nobody's curated name ("sagittatum"), never
+                # another organism's common name ("turmeric" after "ginger").
+                epithet = re.match(r"^\s+([a-z]{4,})(?=\s|$)", after)
+                if epithet and not self._canonical_identity_registry.candidates_index.get(
+                        self._canonical_identity_registry._key(epithet.group(1))):
+                    after = after[epithet.end():]
+            remainder = (before + " " + after).split()
+            if all(token in qualifiers for token in remainder):
+                return True
+        return False
+
+    def _botanical_material_scope_admits(
+        self, canonical_id: str, source_db: Optional[str], forms: List[Any],
+    ) -> bool:
+        """The chosen entry's own declared parts still bound a multi-part row."""
+        if source_db == "botanical_ingredients":
+            return self._mixed_source_parts_match_parent(forms, canonical_id)
+        standard = self._canonical_identity_registry.standard_names.get((source_db, canonical_id), "")
+        scope = set(self._declared_botanical_parts([{"name": standard}]))
+        return not scope or set(self._declared_botanical_parts(forms)) <= scope
+
     def _mixed_source_parts_match_parent(
         self, forms: List[Any], parent_id: str, primary_claims: Optional[List[str]] = None,
     ) -> bool:
@@ -12131,6 +12316,14 @@ class EnhancedDSLDNormalizer:
             score_exclusion_reason=score_exclusion_reason,
         )
     
+    def _forget_unmapped_ingredient(self, name: str) -> None:
+        """Withdraw one report entry for a row that resolved after being recorded."""
+        if self.unmapped_ingredients.get(name, 0) > 1:
+            self.unmapped_ingredients[name] -= 1
+            return
+        self.unmapped_ingredients.pop(name, None)
+        self.unmapped_details.pop(name, None)
+
     def process_and_save_unmapped_tracking(self, processed_count_override: Optional[int] = None):
         """Process unmapped ingredients and save separate active/inactive tracking files"""
         if not self.unmapped_tracker:

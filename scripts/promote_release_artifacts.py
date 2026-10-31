@@ -15,9 +15,9 @@ import shutil
 from pathlib import Path
 from typing import Optional
 
-from dataset_paths import brand_dataset_root
 from audits.run_verification_gate import (
-    RELEASE_SOURCE_INPUTS, _input_binding, _sha256, _canonical_sha256, _write_receipt,
+    RELEASE_SOURCE_INPUTS, SCORING_AUDIT_CORPUS_INPUTS, _input_binding, _sha256,
+    _canonical_sha256, _write_receipt,
 )
 
 
@@ -34,28 +34,17 @@ CATALOG_NONPRODUCER_PATHS = (
 )
 
 
-def _raw_label_fingerprint(raw_root: Path) -> dict:
-    """Content of every raw DSLD label the snapshot's raw-to-final gate reads."""
-    if not raw_root.is_dir():
-        return {'root': str(raw_root), 'missing': True}
-    return {'root': str(raw_root), 'labels': [
-        (str(path.relative_to(raw_root)), _sha256(path)) for path in sorted(raw_root.rglob('*.json'))]}
-
-
 def catalog_input_binding(repo: Path) -> str:
     """Bind assembly to content, runtime and configuration, never mtimes.
 
     Includes the raw DSLD labels: a catalog gated against other raw labels is
-    not current, so the raw-to-final comparison reruns (ADR-0005).
+    not current, so the raw-to-final comparison reruns (ADR-0005). Includes
+    every input of the snapshot's scoring audit, because release skips its
+    duplicate of that audit while this receipt is current.
     """
-    return _canonical_sha256({
-        'inputs': _input_binding(repo.resolve(), ['catalog-assembly'], (
-            *RELEASE_SOURCE_INPUTS,
-            'scripts/products/*_scored/scored/*.json',
-            'manual_labels/**/*.json',
-        ), exclude_paths=CATALOG_NONPRODUCER_PATHS),
-        'raw_labels': _raw_label_fingerprint(brand_dataset_root()),
-    })
+    return _input_binding(repo.resolve(), ['catalog-assembly'], (
+        *RELEASE_SOURCE_INPUTS, *SCORING_AUDIT_CORPUS_INPUTS,
+    ), exclude_paths=CATALOG_NONPRODUCER_PATHS)
 
 
 def require_catalog_inputs(repo: Path, expected: str) -> None:

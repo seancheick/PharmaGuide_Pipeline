@@ -32,6 +32,37 @@ REUSABLE_RELEASE_GATES = frozenset({
     'RDA/UL emitted-reference stamp parity',
 })
 
+# Read-only source/corpus gates that also read scored artifacts and stage
+# manifests bind those too. The scoring completeness preflight took ~17 min on
+# every snapshot (2026-10-31) although nothing it reads had changed between runs.
+# The raw DSLD labels live outside the repository; this input names their
+# content fingerprint (raw_label_fingerprint) in place of a repository glob.
+RAW_DSLD_LABELS = '<raw DSLD labels>'
+
+# The scoring audit joins scored, enriched and cleaned (*.json, *.jsonl) stage
+# files, every stage manifest and the raw labels the clean manifest fingerprints.
+SCORING_AUDIT_CORPUS_INPUTS = (
+    'scripts/products/*_scored/scored/*.json',
+    'scripts/products/*/cleaned/*.json',
+    'scripts/products/*/cleaned/*.jsonl',
+    'scripts/products/*/*/.stage_manifest.json',
+    'manual_labels/**/*.json',
+    RAW_DSLD_LABELS,
+)
+
+RELEASE_GATE_EXTRA_INPUTS = {
+    'scoring assessment completeness preflight': SCORING_AUDIT_CORPUS_INPUTS,
+}
+
+
+def release_gate_input_globs(name: str) -> tuple:
+    """Content globs the shared release-gate reuse policy binds for ``name``."""
+    if name in RELEASE_GATE_EXTRA_INPUTS:
+        return (*RELEASE_SOURCE_INPUTS, *RELEASE_GATE_EXTRA_INPUTS[name])
+    if name in REUSABLE_RELEASE_GATES:
+        return tuple(RELEASE_SOURCE_INPUTS)
+    return ()
+
 # Read-only source/corpus gates share these inputs across snapshot and release.
 # Generated reports, live catalogs and audit caches are deliberately outside
 # this set. Artifact/live/mutating gates never opt into this reuse policy.
@@ -96,21 +127,85 @@ def run_gate(
                          input_globs=input_globs, max_age_seconds=max_age_seconds)
 
 
+# Only variables the pipeline, release scripts and interpreter actually read
+# bind a result. The whole shell environment once did: release_full.sh exports
+# PYTHONUNBUFFERED=1 and the corpus runner exports PHARMAGUIDE_DATASET_ROOT, so a
+# catalog built by the standalone snapshot was never "current" for the release
+# that followed, and every full run assembled the catalog twice (2026-10-31).
+# PYTHON* covers the interpreter selector and every interpreter behaviour
+# switch (PYTHONPATH, PYTHONOPTIMIZE, PYTHONWARNINGS, PYTHONUTF8 ...); LC_*,
+# LANG and TZ set default text encoding and local time.
+BOUND_ENVIRONMENT_PREFIXES = ('PG_', 'PHARMAGUIDE_', 'SUPABASE_', 'FLUTTER_', 'SKIP_',
+                              'PYTHON', 'LC_')
+BOUND_ENVIRONMENT_NAMES = frozenset({
+    'PATH', 'LANG', 'TZ', 'VIRTUAL_ENV', 'PYENV_VERSION', 'HOME',
+    'UMLS_API_KEY', 'PUBMED_API_KEY', 'PUBMED_TOOL', 'PUBMED_EMAIL',
+    'NCBI_API_KEY', 'NCBI_TOOL', 'NCBI_EMAIL', 'USDA_API_KEY', 'FDC_API_KEY',
+    'OPENFDA_API_KEY', 'COMPTOX_API_KEY', 'VALYU_API_KEY',
+    'WADA_LAST_UPDATED', 'ALLOW_CURATED_CONFLICTS', 'ENRICH_DEBUG_AMBIGUITY',
+    'SAFETY_ALERT_DISPATCH_SECRET', 'KEY_NAME', 'SUPABASE_DRY_RUN',
+})
+# Bookkeeping the shell or a tool call sets per process; never configuration.
+UNBOUND_ENVIRONMENT_NAMES = frozenset({
+    'PG_RELEASE_LOCK_TOKEN', 'PG_RELEASE_LOCK_WRAPPED', 'PYTHONUNBUFFERED',
+    'PHARMAGUIDE_DATASET_ROOT',
+})
+
+
+def _dataset_root(environ) -> Path | None:
+    # The resolver is the existing owner in scripts/dataset_paths.py; a copy of
+    # this runner without it reads the raw override only.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    try:
+        from dataset_paths import brand_dataset_root
+    except ImportError:
+        brand_dataset_root = None
+    finally:
+        sys.path.pop(0)
+    if brand_dataset_root is not None:
+        return brand_dataset_root(environ=environ).expanduser().resolve()
+    if environ.get('PHARMAGUIDE_DATASET_ROOT'):
+        return Path(environ['PHARMAGUIDE_DATASET_ROOT']).expanduser().resolve()
+    return None
+
+
+def raw_label_fingerprint(raw_root: Path | None) -> dict:
+    """Content of every raw DSLD label the raw-to-final and scoring audits read."""
+    if raw_root is None or not raw_root.is_dir():
+        return {'root': str(raw_root), 'missing': True}
+    return {'root': str(raw_root), 'labels': [
+        (str(path.relative_to(raw_root)), _sha256(path)) for path in sorted(raw_root.rglob('*.json'))]}
+
+
+def _bound_environment(environ) -> dict:
+    bound = {
+        key: value for key, value in environ.items()
+        if key not in UNBOUND_ENVIRONMENT_NAMES
+        and (key in BOUND_ENVIRONMENT_NAMES or key.startswith(BOUND_ENVIRONMENT_PREFIXES))
+    }
+    # The dataset root binds by its resolved path, so exporting the default
+    # value equals leaving it unset.
+    root = _dataset_root(environ)
+    if root is not None:
+        bound['PHARMAGUIDE_DATASET_ROOT'] = str(root)
+    return bound
+
+
 def _input_binding(
     cwd: Path, command: Sequence[str], patterns: Sequence[str],
     *, exclude_paths: Sequence[str] = (),
 ) -> str:
     # Never persist credentials or environment values. The fingerprint binds
     # effective configuration, not shell bookkeeping or the per-run lock token.
-    ignored = {'_', 'PWD', 'OLDPWD', 'SHLVL', 'SHELL_PID',
-               'PG_RELEASE_LOCK_TOKEN', 'PG_RELEASE_LOCK_WRAPPED',
-               'CODEX_TOOL_CALL_ID'}
-    environment = {key: value for key, value in os.environ.items() if key not in ignored}
+    environment = _bound_environment(os.environ)
     files = {}
     # This cache lives for one content pass only. Never carry hashes across
     # the before/after verification boundary or a later publication check.
     digests = {}
     for pattern in patterns:
+        if pattern == RAW_DSLD_LABELS:
+            files[pattern] = raw_label_fingerprint(_dataset_root(os.environ))
+            continue
         entries = []
         for path in sorted(cwd.glob(pattern)):
             if path.is_file():
@@ -258,8 +353,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         log_path=args.log,
         receipt_path=args.receipt,
         cwd=args.cwd,
-        input_globs=[*args.input_glob, *(RELEASE_SOURCE_INPUTS
-                     if args.release_check and args.name in REUSABLE_RELEASE_GATES else ())],
+        input_globs=[*args.input_glob,
+                     *(release_gate_input_globs(args.name) if args.release_check else ())],
         max_age_seconds=args.max_age_seconds,
     )
 

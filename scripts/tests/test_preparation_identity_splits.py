@@ -1408,3 +1408,131 @@ def test_root_bark_primary_phrase_keeps_existing_bound_material(pipeline):
     assert row["canonical_id"] == "barberry_root"
     assert row["plantPart"] == "root"
     assert row["quantity"] == 100
+
+
+# ---------------------------------------------------------------------------
+# One organism, several declared parts (October 31, 2026).
+#
+# The October 27 mixed-source validation resolved each declared form through
+# the raw reverse index only. "Butcher's Broom Leaf Extract" resolves as a
+# label row but did not as a form, so 111 single-organism rows ("Butcher's
+# Broom Leaf, Stem Extract", "Dandelion Root, Whole Herb Extract") lost their
+# identity in the fresh corpus and 19 products shipped NOT_SCORED. Each form is
+# now resolved the way a single-part row is, must name the organism by itself,
+# and the chosen entry's own material scope still bounds the row.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize("name,group,forms,expected", [
+    ("Butcher's Broom Leaf, Stem Extract", "Butcher's Broom",
+     ("Butcher's Broom Leaf Extract", "Butcher's Broom Stem Extract"),
+     ("butcher_s_broom", "standardized_botanicals")),
+    ("Dandelion Root, Whole Herb Extract", "Dandelion",
+     ("Taraxacum officinale Root Extract", "Taraxacum officinale Whole Herb Extract"),
+     ("dandelion", "ingredient_quality_map")),
+    ("Horny Goat Weed Leaf, Stem Extract", "Horny Goat Weed",
+     ("Epimedium sagittatum Leaf Extract", "Epimedium sagittatum Stem Extract"),
+     ("horny_goat_weed", "botanical_ingredients")),
+    ("Black Cohosh Rhizome, Root Extract", "Black Cohosh",
+     ("Black Cohosh Rhizome Extract", "Black Cohosh Root Extract"),
+     ("black_cohosh", "ingredient_quality_map")),
+    ("Rosemary Leaf, Stem Extract", "Rosemary ",
+     ("Rosemary Leaf Extract", "Rosemary Stem Extract"),
+     ("rosemary", "ingredient_quality_map")),
+    ("Artichoke Leaf, Stem Extract", "Artichoke",
+     ("Artichoke Leaf Extract", "Artichoke Stem Extract"),
+     ("globe_artichoke", "botanical_ingredients")),
+    # A curated literal name of the whole row keeps its reviewed identity.
+    ("Mulberry Mistletoe Leaf, Stem Extract", "Loranthus",
+     ("Taxillus chinensis Leaf Extract", "Taxillus chinensis Stem Extract"),
+     ("mulberry_mistletoe", "botanical_ingredients")),
+    # Both parts of one organism map to its part-less broad entry; no
+    # part-specific credit is created (a single-part row earns the same).
+    ("Ashwagandha Leaf, Root Extract", "Ashwagandha",
+     ("Ashwagandha Leaf Extract", "Ashwagandha Root Extract"),
+     ("ashwagandha", "ingredient_quality_map")),
+])
+def test_single_organism_multi_part_row_keeps_its_organism_identity(pipeline, name, group, forms, expected):
+    raw = _raw_product(991040, [_raw_row(1, name, group, quantity=500, unit="mg", forms=forms)])
+    enriched = pipeline(raw)
+    row = enriched["activeIngredients"][0]
+    assert (row["canonical_id"], row["canonical_source_db"]) == expected
+    assert row["quantity"] == 500
+    assert [form["name"] for form in row["forms"]] == list(forms)
+    # The enricher keeps the row as a recognized identity (its IQD canonical
+    # may be the registry's own owner entry); only an unrecognized row would
+    # drop out of active identity and fail the completeness gate.
+    rows = _rows(enriched, name)
+    assert rows and rows[0].get("canonical_id") is not None
+
+
+@pytest.mark.parametrize("name,group,forms", [
+    # The group resolves to a constituent mineral, not the plant.
+    ("Bamboo Leaf, Stem Extract", "Bamboo", ("Bamboo Leaf Extract", "Bamboo Stem Extract")),
+    # Three parts whose forms resolve to different registry entries.
+    ("Broccoli Floret, Seed, Sprout Extract, Powder", "Broccoli",
+     ("Broccoli Floret Extract, Powder", "Broccoli Seed Extract, Powder", "Broccoli Sprout Extract, Powder")),
+    # A foreign organism's form cannot borrow the row's group identity even
+    # though that group would let it resolve on its own.
+    ("Dandelion Root and Ashwagandha Leaf Extract", "Dandelion",
+     ("Taraxacum officinale Root Extract", "Ashwagandha Leaf Extract")),
+    # One form naming two organisms: "turmeric" is a curated name, not a
+    # species epithet of ginger (fresh-context review, October 31).
+    ("Ginger Turmeric Root, Rhizome Extract", "Ginger",
+     ("Ginger Turmeric Root Extract", "Ginger Turmeric Rhizome Extract")),
+    # Bare preparation forms attribute nothing by their own words.
+    ("Butcher's Broom Leaf, Stem Extract", "Butcher's Broom", ("Leaf Extract", "Stem Extract")),
+])
+def test_multi_part_rows_without_one_named_organism_stay_unmapped(pipeline, name, group, forms):
+    raw = _raw_product(991041, [_raw_row(1, name, group, quantity=500, unit="mg", forms=forms)])
+    enriched = pipeline(raw)
+    row = enriched["activeIngredients"][0]
+    assert row.get("canonical_id") is None
+    assert row["canonical_source_db"] == "unmapped"
+    assert row["quantity"] == 500
+
+
+def test_declared_source_probe_leaves_no_trace_in_the_unmapped_report(pipeline):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    before_counts = dict(normalizer.unmapped_ingredients)
+    before_details = dict(normalizer.unmapped_details)
+    # Bare "Leaf Extract" / "Stem Extract" probes fail on their own words and
+    # are recorded during the probe; only the label row itself may remain.
+    normalizer.normalize_product(_raw_product(991042, [_raw_row(
+        1, "Butcher's Broom Leaf, Stem Extract", "Butcher's Broom", quantity=500, unit="mg",
+        forms=("Leaf Extract", "Stem Extract"),
+    )]))
+    new_counts = {k: v for k, v in normalizer.unmapped_ingredients.items() if v != before_counts.get(k, 0)}
+    new_details = {k for k in normalizer.unmapped_details if k not in before_details}
+    assert set(new_counts) == {"Butcher's Broom Leaf, Stem Extract"}
+    assert new_details == {"Butcher's Broom Leaf, Stem Extract"}
+
+
+def test_row_mapped_by_the_multi_part_branch_is_not_reported_unmapped():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    before = dict(normalizer.unmapped_ingredients)
+    cleaned = normalizer.normalize_product(_raw_product(991043, [_raw_row(
+        1, "Nettle Leaf, Root Extract", "Nettle", quantity=500, unit="mg",
+        forms=("Stinging Nettle Leaf Extract", "Stinging Nettle Root Extract"),
+    )]))
+    row = cleaned["activeIngredients"][0]
+    assert row["canonical_id"] == "stinging_nettle"
+    assert normalizer.unmapped_ingredients.get("Nettle Leaf, Root Extract", 0) == before.get("Nettle Leaf, Root Extract", 0)
+    assert "Nettle Leaf, Root Extract" not in normalizer.unmapped_details
+
+
+@pytest.mark.parametrize("form_name", ["Softgels", "Total Omega"])
+def test_declared_source_probe_leaves_no_display_row(form_name):
+    # A probed form on the skip list queues a display row with no source path
+    # (PR #318 review); the probe must leave the product's display buffer as it found it.
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._display_ingredients_buffer = [{"raw_source_text": "existing"}]
+    row = _raw_row(1, "Butcher's Broom Leaf, Stem Extract", "Butcher's Broom", quantity=500, unit="mg")
+    assert normalizer._declared_source_form_identity({"name": form_name, "category": "botanical"}, row) == (None, None)
+    assert normalizer._display_ingredients_buffer == [{"raw_source_text": "existing"}]
