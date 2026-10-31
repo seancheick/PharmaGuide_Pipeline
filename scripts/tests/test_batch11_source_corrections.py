@@ -194,7 +194,10 @@ def test_returned_iqm_sources_keep_the_studied_endpoint_and_preparation():
     assert 'single 500 mg trans-resveratrol tablet' in rows['red_wine_extract']['forms']['standardized red wine extract']['notes']
     assert 'not 500 mg isolated diosgenin' in rows['diosgenin']['forms']['diosgenin (unspecified)']['notes']
     assert 'six young men' in rows['perilla_oil']['forms']['perilla seed oil']['notes']
-    assert 'Foreword' in rows['sage']['forms']['cognivia sage extract']['notes']
+    sage_note = rows['sage']['forms']['cognivia sage extract']['notes']
+    assert 'PMID20377818' in sage_note
+    assert 'not oral Cognivia in healthy adults' in sage_note
+    assert '10.1038/sj.ijo.0801322' not in sage_note
     assert 'preclinical in-vitro rat-platelet experiment' in rows['cayenne_pepper']['forms']['cayenne pepper (unspecified)']['notes']
     assert '~50% inactive L-βHB enantiomer' not in rows['inositol']['forms']['d-chiro-inositol']['notes']
 

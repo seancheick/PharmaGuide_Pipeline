@@ -180,8 +180,8 @@ def test_sage_description_does_not_restore_disclaimed_aromatherapy_evidence():
     description = _data()['sage']['description']
     assert 'Multiple RCTs support cognitive performance enhancement in healthy adults' not in description
     assert 'mixed aromatherapy' in description
-    assert 'Foreword' in description
-    assert 'full body was not obtained' in description
+    assert '10.1038/sj.ijo.0801322' not in description
+    assert 'not oral sage or Cognivia in healthy adults' in description
     assert 'no oral sage/Cognivia efficacy credit' in description
 
 
