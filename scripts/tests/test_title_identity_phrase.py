@@ -30,6 +30,12 @@ def _named(name, canonical, text):
     ("Alpha-Lipoic Acid", "alpha_lipoic_acid", "alpha betic"),
     ("Beta-Cryptoxanthin", "cryptoxanthin", "women's ultra mega beta complex"),
     ("Fish Oil", "fish_oil", "oil of oregano"),
+    ("Green Tea extract", "green_tea_extract", "black tea extract 500 mg"),
+    ("Branched Chain Amino Acids", "branched_chain_amino_acids", "essential amino acid complete"),
+    ("hydrolyzed Whey Peptide Complex", "whey_protein", "citrulline complex"),
+    ("organic Quinoa", "quinoa", "raw organic perfect food"),
+    # The active_in source names the row only when the row's own name says it.
+    ("Curcumin", "curcumin", "turmeric extract 500 mg"),
 ])
 def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
     assert not _named(name, canonical, text)
@@ -51,6 +57,14 @@ def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
     ("MSM", "msm", "glucosamine msm"),
     ("Vitamin D3", "vitamin_d", "d3 5000 iu"),
     ("Vitamin C", "vitamin_c", "vitamin c 1000"),
+    ("CoffeeGenic Green Coffee extract", "green_coffee_bean", "green coffee extract coffeegenic 400 mg"),
+    ("Energy & Metabolism Blend", "energy_metabolism_blend", "energy and metabolism"),
+    ("Vitamin E (Mixed Tocopherols and Tocotrienols)", "vitamin_e", "gamma e mixed tocopherols & tocotrienols"),
+    ("Apple Cider Vinegar", "apple_cider_vinegar", "apple cider complete"),
+    ("Kelp Thallus Extract", "kombu", "kelp"),
+    ("Waterex Herbal Blend", "waterex_herbal_blend", "waterex"),
+    ("Citrus Bioflavonoid Complex", "citrus_bioflavonoids", "vitamin c with bioflavonoids 1,000 mg"),
+    ("Curcumin C3 Complex Turmeric Extract", "curcumin", "extra strength turmeric extract 1400 mg"),
 ])
 def test_identity_phrase_or_registered_name_names_the_ingredient(name, canonical, text):
     assert _named(name, canonical, text)

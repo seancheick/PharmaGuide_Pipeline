@@ -1753,11 +1753,8 @@ def _loose_identity_named_in_product_title(product: Dict[str, Any], row: Dict[st
     title = _norm(product.get("product_name") or product.get("fullName"))
     if not title:
         return False
-    # The role owner's identity matcher decides; a plural title word
-    # ("Tocotrienols 50 mg") names the singular ingredient.
-    singular = " ".join(token[:-1] if token.endswith("s") and len(token) >= 5 else token
-                        for token in re.split(r"[^a-z0-9]+", title) if token)
-    if _named_in_title(row, title) or _named_in_title(row, singular):
+    # The role owner's identity matcher decides.
+    if _named_in_title(row, title):
         return True
 
     # DSLD is inconsistent about closed vs open compounds (for example,
@@ -6650,7 +6647,7 @@ _ROLE_TITLE_STOPWORDS = {
     # Plant parts and preparations name no species: "Fruit Punch" and
     # "Fruit & Veggie" are not about apple_fruit (40089).
     "fruit", "fruits", "berry", "berries", "seed", "bark", "flower", "herb",
-    "juice", "whole", "leaves", "grass", "thallus",
+    "juice", "whole", "leaves", "grass", "thallus", "herbal",
     # A chemical class names no single ingredient: "Omega-3 Fatty Acids" is
     # named by "Omega-3", never by "Fatty Acid Support".
     "acids", "fatty",
@@ -6810,6 +6807,16 @@ def _role_is_probiotic_strain(row: Dict[str, Any]) -> bool:
 def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     if not title_norm:
         return False
+    if _names_identity_phrase(row, title_norm):
+        return True
+    # A plural title word ("Tocotrienols 50 mg", "Vitamin C with
+    # Bioflavonoids") names the singular ingredient.
+    singular = " ".join(token[:-1] if token.endswith("s") and len(token) >= 5 else token
+                        for token in re.split(r"[^a-z0-9]+", title_norm) if token)
+    return singular != title_norm and _names_identity_phrase(row, singular)
+
+
+def _names_identity_phrase(row: Dict[str, Any], title_norm: str) -> bool:
     # Whole-token match, NOT substring: "iron" must not match inside
     # "environmental". (CR-01)
     ordered_title_tokens = [
@@ -6858,20 +6865,30 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
         # identity ("Green" of "Green Tea extract" in "Ultra Mega Green",
         # 67032); a short name such as "Carnitine" or "Omega-3" counts only
         # when the identity registry lists it for this ingredient.
-        core_tokens = [token for token in candidate_tokens if token not in _ROLE_TITLE_STOPWORDS]
-        for phrase, min_len in ((candidate_tokens, 3),
-                                (core_tokens, 3 if len(candidate_tokens) == 1 else 4)):
-            if len(phrase) == 1:
-                # A whole one-token name of three letters ("MSM", 182940)
-                # matches the same title token; four letters guard a lone
-                # descriptor-stripped core.
-                if len(phrase[0]) >= min_len and phrase[0] in title_tokens:
-                    return True
-            elif any(
-                ordered_title_tokens[index:index + len(phrase)] == phrase
-                for index in range(len(ordered_title_tokens) - len(phrase) + 1)
-            ):
+        if any(
+            ordered_title_tokens[index:index + len(candidate_tokens)] == candidate_tokens
+            for index in range(len(ordered_title_tokens) - len(candidate_tokens) + 1)
+        ) and (len(candidate_tokens) > 1 or len(candidate_tokens[0]) >= 3):
+            # The whole name; a one-token name of three letters ("MSM",
+            # 182940) matches the same title token.
+            return True
+        core_tokens = [token for token in candidate_tokens
+                       if token not in _ROLE_TITLE_STOPWORDS and token != "and"]
+        if len(core_tokens) == 1:
+            if len(core_tokens[0]) >= 4 and core_tokens[0] in title_tokens:
                 return True
+            continue
+        # Two or more consecutive identity words of the name name it, with
+        # "and" read like "&" ("CoffeeGenic Green Coffee extract" in "Green
+        # Coffee Extract CoffeeGenic"; "Energy & Metabolism Blend" in "Energy
+        # and Metabolism").
+        joined_title = [token for token in ordered_title_tokens if token != "and"]
+        if any(
+            joined_title[index:index + 2] == core_tokens[start:start + 2]
+            for start in range(len(core_tokens) - 1)
+            for index in range(len(joined_title) - 1)
+        ):
+            return True
     return False
 
 
@@ -6892,6 +6909,18 @@ def _registered_identity_names(canonical: str, names: tuple) -> tuple:
             if isinstance(form, dict):
                 registered.add(_norm(form_name))
                 registered.update(_norm(alias) for alias in _safe_list(form.get("aliases")))
+        # The source whose active this is ("active_in": curcumin in turmeric)
+        # names the row only where the row's own name carries it
+        # ("Curcumin C3 Complex Turmeric Extract" in "Turmeric Extract").
+        own_names = [" " + " ".join(re.split(r"[^a-z0-9]+", name)).strip() + " " for name in names if name]
+        for relationship in _safe_list(entry.get("relationships")):
+            if not isinstance(relationship, dict) or relationship.get("type") != "active_in":
+                continue
+            source = iqm_reference_entry(_norm(relationship.get("target_id")))
+            for source_name in [(source or {}).get("standard_name")] + _safe_list((source or {}).get("aliases")):
+                phrase = " ".join(token for token in re.split(r"[^a-z0-9]+", _norm(source_name)) if token)
+                if phrase and any(f" {phrase} " in own for own in own_names):
+                    registered.add(phrase)
     alias_index = _botanical_title_alias_index()
     for key in (canonical.replace("_", " "),) + names:
         registered.update(alias_index.get(key, ()))
