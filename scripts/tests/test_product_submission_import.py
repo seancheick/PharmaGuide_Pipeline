@@ -2344,6 +2344,43 @@ def test_check_receipts_reports_legacy_promoted_rows_and_refuses_unpromoted_hash
         check_import_receipts(output_dir=manual_dir)
 
 
+def test_check_receipts_accepts_a_promoted_owner_whose_file_its_correction_replaced(tmp_path):
+    """A correction rewrites the promoted owner's file after freezing the owner's bytes."""
+    from product_submission_import import (
+        SubmissionImportError, check_import_receipts, materialize_approved_submissions,
+    )
+
+    first = _export(kind="label_mismatch", normalized_upc="050428381397", target_dsld_id="278454")
+    materialize_approved_submissions([first], output_dir=tmp_path)
+    receipt_path = tmp_path / ".product_submission_import_receipts"
+    receipts = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipts["submissions"][first["submission_id"]]["promoted_catalog_version"] = "2026.07.30.220000"
+    receipt_path.write_text(json.dumps(receipts), encoding="utf-8")
+    second_payload = _payload()
+    second_payload["fullName"] = "Clinically reviewed second correction"
+    second = _export(second_payload, submission_id="028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+                     kind="label_mismatch", normalized_upc="050428381397", target_dsld_id="278454")
+    materialize_approved_submissions([second], output_dir=tmp_path)
+
+    assert check_import_receipts(output_dir=tmp_path) == {
+        "rows": 2, "promoted": 1, "pending": 1, "legacy_without_payload_hash": 0,
+    }
+
+    shared = tmp_path / "278454.json"
+    current = shared.read_bytes()
+    shared.write_bytes(current + b" ")
+    with pytest.raises(SubmissionImportError, match="changed after import"):
+        check_import_receipts(output_dir=tmp_path)
+    shared.write_bytes(current)
+
+    owner = json.loads(receipt_path.read_text(encoding="utf-8"))["submissions"][first["submission_id"]]
+    frozen = tmp_path / owner["promoted_label_artifact"]
+    frozen_bytes = frozen.read_bytes()
+    frozen.write_bytes(frozen_bytes + b" ")
+    with pytest.raises(SubmissionImportError, match=f"{first['submission_id']}: label file 278454.json changed"):
+        check_import_receipts(output_dir=tmp_path)
+
+
 def test_check_receipts_refuses_a_label_that_drifted_from_its_receipt(tmp_path):
     from product_submission_import import SubmissionImportError, check_import_receipts, materialize_approved_submissions
 

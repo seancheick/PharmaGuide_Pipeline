@@ -2034,6 +2034,20 @@ def check_import_receipts(*, output_dir: str | Path) -> dict[str, int]:
     receipts = _read_receipts(destination / RECEIPT_FILE)["submissions"]
     problems: list[str] = []
     counts = {"rows": 0, "promoted": 0, "pending": 0, "legacy_without_payload_hash": 0}
+    # A correction of a promoted product rewrites the owner's file after
+    # freezing the owner's exact bytes; the correction's receipt owns the file.
+    file_claims = {
+        (row.get("output_file"), str(row.get("product_id") or ""), row.get("label_sha256"))
+        for row in receipts.values() if isinstance(row, dict)
+    }
+
+    def frozen_promoted_label_is_intact(receipt: dict[str, Any], label_sha256: str) -> bool:
+        relative = receipt.get("promoted_label_artifact")
+        if (not isinstance(relative, str) or Path(relative).is_absolute()
+                or receipt.get("promoted_label_sha256") != label_sha256):
+            return False
+        artifact = destination / relative
+        return artifact.is_file() and hashlib.sha256(artifact.read_bytes()).hexdigest() == label_sha256
     for submission_id, receipt in sorted(receipts.items()):
         counts["rows"] += 1
         if not isinstance(receipt, dict):
@@ -2064,7 +2078,10 @@ def check_import_receipts(*, output_dir: str | Path) -> dict[str, int]:
             label_path = destination / output_file
             if not label_path.is_file():
                 problems.append(f"{submission_id}: label file {output_file} is missing")
-            elif hashlib.sha256(label_path.read_bytes()).hexdigest() != label_sha256:
+            elif (current_sha256 := hashlib.sha256(label_path.read_bytes()).hexdigest()) != label_sha256 and not (
+                (output_file, product_id, current_sha256) in file_claims
+                and frozen_promoted_label_is_intact(receipt, label_sha256)
+            ):
                 problems.append(f"{submission_id}: label file {output_file} changed after import")
         payload_hash = receipt.get("approval_payload_sha256")
         if payload_hash is not None and not (
