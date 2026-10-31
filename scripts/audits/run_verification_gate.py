@@ -32,6 +32,27 @@ REUSABLE_RELEASE_GATES = frozenset({
     'RDA/UL emitted-reference stamp parity',
 })
 
+# Read-only source/corpus gates that also read scored artifacts and stage
+# manifests bind those too. The scoring completeness preflight took ~17 min on
+# every snapshot (2026-10-31) although nothing it reads had changed between runs.
+RELEASE_GATE_EXTRA_INPUTS = {
+    'scoring assessment completeness preflight': (
+        'scripts/products/*_scored/scored/*.json',
+        'scripts/products/*/cleaned/*.json',
+        'scripts/products/*/*/.stage_manifest.json',
+        'manual_labels/**/*.json',
+    ),
+}
+
+
+def release_gate_input_globs(name: str) -> tuple:
+    """Content globs the shared release-gate reuse policy binds for ``name``."""
+    if name in RELEASE_GATE_EXTRA_INPUTS:
+        return (*RELEASE_SOURCE_INPUTS, *RELEASE_GATE_EXTRA_INPUTS[name])
+    if name in REUSABLE_RELEASE_GATES:
+        return tuple(RELEASE_SOURCE_INPUTS)
+    return ()
+
 # Read-only source/corpus gates share these inputs across snapshot and release.
 # Generated reports, live catalogs and audit caches are deliberately outside
 # this set. Artifact/live/mutating gates never opt into this reuse policy.
@@ -305,8 +326,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         log_path=args.log,
         receipt_path=args.receipt,
         cwd=args.cwd,
-        input_globs=[*args.input_glob, *(RELEASE_SOURCE_INPUTS
-                     if args.release_check and args.name in REUSABLE_RELEASE_GATES else ())],
+        input_globs=[*args.input_glob,
+                     *(release_gate_input_globs(args.name) if args.release_check else ())],
         max_age_seconds=args.max_age_seconds,
     )
 

@@ -687,8 +687,16 @@ run_strict_gate "cleaner/IQD row contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir "$PRODUCTS_DIR" --strict-release
 run_strict_gate "enrichment/IQD source-of-truth contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir "$PRODUCTS_DIR" --strict-release
-run_strict_gate "scoring assessment completion contract" \
-  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring --products-dir "$PRODUCTS_DIR" --dist-dir "$DIST_DIR" --strict-release
+# The snapshot runs this same scoring audit ("scoring assessment readiness") on
+# the candidate before it records the sealed catalog receipt, and the receipt
+# binds every catalog byte. While the receipt is current, the promoted catalog
+# is byte-for-byte what that audit passed; any mutation since reruns it here.
+if "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-current; then
+  skip "Strict gate: scoring assessment completion contract already passed on these exact catalog bytes (sealed catalog receipt)"
+else
+  run_strict_gate "scoring assessment completion contract" \
+    "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring --products-dir "$PRODUCTS_DIR" --dist-dir "$DIST_DIR" --strict-release
+fi
 run_strict_gate "clinical drift contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir "$PRODUCTS_DIR" --strict-release
 run_strict_gate "clinical evidence match reachability" \
