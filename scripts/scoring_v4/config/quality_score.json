@@ -2986,6 +2986,967 @@
           "dose_benchmark_identity_unresolved"
         ],
         "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1": {
+        "source_name": "PharmaGuide verified product submission",
+        "source_record_id": "1a28723d-bdaf-4ac1-897a-a5ff156faca1",
+        "formula_fingerprint": "7af7c839393eabe571281647aa4e6ee12e5f7e0d8391f500b3207c24dddc753c",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "Lactobacillus acidophilus",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[1]",
+            "raw_source_text": "Bifidobacterium bifidum",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[2]",
+            "raw_source_text": "Bifidobacterium breve",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[3]",
+            "raw_source_text": "Lactobacillus paracasei",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[4]",
+            "raw_source_text": "Lactobacillus plantarum",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[5]",
+            "raw_source_text": "Lactobacillus rhamnosus",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[6]",
+            "raw_source_text": "Bifidobacterium infantis",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[7]",
+            "raw_source_text": "Bifidobacterium longum",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact verified PharmaGuide product submission PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1; Not Scored while probiotic_evidence_assessment_incomplete remains unfinished. Publication only under Sean's source-bound Dose/Evidence hold authorization; no benefit credit or safety clearance.",
+        "source_url": "local/manual_labels/product_submissions/PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1",
+        "blockers": [
+          "probiotic_evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
+      },
+      "PG_SUB_3584FB6BA2DA4497B0A88B524CD45ACB": {
+        "source_name": "PharmaGuide verified product submission",
+        "source_record_id": "3584fb6b-a2da-4497-b0a8-8b524cd45acb",
+        "formula_fingerprint": "097d9c9b4ae86707174b75decb65887dd0bc11d7095a7b35c8f0b95fc13dc0e1",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Vitamin B6 (as pyridoxine hydrochloride)",
+            "quantity": 2.0,
+            "unit": "mg",
+            "notes": "Printed %DV: 118",
+            "forms": [
+              {
+                "name": "pyridoxine hydrochloride",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Folate (as folic acid)",
+            "quantity": 1334.0,
+            "unit": "mcg DFE",
+            "notes": "Printed %DV: 334; printed secondary amount: 800 mcg folic acid.",
+            "forms": [
+              {
+                "name": "folic acid",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Vitamin B12 (as cyanocobalamin)",
+            "quantity": 1000.0,
+            "unit": "mcg",
+            "notes": "Printed %DV: 41667",
+            "forms": [
+              {
+                "name": "cyanocobalamin",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[3]",
+            "raw_source_text": "Stevia Leaf Extract",
+            "quantity": 2.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "leaf",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact verified PharmaGuide product submission PG_SUB_3584FB6BA2DA4497B0A88B524CD45ACB; Not Scored while evidence_assessment_incomplete remains unfinished. Publication only under Sean's source-bound Dose/Evidence hold authorization; no benefit credit or safety clearance.",
+        "source_url": "local/manual_labels/product_submissions/PG_SUB_3584FB6BA2DA4497B0A88B524CD45ACB",
+        "blockers": [
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
+      },
+      "PG_SUB_54970EAA6F6B488185C5B3D38D0E1D43": {
+        "source_name": "PharmaGuide verified product submission",
+        "source_record_id": "54970eaa-6f6b-4881-85c5-b3d38d0e1d43",
+        "formula_fingerprint": "41523f439ce1178dca8420b43cb7b4f217bc049240d52739596e434ece13ab2d",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Women's Blend",
+            "quantity": 250.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "raw_source_text": "Lactobacillus plantarum",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[1]",
+            "raw_source_text": "Lactobacillus fermentum",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[2]",
+            "raw_source_text": "Lactobacillus acidophilus",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[3]",
+            "raw_source_text": "Lactobacillus reuteri",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[4]",
+            "raw_source_text": "Bifidobacterium bifidum",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[5]",
+            "raw_source_text": "Bifidobacterium infantis",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[6]",
+            "raw_source_text": "Lactobacillus rhamnosus",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Fructooligosaccharides (from chicory root extract)",
+            "quantity": 25.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "fructooligosaccharide",
+                "source": "name_extraction"
+              },
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "root",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "raw_source_text": "D-Mannose",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[0].nestedRows[1]",
+            "raw_source_text": "Cranberry (Fruit) Juice Concentrate",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": "fruit",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact verified PharmaGuide product submission PG_SUB_54970EAA6F6B488185C5B3D38D0E1D43; Not Scored while probiotic_evidence_assessment_incomplete remains unfinished. Publication only under Sean's source-bound Dose/Evidence hold authorization; no benefit credit or safety clearance.",
+        "source_url": "local/manual_labels/product_submissions/PG_SUB_54970EAA6F6B488185C5B3D38D0E1D43",
+        "blockers": [
+          "probiotic_evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
+      },
+      "PG_SUB_5871249A699D4EA2A11CC97A6AD4B24F": {
+        "source_name": "PharmaGuide verified product submission",
+        "source_record_id": "5871249a-699d-4ea2-a11c-c97a6ad4b24f",
+        "formula_fingerprint": "e22d9f940c5d21e0094d5bd1252dd20bb62c32594ae5de71a035fea82d41f2bf",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Micronized Creatine Monohydrate",
+            "quantity": 5.0,
+            "unit": "g",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact verified PharmaGuide product submission PG_SUB_5871249A699D4EA2A11CC97A6AD4B24F; Not Scored while evidence_assessment_incomplete remains unfinished. Publication only under Sean's source-bound Dose/Evidence hold authorization; no benefit credit or safety clearance.",
+        "source_url": "local/manual_labels/product_submissions/PG_SUB_5871249A699D4EA2A11CC97A6AD4B24F",
+        "blockers": [
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
+      },
+      "PG_SUB_5E4D136A84A8485F98E1F3C0BCF49A73": {
+        "source_name": "PharmaGuide verified product submission",
+        "source_record_id": "5e4d136a-84a8-485f-98e1-f3c0bcf49a73",
+        "formula_fingerprint": "d6078c1f518362b613a310a9ab10a351bb313b9b5bc069963c1f76d97b202ac5",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Organic Ashwagandha (Withania somnifera) Root and Stem Extract 1.5%",
+            "quantity": 600.0,
+            "unit": "mg",
+            "notes": "Daily Value not established. The label does not name the constituent represented by 1.5%.",
+            "forms": [
+              {
+                "name": "Root and Stem Extract 1.5%",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "root and stem",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Organic Rhodiola (Rhodiola rosea) Root Extract 4:1",
+            "quantity": 400.0,
+            "unit": "mg",
+            "notes": "Daily Value not established.",
+            "forms": [
+              {
+                "name": "Root Extract 4:1",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "root",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Organic (Panax ginseng) Root Extract 30:1",
+            "quantity": 200.0,
+            "unit": "mg",
+            "notes": "Daily Value not established.",
+            "forms": [
+              {
+                "name": "Root Extract 30:1",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "root",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[3]",
+            "raw_source_text": "Phosphatidyl Serine from Sunflower (Helianthus annuus L.) Seed",
+            "quantity": 100.0,
+            "unit": "mg",
+            "notes": "Daily Value not established.",
+            "forms": [
+              {
+                "name": "Sunflower (Helianthus annuus L.) Seed",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "seed",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact verified PharmaGuide product submission PG_SUB_5E4D136A84A8485F98E1F3C0BCF49A73; Not Scored while evidence_assessment_incomplete remains unfinished. Publication only under Sean's source-bound Dose/Evidence hold authorization; no benefit credit or safety clearance.",
+        "source_url": "local/manual_labels/product_submissions/PG_SUB_5E4D136A84A8485F98E1F3C0BCF49A73",
+        "blockers": [
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
+      },
+      "PG_SUB_8800C6CBB6F14B79A73D599B126C8636": {
+        "source_name": "PharmaGuide verified product submission",
+        "source_record_id": "8800c6cb-b6f1-4b79-a73d-599b126c8636",
+        "formula_fingerprint": "81a139a252493af3bb293e334a1eac30dc028835cdcc8b99c593ab4cafe0e997",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Ashwagandha KSM-66 (Withania somnifera) Root Extract",
+            "quantity": 600.0,
+            "unit": "mg",
+            "notes": "Daily Value (DV) not established.",
+            "forms": [
+              {
+                "name": "KSM-66 Root Extract",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "root",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Pleasure Positiv Blend",
+            "quantity": 295.0,
+            "unit": "mg",
+            "notes": "Proprietary blend; individual amounts not disclosed. Daily Value (DV) not established.",
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "raw_source_text": "Ginkgo (Ginkgo biloba) Leaf Extract",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "leaf",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[1]",
+            "raw_source_text": "GABA (Gamma-Aminobutyric Acid)",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[2]",
+            "raw_source_text": "Velvet Bean (Mucuna pruriens) Seed Extract",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "seed",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[3]",
+            "raw_source_text": "L-Citrulline",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1].nestedRows[4]",
+            "raw_source_text": "L-Arginine",
+            "quantity": 0.0,
+            "unit": "unspecified",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact verified PharmaGuide product submission PG_SUB_8800C6CBB6F14B79A73D599B126C8636; Not Scored while evidence_assessment_incomplete remains unfinished. Publication only under Sean's source-bound Dose/Evidence hold authorization; no benefit credit or safety clearance.",
+        "source_url": "local/manual_labels/product_submissions/PG_SUB_8800C6CBB6F14B79A73D599B126C8636",
+        "blockers": [
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
+      },
+      "PG_SUB_A89A9212EDDD4A89A54842EF791F2AE2": {
+        "source_name": "PharmaGuide verified product submission",
+        "source_record_id": "a89a9212-eddd-4a89-a548-42ef791f2ae2",
+        "formula_fingerprint": "c1b44ee4567342d6fa0c7a0eb0410e9acfd3725ff429d547775a0004875c4312",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Vitamin A (as retinyl palmitate)",
+            "quantity": 180.0,
+            "unit": "mcg RAE",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Retinyl Palmitate",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "Vitamin D (as cholecalciferol) [from Lichen (whole plant)]",
+            "quantity": 50.0,
+            "unit": "mcg",
+            "notes": "Label also declares 2,000 IU.",
+            "forms": [
+              {
+                "name": "Cholecalciferol",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "whole plant",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Vitamin E (as alpha-tocopherol from mixed tocopherols) [from Brassica napus (seed)]",
+            "quantity": 6.7,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Alpha-Tocopherol",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              },
+              {
+                "name": "Mixed Tocopherols",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "seed",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[3]",
+            "raw_source_text": "Folate (as 6S-5-Methyltetrahydrofolate (glucosamine salt))",
+            "quantity": 200.0,
+            "unit": "mcg DFE",
+            "notes": null,
+            "forms": [
+              {
+                "name": "6S-5-Methyltetrahydrofolate (Glucosamine Salt)",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[4]",
+            "raw_source_text": "Vitamin B12 (as methylcobalamin)",
+            "quantity": 8.0,
+            "unit": "mcg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Methylcobalamin",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[5]",
+            "raw_source_text": "Magnesium (as dimagnesium malate)",
+            "quantity": 30.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Dimagnesium Malate",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[6]",
+            "raw_source_text": "Zinc (as bisglycinate)",
+            "quantity": 2.4,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Zinc Bisglycinate",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[7]",
+            "raw_source_text": "Omega-3 Docosahexaenoic Acid (DHA) Fatty Acid [from Schizochytrium sp. (whole microalgae)]",
+            "quantity": 330.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Schizochytrium sp. (whole microalgae)",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "whole",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8]",
+            "raw_source_text": "Boron (as calcium fructoborate)",
+            "quantity": 0.7,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Calcium Fructoborate",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9]",
+            "raw_source_text": "Vitamin K2 (as Menaquinone-7)",
+            "quantity": 90.0,
+            "unit": "mcg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Menaquinone-7",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact verified PharmaGuide product submission PG_SUB_A89A9212EDDD4A89A54842EF791F2AE2; Not Scored while evidence_assessment_incomplete remains unfinished. Publication only under Sean's source-bound Dose/Evidence hold authorization; no benefit credit or safety clearance.",
+        "source_url": "local/manual_labels/product_submissions/PG_SUB_A89A9212EDDD4A89A54842EF791F2AE2",
+        "blockers": [
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
+      },
+      "PG_SUB_C926B40D83F1491CB6CD3EEBEBC73FC7": {
+        "source_name": "PharmaGuide verified product submission",
+        "source_record_id": "c926b40d-83f1-491c-b6cd-3eebebc73fc7",
+        "formula_fingerprint": "50ff14bc9b151aa915eb69df2811c79710e45ae423a0c78e2a46ec7ff2a2ee6e",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Niacin (as Niacinamide)",
+            "quantity": 40.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Niacinamide",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[1]",
+            "raw_source_text": "NAD+ (Nicotinamide Adenine Dinucleotide)",
+            "quantity": 200.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Nicotinamide Adenine Dinucleotide",
+                "ingredientId": null,
+                "order": null,
+                "prefix": null,
+                "percent": null,
+                "category": null,
+                "ingredientGroup": null,
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Trans-Resveratrol (from Japanese Knotweed (Polygonum cuspidatum) Extract (root))",
+            "quantity": 100.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "root",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[3]",
+            "raw_source_text": "Luteolin (from Sophora japonica Extract (flower))",
+            "quantity": 50.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "flower",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[4]",
+            "raw_source_text": "Broccoli (Brassica oleracea) Extract (seed) (std. to contain sulforaphane)",
+            "quantity": 10.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "seed",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[5]",
+            "raw_source_text": "Spermidine Trihydrochloride (3HCl)",
+            "quantity": 5.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[6]",
+            "raw_source_text": "Astaxanthin (Haematococcus pluvialis) (whole plant)",
+            "quantity": 2.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": "whole plant",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Exact verified PharmaGuide product submission PG_SUB_C926B40D83F1491CB6CD3EEBEBC73FC7; Not Scored while evidence_assessment_incomplete remains unfinished. Publication only under Sean's source-bound Dose/Evidence hold authorization; no benefit credit or safety clearance.",
+        "source_url": "local/manual_labels/product_submissions/PG_SUB_C926B40D83F1491CB6CD3EEBEBC73FC7",
+        "blockers": [
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": null
       }
     }
   }

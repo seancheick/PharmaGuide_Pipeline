@@ -17,6 +17,73 @@ NEW_BLOCKERS = {
     '59635': ['probiotic_evidence_assessment_incomplete'],
 }
 
+SUBMISSION_HOLDS = [
+    ('PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1', 'no_known_catalog_concern'),
+    ('PG_SUB_C926B40D83F1491CB6CD3EEBEBC73FC7', 'caution'),
+]
+
+
+@pytest.mark.parametrize('pid,safety_status', SUBMISSION_HOLDS)
+def test_verified_submission_science_hold_has_no_public_score(pid, safety_status):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob, validate_export_contract
+
+    raw = json.loads((Path(__file__).parents[2] / 'manual_labels/product_submissions'
+                      / f'{pid}.json').read_text())
+    assert raw['manual_product_provenance']['review_status'] == 'verified'
+    enriched, errors = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    scored = build_scored_artifact(enriched)
+    assert scored['assessment_readiness']['release_assessment']['is_complete'] is False
+    assert scored['quality_score_status'] == 'not_scored'
+    assert scored['verdict'] == 'NOT_SCORED'
+    assert scored['score_unavailable_reason'] == 'release_assessment_incomplete'
+    assert scored['product_safety_status'] == safety_status
+    for key in ('quality_score_v4_100', 'score_100_equivalent',
+                'score_display_100_equivalent', 'quality_pillars_v4', 'quality_tier'):
+        assert scored.get(key) is None
+    assert validate_export_contract(enriched, scored) == []
+    blob = build_detail_blob(enriched, scored)
+    assert blob['label_record']['source_record_id'] == raw['label_record_metadata']['source_record_id']
+
+
+@pytest.mark.parametrize('alteration', [
+    'review_status', 'source_record_id', 'source_path', 'label_record_id',
+    'source_type', 'source_quantity',
+])
+def test_submission_hold_rejects_changed_source_or_unverified_review(alteration):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import score_eligible_identity_view
+    from score_supplements_v4 import score_product_v4
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+
+    pid = 'PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1'
+    raw = json.loads((Path(__file__).parents[2] / 'manual_labels/product_submissions'
+                      / f'{pid}.json').read_text())
+    enriched, errors = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    v4 = score_product_v4(score_eligible_identity_view(enriched))
+    assert assemble_scored_artifact(enriched, deepcopy(v4))['quality_score_status'] == 'not_scored'
+    changed = deepcopy(enriched)
+    if alteration == 'review_status':
+        changed['manual_product_provenance']['review_status'] = 'pending'
+    elif alteration == 'source_record_id':
+        changed['manual_product_provenance']['source_record_id'] = 'other-record'
+    elif alteration == 'source_path':
+        changed['manual_product_provenance']['source_path'] = 'local/other-label'
+    elif alteration == 'label_record_id':
+        changed['label_record_metadata']['source_record_id'] = 'other-record'
+    elif alteration == 'source_type':
+        changed['source_type'] = 'NIH DSLD'
+    else:
+        changed['activeIngredients'][0]['raw_source_text'] = 'changed source row'
+    assert assemble_scored_artifact(changed, deepcopy(v4))['quality_score_status'] == 'scored'
+
 @pytest.fixture(scope='module')
 def pairs():
     from enhanced_normalizer import EnhancedDSLDNormalizer

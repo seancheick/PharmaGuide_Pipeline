@@ -277,7 +277,19 @@ def _held_assessment_label(product: Dict[str, Any], release: Optional[Dict[str, 
         label = build_label_record_contract(product, product.get("display_ingredients"))
     except ValueError:
         return {}
-    if (label.get("source_record_id") != str(product.get("dsld_id") or "")
+    source_record_id = entry.get("source_record_id") or str(product.get("dsld_id") or "")
+    if entry.get("source_record_id"):
+        provenance = _safe_dict(product.get("manual_product_provenance"))
+        metadata = _safe_dict(product.get("label_record_metadata"))
+        if (product.get("source_type") != "external_manual"
+                or provenance.get("source_kind") != "private_product_submission"
+                or provenance.get("review_status") != "verified"
+                or provenance.get("source_record_id") != source_record_id
+                or metadata.get("source_record_id") != source_record_id
+                or metadata.get("source_name") != entry.get("source_name")
+                or provenance.get("source_path") != entry.get("source_url")):
+            return {}
+    if (label.get("source_record_id") != source_record_id
             or label.get("source_name") != entry.get("source_name")
             or not label.get("formula_fingerprint")
             or label["formula_fingerprint"] != entry.get("formula_fingerprint")):

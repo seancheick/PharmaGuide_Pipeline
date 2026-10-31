@@ -41826,7 +41826,9 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [
+      "Ginger (root) extract"
+    ]
   },
   "lions_mane": {
     "standard_name": "Lion's Mane",
