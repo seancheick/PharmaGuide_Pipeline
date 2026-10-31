@@ -41038,7 +41038,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Essential amino acid required for protein synthesis and methylation processes. Important for liver health, detoxification, and S-adenosylmethionine (SAMe) production. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts), ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Essential amino acid required for protein synthesis and methylation processes. Important for liver health, detoxification, and S-adenosylmethionine (SAMe) production.",
         "aliases": [
           "methionine",
           "methionine amino acid",
@@ -45839,7 +45839,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Docosapentaenoic acid (DPA, 22:5 n-3) — an intermediate omega-3 between EPA and DHA. Found naturally in seal oil and human breast milk. Emerging evidence for anti-inflammatory, antithrombotic, and endothelial protection distinct from EPA/DHA. Limited supplemental form availability. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts), ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Docosapentaenoic acid (DPA, 22:5 n-3) — an intermediate omega-3 between EPA and DHA. Found naturally in seal oil and human breast milk. Emerging evidence for anti-inflammatory, antithrombotic, and endothelial protection distinct from EPA/DHA. Limited supplemental form availability.",
         "aliases": [
           "Docosapentaenoic Acid",
           "DPA"
@@ -46192,7 +46192,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Tauroursodeoxycholic acid — a water-soluble bile acid conjugate. Cytoprotective via unfolded protein response modulation and anti-apoptotic pathways. Clinical evidence for liver protection (cholestasis), neuroprotection, and endoplasmic reticulum stress reduction. 250-1000 mg/day. Well-absorbed orally. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver a substantial L-βHB fraction in the tested preparation (not established as inactive or universal to all salts), ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
+        "notes": "Tauroursodeoxycholic acid — a water-soluble bile acid conjugate. Cytoprotective via unfolded protein response modulation and anti-apoptotic pathways. Clinical evidence for liver protection (cholestasis), neuroprotection, and endoplasmic reticulum stress reduction. 250-1000 mg/day. Well-absorbed orally.",
         "aliases": [
           "TUDCA",
           "Tauroursodeoxycholic Acid"
@@ -47319,7 +47319,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Hypericum perforatum extract standardized to 0.3% hypericin and/or 3-5% hyperforin. Multiple meta-analyses confirm efficacy comparable to SSRIs for mild-moderate depression (Cochrane Review 2008). CRITICAL drug interactions: induces CYP3A4 and P-gp, reducing efficacy of oral contraceptives, warfarin, cyclosporine, and many other drugs. 300 mg TID standard dose. B23 audit 2026-04-25: hyperforin PK well-characterized (PMID:9684946); hypericin/pseudohypericin F=14-21% (PMID:8878586). Ghost trap caught: PMID:9684421 is n-of-1 RCT editorial NOT Biber 1998 — use 9684946.",
+        "notes": "Hypericum perforatum extract standardized to 0.3% hypericin and/or 3-5% hyperforin. Multiple meta-analyses confirm efficacy comparable to SSRIs for mild-moderate depression (Cochrane Review 2008). CRITICAL drug interactions: induces CYP3A4 and P-gp, reducing efficacy of oral contraceptives, warfarin, cyclosporine, and many other drugs. 300 mg TID standard dose. B23 audit 2026-04-25: hyperforin PK well-characterized (PMID:9684946); hypericin/pseudohypericin F=14-21% (PMID:8878586).",
         "aliases": [
           "hypericin extract",
           "st johns wort 0.3%",
@@ -49132,7 +49132,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Calamari-derived omega-3 in phospholipid form. Enhanced bioavailability and cell membrane incorporation vs TG. Contains naturally occurring DHA-rich phospholipids. Less commonly available than TG form. Premium pricing reflects phospholipid extraction process. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
+        "notes": "Calamari-derived omega-3 in phospholipid form. Enhanced bioavailability and cell membrane incorporation vs TG. Contains naturally occurring DHA-rich phospholipids. Less commonly available than TG form. Premium pricing reflects phospholipid extraction process.",
         "aliases": [
           "CALAMARI_OIL phospholipid form"
         ],
@@ -49152,7 +49152,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Omega-3 oil from deep-sea squid (Dosidicus gigas or Illex) in natural triglyceride form. Naturally high in DHA (up to 50% of total omega-3). Sustainable marine source with lower heavy metal burden than large predatory fish. Well-absorbed via standard lipase digestion pathway. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
+        "notes": "Omega-3 oil from deep-sea squid (Dosidicus gigas or Illex) in natural triglyceride form. Naturally high in DHA (up to 50% of total omega-3). Sustainable marine source with lower heavy metal burden than large predatory fish. Well-absorbed via standard lipase digestion pathway.",
         "aliases": [
           "CALAMARI_OIL triglyceride form",
           "norwegian calamari oil",
@@ -49175,7 +49175,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Calamari oil form not specified. Conservative scoring. Squid-derived omega-3 naturally high in DHA. Check label for triglyceride or phospholipid specification. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
+        "notes": "Calamari oil form not specified. Conservative scoring. Squid-derived omega-3 naturally high in DHA. Check label for triglyceride or phospholipid specification.",
         "aliases": [
           "calamari oil"
         ],
@@ -49226,7 +49226,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Tuna oil purified via molecular distillation to remove mercury, PCBs, and other contaminants. Critical for tuna-sourced oils due to bioaccumulation in large predatory fish. Purification does not change the molecular form (remains TG). Score reflects purity improvement. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
+        "notes": "Tuna oil purified via molecular distillation to remove mercury, PCBs, and other contaminants. Critical for tuna-sourced oils due to bioaccumulation in large predatory fish. Purification does not change the molecular form (remains TG). Score reflects purity improvement.",
         "aliases": [
           "TUNA_OIL molecular distilled"
         ],
@@ -49246,7 +49246,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Omega-3 oil from tuna (typically Thunnus species) in natural triglyceride form. Higher DHA:EPA ratio than most fish oils. Standard lipase-dependent absorption. Mercury content concern with tuna — molecular distillation recommended for purification. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
+        "notes": "Omega-3 oil from tuna (typically Thunnus species) in natural triglyceride form. Higher DHA:EPA ratio than most fish oils. Standard lipase-dependent absorption. Mercury content concern with tuna — molecular distillation recommended for purification.",
         "aliases": [
           "TUNA_OIL triglyceride form"
         ],
@@ -49266,7 +49266,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Tuna oil form not specified. Conservative scoring. Tuna oil provides DHA-rich omega-3. Mercury contamination is a concern — verify third-party testing or molecular distillation. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
+        "notes": "Tuna oil form not specified. Conservative scoring. Tuna oil provides DHA-rich omega-3. Mercury contamination is a concern — verify third-party testing or molecular distillation.",
         "aliases": [
           "tuna oil"
         ],
@@ -64243,7 +64243,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Tart-cherry recovery, endurance and sleep studies use different juices, concentrates and powders. PMID33440334 reviews recovery studies; PMID31986108 concerns endurance; PMID31474096 includes seven interventional sleep studies with three positive results, rather than uniform benefit. These do not establish VitaCherry-specific 200–500 mg efficacy, a 15-fold PK improvement or 0.6% absolute bioavailability. A selected four-study subset may differ from the full review.",
+        "notes": "Tart-cherry recovery, endurance and sleep studies use different juices, concentrates and powders. PMID33440334 reviews recovery studies; PMID31986108 concerns endurance; PMID40964149 includes seven interventional sleep studies with three positive results, rather than uniform benefit. These do not establish VitaCherry-specific 200–500 mg efficacy, a 15-fold PK improvement or 0.6% absolute bioavailability. A selected four-study subset may differ from the full review.",
         "aliases": [
           "vitacherry",
           "vitacherry sports",
@@ -64778,7 +64778,7 @@
     "category_enum": "herbs",
     "source": "botanical_extract",
     "priority": "medium",
-    "description": "Salvia officinalis (Common Sage). Evidence depends on the specific preparation, route and population. PMID 20377818 studied mixed aromatherapy in elderly dementia patients, not oral sage or Cognivia in healthy adults. PMID 16205659 maps through DOI 10.1038/sj.ijo.0801322 to the Foreword by Van Gaal and Scheen, International Journal of Obesity 24 supplement 1, S1 (2000), associated with the 10th European Congress on Obesity. Publisher and repository metadata identify the source; its full body was not obtained. It supplies no oral sage/Cognivia efficacy credit and no absence-of-trials conclusion.",
+    "description": "Salvia officinalis (Common Sage). Evidence depends on the specific preparation, route and population. PMID20377818 studied mixed aromatherapy in elderly dementia patients, not oral sage or Cognivia in healthy adults; it supplies no oral sage/Cognivia efficacy credit.",
     "dosage_importance": 0.1,
     "cui": "C3265310",
     "cui_note": "",
@@ -64792,7 +64792,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Cognivia is a branded sage preparation. PMID20377818 studies mixed rosemary/lemon/lavender/orange aromatherapy in28 elderly dementia patients, not oral Cognivia in healthy adults. PMID 16205659 maps through DOI 10.1038/sj.ijo.0801322 to the Foreword by Van Gaal and Scheen, International Journal of Obesity 24 supplement 1, S1 (2000), associated with the 10th European Congress on Obesity. Publisher and repository metadata identify the source; its full body was not obtained. It supplies no oral sage/Cognivia efficacy credit and no absence-of-trials conclusion.",
+        "notes": "Cognivia is a branded sage preparation. PMID20377818 studies mixed rosemary/lemon/lavender/orange aromatherapy in elderly dementia patients, not oral Cognivia in healthy adults. This source supplies no oral sage/Cognivia efficacy credit.",
         "aliases": [
           "cognivia sage (leaf) extract",
           "organic cognivia sage (leaf) extract",

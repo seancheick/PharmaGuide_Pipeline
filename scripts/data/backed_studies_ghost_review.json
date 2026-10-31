@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict. A suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry re-arms the gate for that citation.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-27",
-    "total_entries": 7
+    "last_updated": "2026-10-31",
+    "total_entries": 8
   },
   "reviewed": [
     {
@@ -54,6 +54,14 @@
       "rationale": "The pending source context cites this only as a source-bibliography pointer, not an independently qualifying theanine trial. Live PubMed names oolong tea/caffeine and fat oxidation; no isolated theanine exposure or cognitive benefit is established. The context remains scoring_eligible=false. Bibliographic citation is not proof of inclusion in a specific outcome pool, exact preparation, efficacy or dose; all pointers are retained with that limitation.",
       "reviewed_by": "Codex live PubMed source-content verification",
       "reviewed_at": "2026-10-27"
+    },
+    {
+      "pmid": "28680453",
+      "entry_id": "INGR_HMB",
+      "live_title": "Discrepancies in publications related to HMB-FA and ATP supplementation.",
+      "rationale": "Live PubMed and the full letter identify concerns about the shared HMB-FA/ATP trial family NCT01508338, including apparent shared placebo data and reporting inconsistencies. The original authors replied in PMID29209404 and contested the interpretation; that reply does not establish efficacy or resolve the clinical assessment. The HMB record cites this letter only as a limitation in scoring-ineligible study contexts. This acknowledgment is for source identity and caution provenance, not affirmative benefit credit or clinician approval.",
+      "reviewed_by": "Codex primary-source citation review (not clinician-reviewed)",
+      "reviewed_at": "2026-10-31"
     },
     {
       "pmid": "28229548",
