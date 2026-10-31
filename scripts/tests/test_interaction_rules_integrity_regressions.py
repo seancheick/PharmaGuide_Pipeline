@@ -556,9 +556,9 @@ def test_tansy_pregnancy_rule_cites_reproductive_sources():
     pregnancy = _sub_rule(rule, "condition_id", "pregnancy")
 
     # 28472675 is a rat/brine-shrimp thujone toxicity study with no pregnancy data.
-    assert pregnancy["sources"] == [_pmid("33673548"), _pmid("232204")]
+    assert pregnancy["sources"] == [_pmid("33673548")]
     assert pregnancy["severity"] == "contraindicated"
-    assert "miscarriage" in pregnancy["mechanism"]
+    assert "does not establish a clinical miscarriage rate" in pregnancy["mechanism"]
     assert "thujone" in pregnancy["mechanism"]
     assert rule["last_reviewed"] == "2026-04-26"  # agent re-sourcing, not a clinical review
 

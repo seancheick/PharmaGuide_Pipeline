@@ -2926,7 +2926,7 @@
       "mechanism_of_harm": "Refined canola oil undergoes high-heat processing (bleaching, deodorization at 200–270°C) that may generate lipid oxidation products (aldehydes, peroxides) and trace trans fatty acids. High omega-6 content (~20% linoleic acid) may contribute to pro-inflammatory eicosanoid pathways when dietary omega-6/omega-3 ratio is already elevated. Modern canola is bred for low erucic acid (<2%) to avoid cardiotoxicity concerns of traditional rapeseed. Primarily a quality/formulation signal rather than acute harm.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 184.1555). Qualified health claim allowed for reduced saturated fat.",
-        "EU": "Allowed. Low erucic acid rapeseed oil authorized; erucic acid max 20 g/kg in vegetable oils (Reg 2019/1870 amending Reg 1881/2006).",
+        "EU": "Regulation (EU) 2023/915 sets a maximum erucic acid level of 20 g/kg for vegetable oils and fats in its specified food categories, including oils used as food ingredients. This contaminant limit does not by itself establish supplement-specific authorization.",
         "WHO": "No specific ADI. WHO recommends balanced omega-6/omega-3 intake."
       },
       "population_warnings": [
@@ -2935,7 +2935,7 @@
       ],
       "scientific_references": [
         "21 CFR 184.1555 - FDA GRAS listing for low erucic acid rapeseed (canola) oil",
-        "EU Reg 2019/1870 amending Reg 1881/2006 - Erucic acid max levels in food (max 20 g/kg vegetable oils)"
+        "Commission Regulation (EU) 2023/915 - erucic acid maximum levels in specified foods, including vegetable oils and fats"
       ],
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
@@ -2945,11 +2945,11 @@
       },
       "references_structured": [
         {
-          "type": "monograph",
-          "authority": "EFSA",
-          "title": "EFSA Journal 2010;8(3):1461 - Scientific Opinion on dietary reference values for fats",
-          "citation": "EFSA Journal 2010;8(3):1461 - Scientific Opinion on dietary reference values for fats",
-          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1461",
+          "type": "regulation",
+          "authority": "European Commission",
+          "title": "Commission Regulation (EU) 2023/915 on maximum levels for certain contaminants in food",
+          "citation": "Commission Regulation (EU) 2023/915, Annex I, erucic acid maximum level for vegetable oils and fats",
+          "url": "https://eur-lex.europa.eu/eli/reg/2023/915/eng",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -2974,13 +2974,13 @@
         {
           "authority": "EU",
           "jurisdiction": "EU",
-          "status_code": "approved",
+          "status_code": "permitted_with_limit",
           "scope": "supplement",
           "effective_range": {
             "start": "2025-11-14",
             "end": null
           },
-          "source_ref": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2010.1461"
+          "source_ref": "https://eur-lex.europa.eu/eli/reg/2023/915/eng"
         }
       ],
       "review": {

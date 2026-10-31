@@ -189,14 +189,7 @@ def test_st_johns_wort_biber_pmid_correct(iqm):
         'st_johns_wort standardized must cite Biber 1998 PMID:9684946. '
         f'Text: {text[:400]}'
     )
-    # If wrong PMID is present at all, it must be flagged as ghost trap
-    if 'PMID:9684421' in text or '9684421' in text:
-        assert any(neg in text.lower() for neg in
-                   ('not biber', 'transposition', 'ghost', 'misattribut',
-                    'is not', 'editorial')), (
-            f'PMID:9684421 cited without ghost-trap qualification. Must '
-            f'mark as transposition trap (correct = 9684946). Text: {text[:400]}'
-        )
+    assert '9684421' not in text, 'Wrong-topic PMID must not appear in an ingredient note'
 
 
 def test_olive_pre_absorption_hydrolysis_qualified(iqm):
@@ -286,13 +279,9 @@ def test_no_phantom_biber_9684421(iqm):
     forms = iqm['st_johns_wort']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        if 'PMID:9684421' in text or '9684421' in text:
-            assert any(neg in text.lower() for neg in
-                       ('not biber', 'transposition', 'ghost', 'misattribut',
-                        'is not', 'editorial', 'wrong')), (
-                f'st_johns_wort::{fname} cites PMID:9684421 (n-of-1 RCT '
-                f'editorial) without ghost-trap qualification. Use PMID:9684946.'
-            )
+        assert '9684421' not in text, (
+            f'st_johns_wort::{fname} cites wrong-topic PMID 9684421; use PMID 9684946.'
+        )
 
 
 def test_class_authority_pmids_introduced(iqm):

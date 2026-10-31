@@ -130,7 +130,6 @@ REMOVED = {
 
 # Mistyped DOI of the document the entry names -> the verified DOI of that document.
 CORRECTED = [
-    ("harmful_additives.json", "ADD_CANOLA_OIL", "10.2903/j.efsa.2010.1459", "10.2903/j.efsa.2010.1461"),
     ("harmful_additives.json", "ADD_CORN_OIL", "10.2903/j.efsa.2010.1459", "10.2903/j.efsa.2010.1461"),
     ("harmful_additives.json", "ADD_FATTY_ACID_POLYGLYCEROL_ESTERS", "10.2903/j.efsa.2017.4743", "10.2903/j.efsa.2017.5089"),
     ("harmful_additives.json", "ADD_NICKEL", "10.2903/j.efsa.2015.4007", "10.2903/j.efsa.2015.4002"),
@@ -158,6 +157,17 @@ def test_mistyped_efsa_dois_point_at_the_named_opinion(file, entry_id, mistyped,
     text = _claims(file, entry_id)
     assert mistyped not in text
     assert verified in text
+
+
+def test_canola_erucic_acid_limit_cites_the_current_regulation():
+    # The old EFSA fats-DRV opinion describes dietary fat reference values,
+    # not this ingredient's erucic-acid limit or supplement authorization.
+    text = _claims("harmful_additives.json", "ADD_CANOLA_OIL")
+    assert "10.2903/j.efsa.2010.1459" not in text
+    assert "10.2903/j.efsa.2010.1461" not in text
+    assert "eur-lex.europa.eu/eli/reg/2023/915/eng" in text
+    assert "20 g/kg" in text
+    assert '"status_code": "permitted_with_limit"' in text
 
 
 def test_ostarine_cites_the_ostarine_liver_injury_case_not_rad140():
