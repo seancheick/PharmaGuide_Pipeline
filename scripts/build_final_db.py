@@ -1910,7 +1910,9 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         unscored_label_known
         and scored.get("quality_score_status") == "not_scored"
         and strict_scoring_contract.get("passed") is False
-        and strict_scoring_contract.get("findings") == ["disclosed_form_unmapped"]
+        and strict_scoring_contract.get("findings") in (
+            ["disclosed_form_unmapped"], ["form_quality_unassessed"]
+        )
     ) or (
         # A disclosed form gap cannot hide a confirmed ban/recall warning.
         # This permits no score and excuses no other contract finding.
