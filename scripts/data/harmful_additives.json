@@ -2926,7 +2926,7 @@
       "mechanism_of_harm": "Refined canola oil undergoes high-heat processing (bleaching, deodorization at 200–270°C) that may generate lipid oxidation products (aldehydes, peroxides) and trace trans fatty acids. High omega-6 content (~20% linoleic acid) may contribute to pro-inflammatory eicosanoid pathways when dietary omega-6/omega-3 ratio is already elevated. Modern canola is bred for low erucic acid (<2%) to avoid cardiotoxicity concerns of traditional rapeseed. Primarily a quality/formulation signal rather than acute harm.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 184.1555). Qualified health claim allowed for reduced saturated fat.",
-        "EU": "Allowed subject to applicable food contaminant limits. Regulation (EU) 2023/915 sets a maximum erucic acid level of 20 g/kg for vegetable oils and fats in its specified food categories.",
+        "EU": "Regulation (EU) 2023/915 sets a maximum erucic acid level of 20 g/kg for vegetable oils and fats in its specified food categories, including oils used as food ingredients. This contaminant limit does not by itself establish supplement-specific authorization.",
         "WHO": "No specific ADI. WHO recommends balanced omega-6/omega-3 intake."
       },
       "population_warnings": [
@@ -2974,7 +2974,7 @@
         {
           "authority": "EU",
           "jurisdiction": "EU",
-          "status_code": "approved",
+          "status_code": "permitted_with_limit",
           "scope": "supplement",
           "effective_range": {
             "start": "2025-11-14",

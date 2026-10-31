@@ -1840,7 +1840,7 @@
       ],
       "bonus_eligible": true,
       "standardization_basis": "mushroom_fraction",
-      "bonus_rationale": "Label marker composition and clinical applicability are separate assessments. Fermented CS-4 mycelium and wild Ophiocordyceps sinensis are different preparations. Preparation-specific exercise findings do not establish VO2-max improvement or a generic 40% polysaccharide floor. Authored generic floor calibration remains unresolved; no universal efficacy claim follows from matching it.",
+      "bonus_rationale": "Label marker composition and clinical applicability are separate assessments. Fermented CS-4 mycelium and wild Ophiocordyceps sinensis are different preparations. Authored generic floor calibration remains unresolved; no universal efficacy claim follows from matching it.",
       "sources": [
         "NCCIH Cordyceps overview: https://www.nccih.nih.gov/health/cordyceps",
         "Chinese Pharmacopoeia 2020 Cordyceps sinensis monograph (40% polysaccharides minimum spec)"
@@ -1848,7 +1848,7 @@
       "priority": "high",
       "last_updated": "2026-05-22",
       "id": "cordyceps",
-      "notes": "Fermented CS-4 mycelium and wild Ophiocordyceps sinensis are different preparations. Preparation-specific exercise findings do not establish VO2-max improvement or a generic 40% polysaccharide floor.",
+      "notes": "Fermented CS-4 mycelium and wild Ophiocordyceps sinensis are different preparations.",
       "category": "mushroom",
       "min_threshold": 40,
       "external_ids": {

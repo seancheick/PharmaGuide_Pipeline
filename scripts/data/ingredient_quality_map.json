@@ -41038,7 +41038,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Essential amino acid required for protein synthesis and methylation processes. Important for liver health, detoxification, and S-adenosylmethionine (SAMe) production.",
+        "notes": "Essential amino acid required for protein synthesis and methylation. Methionine is a biochemical precursor of S-adenosylmethionine (SAMe); this identity fact does not establish a clinical benefit for a supplement.",
         "aliases": [
           "methionine",
           "methionine amino acid",
@@ -45839,7 +45839,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Docosapentaenoic acid (DPA, 22:5 n-3) — an intermediate omega-3 between EPA and DHA. Found naturally in seal oil and human breast milk. Emerging evidence for anti-inflammatory, antithrombotic, and endothelial protection distinct from EPA/DHA. Limited supplemental form availability.",
+        "notes": "Docosapentaenoic acid (DPA, 22:5 n-3) is an omega-3 fatty acid structurally between EPA and DHA. It occurs in marine oils and human breast milk. This form note does not establish a DPA-specific clinical benefit.",
         "aliases": [
           "Docosapentaenoic Acid",
           "DPA"
@@ -46192,7 +46192,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Tauroursodeoxycholic acid — a water-soluble bile acid conjugate. Cytoprotective via unfolded protein response modulation and anti-apoptotic pathways. Clinical evidence for liver protection (cholestasis), neuroprotection, and endoplasmic reticulum stress reduction. 250-1000 mg/day. Well-absorbed orally.",
+        "notes": "Tauroursodeoxycholic acid (TUDCA) is a water-soluble bile-acid conjugate. The recorded systemic-exposure estimate is a mechanistic inference, not a verified human oral bioavailability value. Clinical benefit and effective dose require separate, claim-specific evidence.",
         "aliases": [
           "TUDCA",
           "Tauroursodeoxycholic Acid"
@@ -49132,7 +49132,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Calamari-derived omega-3 in phospholipid form. Enhanced bioavailability and cell membrane incorporation vs TG. Contains naturally occurring DHA-rich phospholipids. Less commonly available than TG form. Premium pricing reflects phospholipid extraction process.",
+        "notes": "Calamari-derived omega-3 in phospholipid form, containing DHA-rich phospholipids. The current source record does not establish superior absorption or cell-membrane incorporation versus triglyceride calamari oil in humans.",
         "aliases": [
           "CALAMARI_OIL phospholipid form"
         ],

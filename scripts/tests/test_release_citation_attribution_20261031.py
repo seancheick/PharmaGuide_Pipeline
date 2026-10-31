@@ -60,3 +60,20 @@ def test_other_source_lists_exclude_wrong_topic_papers():
     }
     assert "10.2903/j.efsa.2010.1461" not in json.dumps(active_citations)
     assert "2023/915" in json.dumps(active_citations)
+    eu_status = next(s for s in canola["jurisdictional_statuses"] if s["jurisdiction"] == "EU")
+    assert eu_status["status_code"] == "permitted_with_limit"
+
+
+def test_repaired_notes_do_not_keep_unqualified_benefit_or_absorption_claims():
+    iqm = load("ingredient_quality_map.json")
+    assert "detoxification" not in iqm["methionine"]["forms"]["l-methionine"]["notes"].lower()
+    dpa = iqm["docosapentaenoic_acid_dpa"]["forms"]["docosapentaenoic acid dpa (standard)"]["notes"]
+    assert "antithrombotic" not in dpa.lower()
+    tudca = iqm["tudca"]["forms"]["tudca (standard)"]["notes"]
+    assert "well-absorbed orally" not in tudca.lower()
+    assert "human oral bioavailability" in tudca.lower()
+    calamari = iqm["calamari_oil"]["forms"]["calamari oil phospholipid"]["notes"]
+    assert "enhanced bioavailability" not in calamari.lower()
+    cordyceps = next(b for b in load("standardized_botanicals.json")["standardized_botanicals"] if b["id"] == "cordyceps")
+    assert "exercise findings" not in cordyceps["bonus_rationale"]
+    assert "exercise findings" not in cordyceps["notes"]
