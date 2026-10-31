@@ -710,6 +710,39 @@ def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -
     return best
 
 
+def structural_blend_total_source(product: Dict[str, Any], row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """The printed blend-header row when ``row`` is only its structural total.
+
+    Positive source proof: one unmapped ``blend_header_total`` source row, with a
+    matching label-ledger line and a printed mass equal to the scoring row's.
+    Such a total is an opaque blend, not a botanical preparation; Dose and
+    Formulation both read this one decision.
+    """
+    if not (row.get("scoring_input_kind") == "product_level_evidence"
+            and row.get("evidence_scope") == "blend_level"
+            and row.get("reason") == "identity_bearing_blend_header_mass"
+            and not _is_named_botanical_preparation(product, row)):
+        return None
+    from scoring_input_contract import (_source_tree_rows, has_source_printed_amount,
+                                        source_row_has_matching_label_ledger)
+    ref = row.get("raw_source_path")
+    originals = [source for source in _source_tree_rows(product)
+                 if isinstance(ref, str) and ref and source.get("raw_source_path") == ref]
+    original = originals[0] if len(originals) == 1 else None
+    mass = _mass_mg(original) if original is not None else None
+    if (original is not None and source_row_has_matching_label_ledger(product, original)
+            and "canonical_id" in original
+            and original["canonical_id"] is None
+            and original.get("cleaner_row_role") == "blend_header_total"
+            and original.get("score_eligible_by_cleaner") is False
+            and original.get("score_exclusion_reason") == "blend_header_total"
+            and original.get("dose_class") == "blend_total_weight"
+            and has_source_printed_amount(original)
+            and mass is not None and mass > 0 and _mass_mg(row) == mass):
+        return original
+    return None
+
+
 def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     """Botanical formulation adapter (max 15). Replaces A1/A2 for botanicals."""
     row = _primary_botanical_active(product)
@@ -723,8 +756,20 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     if not recognized:
         components["weak_or_unidentified_botanical"] = -4.0
         score = max(0.0, min(BOTANICAL_FORMULATION_CAP, sum(components.values())))
+        metadata: Dict[str, Any] = {"recognized": False}
+        blend = structural_blend_total_source(product, row)
+        if blend is not None:
+            # The limitation is this blend's preparation, not every botanical
+            # on the label; separately identified rows keep their own scoring.
+            metadata["unverified_blend"] = {
+                "name": blend.get("name"),
+                "amount_mg": _mass_mg(blend),
+                "separately_identified": any(
+                    other is not row and other.get("mapped_identity") is True
+                    for other in _scoring_actives(product)),
+            }
         return {"score": round(score, 4), "max": BOTANICAL_FORMULATION_CAP,
-                "components": components, "metadata": {"recognized": False}}
+                "components": components, "metadata": metadata}
 
     forms = _forms_text(row)
     # A recognized identity is a neutral baseline, not earned quality.
@@ -841,31 +886,12 @@ def score_botanical_purpose_dose(
     if not _is_botanical_active(row):
         return None
 
-    if (row.get("scoring_input_kind") == "product_level_evidence"
-            and row.get("evidence_scope") == "blend_level"
-            and row.get("reason") == "identity_bearing_blend_header_mass"
-            and not _is_named_botanical_preparation(product, row)):
-        from scoring_input_contract import (_source_tree_rows, has_source_printed_amount,
-                                            source_row_has_matching_label_ledger)
-        ref = row.get("raw_source_path")
-        originals = [source for source in _source_tree_rows(product)
-                     if isinstance(ref, str) and ref and source.get("raw_source_path") == ref]
-        original = originals[0] if len(originals) == 1 else None
-        mass = _mass_mg(original) if original is not None else None
-        if (original is not None and source_row_has_matching_label_ledger(product, original)
-                and "canonical_id" in original
-                and original["canonical_id"] is None
-                and original.get("cleaner_row_role") == "blend_header_total"
-                and original.get("score_eligible_by_cleaner") is False
-                and original.get("score_exclusion_reason") == "blend_header_total"
-                and original.get("dose_class") == "blend_total_weight"
-                and has_source_printed_amount(original)
-                and mass is not None and mass > 0 and _mass_mg(row) == mass):
-            # The source owner identifies a structural total, not a botanical
-            # preparation. Keep its zero/opacity result without minting an
-            # ingredient identity and a scientific benchmark obligation.
-            return {"score": 0.0, "band": "blend_total_only",
-                    "metadata": {"assessment_status": "not_applicable"}}
+    if structural_blend_total_source(product, row) is not None:
+        # The source owner identifies a structural total, not a botanical
+        # preparation. Keep its zero/opacity result without minting an
+        # ingredient identity and a scientific benchmark obligation.
+        return {"score": 0.0, "band": "blend_total_only",
+                "metadata": {"assessment_status": "not_applicable"}}
 
     benchmark = _botanical_benchmark(row, product=product)
     disclosure = dose_disclosure_status(row)
