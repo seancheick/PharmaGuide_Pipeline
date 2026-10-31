@@ -6640,22 +6640,26 @@ ROLE_ADJUNCT = "adjunct"
 
 # Tokens too generic to prove a product is "about" an ingredient when found in
 # the title. Without these, "Vitamin C" would match "Daily Multivitamin".
-_ROLE_TITLE_STOPWORDS = {
-    "root", "leaf", "extract", "powder", "complex", "blend", "acid", "oil",
-    "capsule", "tablet", "softgel", "organic", "pure", "strength", "daily",
-    "formula", "support", "vitamin", "mineral", "multivitamin", "women",
-    "womens", "men", "mens", "with", "plus", "high", "ultra",
-    # Plant parts and preparations name no species: "Fruit Punch" and
-    # "Fruit & Veggie" are not about apple_fruit (40089).
-    "fruit", "fruits", "berry", "berries", "seed", "bark", "flower", "herb",
-    "juice", "whole", "leaves", "grass", "thallus", "herbal",
+# Material and plant-part words: dropped when reading a title, but part of
+# the identity a name gives ("Black Seed Oil" is not "Black"; "Fish Oil" is
+# not "Fish"). Plant parts and preparations name no species: "Fruit Punch"
+# and "Fruit & Veggie" are not about apple_fruit (40089). A chemical class
+# names no single ingredient: "Omega-3 Fatty Acids" is named by "Omega-3",
+# never by "Fatty Acid Support".
+_ROLE_TITLE_MATERIAL_WORDS = frozenset({
+    "root", "leaf", "leaves", "acid", "acids", "fatty", "oil", "fruit",
+    "fruits", "berry", "berries", "seed", "bark", "flower", "herb", "juice",
+    "grass", "thallus",
+})
+_ROLE_TITLE_STOPWORDS = _ROLE_TITLE_MATERIAL_WORDS | {
+    "extract", "powder", "complex", "blend", "capsule", "tablet", "softgel",
+    "organic", "pure", "strength", "daily", "formula", "support", "vitamin",
+    "mineral", "multivitamin", "women", "womens", "men", "mens", "with",
+    "plus", "high", "ultra", "whole", "herbal",
     # Label marketing and count words name no ingredient: "Relora
     # Proprietary Patented Blend" is named by "Relora", "Total Probiotic CFU"
     # by "Probiotic".
     "total", "cfu", "proprietary", "patented", "micronized", "matrix",
-    # A chemical class names no single ingredient: "Omega-3 Fatty Acids" is
-    # named by "Omega-3", never by "Fatty Acid Support".
-    "acids", "fatty",
 }
 
 # A flavor descriptor ("Natural Raspberry-Tea Flavor", "Blackberry Melon
@@ -6879,15 +6883,17 @@ def _single_word_identity_index() -> tuple:
     return standalone, spread
 
 
-def _single_word_names(word: str, *, label_word: bool) -> bool:
+def _single_word_names(word: str, *, label_word: bool, material_dropped: bool = False) -> bool:
     standalone, spread = _single_word_identity_index()
     owners = standalone.get(word) or {}
     if label_word:
         # The label's own word names its row when a registry lists it as a
-        # whole name ("Echinacea", "Probiotic", "Krill") or no other identity
-        # uses it ("Waterex", "Tinofend"); never a shared modifier ("Black"
-        # of "Black Seed Oil", "Fish" of "Fish Oil").
-        return bool(owners) or len(spread.get(word, ())) <= 1
+        # whole name ("Echinacea", "Probiotic"), when only preparation words
+        # were dropped ("Hemp" of "Hemp extract", "Waterex" of "Waterex Herbal
+        # Blend"), or when no other identity uses it. A word left by dropping
+        # a material or plant part is a modifier ("Black" of "Black Seed
+        # Oil", "Fish" of "Fish Oil").
+        return bool(owners) or not material_dropped or len(spread.get(word, ())) <= 1
     # A registry alias names the row by one word only when no registry gives
     # that word to two identities: a genus ("Citrus" of yuzu, "Artemisia" of
     # wormwood) or a fragment ("Marine" of "Marine Oil") names nothing.
@@ -6964,7 +6970,10 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
             word = core_tokens[0]
             min_len = 3 if len(candidate_tokens) == 1 else 4
             if len(word) >= min_len and any(
-                word in forms and any(_single_word_names(form, label_word=is_label_name) for form in forms)
+                word in forms and any(
+                    _single_word_names(form, label_word=is_label_name, material_dropped=any(
+                        token in _ROLE_TITLE_MATERIAL_WORDS for token in candidate_tokens))
+                    for form in forms)
                 for forms in title_forms
             ):
                 return True

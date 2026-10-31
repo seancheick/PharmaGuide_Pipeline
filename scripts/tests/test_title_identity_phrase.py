@@ -90,6 +90,8 @@ def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
     # a registry gives to more than one identity.
     ("Total Probiotic CFU", "probiotic_cfu_total", "probiotic pearls adult 50+"),
     ("Probiotic", "probiotics", "probiotic tropical mango"),
+    # Only a preparation word was dropped: the label's word names the row.
+    ("Hemp extract", "nha_hemp_extract", "hemp+ stress relief"),
     # A non-plural -s word keeps itself while a plural title word is read singular.
     ("Citrus Bioflavonoid", None, "citrus bioflavonoids 1000 mg"),
 ])
