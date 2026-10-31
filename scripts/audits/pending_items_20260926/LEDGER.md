@@ -4072,3 +4072,15 @@ A single word counts only when a registry lists it as that identity's whole name
 **19435 "Comfort" (open question from PR #320), decided by existing doctrine:** `.claude/rules/scoring.md` says materiality comes from semantic roles, not raw mass. The base product already routed `taxonomy:collagen`; only the false "Comfort" title match made the opaque Acacia catechu + skullcap blend its scoring subject, which zeroed Formulation and Dose (42.4). With the fix the 40 mg UC-II collagen is the subject: Formulation 0 → 14.2, Dose 0 → 11.4; Evidence 15.6, Transparency 9.8, Verification 8.0, Safety/Hygiene 9.0 and `product_safety_status` unchanged (68.0). A mass rule would be new policy (Sean's to set); none is created.
 
 **Checks on the combined candidate:** L-cystine identifiers re-verified live (PubChem CID 67678 / CAS 56-89-3 → CID 67678; GSRS 48TCX9A1VT = cystine with CAS 56-89-3, RXCUI 3036, PubChem 67678; RxNorm 3036 = cystine; UMLS C0010682 = cystine). Combined focused slice (both PRs' test files + identity splits, cleaner preservation, identity integrity): 717 passed. The final corpus pass is Sean's run after this merges.
+
+**Fresh-context review of PR #319 and the combined CI, each finding reproduced first:**
+- D-Cystine and DL-Cystine took `l_cystine` (the L-isomer) because the normalizer's stereo guard listed cysteine but not cystine. Fixed in `normalization.py::_stereo_guard` (`6c37a13ae`); both rows now stay unmapped.
+- A "Butcher's Broom Rhizome Extract" row lost `butchers_broom_root`, which main gave it, because the undeclared-part guard treated rhizome as a different organ from the root record, which is the Ruscus rhizome. Fixed in `enrich_supplements_v3.py::_names_undeclared_plant_part` (`6c37a13ae`).
+- PR #320 imported `iqm_reference_index` into the scoring contract, which the September 25 one-matcher guard forbids. The guard failed in PR #320's CI and locally. The registered names are now read through the resolver's `iqm_registered_names` (`421ccf4d1`). The names are identical for all 656 IQM entries, and the guard was not changed.
+- Tests: 4 new regression cases fail before the fix and pass after it. Owner and consumer slice: 2282 passed; the one failure was the guard above. After the move, the guard plus every test file the integration changed: 902 passed. Dead-code ratchet: 4 passed. Python correctness check: 0 new findings.
+
+**Follow-ups found by the review (none blocks the run):**
+- The `l_cystine` negative term "cysteine" refuses a row whose notes mention cysteine. That is a false negative and fails safe.
+- American ginseng species coverage matches the binomial literally.
+- "Ginseng Root Extract" with a Panax quinquefolius form maps to `ginseng_root_panax`; main does the same.
+- RXCUI 3036 is the cystine concept and is not stereo-specific.
