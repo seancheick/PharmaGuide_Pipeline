@@ -1115,8 +1115,12 @@ def _corrected_source_paths(raw: Mapping[str, Any], product_id: str) -> dict[str
     if str(product_id) not in owner._label_corrections_by_dsld_id:
         return {}
     corrected = dict(raw)
+    rows = deepcopy(raw.get("ingredientRows") or [])
+    # Clean stamps immutable source paths before applying reviewed corrections.
+    # Audit the same guarded correction against a copy of those source rows.
+    owner._stamp_raw_source_paths(rows, "ingredientRows")
     corrected["ingredientRows"] = owner._apply_label_corrections(
-        deepcopy(raw.get("ingredientRows") or []), str(product_id))
+        rows, str(product_id))
     return _raw_paths(corrected)
 
 

@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import copy
+import json
 import sys
 
 import pytest
@@ -792,6 +794,24 @@ def test_corrected_forms_keep_original_inventory_labels_on_existing_paths():
     record = ProductRecord("1179", None, None, None)
     _check_line_integrity(record, raw, None, None, blob)
     assert not any(f.code == "LEDGER_NAME_DIFFERS_FROM_RAW" for f in record.findings)
+
+
+def test_reviewed_bamboo_note_audit_uses_the_original_source_path():
+    from audit_raw_to_final import _corrected_source_paths
+
+    raw = json.loads((SCRIPTS / "tests/fixtures/raw_bamboo_252349.json").read_text())
+    original = copy.deepcopy(raw)
+    row = _corrected_source_paths(raw, "252349")["ingredientRows[0]"]
+
+    assert row["raw_source_path"] == "ingredientRows[0]"
+    assert "Bambusa vulgaris" in row["notes"]
+    assert row["_pre_correction_notes"] == ""
+    assert raw == original
+
+    changed = copy.deepcopy(raw)
+    changed["ingredientRows"][0]["quantity"][0]["quantity"] = 501
+    with pytest.raises(ValueError, match="Reviewed note attribution changed"):
+        _corrected_source_paths(changed, "252349")
 
 
 def test_reviewed_new_form_still_requires_its_exact_source_label():
