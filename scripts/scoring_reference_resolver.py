@@ -144,6 +144,28 @@ def iqm_reference_index() -> Dict[str, Dict[str, Any]]:
     }
 
 
+@lru_cache(maxsize=1)
+def iqm_registered_names() -> Tuple[Tuple[str, Tuple[Any, ...]], ...]:
+    """Every name each IQM entry registers: standard name, aliases, form names
+    and form aliases, as (canonical id, names) pairs.
+
+    Title matching reads who a word names from this; the scoring contract keeps
+    no IQM index of its own (it has no form matcher).
+    """
+    def listed(value: Any) -> list:
+        return value if isinstance(value, list) else []
+
+    registered = []
+    for key, entry in iqm_reference_index().items():
+        names = [entry.get("standard_name")] + listed(entry.get("aliases"))
+        for form_name, form in (entry.get("forms") or {}).items():
+            names.append(form_name)
+            if isinstance(form, dict):
+                names.extend(listed(form.get("aliases")))
+        registered.append((key, tuple(names)))
+    return tuple(registered)
+
+
 def iqm_reference_entry(canonical_id: Any) -> Optional[Dict[str, Any]]:
     """Return the exact IQM entry for a canonical id, without alias guessing."""
     key = _norm(canonical_id)

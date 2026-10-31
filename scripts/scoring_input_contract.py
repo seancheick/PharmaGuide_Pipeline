@@ -34,7 +34,7 @@ from constants import (
 from scoring_reference_resolver import (
     has_therapeutic_reference,
     iqm_reference_entry,
-    iqm_reference_index,
+    iqm_registered_names,
     is_known_botanical,
 )
 
@@ -6859,15 +6859,8 @@ def _single_word_identity_index() -> tuple:
             for token in set(tokens):
                 spread.setdefault(token, set()).add(f"{registry}:{identity}")
 
-    for key, entry in iqm_reference_index().items():
-        if not isinstance(entry, dict):
-            continue
-        names = [entry.get("standard_name")] + _safe_list(entry.get("aliases"))
-        for form_name, form in (entry.get("forms") or {}).items():
-            names.append(form_name)
-            if isinstance(form, dict):
-                names.extend(_safe_list(form.get("aliases")))
-        record("iqm", str(key), names)
+    for key, names in iqm_registered_names():
+        record("iqm", str(key), list(names))
     try:
         raw = json.loads((_DATA_DIR / "botanical_ingredients.json").read_text())
     except Exception:  # pragma: no cover - absence only reduces title matching
