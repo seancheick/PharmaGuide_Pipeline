@@ -203,6 +203,15 @@ def _profile_formulation_reason(metadata: Dict[str, Any]) -> Optional[str]:
         return None
     section, detail = profile
     if section == "botanical_formulation" and _num(detail.get("weak_or_unidentified_botanical")) < 0:
+        blend = metadata.get("botanical_unverified_blend")
+        if isinstance(blend, dict) and blend.get("name"):
+            amount = _num(blend.get("amount_mg"))
+            label = f"{blend['name']}, {amount:g} mg" if amount > 0 else str(blend["name"])
+            reason = (f"The main botanical blend ({label}) is disclosed, but its exact preparation "
+                      "cannot be verified for Formulation scoring.")
+            if blend.get("separately_identified"):
+                reason += " Other identified ingredients are assessed separately."
+            return reason
         return "Botanical identity could not be confirmed, so no formulation credit was given."
     (identity_key, identity_label), credited_map, missing_map = _PROFILE_COPY[section]
     credited = [label for key, label in credited_map if _num(detail.get(key)) > 0]

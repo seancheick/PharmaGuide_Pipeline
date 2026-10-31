@@ -4027,3 +4027,40 @@ PR #304's safety gate and PR #305's repeated-statement cleanup are merged. The c
 **CI on PR #319 (3cabd36a1):** five failures. Two were PR #318's release tests, already fixed on its tip `f32cdeea9`; this branch was rebased onto it. Three pinned the old "no L-cystine owner" state and were updated with the batch: `l_cystine` added to `fixtures/iqm_parent_form_references.json` (reference null, measured above), to the B34 intentionally-unknown-absorption list, and the Solgar 213846 correction test now asserts `l_cystine`, scored, Evidence 0, no `l_cysteine` in the blob pillars.
 
 **Remaining (follow-ups):** Sensoril form generic aliases; botanical `american_ginseng` vs IQM ginseng species form (two owners); butcher's broom leaf/stem now honestly lacks a reviewed evidence assessment; bamboo organism owner needs a labelled species (Sean's call if wanted).
+
+## October 31 — title identity phrase and opaque botanical blend copy (PR #320, stacked on #318)
+
+**Class:** behavioral code (role/positioning title identity) plus display copy (Formulation reason). Sean's October 31 decision "Botanical Blend Scoring Closure", items 1 to 5. **Owner Check:** `scoring_input_contract.py::_named_in_title` is the one title matcher. Role classification, `_identity_named_in_product_title`, `_loose_identity_named_in_product_title` and `clinical_applicability._positioning_is_formula_level` all call it. Names come from IQM (`iqm_reference_entry` / `iqm_reference_index`: standard name, aliases, forms, `active_in` relationships) and `botanical_ingredients`, through `_registered_identity_names` and `_single_word_identity_index`. `botanical_profile.structural_blend_total_source` is the one opaque-blend predicate, shared by Dose and Formulation. The copy lives in `quality_score.py::_profile_formulation_reason`. Will NOT create: a second matcher, an export field, a status, a config magnitude, or a registry alias.
+
+**Root cause.** Every title matcher used word overlap: any 4+ letter word of a name. One shared word therefore "named" an ingredient. Examples: "Green" named Green Tea extract on 67032, "Organic" named every organic X blend child, "Comfort" named Fast-Acting Comfort Blend, and "Digestive" named four enzyme blend headers. The words Complex, Amino, Alpha/Beta and vitamin did the same.
+
+**Fix.** A title names a row by an identity phrase:
+- the whole name;
+- the name without descriptor words;
+- two consecutive identity words of the label's own name;
+- or a single word.
+
+A single word counts only when a registry lists it as that identity's whole name and no registry gives it to two identities. The label's own word also counts when only preparation words were dropped. Parenthesised alternates are read on their own. "and", "as", "of" and "from" are connectors. Plurals are read per title word. An `active_in` source counts only when the label's own name carries it ("Curcumin C3 Complex Turmeric Extract").
+
+**Evidence ledger.**
+- 176190 Evidence 15.6 is the INGR_CAFFEINE primary floor (14.0) under the accepted October 28 condition-scope rule (`ingr_caffeine_33800853_scoped_source`, clinician_approved). The caffeine comes from the label's declared percentages: green tea 50% gives 182 mg and guarana 36% gives 18 mg; the label says "Contains 209 mg of caffeine". The green-tea pipeline alone gives 6.48.
+- 67032 now takes the same path: 32.8 to 37.0 (Dose 11.4 to 0, blend total only; Evidence 0 to 15.6). The 209 mg statement is unchanged in the cleaned and enriched records. The blob's warnings, safety status, safety gate and interaction summary are identical. Neither base nor candidate carries the 209 mg sentence into the blob, which was already the case before this change.
+- Frozen-raw replay (`~/pg_quality/title_identity_20261031/`) covered 98 labels, base 2c8e6fd43 against the candidate: the 22 opaque-blend labels, 28 class representatives, 20 random controls and 28 anchor/loose/positioning-only labels.
+  - Zero `product_safety_status` change.
+  - All 20 controls are byte-identical.
+  - Score movers: 67032 (above); 19435 "Comfort" 42.4 to 68.0; 326253 "Digestive Enzymes" 69.5 to 57.3 (Evidence 12.2 to 0; ginger owned Evidence only through "Digestive"); 77111 "Calcium Ketone Salt" Dose 18.0 to 13.7 (the title correctly names BHB, which now joins Dose with a neutral contribution).
+  - The 14 opaque blend-header labels now give the Formulation reason with the blend's name and amount; all 14 scores are unchanged. Seven of the 22 keep "Botanical identity could not be confirmed". That text is correct for them, because their subject is a single botanical or branded row with no disclosed blend (78446 Cinnamon bark powder, 328295 Metabolaid, 328460 Rhuleave-K, and the four Hemp labels). 19435 left the botanical route (below).
+  - 251549 "DIM-plus": the IQM alias "DIM" now names diindolylmethane, its sole Evidence owner; the total is unchanged.
+- Census (exact matcher decisions, base against candidate, over the enriched corpus): 2,816 products differ at one or more sites, with 0 errors: loose title 2,197, anchor title 2,172, positioning 1,294 and role title 964. A matcher decision is an input, not an output change; the replay above measures the outputs.
+- Tests: the owner/consumer slice is 30 files, 1,718 passed. Ruff: 0 new.
+- Fresh-context review found four false-positive classes, all reproduced and fixed with regressions: registry-alias fragments ("Marine" of Marine Oil), genus aliases (Citrus/Artemisia/Panax), "(as …)" connectors, and plural rewriting ("citrus" became "citru"). It also found the active_in scope and object-identity checks.
+
+**For Sean.** 19435 "Comfort" is the one place two parts of the decision collide. Its botanical route existed only through the false "Comfort" match. Without it, the taxonomy owner classifies the product as collagen ("collagen dominant identity", UC-II 40 mg), while the Acacia catechu + Chinese skullcap blend is 250 mg. The sibling 19436 "Mobility" (general_supplement) stays botanical. Does "dominant opaque blend" mean mass, or does the taxonomy identity decide?
+
+**Residuals (recorded, not this batch).**
+- `pii_purified_fish_oil` has no registry entry (271572, Omega-3 DHA against "Fish Oil Gummies").
+- "Krill Oil" against "krill & fish oil" needs coordination parsing.
+- These stay unnamed: "Ora Cranberry", "Collagen Peptide Hydro-Matrix", ALCAR arginate against "carnitine", and "Omega-3" against "Omega + DHA".
+- A label's own two words, "Liver Health Silymarin", still match "Liver Health Formula".
+- The loose matcher keeps its pre-existing compacted-phrase fallback ("Flaxseed" against "Flax Seed").
+- CI: `pipeline-tests` runs only on PRs into main, so #320 qualifies after #318 merges and GitHub retargets it.
