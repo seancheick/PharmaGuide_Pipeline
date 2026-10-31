@@ -6648,6 +6648,10 @@ _ROLE_TITLE_STOPWORDS = {
     # "Fruit & Veggie" are not about apple_fruit (40089).
     "fruit", "fruits", "berry", "berries", "seed", "bark", "flower", "herb",
     "juice", "whole", "leaves", "grass", "thallus", "herbal",
+    # Label marketing and count words name no ingredient: "Relora
+    # Proprietary Patented Blend" is named by "Relora", "Total Probiotic CFU"
+    # by "Probiotic".
+    "total", "cfu", "proprietary", "patented", "micronized", "matrix",
     # A chemical class names no single ingredient: "Omega-3 Fatty Acids" is
     # named by "Omega-3", never by "Fatty Acid Support".
     "acids", "fatty",
@@ -6845,6 +6849,16 @@ def _names_identity_phrase(row: Dict[str, Any], title_norm: str) -> bool:
     parent_blend = row.get("parent_blend") or row.get("parentBlend")
     if parent_blend and ".forms[" in str(row.get("raw_source_path") or ""):
         candidates.append(_norm(parent_blend))
+    # The label's own names, each parenthesised alternate on its own
+    # ("Tinofend (Tinospora cordifolia) extract" is also "Tinofend extract").
+    label_names = set(candidates[:3] + candidates[4:])
+    for name in list(label_names):
+        parts = [part.strip() for part in re.split(r"\(([^()]*)\)", name)]
+        if len(parts) > 1:
+            outside = " ".join(part for index, part in enumerate(parts) if index % 2 == 0 and part)
+            label_names.update(part for part in [outside] + parts[1::2] if part)
+    label_names.discard("")
+    candidates.extend(sorted(label_names - set(candidates)))
     curated_aliases = _ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ())
     # Curated identity aliases may be shorter than the generic four-character
     # title-token floor (notably D2/D3). Their canonical-scoped allowlist is
@@ -6874,15 +6888,28 @@ def _names_identity_phrase(row: Dict[str, Any], title_norm: str) -> bool:
             return True
         core_tokens = [token for token in candidate_tokens
                        if token not in _ROLE_TITLE_STOPWORDS and token != "and"]
+        if not core_tokens:
+            # Only descriptors ("Leaf and Root Extract") name nothing.
+            continue
         if len(core_tokens) == 1:
             if len(core_tokens[0]) >= 4 and core_tokens[0] in title_tokens:
                 return True
             continue
-        # Two or more consecutive identity words of the name name it, with
-        # "and" read like "&" ("CoffeeGenic Green Coffee extract" in "Green
-        # Coffee Extract CoffeeGenic"; "Energy & Metabolism Blend" in "Energy
-        # and Metabolism").
         joined_title = [token for token in ordered_title_tokens if token != "and"]
+        if any(
+            joined_title[index:index + len(core_tokens)] == core_tokens
+            for index in range(len(joined_title) - len(core_tokens) + 1)
+        ):
+            # The whole name without its descriptors ("Camellia sinensis
+            # leaf extract" in "Camellia Sinensis 500 mg").
+            return True
+        # Two or more consecutive identity words of the label's own name name
+        # it, with "and" read like "&" ("CoffeeGenic Green Coffee extract" in
+        # "Green Coffee Extract CoffeeGenic"; "Energy & Metabolism Blend" in
+        # "Energy and Metabolism"). A registry alias names it only whole: two
+        # words of "Liver Health Silymarin" are marketing, not milk thistle.
+        if cand not in label_names:
+            continue
         if any(
             joined_title[index:index + 2] == core_tokens[start:start + 2]
             for start in range(len(core_tokens) - 1)

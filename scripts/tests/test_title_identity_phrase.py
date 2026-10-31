@@ -36,6 +36,13 @@ def _named(name, canonical, text):
     ("organic Quinoa", "quinoa", "raw organic perfect food"),
     # The active_in source names the row only when the row's own name says it.
     ("Curcumin", "curcumin", "turmeric extract 500 mg"),
+    # A registry alias names the row only whole, never by two of its words.
+    ("Milk Thistle seed extract", "milk_thistle", "liver health"),
+    ("Lactase", "lactase", "digestive enzymes"),
+    # A registered descriptor-only name ("leaf and root extract") names nothing.
+    ("Ashwagandha Leaf, Root Extract", "ashwagandha", "stress & gut health"),
+    ("Sensoril", "ashwagandha", "carbcrave complex"),
+    ("organic sprouted Brown Rice Protein", "rice_protein", "raw protein vanilla spiced chai"),
 ])
 def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
     assert not _named(name, canonical, text)
@@ -65,6 +72,10 @@ def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
     ("Waterex Herbal Blend", "waterex_herbal_blend", "waterex"),
     ("Citrus Bioflavonoid Complex", "citrus_bioflavonoids", "vitamin c with bioflavonoids 1,000 mg"),
     ("Curcumin C3 Complex Turmeric Extract", "curcumin", "extra strength turmeric extract 1400 mg"),
+    ("Relora Proprietary Patented Blend", "relora_proprietary_patented_blend", "relora"),
+    ("Tinofend (Tinospora cordifolia) extract", "tinospora_cordifolia", "immune modulator with tinofend"),
+    ("Total Probiotic CFU", "probiotic_cfu_total", "probiotic pearls adult 50+"),
+    ("Micronized Creatine Matrix Blend", "creatine_blend", "amplified creatine xxx blue raspberry"),
 ])
 def test_identity_phrase_or_registered_name_names_the_ingredient(name, canonical, text):
     assert _named(name, canonical, text)
