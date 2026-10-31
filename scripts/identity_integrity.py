@@ -1138,8 +1138,8 @@ def resolve_identity(
                 and len(canonical_registry.verified_uniis.get(cid, ())) == 1
                 and canonical_registry.verified_uniis.get(cid)
                 == canonical_registry.verified_uniis.get(canonical_before)
-                and (interaction_rules_of is None
-                     or interaction_rules_of(canonical_before) <= interaction_rules_of(cid))
+                and interaction_rules_of is not None
+                and interaction_rules_of(cid) <= interaction_rules_of(canonical_before)
             ) for cid in botanical_form_ids
         )
         and declared_forms[0].get("percent") in {None, 100, "100"}

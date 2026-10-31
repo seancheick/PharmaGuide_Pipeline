@@ -1269,7 +1269,7 @@ def test_verified_submission_gingever_keeps_ginger_identity_and_interactions():
     assert scored["quality_score_status"] == "scored"
 
 
-@pytest.mark.parametrize("change", ["missing_unii", "different_unii", "lost_rule", "fraction"])
+@pytest.mark.parametrize("change", ["missing_unii", "different_unii", "form_only_rule", "fraction"])
 def test_botanical_form_parent_identity_requires_same_plant_and_intact_safety(change):
     iqm = json.loads((Path(__file__).parents[1] / "data/ingredient_quality_map.json").read_text())
     standardized = json.loads((Path(__file__).parents[1] / "data/standardized_botanicals.json").read_text())
@@ -1290,14 +1290,34 @@ def test_botanical_form_parent_identity_requires_same_plant_and_intact_safety(ch
         registry = replace(registry, verified_uniis={
             **registry.verified_uniis, "ginger_extract": frozenset({"OTHER_UNII"}),
         })
-    elif change == "lost_rule":
-        rules = lambda cid: frozenset({"RULE_IQM_GINGER_BLEEDING"}) if cid == "ginger" else frozenset()
+    elif change == "form_only_rule":
+        rules = lambda cid: frozenset({"FORM_ONLY_WARNING"}) if cid == "ginger_extract" else frozenset()
     else:
         row["forms"][0]["percent"] = 50
     decision = resolve_identity(row, "ginger", registry.resolve_unambiguous,
                                 canonical_registry=registry, interaction_rules_of=rules)
     assert decision.disposition == "identity_conflict"
     assert decision.canonical_id is None
+
+
+def test_ginkgo_form_with_its_own_pregnancy_rule_keeps_form_identity():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    iqm = json.loads((Path(__file__).parents[1] / "data/ingredient_quality_map.json").read_text())
+    botanicals = json.loads((Path(__file__).parents[1] / "data/botanical_ingredients.json").read_text())
+    registry = build_canonical_identity_registry({
+        "ingredient_quality_map": iqm, "botanical_ingredients": botanicals,
+    })
+    rules = SupplementEnricherV3()._interaction_rule_ids_of
+    row = {
+        "raw_source_text": "Ginkgo leaf extract", "name": "Ginkgo leaf extract",
+        "ingredientGroup": "Ginkgo", "raw_taxonomy": {"category": "botanical"},
+        "forms": [{"name": "Ginkgo biloba leaf", "category": "botanical"}],
+    }
+    decision = resolve_identity(row, "ginkgo", registry.resolve_unambiguous,
+                                canonical_registry=registry, interaction_rules_of=rules)
+    assert decision.canonical_id == "ginkgo_biloba_leaf"
+    assert "RULE_BOTAN_GINKGO_PREGNANCY" in rules(decision.canonical_id)
 
 
 def test_a_role_record_is_not_protected_from_a_specific_group():
