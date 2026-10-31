@@ -317,6 +317,21 @@ if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   "$PG_PYTHON" "$REPO_ROOT/scripts/sync_to_supabase.py" --preflight-only || exit 1
 fi
 "$PG_PYTHON" "$REPO_ROOT/scripts/promote_release_artifacts.py" --check-disk "$REPO_ROOT/scripts"
+# Submission receipts drive the image copy and promotion steps hours into a
+# release. Prove offline, before anything is built, that every receipt can
+# carry its label through those steps (2026-10-31 failed there after 3 h).
+if [[ -f "$SUBMISSION_RECEIPTS" ]]; then
+  "$PG_PYTHON" scripts/product_submission_import.py --check-receipts \
+    --output-dir "$SUBMISSION_OUTPUT_DIR" || exit 1
+  ok "Product submissions: import receipts verified against their labels"
+fi
+# Say up front whether Step 1 will rebuild the catalog (~60 min) or reuse the
+# sealed receipt, so a surprise assembly is visible before the run starts.
+if "$PG_PYTHON" "$REPO_ROOT/scripts/promote_release_artifacts.py" --catalog-current; then
+  ok "Catalog receipt is current for these inputs: Step 1 will skip assembly"
+else
+  info "Catalog receipt is stale or absent: Step 1 will assemble the catalog"
+fi
 if (( PREFLIGHT_ONLY == 1 )); then
   if (( SKIP_FLUTTER == 0 )) && [[ ! -x "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" ]]; then
     err "Flutter import script is missing or not executable: $FLUTTER_REPO/scripts/import_catalog_artifact.sh"

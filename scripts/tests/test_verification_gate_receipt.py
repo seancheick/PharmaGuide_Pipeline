@@ -256,3 +256,93 @@ def test_receipt_reports_binding_overhead_separately(tmp_path):
     payload = json.loads(args['receipt_path'].read_text())
     assert payload['input_binding_duration_seconds'] >= 0
     assert payload['log_bytes'] == args['log_path'].stat().st_size
+
+
+def test_shell_bookkeeping_and_default_dataset_root_do_not_invalidate_reuse(tmp_path, monkeypatch):
+    """The snapshot and the release must agree on one catalog binding.
+
+    release_full.sh exports PYTHONUNBUFFERED=1 and batch_run_all_datasets.sh
+    exports the default dataset root; neither changes any gate's inputs.
+    """
+    from audits.run_verification_gate import _bound_environment
+    from dataset_paths import brand_dataset_root
+
+    args = _reusable_probe(tmp_path)
+    assert run_gate(**args) == 0
+    monkeypatch.setenv('PYTHONUNBUFFERED', '1')
+    monkeypatch.setenv('TERM', 'xterm-256color-changed')
+    monkeypatch.setenv('SHLVL', '7')
+    monkeypatch.setenv('COLUMNS', '333')
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(brand_dataset_root()))
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'x'
+
+    # A dataset root that resolves elsewhere is configuration and still binds.
+    other_root = tmp_path / 'other-brands'
+    other_root.mkdir()
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(other_root))
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'xx'
+
+    bound = _bound_environment({'PATH': '/bin', 'PG_PYTHON': 'p', 'TERM': 'x', 'PYTHONUNBUFFERED': '1',
+                                'PG_RELEASE_LOCK_TOKEN': 'secret', 'SUPABASE_URL': 'u',
+                                'PYTHONOPTIMIZE': '1', 'LANG': 'C', 'LC_ALL': 'C', 'TZ': 'UTC'})
+    assert set(bound) == {'PATH', 'PG_PYTHON', 'SUPABASE_URL', 'PHARMAGUIDE_DATASET_ROOT',
+                          'PYTHONOPTIMIZE', 'LANG', 'LC_ALL', 'TZ'}
+
+
+def test_scoring_preflight_binds_scored_artifacts_and_manifests_for_reuse():
+    from audits.run_verification_gate import (RELEASE_SOURCE_INPUTS, REUSABLE_RELEASE_GATES,
+                                              release_gate_input_globs)
+    bound = release_gate_input_globs('scoring assessment completeness preflight')
+    assert set(RELEASE_SOURCE_INPUTS) <= set(bound)
+    assert 'scripts/products/*_scored/scored/*.json' in bound
+    assert 'scripts/products/*/*/.stage_manifest.json' in bound
+    # The audit selects cleaned stage files by both patterns it reads.
+    assert {'scripts/products/*/cleaned/*.json', 'scripts/products/*/cleaned/*.jsonl'} <= set(bound)
+    for name in REUSABLE_RELEASE_GATES:
+        assert release_gate_input_globs(name) == tuple(RELEASE_SOURCE_INPUTS)
+    # Artifact, live and publication gates never bind.
+    assert release_gate_input_globs('scoring assessment readiness') == ()
+    assert release_gate_input_globs('interaction DB release asset + app hydration pin') == ()
+
+
+def test_snapshot_preflight_gate_reuses_until_a_scored_artifact_changes(tmp_path, monkeypatch):
+    """The real policy name binds through main(): unchanged scored bytes reuse, a changed byte reruns."""
+    from audits.run_verification_gate import main
+    scored = tmp_path / 'scripts/products/output_A_scored/scored'
+    scored.mkdir(parents=True)
+    (scored / 'batch.json').write_text('[]')
+    probe = tmp_path / 'scripts/probe.py'
+    probe.write_text("from pathlib import Path\np=Path('calls')\np.write_text(p.read_text()+'x' if p.exists() else 'x')\n")
+    argv = ['--name', 'scoring assessment completeness preflight', '--receipt-dir', str(tmp_path),
+            '--cwd', str(tmp_path), '--release-check', '--', sys.executable, str(probe)]
+    assert main(argv) == 0
+    assert main(argv) == 0
+    assert (tmp_path / 'calls').read_text() == 'x'
+    (scored / 'batch.json').write_text('[{"changed": true}]')
+    assert main(argv) == 0
+    assert (tmp_path / 'calls').read_text() == 'xx'
+
+
+def test_snapshot_preflight_gate_reruns_when_a_raw_label_changes(tmp_path, monkeypatch):
+    """The audit compares the clean manifest with the raw labels, so their content binds too."""
+    from audits.run_verification_gate import main
+    raw = tmp_path / 'raw' / 'Olly'
+    raw.mkdir(parents=True)
+    label = raw / '1.json'
+    label.write_text('{"fullName": "A"}')
+    monkeypatch.setenv('PHARMAGUIDE_DATASET_ROOT', str(tmp_path / 'raw'))
+    repo = tmp_path / 'repo'
+    (repo / 'scripts').mkdir(parents=True)
+    probe = repo / 'scripts/probe.py'
+    probe.write_text("from pathlib import Path\np=Path('calls')\np.write_text(p.read_text()+'x' if p.exists() else 'x')\n")
+    argv = ['--name', 'scoring assessment completeness preflight', '--receipt-dir', str(repo),
+            '--cwd', str(repo), '--release-check', '--', sys.executable, str(probe)]
+    assert main(argv) == 0
+    os.utime(label, None)
+    assert main(argv) == 0
+    assert (repo / 'calls').read_text() == 'x'
+    label.write_text('{"fullName": "B"}')
+    assert main(argv) == 0
+    assert (repo / 'calls').read_text() == 'xx'

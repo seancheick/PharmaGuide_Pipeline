@@ -2181,3 +2181,224 @@ def test_printed_daily_directions_reach_clean_as_label_sourced(product_id, expec
     servings = sorted(cleaned["servingSizes"], key=lambda s: s["order"])
     assert [s["dailyServingsSource"] for s in servings] == ["label"] * len(expected)
     assert [(s["minDailyServings"], s["maxDailyServings"]) for s in servings] == expected
+
+
+# ---------------------------------------------------------------------------
+# Receipts written before the revision-aware importer (October 26) carry no
+# approval payload hash. Their approvals are promoted and still verifiable on
+# the server, which derives the exact revision and hash itself. The release of
+# 2026-10-31 crashed on the first such receipt with a bare KeyError.
+# ---------------------------------------------------------------------------
+
+
+def _legacy_receipts(manual_dir: Path, *, promoted: bool) -> tuple[str, str, str, str]:
+    from product_submission_import import RECEIPT_FILE, materialize_approved_submissions
+
+    row = _export()
+    materialize_approved_submissions([row], output_dir=manual_dir)
+    legacy_submission = "35e0bd33-74bf-494b-80fe-abe87fc559e7"
+    legacy_product = "PG_SUB_35E0BD3374BF494B80FEABE87FC559E7"
+    receipt_path = manual_dir / RECEIPT_FILE
+    receipts = json.loads(receipt_path.read_text(encoding="utf-8"))
+    legacy = {
+        "approval_revision": 1,
+        "label_sha256": "0" * 64,
+        "output_file": f"{legacy_product}.json",
+        "product_id": legacy_product,
+        "promoted_approval_revision": 1 if promoted else 0,
+        "upc": "0860340001620",
+    }
+    if promoted:
+        legacy["promoted_catalog_version"] = "2026.09.03.151135"
+    receipts["submissions"][legacy_submission] = legacy
+    receipt_path.write_text(json.dumps(receipts, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return row["submission_id"], "PG_SUB_018F4C797C7E4C709D627FC3B9CE6A11", legacy_submission, legacy_product
+
+
+def _image_catalog(tmp_path: Path, product_ids: list[str]) -> tuple[Path, Path, bytes, str]:
+    catalog = tmp_path / "pharmaguide_core.db"
+    with sqlite3.connect(catalog) as connection:
+        connection.execute(
+            "create table products_core (dsld_id text primary key, image_thumbnail_url text)"
+        )
+        connection.executemany(
+            "insert into products_core values (?, null)", [(pid,) for pid in product_ids]
+        )
+    (tmp_path / "export_manifest.json").write_text(json.dumps({"db_version": "release-3"}))
+    image_dir = tmp_path / "product_images"
+    image_dir.mkdir()
+    (image_dir / "product_image_index.json").write_text("{}\n")
+    source = io.BytesIO()
+    Image.new("RGB", (900, 600), "#183b3f").save(source, format="PNG")
+    source_bytes = source.getvalue()
+    return catalog, image_dir, source_bytes, hashlib.sha256(source_bytes).hexdigest()
+
+
+def test_promoted_legacy_receipt_without_payload_hash_uses_server_derived_image_lookup(tmp_path):
+    from product_submission_import import RECEIPT_FILE, copy_approved_product_images
+
+    manual_dir = tmp_path / "manual"
+    submission_id, product_id, legacy_submission, legacy_product = _legacy_receipts(
+        manual_dir, promoted=True
+    )
+    catalog, image_dir, source_bytes, source_hash = _image_catalog(
+        tmp_path, [product_id, legacy_product]
+    )
+    calls: list[tuple[str, dict[str, object]]] = []
+
+    def rpc(name: str, payload: dict[str, object]) -> object:
+        calls.append((name, payload))
+        return [{
+            "bucket_id": "product-submission-photos",
+            "object_path": f"user/{payload['p_submission_id']}/front.jpg",
+            "content_type": "image/png",
+            "content_sha256": source_hash,
+        }]
+
+    result = copy_approved_product_images(
+        output_dir=manual_dir,
+        catalog_db=catalog,
+        product_images_dir=image_dir,
+        rpc=rpc,
+        download=lambda bucket, path: source_bytes,
+    )
+
+    assert result == {"copied": 2, "failed": 0, "skipped": 0}
+    assert calls == [
+        # The exact approval is the only acceptable lookup where the receipt
+        # recorded it; the legacy promoted approval is derived by the server.
+        (
+            "get_approved_product_submission_image",
+            {
+                "p_submission_id": submission_id,
+                "p_approval_revision": 1,
+                "p_payload_sha256": _export()["payload_sha256"],
+            },
+        ),
+        ("get_approved_product_submission_image", {"p_submission_id": legacy_submission}),
+    ]
+    receipts = json.loads((manual_dir / RECEIPT_FILE).read_text(encoding="utf-8"))["submissions"]
+    assert receipts[legacy_submission]["image_approval_revision"] == 1
+    assert receipts[legacy_submission]["image_source_sha256"] == source_hash
+    assert "approval_payload_sha256" not in receipts[legacy_submission]
+    with sqlite3.connect(catalog) as connection:
+        urls = dict(connection.execute("select dsld_id, image_thumbnail_url from products_core"))
+    assert urls == {
+        product_id: f"product-images/vrelease-3/{product_id}.webp",
+        legacy_product: f"product-images/vrelease-3/{legacy_product}.webp",
+    }
+
+
+def test_unpromoted_receipt_without_payload_hash_is_a_named_failure_not_a_crash(tmp_path, capsys):
+    from product_submission_import import copy_approved_product_images
+
+    manual_dir = tmp_path / "manual"
+    submission_id, product_id, legacy_submission, legacy_product = _legacy_receipts(
+        manual_dir, promoted=False
+    )
+    catalog, image_dir, source_bytes, source_hash = _image_catalog(
+        tmp_path, [product_id, legacy_product]
+    )
+    calls: list[str] = []
+
+    result = copy_approved_product_images(
+        output_dir=manual_dir,
+        catalog_db=catalog,
+        product_images_dir=image_dir,
+        rpc=lambda name, payload: calls.append(str(payload["p_submission_id"])) or [{
+            "bucket_id": "product-submission-photos",
+            "object_path": "user/submission/front.jpg",
+            "content_type": "image/png",
+            "content_sha256": source_hash,
+        }],
+        download=lambda bucket, path: source_bytes,
+    )
+
+    # An unpromoted approval without its recorded hash cannot be fetched
+    # exactly, so it is reported by submission and left for the preflight
+    # check to block; the other approved image still ships.
+    assert result == {"copied": 1, "failed": 1, "skipped": 0}
+    assert calls == [submission_id]
+    assert f"{legacy_submission} has no approval payload hash" in capsys.readouterr().err
+
+
+def test_check_receipts_reports_legacy_promoted_rows_and_refuses_unpromoted_hashless_rows(tmp_path):
+    from product_submission_import import SubmissionImportError, check_import_receipts
+
+    manual_dir = tmp_path / "manual"
+    _, _, legacy_submission, legacy_product = _legacy_receipts(manual_dir, promoted=True)
+    # The legacy label itself must exist and match its receipt like any other.
+    (manual_dir / f"{legacy_product}.json").write_bytes(b"")
+    receipt_path = manual_dir / ".product_submission_import_receipts"
+    receipts = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipts["submissions"][legacy_submission]["label_sha256"] = hashlib.sha256(b"").hexdigest()
+    receipt_path.write_text(json.dumps(receipts, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    assert check_import_receipts(output_dir=manual_dir) == {
+        "rows": 2, "promoted": 1, "pending": 1, "legacy_without_payload_hash": 1,
+    }
+
+    receipts["submissions"][legacy_submission]["promoted_approval_revision"] = 0
+    receipt_path.write_text(json.dumps(receipts, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    with pytest.raises(SubmissionImportError, match=f"{legacy_submission}: unpromoted approval has no approval payload hash"):
+        check_import_receipts(output_dir=manual_dir)
+
+
+def test_check_receipts_accepts_a_promoted_owner_whose_file_its_correction_replaced(tmp_path):
+    """A correction rewrites the promoted owner's file after freezing the owner's bytes."""
+    from product_submission_import import (
+        SubmissionImportError, check_import_receipts, materialize_approved_submissions,
+    )
+
+    first = _export(kind="label_mismatch", normalized_upc="050428381397", target_dsld_id="278454")
+    materialize_approved_submissions([first], output_dir=tmp_path)
+    receipt_path = tmp_path / ".product_submission_import_receipts"
+    receipts = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipts["submissions"][first["submission_id"]]["promoted_catalog_version"] = "2026.07.30.220000"
+    receipt_path.write_text(json.dumps(receipts), encoding="utf-8")
+    second_payload = _payload()
+    second_payload["fullName"] = "Clinically reviewed second correction"
+    second = _export(second_payload, submission_id="028f4c79-7c7e-4c70-9d62-7fc3b9ce6a22",
+                     kind="label_mismatch", normalized_upc="050428381397", target_dsld_id="278454")
+    materialize_approved_submissions([second], output_dir=tmp_path)
+
+    assert check_import_receipts(output_dir=tmp_path) == {
+        "rows": 2, "promoted": 1, "pending": 1, "legacy_without_payload_hash": 0,
+    }
+
+    shared = tmp_path / "278454.json"
+    current = shared.read_bytes()
+    shared.write_bytes(current + b" ")
+    with pytest.raises(SubmissionImportError, match="changed after import"):
+        check_import_receipts(output_dir=tmp_path)
+    shared.write_bytes(current)
+
+    owner = json.loads(receipt_path.read_text(encoding="utf-8"))["submissions"][first["submission_id"]]
+    frozen = tmp_path / owner["promoted_label_artifact"]
+    frozen_bytes = frozen.read_bytes()
+    frozen.write_bytes(frozen_bytes + b" ")
+    with pytest.raises(SubmissionImportError, match=f"{first['submission_id']}: label file 278454.json changed"):
+        check_import_receipts(output_dir=tmp_path)
+
+
+def test_check_receipts_refuses_a_label_that_drifted_from_its_receipt(tmp_path):
+    from product_submission_import import SubmissionImportError, check_import_receipts, materialize_approved_submissions
+
+    manual_dir = tmp_path / "manual"
+    materialize_approved_submissions([_export()], output_dir=manual_dir)
+    assert check_import_receipts(output_dir=manual_dir)["pending"] == 1
+    label = manual_dir / "PG_SUB_018F4C797C7E4C709D627FC3B9CE6A11.json"
+    label.write_text(label.read_text(encoding="utf-8") + "\n", encoding="utf-8")
+    with pytest.raises(SubmissionImportError, match="changed after import"):
+        check_import_receipts(output_dir=manual_dir)
+    label.unlink()
+    with pytest.raises(SubmissionImportError, match="is missing"):
+        check_import_receipts(output_dir=manual_dir)
+
+
+def test_release_preflight_checks_receipts_before_the_read_only_exit():
+    release = Path("scripts/release_full.sh").read_text(encoding="utf-8")
+    check = release.index("product_submission_import.py --check-receipts")
+    assert release.index('SUBMISSION_RECEIPTS="') < check
+    assert check < release.index("if (( PREFLIGHT_ONLY == 1 )); then")
+    assert check < release.index("bash scripts/rebuild_dashboard_snapshot.sh")
