@@ -4199,14 +4199,14 @@
           "drug_class_id": "cardiac_glycosides",
           "severity": "caution",
           "evidence_level": "theoretical",
-          "mechanism": "Health Canada advises professional consultation before American ginseng use with digoxin. A clinically important direct interaction is not established for this preparation; digoxin has a narrow therapeutic range, so review of herbal supplement use is prudent.",
+          "mechanism": "Health Canada advises professional consultation before American ginseng use with digoxin. NCCIH advises people taking narrow-therapeutic-index medicines such as digoxin to discuss herbal supplement use with their health care provider. This precaution does not assign a specific interaction mechanism to every ginseng preparation.",
           "action": "If you take digoxin, ask your prescriber to review ginseng before use. Do not change your digoxin treatment yourself.",
           "sources": [
             "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true",
             "https://www.nccih.nih.gov/health/tips/tips-how-herbs-can-interact-with-medicines"
           ],
           "alert_headline": "Review ginseng with your digoxin prescriber",
-          "alert_body": "If you take digoxin, ask your prescriber to review this ginseng supplement before use. A direct harmful interaction is not established, but digoxin needs careful medication review.",
+          "alert_body": "If you take digoxin, ask your prescriber to review this ginseng supplement before use. Continue taking your prescribed medicine as directed.",
           "informational_note": "Digoxin has a narrow therapeutic range; professional review is advised before adding a ginseng supplement.",
           "profile_gate": {
             "gate_type": "drug_class",

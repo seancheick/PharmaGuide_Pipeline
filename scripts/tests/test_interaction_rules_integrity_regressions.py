@@ -1266,7 +1266,8 @@ def test_ginseng_digoxin_precaution_is_consultation_without_claimed_harm():
     assert "min_effective_dose" not in digoxin
     assert "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true" in digoxin["sources"]
     assert "digoxin" in digoxin["action"].lower()
-    assert "not established" in digoxin["mechanism"].lower()
+    assert "not established" not in digoxin["mechanism"].lower()
+    assert "direct harmful interaction" not in digoxin["alert_body"].lower()
     assert digoxin["profile_gate"]["requires"]["drug_classes_any"] == ["cardiac_glycosides"]
 
 
