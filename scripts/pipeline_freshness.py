@@ -1,10 +1,9 @@
 """Content fingerprints for pipeline inputs that must trigger regeneration.
 
-Every stage manifest (clean, enrich, score) records two input fingerprints:
-the reference data in scripts/data, and the code that ran the stage (its entry
-script, every scripts/ module it imports, and its JSON config). The release
-preflight compares both with the current checkout, so output built from older
-data, older code, or a mix of revisions cannot pass as current.
+Every stage manifest (clean, enrich, score) records fingerprints for reference
+data, stage code/configuration, runtime dependencies and actual source inputs.
+Release checks compare this provenance with the current inputs, so older or
+mixed outputs cannot pass as current.
 """
 
 from __future__ import annotations
@@ -23,6 +22,7 @@ from stage_manifest import MANIFEST_NAME
 REFERENCE_FINGERPRINT_KEY = "reference_data_sha256_v1"
 CODE_FINGERPRINT_KEY = "stage_code_sha256_v1"
 DATA_FINGERPRINT_KEY = "stage_data_sha256_v1"
+RUNTIME_FINGERPRINT_KEY = "stage_runtime_sha256_v1"
 
 #: Per stage: the script run_pipeline runs, the JSON config it reads outside
 #: scripts/data (relative to scripts/), and its outputs (relative to
@@ -92,13 +92,21 @@ def _content_set_fingerprint(
     return digest.hexdigest()
 
 
-def stage_data_fingerprint(paths: Iterable[Path]) -> str:
+def stage_data_fingerprint(paths: Iterable[Path], *,
+                           content_hashes: dict[Path, bytes] | None = None) -> str:
     """Bind the actual flat input file inventory and full bytes, never mtimes."""
     paths = [Path(path).resolve() for path in paths]
     parents = {path.parent for path in paths}
     if len(parents) > 1:
         raise ValueError("Stage inputs must share one directory")
-    return _content_set_fingerprint(paths, root=next(iter(parents), Path.cwd()))
+    # Only invocation-local hashes emitted by ownership verification belong here.
+    # Never retain this map across a stage, verification or publication boundary.
+    def digest(path: Path) -> bytes:
+        if content_hashes is not None and path in content_hashes:
+            return content_hashes[path]
+        return _bytes_digest(path)
+    return _content_set_fingerprint(paths, root=next(iter(parents), Path.cwd()),
+                                    file_digest=digest)
 
 
 def stage_data_files(directory: Path) -> list[Path]:
@@ -208,11 +216,17 @@ def stage_code_fingerprint(repo_root: Path, stage: str) -> str:
 
 
 def stage_input_fingerprints(repo_root: Path, stage: str) -> dict[str, str]:
-    """What a stage manifest records: the reference data and the stage's code."""
+    """Reference, code and runtime stamps used by every stage manifest."""
     return {
         REFERENCE_FINGERPRINT_KEY: reference_data_fingerprint(repo_root),
         CODE_FINGERPRINT_KEY: stage_code_fingerprint(repo_root, stage),
+        RUNTIME_FINGERPRINT_KEY: _runtime_fingerprint(),
     }
+
+
+def _runtime_fingerprint() -> str:
+    from audits.run_verification_gate import runtime_identity
+    return hashlib.sha256(json.dumps(runtime_identity(), sort_keys=True).encode()).hexdigest()
 
 
 def _manifest_issue(manifest_path: Path, expected: dict[str, str]) -> str | None:
@@ -233,7 +247,10 @@ def _manifest_issue(manifest_path: Path, expected: dict[str, str]) -> str | None
     for key, label in (
         (REFERENCE_FINGERPRINT_KEY, "reference_data"),
         (CODE_FINGERPRINT_KEY, "stage code"),
+        (RUNTIME_FINGERPRINT_KEY, "runtime"),
     ):
+        if key not in expected:
+            continue
         declared = (input_fingerprints or {}).get(key)
         if declared != expected[key]:
             reason = "missing" if declared is None else "content mismatch"
@@ -264,8 +281,81 @@ def stage_manifest_issue(
     return f"{manifest_path}: raw input newer than stage manifest: {newer}" if newer else None
 
 
+def reusable_stage_issue(repo_root: Path, stage_dir: Path, stage: str,
+                         input_dir: Path) -> str | None:
+    """Require complete output ownership and current input bytes before reuse."""
+    from stage_manifest import StageManifestError, select_stage_input_files
+
+    try:
+        issue = stage_manifest_issue(repo_root, stage_dir / MANIFEST_NAME, stage)
+        if issue:
+            return issue
+        outputs = select_stage_input_files(
+            stage_dir, stage, require_manifest=True, patterns=("*.json", "*.jsonl"))
+        if not outputs:
+            return "stage owns no outputs"
+        if not input_dir.is_dir():
+            return "missing stage input directory"
+        inputs = stage_data_files(input_dir)
+        if not inputs:
+            return "stage has no inputs"
+        manifest = json.loads((stage_dir / MANIFEST_NAME).read_text())
+        if manifest.get("input_fingerprints", {}).get(DATA_FINGERPRINT_KEY) != stage_data_fingerprint(inputs):
+            return "stage input inventory or content changed"
+    except (StageManifestError, OSError, ValueError) as exc:
+        return str(exc)
+    return None
+
+
+def dataset_resume_plan(repo_root: Path, raw_dir: Path,
+                        output_prefix: Path) -> tuple[list[str], str]:
+    """Reuse a verified prefix, rebuilding the first stale stage and successors."""
+    prefix = str(output_prefix)
+    directories = [Path(prefix) / "cleaned", Path(prefix + "_enriched") / "enriched",
+                   Path(prefix + "_scored") / "scored"]
+    stages = list(STAGES)
+    inputs = Path(raw_dir)
+    for index, (stage, directory) in enumerate(zip(stages, directories)):
+        issue = reusable_stage_issue(repo_root, directory, stage, inputs)
+        if issue:
+            return stages[index:], issue
+        inputs = directory
+    return [], "all stage outputs and inputs verified"
+
+
+def batch_source_fingerprint(repo_root: Path, raw_roots: Iterable[Path] = ()) -> str:
+    """Freeze runtime source across brands, independently of generated outputs."""
+    root = Path(repo_root).resolve()
+    scripts = root / 'scripts'
+    paths = set(_reference_data_files(root))
+    paths.update(scripts.glob('*.py'))
+    paths.update(scripts.glob('*.sh'))
+    paths.update(root.glob('*.sh'))
+    paths.update(path for pattern in ('.env', '.python-version', 'requirements*.txt',
+                                      'scripts/audits/run_verification_gate.py')
+                 for path in root.glob(pattern) if path.is_file())
+    for directory in ('scoring_v4', 'config', 'contracts'):
+        paths.update(path for path in (scripts / directory).rglob('*')
+                     if path.is_file() and path.suffix in ('.py', '.json', '.sh'))
+    # Freeze every runtime module, including dynamic imports, without reparsing
+    # all ASTs between brands. Product-stage fingerprints remain semantic ASTs.
+    excluded = {'products', 'dist', 'final_db_output', 'reports', 'tests', 'audits',
+                '__pycache__', '.cache', '.venv', 'venv', 'data'}
+    for directory in scripts.iterdir():
+        if directory.is_dir() and directory.name not in excluded:
+            paths.update(path for pattern in ('*.py', '*.sh')
+                         for path in directory.rglob(pattern) if path.is_file())
+    internal = {path for path in paths if path.resolve().is_relative_to(root)}
+    external = sorted((path.relative_to(root).as_posix(), _bytes_digest(path).hex())
+                      for path in paths - internal)
+    source = _content_set_fingerprint(internal, root=root)
+    inputs = [(str(Path(raw).resolve()), _content_set_fingerprint(
+        Path(raw).rglob('*.json'), root=Path(raw).resolve())) for raw in raw_roots]
+    return hashlib.sha256(json.dumps([source, external, inputs, _runtime_fingerprint()], sort_keys=True).encode()).hexdigest()
+
+
 def stage_freshness_issues(repo_root: Path) -> list[str]:
-    """Stage outputs whose reference data or stage code differs from now.
+    """Stage outputs whose reference data, code or runtime differs from now.
 
     Each issue starts with its stage name; rerun RERUN_STAGES of the earliest
     stale stage.
@@ -291,6 +381,7 @@ def stage_freshness_issues(repo_root: Path) -> list[str]:
         expected = {
             REFERENCE_FINGERPRINT_KEY: reference,
             CODE_FINGERPRINT_KEY: stage_code_fingerprint(repo_root, stage),
+            RUNTIME_FINGERPRINT_KEY: _runtime_fingerprint(),
         }
         for stage_dir in stage_dirs:
             issue = _manifest_issue(stage_dir / MANIFEST_NAME, expected)
@@ -304,6 +395,9 @@ def _main() -> int:
         description="Check content-based pipeline freshness contracts."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+    baseline = subparsers.add_parser('batch-source-fingerprint')
+    baseline.add_argument('--repo-root', type=Path, required=True)
+    baseline.add_argument('--raw-inputs', type=Path, action='append', default=[])
     check = subparsers.add_parser(
         "check-stage-manifests",
         help=(
@@ -317,6 +411,10 @@ def _main() -> int:
     for stage in STAGES:
         check.add_argument(f"--{stage}", type=Path, metavar="MANIFEST")
     args = parser.parse_args()
+
+    if args.command == 'batch-source-fingerprint':
+        print(batch_source_fingerprint(args.repo_root, args.raw_inputs))
+        return 0
 
     if args.command == "check-stage-manifests":
         checks = [

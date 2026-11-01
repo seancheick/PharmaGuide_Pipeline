@@ -37,6 +37,8 @@ def _install_batch_dependencies(tmp_path):
     """
     scripts_dir = tmp_path / "scripts"
     scripts_dir.mkdir(parents=True, exist_ok=True)
+    if not (scripts_dir / 'pipeline_freshness.py').exists():
+        (scripts_dir / 'pipeline_freshness.py').write_text("print('stable-source')\n")
     (scripts_dir / "python_env.sh").write_text(
         PYTHON_ENV_PATH.read_text(encoding="utf-8"), encoding="utf-8"
     )
@@ -247,6 +249,7 @@ def _batch_with_stale_submissions(tmp_path, *args):
     )
     (scripts_dir / "pipeline_freshness.py").write_text(
         "import sys\n"
+        "if sys.argv[1] == 'batch-source-fingerprint': print('stable-source'); raise SystemExit(0)\n"
         "assert sys.argv[1] == 'check-stage-manifests'\n"
         "print('content mismatch', file=sys.stderr)\n"
         "raise SystemExit(1)\n",
@@ -307,6 +310,7 @@ def test_full_batch_refreshes_stale_product_submissions_before_snapshot(tmp_path
     )
     (scripts_dir / "pipeline_freshness.py").write_text(
         "import sys\n"
+        "if sys.argv[1] == 'batch-source-fingerprint': print('stable-source'); raise SystemExit(0)\n"
         "assert sys.argv[1] == 'check-stage-manifests'\n"
         "print('content mismatch', file=sys.stderr)\n"
         "raise SystemExit(1)\n",
@@ -395,7 +399,9 @@ def test_default_batch_intake_precedes_validation_and_reaches_flutter_commit(tmp
         "import sys\nkind='submissions' if 'products/output_Product_Submissions' in sys.argv else 'brand'\n"
         "with p.open('a') as out: out.write(kind+'\\n')\n")
     (scripts / 'pipeline_freshness.py').write_text(
-        "import sys\nassert '--raw-inputs' in sys.argv\nraise SystemExit(1)\n")
+        "import sys\n"
+        "if sys.argv[1] == 'batch-source-fingerprint': print('stable-source'); raise SystemExit(0)\n"
+        "assert '--raw-inputs' in sys.argv\nraise SystemExit(1)\n")
     snapshot = scripts / 'rebuild_dashboard_snapshot.sh'
     snapshot.write_text(f"#!/bin/bash\nprintf 'snapshot\\n' >> '{events}'\n")
     snapshot.chmod(0o755)
@@ -519,3 +525,49 @@ def test_known_assessment_blocker_stops_before_brand_processing(tmp_path):
     assert result.returncode == 1
     assert 'current assessments block publication before corpus work' in result.stdout
     assert 'must not run corpus' not in result.stderr
+
+
+@pytest.mark.parametrize('targeted', [False, True])
+def test_resume_prints_all_plans_before_running_any_brand(tmp_path, targeted):
+    raw = tmp_path / 'raw'
+    for brand in ('A', 'B'):
+        (raw / brand).mkdir(parents=True)
+        (raw / brand / 'one.json').write_text('{}')
+    _install_batch_dependencies(tmp_path)
+    (tmp_path / 'scripts/run_pipeline.py').write_text(
+        "import sys\n"
+        "print(('PLAN ' if '--resume-plan' in sys.argv else 'RUN ') + sys.argv[sys.argv.index('--raw-dir')+1])\n"
+        "assert '--resume-plan' in sys.argv or '--resume' in sys.argv\n")
+    submissions = tmp_path / 'manual_labels/product_submissions'
+    submissions.mkdir(parents=True)
+    (submissions / 'one.json').write_text('{}')
+    runner = tmp_path / 'batch_run_all_datasets.sh'
+    runner.write_text(SCRIPT_PATH.read_text())
+    extra = ['--targets', 'A'] if targeted else []
+    result = subprocess.run(['bash', str(runner), '--root', str(raw), '--pipeline-only', '--resume', *extra],
+                            text=True, capture_output=True, env={**os.environ})
+    assert result.returncode == 0, result.stdout + result.stderr
+    lines = [line for line in result.stdout.splitlines() if line.startswith(('PLAN ', 'RUN '))]
+    expected = ['PLAN', 'RUN'] if targeted else ['PLAN'] * 3 + ['RUN'] * 3
+    assert [line.split()[0] for line in lines] == expected
+
+
+def test_batch_stops_after_source_drift_before_next_brand(tmp_path):
+    raw = tmp_path / 'raw'
+    for brand in ('A', 'B'):
+        (raw / brand).mkdir(parents=True)
+        (raw / brand / 'one.json').write_text('{}')
+    _install_batch_dependencies(tmp_path)
+    (tmp_path / 'scripts/pipeline_freshness.py').write_text(
+        "from pathlib import Path\nprint(Path('changed').exists())\n")
+    (tmp_path / 'scripts/run_pipeline.py').write_text(
+        "from pathlib import Path\nprint('brand-ran')\nPath('changed').touch()\n")
+    runner = tmp_path / 'batch_run_all_datasets.sh'
+    runner.write_text(SCRIPT_PATH.read_text())
+    result = subprocess.run(['bash', str(runner), '--root', str(raw), '--pipeline-only'],
+                            text=True, capture_output=True, env={**os.environ})
+    assert result.returncode != 0
+    assert result.stdout.count('brand-ran') == 1
+    assert 'source changed' in result.stdout.lower()
+    summary = next((tmp_path / 'scripts/products/reports').glob('batch_run_summary_*.txt'))
+    assert 'source changed' in summary.read_text().lower()

@@ -4176,3 +4176,69 @@ Owner: `scripts/api_audit/verify_certifications.py::build_refresh_candidate/main
 Durable receipts: `/Users/seancheick/pg_quality/certification_renewal_20261101/`; official/retry responses and failure receipts, `combined_report.json`, `independent_review.md/json`, `validated_census/certification_census.json`, `validated_census_delta.json`, `validated_movement_summary.json`, three disjoint frozen raw manifests/full captures, `final_delivery_summary.json`, `trade_designation_consumer_affected.json`, RED/GREEN and final local_delivery.log (564passed/24declared opt-ins124.01s). Existing-policy renewal is automatically authorized by Sean; new program interpretations remain pending policy.
 
 Final source binding `c9a524838ae92142bc54fe0140b6a10d54f0fb9f`: all three current raw-capture runtime/data dictionaries equal committed source (`final_source_binding.json`); contract matrix hash recorded separately. Registry SHA-256 `5b93167d80d4862aadf6f9e83f87134c24a943f313a5f63ed54f10847258f568`. Baseline registry/source remains `76e3b221c`; sourceIFOS record set and per-source verification date unchanged. Earlier candidate captures/checkpoints are explicitly superseded, not green delivery receipts. Final source CI41293871716 is completedgreen on exactc9source, including all4fast shards/skipguards and Merge readiness. Source integration is eeb8d3ce6; later receipt-only commits do not change runtime/data.
+
+## November 1 — verified pipeline resume and retry timings
+
+Behavioral infrastructure batch, branch `codex/pipeline-resume-speed`. Owner:
+`stage_manifest.py::select_stage_input_files` and
+`pipeline_freshness.py::dataset_resume_plan` — inspected checksum/inventory and
+input fingerprint owners plus glossary. Gate reuse remains owned by
+`audits/run_verification_gate.py`; invocation-local digest reuse is consumed by
+`audit_source_of_truth_contract.py::_scoring_enriched_source`. Will NOT create a
+second scorer, reference registry, public status, or parallel corpus worker.
+
+Added explicit batch `--resume`, complete pre-computation plans including approved
+submissions, strict stage/output/input proof, and earliest-invalid-stage rebuild.
+Default commands retain their previous compute behavior. Runtime source drift now
+stops the batch between brands rather than continuing through a mixed run. Raw
+labels are bound before computation and checked before assembly/publication.
+Missing manifests, changed/deleted/added labels, corrupt or unowned output, changed
+references/code, incomplete stages, and custom configuration cannot silently reuse.
+Standalone resume uses the same path resolver as normal computation.
+
+Stage subprocess times and product counts are logged; `run_pipeline.py
+--summarize-log` aggregates measured stage/gate execution and reuse. Catalog
+construction, approved image preparation, cloud sync and Flutter import now use
+the existing nonreusable execution receipt path. Reuse records its own invocation
+cost without renewing the original success timestamp. Stateful publication steps
+remain nonreusable. Completeness validation consumes already-verified upstream
+digests within one invocation, eliminating the second full byte read; no hash map
+survives a verification/publication boundary.
+
+Frozen source sample: GNC 304641/69623/77146/243038 and BulkSupplements
+330196/294273/329958/329949. The 8-label cProfile probe measured 0.0006s JSON parse,
+2.16s normalizer initialization, 0.39s enricher initialization and 4.58s combined
+normalization/enrichment under profiling. Repeated scoring-input derivation and
+regex/normalization were CPU costs. No product cache or speculative Enrich rewrite
+was introduced. On the final sample experiment, a full cold compute took 8.453s;
+unchanged resume took 2.328s, reused all stages, and preserved output and manifest
+bytes. These are bounded sample measurements, not a whole-corpus speed claim.
+Compact source snapshots, profile and measurement receipts remain in this
+worktree's `.claude/state/performance/`.
+
+Reference dependency review: Clean's reviewed import closure includes
+`scoring_v4/cert_evidence.py` and `cert_resolver.py`; Enrich and Score closures
+include them too. The sample does not prove their dynamic reads are absent from
+all Clean paths. Retained the conservative reference fingerprint rather than
+inventing a certification-only exclusion. Markdown documentation and `scripts/tests/` files remain outside
+the runtime freeze. Narrower reference ownership is deferred until proven.
+
+The operator's primary run was not edited or restarted. It independently stopped
+at snapshot pins for Ritual 278454 and CVS 18141; no pin was changed in this batch.
+Those score changes require their own source/cause review before catalog release.
+Qualification results and PR state are recorded in CURRENT_HANDOFF at handoff.
+
+Checkpoint: local corpus gate 564 passed, 24 declared external opt-in skips; skip guard passed. Python correctness: zero new findings. Source freeze checks measured 0.112–0.180s per call. A fail-first external `.env` symlink case verifies content binding without exposing values. The source-freeze path uses runtime byte hashes for speed; product-stage freshness still uses the existing semantic AST hashes. Subsequent resume-plan ordering and source-freeze corrections are covered by focused tests and final exact-source CI.
+Final focused checkpoint: 278 passed, 1 declared missing-built-interaction-DB skip
+in 71.98s across stage ownership, resume paths, batch orchestration, gate receipts,
+publication failure boundaries and scoring/source contracts. The separate local
+gate passed with no undeclared skip. Shell syntax and diff checks passed. The
+operator's current snapshot failure remains a release blocker outside this PR.
+Final report-boundary correction: a fail-first check proved drift stops were
+visible in the terminal but absent from the saved batch summary. Both runtime
+and raw-input drift reasons are now appended through the existing summary owner.
+Batch orchestration tests: 23 passed; no product-stage code changed in this
+follow-up. Main/candidate detail-blob comparison was also identical for all eight
+labels with zero export-contract errors.
+
+PR review corrections: runtime provenance is now shared by stage manifests and gate receipts through `audits/run_verification_gate.py::runtime_identity`. It binds Python/executable, installed dependency versions and actual optional RapidFuzz availability/implementation. Missing or changed runtime proof invalidates reuse. Fully reused computation now enters the existing strict enrichment/coverage gate path with `validation_only=True`; fail-first controls prove gate failures propagate and no product stage runs. Final focused checkpoint: 305 passed, 1 declared absent-built-interaction-DB skip. Updated 8-label cold/resume measurement 8.453s/2.328s includes both strict pre-score gates and preserves every stage output/manifest byte.

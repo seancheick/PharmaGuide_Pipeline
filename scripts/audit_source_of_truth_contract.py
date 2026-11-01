@@ -735,15 +735,16 @@ def _scoring_enriched_source(scored_path: Path, pid: str, cache: dict) -> dict |
                     cache[key] = stage_input_fingerprints(REPO_ROOT, stage)
                 if _manifest_issue(directory / MANIFEST_NAME, cache[key]):
                     return None
+            content_hashes = {}
             scored_files = select_stage_input_files(scored_dir, "score", require_manifest=True)
-            enriched_files = select_stage_input_files(enriched_dir, "enrich", require_manifest=True)
-            clean_files = select_stage_input_files(clean_dir, "clean", require_manifest=True, patterns=("*.json", "*.jsonl"))
+            enriched_files = select_stage_input_files(enriched_dir, "enrich", require_manifest=True, content_hashes=content_hashes)
+            clean_files = select_stage_input_files(clean_dir, "clean", require_manifest=True, patterns=("*.json", "*.jsonl"), content_hashes=content_hashes)
             raw_files = stage_data_files(raw_dir)
             if not raw_files:
                 return None
             for directory, upstream in ((scored_dir, enriched_files), (enriched_dir, clean_files), (clean_dir, raw_files)):
                 manifest = load_json(directory / MANIFEST_NAME)
-                if manifest.get("input_fingerprints", {}).get(DATA_FINGERPRINT_KEY) != stage_data_fingerprint(upstream):
+                if manifest.get("input_fingerprints", {}).get(DATA_FINGERPRINT_KEY) != stage_data_fingerprint(upstream, content_hashes=content_hashes):
                     return None
             index = {}
             for file_path in enriched_files:

@@ -166,3 +166,86 @@ def test_resolve_path_scripts_prefix_is_repo_root_relative():
     # <repo_root>/scripts/scripts/products/output_X
     assert "scripts/scripts" not in str(resolved)
     assert resolved == runner.script_dir / "products" / "output_X"
+
+
+def test_batch_timing_summary_keeps_execution_and_reuse_distinct(tmp_path):
+    from run_pipeline import summarize_batch_timings
+    log = tmp_path / 'batch.txt'
+    log.write_text('STAGE TIMING: clean_dsld_data.py | elapsed 2.500s\n'
+                   'STAGE TIMING: clean_dsld_data.py | elapsed 1.500s\n'
+                   'FINISHED: catalog assembly | exit 0 | 8.000s\n'
+                   'REUSED: clinical drift contract — verified unchanged inputs and successful log | input binding 0.200s\n')
+    rows = summarize_batch_timings(log)
+    assert rows['clean_dsld_data.py'] == {'seconds': 4.0, 'executed': 2, 'reused': 0}
+    assert rows['catalog assembly']['seconds'] == 8.0
+    assert rows['clinical drift contract'] == {'seconds': 0.2, 'executed': 0, 'reused': 1}
+
+
+def test_resume_plan_uses_the_same_script_relative_paths_as_computation(monkeypatch):
+    import pipeline_freshness
+    import run_pipeline
+    seen = []
+    monkeypatch.setattr(pipeline_freshness, 'dataset_resume_plan',
+                        lambda *args: (seen.append(args) or ([], 'verified')))
+    monkeypatch.setattr(sys, 'argv', ['run_pipeline.py', '--resume-plan',
+                        '--raw-dir', 'raw_A', '--output-prefix', 'products/output_A'])
+    with pytest.raises(SystemExit) as result:
+        run_pipeline.main()
+    assert result.value.code == 0
+    scripts = Path(run_pipeline.__file__).resolve().parent
+    assert seen[0][1:] == (scripts / 'raw_A', scripts / 'products/output_A')
+
+
+def test_reused_computation_still_runs_strict_pre_score_gates(monkeypatch, tmp_path):
+    from run_pipeline import PipelineRunner
+    runner = PipelineRunner()
+    calls = []
+    monkeypatch.setattr(runner, '_validate_data_dir', lambda: True)
+    monkeypatch.setattr(runner, '_load_products_for_gates', lambda *args, **kwargs: ([{'id': '1'}], None))
+    monkeypatch.setattr(runner, 'run_enrichment_contract_gate',
+                        lambda *args, **kwargs: (calls.append('contract') or (False, {'failed': True})))
+    monkeypatch.setattr(runner, '_run_script', lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError('reused stage recomputed')))
+    result = runner.run_pipeline(stages=[], raw_dir=str(tmp_path / 'raw'),
+                                 output_prefix=str(tmp_path / 'output'),
+                                 strict_release_gates=True, validation_only=True)
+    assert not result['success']
+    assert result['stages_failed'] == ['enrichment_contract_gate']
+    assert calls == ['contract']
+
+
+@pytest.mark.parametrize('coverage_passes', [False, True])
+def test_reused_computation_preserves_coverage_failure_and_success(monkeypatch, tmp_path, coverage_passes):
+    from run_pipeline import PipelineRunner
+    runner = PipelineRunner()
+    calls = []
+    monkeypatch.setattr(runner, '_validate_data_dir', lambda: True)
+    monkeypatch.setattr(runner, '_load_products_for_gates', lambda *args, **kwargs: ([{'id': '1'}], None))
+    monkeypatch.setattr(runner, 'run_enrichment_contract_gate',
+                        lambda *args, **kwargs: (calls.append('contract') or (True, {})))
+    monkeypatch.setattr(runner, 'run_coverage_gate',
+                        lambda *args, **kwargs: (calls.append('coverage') or (coverage_passes, {})))
+    monkeypatch.setattr(runner, '_run_script', lambda *args, **kwargs: (_ for _ in ()).throw(AssertionError('reused stage recomputed')))
+    result = runner.run_pipeline(stages=[], raw_dir=str(tmp_path / 'raw'),
+                                 output_prefix=str(tmp_path / 'output'),
+                                 strict_release_gates=True, validation_only=True)
+    assert result['success'] is coverage_passes
+    assert calls == ['contract', 'coverage']
+    assert result['stages_completed'] == []
+
+
+def test_resume_cli_does_not_report_success_when_reused_validation_fails(monkeypatch, tmp_path):
+    import pipeline_freshness
+    import run_pipeline
+    seen = []
+    monkeypatch.setattr(pipeline_freshness, 'dataset_resume_plan', lambda *args: ([], 'verified'))
+    def validate(self, **kwargs):
+        seen.append(kwargs)
+        return {'success': False}
+    monkeypatch.setattr(run_pipeline.PipelineRunner, 'run_pipeline', validate)
+    monkeypatch.setattr(sys, 'argv', ['run_pipeline.py', '--resume', '--strict-release-gates',
+                        '--raw-dir', str(tmp_path / 'raw'), '--output-prefix', str(tmp_path / 'output')])
+    with pytest.raises(SystemExit) as result:
+        run_pipeline.main()
+    assert result.value.code == 1
+    assert seen[0]['validation_only'] is True
+    assert seen[0]['stages'] == []

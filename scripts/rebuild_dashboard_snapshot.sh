@@ -213,7 +213,8 @@ fi
 echo "◦ Building from ${#ENR[@]} enriched dirs + ${#SCR[@]} scored dirs..."
 
 # 2. Build into a same-filesystem candidate. Live final_db_output is untouched.
-"$PG_PYTHON" scripts/build_final_db.py \
+run_strict_gate "catalog candidate construction" \
+  "$PG_PYTHON" scripts/build_final_db.py \
   --enriched-dir "${ENR[@]}" \
   --scored-dir "${SCR[@]}" \
   --output-dir "$FINAL_CANDIDATE" \

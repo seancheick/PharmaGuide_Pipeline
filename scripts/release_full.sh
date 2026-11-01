@@ -590,7 +590,8 @@ fi
 # binds the catalog row before any cloud upload can observe the candidate.
 if (( SKIP_PRODUCT_IMAGES == 0 )) && [[ -f "$SUBMISSION_RECEIPTS" ]]; then
   info "Product submissions: copying approved catalog images..."
-  "$PG_PYTHON" scripts/product_submission_import.py --copy-images \
+  run_strict_gate "approved submission image preparation" \
+    "$PG_PYTHON" scripts/product_submission_import.py --copy-images \
     --output-dir "$SUBMISSION_OUTPUT_DIR" \
     --catalog-db "$DIST_CATALOG" \
     --product-images-dir "$DIST_PRODUCT_IMAGES_DIR"
@@ -828,7 +829,8 @@ if (( SKIP_SUPABASE == 0 )); then
     # Storage inventory/deletion runs separately after publication.
     RELEASE_PHASE="Supabase catalog sync"
     REMOTE_CATALOG_STATE=unknown
-    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
+    run_strict_gate "Supabase catalog sync" \
+      "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
       --submission-output-dir "$SUBMISSION_OUTPUT_DIR"
     REMOTE_CATALOG_STATE=confirmed_current
   fi
@@ -878,7 +880,8 @@ if (( SKIP_FLUTTER == 0 )); then
   fi
   if step6_needs_run; then
     info "Step 6/8: Checksums differ between dist/ and Flutter assets/ — importing..."
-    "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" "$DIST_DIR"
+    run_strict_gate "Flutter bundle import" \
+      "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" "$DIST_DIR"
     ok "Flutter bundle updated"
   else
     skip "Step 6/8: Flutter bundle checksums already match dist/ — skipping import"

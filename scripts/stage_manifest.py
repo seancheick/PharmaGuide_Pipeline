@@ -167,6 +167,7 @@ def select_stage_input_files(
     *,
     require_manifest: bool = False,
     patterns: Sequence[str] = ("*.json",),
+    content_hashes: dict[Path, bytes] | None = None,
 ) -> List[Path]:
     """Return only verified files owned by a successful upstream stage.
 
@@ -227,8 +228,11 @@ def select_stage_input_files(
         if not path.is_file():
             raise StageManifestError(f"Owned file is missing: {name}")
         expected_hash = checksums.get(name)
-        if not isinstance(expected_hash, str) or _sha256(path) != expected_hash:
+        actual_hash = _sha256(path)
+        if not isinstance(expected_hash, str) or actual_hash != expected_hash:
             raise StageManifestError(f"Owned file checksum mismatch: {name}")
+        if content_hashes is not None:
+            content_hashes[path.resolve()] = bytes.fromhex(actual_hash)
         if any(path.match(pattern) for pattern in patterns):
             owned.append(path)
 

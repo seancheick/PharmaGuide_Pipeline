@@ -1815,3 +1815,9 @@ Source findings are verified and confirmed engineering corrections are implement
 - [x] Reproduced immutable-approval conflict for4pending records; audited all25receipts and restored10raw source originals while relocating existing reviewed corrections through the canonical owner.310focused tests, local546/24declared skips,10label replay (all scored hashes identical), all25receipt bindings and10entry landed check pass. Owner/evidence/limits in existing LEDGER; qualified runtime425c1712passed CI40283504587(all4shards/skipguards); PR250merged to main686d9653d. Twelve unaffected controls remain identical across all captured stages.
 - [x] Green exact-candidate whole-fast CI, main integration, fresh live intake(10reused/0imported) and publication preflight passed. Startup blockers are corrected.
 - [ ] Final full-corpus/scientific/output/app release gates; these are not cleared by this startup repair. User will start full publication; no corpus/publication run by agent.
+
+## November 1 — verified pipeline retry optimization
+
+- [x] Implement explicit manifest/content-verified resume, complete plans including applicable submissions, runtime/input freeze, measured stage/gate reporting and invocation-local digest reuse. Existing default command/publication behavior and scientific scoring policy retained.
+- [x] Eight frozen real-label cold/resume comparison preserves all output/manifest bytes; changed-brand, corrupt-output, missing-proof, source-drift and stateful-publication controls are covered. Reference invalidation remains conservative where the import/dynamic-read dependency cannot be excluded.
+- [ ] Final CI qualification and integration of the optimization PR. Owner, sample timings, local results and limits are in the existing LEDGER and current handoff. The current catalog's Ritual 278454/CVS 18141 snapshot failures are independent; no fixture was rebaselined here and no catalog publication is claimed.

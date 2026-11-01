@@ -89,10 +89,15 @@ SUBMISSION_SCORE_MANIFEST="$SCRIPTS_DIR/${SUBMISSION_PIPELINE_PREFIX}_scored/sco
 PIPELINE_ONLY=0
 RELEASE_EXPLICIT=0
 PRE_CHECK=0                 # Aggregate preparation is explicit opt-in
+RESUME_ARGS=()
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
+        --resume)
+            RESUME_ARGS=(--resume)
+            shift
+            ;;
         --pre-check)
             PRE_CHECK=1
             shift
@@ -210,6 +215,16 @@ fi
 
 # Change to scripts directory
 cd "$SCRIPTS_DIR"
+
+BATCH_SOURCE_BASELINE=$("$PYTHON" pipeline_freshness.py batch-source-fingerprint --repo-root "$REPO_ROOT") || exit 1
+check_batch_source() {
+    local current_source
+    current_source=$("$PYTHON" pipeline_freshness.py batch-source-fingerprint --repo-root "$REPO_ROOT") || exit 1
+    if [ "$current_source" != "$BATCH_SOURCE_BASELINE" ]; then
+        echo "STOP: runtime source changed during this batch. Completed outputs are retained; freeze source and retry with --resume." | tee -a "$SUMMARY_FILE"
+        exit 1
+    fi
+}
 
 # Create summary file in products/reports/
 mkdir -p products/reports
@@ -360,6 +375,42 @@ else
 fi
 
 # Track results
+PROCESS_SUBMISSIONS=0
+if { [ "$PIPELINE_ONLY" != "1" ] && [ "${SKIP_SNAPSHOT:-0}" != "1" ]; } \
+    || { [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGET_DATASETS" ]; }; then
+    PROCESS_SUBMISSIONS=1
+fi
+BATCH_INPUT_BASELINE=$("$PYTHON" pipeline_freshness.py batch-source-fingerprint \
+    --repo-root "$REPO_ROOT" --raw-inputs "$DATASET_ROOT" \
+    --raw-inputs "$SUBMISSION_OUTPUT_DIR") || exit 1
+check_batch_inputs() {
+    local current_inputs
+    current_inputs=$("$PYTHON" pipeline_freshness.py batch-source-fingerprint \
+        --repo-root "$REPO_ROOT" --raw-inputs "$DATASET_ROOT" \
+        --raw-inputs "$SUBMISSION_OUTPUT_DIR") || exit 1
+    if [ "$current_inputs" != "$BATCH_INPUT_BASELINE" ]; then
+        echo "STOP: source or raw labels changed during this batch. Freeze inputs and retry with --resume." | tee -a "$SUMMARY_FILE"
+        exit 1
+    fi
+}
+if [ "${#RESUME_ARGS[@]}" -gt 0 ]; then
+    if [ "$STAGES" != "clean,enrich,score" ]; then
+        echo "ERROR: --resume requires the default clean,enrich,score stages."
+        exit 1
+    fi
+    echo "Verified resume plan (no computation yet):" | tee -a "$SUMMARY_FILE"
+    for folder in "${sorted_folders[@]}"; do
+        "$PYTHON" run_pipeline.py --raw-dir "$folder" \
+            --output-prefix "products/output_$(basename "$folder")" \
+            --resume-plan 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
+    done
+    if [ "$PROCESS_SUBMISSIONS" = "1" ] && [ -d "$SUBMISSION_OUTPUT_DIR" ] && find "$SUBMISSION_OUTPUT_DIR" \
+        -maxdepth 1 -type f -name '*.json' -print -quit | grep -q .; then
+        "$PYTHON" run_pipeline.py --raw-dir "$SUBMISSION_OUTPUT_DIR" \
+            --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
+            --resume-plan 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
+    fi
+fi
 PASSED=()
 FAILED=()
 
@@ -384,12 +435,14 @@ for folder in "${sorted_folders[@]}"; do
     echo ""
 
     # Run pipeline
-    if $PYTHON run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
+    check_batch_source
+    if $PYTHON run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" "${RESUME_ARGS[@]}" --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
         echo -e "${GREEN}${PROGRESS} ✓ SUCCESS: ${folder_name}${NC}"
         PASSED+=("$folder_name")
     else
         echo -e "${RED}${PROGRESS} ✗ FAILED: ${folder_name}${NC}"
         FAILED+=("$folder_name")
+        check_batch_source
     fi
     
     echo ""
@@ -398,6 +451,7 @@ for folder in "${sorted_folders[@]}"; do
 done
 
 # Print final summary
+check_batch_source
 echo -e "${BLUE}=========================================="
 echo "BATCH RUN COMPLETE"
 echo "==========================================${NC}"
@@ -460,11 +514,11 @@ fi
 # brand run cannot reach snapshot assembly with one stale auxiliary manifest.
 # A pipeline-only run over every brand refreshes them too: the snapshot that
 # follows it by hand reads them.
-if { [ "$SKIP_SNAPSHOT" != "1" ] || { [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGET_DATASETS" ]; }; } \
+if [ "$PROCESS_SUBMISSIONS" = "1" ] \
     && [ -d "$SUBMISSION_OUTPUT_DIR" ] \
     && find "$SUBMISSION_OUTPUT_DIR" -maxdepth 1 -type f -name '*.json' \
         -print -quit 2>/dev/null | grep -q .; then
-    if ! "$PYTHON" pipeline_freshness.py check-stage-manifests \
+    if [ "${#RESUME_ARGS[@]}" -gt 0 ] || ! "$PYTHON" pipeline_freshness.py check-stage-manifests \
         --repo-root "$REPO_ROOT" \
         --clean "$SUBMISSION_CLEAN_MANIFEST" \
         --enrich "$SUBMISSION_ENRICH_MANIFEST" \
@@ -474,7 +528,7 @@ if { [ "$SKIP_SNAPSHOT" != "1" ] || { [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGE
         if "$PYTHON" run_pipeline.py \
             --raw-dir "$SUBMISSION_OUTPUT_DIR" \
             --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
-            --stages clean,enrich,score \
+            --stages clean,enrich,score "${RESUME_ARGS[@]}" \
             --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
             echo -e "${GREEN}✓ Product Submissions cleaning, enrichment and scoring refreshed${NC}"
         else
@@ -486,6 +540,8 @@ if { [ "$SKIP_SNAPSHOT" != "1" ] || { [ "$PIPELINE_ONLY" = "1" ] && [ -z "$TARGE
 fi
 
 # Step A: dashboard snapshot
+check_batch_source
+check_batch_inputs
 if [ "$SKIP_SNAPSHOT" = "1" ]; then
     if [ "$PIPELINE_ONLY" = "1" ]; then
         echo -e "${YELLOW}Pipeline-only run complete; snapshot and release were not started.${NC}"
@@ -523,6 +579,8 @@ fi
 echo ""
 
 # Step B: full release (interaction DB → Supabase → Flutter)
+check_batch_source
+check_batch_inputs
 if [ "$SKIP_RELEASE" = "1" ]; then
     echo -e "${YELLOW}Full release skipped (SKIP_RELEASE=1 or --skip-release).${NC}"
     echo -e "${YELLOW}  Run manually when ready: bash scripts/release_full.sh${NC}"
