@@ -272,3 +272,167 @@ def test_clean_subset_binding_does_not_claim_unprocessed_raw_file(tmp_path):
     binding = json.loads(path.read_text())['input_fingerprints'][DATA_FINGERPRINT_KEY]
     assert binding == stage_data_fingerprint([raw / '1.json'])
     assert binding != stage_data_fingerprint(processor.get_input_files(str(raw)))
+
+
+def test_resume_stage_requires_output_and_input_content_proof(tmp_path, monkeypatch):
+    import pipeline_freshness as freshness
+    from stage_manifest import write_stage_manifest
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    source = raw / 'label.json'
+    source.write_text('{"id": 1}')
+    output = tmp_path / 'cleaned'
+    output.mkdir()
+    product = output / 'cleaned_batch_1.json'
+    product.write_text('[{"id": 1}]')
+    stamps = {freshness.REFERENCE_FINGERPRINT_KEY: 'a' * 64,
+              freshness.CODE_FINGERPRINT_KEY: 'b' * 64}
+    monkeypatch.setattr(freshness, 'stage_input_fingerprints', lambda *args: stamps)
+    write_stage_manifest(output, 'clean', [product], input_fingerprints={
+        **stamps, freshness.DATA_FINGERPRINT_KEY: freshness.stage_data_fingerprint([source])})
+    assert freshness.reusable_stage_issue(tmp_path, output, 'clean', raw) is None
+    source.write_text('{"id": 2}')
+    assert 'input' in freshness.reusable_stage_issue(tmp_path, output, 'clean', raw)
+    source.write_text('{"id": 1}')
+    product.write_text('[]')
+    assert freshness.reusable_stage_issue(tmp_path, output, 'clean', raw)
+
+
+def test_resume_plan_rebuilds_from_first_invalid_stage(tmp_path, monkeypatch):
+    import pipeline_freshness as freshness
+    seen = []
+    def issue(repo, directory, stage, inputs):
+        seen.append(stage)
+        return 'changed input' if stage == 'enrich' else None
+    monkeypatch.setattr(freshness, 'reusable_stage_issue', issue)
+    stages, reason = freshness.dataset_resume_plan(tmp_path, tmp_path / 'raw', tmp_path / 'output_Brand')
+    assert stages == ['enrich', 'score']
+    assert reason == 'changed input'
+    assert seen == ['clean', 'enrich']
+    monkeypatch.setattr(freshness, 'reusable_stage_issue', lambda *args: None)
+    assert freshness.dataset_resume_plan(tmp_path, tmp_path / 'raw', tmp_path / 'output_Brand')[0] == []
+
+
+@pytest.mark.parametrize('change', ['missing', 'incomplete', 'extra_output', 'code', 'reference', 'added_raw', 'deleted_raw'])
+def test_resume_rejects_unproven_stage(tmp_path, monkeypatch, change):
+    import pipeline_freshness as freshness
+    from stage_manifest import write_stage_manifest
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    source = raw / 'one.json'
+    source.write_text('{}')
+    output = tmp_path / 'cleaned'
+    output.mkdir()
+    product = output / 'cleaned_batch_1.json'
+    product.write_text('[{}]')
+    stamps = {freshness.REFERENCE_FINGERPRINT_KEY: 'a' * 64,
+              freshness.CODE_FINGERPRINT_KEY: 'b' * 64}
+    monkeypatch.setattr(freshness, 'stage_input_fingerprints', lambda *args: stamps)
+    manifest = write_stage_manifest(output, 'clean', [product], input_fingerprints={
+        **stamps, freshness.DATA_FINGERPRINT_KEY: freshness.stage_data_fingerprint([source])})
+    if change == 'missing':
+        manifest.unlink()
+    elif change == 'incomplete':
+        data = json.loads(manifest.read_text())
+        data['processing_complete'] = False
+        manifest.write_text(json.dumps(data))
+    elif change == 'extra_output':
+        (output / 'unexpected.json').write_text('[]')
+    elif change in ('code', 'reference'):
+        key = freshness.CODE_FINGERPRINT_KEY if change == 'code' else freshness.REFERENCE_FINGERPRINT_KEY
+        stamps[key] = 'c' * 64
+    elif change == 'added_raw':
+        (raw / 'two.json').write_text('{}')
+    else:
+        source.unlink()
+    assert freshness.reusable_stage_issue(tmp_path, output, 'clean', raw)
+
+
+def test_batch_source_fingerprint_ignores_docs_but_detects_runtime_edits(tmp_path):
+    import pipeline_freshness as freshness
+    (tmp_path / 'scripts/data').mkdir(parents=True)
+    runtime = tmp_path / 'scripts/worker.py'
+    runtime.write_text('VALUE = 1\n')
+    first = freshness.batch_source_fingerprint(tmp_path)
+    (tmp_path / 'README.md').write_text('documentation')
+    (tmp_path / 'scripts/tests').mkdir()
+    (tmp_path / 'scripts/tests/test_probe.py').write_text('assert True\n')
+    assert freshness.batch_source_fingerprint(tmp_path) == first
+    runtime.write_text('VALUE = 2\n')
+    assert freshness.batch_source_fingerprint(tmp_path) != first
+
+
+def test_verified_output_digests_can_bind_upstream_without_second_read(tmp_path, monkeypatch):
+    import pipeline_freshness as freshness
+    from stage_manifest import write_stage_manifest, select_stage_input_files
+    output = tmp_path / 'cleaned'
+    output.mkdir()
+    product = output / 'cleaned_batch_1.json'
+    product.write_text('[{}]')
+    write_stage_manifest(output, 'clean', [product])
+    expected = freshness.stage_data_fingerprint([product])
+    hashes = {}
+    files = select_stage_input_files(output, 'clean', require_manifest=True, content_hashes=hashes)
+    def unexpected_read(path):
+        raise AssertionError('verified file bytes were read twice')
+    monkeypatch.setattr(freshness, '_bytes_digest', unexpected_read)
+    assert freshness.stage_data_fingerprint(files, content_hashes=hashes) == expected
+
+
+def test_resume_invalidates_only_the_changed_brand(tmp_path, monkeypatch):
+    import pipeline_freshness as freshness
+    from stage_manifest import write_stage_manifest
+    stamps = {freshness.REFERENCE_FINGERPRINT_KEY: 'a' * 64,
+              freshness.CODE_FINGERPRINT_KEY: 'b' * 64}
+    monkeypatch.setattr(freshness, 'stage_input_fingerprints', lambda *args: stamps)
+    for brand in ['A', 'B']:
+        raw = tmp_path / brand
+        raw.mkdir()
+        (raw / 'one.json').write_text('{}')
+        prefix = tmp_path / ('output_' + brand)
+        upstream = raw
+        for stage, directory in [('clean', prefix / 'cleaned'),
+                                 ('enrich', Path(str(prefix) + '_enriched') / 'enriched'),
+                                 ('score', Path(str(prefix) + '_scored') / 'scored')]:
+            directory.mkdir(parents=True)
+            product = directory / 'batch.json'
+            product.write_text('[{}]')
+            write_stage_manifest(directory, stage, [product], input_fingerprints={
+                **stamps, freshness.DATA_FINGERPRINT_KEY: freshness.stage_data_fingerprint(freshness.stage_data_files(upstream))})
+            upstream = directory
+        assert freshness.dataset_resume_plan(tmp_path, raw, prefix)[0] == []
+    (tmp_path / 'A/one.json').write_text('{"changed":true}')
+    assert freshness.dataset_resume_plan(tmp_path, tmp_path / 'A', tmp_path / 'output_A')[0] == ['clean', 'enrich', 'score']
+    assert freshness.dataset_resume_plan(tmp_path, tmp_path / 'B', tmp_path / 'output_B')[0] == []
+
+
+def test_stale_source_selects_rebuild_without_reading_large_outputs(tmp_path, monkeypatch):
+    import pipeline_freshness as freshness
+    import stage_manifest
+    output = tmp_path / 'cleaned'
+    output.mkdir()
+    product = output / 'batch.json'
+    product.write_text('[{}]')
+    stage_manifest.write_stage_manifest(output, 'clean', [product], input_fingerprints={
+        freshness.REFERENCE_FINGERPRINT_KEY: 'a' * 64,
+        freshness.CODE_FINGERPRINT_KEY: 'b' * 64})
+    monkeypatch.setattr(freshness, 'stage_input_fingerprints', lambda *args: {
+        freshness.REFERENCE_FINGERPRINT_KEY: 'c' * 64,
+        freshness.CODE_FINGERPRINT_KEY: 'b' * 64})
+    def no_output_read(path):
+        raise AssertionError('stale outputs should not be read before choosing rebuild')
+    monkeypatch.setattr(stage_manifest, '_sha256', no_output_read)
+    assert 'reference_data' in freshness.reusable_stage_issue(tmp_path, output, 'clean', tmp_path)
+
+
+def test_source_freeze_binds_external_environment_symlink_without_exposing_values(tmp_path):
+    import pipeline_freshness as freshness
+    root = tmp_path / 'repo'
+    (root / 'scripts/data').mkdir(parents=True)
+    env = tmp_path / 'private.env'
+    env.write_text('SECRET=first\n')
+    (root / '.env').symlink_to(env)
+    first = freshness.batch_source_fingerprint(root)
+    env.write_text('SECRET=second\n')
+    assert freshness.batch_source_fingerprint(root) != first
+    assert len(first) == 64

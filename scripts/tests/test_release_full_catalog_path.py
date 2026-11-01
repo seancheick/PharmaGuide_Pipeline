@@ -334,7 +334,8 @@ def test_batch_runner_stops_before_processing_when_canary_preflight_fails(tmp_pa
         command.append("--skip-flutter")
     result = subprocess.run(command, env=env, capture_output=True, text=True, timeout=20)
     assert result.returncode != 0, result.stdout + result.stderr
-    invocations = calls.read_text().splitlines()
+    invocations = [call for call in calls.read_text().splitlines()
+                   if not call.startswith('pipeline_freshness.py batch-source-fingerprint ')]
     preparation = [call for call in invocations if "--prepare" in call and "--raw-root" in call]
     if compatibility_fails:
         assert invocations == ["compatibility"]
@@ -374,7 +375,8 @@ def test_batch_preparation_is_opt_in_but_quick_checks_remain(tmp_path, pre_check
         command.append("--pre-check")
     result = subprocess.run(command, env=dict(os.environ, PG_PYTHON=sys.executable, PYTHON=str(fake)),
                             capture_output=True, text=True, timeout=20)
-    invocations = calls.read_text().splitlines()
+    invocations = [call for call in calls.read_text().splitlines()
+                   if not call.startswith('pipeline_freshness.py batch-source-fingerprint ')]
     quick = [call for call in invocations if '--quick' in call]
     prep = [call for call in invocations if '--prepare' in call]
     pipeline = [call for call in invocations if 'run_pipeline.py' in call]
@@ -432,7 +434,8 @@ def test_batch_precheck_flag_preserves_full_release_path(tmp_path, pre_check):
         command.append("--pre-check")
     result = subprocess.run(command, env=env, text=True, capture_output=True, timeout=20)
     assert result.returncode == 0, result.stdout + result.stderr
-    invocations = calls.read_text().splitlines()
+    invocations = [call for call in calls.read_text().splitlines()
+                   if not call.startswith('pipeline_freshness.py batch-source-fingerprint ')]
     assert invocations[0] == 'prerequisites'
     assert 'product_submission_import.py --fetch' in invocations[1]
     assert 'preflight.py --quick' in invocations[2]

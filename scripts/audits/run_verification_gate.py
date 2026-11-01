@@ -254,10 +254,18 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
     receipt_path = Path(receipt_path).resolve()
     log_path.parent.mkdir(parents=True, exist_ok=True)
     binding_started = time.monotonic()
+    invocation_started = binding_started
     binding = _input_binding(cwd, command, input_globs) if input_globs else None
     binding_duration = time.monotonic() - binding_started
     if binding and _can_reuse(receipt_path, log_path, name=name, binding=binding,
                              max_age_seconds=max_age_seconds):
+        receipt = json.loads(receipt_path.read_text())
+        receipt.pop('receipt_sha256', None)
+        receipt['last_invocation'] = {
+            'outcome': 'reused', 'reason': 'unchanged content and successful sealed log',
+            'checked_at': _utc_now(), 'duration_seconds': round(binding_duration, 6),
+        }
+        _write_receipt(receipt_path, receipt)
         print(f'REUSED: {name} — verified unchanged inputs and successful log '
               f'| input binding {binding_duration:.3f}s', flush=True)
         return 0
@@ -317,6 +325,10 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
         "input_binding": binding,
         "input_binding_duration_seconds": round(binding_duration, 6),
         "log_bytes": log_path.stat().st_size,
+        "last_invocation": {
+            "outcome": "executed", "reason": "no reusable success for current inputs",
+            "duration_seconds": round(time.monotonic() - invocation_started, 6),
+        },
     }
     _write_receipt(receipt_path, payload)
     print(f'FINISHED: {name} | exit {exit_code} | {payload["duration_seconds"]:.3f}s', flush=True)

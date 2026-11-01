@@ -35,6 +35,8 @@ import json
 import logging
 import argparse
 import subprocess
+import time
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -255,7 +257,7 @@ class PipelineRunner:
             return True
 
         logger.info(f"Executing: {' '.join(cmd)}")
-
+        started = time.monotonic()
         try:
             result = subprocess.run(
                 cmd,
@@ -273,6 +275,9 @@ class PipelineRunner:
         except Exception as e:
             logger.error(f"Failed to run {script_name}: {e}")
             return False
+        finally:
+            logger.info('STAGE TIMING: %s | elapsed %.3fs', script_name,
+                        time.monotonic() - started)
 
     def run_clean(self, raw_dir: str, output_dir: str, dry_run: bool = False) -> bool:
         """
@@ -793,6 +798,7 @@ class PipelineRunner:
                 logger.error("Pipeline stopped: Enriched gate input is invalid")
                 return results
 
+            logger.info('DATASET PRODUCTS: %s | %d', output_prefix, len(products))
             contract_ok, contract_summary = self.run_enrichment_contract_gate(
                 products,
                 strict_mode=strict_release_gates,
@@ -881,6 +887,26 @@ class PipelineRunner:
         return results
 
 
+def summarize_batch_timings(path: Path) -> Dict[str, Dict[str, Any]]:
+    """Summarize measured execution and reuse without estimating absent timings."""
+    rows = {}
+    patterns = (
+        (re.compile(r'STAGE TIMING: (.+?) \| elapsed ([0-9.]+)s'), 'executed'),
+        (re.compile(r'FINISHED: (.+?) \| exit -?\d+ \| ([0-9.]+)s'), 'executed'),
+        (re.compile(r'REUSED: (.+?) — .*?input binding ([0-9.]+)s'), 'reused'),
+    )
+    with Path(path).open() as handle:
+        for line in handle:
+            for pattern, outcome in patterns:
+                match = pattern.search(line)
+                if match:
+                    row = rows.setdefault(match[1], {'seconds': 0.0, 'executed': 0, 'reused': 0})
+                    row['seconds'] = round(row['seconds'] + float(match[2]), 3)
+                    row[outcome] += 1
+                    break
+    return rows
+
+
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
@@ -951,7 +977,16 @@ Pipeline Flow:
         help='Path-safe run ID shared by enrichment, gates, scoring, and reports',
     )
 
+    parser.add_argument('--resume', action='store_true',
+                        help='Reuse verified stages; rebuild from the first invalid stage')
+    parser.add_argument('--resume-plan', action='store_true',
+                        help='Print the verified stage reuse plan without computing')
+    parser.add_argument('--summarize-log', type=Path,
+                        help='Print measured batch stage/gate timings as JSON')
     args = parser.parse_args()
+    if args.summarize_log:
+        print(json.dumps(summarize_batch_timings(args.summarize_log), indent=2))
+        return
 
     # Load config if provided
     config = None
@@ -971,8 +1006,24 @@ Pipeline Flow:
         logger.error(f"Invalid stages: {invalid}. Valid: {valid_stages}")
         sys.exit(1)
 
-    # Run pipeline
     runner = PipelineRunner(config)
+    if args.resume or args.resume_plan:
+        from pipeline_freshness import dataset_resume_plan
+        if args.config or not args.raw_dir or not args.output_prefix:
+            parser.error('--resume requires explicit raw/output paths and default configuration')
+        if args.strict_release_gates and (args.skip_coverage_gate or args.coverage_gate_warn_only):
+            parser.error('strict release gates cannot be skipped or changed to warn-only')
+        if stages != ['clean', 'enrich', 'score']:
+            parser.error('--resume requires the default clean,enrich,score stage selection')
+        stages, reason = dataset_resume_plan(
+            runner.script_dir.parent, runner._resolve_path(args.raw_dir),
+            runner._resolve_path(args.output_prefix))
+        logger.info('Resume plan: %s | %s | %s', args.output_prefix,
+                    ','.join(stages) if stages else 'reuse all stages', reason)
+        if args.resume_plan or not stages:
+            sys.exit(0)
+
+    # Run pipeline
     results = runner.run_pipeline(
         stages=stages,
         raw_dir=args.raw_dir,

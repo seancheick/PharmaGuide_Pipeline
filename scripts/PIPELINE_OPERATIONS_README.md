@@ -4,6 +4,35 @@
 
 ## 1. Which command should I run?
 
+For a retry that reuses verified computation, add `--resume` to the normal full
+command: `bash batch_run_all_datasets.sh --resume --pre-check`. Before computing,
+it prints the plan for every selected brand and approved submission dataset.
+Each stage needs complete ownership, intact output checksums, current code and
+references, and matching upstream input bytes/inventory. The first invalid stage
+and all later stages rebuild. Missing proof never becomes a restamp. `--resume`
+requires the default `clean,enrich,score` selection; explicit stage commands keep
+their existing meaning. All snapshot, safety, export and publication gates remain.
+
+The batch freezes runtime source before processing and checks it between brands.
+It also binds raw labels before computation and checks them before assembly and
+release. Drift stops the batch immediately; freeze the inputs and retry with
+`--resume`. Do not merge or edit the running checkout. Markdown documentation and files in
+`scripts/tests/` are excluded from the runtime source freeze.
+
+The summary log records `STAGE TIMING`, dataset product counts, and gate
+`FINISHED`/`REUSED` durations. To aggregate measured stage and gate times, run
+`"$PG_PYTHON" scripts/run_pipeline.py --summarize-log <summary-file>` after loading
+`scripts/python_env.sh`. Missing timings are not estimated. Nested gate durations
+overlap and must not be summed as total wall time. Gate receipts preserve
+the original success time and record the latest execution/reuse outcome; reuse
+does not extend their freshness period. Catalog construction, image work,
+interaction assembly, Supabase sync and Flutter import use these same receipts.
+
+Reference invalidation remains conservative: current import closures include
+certification/scoring owners even from Clean. No preparation-specific or
+certification-only exception is inferred from a filename. Stage-specific exclusion
+requires proof covering dynamic reads as well as the observed label sample.
+
 Run from `/Users/seancheick/Downloads/dsld_clean`. For a full Clean → Enrich → Score → snapshot → publication attempt, the command is:
 
 ```bash

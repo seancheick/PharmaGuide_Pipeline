@@ -253,7 +253,13 @@ python_gate() {{
   fi
   return 0
 }}
-run_strict_gate() {{ return 0; }}
+run_strict_gate() {{
+  local label="$1"; shift
+  case "$label" in
+    "Supabase catalog sync"|"Flutter bundle import") "$@" ;;
+    *) return 0 ;;
+  esac
+}}
 '''
     return subprocess.run(['bash', '-c', setup + helpers + boundary + '\necho RELEASE_FINISHED\n'],
                           text=True, capture_output=True)

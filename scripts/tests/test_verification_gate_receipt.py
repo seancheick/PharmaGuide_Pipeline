@@ -346,3 +346,16 @@ def test_snapshot_preflight_gate_reruns_when_a_raw_label_changes(tmp_path, monke
     label.write_text('{"fullName": "B"}')
     assert main(argv) == 0
     assert (repo / 'calls').read_text() == 'xx'
+
+
+def test_receipt_distinguishes_execution_from_verified_reuse(tmp_path):
+    args = _reusable_probe(tmp_path)
+    assert run_gate(**args) == 0
+    first = json.loads(args['receipt_path'].read_text())
+    assert first['last_invocation']['outcome'] == 'executed'
+    assert run_gate(**args) == 0
+    reused = json.loads(args['receipt_path'].read_text())
+    assert reused['last_invocation']['outcome'] == 'reused'
+    assert reused['completed_at'] == first['completed_at']
+    assert reused['last_invocation']['duration_seconds'] >= 0
+    assert (tmp_path / 'calls').read_text() == 'x'
