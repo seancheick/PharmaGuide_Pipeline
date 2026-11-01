@@ -1603,7 +1603,9 @@ def test_cross_module_native_review_stays_bound_to_its_label_row(module, clinica
                "raw_source_path": "ingredientRows[1]", "source_row_ref": "ingredientRows[1]"}
     unresolved = {**reviewed, "name": "Lactobacillus paracasei DSM-16105", "standard_name": "Lactobacillus paracasei DSM-16105",
                   "canonical_id": "lactobacillus_paracasei", "raw_source_path": "ingredientRows[2]", "source_row_ref": "ingredientRows[2]"}
-    product = _product(reviewed)
+    # The title names both species: a genus word alone ("Lactobacillus") names
+    # no other species, and an unnamed sibling is not a material subject.
+    product = _product(reviewed, title=f"{name} with Lactobacillus paracasei")
     product["activeIngredients"] = [reviewed, species, unresolved]
     product["ingredient_quality_data"]["ingredients"] = product["activeIngredients"]
     product["ingredient_quality_data"]["ingredients_scorable"] = product["activeIngredients"]
@@ -1704,7 +1706,12 @@ def test_unresolved_source_quantity_cannot_be_waived_by_complete_typed_assessmen
 @pytest.mark.parametrize("case", json.loads((Path(__file__).parent / "fixtures" /
     "module_aggregate_release_cases.json").read_text()), ids=lambda case: case["id"])
 def test_rebuilt_module_projections_do_not_complete_unresolved_aggregate_review(case):
-    """Minimized final-150 records retain their actual canonical resolutions."""
+    """Minimized final-150 records retain their actual canonical resolutions.
+
+    327398/327399 ("Grass Fed Collagen Protein"): pumpkin and watermelon seed
+    protein are not named by the title's "Collagen Protein", so their crude-
+    powder applicability blocker is no longer an Evidence subject's blocker.
+    """
     from copy import deepcopy
     from assessment_readiness import evaluate_release_assessment
     from evidence_resolver import resolve_product_evidence

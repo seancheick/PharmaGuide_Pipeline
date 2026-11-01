@@ -231,10 +231,10 @@ def test_wasabi_label_keeps_its_plant(enrich):
     (40089, "evidence", 11.1),
     # "Raw organic Svetol" (green coffee) does not own Evidence through "Fit Coffee".
     (204521, "evidence", 10.0),
-    # A 0.4 mg iron row kept for interactions feeds no Dose.
-    # 11.4 on main, where "Natural Berry Flavor" made acai the declared purpose; 1.1 is
-    # what main gives the same label titled "Raw Superfoods".
-    (178728, "dose", 1.1),
+    # A 0.4 mg iron row kept for interactions feeds no Dose. "Raw Superfoods"
+    # names the Organic Superfood Blend, whose printed total is the Dose
+    # subject: blend total only, 0.0 (1.1 while the title named nothing).
+    (178728, "dose", 0.0),
     # "organic Beet" re-identified later as Beetroot Powder (as on main) still scores.
     # 10.8 on main; 12.4 since PR214, whose multi panel no longer averages adjunct rows.
     (62890, "formulation", 12.4),
