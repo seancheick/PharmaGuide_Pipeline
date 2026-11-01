@@ -440,6 +440,9 @@ def _sku_population_tokens(text: str) -> tuple[frozenset[str], ...]:
     an 18+ listing does not certify a different 50+ formulation.
     """
     normalized = _strip_accents(text or "").lower()
+    # Licensed Girl Scout cookie flavor/co-brand wording does not identify
+    # a female formulation. Explicit "for girls"/other qualifiers remain.
+    normalized = re.sub(r"\bgirls?\s+scouts?\b", " ", normalized)
     words = set(re.findall(r"[a-z]+", normalized))
     sexes = frozenset(_SKU_SEX_TOKENS[w] for w in words if w in _SKU_SEX_TOKENS)
     stages = frozenset(_SKU_LIFE_STAGE_TOKENS[w] for w in words if w in _SKU_LIFE_STAGE_TOKENS)
@@ -451,12 +454,12 @@ def _sku_population_tokens(text: str) -> tuple[frozenset[str], ...]:
     return sexes, stages, frozenset(ages)
 
 
-def _sku_population_conflict(product: str, candidate: str) -> bool:
+def _sku_population_conflict(product: str, candidate: str, *, reviewed_omission: bool = False) -> bool:
     for requested, certified in zip(_sku_population_tokens(product), _sku_population_tokens(candidate)):
         # Unknown population is not evidence of the same formulation in
         # either direction. Explicit combined lines (prenatal + postnatal)
         # can still cover either named member.
-        if requested and not certified:
+        if requested and not certified and not reviewed_omission:
             return True
         if certified and (not requested or not requested.issubset(certified)):
             return True
@@ -832,6 +835,10 @@ def _check_override(
                 if _sku_population_conflict(
                     f"{brand_norm} {product}",
                     f"{override.get('matched_brand', '')} {override['matched_product']}",
+                    # The exact reviewed label was checked above. Its verified
+                    # alias can establish an omitted qualifier, never an
+                    # explicit contradiction or changed registry identity.
+                    reviewed_omission=status == "verified" and bool(override.get("product")),
                 ):
                     return CertResolution(
                         program=program_canon,

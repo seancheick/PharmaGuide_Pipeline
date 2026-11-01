@@ -453,3 +453,35 @@ def test_generic_certified_listing_cannot_establish_population_edition(brand, ti
     assert resolution.scope == expected_scope
     assert not resolution.scores_points()
     assert discover_verified_programs(brand, title, registry) == []
+
+
+@pytest.mark.parametrize('title', [
+    'AMP Wheybolic Girl Scouts Thin Mints',
+    'Wheybolic Girl Scout Coconut Caramel',
+])
+def test_licensed_cookie_flavor_is_not_a_formulation_population(title):
+    from cert_resolver import _sku_population_tokens
+    assert _sku_population_tokens(title)[0] == frozenset()
+
+
+@pytest.mark.parametrize('title,sex', [('Vitamins for Girls', 'female'), ('Vitamins for Boys', 'male')])
+def test_actual_child_sex_qualifier_remains_material(title, sex):
+    from cert_resolver import _sku_population_tokens
+    assert _sku_population_tokens(title)[0] == frozenset({sex})
+
+
+def test_exact_reviewed_alias_can_establish_omitted_population_but_not_contradiction():
+    record = {'program': 'USP Verified', 'brand': 'Example',
+              'product': 'Multivitamin Gummies', 'record_id': 'reviewed-gummies'}
+    override = {'program': 'USP Verified', 'brand': 'Example',
+                'product': 'Adult Multivitamin Gummies', 'status': 'verified',
+                'scope': 'product_line', 'record_id': 'reviewed-gummies',
+                'matched_brand': 'Example', 'matched_product': 'Multivitamin Gummies',
+                'reason': 'Exact adult label reviewed against unchanged source listing.'}
+    registry = _make_registry(records=[record], overrides=[override])
+    reviewed = resolve('Example', 'Adult Multivitamin Gummies', ['USP Verified'], registry)[0]
+    assert reviewed.scores_points()
+    assert reviewed.notes == 'curated override'
+    # A changed source listing is not the reviewed identity.
+    conflicting = _make_registry(records=[{**record, 'product': 'Kids Multivitamin Gummies'}], overrides=[override])
+    assert not resolve('Example', 'Adult Multivitamin Gummies', ['USP Verified'], conflicting)[0].scores_points()
