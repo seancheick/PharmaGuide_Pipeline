@@ -18,9 +18,11 @@ import pytest
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
-def _named(name, canonical, text):
+def _named(name, canonical, text, path="ingredientRows[0]", others=()):
     from scoring_input_contract import _named_in_title
-    return _named_in_title({"name": name, "canonical_id": canonical}, text)
+    row = {"name": name, "canonical_id": canonical, "raw_source_path": path,
+           "canonical_source_db": "unmapped" if canonical is None else "ingredient_quality_map"}
+    return _named_in_title(row, text, label_rows=[row, *others])
 
 
 @pytest.mark.parametrize("name,canonical,text", [
@@ -126,3 +128,88 @@ def test_mega_green_title_does_not_make_green_tea_claim_prominent():
     assert mega_green["role_reason"] != "named_in_product_title"
     # Same ingredients and amounts, different title words: one role decision.
     assert (mega_green["role"], mega_green["role_reason"]) == (plain_title["role"], plain_title["role_reason"])
+
+
+# A row the cleaner left without an identity has no registry names of its own.
+# Its label name can still spell a registered identity ("fish oil"), and the
+# title names that row when it spells a registered name of the same identity
+# ("Omega-3" is IQM fish_oil's). CVS Omega-3 100 mg (18141) lost its purpose
+# ingredient to the one-word rule and was graded on its trace vitamins.
+_OMEGA_BLEND = "Flaxseed oil extract (plant based) and purified fish oil concentrate omega fatty acid blend"
+
+
+def test_title_names_an_unmapped_row_by_an_identity_its_own_name_spells():
+    assert _named(_OMEGA_BLEND, None, "omega-3 100 mg")
+
+
+@pytest.mark.parametrize("name,canonical,text", [
+    # One shared word is still no identity, with or without a canonical.
+    (_OMEGA_BLEND, None, "omega joint"),
+    ("Green Superfood Blend", None, "green tea 500 mg"),
+    # The title must name the same identity the row's name spells.
+    (_OMEGA_BLEND, None, "krill oil 500 mg"),
+    # A mapped row keeps its own identity: the source it came from is not it.
+    ("Vitamin D3 (from fish oil)", "vitamin_d", "omega-3 100 mg"),
+])
+def test_identity_spelled_inside_a_name_needs_the_same_identity_in_the_title(name, canonical, text):
+    assert not _named(name, canonical, text)
+
+
+def test_identity_another_row_carries_does_not_name_an_unmapped_row():
+    # 259814: a mapped Fish Oil member already carries the identity.
+    blend = "Total Fish Oil and Superba Boost Krill Oil Blend"
+    assert _named(blend, None, "triple strength fish oil plus krill oil")
+    assert not _named(blend, None, "triple strength fish oil plus krill oil",
+                      others=[{"canonical_id": "fish_oil", "raw_source_path": "ingredientRows[0].nestedRows[2].forms[0]"},
+                              {"canonical_id": "krill_oil", "raw_source_path": "ingredientRows[0].nestedRows[1]"}])
+
+
+@pytest.mark.parametrize("name,text,path", [
+    # A nested member's title role is its parent's (286147, 47225).
+    ("Bergamonte Full Spectrum Citrus Bergamia Risso Fruit Extract Complex",
+     "citrus bergamot extract 1000 mg", "ingredientRows[0].nestedRows[0]"),
+    ("Milk Protein Hydrolysate", "amplified wheybolic extreme 60 casein vanilla", "ingredientRows[12].nestedRows[1]"),
+])
+def test_a_nested_unmapped_member_is_not_named_by_a_spelled_identity(name, text, path):
+    assert not _named(name, None, text, path=path)
+
+
+@pytest.mark.parametrize("name,text,carrier", [
+    # Registries split one plant across ids; any carried one is the carrier's.
+    ("curcuma longa rhizome complex", "turmeric root powder 500 mg", "turmeric"),
+    ("sambucus nigra berry syrup blend", "elderberries 100 mg", "elderberry"),
+])
+def test_an_identity_carried_under_any_registry_id_names_its_carrier(name, text, carrier):
+    other = {"canonical_id": carrier, "raw_source_path": "ingredientRows[0].nestedRows[0]"}
+    assert not _named(name, None, text, others=[other])
+
+
+def test_only_a_row_the_identity_owners_left_unmapped_qualifies():
+    # A banned, additive or other-ingredient identity is a mapping, not a gap.
+    from scoring_input_contract import _named_in_title
+    for canonical, source_db, name, text in [
+        ("BANNED_GREEN_TEA_X", "banned_recalled_ingredients", "green tea leaf concentrate", "camellia sinensis 500 mg"),
+        ("OI_FISH_GELATIN", "other_ingredients", "purified fish oil concentrate", "omega-3 100 mg"),
+        # 176071: the enzyme blends are IQM-mapped rows scored as their projections.
+        ("cerecalase_proprietary_blend", "ingredient_quality_map", "CereCalase Proprietary Blend", "super digestive enzymes"),
+    ]:
+        row = {"name": name, "canonical_id": canonical, "canonical_source_db": source_db,
+               "raw_source_path": "ingredientRows[0]"}
+        assert not _named_in_title(row, text, label_rows=[row])
+
+
+def test_a_name_inside_a_longer_registered_name_is_the_longer_ones():
+    # "Protein" of "Brown Rice Protein" does not name the blend in "Raw Protein".
+    assert not _named("brown rice protein blend", None, "raw protein vanilla")
+
+def test_omega_title_keeps_its_fatty_acid_blend_as_the_dose_purpose():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    logging.disable(logging.INFO)
+    raw = json.loads((FIXTURES / "raw_title_omega_18141.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assessment = build_scored_artifact(enriched)["quality_pillars_v4"]["dose"]["explanation"]["assessment"]
+    assert assessment["dose_participation_basis"] == "declared_purpose_equal_weight"
+    assert any("fish_oil" in subject for subject in assessment["unbenchmarked_purpose_ingredients"])

@@ -6866,7 +6866,7 @@ def _single_word_names(word: str, *, label_word: bool, material_dropped: bool = 
     return bool(owners) and all(len(identities) == 1 for identities in owners.values())
 
 
-def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
+def _named_in_title(row: Dict[str, Any], title_norm: str, *, label_rows: Optional[List[Dict[str, Any]]] = None) -> bool:
     if not title_norm:
         return False
     # Whole-token match, NOT substring: "iron" must not match inside
@@ -6974,7 +6974,64 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
             for index, forms in enumerate(title_forms)
         ):
             return True
+    # A top-level row the identity owners left unmapped has no registry names
+    # of its own, but its label name can spell one ("purified fish oil
+    # concentrate"). The title names that row when it spells a registered
+    # name of the same identity ("Omega-3" is IQM fish_oil's), never by one
+    # shared word (18141). A nested member's title role is its parent's
+    # ("Bergamonte ... Complex" under Citrus Bergamot extract, 286147; 50 mg
+    # milk protein hydrolysate in a 60 g casein shake, 47225), and an
+    # identity another row of the label carries is that row's (259814).
+    path = str(row.get("raw_source_path") or "")
+    if (label_rows is not None and label_names and path and "." not in path
+            and _norm(row.get("canonical_source_db")) == "unmapped"):
+        spelled = {identity.split(":", 1)[1] for identity in
+                   _identities_spelled(tuple(sorted(label_names))) & _identities_spelled((title_norm,))}
+        carried = {_norm(other.get("canonical_id")) for other in label_rows if other is not row}
+        return bool(spelled) and not spelled & carried
     return False
+
+
+@lru_cache(maxsize=1)
+def _identity_phrase_index() -> Dict[str, tuple]:
+    """Registered identity names by first word, for spelling them in text.
+
+    A name counts when it has an identity word (not only descriptors), and a
+    one-word name only when the registries give that word to one identity.
+    """
+    index: Dict[str, set] = {}
+    for registry, identity, names in identity_registry_name_lists():
+        for name in names:
+            tokens = tuple(_title_tokens(_norm(name)))
+            core = [token for token in tokens
+                    if token not in _ROLE_TITLE_STOPWORDS and token not in _ROLE_TITLE_CONNECTORS]
+            if not core or (len(tokens) == 1 and (
+                    len(tokens[0]) < 3 or not _single_word_names(tokens[0], label_word=False))):
+                continue
+            index.setdefault(tokens[0], set()).add((tokens, f"{registry}:{identity}"))
+    return {word: tuple(phrases) for word, phrases in index.items()}
+
+
+@lru_cache(maxsize=8192)
+def _identities_spelled(texts: tuple) -> frozenset:
+    """The registered identities whose whole names these texts spell.
+
+    A name inside a longer registered name belongs to the longer one:
+    "Protein" of "Brown Rice Protein" is not protein's.
+    """
+    index = _identity_phrase_index()
+    spelled = set()
+    for text in texts:
+        forms = [_title_token_forms(token) for token in _title_tokens(text)]
+        matches = [(start, start + len(tokens), identity)
+                   for start, start_forms in enumerate(forms)
+                   for word in start_forms
+                   for tokens, identity in index.get(word, ())
+                   if _phrase_in_title(list(tokens), forms[start:start + len(tokens)])]
+        spelled.update(identity for start, end, identity in matches if not any(
+            other_start <= start and end <= other_end and other_end - other_start > end - start
+            for other_start, other_end, _ in matches))
+    return frozenset(spelled)
 
 
 def _qualified_by_identity(title_tokens: List[str], index: int) -> bool:
@@ -7251,6 +7308,7 @@ def _role_context(
         "module": module,
         "statements": _safe_list(product.get("statements")),
         "title_norm": title_norm,
+        "label_rows": rows,
         "driver_canonicals": drivers,
         "named_amino_mixture": named_amino_mixture,
         "max_mass_mg": max(masses) if masses else 0.0,
@@ -7292,7 +7350,7 @@ def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
     claim_source = _role_function_claim_source(row, ctx)
     if claim_source:
         return out(ROLE_CLAIM_PROMINENT, "named_in_label_function_claim:" + claim_source[1], claim_source[0], "high")
-    if _named_in_title(row, ctx["title_norm"]):
+    if _named_in_title(row, ctx["title_norm"], label_rows=ctx["label_rows"]):
         return out(ROLE_CLAIM_PROMINENT, "named_in_product_title", "product_name", "high")
 
     is_blend = _role_is_blend_member(row)
