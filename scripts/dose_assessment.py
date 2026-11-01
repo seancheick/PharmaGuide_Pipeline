@@ -410,6 +410,7 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
     ratio_pattern = re.compile(r"(?<![\w.])\d+(?:\.\d+)?\s*:\s*\d+(?:\.\d+)?(?![\w.])")
     ratio_feature = "declared extraction ratio"
     has_declared_ratio = False
+    declared_ratios = {re.sub(r"\s+", "", ratio.group()) for ratio in ratio_pattern.finditer(text)}
     for ratio in ratio_pattern.finditer(text):
         marked = text[:ratio.start()] + ratio_feature + text[ratio.end():]
         if find_affirmative_label_match(re.compile(re.escape(ratio_feature), re.I), marked):
@@ -462,6 +463,10 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
         # Each material clause still uses the canonical negation owner.
         for raw_clause in assertion.split(";"):
             clause = raw_clause.strip()
+            # A ratio clause names the row's one declared ratio: "4:1" is not
+            # proven by "4:1.5", "4:1 to 10:1" or "10:1 and 4:1".
+            if ratio_pattern.fullmatch(clause) and declared_ratios != {re.sub(r"\s+", "", clause)}:
+                return False
             pattern = re.compile(r"(?<!\w)" + re.escape(clause) + r"(?!\w)", re.I)
             if not clause or not find_affirmative_label_match(pattern, required_text):
                 return False

@@ -390,3 +390,18 @@ def test_american_4to1_powder_scope_stays_with_that_exact_material(exact_scope_p
         record["reference_semantics"]["approval_status"] = "pending"
     monkeypatch.setattr(evidence_resolver, "_load_literature_evidence", lambda: records)
     assert _botanical_benchmark(row, product=product) == "unresolved"
+
+
+@pytest.mark.parametrize("notes", [
+    # Another or a second ratio is not the one 4:1 the record names.
+    "4:1.5", "4:1 to 10:1", "10:1 and 4:1",
+    # The no-benchmark rationale rests on no stated potency or solvent.
+    "4:1; standardized to 5% ginsenosides", "4:1 ethanol extract", "4:1 water extract",
+])
+def test_american_4to1_powder_scope_needs_the_one_unstandardized_ratio(exact_scope_products, notes):
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    product = deepcopy(exact_scope_products["330196"])
+    row, source = _source_pair(product, "ginseng")
+    assert _botanical_benchmark(row, product=product) != "unresolved"
+    source["notes"] = notes
+    assert _botanical_benchmark(row, product=product) == "unresolved"
