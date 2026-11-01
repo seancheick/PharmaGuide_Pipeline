@@ -4242,3 +4242,22 @@ follow-up. Main/candidate detail-blob comparison was also identical for all eigh
 labels with zero export-contract errors.
 
 PR review corrections: runtime provenance is now shared by stage manifests and gate receipts through `audits/run_verification_gate.py::runtime_identity`. It binds Python/executable, installed dependency versions and actual optional RapidFuzz availability/implementation. Missing or changed runtime proof invalidates reuse. Fully reused computation now enters the existing strict enrichment/coverage gate path with `validation_only=True`; fail-first controls prove gate failures propagate and no product stage runs. Final focused checkpoint: 305 passed, 1 declared absent-built-interaction-DB skip. Updated 8-label cold/resume measurement 8.453s/2.328s includes both strict pre-score gates and preserves every stage output/manifest byte.
+
+## November 1 — scoring snapshot gate after the November 1 corpus run (branch `claude/omega-title-identity-20261101`)
+
+**Owner check:** `scripts/scoring_input_contract.py::_named_in_title` (matrix concept `scoring_input_contract`). Evidence: `grep -n "def _named_in_title" scripts/scoring_input_contract.py`. Will NOT create: a new field, word list, matcher or registry; the rule reads `identity_registry_name_lists()` and the existing `canonical_source_db`.
+
+The corpus run passed every brand, then `rebuild_dashboard_snapshot.sh` failed the scoring snapshot contract on two of 36 canaries:
+- **278454 Ritual Essential for Women:** 86.4 → 84.4, Verification 10 → 8. The renewed USP directory (PR #324/#325) no longer lists this product name, so its USP claim moves from brand-only to claimed-only. Expected source movement; the canary was refreshed and the cause recorded in the manifest changelog.
+- **18141 CVS Omega-3 100 mg:** 59.9 → 54.8, Dose 11.4 → 6.3. Bisected to e84116059 (title identity phrase, PR #320). The title "Omega-3" stopped naming the unmapped 300 mg "flaxseed oil extract ... and purified fish oil concentrate omega fatty acid blend", so Dose graded the trace vitamins. Defect.
+
+- [x] **Implemented:** a top-level row the identity owners left unmapped is named by the title when the title and the row's own label name spell registered names of the same identity ("Omega-3" and "fish oil" are both IQM `fish_oil`'s). It is refused when another row carries any spelled identity under any registry id, and a name inside a longer registered name belongs to the longer one. Fail-first tests pin 18141 end to end from its raw label, plus the counterexamples 286147, 47225, 176071, 259814, the turmeric and elderberry registry splits, banned and other-ingredient ids, and "brown rice protein" in "Raw Protein".
+- [x] **Measured:** all 15,447 stored enriched products scored with origin/main 2ef348106 and with the branch. Only 18141 moves: Dose 6.3 → 11.4, total 54.8 → 59.9, and its blend's Evidence role major → claim_prominent. No status, tier or safety change on any other product. Raw canary check from staging raw labels: 33 of 33 after the Ritual refresh. `shadow-diff` passed.
+- [x] **Reviewed:** a fresh-context review found registry-id splits beating the carried guard, non-IQM ids treated as unmapped, and names inside names. All three were reproduced, fixed and pinned, and the corpus was remeasured after the fixes.
+- [x] **Focused:** title, role, Dose, Evidence and dead-code slice 861 passed; Python correctness 0 new.
+- [ ] **Integrated:** PR pending; exact-head `pipeline-tests` CI is the merge gate. Sean merges.
+- [ ] **Release-validated:** after the merge, rerun Score for the affected outputs (or per stage fingerprints), then `bash scripts/rebuild_dashboard_snapshot.sh`. Release is Sean's call.
+
+**Out of scope, reported only:** IQM `phytosterols` registers the bare alias "Esters". The ALA Dose display reads "RDA/AI 1.6 mg" while the math uses grams. Relative to the pre-e84116059 export, main also lowered 20036 and 49630 Evidence to 0 and moved 321350 Dose; this fix deliberately leaves those at main's values.
+
+Durable receipts: `/Users/seancheick/pg_quality/omega_title_identity_20261101/`.
