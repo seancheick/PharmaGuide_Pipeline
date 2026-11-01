@@ -34,6 +34,14 @@ CASES = [
 ]
 
 
+# Sean's November1 decision: BulkSupplements American ginseng rhizome and root
+# 4:1 extract powder (solvent and ginsenosides undeclared). The Health Canada
+# monograph covers dry root only, in grams of dried root, with ethanol/water
+# extracts; it sets no benchmark for this material.
+AMERICAN_4TO1_POWDER = ["330196", "330197", "330198", "330199"]
+AMERICAN_4TO1_OWNER = "american_ginseng_rhizome_root_extract_4to1_powder"
+
+
 @pytest.fixture(scope="module")
 def exact_scope_products():
     from enhanced_normalizer import EnhancedDSLDNormalizer
@@ -43,7 +51,8 @@ def exact_scope_products():
     return {pid: enricher.enrich_product(normalizer.normalize_product(json.loads(
         (folder / f"raw_{family}_{pid}.json").read_text())))[0]
         for family, pid in [(family, pid) for family, pid, _, _ in CASES]
-        + [("applewise", "231929")] + [("kelp", pid) for pid in ["252562","255054","255055","255057"]]}
+        + [("applewise", "231929")] + [("kelp", pid) for pid in ["252562","255054","255055","255057"]]
+        + [("american_powder_4to1", pid) for pid in AMERICAN_4TO1_POWDER]}
 
 
 def _source_pair(product, canonical):
@@ -319,3 +328,89 @@ def test_bamboo_undeclared_der_branch_cannot_ignore_new_ratio(exact_scope_produc
     assert 'DER not declared' in source['notes']
     source['notes']+='; DER '+ratio
     assert _botanical_benchmark(row,product=product)=='unresolved'
+
+
+@pytest.mark.parametrize("pid", AMERICAN_4TO1_POWDER)
+def test_american_4to1_rhizome_root_powder_completes_dose_with_the_shared_neutral(exact_scope_products, pid):
+    from clinical_applicability import assess_clinical_source_review
+    from dose_assessment import verified_reference_citations
+    from evidence_resolver import _load_literature_evidence
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    from scoring_v4.scored_artifact import build_scored_artifact, unfinished_source_assessment
+    product = exact_scope_products[pid]
+    row, source = _source_pair(product, "ginseng")
+    assert (source["notes"], source["plantPart"]) == ("4:1", "rhizome and root")
+    result = score_botanical_purpose_dose(product, row)
+    assert result["metadata"]["benchmark"] == "absent"
+    assert result["band"] == "disclosed_no_reference"
+    record = _load_literature_evidence()[AMERICAN_4TO1_OWNER]
+    assert record["reference_semantics"]["scope"] == "exact_preparation"
+    assert record["reference_semantics"]["review_date"] == "2026-11-01"
+    assert "Sean" in record["reference_semantics"]["rationale"]
+    assert verified_reference_citations(record)
+    assert not assess_clinical_source_review(record)["is_complete"]
+    scored = build_scored_artifact(deepcopy(product))
+    assert unfinished_source_assessment(product, scored["_v4_module_breakdown"]) is None
+    assert scored["quality_score_status"] == "scored"
+    assert scored["assessment_readiness"]["release_assessment"]["is_complete"] is True
+    # The completed Dose scope adds no clearance: the ginseng precautions stay.
+    from build_final_db import build_detail_blob, validate_export_contract
+    assert validate_export_contract(product, scored) == []
+    assert scored["product_safety_status"] == "no_known_catalog_concern"
+    blob = build_detail_blob(product, scored)
+    subjects = {w["title"].rsplit(" / ", 1)[1]
+                for w in blob["warnings"] + (blob.get("warnings_profile_gated") or [])
+                if w.get("source_rule_id") == "RULE_INGREDIENT_GINSENG"}
+    assert {"diabetes", "anticoagulants", "hypoglycemics_high_risk", "pregnancy",
+            "cardiac_glycosides"} <= subjects
+    digoxin = next(w for w in blob["warnings"] + (blob.get("warnings_profile_gated") or [])
+                   if w.get("source_rule_id") == "RULE_INGREDIENT_GINSENG"
+                   and w["title"].endswith(" / cardiac_glycosides"))
+    assert digoxin["severity"] == "caution"
+    assert "prescriber" in digoxin["alert_body"].lower()
+    assert digoxin["profile_gate"]["requires"]["drug_classes_any"] == ["cardiac_glycosides"]
+
+
+@pytest.mark.parametrize("change", [
+    "other_ratio", "no_ratio", "capsule_delivery", "root_only", "leaf_part", "incomplete_proof", "pending_approval",
+])
+def test_american_4to1_powder_scope_stays_with_that_exact_material(exact_scope_products, monkeypatch, change):
+    import evidence_resolver
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    product = deepcopy(exact_scope_products["330196"])
+    row, source = _source_pair(product, "ginseng")
+    records = deepcopy(evidence_resolver._load_literature_evidence())
+    record = records[AMERICAN_4TO1_OWNER]
+    if change == "other_ratio":
+        source["notes"] = "10:1"
+    elif change == "no_ratio":
+        source["notes"] = ""
+    elif change == "capsule_delivery":
+        product["physicalState"] = {"langualCode": "E0159", "langualCodeDescription": "Capsule"}
+    elif change == "root_only":
+        source["plantPart"] = "root"
+    elif change == "leaf_part":
+        source["raw_source_text"] = source["name"] = "American Ginseng Leaf, Root Extract"
+    elif change == "incomplete_proof":
+        record["verification_provenance"]["reference_citations"]["is_complete"] = False
+    else:
+        record["reference_semantics"]["approval_status"] = "pending"
+    monkeypatch.setattr(evidence_resolver, "_load_literature_evidence", lambda: records)
+    assert _botanical_benchmark(row, product=product) == "unresolved"
+
+
+@pytest.mark.parametrize("notes", [
+    # Another or a second ratio is not the one 4:1 the record names.
+    "4:1.5", "4:1 to 10:1", "10:1 and 4:1",
+    # The no-benchmark rationale rests on no stated potency or solvent.
+    "4:1; standardized to 5% ginsenosides", "4:1 ethanol extract", "4:1 water extract",
+    # A sentence-final period still ends a ratio; solvent adjectives count.
+    "4:1 to 10:1.", "4:1; ethanolic extract", "4:1 hydroalcoholic extract",
+])
+def test_american_4to1_powder_scope_needs_the_one_unstandardized_ratio(exact_scope_products, notes):
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    product = deepcopy(exact_scope_products["330196"])
+    row, source = _source_pair(product, "ginseng")
+    assert _botanical_benchmark(row, product=product) != "unresolved"
+    source["notes"] = notes
+    assert _botanical_benchmark(row, product=product) == "unresolved"

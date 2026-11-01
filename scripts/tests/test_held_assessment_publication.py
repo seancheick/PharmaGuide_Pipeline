@@ -17,12 +17,11 @@ NEW_BLOCKERS = {
     '59635': ['probiotic_evidence_assessment_incomplete'],
 }
 
-RELEASE_FAILURE_IDS = ['330196', '330197', '330198', '330199', '18551', '178728']
-RELEASE_FAILURE_BLOCKERS = {
-    **{pid: ['dose_benchmark_identity_unresolved'] for pid in RELEASE_FAILURE_IDS[:4]},
-    **{pid: ['dose_benchmark_identity_unresolved', 'evidence_assessment_incomplete']
-       for pid in RELEASE_FAILURE_IDS[4:]},
-}
+# 330196-330199 left this list on 2026-11-01: their exact 4:1 powder Dose
+# scope completed (test_exact_approved_botanical_dose_scopes.py). The title
+# and blend-total fixes resolved Dose here too; Evidence remains unfinished.
+RELEASE_FAILURE_IDS = ['18551', '178728']
+RELEASE_FAILURE_BLOCKERS = {pid: ['evidence_assessment_incomplete'] for pid in RELEASE_FAILURE_IDS}
 
 
 @pytest.fixture(scope='module')

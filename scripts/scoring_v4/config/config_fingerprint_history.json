@@ -84,7 +84,8 @@
       "1.31.2-held-label-fidelity": "fa11e86a5d44bb38",
       "1.31.3-source-bound-release-holds": "b892863cc5c8bacf",
       "1.31.4-submission-source-bound-holds": "8df0b454002e0869",
-      "1.31.5-six-source-bound-release-holds": "45b5d383294749c5"
+      "1.31.5-six-source-bound-release-holds": "45b5d383294749c5",
+      "1.31.6-evidence-only-release-holds": "3680e7f56a6d1c4b"
     }
   }
 }

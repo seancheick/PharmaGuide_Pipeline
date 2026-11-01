@@ -13,6 +13,10 @@ audits of PRs #205 and #196 (2026-10-20):
   blend and an enzyme blend owned Evidence (garlic, ginger, bromelain points).
 - 40089 "Kids Gummy Fruit & Veggie": the generic word "Fruit" named the Apple
   row (canonical apple_fruit) and so the whole fruit blend.
+- 18551 "Endurance Booster Chew Orange" (2026-11-01 snapshot preflight): the
+  flavor variant after the dosage form named the 100 mg Citrus sinensis row
+  through its registry alias "Orange", which made that row an unbenchmarked
+  Dose purpose and held the product from release.
 """
 
 import json
@@ -44,8 +48,9 @@ def products():
     logging.disable(logging.INFO)
     enricher, normalizer = SupplementEnricherV3(), EnhancedDSLDNormalizer()
     out = {}
-    for dsld_id in ("40089", "293904", "297665", "321388"):
-        raw = json.loads((FIXTURES / f"evidence_title_{dsld_id}_raw.json").read_text())
+    for dsld_id in ("18551", "40089", "293904", "297665", "321388"):
+        name = "raw_held_assessment_18551.json" if dsld_id == "18551" else f"evidence_title_{dsld_id}_raw.json"
+        raw = json.loads((FIXTURES / name).read_text())
         enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
         out[dsld_id] = (enriched, build_scored_artifact(enriched))
     return out
@@ -93,6 +98,14 @@ def test_a_generic_plant_part_word_does_not_name_a_species(products):
     enriched, _ = products["40089"]
     assert "apple_fruit" not in _title_roles(enriched)
     assert "apple" not in _title_roles(enriched)
+
+
+def test_a_flavor_variant_after_the_dosage_form_names_no_ingredient(products):
+    enriched, scored = products["18551"]
+    assert "citrus_fruit_extract" not in _title_roles(enriched)
+    from scoring_v4.scored_artifact import unfinished_source_assessment
+
+    assert unfinished_source_assessment(enriched, scored["_v4_module_breakdown"]) is None
 
 
 def _roles(title, rows):
@@ -155,6 +168,68 @@ def test_an_undosed_member_named_only_by_the_flavor_is_not_title_named(title):
     roles = _roles(title, rows)
     assert roles["raspberry"] != "named_in_product_title"
     assert roles["orange"] != "named_in_product_title"
+
+
+@pytest.mark.parametrize(
+    "title",
+    ["Endurance Booster Chew Orange", "Vitamin C Chewable Orange", "Zinc Lozenges Orange Cream"],
+)
+def test_a_flavor_variant_after_the_dosage_form_names_no_registry_alias(title):
+    rows = [
+        _row("zinc", "Zinc", 300.0),
+        _row("citrus_fruit_extract", "Citrus sinensis", 100.0, path="ingredientRows[1]",
+             standard_name="Citrus Fruit Extract"),
+    ]
+    assert _roles(title, rows)["citrus_fruit_extract"] != "named_in_product_title"
+
+
+@pytest.mark.parametrize(
+    "title, canonical, name",
+    [
+        # The label's own dosed name after the form word is the active.
+        ("Immune Chews Elderberry", "elderberry", "Elderberry"),
+        # More than two words after the form are not a variant.
+        ("Gummies Ashwagandha 300 mg", "ashwagandha", "Ashwagandha"),
+        # Nothing after the form word.
+        ("Elderberry Gummies", "elderberry", "Elderberry"),
+    ],
+)
+def test_a_dosed_active_after_the_dosage_form_stays_title_named(title, canonical, name):
+    rows = [_row(canonical, name, 50.0), _row("zinc", "Zinc", 300.0, path="ingredientRows[1]")]
+    assert _roles(title, rows)[canonical] == "named_in_product_title"
+
+
+@pytest.mark.parametrize("title", ["Immune Gummies Elderberry", "Liquid Drops Elderberry",
+                                   "Organic Liquid Elderberry"])
+def test_a_blend_member_named_after_the_dosage_form_stays_title_named(title):
+    # The variant words are the label's own name for an undosed blend member.
+    rows = [
+        _row("herbal_blend", "Proprietary Herbal Blend", 192.0, is_proprietary_blend=True),
+        _row("elderberry", "Elderberry", path="ingredientRows[0].nestedRows[0]"),
+    ]
+    assert _roles(title, rows)["elderberry"] == "named_in_product_title"
+
+
+@pytest.mark.parametrize("title, canonical, name, standard_name", [
+    ("Immune Chews Elderberry", "elderberry", "Sambucus nigra", "Elderberry"),
+    ("Kids Gummies Turmeric", "turmeric", "Curcuma longa", "Turmeric"),
+    # No standard name: the row's canonical identity is the title's word.
+    ("Calm Chews Ashwagandha", "ashwagandha", "Withania somnifera", None),
+])
+def test_a_binomial_row_after_the_dosage_form_stays_title_named(title, canonical, name, standard_name):
+    rows = [_row(canonical, name, 50.0, standard_name=standard_name),
+            _row("zinc", "Zinc", 300.0, path="ingredientRows[1]")]
+    assert _roles(title, rows)[canonical] == "named_in_product_title"
+
+
+def test_a_leading_dosage_form_still_lets_the_title_name_a_blend_member():
+    # 268432 "Liquid Elderberry": elderberry is an undosed member of the
+    # proprietary herbal blend, and the title names it.
+    rows = [
+        _row("herbal_blend", "Proprietary Herbal Blend", 192.0, is_proprietary_blend=True),
+        _row("elderberry", "Elderberry", path="ingredientRows[0].nestedRows[0]"),
+    ]
+    assert _roles("Liquid Elderberry", rows)["elderberry"] == "named_in_product_title"
 
 
 def test_natural_opens_the_flavor_phrase():

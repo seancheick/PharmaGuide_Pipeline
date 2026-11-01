@@ -1258,6 +1258,19 @@ def test_ginseng_carries_no_floor_and_keeps_its_studied_glucose_dose_as_evidence
         assert "100 mg/day" in sub["mechanism"], target
 
 
+def test_ginseng_digoxin_precaution_is_consultation_without_claimed_harm():
+    rule = _rule("RULE_INGREDIENT_GINSENG")
+    digoxin = _sub_rule(rule, "drug_class_id", "cardiac_glycosides")
+    assert digoxin["severity"] == "caution"
+    assert digoxin["materiality"] == "presence"
+    assert "min_effective_dose" not in digoxin
+    assert "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true" in digoxin["sources"]
+    assert "digoxin" in digoxin["action"].lower()
+    assert "not established" not in digoxin["mechanism"].lower()
+    assert "direct harmful interaction" not in digoxin["alert_body"].lower()
+    assert digoxin["profile_gate"]["requires"]["drug_classes_any"] == ["cardiac_glycosides"]
+
+
 def test_stinging_nettle_glucose_rules_carry_no_floor():
     """The 1000 mg floor was weak_signal_conservative on a general review. The
     only documented dose, Kianbakht 2013 (PMID 24273930, 500 mg every 8 hours),

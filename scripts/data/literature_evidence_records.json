@@ -3,8 +3,8 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-29",
-    "total_entries": 841,
+    "last_updated": "2026-11-01",
+    "total_entries": 842,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
     "verified_records_count": 809
@@ -39645,6 +39645,94 @@
         "approval_status": "approved_existing_neutral_2026_10_29"
       },
       "notes": "Sean directly approved this exact no-general-benchmark Dose scope on2026-10-29. Official NIH231929/L01625F and232062/L01625CD and source-owner correction evidence establish the sole-row manufacturer linkage. Product title alone never establishes the source material. Manufacturer identity documentation is not qualifying human efficacy evidence."
+    },
+    {
+      "canonical_id": "american_ginseng_rhizome_root_extract_4to1_powder",
+      "material_form": "Source-labelled American ginseng rhizome and root extract powder with a declared 4:1 extraction ratio; extraction solvent and ginsenoside content are not declared. No dried-root conversion, solvent, marker or clinical-extract equivalence is inferred.",
+      "search_date": "2026-11-01",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "No clinical population or efficacy transfer from this exact Dose ruling.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Exact general Dose completeness only. No clinical-benefit review completion or independent safety clearance.",
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "b264f5948220d2727cc19870a3f8a43374654839323298a7fa8b756d16e4ab85",
+          "source_ids": [
+            "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+          ],
+          "verified_at": "2026-11-01T04:51:47+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Health Canada natural health product monograph: Ginseng - American, January30 2026",
+              "content_sha256": "e328960c651c09f13c02b0e1d2715048d736e14970f54617b420c81bd3f090ce",
+              "notes": "Re-read 2026-11-01 (SHA-256 of the page's main text). Source material: Panax quinquefolius root, dry. Regimens: 0.5-12 g, 1-3 g, 6-9 g and 2.4-9 g dried root per day by purpose and preparation; non-standardized dry extracts use ethanol and/or water only; foods and food-like dosage forms are excluded. Cautions: blood thinners, digoxin, diabetes. It names no rhizome material, extract-mass minimum or extraction-ratio conversion. Regulatory/source document, not a human efficacy trial; article-specific alert flags are not applicable. Agent source review; not clinician-reviewed."
+            }
+          ]
+        }
+      },
+      "standard_name": "American Ginseng rhizome and root extract 4:1 powder",
+      "aliases": [
+        "American Ginseng Rhizome, Root Extract"
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "American Ginseng Rhizome, Root Extract; 4:1; PlantPart: rhizome and root"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "leaf",
+          "leaves",
+          "stem",
+          "red",
+          "fermented",
+          "GS15-4",
+          "ginsenoside",
+          "ginsenosides",
+          "standardized",
+          "standardised",
+          "ethanol",
+          "alcohol",
+          "water",
+          "aqueous",
+          "solvent",
+          "ethanolic",
+          "hydroalcoholic",
+          "hydroethanolic",
+          "alcoholic",
+          "methanol",
+          "methanolic"
+        ],
+        "dosage_forms": [
+          "powder"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "Source-labelled American ginseng rhizome and root extract powder with a declared 4:1 extraction ratio; extraction solvent and ginsenoside content are not declared. No dried-root conversion, solvent, marker or clinical-extract equivalence is inferred.",
+        "purpose": "General Dose reference completeness only; no efficacy, Evidence, safety, interaction or contraindication approval.",
+        "population": "General catalog Dose only; no study-population or personal-suitability transfer.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation quantity only; no constituent, marker, extraction-ratio or elemental conversion.",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=ginseng.american2&lang=eng&wbdisable=true"
+        ],
+        "rationale": "Sean directed on November 1, 2026: completed-no-general-benchmark Dose for the four matching BulkSupplements American ginseng rhizome-and-root 4:1 extract powder label editions, under the existing neutral policy. The Health Canada monograph (January 30, 2026) covers Panax quinquefolius dry root only and states every regimen in grams of dried root, with non-standardized dry extracts limited to ethanol and/or water. This label adds rhizome and declares neither solvent nor ginsenoside content, so no monograph regimen applies and the 4:1 ratio is not converted to a dried-root amount. Product-specific trial extracts (CVT-E002 200 mg twice daily; Cereboost 100-400 mg at 10.65% ginsenosides) are different materials and are not transferred. This does not amend the October 29 root-extract capsule and gummy decisions or authorize leaf, stem, red or fermented preparations.",
+        "owner": "scripts/data/literature_evidence_records.json::american_ginseng_rhizome_root_extract_4to1_powder",
+        "review_date": "2026-11-01",
+        "approval_status": "approved_existing_neutral_2026_11_01"
+      },
+      "notes": "Exact Dose scope authority: Sean directly approved this four-label Dose disposition on 2026-11-01. Original source-reviewed labels: 330196, 330197, 330198, 330199 (same formula fingerprint). Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent. The source research and citation check were agent-conducted; no Dr Pham or PharmD review of this exact material is claimed."
     }
   ]
 }

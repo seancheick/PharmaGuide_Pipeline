@@ -4105,3 +4105,56 @@ The completed Clean/Enrich/Score run failed the snapshot scoring-completeness pr
 **Validation:** fail-first raw-label test reproduced `scored` on 330196; after the fix, 24 latest-failure cases and 193 combined held-assessment/release-receipt cases passed. `scripts/test.sh local`: 554 passed, 24 declared external opt-in skips. Exact-head CI is required before merging. The next corpus run needs Score onward from the already completed Clean/Enrich outputs after this source change is merged; release itself remains unverified until that run passes.
 
 **CI correction on the first candidate:** fast shard 1 enforced the valid config-byte/version fingerprint history; bumped the Quality config version and pinned its newly computed SHA-256 prefix without changing prior pins. Fast shard 2 found the old 178728 identity test reading a public Dose pillar that must now be null under the approved hold. Retained its internal 0.0 Dose assertion and added explicit incomplete-blocker, Not Scored, and null-public-pillar assertions. The named regression and complete identity test file passed locally; the corrected exact-head CI is the merge gate.
+
+## November 1 — the six preflight holds resolved at their owners (branch `claude/title-flavor-variant-20261101`, PR #323)
+
+**Owner check:** title roles: `scoring_input_contract.py::_role_title_text`. Botanical Dose: `scoring_v4/modules/botanical_profile.py::_completed_botanical_reference` and `::structural_blend_total_source`. Exact Dose record: `scripts/data/literature_evidence_records.json`. Holds: `quality_score.json::suppression.held_assessment_labels`. Will NOT create: a new Dose policy, a neutral fallback for unreviewed ingredients, a changed 11.4 neutral value, a new status or a second blend registry.
+
+**Correction to the earlier note on this branch:** the 330196–330199 label does state a ratio. The raw row notes say "4:1", the plant part is "rhizome and root", and the directions say 1000 mg once or twice daily. The earlier "no extract ratio" statement was wrong.
+
+**What changed (Sean's November 1 direction, recorded from the pasted assessment):**
+- **18551** "Endurance Booster Chew Orange": one or two words after the dosage form that end the title are read as a flavor variant, so "Orange" no longer names the 100 mg Citrus sinensis row. Census across all 15,447 enriched products: 5 role changes, all flavor variants (18551, plus "Chocolate Mint" in 222788, 222896, 222904 and 222909). Dose then completes. Evidence stays unfinished.
+- **330196–330199** American ginseng 4:1 rhizome-and-root extract powder: added the exact-preparation record `american_ginseng_rhizome_root_extract_4to1_powder`. It holds a completed no-general-benchmark determination under the existing neutral 11.4.
+  - Source: the Health Canada American ginseng monograph (dried root only), content-hashed on 2026-11-01.
+  - No dry-root conversion, no assumed solvent, no ginsenoside potency and no transfer of CVT-E002 or Cereboost results.
+  - Scope is the exact source text, ratio, part and powder form. A different ratio, no ratio, a capsule, root only, leaf, an incomplete proof or a pending approval each stay unresolved.
+  - Attribution: "Sean direct user/team ruling, 2026-11-01"; the source review is agent work, not clinician-reviewed. Reach: 4 of 161 ginseng rows.
+- **178728** "Raw Superfoods": the 4,500 mg Organic Superfood Blend header is filed under the generic `BLEND_SUPERFOOD` category. Its total is now structural (`blend_total_only`, `assessment_status: not_applicable`). It earns no neutral credit and no constituent dose. A branded blend (for example `BLEND_VELOSITOL`) still needs its own reference. Reach: 1 of 934 products, blockers only. Evidence stays unfinished.
+- **Reconciliation with PR #322 (merged to main as 1c3d615ff):**
+  - The four ginseng holds were removed: the label now scores 57.1 with no blockers.
+  - The 18551 and 178728 holds were re-bound from Dose+Evidence to `evidence_assessment_incomplete`, so both stay Not Scored under the standing source-bound policy. Source rows and fingerprints are unchanged.
+  - Quality config is now 1.31.6, with its fingerprint pinned.
+  - Six duplicate raw-label fixtures were folded into one copy each.
+
+**Integrated replay before the later digoxin safety correction** (Clean → Enrich → Score on 18 raw labels: the six plus 12 controls, main 1c3d615ff vs branch, `PHARMAGUIDE_DATASET_ROOT` on a scratch copy):
+- Moved: the four ginseng labels (Not Scored → scored 57.1, complete). 18551 and 178728 stay Not Scored, with blockers now Evidence-only. 222788 and 222896 stay `suppressed_safety`/blocked, and gain an `evidence_assessment_incomplete` blocker because the title no longer names peppermint.
+- Unchanged: 13567, 176190, 182704, 229932, 251616, 268432, 293904, 311195, 327984, 40089.
+- No safety gate field differed on any of the 18 in this initial replay. Checked fields: `product_safety_status`, `_v4_safety_gate`, `safety_*`, `dose_safety_evaluation`.
+- The initial ginseng warnings were identical (pregnancy, lactation, diabetes, surgery, hypoglycemics, anticoagulants, MAOIs). The later source-cited digoxin consultation correction adds a distinct profile-gated warning; it does not alter the Dose or Evidence determination.
+- Strict gate `audit_source_of_truth_contract.py scoring --strict-release --completion-only` (the preflight that failed): exit 0 on the branch.
+- The full mode without `--dist-dir` fails on main as well. It needs the catalog's quarantine and warning-only proof, and `verified_warning_only_products` admits blocked and Not Scored catalog rows with null scores.
+
+**Rerun scope:** Clean output is byte-identical except its timestamp. Enrich output changes for the title-fix products (`product_scoring_classification`). Every stage fingerprint changes: the record is in `scripts/data/`, and both changed modules are in Clean's import closure. The next corpus run must therefore start at Clean.
+
+**Findings for Sean:**
+- 5,884 catalog products ship *scored* with exactly `evidence_assessment_incomplete` through `_retained_evidence_is_publishable`, and both 18551 and 178728 pass that check. Holding them as Not Scored follows the pasted direction, but it treats them differently from that class. Removing the two hold entries would publish them as scored partial (40.6 and 22.7).
+- The direction asked to preserve a ginseng–digoxin precaution. None existed on main. A subsequent bounded correction added it to the existing `RULE_INGREDIENT_GINSENG` owner after Sean authorized a sourced consultation warning; it does not assert a proven direct interaction or contraindication.
+
+**Fresh-context review (same day) and fixes:**
+- **Ginseng scope leak (medium), fixed.** A ratio clause matched inside "4:1.5", "4:1 to 10:1" and "10:1 and 4:1", and a stated ginsenoside standard or solvent was not excluded.
+  - `dose_assessment.py::_dose_source_preparation_matches` now requires the row's declared ratios to be exactly the clause's one ratio. Four exact records use ratio clauses (chaste tree 10:1, Panax 4:1, American ginseng rhizome 4:1, this record). No corpus chaste tree or ginseng row declares two ratios (21 ratio rows checked).
+  - The record now also excludes ginsenoside, standardized, ethanol, alcohol, water, aqueous and solvent. Six fail-first cases were added.
+- **Title rule dropped an undosed blend member after the form word (medium), fixed.** The variant now stops at the label's own name for any non-header row. A binomial row is covered by its standard name, and both shapes are pinned. Corpus census is unchanged: 5 role changes.
+- **Low findings:**
+  - The two holds now pin `unfinished_source_assessment: null`.
+  - A test pins the 14 generic blend categories, because "generic" means no `manufacturer` key.
+  - A test comment was corrected.
+  - The holds keep reviewer "Sean Cheick" (the standing policy owner); their scope text records the agent re-binding.
+- **Slice after the fixes:** 2054 passed across the owner and consumer files, including every test touching `required_form_terms` and `_role_title_text`. Python correctness: 0 new.
+
+**Validation:**
+- Reconciled slice: `scripts/test.sh fast` over the held-assessment, non-scorable identity, exact-scope, title-ownership, blend-subject and config-registry files: 490 passed.
+- Before the merge: title slice 113 passed, exact scopes 262 passed, botanical/blend slice 2456 passed, Python correctness 0 new.
+- Exact-head CI is the merge gate.
+
+**Independent November 1 integration review:** Sean explicitly approved the exact four-label 4:1 rhizome-and-root Dose disposition and separately reaffirmed that 18551/178728 stay Not Scored with Evidence-only blockers. The literature record now distinguishes Sean's Dose decision from agent-conducted source verification and claims no Dr Pham/PharmD signoff. The official Health Canada American-ginseng monograph advises professional consultation with digoxin; the existing ginseng rule had no digoxin class entry. Sean authorized the bounded safety correction. Added a presence-based `cardiac_glycosides` consultation caution to `RULE_INGREDIENT_GINSENG`, also citing NCCIH's narrow-therapeutic-index medication advice. It makes no claim about whether a direct interaction exists and creates no dose threshold or contraindication. Real raw-label tests verify the new profile-gated warning for all four ginseng editions while preserving Dose/Evidence status; a non-ginseng control remains excluded. `data_batch.py check`: exactly the ginseng interaction rule changed, zero problems. Focused safety/consumer slice: 398 passed; source/interaction contract slice: 73 passed. A previous `local` run on the same source owner passed 554 with 24 declared opt-in skips. A later worktree `local` run passed 551 but failed its skip guard because three certification-population cases could not find the local enriched GNC corpus; this is a worktree input limitation, not a source assertion change. The final combined candidate's exact-scope and interaction-owner tests passed 335. CodeRabbit's ratio-punctuation and solvent-adjective findings were fixed in commit `8e3a0691c`; the unsupported direct-interaction reassurance was removed in this follow-up. This additional warning change supersedes the initial replay's warning-parity statement; exact-head CI remains the merge gate.

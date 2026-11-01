@@ -7019,12 +7019,26 @@ def _registered_identity_names(canonical: str, label_names: tuple, names: tuple)
     return tuple(sorted(name for name in registered if name))
 
 
+def _ends_flavor_phrase(word: str, dosed_name_tokens: set[str]) -> bool:
+    return (
+        word in _ROLE_TITLE_FLAVOR_JOINERS
+        or not word[0].isalnum()
+        or any(ch.isdigit() for ch in word)
+        or any(part in _ROLE_TITLE_STOPWORDS or part in _ROLE_TITLE_FORM_WORDS
+               or part in dosed_name_tokens for part in word.split("-"))
+    )
+
+
 def _role_title_text(title_norm: str, rows: List[Dict[str, Any]]) -> str:
     """The title as evidence of what the product is: hyphenated vitamin names
     joined ("b-12" -> "b12") and flavor descriptors removed."""
     title = _ROLE_TITLE_HYPHEN_VITAMIN_RE.sub(r"\1\2", title_norm)
     tokens = re.findall(r"[a-z0-9]+(?:-[a-z0-9]+)*|[^\sa-z0-9-]", title)
-    if not any(_ROLE_TITLE_FLAVOR_RE.match(token) for token in tokens):
+    form_index = next((index for index in range(len(tokens) - 1, -1, -1)
+                       if tokens[index] in _ROLE_TITLE_FORM_WORDS), None)
+    # A leading form word describes the product ("Liquid Elderberry").
+    has_variant = bool(form_index) and 0 < len(tokens) - form_index - 1 <= 2
+    if not has_variant and not any(_ROLE_TITLE_FLAVOR_RE.match(token) for token in tokens):
         return title
     dosed_name_tokens = {
         token
@@ -7037,6 +7051,23 @@ def _role_title_text(title_norm: str, rows: List[Dict[str, Any]]) -> str:
         if token
     }
     dropped: Set[int] = set()
+    # "Endurance Booster Chew Orange" (18551): one or two words that follow
+    # the dosage form and end the title are its flavor variant, read by the
+    # same stop rules as a flavor phrase. The label's own name for an undosed
+    # blend member also ends it ("Immune Gummies Elderberry"), as does a row's
+    # canonical identity ("Calm Chews Ashwagandha" on Withania somnifera).
+    label_name_tokens = {
+        token
+        for row in rows
+        if not _role_is_blend_member(row)
+        for key in ("name", "standard_name", "standardName", "canonical_id")
+        for token in re.split(r"[^a-z0-9]+", _norm(row.get(key)))
+        if token
+    }
+    if has_variant and not any(
+        _ends_flavor_phrase(word, label_name_tokens) for word in tokens[form_index + 1:]
+    ):
+        dropped.update(range(form_index + 1, len(tokens)))
     for index, token in enumerate(tokens):
         if not _ROLE_TITLE_FLAVOR_RE.match(token):
             continue
@@ -7044,7 +7075,6 @@ def _role_title_text(title_norm: str, rows: List[Dict[str, Any]]) -> str:
         budget, words = 2, 0
         for back in range(index - 1, -1, -1):
             word = tokens[back]
-            parts = word.split("-")
             if word in _ROLE_TITLE_FLAVOR_FREE:
                 dropped.add(back)
                 if words:
@@ -7055,14 +7085,7 @@ def _role_title_text(title_norm: str, rows: List[Dict[str, Any]]) -> str:
             elif word in _ROLE_TITLE_FLAVOR_JOINERS and words:
                 dropped.add(back)
                 budget, words = 1, 0
-            elif (
-                words >= budget
-                or word in _ROLE_TITLE_FLAVOR_JOINERS
-                or not word[0].isalnum()
-                or any(ch.isdigit() for ch in word)
-                or any(part in _ROLE_TITLE_STOPWORDS or part in _ROLE_TITLE_FORM_WORDS
-                       or part in dosed_name_tokens for part in parts)
-            ):
+            elif words >= budget or _ends_flavor_phrase(word, dosed_name_tokens):
                 break
             else:
                 dropped.add(back)
