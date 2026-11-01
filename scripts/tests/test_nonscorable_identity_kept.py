@@ -231,10 +231,6 @@ def test_wasabi_label_keeps_its_plant(enrich):
     (40089, "evidence", 11.1),
     # "Raw organic Svetol" (green coffee) does not own Evidence through "Fit Coffee".
     (204521, "evidence", 10.0),
-    # A 0.4 mg iron row kept for interactions feeds no Dose. "Raw Superfoods"
-    # names the Organic Superfood Blend, whose printed total is the Dose
-    # subject: blend total only, 0.0 (1.1 while the title named nothing).
-    (178728, "dose", 0.0),
     # "organic Beet" re-identified later as Beetroot Powder (as on main) still scores.
     # 10.8 on main; 12.4 since PR214, whose multi panel no longer averages adjunct rows.
     (62890, "formulation", 12.4),
@@ -243,6 +239,22 @@ def test_interaction_only_identity_owns_no_evidence_or_dose(enrich, dsld_id, pil
     from scoring_v4.scored_artifact import build_scored_artifact
 
     assert build_scored_artifact(enrich(dsld_id))["quality_pillars_v4"][pillar]["score"] == expected
+
+
+def test_raw_superfoods_iron_keeps_its_internal_dose_result_without_a_public_score(enrich):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # The 0.4 mg iron row remains interaction-only. The printed Organic
+    # Superfood Blend total is the Dose subject, with 0.0 internal credit.
+    # This exact label now publishes without a quality score while its Dose
+    # and Evidence reviews remain incomplete.
+    scored = build_scored_artifact(enrich(178728))
+    assert scored["_v4_module_breakdown"]["dimensions"]["dose"]["score"] == 0.0
+    assert scored["assessment_readiness"]["release_assessment"]["blockers"] == [
+        "dose_benchmark_identity_unresolved", "evidence_assessment_incomplete",
+    ]
+    assert scored["quality_score_status"] == "not_scored"
+    assert scored["quality_pillars_v4"] is None
 
 
 def test_member_forms_keep_the_family_identity():

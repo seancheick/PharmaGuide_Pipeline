@@ -4093,3 +4093,15 @@ A single word counts only when a registry lists it as that identity's whole name
 - American ginseng species coverage matches the binomial literally.
 - "Ginseng Root Extract" with a Panax quinquefolius form maps to `ginseng_root_panax`; main does the same.
 - RXCUI 3036 is the cystine concept and is not stereo-specific.
+
+## November 1 — six exact held labels found by the October 31 release preflight
+
+**Owner check:** `scripts/scoring_v4/scored_artifact.py::_held_assessment_label` and `scripts/scoring_v4/config/quality_score.json::suppression.held_assessment_labels` own source-bound publication holds. Searched `scripts/contracts/source_of_truth_matrix.json`, `scripts/GLOSSARY.md`, and callers of `held_assessment_labels`. Will not create another scorer, registry, public status, or Dose/Evidence policy.
+
+The completed Clean/Enrich/Score run failed the snapshot scoring-completeness preflight on six partially assessed products still emitted as `scored`: 330196–330199 (unresolved exact ginseng Dose benchmark), 18551 and 178728 (unresolved Dose and Evidence). Their source labels, formula fingerprints, ingredient rows, blockers, and safety gates were measured from the current raw NIH records. Sean's October 30 standing publication disposition covers verified non-safety scientific holds; it does not close the underlying scientific reviews. Added these six exact source bindings to the existing held-assessment owner. They now emit `NOT_SCORED` with null quality fields, while original label facts, warnings, allergens, and incomplete review blockers remain. Changed source text or quantity fails the hold match.
+
+**Claude release optimization audit:** the merged receipt code reuses scoring source work only when its bound inputs and sealed catalog outputs match; changed raw labels, scored artifacts, source code, or outputs invalidate reuse in focused tests. The latest full run stopped before snapshot completion, so no completed-run speed claim is made.
+
+**Validation:** fail-first raw-label test reproduced `scored` on 330196; after the fix, 24 latest-failure cases and 193 combined held-assessment/release-receipt cases passed. `scripts/test.sh local`: 554 passed, 24 declared external opt-in skips. Exact-head CI is required before merging. The next corpus run needs Score onward from the already completed Clean/Enrich outputs after this source change is merged; release itself remains unverified until that run passes.
+
+**CI correction on the first candidate:** fast shard 1 enforced the valid config-byte/version fingerprint history; bumped the Quality config version and pinned its newly computed SHA-256 prefix without changing prior pins. Fast shard 2 found the old 178728 identity test reading a public Dose pillar that must now be null under the approved hold. Retained its internal 0.0 Dose assertion and added explicit incomplete-blocker, Not Scored, and null-public-pillar assertions. The named regression and complete identity test file passed locally; the corrected exact-head CI is the merge gate.

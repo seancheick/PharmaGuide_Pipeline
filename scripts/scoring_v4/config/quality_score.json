@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.31.4-submission-source-bound-holds",
+    "version": "1.31.5-six-source-bound-release-holds",
     "schema_version": "1.0.0",
-    "last_updated": "2026-10-30",
+    "last_updated": "2026-11-01",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize against the engine's reviewed structural ceiling; verification saturates hard third-party signals with a fail-open neutral baseline and recognizes verified brand/facility-scoped certs as a small non-stacking signal; safety_hygiene is product-level. Rubric proxies are removed: ingredient-count breadth (including immune-support ingredient counts), focus bonuses/floors, generic enzyme recognition, blanket gummy format penalties, organic/Non-GMO/natural-source and marine-sustainability points, the omega EPA:DHA ratio bonus, the generic Dose premium-form count (1.21.0), astaxanthin/CoQ10 public caps, ingredient-presence Evidence floors, and certification-derived omega Formulation/Transparency floors. Fish/krill/algal oil carrier mass never becomes EPA+DHA dose; an omega-3 row printed as EPA and/or DHA owns that EPA/DHA amount (1.10.1), and omega concentration may use the declared Total Fat plus its FDA rounding half-increment when no oil mass is printed (1.10.1). Dose and Evidence never manufacture Formulation credit. Only transparency remains a faithful linear source-dimension map. raw_score_v4_100 is a module-rubric audit subtotal, not the public six-pillar score. quality_score_status controls whether any public quality score may be shown. Audited GMP facility credit comes only from a sourced link to an audited GMP facility registry row, and mid-tier reputation that restates verified certifications or audited GMP is not counted twice (1.9.0). Quality tiers are independent of safety; quality assembly never writes POOR or converts quality thresholds into SAFE. POOR is a read-only old-catalog compatibility value (October 1, 2026). Omega label ownership is enforced in 1.10.0. Sugar and sweetener charges come only from the shared B1 dietary-sugar and harmful-additive owners: the sports-protein and fiber adapters no longer add their own, and their former clean-daily-use points became a fixed route_base (1.21.4), retired in 1.26.0. Probiotic Evidence uses shared evidence-family certainty (10), identity/purpose applicability (6), and independent same-condition replication (0/2/4); CFU and studied-amount adequacy belong exclusively to Dose (1.22.0). v4 is the production catalog scoring contract as of export schema 2.2.0. Delivery credit uses the shared source-supported, form-aware eligibility decision. Intrinsic chemistry and a technology already represented by the resolved form cannot earn a second delivery bonus; Verification policy is unchanged. 1.26.0 (V4.1 Step 4): the formula-checks pillar owns additive and sugar findings within one 10-point budget; count, disclosure, focus, route-base and duplicate branded credits are retired; an unrated form and an unbenchmarked amount each take one shared neutral; probiotic Formulation is canonical form quality and probiotic Dose is measured adequacy; a label limitation stays scored while PharmaGuide's own unfinished work marks the assessment partial. 1.27.0: Sean approved Dose quality per one declared Facts-panel serving across all routes; daily maximum safety findings remain separate and unchanged. Formulation, Evidence, Verification and personal intake policies are unchanged. 1.28.0 (Dose V4.1, Sean 2026-10-17): Dose adequacy uses the minimum directed daily use and safety the maximum on every route; the per-nutrient UL bands and B7 subtraction are replaced by one product-level Dose ceiling (dose_safety_ceiling). Ordinary-adult magnesium (84 mg) and calcium (260 mg) contribution-policy targets and the potassium completed neutral are in dose_magnitudes.generic (Dose V4.1 section 3.1). Sports adequacy plateaus above former studied ranges; total daily caffeine feeds the product-level ceiling (dose_safety_ceiling.caffeine); sports co-primaries and probiotic strains average, hidden or unbenchmarked strains taking the shared neutral; evidence certainty no longer caps ATP, betaine or taurine Dose. Hidden amounts and completed no-reference conclusions take the shared Dose neutral on every route (section 2.3); config-owned Dose anchors carry reference semantics validated by schemas/dose_reference_semantics.schema.json. Above a highest studied dose adequacy plateaus (the above-studied-range credit is retired); immune zinc and vitamin D at their ULs are reduced only by the product-level ceiling; hidden botanical and collagen amounts take the neutral. 1.29.0: Sean approved revised43reference decisions and six-member prenatal critical group inside existing5-pointbudget on2026-10-18. One shared nutritional curve; unsupported discrete-dose extrapolations completed neutral; sports contribution targets are policy, not clinical minima; generic quarter-RDA/clinical-anchor shortcuts and sports composition credit retired. 1.29.1 integrates the reviewed omega marketing Evidence and molecular-form safeguards while retaining Dose V4.1 minimum-directed-daily exposure and native omega reference ownership. 1.31.0 (Dr Pham framework, 2026-10-28): no automatic generic Evidence floor exceeds the strong base (14 raw = 15.6/20). The branded (branded-rct level or BRAND_ id) and ingredient-allowlist 18-raw tier and the branded single-RCT 17-raw tier are retired; one trial is the moderate floor. No automatic floor reaches the exceptional band (19-20); a single ingredient goes above the strong floor only with a recorded clinician determination of its evidence body. The additive multi-ingredient pipeline is unchanged. Public bands: exceptional 19-20, strong 15-18, moderate 11-14, limited 6-10, preliminary 1-5; nutrition authority, Dose, Transparency, Verification and safety are unchanged.",
     "phase": "scoring_fairness_recalibration"
   },
@@ -1482,6 +1482,1232 @@
       "NOT_SCORED"
     ],
     "held_assessment_labels": {
+      "330196": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "b9d45ee76f120d639ab2a6a18f71f49e6e2e2afe5bcbbf9b9b5d51ba5c938100",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "American Ginseng Rhizome, Root Extract",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": "4:1",
+            "forms": [
+              {
+                "name": "Panax quinquefolius Rhizome Extract",
+                "ingredientId": 354841,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": null
+              },
+              {
+                "name": "Panax quinquefolius Root Extract",
+                "ingredientId": 305644,
+                "order": 2,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": "8W75VCV53Q"
+              }
+            ],
+            "plantPart": "rhizome and root",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Standing source-bound Not Scored publication policy applied to product 330196 on 2026-11-01. The label identifies Panax quinquefolius rhizome and root extract, but no approved exact-material Dose benchmark or completed no-benchmark decision covers this edition. Keep the scientific review open, with no new Dose or Evidence credit and no safety clearance.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/330196.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "330197": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "b9d45ee76f120d639ab2a6a18f71f49e6e2e2afe5bcbbf9b9b5d51ba5c938100",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "American Ginseng Rhizome, Root Extract",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": "4:1",
+            "forms": [
+              {
+                "name": "Panax quinquefolius Rhizome Extract",
+                "ingredientId": 354841,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": null
+              },
+              {
+                "name": "Panax quinquefolius Root Extract",
+                "ingredientId": 305644,
+                "order": 2,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": "8W75VCV53Q"
+              }
+            ],
+            "plantPart": "rhizome and root",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Standing source-bound Not Scored publication policy applied to product 330197 on 2026-11-01. The label identifies Panax quinquefolius rhizome and root extract, but no approved exact-material Dose benchmark or completed no-benchmark decision covers this edition. Keep the scientific review open, with no new Dose or Evidence credit and no safety clearance.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/330197.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "330198": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "b9d45ee76f120d639ab2a6a18f71f49e6e2e2afe5bcbbf9b9b5d51ba5c938100",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "American Ginseng Rhizome, Root Extract",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": "4:1",
+            "forms": [
+              {
+                "name": "Panax quinquefolius Rhizome Extract",
+                "ingredientId": 354841,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": null
+              },
+              {
+                "name": "Panax quinquefolius Root Extract",
+                "ingredientId": 305644,
+                "order": 2,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": "8W75VCV53Q"
+              }
+            ],
+            "plantPart": "rhizome and root",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Standing source-bound Not Scored publication policy applied to product 330198 on 2026-11-01. The label identifies Panax quinquefolius rhizome and root extract, but no approved exact-material Dose benchmark or completed no-benchmark decision covers this edition. Keep the scientific review open, with no new Dose or Evidence credit and no safety clearance.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/330198.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "330199": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "b9d45ee76f120d639ab2a6a18f71f49e6e2e2afe5bcbbf9b9b5d51ba5c938100",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "American Ginseng Rhizome, Root Extract",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": "4:1",
+            "forms": [
+              {
+                "name": "Panax quinquefolius Rhizome Extract",
+                "ingredientId": 354841,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": null
+              },
+              {
+                "name": "Panax quinquefolius Root Extract",
+                "ingredientId": 305644,
+                "order": 2,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Ginseng",
+                "uniiCode": "8W75VCV53Q"
+              }
+            ],
+            "plantPart": "rhizome and root",
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Standing source-bound Not Scored publication policy applied to product 330199 on 2026-11-01. The label identifies Panax quinquefolius rhizome and root extract, but no approved exact-material Dose benchmark or completed no-benchmark decision covers this edition. Keep the scientific review open, with no new Dose or Evidence credit and no safety clearance.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/330199.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "18551": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "e9d9fd6f172eebdeeea3ddcf551f83dec7652609250128ba147e49c64cca3585",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[2]",
+            "raw_source_text": "Calcium",
+            "quantity": 100.0,
+            "unit": "mg",
+            "notes": "Calcium (Form: as Calcium Carbonate) ",
+            "forms": [
+              {
+                "name": "Calcium Carbonate",
+                "ingredientId": 292621,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "mineral",
+                "ingredientGroup": "Calcium",
+                "uniiCode": "H0G9379FGK"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[3]",
+            "raw_source_text": "Phosphorus",
+            "quantity": 40.0,
+            "unit": "mg",
+            "notes": "Phosphorus (Form: as Sodium Phosphate) ",
+            "forms": [
+              {
+                "name": "Sodium Phosphate",
+                "ingredientId": 4160,
+                "order": 1,
+                "prefix": "as",
+                "percent": null,
+                "category": "other",
+                "ingredientGroup": "Sodium Phosphate",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[4]",
+            "raw_source_text": "Magnesium",
+            "quantity": 50.0,
+            "unit": "mg",
+            "notes": "Magnesium (Form: as Magnesium Oxide) ",
+            "forms": [
+              {
+                "name": "Magnesium Oxide",
+                "ingredientId": 4046,
+                "order": 1,
+                "prefix": "as",
+                "percent": null,
+                "category": "mineral",
+                "ingredientGroup": "Magnesium",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[5]",
+            "raw_source_text": "Chloride",
+            "quantity": 55.0,
+            "unit": "mg",
+            "notes": "Chloride (Form: as Potassium Chloride) ",
+            "forms": [
+              {
+                "name": "Potassium Chloride",
+                "ingredientId": 4366,
+                "order": 1,
+                "prefix": "as",
+                "percent": null,
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "Potassium Chloride",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[6]",
+            "raw_source_text": "Sodium",
+            "quantity": 60.0,
+            "unit": "mg",
+            "notes": "Sodium (Form: as Sodium Phosphate) ",
+            "forms": [
+              {
+                "name": "Sodium Phosphate",
+                "ingredientId": 4160,
+                "order": 1,
+                "prefix": "as",
+                "percent": null,
+                "category": "other",
+                "ingredientGroup": "Sodium Phosphate",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[7]",
+            "raw_source_text": "Potassium",
+            "quantity": 60.0,
+            "unit": "mg",
+            "notes": "Potassium (Form: as Potassium Chloride) ",
+            "forms": [
+              {
+                "name": "Potassium Chloride",
+                "ingredientId": 4366,
+                "order": 1,
+                "prefix": "as",
+                "percent": null,
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "Potassium Chloride",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8]",
+            "raw_source_text": "Amino Acid Blend",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "L-Arginine",
+                "ingredientId": 285879,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "Arginine",
+                "uniiCode": "94ZLA3W45F"
+              },
+              {
+                "name": "L-Glutamine",
+                "ingredientId": 286075,
+                "order": 2,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "Glutamine",
+                "uniiCode": "0RH81L854J"
+              },
+              {
+                "name": "L-Histidine",
+                "ingredientId": 286361,
+                "order": 3,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "Histidine",
+                "uniiCode": "4QD397987E"
+              },
+              {
+                "name": "L-Isoleucine",
+                "ingredientId": 285980,
+                "order": 4,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "Isoleucine",
+                "uniiCode": "04Y7590D77"
+              },
+              {
+                "name": "L-Leucine",
+                "ingredientId": 285976,
+                "order": 5,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "Leucine",
+                "uniiCode": "GMW67QNF9C"
+              },
+              {
+                "name": "L-Lysine Hydrochloride",
+                "ingredientId": 286783,
+                "order": 6,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "Lysine",
+                "uniiCode": "K3Z4F929H6"
+              },
+              {
+                "name": "L-Methionine",
+                "ingredientId": 286813,
+                "order": 7,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "METHIONINE",
+                "uniiCode": "AE28F7PNPL"
+              },
+              {
+                "name": "L-Phenylalanine",
+                "ingredientId": 286891,
+                "order": 8,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "Phenylalanine",
+                "uniiCode": "47E5O17Y3R"
+              },
+              {
+                "name": "L-Threonine",
+                "ingredientId": 287016,
+                "order": 9,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "THREONINE",
+                "uniiCode": "2ZD004190S"
+              },
+              {
+                "name": "L-Valine",
+                "ingredientId": 285981,
+                "order": 10,
+                "prefix": null,
+                "percent": null,
+                "category": "amino acid",
+                "ingredientGroup": "Valine",
+                "uniiCode": "HG18B9YRS7"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9]",
+            "raw_source_text": "Sustamine(TM) L-Alanyl-L-Glutamine",
+            "quantity": 100.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[10]",
+            "raw_source_text": "Citrus sinensis",
+            "quantity": 100.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[11]",
+            "raw_source_text": "Quercetin",
+            "quantity": 100.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[12]",
+            "raw_source_text": "Catechins",
+            "quantity": 50.0,
+            "unit": "mg",
+            "notes": "Catechins (Form: from green tea leaf extract PlantPart: leaf) ",
+            "forms": [
+              {
+                "name": "Green Tea leaf extract",
+                "ingredientId": 16161,
+                "order": 1,
+                "prefix": "from",
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Green Tea",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": "leaf)",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[13]",
+            "raw_source_text": "Betaine Anhydrous",
+            "quantity": 850.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[14]",
+            "raw_source_text": "Tender Coconut Water Solids",
+            "quantity": 100.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Standing source-bound Not Scored publication policy applied to product 18551 on 2026-11-01. This exact label has unfinished Dose and Evidence source assessments; neither a general benchmark nor benefit credit is established. Keep the scientific review open, with no new Dose or Evidence credit and no safety clearance.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/18551.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
+      "178728": {
+        "source_name": "NIH DSLD",
+        "formula_fingerprint": "1601582690e849a22ccbc7e678e62ac1551d3890d1e58929ec6512e6d007a5c6",
+        "source_rows": [
+          {
+            "raw_source_path": "ingredientRows[2].nestedRows[0]",
+            "raw_source_text": "Dietary Fiber",
+            "quantity": 4.0,
+            "unit": "Gram(s)",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[4]",
+            "raw_source_text": "Calcium",
+            "quantity": 10.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[5]",
+            "raw_source_text": "Iron",
+            "quantity": 0.4,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[7]",
+            "raw_source_text": "Potassium",
+            "quantity": 70.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8]",
+            "raw_source_text": "Organic Greens Blend",
+            "quantity": 1000.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[0]",
+            "raw_source_text": "organic Wheat Grass",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[1]",
+            "raw_source_text": "organic Alfalfa",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[2]",
+            "raw_source_text": "organic Barley",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[3]",
+            "raw_source_text": "organic Blue Green Algae",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "Spirulina",
+                "ingredientId": 39538,
+                "order": 1,
+                "prefix": null,
+                "percent": null,
+                "category": "botanical",
+                "ingredientGroup": "Blue-Green Algae",
+                "uniiCode": null
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[4]",
+            "raw_source_text": "organic Broccoli",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[5]",
+            "raw_source_text": "organic Green Cabbage",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[6]",
+            "raw_source_text": "organic Kale",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[7]",
+            "raw_source_text": "organic Parsley",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[8]",
+            "raw_source_text": "organic Spinach",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[8].nestedRows[9]",
+            "raw_source_text": "organic Aloe vera inner leaf gel 200:1 concentrate",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": "leaf",
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9]",
+            "raw_source_text": "Organic Superfood Blend",
+            "quantity": 4500.0,
+            "unit": "mg",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[0]",
+            "raw_source_text": "organic Beet",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[1]",
+            "raw_source_text": "organic Carrot",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[2]",
+            "raw_source_text": "organic Red Raspberry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[3]",
+            "raw_source_text": "organic Cranberry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[4]",
+            "raw_source_text": "organic Strawberry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[5]",
+            "raw_source_text": "organic Blueberry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[6]",
+            "raw_source_text": "organic Pomegranate",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[7]",
+            "raw_source_text": "organic Acai",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[8]",
+            "raw_source_text": "organic Blackberry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[9]",
+            "raw_source_text": "organic Cherry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[10]",
+            "raw_source_text": "organic Black Raspberry",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[11]",
+            "raw_source_text": "organic Acerola extract",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "extract",
+                "source": "name_extraction"
+              },
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[12]",
+            "raw_source_text": "organic Apple",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[13]",
+            "raw_source_text": "organic Apple Pectin",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[14]",
+            "raw_source_text": "organic Banana",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[15]",
+            "raw_source_text": "organic Flax",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[16]",
+            "raw_source_text": "organic Mango",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[17]",
+            "raw_source_text": "organic Papaya",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[18]",
+            "raw_source_text": "organic Peach",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[19]",
+            "raw_source_text": "organic Pear",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[20]",
+            "raw_source_text": "organic Pineapple",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[21]",
+            "raw_source_text": "organic Tomato",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[9].nestedRows[22]",
+            "raw_source_text": "organic Watermelon",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [
+              {
+                "name": "organic",
+                "source": "name_extraction"
+              }
+            ],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[10]",
+            "raw_source_text": "Probiotic Blend",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": "Probiotic Blend: Note: 500 million CFU ",
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[10].nestedRows[0]",
+            "raw_source_text": "Lactobacillus acidophilus",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[10].nestedRows[1]",
+            "raw_source_text": "Lactobacillus rhamnosus",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[10].nestedRows[2]",
+            "raw_source_text": "Lactobacillus brevis",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[10].nestedRows[3]",
+            "raw_source_text": "Lactobacillus plantarum",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[10].nestedRows[4]",
+            "raw_source_text": "Bifidobacterium bifidum",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          },
+          {
+            "raw_source_path": "ingredientRows[10].nestedRows[5]",
+            "raw_source_text": "Bifidobacterium longum",
+            "quantity": 0.0,
+            "unit": "NP",
+            "notes": null,
+            "forms": [],
+            "plantPart": null,
+            "genus": null,
+            "species": null
+          }
+        ],
+        "reviewer": "Sean Cheick",
+        "review_date": "2026-10-30",
+        "review_scope": "Standing source-bound Not Scored publication policy applied to product 178728 on 2026-11-01. This exact label has unfinished Dose and Evidence source assessments; neither a general benchmark nor benefit credit is established. Keep the scientific review open, with no new Dose or Evidence credit and no safety clearance.",
+        "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/178728.pdf",
+        "blockers": [
+          "dose_benchmark_identity_unresolved",
+          "evidence_assessment_incomplete"
+        ],
+        "unfinished_source_assessment": "dose_benchmark_identity_unresolved"
+      },
       "232035": {
         "source_name": "NIH DSLD",
         "formula_fingerprint": "fcd2b29e8f47de1402571477fe407de0ed71566724e1e0c2cb17c6836aa1b340",
