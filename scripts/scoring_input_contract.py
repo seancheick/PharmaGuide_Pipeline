@@ -5613,24 +5613,11 @@ def _profile_row_title_pos(row_contract: Dict[str, Any], title: str) -> Optional
 @lru_cache(maxsize=1)
 def _botanical_title_alias_index() -> Dict[str, List[str]]:
     """Identity key -> botanical aliases suitable for product-title matching."""
-    try:
-        raw = json.loads((_DATA_DIR / "botanical_ingredients.json").read_text())
-    except Exception:  # pragma: no cover - absence only reduces title matching
-        return {}
     index: Dict[str, set[str]] = {}
-    for entry in _safe_list(raw.get("botanical_ingredients")):
-        if not isinstance(entry, dict):
+    for registry, _identity, names in identity_registry_name_lists():
+        if registry != "botanical":
             continue
-        aliases = {
-            _norm(entry.get("id")).replace("_", " "),
-            _norm(entry.get("standard_name")),
-            _norm(entry.get("latin_name")),
-        }
-        latin = _norm(entry.get("latin_name"))
-        if latin and " " in latin:
-            aliases.add(latin.split(" ", 1)[0])
-        aliases.update(_norm(alias) for alias in _safe_list(entry.get("aliases")))
-        aliases = {alias for alias in aliases if alias}
+        aliases = {_norm(name) for name in names if _norm(name)}
         for key in aliases:
             index.setdefault(key, set()).update(aliases)
     return {key: sorted(values) for key, values in index.items()}
