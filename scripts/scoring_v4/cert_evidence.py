@@ -76,7 +76,29 @@ def cert_entry_brand_matches_product(product: Dict[str, Any], entry: Dict[str, A
     matched_tokens = brand_tokens(matched_brand)
     if not product_tokens or not matched_tokens:
         return False
-    return product_tokens.issubset(matched_tokens) or matched_tokens.issubset(product_tokens)
+    if product_tokens.issubset(matched_tokens) or matched_tokens.issubset(product_tokens):
+        return True
+    # Manufacturer-owned listings can print the consumer brand in an official
+    # trade designation. Revalidate that identity through the canonical matcher,
+    # not another designation parser or an assertion in the enriched row.
+    if _norm(entry.get("scope")) not in {"sku", "product_line"}:
+        return False
+    title = product.get("fullName") or product.get("product_name") or product.get("name")
+    if not title or not entry.get("record_id") or not entry.get("program"):
+        return False
+    from cert_resolver import resolve
+
+    context = {key: product.get(key) for key in ("form_factor_canonical", "form_factor", "netContents")}
+    matches = resolve(
+        product.get("brandName") or product.get("brand_name") or product.get("brand") or "",
+        title, [entry["program"]], _cert_registry(),
+        dsld_id=str(product.get("dsld_id") or product.get("id") or ""),
+        label_context=context,
+    )
+    proof_fields = ("record_id", "matched_brand", "matched_product", "source_url", "snapshot_date", "scope")
+    return any(match.scores_points() and all(
+        getattr(match, field) == entry.get(field) for field in proof_fields
+    ) for match in matches)
 
 
 def verified_cert_entries(product: Dict[str, Any]) -> List[Dict[str, Any]]:
