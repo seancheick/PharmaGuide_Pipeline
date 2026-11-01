@@ -939,6 +939,10 @@ def _append_signal(result: SafetyResult, code: str) -> None:
 
 
 def _dose_mg(row: Dict[str, Any]) -> Optional[float]:
+    from scoring_v4.exposure import quantity_is_unresolved
+
+    if quantity_is_unresolved(row):
+        return None
     quantity = _as_float(
         row.get("quantity")
         if row.get("quantity") is not None

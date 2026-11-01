@@ -769,3 +769,27 @@ def test_gate_safety_does_not_import_v3_scorer() -> None:
     source = Path(mod.__file__).read_text(encoding="utf-8")
     assert "from score_supplements " not in source
     assert "import score_supplements\n" not in source
+
+
+@pytest.mark.parametrize("operator", ["ambiguous", "unknown"])
+def test_unresolved_caffeine_number_is_not_a_confirmed_dose(operator):
+    from scoring_v4.gate_safety import _dose_mg
+    row = {"quantity": 700.0, "unit": "mg", "quantity_operator": operator}
+    assert _dose_mg(row) is None
+
+
+def test_exact_caffeine_number_remains_quantified():
+    from scoring_v4.gate_safety import _dose_mg
+    assert _dose_mg({"quantity": 700.0, "unit": "mg", "quantity_operator": "="}) == 700.0
+
+
+@pytest.mark.parametrize("operator", ["ambiguous", "unknown"])
+def test_source_conflict_keeps_review_caution_without_confirmed_high_caffeine(operator):
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = _with_scorable_caffeine({"fullName": "Pre-Workout Energy"}, name="Caffeine", quantity=700)
+    product["ingredient_quality_data"]["ingredients_scorable"][0]["quantity_operator"] = operator
+    result = evaluate_safety_gate(product)
+    assert result.verdict == "CAUTION"
+    assert result.needs_review is True
+    assert "STIMULANT_CAFFEINE_UNDISCLOSED_PREWORKOUT" in result.safety_signals
+    assert "STIMULANT_CAFFEINE_HIGH_DOSE" not in result.safety_signals
