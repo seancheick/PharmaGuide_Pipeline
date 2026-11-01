@@ -4140,6 +4140,18 @@ The completed Clean/Enrich/Score run failed the snapshot scoring-completeness pr
 - 5,884 catalog products ship *scored* with exactly `evidence_assessment_incomplete` through `_retained_evidence_is_publishable`, and both 18551 and 178728 pass that check. Holding them as Not Scored follows the pasted direction, but it treats them differently from that class. Removing the two hold entries would publish them as scored partial (40.6 and 22.7).
 - The direction asked to preserve a ginseng–digoxin precaution. `RULE_INGREDIENT_GINSENG` has none on main or on this branch, so nothing was lost; adding one would be a sourced `/data-fix` entry.
 
+**Fresh-context review (same day) and fixes:**
+- **Ginseng scope leak (medium), fixed.** A ratio clause matched inside "4:1.5", "4:1 to 10:1" and "10:1 and 4:1", and a stated ginsenoside standard or solvent was not excluded.
+  - `dose_assessment.py::_dose_source_preparation_matches` now requires the row's declared ratios to be exactly the clause's one ratio. Four exact records use ratio clauses (chaste tree 10:1, Panax 4:1, American ginseng rhizome 4:1, this record). No corpus chaste tree or ginseng row declares two ratios (21 ratio rows checked).
+  - The record now also excludes ginsenoside, standardized, ethanol, alcohol, water, aqueous and solvent. Six fail-first cases were added.
+- **Title rule dropped an undosed blend member after the form word (medium), fixed.** The variant now stops at the label's own name for any non-header row. A binomial row is covered by its standard name, and both shapes are pinned. Corpus census is unchanged: 5 role changes.
+- **Low findings:**
+  - The two holds now pin `unfinished_source_assessment: null`.
+  - A test pins the 14 generic blend categories, because "generic" means no `manufacturer` key.
+  - A test comment was corrected.
+  - The holds keep reviewer "Sean Cheick" (the standing policy owner); their scope text records the agent re-binding.
+- **Slice after the fixes:** 2054 passed across the owner and consumer files, including every test touching `required_form_terms` and `_role_title_text`. Python correctness: 0 new.
+
 **Validation:**
 - Reconciled slice: `scripts/test.sh fast` over the held-assessment, non-scorable identity, exact-scope, title-ownership, blend-subject and config-registry files: 490 passed.
 - Before the merge: title slice 113 passed, exact scopes 262 passed, botanical/blend slice 2456 passed, Python correctness 0 new.
