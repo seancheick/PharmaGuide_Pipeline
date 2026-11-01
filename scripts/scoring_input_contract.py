@@ -7054,12 +7054,13 @@ def _role_title_text(title_norm: str, rows: List[Dict[str, Any]]) -> str:
     # "Endurance Booster Chew Orange" (18551): one or two words that follow
     # the dosage form and end the title are its flavor variant, read by the
     # same stop rules as a flavor phrase. The label's own name for an undosed
-    # blend member also ends it ("Immune Gummies Elderberry").
+    # blend member also ends it ("Immune Gummies Elderberry"), as does a row's
+    # canonical identity ("Calm Chews Ashwagandha" on Withania somnifera).
     label_name_tokens = {
         token
         for row in rows
         if not _role_is_blend_member(row)
-        for key in ("name", "standard_name", "standardName")
+        for key in ("name", "standard_name", "standardName", "canonical_id")
         for token in re.split(r"[^a-z0-9]+", _norm(row.get(key)))
         if token
     }

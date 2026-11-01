@@ -199,7 +199,8 @@ def test_a_dosed_active_after_the_dosage_form_stays_title_named(title, canonical
     assert _roles(title, rows)[canonical] == "named_in_product_title"
 
 
-@pytest.mark.parametrize("title", ["Immune Gummies Elderberry", "Liquid Drops Elderberry"])
+@pytest.mark.parametrize("title", ["Immune Gummies Elderberry", "Liquid Drops Elderberry",
+                                   "Organic Liquid Elderberry"])
 def test_a_blend_member_named_after_the_dosage_form_stays_title_named(title):
     # The variant words are the label's own name for an undosed blend member.
     rows = [
@@ -212,6 +213,8 @@ def test_a_blend_member_named_after_the_dosage_form_stays_title_named(title):
 @pytest.mark.parametrize("title, canonical, name, standard_name", [
     ("Immune Chews Elderberry", "elderberry", "Sambucus nigra", "Elderberry"),
     ("Kids Gummies Turmeric", "turmeric", "Curcuma longa", "Turmeric"),
+    # No standard name: the row's canonical identity is the title's word.
+    ("Calm Chews Ashwagandha", "ashwagandha", "Withania somnifera", None),
 ])
 def test_a_binomial_row_after_the_dosage_form_stays_title_named(title, canonical, name, standard_name):
     rows = [_row(canonical, name, 50.0, standard_name=standard_name),
