@@ -407,7 +407,8 @@ def _dose_source_preparation_matches(product: Dict[str, Any], row: Dict[str, Any
     # A no-DER scope excludes every affirmative declared ratio, not a
     # finite list of ratios seen during review. Keep this feature private to
     # source matching and preserve the shared clause-negation semantics.
-    ratio_pattern = re.compile(r"(?<![\w.])\d+(?:\.\d+)?\s*:\s*\d+(?:\.\d+)?(?![\w.])")
+    # A sentence-final period ends a ratio ("4:1 to 10:1."); a decimal does not.
+    ratio_pattern = re.compile(r"(?<![\w.])\d+(?:\.\d+)?\s*:\s*\d+(?:\.\d+)?(?!\w|\.\d)")
     ratio_feature = "declared extraction ratio"
     has_declared_ratio = False
     declared_ratios = {re.sub(r"\s+", "", ratio.group()) for ratio in ratio_pattern.finditer(text)}

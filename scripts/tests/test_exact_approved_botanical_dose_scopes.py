@@ -404,6 +404,8 @@ def test_american_4to1_powder_scope_stays_with_that_exact_material(exact_scope_p
     "4:1.5", "4:1 to 10:1", "10:1 and 4:1",
     # The no-benchmark rationale rests on no stated potency or solvent.
     "4:1; standardized to 5% ginsenosides", "4:1 ethanol extract", "4:1 water extract",
+    # A sentence-final period still ends a ratio; solvent adjectives count.
+    "4:1 to 10:1.", "4:1; ethanolic extract", "4:1 hydroalcoholic extract",
 ])
 def test_american_4to1_powder_scope_needs_the_one_unstandardized_ratio(exact_scope_products, notes):
     from scoring_v4.modules.botanical_profile import _botanical_benchmark

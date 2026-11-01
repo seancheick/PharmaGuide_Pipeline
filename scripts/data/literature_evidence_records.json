@@ -39703,7 +39703,13 @@
           "alcohol",
           "water",
           "aqueous",
-          "solvent"
+          "solvent",
+          "ethanolic",
+          "hydroalcoholic",
+          "hydroethanolic",
+          "alcoholic",
+          "methanol",
+          "methanolic"
         ],
         "dosage_forms": [
           "powder"
