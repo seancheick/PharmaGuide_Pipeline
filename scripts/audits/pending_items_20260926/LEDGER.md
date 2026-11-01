@@ -4093,3 +4093,22 @@ A single word counts only when a registry lists it as that identity's whole name
 - American ginseng species coverage matches the binomial literally.
 - "Ginseng Root Extract" with a Panax quinquefolius form maps to `ginseng_root_panax`; main does the same.
 - RXCUI 3036 is the cystine concept and is not stereo-specific.
+
+## November 1 — snapshot preflight held 6 products (branch `claude/title-flavor-variant-20261101`)
+
+**What failed:** Sean's corpus run from main `8a0e28dbe` passed all 37 brands. The snapshot's scoring assessment completeness preflight then failed on 6 scored products with `unfinished_source_assessment = dose_benchmark_identity_unresolved`, and release did not start. The gate is `audit_source_of_truth_contract.py::audit_scoring --completion-only`. The blocker comes from `scoring_v4/scored_artifact.py::unfinished_source_assessment`: one botanical Dose purpose whose benchmark is "unresolved" holds the whole product.
+
+**Causes, from raw labels:**
+- 330196–330199 BulkSupplements "American Ginseng Extract Powder 1000 mg": the American ginseng identity restored by PR #318 has no Dose benchmark record. The label gives no extract ratio or ginsenoside standardization.
+- 178728 Spring Valley "Raw Superfoods": PR #320's title matching made the superfood blend header a Dose subject, and the blend has no benchmark.
+- 18551 GNC "Endurance Booster Chew Orange": a false title match. The flavor variant "Orange" named the 100 mg Citrus sinensis row through the registry alias index PR #320 added.
+
+**Fixed here (18551, Sean: "Fix the matcher"):** `scoring_input_contract.py::_role_title_text` now reads one or two words that follow the dosage form and end the title as the flavor variant. It uses the flavor phrase's stop rules, shared through `_ends_flavor_phrase`, and a leading form word ("Liquid Elderberry") still describes the product. Tests: 3 fail-first cases plus the real 18551 label (no title role, no unfinished assessment) in `test_evidence_title_ownership.py`. Controls cover a dosed active after the form, a number after the form, and the 268432 leading-form case; that last control fails under the looser rule. Census of roles on main vs this branch across all 15,447 enriched products: 5 changes, all flavor variants (18551 citrus; peppermint in 222788, 222896, 222904 and 222909, "CBD … Chocolate Mint", whose other ingredients declare "organic Chocolate Mint flavor"). Title-role slice: 113 passed. Python correctness: 0 new findings.
+
+**Open for Sean — no-benchmark Dose policy (5 products):** Sean rejected holds ("we can focus on the other actives"). Today `quality_score.json` `dose_subscale.unbenchmarked_neutral_public` (11.4/20) applies only after a per-ingredient review concludes "no applicable benchmark"; an unreviewed ingredient blocks the product. Research, with PubMed records re-checked:
+- No rater documents excluding or penalizing such an ingredient. Labdoor and NMBER score per ingredient.
+- American ginseng *root* has regulator ranges (Health Canada monograph 0.5–12 g/day dried root by use; WHO 3–9 g). Extracts are dosed only per product: CVT-E002 200 mg twice daily (PMID 14687309); Cereboost 100–400 mg (PMID 20676609).
+- The glycemia trials found 1–3 g equally effective (PMID 11273850).
+- A 1000 mg extract of unstated strength cannot be compared to a dried-root range.
+
+The proposed policy is in the session report. No policy change is made without Sean.
