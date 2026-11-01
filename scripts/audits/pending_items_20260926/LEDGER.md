@@ -4242,3 +4242,21 @@ follow-up. Main/candidate detail-blob comparison was also identical for all eigh
 labels with zero export-contract errors.
 
 PR review corrections: runtime provenance is now shared by stage manifests and gate receipts through `audits/run_verification_gate.py::runtime_identity`. It binds Python/executable, installed dependency versions and actual optional RapidFuzz availability/implementation. Missing or changed runtime proof invalidates reuse. Fully reused computation now enters the existing strict enrichment/coverage gate path with `validation_only=True`; fail-first controls prove gate failures propagate and no product stage runs. Final focused checkpoint: 305 passed, 1 declared absent-built-interaction-DB skip. Updated 8-label cold/resume measurement 8.453s/2.328s includes both strict pre-score gates and preserves every stage output/manifest byte.
+
+## November 1 — final integration audit of Claude's omega-title repair
+
+Pinned local Claude commit 22726d909 copied into the integration branch as
+211cffaf1; Claude's separate tree was not mutated. The proposed unknown-row
+identity fallback correctly recovers the CVS18141 whole fatty-acid blend, but
+four fail-first controls showed that negated source/title phrases also promoted
+it. Owner: scoring_input_contract.py::_identities_spelled through the existing
+normalization.py::find_affirmative_label_match. Preserve token spans/punctuation
+and require the shared affirmative predicate on every matched identity phrase.
+No new negation list, scoring threshold, ingredient registry or clinical credit.
+The title matcher slice passes76 tests including the original positive raw label,
+nested/preparation/projection controls and no/without/-free negatives. The shared
+owner's chemistry exception for spaced 'free base' remains intact.
+Final measurement, independent review and CI/local qualification remain pending
+for the combined source batch; no pipeline or publication is authorized by these
+focused tests alone. Latest operator corpus remains at main2ef348106, snapshot
+blocked on CVS18141 title defect and Ritual278454 certification drift.

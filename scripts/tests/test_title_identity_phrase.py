@@ -192,3 +192,13 @@ def test_omega_title_keeps_its_fatty_acid_blend_as_the_dose_purpose():
     assessment = build_scored_artifact(enriched)["quality_pillars_v4"]["dose"]["explanation"]["assessment"]
     assert assessment["dose_participation_basis"] == "declared_purpose_equal_weight"
     assert any("fish_oil" in subject for subject in assessment["unbenchmarked_purpose_ingredients"])
+
+
+@pytest.mark.parametrize('name,title', [
+    ('Plant oil blend (no fish oil)', 'omega-3 100 mg'),
+    ('Plant oil blend without fish oil', 'omega-3 100 mg'),
+    ('Plant oil blend (fish oil-free)', 'omega-3 100 mg'),
+    ('Purified fish oil concentrate', 'omega-3-free'),
+])
+def test_unmapped_identity_fallback_requires_affirmative_source_and_title(name, title):
+    assert not _named(name, None, title)

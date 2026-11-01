@@ -21,7 +21,7 @@ from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Tuple
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
 # the scorer and only reads data files lazily.
-from normalization import extract_enzyme_activity
+from normalization import extract_enzyme_activity, find_affirmative_label_match
 
 from constants import (
     CLEANER_NON_EFFICACY_ROLES,
@@ -7041,12 +7041,16 @@ def _identities_spelled(texts: tuple) -> frozenset:
     index = _identity_phrase_index()
     spelled = set()
     for text in texts:
-        forms = [_title_token_forms(token) for token in _title_tokens(text)]
+        words = list(re.finditer(r"[a-z0-9]+", text))
+        forms = [_title_token_forms(word.group()) for word in words]
         for start, start_forms in enumerate(forms):
             for word in start_forms:
                 for tokens, identity in index.get(word, ()):
                     if _phrase_in_title(list(tokens), forms[start:start + len(tokens)]):
-                        spelled.add(identity)
+                        phrase = text[words[start].start():words[start + len(tokens) - 1].end()]
+                        pattern = re.compile(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)")
+                        if find_affirmative_label_match(pattern, text):
+                            spelled.add(identity)
     return frozenset(spelled)
 
 
