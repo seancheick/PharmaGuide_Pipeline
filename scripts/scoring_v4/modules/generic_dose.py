@@ -356,13 +356,21 @@ def _score_declared_purpose_window(
 
     # A physical purpose may have a compatibility projection of the same
     # source row.  Count it once by canonical identity, falling back to source.
-    purposes: Dict[str, Dict[str, Any]] = {}
+    grouped: Dict[str, List[Dict[str, Any]]] = {}
     for row in purpose_rows:
         identity = _norm_text(row.get("canonical_id"))
         source = str(row.get("raw_source_path") or row.get("source_row_ref") or "").strip()
         key = identity or source or _norm_text(row.get("name"))
         if key:
-            purposes.setdefault(key, row)
+            grouped.setdefault(key, []).append(row)
+    # Two source rows of one identity share its vote. The heaviest speaks for
+    # it, as in the profile owners' primary, so a small sibling's completed
+    # review cannot stand in for the dominant row's (KSM-66 beside a plain
+    # ashwagandha powder).
+    purposes: Dict[str, Dict[str, Any]] = {}
+    for key, group in grouped.items():
+        heaviest = mass_primary_label_actives(product, group) if len(group) > 1 else []
+        purposes[key] = heaviest[0] if heaviest else group[0]
 
     adequacy = [
         row for row in _safe_list(_safe_dict(product.get("rda_ul_data")).get("adequacy_results"))

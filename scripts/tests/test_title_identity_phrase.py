@@ -54,6 +54,12 @@ def _named(name, canonical, text):
     ("Selenium (as L-selenomethionine)", "selenium", "as l-theanine for calm"),
     ("Vitamin E (as d-alpha tocopheryl acetate)", "vitamin_e", "supports immunity with nutrients such as d and k"),
     ("organic sprouted Brown Rice Protein", "rice_protein", "raw protein vanilla spiced chai"),
+    # A head word qualified by another identity, or one that is an identity itself.
+    ("Maitake Mushroom powder", "maitake", "reishi mushroom extract"),
+    ("Pumpkin Seed Protein", "pumpkin", "grass fed collagen protein fair trade chocolate"),
+    ("Lactobacillus paracasei DSM-16105", "lactobacillus_paracasei", "lactobacillus acidophilus cul-21"),
+    ("Chaga Mushroom", "chaga", "lion's mane mushroom coffee"),
+    ("Fast-Acting Comfort Blend", "fast_acting_comfort_blend", "comfort"),
 ])
 def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
     assert not _named(name, canonical, text)
@@ -94,6 +100,9 @@ def test_one_shared_word_does_not_name_the_ingredient(name, canonical, text):
     ("Hemp extract", "nha_hemp_extract", "hemp+ stress relief"),
     # A non-plural -s word keeps itself while a plural title word is read singular.
     ("Citrus Bioflavonoid", None, "citrus bioflavonoids 1000 mg"),
+    # The label name's head word, unqualified in the title (220046).
+    ("Maitake Mushroom powder", "maitake", "mushroom complex"),
+    ("Lion's Mane Mushroom", "lions_mane", "lion's mane mushroom coffee"),
 ])
 def test_identity_phrase_or_registered_name_names_the_ingredient(name, canonical, text):
     assert _named(name, canonical, text)

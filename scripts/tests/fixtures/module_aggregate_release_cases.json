@@ -790,8 +790,7 @@
     },
     "expected_overall": "research_present_applicability_unestablished",
     "expected_blockers": [
-      "clinical_sources_ineligible",
-      "literature_applicability_unestablished"
+      "clinical_sources_ineligible"
     ]
   },
   {
@@ -1097,8 +1096,7 @@
     },
     "expected_overall": "research_present_applicability_unestablished",
     "expected_blockers": [
-      "clinical_sources_ineligible",
-      "literature_applicability_unestablished"
+      "clinical_sources_ineligible"
     ]
   },
   {

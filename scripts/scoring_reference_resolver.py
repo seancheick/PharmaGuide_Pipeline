@@ -144,28 +144,6 @@ def iqm_reference_index() -> Dict[str, Dict[str, Any]]:
     }
 
 
-@lru_cache(maxsize=1)
-def iqm_registered_names() -> Tuple[Tuple[str, Tuple[Any, ...]], ...]:
-    """Every name each IQM entry registers: standard name, aliases, form names
-    and form aliases, as (canonical id, names) pairs.
-
-    Title matching reads who a word names from this; the scoring contract keeps
-    no IQM index of its own (it has no form matcher).
-    """
-    def listed(value: Any) -> list:
-        return value if isinstance(value, list) else []
-
-    registered = []
-    for key, entry in iqm_reference_index().items():
-        names = [entry.get("standard_name")] + listed(entry.get("aliases"))
-        for form_name, form in (entry.get("forms") or {}).items():
-            names.append(form_name)
-            if isinstance(form, dict):
-                names.extend(listed(form.get("aliases")))
-        registered.append((key, tuple(names)))
-    return tuple(registered)
-
-
 def iqm_reference_entry(canonical_id: Any) -> Optional[Dict[str, Any]]:
     """Return the exact IQM entry for a canonical id, without alias guessing."""
     key = _norm(canonical_id)
@@ -433,6 +411,40 @@ def is_known_botanical(canonical_id: Any = None, name: Any = None, aliases: Any 
     botanical_ingredients.json."""
     index = _botanical_identity_index()
     return any(k in index for k in _identity_keys(canonical_id, name, aliases))
+
+
+@lru_cache(maxsize=1)
+def identity_registry_name_lists() -> Tuple[Tuple[str, str, Tuple[str, ...]], ...]:
+    """(registry, identity, names) for every IQM and botanical identity.
+
+    IQM names are the standard name, aliases, form names and form aliases;
+    botanical names are the id, standard name, Latin binomial and its genus,
+    and aliases. Raw strings: callers tokenize them their own way.
+    """
+    def _list(value: Any) -> list:
+        return value if isinstance(value, list) else []
+
+    out: List[Tuple[str, str, Tuple[str, ...]]] = []
+    for key, entry in iqm_reference_index().items():
+        names = [entry.get("standard_name")] + _list(entry.get("aliases"))
+        for form_name, form in (entry.get("forms") or {}).items():
+            names.append(form_name)
+            if isinstance(form, dict):
+                names.extend(_list(form.get("aliases")))
+        out.append(("iqm", key, tuple(str(name) for name in names if name)))
+    try:
+        raw = json.loads(_BOTANICAL_IDENTITY_PATH.read_text())
+    except Exception:  # pragma: no cover - absence only reduces name coverage
+        raw = {}
+    for entry in _list(raw.get("botanical_ingredients")):
+        if isinstance(entry, dict) and entry.get("id"):
+            key = str(entry["id"])
+            latin = _norm(entry.get("latin_name"))
+            names = [key.replace("_", " "), entry.get("standard_name"), latin] + _list(entry.get("aliases"))
+            if " " in latin:
+                names.append(latin.split(" ", 1)[0])
+            out.append(("botanical", key, tuple(str(name) for name in names if name)))
+    return tuple(out)
 
 
 def has_therapeutic_reference(canonical_id: Any = None, name: Any = None, aliases: Any = None) -> bool:
