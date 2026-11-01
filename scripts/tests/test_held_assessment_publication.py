@@ -17,6 +17,98 @@ NEW_BLOCKERS = {
     '59635': ['probiotic_evidence_assessment_incomplete'],
 }
 
+RELEASE_FAILURE_IDS = ['330196', '330197', '330198', '330199', '18551', '178728']
+RELEASE_FAILURE_BLOCKERS = {
+    **{pid: ['dose_benchmark_identity_unresolved'] for pid in RELEASE_FAILURE_IDS[:4]},
+    **{pid: ['dose_benchmark_identity_unresolved', 'evidence_assessment_incomplete']
+       for pid in RELEASE_FAILURE_IDS[4:]},
+}
+
+
+@pytest.fixture(scope='module')
+def release_failure_pairs():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_input_contract import score_eligible_identity_view
+    from score_supplements_v4 import score_product_v4
+
+    cleaner, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+    pairs = {}
+    for pid in RELEASE_FAILURE_IDS:
+        raw = json.loads((Path(__file__).parent / 'fixtures'
+                          / f'raw_held_assessment_{pid}.json').read_text())
+        enriched, errors = enricher.enrich_product(cleaner.normalize_product(raw))
+        assert not errors, pid
+        pairs[pid] = enriched, score_product_v4(score_eligible_identity_view(enriched))
+    return pairs
+
+
+@pytest.mark.parametrize('pid', RELEASE_FAILURE_IDS)
+def test_latest_release_hold_retains_exact_label_and_safety_without_quality(release_failure_pairs, pid):
+    from build_final_db import build_core_row, build_detail_blob, validate_export_contract
+    from core_export_model import PRODUCTS_CORE_COLUMNS
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+
+    enriched, v4 = release_failure_pairs[pid]
+    scored = assemble_scored_artifact(enriched, deepcopy(v4))
+    assert scored['assessment_readiness']['release_assessment']['blockers'] == RELEASE_FAILURE_BLOCKERS[pid]
+    assert scored['assessment_readiness']['release_assessment']['is_complete'] is False
+    assert scored['quality_score_status'] == 'not_scored'
+    assert scored['verdict'] == 'NOT_SCORED'
+    assert scored['score_unavailable_reason'] == 'release_assessment_incomplete'
+    for key in ('quality_score_v4_100', 'score_100_equivalent',
+                'score_display_100_equivalent', 'quality_pillars_v4', 'quality_tier'):
+        assert scored.get(key) is None, (pid, key)
+    assert scored['_v4_safety_gate'] == v4['v4_breakdown']['safety_gate']
+    assert scored['product_safety_status'] == 'no_known_catalog_concern'
+    assert validate_export_contract(enriched, scored) == []
+    blob = build_detail_blob(enriched, scored)
+    assert blob['label_record']['source_record_id'] == pid
+    assert blob['warnings'] is not None
+    assert blob['allergens'] is not None
+    core = dict(zip(PRODUCTS_CORE_COLUMNS,
+                    build_core_row(enriched, scored, '2026-11-01', detail_blob=blob), strict=True))
+    for key in ('quality_score_v4_100', 'score_100_equivalent', 'quality_tier',
+                'pillar_formulation_v4', 'pillar_dose_v4', 'pillar_evidence_v4'):
+        assert core[key] is None, (pid, key)
+
+
+@pytest.mark.parametrize('pid', RELEASE_FAILURE_IDS)
+@pytest.mark.parametrize('alteration', ['source_text', 'quantity'])
+def test_latest_release_hold_rejects_changed_original_label(release_failure_pairs, pid, alteration):
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+
+    enriched, v4 = deepcopy(release_failure_pairs[pid])
+    before = assemble_scored_artifact(enriched, deepcopy(v4))
+    assert before['quality_score_status'] == 'not_scored'
+    if alteration == 'source_text':
+        enriched['activeIngredients'][0]['raw_source_text'] += ' altered'
+    else:
+        enriched['activeIngredients'][0]['quantity'] += 1
+    changed = assemble_scored_artifact(enriched, deepcopy(v4))
+    assert changed['quality_score_status'] == 'scored'
+    assert changed['assessment_readiness']['release_assessment']['is_complete'] is False
+
+
+@pytest.mark.parametrize('pid', RELEASE_FAILURE_IDS)
+def test_latest_release_hold_keeps_safety_and_allergen_consumers(release_failure_pairs, pid, monkeypatch):
+    from build_final_db import build_detail_blob
+    from scoring_v4 import quality_score_config
+    from scoring_v4.scored_artifact import assemble_scored_artifact
+
+    enriched, v4 = release_failure_pairs[pid]
+    held = assemble_scored_artifact(enriched, deepcopy(v4))
+    held_blob = build_detail_blob(enriched, held)
+    cfg = deepcopy(quality_score_config.config())
+    del cfg['suppression']['held_assessment_labels'][pid]
+    monkeypatch.setattr(quality_score_config, 'config', lambda: cfg)
+    prior = assemble_scored_artifact(enriched, deepcopy(v4))
+    prior_blob = build_detail_blob(enriched, prior)
+    assert prior['quality_score_status'] == 'scored'
+    assert held['product_safety_status'] == prior['product_safety_status']
+    for key in ('warnings', 'warnings_profile_gated', 'allergens', 'warning_rule_refs'):
+        assert held_blob.get(key) == prior_blob.get(key), (pid, key)
+
 SUBMISSION_HOLDS = [
     ('PG_SUB_1A28723DBDAF4AC1897AA5FF156FACA1', 'no_known_catalog_concern'),
     ('PG_SUB_C926B40D83F1491CB6CD3EEBEBC73FC7', 'caution'),
