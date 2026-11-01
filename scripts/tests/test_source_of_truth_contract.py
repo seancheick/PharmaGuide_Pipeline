@@ -1,11 +1,9 @@
 import argparse
 import hashlib
-import importlib.util
 import json
 import os
 import shutil
 import sqlite3
-import sys
 import time
 from pathlib import Path
 
@@ -15,11 +13,7 @@ AUDIT_PATH = REPO_ROOT / "scripts" / "audit_source_of_truth_contract.py"
 MATRIX_PATH = REPO_ROOT / "scripts" / "contracts" / "source_of_truth_matrix.json"
 
 
-spec = importlib.util.spec_from_file_location("audit_source_of_truth_contract", AUDIT_PATH)
-audit = importlib.util.module_from_spec(spec)
-assert spec.loader is not None
-sys.modules[spec.name] = audit
-spec.loader.exec_module(audit)
+import audit_source_of_truth_contract as audit  # noqa: E402
 
 from stage_manifest import write_stage_manifest  # noqa: E402
 from pipeline_freshness import STAGES, stage_input_fingerprints  # noqa: E402
