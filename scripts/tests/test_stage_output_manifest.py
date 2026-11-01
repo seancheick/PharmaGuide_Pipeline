@@ -436,3 +436,14 @@ def test_source_freeze_binds_external_environment_symlink_without_exposing_value
     env.write_text('SECRET=second\n')
     assert freshness.batch_source_fingerprint(root) != first
     assert len(first) == 64
+
+
+def test_missing_runtime_provenance_cannot_be_reused(tmp_path):
+    import pipeline_freshness as freshness
+    path = tmp_path / '.stage_manifest.json'
+    expected = {freshness.REFERENCE_FINGERPRINT_KEY: 'a' * 64,
+                freshness.CODE_FINGERPRINT_KEY: 'b' * 64,
+                freshness.RUNTIME_FINGERPRINT_KEY: 'c' * 64}
+    path.write_text(json.dumps({'input_fingerprints': {k: v for k, v in expected.items()
+                                                     if k != freshness.RUNTIME_FINGERPRINT_KEY}}))
+    assert 'runtime fingerprint missing' in freshness._manifest_issue(path, expected)

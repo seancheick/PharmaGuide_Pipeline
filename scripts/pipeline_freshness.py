@@ -23,6 +23,7 @@ from stage_manifest import MANIFEST_NAME
 REFERENCE_FINGERPRINT_KEY = "reference_data_sha256_v1"
 CODE_FINGERPRINT_KEY = "stage_code_sha256_v1"
 DATA_FINGERPRINT_KEY = "stage_data_sha256_v1"
+RUNTIME_FINGERPRINT_KEY = "stage_runtime_sha256_v1"
 
 #: Per stage: the script run_pipeline runs, the JSON config it reads outside
 #: scripts/data (relative to scripts/), and its outputs (relative to
@@ -220,7 +221,13 @@ def stage_input_fingerprints(repo_root: Path, stage: str) -> dict[str, str]:
     return {
         REFERENCE_FINGERPRINT_KEY: reference_data_fingerprint(repo_root),
         CODE_FINGERPRINT_KEY: stage_code_fingerprint(repo_root, stage),
+        RUNTIME_FINGERPRINT_KEY: _runtime_fingerprint(),
     }
+
+
+def _runtime_fingerprint() -> str:
+    from audits.run_verification_gate import runtime_identity
+    return hashlib.sha256(json.dumps(runtime_identity(), sort_keys=True).encode()).hexdigest()
 
 
 def _manifest_issue(manifest_path: Path, expected: dict[str, str]) -> str | None:
@@ -241,7 +248,10 @@ def _manifest_issue(manifest_path: Path, expected: dict[str, str]) -> str | None
     for key, label in (
         (REFERENCE_FINGERPRINT_KEY, "reference_data"),
         (CODE_FINGERPRINT_KEY, "stage code"),
+        (RUNTIME_FINGERPRINT_KEY, "runtime"),
     ):
+        if key not in expected:
+            continue
         declared = (input_fingerprints or {}).get(key)
         if declared != expected[key]:
             reason = "missing" if declared is None else "content mismatch"
@@ -342,7 +352,7 @@ def batch_source_fingerprint(repo_root: Path, raw_roots: Iterable[Path] = ()) ->
     source = _content_set_fingerprint(internal, root=root)
     inputs = [(str(Path(raw).resolve()), _content_set_fingerprint(
         Path(raw).rglob('*.json'), root=Path(raw).resolve())) for raw in raw_roots]
-    return hashlib.sha256(json.dumps([source, external, inputs], sort_keys=True).encode()).hexdigest()
+    return hashlib.sha256(json.dumps([source, external, inputs, _runtime_fingerprint()], sort_keys=True).encode()).hexdigest()
 
 
 def stage_freshness_issues(repo_root: Path) -> list[str]:
@@ -372,6 +382,7 @@ def stage_freshness_issues(repo_root: Path) -> list[str]:
         expected = {
             REFERENCE_FINGERPRINT_KEY: reference,
             CODE_FINGERPRINT_KEY: stage_code_fingerprint(repo_root, stage),
+            RUNTIME_FINGERPRINT_KEY: _runtime_fingerprint(),
         }
         for stage_dir in stage_dirs:
             issue = _manifest_issue(stage_dir / MANIFEST_NAME, expected)

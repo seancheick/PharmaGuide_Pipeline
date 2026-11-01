@@ -231,6 +231,8 @@ def test_tool_call_bookkeeping_does_not_invalidate_real_configuration(tmp_path, 
 
 def test_binding_hashes_overlapping_inputs_once_per_pass(tmp_path, monkeypatch):
     from audits import run_verification_gate as gate
+    # Runtime provenance has separate coverage; isolate overlapping corpus globs.
+    monkeypatch.setattr(gate, 'runtime_identity', lambda: {'runtime': 'fixed'})
     path = tmp_path / 'one.json'
     path.write_text('{}')
     calls = []
@@ -359,3 +361,16 @@ def test_receipt_distinguishes_execution_from_verified_reuse(tmp_path):
     assert reused['completed_at'] == first['completed_at']
     assert reused['last_invocation']['duration_seconds'] >= 0
     assert (tmp_path / 'calls').read_text() == 'x'
+
+
+def test_stage_provenance_binds_runtime_identity(monkeypatch, tmp_path):
+    import pipeline_freshness as freshness
+    import audits.run_verification_gate as gates
+    monkeypatch.setattr(freshness, 'reference_data_fingerprint', lambda root: 'a' * 64)
+    monkeypatch.setattr(freshness, 'stage_code_fingerprint', lambda root, stage: 'b' * 64)
+    monkeypatch.setattr(gates, 'runtime_identity', lambda: {'python': '3.13', 'packages': [('RapidFuzz', '1')]}, raising=False)
+    before = freshness.stage_input_fingerprints(tmp_path, 'enrich')
+    monkeypatch.setattr(gates, 'runtime_identity', lambda: {'python': '3.13', 'packages': []})
+    after = freshness.stage_input_fingerprints(tmp_path, 'enrich')
+    assert before != after
+    assert before[freshness.RUNTIME_FINGERPRINT_KEY] != after[freshness.RUNTIME_FINGERPRINT_KEY]

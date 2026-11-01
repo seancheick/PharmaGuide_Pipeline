@@ -95,6 +95,24 @@ def _canonical_sha256(payload: dict) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
+def runtime_identity() -> dict:
+    """Shared runtime provenance for stage manifests and verification receipts."""
+    try:
+        fuzz = importlib.import_module('rapidfuzz.fuzz')
+        implementation = sys.modules.get(fuzz.ratio.__module__)
+        origin = getattr(implementation, '__file__', None)
+        rapidfuzz = {'available': True, 'implementation': fuzz.ratio.__module__,
+                    'content_sha256': _sha256(Path(origin)) if origin else None}
+    except (ImportError, OSError):
+        rapidfuzz = {'available': False}
+    executable = Path(sys.executable).resolve()
+    return {'python': sys.version,
+            'executable': (str(executable), _sha256(executable)),
+            'packages': sorted((dist.metadata['Name'], dist.version)
+                               for dist in importlib.metadata.distributions()),
+            'rapidfuzz': rapidfuzz}
+
+
 def _write_receipt(path: Path, payload: dict) -> None:
     body = dict(payload)
     body["receipt_sha256"] = _canonical_sha256(body)
@@ -218,9 +236,7 @@ def _input_binding(
         files[pattern] = entries
     executable = shutil.which(str(command[0]))
     return _canonical_sha256({
-        'files': files, 'environment': environment, 'python': sys.version,
-        'packages': sorted((dist.metadata['Name'], dist.version)
-                           for dist in importlib.metadata.distributions()),
+        'files': files, 'environment': environment, 'runtime': runtime_identity(),
         'executable': (executable, _sha256(Path(executable))) if executable else None,
         'cwd': str(cwd), 'command': list(command),
     })

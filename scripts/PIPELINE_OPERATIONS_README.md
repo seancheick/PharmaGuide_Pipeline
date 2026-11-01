@@ -7,11 +7,13 @@
 For a retry that reuses verified computation, add `--resume` to the normal full
 command: `bash batch_run_all_datasets.sh --resume --pre-check`. Before computing,
 it prints the plan for every selected brand and approved submission dataset.
-Each stage needs complete ownership, intact output checksums, current code and
-references, and matching upstream input bytes/inventory. The first invalid stage
+Each stage needs complete ownership, intact output checksums, current code, references and runtime/dependency provenance, and matching upstream
+input bytes/inventory. The first invalid stage
 and all later stages rebuild. Missing proof never becomes a restamp. `--resume`
 requires the default `clean,enrich,score` selection; explicit stage commands keep
-their existing meaning. All snapshot, safety, export and publication gates remain.
+their existing meaning. Reused computation still runs the strict enrichment-contract
+and coverage gates. Manifests without runtime provenance rebuild; they are never
+restamped. All snapshot, safety, export and publication gates remain.
 
 The batch freezes runtime source before processing and checks it between brands.
 It also binds raw labels before computation and checks them before assembly and

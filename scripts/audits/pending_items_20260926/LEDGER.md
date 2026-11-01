@@ -4210,13 +4210,13 @@ Frozen source sample: GNC 304641/69623/77146/243038 and BulkSupplements
 2.16s normalizer initialization, 0.39s enricher initialization and 4.58s combined
 normalization/enrichment under profiling. Repeated scoring-input derivation and
 regex/normalization were CPU costs. No product cache or speculative Enrich rewrite
-was introduced. On the final sample experiment, a full cold compute took 8.407s;
-unchanged resume took 2.121s, reused all stages, and preserved output and manifest
+was introduced. On the final sample experiment, a full cold compute took 8.453s;
+unchanged resume took 2.328s, reused all stages, and preserved output and manifest
 bytes. These are bounded sample measurements, not a whole-corpus speed claim.
 Compact source snapshots, profile and measurement receipts remain in this
 worktree's `.claude/state/performance/`.
 
-Reference dependency review: Clean's current 69-module closure includes
+Reference dependency review: Clean's reviewed import closure includes
 `scoring_v4/cert_evidence.py` and `cert_resolver.py`; Enrich and Score closures
 include them too. The sample does not prove their dynamic reads are absent from
 all Clean paths. Retained the conservative reference fingerprint rather than
@@ -4240,3 +4240,5 @@ and raw-input drift reasons are now appended through the existing summary owner.
 Batch orchestration tests: 23 passed; no product-stage code changed in this
 follow-up. Main/candidate detail-blob comparison was also identical for all eight
 labels with zero export-contract errors.
+
+PR review corrections: runtime provenance is now shared by stage manifests and gate receipts through `audits/run_verification_gate.py::runtime_identity`. It binds Python/executable, installed dependency versions and actual optional RapidFuzz availability/implementation. Missing or changed runtime proof invalidates reuse. Fully reused computation now enters the existing strict enrichment/coverage gate path with `validation_only=True`; fail-first controls prove gate failures propagate and no product stage runs. Final focused checkpoint: 305 passed, 1 declared absent-built-interaction-DB skip. Updated 8-label cold/resume measurement 8.453s/2.328s includes both strict pre-score gates and preserves every stage output/manifest byte.

@@ -657,6 +657,7 @@ class PipelineRunner:
         coverage_gate_warn_only: bool = False,
         strict_release_gates: bool = False,
         run_id: Optional[str] = None,
+        validation_only: bool = False,
     ) -> Dict:
         """
         Run the complete pipeline or specified stages.
@@ -674,7 +675,7 @@ class PipelineRunner:
         effective_run_id = ensure_run_id(run_id)
 
         # Use defaults if not provided
-        stages = stages or self.config["stages"]
+        stages = [] if validation_only else (stages or self.config["stages"])
         paths = self.config["paths"]
 
         raw_dir = raw_dir or paths.get("raw_directory", "raw_data")
@@ -787,7 +788,7 @@ class PipelineRunner:
                     return results
 
         # Stages 2.4-2.5: load once, then validate contract and coverage.
-        if "score" in stages and not dry_run:
+        if ("score" in stages or validation_only) and not dry_run:
             products, load_error = self._load_products_for_gates(
                 enriched_dir,
                 require_manifest=strict_release_gates,
@@ -811,7 +812,7 @@ class PipelineRunner:
                 logger.error("Pipeline stopped: Enrichment contract gate failed")
                 return results
 
-        if "score" in stages and not dry_run and not skip_coverage_gate:
+        if ("score" in stages or validation_only) and not dry_run and not skip_coverage_gate:
             block_on_failure = not coverage_gate_warn_only
             can_proceed, coverage_summary = self.run_coverage_gate(
                 enriched_dir,
@@ -1020,7 +1021,7 @@ Pipeline Flow:
             runner._resolve_path(args.output_prefix))
         logger.info('Resume plan: %s | %s | %s', args.output_prefix,
                     ','.join(stages) if stages else 'reuse all stages', reason)
-        if args.resume_plan or not stages:
+        if args.resume_plan:
             sys.exit(0)
 
     # Run pipeline
@@ -1033,6 +1034,7 @@ Pipeline Flow:
         coverage_gate_warn_only=args.coverage_gate_warn_only,
         strict_release_gates=args.strict_release_gates,
         run_id=args.run_id,
+        validation_only=bool(args.resume and not stages),
     )
 
     # Exit with appropriate code
