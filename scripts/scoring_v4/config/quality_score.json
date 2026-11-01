@@ -1814,7 +1814,8 @@
         "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/18551.pdf",
         "blockers": [
           "evidence_assessment_incomplete"
-        ]
+        ],
+        "unfinished_source_assessment": null
       },
       "178728": {
         "source_name": "NIH DSLD",
@@ -2518,7 +2519,8 @@
         "source_url": "https://api.ods.od.nih.gov/dsld/s3/pdf/178728.pdf",
         "blockers": [
           "evidence_assessment_incomplete"
-        ]
+        ],
+        "unfinished_source_assessment": null
       },
       "232035": {
         "source_name": "NIH DSLD",

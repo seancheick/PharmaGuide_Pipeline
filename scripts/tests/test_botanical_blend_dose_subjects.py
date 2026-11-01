@@ -45,6 +45,17 @@ def test_unidentified_source_blend_header_is_not_an_ingredient_dose_subject(stru
     assert product == before
 
 
+def test_only_the_generic_blend_categories_are_structural():
+    # Generic means no manufacturer in the blend registry. A branded complex
+    # added without one would silently become structural, so pin the set.
+    from scoring_v4.modules.botanical_profile import _blend_category_ids
+    assert _blend_category_ids() == {
+        'BLEND_ADAPTOGEN', 'BLEND_BEAUTY', 'BLEND_DELIVERY', 'BLEND_ENZYME', 'BLEND_GENERAL',
+        'BLEND_HYDRATION', 'BLEND_NOOTROPIC', 'BLEND_PROBIOTIC', 'BLEND_PROTEIN', 'BLEND_PUMP',
+        'BLEND_STIMULANT', 'BLEND_SUPERFOOD', 'BLEND_TESTOSTERONE', 'BLEND_WEIGHT_LOSS',
+    }
+
+
 @pytest.mark.parametrize('change', ['missing', 'duplicate', 'foreign', 'role', 'canonical', 'branded_class',
                                      'missing_canonical', 'missing_ledger', 'duplicate_ledger', 'malformed_mass',
                                      'unknown_unit'])
