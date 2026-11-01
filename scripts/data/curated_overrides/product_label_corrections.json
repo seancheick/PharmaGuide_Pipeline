@@ -6,7 +6,7 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions. Existing canonical PG_SUB_ product identities may use this same exact-product correction owner. Reviewed physicalState metadata binds its original object and permits only explicit name/langualCodeDescription strings; it does not rewrite an approval or infer a dosage form. Reviewed nutritionalInfo metadata binds the whole original typed object and may add printed Nutrition Facts entries of amount/unit with an optional printed qualifier operator (<, <=, >, >=, ~); a metadata-only repair keeps the source serving rows unchanged.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-10-30",
+    "last_updated": "2026-11-01",
     "total_entries": 218,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
@@ -3234,8 +3234,8 @@
       "provenance_tag": "official_label_form_correction"
     },
     "27808": {
-      "reviewer": "Codex independent NIH API/PDF source verification; no new clinical approval asserted",
-      "review_date": "2026-10-25",
+      "reviewer": "Codex original-panel recheck corroborated by separate source reviewer; no clinical approval asserted",
+      "review_date": "2026-11-01",
       "scope": "dsld_id_only",
       "brand": "GNC Pro Performance AMP",
       "product_name": "Amplified Stamina Lemon Tea",
@@ -3272,7 +3272,7 @@
         "quantity_value",
         "ingredient_text"
       ],
-      "evidence": "Exact LemonTea PDF independently prints L-Arginine500mg per1scoop5.55g and1000mg per2scoops11.1g. API incorrectly transcribes only the5.55g column as100mg. Correct that matching value only, retain1000mg and both serving bases/forms. This is not borrowed fromFruitBlast and does not allocate the total betweenOT2L-arginine andL-arginineHCl. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134 The same Lemon Tea PDF prints guarana-associated caffeine50mg per1scoop and100mg per2scoops; repair API child names150/300 and the erroneous second-column300mg quantity. Four sources100+40+50+10=200mg per scoop agree with printed total200mg. Do not transfer this correction to Fruit Blast28993, whose own PDF differs.",
+      "evidence": "Exact Lemon Tea PDF prints L-Arginine 500 mg per one scoop (5.55 g) and 1000 mg per two scoops (11.1 g). Correct only the API first-column 100 mg transcription to 500 mg; retain the other column, forms and quantities. Original NIH panel declares total caffeine 200 mg per scoop, but its botanical annotations include 40 mg, 150 mg and 10 mg alongside 100/200 mg caffeine anhydrous serving columns. The attribution/column basis is not uniquely reconciled. Preserve all source numbers, units and serving bases with the existing ambiguous qualifier. Do not infer 50/100 mg guarana caffeine from subtraction. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134; independently visually rechecked 2026-11-01. This withdraws the earlier unsupported claim that the PDF prints guarana caffeine 50/100 mg; that reconciliation was inferred, not printed. No new clinical approval or caffeine threshold is asserted.",
       "sources": [
         "https://api.ods.od.nih.gov/dsld/v9/label/27808",
         "https://api.ods.od.nih.gov/dsld/s3/pdf/27808.pdf"
@@ -3280,22 +3280,181 @@
       "provenance_tag": "official_label_quantity_correction",
       "additional_row_corrections": [
         {
+          "raw_ingredient_text": "Caffeine Anhydrous",
+          "corrected_ingredient_text": "Caffeine Anhydrous",
+          "raw_source_path": "ingredientRows[8].nestedRows[3]",
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 11.1,
+              "operator": "=",
+              "quantity": 200,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "operator": null,
+                  "percent": null,
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            },
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 5.55,
+              "operator": "=",
+              "quantity": 100,
+              "unit": "mg",
+              "dailyValueTargetGroup": [
+                {
+                  "name": "Adults and children 4 or more years of age",
+                  "operator": null,
+                  "percent": null,
+                  "footnote": "Daily Value not established"
+                }
+              ],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "raw_forms": [],
+          "raw_notes": null,
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Original NIH panel declares total caffeine 200 mg per scoop, but its botanical annotations include 40 mg, 150 mg and 10 mg alongside 100/200 mg caffeine anhydrous serving columns. The attribution/column basis is not uniquely reconciled. Preserve all source numbers, units and serving bases with the existing ambiguous qualifier. Do not infer 50/100 mg guarana caffeine from subtraction. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134; independently visually rechecked 2026-11-01.",
+          "raw_quantity_value": 200,
+          "raw_quantity_unit": "mg"
+        },
+        {
+          "raw_ingredient_text": "40 mg Caffeine",
+          "corrected_ingredient_text": "40 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[0].nestedRows[0]",
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 5.55,
+              "operator": "=",
+              "quantity": 40,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "raw_forms": [],
+          "raw_notes": null,
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Original NIH panel declares total caffeine 200 mg per scoop, but its botanical annotations include 40 mg, 150 mg and 10 mg alongside 100/200 mg caffeine anhydrous serving columns. The attribution/column basis is not uniquely reconciled. Preserve all source numbers, units and serving bases with the existing ambiguous qualifier. Do not infer 50/100 mg guarana caffeine from subtraction. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134; independently visually rechecked 2026-11-01.",
+          "raw_quantity_value": 40,
+          "raw_quantity_unit": "mg"
+        },
+        {
+          "raw_ingredient_text": "80 mg Caffeine",
+          "corrected_ingredient_text": "80 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[0].nestedRows[1]",
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 11.1,
+              "operator": "=",
+              "quantity": 80,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "raw_forms": [],
+          "raw_notes": null,
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Original NIH panel declares total caffeine 200 mg per scoop, but its botanical annotations include 40 mg, 150 mg and 10 mg alongside 100/200 mg caffeine anhydrous serving columns. The attribution/column basis is not uniquely reconciled. Preserve all source numbers, units and serving bases with the existing ambiguous qualifier. Do not infer 50/100 mg guarana caffeine from subtraction. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134; independently visually rechecked 2026-11-01.",
+          "raw_quantity_value": 80,
+          "raw_quantity_unit": "mg"
+        },
+        {
           "raw_ingredient_text": "150 mg Caffeine",
-          "corrected_ingredient_text": "50 mg Caffeine",
+          "corrected_ingredient_text": "150 mg Caffeine",
           "raw_source_path": "ingredientRows[9].nestedRows[1].nestedRows[0]",
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 5.55,
+              "operator": "=",
+              "quantity": 50,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "raw_forms": [],
+          "raw_notes": null,
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Original NIH panel declares total caffeine 200 mg per scoop, but its botanical annotations include 40 mg, 150 mg and 10 mg alongside 100/200 mg caffeine anhydrous serving columns. The attribution/column basis is not uniquely reconciled. Preserve all source numbers, units and serving bases with the existing ambiguous qualifier. Do not infer 50/100 mg guarana caffeine from subtraction. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134; independently visually rechecked 2026-11-01.",
           "raw_quantity_value": 50,
-          "raw_quantity_unit": "mg",
-          "raw_forms": []
+          "raw_quantity_unit": "mg"
         },
         {
           "raw_ingredient_text": "300 mg Caffeine",
-          "corrected_ingredient_text": "100 mg Caffeine",
+          "corrected_ingredient_text": "300 mg Caffeine",
           "raw_source_path": "ingredientRows[9].nestedRows[1].nestedRows[1]",
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 11.1,
+              "operator": "=",
+              "quantity": 300,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "raw_forms": [],
+          "raw_notes": null,
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Original NIH panel declares total caffeine 200 mg per scoop, but its botanical annotations include 40 mg, 150 mg and 10 mg alongside 100/200 mg caffeine anhydrous serving columns. The attribution/column basis is not uniquely reconciled. Preserve all source numbers, units and serving bases with the existing ambiguous qualifier. Do not infer 50/100 mg guarana caffeine from subtraction. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134; independently visually rechecked 2026-11-01.",
           "raw_quantity_value": 300,
-          "raw_quantity_unit": "mg",
-          "corrected_quantity_value": 100,
-          "corrected_quantity_unit": "mg",
-          "raw_forms": []
+          "raw_quantity_unit": "mg"
+        },
+        {
+          "raw_ingredient_text": "10 mg Caffeine",
+          "corrected_ingredient_text": "10 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[2].nestedRows[0]",
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 5.55,
+              "operator": "=",
+              "quantity": 10,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "raw_forms": [],
+          "raw_notes": null,
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Original NIH panel declares total caffeine 200 mg per scoop, but its botanical annotations include 40 mg, 150 mg and 10 mg alongside 100/200 mg caffeine anhydrous serving columns. The attribution/column basis is not uniquely reconciled. Preserve all source numbers, units and serving bases with the existing ambiguous qualifier. Do not infer 50/100 mg guarana caffeine from subtraction. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134; independently visually rechecked 2026-11-01.",
+          "raw_quantity_value": 10,
+          "raw_quantity_unit": "mg"
+        },
+        {
+          "raw_ingredient_text": "20 mg Caffeine",
+          "corrected_ingredient_text": "20 mg Caffeine",
+          "raw_source_path": "ingredientRows[9].nestedRows[2].nestedRows[1]",
+          "raw_quantities": [
+            {
+              "servingSizeOrder": 1,
+              "servingSizeQuantity": 11.1,
+              "operator": "=",
+              "quantity": 20,
+              "unit": "mg",
+              "dailyValueTargetGroup": [],
+              "servingSizeUnit": "Gram(s)"
+            }
+          ],
+          "raw_forms": [],
+          "raw_notes": null,
+          "corrected_quantity_operator": "ambiguous",
+          "corrected_notes": "Original NIH panel declares total caffeine 200 mg per scoop, but its botanical annotations include 40 mg, 150 mg and 10 mg alongside 100/200 mg caffeine anhydrous serving columns. The attribution/column basis is not uniquely reconciled. Preserve all source numbers, units and serving bases with the existing ambiguous qualifier. Do not infer 50/100 mg guarana caffeine from subtraction. PDF SHA256 631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134; independently visually rechecked 2026-11-01.",
+          "raw_quantity_value": 20,
+          "raw_quantity_unit": "mg"
         }
       ]
     },

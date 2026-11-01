@@ -4225,7 +4225,7 @@ the runtime freeze. Narrower reference ownership is deferred until proven.
 
 The operator's primary run was not edited or restarted. It independently stopped
 at snapshot pins for Ritual 278454 and CVS 18141; no pin was changed in this batch.
-Those score changes require their own source/cause review before catalog release.
+Those changes required a separate source/cause review, completed in the final integration entry below.
 Qualification results and PR state are recorded in CURRENT_HANDOFF at handoff.
 
 Checkpoint: local corpus gate 564 passed, 24 declared external opt-in skips; skip guard passed. Python correctness: zero new findings. Source freeze checks measured 0.112–0.180s per call. A fail-first external `.env` symlink case verifies content binding without exposing values. The source-freeze path uses runtime byte hashes for speed; product-stage freshness still uses the existing semantic AST hashes. Subsequent resume-plan ordering and source-freeze corrections are covered by focused tests and final exact-source CI.
@@ -4233,7 +4233,7 @@ Final focused checkpoint: 278 passed, 1 declared missing-built-interaction-DB sk
 in 71.98s across stage ownership, resume paths, batch orchestration, gate receipts,
 publication failure boundaries and scoring/source contracts. The separate local
 gate passed with no undeclared skip. Shell syntax and diff checks passed. The
-operator's current snapshot failure remains a release blocker outside this PR.
+operator's snapshot failure was outside the performance PR and was subsequently resolved by PR #327.
 Final report-boundary correction: a fail-first check proved drift stops were
 visible in the terminal but absent from the saved batch summary. Both runtime
 and raw-input drift reasons are now appended through the existing summary owner.
@@ -4243,39 +4243,119 @@ labels with zero export-contract errors.
 
 PR review corrections: runtime provenance is now shared by stage manifests and gate receipts through `audits/run_verification_gate.py::runtime_identity`. It binds Python/executable, installed dependency versions and actual optional RapidFuzz availability/implementation. Missing or changed runtime proof invalidates reuse. Fully reused computation now enters the existing strict enrichment/coverage gate path with `validation_only=True`; fail-first controls prove gate failures propagate and no product stage runs. Final focused checkpoint: 305 passed, 1 declared absent-built-interaction-DB skip. Updated 8-label cold/resume measurement 8.453s/2.328s includes both strict pre-score gates and preserves every stage output/manifest byte.
 
-## November 1 — final integration audit of Claude's omega-title repair
+## November 1 — final source integration and catalog qualification
 
-Pinned local Claude commit 22726d909 copied into the integration branch as
-211cffaf1; Claude's separate tree was not mutated. The proposed unknown-row
-identity fallback correctly recovers the CVS18141 whole fatty-acid blend, but
-four fail-first controls showed that negated source/title phrases also promoted
-it. Owner: scoring_input_contract.py::_identities_spelled through the existing
-normalization.py::find_affirmative_label_match. Preserve token spans/punctuation
-and require the shared affirmative predicate on every matched identity phrase.
-No new negation list, scoring threshold, ingredient registry or clinical credit.
-The title matcher slice passes76 tests including the original positive raw label,
-nested/preparation/projection controls and no/without/-free negatives. The shared
-owner's chemistry exception for spaced 'free base' remains intact.
-Final measurement, independent review and CI/local qualification remain pending
-for the combined source batch; no pipeline or publication is authorized by these
-focused tests alone. Latest operator corpus remains at main2ef348106, snapshot
-blocked on CVS18141 title defect and Ritual278454 certification drift.
-Independent fresh-context review at ccf13bdf reproduced two P2 source-negation
-counterexamples: parenthetical extraction lost 'without', and spaced 'fish oil
-free' was read as presence. The fallback now checks the original raw_source_text
-(or original name), not derived fragments/standardized aliases. The shared
-normalization affirmative predicate gained an opt-in spaced-free mode; existing
-callers retain their default semantics. That mode preserves free-base/form/acid
-chemistry and positive 'fish oil free of/from contaminants' qualifiers while
-rejecting actual absence. Fail-first tests cover these classes. Title,
-normalization and all four allergen-negation consumer files:259 passed.
+Owner: `scripts/scoring_input_contract.py::_named_in_title` and
+`normalization.py::find_affirmative_label_match` — evidence: production callers,
+fail-first title controls and raw-label replay. Manifest/freshness and gate-receipt
+ownership stays with the existing owners. Will NOT create: a scorer, ingredient
+registry, clinical threshold, clinical approval or alternative publication status.
 
-Final title audit addendum: Claude's draft exposed four reproducible failures
-(alias IDs sharing a carried ingredient, mapped identities outside IQM, and
-shorter registered names inside longer names). Four new cases failed first;
-all84 title cases now pass. Eligibility uses canonical_source_db=unmapped,
-retains the top-level and same-source projection guards, rejects any carried
-identity and prefers the longest containing registered phrase. Original-source
-negation controls remain intact. Independent review and combined CI/local
-qualification of this final addition are pending. Performance PR326 merged
-at f974d834e; no full corpus computation or catalog publication has run yet.
+**Integrated:** performance PR #326 at `f974d834e`; title/certification PR #327 at
+`b9c313393`. Claude's final source `26f8d3ad2` and certification refresh `4d66345d2`
+were independently audited. Duplicate PR #328 was closed after incorporation;
+its source branch was retained. Final runtime candidate `b62be91c` passed all four
+fast CI shards and Merge readiness (run `41331829606`). Independent final review
+and CodeRabbit found no remaining production findings.
+
+The title repair recovers the whole source-labelled omega blend, restricts the
+fallback to top-level unmapped rows, respects carried aliases and same-source
+projections, prefers a longer registered identity over names contained within it,
+and requires affirmative original label/title text. Fail-first controls reproduce
+negated mentions, parenthetical context loss, spaced-free absence, mapped IDs
+outside IQM, carried registry aliases and longer-name ownership. Free-base/form/
+acid chemistry and positive “free of/from contaminants” remain valid. No new
+benefit credit or scoring policy. Ritual 278454's fixture changed 86.4→84.4 after
+the renewed USP registry removed its verification entry; CVS 18141's 59.9 pin
+was preserved and its production owner repaired.
+
+**Source qualification:** 234 final owner/consumer tests passed; local corpus
+564 passed with 24 declared opt-in skips and a passing skip guard; all 33 raw
+contract canaries passed. The 15-label full-layer replay changed only CVS 18141;
+14 controls were identical across Clean, Enrich, Score and detail blob.
+
+**Fresh computation:** all 37 brands plus Product Submissions completed from
+frozen main `b9c313393`, including Legion. All 38 datasets rebuilt with runtime
+provenance; no output was restamped. Measured stage work: Clean 215.195s,
+Enrich 2980.789s, Score 1010.829s. Stage work totals 70m07s; wall computation
+including guards/gates was about 73 minutes. Cold computation remains broadly
+similar to the previous run; this is not evidence of a major Enrich speedup.
+
+The full 15,447-product comparison retained every ID. Only CVS 18141 changed
+score/pillars (Dose 6.3→11.4; total 54.8→59.9); other pillars, Evidence, quality
+availability and safety gates were unchanged. Two content-only changes (232624,
+26480) mark their structural fish-oil blend rows as title-prominent, with their
+Evidence state still not applicable and no new credit. Their old full records
+were hash-verified against the frozen baseline before comparison.
+
+**Reuse measurement:** cold completeness validation passed in 1273.754s versus
+1290.739s previously: no meaningful cold-gate speedup. The same successful full-
+corpus gate then returned `REUSED` in 9.287s with all input content and its sealed
+log verified; the original completion/expiry was unchanged. A post-run CVS
+resume plan reports “reuse all stages; all stage outputs and inputs verified.”
+The earlier eight-label cold/resume measurement remains 8.453s/2.328s, with
+identical output and manifest bytes. Conservative reference invalidation remains
+until narrower dynamic dependencies can be proven.
+
+**Qualified snapshot:** catalog `2026.11.01.194931`, 15,447 products, zero errors,
+skips, contract quarantines or contract failures. Construction took 980.542s;
+scoring readiness against the actual artifact passed in 1268.361s. Active
+identity/raw-to-final checks, all 15,447 blob field declarations, both export
+contracts and artifact freshness passed. Actual core SHA-256:
+`854b07318712af0a6cc48a493a286b2c996c741454db7fe41e32572aa0e7cffe`.
+
+Disposition counts: 15,129 scored (8,835 complete; 6,294 partial), 249 Not Scored
+(201 completeness-gated; 40 incomplete release assessments; 8 intentionally
+non-scoreable), and 69 safety-suppressed with their blocked disposition retained.
+All Not Scored public scores, compatibility mirrors, legacy numeric pillars and
+tiers are null. Reishi 220046 retains its explicit Wheat allergen. Products
+18551/178728 retain only Evidence blockers, with resolved Dose blockers removed.
+Products 330196–330199 retain Dose 11.4/20. The omega module's 314032 Formulation
+canary remains 4.57; 323062 has no stimulant warning; 285635 has the specific
+bitter-orange pregnancy “avoid” warning.
+
+**Publication checkpoint:** release pytest passed 155 tests with one deferred
+built-interaction-DB case, subsequently passed separately after interaction build
+(1 passed). All 15,447 reachability checks passed, no new identifier/citation
+mismatches; 134 explicitly accepted historical citation mismatches remain.
+Publication reused the sealed catalog (assembly skipped), built interaction DB
+v1.0.15 in 23.518s, and passed final export/reference/snapshot gates. Image metadata
+then legitimately changed the core checksum to
+`b0a2960aeaa95cc5770c08ba8c4efdd2c24f047df97aed5e846cca2b2aa0c3dc`.
+The catalog safety diff stopped before upload: five milder dispositions require
+source review. Cloud activation and Flutter catalog import did not occur.
+
+**Bounded source repair, November 1:** original-panel review verified four prior
+false UL warnings (273629 folate mcg, 64433/64821 vitamin D IU, 78327 iodine mcg)
+and the 78327 cystine identity correction. However, an earlier **Codex** correction
+for 27808 falsely claimed its PDF printed guarana caffeine 50/100 mg. It prints
+150 mg and also declares 200 mg total caffeine per scoop; component/column
+attribution is unresolved. Independent visual review corroborated SHA-256
+`631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134`.
+The unsupported inference is withdrawn. All original caffeine numbers and serving
+bases remain, using the existing exact-source ambiguous qualifier (as for 28993),
+not a fabricated reconciliation. The independently verified arginine correction
+remains. No clinical approval is asserted.
+
+Owner: `enhanced_normalizer.py::_apply_label_corrections` and
+`scoring_v4/exposure.py::quantity_is_unresolved` → `gate_safety.py::_dose_mg`;
+evidence: source-bound correction tests and unresolved-dose fail-first tests
+(3 failed before; 4 passed after). Will NOT create a calculator, registry,
+threshold, status or inferred amount. The stimulant gate now respects unresolved
+qualifiers while retaining existing context-specific caution/review behavior.
+
+Current qualification: owner slice 249 passed; correctness 0 new findings;
+data_batch confirms only corrections/27808 changed; raw contract canaries 33/33.
+The stored 15,447-product caffeine census finds only existing ambiguous product
+28993 affected by the gate helper before the newly corrected 27808. Full raw
+replay changed only 27808/28993 among 12 labels; ten controls are identical.
+Final consumer slice 92 passed; local 564 passed/24 declared opt-in skips with
+passing skip guard. Independent fresh-context source/diff review found no
+substantive findings. Required CI 41357732942 passed all four fast shards and Merge readiness on
+5819cd6a (PR329); CodeRabbit found no functional issue, only a cosmetic test
+comment clarification. Original API 50 mg is preserved as unresolved, not
+certified as a replacement. No warning risk category or allergen was removed
+in the raw comparison; the unresolved caffeine adds a pregnancy precaution.
+All 38 Clean, 38 Enrich and 38 Score manifests are stale against the repaired
+reference fingerprint. The next necessary full run starts at Clean after merge.
+No new corpus computation or publication until this combined candidate is qualified.

@@ -733,16 +733,6 @@ def test_signed_source_correction_never_applies_to_another_label_id(pid):
         assert {q['servingSizeQuantity']: q['quantity'] for q in raw['ingredientRows'][10]['nestedRows'][0]['quantity']} == {5.55: 100, 11.1: 1000}
 
 
-def test_signed_source_lemon_tea_caffeine_matches_own_printed_columns():
-    from enhanced_normalizer import EnhancedDSLDNormalizer
-    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_27808_raw.json').read_text())
-    normalizer = EnhancedDSLDNormalizer()
-    normalizer._stamp_raw_source_paths(raw['ingredientRows'], 'ingredientRows')
-    normalizer._apply_label_corrections(raw['ingredientRows'], '27808')
-    rows = raw['ingredientRows'][9]['nestedRows'][1]['nestedRows']
-    assert [(r['name'], r['quantity'][0]['quantity']) for r in rows] == [('50 mg Caffeine', 50), ('100 mg Caffeine', 100)]
-
-
 def test_signed_source_fruit_blast_conflict_preserves_printed_numbers_without_exact_total():
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
@@ -783,7 +773,7 @@ def test_source_quantity_qualifier_is_exact_snapshot_bound_and_does_not_mutate_r
     assert apply(changed)['quantity'][0]['operator'] == '='
 
 
-def test_lemon_tea_caffeine_daily_range_does_not_add_alternative_columns():
+def test_lemon_tea_source_conflict_stays_unresolved_through_export():
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
     from scoring_v4.dose_safety import _declared_daily_caffeine
@@ -791,10 +781,24 @@ def test_lemon_tea_caffeine_daily_range_does_not_add_alternative_columns():
     clean = EnhancedDSLDNormalizer().normalize_product(raw)
     enriched, _ = SupplementEnricherV3().enrich_product(clean)
     caffeine = _declared_daily_caffeine(enriched)
-    assert caffeine['rows'] == 4
-    assert caffeine['unknown_rows'] == 0
-    assert caffeine['total_mg_day_min'] == 200
-    assert caffeine['total_mg_day_max'] == 400
+    assert caffeine['rows'] == 5
+    assert caffeine['unknown_rows'] == 5
+    assert caffeine['total_mg_day_min'] is None
+    assert caffeine['total_mg_day_max'] is None
+    from scoring_v4.scored_artifact import build_scored_artifact
+    from build_final_db import build_detail_blob
+    scored = build_scored_artifact(enriched)
+    assert scored['assessment_readiness']['dose']['readiness'] != 'complete'
+    assert scored['_v4_safety_gate']['verdict'] == 'CAUTION'
+    assert scored['_v4_safety_gate']['needs_review'] is True
+    assert 'STIMULANT_CAFFEINE_HIGH_DOSE' not in scored['_v4_safety_gate']['safety_signals']
+    assert 'STIMULANT_CAFFEINE_UNDISCLOSED_PREWORKOUT' in scored['_v4_safety_gate']['safety_signals']
+    blob = build_detail_blob(enriched, scored)
+    assert blob['product_safety_status'] == 'caution'
+    assert blob['v4_safety_gate']['needs_review'] is True
+    assert blob['v4_score_provenance']['quality_score_status'] == 'not_scored'
+    assert scored['quality_score_status'] == 'not_scored'
+    assert scored['quality_score_v4_100'] is None
 
 
 @pytest.fixture(scope="module")
@@ -1302,3 +1306,20 @@ def test_216622_whole_root_source_fact_preserves_other_pillars_and_safety():
         assert a['quality_pillars_v4'][pillar]['score'] == b['quality_pillars_v4'][pillar]['score'], pillar
     assert a['_v4_safety_gate'] == b['_v4_safety_gate']
     assert a['product_safety_status'] == b['product_safety_status']
+
+
+def test_lemon_tea_original_panel_conflict_does_not_invent_fifty_mg():
+    """NIH PDF631d243d prints150mg guarana caffeine and200mg total per scoop.
+
+    Fifty would reconcile the arithmetic, but is not printed evidence. Keep
+    source numbers and use the existing unresolved-quantity qualifier.
+    """
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'completion_source_27808_raw.json').read_text())
+    n = EnhancedDSLDNormalizer()
+    n._stamp_raw_source_paths(raw['ingredientRows'], 'ingredientRows')
+    n._apply_label_corrections(raw['ingredientRows'], '27808')
+    children = raw['ingredientRows'][9]['nestedRows'][1]['nestedRows']
+    assert [r['name'] for r in children] == ['150 mg Caffeine', '300 mg Caffeine']
+    assert [r['quantity'][0]['quantity'] for r in children] == [50, 300]
+    assert all(q['operator'] == 'ambiguous' for r in children for q in r['quantity'])

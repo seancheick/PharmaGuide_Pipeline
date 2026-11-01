@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Operations
 
-> Canonical operator runbook | Batch/release flow checked against entry points: 2026-10-31
+> Canonical operator runbook | Batch/release flow checked against entry points: 2026-11-01
 
 ## 1. Which command should I run?
 
