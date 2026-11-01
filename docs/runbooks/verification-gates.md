@@ -171,6 +171,10 @@ of validated existing-policy updates; new policy and external release remain sep
 Use the pinned runtime from `scripts/python_env.sh`. First read the current handoff and
 check active corpus/release jobs. Work in one temporary branch. Use a fresh durable
 receipt directory under `~/pg_quality`, outside the tracked registry directory.
+The output leaf must not already exist; create only its parent. If the installed
+Playwright package reports a missing browser, install its matching Chromium headless
+runtime with `"$PG_PYTHON" -m playwright install chromium --only-shell`, then retry
+only the affected sources into fresh receipt leaves, retaining the failures.
 
 ```bash
 "$PG_PYTHON" scripts/api_audit/verify_certifications.py --source all --output-dir "$CERT_REFRESH_DIR"
