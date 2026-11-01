@@ -4106,21 +4106,41 @@ The completed Clean/Enrich/Score run failed the snapshot scoring-completeness pr
 
 **CI correction on the first candidate:** fast shard 1 enforced the valid config-byte/version fingerprint history; bumped the Quality config version and pinned its newly computed SHA-256 prefix without changing prior pins. Fast shard 2 found the old 178728 identity test reading a public Dose pillar that must now be null under the approved hold. Retained its internal 0.0 Dose assertion and added explicit incomplete-blocker, Not Scored, and null-public-pillar assertions. The named regression and complete identity test file passed locally; the corrected exact-head CI is the merge gate.
 
-## November 1 — snapshot preflight held 6 products (branch `claude/title-flavor-variant-20261101`)
+## November 1 — the six preflight holds resolved at their owners (branch `claude/title-flavor-variant-20261101`, PR #323)
 
-**What failed:** Sean's corpus run from main `8a0e28dbe` passed all 37 brands. The snapshot's scoring assessment completeness preflight then failed on 6 scored products with `unfinished_source_assessment = dose_benchmark_identity_unresolved`, and release did not start. The gate is `audit_source_of_truth_contract.py::audit_scoring --completion-only`. The blocker comes from `scoring_v4/scored_artifact.py::unfinished_source_assessment`: one botanical Dose purpose whose benchmark is "unresolved" holds the whole product.
+**Owner check:** title roles: `scoring_input_contract.py::_role_title_text`. Botanical Dose: `scoring_v4/modules/botanical_profile.py::_completed_botanical_reference` and `::structural_blend_total_source`. Exact Dose record: `scripts/data/literature_evidence_records.json`. Holds: `quality_score.json::suppression.held_assessment_labels`. Will NOT create: a new Dose policy, a neutral fallback for unreviewed ingredients, a changed 11.4 neutral value, a new status or a second blend registry.
 
-**Causes, from raw labels:**
-- 330196–330199 BulkSupplements "American Ginseng Extract Powder 1000 mg": the American ginseng identity restored by PR #318 has no Dose benchmark record. The label gives no extract ratio or ginsenoside standardization.
-- 178728 Spring Valley "Raw Superfoods": PR #320's title matching made the superfood blend header a Dose subject, and the blend has no benchmark.
-- 18551 GNC "Endurance Booster Chew Orange": a false title match. The flavor variant "Orange" named the 100 mg Citrus sinensis row through the registry alias index PR #320 added.
+**Correction to the earlier note on this branch:** the 330196–330199 label does state a ratio. The raw row notes say "4:1", the plant part is "rhizome and root", and the directions say 1000 mg once or twice daily. The earlier "no extract ratio" statement was wrong.
 
-**Fixed here (18551, Sean: "Fix the matcher"):** `scoring_input_contract.py::_role_title_text` now reads one or two words that follow the dosage form and end the title as the flavor variant. It uses the flavor phrase's stop rules, shared through `_ends_flavor_phrase`, and a leading form word ("Liquid Elderberry") still describes the product. Tests: 3 fail-first cases plus the real 18551 label (no title role, no unfinished assessment) in `test_evidence_title_ownership.py`. Controls cover a dosed active after the form, a number after the form, and the 268432 leading-form case; that last control fails under the looser rule. Census of roles on main vs this branch across all 15,447 enriched products: 5 changes, all flavor variants (18551 citrus; peppermint in 222788, 222896, 222904 and 222909, "CBD … Chocolate Mint", whose other ingredients declare "organic Chocolate Mint flavor"). Title-role slice: 113 passed. Python correctness: 0 new findings.
+**What changed (Sean's November 1 direction, recorded from the pasted assessment):**
+- **18551** "Endurance Booster Chew Orange": one or two words after the dosage form that end the title are read as a flavor variant, so "Orange" no longer names the 100 mg Citrus sinensis row. Census across all 15,447 enriched products: 5 role changes, all flavor variants (18551, plus "Chocolate Mint" in 222788, 222896, 222904 and 222909). Dose then completes. Evidence stays unfinished.
+- **330196–330199** American ginseng 4:1 rhizome-and-root extract powder: added the exact-preparation record `american_ginseng_rhizome_root_extract_4to1_powder`. It holds a completed no-general-benchmark determination under the existing neutral 11.4.
+  - Source: the Health Canada American ginseng monograph (dried root only), content-hashed on 2026-11-01.
+  - No dry-root conversion, no assumed solvent, no ginsenoside potency and no transfer of CVT-E002 or Cereboost results.
+  - Scope is the exact source text, ratio, part and powder form. A different ratio, no ratio, a capsule, root only, leaf, an incomplete proof or a pending approval each stay unresolved.
+  - Attribution: "Sean direct user/team ruling, 2026-11-01"; the source review is agent work, not clinician-reviewed. Reach: 4 of 161 ginseng rows.
+- **178728** "Raw Superfoods": the 4,500 mg Organic Superfood Blend header is filed under the generic `BLEND_SUPERFOOD` category. Its total is now structural (`blend_total_only`, `assessment_status: not_applicable`). It earns no neutral credit and no constituent dose. A branded blend (for example `BLEND_VELOSITOL`) still needs its own reference. Reach: 1 of 934 products, blockers only. Evidence stays unfinished.
+- **Reconciliation with PR #322 (merged to main as 1c3d615ff):**
+  - The four ginseng holds were removed: the label now scores 57.1 with no blockers.
+  - The 18551 and 178728 holds were re-bound from Dose+Evidence to `evidence_assessment_incomplete`, so both stay Not Scored under the standing source-bound policy. Source rows and fingerprints are unchanged.
+  - Quality config is now 1.31.6, with its fingerprint pinned.
+  - Six duplicate raw-label fixtures were folded into one copy each.
 
-**Open for Sean — no-benchmark Dose policy (5 products):** Sean rejected holds ("we can focus on the other actives"). Today `quality_score.json` `dose_subscale.unbenchmarked_neutral_public` (11.4/20) applies only after a per-ingredient review concludes "no applicable benchmark"; an unreviewed ingredient blocks the product. Research, with PubMed records re-checked:
-- No rater documents excluding or penalizing such an ingredient. Labdoor and NMBER score per ingredient.
-- American ginseng *root* has regulator ranges (Health Canada monograph 0.5–12 g/day dried root by use; WHO 3–9 g). Extracts are dosed only per product: CVT-E002 200 mg twice daily (PMID 14687309); Cereboost 100–400 mg (PMID 20676609).
-- The glycemia trials found 1–3 g equally effective (PMID 11273850).
-- A 1000 mg extract of unstated strength cannot be compared to a dried-root range.
+**Integrated replay** (Clean → Enrich → Score on 18 raw labels: the six plus 12 controls, main 1c3d615ff vs branch, `PHARMAGUIDE_DATASET_ROOT` on a scratch copy):
+- Moved: the four ginseng labels (Not Scored → scored 57.1, complete). 18551 and 178728 stay Not Scored, with blockers now Evidence-only. 222788 and 222896 stay `suppressed_safety`/blocked, and gain an `evidence_assessment_incomplete` blocker because the title no longer names peppermint.
+- Unchanged: 13567, 176190, 182704, 229932, 251616, 268432, 293904, 311195, 327984, 40089.
+- No safety field differs on any of the 18. Checked fields: `product_safety_status`, `_v4_safety_gate`, `safety_*`, `dose_safety_evaluation`.
+- The ginseng warnings are identical before and after (pregnancy, lactation, diabetes, surgery, hypoglycemics, anticoagulants, MAOIs).
+- Strict gate `audit_source_of_truth_contract.py scoring --strict-release --completion-only` (the preflight that failed): exit 0 on the branch.
+- The full mode without `--dist-dir` fails on main as well. It needs the catalog's quarantine and warning-only proof, and `verified_warning_only_products` admits blocked and Not Scored catalog rows with null scores.
 
-The proposed policy is in the session report. No policy change is made without Sean.
+**Rerun scope:** Clean output is byte-identical except its timestamp. Enrich output changes for the title-fix products (`product_scoring_classification`). Every stage fingerprint changes: the record is in `scripts/data/`, and both changed modules are in Clean's import closure. The next corpus run must therefore start at Clean.
+
+**Findings for Sean:**
+- 5,884 catalog products ship *scored* with exactly `evidence_assessment_incomplete` through `_retained_evidence_is_publishable`, and both 18551 and 178728 pass that check. Holding them as Not Scored follows the pasted direction, but it treats them differently from that class. Removing the two hold entries would publish them as scored partial (40.6 and 22.7).
+- The direction asked to preserve a ginseng–digoxin precaution. `RULE_INGREDIENT_GINSENG` has none on main or on this branch, so nothing was lost; adding one would be a sourced `/data-fix` entry.
+
+**Validation:**
+- Reconciled slice: `scripts/test.sh fast` over the held-assessment, non-scorable identity, exact-scope, title-ownership, blend-subject and config-registry files: 490 passed.
+- Before the merge: title slice 113 passed, exact scopes 262 passed, botanical/blend slice 2456 passed, Python correctness 0 new.
+- Exact-head CI is the merge gate.
