@@ -710,12 +710,25 @@ def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -
     return best
 
 
+@lru_cache(maxsize=1)
+def _blend_category_ids() -> frozenset:
+    """Generic blend categories of the cleaner's blend registry.
+
+    A branded complex there names a manufacturer and its components; a
+    category ("Superfood, Greens & Herbal Blends") names no material.
+    """
+    from constants import PROPRIETARY_BLENDS
+    concerns = json.loads(PROPRIETARY_BLENDS.read_text(encoding="utf-8"))["proprietary_blend_concerns"]
+    return frozenset(concern["id"] for concern in concerns if not concern.get("manufacturer"))
+
+
 def structural_blend_total_source(product: Dict[str, Any], row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     """The printed blend-header row when ``row`` is only its structural total.
 
-    Positive source proof: one unmapped ``blend_header_total`` source row, with a
-    matching label-ledger line and a printed mass equal to the scoring row's.
-    Such a total is an opaque blend, not a botanical preparation; Dose and
+    Positive source proof: one ``blend_header_total`` source row that is
+    unmapped or filed only under a generic blend category, with a matching
+    label-ledger line and a printed mass equal to the scoring row's. Such a
+    total is an opaque blend, not a botanical preparation; Dose and
     Formulation both read this one decision.
     """
     if not (row.get("scoring_input_kind") == "product_level_evidence"
@@ -732,7 +745,7 @@ def structural_blend_total_source(product: Dict[str, Any], row: Dict[str, Any]) 
     mass = _mass_mg(original) if original is not None else None
     if (original is not None and source_row_has_matching_label_ledger(product, original)
             and "canonical_id" in original
-            and original["canonical_id"] is None
+            and (original["canonical_id"] is None or original["canonical_id"] in _blend_category_ids())
             and original.get("cleaner_row_role") == "blend_header_total"
             and original.get("score_eligible_by_cleaner") is False
             and original.get("score_exclusion_reason") == "blend_header_total"

@@ -16,7 +16,7 @@ def structural_blend_products():
     base = Path(__file__).parent / 'fixtures'
     return {pid: e.enrich_product(n.normalize_product(json.loads((base / (
         f'raw_blend_grapefruit_{pid}.json' if pid in {'176190','232084'} else
-        f'raw_named_blend_{pid}.json')).read_text())))[0] for pid in IDS}
+        f'raw_named_blend_{pid}.json')).read_text())))[0] for pid in IDS + ['178728']}
 
 
 def _parent(product):
@@ -44,8 +44,9 @@ def test_unidentified_source_blend_header_is_not_an_ingredient_dose_subject(stru
     assert product == before
 
 
-@pytest.mark.parametrize('change', ['missing', 'duplicate', 'foreign', 'role', 'canonical', 'missing_canonical',
-                                     'missing_ledger', 'duplicate_ledger', 'malformed_mass', 'unknown_unit'])
+@pytest.mark.parametrize('change', ['missing', 'duplicate', 'foreign', 'role', 'canonical', 'branded_class',
+                                     'missing_canonical', 'missing_ledger', 'duplicate_ledger', 'malformed_mass',
+                                     'unknown_unit'])
 def test_unidentified_blend_disposition_needs_positive_original_header_proof(structural_blend_products, change):
     from scoring_input_contract import _source_tree_rows
     from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
@@ -63,6 +64,9 @@ def test_unidentified_blend_disposition_needs_positive_original_header_proof(str
         source['cleaner_row_role'] = 'active_scorable'
     elif change == 'canonical':
         source['canonical_id'] = 'unknown_prepared_material'
+    elif change == 'branded_class':
+        # A branded complex in the blend registry names its material.
+        source['canonical_id'] = 'BLEND_VELOSITOL'
     elif change == 'missing_canonical':
         source.pop('canonical_id')
     elif change == 'missing_ledger':
@@ -111,3 +115,20 @@ def test_source_verified_cordiart_keeps_its_own_dose_reference(citrus_binding_pr
     assert result['score'] > 0
     assert result['metadata']['benchmark']=='absent'
     assert result['metadata'].get('assessment_status')!='not_applicable'
+
+
+def test_raw_superfoods_keeps_only_its_open_evidence_review(structural_blend_products):
+    # 178728 "Raw Superfoods": the cleaner files its 4,500 mg Organic Superfood
+    # Blend header under the generic BLEND_SUPERFOOD category, which names no
+    # material, so the total is structural and owes no ingredient benchmark.
+    from scoring_v4.modules.botanical_profile import _scoring_actives, score_botanical_purpose_dose
+    from scoring_v4.scored_artifact import build_scored_artifact
+    product = structural_blend_products['178728']
+    row = next(row for row in _scoring_actives(product) if row.get('canonical_id') == 'organic_superfood_blend')
+    result = score_botanical_purpose_dose(product, row)
+    assert (result['score'], result['band']) == (0, 'blend_total_only')
+    assert result['metadata'] == {'assessment_status': 'not_applicable'}
+    scored = build_scored_artifact(deepcopy(product))
+    assert scored['quality_pillars_v4']['dose']['score'] == 0
+    assert scored['quality_pillars_v4']['formulation']['score'] == 0
+    assert scored['assessment_readiness']['release_assessment']['blockers'] == ['evidence_assessment_incomplete']
