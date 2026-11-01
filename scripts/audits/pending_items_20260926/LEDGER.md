@@ -4269,3 +4269,13 @@ callers retain their default semantics. That mode preserves free-base/form/acid
 chemistry and positive 'fish oil free of/from contaminants' qualifiers while
 rejecting actual absence. Fail-first tests cover these classes. Title,
 normalization and all four allergen-negation consumer files:259 passed.
+
+Final title audit addendum: Claude's draft exposed four reproducible failures
+(alias IDs sharing a carried ingredient, mapped identities outside IQM, and
+shorter registered names inside longer names). Four new cases failed first;
+all84 title cases now pass. Eligibility uses canonical_source_db=unmapped,
+retains the top-level and same-source projection guards, rejects any carried
+identity and prefers the longest containing registered phrase. Original-source
+negation controls remain intact. Independent review and combined CI/local
+qualification of this final addition are pending. Performance PR326 merged
+at f974d834e; no full corpus computation or catalog publication has run yet.

@@ -20,7 +20,8 @@ FIXTURES = Path(__file__).parent / "fixtures"
 
 def _named(name, canonical, text, path="ingredientRows[0]", others=()):
     from scoring_input_contract import _named_in_title
-    row = {"name": name, "canonical_id": canonical, "raw_source_path": path}
+    row = {"name": name, "canonical_id": canonical, "raw_source_path": path,
+           "canonical_source_db": "unmapped" if canonical is None else "ingredient_quality_map"}
     return _named_in_title(row, text, label_rows=[row, *others])
 
 
@@ -176,7 +177,8 @@ def test_a_nested_unmapped_member_is_not_named_by_a_spelled_identity(name, text,
 def test_a_blend_its_own_projection_resolves_is_not_named_again():
     # 176071: the 10 mg CereCalase blend is scored as its hemicellulase
     # projection (same source row), not as a second digestive-enzyme subject.
-    projection = {"canonical_id": "hemicellulase", "raw_source_path": "ingredientRows[1]"}
+    projection = {"canonical_id": "hemicellulase", "raw_source_path": "ingredientRows[1]",
+                  "canonical_source_db": "ingredient_quality_map"}
     assert _named("CereCalase Proprietary Blend", None, "super digestive enzymes", path="ingredientRows[1]")
     assert not _named("CereCalase Proprietary Blend", None, "super digestive enzymes",
                       path="ingredientRows[1]", others=[projection])
@@ -215,3 +217,32 @@ def test_unknown_title_identity_keeps_original_negation_context(name, title):
 
 def test_unknown_title_identity_preserves_free_base_chemistry():
     assert _named('Amino acid blend with L-Arginine free base', None, 'l-arginine 500 mg')
+
+
+@pytest.mark.parametrize("name,text,carrier", [
+    # Registries split one plant across ids; any carried one is the carrier's.
+    ("curcuma longa rhizome complex", "turmeric root powder 500 mg", "turmeric"),
+    ("sambucus nigra berry syrup blend", "elderberries 100 mg", "elderberry"),
+])
+def test_an_identity_carried_under_any_registry_id_names_its_carrier(name, text, carrier):
+    other = {"canonical_id": carrier, "raw_source_path": "ingredientRows[0].nestedRows[0]"}
+    assert not _named(name, None, text, others=[other])
+
+
+def test_only_a_row_the_identity_owners_left_unmapped_qualifies():
+    # A banned, additive or other-ingredient identity is a mapping, not a gap.
+    from scoring_input_contract import _named_in_title
+    for canonical, source_db, name, text in [
+        ("BANNED_GREEN_TEA_X", "banned_recalled_ingredients", "green tea leaf concentrate", "camellia sinensis 500 mg"),
+        ("OI_FISH_GELATIN", "other_ingredients", "purified fish oil concentrate", "omega-3 100 mg"),
+        # 176071: the enzyme blends are IQM-mapped rows scored as their projections.
+        ("cerecalase_proprietary_blend", "ingredient_quality_map", "CereCalase Proprietary Blend", "super digestive enzymes"),
+    ]:
+        row = {"name": name, "canonical_id": canonical, "canonical_source_db": source_db,
+               "raw_source_path": "ingredientRows[0]"}
+        assert not _named_in_title(row, text, label_rows=[row])
+
+
+def test_a_name_inside_a_longer_registered_name_is_the_longer_ones():
+    # "Protein" of "Brown Rice Protein" does not name the blend in "Raw Protein".
+    assert not _named("brown rice protein blend", None, "raw protein vanilla")

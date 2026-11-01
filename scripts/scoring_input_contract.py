@@ -6974,24 +6974,24 @@ def _named_in_title(row: Dict[str, Any], title_norm: str, *, label_rows: Optiona
             for index, forms in enumerate(title_forms)
         ):
             return True
-    if label_rows is not None and label_names and _unmapped_row_stands_for_itself(row, canonical, label_rows):
+    if label_rows is not None and label_names and _unmapped_row_stands_for_itself(row, label_rows):
         # A row with no registered identity (none, or a slug of its label
         # name) has no registry names of its own, but its label name can
         # spell one ("purified fish oil concentrate"). The title names that
         # row when it spells a registered name of the same identity
         # ("Omega-3" is IQM fish_oil's), never by one shared word (18141),
         # and only for an identity no row of the label carries.
-        carried = {_norm(other.get("canonical_id")) for other in label_rows}
-        # Parenthetical aliases and standardized display names can discard a
-        # surrounding "without". The fallback needs the original source text.
+        carried = {_norm(other.get("canonical_id")) for other in label_rows if other is not row}
+        # Keep the full source clause: parentheses can hide surrounding negation.
         source_name = _norm(row.get("raw_source_text") or row.get("name"))
-        spelled = _identities_spelled((source_name,)) & _identities_spelled((title_norm,))
-        return any(identity.split(":", 1)[1] not in carried for identity in spelled)
+        spelled = {identity.split(":", 1)[1] for identity in
+                   _identities_spelled((source_name,)) & _identities_spelled((title_norm,))}
+        return bool(spelled) and not spelled & carried
     return False
 
 
 def _unmapped_row_stands_for_itself(
-    row: Dict[str, Any], canonical: str, label_rows: List[Dict[str, Any]],
+    row: Dict[str, Any], label_rows: List[Dict[str, Any]],
 ) -> bool:
     """Whether an unmapped row is a label subject in its own right.
 
@@ -7003,19 +7003,13 @@ def _unmapped_row_stands_for_itself(
     blends are scored as their amylase and hemicellulase projections (176071).
     """
     path = str(row.get("raw_source_path") or "")
-    registered = _registered_identity_ids()
-    if canonical in registered or not path or "." in path:
+    if _norm(row.get("canonical_source_db")) != "unmapped" or not path or "." in path:
         return False
     return not any(
         other is not row and str(other.get("raw_source_path") or "") == path
-        and _norm(other.get("canonical_id")) in registered
+        and _norm(other.get("canonical_source_db")) not in {"", "unmapped"}
         for other in label_rows
     )
-
-
-@lru_cache(maxsize=1)
-def _registered_identity_ids() -> frozenset:
-    return frozenset(identity for _, identity, _ in identity_registry_name_lists())
 
 
 @lru_cache(maxsize=1)
@@ -7046,6 +7040,7 @@ def _identities_spelled(texts: tuple) -> frozenset:
     for text in texts:
         words = list(re.finditer(r"[a-z0-9]+", text))
         forms = [_title_token_forms(word.group()) for word in words]
+        matches = []
         for start, start_forms in enumerate(forms):
             for word in start_forms:
                 for tokens, identity in index.get(word, ()):
@@ -7053,7 +7048,11 @@ def _identities_spelled(texts: tuple) -> frozenset:
                         phrase = text[words[start].start():words[start + len(tokens) - 1].end()]
                         pattern = re.compile(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)")
                         if find_affirmative_label_match(pattern, text, spaced_free=True):
-                            spelled.add(identity)
+                            matches.append((start, start + len(tokens), identity))
+        # A shorter identity inside a longer registered name belongs to the latter.
+        spelled.update(identity for start, end, identity in matches if not any(
+            left <= start and end <= right and right - left > end - start
+            for left, right, _ in matches))
     return frozenset(spelled)
 
 
