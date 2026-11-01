@@ -152,7 +152,10 @@ def test_real_ritual_womens_record_does_not_verify_mens_product():
 
     result = resolve("Ritual", "Essential for Men Multivitamin 18+", ["USP Verified"], registry)[0]
 
-    assert result.scope == "needs_review"
+    # A complete refreshed directory can remove the old women's listing.
+    # Either conflicting identity or no current listing must refuse credit;
+    # synthetic fixtures above keep the exact conflicting-row guard pinned.
+    assert result.scope in {"needs_review", "claimed_only"}
     assert not result.scores_points()
 
 
@@ -431,3 +434,54 @@ def test_real_culturelle_form_descriptor_supplies_registry_identity_at_producer_
     matches = _producer_cert_resolution(product, CertRegistry.load())
 
     assert any(row["scope"] == "sku" and row["record_id"] == "USP_VERIFIED_A72E3970D2E5" for row in matches)
+
+
+@pytest.mark.parametrize('brand,title,expected_scope', [
+    ('GNC Mega Men', 'Eye Health', 'needs_review'),
+    ("GNC Women's Ultra Mega", 'Eye Health', 'needs_review'),
+    ('Example', 'Eye Health for Women', 'brand_only'),
+    ('Example', 'Eye Health 50+', 'needs_review'),
+    ('Example Kids', 'Eye Health', 'needs_review'),
+])
+def test_generic_certified_listing_cannot_establish_population_edition(brand, title, expected_scope):
+    """A generic listed formula does not verify a different population SKU."""
+    registry = _make_registry(records=[{
+        'program': 'ConsumerLab', 'brand': 'GNC' if brand.startswith('GNC') else 'Example',
+        'product': 'Eye Health Formula', 'scope': 'sku',
+    }])
+    resolution = resolve(brand, title, ['ConsumerLab'], registry)[0]
+    assert resolution.scope == expected_scope
+    assert not resolution.scores_points()
+    assert discover_verified_programs(brand, title, registry) == []
+
+
+@pytest.mark.parametrize('title', [
+    'AMP Wheybolic Girl Scouts Thin Mints',
+    'Wheybolic Girl Scout Coconut Caramel',
+])
+def test_licensed_cookie_flavor_is_not_a_formulation_population(title):
+    from cert_resolver import _sku_population_tokens
+    assert _sku_population_tokens(title)[0] == frozenset()
+
+
+@pytest.mark.parametrize('title,sex', [('Vitamins for Girls', 'female'), ('Vitamins for Boys', 'male')])
+def test_actual_child_sex_qualifier_remains_material(title, sex):
+    from cert_resolver import _sku_population_tokens
+    assert _sku_population_tokens(title)[0] == frozenset({sex})
+
+
+def test_exact_reviewed_alias_can_establish_omitted_population_but_not_contradiction():
+    record = {'program': 'USP Verified', 'brand': 'Example',
+              'product': 'Multivitamin Gummies', 'record_id': 'reviewed-gummies'}
+    override = {'program': 'USP Verified', 'brand': 'Example',
+                'product': 'Adult Multivitamin Gummies', 'status': 'verified',
+                'scope': 'product_line', 'record_id': 'reviewed-gummies',
+                'matched_brand': 'Example', 'matched_product': 'Multivitamin Gummies',
+                'reason': 'Exact adult label reviewed against unchanged source listing.'}
+    registry = _make_registry(records=[record], overrides=[override])
+    reviewed = resolve('Example', 'Adult Multivitamin Gummies', ['USP Verified'], registry)[0]
+    assert reviewed.scores_points()
+    assert reviewed.notes == 'curated override'
+    # A changed source listing is not the reviewed identity.
+    conflicting = _make_registry(records=[{**record, 'product': 'Kids Multivitamin Gummies'}], overrides=[override])
+    assert not resolve('Example', 'Adult Multivitamin Gummies', ['USP Verified'], conflicting)[0].scores_points()

@@ -318,3 +318,28 @@ def test_both_trust_modules_key_label_asserted_programs_through_the_owner():
     assert omega_trust._label_asserted_quality_programs(product) == [
         "ifos", "nsf sport", "usp verified",
     ]
+
+
+def test_trade_designation_uses_canonical_registry_identity_not_private_brand_guess(monkeypatch):
+    from cert_resolver import resolve
+    from test_cert_resolver import _make_registry
+
+    registry = _make_registry(records=[{
+        'program': 'NSF Certified', 'brand': 'Manufacturer LLC',
+        'product': 'ConsumerBrand Daily Vitamin', 'record_id': 'trade-designation', 'scope': 'sku',
+        'source_listing_rows': [{'brand': 'Manufacturer LLC',
+                                 'trade_designation': 'ConsumerBrand Daily Vitamin'}],
+    }])
+    monkeypatch.setattr(cert_evidence, '_cert_registry', lambda: registry)
+    product = {'brandName': 'ConsumerBrand', 'fullName': 'ConsumerBrand Daily Vitamin'}
+    result = resolve(product['brandName'], product['fullName'], ['NSF Certified'], registry)[0]
+    assert result.scores_points()
+    entry = result.to_dict()
+    assert cert_evidence.cert_entry_brand_matches_product(product, entry)
+    assert cert_evidence.is_verified_product_cert_entry(product, entry)
+    assert not cert_evidence.cert_entry_brand_matches_product(
+        {**product, 'fullName': 'ConsumerBrand Different Preparation'}, entry)
+    assert not cert_evidence.cert_entry_brand_matches_product(
+        product, {**entry, 'record_id': 'invented-record'})
+    assert not cert_evidence.cert_entry_brand_matches_product(
+        product, {**entry, 'source_url': 'https://unrelated.example/forged'})
