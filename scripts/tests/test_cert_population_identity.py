@@ -436,20 +436,20 @@ def test_real_culturelle_form_descriptor_supplies_registry_identity_at_producer_
     assert any(row["scope"] == "sku" and row["record_id"] == "USP_VERIFIED_A72E3970D2E5" for row in matches)
 
 
-@pytest.mark.parametrize('brand,title', [
-    ('GNC Mega Men', 'Eye Health'),
-    ("GNC Women's Ultra Mega", 'Eye Health'),
-    ('Example', 'Eye Health for Women'),
-    ('Example', 'Eye Health 50+'),
-    ('Example Kids', 'Eye Health'),
+@pytest.mark.parametrize('brand,title,expected_scope', [
+    ('GNC Mega Men', 'Eye Health', 'needs_review'),
+    ("GNC Women's Ultra Mega", 'Eye Health', 'needs_review'),
+    ('Example', 'Eye Health for Women', 'brand_only'),
+    ('Example', 'Eye Health 50+', 'needs_review'),
+    ('Example Kids', 'Eye Health', 'needs_review'),
 ])
-def test_generic_certified_listing_cannot_establish_population_edition(brand, title):
+def test_generic_certified_listing_cannot_establish_population_edition(brand, title, expected_scope):
     """A generic listed formula does not verify a different population SKU."""
     registry = _make_registry(records=[{
         'program': 'ConsumerLab', 'brand': 'GNC' if brand.startswith('GNC') else 'Example',
         'product': 'Eye Health Formula', 'scope': 'sku',
     }])
     resolution = resolve(brand, title, ['ConsumerLab'], registry)[0]
-    assert resolution.scope == 'needs_review'
+    assert resolution.scope == expected_scope
     assert not resolution.scores_points()
     assert discover_verified_programs(brand, title, registry) == []
