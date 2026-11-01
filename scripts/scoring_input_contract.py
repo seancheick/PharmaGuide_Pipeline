@@ -34,7 +34,7 @@ from constants import (
 from scoring_reference_resolver import (
     has_therapeutic_reference,
     iqm_reference_entry,
-    iqm_reference_index,
+    identity_registry_name_lists,
     is_known_botanical,
 )
 
@@ -6651,15 +6651,17 @@ _ROLE_TITLE_MATERIAL_WORDS = frozenset({
     "fruits", "berry", "berries", "seed", "bark", "flower", "herb", "juice",
     "grass", "thallus",
 })
-_ROLE_TITLE_STOPWORDS = _ROLE_TITLE_MATERIAL_WORDS | {
-    "extract", "powder", "complex", "blend", "capsule", "tablet", "softgel",
-    "organic", "pure", "strength", "daily", "formula", "support", "vitamin",
+# Words that make a name a blend or formula, whose other words are marketing.
+_ROLE_TITLE_BLEND_WORDS = frozenset({"blend", "complex", "formula", "matrix", "proprietary"})
+_ROLE_TITLE_STOPWORDS = _ROLE_TITLE_MATERIAL_WORDS | _ROLE_TITLE_BLEND_WORDS | {
+    "extract", "powder", "capsule", "tablet", "softgel",
+    "organic", "pure", "strength", "daily", "support", "vitamin",
     "mineral", "multivitamin", "women", "womens", "men", "mens", "with",
     "plus", "high", "ultra", "whole", "herbal",
     # Label marketing and count words name no ingredient: "Relora
     # Proprietary Patented Blend" is named by "Relora", "Total Probiotic CFU"
     # by "Probiotic".
-    "total", "cfu", "proprietary", "patented", "micronized", "matrix",
+    "total", "cfu", "patented", "micronized",
 }
 
 # A flavor descriptor ("Natural Raspberry-Tea Flavor", "Blackberry Melon
@@ -6850,36 +6852,13 @@ def _single_word_identity_index() -> tuple:
     """
     standalone: Dict[str, Dict[str, set]] = {}
     spread: Dict[str, set] = {}
-
-    def record(registry: str, identity: str, names: List[Any]) -> None:
+    for registry, identity, names in identity_registry_name_lists():
         for name in names:
             tokens = _title_tokens(_norm(name))
             if len(tokens) == 1:
                 standalone.setdefault(tokens[0], {}).setdefault(registry, set()).add(identity)
             for token in set(tokens):
                 spread.setdefault(token, set()).add(f"{registry}:{identity}")
-
-    for key, entry in iqm_reference_index().items():
-        if not isinstance(entry, dict):
-            continue
-        names = [entry.get("standard_name")] + _safe_list(entry.get("aliases"))
-        for form_name, form in (entry.get("forms") or {}).items():
-            names.append(form_name)
-            if isinstance(form, dict):
-                names.extend(_safe_list(form.get("aliases")))
-        record("iqm", str(key), names)
-    try:
-        raw = json.loads((_DATA_DIR / "botanical_ingredients.json").read_text())
-    except Exception:  # pragma: no cover - absence only reduces title matching
-        raw = {}
-    for entry in _safe_list(raw.get("botanical_ingredients")):
-        if isinstance(entry, dict) and entry.get("id"):
-            key = str(entry["id"])
-            latin = _norm(entry.get("latin_name"))
-            names = [key.replace("_", " "), entry.get("standard_name"), latin] + _safe_list(entry.get("aliases"))
-            if " " in latin:
-                names.append(latin.split(" ", 1)[0])
-            record("botanical", key, names)
     return standalone, spread
 
 
@@ -6990,7 +6969,32 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
             for start in range(len(core_tokens) - 1)
         ):
             return True
+        # The head word of the label's own name names it where the title uses
+        # that word unqualified ("Mushroom Complex" names "Maitake Mushroom
+        # powder"). Qualified by another identity's word it is that identity's
+        # ("Reishi Mushroom" does not name maitake), and a head word a registry
+        # lists as an identity names that identity ("Protein" of "Raw Protein"
+        # is not "Brown Rice Protein"). A blend's last word is its marketing
+        # name, not a head ("Comfort" of "Fast-Acting Comfort Blend"). The head
+        # precedes any "from"/"as" phrase.
+        head = [token for token in candidate_tokens[:next(
+            (index for index, token in enumerate(candidate_tokens) if token in _ROLE_TITLE_CONNECTORS),
+            len(candidate_tokens))] if token not in _ROLE_TITLE_STOPWORDS][-1:]
+        if (is_label_name and head and head[0].isalpha() and len(head[0]) >= 4
+                and not _ROLE_TITLE_BLEND_WORDS & set(candidate_tokens)
+                and head[0] not in _single_word_identity_index()[0]) and any(
+            head[0] in forms and not _qualified_by_identity(ordered_title_tokens, index)
+            for index, forms in enumerate(title_forms)
+        ):
+            return True
     return False
+
+
+def _qualified_by_identity(title_tokens: List[str], index: int) -> bool:
+    """Whether the title word at ``index`` follows a word of a registry name."""
+    spread = _single_word_identity_index()[1]
+    previous = [token for token in title_tokens[:index] if token not in _ROLE_TITLE_STOPWORDS]
+    return bool(previous) and any(form in spread for form in _title_token_forms(previous[-1]))
 
 
 @lru_cache(maxsize=4096)
