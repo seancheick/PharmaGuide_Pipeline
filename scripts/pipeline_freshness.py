@@ -1,10 +1,9 @@
 """Content fingerprints for pipeline inputs that must trigger regeneration.
 
-Every stage manifest (clean, enrich, score) records two input fingerprints:
-the reference data in scripts/data, and the code that ran the stage (its entry
-script, every scripts/ module it imports, and its JSON config). The release
-preflight compares both with the current checkout, so output built from older
-data, older code, or a mix of revisions cannot pass as current.
+Every stage manifest (clean, enrich, score) records fingerprints for reference
+data, stage code/configuration, runtime dependencies and actual source inputs.
+Release checks compare this provenance with the current inputs, so older or
+mixed outputs cannot pass as current.
 """
 
 from __future__ import annotations
@@ -217,7 +216,7 @@ def stage_code_fingerprint(repo_root: Path, stage: str) -> str:
 
 
 def stage_input_fingerprints(repo_root: Path, stage: str) -> dict[str, str]:
-    """What a stage manifest records: the reference data and the stage's code."""
+    """Reference, code and runtime stamps used by every stage manifest."""
     return {
         REFERENCE_FINGERPRINT_KEY: reference_data_fingerprint(repo_root),
         CODE_FINGERPRINT_KEY: stage_code_fingerprint(repo_root, stage),
@@ -356,7 +355,7 @@ def batch_source_fingerprint(repo_root: Path, raw_roots: Iterable[Path] = ()) ->
 
 
 def stage_freshness_issues(repo_root: Path) -> list[str]:
-    """Stage outputs whose reference data or stage code differs from now.
+    """Stage outputs whose reference data, code or runtime differs from now.
 
     Each issue starts with its stage name; rerun RERUN_STAGES of the earliest
     stale stage.
