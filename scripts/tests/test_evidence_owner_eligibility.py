@@ -180,7 +180,23 @@ def test_owners_are_the_same_inside_and_outside_the_scoring_scope(enriched, dsld
     assert outside == inside
 
 
-@pytest.mark.parametrize("dsld_id", ["212273", "251549"])
+def test_a_title_naming_its_active_makes_that_active_the_owner(enriched):
+    """251549's title "DIM-plus" names diindolylmethane by its IQM alias "DIM"
+    (standard name "Diindolylmethane (DIM)"), so DIM is title-prominent and
+    owns Evidence; the Protectamins vegetable members are a lower owner tier.
+    The old any-four-letter-word matcher missed the three-letter alias."""
+    from scoring_input_contract import ROLE_CLAIM_PROMINENT, classify_ingredient_roles, get_scoring_ingredients
+
+    product = enriched["251549"]
+    rows = get_scoring_ingredients(product, strict=True).rows
+    roles = classify_ingredient_roles(product, module="generic", rows=rows)
+    prominent = {row.get("canonical_id") for row, role in zip(rows, roles)
+                 if role.get("role") == ROLE_CLAIM_PROMINENT}
+    assert prominent == {"diindolylmethane"}
+    assert evidence_owner_canonicals(product, module="generic") == {"diindolylmethane"}
+
+
+@pytest.mark.parametrize("dsld_id", ["212273"])
 def test_undosed_blend_owners_are_assessed_without_becoming_doses(enriched, dsld_id):
     """D31 A: actual raw-label owners get research assessment, never parent mass."""
     import copy

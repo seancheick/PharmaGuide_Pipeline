@@ -598,7 +598,7 @@ def preprocess_text(text: str) -> str:
         r'^[dl]l?-(alpha|beta|gamma|delta'
         r'|mannose|ribose|theanine|carnitine|glutamine|glutathione'
         r'|methionine|phenylalanine|tryptophan|tyrosine|leucine'
-        r'|isoleucine|valine|lysine|arginine|histidine|cysteine'
+        r'|isoleucine|valine|lysine|arginine|histidine|cysteine|cystine'
         r'|serine|threonine|alanine|proline|asparagine|aspartate'
         r'|limonene|pinitol|chiro|glucarate|pantothenate'
         r'|calcium|malic|tartrate'

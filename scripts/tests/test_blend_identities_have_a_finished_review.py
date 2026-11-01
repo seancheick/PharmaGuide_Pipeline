@@ -289,13 +289,18 @@ def test_finished_blend_does_not_finish_empty_alfalfa_source_review(enriched):
     from evidence_resolver import resolve_product_evidence
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    _assert_empty_automated_source_is_unfinished("alfalfa")
+    # The title names no blend member ("Green" of "Green Superfood" is not the
+    # Green Juice Blend), so every member is a subject: red cabbage's empty
+    # automated review is unfinished too.
+    for canonical in ("alfalfa", "cabbage_extract"):
+        _assert_empty_automated_source_is_unfinished(canonical)
     product = enriched["282638"]
     resolution = resolve_product_evidence(product, owner_scoped=True)
     assert not resolution.is_assessment_complete
     pending = [(row.canonical_id, row.blocking_reasons) for row in resolution.resolutions
                if row.disposition == "literature_resolution_required"]
-    assert pending == [("alfalfa", ["literature_verification_pending"])]
+    assert pending == [("alfalfa", ["literature_verification_pending"]),
+                       ("cabbage_extract", ["literature_verification_pending"])]
     evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"
 

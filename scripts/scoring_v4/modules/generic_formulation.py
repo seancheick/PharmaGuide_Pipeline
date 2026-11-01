@@ -495,6 +495,10 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             "iqm_form_quality_assessed_count": form_assessed_count,
             "botanical_profile_applied": bool(botanical_formulation),
             "botanical_formulation": botanical_formulation.get("components", {}),
+            # Only an opaque structural blend total carries it (reason copy).
+            **({"botanical_unverified_blend": unverified_blend} if (
+                unverified_blend := (botanical_formulation.get("metadata") or {}).get("unverified_blend")
+            ) else {}),
             "collagen_profile_applied": bool(collagen_formulation),
             "collagen_formulation": collagen_formulation.get("components", {}),
             "presence_floor": {

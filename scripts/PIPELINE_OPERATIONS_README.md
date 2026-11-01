@@ -1,19 +1,32 @@
 # PharmaGuide Pipeline Operations
 
-> Canonical operator runbook | Last verified: 2026-10-17 (current batch/release entry points and Flutter build handoff)
+> Canonical operator runbook | Batch/release flow checked against entry points: 2026-10-31
 
 ## 1. Which command should I run?
 
-Run these commands from `/Users/seancheick/Downloads/dsld_clean`. Select the supported Python once per terminal:
+Run from `/Users/seancheick/Downloads/dsld_clean`. For a full Clean → Enrich → Score → snapshot → publication attempt, the command is:
 
 ```bash
-source scripts/python_env.sh
-export PYTHON="$PG_PYTHON"
+bash batch_run_all_datasets.sh --pre-check
 ```
+
+The batch script loads `scripts/python_env.sh` itself. The pre-check is optional;
+plain `bash batch_run_all_datasets.sh` follows the same full compute and release
+path with essential startup checks. Neither command builds or uploads a phone app.
+Both commands can publish to Supabase and update the Flutter bundle after gates
+pass, so use `--pipeline-only` or `--skip-release` when publication is not intended.
+Both full commands run `scripts/release_full.sh --preflight-only` before corpus
+work. A run that may publish needs a pipeline checkout with no tracked changes
+and `HEAD` at the freshly fetched `origin/main`; release checks the Flutter
+checkout the same way. `--pipeline-only` and `--skip-release` skip this release
+preflight.
+For the direct Python maintenance commands later in this guide, first run
+`source scripts/python_env.sh` in that terminal; the batch and test wrappers
+load it for themselves.
 
 `--pipeline-only` chooses where the run stops. `--pre-check` independently chooses
 whether aggregate preparation runs before processing. Both combinations are
-available on main after PR #150; update an older checkout before using the flag.
+available on current main.
 
 | Intent                                                    | Command                                                                          | Result                                                                     |
 | --------------------------------------------------------- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
