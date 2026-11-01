@@ -569,3 +569,5 @@ def test_batch_stops_after_source_drift_before_next_brand(tmp_path):
     assert result.returncode != 0
     assert result.stdout.count('brand-ran') == 1
     assert 'source changed' in result.stdout.lower()
+    summary = next((tmp_path / 'scripts/products/reports').glob('batch_run_summary_*.txt'))
+    assert 'source changed' in summary.read_text().lower()

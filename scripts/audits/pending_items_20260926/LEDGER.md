@@ -4234,3 +4234,9 @@ in 71.98s across stage ownership, resume paths, batch orchestration, gate receip
 publication failure boundaries and scoring/source contracts. The separate local
 gate passed with no undeclared skip. Shell syntax and diff checks passed. The
 operator's current snapshot failure remains a release blocker outside this PR.
+Final report-boundary correction: a fail-first check proved drift stops were
+visible in the terminal but absent from the saved batch summary. Both runtime
+and raw-input drift reasons are now appended through the existing summary owner.
+Batch orchestration tests: 23 passed; no product-stage code changed in this
+follow-up. Main/candidate detail-blob comparison was also identical for all eight
+labels with zero export-contract errors.

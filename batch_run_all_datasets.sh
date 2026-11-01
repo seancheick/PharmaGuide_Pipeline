@@ -221,7 +221,7 @@ check_batch_source() {
     local current_source
     current_source=$("$PYTHON" pipeline_freshness.py batch-source-fingerprint --repo-root "$REPO_ROOT") || exit 1
     if [ "$current_source" != "$BATCH_SOURCE_BASELINE" ]; then
-        echo "STOP: runtime source changed during this batch. Completed outputs are retained; freeze source and retry with --resume."
+        echo "STOP: runtime source changed during this batch. Completed outputs are retained; freeze source and retry with --resume." | tee -a "$SUMMARY_FILE"
         exit 1
     fi
 }
@@ -389,7 +389,7 @@ check_batch_inputs() {
         --repo-root "$REPO_ROOT" --raw-inputs "$DATASET_ROOT" \
         --raw-inputs "$SUBMISSION_OUTPUT_DIR") || exit 1
     if [ "$current_inputs" != "$BATCH_INPUT_BASELINE" ]; then
-        echo "STOP: source or raw labels changed during this batch. Freeze inputs and retry with --resume."
+        echo "STOP: source or raw labels changed during this batch. Freeze inputs and retry with --resume." | tee -a "$SUMMARY_FILE"
         exit 1
     fi
 }
