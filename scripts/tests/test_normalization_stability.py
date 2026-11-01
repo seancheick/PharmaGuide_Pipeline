@@ -389,3 +389,22 @@ class TestNoneAndEmptyHandling:
         assert normalize_for_skip_matching("   ") == ""
         assert preprocess_text("   ") == ""
         assert normalize_exact_text("   ") == ""
+
+
+@pytest.mark.parametrize('term,text,expected', [
+    ('fish oil', 'plant blend (fish oil free)', False),
+    ('fish oil', 'plant blend without (fish oil)', False),
+    ('l-arginine', 'amino blend with L-Arginine free base', True),
+    ('l-arginine', 'without L-Arginine free base', False),
+    ('carnitine', 'carnitine free acid', True),
+    ('taurine', 'taurine free form', True),
+    ('fish oil', 'no fish oil. Contains fish oil', True),
+    ('fish oil', 'fish oil free of contaminants', True),
+    ('fish oil', 'fish oil free from gluten', True),
+    ('fish oil', 'blend free of fish oil', False),
+])
+def test_affirmative_identity_absence_preserves_chemical_forms(term, text, expected):
+    import re
+    from normalization import find_affirmative_label_match
+    assert bool(find_affirmative_label_match(re.compile(re.escape(term), re.I), text,
+                                            spaced_free=True)) is expected

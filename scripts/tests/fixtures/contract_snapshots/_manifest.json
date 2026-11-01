@@ -1295,6 +1295,14 @@
       ],
       "source_commit": "7f8c05454 (integrated source: scope870a1ade, materialae2fec36, pregnancyf1e15da6)",
       "notes": "Cause-reviewed full raw replay: 306381 complete->partial because unreviewed B1/B3/B6/taurine research cannot establish completion; qualified citrulline/beta-alanine/theanine/caffeine and total unchanged. 293924 partial->complete through authoritative calcium plus qualified magnesium. 321405 Wobenzym 71.2->60.8 removes unreviewed bromelain clinical credit; 336337 Green Tea Phytosome 78.8->68.4 removes unsigned clinical scope credit; 321969 Iron 94.6->90.1 replaces unreviewed clinical credit with independently qualified nutrient authority and becomes complete. All numeric movement is Evidence-only; full86-label scope receipts show no Clean, other-pillar, route or score-status movement, plus four native controls on final870. Safety and source/exposure guards retained. Actual KSM245156 initial drift was a material-identity defect, FIXED, not refreshed. Other28 canaries remain unchanged. Receipts: ~/pg_quality/field_one_brain_20261028/scope_final/measurement.md and combined_b881c4b_raw_canary.log. No corpus/release acceptance claimed."
+    },
+    {
+      "date": "2026-11-01",
+      "dsld_ids": [
+        278454
+      ],
+      "source_commit": "2ef348106 (certification renewal PR #324/#325), independently replayed at 1d9c7631",
+      "notes": "Source-grounded expectation update only: the renewed USP Verified directory no longer contains Ritual record USP_VERIFIED_6B8C09641894 (Essential for Women Multivitamin 18+). Verification drops 10 to 8 through the existing claimed-only assessment; total 86.4 to 84.4. Main and integration candidate replay the same raw label with identical Clean/Enrich/Score/detail-blob hashes. All other pillars, label amounts, identities, review states and warnings are unchanged. No certification was inferred from a brand name. CVS18141 is repaired at the title-role owner and its existing 59.9 snapshot is retained, not rebaselined. Fifteen-label raw replay: only18141 changes;14 controls identical. Receipts: .claude/state/final_release_audit/."
     }
   ]
 }

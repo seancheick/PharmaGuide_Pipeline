@@ -950,11 +950,22 @@ def is_negated_match_phrase(text: str, matched_term: str, *, spaced_free: bool =
     return any(re.search(pattern, text_lower) for pattern in negation_patterns)
 
 
-def find_affirmative_label_match(pattern, text: str):
-    """Return a positive label occurrence, preserving clause/list negation."""
+def find_affirmative_label_match(pattern, text: str, *, spaced_free: bool = False):
+    """Return an affirmative occurrence, preserving clause/list negation.
+
+    Identity callers can include spaced absence claims while retaining chemical
+    free-base/form/acid wording and positive "fish oil free of contaminants"
+    qualifiers. Existing callers keep their previous semantics.
+    """
     for clause in re.split(r"[.;!?\r\n]+|\b(?:but|however)\b", text, flags=re.I):
         for candidate in pattern.finditer(clause):
-            if is_negated_match_phrase(clause, candidate.group(0)):
+            term = candidate.group(0)
+            if spaced_free:
+                qualifier = re.match(r"[-\s]+free[-\s]+(?:base|form|acid|of|from)\b",
+                                     clause[candidate.end():], re.I)
+                if qualifier:
+                    term += qualifier.group(0)
+            if is_negated_match_phrase(clause, term, spaced_free=spaced_free):
                 continue
             if re.search(r"\b(?:no|not|without|free\s+(?:of|from))\b", clause[:candidate.start()], re.I):
                 continue
