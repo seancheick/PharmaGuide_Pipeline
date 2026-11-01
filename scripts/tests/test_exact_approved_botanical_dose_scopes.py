@@ -361,7 +361,14 @@ def test_american_4to1_rhizome_root_powder_completes_dose_with_the_shared_neutra
     subjects = {w["title"].rsplit(" / ", 1)[1]
                 for w in blob["warnings"] + (blob.get("warnings_profile_gated") or [])
                 if w.get("source_rule_id") == "RULE_INGREDIENT_GINSENG"}
-    assert {"diabetes", "anticoagulants", "hypoglycemics_high_risk", "pregnancy"} <= subjects
+    assert {"diabetes", "anticoagulants", "hypoglycemics_high_risk", "pregnancy",
+            "cardiac_glycosides"} <= subjects
+    digoxin = next(w for w in blob["warnings"] + (blob.get("warnings_profile_gated") or [])
+                   if w.get("source_rule_id") == "RULE_INGREDIENT_GINSENG"
+                   and w["title"].endswith(" / cardiac_glycosides"))
+    assert digoxin["severity"] == "caution"
+    assert "prescriber" in digoxin["alert_body"].lower()
+    assert digoxin["profile_gate"]["requires"]["drug_classes_any"] == ["cardiac_glycosides"]
 
 
 @pytest.mark.parametrize("change", [

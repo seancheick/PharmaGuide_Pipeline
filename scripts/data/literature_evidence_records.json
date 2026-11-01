@@ -39726,7 +39726,7 @@
         "review_date": "2026-11-01",
         "approval_status": "approved_existing_neutral_2026_11_01"
       },
-      "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-11-01. Original source-reviewed labels: 330196, 330197, 330198, 330199 (same formula fingerprint). Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety, including the monograph's blood-thinner, digoxin and diabetes cautions, remain independent. Agent-authored source review; not clinician-reviewed."
+      "notes": "Exact Dose scope authority: Sean directly approved this four-label Dose disposition on 2026-11-01. Original source-reviewed labels: 330196, 330197, 330198, 330199 (same formula fingerprint). Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent. The source research and citation check were agent-conducted; no Dr Pham or PharmD review of this exact material is claimed."
     }
   ]
 }

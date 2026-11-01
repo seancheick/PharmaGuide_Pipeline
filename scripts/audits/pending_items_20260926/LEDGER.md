@@ -4126,11 +4126,11 @@ The completed Clean/Enrich/Score run failed the snapshot scoring-completeness pr
   - Quality config is now 1.31.6, with its fingerprint pinned.
   - Six duplicate raw-label fixtures were folded into one copy each.
 
-**Integrated replay** (Clean → Enrich → Score on 18 raw labels: the six plus 12 controls, main 1c3d615ff vs branch, `PHARMAGUIDE_DATASET_ROOT` on a scratch copy):
+**Integrated replay before the later digoxin safety correction** (Clean → Enrich → Score on 18 raw labels: the six plus 12 controls, main 1c3d615ff vs branch, `PHARMAGUIDE_DATASET_ROOT` on a scratch copy):
 - Moved: the four ginseng labels (Not Scored → scored 57.1, complete). 18551 and 178728 stay Not Scored, with blockers now Evidence-only. 222788 and 222896 stay `suppressed_safety`/blocked, and gain an `evidence_assessment_incomplete` blocker because the title no longer names peppermint.
 - Unchanged: 13567, 176190, 182704, 229932, 251616, 268432, 293904, 311195, 327984, 40089.
-- No safety field differs on any of the 18. Checked fields: `product_safety_status`, `_v4_safety_gate`, `safety_*`, `dose_safety_evaluation`.
-- The ginseng warnings are identical before and after (pregnancy, lactation, diabetes, surgery, hypoglycemics, anticoagulants, MAOIs).
+- No safety gate field differed on any of the 18 in this initial replay. Checked fields: `product_safety_status`, `_v4_safety_gate`, `safety_*`, `dose_safety_evaluation`.
+- The initial ginseng warnings were identical (pregnancy, lactation, diabetes, surgery, hypoglycemics, anticoagulants, MAOIs). The later source-cited digoxin consultation correction adds a distinct profile-gated warning; it does not alter the Dose or Evidence determination.
 - Strict gate `audit_source_of_truth_contract.py scoring --strict-release --completion-only` (the preflight that failed): exit 0 on the branch.
 - The full mode without `--dist-dir` fails on main as well. It needs the catalog's quarantine and warning-only proof, and `verified_warning_only_products` admits blocked and Not Scored catalog rows with null scores.
 
@@ -4138,7 +4138,7 @@ The completed Clean/Enrich/Score run failed the snapshot scoring-completeness pr
 
 **Findings for Sean:**
 - 5,884 catalog products ship *scored* with exactly `evidence_assessment_incomplete` through `_retained_evidence_is_publishable`, and both 18551 and 178728 pass that check. Holding them as Not Scored follows the pasted direction, but it treats them differently from that class. Removing the two hold entries would publish them as scored partial (40.6 and 22.7).
-- The direction asked to preserve a ginseng–digoxin precaution. `RULE_INGREDIENT_GINSENG` has none on main or on this branch, so nothing was lost; adding one would be a sourced `/data-fix` entry.
+- The direction asked to preserve a ginseng–digoxin precaution. None existed on main. A subsequent bounded correction added it to the existing `RULE_INGREDIENT_GINSENG` owner after Sean authorized a sourced consultation warning; it does not assert a proven direct interaction or contraindication.
 
 **Fresh-context review (same day) and fixes:**
 - **Ginseng scope leak (medium), fixed.** A ratio clause matched inside "4:1.5", "4:1 to 10:1" and "10:1 and 4:1", and a stated ginsenoside standard or solvent was not excluded.
@@ -4156,3 +4156,5 @@ The completed Clean/Enrich/Score run failed the snapshot scoring-completeness pr
 - Reconciled slice: `scripts/test.sh fast` over the held-assessment, non-scorable identity, exact-scope, title-ownership, blend-subject and config-registry files: 490 passed.
 - Before the merge: title slice 113 passed, exact scopes 262 passed, botanical/blend slice 2456 passed, Python correctness 0 new.
 - Exact-head CI is the merge gate.
+
+**Independent November 1 integration review:** Sean explicitly approved the exact four-label 4:1 rhizome-and-root Dose disposition and separately reaffirmed that 18551/178728 stay Not Scored with Evidence-only blockers. The literature record now distinguishes Sean's Dose decision from agent-conducted source verification and claims no Dr Pham/PharmD signoff. The official Health Canada American-ginseng monograph advises professional consultation with digoxin; the existing ginseng rule had no digoxin class entry. Sean authorized the bounded safety correction. Added a presence-based `cardiac_glycosides` consultation caution to `RULE_INGREDIENT_GINSENG`, also citing NCCIH's narrow-therapeutic-index medication advice. It states that a direct harmful interaction is not established and creates no dose threshold or contraindication. Real raw-label tests verify the new profile-gated warning for all four ginseng editions while preserving Dose/Evidence status; a non-ginseng control remains excluded. `data_batch.py check`: exactly the ginseng interaction rule changed, zero problems. Focused safety/consumer slice: 398 passed; source/interaction contract slice: 73 passed; `scripts/test.sh local`: 554 passed, 24 declared opt-in skips. This additional warning change supersedes the initial replay's warning-parity statement; exact-head CI remains the merge gate.
