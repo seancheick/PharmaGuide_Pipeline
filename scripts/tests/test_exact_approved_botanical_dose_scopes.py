@@ -353,6 +353,15 @@ def test_american_4to1_rhizome_root_powder_completes_dose_with_the_shared_neutra
     assert unfinished_source_assessment(product, scored["_v4_module_breakdown"]) is None
     assert scored["quality_score_status"] == "scored"
     assert scored["assessment_readiness"]["release_assessment"]["is_complete"] is True
+    # The completed Dose scope adds no clearance: the ginseng precautions stay.
+    from build_final_db import build_detail_blob, validate_export_contract
+    assert validate_export_contract(product, scored) == []
+    assert scored["product_safety_status"] == "no_known_catalog_concern"
+    blob = build_detail_blob(product, scored)
+    subjects = {w["title"].rsplit(" / ", 1)[1]
+                for w in blob["warnings"] + (blob.get("warnings_profile_gated") or [])
+                if w.get("source_rule_id") == "RULE_INGREDIENT_GINSENG"}
+    assert {"diabetes", "anticoagulants", "hypoglycemics_high_risk", "pregnancy"} <= subjects
 
 
 @pytest.mark.parametrize("change", [

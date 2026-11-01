@@ -49,7 +49,8 @@ def products():
     enricher, normalizer = SupplementEnricherV3(), EnhancedDSLDNormalizer()
     out = {}
     for dsld_id in ("18551", "40089", "293904", "297665", "321388"):
-        raw = json.loads((FIXTURES / f"evidence_title_{dsld_id}_raw.json").read_text())
+        name = "raw_held_assessment_18551.json" if dsld_id == "18551" else f"evidence_title_{dsld_id}_raw.json"
+        raw = json.loads((FIXTURES / name).read_text())
         enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
         out[dsld_id] = (enriched, build_scored_artifact(enriched))
     return out

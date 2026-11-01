@@ -245,13 +245,13 @@ def test_raw_superfoods_iron_keeps_its_internal_dose_result_without_a_public_sco
     from scoring_v4.scored_artifact import build_scored_artifact
 
     # The 0.4 mg iron row remains interaction-only. The printed Organic
-    # Superfood Blend total is the Dose subject, with 0.0 internal credit.
-    # This exact label now publishes without a quality score while its Dose
-    # and Evidence reviews remain incomplete.
+    # Superfood Blend total is structural, with 0.0 internal Dose credit.
+    # This exact label publishes without a quality score while its Evidence
+    # review remains incomplete.
     scored = build_scored_artifact(enrich(178728))
     assert scored["_v4_module_breakdown"]["dimensions"]["dose"]["score"] == 0.0
     assert scored["assessment_readiness"]["release_assessment"]["blockers"] == [
-        "dose_benchmark_identity_unresolved", "evidence_assessment_incomplete",
+        "evidence_assessment_incomplete",
     ]
     assert scored["quality_score_status"] == "not_scored"
     assert scored["quality_pillars_v4"] is None

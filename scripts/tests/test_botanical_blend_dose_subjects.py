@@ -16,6 +16,7 @@ def structural_blend_products():
     base = Path(__file__).parent / 'fixtures'
     return {pid: e.enrich_product(n.normalize_product(json.loads((base / (
         f'raw_blend_grapefruit_{pid}.json' if pid in {'176190','232084'} else
+        'raw_held_assessment_178728.json' if pid == '178728' else
         f'raw_named_blend_{pid}.json')).read_text())))[0] for pid in IDS + ['178728']}
 
 
@@ -129,6 +130,6 @@ def test_raw_superfoods_keeps_only_its_open_evidence_review(structural_blend_pro
     assert (result['score'], result['band']) == (0, 'blend_total_only')
     assert result['metadata'] == {'assessment_status': 'not_applicable'}
     scored = build_scored_artifact(deepcopy(product))
-    assert scored['quality_pillars_v4']['dose']['score'] == 0
-    assert scored['quality_pillars_v4']['formulation']['score'] == 0
+    dimensions = scored['_v4_module_breakdown']['dimensions']
+    assert (dimensions['dose']['score'], dimensions['formulation']['score']) == (0, 0)
     assert scored['assessment_readiness']['release_assessment']['blockers'] == ['evidence_assessment_incomplete']
