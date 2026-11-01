@@ -453,9 +453,11 @@ def _sku_population_tokens(text: str) -> tuple[frozenset[str], ...]:
 
 def _sku_population_conflict(product: str, candidate: str) -> bool:
     for requested, certified in zip(_sku_population_tokens(product), _sku_population_tokens(candidate)):
-        # A population-specific registry row cannot establish identity for an
-        # unspecified label. A generic row may cover a more specific member;
-        # explicit combined lines (prenatal + postnatal) can cover either member.
+        # Unknown population is not evidence of the same formulation in
+        # either direction. Explicit combined lines (prenatal + postnatal)
+        # can still cover either named member.
+        if requested and not certified:
+            return True
         if certified and (not requested or not requested.issubset(certified)):
             return True
     return False

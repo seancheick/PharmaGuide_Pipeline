@@ -152,7 +152,10 @@ def test_real_ritual_womens_record_does_not_verify_mens_product():
 
     result = resolve("Ritual", "Essential for Men Multivitamin 18+", ["USP Verified"], registry)[0]
 
-    assert result.scope == "needs_review"
+    # A complete refreshed directory can remove the old women's listing.
+    # Either conflicting identity or no current listing must refuse credit;
+    # synthetic fixtures above keep the exact conflicting-row guard pinned.
+    assert result.scope in {"needs_review", "claimed_only"}
     assert not result.scores_points()
 
 
@@ -431,3 +434,22 @@ def test_real_culturelle_form_descriptor_supplies_registry_identity_at_producer_
     matches = _producer_cert_resolution(product, CertRegistry.load())
 
     assert any(row["scope"] == "sku" and row["record_id"] == "USP_VERIFIED_A72E3970D2E5" for row in matches)
+
+
+@pytest.mark.parametrize('brand,title', [
+    ('GNC Mega Men', 'Eye Health'),
+    ("GNC Women's Ultra Mega", 'Eye Health'),
+    ('Example', 'Eye Health for Women'),
+    ('Example', 'Eye Health 50+'),
+    ('Example Kids', 'Eye Health'),
+])
+def test_generic_certified_listing_cannot_establish_population_edition(brand, title):
+    """A generic listed formula does not verify a different population SKU."""
+    registry = _make_registry(records=[{
+        'program': 'ConsumerLab', 'brand': 'GNC' if brand.startswith('GNC') else 'Example',
+        'product': 'Eye Health Formula', 'scope': 'sku',
+    }])
+    resolution = resolve(brand, title, ['ConsumerLab'], registry)[0]
+    assert resolution.scope == 'needs_review'
+    assert not resolution.scores_points()
+    assert discover_verified_programs(brand, title, registry) == []
