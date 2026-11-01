@@ -188,7 +188,7 @@ def test_a_flavor_variant_after_the_dosage_form_names_no_registry_alias(title):
     [
         # The label's own dosed name after the form word is the active.
         ("Immune Chews Elderberry", "elderberry", "Elderberry"),
-        # A number ends the variant: "Gummies Ashwagandha 300 mg" names it.
+        # More than two words after the form are not a variant.
         ("Gummies Ashwagandha 300 mg", "ashwagandha", "Ashwagandha"),
         # Nothing after the form word.
         ("Elderberry Gummies", "elderberry", "Elderberry"),
@@ -196,6 +196,26 @@ def test_a_flavor_variant_after_the_dosage_form_names_no_registry_alias(title):
 )
 def test_a_dosed_active_after_the_dosage_form_stays_title_named(title, canonical, name):
     rows = [_row(canonical, name, 50.0), _row("zinc", "Zinc", 300.0, path="ingredientRows[1]")]
+    assert _roles(title, rows)[canonical] == "named_in_product_title"
+
+
+@pytest.mark.parametrize("title", ["Immune Gummies Elderberry", "Liquid Drops Elderberry"])
+def test_a_blend_member_named_after_the_dosage_form_stays_title_named(title):
+    # The variant words are the label's own name for an undosed blend member.
+    rows = [
+        _row("herbal_blend", "Proprietary Herbal Blend", 192.0, is_proprietary_blend=True),
+        _row("elderberry", "Elderberry", path="ingredientRows[0].nestedRows[0]"),
+    ]
+    assert _roles(title, rows)["elderberry"] == "named_in_product_title"
+
+
+@pytest.mark.parametrize("title, canonical, name, standard_name", [
+    ("Immune Chews Elderberry", "elderberry", "Sambucus nigra", "Elderberry"),
+    ("Kids Gummies Turmeric", "turmeric", "Curcuma longa", "Turmeric"),
+])
+def test_a_binomial_row_after_the_dosage_form_stays_title_named(title, canonical, name, standard_name):
+    rows = [_row(canonical, name, 50.0, standard_name=standard_name),
+            _row("zinc", "Zinc", 300.0, path="ingredientRows[1]")]
     assert _roles(title, rows)[canonical] == "named_in_product_title"
 
 
