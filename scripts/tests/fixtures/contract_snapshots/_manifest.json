@@ -1295,6 +1295,14 @@
       ],
       "source_commit": "7f8c05454 (integrated source: scope870a1ade, materialae2fec36, pregnancyf1e15da6)",
       "notes": "Cause-reviewed full raw replay: 306381 complete->partial because unreviewed B1/B3/B6/taurine research cannot establish completion; qualified citrulline/beta-alanine/theanine/caffeine and total unchanged. 293924 partial->complete through authoritative calcium plus qualified magnesium. 321405 Wobenzym 71.2->60.8 removes unreviewed bromelain clinical credit; 336337 Green Tea Phytosome 78.8->68.4 removes unsigned clinical scope credit; 321969 Iron 94.6->90.1 replaces unreviewed clinical credit with independently qualified nutrient authority and becomes complete. All numeric movement is Evidence-only; full86-label scope receipts show no Clean, other-pillar, route or score-status movement, plus four native controls on final870. Safety and source/exposure guards retained. Actual KSM245156 initial drift was a material-identity defect, FIXED, not refreshed. Other28 canaries remain unchanged. Receipts: ~/pg_quality/field_one_brain_20261028/scope_final/measurement.md and combined_b881c4b_raw_canary.log. No corpus/release acceptance claimed."
+    },
+    {
+      "date": "2026-11-01",
+      "dsld_ids": [
+        278454
+      ],
+      "source_commit": "2050e8e64 (November certification source renewal, PR #324/#325)",
+      "notes": "Expected movement from the renewed official USP directory, which no longer lists 'Ritual Essential for Women Multivitamin 18+'. The label's USP Verified claim resolves claimed_only instead of brand_only, so Verification loses brand_only_cert (2.0) and falls from the manufacturing to the claim_or_brand tier: 10.0 -> 8.0, total 86.4 -> 84.4. Isolated by resolving the label against old and new code and old and new cert_registry.json: only the registry swap changes the result. Directory absence is not a formal revocation; no other pillar, status, tier or safety field moved. 18141 drifted in the same run (Dose 11.4 -> 6.3) from a title-identity regression in e84116059; that was FIXED on claude/omega-title-identity-20261101, not refreshed, and 18141 matches its existing fixture again. Refreshed from raw with freeze_contract_snapshots.py --raw-root; full raw canary check: 33/33 after refresh."
     }
   ]
 }
