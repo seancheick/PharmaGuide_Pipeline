@@ -6982,7 +6982,10 @@ def _named_in_title(row: Dict[str, Any], title_norm: str, *, label_rows: Optiona
         # ("Omega-3" is IQM fish_oil's), never by one shared word (18141),
         # and only for an identity no row of the label carries.
         carried = {_norm(other.get("canonical_id")) for other in label_rows}
-        spelled = _identities_spelled(tuple(sorted(label_names))) & _identities_spelled((title_norm,))
+        # Parenthetical aliases and standardized display names can discard a
+        # surrounding "without". The fallback needs the original source text.
+        source_name = _norm(row.get("raw_source_text") or row.get("name"))
+        spelled = _identities_spelled((source_name,)) & _identities_spelled((title_norm,))
         return any(identity.split(":", 1)[1] not in carried for identity in spelled)
     return False
 
@@ -7049,7 +7052,7 @@ def _identities_spelled(texts: tuple) -> frozenset:
                     if _phrase_in_title(list(tokens), forms[start:start + len(tokens)]):
                         phrase = text[words[start].start():words[start + len(tokens) - 1].end()]
                         pattern = re.compile(r"(?<!\w)" + re.escape(phrase) + r"(?!\w)")
-                        if find_affirmative_label_match(pattern, text):
+                        if find_affirmative_label_match(pattern, text, spaced_free=True):
                             spelled.add(identity)
     return frozenset(spelled)
 

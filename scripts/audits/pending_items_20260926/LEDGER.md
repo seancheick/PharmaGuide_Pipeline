@@ -4260,3 +4260,12 @@ Final measurement, independent review and CI/local qualification remain pending
 for the combined source batch; no pipeline or publication is authorized by these
 focused tests alone. Latest operator corpus remains at main2ef348106, snapshot
 blocked on CVS18141 title defect and Ritual278454 certification drift.
+Independent fresh-context review at ccf13bdf reproduced two P2 source-negation
+counterexamples: parenthetical extraction lost 'without', and spaced 'fish oil
+free' was read as presence. The fallback now checks the original raw_source_text
+(or original name), not derived fragments/standardized aliases. The shared
+normalization affirmative predicate gained an opt-in spaced-free mode; existing
+callers retain their default semantics. That mode preserves free-base/form/acid
+chemistry and positive 'fish oil free of/from contaminants' qualifiers while
+rejecting actual absence. Fail-first tests cover these classes. Title,
+normalization and all four allergen-negation consumer files:259 passed.

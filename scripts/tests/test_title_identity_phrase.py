@@ -202,3 +202,16 @@ def test_omega_title_keeps_its_fatty_acid_blend_as_the_dose_purpose():
 ])
 def test_unmapped_identity_fallback_requires_affirmative_source_and_title(name, title):
     assert not _named(name, None, title)
+
+
+@pytest.mark.parametrize('name,title', [
+    ('Plant oil blend without (fish oil)', 'omega-3 100 mg'),
+    ('Plant oil blend (fish oil free)', 'omega-3 100 mg'),
+    ('Purified fish oil concentrate', 'omega-3 free'),
+])
+def test_unknown_title_identity_keeps_original_negation_context(name, title):
+    assert not _named(name, None, title)
+
+
+def test_unknown_title_identity_preserves_free_base_chemistry():
+    assert _named('Amino acid blend with L-Arginine free base', None, 'l-arginine 500 mg')
