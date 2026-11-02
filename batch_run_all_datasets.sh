@@ -499,7 +499,6 @@ if [ "$PIPELINE_ONLY" = "1" ]; then
 fi
 SNAPSHOT_SCRIPT="$SCRIPTS_DIR/rebuild_dashboard_snapshot.sh"
 RELEASE_SCRIPT="$SCRIPTS_DIR/release_full.sh"
-SNAPSHOT_OK=0
 
 # CLI flag overrides env var for the full release.
 if [ "$SKIP_RELEASE_FLAG" = "1" ]; then
