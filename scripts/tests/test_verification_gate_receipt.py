@@ -462,7 +462,7 @@ def test_fingerprint_progress_names_the_gate(tmp_path, monkeypatch, capsys):
     assert 'FINGERPRINT: scoring assessment readiness' in capsys.readouterr().err
 
 
-def test_scoring_readiness_ignores_a_manifest_stamp_and_reruns_when_the_database_changes(tmp_path, monkeypatch):
+def test_scoring_readiness_rechecks_changed_manifest_and_database(tmp_path, monkeypatch):
     from audits import run_verification_gate as gate
     monkeypatch.setattr(gate, 'raw_label_fingerprint', lambda root, on_file=None: {'root': 'fixed', 'labels': []})
     monkeypatch.setattr(gate, 'runtime_identity', lambda: {'runtime': 'fixed'})
@@ -489,10 +489,10 @@ def test_scoring_readiness_ignores_a_manifest_stamp_and_reruns_when_the_database
     assert (tmp_path / 'calls').read_text() == 'x'
     (dist / 'export_manifest.json').write_text('{"stamp": 2}')
     assert gate.main(argv) == 0
-    assert (tmp_path / 'calls').read_text() == 'x'
+    assert (tmp_path / 'calls').read_text() == 'xx'
     (dist / 'pharmaguide_core.db').write_bytes(b'db-two')
     assert gate.main(argv) == 0
-    assert (tmp_path / 'calls').read_text() == 'xx'
+    assert (tmp_path / 'calls').read_text() == 'xxx'
 
 
 def test_raw_fingerprint_tracks_jsonl_inputs_read_by_stage_lineage(tmp_path):

@@ -80,20 +80,6 @@ FINGERPRINT_PROGRESS_SECONDS = 15.0
 DEFAULT_HEARTBEAT_SECONDS = 30.0
 
 
-def artifact_binding_excludes(name: str) -> tuple[str, ...]:
-    """Artifact paths a later stamp rewrites without changing this gate's inputs.
-
-    Scoring readiness reads the core database, detail blobs, and audit report.
-    ``stamp_manifest`` then rewrites ``export_manifest.json``. Binding that
-    file made the next release rerun the audit even when the catalog bytes
-    were unchanged. The file still has to exist; the export-contract gate
-    after the stamp is the check that reads it.
-    """
-    if name == 'scoring assessment readiness':
-        return ('export_manifest.json',)
-    return ()
-
-
 def _heartbeat_interval(explicit: float | None) -> float:
     if explicit is not None:
         return explicit
@@ -178,7 +164,6 @@ def run_gate(
     artifact_dir: Path | None = None,
     output_paths: Sequence[Path] = (),
     portable_python: bool = False,
-    artifact_exclude: Sequence[str] = (),
     heartbeat_seconds: float | None = None,
 ) -> int:
     """Serialize receipt writers; reuse is opt-in for bound read-only checks."""
@@ -190,7 +175,7 @@ def run_gate(
                          receipt_path=receipt_path, cwd=cwd,
                          input_globs=input_globs, max_age_seconds=max_age_seconds,
                          artifact_dir=artifact_dir, output_paths=output_paths,
-                         portable_python=portable_python, artifact_exclude=artifact_exclude,
+                         portable_python=portable_python,
                          heartbeat_seconds=heartbeat_seconds)
 
 
@@ -283,7 +268,7 @@ def _input_binding(
     cwd: Path, command: Sequence[str], patterns: Sequence[str],
     *, exclude_paths: Sequence[str] = (), portable_python: bool = False,
     artifact_dir: Path | None = None, output_paths: Sequence[Path] = (),
-    artifact_exclude: Sequence[str] = (), label: str = '',
+    label: str = '',
 ) -> str:
     # Never persist credentials or environment values. The fingerprint binds
     # effective configuration, not shell bookkeeping or the per-run lock token.
@@ -323,12 +308,8 @@ def _input_binding(
     if artifact_dir is not None:
         root = artifact_dir.resolve()
         artifact = {}
-        excluded = set(artifact_exclude)
         for pattern in ('pharmaguide_core.db', 'export_manifest.json', 'detail_index.json',
                         'export_audit_report.json', 'detail_blobs/**/*.json'):
-            if pattern in excluded:
-                artifact[pattern] = []
-                continue
             hashed = []
             for path in sorted(root.glob(pattern)):
                 if path.is_file() and path.resolve() not in {item.resolve() for item in output_paths}:
@@ -381,8 +362,7 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
               receipt_path: Path, cwd: Path, input_globs: Sequence[str],
               max_age_seconds: float, artifact_dir: Path | None = None,
               output_paths: Sequence[Path] = (), portable_python: bool = False,
-              artifact_exclude: Sequence[str] = (),
-              heartbeat_seconds: float | None = None) -> int:
+                        heartbeat_seconds: float | None = None) -> int:
     """Run ``command`` and return its actual exit code after writing a receipt."""
     if not name.strip():
         raise ValueError("gate name must not be empty")
@@ -397,8 +377,7 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
     invocation_started = time.monotonic()
     binding_started = invocation_started
     binding_options = dict(artifact_dir=artifact_dir, output_paths=output_paths,
-                           portable_python=portable_python, artifact_exclude=artifact_exclude,
-                           label=name)
+                           portable_python=portable_python, label=name)
     binding = _input_binding(cwd, command, input_globs, **binding_options) if input_globs else None
     binding_duration = time.monotonic() - binding_started
     if binding and _can_reuse(receipt_path, log_path, name=name, binding=binding,
@@ -572,7 +551,6 @@ def main(argv: Sequence[str] | None = None) -> int:
     artifact_dir, output_paths, portable = release_gate_options(args.name, command, Path(args.cwd), args.release_check)
     return run_gate(
         artifact_dir=artifact_dir, output_paths=output_paths, portable_python=portable,
-        artifact_exclude=artifact_binding_excludes(args.name) if args.release_check else (),
         name=args.name,
         command=command,
         log_path=args.log,

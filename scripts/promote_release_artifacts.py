@@ -241,7 +241,7 @@ def describe_release_plan(repo: Path) -> None:
     from dataset_paths import brand_dataset_root
     from pipeline_freshness import dataset_resume_plan
     from audits.run_verification_gate import (
-        artifact_binding_excludes, release_gate_input_globs, release_gate_options, _can_reuse,
+        release_gate_input_globs, release_gate_options, _can_reuse,
     )
     repo = repo.resolve()
     raw = brand_dataset_root()
@@ -269,8 +269,7 @@ def describe_release_plan(repo: Path) -> None:
                 continue
             artifact, outputs, portable = release_gate_options(name, command, repo)
             current = _input_binding(repo, command, patterns, artifact_dir=artifact,
-                                     output_paths=outputs, portable_python=portable,
-                                     artifact_exclude=artifact_binding_excludes(name))
+                                     output_paths=outputs, portable_python=portable)
             reusable = _can_reuse(path, Path(receipt['log']), name=name, binding=current,
                                  max_age_seconds=86400, output_paths=outputs)
         except (OSError, ValueError, KeyError, TypeError, AttributeError):

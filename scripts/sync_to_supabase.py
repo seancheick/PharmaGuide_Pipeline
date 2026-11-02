@@ -609,7 +609,9 @@ def discover_existing_remote_blob_paths(
         try:
             # Positive existence hints only: absent objects still use create-only
             # uploads. Destructive inventory callers retain summary verification.
-            inventory = inventory_detail_blobs_via_rpc(client, verify_summary=False)
+            inventory = inventory_detail_blobs_via_rpc(
+                client, verify_summary=False,
+                shards=[directory.rsplit("/", 1)[-1] for directory in grouped])
             if not inventory.complete:
                 raise RpcInventoryError('Inventory contains invalid object placement')
             expected = {item['remote_path'] for item in uploads}

@@ -513,6 +513,7 @@ def inventory_detail_blobs_via_rpc(
     inventory callers must retain the default summary verification.
     """
     started = time.monotonic()
+    shards = tuple(shards) if shards is not None else None
     page_limit = max(1, min(int(page_limit), 1000))
 
     def _call(fn, params):
@@ -544,38 +545,41 @@ def inventory_detail_blobs_via_rpc(
 
     base = prefix.rstrip("/") + "/"
     rows: list = []
-    cursor = None
-    while True:
-        page = _call(
-            page_fn,
-            {"p_prefix": prefix, "p_after": cursor, "p_limit": page_limit},
-        )
-        if not isinstance(page, list):
-            raise RpcInventoryError(
-                f"RPC {page_fn} returned a malformed page: {type(page).__name__}"
+    query_prefixes = ([f"{prefix.rstrip('/')}/{shard}" for shard in sorted(set(shards))]
+                      if not verify_summary and shards is not None else [prefix])
+    for query_prefix in query_prefixes:
+        cursor = None
+        while True:
+            page = _call(
+                page_fn,
+                {"p_prefix": query_prefix, "p_after": cursor, "p_limit": page_limit},
             )
-        for row in page:
-            if (
-                not isinstance(row, dict)
-                or not isinstance(row.get("name"), str)
-                or not isinstance(row.get("size"), int)
-                or not isinstance(row.get("etag"), str)
-            ):
-                raise RpcInventoryError(f"RPC {page_fn} malformed row: {row!r}")
-            name = row["name"]
-            if not name.startswith(base):
+            if not isinstance(page, list):
                 raise RpcInventoryError(
-                    f"RPC {page_fn} row escapes prefix {prefix!r}: {name!r}"
+                    f"RPC {page_fn} returned a malformed page: {type(page).__name__}"
                 )
-            if cursor is not None and name <= cursor:
-                raise RpcInventoryError(
-                    f"RPC {page_fn} cursor is not strictly monotonic: "
-                    f"{name!r} after {cursor!r} (duplicate or reordered row)"
-                )
-            cursor = name
-            rows.append((name, row["size"], row["etag"]))
-        if len(page) < page_limit:
-            break  # short page == normal keyset termination
+            for row in page:
+                if (
+                    not isinstance(row, dict)
+                    or not isinstance(row.get("name"), str)
+                    or not isinstance(row.get("size"), int)
+                    or not isinstance(row.get("etag"), str)
+                ):
+                    raise RpcInventoryError(f"RPC {page_fn} malformed row: {row!r}")
+                name = row["name"]
+                if not name.startswith(base):
+                    raise RpcInventoryError(
+                        f"RPC {page_fn} row escapes prefix {prefix!r}: {name!r}"
+                    )
+                if cursor is not None and name <= cursor:
+                    raise RpcInventoryError(
+                        f"RPC {page_fn} cursor is not strictly monotonic: "
+                        f"{name!r} after {cursor!r} (duplicate or reordered row)"
+                    )
+                cursor = name
+                rows.append((name, row["size"], row["etag"]))
+            if len(page) < page_limit:
+                break  # short page == normal keyset termination
 
     total_bytes = sum(size for _n, size, _e in rows)
     if verify_summary and (len(rows) != expected_count or total_bytes != expected_bytes):
