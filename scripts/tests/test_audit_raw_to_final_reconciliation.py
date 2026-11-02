@@ -624,7 +624,7 @@ def test_app_dose_checks_keep_the_exporters_legitimate_folate_fold():
         {"raw_source_path": "ingredientRows[1].nestedRows[0]", "label_display_name": "Folic Acid",
          "parent_label": "Folate", "exact_dose_text": "400 mcg"},
     ]
-    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], [], [])
+    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], blob["ingredients"], [])
     assert len(blob["display_ingredients"]) == 1
     assert blob["display_ingredients"][0]["folded_label_components"][0]["exact_dose_text"] == "400 mcg"
     assert _line_codes(raw, cleaned, enriched, blob) == []
@@ -639,7 +639,7 @@ def test_app_dose_checks_block_corrupted_folate_fold_amounts(field):
         {"raw_source_path": "ingredientRows[1].nestedRows[0]", "label_display_name": "Folic Acid",
          "parent_label": "Folate", "exact_dose_text": "400 mcg"},
     ]
-    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], [], [])
+    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], blob["ingredients"], [])
     if field == "parenthetical_dose_text":
         blob["display_ingredients"][0][field] = "4000 mcg folic acid"
     else:
@@ -902,3 +902,38 @@ def test_real_unresolved_export_passes_line_integrity_and_rejects_corruption(pid
                and isinstance(r.get('quantity'), (int, float)) and r['quantity'] > 0)
     row['quantity'] = None
     assert 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' in findings(corrupt)
+
+
+@pytest.mark.parametrize('surface', ['printed', 'analysis', 'normalized'])
+@pytest.mark.parametrize('corrupt_amount', [0, 150])
+def test_unresolved_amount_corruption_is_reported_on_every_public_surface(surface, corrupt_amount):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+    from build_final_db import build_detail_blob, _unresolved_export_paths
+    from audit_raw_to_final import _corrected_source_paths
+
+    pid = '27808'
+    raw = json.loads((SCRIPTS / 'tests/fixtures/completion_source_27808_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(copy.deepcopy(raw))
+    enriched, _ = SupplementEnricherV3().enrich_product(copy.deepcopy(cleaned))
+    blob = build_detail_blob(enriched, score_product_v4(enriched))
+    paths = _unresolved_export_paths(enriched)
+    if surface == 'printed':
+        row = next(r for r in blob['ingredients'] if r.get('raw_source_path') in paths)
+        printed = _corrected_source_paths(raw, pid)[row['raw_source_path']]['quantity'][0]
+        row['quantity'], row['unit'] = printed['quantity'], printed['unit']
+        field = 'quantity'
+    else:
+        row = next(r for r in blob['display_ingredients'] if r.get('raw_source_path') in paths
+                   and isinstance(r.get('analysis'), dict))
+        if surface == 'analysis':
+            row['analysis']['quantity'] = corrupt_amount
+            field = 'display_ingredients.analysis.quantity'
+        else:
+            row['normalized_amount'] = corrupt_amount
+            field = 'display_ingredients.normalized_amount'
+    record = _record()
+    record.dsld_id = pid
+    _check_line_integrity(record, raw, cleaned, enriched, blob)
+    assert any(f.code == 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' and f.field == field for f in record.findings)

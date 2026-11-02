@@ -1231,7 +1231,7 @@ def _check_line_integrity(
             rec.add("AMOUNT_CHANGE_WITHOUT_EVIDENCE",
                     f"{path}: printed {first.get('quantity')} {first.get('unit')}, exported {amount} "
                     f"{row.get('unit')} with no recorded serving column, correction or %DV evidence",
-                    ingredient=row.get("name"), stage="blob", row_path=path, field=",".join(changed),
+                    ingredient=row.get("name"), stage="blob", row_path=path, field=",".join(changed) or "quantity",
                     source=f"{first.get('quantity')} {first.get('unit')}", exported=f"{amount} {row.get('unit')}")
 
     # Reuse the exporter's display owner, including legitimate folate and
@@ -1268,16 +1268,25 @@ def _check_line_integrity(
                         field="display_ingredients.raw_source_path", source=path)
                 continue
             for key in ("exact_dose_text", "parenthetical_dose_text", "display_dose_label",
-                        "quantity", "unit", "serving_variants", "folded_label_components"):
+                        "quantity", "normalized_amount", "unit", "serving_variants", "folded_label_components"):
                 value = expected.get(key)
                 equal = (_line_text(value) == _line_text(actual.get(key))
                          if key in ("exact_dose_text", "parenthetical_dose_text", "display_dose_label", "unit")
                          else value == actual.get(key))
-                if (value or actual.get(key)) and not equal:
+                if (key in ("quantity", "normalized_amount") or value or actual.get(key)) and not equal:
                     rec.add("AMOUNT_CHANGE_WITHOUT_EVIDENCE",
                             f"{path}: app dose differs from the canonical label ledger",
                             ingredient=expected.get("label_display_name"), stage="blob", row_path=path,
                             field=f"display_ingredients.{key}", source=value, exported=actual.get(key))
+            expected_analysis = expected.get("analysis") or {}
+            actual_analysis = actual.get("analysis") or {}
+            if isinstance(expected_analysis, dict) and isinstance(actual_analysis, dict):
+                if expected_analysis.get("quantity") != actual_analysis.get("quantity"):
+                    rec.add("AMOUNT_CHANGE_WITHOUT_EVIDENCE",
+                            f"{path}: analysis dose differs from the canonical label ledger",
+                            ingredient=expected.get("label_display_name"), stage="blob", row_path=path,
+                            field="display_ingredients.analysis.quantity",
+                            source=expected_analysis.get("quantity"), exported=actual_analysis.get("quantity"))
 
 
 def _check_export_identity(rec: ProductRecord, enriched: Mapping[str, Any] | None, blob: Mapping[str, Any]) -> None:
