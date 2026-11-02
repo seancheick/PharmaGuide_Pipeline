@@ -30,6 +30,14 @@ def make_db(path: Path, rows: list[tuple]) -> Path:
     con.execute(f"create table products_core ({', '.join(catalog_diff.COLUMNS)})")
     con.executemany(
         f"insert into products_core values ({', '.join('?' * len(catalog_diff.COLUMNS))})", rows)
+    con.execute("alter table products_core add column detail_blob_sha256")
+    blobs = path.parent / 'detail_blobs'
+    blobs.mkdir(exist_ok=True)
+    for values in rows:
+        blob = blobs / f'{values[0]}.json'
+        blob.write_text(json.dumps(dict(zip(catalog_diff.COLUMNS, values)), sort_keys=True))
+        con.execute('update products_core set detail_blob_sha256=? where dsld_id=?',
+                    (hashlib.sha256(blob.read_bytes()).hexdigest(), values[0]))
     con.commit()
     con.close()
     return path
@@ -51,7 +59,11 @@ def diff(tmp_path, before, after, approvals=()):
     for group in approvals:
         group = dict(group)
         group.setdefault("baseline_sha256", hashlib.sha256(baseline.read_bytes()).hexdigest())
-        group.setdefault("candidate_sha256", hashlib.sha256(candidate.read_bytes()).hexdigest())
+        group['changes'] = [dict(c) for c in group['changes']]
+        for change in group['changes']:
+            if change['to'] is not None:
+                change.setdefault('candidate_blob_sha256', hashlib.sha256(
+                    (tmp_path / 'detail_blobs' / f"{change['dsld_id']}.json").read_bytes()).hexdigest())
         bound.append(group)
     return catalog_diff.diff_catalogs(baseline, candidate, bound)
 
@@ -303,7 +315,7 @@ def run_cli(tmp_path, monkeypatch, repo, candidate_rows, live_rows=None):
     monkeypatch.setattr(catalog_diff, "_live_baseline", fake_live)
     candidate = make_db(tmp_path / "candidate.db", candidate_rows)
     approvals_path = tmp_path / "approvals.json"
-    approvals_path.write_text(json.dumps({"approvals": []}))
+    approvals_path.write_text(json.dumps({"_metadata": {"schema_version": 4}, "approvals": []}))
     out = tmp_path / "out"
     code = catalog_diff.main([
         "--flutter-repo", str(repo), "--candidate-db", str(candidate),
@@ -349,7 +361,7 @@ def test_cli_fails_closed_when_the_live_catalog_cannot_be_read(tmp_path, monkeyp
     monkeypatch.setattr(catalog_diff, "_live_baseline", lambda *a: (_ for _ in ()).throw(OSError("offline")))
     candidate = make_db(tmp_path / "candidate.db", [row("1")])
     approvals_path = tmp_path / "approvals.json"
-    approvals_path.write_text(json.dumps({"approvals": []}))
+    approvals_path.write_text(json.dumps({"_metadata": {"schema_version": 4}, "approvals": []}))
     code = catalog_diff.main([
         "--flutter-repo", str(repo), "--candidate-db", str(candidate), "--approvals", str(approvals_path),
         "--report", str(tmp_path / "r.md"), "--draft-approvals", str(tmp_path / "d.json"),
@@ -406,7 +418,7 @@ def test_development_quality_movements_are_reported_without_approval(tmp_path):
     assert result['unapproved'] == 0
     assert result['gated'] == []
     assert {c['dsld_id'] for c in result['reported']} == {'up', 'down'}
-    assert catalog_diff.draft_approvals(result) == {'approvals': []}
+    assert catalog_diff.draft_approvals(result) == {'_metadata': {'schema_version': 4}, 'approvals': []}
     report = catalog_diff.render_markdown(result)
     assert 'report-only' in report
     assert '| up |' in report and '| down |' in report
@@ -456,12 +468,13 @@ def test_old_quality_approval_cannot_approve_new_safety_exception(tmp_path):
 
 
 @pytest.mark.parametrize("changed_side", ["baseline", "candidate"])
-def test_exact_state_approval_cannot_survive_unrelated_catalog_change(tmp_path, changed_side):
+def test_exact_state_approval_survives_only_unrelated_candidate_change(tmp_path, changed_side):
     baseline = make_db(tmp_path / "bound_baseline.db", [row("1", "CAUTION"), row("control")])
     candidate = make_db(tmp_path / "bound_candidate.db", [row("1"), row("control")])
     group = approval([{"dsld_id": "1", "from": state("CAUTION"), "to": state()}])
     group.update(baseline_sha256=hashlib.sha256(baseline.read_bytes()).hexdigest(),
                  candidate_sha256=hashlib.sha256(candidate.read_bytes()).hexdigest())
+    group["changes"][0]["candidate_blob_sha256"] = hashlib.sha256((tmp_path / "detail_blobs/1.json").read_bytes()).hexdigest()
     assert catalog_diff.diff_catalogs(baseline, candidate, [group])["unapproved"] == 0
     altered = baseline if changed_side == "baseline" else candidate
     con = sqlite3.connect(altered)
@@ -469,8 +482,8 @@ def test_exact_state_approval_cannot_survive_unrelated_catalog_change(tmp_path, 
     con.commit()
     con.close()
     result = catalog_diff.diff_catalogs(baseline, candidate, [group])
-    assert result["unapproved"] == 1
-    assert result["gated"][0]["approval"] is None
+    assert result["unapproved"] == (1 if changed_side == "baseline" else 0)
+    assert (result["gated"][0]["approval"] is None) == (changed_side == "baseline")
 
 
 def test_drafts_keep_identical_transitions_bound_to_each_baseline(tmp_path):
@@ -486,13 +499,48 @@ def test_drafts_keep_identical_transitions_bound_to_each_baseline(tmp_path):
         assert [c["dsld_id"] for c in group["changes"]] == ["1"]
 
 
-@pytest.mark.parametrize("field", ["baseline_sha256", "candidate_sha256"])
+@pytest.mark.parametrize("field", ["baseline_sha256", "candidate_blob_sha256"])
 @pytest.mark.parametrize("bad", [None, "", "f" * 63, "G" * 64, 42])
 def test_signed_approval_requires_both_valid_catalog_hashes(tmp_path, field, bad):
     group = approval([{"dsld_id": "1", "from": state("CAUTION"), "to": state()}])
     group.update(baseline_sha256="a" * 64, candidate_sha256="b" * 64)
-    group[field] = bad
+    group["changes"][0]["candidate_blob_sha256"] = "b" * 64
+    (group if field == "baseline_sha256" else group["changes"][0])[field] = bad
     path = tmp_path / "approvals.json"
-    path.write_text(json.dumps({"approvals": [group]}))
+    path.write_text(json.dumps({"_metadata": {"schema_version": 4}, "approvals": [group]}))
     with pytest.raises(ValueError, match=field):
         catalog_diff.load_approvals(path)
+
+
+@pytest.mark.parametrize('corruption', ['missing', 'changed', 'core_hash'])
+def test_product_approval_requires_actual_blob_matching_core(tmp_path, corruption):
+    baseline = make_db(tmp_path / 'baseline.db', [row('1', 'CAUTION')])
+    candidate = make_db(tmp_path / 'candidate.db', [row('1')])
+    blob = tmp_path / 'detail_blobs/1.json'
+    group = approval([{'dsld_id': '1', 'from': state('CAUTION'), 'to': state(),
+                       'candidate_blob_sha256': hashlib.sha256(blob.read_bytes()).hexdigest()}])
+    group.update(baseline_sha256=hashlib.sha256(baseline.read_bytes()).hexdigest(),
+                 candidate_sha256=hashlib.sha256(candidate.read_bytes()).hexdigest())
+    assert catalog_diff.diff_catalogs(baseline, candidate, [group])['unapproved'] == 0
+    if corruption == 'missing':
+        blob.unlink()
+    elif corruption == 'changed':
+        blob.write_text('{"changed": true}')
+    else:
+        with sqlite3.connect(candidate) as con:
+            con.execute("update products_core set detail_blob_sha256=?", ('f' * 64,))
+    with pytest.raises((ValueError, OSError), match='blob|Blob'):
+        catalog_diff.diff_catalogs(baseline, candidate, [group])
+
+
+def test_changed_reviewed_blob_needs_review_even_with_updated_core_hash(tmp_path):
+    baseline = make_db(tmp_path / 'baseline.db', [row('1', 'CAUTION')])
+    candidate = make_db(tmp_path / 'candidate.db', [row('1')])
+    result = catalog_diff.diff_catalogs(baseline, candidate, [])
+    group = catalog_diff.draft_approvals(result)['approvals'][0]
+    blob = tmp_path / 'detail_blobs/1.json'
+    blob.write_text('{"changed warning": true}')
+    with sqlite3.connect(candidate) as con:
+        con.execute('update products_core set detail_blob_sha256=?',
+                    (hashlib.sha256(blob.read_bytes()).hexdigest(),))
+    assert catalog_diff.diff_catalogs(baseline, candidate, [group])['unapproved'] == 1
