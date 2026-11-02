@@ -497,6 +497,7 @@ def inventory_detail_blobs_via_rpc(
     prefix: str = BLOB_STORAGE_PREFIX,
     shards: Optional[Iterable[str]] = None,
     page_limit: int = 1000,
+    verify_summary: bool = True,
     summary_fn: str = RPC_SUMMARY_FN,
     page_fn: str = RPC_PAGE_FN,
 ) -> BlobInventory:
@@ -506,7 +507,10 @@ def inventory_detail_blobs_via_rpc(
     increasing across the whole scan (keyset order is the correctness
     backbone), and the final count/bytes must equal the summary RPC's answer.
     Any violation raises :class:`RpcInventoryError`; this function never
-    returns a partial inventory.
+    returns a partial inventory. ``verify_summary=False`` is reserved for
+    non-destructive upload deduplication: positive matches skip create-only
+    uploads, while absence never authorizes deletion or activation. Destructive
+    inventory callers must retain the default summary verification.
     """
     started = time.monotonic()
     page_limit = max(1, min(int(page_limit), 1000))
@@ -523,7 +527,8 @@ def inventory_detail_blobs_via_rpc(
                 f"RPC {fn} failed: {type(exc).__name__}: {exc}"
             ) from exc
 
-    summary_rows = _call(summary_fn, {"p_prefix": prefix})
+    summary_rows = (_call(summary_fn, {"p_prefix": prefix}) if verify_summary
+                    else [{"object_count": 0, "total_bytes": 0}])
     if (
         not isinstance(summary_rows, list)
         or len(summary_rows) != 1
@@ -573,7 +578,7 @@ def inventory_detail_blobs_via_rpc(
             break  # short page == normal keyset termination
 
     total_bytes = sum(size for _n, size, _e in rows)
-    if len(rows) != expected_count or total_bytes != expected_bytes:
+    if verify_summary and (len(rows) != expected_count or total_bytes != expected_bytes):
         raise RpcInventoryError(
             f"RPC summary mismatch: pages delivered {len(rows)} rows / "
             f"{total_bytes} bytes but the summary promised {expected_count} / "

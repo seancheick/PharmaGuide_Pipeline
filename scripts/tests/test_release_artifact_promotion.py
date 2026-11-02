@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 import sys
 from pathlib import Path
@@ -284,3 +285,28 @@ def test_disk_headroom_accounts_for_immutable_construction_and_working_copies(tm
     monkeypatch.setattr(promotion.shutil, 'disk_usage', lambda _: type('Disk', (), {'free': free})())
     with pytest.raises(OSError, match='free disk'):
         promotion.require_catalog_disk_space(tmp_path, tmp_path)
+
+
+def test_release_plan_excludes_only_the_scoring_manifest(tmp_path, monkeypatch):
+    seen = {}
+
+    def fake_binding(_cwd, command, _patterns, **kwargs):
+        seen[tuple(command)] = kwargs.get('artifact_exclude', ())
+        return 'b' * 64
+
+    monkeypatch.setattr(promotion, '_input_binding', fake_binding)
+    receipts = tmp_path / 'scripts/reports/release-gates'
+    receipts.mkdir(parents=True)
+    (receipts / 'scoring.json').write_text(json.dumps({
+        'gate_name': 'scoring assessment readiness',
+        'command': ['python', 'audit.py', '--dist-dir', 'scripts/dist'],
+        'log': str(tmp_path / 'missing.log'),
+    }))
+    (receipts / 'drift.json').write_text(json.dumps({
+        'gate_name': 'clinical drift contract',
+        'command': ['python', 'drift.py'],
+        'log': str(tmp_path / 'missing.log'),
+    }))
+    promotion.describe_release_plan(tmp_path)
+    assert seen[('python', 'audit.py', '--dist-dir', 'scripts/dist')] == ('export_manifest.json',)
+    assert seen[('python', 'drift.py')] == ()

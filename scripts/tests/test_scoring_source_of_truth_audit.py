@@ -1008,3 +1008,23 @@ def test_reusing_source_proof_does_not_extend_its_expiry(tmp_path, monkeypatch):
     audit._save_scoring_source_proof(path, products, reused, binding)
     now[0] += 2 * 3600
     assert audit._load_scoring_source_proof(path, products)[0]['verified_sources'] == {}
+
+
+def test_oversized_source_proof_is_not_parsed(tmp_path, monkeypatch):
+    import time
+    import audit_source_of_truth_contract as audit
+    from audits.run_verification_gate import _write_receipt
+    monkeypatch.setattr(audit, '_scoring_source_proof_binding', lambda _products: 'binding')
+    path = tmp_path / 'proof.json'
+    _write_receipt(path, {
+        'input_binding': 'binding',
+        'created_at': time.time(),
+        'verified_sources': {'batch:1': {'id': 'kept'}},
+    })
+    monkeypatch.setattr(audit, '_SOURCE_PROOF_MAX_BYTES', path.stat().st_size - 1)
+    cache, binding = audit._load_scoring_source_proof(path, tmp_path)
+    assert cache['verified_sources'] == {}
+    assert binding == 'binding'
+    monkeypatch.setattr(audit, '_SOURCE_PROOF_MAX_BYTES', path.stat().st_size)
+    loaded, _ = audit._load_scoring_source_proof(path, tmp_path)
+    assert loaded['verified_sources']['batch:1']['id'] == 'kept'

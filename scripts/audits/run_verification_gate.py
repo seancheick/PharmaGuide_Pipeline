@@ -17,6 +17,7 @@ import os
 import shutil
 import subprocess
 import sys
+import threading
 import time
 from datetime import datetime, timezone
 from fnmatch import fnmatchcase
@@ -71,6 +72,41 @@ def release_gate_input_globs(name: str) -> tuple:
 # Read-only source/corpus gates share these inputs across snapshot and release.
 # Generated reports, live catalogs and audit caches are deliberately outside
 # this set. Artifact/live/mutating gates never opt into this reuse policy.
+# A quiet child used to look identical to a hung release. The runner prints
+# STARTING immediately, FINGERPRINT while it hashes, and STILL RUNNING on this
+# interval while the child produces no output. An explicit test value is not
+# clamped; only the environment default is kept at or above five seconds.
+FINGERPRINT_PROGRESS_SECONDS = 15.0
+DEFAULT_HEARTBEAT_SECONDS = 30.0
+
+
+def artifact_binding_excludes(name: str) -> tuple[str, ...]:
+    """Artifact paths a later stamp rewrites without changing this gate's inputs.
+
+    Scoring readiness reads the core database, detail blobs, and audit report.
+    ``stamp_manifest`` then rewrites ``export_manifest.json``. Binding that
+    file made the next release rerun the audit even when the catalog bytes
+    were unchanged. The file still has to exist; the export-contract gate
+    after the stamp is the check that reads it.
+    """
+    if name == 'scoring assessment readiness':
+        return ('export_manifest.json',)
+    return ()
+
+
+def _heartbeat_interval(explicit: float | None) -> float:
+    if explicit is not None:
+        return explicit
+    raw = os.environ.get('PG_GATE_HEARTBEAT_SECONDS')
+    if not raw:
+        return DEFAULT_HEARTBEAT_SECONDS
+    try:
+        value = float(raw)
+    except ValueError:
+        return DEFAULT_HEARTBEAT_SECONDS
+    return max(5.0, value)
+
+
 RELEASE_SOURCE_INPUTS = (
     '.env', 'scripts/**/*.py', 'scripts/**/*.sh',
     'requirements*.txt', '.python-version',
@@ -142,6 +178,8 @@ def run_gate(
     artifact_dir: Path | None = None,
     output_paths: Sequence[Path] = (),
     portable_python: bool = False,
+    artifact_exclude: Sequence[str] = (),
+    heartbeat_seconds: float | None = None,
 ) -> int:
     """Serialize receipt writers; reuse is opt-in for bound read-only checks."""
     receipt_path = Path(receipt_path).resolve()
@@ -151,7 +189,9 @@ def run_gate(
         return _run_gate(name=name, command=command, log_path=log_path,
                          receipt_path=receipt_path, cwd=cwd,
                          input_globs=input_globs, max_age_seconds=max_age_seconds,
-                         artifact_dir=artifact_dir, output_paths=output_paths, portable_python=portable_python)
+                         artifact_dir=artifact_dir, output_paths=output_paths,
+                         portable_python=portable_python, artifact_exclude=artifact_exclude,
+                         heartbeat_seconds=heartbeat_seconds)
 
 
 # Only variables the pipeline, release scripts and interpreter actually read
@@ -196,13 +236,20 @@ def _dataset_root(environ) -> Path | None:
     return None
 
 
-def raw_label_fingerprint(raw_root: Path | None) -> dict:
+def raw_label_fingerprint(raw_root: Path | None, on_file=None) -> dict:
     """Content of every raw DSLD label the raw-to-final and scoring audits read."""
     if raw_root is None or not raw_root.is_dir():
         return {'root': str(raw_root), 'missing': True}
-    return {'root': str(raw_root), 'labels': [
-        (str(path.relative_to(raw_root)), _sha256(path))
-        for path in sorted({p for pattern in ('*.json', '*.jsonl') for p in raw_root.rglob(pattern) if p.is_file()})]}
+    labels = []
+    paths = sorted({
+        path for pattern in ('*.json', '*.jsonl')
+        for path in raw_root.rglob(pattern) if path.is_file()
+    })
+    for path in paths:
+        labels.append((str(path.relative_to(raw_root)), _sha256(path)))
+        if on_file is not None:
+            on_file(path)
+    return {'root': str(raw_root), 'labels': labels}
 
 
 def _bound_environment(environ) -> dict:
@@ -219,10 +266,24 @@ def _bound_environment(environ) -> dict:
     return bound
 
 
+def _fingerprint_progress(label: str, started: float, progress: dict) -> None:
+    if not label:
+        return
+    now = time.monotonic()
+    if now < progress['next']:
+        return
+    print(
+        f'FINGERPRINT: {label} | {progress["seen"]} files | {now - started:.0f}s',
+        file=sys.stderr, flush=True,
+    )
+    progress['next'] = now + FINGERPRINT_PROGRESS_SECONDS
+
+
 def _input_binding(
     cwd: Path, command: Sequence[str], patterns: Sequence[str],
     *, exclude_paths: Sequence[str] = (), portable_python: bool = False,
     artifact_dir: Path | None = None, output_paths: Sequence[Path] = (),
+    artifact_exclude: Sequence[str] = (), label: str = '',
 ) -> str:
     # Never persist credentials or environment values. The fingerprint binds
     # effective configuration, not shell bookkeeping or the per-run lock token.
@@ -234,9 +295,16 @@ def _input_binding(
     # This cache lives for one content pass only. Never carry hashes across
     # the before/after verification boundary or a later publication check.
     digests = {}
+    started = time.monotonic()
+    progress = {'seen': 0, 'next': started + FINGERPRINT_PROGRESS_SECONDS}
+
+    def saw_file() -> None:
+        progress['seen'] += 1
+        _fingerprint_progress(label, started, progress)
+
     for pattern in patterns:
         if pattern == RAW_DSLD_LABELS:
-            files[pattern] = raw_label_fingerprint(_dataset_root(os.environ))
+            files[pattern] = raw_label_fingerprint(_dataset_root(os.environ), on_file=lambda _path: saw_file())
             continue
         entries = []
         for path in sorted(cwd.glob(pattern)):
@@ -247,6 +315,7 @@ def _input_binding(
                 if path not in digests:
                     digests[path] = _sha256(path)
                 entries.append((relative, digests[path]))
+                saw_file()
         files[pattern] = entries
     executable = shutil.which(str(command[0]))
     normalized = list(command)
@@ -254,10 +323,18 @@ def _input_binding(
     if artifact_dir is not None:
         root = artifact_dir.resolve()
         artifact = {}
+        excluded = set(artifact_exclude)
         for pattern in ('pharmaguide_core.db', 'export_manifest.json', 'detail_index.json',
                         'export_audit_report.json', 'detail_blobs/**/*.json'):
-            artifact[pattern] = [(str(p.relative_to(root)), _sha256(p)) for p in sorted(root.glob(pattern))
-                                 if p.is_file() and p.resolve() not in {v.resolve() for v in output_paths}]
+            if pattern in excluded:
+                artifact[pattern] = []
+                continue
+            hashed = []
+            for path in sorted(root.glob(pattern)):
+                if path.is_file() and path.resolve() not in {item.resolve() for item in output_paths}:
+                    hashed.append((str(path.relative_to(root)), _sha256(path)))
+                    saw_file()
+            artifact[pattern] = hashed
         if not (root / 'pharmaguide_core.db').is_file() or not (root / 'export_manifest.json').is_file():
             raise ValueError(f'Missing candidate core/manifest: {root}')
         normalized = [arg.replace(str(root), '<catalog>') for arg in normalized]
@@ -289,24 +366,39 @@ def _output_hashes(paths: Sequence[Path]) -> dict:
     return {str(index): _sha256(Path(path)) for index, path in enumerate(paths)}
 
 
+def _log_tail(path: Path, lines: int = 12, max_bytes: int = 16384) -> str:
+    try:
+        size = path.stat().st_size
+        with path.open('rb') as handle:
+            handle.seek(max(0, size - max_bytes))
+            text = handle.read().decode('utf-8', errors='replace')
+    except OSError:
+        return ''
+    return '\n'.join(text.splitlines()[-lines:])
+
+
 def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
               receipt_path: Path, cwd: Path, input_globs: Sequence[str],
               max_age_seconds: float, artifact_dir: Path | None = None,
-              output_paths: Sequence[Path] = (), portable_python: bool = False) -> int:
+              output_paths: Sequence[Path] = (), portable_python: bool = False,
+              artifact_exclude: Sequence[str] = (),
+              heartbeat_seconds: float | None = None) -> int:
     """Run ``command`` and return its actual exit code after writing a receipt."""
     if not name.strip():
         raise ValueError("gate name must not be empty")
     if not command:
         raise ValueError("verification command must not be empty")
 
+    print(f'STARTING: {name}', flush=True)
     cwd = Path(cwd).resolve()
     log_path = Path(log_path).resolve()
     receipt_path = Path(receipt_path).resolve()
     log_path.parent.mkdir(parents=True, exist_ok=True)
-    binding_started = time.monotonic()
-    invocation_started = binding_started
+    invocation_started = time.monotonic()
+    binding_started = invocation_started
     binding_options = dict(artifact_dir=artifact_dir, output_paths=output_paths,
-                           portable_python=portable_python)
+                           portable_python=portable_python, artifact_exclude=artifact_exclude,
+                           label=name)
     binding = _input_binding(cwd, command, input_globs, **binding_options) if input_globs else None
     binding_duration = time.monotonic() - binding_started
     if binding and _can_reuse(receipt_path, log_path, name=name, binding=binding,
@@ -329,6 +421,21 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
     _write_receipt(receipt_path, {'gate_name': name, 'exit_code': 125,
                                  'started_at': started_at, 'completed_at': None})
 
+    stop_heartbeat = threading.Event()
+    last_output = time.monotonic()
+    last_line = ''
+    heartbeat = _heartbeat_interval(heartbeat_seconds)
+
+    def beat() -> None:
+        while not stop_heartbeat.wait(heartbeat):
+            quiet = time.monotonic() - last_output
+            elapsed = time.monotonic() - invocation_started
+            shown = last_line or '(no output yet)'
+            print(
+                f'STILL RUNNING: {name} | elapsed {elapsed:.0f}s | quiet for {quiet:.0f}s | last line: {shown}',
+                flush=True,
+            )
+
     with log_path.open("wb") as log_handle:
         process = subprocess.Popen(
             [str(part) for part in command],
@@ -337,12 +444,25 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
             stderr=subprocess.STDOUT,
         )
         assert process.stdout is not None
+        heartbeat_thread = None
+        if heartbeat > 0:
+            heartbeat_thread = threading.Thread(target=beat, name='gate-heartbeat', daemon=True)
+            heartbeat_thread.start()
+        pending = b''
         try:
             for chunk in iter(lambda: process.stdout.read1(64 * 1024), b""):
                 log_handle.write(chunk)
                 log_handle.flush()
                 sys.stdout.buffer.write(chunk)
                 sys.stdout.buffer.flush()
+                last_output = time.monotonic()
+                pending = (pending + chunk)[-4096:]
+                lines = [
+                    line for line in pending.decode('utf-8', errors='replace').splitlines()
+                    if line.strip()
+                ]
+                if lines:
+                    last_line = lines[-1][:240]
             exit_code = process.wait()
         except KeyboardInterrupt:
             process.terminate()
@@ -354,13 +474,16 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
             exit_code = 130
         finally:
             process.stdout.close()
+            stop_heartbeat.set()
+            if heartbeat_thread is not None:
+                heartbeat_thread.join(timeout=2)
 
     if binding:
         binding_started = time.monotonic()
         final_binding = _input_binding(cwd, command, input_globs, **binding_options)
         binding_duration += time.monotonic() - binding_started
         if final_binding != binding:
-            print(f'FAILED: {name} — inputs changed during verification', file=sys.stderr)
+            print(f'FAILED: {name} — inputs changed during verification', file=sys.stderr, flush=True)
             exit_code = exit_code or 125
 
     try:
@@ -368,6 +491,12 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
     except OSError:
         output_hashes = {}
         exit_code = 125
+    if exit_code != 0:
+        elapsed = time.monotonic() - invocation_started
+        print(
+            f'FAILED: {name} | exit {exit_code} | elapsed {elapsed:.0f}s\n{_log_tail(log_path)}',
+            file=sys.stderr, flush=True,
+        )
     payload = {
         "output_hashes": output_hashes,
         "receipt_schema_version": RECEIPT_SCHEMA_VERSION,
@@ -443,6 +572,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     artifact_dir, output_paths, portable = release_gate_options(args.name, command, Path(args.cwd), args.release_check)
     return run_gate(
         artifact_dir=artifact_dir, output_paths=output_paths, portable_python=portable,
+        artifact_exclude=artifact_binding_excludes(args.name) if args.release_check else (),
         name=args.name,
         command=command,
         log_path=args.log,

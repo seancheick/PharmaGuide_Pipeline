@@ -175,7 +175,11 @@ RELEASE_PHASE="release prerequisites and artifact validation"
 report_incomplete_release() {
   local status="$1"
   (( status == 0 )) && return 0
-  err "Release incomplete during $RELEASE_PHASE (exit $status)."
+  local elapsed=""
+  if [[ -n "${START_TS:-}" ]]; then
+    elapsed=" after $(( $(date +%s) - START_TS ))s"
+  fi
+  err "Release incomplete during $RELEASE_PHASE (exit $status)${elapsed}."
   case "$REMOTE_CATALOG_STATE" in
     confirmed_current)
       err "Supabase catalog sync completed successfully (published or already current) before this failure."
@@ -358,6 +362,7 @@ info "skip-flutter:     $SKIP_FLUTTER"
 info "prepared-inputs:  $PREPARED_INPUTS"
 info "keep-versions:    $KEEP_VERSIONS"
 info "flutter-repo:     $FLUTTER_REPO"
+info "A quiet gate prints STILL RUNNING every 30s. A failure prints FAILED with the last log lines."
 info "================================================================"
 
 # ---------------------------------------------------------------------------
@@ -397,7 +402,12 @@ print(h.hexdigest())
 
 run_strict_gate() {
   local label="$1"; shift
-  info "Strict gate: $label"
+  RELEASE_PHASE="$label"
+  if [[ -n "${START_TS:-}" ]]; then
+    info "Strict gate: $label | $(( $(date +%s) - START_TS ))s elapsed"
+  else
+    info "Strict gate: $label"
+  fi
   "$PG_PYTHON" "$REPO_ROOT/scripts/audits/run_verification_gate.py" \
     --name "$label" --receipt-dir "$REPO_ROOT/scripts/reports/release-gates" \
     --cwd "$REPO_ROOT" --release-check -- "$@"

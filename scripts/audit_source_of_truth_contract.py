@@ -711,15 +711,32 @@ def _scoring_diag(product: dict[str, Any]) -> dict[str, Any]:
 def _scoring_source_proof_binding(products_dir: Path) -> str:
     from audits.run_verification_gate import _input_binding, RELEASE_SOURCE_INPUTS, SCORING_AUDIT_CORPUS_INPUTS
     return _input_binding(REPO_ROOT, ['scoring-source-lineage', str(products_dir.resolve())],
-                          (*RELEASE_SOURCE_INPUTS, *SCORING_AUDIT_CORPUS_INPUTS), portable_python=True)
+                          (*RELEASE_SOURCE_INPUTS, *SCORING_AUDIT_CORPUS_INPUTS), portable_python=True,
+                          label='scoring source proof')
+
+
+# A previous release stored every joined enriched product in this file and it
+# grew to about 3 GB. Parsing it took minutes and could swap a 16 GB machine
+# before the audit printed anything. The in-run brand index is the reuse; a
+# file this large is ignored and the next successful audit overwrites it.
+_SOURCE_PROOF_MAX_BYTES = 32 * 1024 * 1024
 
 
 def _load_scoring_source_proof(path: Path, products_dir: Path) -> tuple[dict, str]:
     import time
     from audits.run_verification_gate import _canonical_sha256
+    started = time.monotonic()
     binding = _scoring_source_proof_binding(products_dir)
     cache = {'verified_sources': {}}
     try:
+        size = path.stat().st_size
+        if size > _SOURCE_PROOF_MAX_BYTES:
+            print(
+                f'Scoring source proof is {size} bytes; recomputing joins instead of loading it '
+                f'({time.monotonic() - started:.0f}s).',
+                file=sys.stderr, flush=True,
+            )
+            return cache, binding
         receipt = json.loads(path.read_text())
         seal = receipt.pop('receipt_sha256')
         if (seal == _canonical_sha256(receipt) and receipt['input_binding'] == binding
@@ -795,7 +812,6 @@ def _scoring_enriched_source(scored_path: Path, pid: str, cache: dict) -> dict |
         return None
     products = proof[1].get(pid, [])
     if len(products) == 1:
-        verified[proof_key] = products[0]
         return products[0]
     return None
 
@@ -868,17 +884,29 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
 
     unscored_warning_only = warning_only - blocked_warning_only
 
+    import time
+    seen_products = 0
+    walk_started = time.monotonic()
+    print(f'Scoring audit: {len(files)} scored files', file=sys.stderr, flush=True)
+
     allowed_sources = {
         "ingredient_quality_data.ingredients_scorable",
         "ingredient_quality_data.ingredients_scorable+product_scoring_evidence",
     }
-    for file_path in files:
+    for file_index, file_path in enumerate(files, start=1):
         try:
             products = as_products(load_json(file_path))
         except Exception as exc:
             findings.append(Finding("SCORING_JSON_ERROR", f"cannot read scored product JSON: {exc}", str(file_path)))
             continue
         for product in products:
+            seen_products += 1
+            if seen_products % 500 == 0:
+                print(
+                    f'Scoring audit: {seen_products} products | {len(findings)} findings | '
+                    f'{time.monotonic() - walk_started:.0f}s | file {file_index}/{len(files)}',
+                    file=sys.stderr, flush=True,
+                )
             pid = product_identity(product)
             finding_start = len(findings)
             if getattr(args, "strict_release", False) or completion_only:

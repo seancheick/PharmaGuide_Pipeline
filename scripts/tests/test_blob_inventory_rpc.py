@@ -370,3 +370,15 @@ def test_cli_verify_inventory_fails_on_divergence(tmp_path, capsys):
     out = capsys.readouterr().out
     assert exit_code != 0
     assert "PARITY" in out and "OK" not in out.split("PARITY", 1)[1][:20]
+
+
+def test_upload_hints_can_skip_summary_but_keep_page_validation():
+    from release_safety.blob_inventory import inventory_detail_blobs_via_rpc, RpcInventoryError
+    digest = _h('aa', 1)
+    client = _FakeRpcClient({_path(digest): b'abc'})
+    result = inventory_detail_blobs_via_rpc(client, verify_summary=False)
+    assert result.hashes == {digest}
+    assert not any(name == 'pg_storage_inventory_summary' for name, _ in client.rpc_calls)
+    client.tamper_rows = lambda rows: [dict(rows[0], name='outside/prefix.json')]
+    with pytest.raises(RpcInventoryError):
+        inventory_detail_blobs_via_rpc(client, verify_summary=False)
