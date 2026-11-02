@@ -207,6 +207,14 @@ def test_baseline_section_reports_the_release_gate_diff(tmp_path: Path) -> None:
         con = sqlite3.connect(path)
         con.execute(f"create table products_core ({', '.join(COLUMNS)})")
         con.executemany(f"insert into products_core values ({', '.join('?' * len(COLUMNS))})", rows)
+        con.execute("alter table products_core add column detail_blob_sha256")
+        blobs = tmp_path / "detail_blobs"
+        blobs.mkdir(exist_ok=True)
+        for row in rows:
+            blob = blobs / f"{row[0]}.json"
+            blob.write_text(json.dumps(dict(zip(COLUMNS, row)), sort_keys=True))
+            con.execute("update products_core set detail_blob_sha256=? where dsld_id=?",
+                        (hashlib.sha256(blob.read_bytes()).hexdigest(), row[0]))
         con.commit()
         con.close()
         return path
