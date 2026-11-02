@@ -30,6 +30,14 @@ the original success time and record the latest execution/reuse outcome; reuse
 does not extend their freshness period. Catalog construction, image work,
 interaction assembly, Supabase sync and Flutter import use these same receipts.
 
+Catalog receipts also bind the execution environment, including `PATH` and the
+Python selector. Keep those settings consistent between a separate compute,
+snapshot and release invocation. A different terminal/tool startup context can
+reject reuse even when dataset manifests are current. Verify the existing
+receipt under its original context; never restamp outputs or bypass a mismatch.
+The normal full batch command keeps its child stages in one inherited context.
+The app's older catalog is a comparison baseline, not the source-freshness target.
+
 Reference invalidation remains conservative: current import closures include
 certification/scoring owners even from Clean. No preparation-specific or
 certification-only exception is inferred from a filename. Stage-specific exclusion

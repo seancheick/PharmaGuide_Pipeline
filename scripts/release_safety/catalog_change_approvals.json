@@ -710,6 +710,75 @@
           "why": "safety: CAUTION \u2192 no safety warning"
         }
       ]
+    },
+    {
+      "reason": "Exact image-complete catalog 2026.11.02.011254 source corrections, reviewed under Sean's current instruction to verify, correct, integrate and release. Actual source review was performed by Codex and independently checked by a second agent; this does not claim a Sean/Dr Pham/PharmD source certification. NIH original panels establish: 273629 folic acid 100/200 mcg and biotin 37.5/75 mcg, not API milligrams; 64433 and 64821 vitamin D 800 IU, not 800 mg; 78327 iodine 150 mcg, not 18 mg, and N-Acetyl-L-Cystine 15 mg, not N-acetylcysteine. The removed rules concern those erroneous dose/identity attributions only. Original PDFs and exact label/override mappings were independently checked; actual candidate blobs retain identical allergens and all other warning identities against checksum-verified baseline blobs. Product 78327 remains Not Scored with null public quality score and tier. No threshold, preparation equivalence, efficacy credit, ban/recall policy or safety clearance is introduced. NO_KNOWN_CATALOG_CONCERN means no remaining catalog-level signal in the current rule set, never safe for every person; personalized medication, condition, pregnancy, breastfeeding and allergy warnings remain independently applicable. This record covers only these four exact before/after states and the stated full baseline/candidate hashes. All remaining source, export, interaction, live-comparison and Flutter gates remain mandatory; any changed candidate or states must be reviewed again.",
+      "approved_by": "Codex original-label source verification with independent second-agent review, executing Sean's authorized integration and catalog release",
+      "date": "2026-11-01",
+      "baseline_sha256": "66fb0877258081982dbffccd48704d5a5b1b735ab8b64cf4ccca7d82982b7a45",
+      "candidate_sha256": "e887713601ff6a70c4bc285a89101f830f9200f74023348b1f49f0a5380c958d",
+      "changes": [
+        {
+          "dsld_id": "273629",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 65.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Very good",
+            "score": 82.0
+          },
+          "product_name": "Lil'Ollys Kids' Multi + Probiotic Yum Berry Punch",
+          "why": "safety: CAUTION \u2192 no safety warning; score +17.0; grade Needs improvement \u2192 Very good (+17.0)"
+        },
+        {
+          "dsld_id": "64433",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 60.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 78.0
+          },
+          "product_name": "Spectravite Ultra Women 50 +",
+          "why": "safety: CAUTION \u2192 no safety warning; score +18.0; grade Needs improvement \u2192 Good (+18.0)"
+        },
+        {
+          "dsld_id": "64821",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Needs improvement",
+            "score": 60.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": "Good",
+            "score": 78.0
+          },
+          "product_name": "Spectravite Ultra Women 50 +",
+          "why": "safety: CAUTION \u2192 no safety warning; score +18.0; grade Needs improvement \u2192 Good (+18.0)"
+        },
+        {
+          "dsld_id": "78327",
+          "from": {
+            "verdict": "CAUTION",
+            "tier": "Poor",
+            "score": 49.0
+          },
+          "to": {
+            "verdict": "NO_KNOWN_CATALOG_CONCERN",
+            "tier": null,
+            "score": null
+          },
+          "product_name": "Ultra Mega Green Active Berry",
+          "why": "safety: CAUTION \u2192 no safety warning"
+        }
+      ]
     }
   ]
 }
