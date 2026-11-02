@@ -580,8 +580,9 @@ def inventory_detail_blobs_via_rpc(
                     )
                 cursor = name
                 rows.append((name, row["size"], row["etag"]))
-            if len(page) < page_limit:
-                break  # short page == normal keyset termination
+            if not page or (verify_summary and len(page) < page_limit):
+                # Without a summary, only an empty page proves exhaustion.
+                break
 
     total_bytes = sum(size for _n, size, _e in rows)
     if verify_summary and (len(rows) != expected_count or total_bytes != expected_bytes):

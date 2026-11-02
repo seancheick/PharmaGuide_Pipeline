@@ -399,3 +399,12 @@ def test_transient_rpc_page_failure_retries_same_page(monkeypatch):
     result = inventory_detail_blobs_via_rpc(client, verify_summary=False, shards=['aa'])
     assert result.hashes == {digest}
     assert failed[0]['p_after'] is None
+
+
+def test_upload_hints_follow_capped_pages_until_empty():
+    from release_safety.blob_inventory import inventory_detail_blobs_via_rpc
+    digests = {_h('aa', i) for i in range(3)}
+    client = _FakeRpcClient({_path(digest): b'abc' for digest in digests}, page_limit_served=1)
+    result = inventory_detail_blobs_via_rpc(client, verify_summary=False, shards=['aa'])
+    assert result.hashes == digests
+    assert len(client.rpc_calls) == 4
