@@ -287,7 +287,7 @@ def test_disk_headroom_accounts_for_immutable_construction_and_working_copies(tm
         promotion.require_catalog_disk_space(tmp_path, tmp_path)
 
 
-def test_release_plan_excludes_only_the_scoring_manifest(tmp_path, monkeypatch):
+def test_release_plan_keeps_manifest_in_scoring_binding(tmp_path, monkeypatch):
     seen = {}
 
     def fake_binding(_cwd, command, _patterns, **kwargs):
@@ -308,5 +308,5 @@ def test_release_plan_excludes_only_the_scoring_manifest(tmp_path, monkeypatch):
         'log': str(tmp_path / 'missing.log'),
     }))
     promotion.describe_release_plan(tmp_path)
-    assert seen[('python', 'audit.py', '--dist-dir', 'scripts/dist')] == ('export_manifest.json',)
+    assert seen[('python', 'audit.py', '--dist-dir', 'scripts/dist')] == ()
     assert seen[('python', 'drift.py')] == ()
