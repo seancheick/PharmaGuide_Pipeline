@@ -1082,6 +1082,13 @@ def _child_disclosed_epa_dha_owner(
             nutrients.add("epa")
         elif canonical == "dha" or (not canonical and _PRINTED_DHA_FORM_RE.search(child_name)):
             nutrients.add("dha")
+        elif _OIL_NAME_RE.search(child_name) and any(
+            isinstance(below, dict)
+            and str(below.get("raw_source_path") or "").startswith(other_path + ".nestedRows[")
+            for below in rows
+        ):
+            # An undosed oil row only groups the EPA and DHA beneath it (260262).
+            continue
         else:
             return None
     if not nutrients:
