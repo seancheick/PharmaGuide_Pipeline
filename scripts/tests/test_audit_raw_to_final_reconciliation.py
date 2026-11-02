@@ -937,3 +937,54 @@ def test_unresolved_amount_corruption_is_reported_on_every_public_surface(surfac
     record.dsld_id = pid
     _check_line_integrity(record, raw, cleaned, enriched, blob)
     assert any(f.code == 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' and f.field == field for f in record.findings)
+
+
+@pytest.mark.parametrize('pid', ['47095', '252842'])
+@pytest.mark.parametrize('corrupt_enriched', [False, True])
+def test_real_label_context_retains_printed_dose_without_analysis_quantity(pid, corrupt_enriched):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+    from build_final_db import build_detail_blob
+
+    raw = json.loads((SCRIPTS / 'tests/fixtures' / f'completion_source_{pid}_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(copy.deepcopy(raw))
+    enriched, _ = SupplementEnricherV3().enrich_product(copy.deepcopy(cleaned))
+    blob = build_detail_blob(enriched, score_product_v4(enriched))
+    context = next(r for r in blob['display_ingredients']
+                   if r.get('is_label_context') and r.get('exact_dose_text') and r.get('analysis') is None)
+    record = _record()
+    record.dsld_id = pid
+    _check_line_integrity(record, raw, cleaned, enriched, blob)
+    assert not record.findings
+    context['exact_dose_text'] = '9999 mg'
+    if corrupt_enriched:
+        source = next(r for r in enriched['display_ingredients']
+                      if r.get('raw_source_path') == context['raw_source_path'])
+        source['exact_dose_text'] = '9999 mg'
+        blob = build_detail_blob(enriched, score_product_v4(enriched))
+    _check_line_integrity(record, raw, cleaned, enriched, blob)
+    assert any(f.code == 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' for f in record.findings)
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+def test_analysis_participation_join_reconciles_complementary_blend_rows_first(reverse):
+    from build_final_db import _build_canonical_label_ledger, _reconcile_display_source_rows
+
+    raw, cleaned, enriched, blob = _line_fixture()
+    structural = {
+        'raw_source_path': 'ingredientRows[1]', 'raw_source_text': 'Herbal Blend',
+        'display_type': 'structural_container', 'score_included': False,
+        'quantity': None, 'unit': '', 'children': ['organic Wheat Grass'],
+    }
+    mapped = {**structural, 'display_type': 'mapped_ingredient', 'score_included': True}
+    rows = [mapped, structural] if reverse else [structural, mapped]
+    cleaned['display_ingredients'] = copy.deepcopy(rows)
+    enriched['display_ingredients'] = copy.deepcopy(rows)
+    blob['display_ingredients'] = _build_canonical_label_ledger(
+        _reconcile_display_source_rows(rows), blob['ingredients'], [])
+    assert len(blob['display_ingredients']) == 1
+    assert blob['display_ingredients'][0]['score_included'] is True
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+    blob['display_ingredients'][0]['quantity'] = 999
+    assert 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' in _line_codes(raw, cleaned, enriched, blob)

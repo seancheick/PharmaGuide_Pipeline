@@ -1244,8 +1244,22 @@ def _check_line_integrity(
             _fold_probiotic_serving_headers, _fold_general_serving_variants,
             _omit_unresolved_export_amounts,
         )
+        display_sources = _reconcile_display_source_rows(deepcopy(display_sources))
+        enriched_by_path = {
+            row.get("raw_source_path"): row
+            for row in _reconcile_display_source_rows((enriched or {}).get("display_ingredients") or [])
+            if isinstance(row, dict) and row.get("raw_source_path")
+        }
+        for source in display_sources:
+            if not isinstance(source, dict):
+                continue
+            classified = enriched_by_path.get(source.get("raw_source_path"), {})
+            # Enrich owns analysis participation; Clean owns printed dose facts.
+            # Borrow only participation so upstream dose corruption remains visible.
+            if "score_included" in classified:
+                source["score_included"] = classified["score_included"]
         expected_rows = _build_canonical_label_ledger(
-            _reconcile_display_source_rows(deepcopy(display_sources)),
+            display_sources,
             blob.get("ingredients") or [], blob.get("inactive_ingredients") or [],
         )
         expected_rows = _fold_probiotic_serving_headers(enriched or {}, expected_rows)
