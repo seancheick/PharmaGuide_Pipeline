@@ -382,3 +382,20 @@ def test_upload_hints_can_skip_summary_but_keep_page_validation():
     client.tamper_rows = lambda rows: [dict(rows[0], name='outside/prefix.json')]
     with pytest.raises(RpcInventoryError):
         inventory_detail_blobs_via_rpc(client, verify_summary=False)
+
+
+def test_transient_rpc_page_failure_retries_same_page(monkeypatch):
+    from release_safety.blob_inventory import inventory_detail_blobs_via_rpc
+    digest = _h('aa', 1)
+    client = _FakeRpcClient({_path(digest): b'abc'})
+    original = client.rpc
+    failed = []
+    def rpc(name, params):
+        if name == 'pg_storage_inventory_page' and not failed:
+            failed.append(params.copy())
+            raise TimeoutError('synthetic timeout')
+        return original(name, params)
+    monkeypatch.setattr(client, 'rpc', rpc)
+    result = inventory_detail_blobs_via_rpc(client, verify_summary=False, shards=['aa'])
+    assert result.hashes == {digest}
+    assert failed[0]['p_after'] is None

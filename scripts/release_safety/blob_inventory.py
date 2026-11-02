@@ -518,9 +518,11 @@ def inventory_detail_blobs_via_rpc(
 
     def _call(fn, params):
         try:
-            result = client.rpc(fn, params)
-            result = result.execute() if hasattr(result, "execute") else result
-            return getattr(result, "data", result)
+            def request():
+                result = client.rpc(fn, params)
+                result = result.execute() if hasattr(result, "execute") else result
+                return getattr(result, "data", result)
+            return retry_transient(request, max_attempts=3)
         except RpcInventoryError:
             raise
         except Exception as exc:  # noqa: BLE001
