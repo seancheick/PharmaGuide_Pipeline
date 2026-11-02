@@ -73,7 +73,7 @@ from inactive_ingredient_resolver import (
 )
 from iqm_form_evidence import validate_iqm_form
 from rda_ul_calculator import ul_display_severity
-from scoring_v4.exposure import format_nutrition_mass
+from scoring_v4.exposure import format_nutrition_mass, quantity_is_unresolved
 from scoring_v4.dose_safety import dose_safety_consumer_explanation
 from identity.safety import (
     has_explicit_form_evidence,
@@ -4333,6 +4333,16 @@ def _format_dose_number(qty: float) -> str:
     return f"{qty:g}"
 
 
+def _label_quantity_is_unresolved(ingredient: Dict[str, Any]) -> bool:
+    """Separate ambiguous label amounts from clinical unit/DV conflicts.
+
+    A printed amount remains a label fact when its clinical conversion needs
+    review. Only unresolved source quantity operators prevent exact display.
+    The exposure owner still interprets those operators; no alternate matcher.
+    """
+    return quantity_is_unresolved({**ingredient, "dose_data_quality": None})
+
+
 def _compute_display_dose_label(
     ingredient: Dict[str, Any],
     is_probiotic_strain: bool = False,
@@ -4346,6 +4356,8 @@ def _compute_display_dose_label(
     strain CFU is rarely listed even on transparent probiotic labels
     and the product-level total appears on ProbioticDetailSection.
     """
+    if _label_quantity_is_unresolved(ingredient):
+        return _EM_DASH
     qty_raw = ingredient.get("quantity")
     qty = safe_float(qty_raw, 0) if qty_raw is not None else 0.0
     unit = safe_str(ingredient.get("unit")).strip()
@@ -5157,6 +5169,51 @@ def _fold_general_serving_variants(
     for index, row in enumerate(output):
         row["label_order"] = index
     return output
+
+
+def _omit_unresolved_export_amounts(
+    enriched: Dict[str, Any],
+    ingredients: List[Dict[str, Any]],
+    ledger: List[Dict[str, Any]],
+) -> None:
+    """Do not turn an unresolved source scalar into an exact public amount.
+
+    Preserve source wording and all upstream assessment/disclosure facts. This
+    projection runs after serving folds so an alternative cannot restore an
+    inconsistent amount. Existing nullable numeric fields and dash display
+    semantics are sufficient; consumers need no new uncertainty policy.
+    """
+    unresolved_paths = {
+        safe_str(row.get("raw_source_path"))
+        for row in safe_list(enriched.get("activeIngredients"))
+        if isinstance(row, dict) and row.get("raw_source_path")
+        and _label_quantity_is_unresolved(row)
+    }
+    for row in ingredients:
+        if row.get("raw_source_path") in unresolved_paths:
+            row["quantity"] = None
+            row["normalized_amount"] = None
+            row["display_dose_label"] = _EM_DASH
+    for row in ledger:
+        unresolved_group = row.get("raw_source_path") in unresolved_paths or any(
+            isinstance(component, dict) and component.get("raw_source_path") in unresolved_paths
+            for component in safe_list(row.get("folded_label_components"))
+        )
+        if unresolved_group:
+            row["exact_dose_text"] = _EM_DASH
+            if "parenthetical_dose_text" in row:
+                row["parenthetical_dose_text"] = ""
+            for field in ("quantity", "normalized_amount"):
+                if field in row:
+                    row[field] = None
+            if isinstance(row.get("analysis"), dict):
+                row["analysis"]["quantity"] = None
+            for variant in safe_list(row.get("serving_variants")):
+                if isinstance(variant, dict):
+                    variant["exact_dose_text"] = _EM_DASH
+        for component in safe_list(row.get("folded_label_components")):
+            if isinstance(component, dict) and component.get("raw_source_path") in unresolved_paths:
+                component["exact_dose_text"] = _EM_DASH
 
 
 def _final_label_ledger_omissions(
@@ -7509,6 +7566,7 @@ def build_detail_blob(
         enriched,
         display_ingredients,
     )
+    _omit_unresolved_export_amounts(enriched, ingredients, display_ingredients)
     # One owner of what the label says: the canonical label ledger. The
     # identity step's display name can be a DSLD group name ("Couch Grass" on a
     # wheatgrass row) or drop the brand ("Capsimax Capsicum fruit extract" ->
