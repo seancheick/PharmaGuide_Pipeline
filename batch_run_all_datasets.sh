@@ -90,6 +90,7 @@ PIPELINE_ONLY=0
 RELEASE_EXPLICIT=0
 PRE_CHECK=0                 # Aggregate preparation is explicit opt-in
 RESUME_ARGS=()
+BATCH_ARGS=("$REPO_ROOT/batch_run_all_datasets.sh" "$@")
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -173,6 +174,12 @@ fi
 # and ship the entire catalog. Require --release to opt into downstream work.
 if [ -n "$TARGET_DATASETS" ] && [ "$RELEASE_EXPLICIT" != "1" ]; then
     PIPELINE_ONLY=1
+fi
+
+# One owner spans producer work, snapshot validation and publication.
+if [[ "${PG_RELEASE_LOCK_WRAPPED:-0}" != "1" ]]; then
+    exec "$PG_PYTHON" "$SCRIPTS_DIR/run_with_release_lock.py" \
+        --lock-path "$SCRIPTS_DIR/.release.lock" -- bash "${BATCH_ARGS[@]}"
 fi
 
 # Colors for output
@@ -558,39 +565,15 @@ if [ "$SKIP_SNAPSHOT" = "1" ]; then
     exit 0
 fi
 
-if [ ! -x "$SNAPSHOT_SCRIPT" ]; then
-    echo -e "${RED}✗ Snapshot script not executable: $SNAPSHOT_SCRIPT${NC}"
-    exit 1
-fi
-
-echo -e "${BLUE}=========================================="
-echo "REBUILDING DASHBOARD SNAPSHOT"
-echo "==========================================${NC}"
-echo ""
-if bash "$SNAPSHOT_SCRIPT" 2>&1 | tee -a "$SUMMARY_FILE"; then
-    echo -e "${GREEN}✓ Snapshot rebuilt: scripts/dist/ is up to date${NC}"
-    SNAPSHOT_OK=1
-else
-    echo -e "${RED}✗ Snapshot rebuild failed — pipeline outputs are fresh but scripts/dist/ may be stale${NC}"
-    echo -e "${RED}  Rerun manually: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
-    echo -e "${RED}  Full release was not started.${NC}"
-    exit 1
-fi
-echo ""
-
-# Step B: full release (interaction DB → Supabase → Flutter)
-check_batch_source
-check_batch_inputs
+# Full publication has one assembly owner: release_full.sh. The explicit
+# snapshot-only mode still invokes the snapshot directly.
 if [ "$SKIP_RELEASE" = "1" ]; then
-    echo -e "${YELLOW}Full release skipped (SKIP_RELEASE=1 or --skip-release).${NC}"
-    echo -e "${YELLOW}  Run manually when ready: bash scripts/release_full.sh${NC}"
-    echo ""
-    if [ "$SNAPSHOT_OK" = "1" ]; then
-        echo -e "${GREEN}All datasets + dashboard snapshot ready.${NC}"
-    else
-        echo -e "${YELLOW}All datasets processed, but dashboard snapshot is NOT ready.${NC}"
+    if bash "$SNAPSHOT_SCRIPT" 2>&1 | tee -a "$SUMMARY_FILE"; then
+        echo -e "${GREEN}All datasets + dashboard snapshot ready; publication skipped.${NC}"
+        exit 0
     fi
-    exit 0
+    echo -e "${RED}Snapshot rebuild failed; retry bash batch_run_all_datasets.sh --resume.${NC}"
+    exit 1
 fi
 
 if [ ! -x "$RELEASE_SCRIPT" ]; then

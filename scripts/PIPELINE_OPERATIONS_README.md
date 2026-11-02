@@ -1,11 +1,11 @@
 # PharmaGuide Pipeline Operations
 
-> Canonical operator runbook | Batch/release flow checked against entry points: 2026-11-01
+> Canonical operator runbook | Batch/release flow checked against entry points: 2026-11-02
 
 ## 1. Which command should I run?
 
 For a retry that reuses verified computation, add `--resume` to the normal full
-command: `bash batch_run_all_datasets.sh --resume --pre-check`. Before computing,
+command: `bash batch_run_all_datasets.sh --resume`. Before computing,
 it prints the plan for every selected brand and approved submission dataset.
 Each stage needs complete ownership, intact output checksums, current code, references and runtime/dependency provenance, and matching upstream
 input bytes/inventory. The first invalid stage
@@ -30,13 +30,29 @@ the original success time and record the latest execution/reuse outcome; reuse
 does not extend their freshness period. Catalog construction, image work,
 interaction assembly, Supabase sync and Flutter import use these same receipts.
 
-Catalog receipts also bind the execution environment, including `PATH` and the
-Python selector. Keep those settings consistent between a separate compute,
-snapshot and release invocation. A different terminal/tool startup context can
-reject reuse even when dataset manifests are current. Verify the existing
-receipt under its original context; never restamp outputs or bypass a mismatch.
-The normal full batch command keeps its child stages in one inherited context.
-The app's older catalog is a comparison baseline, not the source-freshness target.
+Catalog construction and its validation now have separate content bindings. A completed,
+checksum-sealed construction is retained under `scripts/.catalog-construction.<binding>`;
+a failed later gate discards only its validation workspace. An audit-only correction reruns
+validation against the retained bytes. Exporter/input changes require new construction.
+Reports needed for reuse remain under `scripts/reports/release-gates/<binding>/` and are
+checksum-verified before reuse. The existing 24-hour artifact age limit still applies: expired
+construction is rebuilt, never timestamp-restamped. Never promote a construction copy without
+the snapshot gates.
+
+Registered direct-Python checks bind the resolved interpreter and effective configuration,
+not incidental `PATH` or selector spelling. Unknown tool chains retain conservative environment
+binding. Raw JSON and JSONL, manifests, relevant artifacts, report/log checksums and receipt
+expiry are enforced. Live catalog comparisons, publication and device verification always run.
+The read-only `bash scripts/release_full.sh --preflight-only` prints producer decisions,
+construction availability and reusable gate evidence before any compute/publication.
+
+The full batch owns the existing release lock across producer and release work, then delegates
+assembly once to `release_full.sh`. `--skip-release` retains explicit snapshot-only operation.
+Do not delete a live lock or merge source during a run. A lock prevents participating jobs,
+not unrelated Git writes; source-drift guards remain mandatory. Normal interruption stops the
+owned child-process group before releasing the lock, preserving completed construction. A forced
+kill or machine crash still requires inspection of the existing stale-lock diagnostic.
+The app's older catalog remains a comparison baseline, not the source-freshness target.
 
 Reference invalidation remains conservative: current import closures include
 certification/scoring owners even from Clean. No preparation-specific or
@@ -46,7 +62,7 @@ requires proof covering dynamic reads as well as the observed label sample.
 Run from `/Users/seancheick/Downloads/dsld_clean`. For a full Clean → Enrich → Score → snapshot → publication attempt, the command is:
 
 ```bash
-bash batch_run_all_datasets.sh --pre-check
+bash batch_run_all_datasets.sh --resume
 ```
 
 The batch script loads `scripts/python_env.sh` itself. The pre-check is optional;

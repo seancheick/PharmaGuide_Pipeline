@@ -34,3 +34,10 @@ paths:
 - **A gate only protects you if something runs it.** When you add or rename a gate, wire it into
   `release_full.sh` or `scripts/test.sh release` and show that it ran.
 - The full test suite runs as a backstop *after* the pipeline, never alongside it.
+
+- Export projections and the raw-to-final audit share the existing amount/ledger owners.
+  Changing a projection requires real affected-label export-to-audit regressions, corrupted
+  export controls and a bounded raw-to-final check before a whole release attempt.
+- Retry through `bash batch_run_all_datasets.sh --resume`. Keep sealed construction and
+  gate reports until their successful replacement is delivered; never treat a retained
+  construction as a validated/published candidate. Freeze source integration during the run.

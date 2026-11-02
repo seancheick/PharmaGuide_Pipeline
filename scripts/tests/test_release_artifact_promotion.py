@@ -82,6 +82,7 @@ def _assembly(repo):
         path = repo / relative
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text('{}')
+    (repo / "scripts/build_final_db.py").write_text("from scoring_v4 import pillar_explanations\n")
     return promotion.catalog_input_binding(repo)
 
 
@@ -159,7 +160,10 @@ def test_catalog_receipt_invalidates_on_safety_formulation_and_exporter_changes(
     changed.parent.mkdir(parents=True, exist_ok=True)
     changed.write_text('# new source')
     assert not promotion.catalog_build_is_current(tmp_path)
-    with pytest.raises(ValueError, match='inputs changed'):
+    if relative not in {'scripts/audit_raw_to_final.py', 'scripts/rebuild_dashboard_snapshot.sh'}:
+        with pytest.raises(ValueError, match='inputs changed'):
+            promotion.require_catalog_inputs(tmp_path, binding)
+    else:
         promotion.require_catalog_inputs(tmp_path, binding)
 
 
@@ -206,3 +210,65 @@ def test_catalog_receipt_ignores_test_only_changes(tmp_path, relative):
     path.write_text('test infrastructure changed')
     assert promotion.catalog_build_is_current(tmp_path)
     promotion.require_catalog_inputs(tmp_path, binding)
+
+
+def test_audit_change_invalidates_validation_but_preserves_construction(tmp_path):
+    binding = _assembly(tmp_path)
+    root = tmp_path / 'scripts/.catalog-construction'
+    root.mkdir()
+    for name in ('pharmaguide_core.db', 'export_manifest.json'):
+        (root / name).write_text('{}')
+    promotion.record_catalog_construction(tmp_path, root, binding)
+    promotion.record_catalog_build(tmp_path, binding)
+    audit = tmp_path / 'scripts/audit_raw_to_final.py'
+    audit.write_text('changed = True\n')
+    assert promotion.catalog_construction_is_current(tmp_path, root)
+    assert not promotion.catalog_build_is_current(tmp_path)
+    target = tmp_path / 'restored'
+    promotion.restore_catalog_construction(tmp_path, root, target)
+    assert (target / 'pharmaguide_core.db').read_text() == '{}'
+    (root / 'pharmaguide_core.db').write_text('corrupt')
+    assert not promotion.catalog_construction_is_current(tmp_path, root)
+    with pytest.raises(ValueError):
+        promotion.restore_catalog_construction(tmp_path, root, tmp_path / 'bad')
+
+
+def test_construction_rejects_partial_receipts_and_changed_exporter(tmp_path):
+    binding = _assembly(tmp_path)
+    root = tmp_path / 'scripts/.catalog-construction'
+    root.mkdir()
+    assert not promotion.catalog_construction_is_current(tmp_path, root)
+    for name in ('pharmaguide_core.db', 'export_manifest.json'):
+        (root / name).write_text('{}')
+    promotion.record_catalog_construction(tmp_path, root, binding)
+    assert promotion.catalog_construction_is_current(tmp_path, root)
+    (tmp_path / 'scripts/build_final_db.py').write_text('changed = True\n')
+    assert not promotion.catalog_construction_is_current(tmp_path, root)
+
+
+def test_preflight_plan_names_stale_producer_and_exact_resume_command(tmp_path, monkeypatch, capsys):
+    import dataset_paths
+    raw = tmp_path / 'raw'
+    (raw / 'Brand').mkdir(parents=True)
+    (raw / 'Brand/1.json').write_text('{}')
+    monkeypatch.setattr(dataset_paths, 'brand_dataset_root', lambda **kwargs: raw)
+    promotion.describe_release_plan(tmp_path)
+    output = capsys.readouterr().out
+    assert 'Brand: rebuild clean,enrich,score' in output
+    assert 'bash batch_run_all_datasets.sh --resume' in output
+    assert 'Publication and live comparisons: always execute' in output
+
+
+def test_expired_construction_is_rebuilt_instead_of_repeatedly_restaged(tmp_path):
+    import json
+    from datetime import datetime, timedelta, timezone
+    binding = _assembly(tmp_path)
+    root = tmp_path / 'construction'
+    root.mkdir()
+    (root / 'pharmaguide_core.db').write_text('{}')
+    (root / 'export_manifest.json').write_text(json.dumps({
+        'generated_at': (datetime.now(timezone.utc) - timedelta(hours=25)).isoformat()}))
+    promotion.record_catalog_construction(tmp_path, root, binding)
+    assert not promotion.catalog_construction_is_current(tmp_path, root)
+    with pytest.raises(ValueError, match='stale'):
+        promotion.restore_catalog_construction(tmp_path, root, tmp_path / 'candidate')

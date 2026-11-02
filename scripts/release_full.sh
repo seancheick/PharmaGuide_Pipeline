@@ -330,9 +330,10 @@ fi
 if "$PG_PYTHON" "$REPO_ROOT/scripts/promote_release_artifacts.py" --catalog-current; then
   ok "Catalog receipt is current for these inputs: Step 1 will skip assembly"
 else
-  info "Catalog receipt is stale or absent: Step 1 will assemble the catalog"
+  info "Catalog validation is stale or absent: Step 1 will reuse verified construction or build if needed"
 fi
 if (( PREFLIGHT_ONLY == 1 )); then
+  "$PG_PYTHON" "$REPO_ROOT/scripts/promote_release_artifacts.py" --preflight-plan
   if (( SKIP_FLUTTER == 0 )) && [[ ! -x "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" ]]; then
     err "Flutter import script is missing or not executable: $FLUTTER_REPO/scripts/import_catalog_artifact.sh"
     exit 1
@@ -497,6 +498,7 @@ sync_final_db_output_catalog_from_dist() {
 
 CATALOG_STATE_SCRIPT="$REPO_ROOT/scripts/promote_release_artifacts.py"
 CATALOG_INPUT_BINDING=$("$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-input-binding)
+VALIDATION_INPUT_BINDING=$("$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --validation-input-binding)
 
 step1_needs_run() {
   (( FORCE == 1 )) && return 0
@@ -606,6 +608,7 @@ fi
 sync_final_db_output_catalog_from_dist
 # Image owners legitimately mutate catalog checksums; bind their resulting
 # mirrors only while the exact validated source remains unchanged.
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-validation-binding "$VALIDATION_INPUT_BINDING"
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --record-catalog "$CATALOG_INPUT_BINDING"
 
 # ---------------------------------------------------------------------------
@@ -688,8 +691,9 @@ run_strict_gate "cleaner/IQD row contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir "$PRODUCTS_DIR" --strict-release
 run_strict_gate "enrichment/IQD source-of-truth contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir "$PRODUCTS_DIR" --strict-release
-run_strict_gate "scoring assessment completion contract" \
-  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring --products-dir "$PRODUCTS_DIR" --dist-dir "$DIST_DIR" --strict-release
+run_strict_gate "scoring assessment readiness" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring --products-dir "$PRODUCTS_DIR" --dist-dir "$DIST_DIR" --strict-release \
+    --source-proof-cache "$REPO_ROOT/scripts/reports/release-gates/scoring-source-proof.json"
 run_strict_gate "clinical drift contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir "$PRODUCTS_DIR" --strict-release
 run_strict_gate "clinical evidence match reachability" \
@@ -747,6 +751,7 @@ fi
 
 # Seal metadata written by the validated gates before a review hold can exit.
 # The retry may reuse assembly; every publication gate still runs again.
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-validation-binding "$VALIDATION_INPUT_BINDING"
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --record-catalog "$CATALOG_INPUT_BINDING"
 
 # Compare every product with each catalog users can have: the app bundle
@@ -790,6 +795,7 @@ fi
 # The completed catalog was sealed before review; verify the source freeze
 # regardless of which publication flags are set.
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-validation-binding "$VALIDATION_INPUT_BINDING"
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   run_strict_gate "interaction DB release asset + app hydration pin" \
     "$PG_PYTHON" scripts/release_interaction_artifact.py \
@@ -825,6 +831,7 @@ if (( SKIP_SUPABASE == 0 )); then
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
     "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
+    "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-validation-binding "$VALIDATION_INPUT_BINDING"
     info "Step 5/8: Syncing dist/ to Supabase (upload only; cleanup deferred)..."
     # Storage inventory/deletion runs separately after publication.
     RELEASE_PHASE="Supabase catalog sync"

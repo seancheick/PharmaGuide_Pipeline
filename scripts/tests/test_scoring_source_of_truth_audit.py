@@ -967,3 +967,25 @@ def test_coherent_higher_score_cannot_borrow_a_valid_source_receipt(tmp_path, mo
         **stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])})
     args = _args(scored); args.completion_only = True
     assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+
+
+def test_source_join_proof_reuses_only_exact_inputs_and_sealed_content(tmp_path, monkeypatch):
+    import audit_source_of_truth_contract as audit
+    monkeypatch.setattr(audit, 'REPO_ROOT', tmp_path)
+    scored = tmp_path / 'scripts/products/output_Test_scored/scored'
+    scored.mkdir(parents=True)
+    batch = scored / 'batch.json'
+    batch.write_text('[]')
+    path = tmp_path / 'proof.json'
+    cache, binding = audit._load_scoring_source_proof(path, tmp_path / 'scripts/products')
+    cache['verified_sources']['batch:1'] = {'id': '1', 'source': 'verified'}
+    audit._save_scoring_source_proof(path, tmp_path / 'scripts/products', cache, binding)
+    loaded, _ = audit._load_scoring_source_proof(path, tmp_path / 'scripts/products')
+    assert loaded['verified_sources'] == cache['verified_sources']
+    path.write_text(path.read_text().replace('verified', 'forged'))
+    assert audit._load_scoring_source_proof(path, tmp_path / 'scripts/products')[0]['verified_sources'] == {}
+    audit._save_scoring_source_proof(path, tmp_path / 'scripts/products', cache, binding)
+    batch.write_text('[{"changed": true}]')
+    assert audit._load_scoring_source_proof(path, tmp_path / 'scripts/products')[0]['verified_sources'] == {}
+    with pytest.raises(ValueError, match='changed'):
+        audit._save_scoring_source_proof(path, tmp_path / 'scripts/products', cache, binding)

@@ -35,16 +35,71 @@ CATALOG_NONPRODUCER_PATHS = (
 
 
 def catalog_input_binding(repo: Path) -> str:
-    """Bind assembly to content, runtime and configuration, never mtimes.
+    """Bind catalog production separately from the checks run against its bytes."""
+    from pipeline_freshness import _imported_modules
+    repo = repo.resolve()
+    scripts = repo / 'scripts'
+    pending = [scripts / name for name in ('build_final_db.py', 'release_catalog_artifact.py')]
+    producers = set()
+    while pending:
+        path = pending.pop()
+        if path not in producers:
+            producers.add(path)
+            if path.is_file():
+                pending.extend(_imported_modules(scripts, path) - producers)
+    inputs = tuple(str(p.relative_to(repo)) for p in sorted(producers))
+    return _input_binding(repo, ['catalog-assembly'], (
+        *inputs, '.env', 'requirements*.txt', '.python-version',
+        'scripts/data/*.json', 'scripts/data/curated*/*.json',
+        'scripts/config/**/*.json', 'scripts/contracts/*.json',
+        'scripts/scoring_v4/config/*.json',
+        'scripts/products/*_enriched/enriched/*.json', *SCORING_AUDIT_CORPUS_INPUTS,
+    ), portable_python=True)
 
-    Includes the raw DSLD labels: a catalog gated against other raw labels is
-    not current, so the raw-to-final comparison reruns (ADR-0005). Includes
-    every input of the snapshot's scoring audit, because release skips its
-    duplicate of that audit while this receipt is current.
-    """
-    return _input_binding(repo.resolve(), ['catalog-assembly'], (
+
+def catalog_validation_binding(repo: Path) -> str:
+    """Gate implementation changes require revalidation, never blind promotion."""
+    return _input_binding(repo.resolve(), ['catalog-validation'], (
         *RELEASE_SOURCE_INPUTS, *SCORING_AUDIT_CORPUS_INPUTS,
-    ), exclude_paths=CATALOG_NONPRODUCER_PATHS)
+    ), exclude_paths=CATALOG_NONPRODUCER_PATHS, portable_python=True)
+
+
+def _construction_outputs(root: Path) -> dict:
+    for required in ('pharmaguide_core.db', 'export_manifest.json'):
+        if not (root / required).is_file():
+            raise FileNotFoundError(root / required)
+    return {str(p.relative_to(root)): _sha256(p) for p in sorted(root.rglob('*'))
+            if p.is_file() and p.name != '.construction-receipt.json'}
+
+
+def record_catalog_construction(repo: Path, root: Path, expected: str) -> None:
+    require_catalog_inputs(repo, expected)
+    outputs = _construction_outputs(root)
+    require_catalog_inputs(repo, expected)
+    _write_receipt(root / '.construction-receipt.json',
+                   {'input_binding': expected, 'outputs': outputs})
+
+
+def catalog_construction_is_current(repo: Path, root: Path) -> bool:
+    from release_catalog_artifact import check_release_freshness, DEFAULT_MAX_AGE_HOURS, ReleaseValidationError
+    try:
+        manifest = json.loads((root / 'export_manifest.json').read_text())
+        check_release_freshness(manifest=manifest, max_age_hours=DEFAULT_MAX_AGE_HOURS, allow_stale=False)
+        receipt = json.loads((root / '.construction-receipt.json').read_text())
+        seal = receipt.pop('receipt_sha256')
+        return (seal == _canonical_sha256(receipt)
+                and receipt['input_binding'] == catalog_input_binding(repo)
+                and receipt['outputs'] == _construction_outputs(root))
+    except (OSError, ValueError, KeyError, TypeError, AttributeError, ReleaseValidationError):
+        return False
+
+
+def restore_catalog_construction(repo: Path, root: Path, destination: Path) -> None:
+    if not catalog_construction_is_current(repo, root):
+        raise ValueError('Construction is incomplete, changed or stale; cannot reuse')
+    shutil.copytree(root, destination, ignore=shutil.ignore_patterns('.construction-receipt.json'))
+    if _construction_outputs(root) != _construction_outputs(destination):
+        raise ValueError('Construction changed while copying; no promotion allowed')
 
 
 def require_catalog_inputs(repo: Path, expected: str) -> None:
@@ -79,7 +134,7 @@ def record_catalog_build(repo: Path, expected: str) -> None:
     outputs = _catalog_outputs(repo)
     require_catalog_inputs(repo, expected)
     _write_receipt(catalog_receipt_path(repo), {
-        'input_binding': expected, 'outputs': outputs,
+        'input_binding': expected, 'validation_binding': catalog_validation_binding(repo), 'outputs': outputs,
     })
 
 
@@ -89,6 +144,7 @@ def catalog_build_is_current(repo: Path) -> bool:
         seal = receipt.pop('receipt_sha256')
         return (seal == _canonical_sha256(receipt)
                 and receipt['input_binding'] == catalog_input_binding(repo)
+                and receipt.get('validation_binding') == catalog_validation_binding(repo)
                 and receipt['outputs'] == _catalog_outputs(repo))
     except (OSError, ValueError, KeyError, TypeError):
         return False
@@ -178,6 +234,48 @@ def promote_release_artifacts(
     _remove_directory(backup_final)
 
 
+def describe_release_plan(repo: Path) -> None:
+    """Read-only recovery plan from the same owners execution uses."""
+    from dataset_paths import brand_dataset_root
+    from pipeline_freshness import dataset_resume_plan
+    from audits.run_verification_gate import release_gate_input_globs, release_gate_options, _can_reuse
+    repo = repo.resolve()
+    raw = brand_dataset_root()
+    datasets = [(p.name, p) for p in sorted(raw.iterdir()) if p.is_dir()] if raw.is_dir() else []
+    submissions = repo / 'manual_labels/product_submissions'
+    if submissions.is_dir():
+        datasets.append(('Product_Submissions', submissions))
+    for name, root in datasets:
+        try:
+            stages, reason = dataset_resume_plan(repo, root, repo / f'scripts/products/output_{name}')
+        except (OSError, ValueError) as exc:
+            stages, reason = ['clean', 'enrich', 'score'], str(exc)
+        action = 'rebuild ' + ','.join(stages) if stages else 'reuse all stages'
+        print(f'Producer {name}: {action} — {reason}', flush=True)
+    binding = catalog_input_binding(repo)
+    root = repo / f'scripts/.catalog-construction.{binding[:20]}'
+    print('Catalog construction: ' + ('reuse verified bytes' if catalog_construction_is_current(repo, root)
+                                      else 'build required'), flush=True)
+    for path in sorted((repo / 'scripts/reports/release-gates').glob('*.json')):
+        try:
+            receipt = json.loads(path.read_text())
+            name, command = receipt['gate_name'], receipt['command']
+            patterns = release_gate_input_globs(name)
+            if not patterns:
+                continue
+            artifact, outputs, portable = release_gate_options(name, command, repo)
+            current = _input_binding(repo, command, patterns, artifact_dir=artifact,
+                                     output_paths=outputs, portable_python=portable)
+            reusable = _can_reuse(path, Path(receipt['log']), name=name, binding=current,
+                                 max_age_seconds=86400, output_paths=outputs)
+        except (OSError, ValueError, KeyError, TypeError, AttributeError):
+            continue
+        print(f'Gate {name}: ' + ('verified reusable' if reusable else 'execute; receipt not current'), flush=True)
+    print('Missing or incomplete gate evidence: execute; never inferred from an old pass.')
+    print('Publication and live comparisons: always execute')
+    print('Next: bash batch_run_all_datasets.sh --resume')
+
+
 def _parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Promote fully gated catalog candidates into live paths."
@@ -189,7 +287,14 @@ def _parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
     parser.add_argument('--repo-root', type=Path, default=Path(__file__).resolve().parents[1])
     actions = parser.add_mutually_exclusive_group()
     actions.add_argument('--catalog-input-binding', action='store_true')
+    actions.add_argument('--preflight-plan', action='store_true')
     actions.add_argument('--catalog-current', action='store_true')
+    actions.add_argument('--construction-current', type=Path)
+    actions.add_argument('--record-construction', type=Path)
+    actions.add_argument('--restore-construction', type=Path)
+    actions.add_argument('--validation-input-binding', action='store_true')
+    actions.add_argument('--check-validation-binding')
+    parser.add_argument('--binding')
     actions.add_argument('--check-input-binding')
     actions.add_argument('--record-catalog')
     actions.add_argument('--check-disk', type=Path)
@@ -198,6 +303,28 @@ def _parse_args(argv: Optional[list[str]] = None) -> argparse.Namespace:
 
 def main(argv: Optional[list[str]] = None) -> int:
     args = _parse_args(argv)
+    if args.preflight_plan:
+        describe_release_plan(args.repo_root)
+        return 0
+    if args.validation_input_binding:
+        print(catalog_validation_binding(args.repo_root))
+        return 0
+    if args.check_validation_binding:
+        if catalog_validation_binding(args.repo_root) != args.check_validation_binding:
+            raise ValueError('Validation source changed during this snapshot; no promotion allowed')
+        return 0
+    if args.construction_current:
+        return 0 if catalog_construction_is_current(args.repo_root, args.construction_current) else 1
+    if args.record_construction:
+        if not args.binding:
+            raise ValueError('--record-construction requires --binding')
+        record_catalog_construction(args.repo_root, args.record_construction, args.binding)
+        return 0
+    if args.restore_construction:
+        if not args.final_candidate:
+            raise ValueError('--restore-construction requires --final-candidate')
+        restore_catalog_construction(args.repo_root, args.restore_construction, Path(args.final_candidate))
+        return 0
     if args.catalog_input_binding:
         print(catalog_input_binding(args.repo_root))
         return 0

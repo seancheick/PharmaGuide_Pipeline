@@ -1,5 +1,15 @@
 # PharmaGuide master completion plan
 
+### November 2 — release-loop recovery
+
+Owner: `build_final_db.py::_omit_unresolved_export_amounts`, `audit_raw_to_final.py::_check_line_integrity`, `release_safety/catalog_diff.py::diff_catalogs`, `audits/run_verification_gate.py::run_gate`, `promote_release_artifacts.py::catalog_build_is_current`, `audit_source_of_truth_contract.py::audit_scoring`. Evidence: reproduced27findings on27808/28993, retained four-product blob hashes, failure/retry harnesses and the existing LEDGER. Will NOT create another quantity classifier, scorer, approvals registry, release engine or freshness system.
+
+- [x] Implement exporter/audit agreement and schema4 approvals bound to exact baseline, states and core-verified product detail hashes. Four previously reviewed corrections reproduce their retained hashes; attribution and reasons remain intact.
+- [x] Implement immutable construction recovery, separate production/validation bindings, source-lineage reuse, artifact/report receipt checks, portable known Python launchers and one batch-to-release assembly path. Keep live publication checks and existing age limits.
+- [x] Independent review: repair late-report deletion, source-audit argument placement, expired construction retry, rawJSONL binding and interrupted process-group ownership. Final code review has no outstanding actionable findings.
+- [ ] Complete final owner/consumer checks, applicable local qualification and exact-candidate CI; integrate under Sean's November2 implementation authorization.
+- [ ] Freeze integrated source, inspect all114producer manifests and run once from the earliest invalid stage. Complete release gates, publication, bundle qualification and actual phone acceptance. User confirmed sole user; OTA preferred. This supersedes older execution reservations for this authorized task only.
+
 ### November 1 — monthly certification renewal
 
 Owner: `scripts/api_audit/verify_certifications.py::build_refresh_candidate/main`, `scripts/cert_resolver.py::_sku_population_conflict/_check_override`, `scripts/api_audit/cert_label_registry_audit.py::census`; numerical owner remains `scripts/scoring_v4/cert_evidence.py`. Evidence: official saved responses, independent per-source/identity reparse and full census. Will NOT create another registry/matcher/scorer, public field, scoring magnitude, certification-program policy or release shortcut.

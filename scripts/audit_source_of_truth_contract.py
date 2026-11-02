@@ -708,12 +708,48 @@ def _scoring_diag(product: dict[str, Any]) -> dict[str, Any]:
     return {}
 
 
+def _scoring_source_proof_binding(products_dir: Path) -> str:
+    from audits.run_verification_gate import _input_binding, RELEASE_SOURCE_INPUTS, SCORING_AUDIT_CORPUS_INPUTS
+    return _input_binding(REPO_ROOT, ['scoring-source-lineage', str(products_dir.resolve())],
+                          (*RELEASE_SOURCE_INPUTS, *SCORING_AUDIT_CORPUS_INPUTS), portable_python=True)
+
+
+def _load_scoring_source_proof(path: Path, products_dir: Path) -> tuple[dict, str]:
+    import time
+    from audits.run_verification_gate import _canonical_sha256
+    binding = _scoring_source_proof_binding(products_dir)
+    cache = {'verified_sources': {}}
+    try:
+        receipt = json.loads(path.read_text())
+        seal = receipt.pop('receipt_sha256')
+        if (seal == _canonical_sha256(receipt) and receipt['input_binding'] == binding
+                and 0 <= time.time() - receipt['created_at'] < 86400
+                and isinstance(receipt['verified_sources'], dict)):
+            cache['verified_sources'] = receipt['verified_sources']
+    except (OSError, ValueError, KeyError, TypeError, AttributeError):
+        pass
+    return cache, binding
+
+
+def _save_scoring_source_proof(path: Path, products_dir: Path, cache: dict, binding: str) -> None:
+    import time
+    from audits.run_verification_gate import _write_receipt
+    if _scoring_source_proof_binding(products_dir) != binding:
+        raise ValueError('Scoring source inputs changed during audit; no reusable proof')
+    _write_receipt(path, {'input_binding': binding, 'created_at': time.time(),
+                          'verified_sources': cache.get('verified_sources', {})})
+
+
 def _scoring_enriched_source(scored_path: Path, pid: str, cache: dict) -> dict | None:
     """Join current manifest-owned stage artifacts once per dataset audit."""
     from stage_manifest import MANIFEST_NAME, select_stage_input_files
     from pipeline_freshness import (_manifest_issue, stage_input_fingerprints,
                                     stage_data_fingerprint, stage_data_files, DATA_FINGERPRINT_KEY)
     from dataset_paths import brand_dataset_root
+    proof_key = f'{scored_path.resolve()}:{pid}'
+    verified = cache.setdefault('verified_sources', {})
+    if proof_key in verified:
+        return verified[proof_key]
     scored_dir = scored_path.resolve().parent
     if cache.get("dataset") != scored_dir:
         cache.pop(cache.get("dataset"), None)
@@ -757,7 +793,10 @@ def _scoring_enriched_source(scored_path: Path, pid: str, cache: dict) -> dict |
     if proof is None or scored_path.resolve() not in proof[0]:
         return None
     products = proof[1].get(pid, [])
-    return products[0] if len(products) == 1 else None
+    if len(products) == 1:
+        verified[proof_key] = products[0]
+        return products[0]
+    return None
 
 
 def _release_assessment_export_contained(
@@ -804,6 +843,13 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
     files = collect_product_files(args, prefer_enriched=False)
     findings: list[Finding] = []
     source_cache = {}
+    proof_path = getattr(args, 'source_proof_cache', None)
+    products_dir = repo_path(getattr(args, 'products_dir', None) or 'scripts/products')
+    if proof_path:
+        # This cache contains verified source joins, never candidate acceptance.
+        if products_dir.resolve() != (REPO_ROOT / 'scripts/products').resolve():
+            raise ValueError('Source proof reuse requires the canonical products directory')
+        source_cache, proof_binding = _load_scoring_source_proof(Path(proof_path), products_dir)
     if not files:
         return [Finding("SCORING_NO_INPUT", "no scored product files found for scoring contract audit")]
 
@@ -1128,6 +1174,9 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                     finding for finding in findings[finding_start:]
                     if finding.code not in contained_codes
                 ]
+    if proof_path:
+        _save_scoring_source_proof(Path(proof_path), products_dir, source_cache, proof_binding)
+
     return findings
 
 
@@ -2203,6 +2252,8 @@ def build_parser() -> argparse.ArgumentParser:
     scoring.add_argument("--scored-file", dest="product_file", action="append", default=[])
     scoring.add_argument("--product-file", action="append", default=[])
     scoring.add_argument("--dist-dir", default=None)
+    scoring.add_argument("--source-proof-cache", type=Path,
+                         help="Reuse content-bound source joins; candidate checks always remain separate")
     scoring.add_argument("--completion-only", action="store_true",
                          help="preflight source completion only; does not replace candidate contract audit")
     scoring.set_defaults(prefer_scored=True)

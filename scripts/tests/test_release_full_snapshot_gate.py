@@ -181,7 +181,7 @@ def test_completed_manifest_is_sealed_before_a_review_hold_can_exit():
 
 def test_release_runs_strict_assessment_audit_after_optional_snapshot_before_publication():
     source = RELEASE_SCRIPT.read_text(encoding='utf-8')
-    gate = source.index('run_strict_gate "scoring assessment completion contract"')
+    gate = source.index('run_strict_gate "scoring assessment readiness"')
     publication = source.index('run_strict_gate "interaction DB release asset + app hydration pin"')
     assert gate < publication
     command = source[gate:source.index('run_strict_gate "clinical drift contract"', gate)]
@@ -244,6 +244,7 @@ SUBMISSION_OUTPUT_DIR=submissions
 SOURCE_OF_TRUTH_AUDIT=audit
 CATALOG_STATE_SCRIPT=state
 CATALOG_INPUT_BINDING=binding
+VALIDATION_INPUT_BINDING=validation-binding
 PG_PYTHON=python_gate
 python_gate() {{
   if [[ "$1" == state ]]; then return {before_sync_exit}; fi

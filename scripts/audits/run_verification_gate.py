@@ -46,12 +46,17 @@ SCORING_AUDIT_CORPUS_INPUTS = (
     'scripts/products/*/cleaned/*.json',
     'scripts/products/*/cleaned/*.jsonl',
     'scripts/products/*/*/.stage_manifest.json',
-    'manual_labels/**/*.json',
+    'manual_labels/**/*.json', 'manual_labels/**/*.jsonl',
     RAW_DSLD_LABELS,
 )
 
 RELEASE_GATE_EXTRA_INPUTS = {
     'scoring assessment completeness preflight': SCORING_AUDIT_CORPUS_INPUTS,
+    'scoring assessment readiness': SCORING_AUDIT_CORPUS_INPUTS,
+    'active identity integrity': SCORING_AUDIT_CORPUS_INPUTS,
+    'raw-to-final line integrity': SCORING_AUDIT_CORPUS_INPUTS,
+    'detail-blob field completeness': SCORING_AUDIT_CORPUS_INPUTS,
+    'clinical evidence match reachability': SCORING_AUDIT_CORPUS_INPUTS,
 }
 
 
@@ -134,6 +139,9 @@ def run_gate(
     cwd: Path,
     input_globs: Sequence[str] = (),
     max_age_seconds: float = 86400,
+    artifact_dir: Path | None = None,
+    output_paths: Sequence[Path] = (),
+    portable_python: bool = False,
 ) -> int:
     """Serialize receipt writers; reuse is opt-in for bound read-only checks."""
     receipt_path = Path(receipt_path).resolve()
@@ -142,7 +150,8 @@ def run_gate(
         fcntl.flock(lock, fcntl.LOCK_EX)
         return _run_gate(name=name, command=command, log_path=log_path,
                          receipt_path=receipt_path, cwd=cwd,
-                         input_globs=input_globs, max_age_seconds=max_age_seconds)
+                         input_globs=input_globs, max_age_seconds=max_age_seconds,
+                         artifact_dir=artifact_dir, output_paths=output_paths, portable_python=portable_python)
 
 
 # Only variables the pipeline, release scripts and interpreter actually read
@@ -192,7 +201,8 @@ def raw_label_fingerprint(raw_root: Path | None) -> dict:
     if raw_root is None or not raw_root.is_dir():
         return {'root': str(raw_root), 'missing': True}
     return {'root': str(raw_root), 'labels': [
-        (str(path.relative_to(raw_root)), _sha256(path)) for path in sorted(raw_root.rglob('*.json'))]}
+        (str(path.relative_to(raw_root)), _sha256(path))
+        for path in sorted({p for pattern in ('*.json', '*.jsonl') for p in raw_root.rglob(pattern) if p.is_file()})]}
 
 
 def _bound_environment(environ) -> dict:
@@ -211,11 +221,15 @@ def _bound_environment(environ) -> dict:
 
 def _input_binding(
     cwd: Path, command: Sequence[str], patterns: Sequence[str],
-    *, exclude_paths: Sequence[str] = (),
+    *, exclude_paths: Sequence[str] = (), portable_python: bool = False,
+    artifact_dir: Path | None = None, output_paths: Sequence[Path] = (),
 ) -> str:
     # Never persist credentials or environment values. The fingerprint binds
     # effective configuration, not shell bookkeeping or the per-run lock token.
     environment = _bound_environment(os.environ)
+    if portable_python:
+        for key in ('PATH', 'PYTHON', 'PG_PYTHON', 'VIRTUAL_ENV', 'PYENV_VERSION'):
+            environment.pop(key, None)
     files = {}
     # This cache lives for one content pass only. Never carry hashes across
     # the before/after verification boundary or a later publication check.
@@ -235,15 +249,29 @@ def _input_binding(
                 entries.append((relative, digests[path]))
         files[pattern] = entries
     executable = shutil.which(str(command[0]))
+    normalized = list(command)
+    artifact = None
+    if artifact_dir is not None:
+        root = artifact_dir.resolve()
+        artifact = {}
+        for pattern in ('pharmaguide_core.db', 'export_manifest.json', 'detail_index.json',
+                        'export_audit_report.json', 'detail_blobs/**/*.json'):
+            artifact[pattern] = [(str(p.relative_to(root)), _sha256(p)) for p in sorted(root.glob(pattern))
+                                 if p.is_file() and p.resolve() not in {v.resolve() for v in output_paths}]
+        if not (root / 'pharmaguide_core.db').is_file() or not (root / 'export_manifest.json').is_file():
+            raise ValueError(f'Missing candidate core/manifest: {root}')
+        normalized = [arg.replace(str(root), '<catalog>') for arg in normalized]
+    # Relative/absolute spellings inside the same checkout are equivalent.
+    normalized = [arg.replace(str(cwd.resolve()) + '/', '') for arg in normalized]
     return _canonical_sha256({
         'files': files, 'environment': environment, 'runtime': runtime_identity(),
         'executable': (executable, _sha256(Path(executable))) if executable else None,
-        'cwd': str(cwd), 'command': list(command),
+        'cwd': str(cwd), 'command': normalized, 'artifact': artifact,
     })
 
 
 def _can_reuse(receipt_path: Path, log_path: Path, *, name: str,
-               binding: str, max_age_seconds: float) -> bool:
+               binding: str, max_age_seconds: float, output_paths: Sequence[Path] = ()) -> bool:
     try:
         receipt = json.loads(receipt_path.read_text())
         seal = receipt.pop('receipt_sha256')
@@ -251,14 +279,20 @@ def _can_reuse(receipt_path: Path, log_path: Path, *, name: str,
         return (seal == _canonical_sha256(receipt) and receipt['exit_code'] == 0
                 and receipt['gate_name'] == name and receipt.get('input_binding') == binding
                 and receipt['log'] == str(log_path) and receipt['log_sha256'] == _sha256(log_path)
+                and receipt.get('output_hashes', {}) == _output_hashes(output_paths)
                 and 0 <= age < max_age_seconds)
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         return False
 
 
+def _output_hashes(paths: Sequence[Path]) -> dict:
+    return {str(index): _sha256(Path(path)) for index, path in enumerate(paths)}
+
+
 def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
               receipt_path: Path, cwd: Path, input_globs: Sequence[str],
-              max_age_seconds: float) -> int:
+              max_age_seconds: float, artifact_dir: Path | None = None,
+              output_paths: Sequence[Path] = (), portable_python: bool = False) -> int:
     """Run ``command`` and return its actual exit code after writing a receipt."""
     if not name.strip():
         raise ValueError("gate name must not be empty")
@@ -271,10 +305,12 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
     log_path.parent.mkdir(parents=True, exist_ok=True)
     binding_started = time.monotonic()
     invocation_started = binding_started
-    binding = _input_binding(cwd, command, input_globs) if input_globs else None
+    binding_options = dict(artifact_dir=artifact_dir, output_paths=output_paths,
+                           portable_python=portable_python)
+    binding = _input_binding(cwd, command, input_globs, **binding_options) if input_globs else None
     binding_duration = time.monotonic() - binding_started
     if binding and _can_reuse(receipt_path, log_path, name=name, binding=binding,
-                             max_age_seconds=max_age_seconds):
+                             max_age_seconds=max_age_seconds, output_paths=output_paths):
         receipt = json.loads(receipt_path.read_text())
         receipt.pop('receipt_sha256', None)
         receipt['last_invocation'] = {
@@ -321,13 +357,19 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
 
     if binding:
         binding_started = time.monotonic()
-        final_binding = _input_binding(cwd, command, input_globs)
+        final_binding = _input_binding(cwd, command, input_globs, **binding_options)
         binding_duration += time.monotonic() - binding_started
         if final_binding != binding:
             print(f'FAILED: {name} — inputs changed during verification', file=sys.stderr)
             exit_code = exit_code or 125
 
+    try:
+        output_hashes = _output_hashes(output_paths) if exit_code == 0 else {}
+    except OSError:
+        output_hashes = {}
+        exit_code = 125
     payload = {
+        "output_hashes": output_hashes,
         "receipt_schema_version": RECEIPT_SCHEMA_VERSION,
         "gate_name": name,
         "command": [str(part) for part in command],
@@ -349,6 +391,29 @@ def _run_gate(*, name: str, command: Sequence[str], log_path: Path,
     _write_receipt(receipt_path, payload)
     print(f'FINISHED: {name} | exit {exit_code} | {payload["duration_seconds"]:.3f}s', flush=True)
     return exit_code
+
+
+def release_gate_options(name: str, command: Sequence[str], cwd: Path, release_check: bool = True):
+    if not command:
+        raise ValueError('A verification command is required')
+    artifact_dir = None
+    output_paths = []
+    artifact_names = {'scoring assessment readiness', 'active identity integrity',
+                      'raw-to-final line integrity', 'detail-blob field completeness'}
+    def option(flag):
+        return (cwd / command[command.index(flag) + 1]).resolve() if flag in command else None
+    if release_check and name in artifact_names:
+        artifact_dir = option('--dist-dir') or option('--export-dir') or option('--build-dir')
+        if artifact_dir is None:
+            raise ValueError(f'{name} requires a candidate directory')
+    if release_check and release_gate_input_globs(name):
+        output = option('--out') or option('--output')
+        if output is not None:
+            output_paths.append(output)
+    # Only explicitly registered direct Python checks have known tool resolution.
+    portable = bool(release_check and release_gate_input_globs(name)
+                    and Path(command[0]).resolve() == Path(sys.executable).resolve())
+    return artifact_dir, output_paths, portable
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -375,7 +440,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         args.receipt = args.receipt_dir / f'{key}.json'
     if not args.log or not args.receipt:
         parser.error('supply --receipt-dir or both --log and --receipt')
+    artifact_dir, output_paths, portable = release_gate_options(args.name, command, Path(args.cwd), args.release_check)
     return run_gate(
+        artifact_dir=artifact_dir, output_paths=output_paths, portable_python=portable,
         name=args.name,
         command=command,
         log_path=args.log,

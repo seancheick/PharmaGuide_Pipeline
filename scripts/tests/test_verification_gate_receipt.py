@@ -304,8 +304,8 @@ def test_scoring_preflight_binds_scored_artifacts_and_manifests_for_reuse():
     assert {'scripts/products/*/cleaned/*.json', 'scripts/products/*/cleaned/*.jsonl'} <= set(bound)
     for name in REUSABLE_RELEASE_GATES:
         assert release_gate_input_globs(name) == tuple(RELEASE_SOURCE_INPUTS)
-    # Artifact, live and publication gates never bind.
-    assert release_gate_input_globs('scoring assessment readiness') == ()
+    # Artifact checks bind source and candidate; publication always executes.
+    assert set(bound) <= set(release_gate_input_globs('scoring assessment readiness'))
     assert release_gate_input_globs('interaction DB release asset + app hydration pin') == ()
 
 
@@ -374,3 +374,48 @@ def test_stage_provenance_binds_runtime_identity(monkeypatch, tmp_path):
     after = freshness.stage_input_fingerprints(tmp_path, 'enrich')
     assert before != after
     assert before[freshness.RUNTIME_FINGERPRINT_KEY] != after[freshness.RUNTIME_FINGERPRINT_KEY]
+
+
+def test_portable_python_binding_ignores_path_but_binds_interpreter_and_configuration(tmp_path, monkeypatch):
+    from audits.run_verification_gate import _input_binding
+    command = [sys.executable, 'probe.py']
+    first = _input_binding(tmp_path, command, (), portable_python=True)
+    monkeypatch.setenv('PATH', '/unrelated/launcher:' + os.environ['PATH'])
+    assert _input_binding(tmp_path, command, (), portable_python=True) == first
+    monkeypatch.setenv('PYTHONPATH', '/different/imports')
+    assert _input_binding(tmp_path, command, (), portable_python=True) != first
+
+
+def test_artifact_gate_reuses_after_move_and_rejects_changed_bytes_or_report(tmp_path):
+    import shutil
+    from audits.run_verification_gate import run_gate
+    source = tmp_path / 'source'
+    source.mkdir()
+    (source / 'pharmaguide_core.db').write_text('one')
+    (source / 'export_manifest.json').write_text('{}')
+    script = tmp_path / 'check.py'
+    script.write_text("from pathlib import Path\nimport sys\np=Path('calls')\np.write_text(p.read_text()+'x' if p.exists() else 'x')\nPath(sys.argv[2]).write_text('verified')\n")
+    report = tmp_path / 'report.json'
+    args = dict(name='artifact probe', command=[sys.executable, str(script), str(source), str(report)],
+                log_path=tmp_path / 'log', receipt_path=tmp_path / 'receipt.json', cwd=tmp_path,
+                input_globs=['check.py'], artifact_dir=source, output_paths=[report])
+    assert run_gate(**args) == 0
+    moved = tmp_path / 'promoted'
+    shutil.move(source, moved)
+    args.update(artifact_dir=moved, command=[sys.executable, str(script), str(moved), str(report)])
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'x'
+    report.write_text('corrupt')
+    assert run_gate(**args) == 0
+    (moved / 'pharmaguide_core.db').write_text('changed')
+    assert run_gate(**args) == 0
+    assert (tmp_path / 'calls').read_text() == 'xxx'
+
+
+def test_raw_fingerprint_tracks_jsonl_inputs_read_by_stage_lineage(tmp_path):
+    from audits.run_verification_gate import raw_label_fingerprint
+    label = tmp_path / 'batch.jsonl'
+    label.write_text('{"id": 1}\n')
+    before = raw_label_fingerprint(tmp_path)
+    label.write_text('{"id": 2}\n')
+    assert raw_label_fingerprint(tmp_path) != before
