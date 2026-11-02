@@ -14438,7 +14438,8 @@
       "id": "PII_OYSTER_EXTRACT",
       "standard_name": "Oyster Extract",
       "aliases": [
-        "oyster extract"
+        "oyster extract",
+        "oyster whole extract"
       ],
       "category": "active_pending_relocation",
       "is_additive": false,

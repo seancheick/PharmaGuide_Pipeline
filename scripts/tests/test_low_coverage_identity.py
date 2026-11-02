@@ -76,3 +76,20 @@ def test_blend_total_by_volume_stays_without_an_anchor(run):
     enriched, scored = run("315586")
     assert _anchors(enriched)[1] == []
     assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] == 0.0
+
+
+def test_oyster_whole_extract_is_the_oyster_extract_identity(run):
+    enriched, scored = run("330192")
+    row = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
+               if r.get("name") == "Oyster Whole Extract")
+    assert row["canonical_id"] == "PII_OYSTER_EXTRACT"
+    assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] >= 0.3
+
+
+def test_oyster_shell_extract_stays_a_different_unresolved_material(run):
+    # The alias names whole extract only. 330191 printed Whole under an API
+    # "Shell"; these three stay held until their own printed labels are read.
+    enriched, scored = run("294580")
+    assert not any(r.get("canonical_id") == "PII_OYSTER_EXTRACT"
+                   for r in enriched["ingredient_quality_data"]["ingredients"])
+    assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] == 0.0
