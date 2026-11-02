@@ -967,3 +967,44 @@ def test_coherent_higher_score_cannot_borrow_a_valid_source_receipt(tmp_path, mo
         **stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])})
     args = _args(scored); args.completion_only = True
     assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+
+
+def test_source_join_proof_reuses_only_exact_inputs_and_sealed_content(tmp_path, monkeypatch):
+    import audit_source_of_truth_contract as audit
+    monkeypatch.setattr(audit, 'REPO_ROOT', tmp_path)
+    scored = tmp_path / 'scripts/products/output_Test_scored/scored'
+    scored.mkdir(parents=True)
+    batch = scored / 'batch.json'
+    batch.write_text('[]')
+    path = tmp_path / 'proof.json'
+    cache, binding = audit._load_scoring_source_proof(path, tmp_path / 'scripts/products')
+    cache['verified_sources']['batch:1'] = {'id': '1', 'source': 'verified'}
+    audit._save_scoring_source_proof(path, tmp_path / 'scripts/products', cache, binding)
+    loaded, _ = audit._load_scoring_source_proof(path, tmp_path / 'scripts/products')
+    assert loaded['verified_sources'] == cache['verified_sources']
+    path.write_text(path.read_text().replace('verified', 'forged'))
+    assert audit._load_scoring_source_proof(path, tmp_path / 'scripts/products')[0]['verified_sources'] == {}
+    audit._save_scoring_source_proof(path, tmp_path / 'scripts/products', cache, binding)
+    batch.write_text('[{"changed": true}]')
+    assert audit._load_scoring_source_proof(path, tmp_path / 'scripts/products')[0]['verified_sources'] == {}
+    with pytest.raises(ValueError, match='changed'):
+        audit._save_scoring_source_proof(path, tmp_path / 'scripts/products', cache, binding)
+
+
+def test_reusing_source_proof_does_not_extend_its_expiry(tmp_path, monkeypatch):
+    import time
+    import audit_source_of_truth_contract as audit
+    monkeypatch.setattr(audit, 'REPO_ROOT', tmp_path)
+    monkeypatch.setattr(audit, '_scoring_source_proof_binding', lambda _: 'unchanged')
+    now = [100000.0]
+    monkeypatch.setattr(time, 'time', lambda: now[0])
+    path = tmp_path / 'proof.json'
+    products = tmp_path / 'scripts/products'
+    cache = {'verified_sources': {'batch:1': {'id': '1'}}}
+    audit._save_scoring_source_proof(path, products, cache, 'unchanged')
+    now[0] += 23 * 3600
+    reused, binding = audit._load_scoring_source_proof(path, products)
+    assert reused['verified_sources']
+    audit._save_scoring_source_proof(path, products, reused, binding)
+    now[0] += 2 * 3600
+    assert audit._load_scoring_source_proof(path, products)[0]['verified_sources'] == {}

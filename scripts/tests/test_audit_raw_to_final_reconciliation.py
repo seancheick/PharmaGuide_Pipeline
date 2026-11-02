@@ -624,7 +624,7 @@ def test_app_dose_checks_keep_the_exporters_legitimate_folate_fold():
         {"raw_source_path": "ingredientRows[1].nestedRows[0]", "label_display_name": "Folic Acid",
          "parent_label": "Folate", "exact_dose_text": "400 mcg"},
     ]
-    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], [], [])
+    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], blob["ingredients"], [])
     assert len(blob["display_ingredients"]) == 1
     assert blob["display_ingredients"][0]["folded_label_components"][0]["exact_dose_text"] == "400 mcg"
     assert _line_codes(raw, cleaned, enriched, blob) == []
@@ -639,7 +639,7 @@ def test_app_dose_checks_block_corrupted_folate_fold_amounts(field):
         {"raw_source_path": "ingredientRows[1].nestedRows[0]", "label_display_name": "Folic Acid",
          "parent_label": "Folate", "exact_dose_text": "400 mcg"},
     ]
-    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], [], [])
+    blob["display_ingredients"] = _build_canonical_label_ledger(cleaned["display_ingredients"], blob["ingredients"], [])
     if field == "parenthetical_dose_text":
         blob["display_ingredients"][0][field] = "4000 mcg folic acid"
     else:
@@ -867,3 +867,124 @@ def test_display_audit_checks_verified_name_correction_against_original_raw(prod
     rec = ProductRecord(product_id, None, None, None)
     _check_display_label_collapse(rec, blob, raw)
     assert any(f.code == "DISPLAY_LABEL_COLLAPSES_TO_CANONICAL" for f in rec.findings) is expected
+
+
+@pytest.mark.parametrize('pid', ['27808', '28993'])
+def test_real_unresolved_export_passes_line_integrity_and_rejects_corruption(pid):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+    from build_final_db import build_detail_blob, _label_quantity_is_unresolved
+
+    raw = json.loads((SCRIPTS / 'tests/fixtures' / f'completion_source_{pid}_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(copy.deepcopy(raw))
+    enriched, _ = SupplementEnricherV3().enrich_product(copy.deepcopy(cleaned))
+    blob = build_detail_blob(enriched, score_product_v4(enriched))
+
+    def findings(candidate):
+        record = _record()
+        record.dsld_id = pid
+        _check_line_integrity(record, raw, cleaned, enriched, candidate)
+        return [f.code for f in record.findings]
+
+    assert findings(blob) == []
+    unresolved = {r['raw_source_path'] for r in enriched['activeIngredients']
+                  if _label_quantity_is_unresolved(r)}
+    for field, value, code in [('quantity', 50, 'AMOUNT_CHANGE_WITHOUT_EVIDENCE'),
+                               ('normalized_amount', 50, 'NORMALIZED_DOSE_NOT_FROM_OWN_ROW'),
+                               ('unit', 'g', 'AMOUNT_CHANGE_WITHOUT_EVIDENCE')]:
+        corrupt = copy.deepcopy(blob)
+        row = next(r for r in corrupt['ingredients'] if r.get('raw_source_path') in unresolved)
+        row[field] = value
+        assert code in findings(corrupt)
+    corrupt = copy.deepcopy(blob)
+    row = next(r for r in corrupt['ingredients'] if r.get('raw_source_path') not in unresolved
+               and isinstance(r.get('quantity'), (int, float)) and r['quantity'] > 0)
+    row['quantity'] = None
+    assert 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' in findings(corrupt)
+
+
+@pytest.mark.parametrize('surface', ['printed', 'analysis', 'normalized'])
+@pytest.mark.parametrize('corrupt_amount', [0, 150])
+def test_unresolved_amount_corruption_is_reported_on_every_public_surface(surface, corrupt_amount):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+    from build_final_db import build_detail_blob, _unresolved_export_paths
+    from audit_raw_to_final import _corrected_source_paths
+
+    pid = '27808'
+    raw = json.loads((SCRIPTS / 'tests/fixtures/completion_source_27808_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(copy.deepcopy(raw))
+    enriched, _ = SupplementEnricherV3().enrich_product(copy.deepcopy(cleaned))
+    blob = build_detail_blob(enriched, score_product_v4(enriched))
+    paths = _unresolved_export_paths(enriched)
+    if surface == 'printed':
+        row = next(r for r in blob['ingredients'] if r.get('raw_source_path') in paths)
+        printed = _corrected_source_paths(raw, pid)[row['raw_source_path']]['quantity'][0]
+        row['quantity'], row['unit'] = printed['quantity'], printed['unit']
+        field = 'quantity'
+    else:
+        row = next(r for r in blob['display_ingredients'] if r.get('raw_source_path') in paths
+                   and isinstance(r.get('analysis'), dict))
+        if surface == 'analysis':
+            row['analysis']['quantity'] = corrupt_amount
+            field = 'display_ingredients.analysis.quantity'
+        else:
+            row['normalized_amount'] = corrupt_amount
+            field = 'display_ingredients.normalized_amount'
+    record = _record()
+    record.dsld_id = pid
+    _check_line_integrity(record, raw, cleaned, enriched, blob)
+    assert any(f.code == 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' and f.field == field for f in record.findings)
+
+
+@pytest.mark.parametrize('pid', ['47095', '252842'])
+@pytest.mark.parametrize('corrupt_enriched', [False, True])
+def test_real_label_context_retains_printed_dose_without_analysis_quantity(pid, corrupt_enriched):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+    from build_final_db import build_detail_blob
+
+    raw = json.loads((SCRIPTS / 'tests/fixtures' / f'completion_source_{pid}_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(copy.deepcopy(raw))
+    enriched, _ = SupplementEnricherV3().enrich_product(copy.deepcopy(cleaned))
+    blob = build_detail_blob(enriched, score_product_v4(enriched))
+    context = next(r for r in blob['display_ingredients']
+                   if r.get('is_label_context') and r.get('exact_dose_text') and r.get('analysis') is None)
+    record = _record()
+    record.dsld_id = pid
+    _check_line_integrity(record, raw, cleaned, enriched, blob)
+    assert not record.findings
+    context['exact_dose_text'] = '9999 mg'
+    if corrupt_enriched:
+        source = next(r for r in enriched['display_ingredients']
+                      if r.get('raw_source_path') == context['raw_source_path'])
+        source['exact_dose_text'] = '9999 mg'
+        blob = build_detail_blob(enriched, score_product_v4(enriched))
+    _check_line_integrity(record, raw, cleaned, enriched, blob)
+    assert any(f.code == 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' for f in record.findings)
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+def test_analysis_participation_join_reconciles_complementary_blend_rows_first(reverse):
+    from build_final_db import _build_canonical_label_ledger, _reconcile_display_source_rows
+
+    raw, cleaned, enriched, blob = _line_fixture()
+    structural = {
+        'raw_source_path': 'ingredientRows[1]', 'raw_source_text': 'Herbal Blend',
+        'display_type': 'structural_container', 'score_included': False,
+        'quantity': None, 'unit': '', 'children': ['organic Wheat Grass'],
+    }
+    mapped = {**structural, 'display_type': 'mapped_ingredient', 'score_included': True}
+    rows = [mapped, structural] if reverse else [structural, mapped]
+    cleaned['display_ingredients'] = copy.deepcopy(rows)
+    enriched['display_ingredients'] = copy.deepcopy(rows)
+    blob['display_ingredients'] = _build_canonical_label_ledger(
+        _reconcile_display_source_rows(rows), blob['ingredients'], [])
+    assert len(blob['display_ingredients']) == 1
+    assert blob['display_ingredients'][0]['score_included'] is True
+    assert _line_codes(raw, cleaned, enriched, blob) == []
+    blob['display_ingredients'][0]['quantity'] = 999
+    assert 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' in _line_codes(raw, cleaned, enriched, blob)

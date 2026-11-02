@@ -170,3 +170,92 @@ def test_raw_label_gates_are_never_satisfied_by_a_reused_receipt() -> None:
     from audits.run_verification_gate import REUSABLE_RELEASE_GATES
     assert "raw-to-final line integrity" not in REUSABLE_RELEASE_GATES
     assert "raw DSLD label availability" not in REUSABLE_RELEASE_GATES
+
+
+@pytest.mark.parametrize("failure_gate", ["raw", "late"])
+def test_failed_gate_retry_reuses_real_construction_receipt_and_promotes_only_after_pass(tmp_path, failure_gate):
+    import os
+    import shutil
+    import subprocess
+    import sys
+    scripts = tmp_path / 'scripts'
+    (scripts / 'audits').mkdir(parents=True)
+    (scripts / 'release_safety').mkdir()
+    for name in ('rebuild_dashboard_snapshot.sh', 'promote_release_artifacts.py',
+                 'pipeline_freshness.py', 'stage_manifest.py', 'run_artifacts.py',
+                 'dataset_paths.py', 'run_with_release_lock.py',
+                 'audits/run_verification_gate.py', 'release_safety/lock.py'):
+        shutil.copy(SCRIPT.parent / name, scripts / name)
+    (scripts / 'python_env.sh').write_text(f'PG_PYTHON="{sys.executable}"\n')
+    (scripts / 'test.sh').write_text('exit 0\n')
+    for name in ('preflight.py', 'iqm_form_evidence.py', 'audit_source_of_truth_contract.py',
+                 'audit_rda_ul_reference_stamps.py', 'audit_identity_integrity.py',
+                 'validate_form_notes_export.py'):
+        (scripts / name).write_text('pass\n')
+    (scripts / 'audit_raw_to_final.py').write_text(
+        "import sys\nfrom pathlib import Path\n"
+        "flag=Path('failed-once')\n"
+        f"if {failure_gate == 'raw'!r} and not flag.exists():\n flag.write_text('yes'); raise SystemExit(19)\n"
+        "Path(sys.argv[sys.argv.index('--out')+1]).write_text('{}')\n")
+    if failure_gate == 'late':
+        (scripts / 'validate_form_notes_export.py').write_text(
+            "from pathlib import Path\nflag=Path('failed-once')\n"
+            "if not flag.exists():\n flag.write_text('yes'); raise SystemExit(19)\n")
+    (scripts / 'audit_contract_sync.py').write_text(
+        "import sys\nfrom pathlib import Path\n"
+        "Path(sys.argv[sys.argv.index('--out')+1]).write_text('{}')\n")
+    (scripts / 'build_final_db.py').write_text(
+        "import sys,sqlite3\nfrom pathlib import Path\n"
+        "p=Path('build-count'); p.write_text(p.read_text()+'x' if p.exists() else 'x')\n"
+        "root=Path(sys.argv[sys.argv.index('--output-dir')+1]); root.mkdir()\n"
+        "with sqlite3.connect(root/'pharmaguide_core.db') as c:\n"
+        " c.execute('create table products_core (dsld_id text)'); c.execute(\"insert into products_core values ('1')\")\n"
+        "(root/'export_manifest.json').write_text('{}')\n"
+        "(root/'detail_blobs').mkdir(); (root/'detail_blobs/1.json').write_text('{}')\n")
+    (scripts / 'release_catalog_artifact.py').write_text(
+        "import sys,shutil\n"
+        "DEFAULT_MAX_AGE_HOURS=24\n"
+        "class ReleaseValidationError(RuntimeError): pass\n"
+        "def check_release_freshness(**kwargs): pass\n"
+        "if __name__ == '__main__':\n"
+        " shutil.copytree(sys.argv[sys.argv.index('--input-dir')+1], sys.argv[sys.argv.index('--output-dir')+1])\n")
+    for name in ('output_Test_enriched/enriched', 'output_Test_scored/scored'):
+        root = scripts / 'products' / name
+        root.mkdir(parents=True)
+        (root / 'batch.json').write_text('[]')
+    raw = tmp_path / 'raw/Test'
+    raw.mkdir(parents=True)
+    (raw / '1.json').write_text('{}')
+    env = {**os.environ, 'PHARMAGUIDE_DATASET_ROOT': str(raw.parent)}
+    for key in ('PG_RELEASE_LOCK_WRAPPED', 'PG_RELEASE_LOCK_TOKEN'):
+        env.pop(key, None)
+    command = ['bash', str(scripts / 'rebuild_dashboard_snapshot.sh')]
+    failed = subprocess.run(command, cwd=tmp_path, env=env, capture_output=True, text=True, timeout=60)
+    assert failed.returncode == 19, failed.stdout + failed.stderr
+    assert (tmp_path / 'build-count').read_text() == 'x'
+    assert not (scripts / 'dist').exists()
+    assert list(scripts.glob('.catalog-construction.*/.construction-receipt.json'))
+    retried = subprocess.run(command, cwd=tmp_path, env=env, capture_output=True, text=True, timeout=60)
+    assert retried.returncode == 0, retried.stdout + retried.stderr
+    assert (tmp_path / 'build-count').read_text() == 'x'
+    assert 'Reusing verified catalog construction' in retried.stdout
+    assert 'REUSED: active identity integrity' in retried.stdout
+    if failure_gate == 'late':
+        assert 'REUSED: raw-to-final line integrity' in retried.stdout
+        assert 'REUSED: detail-blob field completeness' in retried.stdout
+    assert (scripts / 'dist/pharmaguide_core.db').read_bytes() == (scripts / 'final_db_output/pharmaguide_core.db').read_bytes()
+
+
+def test_every_source_audit_shell_invocation_matches_its_real_parser():
+    import shlex
+    from audit_source_of_truth_contract import build_parser
+    checked = 0
+    prefix = '"$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT"'
+    for filename in ('rebuild_dashboard_snapshot.sh', 'release_full.sh'):
+        source = (SCRIPT.parent / filename).read_text().replace(chr(92) + chr(10), ' ')
+        for line in source.splitlines():
+            if prefix in line:
+                command = shlex.split(line[line.index(prefix):])
+                build_parser().parse_args(command[2:])
+                checked += 1
+    assert checked >= 20

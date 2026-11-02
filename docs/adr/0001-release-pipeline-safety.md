@@ -570,3 +570,27 @@ rewrites only the pin's identity fields. After the import, the app's own
 `tool/fetch_interaction_db.sh` runs as a strict gate, and the pin is committed with the bundle.
 Publishing the asset is part of the operator-invoked release, like the Supabase upload; it stays
 inert until the Flutter commit is pushed, and that push remains manual.
+
+
+### Amendment 2026-11-02 — exact-product approvals and recoverable release work
+
+Sean approved binding safety corrections to the reviewed product rather than an unrelated
+catalog build timestamp. Approval schema 4 requires the exact baseline catalog checksum,
+product ID, before/after state and candidate detail-blob checksum; the actual blob must match
+its core row's `detail_blob_sha256`. Removals bind the exact baseline/prior state and absence.
+Whole-catalog hashes remain provenance in reports. Changed records fail closed. The four
+November 1 corrections were rebuilt from manifest-owned stages and matched retained review
+hashes exactly; their reviewer attribution and reasons remain unchanged. Older groups for
+obsolete baselines remain in Git history. No clinical or scoring policy was relaxed.
+
+The existing artifact-promotion owner separates construction inputs from validation inputs.
+It retains an immutable, checksum-sealed construction copy and restores a disposable workspace
+for gates. A later failed gate cannot publish or destroy the only complete construction.
+Artifact/source receipts bind content, runtime, effective configuration, reports, logs and age;
+registered Python checks ignore incidental launcher PATH differences. Source-lineage joins may
+be reused, but candidate quarantine/warning containment is still checked against actual outputs.
+Raw JSONL inputs are covered alongside JSON. Remote comparison and publication are never cached.
+
+The full batch uses the existing release lock and delegates assembly to the existing release
+train once. These changes intentionally require fresh qualification and inspection of producer
+fingerprints before the final run; they do not restamp prior artifacts or establish delivery.

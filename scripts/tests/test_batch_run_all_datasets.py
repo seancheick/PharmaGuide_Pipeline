@@ -36,6 +36,11 @@ def _install_batch_dependencies(tmp_path):
     the production guard or silently skipping a missing dependency.
     """
     scripts_dir = tmp_path / "scripts"
+    import shutil
+    scripts_dir.mkdir(exist_ok=True)
+    shutil.copy(REPO_ROOT / 'scripts/run_with_release_lock.py', scripts_dir)
+    (scripts_dir / 'release_safety').mkdir(exist_ok=True)
+    shutil.copy(REPO_ROOT / 'scripts/release_safety/lock.py', scripts_dir / 'release_safety/lock.py')
     scripts_dir.mkdir(parents=True, exist_ok=True)
     if not (scripts_dir / 'pipeline_freshness.py').exists():
         (scripts_dir / 'pipeline_freshness.py').write_text("print('stable-source')\n")
@@ -218,7 +223,7 @@ def test_batch_runner_propagates_snapshot_failure_and_skips_release(tmp_path):
     copied_script.chmod(copied_script.stat().st_mode | stat.S_IXUSR)
 
     result = subprocess.run(
-        ["bash", str(copied_script), "--root", str(dataset_root)],
+        ["bash", str(copied_script), "--root", str(dataset_root), "--skip-release"],
         capture_output=True,
         text=True,
         env={**os.environ, "PYTHONUNBUFFERED": "1"},
@@ -411,6 +416,7 @@ if [[ "$1" == --preflight-only ]]; then
   exit 0
 fi
 [[ " $* " == *" --prepared-inputs "* ]] || exit 90
+bash '{snapshot}' || exit $?
 printf 'supabase\\nflutter-import\\nflutter-commit\\n' >> '{events}'
 ''')
     (scripts / 'release_full.sh').chmod(0o755)

@@ -169,11 +169,32 @@ def test_release_moves_the_app_hydration_pin_with_the_bundle() -> None:
     assert pin in status_line
 
 
-def test_release_preflight_only_local_run_never_reaches_artifact_gates():
+def _copy_release_lock(scripts):
+    import shutil
+    shutil.copyfile(SCRIPT.parent / 'run_with_release_lock.py', scripts / 'run_with_release_lock.py')
+    (scripts / 'release_safety').mkdir(exist_ok=True)
+    shutil.copyfile(SCRIPT.parent / 'release_safety/lock.py', scripts / 'release_safety/lock.py')
+
+
+def _preflight_harness(tmp_path):
+    import shutil
+    scripts = tmp_path / 'scripts'
+    scripts.mkdir()
+    for name in ('release_full.sh', 'python_env.sh'):
+        shutil.copyfile(SCRIPT.parent / name, scripts / name)
+    _copy_release_lock(scripts)
+    (scripts / 'promote_release_artifacts.py').write_text(
+        "import sys\n"
+        "assert sys.argv[1] in ('--check-disk', '--catalog-current', '--preflight-plan')\n"
+        "raise SystemExit(1 if sys.argv[1] == '--catalog-current' else 0)\n")
+    return scripts / 'release_full.sh'
+
+
+def test_release_preflight_only_local_run_never_reaches_artifact_gates(tmp_path):
     import os
     import subprocess
     result = subprocess.run(
-        ["bash", str(SCRIPT), "--preflight-only", "--skip-supabase", "--skip-flutter"],
+        ["bash", str(_preflight_harness(tmp_path)), "--preflight-only", "--skip-supabase", "--skip-flutter"],
         capture_output=True, text=True, env={**os.environ}, timeout=30,
     )
     assert result.returncode == 0, result.stdout + result.stderr
@@ -243,11 +264,11 @@ def test_release_prepared_inputs_preserve_verified_submission_set(tmp_path, prep
         assert "--fetch" in recorded
 
 
-def test_release_cli_accepts_prepared_inputs_in_read_only_preflight():
+def test_release_cli_accepts_prepared_inputs_in_read_only_preflight(tmp_path):
     import os
     import subprocess
     result = subprocess.run(
-        ["bash", str(SCRIPT), "--preflight-only", "--skip-supabase", "--skip-flutter", "--prepared-inputs"],
+        ["bash", str(_preflight_harness(tmp_path)), "--preflight-only", "--skip-supabase", "--skip-flutter", "--prepared-inputs"],
         capture_output=True, text=True, env={**os.environ}, timeout=30,
     )
     assert result.returncode == 0, result.stdout + result.stderr
@@ -309,6 +330,7 @@ def test_batch_runner_stops_before_processing_when_canary_preflight_fails(tmp_pa
     repo = SCRIPT.parents[1]
     shutil.copyfile(repo / "batch_run_all_datasets.sh", root / "batch_run_all_datasets.sh")
     shutil.copyfile(repo / "scripts/python_env.sh", scripts / "python_env.sh")
+    _copy_release_lock(scripts)
     raw_root = tmp_path / "raw"
     (raw_root / "Brand").mkdir(parents=True)
     calls = tmp_path / "calls.txt"
@@ -361,6 +383,7 @@ def test_batch_preparation_is_opt_in_but_quick_checks_remain(tmp_path, pre_check
     scripts.mkdir(parents=True)
     shutil.copyfile(SCRIPT.parents[1] / "batch_run_all_datasets.sh", root / "batch_run_all_datasets.sh")
     shutil.copyfile(SCRIPT.parent / "python_env.sh", scripts / "python_env.sh")
+    _copy_release_lock(scripts)
     raw = tmp_path / "raw"
     (raw / "Brand").mkdir(parents=True)
     calls = tmp_path / "calls"
@@ -407,6 +430,7 @@ def test_batch_precheck_flag_preserves_full_release_path(tmp_path, pre_check):
     scripts.mkdir(parents=True)
     shutil.copyfile(SCRIPT.parents[1] / "batch_run_all_datasets.sh", root / "batch_run_all_datasets.sh")
     shutil.copyfile(SCRIPT.parent / "python_env.sh", scripts / "python_env.sh")
+    _copy_release_lock(scripts)
     raw = tmp_path / "raw"
     (raw / "Brand").mkdir(parents=True)
     calls = tmp_path / "calls"
@@ -445,7 +469,8 @@ def test_batch_precheck_flag_preserves_full_release_path(tmp_path, pre_check):
     assert '--stages clean,enrich,score --strict-release-gates' in pipeline
     if prepare:
         assert invocations.index(prepare[0]) < invocations.index(pipeline)
-    assert invocations[-2:] == ['snapshot', 'release --prepared-inputs']
+    assert invocations[-1] == 'release --prepared-inputs'
+    assert 'snapshot' not in invocations  # release_full owns assembly
 
 
 @pytest.mark.parametrize("commit_outcome", ["unchanged", "success", "failure"])

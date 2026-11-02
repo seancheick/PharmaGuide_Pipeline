@@ -132,7 +132,9 @@ def _is_state(value) -> bool:
 def load_approvals(path: Path = APPROVALS_PATH) -> list[dict]:
     """Read reviewed approvals; refuse any group that is not fully signed."""
     payload = json.loads(Path(path).read_text(encoding="utf-8"))
-    groups = payload.get("approvals") if isinstance(payload, dict) else None
+    if not isinstance(payload, dict) or payload.get("_metadata", {}).get("schema_version") != 4:
+        raise ValueError(f"{path}: expected approval schema_version 4")
+    groups = payload.get("approvals")
     if not isinstance(groups, list):
         raise ValueError(f"{path}: expected an object with an 'approvals' list")
     for number, group in enumerate(groups, 1):
@@ -146,7 +148,7 @@ def load_approvals(path: Path = APPROVALS_PATH) -> list[dict]:
             date.fromisoformat(group["date"])
         except ValueError:
             raise ValueError(f"{where}: date must be YYYY-MM-DD, got {group['date']!r}") from None
-        for field in ("baseline_sha256", "candidate_sha256"):
+        for field in ("baseline_sha256",):
             value = group.get(field)
             if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
                 raise ValueError(f"{where} needs a lowercase SHA-256 {field!r}")
@@ -159,6 +161,10 @@ def load_approvals(path: Path = APPROVALS_PATH) -> list[dict]:
                 raise ValueError(
                     f"{where}: each change needs dsld_id, a 'from' state and a 'to' state or null "
                     f"(a state has {', '.join(STATE_KEYS)}): {change!r}")
+            if change['to'] is not None:
+                value = change.get('candidate_blob_sha256')
+                if not isinstance(value, str) or len(value) != 64 or any(c not in '0123456789abcdef' for c in value):
+                    raise ValueError(f"{where} needs a lowercase SHA-256 'candidate_blob_sha256'")
     return groups
 
 
@@ -193,8 +199,28 @@ def _severity(change: dict) -> float:
     return move if change["kind"] == "score_drop" else -move
 
 
-def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) -> dict:
+def _candidate_blob_hash(candidate_db: Path, blobs: Path, pid: str) -> str:
+    path = blobs / f'{pid}.json'
+    if path.resolve().parent != blobs.resolve():
+        raise ValueError(f'Invalid blob identity: {pid}')
+    if not path.is_file():
+        raise ValueError(f'Missing candidate blob: {path}')
+    digest = _sha256(path)
+    with sqlite3.connect(f'{candidate_db.resolve().as_uri()}?mode=ro', uri=True) as con:
+        try:
+            row = con.execute('select detail_blob_sha256 from products_core where dsld_id=?', (pid,)).fetchone()
+        except sqlite3.Error as exc:
+            raise ValueError('Candidate core lacks usable detail_blob_sha256') from exc
+    if row is None or row[0] != digest:
+        raise ValueError(f'Candidate blob checksum disagrees with core: {pid}')
+    return digest
+
+
+def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict],
+                  candidate_blobs: Path | None = None) -> dict:
     """Compare two catalogs; the result is plain JSON for reports and the gate."""
+    candidate_db = Path(candidate_db)
+    candidate_blobs = Path(candidate_blobs) if candidate_blobs is not None else candidate_db.parent / "detail_blobs"
     tiers = _tiers()
     before, after = _products(Path(baseline_db)), _products(Path(candidate_db))
     baseline_sha256, candidate_sha256 = _sha256(Path(baseline_db)), _sha256(Path(candidate_db))
@@ -231,9 +257,12 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
     approved = {}
     for group in approvals:
         for change in group["changes"]:
-            approved[(group["baseline_sha256"], group["candidate_sha256"], _key(change))] = (change, group)
+            approved[(group["baseline_sha256"], change.get("candidate_blob_sha256") if change["to"] is not None else None, _key(change))] = (change, group)
     for change in gated:
-        match = approved.pop((baseline_sha256, candidate_sha256, _key(change)), None)
+        digest = (_candidate_blob_hash(candidate_db, candidate_blobs, change['dsld_id'])
+                  if change['to'] is not None else None)
+        change['candidate_blob_sha256'] = digest
+        match = approved.pop((baseline_sha256, digest, _key(change)), None)
         change["approval"] = None if match is None else {
             k: match[1][k] for k in ("reason", "approved_by", "date")}
     order = {kind: i for i, kind in enumerate(KINDS)}
@@ -268,7 +297,7 @@ def diff_catalogs(baseline_db: Path, candidate_db: Path, approvals: list[dict]) 
         "reported": reported,
         "unapproved": sum(c["approval"] is None for c in gated),
         "stale_approvals": [{**c, "baseline_sha256": group["baseline_sha256"],
-                             "candidate_sha256": group["candidate_sha256"]}
+                             "candidate_blob_sha256": c.get("candidate_blob_sha256")}
                             for c, group in approved.values()],
     }
 
@@ -406,9 +435,10 @@ def draft_approvals(results: dict | list[dict]) -> dict:
                 seen.add(key)
                 groups.setdefault((*scope, c["kind"]), []).append({
                     "dsld_id": c["dsld_id"], "from": c["from"], "to": c["to"],
+                    "candidate_blob_sha256": c["candidate_blob_sha256"],
                     "product_name": c["product_name"], "why": "; ".join(r["text"] for r in c["reasons"]),
                 })
-    return {"approvals": [{"reason": "", "approved_by": "", "date": "",
+    return {"_metadata": {"schema_version": 4}, "approvals": [{"reason": "", "approved_by": "", "date": "",
                            "baseline_sha256": baseline, "candidate_sha256": candidate,
                            "changes": changes}
                           for (baseline, candidate, kind), changes in sorted(
@@ -452,6 +482,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--flutter-repo", required=True, type=Path)
     parser.add_argument("--candidate-db", required=True, type=Path)
+    parser.add_argument("--candidate-blobs", type=Path)
     parser.add_argument("--approvals", type=Path, default=APPROVALS_PATH)
     parser.add_argument("--report", required=True, type=Path)
     parser.add_argument("--draft-approvals", required=True, type=Path)
@@ -480,7 +511,7 @@ def main(argv: list[str] | None = None) -> int:
         try:
             results = []
             for db, info in baselines:
-                results.append(diff_catalogs(db, args.candidate_db, approvals))
+                results.append(diff_catalogs(db, args.candidate_db, approvals, args.candidate_blobs))
                 results[-1]["baseline"].update(info)
         except (ValueError, OSError, sqlite3.Error) as exc:
             print(f"catalog diff: cannot compare: {exc}", file=sys.stderr)
@@ -489,7 +520,7 @@ def main(argv: list[str] | None = None) -> int:
     # An approval is stale only when it matches nothing in any comparison.
     stale = [a for a in results[0]["stale_approvals"]
              if all(any(_key(a) == _key(b) and a["baseline_sha256"] == b["baseline_sha256"]
-                         and a["candidate_sha256"] == b["candidate_sha256"]
+                         and a.get("candidate_blob_sha256") == b.get("candidate_blob_sha256")
                          for b in r["stale_approvals"]) for r in results)]
     for result in results:
         result["stale_approvals"] = stale

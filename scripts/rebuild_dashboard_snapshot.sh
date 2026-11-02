@@ -112,6 +112,10 @@ if [[ "${PG_RELEASE_LOCK_WRAPPED:-0}" != "1" ]]; then
 fi
 CATALOG_STATE_SCRIPT="$REPO_ROOT/scripts/promote_release_artifacts.py"
 CATALOG_INPUT_BINDING=$("$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --catalog-input-binding)
+VALIDATION_INPUT_BINDING=$("$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --validation-input-binding)
+CONSTRUCTION_ROOT="$REPO_ROOT/scripts/.catalog-construction.${CATALOG_INPUT_BINDING:0:20}"
+AUDIT_REPORT_ROOT="$REPO_ROOT/scripts/reports/release-gates/${CATALOG_INPUT_BINDING:0:20}"
+mkdir -p "$AUDIT_REPORT_ROOT"
 DISK_DESTINATION="$REPO_ROOT/scripts"
 [[ "$CANDIDATE_ONLY" == "true" ]] && DISK_DESTINATION="$CANDIDATE_PARENT"
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-disk "$DISK_DESTINATION"
@@ -160,7 +164,8 @@ run_strict_gate "raw DSLD label availability" \
 # This source-only check cannot waive the independent candidate audit below.
 run_strict_gate "scoring assessment completeness preflight" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring \
-    --products-dir "$REPO_ROOT/scripts/products" --completion-only --strict-release
+    --products-dir "$REPO_ROOT/scripts/products" --completion-only --strict-release \
+    --source-proof-cache "$REPO_ROOT/scripts/reports/release-gates/scoring-source-proof.json"
 run_strict_gate "source-of-truth matrix" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
 run_strict_gate "IQM form-evidence contract" \
@@ -212,13 +217,25 @@ fi
 
 echo "◦ Building from ${#ENR[@]} enriched dirs + ${#SCR[@]} scored dirs..."
 
-# 2. Build into a same-filesystem candidate. Live final_db_output is untouched.
-run_strict_gate "catalog candidate construction" \
-  "$PG_PYTHON" scripts/build_final_db.py \
-  --enriched-dir "${ENR[@]}" \
-  --scored-dir "${SCR[@]}" \
-  --output-dir "$FINAL_CANDIDATE" \
-  --strict
+# Keep the immutable construction outside the disposable validation workspace.
+# Gate reports and manifest stamps may change the workspace, never this copy.
+if ! "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --construction-current "$CONSTRUCTION_ROOT"; then
+  if [[ -e "$CONSTRUCTION_ROOT" ]]; then
+    mv "$CONSTRUCTION_ROOT" "${CONSTRUCTION_ROOT}.incomplete.$$"
+  fi
+  run_strict_gate "catalog candidate construction" \
+    "$PG_PYTHON" scripts/build_final_db.py \
+    --enriched-dir "${ENR[@]}" \
+    --scored-dir "${SCR[@]}" \
+    --output-dir "$CONSTRUCTION_ROOT" \
+    --strict
+  "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --record-construction "$CONSTRUCTION_ROOT" \
+    --binding "$CATALOG_INPUT_BINDING"
+else
+  echo "✓ Reusing verified catalog construction; validation gates still apply."
+fi
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --restore-construction "$CONSTRUCTION_ROOT" \
+  --final-candidate "$FINAL_CANDIDATE"
 
 # The builder quarantines unresolved identities. Prove their actual exclusion
 # before promotion; a pre-build all-source gate prevents quarantine itself.
@@ -232,15 +249,18 @@ run_strict_gate "active identity integrity" \
 run_strict_gate "raw-to-final line integrity" \
   "$PG_PYTHON" scripts/audit_raw_to_final.py \
     --build-dir "$FINAL_CANDIDATE" --products-root scripts/products --all --raw-root "$RAW_ROOT" \
-    --out "$FINAL_CANDIDATE/raw_to_final_audit.json"
+    --out "$AUDIT_REPORT_ROOT/raw_to_final_audit.json"
+cp "$AUDIT_REPORT_ROOT/raw_to_final_audit.json" "$FINAL_CANDIDATE/raw_to_final_audit.json"
 run_strict_gate "scoring assessment readiness" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" scoring \
-    --products-dir scripts/products --dist-dir "$FINAL_CANDIDATE" --strict-release
+    --products-dir scripts/products --dist-dir "$FINAL_CANDIDATE" --strict-release \
+    --source-proof-cache "$REPO_ROOT/scripts/reports/release-gates/scoring-source-proof.json"
 
 run_strict_gate "detail-blob field completeness" \
   "$PG_PYTHON" scripts/audit_contract_sync.py \
     --build-dir "$FINAL_CANDIDATE" \
-    --out "$FINAL_CANDIDATE/contract_sync_report.json"
+    --out "$AUDIT_REPORT_ROOT/contract_sync_report.json"
+cp "$AUDIT_REPORT_ROOT/contract_sync_report.json" "$FINAL_CANDIDATE/contract_sync_report.json"
 
 # 3. Stage the complete release bundle into a candidate, not scripts/dist/.
 #
@@ -278,6 +298,7 @@ run_strict_gate "catalog artifact freshness" \
 
 # Reject a mixed-source build before either preservation or live promotion.
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
+"$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-validation-binding "$VALIDATION_INPUT_BINDING"
 
 # 5a. Candidate-only mode stops after all gates and atomically preserves the
 # verified pair at the caller's explicit destination. It never reaches the live

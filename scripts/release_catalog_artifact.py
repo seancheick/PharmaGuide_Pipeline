@@ -771,6 +771,9 @@ def stage_release(
 # ---------------------------------------------------------------------------
 
 
+DEFAULT_MAX_AGE_HOURS = 24.0
+
+
 def check_release_freshness(
     *,
     manifest: Dict[str, Any],
@@ -849,7 +852,7 @@ def _parse_args(argv: Optional[list] = None) -> argparse.Namespace:
     p.add_argument(
         "--max-age-hours",
         type=float,
-        default=24.0,
+        default=DEFAULT_MAX_AGE_HOURS,
         help=(
             "Maximum allowed age (in hours) of --input-dir's export_manifest.json "
             "generated_at. Prevents accidentally re-staging stale builds. "
