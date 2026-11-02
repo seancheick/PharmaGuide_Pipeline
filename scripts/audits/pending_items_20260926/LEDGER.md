@@ -4245,117 +4245,104 @@ PR review corrections: runtime provenance is now shared by stage manifests and g
 
 ## November 1 — final source integration and catalog qualification
 
-Owner: `scripts/scoring_input_contract.py::_named_in_title` and
-`normalization.py::find_affirmative_label_match` — evidence: production callers,
-fail-first title controls and raw-label replay. Manifest/freshness and gate-receipt
-ownership stays with the existing owners. Will NOT create: a scorer, ingredient
-registry, clinical threshold, clinical approval or alternative publication status.
+Owner: existing title/normalization, correction/exposure/safety, manifest/freshness,
+gate receipt and catalog exception owners. Evidence: production diffs, raw replays,
+CI and actual catalog gates below. Will NOT create a scorer, registry, benchmark,
+clinical approval, cache owner or public schema/status.
 
-**Integrated:** performance PR #326 at `f974d834e`; title/certification PR #327 at
-`b9c313393`. Claude's final source `26f8d3ad2` and certification refresh `4d66345d2`
-were independently audited. Duplicate PR #328 was closed after incorporation;
-its source branch was retained. Final runtime candidate `b62be91c` passed all four
-fast CI shards and Merge readiness (run `41331829606`). Independent final review
-and CodeRabbit found no remaining production findings.
+**Integrated and independently audited:** performance #326 at `f974d834e`;
+title/certification #327 at `b9c313393`; caffeine source correction #329 at
+`6d53dad75`. Claude source `26f8d3ad2` and certification refresh `4d66345d2`
+were checked and incorporated; duplicate #328 closed, source retained. Title
+fallback respects original-text negation, unmapped ownership, carried aliases,
+same-source projections and longest registered names. Ritual 278454's USP
+fixture 86.4→84.4 follows the renewed registry; CVS 18141's 59.9 pin is retained
+with its production owner repaired. No valid assertion was weakened.
 
-The title repair recovers the whole source-labelled omega blend, restricts the
-fallback to top-level unmapped rows, respects carried aliases and same-source
-projections, prefers a longer registered identity over names contained within it,
-and requires affirmative original label/title text. Fail-first controls reproduce
-negated mentions, parenthetical context loss, spaced-free absence, mapped IDs
-outside IQM, carried registry aliases and longer-name ownership. Free-base/form/
-acid chemistry and positive “free of/from contaminants” remain valid. No new
-benefit credit or scoring policy. Ritual 278454's fixture changed 86.4→84.4 after
-the renewed USP registry removed its verification entry; CVS 18141's 59.9 pin
-was preserved and its production owner repaired.
+The earlier Codex 27808 correction inferred guarana caffeine 50/100 mg although
+the original NIH panel prints 150 mg and also declares total caffeine 200 mg per
+scoop. That inference is withdrawn. Exact original API quantities, names and
+serving bases remain under the existing source-bound ambiguous qualifier;
+verified arginine 500/1000 mg remains. `_dose_mg` delegates unresolved amounts
+to the existing exposure owner. Both 27808/28993 remain Not Scored and Caution;
+unknown exposure replaces unsupported exact/high-dose claims. No clinical signoff.
+Source PDF SHA: `631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134`.
 
-**Source qualification:** 234 final owner/consumer tests passed; local corpus
-564 passed with 24 declared opt-in skips and a passing skip guard; all 33 raw
-contract canaries passed. The 15-label full-layer replay changed only CVS 18141;
-14 controls were identical across Clean, Enrich, Score and detail blob.
+**Qualification:** title owner slice 234/local 564+24 declared opt-ins/raw 33;
+caffeine fail-first reproduced, owner 249/consumer 92/local 564+24 declared
+opt-ins/raw 33; data_batch exactly corrections/27808, correctness 0 new.
+Caffeine raw12-label replay changes only 27808/28993, ten controls identical.
+Independent reviews found no substantive defects. Runtime `5819cd6a` CI
+41357732942: 27,066 passed, 192 declared skips, all four shards and Merge readiness.
+Documentation added afterward caused an avoidable duplicate full CI checkpoint;
+`86a2199f` also passed all four shards/readiness in 41359338093 before #329 merged.
+Prepare the report before the qualification push; later reports belong in a
+separate documentation-only PR against already-integrated runtime.
 
-**Fresh computation:** all 37 brands plus Product Submissions completed from
-frozen main `b9c313393`, including Legion. All 38 datasets rebuilt with runtime
-provenance; no output was restamped. Measured stage work: Clean 215.195s,
-Enrich 2980.789s, Score 1010.829s. Stage work totals 70m07s; wall computation
-including guards/gates was about 73 minutes. Cold computation remains broadly
-similar to the previous run; this is not evidence of a major Enrich speedup.
+**Fresh frozen-source run:** all 37 brands plus Product Submissions computed
+successfully on main `6d53dad75`. All 114 stage executions completed. Clean
+216.290s, Enrich 2981.525s, Score 1010.818s: 70m08.633s stage work, essentially
+unchanged from the prior 70m06.813s. No major cold speedup is claimed. The earlier
+full-corpus completeness reuse was 9.287s versus 1273.754s cold; original receipt
+completion/expiry were preserved. Frozen8-label cold/resume: 8.453s/2.328s,
+byte-identical stage outputs/manifests. Conservative reference dependencies remain.
 
-The full 15,447-product comparison retained every ID. Only CVS 18141 changed
-score/pillars (Dose 6.3→11.4; total 54.8→59.9); other pillars, Evidence, quality
-availability and safety gates were unchanged. Two content-only changes (232624,
-26480) mark their structural fish-oil blend rows as title-prominent, with their
-Evidence state still not applicable and no new credit. Their old full records
-were hash-verified against the frozen baseline before comparison.
+Full 15,447-product post-run comparison took 16.958s: no missing IDs, no hash-only
+drift; all scores, pillars and quality availability unchanged; only the two
+intended caffeine safety changes. Counts: 15,129 scored (previous measured
+breakdown 8,835 complete/6,294 partial), 249 Not Scored, 69 safety-suppressed.
+Do not call all scored products scientifically complete. The actual core retains
+null Not Scored public totals/mirrors/tiers; actual blob controls preserve Reishi
+220046 Wheat, 18551/178728 Evidence-only holds, four ginseng Dose11.4,
+314032 raw omega Formulation4.57 (full pillar7.6), Calming Day without a stimulant
+flag, bitter-orange pregnancy precautions, and unresolved caffeine Caution.
 
-**Reuse measurement:** cold completeness validation passed in 1273.754s versus
-1290.739s previously: no meaningful cold-gate speedup. The same successful full-
-corpus gate then returned `REUSED` in 9.287s with all input content and its sealed
-log verified; the original completion/expiry was unchanged. A post-run CVS
-resume plan reports “reuse all stages; all stage outputs and inputs verified.”
-The earlier eight-label cold/resume measurement remains 8.453s/2.328s, with
-identical output and manifest bytes. Conservative reference invalidation remains
-until narrower dynamic dependencies can be proven.
+**Actual artifact gates:** completeness1274.525s, construction985.572s,
+readiness1267.710s passed. Catalog `2026.11.02.011254`: 15,447 products, 0 errors,
+skips, contract quarantines or contract failures. Identity, raw-to-final, field
+contracts and freshness passed. Release pytest155 passed/1 deferred built-DB
+skip918.81s; that node later passed separately (1 passed0.20s). Clinical
+reachability15,447: 0 affected/stale/new/unlinked/recompute errors. Live identifier/
+citation gates passed0 new mismatches/0 unresolved; 134 accepted historical
+citation mismatches remain reported, not scientifically closed.
 
-**Qualified snapshot:** catalog `2026.11.01.194931`, 15,447 products, zero errors,
-skips, contract quarantines or contract failures. Construction took 980.542s;
-scoring readiness against the actual artifact passed in 1268.361s. Active
-identity/raw-to-final checks, all 15,447 blob field declarations, both export
-contracts and artifact freshness passed. Actual core SHA-256:
-`854b07318712af0a6cc48a493a286b2c996c741454db7fe41e32572aa0e7cffe`.
+**Retry context correction:** a split launcher changed PATH/PYTHON and caused
+an otherwise intact catalog to fail strict reuse. The attempted duplicate
+assembly was stopped before any build. Original seal and all30,903 output hashes
+remain exact. Reusing the original execution context reproduces input binding
+`88dc2f331033cc282e709ad6fe69db3ae07834a468afe3f510a9d5f63bd7dddc` and
+`catalog_build_is_current=True`; no receipt was restamped. The resumed train
+actually skipped assembly and reused eligible source gates. This was the Codex
+launcher mismatch, not an obsolete phone catalog or a new source defect.
 
-Disposition counts: 15,129 scored (8,835 complete; 6,294 partial), 249 Not Scored
-(201 completeness-gated; 40 incomplete release assessments; 8 intentionally
-non-scoreable), and 69 safety-suppressed with their blocked disposition retained.
-All Not Scored public scores, compatibility mirrors, legacy numeric pillars and
-tiers are null. Reishi 220046 retains its explicit Wheat allergen. Products
-18551/178728 retain only Evidence blockers, with resolved Dose blockers removed.
-Products 330196–330199 retain Dose 11.4/20. The omega module's 314032 Formulation
-canary remains 4.57; 323062 has no stimulant warning; 285635 has the specific
-bitter-orange pregnancy “avoid” warning.
+**Image-complete exact source review:** core SHA
+`e887713601ff6a70c4bc285a89101f830f9200f74023348b1f49f0a5380c958d`,
+baseline `66fb0877258081982dbffccd48704d5a5b1b735ab8b64cf4ccca7d82982b7a45`.
+Original NIH panels and actual candidate blobs independently verified all four
+milder summaries: 273629 folate/biotin mcg, 64433/64821 vitamin D800IU, 78327
+iodine150mcg and N-Acetyl-L-Cystine, not NAC. Allergens and every other warning
+identity are retained. 78327 remains Not Scored/null tier. The existing exact
+exception owner records actual Codex source review under Sean's release
+instruction, not a fabricated Sean/Dr Pham/PharmD signature or safety clearance.
+Only these exact states and hashes qualify. No new policy/threshold/efficacy credit.
 
-**Publication checkpoint:** release pytest passed 155 tests with one deferred
-built-interaction-DB case, subsequently passed separately after interaction build
-(1 passed). All 15,447 reachability checks passed, no new identifier/citation
-mismatches; 134 explicitly accepted historical citation mismatches remain.
-Publication reused the sealed catalog (assembly skipped), built interaction DB
-v1.0.15 in 23.518s, and passed final export/reference/snapshot gates. Image metadata
-then legitimately changed the core checksum to
-`b0a2960aeaa95cc5770c08ba8c4efdd2c24f047df97aed5e846cca2b2aa0c3dc`.
-The catalog safety diff stopped before upload: five milder dispositions require
-source review. Cloud activation and Flutter catalog import did not occur.
+The publication-review configuration is outside producer-input globs. Qualify its
+one complete batch with the existing owner tests and CI while read-only artifact
+checks run. Integrate only that JSON and documentation at the controlled review
+checkpoint, with the executable/reference inputs and candidate hash unchanged;
+then run all remaining live-comparison/export/import/publication gates normally.
+No repeated computation or artifact validation is justified by that metadata.
+Owner slice: 61 passed in0.87s. Actual exact-candidate comparison has four reviewed
+transitions and zero unreviewed; altered candidate, baseline and state controls
+fail closed. Independent final record review found no substantive findings
+(approval-file SHA e44d457f6f1268f95cfad14267935be411acd14963cde4cc989af9a082ef3e15).
 
-**Bounded source repair, November 1:** original-panel review verified four prior
-false UL warnings (273629 folate mcg, 64433/64821 vitamin D IU, 78327 iodine mcg)
-and the 78327 cystine identity correction. However, an earlier **Codex** correction
-for 27808 falsely claimed its PDF printed guarana caffeine 50/100 mg. It prints
-150 mg and also declares 200 mg total caffeine per scoop; component/column
-attribution is unresolved. Independent visual review corroborated SHA-256
-`631d243d986502b9651893199ad53200946192714b4ab5fb266f518dbaa10134`.
-The unsupported inference is withdrawn. All original caffeine numbers and serving
-bases remain, using the existing exact-source ambiguous qualifier (as for 28993),
-not a fabricated reconciliation. The independently verified arginine correction
-remains. No clinical approval is asserted.
-
-Owner: `enhanced_normalizer.py::_apply_label_corrections` and
-`scoring_v4/exposure.py::quantity_is_unresolved` → `gate_safety.py::_dose_mg`;
-evidence: source-bound correction tests and unresolved-dose fail-first tests
-(3 failed before; 4 passed after). Will NOT create a calculator, registry,
-threshold, status or inferred amount. The stimulant gate now respects unresolved
-qualifiers while retaining existing context-specific caution/review behavior.
-
-Current qualification: owner slice 249 passed; correctness 0 new findings;
-data_batch confirms only corrections/27808 changed; raw contract canaries 33/33.
-The stored 15,447-product caffeine census finds only existing ambiguous product
-28993 affected by the gate helper before the newly corrected 27808. Full raw
-replay changed only 27808/28993 among 12 labels; ten controls are identical.
-Final consumer slice 92 passed; local 564 passed/24 declared opt-in skips with
-passing skip guard. Independent fresh-context source/diff review found no
-substantive findings. Required CI 41357732942 passed all four fast shards and Merge readiness on
-5819cd6a (PR329); CodeRabbit found no functional issue, only a cosmetic test
-comment clarification. Original API 50 mg is preserved as unresolved, not
-certified as a replacement. No warning risk category or allergen was removed
-in the raw comparison; the unresolved caffeine adds a pregnancy precaution.
-All 38 Clean, 38 Enrich and 38 Score manifests are stale against the repaired
-reference fingerprint. The next necessary full run starts at Clean after merge.
-No new corpus computation or publication until this combined candidate is qualified.
+**Still pending:** exact exception configuration CI/integration, final live catalog
+comparison, upload/activation, Flutter import/bundle qualification and native UI.
+Interaction DB1.0.15, 131 verified interactions, staged in23.274s; no orphan test
+failure. Optional approved image preparation follows its existing fail-closed
+policy; unverified images are not invented. Xcode first-launch status69 remains
+an installed-app blocker; user has been asked to complete setup. No TestFlight
+or installed-app pass is claimed. Durable evidence is the current handoff and
+primary `.claude/state/final_release_run2/`; previous immutable comparison/source
+receipts are retained in `final_release_run/` and the bounded raw replay captures.
