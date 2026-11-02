@@ -37,7 +37,10 @@ validation against the retained bytes. Exporter/input changes require new constr
 Reports needed for reuse remain under `scripts/reports/release-gates/<binding>/` and are
 checksum-verified before reuse. The existing 24-hour artifact age limit still applies: expired
 construction is rebuilt, never timestamp-restamped. Never promote a construction copy without
-the snapshot gates.
+the snapshot gates. Disk preflight reserves space for immutable construction and both
+working mirrors. At release handoff, remove only verified superseded generated construction
+copies; retain the current construction, required comparison baselines and compact failure
+reports. A failed build alone never authorizes deleting the previous candidate.
 
 Registered direct-Python checks bind the resolved interpreter and effective configuration,
 not incidental `PATH` or selector spelling. Unknown tool chains retain conservative environment

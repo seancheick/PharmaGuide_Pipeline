@@ -152,7 +152,8 @@ def catalog_build_is_current(repo: Path) -> bool:
 
 def require_catalog_disk_space(repo: Path, destination: Path) -> None:
     # Existing mirrors must coexist with their replacements until atomic
-    # promotion succeeds. Include source bytes and 1 GiB working headroom.
+    # promotion succeeds. The immutable construction coexists with both
+    # replacement mirrors. Existing retained copies already reduce free space.
     roots = [repo / 'scripts' / name for name in ('dist', 'final_db_output')]
     sizes = sum(path.stat().st_size for root in roots if root.exists()
                 for path in root.rglob('*') if path.is_file())
@@ -160,7 +161,8 @@ def require_catalog_disk_space(repo: Path, destination: Path) -> None:
         'scripts/products/*_enriched/enriched/*.json',
         'scripts/products/*_scored/scored/*.json',
     ) for path in repo.glob(pattern) if path.is_file())
-    required = sizes + source_bytes + 1024 ** 3
+    final_size = sum(path.stat().st_size for path in roots[1].rglob('*') if path.is_file())
+    required = sizes + source_bytes + max(final_size, source_bytes) + 1024 ** 3
     free = shutil.disk_usage(destination).free
     if free < required:
         raise OSError(f'Insufficient free disk for catalog candidates: {free} available, '

@@ -726,6 +726,7 @@ def _load_scoring_source_proof(path: Path, products_dir: Path) -> tuple[dict, st
                 and 0 <= time.time() - receipt['created_at'] < 86400
                 and isinstance(receipt['verified_sources'], dict)):
             cache['verified_sources'] = receipt['verified_sources']
+            cache['created_at'] = receipt['created_at']
     except (OSError, ValueError, KeyError, TypeError, AttributeError):
         pass
     return cache, binding
@@ -736,7 +737,7 @@ def _save_scoring_source_proof(path: Path, products_dir: Path, cache: dict, bind
     from audits.run_verification_gate import _write_receipt
     if _scoring_source_proof_binding(products_dir) != binding:
         raise ValueError('Scoring source inputs changed during audit; no reusable proof')
-    _write_receipt(path, {'input_binding': binding, 'created_at': time.time(),
+    _write_receipt(path, {'input_binding': binding, 'created_at': cache.setdefault('created_at', time.time()),
                           'verified_sources': cache.get('verified_sources', {})})
 
 

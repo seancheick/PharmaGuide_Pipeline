@@ -272,3 +272,15 @@ def test_expired_construction_is_rebuilt_instead_of_repeatedly_restaged(tmp_path
     assert not promotion.catalog_construction_is_current(tmp_path, root)
     with pytest.raises(ValueError, match='stale'):
         promotion.restore_catalog_construction(tmp_path, root, tmp_path / 'candidate')
+
+
+def test_disk_headroom_accounts_for_immutable_construction_and_working_copies(tmp_path, monkeypatch):
+    for name in ('dist', 'final_db_output'):
+        root = tmp_path / 'scripts' / name
+        root.mkdir(parents=True)
+        (root / 'pharmaguide_core.db').write_bytes(b'x' * (8 * 1024 ** 2))
+    # Enough for two replacement mirrors, but not a third immutable build.
+    free = 1024 ** 3 + 20 * 1024 ** 2
+    monkeypatch.setattr(promotion.shutil, 'disk_usage', lambda _: type('Disk', (), {'free': free})())
+    with pytest.raises(OSError, match='free disk'):
+        promotion.require_catalog_disk_space(tmp_path, tmp_path)
