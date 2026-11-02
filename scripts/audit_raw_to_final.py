@@ -1199,6 +1199,9 @@ def _check_line_integrity(
 
     _check_export_identity(rec, enriched, blob)
 
+    from build_final_db import _unresolved_export_paths
+    unresolved_paths = _unresolved_export_paths(enriched or {})
+
     # Amounts: a changed printed amount or unit carries the cleaner's recorded reason.
     cleaned_rows = {
         row.get("raw_source_path"): row
@@ -1214,10 +1217,14 @@ def _check_line_integrity(
         amount, unit = row.get("quantity"), _line_text(row.get("unit"))
         if not (isinstance(first.get("quantity"), (int, float)) and first["quantity"] > 0):
             continue
-        if _same_amount(first["quantity"], amount) and _line_text(first.get("unit")) == unit:
-            continue
         recorded = _recorded_amounts(cleaned_rows.get(path) or {})
-        if not any(_same_amount(a, amount) and u == unit for a, u in recorded):
+        unresolved = path in unresolved_paths
+        if unresolved and amount is None and row.get("display_dose_label") == "—" and unit in {
+                _line_text(first.get("unit")), *(u for _, u in recorded)}:
+            continue
+        if not unresolved and _same_amount(first["quantity"], amount) and _line_text(first.get("unit")) == unit:
+            continue
+        if unresolved or not any(_same_amount(a, amount) and u == unit for a, u in recorded):
             changed = [name for name, same in (
                 ("quantity", _same_amount(first["quantity"], amount)),
                 ("unit", _line_text(first.get("unit")) == unit)) if not same]
@@ -1235,6 +1242,7 @@ def _check_line_integrity(
         from build_final_db import (
             _build_canonical_label_ledger, _reconcile_display_source_rows,
             _fold_probiotic_serving_headers, _fold_general_serving_variants,
+            _omit_unresolved_export_amounts,
         )
         expected_rows = _build_canonical_label_ledger(
             _reconcile_display_source_rows(deepcopy(display_sources)),
@@ -1242,6 +1250,7 @@ def _check_line_integrity(
         )
         expected_rows = _fold_probiotic_serving_headers(enriched or {}, expected_rows)
         expected_rows = _fold_general_serving_variants(enriched or {}, expected_rows)
+        _omit_unresolved_export_amounts(enriched or {}, [], expected_rows)
         actual_by_path = {
             row.get("raw_source_path"): row
             for row in blob.get("display_ingredients") or []
@@ -1305,7 +1314,9 @@ def _check_export_normalized_dose(rec: ProductRecord, enriched: Mapping[str, Any
     A row's dose is the entry whose source_field is that row, else the one entry
     with no position under its name; with neither, the dose ships as unknown.
     """
-    from build_final_db import safe_float, safe_str
+    from build_final_db import safe_float, safe_str, _unresolved_export_paths
+
+    unresolved_paths = _unresolved_export_paths(enriched or {})
 
     entries = ((enriched or {}).get("dosage_normalization") or {}).get("normalized_ingredients")
     if not isinstance(entries, list):
@@ -1339,7 +1350,8 @@ def _check_export_normalized_dose(rec: ProductRecord, enriched: Mapping[str, Any
                     )
                     entry = unpositioned[0] if len(unpositioned) == 1 and matching_rows == 1 else {}
                     break
-        expected = (safe_float(entry.get("normalized_amount")), safe_str(entry.get("normalized_unit")))
+        expected = (None if path in unresolved_paths else safe_float(entry.get("normalized_amount")),
+                    safe_str(entry.get("normalized_unit")))
         exported = (row.get("normalized_amount"), row.get("normalized_unit") or "")
         if expected[1] != exported[1] or not (
             expected[0] == exported[0]

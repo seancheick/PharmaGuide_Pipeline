@@ -5171,6 +5171,16 @@ def _fold_general_serving_variants(
     return output
 
 
+def _unresolved_export_paths(enriched: Dict[str, Any]) -> set[str]:
+    """Source-owned rows whose exact public amount must be withheld."""
+    return {
+        safe_str(row.get("raw_source_path"))
+        for row in safe_list(enriched.get("activeIngredients"))
+        if isinstance(row, dict) and row.get("raw_source_path")
+        and _label_quantity_is_unresolved(row)
+    }
+
+
 def _omit_unresolved_export_amounts(
     enriched: Dict[str, Any],
     ingredients: List[Dict[str, Any]],
@@ -5183,12 +5193,7 @@ def _omit_unresolved_export_amounts(
     inconsistent amount. Existing nullable numeric fields and dash display
     semantics are sufficient; consumers need no new uncertainty policy.
     """
-    unresolved_paths = {
-        safe_str(row.get("raw_source_path"))
-        for row in safe_list(enriched.get("activeIngredients"))
-        if isinstance(row, dict) and row.get("raw_source_path")
-        and _label_quantity_is_unresolved(row)
-    }
+    unresolved_paths = _unresolved_export_paths(enriched)
     for row in ingredients:
         if row.get("raw_source_path") in unresolved_paths:
             row["quantity"] = None

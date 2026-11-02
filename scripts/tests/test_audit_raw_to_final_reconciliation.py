@@ -867,3 +867,38 @@ def test_display_audit_checks_verified_name_correction_against_original_raw(prod
     rec = ProductRecord(product_id, None, None, None)
     _check_display_label_collapse(rec, blob, raw)
     assert any(f.code == "DISPLAY_LABEL_COLLAPSES_TO_CANONICAL" for f in rec.findings) is expected
+
+
+@pytest.mark.parametrize('pid', ['27808', '28993'])
+def test_real_unresolved_export_passes_line_integrity_and_rejects_corruption(pid):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+    from build_final_db import build_detail_blob, _label_quantity_is_unresolved
+
+    raw = json.loads((SCRIPTS / 'tests/fixtures' / f'completion_source_{pid}_raw.json').read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(copy.deepcopy(raw))
+    enriched, _ = SupplementEnricherV3().enrich_product(copy.deepcopy(cleaned))
+    blob = build_detail_blob(enriched, score_product_v4(enriched))
+
+    def findings(candidate):
+        record = _record()
+        record.dsld_id = pid
+        _check_line_integrity(record, raw, cleaned, enriched, candidate)
+        return [f.code for f in record.findings]
+
+    assert findings(blob) == []
+    unresolved = {r['raw_source_path'] for r in enriched['activeIngredients']
+                  if _label_quantity_is_unresolved(r)}
+    for field, value, code in [('quantity', 50, 'AMOUNT_CHANGE_WITHOUT_EVIDENCE'),
+                               ('normalized_amount', 50, 'NORMALIZED_DOSE_NOT_FROM_OWN_ROW'),
+                               ('unit', 'g', 'AMOUNT_CHANGE_WITHOUT_EVIDENCE')]:
+        corrupt = copy.deepcopy(blob)
+        row = next(r for r in corrupt['ingredients'] if r.get('raw_source_path') in unresolved)
+        row[field] = value
+        assert code in findings(corrupt)
+    corrupt = copy.deepcopy(blob)
+    row = next(r for r in corrupt['ingredients'] if r.get('raw_source_path') not in unresolved
+               and isinstance(r.get('quantity'), (int, float)) and r['quantity'] > 0)
+    row['quantity'] = None
+    assert 'AMOUNT_CHANGE_WITHOUT_EVIDENCE' in findings(corrupt)
