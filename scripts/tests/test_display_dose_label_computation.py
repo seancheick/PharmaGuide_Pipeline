@@ -210,3 +210,98 @@ def test_zero_with_unit_not_rendered_as_zero_mg() -> None:
     Zero with a unit is almost certainly a pipeline glitch — render em-dash."""
     ing = {"quantity": 0, "unit": "mg", "isNestedIngredient": False}
     assert _compute_display_dose_label(ing) == "—"
+
+@pytest.mark.parametrize("operator", ["ambiguous", "unknown"])
+def test_unresolved_quantity_is_not_an_exact_display_dose(operator):
+    row = {"quantity": 50, "unit": "mg", "quantity_operator": operator}
+    assert _compute_display_dose_label(row) == "—"
+
+
+@pytest.mark.parametrize("pid", ["27808", "28993"])
+def test_real_unresolved_caffeine_does_not_export_an_exact_quantity(pid):
+    """Original label names survive; inconsistent API scalars are not exact doses."""
+    import json
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from score_supplements_v4 import score_product_v4
+    from build_final_db import build_detail_blob
+    from scoring_v4.exposure import quantity_is_unresolved
+
+    raw = json.loads((Path(__file__).parent / "fixtures" / f"completion_source_{pid}_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw)
+    )
+    scored = score_product_v4(enriched)
+    before = deepcopy((enriched, scored))
+    blob = build_detail_blob(enriched, scored)
+    unresolved = {
+        row["raw_source_path"] for row in enriched["activeIngredients"]
+        if quantity_is_unresolved({**row, "dose_data_quality": None})
+    }
+    assert unresolved
+    projected = [row for row in blob["ingredients"] if row.get("raw_source_path") in unresolved]
+    assert projected
+    for row in projected:
+        assert row["quantity"] is None
+        assert row["normalized_amount"] is None
+        assert row["display_dose_label"] == "—"
+    ledger = [row for row in blob["display_ingredients"] if row.get("raw_source_path") in unresolved]
+    assert ledger
+    for row in ledger:
+        assert row["exact_dose_text"] == "—"
+        if row.get("analysis"):
+            assert row["analysis"]["quantity"] is None
+        assert all(v.get("exact_dose_text") == "—" for v in row.get("serving_variants", []))
+    if pid == "27808":
+        row = next(row for row in ledger if row["raw_source_path"] == "ingredientRows[9].nestedRows[1].nestedRows[0]")
+        assert row["label_display_name"] == "150 mg Caffeine"
+    assert (enriched, scored) == before
+
+
+def test_unresolved_export_projection_covers_folds_without_touching_other_rows():
+    from copy import deepcopy
+    from build_final_db import _omit_unresolved_export_amounts
+    enriched = {"activeIngredients": [{"raw_source_path": "uncertain", "quantity_operator": "unknown"}]}
+    ingredients = [{"raw_source_path": "uncertain", "quantity": 50, "normalized_amount": 50},
+                   {"raw_source_path": "known", "quantity": 100, "normalized_amount": 100}]
+    ledger = [{"raw_source_path": "uncertain", "raw_source_text": "150 mg Caffeine",
+               "exact_dose_text": "50 mg", "analysis": {"quantity": 50},
+               "serving_variants": [{"exact_dose_text": "50 mg"}, {"exact_dose_text": "100 mg"}]},
+              {"raw_source_path": "known", "exact_dose_text": "100 mg",
+               "folded_label_components": [{"raw_source_path": "uncertain", "exact_dose_text": "50 mg"}]}]
+    known = deepcopy(ingredients[1])
+    _omit_unresolved_export_amounts(enriched, ingredients, ledger)
+    assert ingredients[1] == known
+    assert ledger[1]["exact_dose_text"] == "—"
+    assert ledger[1]["folded_label_components"][0]["exact_dose_text"] == "—"
+    assert ledger[0]["raw_source_text"] == "150 mg Caffeine"
+    assert all(row["exact_dose_text"] == "—" for row in ledger[0]["serving_variants"])
+
+
+def test_unresolved_alternate_cannot_leak_through_resolved_serving_parent():
+    from build_final_db import _fold_general_serving_variants, _omit_unresolved_export_amounts
+    enriched = {"servingSizes": [{"order": 1}, {"order": 2}], "activeIngredients": [
+        {"raw_source_path": "ingredientRows[1]", "quantity_operator": "ambiguous"}]}
+    rows = [{"label_display_name": "Caffeine", "label_order": i,
+             "raw_source_path": f"ingredientRows[{i}]", "source_section": "activeIngredients",
+             "serving_size_order": i + 1, "exact_dose_text": amount}
+            for i, amount in enumerate(["100 mg", "50 mg"])]
+    folded = _fold_general_serving_variants(enriched, rows)
+    assert len(folded) == 1
+    _omit_unresolved_export_amounts(enriched, [], folded)
+    assert folded[0]["exact_dose_text"] == "—"
+    assert all(v["exact_dose_text"] == "—" for v in folded[0]["serving_variants"])
+
+
+def test_printed_amount_survives_independent_clinical_unit_review():
+    from build_final_db import _omit_unresolved_export_amounts
+    row = {"raw_source_path": "ingredientRows[0]", "quantity": 125, "unit": "mcg",
+           "dose_data_quality": {"status": "unresolved_unit", "reason": "label_unit_conflict"},
+           "raw_taxonomy": {"quantityVariants": [{"quantity": 125, "unit": "mcg", "operator": "="}]}}
+    assert _compute_display_dose_label(row) == "125 mcg"
+    ingredients = [{"raw_source_path": row["raw_source_path"], "quantity": 125, "normalized_amount": 125}]
+    ledger = [{"raw_source_path": row["raw_source_path"], "exact_dose_text": "125 mcg"}]
+    _omit_unresolved_export_amounts({"activeIngredients": [row]}, ingredients, ledger)
+    assert ingredients[0]["quantity"] == 125
+    assert ledger[0]["exact_dose_text"] == "125 mcg"
