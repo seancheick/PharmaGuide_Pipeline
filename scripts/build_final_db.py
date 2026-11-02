@@ -5201,6 +5201,11 @@ def _omit_unresolved_export_amounts(
         )
         if unresolved_group:
             row["exact_dose_text"] = _EM_DASH
+            if "parenthetical_dose_text" in row:
+                row["parenthetical_dose_text"] = ""
+            for field in ("quantity", "normalized_amount"):
+                if field in row:
+                    row[field] = None
             if isinstance(row.get("analysis"), dict):
                 row["analysis"]["quantity"] = None
             for variant in safe_list(row.get("serving_variants")):

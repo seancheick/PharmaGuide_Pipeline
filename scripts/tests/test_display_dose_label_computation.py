@@ -305,3 +305,34 @@ def test_printed_amount_survives_independent_clinical_unit_review():
     _omit_unresolved_export_amounts({"activeIngredients": [row]}, ingredients, ledger)
     assert ingredients[0]["quantity"] == 125
     assert ledger[0]["exact_dose_text"] == "125 mcg"
+
+
+def test_copied_source_ledger_numeric_fields_are_also_unavailable():
+    from build_final_db import _build_canonical_label_ledger, _omit_unresolved_export_amounts
+    source = {"raw_source_path": "ingredientRows[0]", "label_display_name": "Caffeine",
+              "raw_source_text": "150 mg Caffeine", "source_section": "activeIngredients",
+              "label_order": 0, "quantity": 50, "normalized_amount": 50, "exact_dose_text": "50 mg"}
+    ledger = _build_canonical_label_ledger([source], [], [])
+    _omit_unresolved_export_amounts({"activeIngredients": [
+        {"raw_source_path": source["raw_source_path"], "quantity_operator": "ambiguous"}
+    ]}, [], ledger)
+    assert ledger[0]["quantity"] is None
+    assert ledger[0]["normalized_amount"] is None
+    assert source["quantity"] == 50
+
+
+def test_unresolved_folate_component_does_not_leave_exact_parenthetical_dose():
+    from build_final_db import _build_canonical_label_ledger, _omit_unresolved_export_amounts
+    source = [{"raw_source_path": "ingredientRows[0]", "label_display_name": "Folate",
+               "source_section": "activeIngredients", "label_order": 0, "exact_dose_text": "600 mcg DFE"},
+              {"raw_source_path": "ingredientRows[0].nestedRows[0]", "label_display_name": "Folic Acid",
+               "source_section": "activeIngredients", "label_order": 1, "parent_label": "Folate",
+               "exact_dose_text": "360 mcg"}]
+    ledger = _build_canonical_label_ledger(source, [], [])
+    assert len(ledger) == 1
+    assert ledger[0]["parenthetical_dose_text"] == "360 mcg folic acid"
+    _omit_unresolved_export_amounts({"activeIngredients": [
+        {"raw_source_path": source[1]["raw_source_path"], "quantity_operator": "unknown"}
+    ]}, [], ledger)
+    assert not ledger[0]["parenthetical_dose_text"]
+    assert ledger[0]["folded_label_components"][0]["exact_dose_text"] == "—"
