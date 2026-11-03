@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-10-29",
+    "last_updated": "2026-11-02",
     "total_entries": 738,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -11505,7 +11505,8 @@
         "Pepper Juice",
         "Red Radish",
         "Sweet Potato Juice",
-        "Turmeric juice"
+        "Turmeric juice",
+        "Organic freeze-dried banana powder"
       ],
       "category": "flavor_natural",
       "is_additive": true,
