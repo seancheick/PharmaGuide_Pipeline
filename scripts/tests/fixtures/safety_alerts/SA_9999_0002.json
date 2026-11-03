@@ -1,0 +1,26 @@
+{
+  "alert_id": "SA_9999_0002",
+  "revision": 1,
+  "event_type": "ingredient_ban",
+  "status": "published",
+  "authority": "TEST FIXTURE - not a real authority",
+  "source_url": "https://example.org/fake-ban-source",
+  "evidence_verified_at": "2026-11-03",
+  "fda_class": null,
+  "jurisdiction": "US",
+  "effective_date": "2026-11-01",
+  "published_at": "2026-11-03T12:00:00Z",
+  "scope": {
+    "ingredient_canonical_ids": ["fake_bannedroot"],
+    "dsld_ids": []
+  },
+  "resolved_dsld_ids": ["9990002"],
+  "catalog_snapshot_version": "2026.11.03.000000",
+  "lots": null,
+  "headline": "Fictional test notice: Bannedroot",
+  "body": "Test fixture only. Bannedroot is a made-up prohibited ingredient.",
+  "action": "Test fixture only.",
+  "consumer_disposition": "block",
+  "expires_at": null,
+  "retracted": false
+}

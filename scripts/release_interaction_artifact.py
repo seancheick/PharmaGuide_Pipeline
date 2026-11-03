@@ -98,6 +98,7 @@ from pathlib import Path
 from typing import Any, Callable
 
 from audits.run_verification_gate import _canonical_sha256, _input_binding, _write_receipt
+from rule_change_gate import enforce_against_pin
 
 
 DB_FILENAME = "interaction_db.sqlite"
@@ -759,6 +760,12 @@ def _pipeline_head() -> tuple[str, bool]:
     return head, bool(git("branch", "-r", "--contains", head))
 
 
+def _enforce_rule_gate(db_path: Path, pin: dict[str, Any]) -> None:
+    """A material rule correction with no alert must not reach a release."""
+    result = enforce_against_pin(db_path, pin)
+    _require(result.ok, "; ".join(result.errors))
+
+
 def publish_flutter_pin(
     *,
     dist_dir: Path,
@@ -767,6 +774,7 @@ def publish_flutter_pin(
     download_sha256: Callable[[str], str] = _download_sha256,
     pipeline_head: Callable[[], tuple[str, bool]] = _pipeline_head,
     today: str | None = None,
+    rule_gate: Callable[[Path, dict[str, Any]], None] = _enforce_rule_gate,
 ) -> dict[str, str]:
     """Make the app's hydration pin name the staged interaction DB.
 
@@ -793,6 +801,7 @@ def publish_flutter_pin(
         compute_sha256(db_path) == checksum,
         f"{db_path} does not match its manifest checksum {checksum}",
     )
+    rule_gate(db_path, pin)
     repo = pin["repo"]
     releases = [
         release
