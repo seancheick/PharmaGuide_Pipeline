@@ -4390,4 +4390,3 @@ Fresh-context review refuted the first version: 151 products read `complete` wit
 Checks on `fe968096f`: 2,513 focused tests passed, 18 skipped for local data; contract snapshots 33 of 33 unchanged; `audit_contract_sync` on the existing build 0 undeclared, 0 red; `check_python_correctness` 0 new, 10 existing; projection matches app #177 and is stale on app main until #177 lands. **Not run:** `scripts/test.sh local` (no broad suite beside the #335 corpus build) and contract sync on a build with the new column.
 
 Integration: the app must take #177 with this PR, because `import_catalog_artifact.sh` refuses a mismatched core model. Publication: not done, and the remote-rules gate stays closed (`a9_review_complete: false` in #336). Sean's November 3 decision: an incomplete assessment or a caution shows no all-clear; the field stays a fact.
-
