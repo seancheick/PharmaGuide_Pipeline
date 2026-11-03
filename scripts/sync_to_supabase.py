@@ -1383,17 +1383,16 @@ def v4_manifest_sync_message(manifest):
     )
 
 
-def _enforce_signed_rule_gate(client, bucket, remote, signed, rule_pin):
+def _enforce_signed_rule_gate(client, bucket, signed, rule_pin):
     """A material rule correction must not leave without its alert.
 
-    Compares with what phones hold now: the rules the current signed release
-    names, or the app pin before any rules have been published remotely.
+    Compares with what phones hold now: the rules the newest signed release that
+    named usable ones names, or the app pin if there are none.
     """
     import rule_change_gate
-    from supabase_client import download_file
+    from supabase_client import download_file, fetch_latest_signed_rules
 
-    signed_text = (remote or {}).get("signed_release")
-    current_rules = json.loads(signed_text).get("rules") if signed_text else None
+    current_rules = fetch_latest_signed_rules(client)
     with tempfile.TemporaryDirectory() as directory:
         baseline = Path(directory) / "baseline_interaction_db.sqlite"
         if current_rules:
@@ -1559,7 +1558,7 @@ def sync(
 
     # A protected test project has no phones to mislead, and no alerts live there.
     if signed and signed_rules and not test_project:
-        _enforce_signed_rule_gate(client, bucket, remote, signed, rule_pin)
+        _enforce_signed_rule_gate(client, bucket, signed, rule_pin)
 
     historical = fetch_manifest_version(client, version)
     if historical and historical.get("checksum") != checksum:

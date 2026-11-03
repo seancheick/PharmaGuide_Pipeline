@@ -621,7 +621,7 @@ def test_publication_contract_requires_new_params_only_when_signing(
 def harness(monkeypatch, gate_file):
     """A sync with every remote call recorded, in order. No network."""
     events = []
-    remote = SimpleNamespace(current=None, objects={})
+    remote = SimpleNamespace(current=None, objects={}, older_releases=[])
     client = _RpcClient()
 
     def upload(_client, _bucket, path, local_path, **kwargs):
@@ -651,6 +651,15 @@ def harness(monkeypatch, gate_file):
     monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: client)
     monkeypatch.setattr(supabase_client, "fetch_current_manifest", lambda _c: remote.current)
     monkeypatch.setattr(supabase_client, "fetch_manifest_version", lambda *_a: None)
+
+    def latest_signed_rules(_client):
+        for row in [remote.current or {}, *remote.older_releases]:
+            text = row.get("signed_release")
+            if text and json.loads(text).get("rules"):
+                return json.loads(text)["rules"]
+        return None
+
+    monkeypatch.setattr(supabase_client, "fetch_latest_signed_rules", latest_signed_rules, raising=False)
     monkeypatch.setattr(supabase_client, "upload_file", upload)
     monkeypatch.setattr(supabase_client, "download_file", download)
     monkeypatch.setattr(supabase_client, "list_storage_paths", list_paths)
@@ -1257,6 +1266,108 @@ def test_the_first_signed_rules_release_compares_with_the_app_pin(
                        rule_pin=str(pin))
     assert result["status"] == "synced"
     assert rule_gate.baseline == b"bundled-rules"
+
+
+def test_a_catalog_only_release_does_not_reset_the_rules_phones_hold(
+    tmp_path, harness, key, rule_gate, monkeypatch,
+):
+    """Withdrawing a rule after a catalog-only release must still need its alert."""
+    import rule_change_gate
+
+    catalog, rules, manifest, signature = _rule_gate_setup(tmp_path, key)
+    held = b"rules-from-the-last-release-that-named-rules"
+    harness.remote.objects["rules/1.0.14/interaction_db.sqlite"] = held
+    harness.remote.current = {
+        "db_version": "2026.09.02.000000", "checksum": "sha256:other", "release_sequence": 4,
+        "signed_release": json.dumps({"rules": None}),
+    }
+    harness.remote.older_releases = [{
+        "signed_release": json.dumps({
+            "rules": {"path": "rules/1.0.14/interaction_db.sqlite",
+                      "sha256": hashlib.sha256(held).hexdigest()},
+        }),
+    }]
+    pin = tmp_path / "interaction_db.release.json"
+    pin.write_text(json.dumps({"url": "https://example.test/rules", "sha256": "abc"}))
+    monkeypatch.setattr(
+        rule_change_gate, "fetch_pinned_db",
+        lambda _named, destination: Path(destination).write_bytes(b"older-app-pin"),
+    )
+    sync.sync(str(catalog), max_workers=1, release_manifest=manifest,
+              release_signature=signature, rules_dir=str(rules), rule_pin=str(pin))
+    assert rule_gate.baseline == held
+
+
+class _SignedManifestRows:
+    """export_manifest as PostgREST serves it: newest first, one range at a time."""
+
+    def __init__(self, releases):
+        self.rows = [{"signed_release": json.dumps(release)} for release in releases]
+        self.sent = []
+        self.not_ = self
+        self.window = (0, 999)
+
+    def __getattr__(self, name):
+        def step(*args, **kwargs):
+            self.sent.append((name, args, kwargs))
+            return self
+        return step
+
+    def range(self, start, end):
+        self.window = (start, end)
+        return self
+
+    def execute(self):
+        start, end = self.window
+        return SimpleNamespace(data=self.rows[start:min(end + 1, start + 1000)])
+
+    def client(self):
+        return SimpleNamespace(table=lambda name: self if name == "export_manifest" else None)
+
+
+def _named_rules(version, blocked=()):
+    return {
+        "rules": {"version": version, "path": f"rules/{version}"},
+        "blocked_versions": {"catalog": [], "rules": list(blocked)},
+    }
+
+
+def _catalog_only(blocked=()):
+    return {"rules": None, "blocked_versions": {"catalog": [], "rules": list(blocked)}}
+
+
+def test_latest_signed_rules_skips_catalog_only_releases_newest_first():
+    rows = _SignedManifestRows([
+        _catalog_only(), _named_rules("1.0.20"), _named_rules("1.0.19"),
+    ])
+    assert supabase_client.fetch_latest_signed_rules(rows.client())["version"] == "1.0.20"
+    assert ("order", ("release_sequence",), {"desc": True}) in rows.sent
+
+
+def test_latest_signed_rules_reads_past_one_page_of_catalog_only_releases():
+    rows = _SignedManifestRows([_catalog_only()] * 1000 + [_named_rules("1.0.20")])
+    assert supabase_client.fetch_latest_signed_rules(rows.client())["version"] == "1.0.20"
+
+
+def test_latest_signed_rules_skips_rules_the_newest_release_blocks():
+    """A rule kept from a blocked file must count as new, so its gate still runs."""
+    rows = _SignedManifestRows([
+        _catalog_only(blocked=["1.0.20"]), _named_rules("1.0.20"), _named_rules("1.0.19"),
+    ])
+    assert supabase_client.fetch_latest_signed_rules(rows.client())["version"] == "1.0.19"
+
+
+def test_latest_signed_rules_counts_a_lifted_block_as_lifted():
+    """Phones replace their list with the newest release's, so older lists don't count."""
+    rows = _SignedManifestRows([
+        _catalog_only(), _catalog_only(blocked=["1.0.20"]), _named_rules("1.0.20"),
+    ])
+    assert supabase_client.fetch_latest_signed_rules(rows.client())["version"] == "1.0.20"
+
+
+def test_latest_signed_rules_is_none_when_every_named_rules_file_is_blocked():
+    rows = _SignedManifestRows([_catalog_only(blocked=["1.0.20"]), _named_rules("1.0.20")])
+    assert supabase_client.fetch_latest_signed_rules(rows.client()) is None
 
 
 def test_a_signed_rules_release_with_no_baseline_is_refused(tmp_path, harness, key, rule_gate):
