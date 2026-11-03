@@ -7061,15 +7061,19 @@ def test_unlisted_product_is_not_excluded():
 def test_catalog_exclusions_hold_exactly_the_approved_list():
     data = _catalog_exclusions_file()
     exclusions = data["exclusions"]
-    assert data["_metadata"]["total_entries"] == len(exclusions) == 57
+    assert data["_metadata"]["total_entries"] == len(exclusions) == 86
     assert collections.Counter(e["category"] for e in exclusions.values()) == {
         "sweetener_or_carbohydrate": 47,
         "excipient_or_non_consumer": 2,
         "food": 6,
         "culinary_oil": 2,
+        "sodium_salt": 9,
+        "sodium_compound_without_its_amount": 20,
     }
     # Spot-check each category against the approved list.
     assert exclusions["312465"]["product_name"] == "Erythritol"
     assert exclusions["330072"]["product_name"] == "Silicon Dioxide Powder"
     assert exclusions["29049"]["product_name"] == "Breakfast Squares Iced Cinnamon Bun"
     assert exclusions["78355"]["product_name"] == "Coconut Oil"
+    assert exclusions["252842"]["product_name"] == "Sodium Citrate"
+    assert exclusions["252847"]["product_name"] == "Sodium BHB"

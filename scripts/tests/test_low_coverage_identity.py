@@ -47,9 +47,9 @@ def test_blend_written_as_forms_stays_held_without_member_amounts(run, pid):
             assert not row.get("quantity")
 
 
-# Sean, November 2: sodium-only labels stay unscored. Sodium is a Nutrition Facts
-# line with no credit (ruling D22), and BHB and D-aspartate print elemental sodium
-# with no amount of the compound, so sodium's evidence must not score them.
+# Sean, November 2: sodium-only labels leave the catalog (catalog_exclusions.json),
+# and they still must not score. Sodium is a Nutrition Facts line with no credit
+# (ruling D22), and BHB and D-aspartate print sodium with no amount of the compound.
 @pytest.mark.parametrize("pid", ["252842", "270737", "252847", "252849"])
 def test_sodium_only_label_stays_unscored(run, pid):
     _, scored = run(pid)

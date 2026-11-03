@@ -1736,7 +1736,7 @@ def _has_verified_source_label(enriched: Dict[str, Any]) -> bool:
 
 @lru_cache(maxsize=1)
 def _catalog_exclusions() -> Dict[str, Dict[str, Any]]:
-    """Exact non-supplement labels Sean kept out of the catalog (2026-11-02)."""
+    """Exact labels Sean kept out of the catalog (2026-11-02)."""
     from constants import CATALOG_EXCLUSIONS
 
     with CATALOG_EXCLUSIONS.open(encoding="utf-8") as handle:
