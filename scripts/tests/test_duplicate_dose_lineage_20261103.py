@@ -16,6 +16,7 @@ from build_final_db import _stamp_dose_contract, build_detail_blob
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from enrich_supplements_v3 import SupplementEnricherV3
 from score_supplements_v4 import score_product_v4
+from scoring_v4.dose_safety import _declared_daily_caffeine
 
 FIXTURES = Path(__file__).parent / "fixtures"
 NOT_AN_EXPOSURE = {"form_component", "ul_scoped_component"}
@@ -367,3 +368,136 @@ def test_daily_figures_ship_together_or_not_at_all():
         {"min_servings_per_day": 1, "max_servings_per_day": 1},
     )
     assert row == {"raw_source_path": "ingredientRows[0]", "dose_role": "form_component"}
+
+
+def _caffeine_decisions(product):
+    """{target: {(status, daily mg)}} across every row the caffeine rule fired on."""
+    decisions = {}
+    for alert in product["interaction_profile"]["ingredient_alerts"]:
+        if alert["rule_id"] != "RULE_INGREDIENT_CAFFEINE":
+            continue
+        for hit in alert["condition_hits"]:
+            decision = hit.get("dose_decision") or {}
+            status = decision.get("evaluation_status")
+            if status and hit["condition_id"] in {"pregnancy", "hypertension", "ttc"}:
+                evaluation = decision.get("dose_evaluation") or {}
+                decisions.setdefault(hit["condition_id"], set()).add(
+                    (status, evaluation.get("converted_amount"))
+                )
+    return decisions
+
+
+@pytest.mark.parametrize(
+    "dsld_id,daily_mg",
+    [
+        pytest.param("312701", 202.0, id="three-botanicals-print-202"),
+        pytest.param("316791", 200.0, id="anhydrous-plus-coffee-print-200"),
+        pytest.param("82369", 195.0, id="green-tea-plus-caffeine-three-a-day"),
+        pytest.param("27350", 400.0, id="four-tablets-a-day-print-400"),
+        pytest.param("298076", 100.0, id="complex-prints-50-two-a-day"),
+        pytest.param("319907", 300.0, id="blend-header-300-over-250-and-50"),
+        pytest.param("274620", 300.0, id="anhydrous-plus-coffea-print-300"),
+        pytest.param("253281", 600.0, id="single-row-control"),
+    ],
+)
+def test_each_target_is_judged_once_on_the_distinct_caffeine(enriched, dsld_id, daily_mg):
+    """Comparators are not asserted at exactly 200: the rule owner may move them."""
+    decisions = _caffeine_decisions(enriched(dsld_id))
+    assert set(decisions) == {"pregnancy", "hypertension", "ttc"}
+    for target, seen in decisions.items():
+        assert {amount for _, amount in seen} == {daily_mg}, target
+
+
+def test_a_label_summing_past_the_line_now_crosses_it(enriched):
+    decisions = _caffeine_decisions(enriched("312701"))
+    assert decisions["pregnancy"] == {("above_threshold", 202.0)}
+    assert decisions["hypertension"] == {("below_threshold", 202.0)}
+
+
+def test_correcting_the_serving_basis_keeps_the_pregnancy_alert(enriched):
+    """27350: per-row 200 and 40 alone would lose it once the multiplier is right."""
+    decisions = _caffeine_decisions(enriched("27350"))
+    assert decisions["pregnancy"] == {("above_threshold", 400.0)}
+    assert decisions["hypertension"] == {("below_threshold", 400.0)}
+    assert _declared_daily_caffeine(enriched("27350"))["confirmed_mg_day_max"] == 400.0
+
+
+def test_a_complex_mass_is_not_caffeine(enriched):
+    """298076: PURENERGY 116 mg prints pterostilbene 66 and caffeine 50 under it."""
+    caffeine = _declared_daily_caffeine(enriched("298076"))
+    assert (caffeine["total_mg_day_min"], caffeine["total_mg_day_max"]) == (50.0, 100.0)
+    decisions = _caffeine_decisions(enriched("298076"))
+    assert decisions["pregnancy"] == {("below_threshold", 100.0)}
+
+
+def test_a_compound_mass_with_no_printed_caffeine_cannot_establish_a_crossing(enriched):
+    """249741: 180 mg anhydrous is proven; Infinergy 30 mg is compound mass."""
+    decisions = _caffeine_decisions(enriched("249741"))
+    assert {status for status, _ in decisions["pregnancy"]} == {"form_unknown"}
+    assert {status for status, _ in decisions["ttc"]} == {"form_unknown"}
+    assert decisions["hypertension"] == {("below_threshold", 180.0)}
+
+
+@pytest.mark.parametrize("dsld_id", ["27808", "28993"])
+def test_a_held_label_keeps_its_alerts_and_leaves_hypertension_unresolved(enriched, dsld_id):
+    """Printed total and printed components disagree, and the reviewed entry forbids
+    reconciling them. Every reading crosses pregnancy; only some cross hypertension."""
+    decisions = _caffeine_decisions(enriched(dsld_id))
+    assert decisions["pregnancy"] == {("above_threshold", 300.0)}
+    assert decisions["ttc"] == {("above_threshold", 300.0)}
+    assert {status for status, _ in decisions["hypertension"]} == {"form_unknown"}
+    assert _declared_daily_caffeine(enriched(dsld_id))["unknown_rows"] > 0
+
+
+def test_guarana_keeps_its_own_rule_and_amount(enriched):
+    alerts = [
+        alert for alert in enriched("312701")["interaction_profile"]["ingredient_alerts"]
+        if alert["rule_id"] == "RULE_IQM_GUARANA"
+    ]
+    assert alerts
+    hypertension = [h for a in alerts for h in a["condition_hits"] if h["condition_id"] == "hypertension"]
+    assert {h["dose_decision"]["evaluation_status"] for h in hypertension} == {"amount_unknown"}
+
+
+def test_the_export_shows_one_caffeine_decision_per_target(enriched):
+    product = enriched("312701")
+    blob = build_detail_blob(product, score_product_v4(product))
+    amounts = [
+        (w.get("dose_decision") or {}).get("evaluated_daily_amount")
+        for w in blob["warnings"]
+        if w.get("ingredient_canonical_id") == "caffeine"
+    ]
+    # Pregnancy, hypertension and trying to conceive; the rest carry no dose decision.
+    assert [amount for amount in amounts if amount is not None] == [202.0, 202.0, 202.0]
+
+
+def _caffeine_row(**fields):
+    return {"canonical_id": "caffeine", "unit": "mg", "unit_normalized": "mg", **fields}
+
+
+def test_a_row_with_no_amount_is_not_part_of_the_sum_and_stays_unknown(enricher):
+    known = _caffeine_row(name="Caffeine", quantity=150.0, raw_source_path="ingredientRows[0]")
+    silent = _caffeine_row(name="Guarana Caffeine", quantity=0.0, unit="NP", unit_normalized="NP",
+                           raw_source_path="ingredientRows[1]")
+    dose = enricher._distinct_caffeine_dose({}, [known, silent])
+    assert dose["quantity"] == 150.0 and dose.get("quantity_upper") is None
+    assert id(known) in dose["rows"] and id(silent) not in dose["rows"]
+
+
+def test_an_upper_qualified_amount_only_bounds_the_total(enricher):
+    below = _caffeine_row(name="Caffeine", quantity=100.0, quantity_operator="<",
+                          raw_source_path="ingredientRows[0]")
+    exact = _caffeine_row(name="Caffeine", quantity=150.0, raw_source_path="ingredientRows[1]")
+    dose = enricher._distinct_caffeine_dose({}, [below, exact])
+    assert (dose["quantity"], dose["quantity_upper"]) == (150.0, 250.0)
+
+
+def test_a_lower_qualified_amount_leaves_no_upper_figure(enricher):
+    over = _caffeine_row(name="Caffeine", quantity=100.0, quantity_operator=">",
+                         raw_source_path="ingredientRows[0]")
+    dose = enricher._distinct_caffeine_dose({}, [over])
+    assert dose["quantity"] == 100.0 and dose["quantity_upper"] == float("inf")
+
+
+def test_no_caffeine_rows_means_no_total(enricher):
+    assert enricher._distinct_caffeine_dose({}, [{"canonical_id": "magnesium", "quantity": 100.0, "unit": "mg"}]) is None

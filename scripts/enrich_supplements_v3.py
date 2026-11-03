@@ -20592,6 +20592,75 @@ class SupplementEnricherV3:
             "conversion_failure_policy": "release_block",
         }
 
+    def _distinct_caffeine_dose(
+        self, product: Dict[str, Any], rows: List[Dict[str, Any]]
+    ) -> Optional[Dict[str, Any]]:
+        """The caffeine amount per serving that every caffeine dose rule judges.
+
+        `distinct_caffeine_rows` owns which rows count; this reads the rows the
+        warnings judge. A low and a high appear only when the label leaves the
+        amount open, so a figure can establish a crossing only if every reading
+        does. Printed components the label cannot reconcile are held by their
+        reviewed entry: at least the largest of them, at most all of them. A blend
+        naming caffeine with no caffeine row under it proves mass, not caffeine.
+        A row with no amount stays out of the sum and keeps its amount-unknown state.
+        """
+        from scoring_v4.dose_safety import distinct_caffeine_rows
+        from scoring_v4.exposure import quantity_is_unresolved, row_exposure
+        from scoring_v4.modules.sports_helpers import CAFFEINE_CANONICALS
+
+        def read(row: Dict[str, Any]):
+            return row_exposure(product, row, basis="per_use", unit="mg")
+
+        def is_caffeine(row: Dict[str, Any]) -> bool:
+            return str(row.get("canonical_id") or "").strip().lower() in CAFFEINE_CANONICALS
+
+        by_key = {}
+        for row in rows:
+            by_key.setdefault(row.get("raw_source_path") or id(row), row)
+        physical = list(by_key.values())
+        caffeine_paths = [str(row.get("raw_source_path") or "") for row in physical if is_caffeine(row)]
+        # A header over its own caffeine rows is those rows' total.
+        candidates = [
+            row for row in physical
+            if not (
+                row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                and any(path.startswith(f"{row.get('raw_source_path')}.") for path in caffeine_paths)
+            )
+        ]
+        counted, total_bounds, _ = distinct_caffeine_rows(
+            candidates, read, lambda row, others: source_linked_rows(product, row, others)
+        )
+        low = high = 0.0
+        unreconciled: List[float] = []
+        for row in counted:
+            exposure = read(row)
+            if id(row) in total_bounds:
+                low += total_bounds[id(row)][0]
+                high = math.inf
+            elif exposure.per_serving_amount is None:
+                continue
+            elif row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
+                high += exposure.per_serving_amount
+            elif quantity_is_unresolved(row):
+                unreconciled.append(exposure.per_serving_amount)
+            else:
+                low += exposure.minimum or 0.0
+                high += math.inf if exposure.maximum is None else exposure.maximum
+        if unreconciled:
+            low += max(unreconciled)
+            high += sum(unreconciled)
+        if high <= 0:
+            return None
+        return {
+            "quantity": low,
+            "quantity_upper": None if high == low else high,
+            "rows": {
+                id(row) for row in candidates
+                if is_caffeine(row) and read(row).per_serving_amount
+            },
+        }
+
     def _evaluate_dose_thresholds_for_target(
         self,
         thresholds: List[Dict[str, Any]],
@@ -20678,14 +20747,24 @@ class SupplementEnricherV3:
             serving_multiplier = (
                 float(servings_per_day_max) if basis == "per_day" else 1.0
             )
-            converted_amount, conversion_method = self._marker_amount_for_threshold_unit(
-                ingredient,
-                threshold_unit,
-                serving_multiplier,
+            quantity_upper = ingredient.get("quantity_upper")
+            converted_amount, conversion_method = (
+                (None, None)
+                if quantity_upper is not None
+                else self._marker_amount_for_threshold_unit(
+                    ingredient,
+                    threshold_unit,
+                    serving_multiplier,
+                )
             )
             convert_reason = None
             ul_bounds = (
-                self._ul_exposure_bounds_for_threshold(
+                (
+                    self._convert_mass(amount_basis, unit, threshold_unit),
+                    self._convert_mass(quantity_upper * serving_multiplier, unit, threshold_unit),
+                )
+                if quantity_upper is not None
+                else self._ul_exposure_bounds_for_threshold(
                     amount=amount_basis,
                     from_unit=unit,
                     target_unit=threshold_unit,
@@ -20896,6 +20975,22 @@ class SupplementEnricherV3:
 
         return severity_candidate, details
 
+    def _open_range_reaches_floor(
+        self,
+        ingredient: Dict[str, Any],
+        low: float,
+        floor_value: float,
+        multiplier: float,
+        unit: str,
+        floor_unit: str,
+    ) -> bool:
+        """The proven amount sits below the floor while the label's upper reading reaches it."""
+        upper = ingredient.get("quantity_upper")
+        if upper is None or low >= floor_value:
+            return False
+        converted = self._convert_mass(upper * multiplier, unit, floor_unit)
+        return converted is not None and converted >= floor_value
+
     def _evaluate_min_effective_dose(
         self,
         min_effective_dose: Optional[Dict[str, Any]],
@@ -20963,6 +21058,10 @@ class SupplementEnricherV3:
             standard_name=standard_name,
         )
         if converted_amount is None:
+            return None
+        if self._open_range_reaches_floor(
+            ingredient, converted_amount, floor_value, amount_basis / quantity, unit, floor_unit
+        ):
             return None
         return "below" if converted_amount < floor_value else "at_or_above"
 
@@ -21095,6 +21194,15 @@ class SupplementEnricherV3:
             result["consumer_disposition"] = "suppress"
             result["release_blocking"] = True
             result["conversion_error"] = reason or "conversion_failed"
+            return result
+
+        if self._open_range_reaches_floor(
+            ingredient, converted_amount, floor_value, serving_multiplier, observed_unit, floor_unit
+        ):
+            result["evaluation_status"] = "form_unknown"
+            result["consumer_disposition"] = str(
+                min_effective_dose.get("unknown_form_disposition") or "suppress"
+            ).strip().lower()
             return result
 
         threshold_met = converted_amount >= floor_value
@@ -21369,6 +21477,11 @@ class SupplementEnricherV3:
                     if id(row) in label_rows:
                         repeat_checked_rows.add(id(marker_row))
 
+        caffeine_dose = self._distinct_caffeine_dose(
+            enriched if isinstance(enriched, dict) else {},
+            [row for _, row in all_ingredient_rows],
+        )
+
         for source_bucket, ingredient in all_ingredient_rows:
             safety_refs = (
                 safety_subjects_by_path.get(ingredient.get("raw_source_path"), [])
@@ -21452,6 +21565,21 @@ class SupplementEnricherV3:
                 dose_row = base_dose_row
                 declared_owner = compound_exposure_owners.get(id(ingredient))
                 rule_subject = rule.get("subject_ref") or {}
+                if (
+                    caffeine_dose
+                    and id(ingredient) in caffeine_dose["rows"]
+                    and rule_subject.get("canonical_id") == "caffeine"
+                ):
+                    # Every caffeine row answers with the product's one total, so
+                    # each target gets one decision and the export merges the cards.
+                    dose_row = {
+                        **base_dose_row,
+                        "quantity": caffeine_dose["quantity"],
+                        "quantity_upper": caffeine_dose["quantity_upper"],
+                        "unit": "mg",
+                        "unit_normalized": "mg",
+                        "dose_source": "distinct_caffeine_total",
+                    }
                 if declared_owner is not None and (
                     subject["db"] == "ingredient_quality_map"
                     and
