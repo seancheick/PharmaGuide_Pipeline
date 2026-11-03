@@ -84,6 +84,7 @@ Every database file MUST include a `_metadata` object as its first key:
 | `drug_class_definitions` | drug_classes.json | Enrichment, Export |
 | `cross_db_overlap_guard` | cross_db_overlap_allowlist.json | Enrichment |
 | `unii_lookup_cache` | fda_unii_cache.json | Enrichment |
+| `catalog_scope_exclusions` | curated_overrides/catalog_exclusions.json | Export |
 | `migration_audit` | migration_report.json | Internal |
 
 ---
