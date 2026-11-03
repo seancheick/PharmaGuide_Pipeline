@@ -140,7 +140,7 @@ def _score(pipeline, label, mutate=None):
 
 
 def test_a_real_label_missing_only_evidence_review_is_complete(pipeline):
-    scored = _score(pipeline, "a9_partial_full_evidence_328830_raw.json")
+    scored = _score(pipeline, "a9_completion_12147_raw.json")
     assert scored["quality_assessment_status"] == "partial"
     assert scored["assessment_readiness"]["release_assessment"]["blockers"] == [
         "evidence_assessment_incomplete"]

@@ -1116,6 +1116,17 @@ _EVIDENCE_OPEN_REVIEW_REASON = (
     "Some research on this label earned credit, but our review of the rest "
     "is still open, so this assessment is not finished."
 )
+_EVIDENCE_UNREVIEWED_ROWS_NOTE = (
+    "Other ingredients on this label weren't individually reviewed, which does not "
+    "mean they lack clinical evidence."
+)
+
+
+def note_unreviewed_rows(pillar: Dict[str, Any]) -> Dict[str, Any]:
+    """Keep a finished Evidence conclusion from reading as a review of every row."""
+    if pillar.get("display_state") == "not_yet_reviewed":
+        return pillar
+    return {**pillar, "reason": f"{pillar.get('reason') or ''} {_EVIDENCE_UNREVIEWED_ROWS_NOTE}".strip()}
 
 
 def mark_evidence_review_open(pillar: Dict[str, Any]) -> Dict[str, Any]:

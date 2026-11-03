@@ -13,7 +13,7 @@ import pytest
 from build_final_db import build_decision_highlights, generate_share_metadata
 
 FIXTURES = Path(__file__).parent / "fixtures"
-PARTIAL_LABEL = "a9_partial_full_evidence_328830_raw.json"
+PARTIAL_LABEL = "a9_completion_293417_raw.json"
 COMPLETE_LABEL = "form_association_12012_raw.json"
 
 
@@ -61,7 +61,7 @@ def test_open_evidence_review_does_not_present_as_assessed(partial_full_evidence
     assert scored["quality_assessment_status"] == "partial"
     assert "evidence_assessment_incomplete" in release["blockers"]
     # The retained credit is left alone; only the claim that review ended moves.
-    assert evidence["score"] == 20.0
+    assert evidence["score"] == 16.5
     assert evidence["display_state"] == "not_yet_reviewed"
     assert "still open" in evidence["reason"]
     assert "Established nutritional authority" not in evidence["reason"]
@@ -80,7 +80,7 @@ def test_marking_evidence_open_leaves_the_retained_credit_receipt(partial_full_e
     evidence = scored["quality_pillars_v4"]["evidence"]
     entries = evidence["receipt"]["entries"]
     assert abs(sum(entry["points"] for entry in entries) - evidence["score"]) < 0.001
-    assert evidence["evidence_result_state"] == "evaluated_authority"
+    assert evidence["evidence_result_state"] == "evaluated_applicable"
 
 
 # --- Safety screen: an unread panel is not "no known concern" ---------------
@@ -211,11 +211,20 @@ def test_a_banned_name_blocks_a_label_nothing_else_on_it_could_map(pipeline, ban
 
 def test_an_open_review_drops_the_finished_review_record_count(pipeline):
     # pillar_explanations: only a finished review may report "0 records".
-    evidence = _score(pipeline, _raw("a9_open_review_zero_records_216405_raw.json"))["quality_pillars_v4"]["evidence"]
+    evidence = _score(pipeline, _raw("a9_completion_322514_raw.json"))["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"
     assert evidence["score"] == 0
     facts = (evidence.get("explanation") or {}).get("facts") or []
     assert "matched_evidence_records" not in [fact["id"] for fact in facts]
+
+
+def test_a_finished_review_that_earned_nothing_keeps_its_record_count(pipeline):
+    evidence = _score(pipeline, _raw("a9_finished_authority_no_credit_216405_raw.json"))["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "assessed"
+    assert evidence["score"] == 0
+    assert "no Evidence points" in evidence["reason"]
+    facts = (evidence.get("explanation") or {}).get("facts") or []
+    assert "matched_evidence_records" in [fact["id"] for fact in facts]
 
 
 def test_an_open_review_keeps_an_applicability_finding_and_reads_partial(pipeline):

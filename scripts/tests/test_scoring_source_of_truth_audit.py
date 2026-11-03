@@ -559,6 +559,10 @@ def test_completion_preflight_enforces_missing_receipt_without_strict_flag(tmp_p
     assert {f.code for f in audit_scoring(args)} == {'SCORING_RELEASE_ASSESSMENT_MISSING'}
 
 
+# The nutrient panel owns Evidence for these, and it was read. Their other rows stay open.
+READ_PANEL_LABELS = frozenset({'b_panel', 'multi_fractional', '177500', '233218', '287810', '182627'})
+
+
 def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
     """Source-owned facts matching the three measured retained-science cases."""
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
@@ -695,7 +699,10 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
     from assessment_readiness import evaluate_release_assessment
     product['assessment_readiness']['release_assessment'] = evaluate_release_assessment(
         source, product['assessment_readiness'], product['_v4_module_breakdown'], unfinished_source=None)
-    assert product['assessment_readiness']['release_assessment']['is_complete'] is False
+    read_panel = pid in READ_PANEL_LABELS
+    assert product['assessment_readiness']['release_assessment']['is_complete'] is read_panel
+    if read_panel:
+        product['quality_assessment_status'] = 'complete'
     root = tmp_path / 'products'
     from scoring_v4.quality_score import _pillar_evidence, _normalized_receipt
     from scoring_v4.quality_score_config import config
@@ -723,7 +730,7 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
     return source, product, enriched, scored
 
 
-@pytest.mark.parametrize('pid', ['omega_zero', 'b_panel', 'multi_fractional', 'multi_zero', 'weighted', 'authority_zero'])
+@pytest.mark.parametrize('pid', ['omega_zero', 'multi_zero', 'weighted', 'authority_zero'])
 def test_retained_evidence_uses_the_current_selected_numerical_owner(tmp_path, pid, monkeypatch):
     from copy import deepcopy
     from assessment_readiness import _retained_evidence_is_publishable
@@ -740,7 +747,7 @@ def test_retained_evidence_uses_the_current_selected_numerical_owner(tmp_path, p
     assert product['assessment_readiness']['release_assessment']['is_complete'] is False
 
 
-@pytest.mark.parametrize('pid', ['omega_zero', 'b_panel', 'multi_fractional', 'multi_zero', 'weighted', 'authority_zero'])
+@pytest.mark.parametrize('pid', ['omega_zero', 'multi_zero', 'weighted', 'authority_zero'])
 @pytest.mark.parametrize('change', ['inflated_score', 'stale_lineage', 'changed_component'])
 def test_retained_evidence_owner_proof_rejects_changed_credit_or_lineage(tmp_path, pid, change, monkeypatch):
     source, product, enriched, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
@@ -806,7 +813,7 @@ def test_current_evidence_receipt_uses_the_production_scoring_identity_view():
 
 
 @pytest.mark.parametrize('pid', ['321405', '336337', '306381', '19067', '307621', '180290',
-                               '239729', '272720', '177500', '233218', '287810', '182627', 'omega_generic'])
+                               '239729', '272720', 'omega_generic'])
 def test_current_lineage_allows_only_truthful_held_evidence_without_clearing_completion(tmp_path, pid, monkeypatch):
     _, product, _, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
     args = _args(scored)
@@ -815,6 +822,21 @@ def test_current_lineage_allows_only_truthful_held_evidence_without_clearing_com
         assert audit_scoring(args) == []
     assert product['quality_assessment_status'] == 'partial'
     assert product['assessment_readiness']['release_assessment']['is_complete'] is False
+
+
+@pytest.mark.parametrize('pid', sorted(READ_PANEL_LABELS))
+def test_a_read_panel_completes_without_reading_as_a_review_of_every_row(tmp_path, pid, monkeypatch):
+    from scoring_v4.quality_score import evidence_display_state
+    _, product, _, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
+    args = _args(scored)
+    for completion_only in (False, True):
+        args.completion_only = completion_only
+        assert audit_scoring(args) == []
+    evidence = product['_v4_module_breakdown']['dimensions']['evidence']
+    assert evidence_display_state(evidence['metadata']['evidence_result_state']) != 'not_yet_reviewed'
+    release = product['assessment_readiness']['release_assessment']
+    assert release['is_complete'] is True and release['blockers'] == []
+    assert product['assessment_readiness']['evidence']['readiness'] == 'incomplete'
 
 
 @pytest.mark.parametrize('change', ['missing_metadata', 'positive_credit', 'identity', 'dose', 'safety',

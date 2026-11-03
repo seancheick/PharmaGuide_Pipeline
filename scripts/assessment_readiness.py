@@ -158,6 +158,8 @@ _NONHUMAN_STUDY_TYPES = frozenset({
     "animal_study",
     "in_vitro",
 })
+_OWNER_SCOPED_EVIDENCE_MODULES = frozenset({"generic", "fiber_digestive", "sports"})
+_AUTHORITY_PANEL_MODULES = frozenset({"multi_or_prenatal", "b_complex"})
 _ROUTE_INCOMPLETE_REASON_CODES = frozenset({
     "protein_identity_or_mass_missing",
 })
@@ -366,6 +368,9 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
             and (resolution.owner_facts["nutrition_authority"].get("is_essential") is True
                  or resolution.reason_code == "dietary_reference_intake_authority_established")):
         return EVIDENCE_EVALUATED_SUPPORTED, resolution.reason_code, EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
+    if disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
+        # A finished answer from an authority that sets no intake earns no credit.
+        return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
     if (disposition in {
             EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
             EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
@@ -374,7 +379,8 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
                    and "backed_clinical_studies" in resolution.owner_facts))):
         return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
     if (disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-            and "literature_evidence" in resolution.owner_facts):
+            and ("literature_evidence" in resolution.owner_facts
+                 or "backed_clinical_studies" in resolution.owner_facts)):
         state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
                  else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
         return state, resolution.reason_code, None
@@ -416,7 +422,7 @@ def evaluate_evidence_assessment(
     # them outside the individual Evidence question.
     rows, roles = subjects + other_rows, subject_roles + other_roles
     matches, recovered_matches = resolved_clinical_matches(
-        dict(product), owner_scoped=module in {"generic", "fiber_digestive", "sports"}
+        dict(product), owner_scoped=module in _OWNER_SCOPED_EVIDENCE_MODULES
     )
     indexed_matches = [
         (match, _match_identity_keys(match))
@@ -1514,7 +1520,13 @@ def evaluate_release_assessment(
                         if (receipt.get("status") not in {"applicable", "assessed_studied_formula"}
                                 or receipt.get("scope_qualification_complete") is not True):
                             blockers.append("clinical_applicability_unreviewed:" + str(receipt.get("id") or "unknown"))
-        elif not _is_ready(str(_safe_dict(readiness.get("evidence")).get("readiness") or "")):
+        elif module in _AUTHORITY_PANEL_MODULES:
+            # The essential-nutrient panel owns this question and add-ins earn
+            # nothing here, so their rows stay audit metadata as omega's do.
+            if _evidence_presents_as_unreviewed(module_breakdown):
+                blockers.append("evidence_assessment_incomplete")
+        elif (_required_evidence_review_open(product, readiness, module)
+              or _evidence_presents_as_unreviewed(module_breakdown)):
             blockers.append("evidence_assessment_incomplete")
         # The scoring owner records only records used by the winning generic
         # path. Missing applicability cannot publish provisional legacy credit.
@@ -1523,14 +1535,16 @@ def evaluate_release_assessment(
                    and row.get("scoring_input_kind") == "product_level_evidence"
                    and row.get("evidence_applicability") == EVIDENCE_APPLICABILITY_MODULE_AGGREGATE
                    for row in _safe_list(_safe_dict(readiness.get("evidence")).get("ingredient_assessments"))):
-                from evidence_resolver import EvidenceDisposition, resolve_product_evidence
+                from evidence_resolver import EvidenceDisposition, evidence_required_canonicals, resolve_product_evidence
                 from scoring_v4.modules.generic_evidence import evidence_completeness_gap
 
                 aggregate = resolve_product_evidence(dict(product), owner_scoped=True, module=module)
                 gap = evidence_completeness_gap(dict(product), aggregate, owner_scoped=True)
+                required = {_norm(canonical) for canonical in evidence_required_canonicals(dict(product), module=module)}
                 pending_applicability = any(
                     resolution.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
                     and _resolved_evidence_assessment(resolution)[0] == EVIDENCE_NOT_YET_EVALUATED
+                    and _norm(resolution.canonical_id) in required
                     for resolution in aggregate.resolutions
                 )
                 if gap or pending_applicability:
@@ -1561,6 +1575,15 @@ def evaluate_release_assessment(
                         blockers.append("contributing_source_review_incomplete:" + str(receipt.get("id") or "unknown"))
             elif float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0:
                 blockers.append("contributing_evidence_receipts_missing")
+    # A source-bound hold on an unfinished Evidence review stands while that review
+    # is open, so the narrower completion rule doesn't lift it. Finishing it does.
+    if "evidence_assessment_incomplete" not in blockers and any(
+            row.get("state") == EVIDENCE_NOT_YET_EVALUATED
+            for row in _safe_list(_safe_dict(readiness.get("evidence")).get("ingredient_assessments"))
+            if isinstance(row, Mapping)):
+        from scoring_v4.scored_artifact import _held_assessment_label
+        if "evidence_assessment_incomplete" in (_held_assessment_label(dict(product)).get("blockers") or []):
+            blockers.append("evidence_assessment_incomplete")
     return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
             "unfinished_source_assessment": unfinished_source,
             "unread_printed_nutrient_amounts": unread_printed_nutrient_amounts(product)}
@@ -1604,6 +1627,32 @@ def unread_printed_nutrient_amounts(product: Mapping[str, Any]) -> int:
                 and not isinstance(printed, bool) and printed > 0):
             count += 1
     return count
+
+
+def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mapping[str, Any], module: Any) -> bool:
+    """Whether an unreviewed row can change this product's Evidence answer.
+
+    The rows stay recorded as unreviewed either way; this only decides whether
+    they hold the product. Unknown rows hold it.
+    """
+    evidence = _safe_dict(readiness.get("evidence"))
+    if _is_ready(str(evidence.get("readiness") or "")):
+        return False
+    if module not in _OWNER_SCOPED_EVIDENCE_MODULES:
+        return True
+    from evidence_resolver import evidence_required_canonicals
+    required = {_norm(canonical) for canonical in evidence_required_canonicals(dict(product), module=module)}
+    open_refs = set(_safe_list(evidence.get("not_yet_evaluated_row_refs")))
+    open_rows = [row for row in _safe_list(evidence.get("ingredient_assessments"))
+                 if isinstance(row, Mapping) and row.get("source_row_ref") in open_refs]
+    return (not open_rows or len(open_rows) < len(open_refs)
+            or any(_norm(row.get("canonical_id")) in required for row in open_rows))
+
+
+def _evidence_presents_as_unreviewed(module_breakdown: Any) -> bool:
+    from scoring_v4.quality_score import evidence_display_state
+    state = retained_evidence_result_state(module_breakdown)
+    return bool(state) and evidence_display_state(state) == "not_yet_reviewed"
 
 
 def retained_evidence_result_state(module_breakdown: Any) -> Any:

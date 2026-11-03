@@ -390,6 +390,12 @@ def assemble_scored_artifact(
         from scoring_v4.quality_score import mark_evidence_review_open
         v4 = {**v4, "quality_pillars_v4": {
             **pillars, "evidence": mark_evidence_review_open(pillars["evidence"])}}
+    elif (status == "scored" and _safe_dict(pillars).get("evidence")
+          and any(row.get("state") == "not_yet_evaluated" for row in
+                  _safe_dict(assessment_readiness.get("evidence")).get("ingredient_assessments") or [])):
+        from scoring_v4.quality_score import note_unreviewed_rows
+        v4 = {**v4, "quality_pillars_v4": {
+            **pillars, "evidence": note_unreviewed_rows(pillars["evidence"])}}
     # A panel the safety screen never read keeps the score (a capture gap is a
     # recorded fact) but cannot make the assessment finished.
     capture_gap = "safety_capture_incomplete" if safety_gate.get("ingredient_assessment_errors") else None
