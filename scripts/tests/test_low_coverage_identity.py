@@ -33,49 +33,18 @@ def run():
     return _run
 
 
-def _anchors(enriched):
-    from scoring_input_contract import get_scoring_ingredients
-
-    rows = get_scoring_ingredients(enriched, strict=True).rows
-    return rows, [r for r in rows if r.get("evidence_type") == "blend_anchor_mass"]
-
-
-# DSLD lists these members as forms of a dosed blend row. The cleaner flattens
-# the forms and drops the header, so the blend mass had no row to stand on,
-# while the same label written with nestedRows (74457) keeps its anchor.
-@pytest.mark.parametrize(
-    "pid,anchor,mass",
-    [
-        ("855", "oregano", 60),
-        ("12300", "blessed_thistle", 860),
-        ("19598", "celadrin", 1200),
-        ("271115", "fenugreek", 1000),  # both are in the title; label order picks
-    ],
-)
-def test_form_encoded_blend_keeps_its_blend_level_anchor(run, pid, anchor, mass):
+# DSLD lists these members as forms of a dosed blend row. Members without their
+# own printed amounts keep the completeness hold (f47320a17), so the blend total
+# never becomes a score for them. Their alerts still fire: safety is separate.
+@pytest.mark.parametrize("pid", ["855", "12300", "19598", "271115"])
+def test_blend_written_as_forms_stays_held_without_member_amounts(run, pid):
     enriched, scored = run(pid)
-    rows, anchors = _anchors(enriched)
-    assert [(a["canonical_id"], a["dose_value"], a["dose_unit"]) for a in anchors] == [(anchor, mass, "mg")]
-    assert anchors[0]["evidence_scope"] == "blend_level"
-    assert anchors[0]["raw_source_path"].startswith("ingredientRows[")
-    assert ".forms[" not in anchors[0]["raw_source_path"]
-    assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] >= 0.3
-    # A member's amount is not printed: the blend mass never becomes its dose.
+    assert scored["quality_score_status"] == "not_scored"
+    assert scored["quality_pillars_v4"] is None
+    assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] == 0.0
     for row in enriched["ingredient_quality_data"]["ingredients"]:
         if ".forms[" in str(row.get("raw_source_path")):
             assert not row.get("quantity")
-
-
-def test_nested_row_twin_is_the_same_rule(run):
-    _, anchors = _anchors(run("74457")[0])
-    assert [(a["canonical_id"], a["dose_value"]) for a in anchors] == [("oregano", 60)]
-
-
-def test_blend_total_by_volume_stays_without_an_anchor(run):
-    # 1 mL has no mass; the anchor owner requires one.
-    enriched, scored = run("315586")
-    assert _anchors(enriched)[1] == []
-    assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] == 0.0
 
 
 def test_oyster_whole_extract_is_the_oyster_extract_identity(run):

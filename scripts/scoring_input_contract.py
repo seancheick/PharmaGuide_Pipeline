@@ -1850,15 +1850,10 @@ def _best_nested_anchor_child(
     candidate_rows: List[Dict[str, Any]],
 ) -> Optional[Dict[str, Any]]:
     parent_path = str(parent.get("raw_source_path") or "")
-    form_prefix = f"{parent_path}.forms[" if parent.get("_form_encoded_blend") else None
     children = [
         row
         for row in candidate_rows
-        if (
-            _is_nested_under(parent_path, row)
-            or (form_prefix and str(row.get("raw_source_path") or "").startswith(form_prefix))
-        )
-        and _anchor_identity(row)[0]
+        if _is_nested_under(parent_path, row) and _anchor_identity(row)[0]
         and not is_probiotic_source_identity(row)
     ]
     if not children:
@@ -1963,29 +1958,6 @@ def _blend_child_names(blend: Dict[str, Any]) -> List[str]:
         seen.add(key)
         out.append(name)
     return out
-
-
-def _form_encoded_blend_parents(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Header rows for blends the cleaner flattened from a row's forms."""
-    parents: List[Dict[str, Any]] = []
-    for blend in _safe_list(_safe_dict(product.get("proprietary_data")).get("blends")):
-        if not isinstance(blend, dict):
-            continue
-        amount, unit = _blend_total_amount_unit(blend)
-        path = str(blend.get("source_path") or "")
-        if amount is None or not path.startswith("ingredientRows["):
-            continue
-        parents.append({
-            "name": blend.get("name"),
-            "quantity": amount,
-            "unit": unit,
-            "raw_source_path": path,
-            "raw_source_text": blend.get("name"),
-            "source_section": "activeIngredients",
-            "cleaner_row_role": "blend_header_total",
-            "_form_encoded_blend": True,
-        })
-    return parents
 
 
 def _derive_top_level_botanical_blend_evidence(
@@ -2572,16 +2544,6 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         if item:
             special_evidence_paths.add(parent_path)
             evidence.append(item)
-
-    # DSLD can list a dosed blend's members as forms of its row. The cleaner
-    # flattens them and drops the header, so a label with no other scoring
-    # identity gets the same anchor its nestedRows twin keeps (74457, 855).
-    if not scorable_paths and not evidence:
-        for parent in _form_encoded_blend_parents(product):
-            item = _derive_blend_header_anchor_from_nested_child(product, parent, candidate_rows)
-            if item:
-                special_evidence_paths.add(str(parent["raw_source_path"]))
-                evidence.append(item)
 
     for item in _derive_top_level_botanical_blend_evidence(
         product,
