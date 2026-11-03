@@ -13,6 +13,7 @@ import argparse
 import hashlib
 import json
 import sys
+import time
 from collections import Counter
 from pathlib import Path
 from typing import Any, Callable, Iterable
@@ -105,11 +106,18 @@ def build_reachability_report(
     stale_count = 0
     unlinked_count = 0
     recompute_error_count = 0
+    started = time.monotonic()
 
     for product in products:
         if not isinstance(product, dict):
             raise EvidenceReachabilityError("Enriched product is not an object")
         product_count += 1
+        if product_count % 2000 == 0:
+            print(
+                f'Evidence reachability: {product_count} products | affected {len(affected)} | '
+                f'{time.monotonic() - started:.0f}s',
+                file=sys.stderr, flush=True,
+            )
         dsld_id = str(
             product.get("dsld_id") or product.get("dsldId") or product.get("id") or ""
         ).strip()

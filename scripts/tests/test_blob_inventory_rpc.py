@@ -370,3 +370,41 @@ def test_cli_verify_inventory_fails_on_divergence(tmp_path, capsys):
     out = capsys.readouterr().out
     assert exit_code != 0
     assert "PARITY" in out and "OK" not in out.split("PARITY", 1)[1][:20]
+
+
+def test_upload_hints_can_skip_summary_but_keep_page_validation():
+    from release_safety.blob_inventory import inventory_detail_blobs_via_rpc, RpcInventoryError
+    digest = _h('aa', 1)
+    client = _FakeRpcClient({_path(digest): b'abc'})
+    result = inventory_detail_blobs_via_rpc(client, verify_summary=False)
+    assert result.hashes == {digest}
+    assert not any(name == 'pg_storage_inventory_summary' for name, _ in client.rpc_calls)
+    client.tamper_rows = lambda rows: [dict(rows[0], name='outside/prefix.json')]
+    with pytest.raises(RpcInventoryError):
+        inventory_detail_blobs_via_rpc(client, verify_summary=False)
+
+
+def test_transient_rpc_page_failure_retries_same_page(monkeypatch):
+    from release_safety.blob_inventory import inventory_detail_blobs_via_rpc
+    digest = _h('aa', 1)
+    client = _FakeRpcClient({_path(digest): b'abc'})
+    original = client.rpc
+    failed = []
+    def rpc(name, params):
+        if name == 'pg_storage_inventory_page' and not failed:
+            failed.append(params.copy())
+            raise TimeoutError('synthetic timeout')
+        return original(name, params)
+    monkeypatch.setattr(client, 'rpc', rpc)
+    result = inventory_detail_blobs_via_rpc(client, verify_summary=False, shards=['aa'])
+    assert result.hashes == {digest}
+    assert failed[0]['p_after'] is None
+
+
+def test_upload_hints_follow_capped_pages_until_empty():
+    from release_safety.blob_inventory import inventory_detail_blobs_via_rpc
+    digests = {_h('aa', i) for i in range(3)}
+    client = _FakeRpcClient({_path(digest): b'abc' for digest in digests}, page_limit_served=1)
+    result = inventory_detail_blobs_via_rpc(client, verify_summary=False, shards=['aa'])
+    assert result.hashes == digests
+    assert len(client.rpc_calls) == 4

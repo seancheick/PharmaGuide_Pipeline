@@ -412,6 +412,89 @@ def test_artifact_gate_reuses_after_move_and_rejects_changed_bytes_or_report(tmp
     assert (tmp_path / 'calls').read_text() == 'xxx'
 
 
+def test_quiet_gate_reports_still_running_and_a_failure_shows_the_log(tmp_path, capsys):
+    code = run_gate(
+        name='quiet probe',
+        command=[sys.executable, '-c', 'import time; time.sleep(0.3)'],
+        log_path=tmp_path / 'quiet.log',
+        receipt_path=tmp_path / 'quiet.json',
+        cwd=tmp_path,
+        heartbeat_seconds=0.05,
+    )
+    assert code == 0
+    out = capsys.readouterr().out
+    assert 'STARTING: quiet probe' in out
+    assert 'STILL RUNNING: quiet probe' in out
+    assert 'no output yet' in out
+    assert out.rfind('FINISHED: quiet probe') > out.rfind('STILL RUNNING: quiet probe')
+
+    failed = run_gate(
+        name='failing probe',
+        command=[sys.executable, '-c', 'print("boom-line"); raise SystemExit(3)'],
+        log_path=tmp_path / 'fail.log',
+        receipt_path=tmp_path / 'fail.json',
+        cwd=tmp_path,
+        heartbeat_seconds=30,
+    )
+    captured = capsys.readouterr()
+    assert failed == 3
+    assert 'FAILED: failing probe | exit 3' in captured.err
+    assert 'boom-line' in captured.err
+    log = (tmp_path / 'fail.log').read_text()
+    assert 'boom-line' in log
+    assert 'FAILED:' not in log
+    assert 'STILL RUNNING:' not in log
+
+
+def test_heartbeat_env_is_clamped_and_an_explicit_value_is_not(monkeypatch):
+    from audits.run_verification_gate import _heartbeat_interval
+    monkeypatch.setenv('PG_GATE_HEARTBEAT_SECONDS', '1')
+    assert _heartbeat_interval(None) == 5
+    assert _heartbeat_interval(0.05) == 0.05
+
+
+def test_fingerprint_progress_names_the_gate(tmp_path, monkeypatch, capsys):
+    from audits import run_verification_gate as gate
+    monkeypatch.setattr(gate, 'FINGERPRINT_PROGRESS_SECONDS', 0)
+    monkeypatch.setattr(gate, 'runtime_identity', lambda: {'runtime': 'fixed'})
+    (tmp_path / 'a.json').write_text('{}')
+    gate._input_binding(tmp_path, ['probe'], ['*.json'], label='scoring assessment readiness')
+    assert 'FINGERPRINT: scoring assessment readiness' in capsys.readouterr().err
+
+
+def test_scoring_readiness_rechecks_changed_manifest_and_database(tmp_path, monkeypatch):
+    from audits import run_verification_gate as gate
+    monkeypatch.setattr(gate, 'raw_label_fingerprint', lambda root, on_file=None: {'root': 'fixed', 'labels': []})
+    monkeypatch.setattr(gate, 'runtime_identity', lambda: {'runtime': 'fixed'})
+    dist = tmp_path / 'dist'
+    dist.mkdir()
+    (dist / 'pharmaguide_core.db').write_bytes(b'db-one')
+    (dist / 'export_manifest.json').write_text('{"stamp": 1}')
+    probe = tmp_path / 'probe.py'
+    probe.write_text(
+        "from pathlib import Path\n"
+        "p = Path('calls')\n"
+        "p.write_text((p.read_text() if p.exists() else '') + 'x')\n"
+    )
+    receipts = tmp_path / 'receipts'
+    receipts.mkdir()
+    argv = [
+        '--name', 'scoring assessment readiness',
+        '--receipt-dir', str(receipts),
+        '--cwd', str(tmp_path),
+        '--release-check',
+        '--', sys.executable, str(probe), '--dist-dir', str(dist),
+    ]
+    assert gate.main(argv) == 0
+    assert (tmp_path / 'calls').read_text() == 'x'
+    (dist / 'export_manifest.json').write_text('{"stamp": 2}')
+    assert gate.main(argv) == 0
+    assert (tmp_path / 'calls').read_text() == 'xx'
+    (dist / 'pharmaguide_core.db').write_bytes(b'db-two')
+    assert gate.main(argv) == 0
+    assert (tmp_path / 'calls').read_text() == 'xxx'
+
+
 def test_raw_fingerprint_tracks_jsonl_inputs_read_by_stage_lineage(tmp_path):
     from audits.run_verification_gate import raw_label_fingerprint
     label = tmp_path / 'batch.jsonl'
