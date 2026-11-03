@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+from pathlib import Path
 import os
 import sys
 
@@ -266,3 +267,72 @@ class TestStageImmutability:
         assert outcome["ok"]
         assert record["resolved_dsld_ids"] == ["111111"]
         assert record["catalog_snapshot_version"] == "2026.08.01.010203"
+
+
+import build_safety_alerts as publisher  # noqa: E402
+
+FIXTURES = Path(__file__).parent / "fixtures" / "safety_alerts"
+
+
+def _fixture_records(*names):
+    return [json.loads((FIXTURES / name).read_text(encoding="utf-8")) for name in names]
+
+
+ALL_FIXTURES = ("SA_9999_0001.json", "SA_9999_0002.json", "SA_9999_0003.json", "SA_9999_0004.json")
+
+
+def test_fake_feeds_match_the_bytes_the_app_tests_read(tmp_path):
+    """Two pins, one fixture: the app pins the same digests in its own tests."""
+    staged = publisher.stage(_fixture_records(*ALL_FIXTURES), "2026-11-03", tmp_path)
+    assert (tmp_path / publisher.FEED_FILENAME).read_bytes() == (
+        FIXTURES / "interaction_rule_base_feed.json"
+    ).read_bytes()
+    assert (tmp_path / publisher.EXTENDED_FEED_FILENAME).read_bytes() == (
+        FIXTURES / "interaction_rule_feed.json"
+    ).read_bytes()
+    assert staged["checksum"] == FAKE_BASE_FEED_SHA256
+    assert staged["extended_feed"]["checksum"] == FAKE_INTERACTION_FEED_SHA256
+
+
+FAKE_BASE_FEED_SHA256 = "sha256:7564e689beaa6fe47a794d3121ac715c211a487476098e3c80c6b0bde2a940c5"
+FAKE_INTERACTION_FEED_SHA256 = "sha256:e0f20b54bcdf8aa77eef02c2c8420644adb390510546f8121e8e3359f3c1eb8f"
+
+
+def test_rule_alerts_stay_out_of_the_feed_old_builds_read(tmp_path):
+    staged = publisher.stage(_fixture_records(*ALL_FIXTURES), "2026-11-03", tmp_path)
+    base = json.loads((tmp_path / publisher.FEED_FILENAME).read_text(encoding="utf-8"))
+    extended = json.loads((tmp_path / publisher.EXTENDED_FEED_FILENAME).read_text(encoding="utf-8"))
+
+    assert {a["event_type"] for a in base["alerts"]} == {"ingredient_ban", "product_recall"}
+    assert base["schema_version"] == "1.0.0"
+    assert base["alert_count"] == 2
+    assert {a["event_type"] for a in extended["alerts"]} == {"ingredient_ban", "product_recall", "interaction_rule"}
+    assert extended["schema_version"] == "1.1.0"
+    assert staged["alert_count"] == 2
+    assert staged["extended_feed"]["alert_count"] == 4
+    digest = staged["extended_feed"]["checksum"].removeprefix("sha256:")
+    assert staged["extended_feed"]["path"] == f"safety-alerts/sha256/{digest}.json"
+    # The rule gate reads these, and no old reader or dispatcher does.
+    assert set(staged["latest_revisions"]) == {"SA_9999_0001", "SA_9999_0002", "SA_9999_0003", "SA_9999_0004"}
+
+
+def test_a_rule_only_change_is_still_a_new_release(tmp_path):
+    """The release row is found by the base feed's checksum."""
+    records = _fixture_records(*ALL_FIXTURES)
+    first = publisher.stage(records, "2026-11-03", tmp_path)
+    records[0]["body"] = "Test fixture only. Reworded."
+    second = publisher.stage(records, "2026-11-03", tmp_path)
+    assert first["checksum"] != second["checksum"]
+    assert first["feed_version"] != second["feed_version"]
+
+
+def test_without_rule_alerts_the_release_is_what_it_always_was(tmp_path):
+    publisher.stage(_fixture_records(*ALL_FIXTURES), "2026-11-03", tmp_path)
+    staged = publisher.stage(_fixture_records("SA_9999_0002.json"), "2026-11-03", tmp_path)
+    payload = (tmp_path / publisher.FEED_FILENAME).read_bytes()
+    feed = json.loads(payload)
+    assert "extended_feed" not in staged
+    assert set(feed) == {"schema_version", "generated_at", "alert_count", "alerts"}
+    assert feed["schema_version"] == "1.0.0"
+    assert staged["schema_version"] == "1.0.0"
+    assert not (tmp_path / publisher.EXTENDED_FEED_FILENAME).exists()
