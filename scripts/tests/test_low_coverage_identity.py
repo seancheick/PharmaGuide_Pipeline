@@ -47,6 +47,17 @@ def test_blend_written_as_forms_stays_held_without_member_amounts(run, pid):
             assert not row.get("quantity")
 
 
+# Sean, November 2: sodium-only labels stay unscored. Sodium is a Nutrition Facts
+# line with no credit (ruling D22), and BHB and D-aspartate print elemental sodium
+# with no amount of the compound, so sodium's evidence must not score them.
+@pytest.mark.parametrize("pid", ["252842", "270737", "252847", "252849"])
+def test_sodium_only_label_stays_unscored(run, pid):
+    _, scored = run(pid)
+    assert scored["quality_score_status"] == "not_scored"
+    assert scored["quality_pillars_v4"] is None
+    assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] == 0.0
+
+
 def test_oyster_whole_extract_is_the_oyster_extract_identity(run):
     enriched, scored = run("330192")
     row = next(r for r in enriched["ingredient_quality_data"]["ingredients"]
