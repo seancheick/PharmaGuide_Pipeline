@@ -133,6 +133,7 @@ SKIP_SUPABASE=0
 SKIP_FLUTTER=0
 SKIP_PRODUCT_IMAGES=0
 SUPABASE_DRY_RUN=0
+EMERGENCY_CATALOG=0
 KEEP_VERSIONS=2
 SCORING_SNAPSHOT_GATE_RAN=0
 
@@ -150,6 +151,7 @@ while (($# > 0)); do
     --skip-assemble)     shift ;;  # accepted for backward compat; no-op now
     --skip-supabase)     SKIP_SUPABASE=1; shift ;;
     --skip-flutter)      SKIP_FLUTTER=1; shift ;;
+    --emergency-catalog) EMERGENCY_CATALOG=1; shift ;;
     --skip-product-images) SKIP_PRODUCT_IMAGES=1; shift ;;
     --supabase-dry-run)  SUPABASE_DRY_RUN=1; shift ;;
     --keep-versions)     KEEP_VERSIONS="${2:?--keep-versions requires N}"; shift 2 ;;
@@ -809,7 +811,20 @@ fi
 # A material rule correction must not leave without its alert. Runs for anything
 # that publishes, including a catalog-only sync, whose detail blobs also carry
 # rule warnings. Compares with the DB the pin names, which is what phones hold.
-if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )) || (( SKIP_FLUTTER == 0 )); then
+#
+# --emergency-catalog: this catalog carries a ban or recall already live in the
+# fast lane, and only unrelated rule review is holding it. Needs a dated override
+# in scripts/data/safety_alerts/rule_gate_emergency_overrides.json, and no blob may
+# show a held change. It can't move the app pin, so the interaction DB stays gated.
+if (( EMERGENCY_CATALOG == 1 )); then
+  (( SKIP_FLUTTER == 1 )) || { err "--emergency-catalog needs --skip-flutter"; exit 1; }
+  run_strict_gate "emergency catalog carries no held rule change" \
+    "$PG_PYTHON" scripts/rule_change_gate.py \
+      --candidate "$DIST_DIR/interaction_db.sqlite" \
+      --pin "$FLUTTER_REPO/tool/interaction_db.release.json" \
+      --emergency --blobs-dir "$DIST_DIR/detail_blobs" \
+      --report "$DIST_DIR/rule_gate_emergency_report.json"
+elif (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )) || (( SKIP_FLUTTER == 0 )); then
   run_strict_gate "material rule changes have their alerts" \
     "$PG_PYTHON" scripts/rule_change_gate.py \
       --candidate "$DIST_DIR/interaction_db.sqlite" \

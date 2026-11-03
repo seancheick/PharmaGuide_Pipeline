@@ -329,16 +329,61 @@ def test_profile_review_metadata_alone_is_not_a_change(tmp_path):
     assert result.ok, result.errors
 
 
-def test_new_pregnancy_contraindication_can_only_be_attested_today(tmp_path):
-    """Alerts match medications only. A condition rule still can't slip through."""
+def test_new_pregnancy_contraindication_needs_an_alert(tmp_path):
+    """An attestation is not a notification: the device can match this locally."""
     base = {**_rule(), "drug_class_rules": [], "condition_rules": []}
     new = {**base, "condition_rules": [
         {"condition_id": "pregnancy", "severity": "contraindicated", "mechanism": "Fake."}
     ]}
+    key = f"{PROFILE_RULE}#condition:pregnancy"
     result = _check(tmp_path, base_rules=[base], cand_rules=[new])
     assert not result.ok
-    assert f"{PROFILE_RULE}#condition:pregnancy" in result.errors[0]
-    assert "alert or a reviewed attestation" in result.errors[0]
+    assert key in result.errors[0]
+    assert "needs a published" in result.errors[0]
+
+    fingerprint = _fp(tmp_path, rules=[new], key=key)
+    attested = _check(
+        tmp_path, base_rules=[base], cand_rules=[new],
+        attestations=[{"rule_key": key, "rule_fingerprint": fingerprint, "reason": "r",
+                       "reviewer": "fake", "date": "2026-11-03"}],
+    )
+    assert not attested.ok
+    covered = _check(
+        tmp_path, base_rules=[base], cand_rules=[new],
+        records=[_alert(fingerprint, rule_id=key)],
+    )
+    assert covered.ok, covered.errors
+
+
+def test_new_life_stage_contraindication_needs_an_alert(tmp_path):
+    base = {**_rule(), "drug_class_rules": []}
+    new = {**base, "pregnancy_lactation": {"pregnancy_category": "contraindicated"}}
+    result = _check(tmp_path, base_rules=[base], cand_rules=[new])
+    assert not result.ok
+    assert "needs a published" in result.errors[0]
+
+
+def test_absent_life_stage_tier_is_absent_not_contraindicated(tmp_path):
+    """Only wording changed, on a block whose other tier is simply not stated."""
+    base = {**_rule(), "drug_class_rules": [], "pregnancy_lactation": {
+        "pregnancy_category": "caution", "lactation_category": None, "notes": "Old."}}
+    new = {**base, "pregnancy_lactation": {**base["pregnancy_lactation"], "notes": "New."}}
+    result = _check(tmp_path, base_rules=[base], cand_rules=[new])
+    assert result.ok, result.errors
+
+
+def test_life_stage_block_with_no_tier_at_all_is_not_hard(tmp_path):
+    base = {**_rule(), "drug_class_rules": [], "pregnancy_lactation": {"notes": "Old."}}
+    new = {**base, "pregnancy_lactation": {"notes": "New."}}
+    assert _check(tmp_path, base_rules=[base], cand_rules=[new]).ok
+
+
+def test_invalid_life_stage_tier_still_fails_closed(tmp_path):
+    base = {**_rule(), "drug_class_rules": [], "pregnancy_lactation": {
+        "pregnancy_category": "caution", "lactation_category": None}}
+    new = {**base, "pregnancy_lactation": {
+        "pregnancy_category": "caution", "lactation_category": "bogus"}}
+    assert not _check(tmp_path, base_rules=[base], cand_rules=[new]).ok
 
 
 @pytest.mark.parametrize(
@@ -419,3 +464,179 @@ def test_release_full_runs_the_gate_before_anything_publishes():
     position = source.index("scripts/rule_change_gate.py")
     assert position < source.index("--publish-flutter-pin \"$FLUTTER_REPO\"")
     assert position < source.index("# Step 5: Sync to Supabase")
+
+
+# --- the emergency path: a catalog carrying a ban must not wait on unrelated review
+
+BAN = {
+    "alert_id": "SA_9999_0002",
+    "revision": 1,
+    "event_type": "ingredient_ban",
+    "status": "published",
+    "retracted": False,
+    "effective_date": "2026-11-01",
+    "scope": {"ingredient_canonical_ids": ["fake_bannedroot"], "dsld_ids": []},
+}
+OVERRIDE = {
+    "alert_id": "SA_9999_0002",
+    "revision": 1,
+    "reason": "Fictional ban must reach the catalog tonight.",
+    "approved_by": "fake",
+    "date": "2026-11-03",
+}
+HELD = {
+    "id": PROFILE_RULE,
+    "subject_ref": {"db": "fake", "canonical_id": "fake_fakeroot"},
+    "drug_class_rules": [{
+        "drug_class_id": "fake_class", "severity": "contraindicated",
+        "alert_headline": "Pinned.", "alert_body": "Pinned body.",
+    }],
+}
+HELD_NEW = {
+    **HELD,
+    "drug_class_rules": [{**HELD["drug_class_rules"][0], "alert_body": "Reworded, unreviewed."}],
+}
+
+
+def _emergency(tmp_path, *, blobs=(), overrides=(OVERRIDE,), records=(BAN,), base=(HELD,),
+               cand=(HELD_NEW,), live=None):
+    (tmp_path / "b").mkdir(exist_ok=True)
+    (tmp_path / "c").mkdir(exist_ok=True)
+    baseline = _db(tmp_path / "b" / "db.sqlite", (), base)
+    candidate = _db(tmp_path / "c" / "db.sqlite", (), cand)
+    alerts = _alerts_dir(tmp_path, *records)
+    (alerts / gate.EMERGENCY_FILENAME).write_text(json.dumps({"overrides": list(overrides)}))
+    blob_dir = tmp_path / "blobs"
+    shutil.rmtree(blob_dir, ignore_errors=True)
+    blob_dir.mkdir()
+    for index, warnings in enumerate(blobs):
+        (blob_dir / f"{index}.json").write_text(json.dumps({"warnings": warnings}))
+    return gate.check_emergency_catalog(
+        candidate, baseline, blob_dir, alerts_dir=alerts,
+        live_revisions={"SA_9999_0002": 1} if live is None else live, today="2026-11-03",
+    )
+
+
+def _warning(body):
+    return {"source_rule_id": PROFILE_RULE, "severity": "contraindicated",
+            "alert_headline": "Pinned.", "alert_body": body}
+
+
+def test_emergency_passes_an_unrelated_hold_the_catalog_does_not_carry(tmp_path):
+    result = _emergency(tmp_path, blobs=[[_warning("Pinned body.")], []])
+    assert result.ok, result.errors
+    assert result.record["alert_id"] == "SA_9999_0002"
+    assert result.record["approved_by"] == "fake"
+    assert result.record["held_rule_keys"] == [DRUG_KEY]
+
+
+def test_emergency_refuses_when_a_blob_carries_the_held_change(tmp_path):
+    result = _emergency(tmp_path, blobs=[[_warning("Reworded, unreviewed.")]])
+    assert not result.ok
+    assert DRUG_KEY in result.errors[0]
+    assert "carried by" in result.errors[0]
+
+
+def test_emergency_refuses_a_held_removal_it_cannot_prove_absent(tmp_path):
+    result = _emergency(tmp_path, cand=())
+    assert not result.ok
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        (),
+        ({**OVERRIDE, "date": "2026-11-01"},),
+        ({**OVERRIDE, "revision": 2},),
+        ({**OVERRIDE, "reason": " "},),
+        ({**OVERRIDE, "approved_by": ""},),
+    ],
+    ids=["none", "stale", "other-revision", "no-reason", "no-approver"],
+)
+def test_emergency_needs_a_complete_override_for_today(tmp_path, overrides):
+    assert not _emergency(tmp_path, overrides=overrides).ok
+
+
+@pytest.mark.parametrize(
+    "records",
+    [
+        (),
+        ({**BAN, "event_type": "interaction_rule"},),
+        ({**BAN, "status": "draft"},),
+        ({**BAN, "status": "retracted", "retracted": True},),
+    ],
+    ids=["missing", "not-a-ban", "draft", "retracted"],
+)
+def test_emergency_needs_a_real_ban_or_recall(tmp_path, records):
+    assert not _emergency(tmp_path, records=records).ok
+
+
+def test_emergency_alert_must_already_be_live(tmp_path):
+    assert not _emergency(tmp_path, live={}).ok
+
+
+def test_emergency_exempts_only_the_named_bans_own_rule(tmp_path):
+    ban_rule = {
+        "id": "RULE_FAKE_BANNEDROOT",
+        "subject_ref": {"db": "fake", "canonical_id": "fake_bannedroot"},
+        "condition_rules": [{"condition_id": "pregnancy", "severity": "contraindicated",
+                             "alert_headline": "Banned.", "alert_body": "Banned body."}],
+    }
+    result = _emergency(
+        tmp_path, base=(), cand=(ban_rule,),
+        blobs=[[{"source_rule_id": "RULE_FAKE_BANNEDROOT", "severity": "contraindicated",
+                 "alert_headline": "Banned.", "alert_body": "Banned body."}]],
+    )
+    assert result.ok, result.errors
+    assert result.record["held_rule_keys"] == []
+
+
+def test_emergency_cli_writes_its_record(tmp_path, monkeypatch, capsys):
+    today = gate.date.today().isoformat()
+    (tmp_path / "b").mkdir()
+    (tmp_path / "c").mkdir()
+    baseline = _db(tmp_path / "b" / "db.sqlite", (), (HELD,))
+    candidate = _db(tmp_path / "c" / "db.sqlite", (), (HELD_NEW,))
+    alerts = _alerts_dir(tmp_path, BAN)
+    (alerts / gate.EMERGENCY_FILENAME).write_text(json.dumps({"overrides": [{**OVERRIDE, "date": today}]}))
+    blobs = tmp_path / "blobs"
+    blobs.mkdir()
+    (blobs / "1.json").write_text(json.dumps({"warnings": []}))
+    report = tmp_path / "report.json"
+    monkeypatch.setattr(gate, "live_alert_revisions", lambda: {"SA_9999_0002": 1})
+
+    code = gate.main([
+        "--candidate", str(candidate), "--baseline", str(baseline), "--alerts-dir", str(alerts),
+        "--emergency", "--blobs-dir", str(blobs), "--report", str(report),
+    ])
+
+    assert code == 0
+    assert "EMERGENCY OVERRIDE" in capsys.readouterr().out
+    assert json.loads(report.read_text())["held_rule_keys"] == [DRUG_KEY]
+
+
+def test_the_normal_gate_ignores_an_emergency_override(tmp_path):
+    """The artifact gate and the app pin have no emergency mode."""
+    (tmp_path / "b").mkdir()
+    (tmp_path / "c").mkdir()
+    baseline = _db(tmp_path / "b" / "db.sqlite", (), (HELD,))
+    candidate = _db(tmp_path / "c" / "db.sqlite", (), (HELD_NEW,))
+    alerts = _alerts_dir(tmp_path, BAN)
+    (alerts / gate.EMERGENCY_FILENAME).write_text(json.dumps({"overrides": [OVERRIDE]}))
+    assert not gate.check_rule_changes(
+        candidate, baseline, alerts_dir=alerts, live_revisions={"SA_9999_0002": 1},
+        today="2026-11-03",
+    ).ok
+
+
+def test_release_full_emergency_path_never_moves_the_pin():
+    source = (Path(gate.__file__).parent / "release_full.sh").read_text()
+    assert '(( SKIP_FLUTTER == 1 )) || { err "--emergency-catalog needs --skip-flutter"' in source
+    assert "--emergency --blobs-dir" in source
+
+
+def test_the_fast_lane_never_waits_on_the_rule_gate():
+    """A ban or recall reaches phones through its own script, whatever is held."""
+    source = (Path(gate.__file__).parent / "sync_safety_alerts.py").read_text()
+    assert "rule_change_gate" not in source
+    assert "supabase_client" in source
