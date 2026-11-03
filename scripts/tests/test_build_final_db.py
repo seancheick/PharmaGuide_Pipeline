@@ -605,8 +605,8 @@ def test_partial_assessments_are_not_ranked_and_do_not_shift_complete_ranks():
 
 
 def test_a_strict_build_refuses_a_product_with_no_safety_assessment_status(tmp_path):
-    # NULL would send the app to its older all-clear rule, so a release candidate
-    # never contains one. The whole build stops; no single product is dropped.
+    # NULL says the safety checks are not known, so a release candidate never
+    # contains one. The whole build stops; no single product is dropped.
     scored = _artifact_from_canned("999", _canned_v4())
     assert scored["safety_assessment_status"] in {"complete", "incomplete"}
     scored.pop("safety_assessment_status")

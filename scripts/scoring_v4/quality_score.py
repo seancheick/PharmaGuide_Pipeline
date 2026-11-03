@@ -33,7 +33,7 @@ from scoring_v4.penalty_registry import (
 )
 from scoring_v4.pillar_explanations import (
     CONSUMER, FINISHED_REVIEW_RECORD_COUNT_FACT, attach_pillar_explanations, audit_fact,
-    facts_block, _proprietary_blend_facts,
+    every_strain_count_printed, facts_block, _proprietary_blend_facts,
 )
 
 _CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
@@ -644,6 +644,9 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
             and _band(val, weight) == "high"
         ):
             reason = (
+                "The label prints a live-culture count for every strain; "
+                "their individual weights in the blend are not listed."
+                if every_strain_count_printed(metadata) else
                 "Most amounts are disclosed, but ingredients in a proprietary "
                 "blend are listed without their individual amounts."
             )

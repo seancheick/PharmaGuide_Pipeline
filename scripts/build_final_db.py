@@ -10707,7 +10707,7 @@ def compute_v4_category_percentiles(
 
 
 def _safety_assessment_status_value(scored: Dict) -> Optional[str]:
-    """Only a declared value reaches the column; NULL makes the app withhold."""
+    """Only a declared value reaches the column; anything else is NULL, meaning not known."""
     value = scored.get("safety_assessment_status")
     return value if value in {"complete", "incomplete"} else None
 
@@ -11557,7 +11557,7 @@ def build_final_db(
             ),
         )
 
-    # NULL sends the app to its older all-clear rule, so a release candidate never
+    # NULL says the safety checks are not known, so a release candidate never
     # contains one. The build stops as a whole, so no product is dropped over it.
     if strict:
         missing_safety_status = c.execute(

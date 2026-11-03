@@ -226,3 +226,32 @@ def test_an_open_review_keeps_an_applicability_finding_and_reads_partial(pipelin
     assert scored["quality_assessment_status"] == "partial"
     assert evidence["display_state"] == "applicability_unestablished"
     assert evidence["score"] == 0
+
+
+# --- Transparency: a printed count per strain is not a hidden amount --------
+
+def test_a_probiotic_printing_every_strains_count_is_not_called_hidden(pipeline):
+    # 217182 prints 420, 420 and 160 million viable microorganisms per strain.
+    transparency = _score(pipeline, _raw("a9_probiotic_every_strain_count_217182_raw.json"))[
+        "quality_pillars_v4"]["transparency"]
+    assert transparency["score"] == 15.0
+    assert transparency["reason"] == (
+        "The label prints a live-culture count for every strain; "
+        "their individual weights in the blend are not listed.")
+    facts = {fact["id"]: fact for fact in transparency["explanation"]["facts"]}
+    assert facts["undisclosed_ingredient_amount_count"]["audience"] == "audit"
+
+
+@pytest.mark.parametrize("disclosed", [0, 2])
+def test_a_probiotic_missing_a_strain_count_keeps_the_hidden_amount(disclosed):
+    from scoring_v4.quality_score import _pillar_from_dim
+
+    transparency = _pillar_from_dim("transparency", {
+        "score": 15.0, "max": 15.0, "penalties": {},
+        "metadata": {
+            "total_strain_count": 3, "per_strain_cfu_disclosed_count": disclosed,
+            "flags": ["PROPRIETARY_BLEND_PRESENT"],
+            "B5_blend_evidence": [{"children_without_amount_count": 3}],
+        },
+    }, 15.0, "module")
+    assert transparency["reason"].startswith("Most amounts are disclosed")

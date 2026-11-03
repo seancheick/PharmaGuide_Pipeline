@@ -101,6 +101,12 @@ def _omega_formulation_facts(formulation_dim: Dict[str, Any]) -> List[Dict[str, 
     ]
 
 
+def every_strain_count_printed(metadata: Dict[str, Any]) -> bool:
+    """True when the probiotic owner found a printed count for each strain."""
+    total = _nonnegative_int(metadata.get("total_strain_count"))
+    return bool(total) and metadata.get("per_strain_cfu_disclosed_count") == total
+
+
 def _proprietary_blend_facts(transparency_dim: Dict[str, Any]) -> List[Dict[str, Any]]:
     metadata = transparency_dim.get("metadata") if isinstance(transparency_dim, dict) else None
     evidence = metadata.get("B5_blend_evidence") if isinstance(metadata, dict) else None
@@ -127,7 +133,8 @@ def _proprietary_blend_facts(transparency_dim: Dict[str, Any]) -> List[Dict[str,
             "label": "Ingredient amounts not disclosed",
             "value_display": str(hidden_count),
             # The disclosure gap is the key fact only when an amount is hidden.
-            "audience": CONSUMER if hidden_count else AUDIT,
+            # Weights are not hidden amounts when every strain's count is printed.
+            "audience": CONSUMER if hidden_count and not every_strain_count_printed(metadata) else AUDIT,
         },
     ]
 
