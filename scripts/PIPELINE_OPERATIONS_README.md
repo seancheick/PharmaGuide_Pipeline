@@ -2,6 +2,26 @@
 
 > Canonical operator runbook | Batch/release flow checked against entry points: 2026-11-02
 
+## Release progress and upload recovery
+
+Each strict gate announces STARTING, reports fingerprint progress, and emits a
+STILL RUNNING heartbeat while its child is quiet. A failed gate prints its log
+tail and the release reports the phase that failed. These messages do not waive
+any gate or prove that publication completed.
+
+Upload discovery first uses the existing keyset inventory RPC reader without its
+whole-bucket summary, solely for positive existence hints. Missing objects still
+use create-only uploads; destructive inventory retains summary validation. If the
+RPC reader is unavailable or invalid, bounded storage listing retries classified
+transient failures and cancels queued shards after a terminal failure. A persistent
+server timeout remains a failed release, never an empty inventory or permission
+to activate incomplete data.
+
+Scoring source proofs larger than 32 MiB are ignored instead of parsed into memory.
+The audit retains its current dataset index but no longer serializes complete
+joined source products into the proof cache. Content, manifest and expiry checks
+remain in force. No stat-only cross-run checksum cache is used.
+
 ## 1. Which command should I run?
 
 For a retry that reuses verified computation, add `--resume` to the normal full

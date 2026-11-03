@@ -149,6 +149,7 @@ trap cleanup_candidates EXIT
 
 run_strict_gate() {
   local label="$1"; shift
+  RELEASE_PHASE="$label"
   echo "◦ Strict gate: $label"
   "$PG_PYTHON" "$REPO_ROOT/scripts/audits/run_verification_gate.py" \
     --name "$label" --receipt-dir "$REPO_ROOT/scripts/reports/release-gates" \

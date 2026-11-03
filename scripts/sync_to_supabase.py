@@ -36,6 +36,7 @@ DEFAULT_PROGRESS_EVERY = 500
 # Ensure scripts/ is on the path for sibling imports (supabase_client)
 sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
+from release_safety.transient import is_transient_error
 from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, core_db_remote_path
 from audit_source_of_truth_contract import check_v4_pillar_contract
 
@@ -474,6 +475,11 @@ def filter_pending_blob_uploads(uploads, existing_remote_paths):
 _TRANSIENT_DISCOVERY_ERRORS = (json.JSONDecodeError, OSError)
 
 
+def _retryable_discovery_error(exc):
+    """JSON/socket failures and classified Storage 544s are worth another try."""
+    return isinstance(exc, _TRANSIENT_DISCOVERY_ERRORS) or is_transient_error(exc)
+
+
 def _list_with_retries(
     list_fn,
     client,
@@ -495,12 +501,34 @@ def _list_with_retries(
     for attempt in range(retries + 1):
         try:
             return list_fn(client, bucket, directory, limit=limit, offset=offset)
-        except _TRANSIENT_DISCOVERY_ERRORS as exc:
+        except Exception as exc:
+            if not _retryable_discovery_error(exc):
+                raise
             last_error = exc
+            print(
+                f"Listing {directory} offset {offset} failed "
+                f"(attempt {attempt + 1}/{retries + 1}): {type(exc).__name__}: {exc}",
+                flush=True,
+            )
             if attempt >= retries:
                 raise
             sleep_fn(base_delay * (2 ** attempt))
     raise last_error  # pragma: no cover - defensive; loop always returns or raises
+
+
+def list_detail_blob_page(client, bucket_name, prefix, limit=1000, offset=0):
+    """List one detail-blob shard page with the inventory timeout.
+
+    ``list_storage_paths`` stays an unbounded ``bucket.list()`` delegate.
+    Discovery uses this wrapper so a Storage 544 fails in about 45 seconds
+    and can be retried, instead of hanging on the storage client's timeout.
+    """
+    from release_safety.blob_inventory import PAGE_TIMEOUT_SECONDS, list_storage_page
+
+    bucket = client.storage.from_(bucket_name)
+    return list_storage_page(
+        bucket, prefix, offset, limit=limit, timeout_seconds=PAGE_TIMEOUT_SECONDS,
+    )
 
 
 def _discover_existing_remote_paths_for_directory(
@@ -516,6 +544,10 @@ def _discover_existing_remote_paths_for_directory(
     existing = set()
     offset = 0
     while True:
+        print(
+            f"Listing {directory} offset {offset} | matched {len(existing)}/{len(expected_paths)}",
+            flush=True,
+        )
         page = _list_with_retries(
             list_fn,
             client,
@@ -572,6 +604,21 @@ def discover_existing_remote_blob_paths(
     grouped = partition_remote_paths_by_directory(uploads)
     if not grouped:
         return set()
+    if bucket == STORAGE_BUCKET:
+        from release_safety.blob_inventory import inventory_detail_blobs_via_rpc, RpcInventoryError
+        try:
+            # Positive existence hints only: absent objects still use create-only
+            # uploads. Destructive inventory callers retain summary verification.
+            inventory = inventory_detail_blobs_via_rpc(
+                client, verify_summary=False,
+                shards=[directory.rsplit("/", 1)[-1] for directory in grouped])
+            if not inventory.complete:
+                raise RpcInventoryError('Inventory contains invalid object placement')
+            expected = {item['remote_path'] for item in uploads}
+            return {f'shared/details/sha256/{digest[:2]}/{digest}.json'
+                    for digest in inventory.hashes} & expected
+        except RpcInventoryError as exc:
+            print(f'RPC discovery unavailable: {exc}; using bounded shard listing', flush=True)
 
     if max_workers <= 1 or len(grouped) == 1:
         existing = set()
@@ -614,6 +661,10 @@ def discover_existing_remote_blob_paths(
             try:
                 existing.update(future.result())
             except Exception as exc:
+                # Stop queued pages after failure; running requests retain their
+                # bounded timeout, but the rest cannot help this failed sync.
+                for pending in futures:
+                    pending.cancel()
                 raise RuntimeError(
                     "Failed listing remote detail-blob shard "
                     f"{directory}: {type(exc).__name__}: {exc}"
@@ -1507,7 +1558,7 @@ def sync(
     print("\nDiscovering existing remote hashed blobs...")
     start = time.time()
     existing_remote_paths = discover_existing_remote_blob_paths(
-        client, bucket, uploads, list_storage_paths,
+        client, bucket, uploads, list_detail_blob_page,
         max_workers=min(max_workers, DEFAULT_DISCOVERY_WORKERS),
         client_factory=get_supabase_client,
     )

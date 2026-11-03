@@ -947,6 +947,69 @@ def test_list_with_retries_does_not_retry_non_transient_errors():
     assert attempts["count"] == 1
 
 
+def test_list_with_retries_retries_storage_database_timeout():
+    """HTTP 544 DatabaseTimeout is transient even though it is not an OSError."""
+    from sync_to_supabase import _list_with_retries
+
+    class DatabaseTimeout(Exception):
+        def __init__(self):
+            super().__init__("DatabaseTimeout")
+            self.status = 544
+
+    attempts = {"count": 0}
+
+    def list_fn(_client, _bucket, _directory, limit, offset):
+        attempts["count"] += 1
+        if attempts["count"] == 1:
+            raise DatabaseTimeout()
+        return [{"name": "ok.json"}]
+
+    sleeps = []
+    page = _list_with_retries(
+        list_fn,
+        client=None,
+        bucket="b",
+        directory="shared/details/sha256/00",
+        limit=1000,
+        offset=0,
+        retries=3,
+        base_delay=0.5,
+        sleep_fn=sleeps.append,
+    )
+    assert page == [{"name": "ok.json"}]
+    assert attempts["count"] == 2
+    assert sleeps == [0.5]
+
+
+def test_detail_blob_page_uses_the_inventory_timeout(monkeypatch):
+    from sync_to_supabase import list_detail_blob_page
+    import release_safety.blob_inventory as inventory
+
+    seen = {}
+
+    def fake_page(bucket, prefix, offset, *, limit=None, timeout_seconds=None):
+        seen.update(bucket=bucket, prefix=prefix, offset=offset, limit=limit, timeout=timeout_seconds)
+        return [{"name": "a.json"}]
+
+    class Storage:
+        def from_(self, name):
+            return {"bucket": name}
+
+    monkeypatch.setattr(inventory, "list_storage_page", fake_page)
+    page = list_detail_blob_page(
+        type("Client", (), {"storage": Storage()})(),
+        "pharmaguide",
+        "shared/details/sha256/00",
+        limit=1000,
+        offset=0,
+    )
+    assert page == [{"name": "a.json"}]
+    assert seen["timeout"] == inventory.PAGE_TIMEOUT_SECONDS
+    assert seen["prefix"] == "shared/details/sha256/00"
+    assert seen["bucket"] == {"bucket": "pharmaguide"}
+    assert seen["limit"] == 1000
+
+
 def test_discover_existing_remote_paths_for_directory_recovers_from_transient_jsondecodeerror():
     """Integration test: the discovery loop survives a single Supabase
     list() returning non-JSON. This is the exact scenario that killed
@@ -1306,3 +1369,38 @@ def test_historical_version_collision_refused_before_any_storage_write(tmp_path,
     with pytest.raises(ValueError, match='mutate'):
         syncer.sync(str(tmp_path), max_workers=1, retry_count=0)
     assert writes == []
+
+
+def test_failed_discovery_cancels_queued_shards(monkeypatch):
+    import sync_to_supabase as syncer
+    from concurrent.futures import Future
+    queued = []
+    class Pool:
+        def __init__(self, max_workers): pass
+        def __enter__(self): return self
+        def __exit__(self, *args):
+            assert all(f.cancelled() for f in queued[1:])
+        def submit(self, *args):
+            future = Future()
+            if not queued:
+                future.set_exception(ValueError('listing refused'))
+            queued.append(future)
+            return future
+    monkeypatch.setattr(syncer, 'ThreadPoolExecutor', Pool)
+    uploads = [{'remote_path': f'shared/details/sha256/{i:02x}/blob.json'} for i in range(8)]
+    with pytest.raises(RuntimeError, match='listing refused'):
+        syncer.discover_existing_remote_blob_paths(None, 'bucket', uploads, None, max_workers=2)
+
+
+def test_discovery_uses_verified_inventory_without_storage_search(monkeypatch):
+    import sync_to_supabase as syncer
+    import release_safety.blob_inventory as inventory
+    from types import SimpleNamespace
+    digest = 'a' * 64
+    path = f'shared/details/sha256/aa/{digest}.json'
+    monkeypatch.setattr(inventory, 'inventory_detail_blobs_via_rpc',
+                        lambda client, **kwargs: SimpleNamespace(complete=True, hashes={digest}))
+    def refused(*args, **kwargs):
+        raise AssertionError('slow storage search must not run')
+    assert syncer.discover_existing_remote_blob_paths(
+        object(), 'pharmaguide', [{'remote_path': path}], refused) == {path}

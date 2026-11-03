@@ -240,7 +240,9 @@ def describe_release_plan(repo: Path) -> None:
     """Read-only recovery plan from the same owners execution uses."""
     from dataset_paths import brand_dataset_root
     from pipeline_freshness import dataset_resume_plan
-    from audits.run_verification_gate import release_gate_input_globs, release_gate_options, _can_reuse
+    from audits.run_verification_gate import (
+        release_gate_input_globs, release_gate_options, _can_reuse,
+    )
     repo = repo.resolve()
     raw = brand_dataset_root()
     datasets = [(p.name, p) for p in sorted(raw.iterdir()) if p.is_dir()] if raw.is_dir() else []
