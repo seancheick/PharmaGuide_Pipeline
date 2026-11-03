@@ -7010,6 +7010,17 @@ def _stamp_dose_contract(
             daily = tuple(analyzed.get(key) for key in ("per_day_min", "per_day_max", "converted_unit"))
             if all(value is not None for value in daily):
                 row["per_day_min"], row["per_day_max"], row["converted_unit"] = daily
+            if "low_per_day" in safe_dict(analyzed.get("safety_exposure")):
+                row["safety_exposure"] = dict(analyzed["safety_exposure"])
+            continue
+        parent = analyzed_by_path.get(safe_str(row.get("raw_source_path")).rpartition(".nestedRows[")[0])
+        if (
+            parent is not None
+            and parent.get("dose_role") == "form_component"
+            and row.get("canonical_id") == parent.get("canonical_id")
+        ):
+            # Under a component of the same identity: part of that component.
+            row["dose_role"] = "form_component"
             continue
         amount = row.get("normalized_amount")
         unit = row.get("normalized_unit")

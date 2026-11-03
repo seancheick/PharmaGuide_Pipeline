@@ -845,7 +845,7 @@ def test_reviewed_two_capsule_panel_fixes_shared_basis_not_amounts(preparation_s
     assert clean["servingSizes"][0]["minQuantity"] == 2
     enriched, _ = SupplementEnricherV3().enrich_product(clean)
     for nutrient, expected in [("vitamin_a", 1500), ("vitamin_d", 50), ("vitamin_e", 67), ("magnesium", 100), ("zinc", 25)]:
-        [row] = [a for a in enriched["rda_ul_data"]["adequacy_results"] if a.get("canonical_id") == nutrient and a.get("ul_status") != "skipped_compound_duplicate_row"]
+        [row] = [a for a in enriched["rda_ul_data"]["adequacy_results"] if a.get("canonical_id") == nutrient and a.get("ul_status") not in {"skipped_compound_duplicate_row", "skipped_form_component_of_declared_total"}]
         assert row["per_day_min"] == pytest.approx(expected)
         assert row["per_day_max"] == pytest.approx(expected)
     [vitamin_a] = [a for a in enriched["rda_ul_data"]["adequacy_results"] if a.get("canonical_id") == "vitamin_a"]

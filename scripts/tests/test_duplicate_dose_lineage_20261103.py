@@ -143,19 +143,26 @@ def test_a_compound_mass_reconciled_to_its_elemental_row_is_one_exposure(enriche
     ],
 )
 def test_real_additive_rows_stay_summed(enriched, dsld_id):
-    """Each of these labels prints separate physical amounts."""
+    """Each of these labels prints separate physical amounts. Vitamin E mixtures, on
+    49236, are bounded by the declared row and have their own test."""
     assert not [
         (r["ingredient"], r["quantity"], r["dose_role"])
         for r in _rows(enriched(dsld_id))
-        if r.get("dose_role") == "form_component"
+        if r.get("dose_role") == "form_component" and r.get("canonical_id") != "vitamin_e"
     ]
 
 
-def test_a_mixture_printed_beside_vitamin_e_stays_its_own_row(enriched):
-    """210808: Vitamin E 45 IU + Gamma-E 360 mg. Its vitamin K rows are a breakdown."""
+def test_a_mixture_printed_beside_vitamin_e_bounds_it_and_is_not_counted_again(enriched):
+    """210808: Vitamin E 45 IU + Gamma-E 360 mg. The mixture's alpha share is not printed,
+    so its mass can only raise the declared row's high figure."""
     rows = [r for r in _rows(enriched("210808")) if r.get("canonical_id") == "vitamin_e"]
-    assert {r["ingredient"] for r in rows} == {"Vitamin E", "Gamma-E Mixed Tocopherols"}
-    assert {r["dose_role"] for r in rows} == {"declared_total"}
+    by_name = {r["ingredient"]: r for r in rows}
+    assert by_name["Gamma-E Mixed Tocopherols"]["dose_role"] == "form_component"
+    declared = by_name["Vitamin E"]
+    assert declared["dose_role"] == "declared_total"
+    exposure = declared["safety_exposure"]
+    assert exposure["low_per_day"] == pytest.approx(exposure["per_day"])
+    assert exposure["high_per_day"] == pytest.approx(exposure["per_day"] + 360 * declared["servings_per_day_max"])
 
 
 def test_magnesium_85_and_15_still_total_100(enriched):
@@ -216,7 +223,9 @@ def test_a_kept_total_never_falls_below_a_relabelled_row(enriched, dsld_id):
             and r.get("dose_role") == "declared_total"
             and r.get("source_label_key") == row.get("parent_label_key")
         ]
-        assert (_exposure(owner) or 0) >= (_exposure(row) or 0) * 0.95
+        # A vitamin E mixture's mass is bounded by the owner's high figure, not its exact one.
+        kept = owner["safety_exposure"].get("high_per_day", _exposure(owner) or 0)
+        assert kept >= (_exposure(row) or 0) * 0.95
 
 
 @pytest.mark.parametrize("dsld_id", ["271087", "62812", "317118"])
@@ -501,3 +510,131 @@ def test_a_lower_qualified_amount_leaves_no_upper_figure(enricher):
 
 def test_no_caffeine_rows_means_no_total(enricher):
     assert enricher._distinct_caffeine_dose({}, [{"canonical_id": "magnesium", "quantity": 100.0, "unit": "mg"}]) is None
+
+
+@pytest.mark.parametrize(
+    "dsld_id,low,high",
+    [
+        pytest.param("64845", 80.0, 176.3, id="alpha-minimums-exceed-the-declaration"),
+        pytest.param("64848", 60.3, 138.3, id="declaration-exceeds-the-alpha-minimum"),
+        pytest.param("62796", 66.196, 127.826, id="one-a-day-two-mixtures"),
+        pytest.param("63428", 84.26, 180.106, id="iu-declaration-two-mixtures"),
+        pytest.param("49236", 30.52, 73.23, id="one-mixture-minimum-just-over"),
+        pytest.param("60404", 30.52, 73.23, id="same-softgel-in-a-packet"),
+        pytest.param("307739", 26.0, 776.0, id="complex-prints-no-alpha"),
+    ],
+)
+def test_the_declared_row_carries_the_alpha_range_at_max_servings(enriched, dsld_id, low, high):
+    product = enriched(dsld_id)
+    [declared] = [r for r in _rows(product, "Vitamin E")]
+    exposure = declared["safety_exposure"]
+    assert exposure["low_per_day"] == pytest.approx(low)
+    assert exposure["high_per_day"] == pytest.approx(high)
+    assert exposure["unit"] == "mg"
+
+
+@pytest.mark.parametrize(
+    "dsld_id,per_day",
+    [("64845", 60.3), ("62796", 66.196), ("307739", 26.0)],
+)
+def test_the_exact_declared_figure_stays_for_existing_readers(enriched, dsld_id, per_day):
+    [declared] = _rows(enriched(dsld_id), "Vitamin E")
+    assert declared["safety_exposure"]["per_day"] == pytest.approx(per_day)
+
+
+@pytest.mark.parametrize("dsld_id", ["64845", "62796", "63428", "49236", "307739"])
+def test_only_the_declared_row_is_read_as_vitamin_e(enriched, dsld_id):
+    """Gamma, delta and printed alpha rows stay in the ledger; none is a second exposure."""
+    product = enriched(dsld_id)
+    blob = build_detail_blob(product, score_product_v4(product))
+    readable = [
+        row["name"] for row in blob["ingredients"]
+        if row.get("canonical_id") == "vitamin_e"
+        and row.get("dose_role") not in NOT_AN_EXPOSURE
+        and row.get("per_day_max") is not None
+    ]
+    assert readable == ["Vitamin E"]
+    assert [r["ingredient"] for r in blob["rda_ul_data"]["analyzed_ingredients"]
+            if r.get("canonical_id") == "vitamin_e"] == ["Vitamin E"]
+
+
+def test_the_range_reaches_the_export(enriched):
+    product = enriched("64845")
+    blob = build_detail_blob(product, score_product_v4(product))
+    [row] = [r for r in blob["ingredients"] if r.get("name") == "Vitamin E"]
+    assert row["safety_exposure"]["low_per_day"] == pytest.approx(80.0)
+    [analyzed] = [r for r in blob["rda_ul_data"]["analyzed_ingredients"] if r["ingredient"] == "Vitamin E"]
+    assert analyzed["safety_exposure"]["high_per_day"] == pytest.approx(176.3)
+
+
+def test_an_exact_vitamin_e_row_has_no_range(enricher):
+    rows = [{"name": "Vitamin E", "standardName": "Vitamin E", "canonical_id": "vitamin_e",
+             "quantity": 100.0, "unit": "mg", "forms": [{"name": "d-alpha tocopherol"}],
+             "raw_source_path": "ingredientRows[0]", "dailyValue": 667.0}]
+    [row] = _collect(enricher, rows)
+    assert "low_per_day" not in row["safety_exposure"]
+
+
+def test_a_printed_range_does_not_survive_a_changed_row():
+    """A manufacturer revision must not inherit an old printed range."""
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._label_corrections_by_dsld_id = {
+        "1": {
+            "raw_ingredient_text": "Alpha-Tocopherol",
+            "printed_alpha_tocopherol_ranges": {"ingredientRows[0]": {"low": 27, "high": 39}},
+        }
+    }
+    same = [{"name": "Alpha-Tocopherol", "raw_source_path": "ingredientRows[0]",
+             "quantity": [{"quantity": 39, "unit": "mg"}]}]
+    changed = [{"name": "Alpha-Tocopherol", "raw_source_path": "ingredientRows[0]",
+                "quantity": [{"quantity": 41, "unit": "mg"}]}]
+    assert normalizer._apply_label_corrections(same, "1")[0]["printed_alpha_range_mg"] == {"low": 27, "high": 39}
+    assert "printed_alpha_range_mg" not in normalizer._apply_label_corrections(changed, "1")[0]
+
+
+def _vitamin_e_decision(product):
+    alerts = [a for a in product["interaction_profile"]["ingredient_alerts"]
+              if a["rule_id"] == "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS"]
+    return {
+        (hit["dose_decision"].get("evaluation_status"),
+         (hit["dose_decision"].get("dose_evaluation") or {}).get("converted_amount"))
+        for alert in alerts for hit in alert["condition_hits"]
+        if hit["condition_id"] == "pregnancy" and hit.get("dose_decision")
+    }
+
+
+@pytest.mark.parametrize("dsld_id,low", [("64845", 80.0), ("62796", 66.196), ("307739", 26.0)])
+def test_the_pregnancy_rule_reads_the_same_range_and_rules_out_excess(enriched, dsld_id, low):
+    [(status, amount)] = _vitamin_e_decision(enriched(dsld_id))
+    assert status == "below_threshold"
+    assert amount == pytest.approx(low)
+
+
+def test_a_range_straddling_the_limit_is_not_within_it(enricher):
+    decision = enricher._evaluate_dose_thresholds_for_target(
+        thresholds=[{"scope": "condition", "target_id": "pregnancy", "basis": "per_day",
+                     "comparator": ">", "value": 1000, "unit": "mg",
+                     "severity_if_met": "avoid", "severity_if_not_met": "monitor"}],
+        target_type="condition",
+        target_id="pregnancy",
+        ingredient={"name": "Vitamin E", "standard_name": "Vitamin E", "quantity": 400.0,
+                    "quantity_upper": 1200.0, "unit": "mg"},
+        servings_per_day_max=1.0,
+        base_severity="monitor",
+    )[1]
+    assert decision["evaluation_status"] == "form_unknown"
+
+
+def test_a_low_above_the_limit_establishes_the_excess(enricher):
+    decision = enricher._evaluate_dose_thresholds_for_target(
+        thresholds=[{"scope": "condition", "target_id": "pregnancy", "basis": "per_day",
+                     "comparator": ">", "value": 1000, "unit": "mg",
+                     "severity_if_met": "avoid", "severity_if_not_met": "monitor"}],
+        target_type="condition",
+        target_id="pregnancy",
+        ingredient={"name": "Vitamin E", "standard_name": "Vitamin E", "quantity": 1100.0,
+                    "quantity_upper": 1500.0, "unit": "mg"},
+        servings_per_day_max=1.0,
+        base_severity="monitor",
+    )[1]
+    assert decision["evaluation_status"] == "above_threshold"

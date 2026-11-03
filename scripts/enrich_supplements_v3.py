@@ -20661,6 +20661,39 @@ class SupplementEnricherV3:
             },
         }
 
+    def _distinct_vitamin_e_dose(
+        self, product: Dict[str, Any], servings_per_day_max: float
+    ) -> Optional[Dict[str, Any]]:
+        """The range every vitamin E dose rule judges, from the rows the RDA owner kept.
+
+        A single exact row keeps its own evaluation. Otherwise distinct exposures
+        add: exact rows at their figure, form-range rows at their low and high.
+        """
+        rows = [
+            row for row in (product.get("rda_ul_data") or {}).get("analyzed_ingredients") or []
+            if isinstance(row, dict)
+            and row.get("canonical_id") == "vitamin_e"
+            and row.get("dose_role") not in {"form_component", "ul_scoped_component"}
+        ]
+        low = high = 0.0
+        for row in rows:
+            exposure = row.get("safety_exposure") or {}
+            per_day = self._to_float_safe(exposure.get("per_day"))
+            if per_day is None or _rda_mass_unit_key(exposure.get("unit")) != "mg":
+                return None
+            row_low = self._to_float_safe(exposure.get("low_per_day"))
+            row_high = self._to_float_safe(exposure.get("high_per_day"))
+            low += per_day if row_low is None else row_low
+            high += per_day if row_high is None else row_high
+        if not servings_per_day_max or not (
+            len(rows) > 1 or any("low_per_day" in (row.get("safety_exposure") or {}) for row in rows)
+        ):
+            return None
+        return {
+            "quantity": low / servings_per_day_max,
+            "quantity_upper": high / servings_per_day_max,
+        }
+
     def _evaluate_dose_thresholds_for_target(
         self,
         thresholds: List[Dict[str, Any]],
@@ -20686,7 +20719,11 @@ class SupplementEnricherV3:
         unit = self._normalize_threshold_unit(ingredient.get("unit"))
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
-        if quantity is None or quantity <= 0 or not unit:
+        if (
+            quantity is None
+            or (quantity <= 0 and ingredient.get("quantity_upper") is None)
+            or not unit
+        ):
             policy = relevant[0]
             result = {
                 "evaluated": False,
@@ -21481,6 +21518,9 @@ class SupplementEnricherV3:
             enriched if isinstance(enriched, dict) else {},
             [row for _, row in all_ingredient_rows],
         )
+        vitamin_e_dose = self._distinct_vitamin_e_dose(
+            enriched if isinstance(enriched, dict) else {}, servings_per_day_max
+        )
 
         for source_bucket, ingredient in all_ingredient_rows:
             safety_refs = (
@@ -21579,6 +21619,18 @@ class SupplementEnricherV3:
                         "unit": "mg",
                         "unit_normalized": "mg",
                         "dose_source": "distinct_caffeine_total",
+                    }
+                elif (
+                    vitamin_e_dose
+                    and subject["canonical_id"] == "vitamin_e"
+                    and rule_subject.get("canonical_id") == "vitamin_e"
+                ):
+                    dose_row = {
+                        **base_dose_row,
+                        **vitamin_e_dose,
+                        "unit": "mg",
+                        "unit_normalized": "mg",
+                        "dose_source": "distinct_vitamin_e_range",
                     }
                 if declared_owner is not None and (
                     subject["db"] == "ingredient_quality_map"
@@ -22483,6 +22535,96 @@ class SupplementEnricherV3:
             <= max(0.5, total_mcg_dfe * 0.025)
         )
 
+    def _stamp_vitamin_e_ranges(
+        self,
+        family_rows: List[Tuple[Dict[str, Any], float, str]],
+        active_ingredients: List[Dict[str, Any]],
+        compound_owners: Dict[int, Dict[str, Any]],
+    ) -> None:
+        """Add `low_per_day` and `high_per_day` to a form-range row's safety exposure.
+
+        At maximum servings, in UL mass. `per_day` stays for existing readers.
+        Lows above a limit establish an excess, highs at or below it rule one out,
+        and anything between is unresolved. A row that mixtures are linked to carries
+        the family: its own low, and its own high plus the mixtures' mass, a printed
+        parent counting once against its children. Printed alpha ranges narrow that:
+        at least the declaration or the printed minimums, at most the declaration
+        plus the printed maximums. Non-alpha forms are not alpha exposure.
+        """
+        by_path = {
+            str(row.get("raw_source_path")): row
+            for row in active_ingredients
+            if isinstance(row, dict) and row.get("raw_source_path")
+        }
+        owners = {
+            str(owner.get("raw_source_path"))
+            for row in active_ingredients
+            if isinstance(row, dict)
+            and (owner := compound_owners.get(id(row))) is not None
+            and str(owner.get("canonical_id") or "") == "vitamin_e"
+        }
+        printed = [
+            row["printed_alpha_range_mg"] for row in by_path.values()
+            if row.get("printed_alpha_range_mg")
+        ]
+        amounts = {path: amount_mg for _, amount_mg, path in family_rows if path}
+
+        def _is_family(row: Dict[str, Any]) -> bool:
+            name = self._normalize_text(row.get("name") or "")
+            return (
+                str(row.get("canonical_id") or "") == "vitamin_e"
+                or "tocopherol" in name
+                or "tocotrienol" in name
+            )
+
+        def _tree_mg(path: str, family: List[str], servings: float) -> float:
+            row = by_path[path]
+            mass = amounts.get(path)
+            if mass is None:
+                factor = {"g": 1000.0, "mg": 1.0, "mcg": 0.001}.get(_rda_mass_unit_key(row.get("unit")) or "")
+                mass = (self._to_float_safe(row.get("quantity")) or 0.0) * (factor or 0.0) * servings
+            children = sum(
+                _tree_mg(child, family, servings) for child in family
+                if child.rpartition(".nestedRows[")[0] == path
+            )
+            return max(mass, children)
+
+        for rda_row, amount_mg, path in family_rows:
+            source = by_path.get(path)
+            servings = self._to_float_safe(rda_row.get("servings_per_day_max"))
+            quantity = self._to_float_safe((source or {}).get("quantity"))
+            if (
+                source is None or not servings or quantity is None
+                or rda_row.get("dose_role") in {"form_component", "ul_scoped_component"}
+            ):
+                continue
+            bounds = (
+                self._ul_exposure_bounds_for_threshold(
+                    amount=quantity * servings,
+                    from_unit=str(source.get("unit") or ""),
+                    target_unit="mg",
+                    ingredient_name=str(source.get("name") or ""),
+                    standard_name=str(source.get("standardName") or ""),
+                )
+                if rda_row.get("skip_ul_check")
+                else None
+            )
+            low, high = bounds if bounds is not None else (amount_mg, amount_mg)
+            if path in owners and printed:
+                low = max(low, sum(item["low"] for item in printed) * servings)
+                high += sum(item["high"] for item in printed) * servings
+            elif path in owners:
+                family = [
+                    other for other, row in by_path.items()
+                    if other != path and _is_family(row)
+                ]
+                high += sum(
+                    _tree_mg(root, family, servings) for root in family
+                    if root.rpartition(".nestedRows[")[0] not in family
+                )
+            if low != high:
+                rda_row["safety_exposure"].update(low_per_day=low, high_per_day=high)
+
     def _repeated_declaration_links(
         self,
         active_ingredients: List[Dict[str, Any]],
@@ -22502,8 +22644,10 @@ class SupplementEnricherV3:
           blend's name contains the top row's form).
         - A source compound beside its nutrient: the dual-declaration owner's
           verdict, for a compound nested directly under that nutrient, or a
-          top-level compound whose mass is at least the nutrient's. Vitamin E
-          mixtures are a form question, not a compound one, and stay out.
+          top-level compound whose mass is at least the nutrient's.
+        - A vitamin E mixture beside its declared row: the same owner's verdict,
+          though its alpha share is unknown. It is not a second exposure; its mass
+          only raises the declared row's high figure.
         - A parent total above a breakdown: the parent passes the UL gate, its
           direct children of the same identity don't, it prints a mass, and each
           child and their sum stay within it after unit conversion.
@@ -22580,7 +22724,10 @@ class SupplementEnricherV3:
 
         for row in rows:
             owner = compound_owners.get(id(row))
-            if owner is None or canonical_of(row) == "vitamin_e":
+            if owner is None:
+                continue
+            if canonical_of(row) == "vitamin_e":
+                _link(row, owner)
                 continue
             if _is_nested(row):
                 if _parent_path(row) == str(owner.get("raw_source_path") or ""):
@@ -25624,6 +25771,12 @@ class SupplementEnricherV3:
                     unlinked_family_amount_mg
                     + sum(_vitamin_e_tree_bound(root) for root in family_roots)
                 )
+                if not vitamin_e_family_invalid:
+                    self._stamp_vitamin_e_ranges(
+                        vitamin_e_family_rows,
+                        active_ingredients,
+                        compound_owners,
+                    )
                 if (
                     unresolved_vitamin_e_refs
                     and not vitamin_e_family_invalid

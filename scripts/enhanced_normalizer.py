@@ -5926,6 +5926,19 @@ class EnhancedDSLDNormalizer:
         for r in ingredient_rows:
             rewrite(r)
 
+        # A printed "typical distribution" is label evidence; DSLD keeps only its
+        # upper end as an exact amount. A changed row does not inherit the range.
+        printed_ranges = product_entry.get("printed_alpha_tocopherol_ranges") or {}
+
+        def stamp_printed_ranges(rows):
+            for row in rows:
+                printed = printed_ranges.get(row.get("raw_source_path"))
+                if printed and [q.get("quantity") for q in row.get("quantity") or []] == [printed["high"]]:
+                    row["printed_alpha_range_mg"] = dict(printed)
+                stamp_printed_ranges(row.get("nestedRows") or [])
+
+        stamp_printed_ranges(ingredient_rows)
+
         # Validate the entire reviewed group before mutating any membership.
         def set_reviewed_depth(row, depth, provenance, parent_row):
             row["parentBlend"] = parent_row.get("name")
@@ -8865,6 +8878,8 @@ class EnhancedDSLDNormalizer:
             result["dose_role"] = "declared_total"
         if dose_data_quality:
             result["dose_data_quality"] = dose_data_quality
+        if ing.get("printed_alpha_range_mg"):
+            result["printed_alpha_range_mg"] = ing["printed_alpha_range_mg"]
         if ing.get("_label_correction_applied"):
             source_correction = {
                 "provenance_tag": ing.get("_label_correction_provenance"),
