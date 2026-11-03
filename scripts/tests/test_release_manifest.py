@@ -14,7 +14,10 @@ from types import SimpleNamespace
 
 import pytest
 from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives.asymmetric.ed25519 import (
+    Ed25519PrivateKey,
+    Ed25519PublicKey,
+)
 
 _scripts_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if _scripts_dir not in sys.path:
@@ -902,3 +905,25 @@ def test_rollback_refuses_an_existing_output_dir(tmp_path):
     output.mkdir()
     with pytest.raises(rm.ReleaseManifestError, match="already exists"):
         rm.prepare_rollback(source, output, db_version="2026.11.02.120000")
+
+
+# The app's test/services/release/release_manifest_test.dart pins these same
+# values, so a change to the canonical text fails in one repo or the other.
+_APP_PINNED_PUBLIC_KEY = "8ec0368289f32dbbada878000f19fb5f2f08e9c4c9630489fd9d011138d31014"
+_APP_PINNED_RELEASES = [
+    (
+        "{\"blocked_versions\":{\"catalog\":[\"2026.11.02.000000\"],\"rules\":[\"1.0.14\"]},\"catalog\":{\"min_app_version\":\"1.0.0\",\"path\":\"v2026.11.03.120000/pharmaguide_core.db\",\"schema_version\":\"5.3.0\",\"sha256\":\"652f55016243bf1b9f1bbea46d5749ef892dbe394e46de9d66ab1aacf0b4af57\",\"version\":\"2026.11.03.120000\"},\"format\":1,\"key_id\":\"vector-key-1\",\"min_rules_version\":\"1.0.15\",\"release_sequence\":42,\"rules\":{\"min_app_version\":\"1.0.0\",\"path\":\"rules/1.0.16/interaction_db.sqlite\",\"schema_version\":\"4.0.0\",\"sha256\":\"6c621d1a05138a7888d37d9269a9da8e2e11e4aced2f6cfd24b05ab1b9e61bb0\",\"version\":\"1.0.16\"}}",
+        "vector-key-1:Hjk2pCMD50dxcq72BBmWEjeZ/idZxuwHUVC8rRVQDzwcWDt3aCmPb1Jgz3PGalvBALHb7g1hbvKJBixo74lCAw==",
+    ),
+    (
+        "{\"blocked_versions\":{\"catalog\":[\"2026.11.02.000000\"],\"rules\":[\"1.0.14\"]},\"catalog\":{\"min_app_version\":\"1.0.0\",\"path\":\"v2026.11.03.120000/pharmaguide_core.db\",\"schema_version\":\"5.3.0\",\"sha256\":\"652f55016243bf1b9f1bbea46d5749ef892dbe394e46de9d66ab1aacf0b4af57\",\"version\":\"2026.11.03.120000\"},\"format\":1,\"key_id\":\"vector-key-1\",\"min_rules_version\":\"1.0.15\",\"release_sequence\":42,\"rules\":null}",
+        "vector-key-1:mIgDvhdypUq6lBFzUi46OROmrleTgGkX/sg9rk4g8ydsdtt+zqhQMjqeQ300NYfsloqo3ZAf+2ivOTnfU9iLDQ==",
+    ),
+]
+
+
+@pytest.mark.parametrize("text,signature", _APP_PINNED_RELEASES)
+def test_output_matches_what_the_app_pins(text, signature):
+    public_key = Ed25519PublicKey.from_public_bytes(bytes.fromhex(_APP_PINNED_PUBLIC_KEY))
+    assert rm.canonical_text(json.loads(text)) == text
+    rm.verify_release(text, signature, public_key)
