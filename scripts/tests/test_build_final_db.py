@@ -8,6 +8,7 @@ pipeline outputs.
 """
 
 import json
+import collections
 import sqlite3
 import tempfile
 from pathlib import Path
@@ -7008,3 +7009,111 @@ def test_detail_blob_retains_reviewed_unit_conflict_as_unresolved_exposure():
         assert row["converted_quantity"] is None
         assert row["ul_assessment_status"] == "indeterminate"
         assert row["warnings"]
+
+
+def _catalog_exclusions_file():
+    from constants import CATALOG_EXCLUSIONS
+
+    return json.loads(CATALOG_EXCLUSIONS.read_text(encoding="utf-8"))
+
+
+def _listed_product(dsld_id="312465", safety_status="no_known_catalog_concern"):
+    enriched = make_enriched()
+    enriched["dsld_id"] = dsld_id
+    scored = _artifact_from_canned(dsld_id, _canned_v4())
+    scored["product_safety_status"] = safety_status
+    return enriched, scored
+
+
+def test_listed_non_supplement_leaves_both_catalog_surfaces(tmp_path, monkeypatch):
+    import build_final_db
+
+    monkeypatch.setattr(build_final_db, "_unreviewed_warnings", lambda *_args: [])
+    enriched, scored = _listed_product()
+    kept = make_enriched()
+    result, out = _run_build(
+        tmp_path, [enriched, kept], [scored, _artifact_from_canned("999", _canned_v4())], strict=True,
+    )
+    assert result["product_count"] == 1
+    assert result["error_count"] == 0
+    audit = json.loads((out / "export_audit_report.json").read_text())
+    assert [r["dsld_id"] for r in audit["contract_quarantines"]] == ["312465"]
+    assert not audit["contract_failures"]
+    assert not (out / "detail_blobs" / "312465.json").exists()
+    assert (out / "detail_blobs" / "999.json").exists()
+    assert "312465" not in json.loads((out / "detail_index.json").read_text())
+    manifest = json.loads((out / "export_manifest.json").read_text())
+    assert [r["dsld_id"] for r in manifest["excluded_by_gate"]] == ["312465"]
+
+
+@pytest.mark.parametrize("safety_status", ["caution", "blocked"])
+def test_a_safety_finding_keeps_a_listed_product_visible(safety_status):
+    enriched, scored = _listed_product(safety_status=safety_status)
+    assert not any(
+        "excluded from the catalog" in issue for issue in validate_export_contract(enriched, scored)
+    )
+
+
+def _with_warning(monkeypatch, exclusion=None):
+    import build_final_db
+
+    warning = {"type": "drug_interaction", "title": "Iron / thyroid_medications", "severity": "caution"}
+    monkeypatch.setattr(build_final_db, "build_detail_blob", lambda *_a, **_k: {"warnings": [warning]})
+    if exclusion is not None:
+        monkeypatch.setattr(build_final_db, "_catalog_exclusions", lambda: {"312465": exclusion})
+    return warning
+
+
+def _is_excluded(enriched, scored):
+    return any(
+        "excluded from the catalog" in issue for issue in validate_export_contract(enriched, scored)
+    )
+
+
+def test_a_warning_keeps_a_listed_product_visible(monkeypatch):
+    _with_warning(monkeypatch)
+    assert not _is_excluded(*_listed_product())
+
+
+def test_a_reviewed_warning_lets_the_exclusion_apply(monkeypatch):
+    from build_final_db import _warning_fingerprint
+
+    exclusion = {"category": "food", "reviewed_warnings": []}
+    exclusion["reviewed_warnings"].append(_warning_fingerprint(_with_warning(monkeypatch, exclusion)))
+    assert _is_excluded(*_listed_product())
+
+
+def test_a_review_does_not_cover_a_changed_warning(monkeypatch):
+    from build_final_db import _warning_fingerprint
+
+    exclusion = {"category": "food", "reviewed_warnings": []}
+    warning = _with_warning(monkeypatch, exclusion)
+    exclusion["reviewed_warnings"].append(_warning_fingerprint({**warning, "severity": "monitor"}))
+    assert not _is_excluded(*_listed_product())
+
+
+def test_unlisted_product_is_not_excluded():
+    enriched, scored = _listed_product(dsld_id="999")
+    assert not any(
+        "excluded from the catalog" in issue for issue in validate_export_contract(enriched, scored)
+    )
+
+
+def test_catalog_exclusions_hold_exactly_the_approved_list():
+    data = _catalog_exclusions_file()
+    exclusions = data["exclusions"]
+    assert data["_metadata"]["total_entries"] == len(exclusions) == 47
+    assert collections.Counter(e["category"] for e in exclusions.values()) == {
+        "sweetener_or_carbohydrate": 40,
+        "excipient_or_non_consumer": 2,
+        "food": 3,
+        "culinary_oil": 2,
+    }
+    # Spot-check each category against the approved list.
+    assert exclusions["312465"]["product_name"] == "Erythritol"
+    assert exclusions["330072"]["product_name"] == "Silicon Dioxide Powder"
+    assert exclusions["29049"]["product_name"] == "Breakfast Squares Iced Cinnamon Bun"
+    assert exclusions["78355"]["product_name"] == "Coconut Oil"
+    # Sold to be taken as supplements, so they stay listed in the catalog, unscored.
+    for sold_as_a_supplement in ("252842", "252847", "252849", "270737", "329726", "330001", "16765"):
+        assert sold_as_a_supplement not in exclusions

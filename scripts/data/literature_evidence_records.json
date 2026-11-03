@@ -3,8 +3,8 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-01",
-    "total_entries": 842,
+    "last_updated": "2026-11-03",
+    "total_entries": 844,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
     "verified_records_count": 809
@@ -1954,32 +1954,118 @@
     },
     {
       "canonical_id": "methionine",
-      "material_form": "L-methionine",
-      "search_query": "L-methionine supplementation randomized controlled trial healthy",
-      "search_date": "2026-09-20",
-      "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
-      ],
-      "records_screened": 32,
-      "qualifying_human_studies": [],
-      "effect_direction": null,
-      "population_context": "healthy adults",
-      "studied_dose_exposure": {
-        "values": [
-          1000
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Essential amino acid under DRI authority; standalone supra-nutritional clinical efficacy endpoints unestablished in healthy humans.",
-      "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-03: 449 titles screened, abstracts of the cited studies read; no clinician approval and no scoring credit; receipts scripts/audits/evidence_review_batch1_20261102",
+        "verified_at": "2026-11-03T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "applicability_status": "applicability_unestablished"
+      "material_form": "L-methionine as an oral single amino acid supplement; not S-adenosylmethionine, selenomethionine, D-methionine or a methionine-loading test",
+      "search_query": "(\"L-methionine\"[tiab] OR \"methionine supplementation\"[tiab] OR \"oral methionine\"[tiab] OR \"Methionine/administration and dosage\"[Mesh] OR \"Methionine/therapeutic use\"[Mesh]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt] OR systematic review[pt]) AND humans[mh]",
+      "search_date": "2026-11-03",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 449,
+      "qualifying_human_studies": [
+        {
+          "pmid": "19407666",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 51,
+          "dose": "1 g twice daily, then 2 g twice daily",
+          "duration": "12 weeks, then 8 weeks",
+          "primary_endpoint": "Percent change in hot flash composite score at week 12",
+          "outcome": "37.4% versus 33.4% decrease with placebo (P=0.60); fasting homocysteine rose.",
+          "effect_direction": "null",
+          "title": "Effect of L-methionine on hot flashes in postmenopausal women: a randomized controlled trial.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of L-methionine on hot flashes in postmenopausal women: a randomized controlled trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/19407666/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "there were no significant differences between the L-methionine and placebo groups"
+          }
+        },
+        {
+          "pmid": "15477550",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 56,
+          "dose": "6 g/day in two divided doses",
+          "duration": "12 weeks",
+          "primary_endpoint": "Change in central conduction time in AIDS-associated myelopathy",
+          "outcome": "Nonsignificant change in conduction time (p=0.17), no effect on strength, spasticity or urinary function; serum homocysteine rose.",
+          "effect_direction": "null",
+          "title": "Treatment of AIDS-associated myelopathy with L-methionine: a placebo-controlled study.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Treatment of AIDS-associated myelopathy with L-methionine: a placebo-controlled study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/15477550/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "no benefit in any of the clinical measures"
+          }
+        },
+        {
+          "pmid": "17006600",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 253,
+          "primary_endpoint": "Clinical and safety parameters in HIV infection",
+          "outcome": "After six months, differences were reported for women and for one trial center in CD4 decline, not a stated whole-trial benefit.",
+          "effect_direction": "mixed",
+          "title": "L-methionine as immune supportive supplement: a clinical evaluation.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "L-methionine as immune supportive supplement: a clinical evaluation.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/17006600/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "presented with a decreased level of decline in their CD4 counts"
+          }
+        },
+        {
+          "pmid": "15870821",
+          "study_type": "randomized_crossover",
+          "sample_size": 20,
+          "dose": "500 mg three times daily",
+          "duration": "4 weeks",
+          "primary_endpoint": "Serum and urinary methionine, homocysteine and related amino acids",
+          "outcome": "Plasma homocysteine rose during L-methionine in patients and in healthy controls.",
+          "effect_direction": "negative",
+          "title": "Effect of L-methionine supplementation on plasma homocysteine and other free amino acids: a placebo-controlled double-blind cross-over study.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of L-methionine supplementation on plasma homocysteine and other free amino acids: a placebo-controlled double-blind cross-over study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/15870821/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "Homocysteine plasma concentrations increased"
+          }
+        }
+      ],
+      "effect_direction": "null",
+      "population_context": "Postmenopausal women with hot flashes, adults with AIDS-associated myelopathy, HIV-infected patients, and women with chronic urinary tract infection plus healthy controls",
+      "studied_dose_exposure": {
+        "values": [
+          1500,
+          2000,
+          4000,
+          6000
+        ],
+        "unit": "mg",
+        "basis": "daily_intake"
+      },
+      "applicability_decision": "Placebo-controlled trials of oral L-methionine found no benefit for hot flashes (19407666) and no benefit in clinical measures in AIDS-associated myelopathy (15477550). One HIV trial reported only subgroup differences in CD4 decline (17006600). Supplementation raised plasma homocysteine (15870821, 19407666, 15477550). No trial establishes a general supplement benefit, so this review completes with no Evidence credit. Dietary essential-amino-acid adequacy is a separate question.",
+      "applicability_status": "reviewed_null_evidence",
+      "verification_result": "authoritative_pubmed_verified"
     },
     {
       "canonical_id": "polyphenols",
@@ -37620,20 +37706,10 @@
     },
     {
       "canonical_id": "turmeric",
-      "material_form": "turmeric",
-      "search_date": "2026-10-27",
-      "databases_searched": [
-        "PubMed"
-      ],
-      "qualifying_human_studies": [],
-      "effect_direction": null,
-      "population_context": "Source-specific populations only",
-      "studied_dose_exposure": {},
-      "applicability_status": "applicability_unestablished",
-      "applicability_decision": "Dose source reviewed separately; no new Evidence grade, clinical approval or exact preparation/purpose applicability added.",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "all_pmids_verified": false,
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-03: 314 titles screened, abstracts of the cited studies read; no clinician approval and no scoring credit; receipts scripts/audits/evidence_review_batch1_20261102",
+        "verified_at": "2026-11-03T00:00:00+00:00",
+        "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
           "source_sha256": "21c560c47eda15530ffbcc062e9726fefe5be328657fa9697c257aa6bdf6b1c3",
@@ -37678,7 +37754,6 @@
           ]
         }
       },
-      "verification_result": "verification_failure_unresolved",
       "reference_semantics": {
         "reference_type": "no_benchmark",
         "scope": "General catalog Dose for this exact source-owned preparation; not a clinical-efficacy or safety decision",
@@ -37697,7 +37772,168 @@
         "owner": "scripts/data/literature_evidence_records.json::turmeric",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      }
+      },
+      "documented_review_scope": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "extract",
+          "curcumin",
+          "curcuminoid",
+          "curcuminoids",
+          "meriva",
+          "bcm-95"
+        ],
+        "excluded_form_terms": [
+          "4:1",
+          "turmeric powder",
+          "root powder",
+          "rhizome powder"
+        ],
+        "supported_outcomes": [
+          "joint",
+          "digestive"
+        ],
+        "studied_population": "Adults with knee osteoarthritis or functional dyspepsia",
+        "source_pmids": [
+          "33511486",
+          "40731001",
+          "32926799",
+          "34652861"
+        ],
+        "reviewed_at": "2026-11-03"
+      },
+      "material_form": "Curcuma longa (turmeric) extract, including curcumin preparations; curcuminoid content and bioavailability preparation vary. Whole root powder, ratio extracts and unspecified turmeric are not settled by these studies",
+      "search_query": "(\"Curcuma\"[Mesh] OR turmeric[tiab] OR \"Curcuma longa\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (turmeric[ti] OR \"Curcuma longa\"[ti]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]",
+      "search_date": "2026-11-03",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 314,
+      "qualifying_human_studies": [
+        {
+          "pmid": "33511486",
+          "study_type": "meta_analysis_rct",
+          "sample_size": 1810,
+          "primary_endpoint": "Knee pain and physical function in knee osteoarthritis",
+          "outcome": "16 RCTs up to 16 weeks: less knee pain (SMD -0.82) and better function (SMD -0.75) than placebo, similar to NSAIDs; heterogeneous, moderate risk of bias.",
+          "effect_direction": "positive_weak",
+          "title": "Efficacy and Safety of Turmeric Extracts for the Treatment of Knee Osteoarthritis: a Systematic Review and Meta-analysis of Randomised Controlled Trials.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy and Safety of Turmeric Extracts for the Treatment of Knee Osteoarthritis: a Systematic Review and Meta-analysis of Randomised Controlled Trials.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/33511486/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "Turmeric extracts significantly reduced knee pain"
+          }
+        },
+        {
+          "pmid": "40731001",
+          "study_type": "systematic_review_meta",
+          "primary_endpoint": "WOMAC pain in knee osteoarthritis across turmeric preparations",
+          "outcome": "17 studies in a network meta-analysis: all preparations reduced WOMAC pain versus placebo; authors rate certainty low.",
+          "effect_direction": "positive_weak",
+          "title": "Effect of turmeric products on knee osteoarthritis: a systematic review and network meta-analysis.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of turmeric products on knee osteoarthritis: a systematic review and network meta-analysis.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/40731001/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "the certainty of evidence remains low"
+          }
+        },
+        {
+          "pmid": "32926799",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 70,
+          "duration": "12 weeks",
+          "primary_endpoint": "Knee pain (VAS) and effusion-synovitis volume on MRI",
+          "outcome": "VAS pain improved by -9.1 mm versus placebo; effusion-synovitis volume did not change.",
+          "effect_direction": "mixed",
+          "title": "Effectiveness of Curcuma longa Extract for the Treatment of Symptoms and Effusion-Synovitis of Knee Osteoarthritis : A Randomized Trial.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effectiveness of Curcuma longa Extract for the Treatment of Symptoms and Effusion-Synovitis of Knee Osteoarthritis : A Randomized Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32926799/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "did not change effusion-synovitis volume"
+          }
+        },
+        {
+          "pmid": "34652861",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 132,
+          "duration": "4 weeks",
+          "primary_endpoint": "Severity of Dyspepsia Assessment in functional dyspepsia",
+          "outcome": "Pain and non-pain scores fell more than placebo and did not differ from omeprazole.",
+          "effect_direction": "positive_weak",
+          "title": "Curcuma longa Linn versus omeprazole in treatment of functional dyspepsia: A randomized, double-blind, placebo-controlled trial.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Curcuma longa Linn versus omeprazole in treatment of functional dyspepsia: A randomized, double-blind, placebo-controlled trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/34652861/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "No significant difference was observed between curcumin and omeprazole groups"
+          }
+        },
+        {
+          "pmid": "28443702",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 46,
+          "dose": "3000 mg/day turmeric powder (6 x 500 mg capsules)",
+          "duration": "12 weeks",
+          "primary_endpoint": "Glycemic indices and leptin in non-alcoholic fatty liver disease",
+          "outcome": "Glucose, insulin, HOMA-IR and leptin fell versus placebo; weight, BMI and liver enzymes did not change significantly.",
+          "effect_direction": "mixed",
+          "title": "Turmeric Supplementation Improves Serum Glucose Indices and Leptin Levels in Patients with Nonalcoholic Fatty Liver Diseases.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Turmeric Supplementation Improves Serum Glucose Indices and Leptin Levels in Patients with Nonalcoholic Fatty Liver Diseases.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/28443702/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "Changes in weight, BMI and liver enzymes were not significant"
+          }
+        },
+        {
+          "pmid": "32656820",
+          "study_type": "case_series_systematic_review",
+          "primary_endpoint": "Acute liver injury reports after Curcuma longa supplements",
+          "outcome": "7 Tuscan cases and 23 published cases; the Tuscan cases involved high-bioavailability, high-dose curcumin or curcuminoid formulations. Case evidence, not an efficacy finding.",
+          "effect_direction": "negative",
+          "title": "Acute liver injury following turmeric use in Tuscany: An analysis of the Italian Phytovigilance database and systematic review of case reports.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Acute liver injury following turmeric use in Tuscany: An analysis of the Italian Phytovigilance database and systematic review of case reports.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32656820/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "confirmed the association between Curcuma longa and liver injury"
+          }
+        }
+      ],
+      "effect_direction": null,
+      "population_context": "Adults with knee osteoarthritis, functional dyspepsia or non-alcoholic fatty liver disease; source-specific populations only",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Human trials tested specific Curcuma longa extracts. Knee-pain syntheses favor them with low certainty and heterogeneous preparations (33511486, 40731001); one RCT improved pain but not effusion-synovitis (32926799), and a curcumin trial improved functional dyspepsia scores (34652861). One small trial used 3 g/day whole powder (28443702), which does not settle whole root or unspecified turmeric. Findings are outcome-specific and a label's curcuminoid content may differ, so this review earns no Evidence credit. A row declaring a studied extract finishes at no credit, a row declaring whole powder or a ratio extract finishes as outside these studies, and a row stating no preparation stays open. Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is recorded here and does not change any safety owner.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified"
     },
     {
       "canonical_id": "nha_cranberry_extract",
@@ -39733,6 +39969,312 @@
         "approval_status": "approved_existing_neutral_2026_11_01"
       },
       "notes": "Exact Dose scope authority: Sean directly approved this four-label Dose disposition on 2026-11-01. Original source-reviewed labels: 330196, 330197, 330198, 330199 (same formula fingerprint). Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent. The source research and citation check were agent-conducted; no Dr Pham or PharmD review of this exact material is claimed."
+    },
+    {
+      "canonical_id": "ginkgo",
+      "notes": "PMID 19017911 (GEM dementia prevention trial) has an unread erratum, JAMA 2008;300(23):2730, so it is retired from qualifying_human_studies until that notice is read.",
+      "documented_review_scope": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "flavone glycoside",
+          "flavone glycosides",
+          "flavonol glycoside",
+          "flavonol glycosides",
+          "egb 761",
+          "egb761",
+          "ginkgold"
+        ],
+        "excluded_form_terms": [
+          "4:1",
+          "biloba powder",
+          "ginkgo powder",
+          "leaf powder"
+        ],
+        "supported_outcomes": [
+          "cognitive"
+        ],
+        "studied_population": "Older adults with normal cognition, memory complaints, mild cognitive impairment or dementia",
+        "source_pmids": [
+          "41641880",
+          "20040554",
+          "22959217",
+          "36383762",
+          "23744597"
+        ],
+        "reviewed_at": "2026-11-03"
+      },
+      "material_form": "Ginkgo biloba leaf extract, mainly standardized preparations such as EGb 761; undeclared extracts and crude leaf powder are not settled by these studies",
+      "search_query": "(\"Ginkgo biloba\"[Mesh] OR ginkgo[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (\"Ginkgo biloba\"[Mesh] OR ginkgo[tiab]) AND (randomized controlled trial[pt]) AND (dementia[tiab] OR cognitive[tiab] OR memory[tiab]) AND humans[mh]",
+      "search_date": "2026-11-03",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 341,
+      "qualifying_human_studies": [
+        {
+          "pmid": "41641880",
+          "study_type": "systematic_review_meta",
+          "sample_size": 10613,
+          "primary_endpoint": "Global status, cognition, daily living and adverse events at six months",
+          "outcome": "82 studies: possible small to moderate benefits in dementia; probably little or no effect in mild cognitive impairment; uncertain in subjective complaints.",
+          "effect_direction": "mixed",
+          "title": "Ginkgo biloba for cognitive impairment and dementia.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Ginkgo biloba for cognitive impairment and dementia.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/41641880/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "In people with dementia, there may be small to moderate benefits at six months"
+          }
+        },
+        {
+          "pmid": "20040554",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 3069,
+          "dose": "120 mg extract twice daily",
+          "duration": "median 6.1 years",
+          "primary_endpoint": "Rates of cognitive decline on 3MSE, ADAS-Cog and domain scores",
+          "outcome": "Annual decline did not differ from placebo in any domain.",
+          "effect_direction": "null",
+          "title": "Ginkgo biloba for preventing cognitive decline in older adults: a randomized trial.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Ginkgo biloba for preventing cognitive decline in older adults: a randomized trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/20040554/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "did not result in less cognitive decline in older adults"
+          }
+        },
+        {
+          "pmid": "22959217",
+          "study_type": "randomized_double_blind_placebo_controlled",
+          "sample_size": 2854,
+          "dose": "120 mg EGb 761 twice daily",
+          "duration": "5 years",
+          "primary_endpoint": "Conversion to probable Alzheimer's disease",
+          "outcome": "HR 0.84 (95% CI 0.60-1.18; p=0.306) versus placebo.",
+          "effect_direction": "null",
+          "title": "Long-term use of standardised Ginkgo biloba extract for the prevention of Alzheimer's disease (GuidAge): a randomised placebo-controlled trial.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Long-term use of standardised Ginkgo biloba extract for the prevention of Alzheimer's disease (GuidAge): a randomised placebo-controlled trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/22959217/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "did not reduce the risk of progression to Alzheimer's disease"
+          }
+        },
+        {
+          "pmid": "36383762",
+          "study_type": "systematic_review",
+          "sample_size": 1915,
+          "primary_endpoint": "Tinnitus symptom severity and serious adverse effects",
+          "outcome": "12 studies: little to no effect on Tinnitus Handicap Inventory scores, with very low certainty; low-certainty little or no difference in bleeding or seizures.",
+          "effect_direction": "null",
+          "title": "Ginkgo biloba for tinnitus.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Ginkgo biloba for tinnitus.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/36383762/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "Ginkgo biloba may have little to no effect"
+          }
+        },
+        {
+          "pmid": "23744597",
+          "study_type": "meta_analysis_rct",
+          "sample_size": 739,
+          "primary_endpoint": "Absolute claudication distance",
+          "outcome": "14 trials; distance gain did not reach significance (P=0.06) and publication bias likely inflated it.",
+          "effect_direction": "null",
+          "title": "Ginkgo biloba for intermittent claudication.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Ginkgo biloba for intermittent claudication.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23744597/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "no evidence that Ginkgo biloba has a clinically significant benefit"
+          }
+        }
+      ],
+      "effect_direction": null,
+      "population_context": "Older adults with normal cognition, memory complaints, mild cognitive impairment or dementia; adults with tinnitus or intermittent claudication",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Large prevention trials of 120 mg twice daily found no reduction in Alzheimer's incidence or cognitive decline (20040554, 22959217). The 2026 Cochrane review (41641880) finds possible small to moderate benefits at six months in dementia and probably little or no effect in mild cognitive impairment. Reviews in tinnitus and intermittent claudication show little or no clinically significant benefit (36383762, 23744597). Findings concern standardized extracts, so this review earns no Evidence credit. A row declaring that standardization or a studied extract finishes at no credit, a row declaring crude powder or a ratio extract finishes as outside these studies, and an extract or plant name alone stays open. Interaction and bleeding warnings stay with their own owners.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-03: 341 titles screened, abstracts of the cited studies read; no clinician approval and no scoring credit; receipts scripts/audits/evidence_review_batch1_20261102",
+        "verified_at": "2026-11-03T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
+    },
+    {
+      "canonical_id": "collagen",
+      "notes": "PMID 31919527 (whey versus collagen peptides, muscle protein synthesis) has an unread corrigendum, PMID 33301004, so it is retired from qualifying_human_studies until that notice is read.",
+      "documented_review_scope": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "hydrolyzed",
+          "hydrolysate",
+          "collagen peptides",
+          "peptan",
+          "verisol",
+          "naticol"
+        ],
+        "excluded_form_terms": [
+          "biocell",
+          "undenatured",
+          "uc-ii",
+          "uc ii",
+          "nt2"
+        ],
+        "supported_outcomes": [
+          "skin",
+          "joint"
+        ],
+        "studied_population": "Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis",
+        "source_pmids": [
+          "33742704",
+          "37432180",
+          "40324552",
+          "42342959",
+          "39212129"
+        ],
+        "reviewed_at": "2026-11-03"
+      },
+      "material_form": "Oral hydrolyzed collagen or collagen peptides; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are not settled by these studies",
+      "search_query": "(\"collagen peptides\"[tiab] OR \"collagen hydrolysate\"[tiab] OR \"hydrolyzed collagen\"[tiab] OR \"hydrolysed collagen\"[tiab] OR \"collagen supplementation\"[tiab] OR gelatin[ti]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (\"collagen peptides\"[tiab] OR \"collagen hydrolysate\"[tiab] OR \"hydrolyzed collagen\"[tiab] OR \"hydrolysed collagen\"[tiab] OR \"collagen supplementation\"[tiab]) AND (oral[tiab] OR supplement*[tiab]) AND randomized controlled trial[pt] AND humans[mh]",
+      "search_date": "2026-11-03",
+      "databases_searched": [
+        "PubMed"
+      ],
+      "records_screened": 142,
+      "qualifying_human_studies": [
+        {
+          "pmid": "33742704",
+          "study_type": "meta_analysis_rct",
+          "sample_size": 1125,
+          "primary_endpoint": "Skin wrinkles, hydration, elasticity and firmness",
+          "outcome": "19 studies: pooled results favored hydrolyzed collagen over placebo for hydration, elasticity and wrinkles.",
+          "effect_direction": "positive_weak",
+          "title": "Effects of hydrolyzed collagen supplementation on skin aging: a systematic review and meta-analysis.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of hydrolyzed collagen supplementation on skin aging: a systematic review and meta-analysis.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/33742704/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "favorable results of hydrolyzed collagen supplementation compared with placebo"
+          }
+        },
+        {
+          "pmid": "37432180",
+          "study_type": "meta_analysis_rct",
+          "sample_size": 1721,
+          "primary_endpoint": "Skin hydration and elasticity",
+          "outcome": "26 RCTs: hydration and elasticity improved; authors identify several biases and call for larger trials.",
+          "effect_direction": "positive_weak",
+          "title": "Effects of Oral Collagen for Skin Anti-Aging: A Systematic Review and Meta-Analysis.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of Oral Collagen for Skin Anti-Aging: A Systematic Review and Meta-Analysis.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/37432180/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "The study also identified several biases in the included RCTs"
+          }
+        },
+        {
+          "pmid": "40324552",
+          "study_type": "meta_analysis_rct",
+          "sample_size": 1474,
+          "primary_endpoint": "Skin hydration, elasticity and wrinkles by funding source and study quality",
+          "outcome": "23 RCTs: overall benefit, but no effect in non-pharmaceutical-funded or high-quality subgroups.",
+          "effect_direction": "mixed",
+          "title": "Effects of Collagen Supplements on Skin Aging: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of Collagen Supplements on Skin Aging: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/40324552/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "high-quality studies revealed no significant effect in all categories"
+          }
+        },
+        {
+          "pmid": "42342959",
+          "study_type": "systematic_review",
+          "primary_endpoint": "Skin outcomes, safety and quality of life",
+          "outcome": "25 RCTs without pooling: improvements in most trials, most at high risk of bias; authors call the evidence preliminary.",
+          "effect_direction": "positive_weak",
+          "title": "Efficacy and safety of hydrolyzed collagen supplementation on skin health outcomes: a systematic literature review of randomized controlled trials.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy and safety of hydrolyzed collagen supplementation on skin health outcomes: a systematic literature review of randomized controlled trials.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/42342959/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "majority of included trials were rated as having a high risk of bias"
+          }
+        },
+        {
+          "pmid": "39212129",
+          "study_type": "meta_analysis_rct",
+          "sample_size": 870,
+          "primary_endpoint": "Pain and function in knee osteoarthritis",
+          "outcome": "11 RCTs: improved function and pain with high heterogeneity (I2 75% and 88%).",
+          "effect_direction": "positive_weak",
+          "title": "Effect of collagen supplementation on knee osteoarthritis: an updated systematic review and meta-analysis of randomised controlled trials.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of collagen supplementation on knee osteoarthritis: an updated systematic review and meta-analysis of randomised controlled trials.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/39212129/",
+            "verified_at": "2026-11-03T00:00:00+00:00",
+            "abstract_evidence_quote": "oral collagen administration relieves OA symptoms"
+          }
+        }
+      ],
+      "effect_direction": null,
+      "population_context": "Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Pooled trials report favorable skin and knee-osteoarthritis measurements with high risk of bias, high heterogeneity or co-active formulations (33742704, 37432180, 42342959, 39212129). In one review those skin benefits were absent in non-pharmaceutical-funded and high-quality subgroups (40324552). This review does not change the clinician-signed limitation already on INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so this review earns no Evidence credit. A row declaring hydrolyzed collagen or peptides finishes at no credit, a row declaring undenatured collagen or a co-active complex finishes as outside these studies, and collagen or gelatin alone stays open.",
+      "applicability_status": "applicability_unestablished",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-03: 142 titles screened, abstracts of the cited studies read; no clinician approval and no scoring credit; receipts scripts/audits/evidence_review_batch1_20261102",
+        "verified_at": "2026-11-03T00:00:00+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      }
     }
   ]
 }
