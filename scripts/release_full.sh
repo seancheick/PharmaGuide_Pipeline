@@ -172,6 +172,10 @@ while (($# > 0)); do
   esac
 done
 
+if (( ${#RELEASE_SIGN_ARGS[@]} > 0 )); then
+  RELEASE_SIGN_ARGS+=(--rule-pin "$FLUTTER_REPO/tool/interaction_db.release.json")
+fi
+
 info()  { printf '\033[36m[release]\033[0m %s\n' "$*"; }
 ok()    { printf '\033[32m[release] OK:\033[0m %s\n' "$*"; }
 warn()  { printf '\033[33m[release] WARN:\033[0m %s\n' "$*"; }
@@ -871,9 +875,6 @@ require_signed_release_or_stop() {
 
 if (( SKIP_SUPABASE == 0 )); then
   require_signed_release_or_stop || exit 1
-fi
-if (( ${#RELEASE_SIGN_ARGS[@]} > 0 )); then
-  RELEASE_SIGN_ARGS+=(--rule-pin "$FLUTTER_REPO/tool/interaction_db.release.json")
 fi
 
 # Fail early before expensive uploads if a reviewer reopened an approval while
