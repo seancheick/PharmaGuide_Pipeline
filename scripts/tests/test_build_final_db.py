@@ -8,6 +8,7 @@ pipeline outputs.
 """
 
 import json
+import collections
 import sqlite3
 import tempfile
 from pathlib import Path
@@ -7008,3 +7009,67 @@ def test_detail_blob_retains_reviewed_unit_conflict_as_unresolved_exposure():
         assert row["converted_quantity"] is None
         assert row["ul_assessment_status"] == "indeterminate"
         assert row["warnings"]
+
+
+def _catalog_exclusions_file():
+    from constants import CATALOG_EXCLUSIONS
+
+    return json.loads(CATALOG_EXCLUSIONS.read_text(encoding="utf-8"))
+
+
+def _listed_product(dsld_id="312465", safety_status="no_known_catalog_concern"):
+    enriched = make_enriched()
+    enriched["dsld_id"] = dsld_id
+    scored = _artifact_from_canned(dsld_id, _canned_v4())
+    scored["product_safety_status"] = safety_status
+    return enriched, scored
+
+
+def test_listed_non_supplement_leaves_both_catalog_surfaces(tmp_path):
+    enriched, scored = _listed_product()
+    kept = make_enriched()
+    result, out = _run_build(
+        tmp_path, [enriched, kept], [scored, _artifact_from_canned("999", _canned_v4())], strict=True,
+    )
+    assert result["product_count"] == 1
+    assert result["error_count"] == 0
+    audit = json.loads((out / "export_audit_report.json").read_text())
+    assert [r["dsld_id"] for r in audit["contract_quarantines"]] == ["312465"]
+    assert not audit["contract_failures"]
+    assert not (out / "detail_blobs" / "312465.json").exists()
+    assert (out / "detail_blobs" / "999.json").exists()
+    assert "312465" not in json.loads((out / "detail_index.json").read_text())
+    manifest = json.loads((out / "export_manifest.json").read_text())
+    assert [r["dsld_id"] for r in manifest["excluded_by_gate"]] == ["312465"]
+
+
+@pytest.mark.parametrize("safety_status", ["caution", "blocked"])
+def test_a_safety_finding_keeps_a_listed_product_visible(safety_status):
+    enriched, scored = _listed_product(safety_status=safety_status)
+    assert not any(
+        "excluded from the catalog" in issue for issue in validate_export_contract(enriched, scored)
+    )
+
+
+def test_unlisted_product_is_not_excluded():
+    enriched, scored = _listed_product(dsld_id="999")
+    assert not any(
+        "excluded from the catalog" in issue for issue in validate_export_contract(enriched, scored)
+    )
+
+
+def test_catalog_exclusions_hold_exactly_the_approved_list():
+    data = _catalog_exclusions_file()
+    exclusions = data["exclusions"]
+    assert data["_metadata"]["total_entries"] == len(exclusions) == 57
+    assert collections.Counter(e["category"] for e in exclusions.values()) == {
+        "sweetener_or_carbohydrate": 47,
+        "excipient_or_non_consumer": 2,
+        "food": 6,
+        "culinary_oil": 2,
+    }
+    # Spot-check each category against the approved list.
+    assert exclusions["312465"]["product_name"] == "Erythritol"
+    assert exclusions["330072"]["product_name"] == "Silicon Dioxide Powder"
+    assert exclusions["29049"]["product_name"] == "Breakfast Squares Iced Cinnamon Bun"
+    assert exclusions["78355"]["product_name"] == "Coconut Oil"

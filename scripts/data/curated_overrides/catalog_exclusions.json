@@ -1,0 +1,299 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "description": "Exact products kept out of the consumer catalog because they are not supplements PharmaGuide assesses.",
+    "purpose": "Sean decided on 2026-11-02 to exclude these labels rather than show them as not assessed. Every one had mapped_coverage 0.0 and no catalog safety finding.",
+    "scope": "Fires only for an exact dsld_id in build_final_db.validate_export_contract. Scoring and enrichment are unaffected. A new label of the same product has a new dsld_id and is not excluded until it is added here.",
+    "fail_safe_policy": "A listed product whose product_safety_status is anything other than no_known_catalog_concern stays in the catalog, so an exclusion can never hide a safety finding.",
+    "last_updated": "2026-11-02",
+    "total_entries": 57,
+    "loaded_by": "scripts/build_final_db.py via _catalog_exclusions"
+  },
+  "exclusions": {
+    "16765": {
+      "product_name": "ProCrunch Lite Peanut Butter Cup",
+      "brand": "GNC",
+      "category": "food"
+    },
+    "16766": {
+      "product_name": "ProCrunch Lite Cinnamon Bun",
+      "brand": "GNC",
+      "category": "food"
+    },
+    "16827": {
+      "product_name": "ProCrunch Lite Chocolate Crisp",
+      "brand": "GNC",
+      "category": "food"
+    },
+    "25583": {
+      "product_name": "Breakfast Squares Oatmeal Chocolate Chip",
+      "brand": "GNC",
+      "category": "food"
+    },
+    "29049": {
+      "product_name": "Breakfast Squares Iced Cinnamon Bun",
+      "brand": "GNC",
+      "category": "food"
+    },
+    "29054": {
+      "product_name": "Breakfast Squares Strawberries & Cream",
+      "brand": "GNC",
+      "category": "food"
+    },
+    "78355": {
+      "product_name": "Coconut Oil",
+      "brand": "GNC",
+      "category": "culinary_oil"
+    },
+    "294450": {
+      "product_name": "Erythritol",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "294491": {
+      "product_name": "Arnica Extract",
+      "brand": "BulkSupplements",
+      "category": "excipient_or_non_consumer"
+    },
+    "311671": {
+      "product_name": "Sucralose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "311672": {
+      "product_name": "Sucralose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "311673": {
+      "product_name": "Sucralose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "311674": {
+      "product_name": "Sucralose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "311675": {
+      "product_name": "Sucralose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "311709": {
+      "product_name": "Trehalose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "312465": {
+      "product_name": "Erythritol",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "312466": {
+      "product_name": "Erythritol",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "312467": {
+      "product_name": "Erythritol",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "312468": {
+      "product_name": "Erythritol",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "329726": {
+      "product_name": "Maltodextrin Powder",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "329727": {
+      "product_name": "Maltodextrin Powder 30 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "329728": {
+      "product_name": "Maltodextrin Powder",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "329729": {
+      "product_name": "Maltodextrin Powder 30 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "329907": {
+      "product_name": "Allulose Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "329908": {
+      "product_name": "Allulose Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "329909": {
+      "product_name": "Allulose Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "329910": {
+      "product_name": "Allulose Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330001": {
+      "product_name": "Dextrose Powder 20 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330002": {
+      "product_name": "Dextrose Powder 20 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330003": {
+      "product_name": "Dextrose Powder 20 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330055": {
+      "product_name": "Organic Stevia Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330056": {
+      "product_name": "Organic Stevia Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330057": {
+      "product_name": "Organic Stevia Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330072": {
+      "product_name": "Silicon Dioxide Powder",
+      "brand": "BulkSupplements",
+      "category": "excipient_or_non_consumer"
+    },
+    "330277": {
+      "product_name": "Aspartame Powder 1000 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330278": {
+      "product_name": "Aspartame Powder 1000 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330279": {
+      "product_name": "Aspartame Powder 1000 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330280": {
+      "product_name": "Aspartame Powder 1000 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330769": {
+      "product_name": "Sorbitol",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330770": {
+      "product_name": "Sorbitol Powder 3000 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330771": {
+      "product_name": "Sorbitol",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330772": {
+      "product_name": "Sorbitol",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330862": {
+      "product_name": "Stevia Extract Powder 40 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330863": {
+      "product_name": "Stevia Extract Powder 40 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330864": {
+      "product_name": "Stevia Extract Powder 40 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330892": {
+      "product_name": "Trehalose Powder 5 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330893": {
+      "product_name": "Trehalose Powder 5 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330895": {
+      "product_name": "Trehalose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330931": {
+      "product_name": "Fructose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330932": {
+      "product_name": "Fructose Powder 1000 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330933": {
+      "product_name": "Fructose Powder 1000 mg",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "330934": {
+      "product_name": "Fructose",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "331255": {
+      "product_name": "Xylitol Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "331256": {
+      "product_name": "Xylitol Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "331257": {
+      "product_name": "Xylitol Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "331258": {
+      "product_name": "Xylitol Powder 4 g",
+      "brand": "BulkSupplements",
+      "category": "sweetener_or_carbohydrate"
+    },
+    "333714": {
+      "product_name": "Premium Liquid Coconut Oil",
+      "brand": "Nature's Way",
+      "category": "culinary_oil"
+    }
+  }
+}

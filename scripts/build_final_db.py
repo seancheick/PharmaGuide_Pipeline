@@ -1734,6 +1734,15 @@ def _has_verified_source_label(enriched: Dict[str, Any]) -> bool:
         return False
 
 
+@lru_cache(maxsize=1)
+def _catalog_exclusions() -> Dict[str, Dict[str, Any]]:
+    """Exact non-supplement labels Sean kept out of the catalog (2026-11-02)."""
+    from constants import CATALOG_EXCLUSIONS
+
+    with CATALOG_EXCLUSIONS.open(encoding="utf-8") as handle:
+        return json.load(handle)["exclusions"]
+
+
 def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     """Validate the minimum upstream contract needed for final DB export.
 
@@ -1744,6 +1753,8 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
 
     Products are QUARANTINED (excluded_by_gate; never reach Flutter) when:
       - NOT_SCORED without a verified source-label record or with a score/tier
+      - the exact label is in curated_overrides/catalog_exclusions.json and has
+        no catalog safety finding
       - score_100_equivalent is None on a scored non-BLOCKED/UNSAFE verdict
       - the Stage-3 artifact is not the v4-native six-pillar contract
 
@@ -1777,6 +1788,12 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
             issues.append("review_queue: NOT_SCORED product cannot publish a quality score or tier.")
         if not safe_str(scored.get("score_unavailable_reason") or scored.get("not_scorable_reason")):
             issues.append("review_queue: NOT_SCORED product must explain its assessment limitation.")
+
+    # A safety finding always outranks an exclusion, so the listed product
+    # stays visible and its finding still reaches the user.
+    excluded = _catalog_exclusions().get(safe_str(enriched.get("dsld_id")))
+    if excluded and scored.get("product_safety_status") == "no_known_catalog_concern":
+        issues.append(f"review_queue: excluded from the catalog as {excluded['category']}.")
 
     if not safe_str(enriched.get("dsld_id")):
         issues.append("missing enriched.dsld_id")
