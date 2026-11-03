@@ -124,7 +124,10 @@ def require_publication_contract(signed_release=False):
     if len(bodies) != 1:
         raise ValueError("Deployed publication contract is unavailable to the publishing role")
     schema = bodies[0]
-    if (any(schema.get("properties", {}).get(k, {}).get("format") != v for k, v in expected.items())
+    # PostgREST 14 reports the Postgres type name; 16 reports int32 and int64.
+    spellings = {"integer": {"integer", "int32"}, "bigint": {"bigint", "int64"}}
+    if (any(schema.get("properties", {}).get(k, {}).get("format") not in spellings.get(v, {v})
+            for k, v in expected.items())
             or not set(schema.get("required", [])).issubset(expected)):
         raise ValueError("Deployed publication contract arguments do not match this publisher")
 

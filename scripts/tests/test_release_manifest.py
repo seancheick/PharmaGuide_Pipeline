@@ -547,6 +547,36 @@ def test_partial_signed_params_are_refused():
         supabase_client.insert_manifest(_RpcClient(), LOCAL_MANIFEST, release_sequence=5)
 
 
+@pytest.mark.parametrize("integer, bigint, ok", [
+    ("integer", "bigint", True),   # PostgREST 14.5, production today
+    ("int32", "int64", True),      # PostgREST 16.4, what the Supabase CLI now pins
+    ("int64", "int64", False),     # a real change of argument type still refuses
+    ("int32", "int32", False),
+])
+def test_publication_contract_reads_either_postgrest_spelling(monkeypatch, integer, bigint, ok):
+    import requests
+    formats = {
+        "p_db_version": "text", "p_pipeline_version": "text", "p_scoring_version": "text",
+        "p_schema_version": "text", "p_product_count": integer, "p_checksum": "text",
+        "p_generated_at": "timestamp with time zone", "p_min_app_version": "text",
+        "p_submission_approvals": "jsonb", "p_release_sequence": bigint,
+        "p_signed_release": "text", "p_release_signature": "text",
+    }
+    schema = {"properties": {k: {"format": v} for k, v in formats.items()},
+              "required": ["p_db_version"]}
+    paths = {"/rpc/rotate_manifest_with_submission_approvals": {
+        "post": {"parameters": [{"in": "body", "schema": schema}]}}}
+    monkeypatch.setenv("SUPABASE_URL", "https://example.invalid")
+    monkeypatch.setenv("SUPABASE_SERVICE_ROLE_KEY", "test-only-secret")
+    monkeypatch.setattr(requests, "get", lambda *a, **k: SimpleNamespace(
+        raise_for_status=lambda: None, json=lambda: {"paths": paths}))
+    if ok:
+        supabase_client.require_publication_contract(signed_release=True)
+    else:
+        with pytest.raises(ValueError, match="publication contract"):
+            supabase_client.require_publication_contract(signed_release=True)
+
+
 @pytest.mark.parametrize("deployed, signed, ok", [
     (False, False, True),   # the publisher keeps working before the migration deploys
     (True, False, True),
