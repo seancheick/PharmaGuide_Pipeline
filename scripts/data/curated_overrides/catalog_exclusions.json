@@ -1,30 +1,15 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "description": "Exact products kept out of the consumer catalog because PharmaGuide does not assess them and cannot score them.",
-    "purpose": "Sean decided on 2026-11-02 to remove these labels rather than show a coverage warning: sweeteners, excipients, foods and culinary oils, plus sodium-only labels (sodium earns no credit under ruling D22, and BHB and D-aspartate labels print sodium with no amount of the compound). Every one had mapped_coverage 0.0 and no catalog safety finding.",
+    "description": "Exact products kept out of the consumer catalog because the label sells them as something other than a supplement.",
+    "purpose": "Sean decided on 2026-11-02 that scope is the rule: a label sold as a sweetener, snack, cooking oil, blending ingredient or external-use product leaves the catalog. A label sold to be taken as a supplement stays, unscored, even when it cannot be scored. Classified from DSLD record text, not printed labels.",
     "scope": "Fires only for an exact dsld_id in build_final_db.validate_export_contract. Scoring and enrichment are unaffected. A new label of the same product has a new dsld_id and is not excluded until it is added here.",
     "fail_safe_policy": "A listed product whose product_safety_status is anything other than no_known_catalog_concern stays in the catalog, so an exclusion can never hide a safety finding.",
     "last_updated": "2026-11-02",
-    "total_entries": 86,
+    "total_entries": 47,
     "loaded_by": "scripts/build_final_db.py via _catalog_exclusions"
   },
   "exclusions": {
-    "16765": {
-      "product_name": "ProCrunch Lite Peanut Butter Cup",
-      "brand": "GNC",
-      "category": "food"
-    },
-    "16766": {
-      "product_name": "ProCrunch Lite Cinnamon Bun",
-      "brand": "GNC",
-      "category": "food"
-    },
-    "16827": {
-      "product_name": "ProCrunch Lite Chocolate Crisp",
-      "brand": "GNC",
-      "category": "food"
-    },
     "25583": {
       "product_name": "Breakfast Squares Oatmeal Chocolate Chip",
       "brand": "GNC",
@@ -45,71 +30,6 @@
       "brand": "GNC",
       "category": "culinary_oil"
     },
-    "252842": {
-      "product_name": "Sodium Citrate",
-      "brand": "BulkSupplements",
-      "category": "sodium_salt"
-    },
-    "252847": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "252849": {
-      "product_name": "Sodium D-Aspartate",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "254473": {
-      "product_name": "Sodium Citrate",
-      "brand": "BulkSupplements",
-      "category": "sodium_salt"
-    },
-    "254474": {
-      "product_name": "Sodium Citrate",
-      "brand": "BulkSupplements",
-      "category": "sodium_salt"
-    },
-    "254475": {
-      "product_name": "Sodium Citrate",
-      "brand": "BulkSupplements",
-      "category": "sodium_salt"
-    },
-    "254479": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "254480": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "254481": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "254485": {
-      "product_name": "Sodium D-Aspartate",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "254486": {
-      "product_name": "Sodium D-Aspartate",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "254487": {
-      "product_name": "Sodium D-Aspartate",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "270737": {
-      "product_name": "Sodium Chloride 1000 mg",
-      "brand": "Nutricost",
-      "category": "sodium_salt"
-    },
     "294450": {
       "product_name": "Erythritol",
       "brand": "BulkSupplements",
@@ -119,66 +39,6 @@
       "product_name": "Arnica Extract",
       "brand": "BulkSupplements",
       "category": "excipient_or_non_consumer"
-    },
-    "311572": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "311573": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "311574": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "311575": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "311576": {
-      "product_name": "Sodium Citrate",
-      "brand": "BulkSupplements",
-      "category": "sodium_salt"
-    },
-    "311577": {
-      "product_name": "Sodium Citrate",
-      "brand": "BulkSupplements",
-      "category": "sodium_salt"
-    },
-    "311578": {
-      "product_name": "Sodium Citrate",
-      "brand": "BulkSupplements",
-      "category": "sodium_salt"
-    },
-    "311579": {
-      "product_name": "Sodium Citrate",
-      "brand": "BulkSupplements",
-      "category": "sodium_salt"
-    },
-    "311580": {
-      "product_name": "Sodium D-Aspartate",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "311581": {
-      "product_name": "Sodium D-Aspartate",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "311582": {
-      "product_name": "Sodium D-Aspartate",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "311583": {
-      "product_name": "Sodium D-Aspartate",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
     },
     "311671": {
       "product_name": "Sucralose",
@@ -230,26 +90,6 @@
       "brand": "BulkSupplements",
       "category": "sweetener_or_carbohydrate"
     },
-    "329726": {
-      "product_name": "Maltodextrin Powder",
-      "brand": "BulkSupplements",
-      "category": "sweetener_or_carbohydrate"
-    },
-    "329727": {
-      "product_name": "Maltodextrin Powder 30 g",
-      "brand": "BulkSupplements",
-      "category": "sweetener_or_carbohydrate"
-    },
-    "329728": {
-      "product_name": "Maltodextrin Powder",
-      "brand": "BulkSupplements",
-      "category": "sweetener_or_carbohydrate"
-    },
-    "329729": {
-      "product_name": "Maltodextrin Powder 30 g",
-      "brand": "BulkSupplements",
-      "category": "sweetener_or_carbohydrate"
-    },
     "329907": {
       "product_name": "Allulose Powder 4 g",
       "brand": "BulkSupplements",
@@ -267,21 +107,6 @@
     },
     "329910": {
       "product_name": "Allulose Powder 4 g",
-      "brand": "BulkSupplements",
-      "category": "sweetener_or_carbohydrate"
-    },
-    "330001": {
-      "product_name": "Dextrose Powder 20 g",
-      "brand": "BulkSupplements",
-      "category": "sweetener_or_carbohydrate"
-    },
-    "330002": {
-      "product_name": "Dextrose Powder 20 g",
-      "brand": "BulkSupplements",
-      "category": "sweetener_or_carbohydrate"
-    },
-    "330003": {
-      "product_name": "Dextrose Powder 20 g",
       "brand": "BulkSupplements",
       "category": "sweetener_or_carbohydrate"
     },
@@ -324,26 +149,6 @@
       "product_name": "Aspartame Powder 1000 mg",
       "brand": "BulkSupplements",
       "category": "sweetener_or_carbohydrate"
-    },
-    "330765": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "330766": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "330767": {
-      "product_name": "Sodium BHB Powder 10 g",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
-    },
-    "330768": {
-      "product_name": "Sodium BHB",
-      "brand": "BulkSupplements",
-      "category": "sodium_compound_without_its_amount"
     },
     "330769": {
       "product_name": "Sorbitol",
