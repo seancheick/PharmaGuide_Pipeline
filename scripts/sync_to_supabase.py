@@ -1403,10 +1403,11 @@ def sync(
     5. Publish catalog_search rows (public MCP search); prune old versions
     6. Insert new manifest row
 
-    With release_manifest and release_signature (ADR-012), everything is checked
-    before the first Storage write, the rules file is staged create-only before
-    the flip, and the signed fields go through the same RPC. Without them, nothing
-    here changes.
+    With release_manifest and release_signature (ADR-012), the signature is verified
+    against a key pinned in the repo and everything is checked before the first
+    Storage write, the rules file is staged create-only before the flip, and the
+    signed fields go through the same RPC. Without them, the publish is refused once
+    a production key is pinned.
     """
     sync_started_at = time.monotonic()
 
@@ -1429,11 +1430,15 @@ def sync(
     checksum = local["checksum"]
     build_stats = validate_build_output(build_dir, local)
     signed = None
-    if release_manifest:
+    if not release_manifest:
+        from release_manifest import require_signed_when_keys_are_pinned
+        require_signed_when_keys_are_pinned()
+    else:
         from release_manifest import check_remote_rules_gate, load_signed_release
         signed = load_signed_release(
             release_manifest, release_signature,
             local_manifest=local, rules_dir=rules_dir or build_dir,
+            test_project=test_project,
         )
         gate_status = check_remote_rules_gate(signed["release"], test_project=test_project)
         signed_rules = signed["release"]["rules"]
@@ -1829,7 +1834,7 @@ def parse_args(argv=None):
     parser.add_argument("--rules-dir",
                         help="Directory holding the named interaction_db.sqlite (default: build_dir)")
     parser.add_argument("--test-project", action="store_true",
-                        help="Allow rules before A9 sign-off; PHARMAGUIDE_TEST_SUPABASE_URL must equal SUPABASE_URL")
+                        help="Allow rules before A9 sign-off; the SUPABASE_URL host must be listed in release_trust.json")
     args = parser.parse_args(argv)
     if bool(args.release_manifest) != bool(args.release_signature):
         parser.error('--release-manifest and --release-signature must be used together')

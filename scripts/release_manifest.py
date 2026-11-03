@@ -29,6 +29,7 @@ import sqlite3
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from cryptography.exceptions import InvalidSignature
 from cryptography.hazmat.primitives import serialization
@@ -42,7 +43,7 @@ from supabase_client import core_db_remote_path, rules_db_remote_path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GATE_PATH = REPO_ROOT / "scripts" / "config" / "remote_rules_gate.json"
-TEST_SUPABASE_URL_ENV = "PHARMAGUIDE_TEST_SUPABASE_URL"
+TRUST_PATH = REPO_ROOT / "scripts" / "config" / "release_trust.json"
 
 RELEASE_FORMAT = 1
 CATALOG_DB = "pharmaguide_core.db"
@@ -346,20 +347,90 @@ def verify_release(text, release_signature, public_key):
     return release
 
 
+def _read_trust():
+    """The repo's own record of where releases go and whose signatures count.
+
+    Anything wrong with it refuses, because a publish can't be judged without it.
+    """
+    try:
+        trust = _read_json(TRUST_PATH)
+    except (OSError, ValueError):
+        trust = None
+    _refuse_unless(
+        isinstance(trust, dict)
+        and isinstance(trust.get("production_project_ref"), str)
+        and trust["production_project_ref"]
+        and isinstance(trust.get("test_hosts"), list)
+        and isinstance(trust.get("production_keys"), dict)
+        and isinstance(trust.get("test_keys"), dict),
+        f"{TRUST_PATH.name} can't be read, so nothing can be published",
+    )
+    return trust
+
+
+def require_test_destination():
+    """Refuse unless SUPABASE_URL is a host this repo lists as a test project.
+
+    The environment says where the client will write, so it can't also vouch for
+    that destination. Production is refused first, even if the list ever names it.
+    """
+    trust = _read_trust()
+    try:
+        host = (urlsplit(os.environ.get("SUPABASE_URL", "").strip()).hostname or "").lower()
+    except ValueError:
+        host = ""
+    _refuse_unless(
+        host != f"{trust['production_project_ref']}.supabase.co",
+        "--test-project refused: SUPABASE_URL is the production project",
+    )
+    _refuse_unless(
+        host and host in trust["test_hosts"],
+        f"--test-project refused: SUPABASE_URL host {host or '(none)'} is not listed in "
+        f"{TRUST_PATH.name}",
+    )
+
+
+def unsigned_publish_allowed():
+    """Unsigned stays possible only while no keyed build can exist.
+
+    Pinning the first production key, which comes before the first keyed build,
+    ends unsigned publishing for good. A keyed build refuses an unsigned row.
+    """
+    return not _read_trust()["production_keys"]
+
+
+def require_signed_when_keys_are_pinned():
+    _refuse_unless(
+        unsigned_publish_allowed(),
+        f"this release must be signed: {TRUST_PATH.name} pins a production key",
+    )
+
+
+def _verify_against_pinned_key(text, release_signature, release, test_project):
+    """Check the signature here, in the publish path, against a key in the repo."""
+    trust = _read_trust()
+    group = "test_keys" if test_project else "production_keys"
+    public = trust[group].get(release["key_id"])
+    _refuse_unless(
+        isinstance(public, str),
+        f"signing key {release['key_id']} is not pinned in {TRUST_PATH.name} {group}",
+    )
+    try:
+        public_key = Ed25519PublicKey.from_public_bytes(bytes.fromhex(public))
+    except ValueError:
+        raise ReleaseManifestError(
+            f"signing key {release['key_id']} in {TRUST_PATH.name} is not a valid Ed25519 key"
+        ) from None
+    verify_release(text, release_signature, public_key)
+
+
 def check_remote_rules_gate(release, *, test_project=False):
     """Hold remote rules off production until the A9 sign-off is recorded.
 
-    Returns a one-line reason. The repo holds no production project identity, so
-    a test project is proven only by an explicit env var naming SUPABASE_URL.
+    Returns a one-line reason.
     """
     if test_project:
-        url = os.environ.get("SUPABASE_URL", "").rstrip("/")
-        test_url = os.environ.get(TEST_SUPABASE_URL_ENV, "").rstrip("/")
-        _refuse_unless(
-            url and url == test_url,
-            f"--test-project needs {TEST_SUPABASE_URL_ENV} set to the same URL as "
-            "SUPABASE_URL",
-        )
+        require_test_destination()
     if release["rules"] is None:
         return "catalog-only release; the remote rules gate does not apply"
     try:
@@ -376,16 +447,19 @@ def check_remote_rules_gate(release, *, test_project=False):
     return "remote rules gate is closed; allowed for this named test project only"
 
 
-def load_signed_release(manifest_path, signature_path, *, local_manifest, rules_dir):
-    """Prove a signed release describes this build. Called before any Storage write.
+def load_signed_release(manifest_path, signature_path, *, local_manifest, rules_dir,
+                        test_project=False):
+    """Prove a signed release is genuine and describes this build.
 
-    The signature's format and key ID are checked here. Checking it against a public
-    key is the ``verify`` step, because the publisher holds no key material.
+    Called before any Storage write. Publishing needs no private key: the public
+    keys it checks against are pinned in the repo.
     """
+    if test_project:
+        require_test_destination()
     text = Path(manifest_path).read_bytes().decode("utf-8")
     release = parse_release(text)
     release_signature = Path(signature_path).read_text(encoding="utf-8").strip()
-    parse_signature(release_signature, release["key_id"])
+    _verify_against_pinned_key(text, release_signature, release, test_project)
 
     catalog = release["catalog"]
     expected = {
@@ -521,6 +595,10 @@ def _parse_args(argv):
     sign.add_argument("--key-file", required=True)
     sign.add_argument("--output", required=True)
 
+    commands.add_parser(
+        "unsigned-allowed", help="Exit 0 only while an unsigned publish is still allowed",
+    )
+
     verify = commands.add_parser("verify", help="Verify a signature with a public key file")
     verify.add_argument("--manifest", required=True)
     verify.add_argument("--signature", required=True)
@@ -555,6 +633,9 @@ def _run(args):
         signature = sign_release(_read_text(args.manifest), load_private_key(args.key_file))
         _write_text(args.output, signature)
         print(f"Wrote {args.output} (key ID {signature.partition(':')[0]})")
+    elif args.command == "unsigned-allowed":
+        require_signed_when_keys_are_pinned()
+        print("Unsigned publishing is allowed: no production key is pinned")
     elif args.command == "verify":
         public_key = serialization.load_pem_public_key(Path(args.public_key).read_bytes())
         release = verify_release(

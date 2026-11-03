@@ -461,11 +461,11 @@
       "owner": "scripts/release_manifest.py",
       "first_created_stage": "exported",
       "field_kind": "exported",
-      "source_data_files": ["scripts/config/remote_rules_gate.json"],
+      "source_data_files": ["scripts/config/remote_rules_gate.json", "scripts/config/release_trust.json"],
       "consumers": ["scripts/sync_to_supabase.py", "Flutter signed release verifier"],
       "forbidden_recomputation": ["activation may read only the signed text; rules fields have no unsigned copy, and a signature proves the publisher, not clinical correctness"],
       "fallback_class": "clinical_fail_safe",
-      "release_gate": "scripts/release_manifest.py verify",
+      "release_gate": "scripts/sync_to_supabase.py verifies against scripts/config/release_trust.json",
       "tests": ["scripts/tests/test_release_manifest.py"],
       "retirement_status": "active"
     },

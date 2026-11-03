@@ -43,7 +43,7 @@ PY
 ```
 
 Pick a key ID such as `release-2026-11`. It may use letters, digits, `.`, `_` and `-`. The
-public key and its ID go in the app. Only the public key may leave the custody machine.
+public key and its ID go in the app and in `scripts/config/release_trust.json`. Only the public key may leave the custody machine.
 Make one offline backup of the private key, held under the same protections.
 
 ## Publish a signed release
@@ -68,29 +68,40 @@ Make one offline backup of the private key, held under the same protections.
    ```
 
 4. Move `release.json` and `release.sig` back. Don't edit them. Any edit breaks the signature.
-5. Verify, then dry-run. `sync` checks the signature's format and key ID, not the signature
-   itself, because the publisher holds no keys, so this `verify` step is required:
+5. Dry-run. `sync` verifies the signature against the key pinned for this destination in
+   `scripts/config/release_trust.json`, before anything else:
 
    ```bash
-   python scripts/release_manifest.py verify --manifest release.json \
-     --signature release.sig --public-key release-key.pub.pem
    python scripts/sync_to_supabase.py scripts/dist --dry-run \
      --release-manifest release.json --release-signature release.sig
    ```
 
-6. Run the same `sync` command without `--dry-run`. Before its first Storage write it checks
-   the catalog version and hash against the build, the rules file's hash, the rules gate, the
-   deployed RPC arguments and the sequence.
+6. Publish. The usual way is the same release command, which stops before its sync step
+   once a production key is pinned, with the build ready to sign:
 
-`scripts/release_full.sh` still publishes unsigned. Until it is wired to sign, publish signed
-releases with these steps.
+   ```bash
+   bash scripts/release_full.sh                    # stops: "This release must be signed"
+   # steps 2-4 above, on the build it left in scripts/dist
+   bash scripts/release_full.sh --release-manifest release.json --release-signature release.sig
+   ```
+
+   Add `--release-rules-dir DIR` when the manifest names rules. The rerun finds every earlier
+   step up to date. If the build changed, `sync` refuses, because the manifest no longer
+   matches it. Before its first Storage write `sync` also checks the catalog version and hash
+   against the build, the rules file's hash, the rules gate, the deployed RPC arguments and
+   the sequence.
+
+An unsigned publish is refused as soon as `production_keys` names any key, by `sync` itself,
+so no caller can skip it. Until then no keyed build can exist, so unsigned catalog-only
+releases still work.
 
 ## Order of first use
 
 1. Deploy the app repo's migration that adds the columns and RPC arguments.
-2. The pipeline starts signing. Builds with no keys ignore the signed fields, so nothing
-   changes for them.
-3. Ship the first keyed app build.
+2. Pin the public key in `scripts/config/release_trust.json` `production_keys`, and merge it.
+   From this commit every publish must be signed. Builds with no keys ignore the signed
+   fields, so nothing changes for them.
+3. Ship the first keyed app build, with the same key.
 
 Don't reverse this. A keyed build refuses any unsigned row, so a keyed build shipped before
 signing starts gets no catalog updates. After step 3, **every** publish must be signed.
@@ -106,10 +117,11 @@ that names rules until `a9_review_complete` is `true` and `signed_off_by` and `s
 are filled in. Only Sean records that sign-off, after A9 finishes. Public builds also carry no
 key until then, so two separate locks hold.
 
-To test rules on a test project, pass `--test-project` and set
-`PHARMAGUIDE_TEST_SUPABASE_URL` to the same URL as `SUPABASE_URL`, on the command line for that
-one run. The repo holds no reliable production project ID, so this env var is the only proof
-of a test project. Never put it in `.env`.
+To test rules on a test project, pass `--test-project`. `sync` refuses unless the host in
+`SUPABASE_URL` is listed under `test_hosts` in `scripts/config/release_trust.json`, and it
+refuses the project named by `production_project_ref` even if that list ever names it. The
+environment can't prove where it points, so adding a test project takes a reviewed commit. A
+test release is signed with a key under `test_keys`, and that key can't publish to production.
 
 ## Rotate the key
 

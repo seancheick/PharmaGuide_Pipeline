@@ -7,7 +7,9 @@ import base64
 import hashlib
 import json
 import os
+import re
 import sqlite3
+import subprocess
 import sys
 from pathlib import Path
 from types import SimpleNamespace
@@ -129,11 +131,42 @@ def key():
     return Ed25519PrivateKey.generate()
 
 
-def _write_signed(tmp_path, text, key):
+PRODUCTION_REF = "prodref000000000000"
+PRODUCTION_URL = f"https://{PRODUCTION_REF}.supabase.co"
+
+
+@pytest.fixture(autouse=True)
+def trust_file(tmp_path, monkeypatch):
+    path = tmp_path / "release_trust.json"
+    path.write_text(json.dumps({
+        "production_project_ref": PRODUCTION_REF,
+        "test_hosts": ["project-under-test.example", "127.0.0.1"],
+        "production_keys": {},
+        "test_keys": {},
+    }))
+    monkeypatch.setattr(rm, "TRUST_PATH", path)
+    return path
+
+
+def _public_hex(key):
+    return key.public_key().public_bytes(
+        serialization.Encoding.Raw, serialization.PublicFormat.Raw,
+    ).hex()
+
+
+def _pin(key, *groups):
+    trust = json.loads(rm.TRUST_PATH.read_text())
+    for group in groups:
+        trust[group][KEY_ID] = _public_hex(key)
+    rm.TRUST_PATH.write_text(json.dumps(trust))
+
+
+def _write_signed(tmp_path, text, key, *, pin=("production_keys", "test_keys")):
     manifest_path = tmp_path / "release.json"
     signature_path = tmp_path / "release.sig"
     manifest_path.write_bytes(text.encode("utf-8"))
     signature_path.write_text(rm.sign_release(text, key))
+    _pin(key, *pin)
     return str(manifest_path), str(signature_path)
 
 
@@ -356,7 +389,6 @@ def gate_file(tmp_path, monkeypatch):
     path = tmp_path / "remote_rules_gate.json"
     monkeypatch.setattr(rm, "GATE_PATH", path)
     monkeypatch.setenv("SUPABASE_URL", "https://project-under-test.example/")
-    monkeypatch.delenv(rm.TEST_SUPABASE_URL_ENV, raising=False)
     return path
 
 
@@ -404,26 +436,65 @@ def test_gate_does_not_apply_to_a_catalog_only_release(gate_file):
     assert "catalog-only" in rm.check_remote_rules_gate({"rules": None})
 
 
-def test_test_project_passes_only_when_the_env_names_this_exact_project(gate_file, monkeypatch):
+def test_test_project_needs_a_host_the_repo_allows(gate_file):
     _gate(gate_file, False, None, None)
-    # Flag alone: production cannot be told apart, so this must refuse.
-    with pytest.raises(rm.ReleaseManifestError, match=rm.TEST_SUPABASE_URL_ENV):
-        rm.check_remote_rules_gate(RULES_RELEASE, test_project=True)
-    monkeypatch.setenv(rm.TEST_SUPABASE_URL_ENV, "https://other-project.example")
-    with pytest.raises(rm.ReleaseManifestError, match=rm.TEST_SUPABASE_URL_ENV):
-        rm.check_remote_rules_gate(RULES_RELEASE, test_project=True)
-    monkeypatch.setenv(rm.TEST_SUPABASE_URL_ENV, "https://project-under-test.example")
     assert "test project" in rm.check_remote_rules_gate(RULES_RELEASE, test_project=True)
-    # Env alone is not a request to bypass the gate.
+    # Without the flag, nothing about the host opens the gate.
     with pytest.raises(rm.ReleaseManifestError, match="no A9 sign-off"):
         rm.check_remote_rules_gate(RULES_RELEASE)
 
 
-def test_test_project_with_empty_urls_does_not_match(gate_file, monkeypatch):
-    monkeypatch.delenv("SUPABASE_URL")
-    monkeypatch.setenv(rm.TEST_SUPABASE_URL_ENV, "")
-    with pytest.raises(rm.ReleaseManifestError, match=rm.TEST_SUPABASE_URL_ENV):
+@pytest.mark.parametrize("url", [
+    PRODUCTION_URL,
+    PRODUCTION_URL.upper().replace("HTTPS", "https"),
+    f"{PRODUCTION_URL}/",
+    # The name before the @ is not the host.
+    f"https://127.0.0.1@{PRODUCTION_REF}.supabase.co",
+])
+def test_test_project_refuses_production_however_it_is_spelled(gate_file, monkeypatch, url):
+    _gate(gate_file, False, None, None)
+    monkeypatch.setenv("SUPABASE_URL", url)
+    # The env var that used to prove this is no longer read, even when it agrees.
+    monkeypatch.setenv("PHARMAGUIDE_TEST_SUPABASE_URL", url)
+    with pytest.raises(rm.ReleaseManifestError, match="production"):
+        rm.check_remote_rules_gate(RULES_RELEASE, test_project=True)
+
+
+def test_production_stays_refused_if_the_allowlist_ever_names_it(gate_file, monkeypatch, trust_file):
+    trust = json.loads(trust_file.read_text())
+    trust["test_hosts"].append(f"{PRODUCTION_REF}.supabase.co")
+    trust_file.write_text(json.dumps(trust))
+    monkeypatch.setenv("SUPABASE_URL", PRODUCTION_URL)
+    with pytest.raises(rm.ReleaseManifestError, match="production"):
         rm.check_remote_rules_gate({"rules": None}, test_project=True)
+
+
+@pytest.mark.parametrize("url", ["https://unlisted-project.supabase.co", "", "not a url"])
+def test_test_project_refuses_any_host_the_repo_does_not_list(gate_file, monkeypatch, url):
+    monkeypatch.setenv("SUPABASE_URL", url)
+    with pytest.raises(rm.ReleaseManifestError, match="release_trust.json"):
+        rm.check_remote_rules_gate({"rules": None}, test_project=True)
+
+
+@pytest.mark.parametrize("content", [None, "not json", "[]", "{}", '{"production_keys": 1}'])
+def test_unreadable_trust_refuses_the_test_project(gate_file, trust_file, content):
+    if content is None:
+        trust_file.unlink()
+    else:
+        trust_file.write_text(content)
+    with pytest.raises(rm.ReleaseManifestError, match="release_trust.json"):
+        rm.check_remote_rules_gate({"rules": None}, test_project=True)
+
+
+def test_committed_trust_file_is_well_formed_and_keeps_production_apart():
+    trust = json.loads((Path(rm.__file__).parent / "config" / "release_trust.json").read_text())
+    assert set(trust) == {"production_project_ref", "test_hosts", "production_keys", "test_keys"}
+    assert re.fullmatch(r"[a-z0-9]{20}", trust["production_project_ref"])
+    assert not any(trust["production_project_ref"] in host for host in trust["test_hosts"])
+    for group in ("production_keys", "test_keys"):
+        for key_id, public in trust[group].items():
+            assert rm.KEY_ID_PATTERN.fullmatch(key_id)
+            assert len(bytes.fromhex(public)) == 32
 
 
 # --- RPC client seam -----------------------------------------------------------------
@@ -642,9 +713,8 @@ def test_sync_refuses_rules_while_the_gate_is_closed(tmp_path, harness, key, dry
     assert harness.events == []
 
 
-def test_sync_allows_rules_on_a_named_test_project(tmp_path, harness, key, monkeypatch):
+def test_sync_allows_rules_on_a_listed_test_project(tmp_path, harness, key):
     _gate(rm.GATE_PATH, False, None, None)
-    monkeypatch.setenv(rm.TEST_SUPABASE_URL_ENV, os.environ["SUPABASE_URL"])
     catalog = _make_catalog(tmp_path / "catalog")
     rules = _make_rules(tmp_path / "rules")
     manifest, signature = _write_signed(tmp_path, _build(catalog, rules), key)
@@ -653,6 +723,145 @@ def test_sync_allows_rules_on_a_named_test_project(tmp_path, harness, key, monke
         rules_dir=str(rules), test_project=True,
     )
     assert result["status"] == "synced"
+
+
+@pytest.mark.parametrize("dry_run", [True, False])
+def test_sync_refuses_a_signature_from_any_other_key_before_any_write(
+    tmp_path, harness, key, dry_run,
+):
+    catalog = _make_catalog(tmp_path / "catalog")
+    manifest, signature = _write_signed(tmp_path, _build(catalog), key, pin=())
+    _pin(Ed25519PrivateKey.generate(), "production_keys")
+    with pytest.raises(rm.ReleaseManifestError, match="does not verify"):
+        sync.sync(
+            str(catalog), dry_run=dry_run, max_workers=1,
+            release_manifest=manifest, release_signature=signature,
+        )
+    assert harness.events == []
+
+
+def test_sync_refuses_a_manifest_changed_after_signing(tmp_path, harness, key):
+    catalog = _make_catalog(tmp_path / "catalog")
+    manifest, signature = _write_signed(tmp_path, _build(catalog), key)
+    # Still canonical and still this build; only the signature can catch it.
+    Path(manifest).write_bytes(_build(catalog, sequence=6).encode("utf-8"))
+    with pytest.raises(rm.ReleaseManifestError, match="does not verify"):
+        sync.sync(
+            str(catalog), max_workers=1, release_manifest=manifest, release_signature=signature,
+        )
+    assert harness.events == []
+
+
+def test_sync_refuses_a_key_the_repo_does_not_pin(tmp_path, harness, key):
+    catalog = _make_catalog(tmp_path / "catalog")
+    manifest, signature = _write_signed(tmp_path, _build(catalog), key, pin=())
+    with pytest.raises(rm.ReleaseManifestError, match="not pinned"):
+        sync.sync(
+            str(catalog), max_workers=1, release_manifest=manifest, release_signature=signature,
+        )
+    assert harness.events == []
+
+
+def test_a_test_key_can_not_publish_to_production(tmp_path, harness, key):
+    catalog = _make_catalog(tmp_path / "catalog")
+    manifest, signature = _write_signed(tmp_path, _build(catalog), key, pin=("test_keys",))
+    with pytest.raises(rm.ReleaseManifestError, match="not pinned"):
+        sync.sync(
+            str(catalog), max_workers=1, release_manifest=manifest, release_signature=signature,
+        )
+    assert harness.events == []
+
+
+def test_a_production_key_is_not_a_test_key(tmp_path, harness, key):
+    catalog = _make_catalog(tmp_path / "catalog")
+    manifest, signature = _write_signed(tmp_path, _build(catalog), key, pin=("production_keys",))
+    with pytest.raises(rm.ReleaseManifestError, match="not pinned"):
+        sync.sync(
+            str(catalog), max_workers=1, release_manifest=manifest,
+            release_signature=signature, test_project=True,
+        )
+    assert harness.events == []
+
+
+@pytest.mark.parametrize("dry_run", [True, False])
+def test_once_a_production_key_is_pinned_unsigned_can_not_publish(tmp_path, harness, key, dry_run):
+    _pin(key, "production_keys")
+    catalog = _make_catalog(tmp_path / "catalog")
+    with pytest.raises(rm.ReleaseManifestError, match="must be signed"):
+        sync.sync(str(catalog), dry_run=dry_run, max_workers=1)
+    assert harness.events == []
+
+
+def test_an_unreadable_trust_file_stops_unsigned_publishing(tmp_path, harness, trust_file):
+    trust_file.unlink()
+    catalog = _make_catalog(tmp_path / "catalog")
+    with pytest.raises(rm.ReleaseManifestError, match="release_trust.json"):
+        sync.sync(str(catalog), max_workers=1)
+    assert harness.events == []
+
+
+@pytest.mark.parametrize("pinned,expected", [(False, 0), (True, 1)])
+def test_unsigned_allowed_command_reports_the_rule(key, pinned, expected, capsys):
+    if pinned:
+        _pin(key, "production_keys")
+    assert rm.main(["unsigned-allowed"]) == expected
+
+
+def test_unsigned_allowed_command_fails_closed(trust_file):
+    trust_file.unlink()
+    assert rm.main(["unsigned-allowed"]) == 1
+
+
+# --- release_full wiring -------------------------------------------------------------
+
+
+RELEASE_FULL = Path(rm.__file__).parent / "release_full.sh"
+
+
+def _signed_publish_gate(*, allowed, signed_args=""):
+    source = RELEASE_FULL.read_text()
+    start = source.index("require_signed_release_or_stop() {")
+    end = source.index("\n}\n", start) + 3
+    python = "true" if allowed else "false"
+    return subprocess.run(
+        ["bash", "-uc", f"""
+err() {{ echo "$*" >&2; }}
+PG_PYTHON={python}
+DIST_DIR=/fake/dist
+RELEASE_SIGN_ARGS=({signed_args})
+{source[start:end]}
+require_signed_release_or_stop || exit 1
+echo reached-sync
+"""],
+        capture_output=True, text=True,
+    )
+
+
+def test_release_full_stops_before_sync_when_a_signature_is_owed():
+    result = _signed_publish_gate(allowed=False)
+    assert result.returncode == 1
+    assert "reached-sync" not in result.stdout
+    assert "--release-manifest" in result.stderr and "sign" in result.stderr
+
+
+def test_release_full_goes_on_when_unsigned_is_still_allowed():
+    result = _signed_publish_gate(allowed=True)
+    assert result.returncode == 0 and "reached-sync" in result.stdout
+
+
+def test_release_full_goes_on_with_a_signed_release_and_leaves_checking_to_sync():
+    result = _signed_publish_gate(allowed=False, signed_args="--release-manifest a --release-signature b")
+    assert result.returncode == 0 and "reached-sync" in result.stdout
+
+
+def test_every_release_full_sync_carries_the_signed_arguments():
+    source = RELEASE_FULL.read_text()
+    calls = re.findall(r'scripts/sync_to_supabase\.py "\$DIST_DIR"(?:[^\n]*\\\n)*[^\n]*', source)
+    assert len(calls) == 2
+    for call in calls:
+        assert '${RELEASE_SIGN_ARGS[@]+"${RELEASE_SIGN_ARGS[@]}"}' in call
+    gate = source.index("require_signed_release_or_stop\n", source.index("# Step 5: Sync to Supabase"))
+    assert gate < source.index('scripts/sync_to_supabase.py "$DIST_DIR"')
 
 
 def test_sync_refuses_a_manifest_for_another_build_before_any_write(tmp_path, harness, key):

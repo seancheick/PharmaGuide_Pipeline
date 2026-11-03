@@ -119,15 +119,15 @@ owns the RPC; `scripts/sql/supabase_schema.sql` only mirrors the columns. `--pre
 checks the unsigned contract. A signed sync checks the three new arguments before its first
 Storage write, so the publisher keeps working before that migration deploys.
 
-Before any Storage write, a signed sync refuses:
+An unsigned sync is refused once `release_trust.json` pins a production key. Before any Storage write, a signed sync refuses:
 
 - a manifest that isn't canonical or doesn't match the contract;
 - a catalog version, hash, schema or minimum app version that differs from the build;
 - a rules file whose hash differs from the manifest;
-- a signature with the wrong format or key ID (run `release_manifest.py verify` for the
-  signature itself);
+- a signature that doesn't verify against the key pinned for this destination in
+  `scripts/config/release_trust.json`, or a key that isn't pinned there;
 - rules while `scripts/config/remote_rules_gate.json` records no A9 sign-off, unless
-  `--test-project` is passed and `PHARMAGUIDE_TEST_SUPABASE_URL` equals `SUPABASE_URL`;
+  `--test-project` is passed and the `SUPABASE_URL` host is listed in `test_hosts` there;
 - a sequence below the current row's, or equal to it with different content;
 - a deployed RPC without the new arguments.
 
