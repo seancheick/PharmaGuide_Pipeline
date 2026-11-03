@@ -1,49 +1,22 @@
 # Per-product sort, 2026.11.02 not_scored labels
 
-Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were replayed on main and all reproduced. Sort: **a** our gap, **b** real label limit, **c** Sean's decision (codes C1 to C8 in the PR and `research.md`). Replay is the clean → enrich → score path on frozen raw labels. Nothing is published.
+Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were replayed on main and all reproduced. Sort: **a** our gap, **b** real label limit, **c** Sean's decision (codes C1 to C13 in the PR and `research.md`). Replay is the clean → enrich → score path on frozen raw labels. Nothing is published.
 
-## Moved to scored (39)
+## Moved to scored (12)
 
 | ID | Product | Before | After score | After verdict | Safety status (unchanged) |
 |---|---|---|---|---|---|
 | 328639 | Life Extension Plant-Based Multivitamin | no score, NOT_SCORED | 86 | SAFE | no_known_catalog_concern |
-| 66513 | Nature's Way Completia Prenatal Multi-Vitamin | no score, NOT_SCORED | 84 | SAFE | no_known_catalog_concern |
-| 188790 | Pure Encapsulations PureLean Pure Pack | no score, NOT_SCORED | 82 | CAUTION | caution |
-| 306204 | Nutricost Women Creatine 3 g Peach Mango | no score, NOT_SCORED | 78.5 | SAFE | no_known_catalog_concern |
 | 293269 | Nature's Way CoQ10 100 mg | no score, NOT_SCORED | 76.9 | SAFE | no_known_catalog_concern |
-| 256962 | Centrum Men's Multi | no score, NOT_SCORED | 76.4 | SAFE | no_known_catalog_concern |
-| 312640 | GNC AMP Advanced Muscle Performance Waterex | no score, NOT_SCORED | 76 | SAFE | no_known_catalog_concern |
-| 312713 | GNC AMP Advanced Muscle Performance Waterex | no score, NOT_SCORED | 76 | SAFE | no_known_catalog_concern |
-| 330886 | GNC Total Lean Waterex | no score, NOT_SCORED | 76 | SAFE | no_known_catalog_concern |
-| 220021 | Solgar Vegetarian Multiple | no score, NOT_SCORED | 75.1 | CAUTION | caution |
 | 328127 | Nature's Way Blood Sugar Manager | no score, NOT_SCORED | 72.8 | SAFE | no_known_catalog_concern |
-| 62816 | Life Extension Natural Glucose | no score, NOT_SCORED | 72.8 | SAFE | no_known_catalog_concern |
-| 246370 | Pure Encapsulations PureLean Nutrients | no score, NOT_SCORED | 72.6 | CAUTION | caution |
-| 27203 | GNC Ultra Mega Green Maximum Nutrition Berry | no score, NOT_SCORED | 71.9 | SAFE | no_known_catalog_concern |
-| 246350 | Pure Encapsulations Metabolic Xtra | no score, NOT_SCORED | 68.8 | SAFE | no_known_catalog_concern |
-| 63463 | MegaFood Daily Energy Nutrient Booster Powder | no score, NOT_SCORED | 68.8 | SAFE | no_known_catalog_concern |
 | 328006 | Nature's Way Oregano Oil | no score, NOT_SCORED | 66.4 | SAFE | no_known_catalog_concern |
-| 214676 | Solgar Naturvite | no score, NOT_SCORED | 65.8 | CAUTION | caution |
-| 214952 | Solgar Solovite | no score, NOT_SCORED | 64.6 | CAUTION | caution |
-| 312947 | BulkSupplements.com Psyllium Husk 1400 mg Veg Capsules | no score, NOT_SCORED | 62.4 | SAFE | no_known_catalog_concern |
-| 328649 | Life Extension Reishi Extract Mushroom Complex | no score, NOT_SCORED | 62.2 | SAFE | no_known_catalog_concern |
-| 231826 | Life Extension Optimized African Mango Irvingia With Phase 3 Calorie Control Complex | no score, NOT_SCORED | 62.1 | SAFE | no_known_catalog_concern |
-| 287389 | Pure Encapsulations Brain Reset | no score, NOT_SCORED | 61.1 | SAFE | no_known_catalog_concern |
-| 43662 | MegaFood Daily Purify | no score, NOT_SCORED | 60.9 | SAFE | no_known_catalog_concern |
-| 63330 | MegaFood Daily Purify | no score, NOT_SCORED | 60.9 | SAFE | no_known_catalog_concern |
-| 63475 | MegaFood Daily Purify Nutrient Booster Powder | no score, NOT_SCORED | 60.9 | SAFE | no_known_catalog_concern |
-| 47590 | GNC Pro Performance AMP Amplified Ripped Fruit Punch | no score, NOT_SCORED | 60.9 | SAFE | no_known_catalog_concern |
-| 29066 | GNC Pro Performance AMP Amplified Ripped Watermelon | no score, NOT_SCORED | 60.9 | SAFE | no_known_catalog_concern |
-| 43947 | MegaFood Daily Energy | no score, NOT_SCORED | 58.4 | SAFE | no_known_catalog_concern |
 | 312832 | BulkSupplements.com Omega 3-6-9 Softgels 2400 mg | no score, NOT_SCORED | 58.1 | SAFE | no_known_catalog_concern |
 | 294583 | BulkSupplements.com Omega 3-6-9 Softgels (1200 mg) | no score, NOT_SCORED | 58.1 | SAFE | no_known_catalog_concern |
 | 285637 | Garden of Life MyKind Organics Sleep Well R&R Spray | no score, NOT_SCORED | 56.9 | SAFE | no_known_catalog_concern |
 | 294296 | BulkSupplements.com Wild Cherry Extract | no score, NOT_SCORED | 54.4 | SAFE | no_known_catalog_concern |
 | 295001 | BulkSupplements.com Conjugated Linoleic Acid (CLA) | no score, NOT_SCORED | 54.3 | SAFE | no_known_catalog_concern |
 | 241290 | Garden of Life Extraordinary Beauty Lovely Legs | no score, NOT_SCORED | 53.2 | SAFE | no_known_catalog_concern |
-| 328434 | Life Extension Dopa-Mind | no score, NOT_SCORED | 52.6 | SAFE | no_known_catalog_concern |
 | 28963 | Garden of Life Primal Defense Kids Probiotic Formula Natural Banana Flavor | no score, NOT_SCORED | 50.9 | SAFE | no_known_catalog_concern |
-| 259374 | Nature's Way Organic Hemp Powder Protein & Fiber | no score, NOT_SCORED | 48.7 | SAFE | no_known_catalog_concern |
 | 328465 | Life Extension Ginseng Energy Boost | no score, NOT_SCORED | 48.2 | SAFE | no_known_catalog_concern |
 
 ## Identity group (74)
@@ -56,45 +29,17 @@ Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were repla
 | 294582 | BulkSupplements.com Oyster Extract | a | ingredientRows[0] Oyster Shell Extract 500 mg | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, dose_assessment_incomplete |
 | 330192 | BulkSupplements.com Oyster Extract Powder 500 mg | a | ingredientRows[0] Oyster Whole Extract 500 mg | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, dose_assessment_incomplete |
 | 330215 | BulkSupplements.com Oyster Extract Powder 500 mg | a | ingredientRows[0] Oyster Whole Extract 500 mg | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, dose_assessment_incomplete |
-| 27203 | GNC Ultra Mega Green Maximum Nutrition Berry | a | ingredientRows[30] Silica 1 mg (form: Silicon Hydrolyzed Vegetable Protein) | fixed: form read | scored 71.9, SAFE / no_known_catalog_concern | — |
-| 27808 | GNC Pro Performance AMP Amplified Stamina Lemon Tea | a | ingredientRows[10].nestedRows[0] L-Arginine 1000 mg (form: L-Arginine, OT2) | fixed: form read | not_scored, NOT_SCORED / caution | dose_assessment_incomplete, evidence_assessment_incomplete |
-| 28993 | GNC Pro Performance AMP Amplified Stamina Fruit Blast | a | ingredientRows[10].nestedRows[0] L-Arginine 1000 mg (form: L-Arginine, OT2) | fixed: form read | not_scored, NOT_SCORED / caution | dose_assessment_incomplete, evidence_assessment_incomplete |
-| 29066 | GNC Pro Performance AMP Amplified Ripped Watermelon | a | ingredientRows[9].nestedRows[1] L-Arginine 3 Gram(s) (form: L-Arginine, OT2) | fixed: form read | scored 60.9, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 47590 | GNC Pro Performance AMP Amplified Ripped Fruit Punch | a | ingredientRows[9].nestedRows[1] L-Arginine 3 Gram(s) (form: L-Arginine, OT2) | fixed: form read | scored 60.9, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 62816 | Life Extension Natural Glucose | a | ingredientRows[1] Chromium 100 mcg (form: Chromium GlycoProtein Matrix) | fixed: form read | scored 72.8, SAFE / no_known_catalog_concern | — |
-| 66513 | Nature's Way Completia Prenatal Multi-Vitamin | a | ingredientRows[22] Manganese 1 mg (form: Manganese Bisglycinate Sulfate Chelate) | fixed: form read | scored 84, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 188790 | Pure Encapsulations PureLean Pure Pack | a | ingredientRows[24] Chromium 200 mcg (form: Zychrome Chromium Dinicocysteinate) | fixed: form read | scored 82, CAUTION / caution | evidence_assessment_incomplete |
-| 214676 | Solgar Naturvite | a | ingredientRows[15] Phosphorus 13.5 mg (form: Phosphorus Oxide) | fixed: form read | scored 65.8, CAUTION / caution | evidence_assessment_incomplete |
-| 214952 | Solgar Solovite | a | ingredientRows[16] Phosphorus 13 mg (form: Phosphorus Oxide) | fixed: form read | scored 64.6, CAUTION / caution | evidence_assessment_incomplete |
-| 220021 | Solgar Vegetarian Multiple | a | ingredientRows[15] Calcium 40 mg (form: Calcium Pantothenate Glycinate Amino Acid Chelate) | fixed: form read | scored 75.1, CAUTION / caution | evidence_assessment_incomplete |
-| 231826 | Life Extension Optimized African Mango Irvingia With Phase 3 Calorie Control Complex | a | ingredientRows[1] Chromium 100 mcg (form: Chromium GlycoProtein Matrix) | fixed: form read | scored 62.1, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 241290 | Garden of Life Extraordinary Beauty Lovely Legs | a | ingredientRows[0] Diosmin 600 mg (form: Citrus Bioflavonoid Complex) | fixed: form read | scored 53.2, SAFE / no_known_catalog_concern | — |
-| 246350 | Pure Encapsulations Metabolic Xtra | a | ingredientRows[0] Zychrome Chromium 135 mcg (form: Chromium Dinicocysteinate) | fixed: form read | scored 68.8, SAFE / no_known_catalog_concern | — |
-| 246370 | Pure Encapsulations PureLean Nutrients | a | ingredientRows[21] Chromium 200 mcg (form: Zychrome Chromium Dinicocysteinate) | fixed: form read | scored 72.6, CAUTION / caution | evidence_assessment_incomplete |
-| 256962 | Centrum Men's Multi | a | ingredientRows[16] Magnesium 25 mg (form: Magnesium Oxide Chelate) | fixed: form read | scored 76.4, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 287389 | Pure Encapsulations Brain Reset | a | ingredientRows[3] Virtiva 120 mg (form: Ginkgo-Phosphatidylserine Phytosome) | fixed: form read | scored 61.1, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 293269 | Nature's Way CoQ10 100 mg | a | ingredientRows[1] Vitamin A 700 mcg (form: Mixed Carotenoids) | fixed: form read | scored 76.9, SAFE / no_known_catalog_concern | — |
 | 294296 | BulkSupplements.com Wild Cherry Extract | a | ingredientRows[0] Wild Cherry Fruit Extract, Powder 500 mg (form: Prunus avium Fruit Extract, Powder) | fixed: form read | scored 54.4, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 294583 | BulkSupplements.com Omega 3-6-9 Softgels (1200 mg) | a | ingredientRows[2] Flaxseed Oil 800 mg (form: Omega-9) | fixed: form read | scored 58.1, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 295001 | BulkSupplements.com Conjugated Linoleic Acid (CLA) | a | ingredientRows[0] Conjugated Linoleic Acid 1000 mg (form: Safflower) | fixed: form read | scored 54.3, SAFE / no_known_catalog_concern | — |
-| 306204 | Nutricost Women Creatine 3 g Peach Mango | a | ingredientRows[3] Dandelion Root Extract 80 mg (form: Taraxacum mongolicum Root Extract) | fixed: form read | scored 78.5, SAFE / no_known_catalog_concern | — |
-| 312640 | GNC AMP Advanced Muscle Performance Waterex | a | ingredientRows[2] Corn Silk, Powder 6.25 mg (form: Zea mays, Powder) | fixed: form read | scored 76, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 312713 | GNC AMP Advanced Muscle Performance Waterex | a | ingredientRows[2] Corn Silk, Powder 6.25 mg (form: Zea mays, Powder) | fixed: form read | scored 76, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 312832 | BulkSupplements.com Omega 3-6-9 Softgels 2400 mg | a | ingredientRows[2] Flaxseed Oil 800 mg (form: Omega-9) | fixed: form read | scored 58.1, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 312947 | BulkSupplements.com Psyllium Husk 1400 mg Veg Capsules | a | ingredientRows[0] Psyllium 1400 mg (form: Plantago Asiatica) | fixed: form read | scored 62.4, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 328127 | Nature's Way Blood Sugar Manager | a | ingredientRows[1] Vitamin A 450 mcg (form: Mixed Carotenoids) | fixed: form read | scored 72.8, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 328434 | Life Extension Dopa-Mind | a | ingredientRows[1] Neuravena 800 mg (form: Wild Green Oat Aerial Parts Extract) | fixed: form read | scored 52.6, SAFE / no_known_catalog_concern | — |
 | 328465 | Life Extension Ginseng Energy Boost | a | ingredientRows[0] GS15-4 200 mg (form: Asian Ginseng Root Extract, Fermented) | fixed: form read | scored 48.2, SAFE / no_known_catalog_concern | dose_benchmark_identity_unresolved |
 | 328639 | Life Extension Plant-Based Multivitamin | a | ingredientRows[0] Vitamin A 900 mcg RAE (form: Mixed Carotenoids from African Oil Palm Fruit Extract) | fixed: form read | scored 86, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 328649 | Life Extension Reishi Extract Mushroom Complex | a | ingredientRows[0] Reishi Mushroom Fruiting Body Extract 980 mg (form: Ganoderma lucidum Mushroom Fruiting Body Extract); ingredientRows[1] Shell-broken Reishi mushroom spore 150 mg (form: Ganoderma lucidum spore, shell-broken) | fixed: form read | scored 62.2, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 330886 | GNC Total Lean Waterex | a | ingredientRows[2] Corn Silk, Powder 6.25 mg (form: Zea mays, Powder) | fixed: form read | scored 76, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
+| 328649 | Life Extension Reishi Extract Mushroom Complex | a/c | ingredientRows[0] Reishi Mushroom Fruiting Body Extract 980 mg (form: Ganoderma lucidum Mushroom Fruiting Body Extract); ingredientRows[1] Shell-broken Reishi mushroom spore 150 mg (form: Ganoderma lucidum spore, shell-broken) | fixed: form read; C13 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
 | 28963 | Garden of Life Primal Defense Kids Probiotic Formula Natural Banana Flavor | a | ingredientRows[3] Organic freeze-dried banana powder 100 mg | fixed: identity pair | scored 50.9, SAFE / no_known_catalog_concern | probiotic_evidence_assessment_incomplete |
-| 43662 | MegaFood Daily Purify | a | ingredientRows[1] FoodState(R) Farm Fresh Beet Root 325 mg | fixed: identity pair | scored 60.9, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 43947 | MegaFood Daily Energy | a | ingredientRows[3] FoodState(R) Farm Fresh Beet Root 550 mg | fixed: identity pair | scored 58.4, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 63330 | MegaFood Daily Purify | a | ingredientRows[1] FoodState farm fresh Beet Root 325 mg | fixed: identity pair | scored 60.9, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 63463 | MegaFood Daily Energy Nutrient Booster Powder | a | ingredientRows[3] FoodState farm fresh Beet Root 550 mg | fixed: identity pair | scored 68.8, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 63475 | MegaFood Daily Purify Nutrient Booster Powder | a | ingredientRows[1] FoodState farm fresh Beet Root 325 mg | fixed: identity pair | scored 60.9, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 259374 | Nature's Way Organic Hemp Powder Protein & Fiber | a | ingredientRows[6] Organic Hemp Powder (seed) 30 Gram(s) | fixed: identity pair | scored 48.7, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 285637 | Garden of Life MyKind Organics Sleep Well R&R Spray | a | ingredientRows[1].nestedRows[2] organic Chamomile (flower) extract 50 mg | fixed: identity pair | scored 56.9, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 328006 | Nature's Way Oregano Oil | a | ingredientRows[0] Oregano Flower, Leaf Oil 50 mg | fixed: identity pair | scored 66.4, SAFE / no_known_catalog_concern | — |
 | 13041 | Spring Valley Gummie Multi Vitamin Daily Formula | b | no_score_eligible_active_rows | %DV rows with no amounts; #335 holds it as an unreadable label | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
@@ -114,6 +59,31 @@ Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were repla
 | 302675 | Doctor's Best High Absorption Magnesium Powder | c | ingredientRows[0].nestedRows[0] Magnesium Lysinate Glycinate Chelate 2000 mg (form: Magnesium Lysinate Glycinate Chelate) | C1 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete |
 | 322515 | Doctor's Best High Absorption Magnesium 200 mg | c | ingredientRows[0].nestedRows[0] Albion Magnesium Lysinate Glycinate Chelate 2000 mg (form: Albion Magnesium Lysinate Glycinate Chelate) | C1 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete |
 | 323080 | Thorne Catalyte Lemon Lime Flavored Electrolytes | c | ingredientRows[10] Magnesium 40 mg (form: Albion Magnesium Lysinate Glycinate Chelate) | C1 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 27808 | GNC Pro Performance AMP Amplified Stamina Lemon Tea | c | ingredientRows[10].nestedRows[0] L-Arginine 1000 mg (form: L-Arginine, OT2) | C10 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, dose_assessment_incomplete, evidence_assessment_incomplete |
+| 28993 | GNC Pro Performance AMP Amplified Stamina Fruit Blast | c | ingredientRows[10].nestedRows[0] L-Arginine 1000 mg (form: L-Arginine, OT2) | C10 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, dose_assessment_incomplete, evidence_assessment_incomplete |
+| 29066 | GNC Pro Performance AMP Amplified Ripped Watermelon | c | ingredientRows[9].nestedRows[1] L-Arginine 3 Gram(s) (form: L-Arginine, OT2) | C10 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 47590 | GNC Pro Performance AMP Amplified Ripped Fruit Punch | c | ingredientRows[9].nestedRows[1] L-Arginine 3 Gram(s) (form: L-Arginine, OT2) | C10 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 62816 | Life Extension Natural Glucose | c | ingredientRows[1] Chromium 100 mcg (form: Chromium GlycoProtein Matrix) | C10 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
+| 188790 | Pure Encapsulations PureLean Pure Pack | c | ingredientRows[24] Chromium 200 mcg (form: Zychrome Chromium Dinicocysteinate) | C10 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 214676 | Solgar Naturvite | c | ingredientRows[15] Phosphorus 13.5 mg (form: Phosphorus Oxide) | C10 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 214952 | Solgar Solovite | c | ingredientRows[16] Phosphorus 13 mg (form: Phosphorus Oxide) | C10 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 231826 | Life Extension Optimized African Mango Irvingia With Phase 3 Calorie Control Complex | c | ingredientRows[1] Chromium 100 mcg (form: Chromium GlycoProtein Matrix) | C10 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 246350 | Pure Encapsulations Metabolic Xtra | c | ingredientRows[0] Zychrome Chromium 135 mcg (form: Chromium Dinicocysteinate) | C10 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
+| 246370 | Pure Encapsulations PureLean Nutrients | c | ingredientRows[21] Chromium 200 mcg (form: Zychrome Chromium Dinicocysteinate) | C10 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 43662 | MegaFood Daily Purify | c | ingredientRows[1] FoodState(R) Farm Fresh Beet Root 325 mg | C11 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 43947 | MegaFood Daily Energy | c | ingredientRows[3] FoodState(R) Farm Fresh Beet Root 550 mg | C11 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 63330 | MegaFood Daily Purify | c | ingredientRows[1] FoodState farm fresh Beet Root 325 mg | C11 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 63463 | MegaFood Daily Energy Nutrient Booster Powder | c | ingredientRows[3] FoodState farm fresh Beet Root 550 mg | C11 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 63475 | MegaFood Daily Purify Nutrient Booster Powder | c | ingredientRows[1] FoodState farm fresh Beet Root 325 mg | C11 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 259374 | Nature's Way Organic Hemp Powder Protein & Fiber | c | ingredientRows[6] Organic Hemp Powder (seed) 30 Gram(s) | C11 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
+| 312640 | GNC AMP Advanced Muscle Performance Waterex | c | ingredientRows[2] Corn Silk, Powder 6.25 mg (form: Zea mays, Powder) | C12 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 312713 | GNC AMP Advanced Muscle Performance Waterex | c | ingredientRows[2] Corn Silk, Powder 6.25 mg (form: Zea mays, Powder) | C12 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 330886 | GNC Total Lean Waterex | c | ingredientRows[2] Corn Silk, Powder 6.25 mg (form: Zea mays, Powder) | C12 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 27203 | GNC Ultra Mega Green Maximum Nutrition Berry | c | ingredientRows[30] Silica 1 mg (form: Silicon Hydrolyzed Vegetable Protein) | C13 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
+| 66513 | Nature's Way Completia Prenatal Multi-Vitamin | c | ingredientRows[22] Manganese 1 mg (form: Manganese Bisglycinate Sulfate Chelate) | C13 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 220021 | Solgar Vegetarian Multiple | c | ingredientRows[15] Calcium 40 mg (form: Calcium Pantothenate Glycinate Amino Acid Chelate) | C13 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 256962 | Centrum Men's Multi | c | ingredientRows[16] Magnesium 25 mg (form: Magnesium Oxide Chelate) | C13 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 287389 | Pure Encapsulations Brain Reset | c | ingredientRows[3] Virtiva 120 mg (form: Ginkgo-Phosphatidylserine Phytosome) | C13 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
 | 801 | GNC Mega Men Maximum Nutrition Vanilla Bean | c | ingredientRows[44] L-Arginine 1000 mg (form: Di-Arginine Malate) | C2 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, dose_assessment_incomplete, evidence_assessment_incomplete |
 | 31063 | GNC Mega Men Maximum Nutrition Milk Chocolate | c | ingredientRows[44] L-Arginine 1000 mg (form: Di-Arginine Malate) | C2 | not_scored, NOT_SCORED / caution | identity_assessment_incomplete, dose_assessment_incomplete, evidence_assessment_incomplete |
 | 59067 | Life Extension GH Pituitary Support Day Formula | c | ingredientRows[2] L-Ornithine 800 mg (form: L-Ornithine Alpha-Ketoglutarate) | C2 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
@@ -124,6 +94,9 @@ Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were repla
 | 336100 | Nature's Bounty Optimal Solutions Hair Growth | c | ingredientRows[0] Biotin 10000 mcg (form: Advanced Hair Complex) | C5 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
 | 299744 | Pure Encapsulations Biotin Complex Hair & Skin | c | ingredientRows[0] Biotin 10000 mcg | C6 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
 | 306350 | Nutricost Marine Collagen Unflavored | c | no_score_eligible_active_rows | C7: Protein 10 g only; Hydrolyzed Fish Collagen sits in Other Ingredients | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 306204 | Nutricost Women Creatine 3 g Peach Mango | c | ingredientRows[3] Dandelion Root Extract 80 mg (form: Taraxacum mongolicum Root Extract) | C9 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
+| 312947 | BulkSupplements.com Psyllium Husk 1400 mg Veg Capsules | c | ingredientRows[0] Psyllium 1400 mg (form: Plantago Asiatica) | C9 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
+| 328434 | Life Extension Dopa-Mind | c | ingredientRows[1] Neuravena 800 mg (form: Wild Green Oat Aerial Parts Extract) | C9 | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
 
 ## Dose group (61)
 

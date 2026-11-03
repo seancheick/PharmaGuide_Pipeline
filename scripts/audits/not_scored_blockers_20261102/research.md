@@ -2,33 +2,19 @@
 
 Verified 2026-11-02. Label means the printed NIH DSLD label PDF (`https://api.ods.od.nih.gov/dsld/s3/pdf/<id>.pdf`), read directly. DSLD record means the raw staged JSON for that id. Agent review only: nothing here is clinician or Sean sign-off.
 
-**Rule applied.** A named form with no established quality takes the parent's authored unspecified form, which is the floor. That follows existing entries such as Chromium Citrate and Manganese Fumarate under their unspecified forms. Every form entry is a parent-scoped `source_form_aliases` value, so it cannot create an identity on another row. No `bio_score` was invented. The one new form is corn silk's floor, which equals the value the unknown-form rule already derived (6).
+**Rule applied.** An entry stays only where the printed words identify a form the map already holds, and no earlier review note or test holds that row. Every entry is parent-scoped, so it cannot create a new identity on another row. A floor read where the chemistry or plant part is not established is not ours to add: `phase2_form_curation_20260929/README.md` held `phosphorus oxide` for exactly that reason. Those rows are decision C13.
 
 ## Forms read (`ingredient_quality_map.json`)
 
 | Label text | Parent → form | Bio | Evidence and limit |
 |---|---|---|---|
-| Zychrome Chromium Dinicocysteinate; Chromium Dinicocysteinate | chromium → unspecified | 5 | DSLD 188790, 246350, 246370. `Zychrome` is already an alias of this form. Not found in PubChem or GSRS by that name, so identity rests on the label and the floor makes no quality claim. |
-| Chromium GlycoProtein Matrix | chromium → unspecified | 5 | DSLD 231826, 62816. A branded matrix, no compound identifier. Floor. |
 | Safflower | cla → cla 80% | 11 | Label 295001 prints "Conjugated Linoleic Acid (from Safflower oil)". The map already files `cla safflower oil` under this form. The label prints no 80%: that is the existing form's name, not a new claim. |
-| Taraxacum mongolicum Root Extract | dandelion → dandelion root | 6 | DSLD 306204. GSRS: TARAXACUM MONGOLICUM WHOLE, UNII 4E8QL88U6H. A different species from the map's T. officinale. All dandelion forms hold 6, so no quality moves. No clinical data transfers. |
-| Prunus avium Fruit Extract, Powder | dark_sweet_cherry → powder | 6 | DSLD 294296. GSRS: SWEET CHERRY, UNII 93T4562ZI3. `prunus avium extract` is already on this form. |
+| Prunus avium Fruit Extract, Powder | dark_sweet_cherry → powder | 6 | DSLD 294296. GSRS: SWEET CHERRY, UNII 93T4562ZI3. `prunus avium extract` is already on this form. LEDGER D21 once listed sweet cherry under a wild cherry label as held; `phase2_form_curation_20260929/README.md` records that a separate owner has since resolved Prunus avium. |
 | Citrus Bioflavonoid Complex | diosmin → unspecified | 7 | DSLD 241290: "95% Diosmin, in a Citrus Bioflavonoid Complex, with Hesperidin". The complex is the carrier, not a diosmin form. |
 | Omega-9 | flaxseed → flaxseed oil | 10 | DSLD 312832, 294583 note "source of omega-9". A marker on a row already named Flaxseed Oil. |
-| Ginkgo-Phosphatidylserine Phytosome | ginkgo → unspecified | 6 | DSLD 287389 (Virtiva). Floor. Does not infer pure ginkgo or phosphatidylserine content, as the existing correction note requires. |
 | Asian Ginseng Root Extract, Fermented | ginseng → fermented red ginseng | 12 | DSLD 328465, row GS15-4. The map already files GS15-4 under this form. |
-| L-Arginine, OT2 | l_arginine → l-arginine base | 10 | DSLD 47590, 27808, 28993, 29066. DSLD UNII 94ZLA3W45F is arginine, on both the row and the form. OT2 is an unexplained brand token. |
-| Manganese Bisglycinate Sulfate Chelate | manganese → unspecified | 3 | DSLD 66513. Not the map's bisglycinate. Floor. |
-| Wild Green Oat Aerial Parts Extract | oat_straw → unspecified | 5 | DSLD 328434, row Neuravena. `neuravena` and `wild green oat extract` are already on this form. |
-| Phosphorus Oxide | phosphorus → unspecified | 7 | DSLD 214676, 214952. Floor. |
-| Plantago Asiatica | psyllium → unspecified | 8 | DSLD 312947, grouped by DSLD under Psyllium fiber. GSRS: PLANTAGO ASIATICA WHOLE, UNII 5F5728J5E8. A different species from P. ovata husk, so it takes no husk credit. |
 | Ganoderma lucidum Mushroom Fruiting Body Extract | reishi → fruiting body | 9 | DSLD 328649. Same species and part as the existing alias. |
-| Ganoderma lucidum spore, shell-broken | reishi → unspecified | 8 | DSLD 328649. Floor; no spore form exists. |
-| Silicon Hydrolyzed Vegetable Protein | silica → unspecified | 7 | DSLD 27203. Floor. |
 | Mixed Carotenoids; Mixed Carotenoids from African Oil Palm Fruit Extract | vitamin_a → beta-carotene from mixed carotenoids | 7 | DSLD 293269, 328127, 328639, each also naming Beta-Carotene. Keeps the row provitamin, so no preformed vitamin A or UL reading changes. Confirmed in replay. |
-| Calcium Pantothenate Glycinate Amino Acid Chelate | calcium → calcium pantothenate (as calcium source) | 10 | Label 220021 prints "Calcium (as ascorbate, carbonate, pantothenate glycinate amino acid chelate)". Ambiguous between two forms, so it takes the lower one. |
-| Magnesium Oxide Chelate | magnesium → unspecified | 1 | Label 256962 prints "Magnesium (as magnesium oxide & magnesium oxide chelate) 25 mg". Not a known compound. Floor. |
-| Zea mays, Powder; Corn Silk, Powder | corn_silk → new `corn silk (unspecified)` | 6 | NIH labels print Cornsilk (Zea mays) Powder (pinned in `test_identity_label_named_over_group`). The matcher correctly refuses extract credit for a printed powder, and corn silk had no other form, so the existing alias could never be read. The new form holds the floor the rule already derived. |
 
 ## Identity conflicts, one pair at a time
 
@@ -36,9 +22,7 @@ Verified 2026-11-02. Label means the printed NIH DSLD label PDF (`https://api.od
 |---|---|---|
 | Oregano Flower, Leaf Oil (328006) | oregano → oil of oregano | DSLD group `oregano`, forms Oregano Leaf Oil and Oregano Flower Oil. DSLD's UNII 7D0CGR40U1 was not found in GSRS, so it was not used. |
 | organic Chamomile (flower) extract (285637, 232887) | chamomile → chamomile extract | DSLD group Chamomile. The map already reads `chamomile flower extract`. |
-| FoodState farm fresh Beet Root (63330, 63463, 63475); FoodState(R) Farm Fresh Beet Root (43662, 43947) | botanical `beet_root` | DSLD group Beet, printed root. The reviewed correction text names no nitrate amount, so it does not reach `dietary_nitrate`. |
 | Organic freeze-dried banana powder (28963) | other_ingredients `NHA_MISC_JUICE_CONCENTRATES` | That entry already holds `organic Banana powder`. |
-| Organic Hemp Powder (seed) (259374) | new botanical `hemp_seed_powder` | GSRS: CANNABIS SATIVA SEED, UNII QE567Z26NG, RxCUI 1429926. Distinct from hemp seed oil and hemp protein. The notes forbid cannabinoid or whole-plant evidence transfer. UMLS returned no hemp-seed CUI, so `cui` stays null. |
 
 ## Withdrawn after checking
 
@@ -46,23 +30,38 @@ Verified 2026-11-02. Label means the printed NIH DSLD label PDF (`https://api.od
 - **Advanced Hair Complex on Biotin (336100).** Label shows it is a marketing name for a biotin, arginine and silicon matrix. `test_identity_label_named_over_group` pins this product held since 2026-10-23, so the pin stands. Held for Sean.
 - **Zero-%DV parser change (212411, 212398, 214221).** These panels print "0%" with no amount, and the rows read as active doses, which looked like a falsy-zero bug beside the nonzero `daily_value_no_amount` branch. Extending that branch was tried and withdrawn. `identity.interaction.label_row_establishes_presence` treats that role as present, while a printed 0% reads as absent (Sean, 2026-09-26, register Q23), so it would have flipped presence on about 80 labels. It also finished none of them: replay moved 212411 and 212398 to `identity_assessment_incomplete` and left 214221 `not_scored` with no named blocker. The labels have no dosed active, so they stay held as a real label limit.
 
-## Two pinned tests changed
+## Released by mistake in `47a3ea25d`, put back in `f0f7e406c`
 
-Both pins said the row stays held because no form could be read. Each test's named purpose still holds: the row takes no credit from a higher form.
+CI on `47a3ea25d` failed on 7 pinned labels. Checking every alias against the ledger and earlier audits then found more. These rows were held on purpose, the first batch of this PR released them, and 27 labels that it had scored are `not_scored` again. No test pin is changed any more.
 
-- `test_dinicocysteinate_never_inherits_polynicotinate_form` now asserts `form_id == "chromium (unspecified)"`, a bio below polynicotinate and no `unmapped_forms`. It was `unmapped_forms == [chemical]`. Affects 188790, 246350, 246370.
-- `test_a_named_corn_silk_powder_cannot_claim_extract_form_credit` now asserts `form_id == "corn silk (unspecified)"`, bio 6 below the extract and no `unmapped_forms`. It was held as `FORM_DISCLOSED_UNMAPPED`. Affects 312640, 312713, 330886.
+| Row | Where the hold is recorded | Labels | Code |
+|---|---|---|---|
+| Plantago asiatica on Psyllium | LEDGER D21; 312947's correction says the repair must not remove this hold; `test_batch12_label_source_corrections` | 312947 | C9 |
+| Taraxacum mongolicum on Dandelion | LEDGER D21 | 306204 | C9 |
+| Wild Green Oat Aerial Parts on Oat Straw | LEDGER D21; `test_a_different_species_under_the_row_parent_stays_held_for_review` pins a near spelling, which is how the alias got past it | 328434 | C9 |
+| Phosphorus Oxide | `phase2_form_curation_20260929/README.md`: chemically ambiguous, PubChem has no exact compound | 214676, 214952 | C10 |
+| L-Arginine, OT2 | Same README and LEDGER Q32: token whose chemistry is not established | 47590, 29066; also 27808, 28993, already held on caffeine dose and evidence | C10 |
+| Chromium GlycoProtein Matrix | Same README and Q32 | 231826, 62816 | C10 |
+| Zychrome / Chromium Dinicocysteinate | Same README and Q32; `test_dinicocysteinate_never_inherits_polynicotinate_form` | 188790, 246350, 246370 | C10 |
+| FoodState Farm Fresh Beet Root | `test_reviewed_literal_correction_exports_without_assigning_quality_identity`, returned review `acf3edb0f`, 2026-10-26 | 43662, 43947, 63330, 63463, 63475 | C11 |
+| Organic Hemp Powder (seed) | Same test and review; correction text "No CBD/whole-plant evidence transfer" | 259374 | C11 |
+| Corn Silk, Powder | `test_a_named_corn_silk_powder_cannot_claim_extract_form_credit`, `6d7d535d0`; the first batch also authored a new form with a bio score | 312640, 312713, 330886 | C12 |
+| Magnesium Oxide Chelate; Manganese Bisglycinate Sulfate Chelate; Silicon Hydrolyzed Vegetable Protein | No hold recorded, but no established compound: same reasoning as phosphorus oxide | 256962; 66513; 27203 | C13 |
+| Ginkgo-Phosphatidylserine Phytosome | 287389's correction forbids inferring pure ginkgo or phosphatidylserine, and the row scores under ginkgo | 287389 | C13 |
+| Shell-broken Reishi spore | The map has no spore form, and 328649's correction says extract standards do not apply to spores | 328649 | C13 |
+| Calcium Pantothenate Glycinate Amino Acid Chelate | The printed term reads as two forms, and choosing the lower one is still a choice | 220021 | C13 |
 
-Sean can veto either: reverting that alias and that pin puts those products back on hold, and nothing else depends on them.
+**Why the first check missed this.** It searched for identifiers and DSLD groups, not for earlier decisions on the same row, and the owner test set left out the two files holding the pins.
 
 ## Replay
 
-Frozen raw labels through Clean, Enrich and Score, on main `0bd492188` and on this branch, with `scripts/audits/quality_redesign/replay.py`.
+Frozen raw labels through Clean, Enrich and Score, on main `0bd492188` and on `f0f7e406c`, with `scripts/audits/quality_redesign/replay.py`.
 
-- 152 affected labels: all 152 `not_scored` on main, reproducing the build. 39 moved to scored. The rest stay held. See `per_product.md`.
+- 152 affected labels: all 152 `not_scored` on main, reproducing the build. 12 moved to scored. See `per_product.md`.
 - 121 controls, chosen because they carry the same forms and names or read zero-%DV rows: no status or score changed. Only 232887 (CBD+ Sleep) differs: its chamomile row now resolves, its reasons change, and it stays `suppressed_safety`.
 - Safety fields compared across the 152: `product_safety_status`, `safety_verdict`, `dose_safety_evaluation`, safety review records, harmful additives and allergens. None changed.
-- `interaction_profile` changed on 6. 231826, 246350, 62816, 287389 and 328465 change only `form_context` text, with no change to hits, severity or disposition. 285637 gains `RULE_INGREDIENT_CHAMOMILE` because its chamomile row now resolves: bleeding disorders, anticoagulants, antiplatelets and NSAIDs. That alert is correct for a product that prints chamomile, and it was missing before only because the row was unresolved.
+- `interaction_profile` changed on 2. 328465 changes only `form_context` text. 285637 gains `RULE_INGREDIENT_CHAMOMILE` because its chamomile row now resolves: bleeding disorders, anticoagulants, antiplatelets and NSAIDs.
+- The 86 labels on PR #335's earlier list, on main and on this branch: no status, score, verdict or safety status changed.
 
 ## The dose group has no group (a)
 
@@ -81,4 +80,8 @@ No dose-blocked label had a curated or parser gap to fix. 25 of the 61 (20 no-re
 | C7 | Marine Collagen: panel prints Protein 10 g, and the collagen sits in Other Ingredients. Read it as the collagen dose, or stay held? | 306350 |
 | C8 | No completed dose reference (`dose_benchmark_identity_unresolved`). Sean approved these as exact-edition holds on 2026-10-30. Keep holding, or commission approved neutral records? Sibling session `start-evidence-review-wi` may overlap. | Horsetail: 251616, 327984, 252704, 254795, 254796, 254797, 312024, 312025, 312026, 312027, 331202. Others: 231921, 232035, 269718, 328831, 232921, 232928, 220046, 80302, 295107 |
 
-**One policy for Sean to confirm.** A named form with no published quality evidence scores at the parent's floor instead of staying held. That is the existing unknown-form rule and has precedents, but it moves 39 labels from no score to a score, so it is his to veto.
+| C9 | Different species or plant part from the map's parent, left held on purpose in LEDGER D21. Keep holding, or give each its own form? | Plantago asiatica 312947; Taraxacum mongolicum 306204; wild green oat aerial parts 328434 |
+| C10 | Terms whose chemistry was not established in form curation. Keep holding, or commission an identity check? | Phosphorus Oxide 214676, 214952; OT2 47590, 29066, 27808, 28993; Chromium GlycoProtein Matrix 231826, 62816; Zychrome/Dinicocysteinate 188790, 246350, 246370 |
+| C11 | The October 26 review exports these without a quality identity, and its stated limits are no nitrate allocation and no CBD or whole-plant transfer. Was withholding the score itself intended, or may they score with those limits kept? | Beet root 43662, 43947, 63330, 63463, 63475; hemp 259374 |
+| C12 | Corn silk powder: the only form is an extract, and a printed powder cannot take its credit. Author a powder form, or keep holding? | 312640, 312713, 330886 |
+| C13 | Named forms with no established compound or part. May a named form score at the parent's floor, or does it stay held? | 256962, 66513, 27203, 287389, 328649, 220021 |
