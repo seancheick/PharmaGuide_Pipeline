@@ -4379,6 +4379,14 @@ Integrated preflight passed publication access, checkout alignment, manufacturer
 
 Sean now owns execution. Resume the prepared input set through snapshot, then run `scripts/test.sh release`, then `scripts/release_full.sh`; stop on any failure. The existing verified-construction receipt prevents duplicate assembly. The standard future full workflow remains `bash batch_run_all_datasets.sh --resume`. Final producer completion, catalog validation, source-based movement review, publication, Flutter bundle qualification, actual phone acceptance and post-construction interruption/reuse measurement remain pending. Durable evidence and the single current operator handoff are under `.claude/state/release_loop_recovery/` and `.claude/state/CURRENT_HANDOFF.md`; do not restart an agent-owned run while Sean is operating.
 
+## November 3 — A9 completion: a finished review is complete, an unread primary is not (PR #338)
+
+**Class:** behavioral (release decision and Evidence wording). **Owners:** `assessment_readiness.evaluate_release_assessment`, `evidence_resolver.evidence_required_canonicals`. Sean authorized the rule; he did not approve any PR result or reverse a hold.
+
+Frozen corpus `~/pg_quality/a9_corpus_20261103`, 15,447 labels, both arms at `a225a6823` (has #335 and #340, not #339 or the dose batch), 0 errors. Partial 6,343 to 5,315: 1,028 complete, 0 the other way. 0 moves in score, tier, status, pillars, catalog safety, `safety_assessment_status`, verdict or confidence. All 40 label holds unchanged. Tables, shared-cause plan and limits: `scripts/audits/a9_scoring_state_audit_20261102/AUDIT.md`.
+
+Open: 8 labels read complete while the ingredient their title names is unread, because `_named_in_title` doesn't read a genus, class or brand word (251695, 293389, 326688, 178674, 221657, 223436, 243141, 25921); the alias fix moves scores, so it needs its own batch. 69 multi labels don't count "Vitamin A" printed on a `beta_carotene` row. For Sean: the new Evidence sentence about rows not individually reviewed, and the `applicability_unestablished` wording. After #339 and the dose batch land, replay only the labels they change and report the delta.
+
 ## November 3 — A9: unfinished data no longer reads as finished (PR #338, branch `claude/a9-scoring-state-audit-a147a2`)
 
 **Class:** behavioral (public contract column, safety status, consumer copy). No score or tier moves. **Owners:** `assessment_readiness.safety_assessment_status`, `scored_artifact._product_safety_status`, `quality_score.mark_evidence_review_open`, `build_final_db.py` share, highlight and percentile copy, `core_export_model.py` 1.2.0. **Audit and evidence:** `scripts/audits/a9_scoring_state_audit_20261102/AUDIT.md`.

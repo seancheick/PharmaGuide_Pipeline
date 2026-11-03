@@ -4,8 +4,7 @@ A finished review that found little is complete and low-evidence. A review never
 performed stays recorded as unreviewed. It holds the product only when its row
 could change the Evidence answer: the route's nutrient panel, a claim-named or
 materially dosed owner, or a member of such a blend. Supporting rows don't hold, and
-this is never a reason to
-relabel them as reviewed (Sean, November 3, 2026).
+this is never a reason to relabel them as reviewed (Sean, November 3, 2026).
 
 Every label here is a real DSLD label, measured on the code before this rule
 (all read partial) and after it.
@@ -86,6 +85,35 @@ def test_an_open_review_that_could_change_the_answer_still_holds(pipeline, label
     assert scored["quality_assessment_status"] == "partial"
     assert scored["assessment_readiness"]["release_assessment"]["blockers"] == blockers
     assert scored["quality_pillars_v4"]["evidence"]["display_state"] != "assessed"
+
+
+def test_a_blend_member_completes_only_on_its_own_reviewed_decision(pipeline):
+    from evidence_resolver import resolve_product_evidence
+    from scoring_input_contract import score_eligible_identity_view
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # 221423 prints whey isolate inside its protein blend, with no amount of its own.
+    # The Evidence credit comes from whey's finished review, not an unread row.
+    enriched = _enrich(pipeline, "a9_completion_221423_raw.json")
+    scored = build_scored_artifact(enriched)
+    assert scored["quality_assessment_status"] == "complete"
+    assert _unreviewed_rows(scored) == []
+    whey = next(row for row in scored["assessment_readiness"]["evidence"]["ingredient_assessments"]
+                if row["canonical_id"] == "whey_protein")
+    assert ".nestedRows[" in whey["source_row_ref"]
+    assert whey["state"] == "evaluated_supported"
+    resolutions = resolve_product_evidence(
+        score_eligible_identity_view(enriched), owner_scoped=True, module="sports").resolutions
+    assert {r.canonical_id: r.reason_code for r in resolutions}["whey_protein"] == (
+        "reviewed_human_clinical_evidence_matched")
+    evidence = scored["_v4_module_breakdown"]["dimensions"]["evidence"]["metadata"]
+    assert any("WHEY" in str(entry) for entry in evidence["recovered_matches"])
+
+    # 256990 is the control: unread members of its heavy blend keep it held, though
+    # magnesium already earned credit.
+    held = build_scored_artifact(_enrich(pipeline, "a9_completion_256990_raw.json"))
+    assert held["quality_assessment_status"] == "partial"
+    assert {"chamomile", "lemon_balm"} <= {row["canonical_id"] for row in _unreviewed_rows(held)}
 
 
 def test_required_owners_are_the_ones_that_can_move_the_answer(pipeline):
