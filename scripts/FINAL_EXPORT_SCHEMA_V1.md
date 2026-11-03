@@ -1067,6 +1067,12 @@ and shared across versions so unchanged products do not get re-uploaded.
 | SQLite database      | `pharmaguide/v{db_version}/pharmaguide_core.db`                           |
 | Detail index         | `pharmaguide/v{db_version}/detail_index.json`                             |
 | Detail blob payloads | `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
+| Signed release rules | `pharmaguide/rules/{version}/interaction_db.sqlite`                       |
+
+The Supabase `export_manifest` row also has `release_sequence`, `signed_release` and
+`release_signature` for signed releases (ADR-012). The SQLite `export_manifest` table and
+`export_manifest.json` do not carry them. The contract is declared in
+`scripts/SUPABASE_SYNC_README.md` ("Signed release manifest").
 
 ### Supabase RPCs
 
