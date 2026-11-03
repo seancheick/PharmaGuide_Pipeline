@@ -1892,7 +1892,7 @@
           "scope": "condition",
           "target_id": "pregnancy",
           "basis": "per_day",
-          "comparator": ">",
+          "comparator": ">=",
           "value": 200,
           "unit": "mg",
           "severity_if_met": "avoid",
@@ -1915,7 +1915,7 @@
             },
             "dose": {
               "basis": "per_day",
-              "comparator": ">",
+              "comparator": ">=",
               "value": 200,
               "unit": "mg",
               "severity_if_met": "avoid",
@@ -21903,7 +21903,7 @@
           "action": "Do not use supplement-dose bitter orange in pregnancy.",
           "sources": [
             "https://www.nccih.nih.gov/health/bitter-orange",
-            "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
+            "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/legislation-guidelines/guidance-documents/notice-use-synephrine.html"
           ],
           "alert_headline": "Stimulant — avoid in pregnancy",
           "alert_body": "Bitter orange contains synephrine, a stimulant that can stress the cardiovascular system. If you are pregnant, avoid supplement-dose bitter orange.",
@@ -21963,7 +21963,7 @@
         "materiality": "presence",
         "sources": [
           "https://www.nccih.nih.gov/health/bitter-orange",
-          "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
+          "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/legislation-guidelines/guidance-documents/notice-use-synephrine.html"
         ]
       },
       "last_reviewed": "2026-10-28",
