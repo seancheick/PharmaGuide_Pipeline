@@ -1,0 +1,56 @@
+{
+  "alert_id": "SA_9999_0003",
+  "revision": 1,
+  "event_type": "interaction_rule",
+  "status": "published",
+  "authority": "TEST FIXTURE - not a real authority",
+  "source_url": "https://example.org/fake-interaction-source",
+  "evidence_verified_at": "2026-11-03",
+  "fda_class": null,
+  "jurisdiction": "US",
+  "effective_date": "2026-11-01",
+  "published_at": "2026-11-03T12:00:00Z",
+  "scope": {
+    "ingredient_canonical_ids": [
+      "fake_fakeroot"
+    ],
+    "dsld_ids": []
+  },
+  "resolved_dsld_ids": [
+    "9990001"
+  ],
+  "catalog_snapshot_version": "2026.11.03.000000",
+  "lots": null,
+  "headline": "Fictional test notice: Fakeroot in pregnancy",
+  "body": "Test fixture only. Fakeroot is a made-up ingredient that this fictional rule says is not for use during pregnancy.",
+  "action": "Test fixture only. Worth a conversation with your doctor.",
+  "consumer_disposition": "block",
+  "expires_at": null,
+  "retracted": false,
+  "interaction": {
+    "rule_id": "RULE_FAKE_FAKEROOT_PREGNANCY#condition:pregnancy",
+    "rule_fingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "ingredient_name": "Fakeroot (fictional)",
+    "severity": "contraindicated",
+    "evidence_level": "established",
+    "profile_context": "Pregnancy",
+    "profile_gate": {
+      "gate_type": "profile_flag",
+      "requires": {
+        "conditions_any": [],
+        "drug_classes_any": [],
+        "profile_flags_any": [
+          "pregnant"
+        ]
+      },
+      "excludes": {
+        "conditions_any": [],
+        "drug_classes_any": [],
+        "profile_flags_any": [],
+        "product_forms_any": [],
+        "nutrient_forms_any": []
+      },
+      "dose": null
+    }
+  }
+}

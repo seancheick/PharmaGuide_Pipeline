@@ -19,6 +19,8 @@ import argparse
 import glob
 import hashlib
 import json
+import tempfile
+from pathlib import Path
 import math
 import os
 import sqlite3
@@ -1381,6 +1383,44 @@ def v4_manifest_sync_message(manifest):
     )
 
 
+def _enforce_signed_rule_gate(client, bucket, signed, rule_pin):
+    """A material rule correction must not leave without its alert.
+
+    Compares with what phones hold now: the rules the newest signed release that
+    named usable ones names, or the app pin if there are none.
+    """
+    import rule_change_gate
+    from supabase_client import download_file, fetch_latest_signed_rules
+
+    current_rules = fetch_latest_signed_rules(client)
+    with tempfile.TemporaryDirectory() as directory:
+        baseline = Path(directory) / "baseline_interaction_db.sqlite"
+        if current_rules:
+            data = download_file(client, bucket, current_rules["path"])
+            if hashlib.sha256(data).hexdigest() != current_rules["sha256"]:
+                raise ValueError(
+                    f"{current_rules['path']} does not match its signed release"
+                )
+            baseline.write_bytes(data)
+        elif rule_pin:
+            with open(rule_pin, encoding="utf-8") as handle:
+                rule_change_gate.fetch_pinned_db(json.load(handle), baseline)
+        else:
+            raise ValueError(
+                "No published rules to compare with; pass --rule-pin "
+                "<app repo>/tool/interaction_db.release.json"
+            )
+        try:
+            result = rule_change_gate.check_rule_changes(
+                signed["rules_local_path"], baseline,
+                live_revisions=rule_change_gate.live_alert_revisions,
+            )
+        except rule_change_gate.RuleGateError as error:
+            raise ValueError(f"Rule-change gate could not run: {error}") from error
+    if not result.ok:
+        raise ValueError("Rule-change gate: " + "; ".join(result.errors))
+
+
 def sync(
     build_dir,
     dry_run=False,
@@ -1389,6 +1429,11 @@ def sync(
     retry_count=DEFAULT_UPLOAD_RETRIES,
     retry_base_delay=DEFAULT_RETRY_BASE_DELAY,
     submission_output_dir=None,
+    release_manifest=None,
+    release_signature=None,
+    rules_dir=None,
+    test_project=False,
+    rule_pin=None,
 ):
     """Main sync workflow.
 
@@ -1398,6 +1443,12 @@ def sync(
     4. Upload detail blobs to Storage
     5. Publish catalog_search rows (public MCP search); prune old versions
     6. Insert new manifest row
+
+    With release_manifest and release_signature (ADR-012), the signature is verified
+    against a key pinned in the repo and everything is checked before the first
+    Storage write, the rules file is staged create-only before the flip, and the
+    signed fields go through the same RPC. Without them, the publish is refused once
+    a production key is pinned.
     """
     sync_started_at = time.monotonic()
 
@@ -1419,6 +1470,19 @@ def sync(
     product_count = local["product_count"]
     checksum = local["checksum"]
     build_stats = validate_build_output(build_dir, local)
+    signed = None
+    if not release_manifest:
+        from release_manifest import require_signed_when_keys_are_pinned
+        require_signed_when_keys_are_pinned()
+    else:
+        from release_manifest import check_remote_rules_gate, load_signed_release
+        signed = load_signed_release(
+            release_manifest, release_signature,
+            local_manifest=local, rules_dir=rules_dir or build_dir,
+            test_project=test_project,
+        )
+        gate_status = check_remote_rules_gate(signed["release"], test_project=test_project)
+        signed_rules = signed["release"]["rules"]
     share_index_dir = os.path.join(build_dir, SHARE_INDEX_DIRNAME)
     share_product_count = write_share_index(
         db_path=build_stats["db_path"],
@@ -1451,7 +1515,20 @@ def sync(
             f"keep the last {CATALOG_SEARCH_KEEP_VERSIONS} versions"
         )
         print(f"  - New manifest row (version {version})")
-        return {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"]}
+        result = {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"]}
+        if signed:
+            sequence = signed["release"]["release_sequence"]
+            print(f"  - Signed release: sequence {sequence}, key {signed['release']['key_id']}; "
+                  "catalog version and sha256 match this build")
+            if signed_rules:
+                print(f"  - Rules: {signed_rules['path']} (create-only, sha256 matches)")
+            else:
+                print("  - Rules: none; catalog-only release")
+            print(f"  - Gate: {gate_status}")
+            print("  - RPC adds p_release_sequence, p_signed_release, p_release_signature")
+            print("  - Not checked offline: the deployed RPC arguments and the remote sequence")
+            result["release_sequence"] = sequence
+        return result
 
     client = get_supabase_client()
     bucket = STORAGE_BUCKET
@@ -1462,6 +1539,26 @@ def sync(
         print(f"  Remote version: {remote['db_version']}")
     else:
         print("  No remote version found (first push)")
+
+    same_signed_release = False
+    if signed:
+        from supabase_client import require_publication_contract
+        require_publication_contract(signed_release=True)
+        remote_sequence = (remote or {}).get("release_sequence")
+        sequence = signed["release"]["release_sequence"]
+        if remote_sequence is not None and sequence < remote_sequence:
+            raise ValueError(
+                f"Release sequence {sequence} is older than the current {remote_sequence}"
+            )
+        same_signed_release = sequence == remote_sequence
+        if same_signed_release and remote.get("signed_release") != signed["rpc_params"]["signed_release"]:
+            raise ValueError(
+                f"Release sequence {sequence} is already published with different content"
+            )
+
+    # A protected test project has no phones to mislead, and no alerts live there.
+    if signed and signed_rules and not test_project:
+        _enforce_signed_rule_gate(client, bucket, signed, rule_pin)
 
     historical = fetch_manifest_version(client, version)
     if historical and historical.get("checksum") != checksum:
@@ -1483,6 +1580,8 @@ def sync(
         )
     if same_catalog_identity:
         catalog_changed = False
+    # A signed release that keeps its catalog still has a new sequence to publish.
+    rotate_manifest = catalog_changed or bool(signed and not same_signed_release)
     remote_db_path = core_db_remote_path(version)
     catalog_upload_needed = catalog_changed or force
     if not catalog_changed:
@@ -1501,7 +1600,11 @@ def sync(
            os.path.join(share_index_dir, f"{shard}.json")
            for shard in SHARE_INDEX_SHARDS},
     }
-    for directory in (f"v{version}", f"v{version}/{SHARE_INDEX_DIRNAME}"):
+    versioned_directories = [f"v{version}", f"v{version}/{SHARE_INDEX_DIRNAME}"]
+    if signed and signed_rules:
+        versioned_files[signed_rules["path"]] = signed["rules_local_path"]
+        versioned_directories.append(signed_rules["path"].rsplit("/", 1)[0])
+    for directory in versioned_directories:
         expected = {path for path in versioned_files if path.rsplit("/", 1)[0] == directory}
         present = _discover_existing_remote_paths_for_directory(
             client, bucket, directory, expected, list_storage_paths, 1000,
@@ -1513,6 +1616,11 @@ def sync(
         validate_bucket_upload_capacity(
             client, bucket=bucket,
             object_size_bytes=os.path.getsize(build_stats["db_path"]),
+        )
+    if signed and signed_rules:
+        validate_bucket_upload_capacity(
+            client, bucket=bucket,
+            object_size_bytes=os.path.getsize(signed["rules_local_path"]),
         )
 
     def sync_versioned(remote_path, local_path, content_type="application/json"):
@@ -1644,6 +1752,14 @@ def sync(
     share_index_time = time.time() - start
     print(f"  Done ({share_index_time:.1f}s)")
 
+    if signed and signed_rules:
+        print(f"\nUploading {signed_rules['path']}...")
+        sync_versioned(
+            signed_rules["path"], signed["rules_local_path"],
+            content_type="application/octet-stream",
+        )
+        print("  Done")
+
     # Public MCP search rows for this release go in BEFORE the manifest flip;
     # catalog_search_current exposes them only once rotate_manifest runs.
     _publish_catalog_search_step(
@@ -1680,9 +1796,10 @@ def sync(
     # same transaction (only after every immutable object is staged).
     # is at least VALIDATING — see P3.6b above).
     print(f"\nUpdating manifest (version {version})...")
-    if catalog_changed:
+    if rotate_manifest:
         insert_manifest(
             client, local, submission_approvals=submission_approvals,
+            **(signed["rpc_params"] if signed else {}),
         )
     print("  Done")
 
@@ -1713,9 +1830,9 @@ def sync(
         if len(errors) > 10:
             print(f"  ... and {len(errors) - 10} more")
 
-    if not catalog_changed:
+    if not rotate_manifest:
         return {"status": "up_to_date", "version": version}
-    return {
+    result = {
         "status": "synced",
         "version": version,
         "product_count": int(product_count),
@@ -1723,6 +1840,9 @@ def sync(
         "error_count": len(errors),
         "time_seconds": round(total_time, 1),
     }
+    if signed:
+        result["release_sequence"] = signed["release"]["release_sequence"]
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -1752,7 +1872,23 @@ def parse_args(argv=None):
                         help="After successful sync, clean up old versions (keep last 2)")
     parser.add_argument("--cleanup-keep", type=int, default=2,
                         help="Number of versions to keep during cleanup (default: 2)")
+    parser.add_argument("--release-manifest",
+                        help="Signed release JSON from release_manifest.py (needs --release-signature)")
+    parser.add_argument("--release-signature",
+                        help="Signature file from release_manifest.py sign")
+    parser.add_argument("--rules-dir",
+                        help="Directory holding the named interaction_db.sqlite (default: build_dir)")
+    parser.add_argument("--test-project", action="store_true",
+                        help="Allow rules before A9 sign-off; the SUPABASE_URL host must be listed in release_trust.json")
+    parser.add_argument("--rule-pin",
+                        help="App pin file: what phones hold before any rules are published")
     args = parser.parse_args(argv)
+    if bool(args.release_manifest) != bool(args.release_signature):
+        parser.error('--release-manifest and --release-signature must be used together')
+    if not args.release_manifest and (args.rules_dir or args.test_project or args.rule_pin):
+        parser.error('--rules-dir, --test-project and --rule-pin need --release-manifest')
+    if args.preflight_only and args.release_manifest:
+        parser.error('--preflight-only cannot be combined with --release-manifest')
     if not args.preflight_only and not args.build_dir:
         parser.error('build_dir is required outside --preflight-only')
     if args.preflight_only and (args.cleanup or args.force):
@@ -1789,6 +1925,16 @@ def main(argv=None):
         print(f"Error: {args.build_dir} is not a directory")
         sys.exit(1)
 
+    signed_args = {}
+    if args.release_manifest:
+        signed_args = {
+            "release_manifest": args.release_manifest,
+            "release_signature": args.release_signature,
+            "rules_dir": args.rules_dir,
+            "test_project": args.test_project,
+            "rule_pin": args.rule_pin,
+        }
+
     try:
         result = sync(
             args.build_dir,
@@ -1798,6 +1944,7 @@ def main(argv=None):
             retry_count=args.retry_count,
             retry_base_delay=args.retry_base_delay,
             submission_output_dir=args.submission_output_dir,
+            **signed_args,
         )
         if result["status"] == "partial_failure":
             sys.exit(2)

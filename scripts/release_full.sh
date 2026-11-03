@@ -73,6 +73,10 @@
 #     # Preview Supabase sync without uploading:
 #     bash scripts/release_full.sh --supabase-dry-run
 #
+#     # A catalog carrying a ban or recall already live, held only by unrelated
+#     # rule review. Needs a dated override; see scripts/data/safety_alerts/README.md:
+#     bash scripts/release_full.sh --emergency-catalog --skip-flutter
+#
 #     # Custom Flutter repo location:
 #     bash scripts/release_full.sh --flutter-repo /path/to/PharmaGuide_ai
 #
@@ -133,6 +137,8 @@ SKIP_SUPABASE=0
 SKIP_FLUTTER=0
 SKIP_PRODUCT_IMAGES=0
 SUPABASE_DRY_RUN=0
+RELEASE_SIGN_ARGS=()
+EMERGENCY_CATALOG=0
 KEEP_VERSIONS=2
 SCORING_SNAPSHOT_GATE_RAN=0
 
@@ -150,17 +156,25 @@ while (($# > 0)); do
     --skip-assemble)     shift ;;  # accepted for backward compat; no-op now
     --skip-supabase)     SKIP_SUPABASE=1; shift ;;
     --skip-flutter)      SKIP_FLUTTER=1; shift ;;
+    --emergency-catalog) EMERGENCY_CATALOG=1; shift ;;
     --skip-product-images) SKIP_PRODUCT_IMAGES=1; shift ;;
     --supabase-dry-run)  SUPABASE_DRY_RUN=1; shift ;;
+    --release-manifest)  RELEASE_SIGN_ARGS+=(--release-manifest "$2"); shift 2 ;;
+    --release-signature) RELEASE_SIGN_ARGS+=(--release-signature "$2"); shift 2 ;;
+    --release-rules-dir) RELEASE_SIGN_ARGS+=(--rules-dir "$2"); shift 2 ;;
     --keep-versions)     KEEP_VERSIONS="${2:?--keep-versions requires N}"; shift 2 ;;
     --flutter-repo)      FLUTTER_REPO="${2:?--flutter-repo requires path}"; shift 2 ;;
     -h|--help)
-      sed -n '2,102p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '2,106p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *) echo "Unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+if (( ${#RELEASE_SIGN_ARGS[@]} > 0 )); then
+  RELEASE_SIGN_ARGS+=(--rule-pin "$FLUTTER_REPO/tool/interaction_db.release.json")
+fi
 
 info()  { printf '\033[36m[release]\033[0m %s\n' "$*"; }
 ok()    { printf '\033[32m[release] OK:\033[0m %s\n' "$*"; }
@@ -806,6 +820,30 @@ fi
 # regardless of which publication flags are set.
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-validation-binding "$VALIDATION_INPUT_BINDING"
+# A material rule correction must not leave without its alert. Runs for anything
+# that publishes, including a catalog-only sync, whose detail blobs also carry
+# rule warnings. Compares with the DB the pin names, which is what phones hold.
+#
+# --emergency-catalog: this catalog carries a ban or recall already live in the
+# fast lane, and only unrelated rule review is holding it. Needs a dated override
+# in scripts/data/safety_alerts/rule_gate_emergency_overrides.json, and no blob may
+# show a held change. It can't move the app pin, so the interaction DB stays gated.
+if (( EMERGENCY_CATALOG == 1 )); then
+  (( SKIP_FLUTTER == 1 )) || { err "--emergency-catalog needs --skip-flutter"; exit 1; }
+  run_strict_gate "emergency catalog carries no held rule change" \
+    "$PG_PYTHON" scripts/rule_change_gate.py \
+      --candidate "$DIST_DIR/interaction_db.sqlite" \
+      --pin "$FLUTTER_REPO/tool/interaction_db.release.json" \
+      --emergency --blobs-dir "$DIST_DIR/detail_blobs" \
+      --report "$DIST_DIR/rule_gate_emergency_report.json"
+elif (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )) || (( SKIP_FLUTTER == 0 )); then
+  run_strict_gate "material rule changes have their alerts" \
+    "$PG_PYTHON" scripts/rule_change_gate.py \
+      --candidate "$DIST_DIR/interaction_db.sqlite" \
+      --pin "$FLUTTER_REPO/tool/interaction_db.release.json"
+else
+  skip "Rule-change gate skipped (this run publishes nothing)"
+fi
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   run_strict_gate "interaction DB release asset + app hydration pin" \
     "$PG_PYTHON" scripts/release_interaction_artifact.py \
@@ -823,6 +861,22 @@ fi
 # 0 with status="up_to_date" when nothing changed.
 # ---------------------------------------------------------------------------
 
+# Once a production key is pinned, stop here with the build ready to sign. Signing
+# happens away from this machine, and a rerun with the signed files finds every
+# earlier step up to date. sync_to_supabase.py verifies them and refuses a mismatch.
+require_signed_release_or_stop() {
+  (( ${#RELEASE_SIGN_ARGS[@]} > 0 )) && return 0
+  "$PG_PYTHON" scripts/release_manifest.py unsigned-allowed >/dev/null && return 0
+  err "This release must be signed. The build in $DIST_DIR is ready, and nothing was published."
+  err "Build and sign its manifest (docs/RELEASE_SIGNING_RUNBOOK.md), then rerun with:"
+  err "  --release-manifest release.json --release-signature release.sig"
+  return 1
+}
+
+if (( SKIP_SUPABASE == 0 )); then
+  require_signed_release_or_stop || exit 1
+fi
+
 # Fail early before expensive uploads if a reviewer reopened an approval while
 # the pipeline ran. The authoritative fence still occurs inside the atomic
 # manifest-activation transaction below; this precheck is only an early exit.
@@ -837,7 +891,7 @@ fi
 if (( SKIP_SUPABASE == 0 )); then
   if (( SUPABASE_DRY_RUN == 1 )); then
     info "Step 5/8: Syncing dist/ to Supabase (DRY-RUN)..."
-    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" --dry-run
+    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" --dry-run ${RELEASE_SIGN_ARGS[@]+"${RELEASE_SIGN_ARGS[@]}"}
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
     "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
@@ -848,7 +902,7 @@ if (( SKIP_SUPABASE == 0 )); then
     REMOTE_CATALOG_STATE=unknown
     run_strict_gate "Supabase catalog sync" \
       "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
-      --submission-output-dir "$SUBMISSION_OUTPUT_DIR"
+      --submission-output-dir "$SUBMISSION_OUTPUT_DIR" ${RELEASE_SIGN_ARGS[@]+"${RELEASE_SIGN_ARGS[@]}"}
     REMOTE_CATALOG_STATE=confirmed_current
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
