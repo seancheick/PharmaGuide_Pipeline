@@ -1387,7 +1387,7 @@ def _enforce_signed_rule_gate(client, bucket, signed, rule_pin):
     """A material rule correction must not leave without its alert.
 
     Compares with what phones hold now: the rules the newest signed release that
-    named any names, or the app pin before any rules have been published remotely.
+    named usable ones names, or the app pin if there are none.
     """
     import rule_change_gate
     from supabase_client import download_file, fetch_latest_signed_rules

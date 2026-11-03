@@ -198,7 +198,8 @@ version, and a `--min-rules-version` at or below the known-good version. The rul
 
 Sync runs `scripts/rule_change_gate.py` on any signed release that names rules, comparing with the
 rules the newest signed release that named any names, so a catalog-only release in between
-doesn't reset the comparison. Before any are published, pass
+doesn't reset the comparison. Rules the newest release blocks don't count, so a rule carried
+over from a blocked file still needs its review. Before any are published, pass
 `--rule-pin <app repo>/tool/interaction_db.release.json`; `release_full.sh` does this for you.
 
 **What a rules-only release can't change.** On a schema 2 catalog the product page's pregnancy and

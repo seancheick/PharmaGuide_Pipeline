@@ -1298,29 +1298,76 @@ def test_a_catalog_only_release_does_not_reset_the_rules_phones_hold(
     assert rule_gate.baseline == held
 
 
+class _SignedManifestRows:
+    """export_manifest as PostgREST serves it: newest first, one range at a time."""
+
+    def __init__(self, releases):
+        self.rows = [{"signed_release": json.dumps(release)} for release in releases]
+        self.sent = []
+        self.not_ = self
+        self.window = (0, 999)
+
+    def __getattr__(self, name):
+        def step(*args, **kwargs):
+            self.sent.append((name, args, kwargs))
+            return self
+        return step
+
+    def range(self, start, end):
+        self.window = (start, end)
+        return self
+
+    def execute(self):
+        start, end = self.window
+        return SimpleNamespace(data=self.rows[start:min(end + 1, start + 1000)])
+
+    def client(self):
+        return SimpleNamespace(table=lambda name: self if name == "export_manifest" else None)
+
+
+def _named_rules(version, blocked=()):
+    return {
+        "rules": {"version": version, "path": f"rules/{version}"},
+        "blocked_versions": {"catalog": [], "rules": list(blocked)},
+    }
+
+
+def _catalog_only(blocked=()):
+    return {"rules": None, "blocked_versions": {"catalog": [], "rules": list(blocked)}}
+
+
 def test_latest_signed_rules_skips_catalog_only_releases_newest_first():
-    class Query:
-        def __init__(self):
-            self.sent = []
-            self.not_ = self
+    rows = _SignedManifestRows([
+        _catalog_only(), _named_rules("1.0.20"), _named_rules("1.0.19"),
+    ])
+    assert supabase_client.fetch_latest_signed_rules(rows.client())["version"] == "1.0.20"
+    assert ("order", ("release_sequence",), {"desc": True}) in rows.sent
 
-        def __getattr__(self, name):
-            def step(*args, **kwargs):
-                self.sent.append((name, args, kwargs))
-                return self
-            return step
 
-        def execute(self):
-            return SimpleNamespace(data=[
-                {"signed_release": json.dumps({"rules": None})},
-                {"signed_release": json.dumps({"rules": {"path": "newest"}})},
-                {"signed_release": json.dumps({"rules": {"path": "older"}})},
-            ])
+def test_latest_signed_rules_reads_past_one_page_of_catalog_only_releases():
+    rows = _SignedManifestRows([_catalog_only()] * 1000 + [_named_rules("1.0.20")])
+    assert supabase_client.fetch_latest_signed_rules(rows.client())["version"] == "1.0.20"
 
-    query = Query()
-    client = SimpleNamespace(table=lambda name: query if name == "export_manifest" else None)
-    assert supabase_client.fetch_latest_signed_rules(client) == {"path": "newest"}
-    assert ("order", ("release_sequence",), {"desc": True}) in query.sent
+
+def test_latest_signed_rules_skips_rules_the_newest_release_blocks():
+    """A rule kept from a blocked file must count as new, so its gate still runs."""
+    rows = _SignedManifestRows([
+        _catalog_only(blocked=["1.0.20"]), _named_rules("1.0.20"), _named_rules("1.0.19"),
+    ])
+    assert supabase_client.fetch_latest_signed_rules(rows.client())["version"] == "1.0.19"
+
+
+def test_latest_signed_rules_counts_a_lifted_block_as_lifted():
+    """Phones replace their list with the newest release's, so older lists don't count."""
+    rows = _SignedManifestRows([
+        _catalog_only(), _catalog_only(blocked=["1.0.20"]), _named_rules("1.0.20"),
+    ])
+    assert supabase_client.fetch_latest_signed_rules(rows.client())["version"] == "1.0.20"
+
+
+def test_latest_signed_rules_is_none_when_every_named_rules_file_is_blocked():
+    rows = _SignedManifestRows([_catalog_only(blocked=["1.0.20"]), _named_rules("1.0.20")])
+    assert supabase_client.fetch_latest_signed_rules(rows.client()) is None
 
 
 def test_a_signed_rules_release_with_no_baseline_is_refused(tmp_path, harness, key, rule_gate):

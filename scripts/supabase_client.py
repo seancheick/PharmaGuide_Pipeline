@@ -140,19 +140,31 @@ def fetch_manifest_version(client, db_version):
     return parse_manifest_response({"data": response.data})
 
 
-def fetch_latest_signed_rules(client):
-    """The rules entry of the newest signed release that named rules, or None.
+def fetch_latest_signed_rules(client, page_size=1000):
+    """The rules entry of the newest signed release that named usable rules, or None.
 
-    A catalog-only release names none, and phones keep what they hold.
+    A catalog-only release names none, and phones keep what they hold. Rules the
+    newest release blocks don't count: phones have stopped using them, and comparing
+    with them would hide a rule carried over from the blocked file. Only the newest
+    list applies, because phones replace theirs with it.
     """
-    response = (client.table("export_manifest").select("signed_release")
+    blocked = None
+    start = 0
+    while True:
+        rows = (client.table("export_manifest").select("signed_release")
                 .not_.is_("signed_release", "null")
-                .order("release_sequence", desc=True).execute())
-    for row in response.data or []:
-        rules = json.loads(row["signed_release"]).get("rules")
-        if rules:
-            return rules
-    return None
+                .order("release_sequence", desc=True)
+                .range(start, start + page_size - 1).execute()).data or []
+        if not rows:
+            return None
+        for row in rows:
+            release = json.loads(row["signed_release"])
+            if blocked is None:
+                blocked = set(release.get("blocked_versions", {}).get("rules", []))
+            rules = release.get("rules")
+            if rules and rules.get("version") not in blocked:
+                return rules
+        start += len(rows)
 
 
 def insert_manifest(client, manifest_data, submission_approvals=None,
