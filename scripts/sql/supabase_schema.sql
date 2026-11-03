@@ -19,7 +19,11 @@ CREATE TABLE IF NOT EXISTS export_manifest (
   min_app_version  text NOT NULL DEFAULT '1.0.0',
   generated_at     timestamptz NOT NULL,
   created_at       timestamptz DEFAULT now(),
-  is_current       boolean NOT NULL DEFAULT true
+  is_current       boolean NOT NULL DEFAULT true,
+  -- ADR-012 signed release. The app repo's migration owns deployment and the RPC.
+  release_sequence  bigint,
+  signed_release    text,
+  release_signature text
 );
 
 -- =============================================================================

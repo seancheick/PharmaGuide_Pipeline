@@ -457,6 +457,19 @@
       "retirement_status": "active"
     },
     {
+      "concept_id": "signed_release_manifest",
+      "owner": "scripts/release_manifest.py",
+      "first_created_stage": "exported",
+      "field_kind": "exported",
+      "source_data_files": ["scripts/config/remote_rules_gate.json"],
+      "consumers": ["scripts/sync_to_supabase.py", "Flutter signed release verifier"],
+      "forbidden_recomputation": ["activation may read only the signed text; rules fields have no unsigned copy, and a signature proves the publisher, not clinical correctness"],
+      "fallback_class": "clinical_fail_safe",
+      "release_gate": "scripts/release_manifest.py verify",
+      "tests": ["scripts/tests/test_release_manifest.py"],
+      "retirement_status": "active"
+    },
+    {
       "concept_id": "flutter_bundled_assets",
       "owner": "scripts/release_full.sh",
       "first_created_stage": "exported",
