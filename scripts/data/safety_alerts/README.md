@@ -158,7 +158,7 @@ Keys are the interaction `id`, or for ingredient rules `RULE_ID#drug_class:<id>`
 `RULE_ID#condition:<id>`, `RULE_ID#dose:<index>` or `RULE_ID#pregnancy_lactation`.
 
 An attestation goes in `rule_change_attestations.json`. It records a person's decision that no user
-notice is needed, and it only covers that exact version of the rule (`"removed"` for a removal):
+notice is needed, and it only covers that exact version of the rule (`removed:<fingerprint of the removed rule>` for a removal):
 
 ```json
 {"attestations": [
@@ -189,7 +189,8 @@ a dated entry to `rule_gate_emergency_overrides.json` and run
 ```
 
 The alert must be a ban or recall already live, and the entry counts only on its date. The app pin
-doesn't move, so the interaction DB stays gated. Blobs carry rule text, so the gate still refuses if
-a blob shows a held change, or if a held rule was removed or lowered, which no blob can disprove:
+doesn't move, so the interaction DB stays gated. Blobs carry rule text and tiers, in warnings and in
+`interaction_summary`, so the gate still refuses if a blob shows a held change, or if a held rule was
+removed or lowered, which no blob can disprove:
 sign that change off, or hold that rule edit back and rebuild. The entry and
 `rule_gate_emergency_report.json` record what went out ahead of review.

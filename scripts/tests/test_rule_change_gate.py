@@ -197,6 +197,41 @@ def test_alert_that_is_not_live_does_not_cover(tmp_path, overrides):
     assert not result.ok
 
 
+def test_a_retracted_alert_no_longer_covers_the_rule(tmp_path):
+    """Revision 1 is still on disk. Revision 2 withdrew it."""
+    rule = _row(severity="avoid")
+    fingerprint = _fp(tmp_path, [rule])
+    result = _check(
+        tmp_path, [], [rule],
+        records=[_alert(fingerprint), _alert(fingerprint, status="retracted", revision=2)],
+        live_revisions={"SA_9999_0001": 2},
+    )
+    assert not result.ok
+
+
+def test_an_older_revision_does_not_cover_what_the_latest_stopped_saying(tmp_path):
+    rule = _row(severity="avoid")
+    fingerprint = _fp(tmp_path, [rule])
+    other = _fp(tmp_path, [_row(severity="avoid", mechanism="Other words.")])
+    result = _check(
+        tmp_path, [], [rule],
+        records=[_alert(fingerprint), _alert(other, revision=2)],
+        live_revisions={"SA_9999_0001": 2},
+    )
+    assert not result.ok
+
+
+def test_a_draft_revision_does_not_hide_the_published_alert(tmp_path):
+    rule = _row(severity="avoid")
+    fingerprint = _fp(tmp_path, [rule])
+    result = _check(
+        tmp_path, [], [rule],
+        records=[_alert(fingerprint), _alert(fingerprint, status="draft", revision=2)],
+        live_revisions={"SA_9999_0001": 1},
+    )
+    assert result.ok, result.errors
+
+
 def test_attestation_cannot_replace_a_required_alert(tmp_path):
     row = _row(severity="contraindicated")
     result = _check(
@@ -242,6 +277,25 @@ def test_attestation_is_bound_to_the_exact_rule_text(tmp_path):
                        "reason": "Typo.", "reviewer": "fake", "date": "2026-11-03"}],
     )
     assert not result.ok
+
+
+@pytest.mark.parametrize("bad_date", ["soon", "2026-13-40", "2999-01-01"])
+def test_attestation_needs_a_real_date_that_has_passed(tmp_path, bad_date):
+    base = _row(severity="avoid")
+    new = _row(severity="avoid", mechanism="Different words.")
+    entry = {"rule_key": KEY, "rule_fingerprint": _fp(tmp_path, [new]),
+             "reason": "Typo.", "reviewer": "fake", "date": bad_date}
+    assert not _check(tmp_path, [base], [new], attestations=[entry]).ok
+
+
+def test_removal_attestation_covers_only_the_rule_it_saw_removed(tmp_path):
+    """A rule that came back and was removed again is a new decision."""
+    first = _row(severity="contraindicated")
+    second = _row(severity="contraindicated", mechanism="Came back reworded.")
+    entry = {"rule_key": KEY, "rule_fingerprint": f"removed:{_fp(tmp_path, [first])}",
+             "reason": "Withdrawn.", "reviewer": "fake", "date": "2026-11-03"}
+    assert _check(tmp_path, [first], [], attestations=[entry]).ok
+    assert not _check(tmp_path, [second], [], attestations=[entry]).ok
 
 
 @pytest.mark.parametrize(
@@ -521,6 +575,7 @@ def _emergency(tmp_path, *, blobs=(), overrides=(OVERRIDE,), records=(BAN,), bas
 
 def _warning(body):
     return {"source_rule_id": PROFILE_RULE, "severity": "contraindicated",
+            "condition_ids": [], "drug_class_ids": ["fake_class"],
             "alert_headline": "Pinned.", "alert_body": body}
 
 
@@ -553,6 +608,112 @@ def test_emergency_reads_every_list_a_blob_carries_rules_in(tmp_path, field):
 def test_emergency_counts_the_detail_field_too(tmp_path):
     warning = {**_warning("Pinned body."), "detail": "Reworded, unreviewed."}
     assert not _emergency(tmp_path, blobs=[[warning]]).ok
+
+
+RAISED_BASE = {
+    **HELD,
+    "drug_class_rules": [{"drug_class_id": "fake_class", "severity": "caution"}],
+    "condition_rules": [{"condition_id": "fake_condition", "severity": "avoid"}],
+}
+RAISED_CAND = {
+    **RAISED_BASE,
+    "drug_class_rules": [{"drug_class_id": "fake_class", "severity": "avoid"}],
+}
+
+
+def _target_warning(severity, *, condition_ids=(), drug_class_ids=()):
+    return {"source_rule_id": PROFILE_RULE, "severity": severity,
+            "condition_ids": list(condition_ids), "drug_class_ids": list(drug_class_ids)}
+
+
+def test_emergency_sees_a_raised_tier_the_rule_already_uses_elsewhere(tmp_path):
+    """Avoid is in the pinned rule, but not for this drug class."""
+    result = _emergency(
+        tmp_path, base=(RAISED_BASE,), cand=(RAISED_CAND,),
+        blobs=[[_target_warning("avoid", drug_class_ids=["fake_class"])]],
+    )
+    assert not result.ok
+    assert "carried by" in result.errors[0]
+
+
+def test_emergency_passes_the_same_tier_on_the_target_that_always_had_it(tmp_path):
+    result = _emergency(
+        tmp_path, base=(RAISED_BASE,), cand=(RAISED_CAND,),
+        blobs=[[_target_warning("avoid", condition_ids=["fake_condition"])]],
+    )
+    assert result.ok, result.errors
+
+
+def test_emergency_refuses_a_tier_on_a_target_the_pinned_rule_lacks(tmp_path):
+    result = _emergency(
+        tmp_path, base=(RAISED_BASE,), cand=(RAISED_CAND,),
+        blobs=[[_target_warning("avoid", condition_ids=["fake_other"])]],
+    )
+    assert not result.ok
+
+
+def _summary(bucket_field, target, *, severity="avoid", rule_ids=(PROFILE_RULE,), actions=()):
+    return {"interaction_summary": {
+        "highest_severity": severity,
+        bucket_field: {target: {"label": target, "highest_severity": severity,
+                                "rule_ids": list(rule_ids), "actions": list(actions)}},
+    }}
+
+
+def test_emergency_sees_a_raised_tier_in_the_blob_summary(tmp_path):
+    """The Fit score and the core hint read this. Its tier names no single rule."""
+    result = _emergency(
+        tmp_path, base=(RAISED_BASE,), cand=(RAISED_CAND,), blobs=[[]],
+        blob_fields=_summary("drug_class_summary", "fake_class"),
+    )
+    assert not result.ok
+    assert "carried by" in result.errors[0]
+
+
+def test_emergency_sees_a_new_action_in_the_blob_summary(tmp_path):
+    cand = {**HELD, "drug_class_rules": [{**HELD["drug_class_rules"][0], "action": "Reworded, unreviewed."}]}
+    result = _emergency(
+        tmp_path, cand=(cand,), blobs=[[]],
+        blob_fields=_summary("drug_class_summary", "fake_class", severity="contraindicated",
+                             actions=["Reworded, unreviewed."]),
+    )
+    assert not result.ok
+
+
+@pytest.mark.parametrize(
+    "fields",
+    [
+        _summary("drug_class_summary", "fake_class", rule_ids=("RULE_FAKE_OTHER",)),
+        _summary("condition_summary", "fake_condition"),
+    ],
+    ids=["another rule's bucket", "the target whose tier did not change"],
+)
+def test_emergency_summary_check_stays_on_the_held_change(tmp_path, fields):
+    result = _emergency(
+        tmp_path, base=(RAISED_BASE,), cand=(RAISED_CAND,), blobs=[[]], blob_fields=fields,
+    )
+    assert result.ok, result.errors
+
+
+def test_tiers_by_target_hold_every_tier_export_can_derive():
+    """So the check doesn't refuse an unchanged rule."""
+    rule = {
+        **HELD,
+        "drug_class_rules": [{"drug_class_id": "fake_class", "severity": "caution"}],
+        "condition_rules": [{"condition_id": "pregnancy", "severity": "avoid"}],
+        "dose_thresholds": [
+            {"scope": "condition", "target_id": "fake_condition",
+             "severity_if_met": "avoid", "severity_if_not_met": "monitor"},
+            {"scope": None, "severity_if_met": "caution"},
+        ],
+        "pregnancy_lactation": {"pregnancy_category": "avoid", "lactation_category": "caution"},
+    }
+    tiers = gate._tiers_by_target(rule)
+    assert tiers[("drug_class", "fake_class")] == {"caution"}
+    assert tiers[("condition", "pregnancy")] == {"avoid"}
+    assert tiers[("condition", "lactation")] == {"caution"}
+    assert tiers[("condition", "fake_condition")] == {"avoid", "monitor"}
+    assert tiers[("dose", "")] == {"caution", "informational"}
 
 
 def test_emergency_uses_the_alerts_latest_revision(tmp_path):

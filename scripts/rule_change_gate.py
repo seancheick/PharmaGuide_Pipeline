@@ -36,8 +36,8 @@ on this gate. A catalog carrying that ban may need to follow while unrelated rul
 changes wait on review. `--emergency` allows that only for a catalog-only release,
 with a dated override in rule_gate_emergency_overrides.json that names a ban or
 recall already live, and only when no detail blob carries a held change. Blobs
-carry rule text too, so a held change a blob shows, or a removal or lowering no
-blob can disprove, still refuses: sign it off or hold that rule edit back. The
+carry rule text and tiers too, in warnings and summaries, so a held change a blob
+shows, or a removal or lowering no blob can disprove, still refuses: sign it off or hold that rule edit back. The
 interaction DB pin has no emergency mode.
 
 Usage
@@ -243,7 +243,14 @@ def rule_fingerprint(db_path: Path, rule_key: str) -> str:
     return rule.fingerprint
 
 
-def _load_attestations(alerts_dir: Path) -> Dict[Tuple[str, str], Mapping[str, Any]]:
+def _has_passed(value: Any, today: str) -> bool:
+    try:
+        return date.fromisoformat(str(value)) <= date.fromisoformat(today)
+    except ValueError:
+        return False
+
+
+def _load_attestations(alerts_dir: Path, today: str) -> Dict[Tuple[str, str], Mapping[str, Any]]:
     path = alerts_dir / ATTESTATIONS_FILENAME
     if not path.is_file():
         return {}
@@ -251,14 +258,20 @@ def _load_attestations(alerts_dir: Path) -> Dict[Tuple[str, str], Mapping[str, A
     return {
         (str(entry.get("rule_key")), str(entry.get("rule_fingerprint"))): entry
         for entry in entries
-        if all(str(entry.get(name) or "").strip() for name in ("reason", "reviewer", "date"))
+        if all(str(entry.get(name) or "").strip() for name in ("reason", "reviewer"))
+        and _has_passed(entry.get("date"), today)
     }
+
+
+def _latest_alerts(alerts_dir: Path) -> Mapping[str, Mapping[str, Any]]:
+    """What each alert says now. An earlier revision on disk says nothing."""
+    records = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(alerts_dir.glob("SA_*.json"))]
+    return latest_revisions(r for r in records if r.get("status") in {"published", "retracted"})
 
 
 def _load_alerts(alerts_dir: Path, today: str) -> Dict[Tuple[str, str], Mapping[str, Any]]:
     covering: Dict[Tuple[str, str], Mapping[str, Any]] = {}
-    for path in sorted(alerts_dir.glob("SA_*.json")):
-        record = json.loads(path.read_text(encoding="utf-8"))
+    for record in _latest_alerts(alerts_dir).values():
         interaction = record.get("interaction")
         if (
             record.get("event_type") == "interaction_rule"
@@ -315,7 +328,7 @@ def check_rule_changes(
     baseline = load_rules(baseline_db)
     candidate = load_rules(candidate_db)
     alerts = _load_alerts(alerts_dir, today)
-    attestations = _load_attestations(alerts_dir)
+    attestations = _load_attestations(alerts_dir, today)
     result = GateResult()
     live: Optional[Mapping[str, int]] = None
     live_failed = False
@@ -327,7 +340,7 @@ def check_rule_changes(
             continue
         needed, why = requirement
         result.changes.append(f"{key}: {why}")
-        fingerprint = new.fingerprint if new else "removed"
+        fingerprint = new.fingerprint if new else f"removed:{base.fingerprint}"
         alert = alerts.get((key, fingerprint))
         if alert is not None and live_revisions is not None:
             if live is None and not live_failed:
@@ -376,10 +389,7 @@ def _load_emergency_ban(
     missing = [n for n in ("alert_id", "reason", "approved_by") if not str(override.get(n) or "").strip()]
     if missing:
         return None, None, [f"the override needs {', '.join(missing)}"]
-    records = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(alerts_dir.glob("SA_*.json"))]
-    alert = latest_revisions(
-        r for r in records if r.get("status") in {"published", "retracted"}
-    ).get(override["alert_id"])
+    alert = _latest_alerts(alerts_dir).get(override["alert_id"])
     if alert is None:
         return None, None, [f"the override names {override['alert_id']}, which does not exist"]
     if alert.get("event_type") not in _EMERGENCY_EVENT_TYPES:
@@ -430,20 +440,60 @@ def _rule_json(db_path: Path) -> Dict[str, Mapping[str, Any]]:
         raise RuleGateError(f"could not read rules from {db_path}: {exc}") from exc
 
 
+def _tiers_by_target(rule: Optional[Mapping[str, Any]]) -> Dict[Tuple[str, str], set]:
+    """Every tier export can derive from a rule, per person it speaks to.
+
+    The same tier elsewhere in a rule says nothing about this target, so a tier
+    only counts as known for the condition or drug class that had it.
+    """
+    tiers: Dict[Tuple[str, str], set] = {}
+
+    def add(target: Tuple[str, str], *values: Any) -> None:
+        tiers.setdefault(target, set()).update(str(v).strip().lower() for v in values if v)
+
+    rule = rule or {}
+    for sub in rule.get("condition_rules") or []:
+        add(("condition", str(sub.get("condition_id"))), sub.get("severity"))
+    for sub in rule.get("drug_class_rules") or []:
+        add(("drug_class", str(sub.get("drug_class_id"))), sub.get("severity"))
+    for threshold in rule.get("dose_thresholds") or []:
+        scope = threshold.get("scope")
+        target = (str(scope), str(threshold.get("target_id"))) if scope else ("dose", "")
+        add(target, threshold.get("severity_if_met"),
+            threshold.get("severity_if_not_met") or "informational")
+    life_stage = rule.get("pregnancy_lactation") or {}
+    add(("condition", "pregnancy"), life_stage.get("pregnancy_category"))
+    add(("condition", "lactation"), life_stage.get("lactation_category"))
+    return tiers
+
+
+def _warning_targets(warning: Mapping[str, Any]) -> List[Tuple[str, str]]:
+    targets = [("condition", str(c)) for c in warning.get("condition_ids") or []]
+    targets += [("drug_class", str(d)) for d in warning.get("drug_class_ids") or []]
+    return targets or [("dose", "")]
+
+
 def _blobs_showing_new_content(
     blobs_dir: Path,
     held_ids: Iterable[str],
     pinned: Mapping[str, Mapping[str, Any]],
     candidate: Mapping[str, Mapping[str, Any]],
 ) -> Dict[str, int]:
-    """Warnings per held rule whose text or tier is not what phones hold now.
+    """Warnings and summaries per held rule that aren't what phones hold now.
 
     Life-stage headlines and actions are derived at export, so those two fields
     count only when the candidate rule authored them. Tier and body always count.
     `detail` carries the rule's body under its export name.
+
+    `interaction_summary` buckets list rule ids beside one tier for the whole
+    bucket, so a tier the candidate adds there counts wherever the rule is listed.
+    The core columns `interaction_summary_hint` and `top_warnings` come from the
+    same hits as these buckets and warnings, so reading the blob covers them.
     """
     known = {rule_id: _rule_strings(pinned.get(rule_id)) for rule_id in held_ids}
     authored = {rule_id: _rule_strings(candidate.get(rule_id)) for rule_id in held_ids}
+    pinned_tiers = {rule_id: _tiers_by_target(pinned.get(rule_id)) for rule_id in held_ids}
+    candidate_tiers = {rule_id: _tiers_by_target(candidate.get(rule_id)) for rule_id in held_ids}
     showing: Dict[str, int] = {}
     if not blobs_dir.is_dir():
         raise RuleGateError(f"{blobs_dir} is not a directory of detail blobs")
@@ -459,13 +509,26 @@ def _blobs_showing_new_content(
                     continue
                 new = any(
                     warning.get(name) is not None and warning[name] not in known[rule_id]
-                    for name in ("severity", "alert_body", "detail")
+                    for name in ("alert_body", "detail")
                 ) or any(
                     warning.get(name) in authored[rule_id] - known[rule_id]
                     for name in ("alert_headline", "action")
+                ) or any(
+                    str(warning.get("severity")).strip().lower()
+                    not in pinned_tiers[rule_id].get(target, ())
+                    for target in _warning_targets(warning)
                 )
                 if new:
                     showing[rule_id] = showing.get(rule_id, 0) + 1
+            summary = blob.get("interaction_summary") or {}
+            for kind, name in (("condition", "condition_summary"), ("drug_class", "drug_class_summary")):
+                for target, bucket in (summary.get(name) or {}).items():
+                    for rule_id in known.keys() & set(bucket.get("rule_ids") or []):
+                        added = candidate_tiers[rule_id].get((kind, target), set()) - pinned_tiers[
+                            rule_id
+                        ].get((kind, target), set())
+                        if added or set(bucket.get("actions") or []) & (authored[rule_id] - known[rule_id]):
+                            showing[rule_id] = showing.get(rule_id, 0) + 1
     return showing
 
 
