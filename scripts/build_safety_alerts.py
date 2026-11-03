@@ -12,6 +12,16 @@ separately-versioned artifact next to the catalog. Same contract, deliberately:
     (a file cannot contain its own digest without invalidating it)
   * the manifest is the sole source of truth for the checksum
 
+Two feeds
+---------
+Builds up to 1.0.0+23 reject a whole feed on an event type they don't know, and a
+fresh install then has no alerts at all, bans and recalls included. Shipping a
+new build doesn't update installed apps. So the release row's `feed_path` keeps
+naming a feed with bans and recalls only, at schema 1.0.0, and the dispatcher
+reads only that path. Interaction rules live in a separate superset, named by
+`manifest.extended_feed`, which only builds that know the key go looking for.
+With no rule alerts active, a release is what it always was.
+
 Resolution
 ----------
 `resolved_dsld_ids` is the frozen, publication-time applicability set — not
@@ -55,6 +65,7 @@ SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPTS))
 
 from safety_alerts import (  # noqa: E402
+    BASE_SCHEMA_VERSION,
     SCHEMA_VERSION,
     is_active,
     latest_revisions,
@@ -67,6 +78,7 @@ BLOBS_DIR = DIST_DIR / "detail_blobs"
 CATALOG_MANIFEST = DIST_DIR / "export_manifest.json"
 
 FEED_FILENAME = "safety_alerts.json"
+EXTENDED_FEED_FILENAME = "safety_alerts_extended.json"
 MANIFEST_FILENAME = "safety_alerts_manifest.json"
 
 
@@ -204,7 +216,9 @@ def resolve_all(records: List[Dict[str, Any]], *, write: bool) -> Dict[str, Any]
 
 
 def build_feed(records: List[Dict[str, Any]], today: str) -> Dict[str, Any]:
-    """The shipped feed: latest revision per alert_id, active records only.
+    """Every active alert: latest revision per alert_id, active records only.
+
+    `stage` splits this into the feed every build reads and the extended one.
 
     Retracted and expired alerts are dropped from the feed rather than shipped
     as tombstones — a client that no longer sees an alert clears ONLY that
@@ -232,14 +246,36 @@ def build_feed(records: List[Dict[str, Any]], today: str) -> Dict[str, Any]:
     }
 
 
+def _serialize(feed: Dict[str, Any]) -> str:
+    return json.dumps(feed, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
+
+
+def _checksum(payload: str) -> str:
+    return "sha256:" + hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def stage(records: List[Dict[str, Any]], today: str, dist_dir: Path = DIST_DIR) -> Dict[str, Any]:
     """Write feed + manifest into dist/. Checksum lives in the manifest only."""
-    feed = build_feed(records, today)
-    payload = json.dumps(feed, indent=2, ensure_ascii=False, sort_keys=True) + "\n"
-    digest = hashlib.sha256(payload.encode("utf-8")).hexdigest()
+    full = build_feed(records, today)
+    bans_and_recalls = [a for a in full["alerts"] if a.get("event_type") != "interaction_rule"]
+    feed: Dict[str, Any] = {
+        **full,
+        "schema_version": BASE_SCHEMA_VERSION,
+        "alert_count": len(bans_and_recalls),
+        "alerts": bans_and_recalls,
+    }
+    extended_payload = None
+    if len(bans_and_recalls) != len(full["alerts"]):
+        extended_payload = _serialize(full)
+        # The release row is found by this feed's checksum, so a change to rules
+        # alone must still make a new one. Old readers ignore unknown keys.
+        feed["extended_feed_checksum"] = _checksum(extended_payload)
+    payload = _serialize(feed)
+    digest = _checksum(payload).removeprefix("sha256:")
 
     dist_dir.mkdir(parents=True, exist_ok=True)
     feed_path = dist_dir / FEED_FILENAME
+    extended_path = dist_dir / EXTENDED_FEED_FILENAME
     manifest_path = dist_dir / MANIFEST_FILENAME
 
     # Atomic: write beside, then replace. A partially written feed must never be
@@ -256,8 +292,8 @@ def stage(records: List[Dict[str, Any]], today: str, dist_dir: Path = DIST_DIR) 
         if record.get("status") == "retracted" or not is_active(record, today)
     }
 
-    manifest = {
-        "schema_version": SCHEMA_VERSION,
+    manifest: Dict[str, Any] = {
+        "schema_version": BASE_SCHEMA_VERSION,
         # A calendar date cannot identify two corrected releases published on
         # the same day. The immutable content digest is the release version.
         "feed_version": f"sha256:{digest}",
@@ -280,6 +316,14 @@ def stage(records: List[Dict[str, Any]], today: str, dist_dir: Path = DIST_DIR) 
         },
         "retired_alerts": retired_alerts,
     }
+    if extended_payload is not None:
+        extended_checksum = _checksum(extended_payload)
+        manifest["extended_feed"] = {
+            "path": f"safety-alerts/sha256/{extended_checksum.removeprefix('sha256:')}.json",
+            "checksum": extended_checksum,
+            "schema_version": SCHEMA_VERSION,
+            "alert_count": full["alert_count"],
+        }
     feed_tmp = feed_path.with_suffix(".json.tmp")
     manifest_tmp = manifest_path.with_suffix(".json.tmp")
     feed_tmp.write_text(payload, encoding="utf-8")
@@ -290,6 +334,12 @@ def stage(records: List[Dict[str, Any]], today: str, dist_dir: Path = DIST_DIR) 
     # Publish the manifest last. A client that sees the new feed with the old
     # manifest rejects it and retains last-known-good; it can never accept a
     # partial feed under the new checksum.
+    if extended_payload is None:
+        extended_path.unlink(missing_ok=True)
+    else:
+        extended_tmp = extended_path.with_suffix(".json.tmp")
+        extended_tmp.write_text(extended_payload, encoding="utf-8")
+        extended_tmp.replace(extended_path)
     feed_tmp.replace(feed_path)
     manifest_tmp.replace(manifest_path)
     return {"feed": str(feed_path), "manifest": str(manifest_path), **manifest}
@@ -345,6 +395,8 @@ def main() -> int:
         print(f"[safety-alerts] staged -> {staged['feed']}")
         print(f"[safety-alerts]   alerts   = {staged['alert_count']}")
         print(f"[safety-alerts]   checksum = {staged['checksum']}")
+        if "extended_feed" in staged:
+            print(f"[safety-alerts]   extended = {staged['extended_feed']['alert_count']} alerts")
         print(
             "[safety-alerts]   catalogs = "
             f"{', '.join(staged['catalog_snapshot_versions'])}"

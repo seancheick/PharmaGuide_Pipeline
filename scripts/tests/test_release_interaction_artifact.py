@@ -475,6 +475,7 @@ def _publish(dist, flutter, gh, *, downloaded_sha, pushed=True):
         download_sha256=lambda url: downloaded_sha,
         pipeline_head=lambda: (HEAD_SHA, pushed),
         today="2026.09.25",
+        rule_gate=lambda db_path, pin: None,
     )
 
 
@@ -796,3 +797,28 @@ def test_real_staged_manifest_seals_and_restages_with_new_timestamp(freshness_tr
     assert ria.ensure_interaction_build_current(repo, suppai, dist)
     assert (dist / ria.MANIFEST_FILENAME).read_bytes() != original_manifest
     assert ria.interaction_build_is_current(repo, suppai, dist)
+
+
+# --- the rule-correction gate runs before anything is published --------------
+
+
+def test_publish_refuses_before_any_release_when_the_rule_gate_fails(tmp_path):
+    dist, flutter, pin_path, _ = _staged_dist_and_pin(tmp_path)
+    before = pin_path.read_bytes()
+    gh = _FakeGh([])
+
+    def refuse(db_path, pin):
+        raise ria.ReleaseValidationError("material rule change has no alert")
+
+    with pytest.raises(ria.ReleaseValidationError, match="no alert"):
+        ria.publish_flutter_pin(
+            dist_dir=dist,
+            flutter_repo=flutter,
+            gh=gh,
+            download_sha256=lambda url: "unused",
+            pipeline_head=lambda: (HEAD_SHA, True),
+            today="2026.09.25",
+            rule_gate=refuse,
+        )
+    assert gh.calls == []
+    assert pin_path.read_bytes() == before

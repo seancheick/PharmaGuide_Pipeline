@@ -1,0 +1,32 @@
+{
+  "alert_id": "SA_9999_0004",
+  "revision": 1,
+  "event_type": "product_recall",
+  "status": "published",
+  "authority": "TEST FIXTURE - not a real authority",
+  "source_url": "https://example.org/fake-ban-source",
+  "evidence_verified_at": "2026-11-03",
+  "fda_class": "II",
+  "jurisdiction": "US",
+  "effective_date": "2026-11-01",
+  "published_at": "2026-11-03T12:00:00Z",
+  "scope": {
+    "ingredient_canonical_ids": [],
+    "dsld_ids": [
+      "9990002"
+    ]
+  },
+  "resolved_dsld_ids": [
+    "9990002"
+  ],
+  "catalog_snapshot_version": "2026.11.03.000000",
+  "lots": [
+    "FAKE-LOT-1"
+  ],
+  "headline": "Fictional test notice: Fakeroot capsules recall",
+  "body": "Test fixture only. This fictional recall covers one made-up product.",
+  "action": "Test fixture only.",
+  "consumer_disposition": "block",
+  "expires_at": null,
+  "retracted": false
+}
