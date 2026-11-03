@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from build_final_db import build_detail_blob
+from build_final_db import _stamp_dose_contract, build_detail_blob
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from enrich_supplements_v3 import SupplementEnricherV3
 from score_supplements_v4 import score_product_v4
@@ -138,7 +138,6 @@ def test_a_compound_mass_reconciled_to_its_elemental_row_is_one_exposure(enriche
         pytest.param("31038", id="olive-two-extracts-same-amount"),
         pytest.param("273843", id="k-120-mk7-50"),
         pytest.param("49236", id="k-children-with-no-exported-parent"),
-        pytest.param("210808", id="vitamin-e-iu-gamma-mg"),
         pytest.param("329778", id="selenium-printed-twice-with-no-proof"),
     ],
 )
@@ -149,6 +148,13 @@ def test_real_additive_rows_stay_summed(enriched, dsld_id):
         for r in _rows(enriched(dsld_id))
         if r.get("dose_role") == "form_component"
     ]
+
+
+def test_a_mixture_printed_beside_vitamin_e_stays_its_own_row(enriched):
+    """210808: Vitamin E 45 IU + Gamma-E 360 mg. Its vitamin K rows are a breakdown."""
+    rows = [r for r in _rows(enriched("210808")) if r.get("canonical_id") == "vitamin_e"]
+    assert {r["ingredient"] for r in rows} == {"Vitamin E", "Gamma-E Mixed Tocopherols"}
+    assert {r["dose_role"] for r in rows} == {"declared_total"}
 
 
 def test_magnesium_85_and_15_still_total_100(enriched):
@@ -258,3 +264,106 @@ def test_a_duplicate_can_cross_the_vitamin_c_upper_limit(enriched):
     )
     assert total == pytest.approx(1625.0)
     assert total < upper_limit
+
+
+def _collect(enricher, rows):
+    return enricher._collect_rda_ul_data(
+        {"activeIngredients": rows, "inactiveIngredients": []},
+        min_servings_per_day=1,
+        max_servings_per_day=1,
+    )["analyzed_ingredients"]
+
+
+def test_a_compound_below_its_nutrient_stays_its_own_row(enricher):
+    """A source mass can't be smaller than what it supplies, so 50 mg isn't the 100 mg."""
+    rows = _collect(enricher, [
+        {"name": "Magnesium", "canonical_id": "magnesium", "quantity": 100, "unit": "mg",
+         "dailyValue": 24, "raw_source_path": "ingredientRows[0]"},
+        {"name": "Magnesium Oxide", "canonical_id": "magnesium", "quantity": 50, "unit": "mg",
+         "raw_source_path": "ingredientRows[1]"},
+    ])
+    assert {r["ingredient"]: r["dose_role"] for r in rows} == {
+        "Magnesium": "declared_total", "Magnesium Oxide": "declared_total"}
+
+
+def test_a_conversion_that_disagrees_with_its_nutrient_stays_its_own_row(enricher):
+    """5 g of magnesium hydroxide is 2 g of magnesium, not the 100 mg printed beside it."""
+    rows = _collect(enricher, [
+        {"name": "Magnesium", "canonical_id": "magnesium", "quantity": 100, "unit": "mg",
+         "dailyValue": 24, "raw_source_path": "ingredientRows[0]"},
+        {"name": "Magnesium Hydroxide", "canonical_id": "magnesium", "quantity": 5, "unit": "g",
+         "raw_source_path": "ingredientRows[1]"},
+    ])
+    assert {r["ingredient"]: r["dose_role"] for r in rows}["Magnesium Hydroxide"] == "declared_total"
+
+
+def test_a_compound_under_another_blend_stays_its_own_row(enricher):
+    """246189: Choline 20 mg (as bitartrate) and Alpha-GPC 25 mg in a separate complex."""
+    rows = _collect(enricher, [
+        {"name": "Choline", "canonical_id": "choline", "quantity": 20, "unit": "mg",
+         "dailyValue": 4, "raw_source_path": "ingredientRows[13]"},
+        {"name": "CognitivePro Complex", "quantity": 100, "unit": "mg",
+         "raw_source_path": "ingredientRows[26]"},
+        {"name": "Alpha-GPC", "canonical_id": "choline", "quantity": 25, "unit": "mg",
+         "raw_source_path": "ingredientRows[26].nestedRows[2]",
+         "isNestedIngredient": True, "parentBlend": "CognitivePro Complex"},
+    ])
+    assert {r["ingredient"]: r["dose_role"] for r in rows}["Alpha-GPC"] == "declared_total"
+
+
+def test_a_nested_bare_row_cannot_own_the_total_above_it(enricher):
+    rows = _collect(enricher, [
+        {"name": "Vitamin K", "canonical_id": "vitamin_k1", "quantity": 500, "unit": "mcg",
+         "dailyValue": 400, "raw_source_path": "ingredientRows[0]"},
+        {"name": "Vitamin K1", "canonical_id": "vitamin_k1", "quantity": 100, "unit": "mcg",
+         "raw_source_path": "ingredientRows[0].nestedRows[0]",
+         "isNestedIngredient": True, "parentBlend": "Vitamin K"},
+    ])
+    total = next(r for r in rows if r["ingredient"] == "Vitamin K")
+    assert total.get("skip_ul_reason") != "compound_duplicate_row"
+
+
+def test_folic_acid_on_the_next_row_needs_the_labels_own_conversion(enricher):
+    """Equal converted amounts on distant rows prove nothing."""
+    rows = _collect(enricher, [
+        {"name": "Folate", "canonical_id": "vitamin_b9_folate", "quantity": 400, "unit": "mcg DFE",
+         "dailyValue": 100, "raw_source_path": "ingredientRows[0]"},
+        {"name": "Biotin", "canonical_id": "vitamin_b7_biotin", "quantity": 30, "unit": "mcg",
+         "dailyValue": 100, "raw_source_path": "ingredientRows[1]"},
+        {"name": "Folic Acid", "canonical_id": "vitamin_b9_folate", "quantity": 240, "unit": "mcg",
+         "raw_source_path": "ingredientRows[2]", "forms": [{"name": "folic acid"}]},
+    ])
+    assert {r["ingredient"]: r["dose_role"] for r in rows}["Folic Acid"] == "declared_total"
+
+
+@pytest.mark.parametrize(
+    "serving",
+    [
+        {},
+        {"min_servings_per_day": None, "max_servings_per_day": 2},
+        {"min_servings_per_day": 0, "max_servings_per_day": 2},
+    ],
+)
+def test_a_row_outside_the_dose_loop_gets_no_guessed_daily_figure(serving):
+    row = {"raw_source_path": "ingredientRows[0]", "normalized_amount": 160.0, "normalized_unit": "mg"}
+    _stamp_dose_contract([row], [], serving)
+    assert not {"dose_role", "per_day_min", "per_day_max", "converted_unit"} & set(row)
+
+
+def test_a_row_outside_the_dose_loop_takes_its_daily_figure_from_servings():
+    """212783: saw palmetto 160 mg, label two a day, no analyzed row."""
+    row = {"raw_source_path": "ingredientRows[0]", "normalized_amount": 160.0, "normalized_unit": "mg"}
+    _stamp_dose_contract([row], [], {"min_servings_per_day": 1, "max_servings_per_day": 2})
+    assert row["dose_role"] == "declared_total"
+    assert (row["per_day_min"], row["per_day_max"], row["converted_unit"]) == (160.0, 320.0, "mg")
+
+
+def test_daily_figures_ship_together_or_not_at_all():
+    row = {"raw_source_path": "ingredientRows[0]"}
+    _stamp_dose_contract(
+        [row],
+        [{"raw_source_path": "ingredientRows[0]", "dose_role": "form_component",
+          "per_day_max": 5.0, "converted_unit": "mg", "skip_ul_check": True}],
+        {"min_servings_per_day": 1, "max_servings_per_day": 1},
+    )
+    assert row == {"raw_source_path": "ingredientRows[0]", "dose_role": "form_component"}

@@ -31,7 +31,7 @@ import argparse
 import traceback
 from datetime import datetime, timezone
 from difflib import SequenceMatcher
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Callable, Dict, List, Any, Optional, Tuple
 from pathlib import Path
 
 # Optional tqdm import for progress bars
@@ -267,6 +267,11 @@ _NON_UL_BOTANICAL_CANONICALS = {
     "thyme",
 }
 _FOLIC_ACID_LABEL_DFE_FACTOR = 1.7
+_VERIFIED_ACTIVE_MOIETY_CONVERSIONS = frozenset({
+    "choline_bitartrate_to_choline",
+    "magnesium_hydroxide_to_magnesium",
+    "inositol_hexanicotinate_to_niacin_equivalents",
+})
 _FOLATE_DAILY_VALUE_DFE_MCG = 400.0
 
 
@@ -22293,6 +22298,8 @@ class SupplementEnricherV3:
             parent = next(row for row in active_ingredients
                           if self._rda_source_label_key(row) == declared["source_label_key"])
             parent_path = str(parent.get("raw_source_path") or "")
+            top_index = re.fullmatch(r"ingredientRows\[(\d+)\]", parent_path)
+            next_path = f"ingredientRows[{int(top_index.group(1)) + 1}]" if top_index else None
             components = set()
             for row in active_ingredients:
                 child_path = str(row.get("raw_source_path") or "")
@@ -22300,6 +22307,13 @@ class SupplementEnricherV3:
                     len(totals) == 1 and row.get("isNestedIngredient") is True
                     and self._normalize_text(row.get("parentBlend") or "")
                     == self._normalize_text(parent.get("name") or ""))
+                if child_path == next_path and row.get("dailyValue") is None:
+                    # DSLD can print "Folic Acid" on the row after its DFE total
+                    # instead of under it. Only the label's own conversion (the
+                    # existing 2.5%) links them; equal amounts on distant rows don't.
+                    linked = linked or self._is_folic_acid_mass_of_dfe_total(
+                        row, declared["quantity"]
+                    )
                 identity = " ".join(str(row.get(key) or "") for key in ("name", "matched_form", "raw_source_text"))
                 if linked and norm_module.classify_folate_form(identity) == norm_module.FOLATE_FORM_FOLIC_ACID:
                     unit = _rda_mass_unit_key(row.get("unit"))
@@ -22324,10 +22338,170 @@ class SupplementEnricherV3:
                 declared["native_folic_acid_mcg"] = next(iter(masses))
         return totals
 
+    @staticmethod
+    def _is_folic_acid_mass_of_dfe_total(
+        row: Dict[str, Any], total_mcg_dfe: float
+    ) -> bool:
+        unit = _rda_mass_unit_key(row.get("unit"))
+        try:
+            quantity = float(row.get("quantity") or 0)
+        except (TypeError, ValueError):
+            return False
+        if unit not in {"mg", "mcg"} or quantity <= 0:
+            return False
+        mass_mcg = quantity * (1000.0 if unit == "mg" else 1.0)
+        return (
+            abs(mass_mcg * _FOLIC_ACID_LABEL_DFE_FACTOR - total_mcg_dfe)
+            <= max(0.5, total_mcg_dfe * 0.025)
+        )
+
+    def _repeated_declaration_links(
+        self,
+        active_ingredients: List[Dict[str, Any]],
+        *,
+        compound_owners: Dict[int, Dict[str, Any]],
+        canonical_of: Callable[[Dict[str, Any]], str],
+        ul_gate_of: Callable[[Dict[str, Any]], bool],
+    ) -> Dict[str, Dict[str, Any]]:
+        """Map rows repeating a printed amount to the row that owns it, by source path.
+
+        One physical amount is one exposure, but matching names, amounts or label
+        keys never prove it: only the label's structure does. A row with no such
+        proof stays its own exposure.
+        - A blend restating the top row: the one nested and one top row of an
+          identity, same amount and unit, nested row has no Daily Value, and the
+          label prints the link (the top row's notes name the blend, or the
+          blend's name contains the top row's form).
+        - A source compound beside its nutrient: the dual-declaration owner's
+          verdict, for a compound nested directly under that nutrient, or a
+          top-level compound whose mass is at least the nutrient's. Vitamin E
+          mixtures are a form question, not a compound one, and stay out.
+        - A parent total above a breakdown: the parent passes the UL gate, its
+          direct children of the same identity don't, it prints a mass, and each
+          child and their sum stay within it after unit conversion.
+        """
+        rows = [
+            row for row in active_ingredients
+            if isinstance(row, dict) and row.get("raw_source_path")
+        ]
+        by_path = {str(row["raw_source_path"]): row for row in rows}
+        links: Dict[str, Dict[str, Any]] = {}
+
+        def _amount(row: Dict[str, Any]) -> float:
+            try:
+                return float(row.get("quantity") or 0)
+            except (TypeError, ValueError):
+                return 0.0
+
+        def _mass_mg(row: Dict[str, Any]) -> Optional[float]:
+            factor = {"g": 1000.0, "mg": 1.0, "mcg": 0.001}.get(
+                _rda_mass_unit_key(row.get("unit")) or ""
+            )
+            return _amount(row) * factor if factor else None
+
+        def _is_nested(row: Dict[str, Any]) -> bool:
+            return bool(row.get("isNestedIngredient") or row.get("parentBlend"))
+
+        def _parent_path(row: Dict[str, Any]) -> str:
+            return str(row["raw_source_path"]).rpartition(".nestedRows[")[0]
+
+        def _words(text: Any) -> str:
+            return " ".join(re.findall(r"[a-z0-9]+", str(text or "").lower()))
+
+        def _link(row: Dict[str, Any], owner: Dict[str, Any], **extra: Any) -> None:
+            links[str(row["raw_source_path"])] = {
+                "dose_role": "form_component",
+                "parent_label_key": self._rda_source_label_key(owner),
+                **extra,
+            }
+
+        groups: Dict[str, List[Dict[str, Any]]] = {}
+        for row in rows:
+            canonical = canonical_of(row)
+            if canonical and _amount(row) > 0:
+                groups.setdefault(canonical, []).append(row)
+
+        for group in groups.values():
+            tops = [row for row in group if not _is_nested(row)]
+            nested = [row for row in group if _is_nested(row)]
+            if len(tops) != 1 or len(nested) != 1:
+                continue
+            top, child = tops[0], nested[0]
+            if (
+                _amount(top) != _amount(child)
+                or self._same_identity_unit_key(top.get("unit"))
+                != self._same_identity_unit_key(child.get("unit"))
+                or child.get("dailyValue") is not None
+            ):
+                continue
+            blend = _words(child.get("parentBlend"))
+            blend_words = set(blend.split()) - {"proprietary", "blend"}
+            notes_name_blend = bool(blend_words) and blend_words <= set(
+                _words(top.get("notes")).split()
+            )
+            blend_names_form = any(
+                len(form_words.split()) >= 2 and f" {form_words} " in f" {blend} "
+                for form_words in (
+                    _words(form.get("name"))
+                    for form in top.get("forms") or []
+                    if isinstance(form, dict)
+                )
+            )
+            if notes_name_blend or blend_names_form:
+                _link(child, top)
+
+        for row in rows:
+            owner = compound_owners.get(id(row))
+            if owner is None or canonical_of(row) == "vitamin_e":
+                continue
+            if _is_nested(row):
+                if _parent_path(row) == str(owner.get("raw_source_path") or ""):
+                    _link(row, owner)
+                continue
+            row_mass, owner_mass = _mass_mg(row), _mass_mg(owner)
+            if row_mass is not None and owner_mass is not None and row_mass >= owner_mass:
+                _link(row, owner, compound_owner_mass_mg=owner_mass)
+
+        children: Dict[str, List[Dict[str, Any]]] = {}
+        for row in rows:
+            if _is_nested(row) and _amount(row) > 0:
+                children.setdefault(_parent_path(row), []).append(row)
+        for parent_path, kids in children.items():
+            parent = by_path.get(parent_path)
+            if parent is None or parent.get("is_compound_duplicate"):
+                continue
+            canonical = canonical_of(parent)
+            kids = [row for row in kids if canonical and canonical_of(row) == canonical]
+            parent_mass = _mass_mg(parent)
+            kid_masses = [_mass_mg(row) for row in kids]
+            if (
+                not kids
+                or canonical in {"vitamin_a", "vitamin_b9_folate"}
+                or not parent_mass
+                or None in kid_masses
+                or sum(kid_masses) > parent_mass * (1 + 1e-9)
+                or not ul_gate_of(parent)
+                or any(ul_gate_of(row) for row in kids)
+            ):
+                continue
+            for row in kids:
+                _link(row, parent)
+        return links
+
     def _declared_same_identity_totals(
         self, active_ingredients: List[Dict[str, Any]]
     ) -> List[Dict[str, Any]]:
         """Find top-level nutrient rows that own nested form detail."""
+        quality_map = self.databases.get("ingredient_quality_map") or {}
+
+        def _nutrient_family(row: Dict[str, Any], canonical: str) -> str:
+            # K1 and K2 are one nutrient on a "Vitamin K activity from:" total.
+            # A parent can own them only with a Daily Value anchoring its amount;
+            # with none it leaves the export, and the children must stay counted.
+            entry = quality_map.get(str(row.get("canonical_id") or ""))
+            group = entry.get("nutrient_group_id") if isinstance(entry, dict) else None
+            return str(group) if group else canonical
+
         totals: List[Dict[str, Any]] = []
         for ingredient in active_ingredients:
             if ingredient.get("isNestedIngredient") or ingredient.get("parentBlend"):
@@ -22348,6 +22522,11 @@ class SupplementEnricherV3:
                 continue
             totals.append({
                 "canonical": canonical,
+                "family": (
+                    _nutrient_family(ingredient, canonical)
+                    if ingredient.get("dailyValue") is not None
+                    else None
+                ),
                 "label_name": self._normalize_text(
                     ingredient.get("raw_source_text")
                     or ingredient.get("name")
@@ -22389,7 +22568,10 @@ class SupplementEnricherV3:
                 except (TypeError, ValueError):
                     continue
                 if (
-                    canonical != declared["canonical"]
+                    (
+                        canonical != declared["canonical"]
+                        and _nutrient_family(ingredient, canonical) != declared["family"]
+                    )
                     or parent_name != declared["label_name"]
                     or quantity <= 0
                     or self._same_identity_unit_key(unit)
@@ -22798,6 +22980,7 @@ class SupplementEnricherV3:
         declared_vitamin_a_components: Dict[str, Dict[str, Any]],
         nested_daily_value_owners: Dict[str, str],
         composition_share_owners: Dict[str, str],
+        repeated_declarations: Optional[Dict[str, Dict[str, Any]]] = None,
     ) -> Dict[str, Any]:
         """Classify an emitted RDA/UL row as a total or label sub-component."""
         source_label_key = self._rda_source_label_key(ingredient)
@@ -22834,6 +23017,25 @@ class SupplementEnricherV3:
                 "composition_share_of_declared_total"
             )
             return lineage
+
+        repeat = (repeated_declarations or {}).get(
+            str(ingredient.get("raw_source_path") or "")
+        )
+        if repeat:
+            # A verified conversion must agree with the nutrient row it repeats
+            # (900 vs 903 mg). Label rounding, hence the margin.
+            owner_mass = repeat.get("compound_owner_mass_mg")
+            if (
+                owner_mass is None
+                or conversion_evidence.get("conversion_rule_id")
+                not in _VERIFIED_ACTIVE_MOIETY_CONVERSIONS
+                or converted_amount is None
+                or _rda_mass_unit_key(converted_unit) != "mg"
+                or abs(converted_amount - owner_mass) <= owner_mass * 0.05
+            ):
+                lineage["dose_role"] = repeat["dose_role"]
+                lineage["parent_label_key"] = repeat["parent_label_key"]
+                return lineage
 
         canonical = self._normalize_text(
             ingredient.get("canonical_id")
@@ -23191,7 +23393,23 @@ class SupplementEnricherV3:
         # Dual-declaration dedupe: the compound-weight restatement of a bare
         # elemental row must not contribute to UL totals (60+400=460 mg
         # would falsely breach the 350 mg magnesium UL).
-        mark_compound_duplicate_rows(active_ingredients)
+        compound_owners: Dict[int, Dict[str, Any]] = {}
+        mark_compound_duplicate_rows(active_ingredients, owners=compound_owners)
+
+        def _canonical_of(row: Dict[str, Any]) -> str:
+            identity = _take_quality_identity(row, consume=False)
+            return str(identity.get("canonical_id") or row.get("canonical_id") or "").strip()
+
+        repeated_declarations = self._repeated_declaration_links(
+            active_ingredients,
+            compound_owners=compound_owners,
+            canonical_of=_canonical_of,
+            ul_gate_of=lambda row: self._ul_exposure_basis(
+                row,
+                canonical_id=_canonical_of(row),
+                standard_name=row.get("standardName") or row.get("name") or "",
+            )["ul_gate_eligible"],
+        )
         declared_folate_totals = self._declared_folate_dfe_totals(active_ingredients)
         declared_same_identity_totals = self._declared_same_identity_totals(
             active_ingredients
@@ -23584,11 +23802,7 @@ class SupplementEnricherV3:
 
                     # Step 2: Compute adequacy with converted amount
                     rule_id = (conversion.conversion_rule_id or '').lower()
-                    if rule_id in {
-                        "choline_bitartrate_to_choline",
-                        "magnesium_hydroxide_to_magnesium",
-                        "inositol_hexanicotinate_to_niacin_equivalents",
-                    }:
+                    if rule_id in _VERIFIED_ACTIVE_MOIETY_CONVERSIONS:
                         ul_exposure = {
                             "ul_gate_eligible": True,
                             "ul_exposure_basis": (
@@ -23707,6 +23921,7 @@ class SupplementEnricherV3:
                         declared_vitamin_a_components=declared_vitamin_a_components,
                         nested_daily_value_owners=nested_daily_value_owners,
                         composition_share_owners=composition_share_owners,
+                        repeated_declarations=repeated_declarations,
                     )
                     if (
                         conversion_failed

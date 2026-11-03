@@ -213,6 +213,9 @@ def mark_compound_duplicate_rows(
             row for row in group
             if _normalize_text(row.get("name")) == canonical_name
             and _row_qty(row) > 0
+            # A bare row printed under another row breaks that row down. It
+            # can't own the row above it (Vitamin K 2200 > Vitamin K1 1000).
+            and not row.get("isNestedIngredient")
         ]
         if not bare_rows:
             continue

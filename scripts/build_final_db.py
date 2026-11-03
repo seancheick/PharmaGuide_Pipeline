@@ -6984,6 +6984,45 @@ def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str,
     return {}
 
 
+def _stamp_dose_contract(
+    ingredients: List[Dict], analyzed_rows: Any, serving: Dict
+) -> None:
+    """Give each exported ingredient row the pipeline's dose role and daily figures.
+
+    analyzed_ingredients drops a form component or an unsupported mass, yet the row
+    stays here, where a reader would count it again. `skip_ul_check` stays out on
+    purpose: "no upper limit applies" says nothing about the amount. A row outside
+    the dose loop takes its daily figures from its normalized amount and the
+    product's servings; without usable servings it gets none, never a guess.
+    Daily figures ship together or not at all.
+    """
+    analyzed_by_path = {
+        safe_str(row.get("raw_source_path")): row
+        for row in safe_list(analyzed_rows)
+        if isinstance(row, dict) and row.get("raw_source_path")
+    }
+    servings_min = safe_float(safe_dict(serving).get("min_servings_per_day"))
+    servings_max = safe_float(safe_dict(serving).get("max_servings_per_day"))
+    for row in ingredients:
+        analyzed = analyzed_by_path.get(safe_str(row.get("raw_source_path")))
+        if analyzed is not None:
+            row["dose_role"] = analyzed.get("dose_role")
+            daily = tuple(analyzed.get(key) for key in ("per_day_min", "per_day_max", "converted_unit"))
+            if all(value is not None for value in daily):
+                row["per_day_min"], row["per_day_max"], row["converted_unit"] = daily
+            continue
+        amount = row.get("normalized_amount")
+        unit = row.get("normalized_unit")
+        if (
+            isinstance(amount, (int, float)) and amount > 0 and unit
+            and servings_min and servings_max and servings_min > 0 and servings_max > 0
+        ):
+            row["dose_role"] = "declared_total"
+            row["per_day_min"] = amount * servings_min
+            row["per_day_max"] = amount * servings_max
+            row["converted_unit"] = unit
+
+
 @lru_cache(maxsize=1)
 def _identity_uncertainty_rules() -> Dict[str, Dict]:
     """Internal matching rules; public warnings carry their already-bound result."""
@@ -8182,6 +8221,7 @@ def build_detail_blob(
     serving = safe_dict(enriched.get("serving_basis"))
     evidence_data = safe_dict(enriched.get("evidence_data"))
     rda_ul_data = safe_dict(enriched.get("rda_ul_data"))
+    _stamp_dose_contract(ingredients, rda_ul_data.get("analyzed_ingredients"), serving)
     prenatal_coverage = _build_prenatal_coverage(ingredients, rda_ul_data)
     adult_multi_coverage = _build_adult_multi_coverage(ingredients, rda_ul_data)
     role_context = _classify_product_role(
