@@ -57,7 +57,7 @@ CI on `47a3ea25d` failed on 7 pinned labels. Checking every alias against the le
 
 Frozen raw labels through Clean, Enrich and Score, on main `0bd492188` and on `f0f7e406c`, with `scripts/audits/quality_redesign/replay.py`.
 
-- 152 affected labels: all 152 `not_scored` on main, reproducing the build. 12 moved to scored. See `per_product.md`.
+- 152 labels: all 152 `not_scored` on main, reproducing the build. `per_product.md` lists the 135 in the identity and dose groups, and 12 of those moved to scored. The other 17 are outside this sort: 15 Cascara (229932, 251528, 252441, 253399, 253403, 253404, 311301, 311302, 311303, 311304, 327907, 330523, 330524, 330525, 332909) and 2 with no identity or dose blocker (222918, 315691). All 17 are `not_scored` on main and on this branch, with score, verdict and safety status unchanged. The 11 evidence-group labels were not replayed.
 - 121 controls, chosen because they carry the same forms and names or read zero-%DV rows: no status or score changed. Only 232887 (CBD+ Sleep) differs: its chamomile row now resolves, its reasons change, and it stays `suppressed_safety`.
 - Safety fields compared across the 152: `product_safety_status`, `safety_verdict`, `dose_safety_evaluation`, safety review records, harmful additives and allergens. None changed.
 - `interaction_profile` changed on 2. 328465 changes only `form_context` text. 285637 gains `RULE_INGREDIENT_CHAMOMILE` because its chamomile row now resolves: bleeding disorders, anticoagulants, antiplatelets and NSAIDs.

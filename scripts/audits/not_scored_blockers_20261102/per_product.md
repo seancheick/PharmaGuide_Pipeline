@@ -1,6 +1,6 @@
 # Per-product sort, 2026.11.02 not_scored labels
 
-Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were replayed on main and all reproduced. Sort: **a** our gap, **b** real label limit, **c** Sean's decision (codes C1 to C13 in the PR and `research.md`). Replay is the clean → enrich → score path on frozen raw labels. Nothing is published.
+Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were replayed on main and all reproduced: these 135, plus 17 outside this sort and unchanged (15 Cascara and 2 others, listed in `research.md`). Sort: **a** our gap, **b** real label limit, **c** Sean's decision (codes C1 to C13 in the PR and `research.md`). Replay is the clean → enrich → score path on frozen raw labels. Nothing is published.
 
 ## Moved to scored (12)
 
