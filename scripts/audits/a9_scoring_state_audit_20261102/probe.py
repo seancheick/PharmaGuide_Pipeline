@@ -23,6 +23,7 @@ def _driver(scored):
         "quality_score_status": scored.get("quality_score_status"),
         "quality_assessment_status": scored.get("quality_assessment_status"),
         "product_safety_status": scored.get("product_safety_status"),
+        "safety_assessment_status": scored.get("safety_assessment_status"),
         "quality_score_v4_100": scored.get("quality_score_v4_100"),
         "quality_tier": scored.get("quality_tier"),
         "score_unavailable_reason": scored.get("score_unavailable_reason"),
@@ -32,6 +33,9 @@ def _driver(scored):
         "release_blockers": release.get("blockers"),
         "mapped_coverage": scored.get("mapped_coverage"),
         "ingredient_assessment_errors": gate.get("ingredient_assessment_errors"),
+        "needs_review": gate.get("needs_review"),
+        "unread_printed_nutrient_amounts": release.get("unread_printed_nutrient_amounts"),
+        "evidence_result_state": evidence.get("evidence_result_state"),
     }
 
 

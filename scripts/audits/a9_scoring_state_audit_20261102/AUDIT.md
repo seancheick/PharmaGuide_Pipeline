@@ -72,4 +72,35 @@ Sibutramine beside an unknown row all return `blocked`, score None
 
 ## Open by design or for Sean
 
-See the PR for the decision list and the measured before and after.
+See the PR for the decision list.
+
+## Measured before and after
+
+Full rescore of all 38 stored inputs at `eb47098a8` against clean main, 15,447 products. Scores,
+tiers, score status, quality status and blockers: 0 moved. `product_safety_status`: 4 moved to
+`not_assessed` (329726-329729). Evidence `display_state`: 1,368 moved from `assessed` to
+`not_yet_reviewed`, with points unchanged. Scratch strict export: 15,447 products, 0 errors.
+`shadow-diff` passed. The scoring audit reports 0 `SCORING_SAFETY_ASSESSMENT_STATUS_MISMATCH` and 81
+`SCORING_STRICT_CONTRACT_FAILED` (`disclosed_form_unmapped`), not yet compared with main.
+
+## `safety_assessment_status` by state, with a real product
+
+| Quality status | Quality assessment | Catalog safety | Safety assessment | Products | Example |
+|---|---|---|---|---|---|
+| scored | complete | no_known_catalog_concern | complete | 7,941 | 240875 |
+| scored | partial | no_known_catalog_concern | complete | 5,686 | 268686 |
+| scored | complete | caution | complete | 863 | 1060 |
+| scored | partial | caution | complete | 421 | 1640 |
+| suppressed_safety | complete | blocked | complete | 50 | 220094 |
+| not_scored | partial | no_known_catalog_concern | incomplete | 192 | 16765 |
+| scored | partial | no_known_catalog_concern | incomplete | 142 | 212388 |
+| not_scored | partial | caution | incomplete | 53 | 19598 |
+| scored | partial | caution | incomplete | 45 | 1179 |
+| scored | complete | caution | incomplete | 22 | 12031 |
+| suppressed_safety | complete | blocked | incomplete | 19 | 252358 |
+| scored | complete | no_known_catalog_concern | incomplete | 9 | 16730 |
+| not_scored | partial | not_assessed | incomplete | 4 | 329726 |
+
+The field is a fact, not a display rule: an incomplete assessment or a caution shows no all-clear
+(Sean, 2026-11-03), and `incomplete` never overrides a block. Open for Sean: 2,581 partial products
+keep `applicability_unestablished` Evidence (182957), and quality status reads partial on them.

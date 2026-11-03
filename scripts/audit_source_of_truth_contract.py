@@ -942,7 +942,7 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                     dose_safety=product.get("dose_safety_evaluation"),
                     release=_safe_dict(product.get("assessment_readiness")).get("release_assessment"),
                     evidence_result_state=retained_evidence_result_state(product.get("_v4_module_breakdown"))):
-                # The app's all-clear reads this column; it must follow from the
+                # The app reads this column; it must follow from the
                 # facts retained beside it.
                 findings.append(Finding("SCORING_SAFETY_ASSESSMENT_STATUS_MISMATCH",
                     f"{pid}: safety_assessment_status {product.get('safety_assessment_status')!r} "

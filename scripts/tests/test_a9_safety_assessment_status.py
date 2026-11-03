@@ -1,8 +1,8 @@
 """A9: `safety_assessment_status` says whether the catalog safety checks finished.
 
-Sean, 2026-11-03: a product whose only gap is the Evidence review may say "no known
-concerns" once its safety checks are complete. The field states that fact and is
-separate from Evidence and overall quality. Anything unknown fails closed.
+The field states whether the safety checks finished, separate from Evidence and
+overall quality. It is not a display rule: a product with an incomplete assessment
+or a caution shows no all-clear (Sean, 2026-11-03). Anything unknown fails closed.
 """
 import json
 import logging
