@@ -1,29 +1,34 @@
 # Traces behind the review order
 
-All counts come from the unpublished 2026.11.02 scored and enriched artifacts in the main checkout, re-resolved with code at `0bd492188`. Nothing here was published.
+All counts come from the unpublished 2026.11.02 scored and enriched artifacts in the main checkout, re-resolved with code at `0bd492188` and base literature data, through `score_eligible_identity_view`, the same view the scorer reads. Nothing here was published.
 
 ## Which rows actually block
 
-The artifact labels 9,065 rows `no_reviewed_evidence_assessment`. Re-running the resolver gives the real reason for each row (11,318 rows across 6,289 Evidence-only products):
+The artifact labels 9,065 rows `no_reviewed_evidence_assessment`. Re-running the resolver gives the real reason for each row: 11,175 rows on 5,993 of the 6,289 Evidence-only products. The other 296 have no blocked row at all (see below).
 
 | Rows | Resolver reason | What it means |
 |---|---|---|
-| 3,475 | `unverified_generated_record_cannot_complete_evidence` | The record was never reviewed |
+| 3,461 | `unverified_generated_record_cannot_complete_evidence` | The record was never reviewed |
 | 2,102 | `clinical_sources_ineligible` | A curated record is held on a source or clinician decision |
-| 1,705 | `literature_applicability_unestablished` | Reviewed, but the review does not establish applicability |
-| 1,098 | `probiotic_species_or_stub_applicability_unestablished` | Probiotic species or stub row |
+| 1,698 | `literature_applicability_unestablished` | Reviewed, but the review does not establish applicability |
+| 1,094 | `probiotic_species_or_stub_applicability_unestablished` | Probiotic species or stub row |
 | 789 | `botanical_therapeutic_reference_unverified_studies` | Botanical route with no reviewed studies |
 | 748 | `clinical_source_contexts_missing` | Curated record has no approved contexts |
-| 298 | `invalid_applicability_contract` | Scope present but not signed |
-| 265 | `crude_vegetable_powder_cannot_inherit_purified_extract_trials` | Hard-coded broccoli rule |
-| 246 | reviewed rows that resolve | Already finished |
-| 211 | `culinary_matrix_review_cannot_complete_extract` | Culinary review on an extract row |
-| 156 | `active_identity_requires_literature_search` | No record yet |
-| 129 | `crude_seed_powder_cannot_inherit_purified_oil_trials` | Hard-coded pumpkin rule |
+| 295 | `invalid_applicability_contract` | Scope present but not signed |
+| 269 | `crude_vegetable_powder_cannot_inherit_purified_extract_trials` | Hard-coded broccoli rule |
+| 205 | `culinary_matrix_review_cannot_complete_extract` | Culinary review on an extract row |
+| 155 | `active_identity_requires_literature_search` | No record yet |
+| 133 | `crude_seed_powder_cannot_inherit_purified_oil_trials` | Hard-coded pumpkin rule |
+| 131 | `reviewed_human_clinical_evidence_matched` | Resolves on current code |
+| 55 | `label_claim_unclassified` | Label claim has no class |
+| 35 | `trace_mineral_authority_established` | Resolves on current code |
+| 2 | `identity_material_unresolved` | Identity not settled |
+| 2 | `clinical_outcome_not_qualified` | Outcome not qualified |
+| 1 | `probiotic_strain_reviewed_no_qualifying_human_evidence` | Resolves on current code |
 
-So about 2,600 rows are not waiting on research at all. They wait on a rule about what a finished review may close.
+The table sums to 11,175. So 2,600 rows (1,698 + 295 + 269 + 205 + 133) are not waiting on research. They wait on a rule about what a finished review may close.
 
-The probe disagreed with the artifact on 152 of 6,289 products: current code adds beetroot, red raspberry fruit, apple fruit and black tea leaf rows the artifact did not list. I did not trace why. The replay below re-derives everything from raw labels, so its measurements do not depend on this.
+The first version of this file reported 11,318 rows, listed only 11,222 of them, and said the probe disagreed with the artifact on 152 products. All of that came from one mistake: the probe resolved the raw enriched product instead of the scoring view, which added rows the scorer never reads (beetroot on 256991, apple fruit on 328104). Through the scoring view, the probe matches the artifact on all 6,289 products (0 mismatches).
 
 ## Why `clinical_sources_ineligible` records fail
 
@@ -43,13 +48,19 @@ Also held: `INGR_OMEGA3` (omega nutrition path, in the Evidence calibration work
 
 ## Why fully assessed products stay blocked
 
-The brief counted 272. With current code it is 298: fiber_digestive 105, generic 94, probiotic 93, sports 3, multi 3.
+The brief counted 272. With current code it is 296: fiber_digestive 105, generic 94, probiotic 94, sports 3. I earlier counted 298 including 3 multi products and called those drift. That was the same probe mistake: 204732, 241347 and 241349 have real blocked rows (alfalfa, broccoli, cabbage extract, pumpkin), so they are not in this group.
 
-**Generic, sports and fiber (202 products).** The artifact marks module-scoped product-level rows `not_applicable` / `module_scoped_product_projection`, so every visible row looks assessed. `evaluate_release_assessment` then re-resolves those same rows with `resolve_product_evidence(owner_scoped=True, module=...)` and adds `evidence_assessment_incomplete`. The ledger and the release gate disagree about what counts. Split: evidence-completeness gap only 106, gap plus pending applicability 30, pending only 65, neither 1 (278416, which I did not resolve). Live probes: 278554 and 47339 both stop on a fiber row with `unverified_generated_record_cannot_complete_evidence`. The pending list is led by bromelain (contexts missing, 24), pancreatin 7, triphala 6, collagen 6, phytosterols 6, elderberry 5, sytrinol 4.
+**Generic, sports and fiber (202 products).** The artifact marks module-scoped product-level rows `not_applicable` / `module_scoped_product_projection`, so every visible row looks assessed. `evaluate_release_assessment` then re-resolves those same rows with `resolve_product_evidence(owner_scoped=True, module=...)` and adds `evidence_assessment_incomplete`. The ledger and the release gate disagree about what counts. Split: unreviewed row only 89, unreviewed plus pending applicability 47, pending only 65, neither 1. Live probes: 278554 and 47339 both stop on a fiber row with `unverified_generated_record_cannot_complete_evidence`. The pending list is led by bromelain 24, prebiotics 13, collagen 8, pancreatin 7, triphala 6, phytosterols 6, elderberry 5, sytrinol 4.
 
-**Probiotic (93).** 69 have `probiotic_evidence_assessment_incomplete` (180210 and 60467: strain status `strain_context_not_applicable`, so no reviewed conclusion). 20 carry the contributing context `is2_adult_ibs_multicenter_31434935`, 4 carry `p299v_ibs_rome3_22912552`.
+The one with neither is 232321 (VenoFlow): its only row, nattokinase, resolves as reviewed clinical evidence on current code, although the artifact still blocks it. I did not replay it, so I can't say whether that is drift since the build.
 
-**Multi (3).** 204732, 241347 and 241349 are blocked in the artifact but complete on current code, because apple fruit is now `not_efficacy_relevant`. That is drift since the build, not an open question.
+**Probiotic (94).** 70 have `probiotic_evidence_assessment_incomplete` (180210 and 60467: strain status `strain_context_not_applicable`, so no reviewed conclusion). 20 carry the contributing context `is2_adult_ibs_multicenter_31434935`, 4 carry `p299v_ibs_rome3_22912552`.
+
+**278416.** It is not in this group either. I reported it as unresolved because the old probe saw no blocked row. Through the scoring view it has four: alfalfa and cabbage extract (`unverified_generated_record_cannot_complete_evidence`), broccoli and pumpkin (the hard-coded crude-powder rules).
+
+## Why the fiber review is not in the data
+
+A record moved from unverified to `applicability_unestablished` stops being a gap: `compose_product_resolution_state` treats that disposition as complete. Generic products still stop at their row ledger. The probiotic branch of `evaluate_release_assessment` reads only the module's `evidence_result_state`, so the fiber record alone finishes 3 probiotic products: 59635, 241707 and 276704. On 59635 the fiber row is a 0 g line on the label, and an approved hold (`test_held_assessment_publication.py`) would have become a public score of 60.9, Needs improvement, driven by a review nobody signed. Turmeric, ginkgo and collagen flip nothing this way in the replay.
 
 ## Oddities for later
 

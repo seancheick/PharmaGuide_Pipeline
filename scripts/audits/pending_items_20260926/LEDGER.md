@@ -4381,4 +4381,4 @@ Sean now owns execution. Resume the prepared input set through snapshot, then ru
 
 ## November 3 — first Evidence review batch
 
-**Class:** behavioral curated data; no scoring code change. **Owner:** `literature_evidence_records.json`. Live PubMed review of turmeric, ginkgo, methionine, fiber and collagen, with no clinician approval and no credit. Frozen-label replay: 142 partial to complete, 0 score, tier or safety moves, 0 of 150 controls changed. Report and open questions: `scripts/audits/evidence_review_batch1_20261102/report.md`.
+**Class:** behavioral curated data; no scoring code change. **Owner:** `literature_evidence_records.json`. Live PubMed review of turmeric, ginkgo, methionine and collagen, with no clinician approval and no credit; fiber was read and withheld because applying it would finish held product 59635. Frozen-label replay: 40 partial to complete, all from methionine, 0 held to scored, 0 score, tier, Dose or safety moves, 0 of 150 controls changed. Report and open questions: `scripts/audits/evidence_review_batch1_20261102/report.md`.

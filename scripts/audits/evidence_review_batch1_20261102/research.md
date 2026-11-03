@@ -2,12 +2,14 @@
 
 Live PubMed esearch/efetch on 2026-11-03. No clinician approved any of this and no record earns Evidence credit. Retained query, count, title, publication types, MeSH, retraction state and abstract hash for each paper are in `receipts.json`. Effect-label rule is at the top of `spec.py`.
 
-`verify_literature_records.py` on these five records: 26 studies, 3 reference citations, 0 findings, 0 retractions. `verify_all_citations_content.py` has no config for this file, so that verifier does not cover it; `verify_literature_records.py` is the owner here.
+`verify_literature_records.py` on the four applied records: 20 studies, 0 findings, 0 retractions. It screens PubMed bibliography and abstracts only, not full text, dose, outcome or clinician approval. `verify_all_citations_content.py` has no config for this file, so that verifier does not cover it; `verify_literature_records.py` is the owner here.
+
+Turmeric, ginkgo and collagen carry `applicability_unestablished`, so their record-level `effect_direction` is null under the literature contract. The labels below are study-level findings. Fiber was read but is not in the data; see `report.md`.
 
 ## turmeric
 
-- **Result:** positive_weak; status `applicable_reviewed_trials`
-- **Scope:** Curcuma longa (turmeric) extract, including curcumin preparations; curcuminoid content and bioavailability preparation vary. Whole root powder, ratio extracts and unspecified turmeric are outside this scope
+- **Result:** status `applicability_unestablished`, record effect null. Study-level findings: positive_weak 3, mixed 2, negative 1
+- **Scope read:** Curcuma longa (turmeric) extract, including curcumin preparations; curcuminoid content and bioavailability preparation vary. Whole root powder, ratio extracts and unspecified turmeric are not settled by these studies
 - **Search:** `("Curcuma"[Mesh] OR turmeric[tiab] OR "Curcuma longa"[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (turmeric[ti] OR "Curcuma longa"[ti]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]`
 - **Titles screened:** 314
 
@@ -22,8 +24,8 @@ Live PubMed esearch/efetch on 2026-11-03. No clinician approved any of this and 
 
 ## ginkgo
 
-- **Result:** mixed; status `applicable_reviewed_trials`
-- **Scope:** Ginkgo biloba leaf extract declaring flavone or flavonol glycoside standardization, EGb 761 or Ginkgold; undeclared extracts and leaf powder are outside this scope
+- **Result:** status `applicability_unestablished`, record effect null. Study-level findings: null 4, mixed 1
+- **Scope read:** Ginkgo biloba leaf extract, mainly standardized preparations such as EGb 761; undeclared extracts and crude leaf powder are not settled by these studies
 - **Search:** `("Ginkgo biloba"[Mesh] OR ginkgo[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || ("Ginkgo biloba"[Mesh] OR ginkgo[tiab]) AND (randomized controlled trial[pt]) AND (dementia[tiab] OR cognitive[tiab] OR memory[tiab]) AND humans[mh]`
 - **Titles screened:** 341
 
@@ -39,8 +41,8 @@ Live PubMed esearch/efetch on 2026-11-03. No clinician approved any of this and 
 
 ## methionine
 
-- **Result:** null; status `reviewed_null_evidence`
-- **Scope:** L-methionine as an oral single amino acid supplement; not S-adenosylmethionine, selenomethionine, D-methionine or a methionine-loading test
+- **Result:** null; status `reviewed_null_evidence`. Study-level findings: null 2, mixed 1, negative 1
+- **Scope read:** L-methionine as an oral single amino acid supplement; not S-adenosylmethionine, selenomethionine, D-methionine or a methionine-loading test
 - **Search:** `("L-methionine"[tiab] OR "methionine supplementation"[tiab] OR "oral methionine"[tiab] OR "Methionine/administration and dosage"[Mesh] OR "Methionine/therapeutic use"[Mesh]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt] OR systematic review[pt]) AND humans[mh]`
 - **Titles screened:** 449
 
@@ -51,26 +53,10 @@ Live PubMed esearch/efetch on 2026-11-03. No clinician approved any of this and 
 | [17006600](https://pubmed.ncbi.nlm.nih.gov/17006600/) | randomized_double_blind_placebo_controlled | 253 | Clinical and safety parameters in HIV infection | After six months, differences were reported for women and for one trial center in CD4 decline, not a stated whole-trial benefit. | "presented with a decreased level of decline in their CD4 counts" |
 | [15870821](https://pubmed.ncbi.nlm.nih.gov/15870821/) | randomized_crossover | 20 | Serum and urinary methionine, homocysteine and related amino acids | Plasma homocysteine rose during L-methionine in patients and in healthy controls. | "Homocysteine plasma concentrations increased" |
 
-## fiber
-
-- **Result:** mixed; status `applicable_reviewed_trials`
-- **Scope:** Named fibers studied in these reviews when the label states them: psyllium, pectin, galactomannan and glucomannan (konjac). Fiber declared as a class or unspecified is outside this scope
-- **Search:** `("Dietary Fiber"[Mesh] OR "fiber supplement*"[tiab] OR "fibre supplement*"[tiab] OR "fiber supplementation"[tiab] OR "fibre supplementation"[tiab]) AND (supplement*[tiab]) AND (meta-analysis[pt]) AND humans[mh]`
-- **Titles screened:** 163
-
-| PMID | Design | n | Endpoint | Finding | Abstract words |
-|---|---|---|---|---|---|
-| [35816465](https://pubmed.ncbi.nlm.nih.gov/35816465/) | meta_analysis_rct | 1251 | Treatment response, stool output and symptoms in chronic constipation | 16 RCTs: response RR 1.48 (95% CI 1.17-1.88), with significant effects for psyllium and pectin and only at higher doses; more flatulence. | "psyllium and pectin having significant effects" |
-| [33162192](https://pubmed.ncbi.nlm.nih.gov/33162192/) | meta_analysis_rct | 1517 | Glycemic control in type 2 diabetes | 29 RCTs: HbA1c MD -0.63% and fasting glucose MD -0.89 mmol/L versus control diets. | "supplemental soluble dietary fiber significantly reduced glycosylated hemoglobin" |
-| [36796439](https://pubmed.ncbi.nlm.nih.gov/36796439/) | meta_analysis_rct | 14505 | Blood lipids per 5 g/day of soluble fiber | 181 RCTs: LDL cholesterol MD -8.28 mg/dL overall. | "There was a significant reduction in LDL cholesterol" |
-| [37833676](https://pubmed.ncbi.nlm.nih.gov/37833676/) | meta_analysis_rct | 5985 | Systolic and diastolic blood pressure | 83 studies: SBP WMD -1.36 mmHg and DBP WMD -0.72 mmHg. | "Soluble fiber supplementation significantly decreased SBP" |
-| [36811560](https://pubmed.ncbi.nlm.nih.gov/36811560/) | systematic_review_meta | 2685 | Glycemic and lipid outcomes by fiber type in type 2 diabetes | 46 RCTs of 16 fiber types: rankings differ by fiber and outcome; low or moderate certainty for most comparisons. | "Most comparisons had a low or moderate certainty of evidence" |
-| [24533610](https://pubmed.ncbi.nlm.nih.gov/24533610/) | meta_analysis_rct | not stated | Body weight in overweight and obesity | 8 pooled RCTs: weight difference MD -0.22 kg (95% CI -0.62 to 0.19), not significant. | "does not show that glucomannan intake generates statistically significant weight loss" |
-
 ## collagen
 
-- **Result:** mixed; status `applicable_reviewed_trials`
-- **Scope:** Oral hydrolyzed collagen, collagen peptides or gelatin hydrolysate; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are outside this scope
+- **Result:** status `applicability_unestablished`, record effect null. Study-level findings: positive_weak 4, mixed 1
+- **Scope read:** Oral hydrolyzed collagen or collagen peptides; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are not settled by these studies
 - **Search:** `("collagen peptides"[tiab] OR "collagen hydrolysate"[tiab] OR "hydrolyzed collagen"[tiab] OR "hydrolysed collagen"[tiab] OR "collagen supplementation"[tiab] OR gelatin[ti]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || ("collagen peptides"[tiab] OR "collagen hydrolysate"[tiab] OR "hydrolyzed collagen"[tiab] OR "hydrolysed collagen"[tiab] OR "collagen supplementation"[tiab]) AND (oral[tiab] OR supplement*[tiab]) AND randomized controlled trial[pt] AND humans[mh]`
 - **Titles screened:** 142
 
@@ -83,3 +69,19 @@ Live PubMed esearch/efetch on 2026-11-03. No clinician approved any of this and 
 | [40324552](https://pubmed.ncbi.nlm.nih.gov/40324552/) | meta_analysis_rct | 1474 | Skin hydration, elasticity and wrinkles by funding source and study quality | 23 RCTs: overall benefit, but no effect in non-pharmaceutical-funded or high-quality subgroups. | "high-quality studies revealed no significant effect in all categories" |
 | [42342959](https://pubmed.ncbi.nlm.nih.gov/42342959/) | systematic_review | not stated | Skin outcomes, safety and quality of life | 25 RCTs without pooling: improvements in most trials, most at high risk of bias; authors call the evidence preliminary. | "majority of included trials were rated as having a high risk of bias" |
 | [39212129](https://pubmed.ncbi.nlm.nih.gov/39212129/) | meta_analysis_rct | 870 | Pain and function in knee osteoarthritis | 11 RCTs: improved function and pain with high heterogeneity (I2 75% and 88%). | "oral collagen administration relieves OA symptoms" |
+
+## fiber (read, not applied)
+
+- **Result:** not applied to the data. Study-level findings: positive_weak 4, mixed 1, null 1
+- **Scope read:** Named fibers studied in these reviews: psyllium, pectin, galactomannan and glucomannan (konjac). Fiber declared as a class or unspecified is not settled by these studies
+- **Search:** `("Dietary Fiber"[Mesh] OR "fiber supplement*"[tiab] OR "fibre supplement*"[tiab] OR "fiber supplementation"[tiab] OR "fibre supplementation"[tiab]) AND (supplement*[tiab]) AND (meta-analysis[pt]) AND humans[mh]`
+- **Titles screened:** 163
+
+| PMID | Design | n | Endpoint | Finding | Abstract words |
+|---|---|---|---|---|---|
+| [35816465](https://pubmed.ncbi.nlm.nih.gov/35816465/) | meta_analysis_rct | 1251 | Treatment response, stool output and symptoms in chronic constipation | 16 RCTs: response RR 1.48 (95% CI 1.17-1.88), with significant effects for psyllium and pectin and only at higher doses; more flatulence. | "psyllium and pectin having significant effects" |
+| [33162192](https://pubmed.ncbi.nlm.nih.gov/33162192/) | meta_analysis_rct | 1517 | Glycemic control in type 2 diabetes | 29 RCTs: HbA1c MD -0.63% and fasting glucose MD -0.89 mmol/L versus control diets. | "supplemental soluble dietary fiber significantly reduced glycosylated hemoglobin" |
+| [36796439](https://pubmed.ncbi.nlm.nih.gov/36796439/) | meta_analysis_rct | 14505 | Blood lipids per 5 g/day of soluble fiber | 181 RCTs: LDL cholesterol MD -8.28 mg/dL overall. | "There was a significant reduction in LDL cholesterol" |
+| [37833676](https://pubmed.ncbi.nlm.nih.gov/37833676/) | meta_analysis_rct | 5985 | Systolic and diastolic blood pressure | 83 studies: SBP WMD -1.36 mmHg and DBP WMD -0.72 mmHg. | "Soluble fiber supplementation significantly decreased SBP" |
+| [36811560](https://pubmed.ncbi.nlm.nih.gov/36811560/) | systematic_review_meta | 2685 | Glycemic and lipid outcomes by fiber type in type 2 diabetes | 46 RCTs of 16 fiber types: rankings differ by fiber and outcome; low or moderate certainty for most comparisons. | "Most comparisons had a low or moderate certainty of evidence" |
+| [24533610](https://pubmed.ncbi.nlm.nih.gov/24533610/) | meta_analysis_rct | not stated | Body weight in overweight and obesity | 8 pooled RCTs: weight difference MD -0.22 kg (95% CI -0.62 to 0.19), not significant. | "does not show that glucomannan intake generates statistically significant weight loss" |

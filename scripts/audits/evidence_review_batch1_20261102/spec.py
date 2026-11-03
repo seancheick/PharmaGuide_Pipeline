@@ -2,7 +2,7 @@
 
 Every figure comes from the PubMed abstract read on 2026-11-03. None of this is a
 clinician approval and none of it earns Evidence credit. Effect labels used here:
-positive_weak means a significant finding the authors qualify (low certainty, high
+At study level, positive_weak means a significant finding the authors qualify (low certainty, high
 heterogeneity or bias); mixed means findings differ by outcome, population or fiber
 type; null means no significant benefit on the tested outcome; negative records an
 observed harm. No record here uses positive_moderate or positive_strong.
@@ -20,13 +20,13 @@ RECORDS = {
     "turmeric": {
         "material_form": "Curcuma longa (turmeric) extract, including curcumin preparations; curcuminoid content and bioavailability preparation vary. Whole root powder, ratio extracts and unspecified turmeric are not settled by these studies",
         "population_context": "Adults with knee osteoarthritis, functional dyspepsia or non-alcoholic fatty liver disease; source-specific populations only",
-        "effect_direction": "positive_weak",
+        "effect_direction": None,
         "applicability_status": "applicability_unestablished",
         "applicability_decision": (
             "Human trials tested specific Curcuma longa extracts. Knee-pain syntheses favor them with low certainty and heterogeneous preparations (33511486, 40731001); "
             "one RCT improved pain but not effusion-synovitis (32926799), and a curcumin trial improved functional dyspepsia scores (34652861). One small trial used 3 g/day whole powder (28443702), "
-            "which does not settle whole root or unspecified turmeric. No turmeric row closes here: a preparation scope on this record would also narrow its approved neutral Dose reference. Findings are outcome-specific and a label's "
-            "curcuminoid content may differ, so it earns no Evidence credit. Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is "
+            "which does not settle whole root or unspecified turmeric. Findings are outcome-specific and a label's "
+            "curcuminoid content may differ, so rows stay open and this review earns no Evidence credit. Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is "
             "recorded here and does not change any safety owner."
         ),
         "studies": [
@@ -57,17 +57,16 @@ RECORDS = {
         ],
     },
     "ginkgo": {
-        "material_form": "Ginkgo biloba leaf extract declaring flavone or flavonol glycoside standardization, EGb 761 or Ginkgold; undeclared extracts and leaf powder are outside this scope",
+        "material_form": "Ginkgo biloba leaf extract, mainly standardized preparations such as EGb 761; undeclared extracts and crude leaf powder are not settled by these studies",
         "population_context": "Older adults with normal cognition, memory complaints, mild cognitive impairment or dementia; adults with tinnitus or intermittent claudication",
-        "effect_direction": "mixed",
+        "effect_direction": None,
         "applicability_status": "applicability_unestablished",
         "applicability_decision": (
             "Large prevention trials of 120 mg twice daily found no reduction in Alzheimer's incidence or cognitive decline (20040554, 22959217). The 2026 Cochrane review (41641880) finds possible "
             "small to moderate benefits at six months in dementia and probably little or no effect in mild cognitive impairment. Reviews in tinnitus and intermittent claudication show little or no "
-            "clinically significant benefit (36383762, 23744597). Findings concern standardized extracts, so this review covers labels that declare that standardization; undeclared extracts and leaf "
-            "powder stay open. It earns no Evidence credit. Interaction and bleeding warnings stay with their own owners."
+            "clinically significant benefit (36383762, 23744597). Findings concern standardized extracts and do not establish applicability to a retail label, so rows stay "
+            "open and this review earns no Evidence credit. Interaction and bleeding warnings stay with their own owners."
         ),
-        "applicability": {'scope': 'ingredient', 'require_source_label_form': True, 'required_form_terms': ['flavone glycoside', 'flavone glycosides', 'flavonol glycoside', 'flavonol glycosides', 'flavonoid glycosides', 'EGb 761', 'EGb761', 'Ginkgold'], 'excluded_form_terms': ['powder', '4:1']},
         "notes": ("PMID 19017911 (GEM dementia prevention trial) has an unread erratum, JAMA 2008;300(23):2730, so it is retired from "
                   "qualifying_human_studies until that notice is read."),
         "studies": [
@@ -124,18 +123,58 @@ RECORDS = {
                  effect_direction="negative", quote="Homocysteine plasma concentrations increased"),
         ],
     },
+    "collagen": {
+        "material_form": "Oral hydrolyzed collagen or collagen peptides; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are not settled by these studies",
+        "population_context": "Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis",
+        "effect_direction": None,
+        "applicability_status": "applicability_unestablished",
+        "applicability_decision": (
+            "Pooled trials report favorable skin and knee-osteoarthritis measurements with high risk of bias, high heterogeneity or co-active formulations (33742704, 37432180, 42342959, 39212129). "
+            "In one review those skin benefits were absent in non-pharmaceutical-funded and high-quality subgroups (40324552). This review does not change the clinician-signed limitation already on "
+            "INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so rows stay open and this review earns no Evidence credit."
+        ),
+        "notes": ("PMID 31919527 (whey versus collagen peptides, muscle protein synthesis) has an unread corrigendum, PMID 33301004, so it is "
+                  "retired from qualifying_human_studies until that notice is read."),
+        "studies": [
+            dict(pmid="33742704", study_type="meta_analysis_rct", sample_size=1125,
+                 primary_endpoint="Skin wrinkles, hydration, elasticity and firmness",
+                 outcome="19 studies: pooled results favored hydrolyzed collagen over placebo for hydration, elasticity and wrinkles.",
+                 effect_direction="positive_weak", quote="favorable results of hydrolyzed collagen supplementation compared with placebo"),
+            dict(pmid="37432180", study_type="meta_analysis_rct", sample_size=1721,
+                 primary_endpoint="Skin hydration and elasticity",
+                 outcome="26 RCTs: hydration and elasticity improved; authors identify several biases and call for larger trials.",
+                 effect_direction="positive_weak", quote="The study also identified several biases in the included RCTs"),
+            dict(pmid="40324552", study_type="meta_analysis_rct", sample_size=1474,
+                 primary_endpoint="Skin hydration, elasticity and wrinkles by funding source and study quality",
+                 outcome="23 RCTs: overall benefit, but no effect in non-pharmaceutical-funded or high-quality subgroups.",
+                 effect_direction="mixed", quote="high-quality studies revealed no significant effect in all categories"),
+            dict(pmid="42342959", study_type="systematic_review",
+                 primary_endpoint="Skin outcomes, safety and quality of life",
+                 outcome="25 RCTs without pooling: improvements in most trials, most at high risk of bias; authors call the evidence preliminary.",
+                 effect_direction="positive_weak", quote="majority of included trials were rated as having a high risk of bias"),
+            dict(pmid="39212129", study_type="meta_analysis_rct", sample_size=870,
+                 primary_endpoint="Pain and function in knee osteoarthritis",
+                 outcome="11 RCTs: improved function and pain with high heterogeneity (I2 75% and 88%).",
+                 effect_direction="positive_weak", quote="oral collagen administration relieves OA symptoms"),
+        ],
+    },
+}
+
+# Read and retained, but not applied to the data. Moving fiber off its generated record ends the only
+# gap on 3 probiotic products (59635, 241707, 276704), which then finish through a fiber row: the probiotic
+# release branch reads the module result, not the row. That needs a decision, so this stays here.
+WITHHELD = {
     "fiber": {
-        "material_form": "Named fibers studied in these reviews when the label states them: psyllium, pectin, galactomannan and glucomannan (konjac). Fiber declared as a class or unspecified is outside this scope",
+        "material_form": "Named fibers studied in these reviews: psyllium, pectin, galactomannan and glucomannan (konjac). Fiber declared as a class or unspecified is not settled by these studies",
         "population_context": "Adults with chronic constipation, type 2 diabetes, dyslipidemia or elevated blood pressure; adults with overweight or obesity",
-        "effect_direction": "mixed",
+        "effect_direction": None,
         "applicability_status": "applicability_unestablished",
         "studied_dose_exposure": {},
         "applicability_decision": (
             "Pooled randomized trials favor supplemental fiber for chronic constipation, mainly psyllium and pectin above 10 g/day (35816465), and soluble fiber for glycemic control in type 2 diabetes, "
             "LDL cholesterol and blood pressure (33162192, 36796439, 37833676), with differences by fiber type including galactomannan (36811560). Glucomannan did not produce significant weight loss (24533610). "
-            "A label that states only dietary, soluble or insoluble fiber does not identify the studied fiber or dose, so those rows stay open. Rows naming a studied fiber earn no Evidence credit from this review."
+            "A label that states only dietary, soluble or insoluble fiber does not identify the studied fiber or dose. Rows stay open and this review earns no Evidence credit."
         ),
-        "applicability": {'scope': 'ingredient', 'require_source_label_form': True, 'required_form_terms': ['psyllium', 'pectin', 'galactomannan', 'galactomannans', 'glucomannan', 'konjac']},
         "studies": [
             dict(pmid="35816465", study_type="meta_analysis_rct", sample_size=1251,
                  primary_endpoint="Treatment response, stool output and symptoms in chronic constipation",
@@ -161,42 +200,6 @@ RECORDS = {
                  primary_endpoint="Body weight in overweight and obesity",
                  outcome="8 pooled RCTs: weight difference MD -0.22 kg (95% CI -0.62 to 0.19), not significant.",
                  effect_direction="null", quote="does not show that glucomannan intake generates statistically significant weight loss"),
-        ],
-    },
-    "collagen": {
-        "material_form": "Oral hydrolyzed collagen, collagen peptides or gelatin hydrolysate; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are outside this scope",
-        "population_context": "Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis; healthy older women in one muscle protein synthesis trial",
-        "effect_direction": "mixed",
-        "applicability_status": "applicability_unestablished",
-        "applicability_decision": (
-            "Pooled trials report favorable skin and knee-osteoarthritis measurements with high risk of bias, high heterogeneity or co-active formulations (33742704, 37432180, 42342959, 39212129). "
-            "In one review those skin benefits were absent in non-pharmaceutical-funded and high-quality subgroups (40324552). This review does not change the clinician-signed limitation already on "
-            "INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so it earns no Evidence credit; unspecified collagen and other preparations stay open."
-        ),
-        "applicability": {'scope': 'ingredient', 'require_source_label_form': True, 'required_form_terms': ['hydrolyzed', 'hydrolysed', 'hydrolysate', 'peptide', 'peptides', 'Verisol'], 'excluded_form_terms': ['undenatured', 'UC-II', 'BioCell', 'NT2']},
-        "notes": ("PMID 31919527 (whey versus collagen peptides, muscle protein synthesis) has an unread corrigendum, PMID 33301004, so it is "
-                  "retired from qualifying_human_studies until that notice is read."),
-        "studies": [
-            dict(pmid="33742704", study_type="meta_analysis_rct", sample_size=1125,
-                 primary_endpoint="Skin wrinkles, hydration, elasticity and firmness",
-                 outcome="19 studies: pooled results favored hydrolyzed collagen over placebo for hydration, elasticity and wrinkles.",
-                 effect_direction="positive_weak", quote="favorable results of hydrolyzed collagen supplementation compared with placebo"),
-            dict(pmid="37432180", study_type="meta_analysis_rct", sample_size=1721,
-                 primary_endpoint="Skin hydration and elasticity",
-                 outcome="26 RCTs: hydration and elasticity improved; authors identify several biases and call for larger trials.",
-                 effect_direction="positive_weak", quote="The study also identified several biases in the included RCTs"),
-            dict(pmid="40324552", study_type="meta_analysis_rct", sample_size=1474,
-                 primary_endpoint="Skin hydration, elasticity and wrinkles by funding source and study quality",
-                 outcome="23 RCTs: overall benefit, but no effect in non-pharmaceutical-funded or high-quality subgroups.",
-                 effect_direction="mixed", quote="high-quality studies revealed no significant effect in all categories"),
-            dict(pmid="42342959", study_type="systematic_review",
-                 primary_endpoint="Skin outcomes, safety and quality of life",
-                 outcome="25 RCTs without pooling: improvements in most trials, most at high risk of bias; authors call the evidence preliminary.",
-                 effect_direction="positive_weak", quote="majority of included trials were rated as having a high risk of bias"),
-            dict(pmid="39212129", study_type="meta_analysis_rct", sample_size=870,
-                 primary_endpoint="Pain and function in knee osteoarthritis",
-                 outcome="11 RCTs: improved function and pain with high heterogeneity (I2 75% and 88%).",
-                 effect_direction="positive_weak", quote="oral collagen administration relieves OA symptoms"),
         ],
     },
 }

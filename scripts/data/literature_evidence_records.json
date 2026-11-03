@@ -10017,152 +10017,29 @@
     },
     {
       "canonical_id": "fiber",
-      "verification_provenance": {
-        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-03: 163 titles screened, abstracts of the cited studies read; no clinician approval and no scoring credit; receipts scripts/audits/evidence_review_batch1_20261102",
-        "verified_at": "2026-11-03T00:00:00+00:00",
-        "all_pmids_verified": true,
-        "retractions_found": false
-      },
-      "applicability": {
-        "scope": "ingredient",
-        "require_source_label_form": true,
-        "required_form_terms": [
-          "psyllium",
-          "pectin",
-          "galactomannan",
-          "galactomannans",
-          "glucomannan",
-          "konjac"
-        ]
-      },
-      "material_form": "Named fibers studied in these reviews when the label states them: psyllium, pectin, galactomannan and glucomannan (konjac). Fiber declared as a class or unspecified is outside this scope",
-      "search_query": "(\"Dietary Fiber\"[Mesh] OR \"fiber supplement*\"[tiab] OR \"fibre supplement*\"[tiab] OR \"fiber supplementation\"[tiab] OR \"fibre supplementation\"[tiab]) AND (supplement*[tiab]) AND (meta-analysis[pt]) AND humans[mh]",
-      "search_date": "2026-11-03",
+      "material_form": "Generic unspecified dietary fiber",
+      "search_query": "dietary fiber generic unspecified clinical trial",
+      "search_date": "2026-09-20",
       "databases_searched": [
         "PubMed"
       ],
-      "records_screened": 163,
-      "qualifying_human_studies": [
-        {
-          "pmid": "35816465",
-          "study_type": "meta_analysis_rct",
-          "sample_size": 1251,
-          "primary_endpoint": "Treatment response, stool output and symptoms in chronic constipation",
-          "outcome": "16 RCTs: response RR 1.48 (95% CI 1.17-1.88), with significant effects for psyllium and pectin and only at higher doses; more flatulence.",
-          "effect_direction": "positive_weak",
-          "title": "The Effect of Fiber Supplementation on Chronic Constipation in Adults: An Updated Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "The Effect of Fiber Supplementation on Chronic Constipation in Adults: An Updated Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/35816465/",
-            "verified_at": "2026-11-03T00:00:00+00:00",
-            "abstract_evidence_quote": "psyllium and pectin having significant effects"
-          }
-        },
-        {
-          "pmid": "33162192",
-          "study_type": "meta_analysis_rct",
-          "sample_size": 1517,
-          "primary_endpoint": "Glycemic control in type 2 diabetes",
-          "outcome": "29 RCTs: HbA1c MD -0.63% and fasting glucose MD -0.89 mmol/L versus control diets.",
-          "effect_direction": "positive_weak",
-          "title": "Effects of soluble fiber supplementation on glycemic control in adults with type 2 diabetes mellitus: A systematic review and meta-analysis of randomized controlled trials.",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Effects of soluble fiber supplementation on glycemic control in adults with type 2 diabetes mellitus: A systematic review and meta-analysis of randomized controlled trials.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/33162192/",
-            "verified_at": "2026-11-03T00:00:00+00:00",
-            "abstract_evidence_quote": "supplemental soluble dietary fiber significantly reduced glycosylated hemoglobin"
-          }
-        },
-        {
-          "pmid": "36796439",
-          "study_type": "meta_analysis_rct",
-          "sample_size": 14505,
-          "primary_endpoint": "Blood lipids per 5 g/day of soluble fiber",
-          "outcome": "181 RCTs: LDL cholesterol MD -8.28 mg/dL overall.",
-          "effect_direction": "positive_weak",
-          "title": "Soluble Fiber Supplementation and Serum Lipid Profile: A Systematic Review and Dose-Response Meta-Analysis of Randomized Controlled Trials.",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Soluble Fiber Supplementation and Serum Lipid Profile: A Systematic Review and Dose-Response Meta-Analysis of Randomized Controlled Trials.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/36796439/",
-            "verified_at": "2026-11-03T00:00:00+00:00",
-            "abstract_evidence_quote": "There was a significant reduction in LDL cholesterol"
-          }
-        },
-        {
-          "pmid": "37833676",
-          "study_type": "meta_analysis_rct",
-          "sample_size": 5985,
-          "primary_endpoint": "Systolic and diastolic blood pressure",
-          "outcome": "83 studies: SBP WMD -1.36 mmHg and DBP WMD -0.72 mmHg.",
-          "effect_direction": "positive_weak",
-          "title": "Effect of soluble fiber on blood pressure in adults: a systematic review and dose-response meta-analysis of randomized controlled trials.",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Effect of soluble fiber on blood pressure in adults: a systematic review and dose-response meta-analysis of randomized controlled trials.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/37833676/",
-            "verified_at": "2026-11-03T00:00:00+00:00",
-            "abstract_evidence_quote": "Soluble fiber supplementation significantly decreased SBP"
-          }
-        },
-        {
-          "pmid": "36811560",
-          "study_type": "systematic_review_meta",
-          "sample_size": 2685,
-          "primary_endpoint": "Glycemic and lipid outcomes by fiber type in type 2 diabetes",
-          "outcome": "46 RCTs of 16 fiber types: rankings differ by fiber and outcome; low or moderate certainty for most comparisons.",
-          "effect_direction": "mixed",
-          "title": "Galactomannans are the most effective soluble dietary fibers in type 2 diabetes: a systematic review and network meta-analysis.",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Galactomannans are the most effective soluble dietary fibers in type 2 diabetes: a systematic review and network meta-analysis.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/36811560/",
-            "verified_at": "2026-11-03T00:00:00+00:00",
-            "abstract_evidence_quote": "Most comparisons had a low or moderate certainty of evidence"
-          }
-        },
-        {
-          "pmid": "24533610",
-          "study_type": "meta_analysis_rct",
-          "primary_endpoint": "Body weight in overweight and obesity",
-          "outcome": "8 pooled RCTs: weight difference MD -0.22 kg (95% CI -0.62 to 0.19), not significant.",
-          "effect_direction": "null",
-          "title": "The efficacy of glucomannan supplementation in overweight and obesity: a systematic review and meta-analysis of randomized clinical trials.",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "The efficacy of glucomannan supplementation in overweight and obesity: a systematic review and meta-analysis of randomized clinical trials.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24533610/",
-            "verified_at": "2026-11-03T00:00:00+00:00",
-            "abstract_evidence_quote": "does not show that glucomannan intake generates statistically significant weight loss"
-          }
-        }
-      ],
-      "effect_direction": "mixed",
-      "population_context": "Adults with chronic constipation, type 2 diabetes, dyslipidemia or elevated blood pressure; adults with overweight or obesity",
-      "studied_dose_exposure": {},
-      "applicability_decision": "Pooled randomized trials favor supplemental fiber for chronic constipation, mainly psyllium and pectin above 10 g/day (35816465), and soluble fiber for glycemic control in type 2 diabetes, LDL cholesterol and blood pressure (33162192, 36796439, 37833676), with differences by fiber type including galactomannan (36811560). Glucomannan did not produce significant weight loss (24533610). A label that states only dietary, soluble or insoluble fiber does not identify the studied fiber or dose, so those rows stay open. Rows naming a studied fiber earn no Evidence credit from this review.",
-      "applicability_status": "applicability_unestablished",
-      "verification_result": "authoritative_pubmed_verified"
+      "records_screened": 10,
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "population_context": "general population",
+      "studied_dose_exposure": {
+        "values": [],
+        "unit": "mg"
+      },
+      "applicability_decision": "Broad macronutrient umbrella term; lacking specific polysaccharide identification (e.g. psyllium, inulin, pectin); applicability unestablished.",
+      "verification_result": "authoritative_pubmed_verified",
+      "verification_provenance": {
+        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "all_pmids_verified": true,
+        "retractions_found": false
+      },
+      "applicability_status": "applicability_unestablished"
     },
     {
       "canonical_id": "NHA_WEST_INDIAN_CHERRY",
@@ -38021,10 +37898,10 @@
           }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": null,
       "population_context": "Adults with knee osteoarthritis, functional dyspepsia or non-alcoholic fatty liver disease; source-specific populations only",
       "studied_dose_exposure": {},
-      "applicability_decision": "Human trials tested specific Curcuma longa extracts. Knee-pain syntheses favor them with low certainty and heterogeneous preparations (33511486, 40731001); one RCT improved pain but not effusion-synovitis (32926799), and a curcumin trial improved functional dyspepsia scores (34652861). One small trial used 3 g/day whole powder (28443702), which does not settle whole root or unspecified turmeric. No turmeric row closes here: a preparation scope on this record would also narrow its approved neutral Dose reference. Findings are outcome-specific and a label's curcuminoid content may differ, so it earns no Evidence credit. Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is recorded here and does not change any safety owner.",
+      "applicability_decision": "Human trials tested specific Curcuma longa extracts. Knee-pain syntheses favor them with low certainty and heterogeneous preparations (33511486, 40731001); one RCT improved pain but not effusion-synovitis (32926799), and a curcumin trial improved functional dyspepsia scores (34652861). One small trial used 3 g/day whole powder (28443702), which does not settle whole root or unspecified turmeric. Findings are outcome-specific and a label's curcuminoid content may differ, so rows stay open and this review earns no Evidence credit. Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is recorded here and does not change any safety owner.",
       "applicability_status": "applicability_unestablished",
       "verification_result": "authoritative_pubmed_verified"
     },
@@ -40066,25 +39943,7 @@
     {
       "canonical_id": "ginkgo",
       "notes": "PMID 19017911 (GEM dementia prevention trial) has an unread erratum, JAMA 2008;300(23):2730, so it is retired from qualifying_human_studies until that notice is read.",
-      "applicability": {
-        "scope": "ingredient",
-        "require_source_label_form": true,
-        "required_form_terms": [
-          "flavone glycoside",
-          "flavone glycosides",
-          "flavonol glycoside",
-          "flavonol glycosides",
-          "flavonoid glycosides",
-          "EGb 761",
-          "EGb761",
-          "Ginkgold"
-        ],
-        "excluded_form_terms": [
-          "powder",
-          "4:1"
-        ]
-      },
-      "material_form": "Ginkgo biloba leaf extract declaring flavone or flavonol glycoside standardization, EGb 761 or Ginkgold; undeclared extracts and leaf powder are outside this scope",
+      "material_form": "Ginkgo biloba leaf extract, mainly standardized preparations such as EGb 761; undeclared extracts and crude leaf powder are not settled by these studies",
       "search_query": "(\"Ginkgo biloba\"[Mesh] OR ginkgo[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (\"Ginkgo biloba\"[Mesh] OR ginkgo[tiab]) AND (randomized controlled trial[pt]) AND (dementia[tiab] OR cognitive[tiab] OR memory[tiab]) AND humans[mh]",
       "search_date": "2026-11-03",
       "databases_searched": [
@@ -40192,10 +40051,10 @@
           }
         }
       ],
-      "effect_direction": "mixed",
+      "effect_direction": null,
       "population_context": "Older adults with normal cognition, memory complaints, mild cognitive impairment or dementia; adults with tinnitus or intermittent claudication",
       "studied_dose_exposure": {},
-      "applicability_decision": "Large prevention trials of 120 mg twice daily found no reduction in Alzheimer's incidence or cognitive decline (20040554, 22959217). The 2026 Cochrane review (41641880) finds possible small to moderate benefits at six months in dementia and probably little or no effect in mild cognitive impairment. Reviews in tinnitus and intermittent claudication show little or no clinically significant benefit (36383762, 23744597). Findings concern standardized extracts, so this review covers labels that declare that standardization; undeclared extracts and leaf powder stay open. It earns no Evidence credit. Interaction and bleeding warnings stay with their own owners.",
+      "applicability_decision": "Large prevention trials of 120 mg twice daily found no reduction in Alzheimer's incidence or cognitive decline (20040554, 22959217). The 2026 Cochrane review (41641880) finds possible small to moderate benefits at six months in dementia and probably little or no effect in mild cognitive impairment. Reviews in tinnitus and intermittent claudication show little or no clinically significant benefit (36383762, 23744597). Findings concern standardized extracts and do not establish applicability to a retail label, so rows stay open and this review earns no Evidence credit. Interaction and bleeding warnings stay with their own owners.",
       "applicability_status": "applicability_unestablished",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
@@ -40208,25 +40067,7 @@
     {
       "canonical_id": "collagen",
       "notes": "PMID 31919527 (whey versus collagen peptides, muscle protein synthesis) has an unread corrigendum, PMID 33301004, so it is retired from qualifying_human_studies until that notice is read.",
-      "applicability": {
-        "scope": "ingredient",
-        "require_source_label_form": true,
-        "required_form_terms": [
-          "hydrolyzed",
-          "hydrolysed",
-          "hydrolysate",
-          "peptide",
-          "peptides",
-          "Verisol"
-        ],
-        "excluded_form_terms": [
-          "undenatured",
-          "UC-II",
-          "BioCell",
-          "NT2"
-        ]
-      },
-      "material_form": "Oral hydrolyzed collagen, collagen peptides or gelatin hydrolysate; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are outside this scope",
+      "material_form": "Oral hydrolyzed collagen or collagen peptides; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are not settled by these studies",
       "search_query": "(\"collagen peptides\"[tiab] OR \"collagen hydrolysate\"[tiab] OR \"hydrolyzed collagen\"[tiab] OR \"hydrolysed collagen\"[tiab] OR \"collagen supplementation\"[tiab] OR gelatin[ti]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (\"collagen peptides\"[tiab] OR \"collagen hydrolysate\"[tiab] OR \"hydrolyzed collagen\"[tiab] OR \"hydrolysed collagen\"[tiab] OR \"collagen supplementation\"[tiab]) AND (oral[tiab] OR supplement*[tiab]) AND randomized controlled trial[pt] AND humans[mh]",
       "search_date": "2026-11-03",
       "databases_searched": [
@@ -40329,10 +40170,10 @@
           }
         }
       ],
-      "effect_direction": "mixed",
-      "population_context": "Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis; healthy older women in one muscle protein synthesis trial",
+      "effect_direction": null,
+      "population_context": "Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis",
       "studied_dose_exposure": {},
-      "applicability_decision": "Pooled trials report favorable skin and knee-osteoarthritis measurements with high risk of bias, high heterogeneity or co-active formulations (33742704, 37432180, 42342959, 39212129). In one review those skin benefits were absent in non-pharmaceutical-funded and high-quality subgroups (40324552). This review does not change the clinician-signed limitation already on INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so it earns no Evidence credit; unspecified collagen and other preparations stay open.",
+      "applicability_decision": "Pooled trials report favorable skin and knee-osteoarthritis measurements with high risk of bias, high heterogeneity or co-active formulations (33742704, 37432180, 42342959, 39212129). In one review those skin benefits were absent in non-pharmaceutical-funded and high-quality subgroups (40324552). This review does not change the clinician-signed limitation already on INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so rows stay open and this review earns no Evidence credit.",
       "applicability_status": "applicability_unestablished",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {

@@ -50,12 +50,16 @@ def test_reviewed_null_closes_the_question_without_credit():
     ("turmeric", "Turmeric Root Extract", "literature_applicability_unestablished"),
     ("turmeric", "Turmeric Root Powder", "literature_applicability_unestablished"),
     ("turmeric", "Turmeric", "literature_applicability_unestablished"),
-    ("ginkgo", "Ginkgo Flavone Glycosides", "invalid_applicability_contract"),
-    ("fiber", "Glucomannan", "invalid_applicability_contract"),
+    ("ginkgo", "Ginkgo Flavone Glycosides", "literature_applicability_unestablished"),
+    ("ginkgo", "Ginkgo Biloba Leaf Extract", "literature_applicability_unestablished"),
+    ("ginkgo", "Ginkgo Biloba Extract Powder (24% Flavone Glycosides)", "literature_applicability_unestablished"),
+    ("ginkgo", "Ginkgo Biloba Powder", "literature_applicability_unestablished"),
+    ("collagen", "Collagen", "literature_applicability_unestablished"),
+    ("collagen", "Gelatin", "literature_applicability_unestablished"),
     ("collagen", "Hydrolyzed Collagen", "clinical_sources_ineligible"),
 ])
-def test_review_without_a_signed_scope_stays_open(cid, name, reason):
-    """An agent review cannot sign a preparation scope, so these rows do not close yet."""
+def test_review_without_a_signed_scope_closes_no_row(cid, name, reason):
+    """An agent review cannot sign a preparation scope, inside or outside what the trials tested."""
     resolution = _resolve_label_row(cid, name)
     assert resolution.disposition == "research_present_applicability_unestablished"
     assert resolution.reason_code == reason
@@ -63,23 +67,19 @@ def test_review_without_a_signed_scope_stays_open(cid, name, reason):
     assert resolution.blocking_reasons
 
 
-@pytest.mark.parametrize("cid, name, reason", [
-    ("ginkgo", "Ginkgo Biloba Powder", "clinical_form_excluded"),
-    ("ginkgo", "Ginkgo Biloba Leaf Extract", "clinical_form_mismatch"),
-    ("fiber", "Fiber", "clinical_form_mismatch"),
-    ("fiber", "Total Dietary Fiber", "clinical_form_mismatch"),
-    ("fiber", "Fiber, Soluble", "clinical_form_mismatch"),
-    ("collagen", "Collagen", "clinical_form_mismatch"),
-    ("collagen", "Gelatin", "clinical_form_mismatch"),
-    ("collagen", "Undenatured Type II Collagen", "clinical_form_excluded"),
-    ("collagen", "Biocell Collagen Hydrolyzed Collagen Complex", "clinical_form_excluded"),
-])
-def test_scope_exclusion_is_a_reviewed_conclusion_without_credit(cid, name, reason):
-    resolution = _resolve_label_row(cid, name)
-    assert resolution.disposition == "research_present_applicability_unestablished"
-    assert resolution.reason_code == reason
-    assert resolution.points_eligible is False
-    assert resolution.blocking_reasons == ["literature_applicability_unestablished"]
+@pytest.mark.parametrize("cid", ["turmeric", "ginkgo", "collagen"])
+def test_unsigned_review_carries_no_preparation_scope(records, cid):
+    """A scope's exclusions read as reviewed conclusions and can finish a held product (59635)."""
+    assert "applicability" not in records[cid]
+    assert records[cid]["applicability_status"] == "applicability_unestablished"
+    assert records[cid]["effect_direction"] is None
+
+
+def test_fiber_review_stays_out_of_the_data():
+    """Applied, it would finish 59635, 241707 and 276704 through a fiber row nobody signed."""
+    resolution = _resolve_label_row("fiber", "Dietary Fiber")
+    assert resolution.disposition == "literature_resolution_required"
+    assert resolution.reason_code == "unverified_generated_record_cannot_complete_evidence"
 
 
 @pytest.mark.parametrize("cid, name, reason", [
