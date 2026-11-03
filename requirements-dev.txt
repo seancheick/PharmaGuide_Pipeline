@@ -6,6 +6,7 @@ pytest-xdist>=3.6,<4
 pytest-timeout>=2.3,<3   # fail a hung test with a named traceback instead of a multi-hour zombie
 jsonschema>=4,<5    # v4 scoring-config rubric validation (Phase 0 config registry)
 supabase>=2.0,<3
+cryptography>=44,<47   # Ed25519 release signing (scripts/release_manifest.py)
 PyMuPDF>=1.24,<2
 Pillow>=10.0,<11
 tqdm>=4.66,<5       # progress bars for batch_processor / enrich / score pipeline stages

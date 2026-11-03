@@ -67,6 +67,11 @@ def core_db_remote_path(db_version):
     return f"v{db_version}/pharmaguide_core.db"
 
 
+def rules_db_remote_path(rules_version):
+    """Immutable Storage path of an interaction rules file named by a signed release."""
+    return f"rules/{rules_version}/interaction_db.sqlite"
+
+
 def fetch_current_manifest(client):
     """Fetch the current (is_current=true) export_manifest row.
 
@@ -85,11 +90,13 @@ def fetch_current_manifest(client):
 PUBLICATION_RPC = "rotate_manifest_with_submission_approvals"
 
 
-def require_publication_contract():
+def require_publication_contract(signed_release=False):
     """Verify the service-role-visible RPC contract without activating anything.
 
     PostgREST's role-filtered OpenAPI schema checks the deployed operation and
     its arguments. This proves availability, not successful future activation.
+    The signed-release arguments are required only when publishing a signed
+    release, so the unsigned path keeps working before that migration deploys.
     """
     import requests
     _load_env()
@@ -109,10 +116,18 @@ def require_publication_contract():
         "p_generated_at": "timestamp with time zone", "p_min_app_version": "text",
         "p_submission_approvals": "jsonb",
     }
+    if signed_release:
+        expected.update({
+            "p_release_sequence": "bigint", "p_signed_release": "text",
+            "p_release_signature": "text",
+        })
     if len(bodies) != 1:
         raise ValueError("Deployed publication contract is unavailable to the publishing role")
     schema = bodies[0]
-    if (any(schema.get("properties", {}).get(k, {}).get("format") != v for k, v in expected.items())
+    # PostgREST 14 reports the Postgres type name; 16 reports int32 and int64.
+    spellings = {"integer": {"integer", "int32"}, "bigint": {"bigint", "int64"}}
+    if (any(schema.get("properties", {}).get(k, {}).get("format") not in spellings.get(v, {v})
+            for k, v in expected.items())
             or not set(schema.get("required", [])).issubset(expected)):
         raise ValueError("Deployed publication contract arguments do not match this publisher")
 
@@ -124,16 +139,26 @@ def fetch_manifest_version(client, db_version):
     return parse_manifest_response({"data": response.data})
 
 
-def insert_manifest(client, manifest_data, submission_approvals=None):
+def insert_manifest(client, manifest_data, submission_approvals=None,
+                    release_sequence=None, signed_release=None, release_signature=None):
     """Atomically insert a new manifest and mark previous as not current.
 
     Uses the approval-aware publication RPC so manifest rotation stays inside a
     single database transaction. The SQL function owns the exact update/insert
-    order; callers should treat it as atomic.
+    order; callers should treat it as atomic. The signed-release params are sent
+    only when present, and only all together.
 
     Raises RuntimeError if the RPC returns an error or unexpected response.
     """
-    response = client.rpc(PUBLICATION_RPC, {
+    signed_params = {
+        "p_release_sequence": release_sequence,
+        "p_signed_release": signed_release,
+        "p_release_signature": release_signature,
+    }
+    present = [value is not None for value in signed_params.values()]
+    if any(present) and not all(present):
+        raise ValueError("a signed release needs its sequence, text and signature together")
+    params = {
         "p_db_version": manifest_data["db_version"],
         "p_pipeline_version": manifest_data["pipeline_version"],
         "p_scoring_version": manifest_data["scoring_version"],
@@ -143,7 +168,10 @@ def insert_manifest(client, manifest_data, submission_approvals=None):
         "p_generated_at": manifest_data["generated_at"],
         "p_min_app_version": manifest_data.get("min_app_version", "1.0.0"),
         "p_submission_approvals": submission_approvals or [],
-    }).execute()
+    }
+    if all(present):
+        params.update(signed_params)
+    response = client.rpc(PUBLICATION_RPC, params).execute()
 
     # The RPC returns the new manifest UUID on success.
     # Validate that we got a non-empty result back.
