@@ -794,8 +794,12 @@ def test_phase4_batch4_food_matrix_and_umbrella_guards():
         )
 
     # Crude powders lacking standardization stay applicability unestablished
-    for cid in ["papaya", "papaya_fruit_powder", "alfalfa_leaf", "wheatgrass_powder", "fiber"]:
+    for cid in ["papaya", "papaya_fruit_powder", "alfalfa_leaf", "wheatgrass_powder"]:
         _assert_incomplete_source_review(cid)
+    # Fiber's review covers fibers a label names; the class stays unestablished.
+    assert er.resolve_evidence_for_canonical("fiber").disposition == (
+        EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    )
 
 
 def test_phase4_batch4_standardized_clinical_canaries():
