@@ -525,6 +525,11 @@ This occurs before Supabase and Flutter publication.
 Fix credentials/path/import/parity issue and rerun `release_full.sh`. Its
 freshness/checksum checks reuse already-gated artifacts.
 
+### Signed releases and rollback
+
+`release_full.sh` publishes unsigned. Signing, key custody and catalog rollback follow
+`docs/RELEASE_SIGNING_RUNBOOK.md`.
+
 ## 9. Tests and audits
 
 Use only the supported test runner:

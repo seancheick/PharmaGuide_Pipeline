@@ -83,6 +83,58 @@ Only the service role can read the table; the app repo's public MCP edge functio
 `scripts/sql/supabase_schema.sql` (idempotent) before the first sync that includes this
 step**: a missing table fails the step, and the manifest then does not rotate.
 
+### Signed release manifest (ADR-012)
+
+Optional. With `--release-manifest` and `--release-signature`, the sync also publishes a signed
+release. Without them, the sync and its RPC payload are unchanged. The procedure, key custody
+and rollback are in [`docs/RELEASE_SIGNING_RUNBOOK.md`](../docs/RELEASE_SIGNING_RUNBOOK.md).
+`scripts/release_manifest.py` owns this contract, and the Flutter app parses it exactly.
+
+`signed_release` is this text, signed as UTF-8 bytes with Ed25519:
+`json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)`.
+`release_signature` is `<key_id>:<standard base64 of the 64-byte signature>`.
+
+```
+{
+ "format": 1,
+ "key_id": "<same key id>",
+ "release_sequence": <positive int>,
+ "catalog": {"version": "<db_version>", "path": "v<db_version>/pharmaguide_core.db", "sha256": "<hex no prefix>", "schema_version": "...", "min_app_version": "..."},
+ "rules": {"version": "...", "path": "rules/<version>/interaction_db.sqlite", "sha256": "<hex no prefix>", "schema_version": "...", "min_app_version": "..."} or null for a catalog-only release,
+ "min_rules_version": "<semver>",
+ "blocked_versions": {"catalog": [<db_version>...], "rules": [<rules version>...]}
+}
+```
+
+| Storage or table | Added by a signed release |
+|---|---|
+| Storage: `pharmaguide/rules/{version}/interaction_db.sqlite` | Create-only, before the manifest flip. Existing bytes must match. `--rules-dir` names the local directory (default: the build dir) |
+| `export_manifest.release_sequence` (bigint) | Monotonic, separate from content versions, enforced by the RPC |
+| `export_manifest.signed_release` (text) | The exact signed text. Rules fields live only here |
+| `export_manifest.release_signature` (text) | The signature |
+
+The RPC `rotate_manifest_with_submission_approvals` takes `p_release_sequence`,
+`p_signed_release` and `p_release_signature`, all defaulting to NULL. The app repo's migration
+owns the RPC; `scripts/sql/supabase_schema.sql` only mirrors the columns. `--preflight-only`
+checks the unsigned contract. A signed sync checks the three new arguments before its first
+Storage write, so the publisher keeps working before that migration deploys.
+
+Before any Storage write, a signed sync refuses:
+
+- a manifest that isn't canonical or doesn't match the contract;
+- a catalog version, hash, schema or minimum app version that differs from the build;
+- a rules file whose hash differs from the manifest;
+- a signature with the wrong format or key ID (run `release_manifest.py verify` for the
+  signature itself);
+- rules while `scripts/config/remote_rules_gate.json` records no A9 sign-off, unless
+  `--test-project` is passed and `PHARMAGUIDE_TEST_SUPABASE_URL` equals `SUPABASE_URL`;
+- a sequence below the current row's, or equal to it with different content;
+- a deployed RPC without the new arguments.
+
+A signed release on the current catalog still rotates, because its sequence is new. Re-running
+the same signed release does not. The RPC currently refuses any repeated `db_version`, so this
+path needs a migration that allows it.
+
 ### Version checking
 
 The script compares the local `export_manifest.json` to the current Supabase manifest:
