@@ -66,13 +66,19 @@ def test_oyster_whole_extract_is_the_oyster_extract_identity(run):
     assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] >= 0.3
 
 
-def test_oyster_shell_extract_stays_a_different_unresolved_material(run):
-    # The alias names whole extract only. 330191 printed Whole under an API
-    # "Shell"; these three stay held until their own printed labels are read.
+def test_oyster_shell_extract_has_its_own_identity(run):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # 294580 really prints "Oyster Extract (Ostrea gigas Thunberg) (Shell)", unlike
+    # 330191, whose API "Shell" was a transcription error over a printed Whole. The
+    # shell is its own material: it never takes the whole-extract identity, and
+    # 500 mg of extract is never read as an amount of calcium.
     enriched, scored = run("294580")
-    assert not any(r.get("canonical_id") == "PII_OYSTER_EXTRACT"
-                   for r in enriched["ingredient_quality_data"]["ingredients"])
-    assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] == 0.0
+    rows = enriched["ingredient_quality_data"]["ingredients"]
+    assert [r.get("canonical_id") for r in rows] == ["PII_OYSTER_SHELL_EXTRACT"]
+    assert scored["v4_breakdown"]["completeness_gate"]["mapped_coverage"] == 1.0
+    assert scored["quality_score_status"] == "scored"
+    assert build_scored_artifact(enriched)["product_safety_status"] == "no_known_catalog_concern"
 
 
 def _rows_named(enriched, name):
