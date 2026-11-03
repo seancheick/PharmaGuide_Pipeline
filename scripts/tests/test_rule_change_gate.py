@@ -499,7 +499,7 @@ HELD_NEW = {
 
 
 def _emergency(tmp_path, *, blobs=(), overrides=(OVERRIDE,), records=(BAN,), base=(HELD,),
-               cand=(HELD_NEW,), live=None):
+               cand=(HELD_NEW,), live=None, blob_fields=None):
     (tmp_path / "b").mkdir(exist_ok=True)
     (tmp_path / "c").mkdir(exist_ok=True)
     baseline = _db(tmp_path / "b" / "db.sqlite", (), base)
@@ -510,7 +510,9 @@ def _emergency(tmp_path, *, blobs=(), overrides=(OVERRIDE,), records=(BAN,), bas
     shutil.rmtree(blob_dir, ignore_errors=True)
     blob_dir.mkdir()
     for index, warnings in enumerate(blobs):
-        (blob_dir / f"{index}.json").write_text(json.dumps({"warnings": warnings}))
+        (blob_dir / f"{index}.json").write_text(
+            json.dumps({"warnings": warnings, **(blob_fields or {})})
+        )
     return gate.check_emergency_catalog(
         candidate, baseline, blob_dir, alerts_dir=alerts,
         live_revisions={"SA_9999_0002": 1} if live is None else live, today="2026-11-03",
@@ -535,6 +537,50 @@ def test_emergency_refuses_when_a_blob_carries_the_held_change(tmp_path):
     assert not result.ok
     assert DRUG_KEY in result.errors[0]
     assert "carried by" in result.errors[0]
+
+
+@pytest.mark.parametrize("field", ["warnings", "warnings_profile_gated"])
+def test_emergency_reads_every_list_a_blob_carries_rules_in(tmp_path, field):
+    result = _emergency(
+        tmp_path,
+        blobs=[[]],
+        blob_fields={field: [_warning("Reworded, unreviewed.")]},
+    )
+    assert not result.ok
+    assert "carried by" in result.errors[0]
+
+
+def test_emergency_counts_the_detail_field_too(tmp_path):
+    warning = {**_warning("Pinned body."), "detail": "Reworded, unreviewed."}
+    assert not _emergency(tmp_path, blobs=[[warning]]).ok
+
+
+def test_emergency_uses_the_alerts_latest_revision(tmp_path):
+    """Revision 1 was withdrawn by revision 2: it can't justify going early."""
+    withdrawn = {**BAN, "revision": 2, "status": "retracted", "retracted": True}
+    assert not _emergency(tmp_path, records=(BAN, withdrawn)).ok
+
+
+def test_a_rule_an_alert_cannot_express_can_still_be_attested(tmp_path):
+    """A gate with a form or a dose needs a product in hand, so no alert can carry it."""
+    empty = {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": []}
+    gate = {
+        "gate_type": "condition",
+        "requires": {**empty, "conditions_any": ["pregnancy"]},
+        "excludes": {**empty, "product_forms_any": ["topical"], "nutrient_forms_any": []},
+        "dose": None,
+    }
+    base = {**_rule(), "drug_class_rules": [], "condition_rules": []}
+    new = {**base, "condition_rules": [{
+        "condition_id": "pregnancy", "severity": "contraindicated", "profile_gate": gate,
+    }]}
+    key = f"{PROFILE_RULE}#condition:pregnancy"
+    fingerprint = _fp(tmp_path, rules=[new], key=key)
+    assert _check(
+        tmp_path, base_rules=[base], cand_rules=[new],
+        attestations=[{"rule_key": key, "rule_fingerprint": fingerprint, "reason": "r",
+                       "reviewer": "fake", "date": "2026-11-03"}],
+    ).ok
 
 
 def test_emergency_refuses_a_held_removal_it_cannot_prove_absent(tmp_path):

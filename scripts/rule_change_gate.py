@@ -18,8 +18,9 @@ needs an alert or a reviewed attestation
     A change a person has to judge: a reworded or re-graded hard rule, a hard
     rule removed or lowered (the fast lane may only add state, so no alert can
     subtract it), a lower tier raised, or a hard rule an alert cannot express
-    (medication x medication, supplement x supplement, food, and dose thresholds,
-    because the feed cannot see a stack's dose).
+    (medication x medication, supplement x supplement, food, dose thresholds, and
+    a gate that uses a dose or excludes a form, because answering those takes a
+    product in hand and an alert has only the profile).
 
 nothing
     Everything else, including new rules below avoid, wording changes below
@@ -67,7 +68,7 @@ from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Tuple
 SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPTS))
 
-from safety_alerts import is_active  # noqa: E402
+from safety_alerts import is_active, latest_revisions  # noqa: E402
 
 ALERTS_DIR = SCRIPTS / "data" / "safety_alerts"
 ATTESTATIONS_FILENAME = "rule_change_attestations.json"
@@ -152,6 +153,13 @@ def _interaction_rule(row: Mapping[str, Any]) -> Rule:
     )
 
 
+def _alert_can_express(sub: Mapping[str, Any]) -> bool:
+    """An alert's gate is answered from the profile alone (safety_alerts.py)."""
+    gate = sub.get("profile_gate") or {}
+    excludes = gate.get("excludes") or {}
+    return not (gate.get("dose") or excludes.get("product_forms_any") or excludes.get("nutrient_forms_any"))
+
+
 def _sub_rule(
     key: str, canonical_id: str, sub: Mapping[str, Any], severity: Any, *, alertable: bool
 ) -> Rule:
@@ -183,7 +191,7 @@ def _profile_rules(rule: Mapping[str, Any]) -> Iterable[Rule]:
     for sub in rule.get("condition_rules") or []:
         yield _sub_rule(
             f"{rule_id}#condition:{sub.get('condition_id')}",
-            canonical_id, sub, sub.get("severity"), alertable=True,
+            canonical_id, sub, sub.get("severity"), alertable=_alert_can_express(sub),
         )
     for index, sub in enumerate(rule.get("dose_thresholds") or []):
         yield _sub_rule(
@@ -200,7 +208,8 @@ def _profile_rules(rule: Mapping[str, Any]) -> Iterable[Rule]:
         ]
         worst = max(stated, key=_rank) if stated else "informational"
         yield _sub_rule(
-            f"{rule_id}#pregnancy_lactation", canonical_id, life_stage, worst, alertable=True
+            f"{rule_id}#pregnancy_lactation", canonical_id, life_stage, worst,
+            alertable=_alert_can_express(life_stage),
         )
 
 
@@ -367,8 +376,10 @@ def _load_emergency_ban(
     missing = [n for n in ("alert_id", "reason", "approved_by") if not str(override.get(n) or "").strip()]
     if missing:
         return None, None, [f"the override needs {', '.join(missing)}"]
-    records = (json.loads(p.read_text(encoding="utf-8")) for p in sorted(alerts_dir.glob("SA_*.json")))
-    alert = next((r for r in records if r.get("alert_id") == override["alert_id"]), None)
+    records = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(alerts_dir.glob("SA_*.json"))]
+    alert = latest_revisions(
+        r for r in records if r.get("status") in {"published", "retracted"}
+    ).get(override["alert_id"])
     if alert is None:
         return None, None, [f"the override names {override['alert_id']}, which does not exist"]
     if alert.get("event_type") not in _EMERGENCY_EVENT_TYPES:
@@ -429,6 +440,7 @@ def _blobs_showing_new_content(
 
     Life-stage headlines and actions are derived at export, so those two fields
     count only when the candidate rule authored them. Tier and body always count.
+    `detail` carries the rule's body under its export name.
     """
     known = {rule_id: _rule_strings(pinned.get(rule_id)) for rule_id in held_ids}
     authored = {rule_id: _rule_strings(candidate.get(rule_id)) for rule_id in held_ids}
@@ -440,14 +452,14 @@ def _blobs_showing_new_content(
             if not entry.name.endswith(".json"):
                 continue
             with open(entry.path, encoding="utf-8") as handle:
-                warnings = json.load(handle).get("warnings") or []
-            for warning in warnings:
+                blob = json.load(handle)
+            for warning in (blob.get("warnings") or []) + (blob.get("warnings_profile_gated") or []):
                 rule_id = warning.get("source_rule_id")
                 if rule_id not in known:
                     continue
                 new = any(
                     warning.get(name) is not None and warning[name] not in known[rule_id]
-                    for name in ("severity", "alert_body")
+                    for name in ("severity", "alert_body", "detail")
                 ) or any(
                     warning.get(name) in authored[rule_id] - known[rule_id]
                     for name in ("alert_headline", "action")

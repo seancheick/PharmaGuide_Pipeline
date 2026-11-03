@@ -73,6 +73,10 @@
 #     # Preview Supabase sync without uploading:
 #     bash scripts/release_full.sh --supabase-dry-run
 #
+#     # A catalog carrying a ban or recall already live, held only by unrelated
+#     # rule review. Needs a dated override; see scripts/data/safety_alerts/README.md:
+#     bash scripts/release_full.sh --emergency-catalog --skip-flutter
+#
 #     # Custom Flutter repo location:
 #     bash scripts/release_full.sh --flutter-repo /path/to/PharmaGuide_ai
 #
