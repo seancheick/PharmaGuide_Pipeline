@@ -278,7 +278,7 @@ def _fixture_records(*names):
     return [json.loads((FIXTURES / name).read_text(encoding="utf-8")) for name in names]
 
 
-ALL_FIXTURES = ("SA_9999_0001.json", "SA_9999_0002.json", "SA_9999_0003.json")
+ALL_FIXTURES = ("SA_9999_0001.json", "SA_9999_0002.json", "SA_9999_0003.json", "SA_9999_0004.json")
 
 
 def test_fake_feeds_match_the_bytes_the_app_tests_read(tmp_path):
@@ -294,8 +294,8 @@ def test_fake_feeds_match_the_bytes_the_app_tests_read(tmp_path):
     assert staged["extended_feed"]["checksum"] == FAKE_INTERACTION_FEED_SHA256
 
 
-FAKE_BASE_FEED_SHA256 = "sha256:a808f89b2e4ce79f81e20f4f37cf0d210a5e578da43261bbb87f3d2a55c7098f"
-FAKE_INTERACTION_FEED_SHA256 = "sha256:b59edbd676d4eb1b71b90ed4f42e880b11808561eda4fa5e03cca54e394e79e7"
+FAKE_BASE_FEED_SHA256 = "sha256:7564e689beaa6fe47a794d3121ac715c211a487476098e3c80c6b0bde2a940c5"
+FAKE_INTERACTION_FEED_SHA256 = "sha256:e0f20b54bcdf8aa77eef02c2c8420644adb390510546f8121e8e3359f3c1eb8f"
 
 
 def test_rule_alerts_stay_out_of_the_feed_old_builds_read(tmp_path):
@@ -303,17 +303,17 @@ def test_rule_alerts_stay_out_of_the_feed_old_builds_read(tmp_path):
     base = json.loads((tmp_path / publisher.FEED_FILENAME).read_text(encoding="utf-8"))
     extended = json.loads((tmp_path / publisher.EXTENDED_FEED_FILENAME).read_text(encoding="utf-8"))
 
-    assert {a["event_type"] for a in base["alerts"]} == {"ingredient_ban"}
+    assert {a["event_type"] for a in base["alerts"]} == {"ingredient_ban", "product_recall"}
     assert base["schema_version"] == "1.0.0"
-    assert base["alert_count"] == 1
-    assert {a["event_type"] for a in extended["alerts"]} == {"ingredient_ban", "interaction_rule"}
+    assert base["alert_count"] == 2
+    assert {a["event_type"] for a in extended["alerts"]} == {"ingredient_ban", "product_recall", "interaction_rule"}
     assert extended["schema_version"] == "1.1.0"
-    assert staged["alert_count"] == 1
-    assert staged["extended_feed"]["alert_count"] == 3
+    assert staged["alert_count"] == 2
+    assert staged["extended_feed"]["alert_count"] == 4
     digest = staged["extended_feed"]["checksum"].removeprefix("sha256:")
     assert staged["extended_feed"]["path"] == f"safety-alerts/sha256/{digest}.json"
     # The rule gate reads these, and no old reader or dispatcher does.
-    assert set(staged["latest_revisions"]) == {"SA_9999_0001", "SA_9999_0002", "SA_9999_0003"}
+    assert set(staged["latest_revisions"]) == {"SA_9999_0001", "SA_9999_0002", "SA_9999_0003", "SA_9999_0004"}
 
 
 def test_a_rule_only_change_is_still_a_new_release(tmp_path):

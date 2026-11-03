@@ -1,5 +1,5 @@
 {
-  "alert_count": 3,
+  "alert_count": 4,
   "alerts": [
     {
       "action": "Test fixture only. Worth a conversation with your doctor.",
@@ -127,6 +127,38 @@
         ]
       },
       "source_url": "https://example.org/fake-interaction-source",
+      "status": "published"
+    },
+    {
+      "action": "Test fixture only.",
+      "alert_id": "SA_9999_0004",
+      "authority": "TEST FIXTURE - not a real authority",
+      "body": "Test fixture only. This fictional recall covers one made-up product.",
+      "catalog_snapshot_version": "2026.11.03.000000",
+      "consumer_disposition": "block",
+      "effective_date": "2026-11-01",
+      "event_type": "product_recall",
+      "evidence_verified_at": "2026-11-03",
+      "expires_at": null,
+      "fda_class": "II",
+      "headline": "Fictional test notice: Fakeroot capsules recall",
+      "jurisdiction": "US",
+      "lots": [
+        "FAKE-LOT-1"
+      ],
+      "published_at": "2026-11-03T12:00:00Z",
+      "resolved_dsld_ids": [
+        "9990002"
+      ],
+      "retracted": false,
+      "revision": 1,
+      "scope": {
+        "dsld_ids": [
+          "9990002"
+        ],
+        "ingredient_canonical_ids": []
+      },
+      "source_url": "https://example.org/fake-ban-source",
       "status": "published"
     }
   ],

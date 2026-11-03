@@ -121,7 +121,7 @@ FIXTURES = Path(__file__).parent / "fixtures" / "safety_alerts"
 def _stage_all(dist_dir):
     records = [
         json.loads((FIXTURES / name).read_text(encoding="utf-8"))
-        for name in ("SA_9999_0001.json", "SA_9999_0002.json", "SA_9999_0003.json")
+        for name in ("SA_9999_0001.json", "SA_9999_0002.json", "SA_9999_0003.json", "SA_9999_0004.json")
     ]
     return publisher.stage(records, "2026-11-03", dist_dir)
 
