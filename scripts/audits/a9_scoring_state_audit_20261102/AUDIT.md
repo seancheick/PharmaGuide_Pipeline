@@ -66,13 +66,48 @@ Driver values are printed by `probe.py <enriched_root> <id>`.
 | F4 | A panel the screen never read reported a clean screen, and a scored label with one reported a finished assessment | `scored_artifact.py::_product_safety_status`, `assemble_scored_artifact` | 329726: `no_known_catalog_concern` | `not_assessed`, `partial`; hard verdicts and CAUTION unaffected |
 | F5 | Evidence said `assessed` while a release blocker said its review was open | `assessment_readiness.py::evidence_review_open`, `quality_score.py::mark_evidence_review_open` | 328830: 20/20, 1 of 30 material actives `not_yet_evaluated` | `not_yet_reviewed`; points and receipt stay |
 
+An independent review of the first version found these, each reproduced and fixed:
+
+| # | Defect | Owner | Example before | After |
+|---|---|---|---|---|
+| F6 | `safety_assessment_status` read `complete` on an unresolved identity behind an Evidence blocker | `assessment_readiness.safety_assessment_status` | 252496 (141 omega labels), 307560 | `incomplete` |
+| F7 | The same field ignored a printed nutrient amount the upper-limit check never read | same, `unread_printed_nutrient_amounts` | 16730 (9 sports labels) | `incomplete`; the quality tier is not held |
+| F8 | The same field ignored a safety match still awaiting review | same, `needs_review` | 12031 (67 scored, 9 not scored) | `incomplete`; `caution` stays |
+| F9 | An open review kept the "0 records" fact only a finished review may report | `quality_score.mark_evidence_review_open` | 216405 (24 by the review's count) | Fact removed |
+| F10 | 15/15 probiotics said amounts were hidden while every strain's count is printed | `quality_score._pillar_from_dim`, `pillar_explanations.every_strain_count_printed` | 217182 (26 labels) | Names the missing weights; score unchanged |
+
 A banned name on a label nothing else maps to still blocks: DMAA, 1,3-Dimethylamylamine, Ephedra and
 Sibutramine beside an unknown row all return `blocked`, score None
 (`test_a_banned_name_blocks_a_label_nothing_else_on_it_could_map`).
 
 ## Open by design or for Sean
 
-See the PR for the decision list.
+Why the scored partial products are partial (6,294, `census_before.json` query over stored artifacts):
+`evidence_assessment_incomplete` 5,884, `probiotic_evidence_assessment_incomplete` 239,
+`omega_evidence_assessment_incomplete` 141 (an identity hold, not a pending review),
+`probiotic_contributing_context_incomplete` 25, no blocker 5 (252560, 253359, 329658, 232945, 232952:
+`not_yet_reviewed` Evidence with complete readiness). The 272 products with every ingredient assessed
+yet still blocked are the 301 scored partial products with complete Evidence readiness, less 24
+contributing-context and 5 no-blocker: 202 `evidence_assessment_incomplete` from the module aggregate
+and 70 `probiotic_evidence_assessment_incomplete` from the native strain check.
+
+Decisions for Sean:
+
+1. Partial products keep their number and tier in core. Nothing here nulls them; the app hides or labels them.
+2. Neutral Dose lets a finished label with hidden amounts reach about 81.8 (339541). Accepted policy, unchanged.
+3. Nested-row blend anchors as the only scoring row (284197, 217182): owned by #335.
+4. Evidence points stay visible while the review is open (328830, 20/20).
+5. 2,581 partial products keep `applicability_unestablished` Evidence (182957, 184730) though a blocker says the review is open. Moving them contradicts copy that existing tests pin as policy, so it stays until decided. Quality status already reads partial.
+6. Low-coverage not-scored products keep `no_known_catalog_concern` from a name-only screen; `safety_assessment_status` reads `incomplete` on all of them.
+7. 10 of the 11 held labels with evidence-only blockers record "no safety clearance" in their `review_scope`, so they read `incomplete`. Changing that text changes the field.
+
+For Dr Pham (pending delta review, none invented here): `DEP_ANTACIDS_IRON`, `DEP_DIURETICS_THIAMINE`,
+`DEP_SSRIS_SODIUM`, `DEP_LEVOTHYROXINE_CALCIUM`, `DEP_LEVOTHYROXINE_IRON`, `DEP_ANTICOAGULANTS_VITAMINK`,
+`DEP_ORLISTAT_VITAMINA`, `DEP_CHOLESTYRAMINE_VITAMINA`, `DEP_CHOLESTYRAMINE_VITAMIND`,
+`DEP_CHOLESTYRAMINE_VITAMINE`, `DEP_CHOLESTYRAMINE_VITAMINK`. The 20 approved records are traced from
+source to the bundled app copy by `test_a9_reviewed_depletion_examples.py`. The ledgers say
+`licensed_pharmacist_signoff: false`, and the approver is recorded as "PharmaGuide Clinical Team"; the app
+golden calls pending warfarin "Clinician-pinned", which an app fix should relabel.
 
 ## Measured before and after
 
@@ -81,7 +116,13 @@ tiers, score status, quality status and blockers: 0 moved. `product_safety_statu
 `not_assessed` (329726-329729). Evidence `display_state`: 1,368 moved from `assessed` to
 `not_yet_reviewed`, with points unchanged. Scratch strict export: 15,447 products, 0 errors.
 `shadow-diff` passed. The scoring audit reports 0 `SCORING_SAFETY_ASSESSMENT_STATUS_MISMATCH` and 81
-`SCORING_STRICT_CONTRACT_FAILED` (`disclosed_form_unmapped`), not yet compared with main.
+`SCORING_STRICT_CONTRACT_FAILED`: 51 `disclosed_form_unmapped`, 29 `identity_conflict`, 1
+`form_quality_unassessed`. The same 81 ids and reasons are in main's stored scored artifacts, so this
+branch adds none and removes none.
+
+Export against `scripts/final_db_output`: percentile rows 15,129 to 8,834, because only complete products
+rank and cohorts under 5 get none. The probiotic wording fix (F10, `fe968096f`) came after this rescore:
+display only, measured on 217182 at 73.9, Good, and on the 26 labels by their stored reason.
 
 ## `safety_assessment_status` by state, with a real product
 
