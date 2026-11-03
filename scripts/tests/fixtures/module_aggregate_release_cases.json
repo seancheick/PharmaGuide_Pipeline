@@ -1177,7 +1177,7 @@
     },
     "expected_overall": "research_present_applicability_unestablished",
     "expected_blockers": [
-      "clinical_trials_registry_entry_pending"
+      "literature_applicability_unestablished"
     ]
   }
 ]
