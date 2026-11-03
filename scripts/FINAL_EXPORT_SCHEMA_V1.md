@@ -117,7 +117,7 @@ CREATE TABLE products_core (
     quality_score_status            TEXT,   -- scored | suppressed_safety | not_scored
     product_safety_status           TEXT,   -- blocked | unsafe | caution | no_known_catalog_concern | not_assessed
     quality_assessment_status       TEXT,   -- complete | partial | failed
-    safety_assessment_status        TEXT,   -- complete | incomplete; NULL = not known, the app withholds its all-clear
+    safety_assessment_status        TEXT,   -- complete | incomplete; NULL = not known (never read it as complete); `incomplete` never overrides a recorded concern
     quality_tier                    TEXT,   -- Exceptional/Excellent/Very good/Good/Needs improvement/Poor
     quality_score_suppressed_reason TEXT,
     v4_module                       TEXT,   -- generic/probiotic/omega/multi_or_prenatal/sports

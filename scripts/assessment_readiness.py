@@ -1562,7 +1562,8 @@ def evaluate_release_assessment(
             elif float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0:
                 blockers.append("contributing_evidence_receipts_missing")
     return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
-            "unfinished_source_assessment": unfinished_source}
+            "unfinished_source_assessment": unfinished_source,
+            "unread_printed_nutrient_amounts": unread_printed_nutrient_amounts(product)}
 
 
 #: Every release blocker that belongs to the Evidence review. Any other blocker,
@@ -1577,7 +1578,40 @@ _EVIDENCE_RELEASE_BLOCKERS = frozenset({
     "contributing_source_review_incomplete",
     "clinical_applicability_unreviewed",
 })
+#: The omega owner keeps Evidence open only for unresolved EPA/DHA material
+#: identity (omega_evidence._evidence_result_state), which is not a pending review.
+_BLOCKERS_THAT_LEAVE_SAFETY_FINISHED = _EVIDENCE_RELEASE_BLOCKERS - {
+    "omega_evidence_assessment_incomplete"}
 _KNOWN_SAFETY_OUTCOMES = frozenset({"blocked", "unsafe", "caution", "no_known_catalog_concern"})
+#: The upper-limit check skipped these rows without reading their amount.
+_UNREAD_NUTRIENT_AMOUNT_STATUSES = frozenset({
+    "skipped_unit_unrecognized",
+    "skipped_amount_not_declared",
+})
+
+
+def unread_printed_nutrient_amounts(product: Mapping[str, Any]) -> int:
+    """Nutrients with a reference record whose printed number the owner could not read.
+
+    An amount the label never printed is the label's limitation and is not counted.
+    """
+    count = 0
+    for row in _safe_list(_safe_dict(product.get("rda_ul_data")).get("adequacy_results")):
+        if not isinstance(row, Mapping) or row.get("ul_status") not in _UNREAD_NUTRIENT_AMOUNT_STATUSES:
+            continue
+        printed = row.get("original_quantity")
+        if (row.get("data_by_group") and isinstance(printed, (int, float))
+                and not isinstance(printed, bool) and printed > 0):
+            count += 1
+    return count
+
+
+def retained_evidence_result_state(module_breakdown: Any) -> Any:
+    """The Evidence result state a scored module recorded, if it reached Evidence."""
+    evidence = _safe_dict(_safe_dict(_safe_dict(module_breakdown).get("dimensions")).get("evidence"))
+    metadata = _safe_dict(evidence.get("metadata"))
+    return (metadata.get("evidence_result_state")
+            or _safe_dict(metadata.get("generic_evidence_metadata")).get("evidence_result_state"))
 
 
 def _is_evidence_blocker(blocker: Any) -> bool:
@@ -1591,14 +1625,15 @@ def evidence_review_open(release: Mapping[str, Any]) -> bool:
 
 def safety_assessment_status(
     *, quality_score_status: Any, product_safety_status: Any, safety_gate: Any,
-    dose_safety: Any, release: Any,
+    dose_safety: Any, release: Any, evidence_result_state: Any,
 ) -> str:
     """Whether the catalog safety checks finished: ``complete`` or ``incomplete``.
 
     A fact, separate from Evidence and overall quality: an open Evidence review
-    alone leaves this complete. It reports only ``complete`` when each input
-    proves it, so anything missing or unrecognized is incomplete. A found concern
-    is a finished check, and this field never softens one.
+    alone leaves this complete, but an unresolved identity or unread dose found
+    while assessing Evidence does not. It reports only ``complete`` when each input
+    proves it, so anything missing or unrecognized is incomplete. It never softens
+    a found concern, and ``incomplete`` never overrides a blocked product.
     """
     gate, dose, assessment = _safe_dict(safety_gate), _safe_dict(dose_safety), _safe_dict(release)
     blockers = assessment.get("blockers")
@@ -1608,9 +1643,14 @@ def safety_assessment_status(
         and product_safety_status in _KNOWN_SAFETY_OUTCOMES
         and gate.get("ingredient_assessment_complete") is True
         and not gate.get("ingredient_assessment_errors")
+        and gate.get("needs_review") is not True
         and isinstance(dose_counts, dict) and dose_counts.get("material_but_unresolved", 0) == 0
+        and assessment.get("unread_printed_nutrient_amounts") == 0
+        and evidence_result_state != "identity_material_unresolved"
         and isinstance(blockers, list)
-        and all(_is_evidence_blocker(blocker) for blocker in blockers)
+        and all(isinstance(blocker, str)
+                and blocker.split(":", 1)[0] in _BLOCKERS_THAT_LEAVE_SAFETY_FINISHED
+                for blocker in blockers)
     )
     return "complete" if finished else "incomplete"
 

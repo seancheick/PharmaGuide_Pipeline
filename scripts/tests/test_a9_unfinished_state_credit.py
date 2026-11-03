@@ -207,3 +207,22 @@ def test_a_banned_name_blocks_a_label_nothing_else_on_it_could_map(pipeline, ban
     assert scored["product_safety_status"] == "blocked"
     assert scored["score_unavailable_reason"] == "blocked_by_safety_gate"
     assert scored["quality_score_v4_100"] is None
+
+
+def test_an_open_review_drops_the_finished_review_record_count(pipeline):
+    # pillar_explanations: only a finished review may report "0 records".
+    evidence = _score(pipeline, _raw("a9_open_review_zero_records_216405_raw.json"))["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "not_yet_reviewed"
+    assert evidence["score"] == 0
+    facts = (evidence.get("explanation") or {}).get("facts") or []
+    assert "matched_evidence_records" not in [fact["id"] for fact in facts]
+
+
+def test_an_open_review_keeps_an_applicability_finding_and_reads_partial(pipeline):
+    scored = _score(pipeline, _raw("a9_open_review_applicability_182957_raw.json"))
+    evidence = scored["quality_pillars_v4"]["evidence"]
+    assert scored["assessment_readiness"]["release_assessment"]["blockers"] == [
+        "evidence_assessment_incomplete"]
+    assert scored["quality_assessment_status"] == "partial"
+    assert evidence["display_state"] == "applicability_unestablished"
+    assert evidence["score"] == 0

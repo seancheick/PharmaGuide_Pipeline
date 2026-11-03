@@ -27,8 +27,23 @@ def _args(path: Path) -> argparse.Namespace:
     )
 
 
+def _recorded_safety_status(product: dict) -> str:
+    from assessment_readiness import retained_evidence_result_state, safety_assessment_status
+
+    return safety_assessment_status(
+        quality_score_status=product.get("quality_score_status"),
+        product_safety_status=product.get("product_safety_status"),
+        safety_gate=product.get("_v4_safety_gate"),
+        dose_safety=product.get("dose_safety_evaluation"),
+        release=(product.get("assessment_readiness") or {}).get("release_assessment"),
+        evidence_result_state=retained_evidence_result_state(product.get("_v4_module_breakdown")),
+    )
+
+
 def _write(path: Path, product: dict) -> None:
-    path.write_text(json.dumps([product]), encoding="utf-8")
+    # A real artifact records the status its own facts give.
+    recorded = {"safety_assessment_status": _recorded_safety_status(product), **product}
+    path.write_text(json.dumps([recorded]), encoding="utf-8")
 
 
 def _scored(**overrides) -> dict:
@@ -77,6 +92,15 @@ def test_scoring_audit_passes_strict_scored_product(tmp_path: Path) -> None:
     _write(path, _scored())
 
     assert audit_scoring(_args(path)) == []
+
+
+@pytest.mark.parametrize("recorded", [None, "", "finished", "complete"])
+def test_scoring_audit_rejects_a_safety_status_its_facts_do_not_give(tmp_path: Path, recorded) -> None:
+    path = tmp_path / "scored.json"
+    product = _scored(safety_assessment_status=recorded)
+    assert _recorded_safety_status(product) == "incomplete"
+    _write(path, product)
+    assert "SCORING_SAFETY_ASSESSMENT_STATUS_MISMATCH" in {f.code for f in audit_scoring(_args(path))}
 
 
 def test_scoring_audit_products_dir_reads_only_scored_outputs(tmp_path: Path) -> None:

@@ -130,10 +130,6 @@ _GENERIC_NUTRIENT_DOSE_METHODS = frozenset({
 #: Adequacy statuses recorded when a printed nutrient amount could not be read.
 #: An unstated vitamin form is the label's limitation (its upper-limit risk is
 #: dose-safety's unresolved state), so it is not listed here.
-_UNREAD_NUTRIENT_AMOUNT_STATUSES = frozenset({
-    "skipped_unit_unrecognized",
-    "skipped_amount_not_declared",
-})
 
 
 def unfinished_source_assessment(enriched_product: Dict[str, Any],
@@ -175,13 +171,9 @@ def unfinished_source_assessment(enriched_product: Dict[str, Any],
     if module in _NUTRIENT_DOSE_ROUTES and (
         module != "generic" or dose_meta.get("method") in _GENERIC_NUTRIENT_DOSE_METHODS
     ):
-        for row in _safe_dict(enriched_product.get("rda_ul_data")).get("adequacy_results") or []:
-            if not isinstance(row, dict) or row.get("ul_status") not in _UNREAD_NUTRIENT_AMOUNT_STATUSES:
-                continue
-            printed = row.get("original_quantity")
-            if (row.get("data_by_group") and isinstance(printed, (int, float))
-                    and not isinstance(printed, bool) and printed > 0):
-                return "nutrient_amount_unread"
+        from assessment_readiness import unread_printed_nutrient_amounts
+        if unread_printed_nutrient_amounts(enriched_product):
+            return "nutrient_amount_unread"
     # The enricher owns the sugar reading: a printed sugars line it classified
     # but could not read as an exact mass keeps its level with no amount.
     sugar = _safe_dict(_safe_dict(enriched_product.get("dietary_sensitivity_data")).get("sugar"))
@@ -369,7 +361,8 @@ def assemble_scored_artifact(
     )
     unfinished = unfinished_source_assessment(enriched_product, _safe_dict(module_breakdown))
     from assessment_readiness import (
-        evaluate_release_assessment, evidence_review_open, safety_assessment_status,
+        evaluate_release_assessment, evidence_review_open, retained_evidence_result_state,
+        safety_assessment_status,
     )
     assessment_readiness = {**assessment_readiness, "release_assessment": evaluate_release_assessment(
         enriched_product, assessment_readiness, _safe_dict(module_breakdown),
@@ -486,6 +479,7 @@ def assemble_scored_artifact(
             quality_score_status=status, product_safety_status=product_safety_status,
             safety_gate=safety_gate, dose_safety=dose_safety,
             release=assessment_readiness["release_assessment"],
+            evidence_result_state=retained_evidence_result_state(module_breakdown),
         ),
         "assessment_readiness": assessment_readiness,
         "dose_safety_evaluation": dose_safety,

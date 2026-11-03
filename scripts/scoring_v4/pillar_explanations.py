@@ -132,6 +132,9 @@ def _proprietary_blend_facts(transparency_dim: Dict[str, Any]) -> List[Dict[str,
     ]
 
 
+FINISHED_REVIEW_RECORD_COUNT_FACT = "matched_evidence_records"
+
+
 def _zero_evidence_facts(
     pillar: Dict[str, Any], evidence_dim: Dict[str, Any]
 ) -> List[Dict[str, Any]]:
@@ -147,7 +150,7 @@ def _zero_evidence_facts(
         return []
     return [
         {
-            "id": "matched_evidence_records",
+            "id": FINISHED_REVIEW_RECORD_COUNT_FACT,
             "label": "Qualifying evidence matches",
             "value_display": "0 in PharmaGuide's current evidence data",
             "audience": CONSUMER,

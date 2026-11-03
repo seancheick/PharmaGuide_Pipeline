@@ -32,7 +32,8 @@ from scoring_v4.penalty_registry import (
     penalty_spec,
 )
 from scoring_v4.pillar_explanations import (
-    CONSUMER, attach_pillar_explanations, audit_fact, facts_block, _proprietary_blend_facts,
+    CONSUMER, FINISHED_REVIEW_RECORD_COUNT_FACT, attach_pillar_explanations, audit_fact,
+    facts_block, _proprietary_blend_facts,
 )
 
 _CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
@@ -1119,16 +1120,26 @@ def mark_evidence_review_open(pillar: Dict[str, Any]) -> Dict[str, Any]:
 
     Scoring only sees the winning result state, so one authority-backed row can
     read as a finished review while another active is still pending. The points
-    and receipt stay; only the claim that the review ended moves.
+    and receipt stay; only the claim that the review ended moves, including its
+    record count. A recorded applicability finding stays: it says what the
+    research does not establish, and quality_assessment_status carries the rest.
     """
     if pillar.get("display_state") != "assessed":
         return pillar
-    return {
+    marked = {
         **pillar,
         "display_state": "not_yet_reviewed",
         "reason": (_EVIDENCE_OPEN_REVIEW_REASON if _num(pillar.get("score")) > 0
                    else _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]),
     }
+    explanation = pillar.get("explanation")
+    if explanation:
+        facts = [fact for fact in explanation.get("facts") or []
+                 if fact.get("id") != FINISHED_REVIEW_RECORD_COUNT_FACT]
+        marked["explanation"] = {**explanation, "facts": facts}
+        if not facts:
+            del marked["explanation"]
+    return marked
 
 
 def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
