@@ -6,6 +6,8 @@ from pathlib import Path
 
 import pytest
 
+import build_safety_alerts as publisher
+import sync_safety_alerts
 from sync_safety_alerts import load_staged_release
 
 
@@ -109,3 +111,103 @@ def test_dispatch_transport_error_raises(monkeypatch):
 def test_dispatch_unreadable_body_raises(monkeypatch):
     with pytest.raises(RuntimeError, match="unreadable"):
         _dispatch_with(monkeypatch, _FakeResponse(200, "<html>gateway</html>"))
+
+
+# --- the extended feed --------------------------------------------------------
+
+FIXTURES = Path(__file__).parent / "fixtures" / "safety_alerts"
+
+
+def _stage_all(dist_dir):
+    records = [
+        json.loads((FIXTURES / name).read_text(encoding="utf-8"))
+        for name in ("SA_9999_0001.json", "SA_9999_0002.json", "SA_9999_0003.json", "SA_9999_0004.json")
+    ]
+    return publisher.stage(records, "2026-11-03", dist_dir)
+
+
+def test_staged_release_verifies_the_extended_feed(tmp_path):
+    staged = _stage_all(tmp_path)
+    loaded = load_staged_release(tmp_path)
+    digest = staged["extended_feed"]["checksum"].removeprefix("sha256:")
+    assert loaded["extended_remote_path"] == f"safety-alerts/sha256/{digest}.json"
+    assert loaded["extended_feed_path"] == tmp_path / publisher.EXTENDED_FEED_FILENAME
+
+    (tmp_path / publisher.EXTENDED_FEED_FILENAME).write_text("{}")
+    with pytest.raises(ValueError, match="extended"):
+        load_staged_release(tmp_path)
+
+
+def test_staged_release_needs_its_extended_feed(tmp_path):
+    _stage_all(tmp_path)
+    (tmp_path / publisher.EXTENDED_FEED_FILENAME).unlink()
+    with pytest.raises(FileNotFoundError):
+        load_staged_release(tmp_path)
+
+
+def test_staged_release_refuses_a_rule_in_the_feed_old_builds_read(tmp_path):
+    """Old builds reject the whole feed on this event, and the old dispatcher reads it."""
+    feed = json.dumps({"alerts": [{"event_type": "interaction_rule"}]}).encode()
+    checksum = "sha256:" + hashlib.sha256(feed).hexdigest()
+    (tmp_path / "safety_alerts.json").write_bytes(feed)
+    (tmp_path / "safety_alerts_manifest.json").write_text(
+        json.dumps({"checksum": checksum, "feed_version": checksum, "latest_revisions": {}}),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="interaction_rule"):
+        load_staged_release(tmp_path)
+
+
+def test_sync_uploads_the_extended_feed_before_promoting(tmp_path, monkeypatch):
+    staged = _stage_all(tmp_path)
+    events = []
+
+    class _Query:
+        def __init__(self, table):
+            self.table_name = table
+            self.inserted = None
+
+        def select(self, *_):
+            return self
+
+        def eq(self, *_):
+            return self
+
+        def limit(self, *_):
+            return self
+
+        def insert(self, row):
+            self.inserted = row
+            events.append(("insert", row))
+            return self
+
+        def execute(self):
+            class _Response:
+                data = [{"id": "fake-release"}] if self.inserted else []
+
+            return _Response()
+
+    class _Client:
+        def table(self, name):
+            return _Query(name)
+
+        def rpc(self, name, _params):
+            events.append(("rpc", name))
+            return _Query(name)
+
+    monkeypatch.setattr(sync_safety_alerts, "get_supabase_client", _Client)
+    monkeypatch.setattr(
+        sync_safety_alerts, "upload_file",
+        lambda _client, _bucket, remote, _local, **_kw: events.append(("upload", remote)),
+    )
+    monkeypatch.setattr(
+        sync_safety_alerts, "_dispatch_release", lambda _id: events.append(("dispatch", None))
+    )
+
+    sync_safety_alerts.sync(tmp_path)
+
+    names = [event[0] for event in events]
+    assert names == ["upload", "upload", "insert", "rpc", "dispatch"]
+    assert events[0][1] == staged["extended_feed"]["path"]
+    assert events[2][1]["feed_path"] == f"safety-alerts/sha256/{staged['checksum'].removeprefix('sha256:')}.json"
+    assert events[2][1]["manifest"]["extended_feed"]["path"] == staged["extended_feed"]["path"]

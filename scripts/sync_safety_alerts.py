@@ -25,6 +25,7 @@ from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, get_supabas
 
 
 FEED_FILENAME = "safety_alerts.json"
+EXTENDED_FEED_FILENAME = "safety_alerts_extended.json"
 MANIFEST_FILENAME = "safety_alerts_manifest.json"
 
 
@@ -57,13 +58,36 @@ def load_staged_release(dist_dir: Path) -> Dict[str, Any]:
     if not isinstance(feed, dict) or not isinstance(feed.get("alerts"), list):
         raise ValueError("safety-alerts feed has no alerts list")
 
+    # Old builds reject a whole feed on this event, and the dispatcher reads only
+    # this file, so it must never reach either of them.
+    if any(a.get("event_type") == "interaction_rule" for a in feed["alerts"] if isinstance(a, dict)):
+        raise ValueError("an interaction_rule alert is in the feed every build reads")
+
     digest = actual.removeprefix("sha256:")
     return {
         "feed_path": feed_path,
         "manifest": manifest,
         "checksum": actual,
         "remote_path": f"safety-alerts/sha256/{digest}.json",
+        **_load_extended(dist_dir, manifest, feed),
     }
+
+
+def _load_extended(dist_dir: Path, manifest: Dict[str, Any], feed: Dict[str, Any]) -> Dict[str, Any]:
+    extended = manifest.get("extended_feed")
+    if extended is None:
+        return {}
+    path = dist_dir / EXTENDED_FEED_FILENAME
+    if not path.is_file():
+        raise FileNotFoundError("the manifest names an extended feed that is not staged")
+    actual = f"sha256:{hashlib.sha256(path.read_bytes()).hexdigest()}"
+    if extended.get("checksum") != actual or feed.get("extended_feed_checksum") != actual:
+        raise ValueError(f"extended feed checksum mismatch: actual={actual}")
+    digest = actual.removeprefix("sha256:")
+    remote = f"safety-alerts/sha256/{digest}.json"
+    if extended.get("path") != remote:
+        raise ValueError(f"extended feed path mismatch: {extended.get('path')!r}")
+    return {"extended_feed_path": path, "extended_remote_path": remote}
 
 
 def sync(dist_dir: Path, *, dry_run: bool = False) -> Dict[str, Any]:
@@ -73,6 +97,17 @@ def sync(dist_dir: Path, *, dry_run: bool = False) -> Dict[str, Any]:
         return {"status": "dry_run", **staged}
 
     client = get_supabase_client()
+    # Before anything can name it: a build must never be told to fetch a missing file.
+    if "extended_feed_path" in staged:
+        upload_file(
+            client,
+            STORAGE_BUCKET,
+            staged["extended_remote_path"],
+            staged["extended_feed_path"],
+            content_type="application/json",
+            upsert=True,
+            cache_control=CACHE_CONTROL_IMMUTABLE,
+        )
     upload_file(
         client,
         STORAGE_BUCKET,
