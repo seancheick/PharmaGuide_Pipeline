@@ -21,9 +21,9 @@ PRODUCTS = ["1179", "14168", "315089", "243271", "282638", "299755", "54775", "2
 # 1179 (Ravage) also carries L-phenylalanine as a primary active. Its literature record's only
 # citation, PMID 37629744, is a review of depression treatment in Parkinson's disease, not a
 # phenylalanine trial (literature records review 2026-10-20), so that review is genuinely open
-# again. Methionine also has only an empty automated verification stamp; neither
-# unfinished individual review is completed by the blend owners.
-# Whole turmeric cannot inherit Curcumin trials from an INGR_ key suffix.
+# again and the blend owners do not complete it.
+# Whole turmeric cannot inherit Curcumin trials from an INGR_ key suffix, and the
+# 2026-11-03 turmeric review leaves applicability unestablished.
 _REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid not in {"1179", "243271", "282638", "299755"}]
 
 
@@ -85,9 +85,9 @@ def test_ravage_retains_each_unfinished_individual_review(enriched):
         (r.canonical_id, r.blocking_reasons) for r in resolution.resolutions
         if r.disposition == "literature_resolution_required"
     ]
-    assert open_owners == [("methionine", ["literature_verification_pending"]),
-                           ("l_phenylalanine", ["literature_verification_pending"])]
-    _assert_empty_automated_source_is_unfinished("methionine")
+    assert open_owners == [("l_phenylalanine", ["literature_verification_pending"])]
+    methionine = next(r for r in resolution.resolutions if r.canonical_id == "methionine")
+    assert methionine.disposition == "reviewed_null_unfavorable"
     evidence = build_scored_artifact(enriched["1179"])["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"
 
@@ -130,10 +130,7 @@ def test_a_lent_blend_total_is_not_a_member_dose(enriched, pid, canonical):
         if r.get("canonical_id") == canonical
     )
     resolution = resolve_evidence_for_row(row, enriched[pid])
-    assert resolution.applicability_status == (
-        "unverified_literature_record" if canonical == "turmeric"
-        else "applicability_unestablished"
-    )
+    assert resolution.applicability_status == "applicability_unestablished"
 
     # Cinnamon also retains its reviewed source-integrity hold; a lent mass
     # cannot clear it. Dose
@@ -285,10 +282,13 @@ def test_golden_milk_whole_turmeric_does_not_inherit_curcumin_identity(enriched)
     resolution = resolve_product_evidence(product, owner_scoped=True)
     unresolved = [r.canonical_id for r in resolution.resolutions
                   if r.disposition == "literature_resolution_required"]
-    assert unresolved == ["turmeric", "cardamom"]
+    assert unresolved == ["cardamom"]
     _assert_empty_automated_source_is_unfinished("cardamom")
     turmeric = next(r for r in resolution.resolutions if r.canonical_id == "turmeric")
-    assert "backed_clinical_studies" not in turmeric.matched_owners
+    # Reviewed literature exists, but it does not establish applicability to this row.
+    assert turmeric.disposition == "research_present_applicability_unestablished"
+    assert turmeric.reason_code == "literature_applicability_unestablished"
+    assert turmeric.points_eligible is False
     assert not resolution.is_assessment_complete
     evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"

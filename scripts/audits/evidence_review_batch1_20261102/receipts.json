@@ -1,0 +1,593 @@
+{
+ "articles": {
+  "15477550": {
+   "abstract_sha256": "078a503a330a9a2efb45f847d22615e1a8bcabf7097124afbf4841de74d9beba",
+   "canonical_ids": [
+    "methionine"
+   ],
+   "human_mesh": true,
+   "journal": "Neurology",
+   "publication_types": [
+    "Clinical Trial",
+    "Clinical Trial, Phase II",
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, U.S. Gov't, P.H.S."
+   ],
+   "quotes": [
+    "no benefit in any of the clinical measures"
+   ],
+   "retracted": false,
+   "title": "Treatment of AIDS-associated myelopathy with L-methionine: a placebo-controlled study.",
+   "year": "2004"
+  },
+  "15870821": {
+   "abstract_sha256": "1bb96a2b353091b4674e54146191cba25b8d6d6a3a3686d2b06d5ba31cd7be26",
+   "canonical_ids": [
+    "methionine"
+   ],
+   "human_mesh": true,
+   "journal": "Eur J Clin Nutr",
+   "publication_types": [
+    "Clinical Trial",
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "quotes": [
+    "Homocysteine plasma concentrations increased"
+   ],
+   "retracted": false,
+   "title": "Effect of L-methionine supplementation on plasma homocysteine and other free amino acids: a placebo-controlled double-blind cross-over study.",
+   "year": "2005"
+  },
+  "17006600": {
+   "abstract_sha256": "86026450f73503c5abc96da9dc67b27e3cac8743be315f13f093c22ee5580821",
+   "canonical_ids": [
+    "methionine"
+   ],
+   "human_mesh": true,
+   "journal": "Amino Acids",
+   "publication_types": [
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "quotes": [
+    "presented with a decreased level of decline in their CD4 counts"
+   ],
+   "retracted": false,
+   "title": "L-methionine as immune supportive supplement: a clinical evaluation.",
+   "year": "2007"
+  },
+  "19017911": {
+   "abstract_sha256": "9f9b2eeeae3b62e666d8ba1b81814ee92dfda9dc3f53b1edce908dd35c97daa4",
+   "canonical_ids": [
+    "ginkgo"
+   ],
+   "human_mesh": true,
+   "journal": "JAMA",
+   "publication_types": [
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "quotes": [
+    "was not effective in reducing either the overall incidence rate of dementia"
+   ],
+   "retracted": false,
+   "title": "Ginkgo biloba for prevention of dementia: a randomized controlled trial.",
+   "year": "2008"
+  },
+  "19407666": {
+   "abstract_sha256": "aab6c1faeb851518050b5f7105f82ac6d926647bc292a6a0a68416dca04fb9e4",
+   "canonical_ids": [
+    "methionine"
+   ],
+   "human_mesh": true,
+   "journal": "Menopause",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "quotes": [
+    "there were no significant differences between the L-methionine and placebo groups"
+   ],
+   "retracted": false,
+   "title": "Effect of L-methionine on hot flashes in postmenopausal women: a randomized controlled trial.",
+   "year": "2009"
+  },
+  "20040554": {
+   "abstract_sha256": "7ca7d1f28a875dea627694a258ed5ef35ac9221020f920f95e5ce521443972f3",
+   "canonical_ids": [
+    "ginkgo"
+   ],
+   "human_mesh": true,
+   "journal": "JAMA",
+   "publication_types": [
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, N.I.H., Extramural",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "quotes": [
+    "did not result in less cognitive decline in older adults"
+   ],
+   "retracted": false,
+   "title": "Ginkgo biloba for preventing cognitive decline in older adults: a randomized trial.",
+   "year": "2009"
+  },
+  "22959217": {
+   "abstract_sha256": "9042f0ef7e70a7c0480f89f57c532a2163a54c68c3b4c3975068672dc3212b8d",
+   "canonical_ids": [
+    "ginkgo"
+   ],
+   "human_mesh": true,
+   "journal": "Lancet Neurol",
+   "publication_types": [
+    "Journal Article",
+    "Multicenter Study",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't",
+    "Review"
+   ],
+   "quotes": [
+    "did not reduce the risk of progression to Alzheimer's disease"
+   ],
+   "retracted": false,
+   "title": "Long-term use of standardised Ginkgo biloba extract for the prevention of Alzheimer's disease (GuidAge): a randomised placebo-controlled trial.",
+   "year": "2012"
+  },
+  "23744597": {
+   "abstract_sha256": "320c8b9d082fec68c51e14402ce46e2b9f21a08017501ff02dba092e65dabe6b",
+   "canonical_ids": [
+    "ginkgo"
+   ],
+   "human_mesh": true,
+   "journal": "Cochrane Database Syst Rev",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "no evidence that Ginkgo biloba has a clinically significant benefit"
+   ],
+   "retracted": false,
+   "title": "Ginkgo biloba for intermittent claudication.",
+   "year": "2013"
+  },
+  "24533610": {
+   "abstract_sha256": "4a5296fe872d0b074de961f6ad225f72fca0b79f0e9bced9ae6d1709ab1f4384",
+   "canonical_ids": [
+    "fiber"
+   ],
+   "human_mesh": true,
+   "journal": "J Am Coll Nutr",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "does not show that glucomannan intake generates statistically significant weight loss"
+   ],
+   "retracted": false,
+   "title": "The efficacy of glucomannan supplementation in overweight and obesity: a systematic review and meta-analysis of randomized clinical trials.",
+   "year": "2014"
+  },
+  "28443702": {
+   "abstract_sha256": "e3188d1b65641cdfb9639f8faf4a4c267f76ec2fe0b658ecad234f036ca708c4",
+   "canonical_ids": [
+    "turmeric"
+   ],
+   "human_mesh": true,
+   "journal": "J Am Coll Nutr",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "quotes": [
+    "Changes in weight, BMI and liver enzymes were not significant"
+   ],
+   "retracted": false,
+   "title": "Turmeric Supplementation Improves Serum Glucose Indices and Leptin Levels in Patients with Nonalcoholic Fatty Liver Diseases.",
+   "year": "2017"
+  },
+  "31919527": {
+   "abstract_sha256": "508a32367affed2ba4d3cf16fa6cad443ddf40bba2138978a36e9000d6c4f176",
+   "canonical_ids": [
+    "collagen"
+   ],
+   "human_mesh": true,
+   "journal": "Am J Clin Nutr",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "quotes": [
+    "elicited greater increases in both acute and longer-term MPS than CP"
+   ],
+   "retracted": false,
+   "title": "Whey protein but not collagen peptides stimulate acute and longer-term muscle protein synthesis with and without resistance exercise in healthy older women: a randomized controlled trial.",
+   "year": "2020"
+  },
+  "32656820": {
+   "abstract_sha256": "736aa91102a74435e877ee868ed87b3a09b6fab53b5926afa3d85da4ada808ba",
+   "canonical_ids": [
+    "turmeric"
+   ],
+   "human_mesh": true,
+   "journal": "Br J Clin Pharmacol",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "confirmed the association between Curcuma longa and liver injury"
+   ],
+   "retracted": false,
+   "title": "Acute liver injury following turmeric use in Tuscany: An analysis of the Italian Phytovigilance database and systematic review of case reports.",
+   "year": "2021"
+  },
+  "32926799": {
+   "abstract_sha256": "3f8ff7ec9488094ab729a57f8310aeae7bfff281da6870ea61bfb64c4b711bfc",
+   "canonical_ids": [
+    "turmeric"
+   ],
+   "human_mesh": true,
+   "journal": "Ann Intern Med",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "quotes": [
+    "did not change effusion-synovitis volume"
+   ],
+   "retracted": false,
+   "title": "Effectiveness of Curcuma longa Extract for the Treatment of Symptoms and Effusion-Synovitis of Knee Osteoarthritis : A Randomized Trial.",
+   "year": "2020"
+  },
+  "33162192": {
+   "abstract_sha256": "5bffd9d06829374f89c15e5fc52e18a31e01523594d4470fcc7c336aa8b3b868",
+   "canonical_ids": [
+    "fiber"
+   ],
+   "human_mesh": true,
+   "journal": "Clin Nutr",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "supplemental soluble dietary fiber significantly reduced glycosylated hemoglobin"
+   ],
+   "retracted": false,
+   "title": "Effects of soluble fiber supplementation on glycemic control in adults with type 2 diabetes mellitus: A systematic review and meta-analysis of randomized controlled trials.",
+   "year": "2021"
+  },
+  "33511486": {
+   "abstract_sha256": "b4899b859709b7122b015c5cb3a03b543610aefce3c2ecf6ee641e6c4ad26cfc",
+   "canonical_ids": [
+    "turmeric"
+   ],
+   "human_mesh": true,
+   "journal": "Curr Rheumatol Rep",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "Turmeric extracts significantly reduced knee pain"
+   ],
+   "retracted": false,
+   "title": "Efficacy and Safety of Turmeric Extracts for the Treatment of Knee Osteoarthritis: a Systematic Review and Meta-analysis of Randomised Controlled Trials.",
+   "year": "2021"
+  },
+  "33742704": {
+   "abstract_sha256": "4bed9a813a99f824fb6133e4471c1ce52af3f2fc39051ab9c8ac65f105229ccd",
+   "canonical_ids": [
+    "collagen"
+   ],
+   "human_mesh": true,
+   "journal": "Int J Dermatol",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "favorable results of hydrolyzed collagen supplementation compared with placebo"
+   ],
+   "retracted": false,
+   "title": "Effects of hydrolyzed collagen supplementation on skin aging: a systematic review and meta-analysis.",
+   "year": "2021"
+  },
+  "34652861": {
+   "abstract_sha256": "d0529c054d263a263766357f4d962fc77c767d9d785e2eaf7b2f6af9e0992e7c",
+   "canonical_ids": [
+    "turmeric"
+   ],
+   "human_mesh": true,
+   "journal": "J Gastroenterol Hepatol",
+   "publication_types": [
+    "Journal Article",
+    "Randomized Controlled Trial"
+   ],
+   "quotes": [
+    "No significant difference was observed between curcumin and omeprazole groups"
+   ],
+   "retracted": false,
+   "title": "Curcuma longa Linn versus omeprazole in treatment of functional dyspepsia: A randomized, double-blind, placebo-controlled trial.",
+   "year": "2022"
+  },
+  "35816465": {
+   "abstract_sha256": "f18c00bc5d9f33f2f282b6a0c9d8006033e8ce58152f69a178feeb7d792a58bd",
+   "canonical_ids": [
+    "fiber"
+   ],
+   "human_mesh": true,
+   "journal": "Am J Clin Nutr",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review",
+    "Research Support, Non-U.S. Gov't"
+   ],
+   "quotes": [
+    "psyllium and pectin having significant effects"
+   ],
+   "retracted": false,
+   "title": "The Effect of Fiber Supplementation on Chronic Constipation in Adults: An Updated Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "year": "2022"
+  },
+  "36383762": {
+   "abstract_sha256": "261a448ec119308dbe513a7a8ce7155f48149ff5804677ef3a6bf234d5ca29c5",
+   "canonical_ids": [
+    "ginkgo"
+   ],
+   "human_mesh": true,
+   "journal": "Cochrane Database Syst Rev",
+   "publication_types": [
+    "Journal Article",
+    "Research Support, Non-U.S. Gov't",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "Ginkgo biloba may have little to no effect"
+   ],
+   "retracted": false,
+   "title": "Ginkgo biloba for tinnitus.",
+   "year": "2022"
+  },
+  "36796439": {
+   "abstract_sha256": "60e1b8798d24d8cc42d2fe59a4a3d8ef85dd366d8c867705b21187b1385c38ff",
+   "canonical_ids": [
+    "fiber"
+   ],
+   "human_mesh": true,
+   "journal": "Adv Nutr",
+   "publication_types": [
+    "Systematic Review",
+    "Meta-Analysis",
+    "Journal Article"
+   ],
+   "quotes": [
+    "There was a significant reduction in LDL cholesterol"
+   ],
+   "retracted": false,
+   "title": "Soluble Fiber Supplementation and Serum Lipid Profile: A Systematic Review and Dose-Response Meta-Analysis of Randomized Controlled Trials.",
+   "year": "2023"
+  },
+  "36811560": {
+   "abstract_sha256": "d4e159c105be579175c79a50b3a6e090bbeafa38d6fef1f0c1bb1f10a43e9b03",
+   "canonical_ids": [
+    "fiber"
+   ],
+   "human_mesh": true,
+   "journal": "Am J Clin Nutr",
+   "publication_types": [
+    "Systematic Review",
+    "Journal Article",
+    "Network Meta-Analysis"
+   ],
+   "quotes": [
+    "Most comparisons had a low or moderate certainty of evidence"
+   ],
+   "retracted": false,
+   "title": "Galactomannans are the most effective soluble dietary fibers in type 2 diabetes: a systematic review and network meta-analysis.",
+   "year": "2023"
+  },
+  "37432180": {
+   "abstract_sha256": "4cbef2c2e3bd9921e8d643412034a230bde738ad41fb5260732d07aca24f3ca4",
+   "canonical_ids": [
+    "collagen"
+   ],
+   "human_mesh": true,
+   "journal": "Nutrients",
+   "publication_types": [
+    "Meta-Analysis",
+    "Systematic Review",
+    "Journal Article"
+   ],
+   "quotes": [
+    "The study also identified several biases in the included RCTs"
+   ],
+   "retracted": false,
+   "title": "Effects of Oral Collagen for Skin Anti-Aging: A Systematic Review and Meta-Analysis.",
+   "year": "2023"
+  },
+  "37833676": {
+   "abstract_sha256": "39e621382a962ac07fe55908763d74c1b97255f3ff2fc3073adce09633e4382e",
+   "canonical_ids": [
+    "fiber"
+   ],
+   "human_mesh": true,
+   "journal": "Nutr J",
+   "publication_types": [
+    "Systematic Review",
+    "Meta-Analysis",
+    "Journal Article"
+   ],
+   "quotes": [
+    "Soluble fiber supplementation significantly decreased SBP"
+   ],
+   "retracted": false,
+   "title": "Effect of soluble fiber on blood pressure in adults: a systematic review and dose-response meta-analysis of randomized controlled trials.",
+   "year": "2023"
+  },
+  "39212129": {
+   "abstract_sha256": "d3a5dd52b569d5097a1bde8903697b95eccd2cc31d77117e3dacd346a2a7fd66",
+   "canonical_ids": [
+    "collagen"
+   ],
+   "human_mesh": true,
+   "journal": "Clin Exp Rheumatol",
+   "publication_types": [
+    "Journal Article",
+    "Meta-Analysis",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "oral collagen administration relieves OA symptoms"
+   ],
+   "retracted": false,
+   "title": "Effect of collagen supplementation on knee osteoarthritis: an updated systematic review and meta-analysis of randomised controlled trials.",
+   "year": "2025"
+  },
+  "40324552": {
+   "abstract_sha256": "9517bc03c4ce889b2101006c8e839f7ff2326418f7cbf18750450016cba50464",
+   "canonical_ids": [
+    "collagen"
+   ],
+   "human_mesh": true,
+   "journal": "Am J Med",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis"
+   ],
+   "quotes": [
+    "high-quality studies revealed no significant effect in all categories"
+   ],
+   "retracted": false,
+   "title": "Effects of Collagen Supplements on Skin Aging: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+   "year": "2025"
+  },
+  "40731001": {
+   "abstract_sha256": "e8222a7fb41828608b9613130f306827cfb379d52c999ebd425ab95eaf9d3fdb",
+   "canonical_ids": [
+    "turmeric"
+   ],
+   "human_mesh": true,
+   "journal": "BMC Complement Med Ther",
+   "publication_types": [
+    "Journal Article",
+    "Network Meta-Analysis",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "the certainty of evidence remains low"
+   ],
+   "retracted": false,
+   "title": "Effect of turmeric products on knee osteoarthritis: a systematic review and network meta-analysis.",
+   "year": "2025"
+  },
+  "41641880": {
+   "abstract_sha256": "2f697de460a0ab4eadadae4712dddf8a64efcbdd66560f4dd5beff70bdface9e",
+   "canonical_ids": [
+    "ginkgo"
+   ],
+   "human_mesh": true,
+   "journal": "Cochrane Database Syst Rev",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review",
+    "Meta-Analysis"
+   ],
+   "quotes": [
+    "In people with dementia, there may be small to moderate benefits at six months"
+   ],
+   "retracted": false,
+   "title": "Ginkgo biloba for cognitive impairment and dementia.",
+   "year": "2026"
+  },
+  "42342959": {
+   "abstract_sha256": "2b4ee7c2204a376fd05d35c5bcc7dc529bfef485bdf442d749322ec5f051fd1a",
+   "canonical_ids": [
+    "collagen"
+   ],
+   "human_mesh": true,
+   "journal": "Eur J Clin Nutr",
+   "publication_types": [
+    "Journal Article",
+    "Systematic Review"
+   ],
+   "quotes": [
+    "majority of included trials were rated as having a high risk of bias"
+   ],
+   "retracted": false,
+   "title": "Efficacy and safety of hydrolyzed collagen supplementation on skin health outcomes: a systematic literature review of randomized controlled trials.",
+   "year": "2026"
+  }
+ },
+ "searched_on": "2026-11-03",
+ "searches": {
+  "collagen": {
+   "date": "2026-11-03",
+   "per_query": {
+    "collagen_rct": 113,
+    "collagen_syn": 29
+   },
+   "records_screened": 142,
+   "search_query": "(\"collagen peptides\"[tiab] OR \"collagen hydrolysate\"[tiab] OR \"hydrolyzed collagen\"[tiab] OR \"hydrolysed collagen\"[tiab] OR \"collagen supplementation\"[tiab] OR gelatin[ti]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (\"collagen peptides\"[tiab] OR \"collagen hydrolysate\"[tiab] OR \"hydrolyzed collagen\"[tiab] OR \"hydrolysed collagen\"[tiab] OR \"collagen supplementation\"[tiab]) AND (oral[tiab] OR supplement*[tiab]) AND randomized controlled trial[pt] AND humans[mh]"
+  },
+  "fiber": {
+   "date": "2026-11-03",
+   "per_query": {
+    "fiber_syn": 163
+   },
+   "records_screened": 163,
+   "search_query": "(\"Dietary Fiber\"[Mesh] OR \"fiber supplement*\"[tiab] OR \"fibre supplement*\"[tiab] OR \"fiber supplementation\"[tiab] OR \"fibre supplementation\"[tiab]) AND (supplement*[tiab]) AND (meta-analysis[pt]) AND humans[mh]"
+  },
+  "ginkgo": {
+   "date": "2026-11-03",
+   "per_query": {
+    "ginkgo_rct_dementia": 140,
+    "ginkgo_syn": 201
+   },
+   "records_screened": 341,
+   "search_query": "(\"Ginkgo biloba\"[Mesh] OR ginkgo[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (\"Ginkgo biloba\"[Mesh] OR ginkgo[tiab]) AND (randomized controlled trial[pt]) AND (dementia[tiab] OR cognitive[tiab] OR memory[tiab]) AND humans[mh]"
+  },
+  "methionine": {
+   "date": "2026-11-03",
+   "per_query": {
+    "methionine_all": 449
+   },
+   "records_screened": 449,
+   "search_query": "(\"L-methionine\"[tiab] OR \"methionine supplementation\"[tiab] OR \"oral methionine\"[tiab] OR \"Methionine/administration and dosage\"[Mesh] OR \"Methionine/therapeutic use\"[Mesh]) AND (randomized controlled trial[pt] OR clinical trial[pt] OR meta-analysis[pt] OR systematic review[pt]) AND humans[mh]"
+  },
+  "turmeric": {
+   "date": "2026-11-03",
+   "per_query": {
+    "turmeric_rct": 106,
+    "turmeric_syn": 208
+   },
+   "records_screened": 314,
+   "search_query": "(\"Curcuma\"[Mesh] OR turmeric[tiab] OR \"Curcuma longa\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (turmeric[ti] OR \"Curcuma longa\"[ti]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]"
+  }
+ },
+ "source": "NCBI E-utilities esearch and efetch"
+}

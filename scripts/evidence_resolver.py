@@ -633,6 +633,13 @@ def _load_botanical_index() -> Dict[str, Dict[str, Any]]:
     return idx
 
 
+# What a documented review concludes from a fact the label states. A required
+# term that is simply absent is not here: that row never declared a preparation.
+_DOCUMENTED_REVIEW_CONCLUSIONS = frozenset({
+    "clinical_form_excluded", "clinical_identity_excluded", "clinical_delivery_mismatch",
+    "clinical_population_mismatch", "label_purpose_evidence_mismatch",
+})
+
 LITERATURE_REVIEW_RESULTS = frozenset({
     "applicability_unestablished", "no_qualifying_human_evidence",
     "not_efficacy_relevant", "identity_material_unresolved",
@@ -1409,6 +1416,30 @@ def resolve_evidence_for_row(
                 scoped["matched_source_row_refs"] = [source_ref]
             decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False)
             if decision["status"] not in {"applicable", "not_curated"}:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code=decision["reason_code"], owner_facts=owner_facts,
+                    blocking_reasons=["literature_applicability_unestablished"],
+                )
+
+        # A documented source review states its preparation, purpose, sources and
+        # scope once for reuse, and earns no credit here. Dose reads ``applicability``,
+        # so this scope is separate. A row that declares no preparation matches
+        # neither list and stays open: an unresolved match is not a conclusion.
+        documented_scope = lit_entry.get("documented_review_scope")
+        if documented_scope is not None:
+            from clinical_applicability import assess_clinical_applicability
+            scoped = {**lit_entry, "applicability": documented_scope, "ingredient": name,
+                      "matched_canonical_ids": [canonical]}
+            source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
+            if source_ref:
+                scoped["matched_source_row_refs"] = [source_ref]
+            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False)
+            if decision["status"] == "applicable":
+                material_form_matched = True
+            elif decision["reason_code"] in _DOCUMENTED_REVIEW_CONCLUSIONS:
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
                     disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
