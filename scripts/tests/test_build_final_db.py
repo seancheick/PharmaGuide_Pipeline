@@ -7025,7 +7025,10 @@ def _listed_product(dsld_id="312465", safety_status="no_known_catalog_concern"):
     return enriched, scored
 
 
-def test_listed_non_supplement_leaves_both_catalog_surfaces(tmp_path):
+def test_listed_non_supplement_leaves_both_catalog_surfaces(tmp_path, monkeypatch):
+    import build_final_db
+
+    monkeypatch.setattr(build_final_db, "_unreviewed_warnings", lambda *_args: [])
     enriched, scored = _listed_product()
     kept = make_enriched()
     result, out = _run_build(
@@ -7049,6 +7052,44 @@ def test_a_safety_finding_keeps_a_listed_product_visible(safety_status):
     assert not any(
         "excluded from the catalog" in issue for issue in validate_export_contract(enriched, scored)
     )
+
+
+def _with_warning(monkeypatch, exclusion=None):
+    import build_final_db
+
+    warning = {"type": "drug_interaction", "title": "Iron / thyroid_medications", "severity": "caution"}
+    monkeypatch.setattr(build_final_db, "build_detail_blob", lambda *_a, **_k: {"warnings": [warning]})
+    if exclusion is not None:
+        monkeypatch.setattr(build_final_db, "_catalog_exclusions", lambda: {"312465": exclusion})
+    return warning
+
+
+def _is_excluded(enriched, scored):
+    return any(
+        "excluded from the catalog" in issue for issue in validate_export_contract(enriched, scored)
+    )
+
+
+def test_a_warning_keeps_a_listed_product_visible(monkeypatch):
+    _with_warning(monkeypatch)
+    assert not _is_excluded(*_listed_product())
+
+
+def test_a_reviewed_warning_lets_the_exclusion_apply(monkeypatch):
+    from build_final_db import _warning_fingerprint
+
+    exclusion = {"category": "food", "reviewed_warnings": []}
+    exclusion["reviewed_warnings"].append(_warning_fingerprint(_with_warning(monkeypatch, exclusion)))
+    assert _is_excluded(*_listed_product())
+
+
+def test_a_review_does_not_cover_a_changed_warning(monkeypatch):
+    from build_final_db import _warning_fingerprint
+
+    exclusion = {"category": "food", "reviewed_warnings": []}
+    warning = _with_warning(monkeypatch, exclusion)
+    exclusion["reviewed_warnings"].append(_warning_fingerprint({**warning, "severity": "monitor"}))
+    assert not _is_excluded(*_listed_product())
 
 
 def test_unlisted_product_is_not_excluded():

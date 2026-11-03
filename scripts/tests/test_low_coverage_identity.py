@@ -117,3 +117,33 @@ def test_oil_wrapper_row_still_reads_the_total_as_epa_plus_dha(run):
     assert _child_disclosed_epa_dha_owner(
         total, [r for r in rows if r is not other] + [{**other, "name": "ALA", "canonical_id": "ala"}],
     ) is None
+
+
+# Listed as food, but its label prints calcium and iron, so the interaction rules
+# apply. An unreviewed warning keeps the label listed; a label with none leaves.
+def test_listed_label_with_warnings_stays_and_one_without_leaves():
+    from build_final_db import build_detail_blob, validate_export_contract
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    logging.disable(logging.INFO)
+    normalizer, enricher = EnhancedDSLDNormalizer(), SupplementEnricherV3()
+
+    def built(pid):
+        raw = json.loads((FIXTURES / f"low_coverage_{pid}_raw.json").read_text())
+        enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
+        return enriched, build_scored_artifact(enriched)
+
+    def excluded(pair):
+        return any("excluded from the catalog" in issue for issue in validate_export_contract(*pair))
+
+    bar = built("25583")
+    assert {"Calcium / thyroid_medications", "Iron / thyroid_medications"} <= {
+        w.get("title") for w in build_detail_blob(*bar)["warnings"]
+    }
+    assert not excluded(bar)
+
+    oil = built("78355")
+    assert not build_detail_blob(*oil)["warnings"]
+    assert excluded(oil)
