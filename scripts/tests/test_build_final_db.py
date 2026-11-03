@@ -500,7 +500,7 @@ def test_build_backfills_v4_category_percentiles(monkeypatch):
         return e
 
     def _scored(pid):
-        return _artifact_from_canned(pid, canned[pid])
+        return {**_artifact_from_canned(pid, canned[pid]), "quality_assessment_status": "complete"}
 
     enriched_list = [
         _enriched(pid, f"11111111{i:05d}", "fish_oil") for i, (pid, _) in enumerate(ranked)
@@ -546,6 +546,62 @@ def test_build_backfills_v4_category_percentiles(monkeypatch):
     assert rows["805"][1] == 0.0 and rows["805"][2] == 100.0
     # Solo-category product: cohort of 1 (<5) -> unranked, all three columns NULL.
     assert rows["806"][1] is None and rows["806"][2] is None and rows["806"][3] is None
+
+
+def test_partial_assessments_are_not_ranked_and_do_not_shift_complete_ranks():
+    """A9: a percentile reads as a finished result, so partial products get none."""
+    ranked = [("811", 95.0), ("812", 85.0), ("813", 75.0), ("814", 65.0), ("815", 55.0)]
+    canned = {pid: _canned_v4(status="scored", quality_100=sc) for pid, sc in ranked}
+    canned["816"] = _canned_v4(status="scored", quality_100=99.0)
+
+    def _enriched(pid, upc):
+        e = make_enriched()
+        e["dsld_id"] = pid
+        e["upcSku"] = upc
+        e["supplement_taxonomy"] = {
+            "primary_type": "omega_3",
+            "percentile_category": "fish_oil",
+            "classification_confidence": 0.95,
+        }
+        return e
+
+    pids = [pid for pid, _ in ranked] + ["816"]
+    enriched_list = [_enriched(pid, f"22222222{i:05d}") for i, pid in enumerate(pids)]
+    scored_list = [{**_artifact_from_canned(pid, canned[pid]), "quality_assessment_status": "complete"}
+                   for pid in pids]
+    scored_list[-1]["quality_assessment_status"] = "partial"
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        enriched_dir = root / "enriched"
+        enriched_dir.mkdir()
+        scored_dir = root / "scored"
+        scored_dir.mkdir()
+        output_dir = root / "out"
+        (enriched_dir / "batch.json").write_text(json.dumps(enriched_list), encoding="utf-8")
+        (scored_dir / "batch.json").write_text(json.dumps(scored_list), encoding="utf-8")
+        result = build_final_db(
+            [str(enriched_dir)],
+            [str(scored_dir)],
+            str(output_dir),
+            str(Path(__file__).parent.parent),
+        )
+        assert result["product_count"] == 6, result
+        conn = sqlite3.connect(output_dir / "pharmaguide_core.db")
+        try:
+            rows = {
+                r[0]: r
+                for r in conn.execute(
+                    "SELECT dsld_id, percentile_rank, percentile_top_pct, "
+                    "percentile_cohort FROM products_core"
+                ).fetchall()
+            }
+        finally:
+            conn.close()
+
+    assert rows["816"][1:] == (None, None, None)
+    # The partial 99 is not in the cohort: the top complete product still ranks first.
+    assert rows["811"][3] == 5 and rows["811"][1] == 80.0 and rows["811"][2] == 20.0
 
 
 def test_build_core_row_includes_flutter_convenience_fields():

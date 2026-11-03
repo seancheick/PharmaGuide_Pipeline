@@ -198,9 +198,18 @@ def _score_projection(artifact: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
+def _with_captured_panels(product: Mapping[str, Any]) -> dict[str, Any]:
+    """Fixtures describe scored rows, so state the panels a real label always captures."""
+    fixture = copy.deepcopy(dict(product))
+    rows = fixture.get("activeIngredients") or fixture.get("ingredient_quality_data", {}).get("ingredients")
+    fixture["activeIngredients"] = rows or [{"name": fixture.get("product_name")}]
+    fixture.setdefault("inactiveIngredients", [])
+    return fixture
+
+
 def evaluate_fixture(case: ArchetypeFixture) -> ArchetypeFixtureResult:
     """Score one fixture once and compare it with its reviewed snapshot."""
-    actual = _score_projection(scoring_entry_point(copy.deepcopy(case.product)))
+    actual = _score_projection(scoring_entry_point(_with_captured_panels(case.product)))
     passed = actual == case.expected
     diff = {} if passed else {"expected": case.expected, "actual": actual}
     return ArchetypeFixtureResult(

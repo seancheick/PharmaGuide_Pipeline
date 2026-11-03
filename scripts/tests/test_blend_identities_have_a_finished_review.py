@@ -51,7 +51,24 @@ def test_the_owner_review_is_finished(enriched, pid):
     ]
 
 
-@pytest.mark.parametrize("pid", _REVIEW_PRODUCTS)
+# 315089 keeps a separate open review: Tongkat Ali Root Extract is a material active
+# still `not_yet_evaluated`, so the blend review earns its credit without closing it.
+_FINISHED_PILLAR_PRODUCTS = [pid for pid in _REVIEW_PRODUCTS if pid != "315089"]
+
+
+def test_a_finished_blend_review_does_not_close_another_actives_review(enriched):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    scored = build_scored_artifact(enriched["315089"])
+    evidence = scored["assessment_readiness"]["evidence"]
+    open_rows = [row["name"] for row in evidence["ingredient_assessments"]
+                 if row["material"] and row["state"] == "not_yet_evaluated"]
+    assert open_rows == ["Tongkat Ali Root Extract"]
+    assert scored["quality_pillars_v4"]["evidence"]["score"] > 0
+    assert scored["quality_pillars_v4"]["evidence"]["display_state"] == "not_yet_reviewed"
+
+
+@pytest.mark.parametrize("pid", _FINISHED_PILLAR_PRODUCTS)
 def test_the_evidence_pillar_no_longer_says_not_yet_reviewed(enriched, pid):
     from scoring_v4.scored_artifact import build_scored_artifact
 

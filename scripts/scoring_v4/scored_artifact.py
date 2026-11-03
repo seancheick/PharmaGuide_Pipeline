@@ -99,8 +99,9 @@ def _product_safety_status(
         return "unsafe"
     if verdict == "CAUTION":
         return "caution"
-    if safety_resolvers_failed(safety_gate.get("ingredient_assessment_errors")):
-        # No hard verdict, and a safety resolver never checked the rows.
+    if safety_gate.get("ingredient_assessment_errors"):
+        # No finding, but the screen did not read everything: a resolver failed
+        # or a panel was never captured. Neither is "no known concern".
         return "not_assessed"
     if verdict in {"", "SAFE"}:
         return "no_known_catalog_concern"
@@ -367,7 +368,9 @@ def assemble_scored_artifact(
         was_assessed=safety_was_assessed,
     )
     unfinished = unfinished_source_assessment(enriched_product, _safe_dict(module_breakdown))
-    from assessment_readiness import evaluate_release_assessment
+    from assessment_readiness import (
+        evaluate_release_assessment, evidence_review_open, safety_assessment_status,
+    )
     assessment_readiness = {**assessment_readiness, "release_assessment": evaluate_release_assessment(
         enriched_product, assessment_readiness, _safe_dict(module_breakdown),
         unfinished_source=unfinished,
@@ -388,9 +391,18 @@ def assemble_scored_artifact(
     # unresolved source review. A provisional calculation must render the
     # same completeness conclusion without recomputing that policy here.
     release_complete = assessment_readiness["release_assessment"]["is_complete"]
+    pillars = v4.get("quality_pillars_v4")
+    if (status == "scored" and _safe_dict(pillars).get("evidence")
+            and evidence_review_open(assessment_readiness["release_assessment"])):
+        from scoring_v4.quality_score import mark_evidence_review_open
+        v4 = {**v4, "quality_pillars_v4": {
+            **pillars, "evidence": mark_evidence_review_open(pillars["evidence"])}}
+    # A panel the safety screen never read keeps the score (a capture gap is a
+    # recorded fact) but cannot make the assessment finished.
+    capture_gap = "safety_capture_incomplete" if safety_gate.get("ingredient_assessment_errors") else None
     quality_assessment_status = _quality_assessment_status(
         status, dose_safety, v4.get("quality_pillars_v4"),
-        unfinished or (None if release_complete else "release_assessment_incomplete"),
+        unfinished or (None if release_complete else "release_assessment_incomplete") or capture_gap,
     )
     quality_score = v4.get("quality_score_v4_100")
     verdict = _public_verdict(v4)
@@ -470,6 +482,11 @@ def assemble_scored_artifact(
         "route_confidence": route_confidence,
         "product_safety_status": product_safety_status,
         "quality_assessment_status": quality_assessment_status,
+        "safety_assessment_status": safety_assessment_status(
+            quality_score_status=status, product_safety_status=product_safety_status,
+            safety_gate=safety_gate, dose_safety=dose_safety,
+            release=assessment_readiness["release_assessment"],
+        ),
         "assessment_readiness": assessment_readiness,
         "dose_safety_evaluation": dose_safety,
         "quality_tier": v4.get("quality_tier"),

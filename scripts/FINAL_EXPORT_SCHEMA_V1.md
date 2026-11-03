@@ -117,6 +117,7 @@ CREATE TABLE products_core (
     quality_score_status            TEXT,   -- scored | suppressed_safety | not_scored
     product_safety_status           TEXT,   -- blocked | unsafe | caution | no_known_catalog_concern | not_assessed
     quality_assessment_status       TEXT,   -- complete | partial | failed
+    safety_assessment_status        TEXT,   -- complete | incomplete; NULL = not known, the app withholds its all-clear
     quality_tier                    TEXT,   -- Exceptional/Excellent/Very good/Good/Needs improvement/Poor
     quality_score_suppressed_reason TEXT,
     v4_module                       TEXT,   -- generic/probiotic/omega/multi_or_prenatal/sports
@@ -138,7 +139,7 @@ CREATE TABLE products_core (
     score_brand_trust             REAL,
     score_brand_trust_max         REAL,
 
-    percentile_rank               REAL,
+    percentile_rank               REAL,    -- NULL unless quality_assessment_status = complete
     percentile_top_pct            REAL,
     percentile_category           TEXT,
     percentile_label              TEXT,
@@ -186,7 +187,7 @@ CREATE TABLE products_core (
     contains_blood_thinners       INTEGER DEFAULT 0,  -- omega-3, garlic, ginkgo, etc.
 
     -- Enhancement 2: Social Sharing Metadata
-    share_title                   TEXT,    -- Pre-formatted share title with score
+    share_title                   TEXT,    -- Pre-formatted share title; score only when the assessment is complete
     share_description             TEXT,    -- Pre-formatted 2-3 sentence summary
     share_highlights              TEXT,    -- JSON array: 3-4 key positive attributes
     share_og_image_url            TEXT,    -- Open Graph optimized image URL
@@ -288,7 +289,7 @@ CREATE INDEX idx_products_core_contains_nootropics ON products_core(contains_noo
 | `contains_stimulants`          | Derived from ingredient names                             | Boolean: caffeine, synephrine, bitter orange, yohimbine, etc.                           |
 | `contains_sedatives`           | Derived from ingredient names                             | Boolean: melatonin, valerian, passionflower, lemon balm, GABA                           |
 | `contains_blood_thinners`      | Derived from ingredient names                             | Boolean: omega-3, garlic, ginkgo, turmeric, curcumin, vitamin E                         |
-| `share_title`                  | Generated from product_name, brandName, score_100         | Pre-formatted: "Nature's Bounty Magnesium - 92/100 ⭐"                                  |
+| `share_title`                  | Generated from product_name, brandName, score_100         | Pre-formatted: "Nature's Bounty Magnesium - 92/100 ⭐"; no number on a partial or failed assessment |
 | `share_description`            | Generated from grade, evidence, certs, dietary flags      | Pre-formatted 2-3 sentence summary                                                      |
 | `share_highlights`             | Generated from formulation_detail, certs, dietary flags   | JSON array of 3-4 positive attributes                                                   |
 | `share_og_image_url`           | `enriched.imageUrl`                                       | Product image URL (OG image generation future enhancement)                              |

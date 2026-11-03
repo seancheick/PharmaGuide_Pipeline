@@ -1565,6 +1565,56 @@ def evaluate_release_assessment(
             "unfinished_source_assessment": unfinished_source}
 
 
+#: Every release blocker that belongs to the Evidence review. Any other blocker,
+#: including one added later, means a check other than Evidence is unfinished.
+_EVIDENCE_RELEASE_BLOCKERS = frozenset({
+    "evidence_assessment_incomplete",
+    "omega_evidence_assessment_incomplete",
+    "probiotic_evidence_assessment_incomplete",
+    "probiotic_contributing_evidence_receipts_missing",
+    "probiotic_contributing_context_incomplete",
+    "contributing_evidence_receipts_missing",
+    "contributing_source_review_incomplete",
+    "clinical_applicability_unreviewed",
+})
+_KNOWN_SAFETY_OUTCOMES = frozenset({"blocked", "unsafe", "caution", "no_known_catalog_concern"})
+
+
+def _is_evidence_blocker(blocker: Any) -> bool:
+    return isinstance(blocker, str) and blocker.split(":", 1)[0] in _EVIDENCE_RELEASE_BLOCKERS
+
+
+def evidence_review_open(release: Mapping[str, Any]) -> bool:
+    """True when a release blocker says the Evidence review itself is unfinished."""
+    return any(_is_evidence_blocker(blocker) for blocker in _safe_list(release.get("blockers")))
+
+
+def safety_assessment_status(
+    *, quality_score_status: Any, product_safety_status: Any, safety_gate: Any,
+    dose_safety: Any, release: Any,
+) -> str:
+    """Whether the catalog safety checks finished: ``complete`` or ``incomplete``.
+
+    A fact, separate from Evidence and overall quality: an open Evidence review
+    alone leaves this complete. It reports only ``complete`` when each input
+    proves it, so anything missing or unrecognized is incomplete. A found concern
+    is a finished check, and this field never softens one.
+    """
+    gate, dose, assessment = _safe_dict(safety_gate), _safe_dict(dose_safety), _safe_dict(release)
+    blockers = assessment.get("blockers")
+    dose_counts = dose.get("state_counts")
+    finished = (
+        quality_score_status in {"scored", "suppressed_safety"}
+        and product_safety_status in _KNOWN_SAFETY_OUTCOMES
+        and gate.get("ingredient_assessment_complete") is True
+        and not gate.get("ingredient_assessment_errors")
+        and isinstance(dose_counts, dict) and dose_counts.get("material_but_unresolved", 0) == 0
+        and isinstance(blockers, list)
+        and all(_is_evidence_blocker(blocker) for blocker in blockers)
+    )
+    return "complete" if finished else "incomplete"
+
+
 def _current_evidence_dimension_receipt(enriched: Mapping, module: str, evidence: Mapping) -> bool:
     """Validate only the retained dimension through its existing numerical owner.
 

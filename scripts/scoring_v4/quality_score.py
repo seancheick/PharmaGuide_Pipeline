@@ -1108,6 +1108,29 @@ _EVIDENCE_ZERO_CLASS_FALLBACK = {
 }
 
 
+_EVIDENCE_OPEN_REVIEW_REASON = (
+    "Some research on this label earned credit, but our review of the rest "
+    "is still open, so this assessment is not finished."
+)
+
+
+def mark_evidence_review_open(pillar: Dict[str, Any]) -> Dict[str, Any]:
+    """Present an Evidence pillar whose review the release owner found unfinished.
+
+    Scoring only sees the winning result state, so one authority-backed row can
+    read as a finished review while another active is still pending. The points
+    and receipt stay; only the claim that the review ended moves.
+    """
+    if pillar.get("display_state") != "assessed":
+        return pillar
+    return {
+        **pillar,
+        "display_state": "not_yet_reviewed",
+        "reason": (_EVIDENCE_OPEN_REVIEW_REASON if _num(pillar.get("score")) > 0
+                   else _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]),
+    }
+
+
 def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
                      cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Category-aware evidence fit against reviewed engine/purpose ceilings.
@@ -1179,8 +1202,7 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     if val > 0 and evidence_display_state(result_state) == "not_yet_reviewed":
         # Credit already earned cannot finish the assessment while other
         # research on the label is still under review.
-        reason = ("Some research on this label earned credit, but our review of the rest "
-                  "is still open, so this assessment is not finished.")
+        reason = _EVIDENCE_OPEN_REVIEW_REASON
     pillar = {
         "score": val,
         "max": weight,
