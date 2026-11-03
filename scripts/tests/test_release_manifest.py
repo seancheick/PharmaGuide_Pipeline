@@ -29,6 +29,7 @@ import release_manifest as rm  # noqa: E402
 import supabase_client  # noqa: E402
 import sync_to_supabase as sync  # noqa: E402
 
+_REAL_SIGNED_RULE_GATE = sync._enforce_signed_rule_gate
 CATALOG_VERSION = "2026.10.01.120000"
 RULES_VERSION = "1.0.15"
 KEY_ID = "test-key-1"
@@ -661,6 +662,7 @@ def harness(monkeypatch, gate_file):
     monkeypatch.setattr(sync, "catalog_search_rows", lambda *_a, **_k: [])
     monkeypatch.setattr(sync, "_ensure_registry_validating", lambda *_a, **_k: None)
     monkeypatch.setattr(sync, "_promote_registry_release", lambda *_a, **_k: None)
+    monkeypatch.setattr(sync, "_enforce_signed_rule_gate", lambda *_a, **_k: None)
     return SimpleNamespace(events=events, remote=remote, client=client)
 
 
@@ -894,6 +896,12 @@ def test_every_release_full_sync_carries_the_signed_arguments():
     assert gate < source.index('scripts/sync_to_supabase.py "$DIST_DIR"')
 
 
+def test_release_full_gives_a_signed_sync_the_app_pin_to_compare_rules_with():
+    source = RELEASE_FULL.read_text()
+    forward = source.index('RELEASE_SIGN_ARGS+=(--rule-pin "$FLUTTER_REPO/tool/interaction_db.release.json")')
+    assert forward < source.index('scripts/sync_to_supabase.py "$DIST_DIR"')
+
+
 def test_sync_refuses_a_manifest_for_another_build_before_any_write(tmp_path, harness, key):
     other = _make_catalog(tmp_path / "other", version="2026.10.02.120000")
     catalog = _make_catalog(tmp_path / "catalog")
@@ -1110,6 +1118,168 @@ def test_rollback_build_passes_sync_validation_and_can_be_signed(tmp_path, key, 
     shard = json.loads((output / "share_index" / "00.json").read_text())
     assert shard["catalogVersion"] == "2026.11.02.120000"
     assert not (source / "share_index").exists()
+
+
+def _add_version_bound_images(build, version=CATALOG_VERSION):
+    """Images as the extractor leaves them: paths in the index and the DB name the version."""
+    images = build / "product_images"
+    images.mkdir()
+    index = {}
+    for dsld_id in ("1", "2"):
+        (images / f"{dsld_id}.webp").write_bytes(b"webp-" + dsld_id.encode())
+        index[dsld_id] = {"filename": f"{dsld_id}.webp", "remote_path": f"v{version}/{dsld_id}.webp"}
+    (images / "product_image_index.json").write_text(json.dumps(index))
+    conn = sqlite3.connect(build / "pharmaguide_core.db")
+    with conn:
+        conn.execute("ALTER TABLE products_core ADD COLUMN image_thumbnail_url TEXT")
+        conn.execute(
+            "UPDATE products_core SET image_thumbnail_url = 'product-images/v' || ? || '/' || dsld_id || '.webp'",
+            (version,),
+        )
+    conn.close()
+    manifest = json.loads((build / "export_manifest.json").read_text())
+    manifest["checksum"] = f"sha256:{_sha(build / 'pharmaguide_core.db')}"
+    (build / "export_manifest.json").write_text(json.dumps(manifest))
+
+
+def test_rollback_moves_version_bound_images_to_the_new_version(tmp_path, key, harness):
+    source = _make_catalog(tmp_path / "good")
+    _add_version_bound_images(source)
+    source_index = (source / "product_images" / "product_image_index.json").read_bytes()
+    new_version = "2026.11.02.120000"
+    output = tmp_path / "rollback"
+    rm.prepare_rollback(source, output, db_version=new_version)
+
+    index = json.loads((output / "product_images" / "product_image_index.json").read_text())
+    assert {entry["remote_path"] for entry in index.values()} == {
+        f"v{new_version}/1.webp", f"v{new_version}/2.webp",
+    }
+    assert (output / "product_images" / "1.webp").read_bytes() == b"webp-1"
+    assert (source / "product_images" / "product_image_index.json").read_bytes() == source_index
+    conn = sqlite3.connect(output / "pharmaguide_core.db")
+    urls = {row[0] for row in conn.execute("SELECT image_thumbnail_url FROM products_core")}
+    conn.close()
+    assert urls == {
+        f"product-images/v{new_version}/1.webp", f"product-images/v{new_version}/2.webp",
+    }
+
+    manifest, signature = _write_signed(tmp_path, _build(output, sequence=9), key)
+    result = sync.sync(
+        str(output), max_workers=1, release_manifest=manifest, release_signature=signature,
+    )
+    assert result["status"] == "synced"
+    assert ("upload", f"v{new_version}/1.webp", False) in harness.events
+
+
+def test_rollback_leaves_unversioned_image_urls_alone(tmp_path):
+    source = _make_catalog(tmp_path / "good")
+    conn = sqlite3.connect(source / "pharmaguide_core.db")
+    with conn:
+        conn.execute("ALTER TABLE products_core ADD COLUMN image_thumbnail_url TEXT")
+        conn.execute("UPDATE products_core SET image_thumbnail_url = 'product-images/1.webp'")
+    conn.close()
+    manifest = json.loads((source / "export_manifest.json").read_text())
+    manifest["checksum"] = f"sha256:{_sha(source / 'pharmaguide_core.db')}"
+    (source / "export_manifest.json").write_text(json.dumps(manifest))
+    output = tmp_path / "rollback"
+    rm.prepare_rollback(source, output, db_version="2026.11.02.120000")
+    conn = sqlite3.connect(output / "pharmaguide_core.db")
+    assert {r[0] for r in conn.execute("SELECT image_thumbnail_url FROM products_core")} == {
+        "product-images/1.webp",
+    }
+    conn.close()
+
+
+def _rule_gate_setup(tmp_path, key):
+    _gate(rm.GATE_PATH, True, "Sean", "2026-12-01")
+    catalog = _make_catalog(tmp_path / "catalog")
+    rules = _make_rules(tmp_path / "rules")
+    manifest, signature = _write_signed(tmp_path, _build(catalog, rules), key)
+    return catalog, rules, manifest, signature
+
+
+@pytest.fixture()
+def rule_gate(monkeypatch):
+    """Records what the real gate is asked to compare, and answers as told."""
+    import rule_change_gate
+
+    seen = SimpleNamespace(baseline=None, candidate=None, errors=[])
+
+    def check(candidate, baseline, **_kwargs):
+        seen.candidate = Path(candidate).read_bytes()
+        seen.baseline = Path(baseline).read_bytes()
+        return rule_change_gate.GateResult(errors=list(seen.errors))
+
+    monkeypatch.setattr(sync, "_enforce_signed_rule_gate", _REAL_SIGNED_RULE_GATE)
+    monkeypatch.setattr(rule_change_gate, "check_rule_changes", check)
+    return seen
+
+
+def test_a_held_rule_change_stops_a_signed_rules_release_before_any_write(
+    tmp_path, harness, key, rule_gate,
+):
+    catalog, rules, manifest, signature = _rule_gate_setup(tmp_path, key)
+    previous = b"rules-the-phones-hold"
+    harness.remote.objects["rules/1.0.14/interaction_db.sqlite"] = previous
+    harness.remote.current = {
+        "db_version": "2026.09.01.000000", "checksum": "sha256:other", "release_sequence": 4,
+        "signed_release": json.dumps({
+            "rules": {"path": "rules/1.0.14/interaction_db.sqlite",
+                      "sha256": hashlib.sha256(previous).hexdigest()},
+        }),
+    }
+    rule_gate.errors = ["RULE: raised to avoid with no alert"]
+    with pytest.raises(ValueError, match="raised to avoid"):
+        sync.sync(str(catalog), max_workers=1, release_manifest=manifest,
+                  release_signature=signature, rules_dir=str(rules))
+    assert rule_gate.baseline == previous
+    assert rule_gate.candidate == (rules / "interaction_db.sqlite").read_bytes()
+    assert _uploads(harness) == []
+    assert harness.client.calls == []
+
+
+def test_the_first_signed_rules_release_compares_with_the_app_pin(
+    tmp_path, harness, key, rule_gate, monkeypatch,
+):
+    import rule_change_gate
+
+    catalog, rules, manifest, signature = _rule_gate_setup(tmp_path, key)
+    pin = tmp_path / "interaction_db.release.json"
+    pin.write_text(json.dumps({"url": "https://example.test/rules", "sha256": "abc"}))
+
+    def fetch(named, destination):
+        assert named["sha256"] == "abc"
+        Path(destination).write_bytes(b"bundled-rules")
+
+    monkeypatch.setattr(rule_change_gate, "fetch_pinned_db", fetch)
+    result = sync.sync(str(catalog), max_workers=1, release_manifest=manifest,
+                       release_signature=signature, rules_dir=str(rules),
+                       rule_pin=str(pin))
+    assert result["status"] == "synced"
+    assert rule_gate.baseline == b"bundled-rules"
+
+
+def test_a_signed_rules_release_with_no_baseline_is_refused(tmp_path, harness, key, rule_gate):
+    catalog, rules, manifest, signature = _rule_gate_setup(tmp_path, key)
+    with pytest.raises(ValueError, match="--rule-pin"):
+        sync.sync(str(catalog), max_workers=1, release_manifest=manifest,
+                  release_signature=signature, rules_dir=str(rules))
+    assert _uploads(harness) == []
+
+
+def test_a_baseline_that_does_not_match_its_release_is_refused(tmp_path, harness, key, rule_gate):
+    catalog, rules, manifest, signature = _rule_gate_setup(tmp_path, key)
+    harness.remote.objects["rules/1.0.14/interaction_db.sqlite"] = b"altered"
+    harness.remote.current = {
+        "db_version": "2026.09.01.000000", "checksum": "sha256:other", "release_sequence": 4,
+        "signed_release": json.dumps({
+            "rules": {"path": "rules/1.0.14/interaction_db.sqlite", "sha256": "0" * 64},
+        }),
+    }
+    with pytest.raises(ValueError, match="does not match"):
+        sync.sync(str(catalog), max_workers=1, release_manifest=manifest,
+                  release_signature=signature, rules_dir=str(rules))
+    assert _uploads(harness) == []
 
 
 def test_rollback_default_version_comes_from_the_build_owner(tmp_path):

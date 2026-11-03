@@ -527,8 +527,10 @@ freshness/checksum checks reuse already-gated artifacts.
 
 ### Signed releases and rollback
 
-`release_full.sh` publishes unsigned. Signing, key custody and catalog rollback follow
-`docs/RELEASE_SIGNING_RUNBOOK.md`.
+`release_full.sh` publishes unsigned only while `scripts/config/release_trust.json` pins no
+production key. Once one is pinned, it stops before sync with the build ready to sign; rerun it
+with `--release-manifest`, `--release-signature` and, for rules, `--release-rules-dir`. Signing,
+key custody and catalog rollback follow `docs/RELEASE_SIGNING_RUNBOOK.md`.
 
 ## 9. Tests and audits
 

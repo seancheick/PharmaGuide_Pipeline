@@ -19,6 +19,8 @@ import argparse
 import glob
 import hashlib
 import json
+import tempfile
+from pathlib import Path
 import math
 import os
 import sqlite3
@@ -1381,6 +1383,45 @@ def v4_manifest_sync_message(manifest):
     )
 
 
+def _enforce_signed_rule_gate(client, bucket, remote, signed, rule_pin):
+    """A material rule correction must not leave without its alert.
+
+    Compares with what phones hold now: the rules the current signed release
+    names, or the app pin before any rules have been published remotely.
+    """
+    import rule_change_gate
+    from supabase_client import download_file
+
+    signed_text = (remote or {}).get("signed_release")
+    current_rules = json.loads(signed_text).get("rules") if signed_text else None
+    with tempfile.TemporaryDirectory() as directory:
+        baseline = Path(directory) / "baseline_interaction_db.sqlite"
+        if current_rules:
+            data = download_file(client, bucket, current_rules["path"])
+            if hashlib.sha256(data).hexdigest() != current_rules["sha256"]:
+                raise ValueError(
+                    f"{current_rules['path']} does not match its signed release"
+                )
+            baseline.write_bytes(data)
+        elif rule_pin:
+            with open(rule_pin, encoding="utf-8") as handle:
+                rule_change_gate.fetch_pinned_db(json.load(handle), baseline)
+        else:
+            raise ValueError(
+                "No published rules to compare with; pass --rule-pin "
+                "<app repo>/tool/interaction_db.release.json"
+            )
+        try:
+            result = rule_change_gate.check_rule_changes(
+                signed["rules_local_path"], baseline,
+                live_revisions=rule_change_gate.live_alert_revisions,
+            )
+        except rule_change_gate.RuleGateError as error:
+            raise ValueError(f"Rule-change gate could not run: {error}") from error
+    if not result.ok:
+        raise ValueError("Rule-change gate: " + "; ".join(result.errors))
+
+
 def sync(
     build_dir,
     dry_run=False,
@@ -1393,6 +1434,7 @@ def sync(
     release_signature=None,
     rules_dir=None,
     test_project=False,
+    rule_pin=None,
 ):
     """Main sync workflow.
 
@@ -1514,6 +1556,10 @@ def sync(
             raise ValueError(
                 f"Release sequence {sequence} is already published with different content"
             )
+
+    # A protected test project has no phones to mislead, and no alerts live there.
+    if signed and signed_rules and not test_project:
+        _enforce_signed_rule_gate(client, bucket, remote, signed, rule_pin)
 
     historical = fetch_manifest_version(client, version)
     if historical and historical.get("checksum") != checksum:
@@ -1835,11 +1881,13 @@ def parse_args(argv=None):
                         help="Directory holding the named interaction_db.sqlite (default: build_dir)")
     parser.add_argument("--test-project", action="store_true",
                         help="Allow rules before A9 sign-off; the SUPABASE_URL host must be listed in release_trust.json")
+    parser.add_argument("--rule-pin",
+                        help="App pin file: what phones hold before any rules are published")
     args = parser.parse_args(argv)
     if bool(args.release_manifest) != bool(args.release_signature):
         parser.error('--release-manifest and --release-signature must be used together')
-    if not args.release_manifest and (args.rules_dir or args.test_project):
-        parser.error('--rules-dir and --test-project need --release-manifest')
+    if not args.release_manifest and (args.rules_dir or args.test_project or args.rule_pin):
+        parser.error('--rules-dir, --test-project and --rule-pin need --release-manifest')
     if args.preflight_only and args.release_manifest:
         parser.error('--preflight-only cannot be combined with --release-manifest')
     if not args.preflight_only and not args.build_dir:
@@ -1885,6 +1933,7 @@ def main(argv=None):
             "release_signature": args.release_signature,
             "rules_dir": args.rules_dir,
             "test_project": args.test_project,
+            "rule_pin": args.rule_pin,
         }
 
     try:

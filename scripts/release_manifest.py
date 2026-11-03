@@ -494,14 +494,25 @@ def load_signed_release(manifest_path, signature_path, *, local_manifest, rules_
     }
 
 
-# Read by sync but unchanged by a new db_version. Directories are linked, because
-# sync only reads them and blobs are addressed by hash; files are copied. share_index
-# is left out because sync regenerates it with the new version inside.
-_ROLLBACK_LINKED_DIRS = ("detail_blobs", "product_images")
+# Read by sync but unchanged by a new db_version. Detail blobs are linked, because sync
+# only reads them and they are addressed by hash; files are copied. share_index is left
+# out because sync regenerates it with the new version inside. Image files are linked one
+# by one, because their index names the version and has to be rewritten.
 _ROLLBACK_COPIED_FILES = (
-    "detail_index.json", "product_image_index.json", "core_projection_manifest.json",
-    RULES_DB, RULES_MANIFEST,
+    "detail_index.json", "core_projection_manifest.json", RULES_DB, RULES_MANIFEST,
 )
+_IMAGES_DIR = "product_images"
+_IMAGE_INDEX = "product_image_index.json"
+_IMAGE_URL_PREFIX = "product-images/"
+
+
+def _write_rollback_image_index(source_index, destination, db_version):
+    index = _read_json(source_index)
+    for entry in index.values():
+        if entry.get("remote_path") is not None:
+            entry["remote_path"] = f"v{db_version}/{entry['filename']}"
+    with open(destination, "w", encoding="utf-8") as handle:
+        json.dump(index, handle, indent=2, sort_keys=True)
 
 
 def prepare_rollback(source_dir, output_dir, *, db_version=None, newer_than=None):
@@ -510,7 +521,9 @@ def prepare_rollback(source_dir, output_dir, *, db_version=None, newer_than=None
     Keyed builds roll back by sequence alone. Builds without keys only ever move to
     a newer db_version, and they refuse a file whose embedded version differs from
     the manifest, so the version is stamped inside the catalog and its hash changes.
-    Product rows and detail blobs stay exactly as they were.
+    Sync uploads images under the new version and old versions get pruned, so an image
+    path that names the source version moves with it. Everything else in the product
+    rows, and the detail blobs, stay exactly as they were.
     """
     source = Path(source_dir).resolve()
     output = Path(output_dir).resolve()
@@ -548,6 +561,16 @@ def prepare_rollback(source_dir, output_dir, *, db_version=None, newer_than=None
                     "UPDATE export_manifest SET value = ? WHERE key = 'generated_at'",
                     (generated_at.isoformat(),),
                 )
+                columns = {row[1] for row in conn.execute("PRAGMA table_info(products_core)")}
+                if "image_thumbnail_url" in columns:
+                    old_prefix = f"{_IMAGE_URL_PREFIX}v{manifest.get('db_version')}/"
+                    conn.execute(
+                        "UPDATE products_core SET image_thumbnail_url = "
+                        "? || substr(image_thumbnail_url, ?) "
+                        "WHERE substr(image_thumbnail_url, 1, ?) = ?",
+                        (f"{_IMAGE_URL_PREFIX}v{db_version}/", len(old_prefix) + 1,
+                         len(old_prefix), old_prefix),
+                    )
         finally:
             conn.close()
 
@@ -566,9 +589,19 @@ def prepare_rollback(source_dir, output_dir, *, db_version=None, newer_than=None
         for name in _ROLLBACK_COPIED_FILES:
             if (source / name).is_file():
                 shutil.copy2(source / name, staging / name)
-        for name in _ROLLBACK_LINKED_DIRS:
-            if (source / name).is_dir():
-                os.symlink(source / name, staging / name)
+        if (source / "detail_blobs").is_dir():
+            os.symlink(source / "detail_blobs", staging / "detail_blobs")
+        if (source / _IMAGE_INDEX).is_file():
+            _write_rollback_image_index(source / _IMAGE_INDEX, staging / _IMAGE_INDEX, db_version)
+        if (source / _IMAGES_DIR).is_dir():
+            (staging / _IMAGES_DIR).mkdir()
+            for item in (source / _IMAGES_DIR).iterdir():
+                if item.name == _IMAGE_INDEX:
+                    _write_rollback_image_index(
+                        item, staging / _IMAGES_DIR / _IMAGE_INDEX, db_version,
+                    )
+                else:
+                    os.symlink(item, staging / _IMAGES_DIR / item.name)
         os.replace(staging, output)
     except BaseException:
         shutil.rmtree(staging, ignore_errors=True)

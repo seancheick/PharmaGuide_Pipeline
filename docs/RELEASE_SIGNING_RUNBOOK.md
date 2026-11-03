@@ -173,9 +173,9 @@ from source instead. Say `2026.11.02.090000` is the bad catalog and the current 
    ```
 
    This copies the catalog and stamps a fresher `db_version` into its `export_manifest` table.
-   It writes a matching `export_manifest.json` with new checksums. Product rows don't change.
-   `detail_blobs` and `product_images` are linked to the source, so keep the source in place
-   until the sync finishes.
+   It writes a matching `export_manifest.json` with new checksums. Product rows don't change,
+   except that an image path naming the source version moves to the new one. Detail blobs and
+   image files are linked to the source, so keep the source in place until the sync finishes.
 2. Build with a newer sequence and block the bad version:
 
    ```bash
@@ -195,6 +195,16 @@ from source instead. Say `2026.11.02.090000` is the bad catalog and the current 
 To replace bad rules, add `--rules-dir` with the known-good rules, `--block-rules` with the bad
 version, and a `--min-rules-version` at or below the known-good version. The rules gate applies.
 `prepare-rollback` does not re-stamp a rules file. It stays at its own version.
+
+Sync runs `scripts/rule_change_gate.py` on any signed release that names rules, comparing with the
+rules the current signed release names. Before any are published, pass
+`--rule-pin <app repo>/tool/interaction_db.release.json`; `release_full.sh` does this for you.
+
+**What a rules-only release can't change.** On a schema 2 catalog the product page's pregnancy and
+condition wording is inline in each detail blob, and the app reads `profile_warning_rules` only for
+schema 3 blobs. A correction to that wording, published as rules only, looks published and changes
+nothing. Ship it in a signed catalog release, which needs no app update either. Proved on a simulator
+on 2026-11-03; see ADR-012.
 
 ### What each build does
 
