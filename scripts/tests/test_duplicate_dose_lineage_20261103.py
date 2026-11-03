@@ -103,7 +103,11 @@ def test_folic_acid_printed_beside_its_dfe_total_is_one_exposure(enriched, dsld_
 # "Vitamin K activity from:" prints a total, then what it is made of.
 @pytest.mark.parametrize(
     "dsld_id,total,children",
-    [("62812", 2200.0, [1000.0, 1000.0, 200.0]), ("59075", 1100.0, [1000.0, 100.0])],
+    [
+        ("62812", 2200.0, [1000.0, 1000.0, 200.0]),
+        ("59075", 1100.0, [1000.0, 100.0]),
+        ("62815", 2200.0, [1000.0, 1000.0, 200.0]),
+    ],
 )
 def test_children_that_sum_to_their_printed_parent_are_one_exposure(enriched, dsld_id, total, children):
     product = enriched(dsld_id)
@@ -206,7 +210,7 @@ def test_alternate_columns_keep_one_applicable_amount(enriched, dsld_id, name, s
     printed_text = " ".join(
         str(variant.get("exact_dose_text")) for variant in display.get("serving_variants") or []
     )
-    assert f"{printed:g} " in printed_text and f"{selected:g} " in printed_text
+    assert f"{printed:,g} " in printed_text and f"{selected:,g} " in printed_text
 
 
 @pytest.mark.parametrize("dsld_id", ["271087", "231826", "252902", "62812", "59075", "317118", "253515"])
@@ -638,3 +642,123 @@ def test_a_low_above_the_limit_establishes_the_excess(enricher):
         base_severity="monitor",
     )[1]
     assert decision["evaluation_status"] == "above_threshold"
+
+
+# Transcription errors the label settles. Each label was read.
+def test_a_calcium_row_mistyped_as_vitamin_c_stops_adding_to_vitamin_c(enriched):
+    """263869 prints Calcium 55 mg (as Ester-C Calcium Ascorbate); DSLD calls it Vitamin C."""
+    product = enriched("263869")
+    assert [r["quantity"] for r in _rows(product) if r.get("canonical_id") == "vitamin_c"] == [500.0]
+    [calcium] = [r for r in _rows(product) if r.get("canonical_id") == "calcium"]
+    assert calcium["quantity"] == 55.0
+    assert _exposure(calcium) == pytest.approx(110.0)
+
+
+def test_thiamine_printed_in_milligrams_is_not_read_in_micrograms(enriched):
+    """328514 prints 125 mg, 10417% of the 1.2 mg Daily Value."""
+    [thiamine] = _rows(enriched("328514"), "Thiamine")
+    assert (thiamine["quantity"], thiamine["unit"]) == (125.0, "mg")
+
+
+@pytest.mark.parametrize(
+    "dsld_id,name,per_day",
+    [
+        ("311734", "Caffeine, Natural", 100.0),
+        ("2704", "Pantothenic Acid", 15.0),
+        ("c4sport", "Caffeine Anhydrous", 200.0),
+    ],
+)
+def test_a_serving_mislabelled_in_dsld_does_not_scale_the_daily_amount(enriched, dsld_id, name, per_day):
+    """311734: 1 scoop (21 g) daily, panel rows filed against 22 g. 2704: 2 tablespoons
+    (30 mL) daily, filed as 2 capsules per packet beside a second 30 mL serving."""
+    [row] = _rows(enriched(dsld_id), name)
+    assert row["servings_per_day_max"] == 1.0
+    assert _exposure(row) == pytest.approx(per_day)
+
+
+def test_one_amount_printed_for_two_forms_counts_once(enriched):
+    """62825 prints "4 mg meso-zeaxanthin & trans-zeaxanthin"; DSLD gives each 4 mg."""
+    rows = [r for r in _rows(enriched("62825")) if r.get("canonical_id") == "zeaxanthin"]
+    assert [r["ingredient"] for r in rows] == ["Meso-Zeaxanthin"]
+    assert _exposure(rows[0]) == pytest.approx(4.0)
+    product = enriched("62825")
+    exported = {
+        r["name"]: r for r in build_detail_blob(product, score_product_v4(product))["ingredients"]
+        if r.get("canonical_id") == "zeaxanthin"
+    }
+    assert exported["Meso-Zeaxanthin"]["dose_role"] == "declared_total"
+    assert exported["Trans-Zeaxanthin"]["dose_role"] == "form_component"
+    assert "per_day_max" not in exported["Trans-Zeaxanthin"]
+
+
+# A printed amount can miss both arrays: no upper limit keeps it out of analyzed_ingredients,
+# a strict primary contract keeps it out of ingredients. It still reaches the dose readers.
+def _exported(enriched, dsld_id):
+    product = enriched(dsld_id)
+    return product, build_detail_blob(product, score_product_v4(product))
+
+
+def test_an_amount_missing_from_both_arrays_reaches_the_dose_readers(enriched):
+    _, blob = _exported(enriched, "c4sport")
+    [caffeine] = [r for r in blob["ingredients"] if r.get("canonical_id") == "caffeine"]
+    assert caffeine["raw_source_path"] == "ingredientRows[14].nestedRows[1]"
+    assert caffeine["dose_role"] == "declared_total"
+    assert (caffeine["per_day_min"], caffeine["per_day_max"], caffeine["converted_unit"]) == (200.0, 200.0, "mg")
+    # Contract fields only: nothing a reader could take for an analysis, a limit or a flag.
+    assert set(caffeine) == {
+        "name", "canonical_id", "raw_source_path", "dose_role",
+        "per_day_min", "per_day_max", "converted_unit",
+    }
+
+
+def test_restoring_a_dose_row_adds_no_label_row(enriched):
+    _, blob = _exported(enriched, "c4sport")
+    paths = [r.get("raw_source_path") for r in blob["ingredients"]]
+    assert len(paths) == len(set(paths))
+    assert "ingredientRows[14].nestedRows[1]" in paths
+    assert [r.get("raw_source_path") for r in blob["display_ingredients"]].count(
+        "ingredientRows[14].nestedRows[1]"
+    ) == 1
+
+
+@pytest.mark.parametrize("dsld_id", ["62825", "64845"])
+def test_a_component_never_comes_back_as_a_dose_row(enriched, dsld_id):
+    product, blob = _exported(enriched, dsld_id)
+    components = {
+        r["raw_source_path"] for r in _rows(product) if r.get("dose_role") in NOT_AN_EXPOSURE
+    }
+    counted = [
+        r for r in blob["ingredients"]
+        if r.get("raw_source_path") in components and r.get("dose_role") not in NOT_AN_EXPOSURE
+    ]
+    assert not counted
+
+
+def test_a_row_represented_by_its_exported_parent_is_not_added():
+    from build_final_db import _append_dose_only_rows
+
+    ingredients = [{"raw_source_path": "ingredientRows[0]", "name": "BCAA"}]
+    _append_dose_only_rows(
+        ingredients,
+        [
+            {"raw_source_path": "ingredientRows[0].nestedRows[0]", "ingredient": "Leucine",
+             "canonical_id": "leucine", "dose_role": "declared_total", "ul_gate_eligible": False,
+             "per_day_min": 2.5, "per_day_max": 2.5, "converted_unit": "g"},
+        ],
+    )
+    assert len(ingredients) == 1
+
+
+def test_a_row_the_analyzed_export_keeps_is_not_added():
+    from build_final_db import _append_dose_only_rows
+
+    ingredients = []
+    _append_dose_only_rows(
+        ingredients,
+        [
+            {"raw_source_path": "ingredientRows[1]", "ingredient": "Polyphenols",
+             "canonical_id": "polyphenols", "dose_role": "declared_total", "ul_gate_eligible": True,
+             "per_day_min": 400.0, "per_day_max": 400.0, "converted_unit": "mg"},
+        ],
+    )
+    assert ingredients == []

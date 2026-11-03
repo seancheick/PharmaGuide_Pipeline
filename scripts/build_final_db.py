@@ -6984,8 +6984,11 @@ def _normalized_dose_entry(norm_raw: Any, index: int, raw: str, name: str,
     return {}
 
 
+_DOSE_DAILY_FIELDS = ("per_day_min", "per_day_max", "converted_unit")
+
+
 def _stamp_dose_contract(
-    ingredients: List[Dict], analyzed_rows: Any, serving: Dict
+    ingredients: List[Dict], analyzed_rows: Any, serving: Dict, descriptor_paths: Any = ()
 ) -> None:
     """Give each exported ingredient row the pipeline's dose role and daily figures.
 
@@ -6994,7 +6997,8 @@ def _stamp_dose_contract(
     purpose: "no upper limit applies" says nothing about the amount. A row outside
     the dose loop takes its daily figures from its normalized amount and the
     product's servings; without usable servings it gets none, never a guess.
-    Daily figures ship together or not at all.
+    Daily figures ship together or not at all. A reviewed source descriptor stays on
+    the label and is not an amount of its own.
     """
     analyzed_by_path = {
         safe_str(row.get("raw_source_path")): row
@@ -7007,7 +7011,7 @@ def _stamp_dose_contract(
         analyzed = analyzed_by_path.get(safe_str(row.get("raw_source_path")))
         if analyzed is not None:
             row["dose_role"] = analyzed.get("dose_role")
-            daily = tuple(analyzed.get(key) for key in ("per_day_min", "per_day_max", "converted_unit"))
+            daily = tuple(analyzed.get(key) for key in _DOSE_DAILY_FIELDS)
             if all(value is not None for value in daily):
                 row["per_day_min"], row["per_day_max"], row["converted_unit"] = daily
             if "low_per_day" in safe_dict(analyzed.get("safety_exposure")):
@@ -7022,6 +7026,9 @@ def _stamp_dose_contract(
             # Under a component of the same identity: part of that component.
             row["dose_role"] = "form_component"
             continue
+        if safe_str(row.get("raw_source_path")) in descriptor_paths:
+            row["dose_role"] = "form_component"
+            continue
         amount = row.get("normalized_amount")
         unit = row.get("normalized_unit")
         if (
@@ -7032,6 +7039,40 @@ def _stamp_dose_contract(
             row["per_day_min"] = amount * servings_min
             row["per_day_max"] = amount * servings_max
             row["converted_unit"] = unit
+
+
+def _append_dose_only_rows(ingredients: List[Dict], analyzed_rows: Any) -> None:
+    """Export a printed amount that neither array carries (C4 Sport caffeine, 200 mg).
+
+    No upper limit keeps it out of analyzed_ingredients and a strict primary contract
+    keeps it out of ingredients, so no dose reader sees it. Only the dose contract ships;
+    the label row stays in display_ingredients and scoring never reads this array. A row
+    with an exported parent or child is already represented there. A component stays out.
+    """
+    exported = [safe_str(row.get("raw_source_path")) for row in ingredients]
+    for row in safe_list(analyzed_rows):
+        if not isinstance(row, dict) or row.get("ul_gate_eligible") is True:
+            continue
+        path = safe_str(row.get("raw_source_path"))
+        daily = tuple(row.get(key) for key in _DOSE_DAILY_FIELDS)
+        if (
+            not path
+            or not row.get("canonical_id")
+            or row.get("dose_role") in {"form_component", "ul_scoped_component"}
+            or not all(value is not None for value in daily)
+            or any(
+                other and (other == path or other.startswith(f"{path}.") or path.startswith(f"{other}."))
+                for other in exported
+            )
+        ):
+            continue
+        ingredients.append({
+            "name": safe_str(row.get("ingredient")),
+            "canonical_id": row["canonical_id"],
+            "raw_source_path": path,
+            "dose_role": row.get("dose_role"),
+            **dict(zip(_DOSE_DAILY_FIELDS, daily)),
+        })
 
 
 @lru_cache(maxsize=1)
@@ -8232,7 +8273,17 @@ def build_detail_blob(
     serving = safe_dict(enriched.get("serving_basis"))
     evidence_data = safe_dict(enriched.get("evidence_data"))
     rda_ul_data = safe_dict(enriched.get("rda_ul_data"))
-    _stamp_dose_contract(ingredients, rda_ul_data.get("analyzed_ingredients"), serving)
+    _stamp_dose_contract(
+        ingredients,
+        rda_ul_data.get("analyzed_ingredients"),
+        serving,
+        {
+            safe_str(row.get("raw_source_path"))
+            for row in safe_list(enriched.get("activeIngredients"))
+            if isinstance(row, dict)
+            and safe_dict(row.get("source_correction")).get("scoring_disposition") == "source_descriptor"
+        },
+    )
     prenatal_coverage = _build_prenatal_coverage(ingredients, rda_ul_data)
     adult_multi_coverage = _build_adult_multi_coverage(ingredients, rda_ul_data)
     role_context = _classify_product_role(
@@ -8241,6 +8292,7 @@ def build_detail_blob(
         prenatal_coverage,
         adult_multi_coverage,
     )
+    _append_dose_only_rows(ingredients, rda_ul_data.get("analyzed_ingredients"))
 
     blob = {
         "dsld_id": safe_str(enriched.get("dsld_id")),
