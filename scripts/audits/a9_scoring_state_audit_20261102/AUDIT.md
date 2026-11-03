@@ -118,7 +118,8 @@ tiers, score status, quality status and blockers: 0 moved. `product_safety_statu
 `shadow-diff` passed. The scoring audit reports 0 `SCORING_SAFETY_ASSESSMENT_STATUS_MISMATCH` and 81
 `SCORING_STRICT_CONTRACT_FAILED`: 51 `disclosed_form_unmapped`, 29 `identity_conflict`, 1
 `form_quality_unassessed`. The same 81 ids and reasons are in main's stored scored artifacts, so this
-branch adds none and removes none.
+branch adds none and removes none. Rerun with
+`compare_strict_contract.py <products_root>`, which reads stored output against `strict_contract_findings.json`.
 
 Export against `scripts/final_db_output`: percentile rows 15,129 to 8,834, because only complete products
 rank and cohorts under 5 get none. The probiotic wording fix (F10, `fe968096f`) came after this rescore:
