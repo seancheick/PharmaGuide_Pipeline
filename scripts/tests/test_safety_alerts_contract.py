@@ -327,3 +327,78 @@ def test_evidence_levels_stay_equal_to_the_locked_vocabulary():
     with open(path, encoding="utf-8") as handle:
         vocab = json.load(handle)["evidence_strengths"]
     assert {entry["id"] for entry in vocab} == INTERACTION_EVIDENCE_LEVELS
+
+
+# --- pregnancy, lactation and condition rules: the device evaluates the gate ----
+
+
+def _gate(gate_type="profile_flag", requires=None, excludes=None, dose=None):
+    empty = {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": []}
+    return {
+        "gate_type": gate_type,
+        "requires": {**empty, **(requires or {"profile_flags_any": ["pregnant"]})},
+        "excludes": {**empty, "product_forms_any": [], "nutrient_forms_any": [], **(excludes or {})},
+        "dose": dose,
+    }
+
+
+def _profile_alert(**block):
+    record = _interaction_alert()
+    for name in ("medication_ids", "medication_name"):
+        record["interaction"].pop(name)
+    record["interaction"].update(profile_context="Pregnancy", profile_gate=_gate())
+    record["interaction"].update(block)
+    return record
+
+
+def test_a_rule_for_pregnancy_is_valid_without_a_medication():
+    assert validate_alert(_profile_alert())["ok"]
+
+
+def test_a_rule_targets_medications_or_a_profile_never_both():
+    record = _profile_alert(medication_ids=["0000001"], medication_name="Fake")
+    assert not validate_alert(record)["ok"]
+
+
+def test_a_rule_targets_someone():
+    record = _profile_alert()
+    record["interaction"].pop("profile_gate")
+    assert not validate_alert(record)["ok"]
+
+
+@pytest.mark.parametrize(
+    "gate",
+    [
+        {},
+        _gate(requires={"profile_flags_any": []}),
+        _gate(gate_type="nutrient_form", requires={"profile_flags_any": []}),
+        _gate(requires={"profile_flags_any": [3]}),
+        _gate(dose={"threshold": 1}),
+        _gate(excludes={"product_forms_any": ["topical"]}),
+        _gate(excludes={"nutrient_forms_any": ["retinol"]}),
+        "pregnant",
+    ],
+    ids=["empty", "no-one", "form-gate", "non-text", "dose", "product-form", "nutrient-form", "not-a-gate"],
+)
+def test_a_profile_gate_must_narrow_to_someone_the_device_can_evaluate(gate):
+    """An empty gate fires for everyone; dose and form need a product the feed can't see."""
+    assert not validate_alert(_profile_alert(profile_gate=gate))["ok"]
+
+
+def test_a_profile_rule_names_who_it_is_for():
+    assert not validate_alert(_profile_alert(profile_context=" "))["ok"]
+
+
+@pytest.mark.parametrize(
+    "gate",
+    [
+        _gate(gate_type="condition", requires={"conditions_any": ["liver_disease"]}),
+        _gate(gate_type="profile_flag", requires={"profile_flags_any": ["breastfeeding"]}),
+        _gate(gate_type="combination", requires={
+            "conditions_any": ["diabetes"], "drug_classes_any": ["class:fake"],
+        }),
+    ],
+    ids=["condition", "lactation", "both"],
+)
+def test_condition_and_lactation_gates_are_valid(gate):
+    assert validate_alert(_profile_alert(profile_gate=gate))["ok"]

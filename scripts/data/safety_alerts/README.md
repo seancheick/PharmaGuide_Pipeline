@@ -85,8 +85,8 @@ user cannot act on is not a warning.
 
 The interaction DB reaches phones slowly. This event carries a rule correction to the people it
 affects on their next connection. **Matching happens only on the device**, against the medications
-the user has on their phone. Nothing about medications is ever sent to us, and this repo has no way
-of knowing who matches: `applies_to` here always answers no, and push is skipped for this event.
+and profile the user has on their phone. Nothing about either is ever sent to us, and this repo has
+no way of knowing who matches: `applies_to` here always answers no, and push is skipped for this event.
 
 It adds one object to the record. `body` is the reason and `action` the management, so neither is
 repeated:
@@ -103,6 +103,23 @@ repeated:
 }
 ```
 
+A rule for pregnancy, lactation or a condition targets a profile instead of medications. Replace
+`medication_name` and `medication_ids` with the rule's own gate and a label for the notice:
+
+```json
+"profile_context": "Pregnancy",
+"profile_gate": {
+  "gate_type": "profile_flag",
+  "requires": {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": ["pregnant"]},
+  "excludes": {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": [],
+               "product_forms_any": [], "nutrient_forms_any": []},
+  "dose": null
+}
+```
+
+The gate must require someone, and can't use a dose or exclude a form: the device evaluates it from
+the profile alone, without a product in hand.
+
 **`medication_ids` are exact identities:** `class:*` ids, RxCUIs or profile drug-class ids, in the
 vocabulary of the rule itself. List each form you need, because the device does no clinical
 crosswalk. A display name would silently match nobody, so validation refuses one.
@@ -112,6 +129,12 @@ crosswalk. A display name would silently match nobody, so validation refuses one
 **This lane still only adds.** An alert can warn sooner or more strongly than the DB on the phone. It
 can't take back a stricter warning the phone already shows.
 
+**Old builds never see this event.** Builds up to 1.0.0+23 reject a whole feed on an event type they
+don't know, and a fresh install would then have no alerts at all. So `build_safety_alerts.py --stage`
+keeps rules out of `safety_alerts.json`, the file the release row's `feed_path` names and the only
+one the dispatcher reads. Rules go in `safety_alerts_extended.json`, which `manifest.extended_feed`
+names for builds that know the key. With no rule alerts active, a release is what it always was.
+
 ## Publishing a rule correction: the gate
 
 `scripts/rule_change_gate.py` runs before any release. It compares the candidate interaction DB with
@@ -119,10 +142,10 @@ the one the app's pin names, and refuses a material change that has no cover:
 
 | Change | Needs |
 |---|---|
-| Medication x supplement at `avoid` or `contraindicated`: new, raised into that tier, or now applies to different people | A published, live `interaction_rule` alert |
+| Medication x supplement, or a pregnancy, lactation or condition rule, at `avoid` or `contraindicated`: new, raised into that tier, or now applies to different people | A published, live `interaction_rule` alert. An attestation is not a notification |
 | Any other hard rule change: reworded, re-graded, lowered or removed | The alert, or an attestation |
 | A lower tier raised | The alert, or an attestation |
-| A hard medication x medication, supplement x supplement, food, condition or life-stage rule | An attestation. Alerts match medications only |
+| A hard medication x medication, supplement x supplement, food or dose rule | An attestation. An alert can't express these |
 | New or reworded rules below `avoid`, timestamps, source lists | Nothing |
 
 Get the value to put in `rule_fingerprint`:
@@ -152,3 +175,21 @@ draft ──(human verifies identity, scope, wording, source)──> published �
 `draft` may have an empty `resolved_dsld_ids`; resolution happens at publication. Class I raises
 draft priority and review urgency — it does **not** bypass review. FDA does not publish every recall
 to its public alert page, so automated collection is not sufficient publication authority.
+
+## When a ban can't wait on rule review
+
+A ban or recall reaches phones through `run_safety_alert_publish.sh`, which never waits on the gate.
+Only a catalog carrying it can be held up. If unrelated rule review is the only thing holding it, add
+a dated entry to `rule_gate_emergency_overrides.json` and run
+`release_full.sh --emergency-catalog --skip-flutter`:
+
+```json
+{"overrides": [{"alert_id": "SA_2026_0001", "revision": 1, "reason": "why this can't wait",
+                "approved_by": "who decided", "date": "YYYY-MM-DD"}]}
+```
+
+The alert must be a ban or recall already live, and the entry counts only on its date. The app pin
+doesn't move, so the interaction DB stays gated. Blobs carry rule text, so the gate still refuses if
+a blob shows a held change, or if a held rule was removed or lowered, which no blob can disprove:
+sign that change off, or hold that rule edit back and rebuild. The entry and
+`rule_gate_emergency_report.json` record what went out ahead of review.

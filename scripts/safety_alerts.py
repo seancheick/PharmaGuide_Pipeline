@@ -42,6 +42,11 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
+from profile_gate_evaluator import validate_profile_gate
+
+# The feed every installed build reads: bans and recalls only.
+BASE_SCHEMA_VERSION = "1.0.0"
+# The extended feed, which adds interaction rules for builds that can read them.
 SCHEMA_VERSION = "1.1.0"
 
 EVENT_TYPES = frozenset({"ingredient_ban", "product_recall", "interaction_rule"})
@@ -226,9 +231,10 @@ def _validate_interaction(record: Dict[str, Any], event_type: Any) -> List[str]:
     """What the app's notice shows, and the ids the device matches on.
 
     `body` is the reason and `action` the management, so neither is repeated
-    here. Medications are matched only on the device; nothing here is ever sent
-    back, and `rule_fingerprint` ties the alert to one version of the rule (see
-    rule_change_gate.py).
+    here. A rule targets either medications or a profile gate (pregnancy,
+    lactation, a condition). Both are matched only on the device; nothing here is
+    ever sent back, and `rule_fingerprint` ties the alert to one version of the
+    rule (see rule_change_gate.py).
     """
     block = record.get("interaction")
     if event_type != "interaction_rule":
@@ -237,21 +243,14 @@ def _validate_interaction(record: Dict[str, Any], event_type: Any) -> List[str]:
         return ["interaction_rule must carry an interaction object"]
 
     errors: List[str] = []
-    for name in ("rule_id", "ingredient_name", "medication_name"):
+    for name in ("rule_id", "ingredient_name"):
         if not _nonempty_str(block.get(name)):
             errors.append(f"interaction.{name} must be a non-empty string")
     fingerprint = block.get("rule_fingerprint")
     if not isinstance(fingerprint, str) or not _FINGERPRINT_RE.match(fingerprint):
         errors.append("interaction.rule_fingerprint must be sha256:<hex>")
 
-    ids = block.get("medication_ids")
-    if not isinstance(ids, list) or not ids:
-        errors.append("interaction.medication_ids must be a non-empty list")
-    elif not all(isinstance(x, str) and _MEDICATION_ID_RE.match(x) for x in ids):
-        errors.append(
-            "interaction.medication_ids must be class:* ids, RxCUIs or profile "
-            f"drug-class ids, never display names, got {ids!r}"
-        )
+    errors.extend(_validate_target(block))
 
     severity = block.get("severity")
     if severity not in INTERACTION_SEVERITIES:
@@ -267,6 +266,51 @@ def _validate_interaction(record: Dict[str, Any], event_type: Any) -> List[str]:
     expected = "block" if severity == "contraindicated" else "review"
     if severity in INTERACTION_SEVERITIES and record.get("consumer_disposition") != expected:
         errors.append(f"interaction severity {severity!r} requires consumer_disposition {expected!r}")
+    return errors
+
+
+def _validate_target(block: Dict[str, Any]) -> List[str]:
+    medication = "medication_ids" in block or "medication_name" in block
+    profile = "profile_gate" in block or "profile_context" in block
+    if medication == profile:
+        return ["interaction must target either medication_ids or a profile_gate, exactly one"]
+    if profile:
+        return _validate_alert_gate(block)
+    errors: List[str] = []
+    if not _nonempty_str(block.get("medication_name")):
+        errors.append("interaction.medication_name must be a non-empty string")
+    ids = block.get("medication_ids")
+    if not isinstance(ids, list) or not ids:
+        errors.append("interaction.medication_ids must be a non-empty list")
+    elif not all(isinstance(x, str) and _MEDICATION_ID_RE.match(x) for x in ids):
+        errors.append(
+            "interaction.medication_ids must be class:* ids, RxCUIs or profile "
+            f"drug-class ids, never display names, got {ids!r}"
+        )
+    return errors
+
+
+def _validate_alert_gate(block: Dict[str, Any]) -> List[str]:
+    """A gate the device can evaluate from the profile alone, narrowed to someone.
+
+    An empty gate fires for everyone. A dose or a form needs the product in hand,
+    which an alert match doesn't have, so it would warn people the rule excludes.
+    """
+    errors: List[str] = []
+    if not _nonempty_str(block.get("profile_context")):
+        errors.append("interaction.profile_context must name who this is for")
+    gate = block.get("profile_gate")
+    problems = validate_profile_gate(gate)
+    errors.extend(f"interaction.profile_gate: {problem}" for problem in problems)
+    if not isinstance(gate, dict):
+        return errors
+    if not any((gate.get("requires") or {}).values()):
+        errors.append("interaction.profile_gate must require a condition, drug class or flag")
+    if gate.get("dose"):
+        errors.append("interaction.profile_gate cannot carry a dose: the device can't evaluate it")
+    excludes = gate.get("excludes") or {}
+    if excludes.get("product_forms_any") or excludes.get("nutrient_forms_any"):
+        errors.append("interaction.profile_gate cannot exclude forms: the device can't evaluate them")
     return errors
 
 
