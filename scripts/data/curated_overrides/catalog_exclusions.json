@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "description": "Exact products kept out of the consumer catalog because the label sells them as something other than a supplement.",
-    "purpose": "Sean decided on 2026-11-02 that scope is the rule: a label sold as a sweetener, snack, cooking oil, blending ingredient or external-use product leaves the catalog. A label sold to be taken as a supplement stays, unscored, even when it cannot be scored. Classified from DSLD record text, not printed labels.",
+    "description": "Exact products kept out of the consumer catalog because the label sells them as something other than a supplement. Sean decided on 2026-11-02 that scope is the rule: a label sold as a sweetener, snack, cooking oil, blending ingredient or external-use product leaves the catalog. A label sold to be taken as a supplement stays, unscored, even when it cannot be scored. Classified from DSLD record text, not printed labels.",
+    "purpose": "catalog_scope_exclusions",
     "scope": "Fires only for an exact dsld_id in build_final_db.validate_export_contract. Scoring and enrichment are unaffected. A new label of the same product has a new dsld_id and is not excluded until it is added here.",
     "fail_safe_policy": "A listed product stays in the catalog if its product_safety_status is anything other than no_known_catalog_concern, or if it carries a warning record that reviewed_warnings does not cover by exact fingerprint.",
     "last_updated": "2026-11-03",
