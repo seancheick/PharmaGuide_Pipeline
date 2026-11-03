@@ -236,6 +236,7 @@ SKIP_SUPABASE={skip_cloud}
 SUPABASE_DRY_RUN={dry_run}
 SKIP_FLUTTER=0
 FORCE=1
+RELEASE_SIGN_ARGS=()
 FLUTTER_REPO={shlex.quote(str(app))}
 DIST_DIR=dist
 ASSETS_DIR=assets
