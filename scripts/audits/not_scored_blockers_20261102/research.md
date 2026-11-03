@@ -8,13 +8,20 @@ Verified 2026-11-02. Label means the printed NIH DSLD label PDF (`https://api.od
 
 | Label text | Parent → form | Bio | Evidence and limit |
 |---|---|---|---|
-| Safflower | cla → cla 80% | 11 | Label 295001 prints "Conjugated Linoleic Acid (from Safflower oil)". The map already files `cla safflower oil` under this form. The label prints no 80%: that is the existing form's name, not a new claim. |
-| Prunus avium Fruit Extract, Powder | dark_sweet_cherry → powder | 6 | DSLD 294296. GSRS: SWEET CHERRY, UNII 93T4562ZI3. `prunus avium extract` is already on this form. LEDGER D21 once listed sweet cherry under a wild cherry label as held; `phase2_form_curation_20260929/README.md` records that a separate owner has since resolved Prunus avium. |
-| Citrus Bioflavonoid Complex | diosmin → unspecified | 7 | DSLD 241290: "95% Diosmin, in a Citrus Bioflavonoid Complex, with Hesperidin". The complex is the carrier, not a diosmin form. |
 | Omega-9 | flaxseed → flaxseed oil | 10 | DSLD 312832, 294583 note "source of omega-9". A marker on a row already named Flaxseed Oil. |
 | Asian Ginseng Root Extract, Fermented | ginseng → fermented red ginseng | 12 | DSLD 328465, row GS15-4. The map already files GS15-4 under this form. |
 | Ganoderma lucidum Mushroom Fruiting Body Extract | reishi → fruiting body | 9 | DSLD 328649. Same species and part as the existing alias. |
 | Mixed Carotenoids; Mixed Carotenoids from African Oil Palm Fruit Extract | vitamin_a → beta-carotene from mixed carotenoids | 7 | DSLD 293269, 328127, 328639, each also naming Beta-Carotene. Keeps the row provitamin, so no preformed vitamin A or UL reading changes. Confirmed in replay. |
+
+## Removed after label review, November 3
+
+These three aliases were in this PR and are gone. The earlier entries here over-read the labels: `cla 80%` holds a `cla safflower oil` alias, but the 295001 label prints no 80%, and a settled species does not settle a preparation. The rows are held.
+
+| Label row | Alias removed | Why |
+|---|---|---|
+| Safflower, 295001 | `safflower` on `cla 80%` | The label prints safflower as the source, not 80%. Temporary hold; a qualified correction follows on a separate branch. |
+| Prunus avium Fruit Extract, Powder, 294296 | `prunus avium fruit extract, powder` on `dark sweet cherry powder` | Sean: "Species identification is settled; preparation assessment is not." |
+| Citrus Bioflavonoid Complex, 241290 | `citrus bioflavonoid complex` on `diosmin (unspecified)` | Sean: "The current mapping does not justify its score." That form is what `unknown_form_quality` returns for a form a label does not disclose, and this label discloses one. |
 
 ## Identity conflicts, one pair at a time
 
@@ -57,7 +64,7 @@ CI on `47a3ea25d` failed on 7 pinned labels. Checking every alias against the le
 
 Frozen raw labels through Clean, Enrich and Score, on main `0bd492188` and on `f0f7e406c`, with `scripts/audits/quality_redesign/replay.py`.
 
-- 152 labels: all 152 `not_scored` on main, reproducing the build. `per_product.md` lists the 135 in the identity and dose groups, and 12 of those moved to scored. The other 17 are outside this sort: 15 Cascara (229932, 251528, 252441, 253399, 253403, 253404, 311301, 311302, 311303, 311304, 327907, 330523, 330524, 330525, 332909) and 2 with no identity or dose blocker (222918, 315691). All 17 are `not_scored` on main and on this branch, with score, verdict and safety status unchanged. The 11 evidence-group labels were not replayed.
+- 152 labels: all 152 `not_scored` on main, reproducing the build. `per_product.md` lists the 135 in the identity and dose groups, and 12 of those moved to scored at that commit. After the three aliases above were removed, the estimate is 9 of 135 until the affected labels are replayed. The other 17 are outside this sort: 15 Cascara (229932, 251528, 252441, 253399, 253403, 253404, 311301, 311302, 311303, 311304, 327907, 330523, 330524, 330525, 332909) and 2 with no identity or dose blocker (222918, 315691). All 17 are `not_scored` on main and on this branch, with score, verdict and safety status unchanged. The 11 evidence-group labels were not replayed.
 - 121 controls, chosen because they carry the same forms and names or read zero-%DV rows: no status or score changed. Only 232887 (CBD+ Sleep) differs: its chamomile row now resolves, its reasons change, and it stays `suppressed_safety`.
 - Safety fields compared across the 152: `product_safety_status`, `safety_verdict`, `dose_safety_evaluation`, safety review records, harmful additives and allergens. None changed.
 - `interaction_profile` changed on 2. 328465 changes only `form_context` text. 285637 gains `RULE_INGREDIENT_CHAMOMILE` because its chamomile row now resolves: bleeding disorders, anticoagulants, antiplatelets and NSAIDs.
@@ -80,6 +87,10 @@ No dose-blocked label had a curated or parser gap to fix. 25 of the 61 (20 no-re
 | C7 | Marine Collagen: panel prints Protein 10 g, and the collagen sits in Other Ingredients. Read it as the collagen dose, or stay held? | 306350 |
 | C8 | No completed dose reference (`dose_benchmark_identity_unresolved`). Sean approved these as exact-edition holds on 2026-10-30. Keep holding, or commission approved neutral records? Sibling session `start-evidence-review-wi` may overlap. | Horsetail: 251616, 327984, 252704, 254795, 254796, 254797, 312024, 312025, 312026, 312027, 331202. Others: 231921, 232035, 269718, 328831, 232921, 232928, 220046, 80302, 295107 |
 
+**C9 to C13 are decided.** Sean answered "Yes, hold all 29" on November 3, 2026. C13 rests on `unknown_form_quality`: a named form the map does not recognize stays unmapped for curation and is not routed to the floor.
+
+| Code | Question | Products |
+|---|---|---|
 | C9 | Different species or plant part from the map's parent, left held on purpose in LEDGER D21. Keep holding, or give each its own form? | Plantago asiatica 312947; Taraxacum mongolicum 306204; wild green oat aerial parts 328434 |
 | C10 | Terms whose chemistry was not established in form curation. Keep holding, or commission an identity check? | Phosphorus Oxide 214676, 214952; OT2 47590, 29066, 27808, 28993; Chromium GlycoProtein Matrix 231826, 62816; Zychrome/Dinicocysteinate 188790, 246350, 246370 |
 | C11 | The October 26 review exports these without a quality identity, and its stated limits are no nitrate allocation and no CBD or whole-plant transfer. Was withholding the score itself intended, or may they score with those limits kept? | Beet root 43662, 43947, 63330, 63463, 63475; hemp 259374 |

@@ -43044,10 +43044,7 @@
           "range_low": 0.6,
           "range_high": 0.9,
           "quality": "good"
-        },
-        "source_form_aliases": [
-          "safflower"
-        ]
+        }
       },
       "clarinol": {
         "bio_score": 13,
@@ -63444,10 +63441,7 @@
           "range_low": 0.25,
           "range_high": 0.5,
           "quality": "moderate"
-        },
-        "source_form_aliases": [
-          "citrus bioflavonoid complex"
-        ]
+        }
       }
     },
     "cui": "C0012498",
@@ -72205,10 +72199,7 @@
           "range_low": 0.01,
           "range_high": 0.15,
           "quality": "low"
-        },
-        "source_form_aliases": [
-          "prunus avium fruit extract, powder"
-        ]
+        }
       }
     },
     "match_rules": {

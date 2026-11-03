@@ -38,9 +38,6 @@ def _quality_rows(enriched, name):
 
 
 @pytest.mark.parametrize("pid, name, canonical, form", [
-    ("295001", "Conjugated Linoleic Acid", "cla", "cla 80%"),
-    ("294296", "Wild Cherry Fruit Extract, Powder", "dark_sweet_cherry", "dark sweet cherry powder"),
-    ("241290", "Diosmin", "diosmin", "diosmin (unspecified)"),
     ("312832", "Flaxseed Oil", "flaxseed", "flaxseed oil"),
     ("328465", "GS15-4", "ginseng", "fermented red ginseng"),
     ("328649", "Reishi Mushroom Fruiting Body Extract", "reishi", "reishi fruiting body"),
@@ -103,6 +100,9 @@ def test_a_row_held_for_its_identity_stays_a_conflict(pid, name, why):
     ("287389", "Virtiva", "this label's correction: do not infer pure ginkgo or phosphatidylserine"),
     ("328649", "Shell-broken Reishi mushroom spore", "the map has no spore form and extract standards do not apply"),
     ("220021", "Calcium", "the printed term reads as two different calcium forms"),
+    ("295001", "Conjugated Linoleic Acid", "the label prints safflower as the source; it does not print 80%, so cla 80% is unsupported"),
+    ("294296", "Wild Cherry Fruit Extract, Powder", "Sean 2026-11-03: species identification is settled; preparation assessment is not"),
+    ("241290", "Diosmin", "Sean 2026-11-03: the current mapping does not justify its score"),
 ])
 def test_a_real_limit_or_open_decision_stays_held(pid, name, why):
     assert [r for r in _rows(_enrich(pid), name) if r.get("form_match_status") == "unmapped"], why
