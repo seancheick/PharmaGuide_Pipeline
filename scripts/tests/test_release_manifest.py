@@ -860,7 +860,7 @@ def test_every_release_full_sync_carries_the_signed_arguments():
     assert len(calls) == 2
     for call in calls:
         assert '${RELEASE_SIGN_ARGS[@]+"${RELEASE_SIGN_ARGS[@]}"}' in call
-    gate = source.index("require_signed_release_or_stop\n", source.index("# Step 5: Sync to Supabase"))
+    gate = source.index("require_signed_release_or_stop || exit 1")
     assert gate < source.index('scripts/sync_to_supabase.py "$DIST_DIR"')
 
 
