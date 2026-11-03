@@ -9382,14 +9382,25 @@ class SupplementEnricherV3:
             names.update(cls._norm_form_name(alias) for alias in entry.get("aliases") or [])
         return {name for name in names if name}
 
-    @staticmethod
-    def _is_cross_class_source_form(form_data: Dict, parent_category: Optional[str]) -> bool:
+    @classmethod
+    def _is_cross_class_source_form(cls, form_data: Dict, parent_category: Optional[str]) -> bool:
         """A botanical/protein token under a vitamin, mineral, amino acid or
         enzyme parent names a source. Only asked after the token failed to
-        match a real form of that parent, so a listed IQM form still wins."""
+        match a real form of that parent, so a listed IQM form still wins.
+
+        A fatty-acid parent accepts only a bare botanical source (295001 CLA
+        from safflower): the token is exactly its own DSLD ingredient group and
+        no other percentage is printed. A branded or standardized token stays
+        unmapped for curation rather than reaching the nondisclosure floor."""
         category = (form_data.get('dsld_category') or '').lower().strip()
-        return (category in _SOURCE_CLASS_FORM_CATEGORIES
-                and (parent_category or '').lower() in _DEFINED_NUTRIENT_PARENT_CATEGORIES)
+        parent = (parent_category or '').lower()
+        if category in _SOURCE_CLASS_FORM_CATEGORIES and parent in _DEFINED_NUTRIENT_PARENT_CATEGORIES:
+            return True
+        return (category == 'botanical'
+                and parent == 'fatty_acids'
+                and form_data.get('percent_share') in (None, 1.0)
+                and cls._norm_form_name(form_data.get('raw_form_text'))
+                == cls._norm_form_name(form_data.get('dsld_ingredient_group')))
 
     def _is_dsld_source_descriptor_form(self, form_data: Dict) -> bool:
         """DSLD origin/culture descriptors are not chemical forms."""
