@@ -806,6 +806,17 @@ fi
 # regardless of which publication flags are set.
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
 "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-validation-binding "$VALIDATION_INPUT_BINDING"
+# A material rule correction must not leave without its alert. Runs for anything
+# that publishes, including a catalog-only sync, whose detail blobs also carry
+# rule warnings. Compares with the DB the pin names, which is what phones hold.
+if (( SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )) || (( SKIP_FLUTTER == 0 )); then
+  run_strict_gate "material rule changes have their alerts" \
+    "$PG_PYTHON" scripts/rule_change_gate.py \
+      --candidate "$DIST_DIR/interaction_db.sqlite" \
+      --pin "$FLUTTER_REPO/tool/interaction_db.release.json"
+else
+  skip "Rule-change gate skipped (this run publishes nothing)"
+fi
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   run_strict_gate "interaction DB release asset + app hydration pin" \
     "$PG_PYTHON" scripts/release_interaction_artifact.py \
