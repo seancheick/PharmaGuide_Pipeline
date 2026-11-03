@@ -199,7 +199,7 @@ dose 63, probiotic context 25, dose benchmark identity 24, unread dose amount 5.
 
 **Shared-cause plan** (`completion_held_shared_causes.csv`): the open required rows on those labels come to 509
 ingredients and 623 ingredient-and-preparation pairs, by role claim-named 3,589 rows, major 1,561, adjunct 2,462.
-3,973 labels need one shared decision, 851 need two or more, and 446 have no open required row (other blockers,
+3,973 labels need one shared decision, 896 need two or more, and 446 have no open required row (other blockers,
 or the Evidence pillar still reading as unreviewed). Reuse each decision across labels with #340's review format.
 
 | Open reason code | Labels | Ingredients | Decision needed |
