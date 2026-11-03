@@ -1092,9 +1092,8 @@ def test_dinicocysteinate_never_inherits_polynicotinate_form(enricher, chemical)
     match = enricher._match_quality_map('Chromium', 'Chromium', iqm,
         cleaned_forms=[{'name': chemical, 'category': 'mineral'}],
         cleaner_canonical_id='chromium')
-    assert match.get('form_id') == 'chromium (unspecified)'
-    assert match['bio_score'] < iqm['chromium']['forms']['chromium polynicotinate']['bio_score']
-    assert not match.get('unmapped_forms')
+    assert match.get('form_id') != 'chromium polynicotinate'
+    assert match.get('unmapped_forms') == [chemical]
 
 
 def test_chromemate_polynicotinate_control_keeps_named_form(enricher):
@@ -1135,9 +1134,10 @@ def test_a_named_corn_silk_powder_cannot_claim_extract_form_credit(enricher):
     match = enricher._match_quality_map("Corn Silk, Powder", "Corn Silk, Powder",
         enricher.databases["ingredient_quality_map"], cleaned_forms=[form], cleaner_canonical_id="corn_silk")
     assert match["canonical_id"] == "corn_silk"
-    assert match["form_id"] == "corn silk (unspecified)"
-    assert match["bio_score"] == 6 < IQM["corn_silk"]["forms"]["corn silk extract"]["bio_score"]
-    assert not match.get("unmapped_forms")
+    assert match["form_id"] is None
+    assert match["bio_score"] is None
+    assert match["match_status"] == "FORM_DISCLOSED_UNMAPPED"
+    assert match["unmapped_forms"] == ["Zea mays, Powder"]
 
 
 @pytest.mark.parametrize("label", ["Dried Rose Hips (Rosa canina)", "Rose Hips, dried", "Rose Hips Powder (Rosa canina)"])

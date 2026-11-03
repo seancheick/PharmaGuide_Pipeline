@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-11-02",
-    "total_entries": 560,
+    "last_updated": "2026-10-29",
+    "total_entries": 559,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -1179,9 +1179,7 @@
         "beta vulgaris root",
         "beetroot powder",
         "beet root extract",
-        "Beta vulgaris",
-        "foodstate farm fresh beet root",
-        "foodstate(r) farm fresh beet root"
+        "Beta vulgaris"
       ],
       "category": "root",
       "notes": "Beta vulgaris (Amaranthaceae) root. Rich in dietary nitrate (250-400 mg/100g), betalain pigments, and betaine. Botanical powder form. Source review: PMID 28983845 does not support the attributed botanical clinical claim; replacement source and preparation applicability remain unresolved.",
@@ -15458,32 +15456,6 @@
         "source_origin": "plant"
       },
       "cui": "C0700268"
-    },
-    {
-      "id": "hemp_seed_powder",
-      "standard_name": "Hemp Seed Powder",
-      "latin_name": "Cannabis sativa",
-      "aliases": [
-        "organic hemp powder (seed)",
-        "hemp seed powder",
-        "organic hemp seed powder"
-      ],
-      "category": "seed",
-      "notes": "Cannabis sativa seed, powdered, as a whole-food ingredient. Distinct from hemp seed oil and hemp protein; no cannabinoid or whole-plant evidence transfers to it.",
-      "last_updated": "2026-11-02",
-      "external_ids": {
-        "unii": "QE567Z26NG"
-      },
-      "rxcui": "1429926",
-      "gsrs": {
-        "substance_name": "CANNABIS SATIVA SEED",
-        "substance_class": "structurallyDiverse"
-      },
-      "functional_roles": [],
-      "attributes": {
-        "source_origin": "plant"
-      },
-      "cui": null
     },
     {
       "id": "betel_leaf",

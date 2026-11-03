@@ -1,13 +1,12 @@
 """Held labels from the 2026.11.02 build that are ours to finish.
 
-Every disclosed form below is a known identity the map did not read. Each entry is
+Every disclosed form read below names a form the map already holds. Each entry is
 parent-scoped, so it cannot create a new identity on another row, and each was
 checked against the printed label or its DSLD record (receipts:
-scripts/audits/not_scored_blockers_20261102/research.md). A form whose quality
-nobody has established takes the parent's authored unspecified form, the floor.
+scripts/audits/not_scored_blockers_20261102/research.md).
 
-The second half pins what stays held: a real label limit, or a decision that is
-Sean's, must not be finished by an alias.
+The second half pins what stays held: a real label limit, an earlier review's hold,
+or a decision that is Sean's must not be finished by an alias.
 """
 import json
 import logging
@@ -39,28 +38,14 @@ def _quality_rows(enriched, name):
 
 
 @pytest.mark.parametrize("pid, name, canonical, form", [
-    ("246350", "Zychrome Chromium", "chromium", "chromium (unspecified)"),
-    ("231826", "Chromium", "chromium", "chromium (unspecified)"),
     ("295001", "Conjugated Linoleic Acid", "cla", "cla 80%"),
-    ("312640", "Corn Silk, Powder", "corn_silk", "corn silk (unspecified)"),
-    ("306204", "Dandelion Root Extract", "dandelion", "dandelion root"),
     ("294296", "Wild Cherry Fruit Extract, Powder", "dark_sweet_cherry", "dark sweet cherry powder"),
     ("241290", "Diosmin", "diosmin", "diosmin (unspecified)"),
     ("312832", "Flaxseed Oil", "flaxseed", "flaxseed oil"),
-    ("287389", "Virtiva", "ginkgo", "ginkgo (unspecified)"),
     ("328465", "GS15-4", "ginseng", "fermented red ginseng"),
-    ("47590", "L-Arginine", "l_arginine", "l-arginine base"),
-    ("66513", "Manganese", "manganese", "manganese (unspecified)"),
-    ("328434", "Neuravena", "oat_straw", "oat straw extract (unspecified)"),
-    ("214676", "Phosphorus", "phosphorus", "phosphorus (unspecified)"),
-    ("312947", "Psyllium", "psyllium", "psyllium (unspecified)"),
     ("328649", "Reishi Mushroom Fruiting Body Extract", "reishi", "reishi fruiting body"),
-    ("328649", "Shell-broken Reishi mushroom spore", "reishi", "reishi (unspecified)"),
-    ("27203", "Silica", "silica", "silica (unspecified)"),
     ("293269", "Vitamin A", "vitamin_a", "beta-carotene from mixed carotenoids"),
     ("328639", "Vitamin A", "vitamin_a", "beta-carotene from mixed carotenoids"),
-    ("220021", "Calcium", "calcium", None),
-    ("256962", "Magnesium", "magnesium", None),
 ])
 def test_a_known_disclosed_form_is_read_not_held(pid, name, canonical, form):
     rows = _rows(_enrich(pid), name)
@@ -68,8 +53,7 @@ def test_a_known_disclosed_form_is_read_not_held(pid, name, canonical, form):
     assert {r.get("canonical_id") for r in rows} == {canonical}
     assert not [r for r in rows if r.get("form_match_status") == "unmapped"]
     assert not [r for r in rows if r.get("unmapped_forms")]
-    if form:
-        assert {r.get("form_id") for r in rows} == {form}
+    assert {r.get("form_id") for r in rows} == {form}
 
 
 # One pair at a time: each label row and the single identity it resolves to.
@@ -83,23 +67,20 @@ def test_a_source_verified_pair_resolves_to_that_identity(pid, name, canonical):
     assert rows[0].get("identity_disposition") != "identity_conflict"
 
 
-@pytest.mark.parametrize("pid, name", [
-    ("63330", "FoodState farm fresh Beet Root"),
-    ("43662", "FoodState(R) Farm Fresh Beet Root"),
-    ("28963", "Organic freeze-dried banana powder"),
-    ("259374", "Organic Hemp Powder (seed)"),
+def test_a_recognized_whole_food_row_is_no_longer_a_conflict():
+    name = "Organic freeze-dried banana powder"
+    assert _quality_rows(_enrich("28963"), name)[0].get("identity_disposition") != "identity_conflict"
+
+
+@pytest.mark.parametrize("pid, name, why", [
+    ("78327", "N-Acetyl-L-Cystine", "a real compound (PubChem CID 12049111) DSLD groups under NAC (CID 12035)"),
+    ("63330", "FoodState farm fresh Beet Root", "reviewed 2026-10-26: exports without a quality identity"),
+    ("43662", "FoodState(R) Farm Fresh Beet Root", "reviewed 2026-10-26: exports without a quality identity"),
+    ("259374", "Organic Hemp Powder (seed)", "reviewed 2026-10-26: exports without a quality identity"),
 ])
-def test_a_recognized_whole_food_row_is_no_longer_a_conflict(pid, name):
-    enriched = _enrich(pid)
-    assert _quality_rows(enriched, name)[0].get("identity_disposition") != "identity_conflict"
-    assert name not in [r.get("name") for r in _rows(enriched, name) if r.get("canonical_id") == "dietary_nitrate"]
-
-
-def test_a_label_that_disagrees_with_dsld_about_a_real_compound_stays_held():
-    # The label prints N-acetyl-L-cystine, a real compound (PubChem CID 12049111);
-    # DSLD groups the row under N-acetyl cysteine (CID 12035). Which one is Sean's call.
-    rows = _quality_rows(_enrich("78327"), "N-Acetyl-L-Cystine")
-    assert [r.get("identity_disposition") for r in rows] == ["identity_conflict"]
+def test_a_row_held_for_its_identity_stays_a_conflict(pid, name, why):
+    rows = _quality_rows(_enrich(pid), name)
+    assert [r.get("identity_disposition") for r in rows] == ["identity_conflict"], why
 
 
 @pytest.mark.parametrize("pid, name, why", [
@@ -108,6 +89,20 @@ def test_a_label_that_disagrees_with_dsld_about_a_real_compound_stays_held():
     ("311132", "Oat Straw Extract", "the label prints straw and seed for one row"),
     ("12144", "Chondroitin Complex", "blend members written as forms, open decision"),
     ("336100", "Biotin", "a hair-complex name on biotin, pinned held in test_identity_label_named_over_group"),
+    ("312947", "Psyllium", "LEDGER D21 and this label's correction: the P. asiatica hold stays"),
+    ("306204", "Dandelion Root Extract", "LEDGER D21: Taraxacum mongolicum needs a species call"),
+    ("328434", "Neuravena", "LEDGER D21: wild green oat aerial parts need a plant-part call"),
+    ("214676", "Phosphorus", "phase2 form curation: phosphorus oxide is chemically ambiguous"),
+    ("47590", "L-Arginine", "LEDGER Q32: OT2 is an unestablished token"),
+    ("246350", "Zychrome Chromium", "LEDGER Q32 and test_dinicocysteinate_never_inherits_polynicotinate_form"),
+    ("231826", "Chromium", "LEDGER Q32: Chromium GlycoProtein Matrix is an unestablished token"),
+    ("312640", "Corn Silk, Powder", "test_a_named_corn_silk_powder_cannot_claim_extract_form_credit"),
+    ("256962", "Magnesium", "magnesium oxide chelate is not an established compound"),
+    ("66513", "Manganese", "manganese bisglycinate sulfate chelate is not an established compound"),
+    ("27203", "Silica", "silicon hydrolyzed vegetable protein is not an established compound"),
+    ("287389", "Virtiva", "this label's correction: do not infer pure ginkgo or phosphatidylserine"),
+    ("328649", "Shell-broken Reishi mushroom spore", "the map has no spore form and extract standards do not apply"),
+    ("220021", "Calcium", "the printed term reads as two different calcium forms"),
 ])
 def test_a_real_limit_or_open_decision_stays_held(pid, name, why):
     assert [r for r in _rows(_enrich(pid), name) if r.get("form_match_status") == "unmapped"], why

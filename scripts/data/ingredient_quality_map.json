@@ -31,7 +31,7 @@
     },
     "statistics": {
       "total_parents": 656,
-      "total_forms": 1477,
+      "total_forms": 1476,
       "total_form_aliases": 12306,
       "parents_with_parent_aliases": 151,
       "parents_with_contains_aliases": 0,
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-11-02",
+    "last_updated": "2026-11-03",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -7866,8 +7866,7 @@
           "calcium from calcium pantothenate"
         ],
         "source_form_aliases": [
-          "calcium pantothenate",
-          "calcium pantothenate glycinate amino acid chelate"
+          "calcium pantothenate"
         ],
         "dosage_importance": 1.5,
         "cross_ref": {
@@ -8047,8 +8046,7 @@
           "quality": "moderate"
         },
         "source_form_aliases": [
-          "calcium magnesium phytate",
-          "phosphorus oxide"
+          "calcium magnesium phytate"
         ]
       },
       "dicalcium phosphate (as phosphorus source)": {
@@ -8896,8 +8894,7 @@
         "source_form_aliases": [
           "r-3-hydroxybutyric acid magnesium",
           "calcium magnesium phytate",
-          "magnesium d-aspartate",
-          "magnesium oxide chelate"
+          "magnesium d-aspartate"
         ],
         "bio_score": 1,
         "absorption": "Chemical form is not established from the label; the conservative scoring fallback is not a measured absorption estimate or identification as oxide.",
@@ -15297,12 +15294,7 @@
           "range_low": 0.01,
           "range_high": 0.04,
           "quality": "poor"
-        },
-        "source_form_aliases": [
-          "zychrome chromium dinicocysteinate",
-          "chromium dinicocysteinate",
-          "chromium glycoprotein matrix"
-        ]
+        }
       },
       "crominex 3+ chromium complex": {
         "source_form_aliases": [
@@ -15981,10 +15973,7 @@
           "range_low": 0.03,
           "range_high": 0.08,
           "quality": "low"
-        },
-        "source_form_aliases": [
-          "manganese bisglycinate sulfate chelate"
-        ]
+        }
       },
       "manganese brown rice chelate": {
         "bio_score": 6,
@@ -20710,10 +20699,7 @@
           "range_low": 0.2,
           "range_high": 0.68,
           "quality": "moderate"
-        },
-        "source_form_aliases": [
-          "l-arginine, ot2"
-        ]
+        }
       },
       "arginine aspartate": {
         "bio_score": 11,
@@ -24866,10 +24852,7 @@
           "range_low": 0.25,
           "range_high": 0.65,
           "quality": "moderate"
-        },
-        "source_form_aliases": [
-          "ginkgo-phosphatidylserine phytosome"
-        ]
+        }
       }
     },
     "match_rules": {
@@ -38610,10 +38593,7 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown"
-        },
-        "source_form_aliases": [
-          "silicon hydrolyzed vegetable protein"
-        ]
+        }
       },
       "bamboo silica": {
         "bio_score": 9,
@@ -42183,10 +42163,7 @@
           "range_low": 0.65,
           "range_high": 0.85,
           "quality": "unknown"
-        },
-        "source_form_aliases": [
-          "ganoderma lucidum spore, shell-broken"
-        ]
+        }
       }
     },
     "match_rules": {
@@ -43238,8 +43215,7 @@
           "quality": "unknown"
         },
         "source_form_aliases": [
-          "plantago ovata, powder",
-          "plantago asiatica"
+          "plantago ovata, powder"
         ]
       }
     },
@@ -51359,10 +51335,7 @@
           "range_high": 0.6,
           "quality": "moderate"
         },
-        "dosage_importance": 1.0,
-        "source_form_aliases": [
-          "taraxacum mongolicum root extract"
-        ]
+        "dosage_importance": 1.0
       },
       "dandelion leaf": {
         "bio_score": 6,
@@ -54157,10 +54130,13 @@
         },
         "notes": "Stigma maydis (corn silk/Zea mays) botanical extract. Traditional diuretic and urinary tract support herb. Contains flavonoids (maysin), allantoin, and potassium salts. Limited clinical trial evidence but extensive traditional use across cultures. Mild diuretic effect via potassium-sparing mechanism. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=7 → low-mod) — mechanical mapping from absorption + bio_score.",
         "aliases": [
+          "cornsilk powder",
+          "corn silk powder",
           "zea mays stigma extract",
           "organic cornsilk zea mays (stigma and style) extract",
           "Cornsilk Zea mays Stigma and Style Extract",
           "corn silk",
+          "Corn Silk, Powder",
           "corn silk (zea mays) extract"
         ],
         "dosage_importance": 0.8,
@@ -54169,24 +54145,6 @@
           "range_low": 0.25,
           "range_high": 0.5,
           "quality": "moderate"
-        }
-      },
-      "corn silk (unspecified)": {
-        "alias_identity_scope": "same_identity",
-        "bio_score": 6,
-        "absorption": "unknown",
-        "notes": "Whole corn silk (Zea mays stigma and style) powder or an unnamed preparation. Holds the unknown-form floor, one below the extract, so a powder takes no extract credit.",
-        "aliases": [
-          "cornsilk powder",
-          "corn silk powder",
-          "Corn Silk, Powder"
-        ],
-        "dosage_importance": 0.8,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown"
         },
         "source_form_aliases": [
           "zea mays, powder"
@@ -64046,8 +64004,7 @@
           "quality": "low"
         },
         "source_form_aliases": [
-          "avena sativa",
-          "wild green oat aerial parts extract"
+          "avena sativa"
         ]
       }
     },
