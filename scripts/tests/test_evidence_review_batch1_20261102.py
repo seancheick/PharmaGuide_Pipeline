@@ -46,33 +46,90 @@ def test_reviewed_null_closes_the_question_without_credit():
     assert not resolution.blocking_reasons
 
 
-@pytest.mark.parametrize("cid, name, reason", [
-    ("turmeric", "Turmeric Root Extract", "literature_applicability_unestablished"),
-    ("turmeric", "Turmeric Root Powder", "literature_applicability_unestablished"),
-    ("turmeric", "Turmeric", "literature_applicability_unestablished"),
-    ("ginkgo", "Ginkgo Flavone Glycosides", "literature_applicability_unestablished"),
-    ("ginkgo", "Ginkgo Biloba Leaf Extract", "literature_applicability_unestablished"),
-    ("ginkgo", "Ginkgo Biloba Extract Powder (24% Flavone Glycosides)", "literature_applicability_unestablished"),
-    ("ginkgo", "Ginkgo Biloba Powder", "literature_applicability_unestablished"),
-    ("collagen", "Collagen", "literature_applicability_unestablished"),
-    ("collagen", "Gelatin", "literature_applicability_unestablished"),
-    ("collagen", "Hydrolyzed Collagen", "clinical_sources_ineligible"),
+def _review_state(resolution):
+    from assessment_readiness import _resolved_evidence_assessment
+    return _resolved_evidence_assessment(resolution)[0]
+
+
+@pytest.mark.parametrize("cid, name", [
+    ("turmeric", "Turmeric Root Extract"),
+    ("turmeric", "Turmeric Rhizome Extract"),
+    ("ginkgo", "Ginkgo Flavone Glycosides"),
+    ("ginkgo", "Ginkgo Biloba Extract Powder (24% Flavone Glycosides)"),
+    ("ginkgo", "EGb 761 Ginkgo extract powder"),
+    ("collagen", "Collagen, Hydrolyzed"),
 ])
-def test_review_without_a_signed_scope_closes_no_row(cid, name, reason):
-    """An agent review cannot sign a preparation scope, inside or outside what the trials tested."""
+def test_documented_review_finishes_a_declared_preparation_at_no_credit(cid, name):
     resolution = _resolve_label_row(cid, name)
-    assert resolution.disposition == "research_present_applicability_unestablished"
-    assert resolution.reason_code == reason
     assert resolution.points_eligible is False
-    assert resolution.blocking_reasons
+    assert resolution.reason_code == "literature_reviewed_human_clinical_evidence"
+    assert _review_state(resolution) == "evaluated_limited_or_negative"
 
 
-@pytest.mark.parametrize("cid", ["turmeric", "ginkgo", "collagen"])
-def test_unsigned_review_carries_no_preparation_scope(records, cid):
-    """A scope's exclusions read as reviewed conclusions and can finish a held product (59635)."""
-    assert "applicability" not in records[cid]
-    assert records[cid]["applicability_status"] == "applicability_unestablished"
-    assert records[cid]["effect_direction"] is None
+@pytest.mark.parametrize("cid, name", [
+    ("turmeric", "Turmeric Root Powder"),
+    ("turmeric", "Turmeric Root 4:1 Extract"),
+    ("ginkgo", "Ginkgo Biloba, Powder"),
+    ("collagen", "BioCell Collagen Hydrolyzed Collagen Complex"),
+    ("collagen", "Undenatured Type II Collagen"),
+])
+def test_declared_preparation_outside_the_review_is_a_conclusion(cid, name):
+    resolution = _resolve_label_row(cid, name)
+    assert resolution.reason_code == "clinical_form_excluded"
+    assert resolution.points_eligible is False
+    assert _review_state(resolution) == "evaluated_limited_or_negative"
+
+
+@pytest.mark.parametrize("cid, name", [
+    ("turmeric", "Turmeric"),
+    ("turmeric", "Organic Turmeric"),
+    ("ginkgo", "Ginkgo Biloba Leaf Extract"),
+    ("ginkgo", "Ginkgo Biloba"),
+    ("collagen", "Collagen"),
+    ("collagen", "Gelatin"),
+])
+def test_undeclared_preparation_stays_open(cid, name):
+    """An unresolved preparation match cannot be renamed a finished non-applicability."""
+    resolution = _resolve_label_row(cid, name)
+    assert resolution.reason_code == "literature_applicability_unestablished"
+    assert resolution.points_eligible is False
+    assert _review_state(resolution) == "not_yet_evaluated"
+
+
+def test_signed_collagen_record_keeps_its_hold():
+    resolution = _resolve_label_row("collagen", "Hydrolyzed Collagen")
+    assert resolution.reason_code == "clinical_sources_ineligible"
+    assert _review_state(resolution) == "not_yet_evaluated"
+
+
+def test_documented_scope_needs_a_source_this_review_read(records):
+    """Citing a paper outside the record's verified studies leaves the row open."""
+    from clinical_applicability import assess_clinical_applicability
+    record = records["turmeric"]
+    scope = {**record["documented_review_scope"], "source_pmids": ["1"]}
+    row = {"canonical_id": "turmeric", "name": "Turmeric Root Extract", "raw_source_text": "Turmeric Root Extract",
+           "source_label_name": "Turmeric Root Extract", "raw_source_path": "activeIngredients[0]",
+           "source_section": "activeIngredients"}
+    decision = assess_clinical_applicability(
+        {"activeIngredients": [row], "ingredients_scorable": [row]},
+        {**record, "documented_review_scope": scope, "applicability": scope, "ingredient": row["name"],
+         "matched_canonical_ids": ["turmeric"], "matched_source_row_refs": [row["raw_source_path"]]},
+        assess_amount=False)
+    assert decision["reason_code"] == "invalid_applicability_contract"
+
+
+def test_documented_scope_does_not_reach_the_signed_scope_key(records):
+    """Dose reads ``applicability``, so an Evidence review's scope stays out of it."""
+    for cid in ("turmeric", "ginkgo", "collagen"):
+        assert "applicability" not in records[cid]
+        assert records[cid]["documented_review_scope"]["source_pmids"]
+
+
+def test_no_agent_review_is_recorded_as_a_clinician(records):
+    for cid in ("turmeric", "ginkgo", "methionine", "collagen"):
+        blob = json.dumps(records[cid]).lower()
+        assert "clinician_approved" not in blob
+        assert "dr. pham" not in blob and "dr pham" not in blob
 
 
 def test_fiber_review_stays_out_of_the_data():

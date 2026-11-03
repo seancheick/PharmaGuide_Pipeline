@@ -4,12 +4,13 @@ Live PubMed esearch/efetch on 2026-11-03. No clinician approved any of this and 
 
 `verify_literature_records.py` on the four applied records: 20 studies, 0 findings, 0 retractions. It screens PubMed bibliography and abstracts only, not full text, dose, outcome or clinician approval. `verify_all_citations_content.py` has no config for this file, so that verifier does not cover it; `verify_literature_records.py` is the owner here.
 
-Turmeric, ginkgo and collagen carry `applicability_unestablished`, so their record-level `effect_direction` is null under the literature contract. The labels below are study-level findings. Fiber was read but is not in the data; see `report.md`.
+Turmeric, ginkgo and collagen carry `applicability_unestablished`, so their record-level `effect_direction` is null under the literature contract. The labels below are study-level findings. A label that declares a preparation inside the documented scope finishes at no credit, one that declares a preparation outside it finishes as outside, and one that declares no preparation stays open. Fiber was read but is not in the data; see `report.md`.
 
 ## turmeric
 
 - **Result:** status `applicability_unestablished`, record effect null. Study-level findings: positive_weak 3, mixed 2, negative 1
 - **Scope read:** Curcuma longa (turmeric) extract, including curcumin preparations; curcuminoid content and bioavailability preparation vary. Whole root powder, ratio extracts and unspecified turmeric are not settled by these studies
+- **Documented scope:** require_source_label_form: True; required_form_terms: extract, curcumin, curcuminoid, curcuminoids, meriva, bcm-95; excluded_form_terms: 4:1, turmeric powder, root powder, rhizome powder; supported_outcomes: joint, digestive; studied_population: Adults with knee osteoarthritis or functional dyspepsia
 - **Search:** `("Curcuma"[Mesh] OR turmeric[tiab] OR "Curcuma longa"[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (turmeric[ti] OR "Curcuma longa"[ti]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]`
 - **Titles screened:** 314
 
@@ -26,6 +27,7 @@ Turmeric, ginkgo and collagen carry `applicability_unestablished`, so their reco
 
 - **Result:** status `applicability_unestablished`, record effect null. Study-level findings: null 4, mixed 1
 - **Scope read:** Ginkgo biloba leaf extract, mainly standardized preparations such as EGb 761; undeclared extracts and crude leaf powder are not settled by these studies
+- **Documented scope:** require_source_label_form: True; required_form_terms: flavone glycoside, flavone glycosides, flavonol glycoside, flavonol glycosides, egb 761, egb761, ginkgold; excluded_form_terms: 4:1, biloba powder, ginkgo powder, leaf powder; supported_outcomes: cognitive; studied_population: Older adults with normal cognition, memory complaints, mild cognitive impairment or dementia
 - **Search:** `("Ginkgo biloba"[Mesh] OR ginkgo[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || ("Ginkgo biloba"[Mesh] OR ginkgo[tiab]) AND (randomized controlled trial[pt]) AND (dementia[tiab] OR cognitive[tiab] OR memory[tiab]) AND humans[mh]`
 - **Titles screened:** 341
 
@@ -57,6 +59,7 @@ Turmeric, ginkgo and collagen carry `applicability_unestablished`, so their reco
 
 - **Result:** status `applicability_unestablished`, record effect null. Study-level findings: positive_weak 4, mixed 1
 - **Scope read:** Oral hydrolyzed collagen or collagen peptides; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are not settled by these studies
+- **Documented scope:** require_source_label_form: True; required_form_terms: hydrolyzed, hydrolysate, collagen peptides, peptan, verisol, naticol; excluded_form_terms: biocell, undenatured, uc-ii, uc ii, nt2; supported_outcomes: skin, joint; studied_population: Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis
 - **Search:** `("collagen peptides"[tiab] OR "collagen hydrolysate"[tiab] OR "hydrolyzed collagen"[tiab] OR "hydrolysed collagen"[tiab] OR "collagen supplementation"[tiab] OR gelatin[ti]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || ("collagen peptides"[tiab] OR "collagen hydrolysate"[tiab] OR "hydrolyzed collagen"[tiab] OR "hydrolysed collagen"[tiab] OR "collagen supplementation"[tiab]) AND (oral[tiab] OR supplement*[tiab]) AND randomized controlled trial[pt] AND humans[mh]`
 - **Titles screened:** 142
 

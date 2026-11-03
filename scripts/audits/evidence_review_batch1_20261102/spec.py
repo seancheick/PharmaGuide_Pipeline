@@ -20,13 +20,19 @@ RECORDS = {
     "turmeric": {
         "material_form": "Curcuma longa (turmeric) extract, including curcumin preparations; curcuminoid content and bioavailability preparation vary. Whole root powder, ratio extracts and unspecified turmeric are not settled by these studies",
         "population_context": "Adults with knee osteoarthritis, functional dyspepsia or non-alcoholic fatty liver disease; source-specific populations only",
+        "documented_review_scope": {"scope": "ingredient", "require_source_label_form": True,
+            "required_form_terms": ['extract', 'curcumin', 'curcuminoid', 'curcuminoids', 'meriva', 'bcm-95'],
+            "excluded_form_terms": ['4:1', 'turmeric powder', 'root powder', 'rhizome powder'],
+            "supported_outcomes": ['joint', 'digestive'],
+            "studied_population": 'Adults with knee osteoarthritis or functional dyspepsia',
+            "source_pmids": ['33511486', '40731001', '32926799', '34652861'], "reviewed_at": "2026-11-03"},
         "effect_direction": None,
         "applicability_status": "applicability_unestablished",
         "applicability_decision": (
             "Human trials tested specific Curcuma longa extracts. Knee-pain syntheses favor them with low certainty and heterogeneous preparations (33511486, 40731001); "
             "one RCT improved pain but not effusion-synovitis (32926799), and a curcumin trial improved functional dyspepsia scores (34652861). One small trial used 3 g/day whole powder (28443702), "
             "which does not settle whole root or unspecified turmeric. Findings are outcome-specific and a label's "
-            "curcuminoid content may differ, so rows stay open and this review earns no Evidence credit. Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is "
+            "curcuminoid content may differ, so this review earns no Evidence credit. A row declaring a studied extract finishes at no credit, a row declaring whole powder or a ratio extract finishes as outside these studies, and a row stating no preparation stays open. Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is "
             "recorded here and does not change any safety owner."
         ),
         "studies": [
@@ -59,13 +65,19 @@ RECORDS = {
     "ginkgo": {
         "material_form": "Ginkgo biloba leaf extract, mainly standardized preparations such as EGb 761; undeclared extracts and crude leaf powder are not settled by these studies",
         "population_context": "Older adults with normal cognition, memory complaints, mild cognitive impairment or dementia; adults with tinnitus or intermittent claudication",
+        "documented_review_scope": {"scope": "ingredient", "require_source_label_form": True,
+            "required_form_terms": ['flavone glycoside', 'flavone glycosides', 'flavonol glycoside', 'flavonol glycosides', 'egb 761', 'egb761', 'ginkgold'],
+            "excluded_form_terms": ['4:1', 'biloba powder', 'ginkgo powder', 'leaf powder'],
+            "supported_outcomes": ['cognitive'],
+            "studied_population": 'Older adults with normal cognition, memory complaints, mild cognitive impairment or dementia',
+            "source_pmids": ['41641880', '20040554', '22959217', '36383762', '23744597'], "reviewed_at": "2026-11-03"},
         "effect_direction": None,
         "applicability_status": "applicability_unestablished",
         "applicability_decision": (
             "Large prevention trials of 120 mg twice daily found no reduction in Alzheimer's incidence or cognitive decline (20040554, 22959217). The 2026 Cochrane review (41641880) finds possible "
             "small to moderate benefits at six months in dementia and probably little or no effect in mild cognitive impairment. Reviews in tinnitus and intermittent claudication show little or no "
-            "clinically significant benefit (36383762, 23744597). Findings concern standardized extracts and do not establish applicability to a retail label, so rows stay "
-            "open and this review earns no Evidence credit. Interaction and bleeding warnings stay with their own owners."
+            "clinically significant benefit (36383762, 23744597). Findings concern standardized extracts, so this review earns no Evidence credit. A row declaring that standardization or "
+            "a studied extract finishes at no credit, a row declaring crude powder or a ratio extract finishes as outside these studies, and an extract or plant name alone stays open. Interaction and bleeding warnings stay with their own owners."
         ),
         "notes": ("PMID 19017911 (GEM dementia prevention trial) has an unread erratum, JAMA 2008;300(23):2730, so it is retired from "
                   "qualifying_human_studies until that notice is read."),
@@ -126,12 +138,18 @@ RECORDS = {
     "collagen": {
         "material_form": "Oral hydrolyzed collagen or collagen peptides; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are not settled by these studies",
         "population_context": "Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis",
+        "documented_review_scope": {"scope": "ingredient", "require_source_label_form": True,
+            "required_form_terms": ['hydrolyzed', 'hydrolysate', 'collagen peptides', 'peptan', 'verisol', 'naticol'],
+            "excluded_form_terms": ['biocell', 'undenatured', 'uc-ii', 'uc ii', 'nt2'],
+            "supported_outcomes": ['skin', 'joint'],
+            "studied_population": 'Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis',
+            "source_pmids": ['33742704', '37432180', '40324552', '42342959', '39212129'], "reviewed_at": "2026-11-03"},
         "effect_direction": None,
         "applicability_status": "applicability_unestablished",
         "applicability_decision": (
             "Pooled trials report favorable skin and knee-osteoarthritis measurements with high risk of bias, high heterogeneity or co-active formulations (33742704, 37432180, 42342959, 39212129). "
             "In one review those skin benefits were absent in non-pharmaceutical-funded and high-quality subgroups (40324552). This review does not change the clinician-signed limitation already on "
-            "INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so rows stay open and this review earns no Evidence credit."
+            "INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so this review earns no Evidence credit. A row declaring hydrolyzed collagen or peptides finishes at no credit, a row declaring undenatured collagen or a co-active complex finishes as outside these studies, and collagen or gelatin alone stays open."
         ),
         "notes": ("PMID 31919527 (whey versus collagen peptides, muscle protein synthesis) has an unread corrigendum, PMID 33301004, so it is "
                   "retired from qualifying_human_studies until that notice is read."),
@@ -162,7 +180,8 @@ RECORDS = {
 
 # Read and retained, but not applied to the data. Moving fiber off its generated record ends the only
 # gap on 3 probiotic products (59635, 241707, 276704), which then finish through a fiber row: the probiotic
-# release branch reads the module result, not the row. That needs a decision, so this stays here.
+# release branch reads the module result, not the row. Sean's November 3 decision keeps those holds and rejects
+# a module-specific shortcut, so this waits until that branch reads rows like the generic one.
 WITHHELD = {
     "fiber": {
         "material_form": "Named fibers studied in these reviews: psyllium, pectin, galactomannan and glucomannan (konjac). Fiber declared as a class or unspecified is not settled by these studies",

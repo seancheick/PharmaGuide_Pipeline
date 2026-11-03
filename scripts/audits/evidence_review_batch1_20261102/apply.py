@@ -59,6 +59,8 @@ for cid, entry in spec.RECORDS.items():
     }
     if entry.get("notes"):
         record["notes"] = entry["notes"]
+    if entry.get("documented_review_scope"):
+        record["documented_review_scope"] = entry["documented_review_scope"]
     if prior.get("reference_citations"):
         provenance["reference_citations"] = prior["reference_citations"]
     record.update({

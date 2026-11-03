@@ -992,6 +992,16 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     return components
 
 
+def _study_read_and_verified(study: Mapping) -> bool:
+    """A cited paper whose live record and abstract this review actually checked."""
+    provenance = study.get("verification_provenance")
+    return (isinstance(provenance, Mapping) and bool(study.get("pmid"))
+            and provenance.get("pmid_verified") is True
+            and provenance.get("topic_match_verified") is True
+            and provenance.get("retracted") is False
+            and bool(provenance.get("abstract_evidence_quote")))
+
+
 def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Mapping, policy: Mapping) -> dict:
     # Preserve existing signed legacy scopes without inventing a migrated
     # context. The scope, its population and its sources remain one unit;
@@ -1006,6 +1016,11 @@ def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Map
     eligible_sources = {str(ref.get("pmid")) for ref in reference.get("references_structured") or []
                         if isinstance(ref, Mapping) and ref.get("pmid")
                         and clinical_record_sources_eligible({"references_structured": [ref]})}
+    if reference.get("documented_review_scope") == policy:
+        # A documented source review carries its own verified sources; the
+        # population and outcome owners below still decide the label's match.
+        eligible_sources |= {str(study.get("pmid")) for study in reference.get("qualifying_human_studies") or []
+                             if isinstance(study, Mapping) and _study_read_and_verified(study)}
     if (not dated or not sources or not sources <= eligible_sources
             or not policy.get("studied_population") or not policy.get("supported_outcomes")):
         return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}

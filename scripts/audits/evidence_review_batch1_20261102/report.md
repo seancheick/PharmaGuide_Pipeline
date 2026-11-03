@@ -1,76 +1,105 @@
 # First Evidence review batch: report for Sean
 
-Nothing is published. No clinician approval is claimed, and no record earns Evidence credit.
+Nothing is published. No clinician approval is claimed, and no record earns Evidence credit. This applies your November 3 decisions; it does not ask you to approve the result, and it does not authorize a whole-catalog build.
 
 ## Result
 
-I read the literature for 5 of the top 10 ingredients. The other 5 are held on sources or a clinician decision, so I did not touch them. One review finishes rows, three are recorded and finish nothing, and one is not applied.
+200 products go from partial to complete. No score, tier, Dose points, Evidence points or safety status moves on any product.
 
-Measured on 1,285 products that contain a batch ingredient, plus 150 controls, from frozen raw labels through clean, enrich and the scored artifact, comparing base data with this PR's data:
+I replayed 2,063 products from frozen raw labels through clean, enrich and the scored artifact, comparing base data with this PR's data. That covers all but 2 of the 1,923 products with a batch ingredient anywhere in their enriched data, plus controls. The first replay had missed 630 of them, mostly fiber rows, so I added 628 and read the other 2 through their stored enriched files, because they are user submissions with no raw label.
 
 | | This PR |
 |---|---|
-| Partial to complete | 40, all from methionine |
+| Partial to complete | 200 (199 replayed, 1 user submission) |
 | Held to scored | 0 |
 | Complete to partial | 0 |
 | Quality score, tier, Dose or Evidence points moved | 0 |
 | Safety status moved | 0 |
 | Controls changed | 0 of 150 |
 
-The 40 by tier: Needs improvement 37, Good 1, Very good 1, Poor 1. They already carried these scores and tiers. On 192 products the Evidence result state changes with no change in points, for example `clinical_review_not_covered` to `applicability_unestablished` (88). I did not review how each state reads to a consumer.
+The 200 by tier: Needs improvement 155, Good 23, Poor 16, Very good 6. They already carried these scores and tiers. On 192 products the Evidence result state changes with no change in points.
 
-| Ingredient | Result | Rows in the Evidence-only set |
+| Record | Finish | Reviewed preparation, no credit | Outside the review (preparation or label purpose) | Mixed rows |
+|---|---|---|---|---|
+| turmeric | 66 | 47 | 14 | 5 |
+| collagen | 66 | 54 | 9 | 3 |
+| methionine | 40 | 40 (reviewed null) | 0 | 0 |
+| ginkgo | 28 | 19 | 8 | 1 |
+| fiber | 0 | Read, not applied | | |
+
+The collagen line includes the user submission. `products_complete.csv` names each product, its record and its conclusion. `products_held.csv` names every replayed product that stays incomplete and the open rows behind it.
+
+## How each decision is applied
+
+**1. A documented review may close an ordinary assessment.** Turmeric, ginkgo and collagen now state once, on the record, the preparation, purpose, population, sources and scope (`documented_review_scope`), and every label reuses it. The sources must be cited papers whose live record and abstract were checked. The record says Claude did the review. Nothing names an agent as a clinician.
+
+| The label | The row | Example |
 |---|---|---|
-| methionine | Reviewed null. Closes through the existing owner | 173 close |
-| turmeric | Applicability unestablished | 192 stay open |
-| ginkgo | Applicability unestablished | 108 stay open |
-| collagen | Applicability unestablished | 143 stay open, and 59 stay held by the signed record |
-| fiber | Read, not applied | 57 stay open as they were |
+| Declares a preparation inside the scope | Finishes at no credit | "Collagen, Hydrolyzed", 312932 |
+| Declares a preparation outside it | Finishes as outside the review | "Ginkgo biloba, Powder", 329958 |
+| Declares a purpose the sources do not cover | Finishes as outside the review | 74547 |
+| Declares no preparation, or an unclassified claim | Stays open | "Turmeric", or 278548 |
 
-The order in `review_order.csv` predicted 61 products for methionine; 40 finished in the replay. I did not trace the other 21. The prediction for a review that finishes nothing is simply wrong, so read the route column as a prediction, not a result.
+The last line is the one that matters: an unresolved match is not renamed a conclusion.
 
-## What was wrong in the first version of this PR
+**2. No module shortcut.** Fiber stays out of the data, and 59635, 241707 and 276704 stay held. The reason is in `traces.md`: the probiotic branch of the release gate reads the module result rather than the rows. The same gap already lets 98 of 279 complete probiotic products through with an open non-strain row. Closing it is a change to the shared completion rule, so a9 has the count and the product IDs.
 
-- **Three tests failed in CI and I had not run them.** After a late status change I ran a focused set that left out their files.
-  - All four non-null records broke the literature contract: `applicability_unestablished` requires a null record effect. Their effects are now null, and the study-level findings stay on each study.
-  - Product 59635 went from held to a public score of 60.9. See Question 2. Neither test's expected values changed.
-- **"142 finished, 0 score moves" was wrong.** That number came from the unsigned scopes, and the release check ran only on products whose readiness flipped, which missed 59635. It now runs on all 1,435.
-- **My unsigned scopes closed rows.** Fiber, ginkgo and collagen carried preparation scopes I wrote. Rows outside them closed as if a reviewer had concluded something. I removed all three. This withdraws my own closure and restores the existing hold; it does not decide Question 1.
-- **The ginkgo scope excluded `powder`,** so "Ginkgo Biloba Extract Powder (24% Flavone Glycosides)" and EGb 761 extract powder read as crude leaf powder. No blocked label in the catalog had that wording, but the rule was wrong. Any future scope must not reject standardized extract powder.
-- **The 329-product what-if is withdrawn.** It finished 329 products, cut Dose from 11.4 to 0 on 5 (278548 and 329958 to 329961) and moved 278548 from Needs improvement to Poor. "0 once handled" was never measured, and it used the same flawed selection. Nothing replaces it; treat the effect of a yes on Question 1 as unmeasured.
-- **Stale text.** Four `research.md` status lines were out of date, and collagen's population still named a retired muscle trial. Both are fixed.
-- **Trace numbers.** The table, the 152-product difference, the fully assessed count and 278416 all came from probing the wrong view of the product. `traces.md` has the corrected figures and the cause.
+**3. Trace powders and amino acids use the existing rules.** No new rule and no blanket call on powders.
+- 2,012 of the 3,256 open rows on these products are `adjunct`. All 389 products with an adjunct row inherit it from a material blend, and on 317 of them every open row is adjunct. So the existing inheritance rule is what asks a supporting broccoli or pumpkin row for an answer, not a missing trial. Owner selection also decides Evidence points, so I did not change it here. a9 has the count.
+- l_isoleucine and l_valine are primary on 200 rows each, so they are not supporting rows. None is a DRI essential nutrient, so they take the ordinary documented review, one preparation and purpose at a time.
 
-Two papers remain retired because their corrections are unread: 19017911 (GEM, JAMA erratum) and 31919527 (corrigendum 33301004), following the flaxseed precedent.
+**4. The holds stay.** Nothing changed on carnitine, elderberry, betaine, phytosterols, taurine or grape seed, and the signed collagen record stays held on its unresolved extraction (60 products). Unread papers are not recorded as negative or complete. PMID 24287284 stays unread: its publisher returned 403 and I did not try to get around that.
 
-## Questions for you
+## Dose
 
-The suggested answers below come from Codex's audit. They are recommendations for you to weigh, and I implemented none of them.
+The review does not move Dose. The 11.4 points on 278548 and 329958 to 329961 are the existing neutral value for a disclosed dose with no applicable benchmark (`no_benchmark_neutral`, `pharmaguide_policy`, reason "Dose disclosed, but adequacy cannot be determined"). The review adds no benchmark, so those points are still supported, and they are not being preserved to protect a tier.
 
-**Question 1: may an agent review finish rows at no credit, and under what policy?** Today one route does: a reviewed null with studies closes through the existing owner, which is how methionine finishes 40 products. A review with positive or mixed findings cannot, because `_assess_legacy_signed_scope` needs a signed scope. So a null finding finishes and a positive one waits. Codex suggests agent review only under an approved source-verified policy. If you want that, methionine should wait too: revert its one record and this PR finishes nothing. Allowing positive and mixed reviews to close needs a code change, and Dose must be protected first, as the withdrawn what-if showed.
+The earlier drop to 0 was a real coupling. `_completed_botanical_reference` and `_botanical_benchmark` read a record's `applicability`, so writing an Evidence scope into that key narrowed turmeric's Dose reference, and changing the status hid the exact-preparation ginkgo owners. The owner fix is a separate key that Dose does not read, with the record status left as it was. The 5 products keep 11.4 in the replay. 329958 to 329961 are now complete at 54.4 (Poor); 278548 stays partial at 55.4 on its unclassified claim.
 
-**Question 2: should a row with an unsigned review count as finished on a probiotic product?** `compose_product_resolution_state` treats `research_present_applicability_unestablished` as complete. Generic products still stop at their row ledger. The probiotic branch of the release gate reads only the module's result, so moving fiber off its generated record would finish 59635, 241707 and 276704. On 59635 the fiber row is a 0 g line on the label. I left fiber out of the data to keep today's behavior, and the review is in `spec.py` and `research.md` ready to apply. Codex suggests no automatic completion from outside-scope rows, which points the same way. Your answer decides whether fiber goes in, and whether the gate needs tightening before any later review of a non-strain row on a probiotic label.
+## Who stays held
 
-**Question 3: how should trace food powders and single amino acids be handled?** Blocked rows: broccoli 269, pumpkin 133, acai 132, culinary matrix 205, l_isoleucine 239, l_valine 226, l_tryptophan 67, l_threonine 49, l_histidine 58, l_phenylalanine 84. I withdraw my earlier recommendation, because I did not collect each row's role, dose or claim. Codex suggests classifying by actual role, dose and claim, and that needs those data first. I changed nothing here. Methionine is also an essential amino acid, so a ruling here may also apply to it.
+1,098 of the 2,063 replayed products stay incomplete. Evidence blocks 1,086 of them, some alongside another blocker. The other 12 stop only on Dose or identity.
 
-**Question 4: clinician items, per record.** For each of l_carnitine, elderberry, tmg_betaine, phytosterols, taurine and grape seed: supply the unread papers listed in `traces.md`, or give a per-record ruling on what happens without them. Codex suggests the same. Collagen needs one field: read the Am J Med 2025 paper for `collagen_skin_funding_40324552`, or authorize re-encoding it as a rejected source.
-
-## Remaining work (rough estimate)
-
-Of 5,797 ordinary products with blocked rows (omega 141 and probiotic 244 counted apart), predicted closure if each route's rows really closed, from row reasons, not replayed:
-
-| Route | Ingredients | Products closable by this route alone |
+| Open rows | Products | Why |
 |---|---|---|
-| Agent review | 341 | 2,218 |
-| Clinician | 71 | 1,571 |
-| Applicability decision (reviewed, cannot close) | 69 | 617 |
-| Policy or identity | 43 | 212 |
-| All four together | 524 | 5,765 |
+| A batch record's row | 414 | See below |
+| Only other ingredients' rows | 668 | Not reviewed in this batch, or held on their own record |
+| No individual row | 16 | 11 stop on Dose or identity, 5 on the probiotic gate. 59635 is one of the 5 |
 
-This batch says to discount the agent figure heavily. Of the five reviews, one finished rows, and only because its finding was null. At that rate, 341 ingredients at 5 per long session is about 70 sessions and closes about 70 ingredients. 2,047 single-ingredient products sit behind those reviews, so at 1 in 5, and the 40 of 61 yield methionine showed, that is on the order of 270 products. It is a rough extrapolation from one batch. More review before Questions 1 and 2 are answered mostly produces records that stay open.
+Products with an open batch row (a product can appear in more than one line):
+
+| Row | Products | Why it is open |
+|---|---|---|
+| fiber | 179 | Review not applied |
+| turmeric | 75 | Mostly no preparation declared ("Turmeric", "organic Turmeric") |
+| ginkgo | 65 | Mostly an unstandardized "Ginkgo biloba leaf extract", which the review does not settle |
+| collagen, signed record | 60 | The unresolved extraction |
+| collagen, literature record | 47 | Mostly no preparation declared ("Collagen", "Marine Collagen", "Gelatin") |
+
+14 of the open turmeric, ginkgo and collagen products name a preparation inside the review and still stay open. The one I traced (278548) has an unclassified label claim. I did not trace the other 13, and they are conservative either way.
+
+## Methionine and 232321
+
+Every methionine case is accounted for in `traces.md`. 40 finish, 19 also need a held betaine, carnitine or taurine row, and 27810 and 31064 stay partial on a whey row where the resolver and the ledger disagree. 232321 is not a methionine case: it holds on an unreviewed Pycnogenol row that the release gate sees and the scoring view drops.
+
+## Corrections to earlier versions
+
+- **Workload estimates are removed.** The session and product projections extrapolated from one batch and were unsupported. The `unlocks` column in `review_order.csv` is greedy and assumes every higher rank has closed, so read it as an order, not a forecast. Its route names now say `documented_scope` and `held_source_or_ruling`.
+- **The 142-product figure and the 329-product what-if stay withdrawn.** The 40-product result was correct for the rule then in force and is superseded by this one.
+- **The first replay did not cover every product with a batch ingredient.** The 628 added products changed nothing.
+- Earlier corrections: the literature contract failures, the ginkgo `powder` exclusion and the 11,318-row table are all fixed, and `traces.md` has the correct figures. Papers 19017911 and 31919527 stay retired because their corrections are unread.
+
+## For a9
+
+- The probiotic branch reads the module result (98 complete products with an open non-strain row).
+- The release gate reads the raw enriched product while the scorer and ledger read the scoring view (232321).
+- The resolver and ledger disagree on some matched rows (27810, 31064; 266 such rows in `products_held.csv`).
+- Material-blend members inherit the purpose tier (389 products).
+- A finished no-credit row and an open row show the same sentence: "Available research has not established a match to this product's assessed ingredients and use." #338 owns that distinction.
+- `get_evidence_subject_rows` keeps one row per ingredient in a blend. On 46707 the gate reads the root powder and records "outside the review", while the 95% extract would be inside. It finishes at no credit either way, but the recorded reason describes only the first row.
 
 ## Not done
 
-- The replay covers products containing a batch ingredient, not the whole catalog, and the corpus was selected before the view correction.
-- 232321 and the 21 methionine products that did not finish are not traced.
-- `origin/main` is merged in. Its 23 new commits are release and signing work and touch no file this batch changed, so I did not rerun the replay on it.
+- No whole-catalog build. The replay covers the products with a batch ingredient and the controls.
+- Fiber is not applied, and the other held records are not reopened.
+- This branch is not merged with a9's work. That branch changes `assessment_readiness.py` and `scored_artifact.py`, including a new capture-gap condition on completion that could hold some of these products. Both branches edit `test_blend_identities_have_a_finished_review.py`. Whichever lands second must reconcile that test and rerun this replay.
