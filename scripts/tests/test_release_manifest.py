@@ -621,7 +621,7 @@ def test_publication_contract_requires_new_params_only_when_signing(
 def harness(monkeypatch, gate_file):
     """A sync with every remote call recorded, in order. No network."""
     events = []
-    remote = SimpleNamespace(current=None, objects={})
+    remote = SimpleNamespace(current=None, objects={}, older_releases=[])
     client = _RpcClient()
 
     def upload(_client, _bucket, path, local_path, **kwargs):
@@ -651,6 +651,15 @@ def harness(monkeypatch, gate_file):
     monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: client)
     monkeypatch.setattr(supabase_client, "fetch_current_manifest", lambda _c: remote.current)
     monkeypatch.setattr(supabase_client, "fetch_manifest_version", lambda *_a: None)
+
+    def latest_signed_rules(_client):
+        for row in [remote.current or {}, *remote.older_releases]:
+            text = row.get("signed_release")
+            if text and json.loads(text).get("rules"):
+                return json.loads(text)["rules"]
+        return None
+
+    monkeypatch.setattr(supabase_client, "fetch_latest_signed_rules", latest_signed_rules, raising=False)
     monkeypatch.setattr(supabase_client, "upload_file", upload)
     monkeypatch.setattr(supabase_client, "download_file", download)
     monkeypatch.setattr(supabase_client, "list_storage_paths", list_paths)
@@ -1257,6 +1266,61 @@ def test_the_first_signed_rules_release_compares_with_the_app_pin(
                        rule_pin=str(pin))
     assert result["status"] == "synced"
     assert rule_gate.baseline == b"bundled-rules"
+
+
+def test_a_catalog_only_release_does_not_reset_the_rules_phones_hold(
+    tmp_path, harness, key, rule_gate, monkeypatch,
+):
+    """Withdrawing a rule after a catalog-only release must still need its alert."""
+    import rule_change_gate
+
+    catalog, rules, manifest, signature = _rule_gate_setup(tmp_path, key)
+    held = b"rules-from-the-last-release-that-named-rules"
+    harness.remote.objects["rules/1.0.14/interaction_db.sqlite"] = held
+    harness.remote.current = {
+        "db_version": "2026.09.02.000000", "checksum": "sha256:other", "release_sequence": 4,
+        "signed_release": json.dumps({"rules": None}),
+    }
+    harness.remote.older_releases = [{
+        "signed_release": json.dumps({
+            "rules": {"path": "rules/1.0.14/interaction_db.sqlite",
+                      "sha256": hashlib.sha256(held).hexdigest()},
+        }),
+    }]
+    pin = tmp_path / "interaction_db.release.json"
+    pin.write_text(json.dumps({"url": "https://example.test/rules", "sha256": "abc"}))
+    monkeypatch.setattr(
+        rule_change_gate, "fetch_pinned_db",
+        lambda _named, destination: Path(destination).write_bytes(b"older-app-pin"),
+    )
+    sync.sync(str(catalog), max_workers=1, release_manifest=manifest,
+              release_signature=signature, rules_dir=str(rules), rule_pin=str(pin))
+    assert rule_gate.baseline == held
+
+
+def test_latest_signed_rules_skips_catalog_only_releases_newest_first():
+    class Query:
+        def __init__(self):
+            self.sent = []
+            self.not_ = self
+
+        def __getattr__(self, name):
+            def step(*args, **kwargs):
+                self.sent.append((name, args, kwargs))
+                return self
+            return step
+
+        def execute(self):
+            return SimpleNamespace(data=[
+                {"signed_release": json.dumps({"rules": None})},
+                {"signed_release": json.dumps({"rules": {"path": "newest"}})},
+                {"signed_release": json.dumps({"rules": {"path": "older"}})},
+            ])
+
+    query = Query()
+    client = SimpleNamespace(table=lambda name: query if name == "export_manifest" else None)
+    assert supabase_client.fetch_latest_signed_rules(client) == {"path": "newest"}
+    assert ("order", ("release_sequence",), {"desc": True}) in query.sent
 
 
 def test_a_signed_rules_release_with_no_baseline_is_refused(tmp_path, harness, key, rule_gate):

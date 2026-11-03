@@ -4,6 +4,7 @@ Initializes from environment variables (loaded via env_loader.py).
 Provides typed helpers for manifest queries and storage uploads.
 """
 
+import json
 import os
 
 #: Storage bucket for pipeline artifacts (core DB, detail blobs, indexes,
@@ -137,6 +138,21 @@ def fetch_manifest_version(client, db_version):
     response = (client.table("export_manifest").select("*")
                 .eq("db_version", db_version).limit(1).execute())
     return parse_manifest_response({"data": response.data})
+
+
+def fetch_latest_signed_rules(client):
+    """The rules entry of the newest signed release that named rules, or None.
+
+    A catalog-only release names none, and phones keep what they hold.
+    """
+    response = (client.table("export_manifest").select("signed_release")
+                .not_.is_("signed_release", "null")
+                .order("release_sequence", desc=True).execute())
+    for row in response.data or []:
+        rules = json.loads(row["signed_release"]).get("rules")
+        if rules:
+            return rules
+    return None
 
 
 def insert_manifest(client, manifest_data, submission_approvals=None,
