@@ -1646,7 +1646,15 @@ def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mappin
     open_rows = [row for row in _safe_list(evidence.get("ingredient_assessments"))
                  if isinstance(row, Mapping) and row.get("source_row_ref") in open_refs]
     return (not open_rows or len(open_rows) < len(open_refs)
-            or any(_norm(row.get("canonical_id")) in required for row in open_rows))
+            or any(_norm(row.get("canonical_id")) in required for row in open_rows)
+            or _title_names_an_open_row(product, open_rows))
+
+
+def _title_names_an_open_row(product: Mapping[str, Any], open_rows: list) -> bool:
+    """An unread ingredient the title is about holds the product, whatever its role."""
+    from scoring_input_contract import _identity_named_in_product_title
+    rows = [dict(row) for row in open_rows]
+    return any(_identity_named_in_product_title(dict(product), row, rows, subject_words=True) for row in rows)
 
 
 def _evidence_presents_as_unreviewed(module_breakdown: Any) -> bool:

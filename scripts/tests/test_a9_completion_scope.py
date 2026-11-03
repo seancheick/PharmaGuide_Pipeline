@@ -116,6 +116,66 @@ def test_a_blend_member_completes_only_on_its_own_reviewed_decision(pipeline):
     assert {"chamomile", "lemon_balm"} <= {row["canonical_id"] for row in _unreviewed_rows(held)}
 
 
+@pytest.mark.parametrize("label, open_row", [
+    pytest.param("a9_title_subject_293389_raw.json", "elderberry", id="genus_sambucus"),
+    pytest.param("a9_title_subject_251695_raw.json", "elderberry", id="genus_sambucus_with_vitamin_c_credit"),
+    pytest.param("a9_title_subject_178674_raw.json", "fish_oil", id="source_fish"),
+    pytest.param("a9_title_subject_221657_raw.json", "epa", id="class_omega"),
+    pytest.param("a9_title_subject_243141_raw.json", "reishi", id="class_mushroom"),
+    pytest.param("a9_title_subject_25921_raw.json", "maca", id="brand_reparagen"),
+])
+def test_an_unread_ingredient_the_title_names_holds_the_product(pipeline, label, open_row, monkeypatch):
+    import assessment_readiness
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = _enrich(pipeline, label)
+    held = build_scored_artifact(json.loads(json.dumps(enriched)))
+    assert held["quality_assessment_status"] == "partial"
+    assert "evidence_assessment_incomplete" in held["assessment_readiness"]["release_assessment"]["blockers"]
+    assert open_row in {row["canonical_id"] for row in _unreviewed_rows(held)}
+
+    # The title word decides completion alone: its role and points stay where they were.
+    from evidence_resolver import evidence_required_canonicals
+    assert open_row not in evidence_required_canonicals(
+        enriched, module=held["_v4_module_breakdown"]["module"])
+    original = assessment_readiness._title_names_an_open_row
+    monkeypatch.setattr(assessment_readiness, "_title_names_an_open_row", lambda *_: False)
+    unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
+    monkeypatch.setattr(assessment_readiness, "_title_names_an_open_row", original)
+    assert unheld["quality_assessment_status"] == "complete"
+    for field in ("quality_score_v4_100", "quality_tier", "quality_score_status", "product_safety_status",
+                  "safety_assessment_status", "verdict"):
+        assert held[field] == unheld[field]
+    assert ({key: pillar["score"] for key, pillar in held["quality_pillars_v4"].items()}
+            == {key: pillar["score"] for key, pillar in unheld["quality_pillars_v4"].items()})
+
+
+@pytest.mark.parametrize("title, canonical, named", [
+    ("Sambucus Nighttime Syrup", "elderberry", True),
+    ("Omega Curcumin", "dha", True),
+    ("Mushrooms + Immune", "chaga", True),
+    # A subject word names only its own ingredients, and a role never reads it.
+    ("Omega Curcumin", "curcumin", True),
+    ("Sambucus Nighttime Syrup", "melatonin", False),
+    ("Fish Collagen", "collagen", True),
+    ("Fish Collagen", "reishi", False),
+])
+def test_a_subject_word_names_only_its_own_ingredient(title, canonical, named):
+    from scoring_input_contract import _named_in_title
+
+    row = {"canonical_id": canonical, "name": canonical}
+    assert _named_in_title(row, title.lower(), subject_words=True) is named
+
+
+@pytest.mark.parametrize("title, canonical", [
+    ("sambucus nighttime syrup", "elderberry"), ("omega curcumin", "epa"), ("mushroom blend", "reishi"),
+])
+def test_a_role_doesnt_read_a_subject_word(title, canonical):
+    from scoring_input_contract import _named_in_title
+
+    assert _named_in_title({"canonical_id": canonical, "name": canonical}, title) is False
+
+
 def test_required_owners_are_the_ones_that_can_move_the_answer(pipeline):
     from evidence_resolver import evidence_owner_canonicals, evidence_required_canonicals
 
