@@ -1,0 +1,35 @@
+{
+  "alert_id": "SA_9999_0001",
+  "revision": 1,
+  "event_type": "interaction_rule",
+  "status": "published",
+  "authority": "TEST FIXTURE - not a real authority",
+  "source_url": "https://example.org/fake-interaction-source",
+  "evidence_verified_at": "2026-11-03",
+  "fda_class": null,
+  "jurisdiction": "US",
+  "effective_date": "2026-11-01",
+  "published_at": "2026-11-03T12:00:00Z",
+  "scope": {
+    "ingredient_canonical_ids": ["fake_fakeroot"],
+    "dsld_ids": []
+  },
+  "resolved_dsld_ids": ["9990001"],
+  "catalog_snapshot_version": "2026.11.03.000000",
+  "lots": null,
+  "headline": "Fictional test notice: Fakeroot and Testoprilex",
+  "body": "Test fixture only. Fakeroot is a made-up ingredient that this fictional rule says can raise Testoprilex levels.",
+  "action": "Test fixture only. Worth a conversation with your doctor.",
+  "consumer_disposition": "block",
+  "expires_at": null,
+  "retracted": false,
+  "interaction": {
+    "rule_id": "DSI_FAKE_TESTOPRILEX_FAKEROOT",
+    "rule_fingerprint": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "ingredient_name": "Fakeroot (fictional)",
+    "medication_name": "Testoprilex (fictional)",
+    "medication_ids": ["class:fake_test_medications", "0000001"],
+    "severity": "contraindicated",
+    "evidence_level": "established"
+  }
+}

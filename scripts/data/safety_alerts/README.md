@@ -81,6 +81,68 @@ Never *"your lot matched."* Never soften a ban into a suggestion. See
 `feedback_pharmaguide_safety_voice`: under-warning is the more expensive failure, but a warning the
 user cannot act on is not a warning.
 
+## Interaction rules: `interaction_rule`
+
+The interaction DB reaches phones slowly. This event carries a rule correction to the people it
+affects on their next connection. **Matching happens only on the device**, against the medications
+the user has on their phone. Nothing about medications is ever sent to us, and this repo has no way
+of knowing who matches: `applies_to` here always answers no, and push is skipped for this event.
+
+It adds one object to the record. `body` is the reason and `action` the management, so neither is
+repeated:
+
+```json
+"interaction": {
+  "rule_id": "DSI_...",
+  "rule_fingerprint": "sha256:...",
+  "ingredient_name": "as the user reads it",
+  "medication_name": "as the user reads it",
+  "medication_ids": ["class:doacs", "11289"],
+  "severity": "contraindicated",
+  "evidence_level": "established"
+}
+```
+
+**`medication_ids` are exact identities:** `class:*` ids, RxCUIs or profile drug-class ids, in the
+vocabulary of the rule itself. List each form you need, because the device does no clinical
+crosswalk. A display name would silently match nobody, so validation refuses one.
+
+**`consumer_disposition` follows severity:** `block` for `contraindicated`, otherwise `review`.
+
+**This lane still only adds.** An alert can warn sooner or more strongly than the DB on the phone. It
+can't take back a stricter warning the phone already shows.
+
+## Publishing a rule correction: the gate
+
+`scripts/rule_change_gate.py` runs before any release. It compares the candidate interaction DB with
+the one the app's pin names, and refuses a material change that has no cover:
+
+| Change | Needs |
+|---|---|
+| Medication x supplement at `avoid` or `contraindicated`: new, raised into that tier, or now applies to different people | A published, live `interaction_rule` alert |
+| Any other hard rule change: reworded, re-graded, lowered or removed | The alert, or an attestation |
+| A lower tier raised | The alert, or an attestation |
+| A hard medication x medication, supplement x supplement, food, condition or life-stage rule | An attestation. Alerts match medications only |
+| New or reworded rules below `avoid`, timestamps, source lists | Nothing |
+
+Get the value to put in `rule_fingerprint`:
+
+```bash
+python3 scripts/rule_change_gate.py --fingerprint RULE_KEY --candidate scripts/dist/interaction_db.sqlite
+```
+
+Keys are the interaction `id`, or for ingredient rules `RULE_ID#drug_class:<id>`,
+`RULE_ID#condition:<id>`, `RULE_ID#dose:<index>` or `RULE_ID#pregnancy_lactation`.
+
+An attestation goes in `rule_change_attestations.json`. It records a person's decision that no user
+notice is needed, and it only covers that exact version of the rule (`"removed"` for a removal):
+
+```json
+{"attestations": [
+  {"rule_key": "...", "rule_fingerprint": "sha256:...", "reason": "...", "reviewer": "...", "date": "YYYY-MM-DD"}
+]}
+```
+
 ## Status lifecycle
 
 ```

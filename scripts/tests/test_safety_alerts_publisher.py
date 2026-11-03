@@ -266,3 +266,22 @@ class TestStageImmutability:
         assert outcome["ok"]
         assert record["resolved_dsld_ids"] == ["111111"]
         assert record["catalog_snapshot_version"] == "2026.08.01.010203"
+
+
+def test_fake_interaction_feed_matches_the_bytes_the_app_tests_read(tmp_path):
+    """Two pins, one fixture: the app pins this same digest in
+    test/services/safety_alerts/interaction_rule_alert_test.dart."""
+    fixtures = os.path.join(os.path.dirname(__file__), "fixtures", "safety_alerts")
+    records = [
+        json.load(open(os.path.join(fixtures, name), encoding="utf-8"))
+        for name in ("SA_9999_0001.json", "SA_9999_0002.json")
+    ]
+    staged = stage(records, "2026-11-03", tmp_path)
+    produced = (tmp_path / "safety_alerts.json").read_bytes()
+
+    with open(os.path.join(fixtures, "interaction_rule_feed.json"), "rb") as handle:
+        assert produced == handle.read()
+    assert staged["checksum"] == FAKE_INTERACTION_FEED_SHA256
+
+
+FAKE_INTERACTION_FEED_SHA256 = "sha256:7c17891cabd3e4fa495c19bd2d42765e229ef4bb46dd3176ce11d84e006b0219"

@@ -7,6 +7,7 @@ retraction reaching across lanes — has to be impossible rather than discourage
 """
 from __future__ import annotations
 
+import json
 import os
 import sys
 
@@ -15,6 +16,7 @@ import pytest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from safety_alerts import (  # noqa: E402
+    INTERACTION_EVIDENCE_LEVELS,
     applies_to,
     is_active,
     latest_revisions,
@@ -211,3 +213,117 @@ class TestAppliesTo:
 
     def test_unrelated_product_never_matches(self):
         assert not applies_to(_alert(), dsld_id="999999", ingredient_canonical_ids=["ashwagandha"])
+
+
+# --- interaction_rule: a rule correction, matched only on the device ---------
+
+
+def _interaction_alert(**interaction_overrides):
+    interaction = {
+        "rule_id": "DSI_FAKE_TESTOPRILEX_FAKEROOT",
+        "rule_fingerprint": "sha256:" + "0" * 64,
+        "ingredient_name": "Fakeroot (fictional)",
+        "medication_name": "Testoprilex (fictional)",
+        "medication_ids": ["class:fake_test_medications", "0000001"],
+        "severity": "contraindicated",
+        "evidence_level": "established",
+    }
+    interaction.update(interaction_overrides)
+    return _alert(
+        event_type="interaction_rule",
+        scope={"ingredient_canonical_ids": ["fake_fakeroot"], "dsld_ids": []},
+        resolved_dsld_ids=["9990001"],
+        consumer_disposition="block",
+        interaction=interaction,
+    )
+
+
+def test_a_complete_interaction_rule_alert_is_valid():
+    outcome = validate_alert(_interaction_alert())
+    assert outcome["ok"], outcome["errors"]
+
+
+@pytest.mark.parametrize(
+    "field", ["rule_id", "ingredient_name", "medication_name", "evidence_level"]
+)
+def test_interaction_rule_needs_its_text_fields(field):
+    assert not validate_alert(_interaction_alert(**{field: ""}))["ok"]
+    assert not validate_alert(_interaction_alert(**{field: None}))["ok"]
+
+
+def test_interaction_rule_without_a_block_is_refused():
+    record = _interaction_alert()
+    del record["interaction"]
+    assert not validate_alert(record)["ok"]
+
+
+@pytest.mark.parametrize("value", [None, [], "class:x", [""], [7]])
+def test_interaction_rule_needs_real_medication_ids(value):
+    assert not validate_alert(_interaction_alert(medication_ids=value))["ok"]
+
+
+@pytest.mark.parametrize("value", ["Warfarin", "Blood thinners", "class:Has Spaces"])
+def test_medication_ids_are_identities_never_display_names(value):
+    """The device matches ids exactly. A name would silently match nobody."""
+    assert not validate_alert(_interaction_alert(medication_ids=[value]))["ok"]
+
+
+@pytest.mark.parametrize("value", ["", "abc", "sha256:xyz", None])
+def test_interaction_rule_needs_a_rule_fingerprint(value):
+    assert not validate_alert(_interaction_alert(rule_fingerprint=value))["ok"]
+
+
+@pytest.mark.parametrize("value", ["informational", "safe", "severe", None])
+def test_interaction_rule_severity_is_one_of_the_four_warning_tiers(value):
+    assert not validate_alert(_interaction_alert(severity=value))["ok"]
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["established", "probable", "moderate", "limited", "theoretical", "no_data"],
+)
+def test_evidence_level_uses_the_locked_vocabulary(value):
+    assert validate_alert(_interaction_alert(evidence_level=value))["ok"]
+
+
+def test_evidence_level_refuses_a_value_outside_the_vocabulary():
+    assert not validate_alert(_interaction_alert(evidence_level="strong"))["ok"]
+
+
+def test_disposition_follows_severity_the_way_the_app_does():
+    """Same mapping as the app's disposition fallback: only contraindicated blocks."""
+    good = _interaction_alert(severity="avoid")
+    good["consumer_disposition"] = "review"
+    assert validate_alert(good)["ok"]
+
+    assert not validate_alert(_interaction_alert(severity="avoid"))["ok"]
+    bad = _interaction_alert()
+    bad["consumer_disposition"] = "review"
+    assert not validate_alert(bad)["ok"]
+
+
+def test_interaction_rule_scopes_on_ingredients_not_products():
+    record = _interaction_alert()
+    record["scope"] = {"ingredient_canonical_ids": [], "dsld_ids": ["9990001"]}
+    assert not validate_alert(record)["ok"]
+
+
+def test_only_an_interaction_rule_may_carry_the_block():
+    record = _alert(interaction={"rule_id": "x"})
+    assert not validate_alert(record)["ok"]
+
+
+def test_the_server_side_matcher_never_claims_an_interaction_rule_match():
+    """Only the device knows the medications. Publication-time code must not guess."""
+    record = _interaction_alert()
+    assert not applies_to(record, dsld_id="9990001")
+    assert not applies_to(record, ingredient_canonical_ids=["fake_fakeroot"])
+
+
+def test_evidence_levels_stay_equal_to_the_locked_vocabulary():
+    path = os.path.join(
+        os.path.dirname(__file__), "..", "data", "evidence_strength_vocab.json"
+    )
+    with open(path, encoding="utf-8") as handle:
+        vocab = json.load(handle)["evidence_strengths"]
+    assert {entry["id"] for entry in vocab} == INTERACTION_EVIDENCE_LEVELS

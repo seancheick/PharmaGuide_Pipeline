@@ -42,13 +42,19 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-SCHEMA_VERSION = "1.0.0"
+SCHEMA_VERSION = "1.1.0"
 
-EVENT_TYPES = frozenset({"ingredient_ban", "product_recall"})
+EVENT_TYPES = frozenset({"ingredient_ban", "product_recall", "interaction_rule"})
 STATUSES = frozenset({"draft", "published", "retracted"})
 CONSUMER_DISPOSITIONS = frozenset({"block", "review"})
 # FDA recall classifications. Deliberately NOT required — see `fda_class` below.
 FDA_CLASSES = frozenset({"I", "II", "III"})
+# The four warning tiers. Below these a rule is not a warning, so not an alert.
+INTERACTION_SEVERITIES = frozenset({"contraindicated", "avoid", "caution", "monitor"})
+# scripts/data/evidence_strength_vocab.json; a contract test keeps them equal.
+INTERACTION_EVIDENCE_LEVELS = frozenset(
+    {"established", "probable", "moderate", "limited", "theoretical", "no_data"}
+)
 
 # Required on EVERY record regardless of event type. Publication authority is
 # non-negotiable: an alert without a verifiable official source is not an alert.
@@ -75,6 +81,10 @@ REQUIRED_FIELDS: Tuple[str, ...] = (
 
 _DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _ALERT_ID_RE = re.compile(r"^SA_[0-9]{4}_[0-9]{4}$")
+_FINGERPRINT_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+# The ids an interaction rule carries: `class:doacs`, an RxCUI, or a profile
+# drug-class id. Never a display name, which would silently match nobody.
+_MEDICATION_ID_RE = re.compile(r"^(class:[a-z0-9_]+|[0-9]+|[a-z0-9_]+)$")
 
 
 def _is_date(value: Any) -> bool:
@@ -162,6 +172,7 @@ def validate_alert(record: Any) -> Dict[str, Any]:
 
     errors.extend(_validate_scope(record, event_type))
     errors.extend(_validate_resolution(record))
+    errors.extend(_validate_interaction(record, event_type))
 
     # lots[] is DISPLAY-ONLY and must never be read as a matching input. We do
     # not know the user's lot, so a lot-scoped alert says "check your lot" and
@@ -204,10 +215,58 @@ def _validate_scope(record: Dict[str, Any], event_type: Any) -> List[str]:
             f"(got {len(ingredients)} ingredient ids and {len(dsld_ids)} dsld ids)"
         )
 
-    if event_type == "ingredient_ban" and not ingredients:
-        errors.append("ingredient_ban must scope on ingredient_canonical_ids")
+    if event_type in {"ingredient_ban", "interaction_rule"} and not ingredients:
+        errors.append(f"{event_type} must scope on ingredient_canonical_ids")
     if event_type == "product_recall" and not dsld_ids:
         errors.append("product_recall must scope on dsld_ids")
+    return errors
+
+
+def _validate_interaction(record: Dict[str, Any], event_type: Any) -> List[str]:
+    """What the app's notice shows, and the ids the device matches on.
+
+    `body` is the reason and `action` the management, so neither is repeated
+    here. Medications are matched only on the device; nothing here is ever sent
+    back, and `rule_fingerprint` ties the alert to one version of the rule (see
+    rule_change_gate.py).
+    """
+    block = record.get("interaction")
+    if event_type != "interaction_rule":
+        return ["interaction is only allowed on an interaction_rule"] if block is not None else []
+    if not isinstance(block, dict):
+        return ["interaction_rule must carry an interaction object"]
+
+    errors: List[str] = []
+    for name in ("rule_id", "ingredient_name", "medication_name"):
+        if not _nonempty_str(block.get(name)):
+            errors.append(f"interaction.{name} must be a non-empty string")
+    fingerprint = block.get("rule_fingerprint")
+    if not isinstance(fingerprint, str) or not _FINGERPRINT_RE.match(fingerprint):
+        errors.append("interaction.rule_fingerprint must be sha256:<hex>")
+
+    ids = block.get("medication_ids")
+    if not isinstance(ids, list) or not ids:
+        errors.append("interaction.medication_ids must be a non-empty list")
+    elif not all(isinstance(x, str) and _MEDICATION_ID_RE.match(x) for x in ids):
+        errors.append(
+            "interaction.medication_ids must be class:* ids, RxCUIs or profile "
+            f"drug-class ids, never display names, got {ids!r}"
+        )
+
+    severity = block.get("severity")
+    if severity not in INTERACTION_SEVERITIES:
+        errors.append(
+            f"interaction.severity must be one of {sorted(INTERACTION_SEVERITIES)}, got {severity!r}"
+        )
+    if block.get("evidence_level") not in INTERACTION_EVIDENCE_LEVELS:
+        errors.append(
+            "interaction.evidence_level must be one of "
+            f"{sorted(INTERACTION_EVIDENCE_LEVELS)}, got {block.get('evidence_level')!r}"
+        )
+    # The same mapping the app applies to a rule with no authored disposition.
+    expected = "block" if severity == "contraindicated" else "review"
+    if severity in INTERACTION_SEVERITIES and record.get("consumer_disposition") != expected:
+        errors.append(f"interaction severity {severity!r} requires consumer_disposition {expected!r}")
     return errors
 
 
@@ -317,8 +376,11 @@ def applies_to(
     snapshot predates the alert. Canonical ingredient matching is the second
     confirmation, used only when the caller's snapshot can supply identities.
     Either path alone is sufficient; never match on name similarity.
+
+    An interaction rule also depends on the user's medications, which only the
+    device knows, so this never reports a match for one.
     """
-    if not isinstance(record, dict):
+    if not isinstance(record, dict) or record.get("event_type") == "interaction_rule":
         return False
     if dsld_id and dsld_id in set(record.get("resolved_dsld_ids") or []):
         return True
