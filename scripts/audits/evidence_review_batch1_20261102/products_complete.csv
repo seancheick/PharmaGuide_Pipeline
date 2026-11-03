@@ -1,0 +1,201 @@
+dsld_id,brand,product,module,quality_score,quality_tier,product_safety_status,dose_points,evidence_points,record_that_closed,conclusion
+695,GNC Herbal Plus Standardized,Turmeric Curcumin,generic,63.9,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+12089,CVS Pharmacy,Daily Multiple For Men 50+,multi_or_prenatal,79.0,Good,no_known_catalog_concern,18.2,20.0,ginkgo,declared_preparation_outside_review
+17384,Nature's Bounty,"Hair, Skin & Nails",multi_or_prenatal,84.1,Very good,no_known_catalog_concern,16.4,20.0,collagen,reviewed_preparation_no_credit
+18392,GNC Herbal Plus Formula,Turmeric Complex,generic,63.9,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,declared_preparation_outside_review+label_purpose_outside_review
+19435,GNC TriFlex,Comfort,generic,68.0,Needs improvement,no_known_catalog_concern,11.4,15.6,collagen,declared_preparation_outside_review+existing_trial_match
+25826,CVS Pharmacy,Spectravite Ultra Men's Health Senior,multi_or_prenatal,77.5,Good,no_known_catalog_concern,17.8,20.0,ginkgo,declared_preparation_outside_review
+26136,Spring Valley,Standardized Extract Ginkgo Biloba 60 mg,generic,55.1,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+26256,GNC Herbal Plus Formula,Turmeric Support,generic,60.5,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+29233,Nature's Bounty,Standarized Extract Ginkgo Biloba 60 mg,generic,57.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+29262,Nature's Bounty,Flex-A-Min Triple Strength with Bone Shield,generic,64.2,Needs improvement,no_known_catalog_concern,11.4,12.2,collagen,reviewed_preparation_no_credit
+31998,GNC Mega Men,Antioxidant & Circulation,generic,59.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+33608,GNC Pro Performance AMP,Amplified Creatine XXX Ripped Fruit Punch,sports,58.3,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+35922,GNC Herbal Plus,Turmeric Sport,generic,57.7,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+46283,Member's Mark,Ginkgo Biloba 120 mg,generic,56.1,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+46707,Member's Mark,High Absorption Turmeric Curcumin Complex,generic,37.8,Poor,no_known_catalog_concern,5.7,6.1,turmeric,declared_preparation_outside_review
+49236,Life Extension,Super Booster Softgels With Advanced K2 Complex,multi_or_prenatal,73.3,Good,no_known_catalog_concern,16.7,6.7,ginkgo,reviewed_preparation_no_credit
+57502,GNC Women's Ultra Mega,Brain Health Complex,generic,69.4,Needs improvement,no_known_catalog_concern,11.6,11.1,ginkgo,reviewed_preparation_no_credit
+59204,Life Extension,Super Ginkgo Extract 28/7 120 mg,generic,60.1,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+59705,Life Extension,Super Booster Softgels With Advanced K2 Complex,multi_or_prenatal,70.8,Good,no_known_catalog_concern,16.7,6.7,ginkgo,reviewed_preparation_no_credit
+60306,CVS Health,Turmeric Curcumin 500 mg,generic,58.7,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+60404,Life Extension,Super Booster Softgels With Advanced K2 Complex,multi_or_prenatal,74.1,Good,no_known_catalog_concern,16.7,6.7,ginkgo,reviewed_preparation_no_credit
+60681,Life Extension,"Hair, Skin & Nails Rejuvenation Formula with Verisol",multi_or_prenatal,66.6,Needs improvement,no_known_catalog_concern,14.0,3.3,collagen,reviewed_preparation_no_credit
+62250,Nature's Bounty,Ginkgo Biloba 60 mg,generic,58.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+65706,Nature's Bounty Optimal Solutions,"Hair, Skin & Nails",multi_or_prenatal,84.1,Very good,no_known_catalog_concern,16.4,20.0,collagen,reviewed_preparation_no_credit
+65790,Solgar,Super Ginkgo,generic,58.1,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,declared_preparation_outside_review+reviewed_preparation_no_credit
+66367,Nature's Bounty Optimal Solutions,"Hair, Skin & Nails",multi_or_prenatal,82.4,Very good,no_known_catalog_concern,16.4,20.0,collagen,reviewed_preparation_no_credit
+66883,GNC Pro Performance,Creatine Plus 5950 Unflavored,sports,87.2,Very good,no_known_catalog_concern,20.0,15.6,methionine,reviewed_null
+69374,GNC Pro Performance AMP,Amplified Wheybolic Extreme 60 Ripped Chocolate Peanut Butter,sports,67.4,Needs improvement,caution,18.0,15.6,methionine,reviewed_null
+69455,GNC Pro Performance AMP,Amplified Wheybolic Extreme 60 Ripped Strawberries & Cream,sports,62.4,Needs improvement,caution,18.0,15.6,methionine,reviewed_null
+69503,GNC Women's Ultra Mega,Antioxidant & Circulation,generic,58.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+69645,GNC Pro Performance AMP,Amplified Wheybolic Extreme 60 Ripped Cookies & Cream,sports,63.3,Needs improvement,no_known_catalog_concern,20.0,15.6,methionine,reviewed_null
+70136,GNC Preventive Nutrition,Joint Health Support,generic,58.9,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,declared_preparation_outside_review
+74430,GNC Herbal Plus,Turmeric Curcumin 500 mg,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,label_purpose_outside_review
+74547,GNC Herbal Plus,Turmeric Sport,generic,48.1,Poor,no_known_catalog_concern,11.4,0.0,turmeric,label_purpose_outside_review
+74555,GNC Herbal Plus,Turmeric Complex,generic,63.9,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,declared_preparation_outside_review+label_purpose_outside_review
+74565,GNC Herbal Plus,Turmeric Curcumin 1050 mg,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,label_purpose_outside_review
+74570,GNC Herbal Plus,Turmeric Curcumin 1050 mg Extra Strength,generic,61.9,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,label_purpose_outside_review
+74586,GNC Pro Performance,Creatine Advance XR Unflavored,sports,47.4,Poor,no_known_catalog_concern,11.4,6.0,methionine,reviewed_null
+77680,Nature's Way,Ginkgold 60 mg,generic,58.1,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+81931,GNC Women's,Collagen,generic,57.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+182824,Pure Encapsulations,Curcumin 500 with Bioperine,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+182880,GNC Herbal Plus,Turmeric Curcumin 1000 mg Extra Strength,generic,61.9,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,label_purpose_outside_review
+182940,Pure Encapsulations,Glucosamine/MSM,generic,64.6,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+184133,Pure Encapsulations,Curcumin 500 with Bioperine,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+184189,Pure Encapsulations,Curcumin,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+184197,Pure Encapsulations,Curcumin,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+201366,Solgar,Lipotropic Factors,generic,71.9,Good,no_known_catalog_concern,11.4,11.1,methionine,reviewed_null
+202811,Doctor's Best,Extra Strength Ginkgo 120 mg,generic,55.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+204681,Garden of Life MyKind Organics,Maximum Strength Turmeric,generic,51.2,Poor,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+210902,Life Extension,"Hair, Skin & Nails Rejuvenation Formula with VERISOL",multi_or_prenatal,66.7,Needs improvement,no_known_catalog_concern,14.1,3.3,collagen,reviewed_preparation_no_credit
+211585,up&up,Ginkgo Biloba 120 mg,generic,59.9,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,label_purpose_outside_review
+213097,Nature's Way,Ginkgold Max,generic,58.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+214658,Solgar,L-Methionine 500 mg,generic,63.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+216564,Solgar,Bilberry,generic,68.1,Needs improvement,no_known_catalog_concern,11.4,12.2,ginkgo,declared_preparation_outside_review
+216987,Solgar,No. 7,generic,70.8,Good,no_known_catalog_concern,11.4,15.6,turmeric,declared_preparation_outside_review
+217032,Solgar,No. 7,generic,70.8,Good,no_known_catalog_concern,11.4,15.6,turmeric,declared_preparation_outside_review
+217059,Solgar,No. 7,generic,70.8,Good,no_known_catalog_concern,11.4,15.6,turmeric,declared_preparation_outside_review
+218487,Solgar,L-Methionine 500 mg,generic,63.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+218502,Solgar,L-Methionine 500 mg,generic,63.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+220746,Solgar,No. 7,generic,70.8,Good,no_known_catalog_concern,11.4,15.6,turmeric,declared_preparation_outside_review
+221158,GNC Mega Men,Antioxidant & Circulation,generic,57.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+229093,GNC Women's,Collagen Beauty Basics,generic,57.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+229934,Nature's Way,Tumerich Joint,generic,77.6,Good,no_known_catalog_concern,11.4,12.2,turmeric,reviewed_preparation_no_credit
+230279,Nature's Way,Ginkgold 60 mg,generic,58.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+232381,Life Extension,NT2 Collagen 40 mg,generic,56.9,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,declared_preparation_outside_review
+232456,Life Extension Gummy Science,Youthful Collagen Cherry,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+232810,Life Extension Gummy Science,Youthful Collagen Cherry,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+239062,Nature's Bounty,Ginkgo Biloba 120 mg,generic,58.1,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+239682,Garden of Life MyKind Organics,Extra Strength Turmeric,generic,51.2,Poor,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+239811,Spring Valley,Collagen 1000 mg,generic,60.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+239820,Spring Valley,Turmeric Curcumin 500 mg,generic,59.7,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,declared_preparation_outside_review+reference_only_record
+239842,Spring Valley,Collagen + C 2500 mg,generic,49.9,Poor,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+239850,Spring Valley,Turmeric Curcumin Complex with CurcuWin 550 mg,generic,55.6,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,declared_preparation_outside_review
+240013,Spring Valley,"Hair, Skin & Nails",multi_or_prenatal,77.3,Good,no_known_catalog_concern,16.4,20.0,collagen,reviewed_preparation_no_credit
+241155,Solgar,No. 7,generic,70.8,Good,no_known_catalog_concern,11.4,15.6,turmeric,declared_preparation_outside_review
+241200,Solgar,Turmeric Root Extract,generic,62.9,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+241737,Double Wood Supplements,Collagen Peptides,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+243134,GNC Herbal Plus,Turmeric Sport,generic,65.9,Needs improvement,no_known_catalog_concern,11.4,15.6,turmeric,reviewed_preparation_no_credit
+243618,GNC,TriFlex Turmeric Formula,generic,61.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+243668,GNC Women's,"Hair, Skin & Nails Mixed Berry",generic,58.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,label_purpose_outside_review
+243683,GNC Women's,Antioxidant & Circulation,generic,54.6,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+246117,vitafusion,Irresistible Skin Natural Berry Pomegranate Flavor,generic,58.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+246412,vitafusion,Collagen 2500 mg Natural Berry Pomegranate Flavor,generic,58.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+248670,Legion,Fortify,generic,72.2,Good,no_known_catalog_concern,11.4,11.1,turmeric,reviewed_preparation_no_credit
+252482,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+252795,BulkSupplements.com,L-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+253547,BulkSupplements.com,DL-Methionine 550 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+253550,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+253563,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+253595,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+253597,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+253599,BulkSupplements.com,DL-Methionine 550 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+253602,BulkSupplements.com,DL-Methionine 550 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+254611,BulkSupplements.com,L-Methionine 550 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+254612,BulkSupplements.com,L-Methionine 550 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+254613,BulkSupplements.com,L-Methionine 550 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+254614,BulkSupplements.com,L-Methionine 550 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+254615,BulkSupplements.com,L-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+254616,BulkSupplements.com,L-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+254617,BulkSupplements.com,L-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+259828,GNC Mega Men,Mental Sharpness Support,generic,68.7,Needs improvement,no_known_catalog_concern,11.4,11.1,ginkgo,reviewed_preparation_no_credit
+264119,Solgar,No. 7,generic,70.8,Good,no_known_catalog_concern,11.4,15.6,turmeric,reviewed_preparation_no_credit
+268402,SR Sports Research,Collagen Beauty Complex Strawberry Lemonade,generic,58.6,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+268407,SR Sports Research,Collagen Beauty Complex Watermelon Yuzu,generic,58.6,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+268448,SR Sports Research,Hydrolyzed Collagen Peptides Dark Chocolate,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+268450,SR Sports Research,Hydrolyzed Collagen Peptides Vanilla,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,label_purpose_outside_review
+268562,SR Sports Research,Multi-Collagen Complex Unflavored,generic,51.5,Poor,no_known_catalog_concern,11.4,0.0,collagen,label_purpose_outside_review
+268575,SR Sports Research,Multi-Collagen Complex Chocolate,generic,59.0,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,label_purpose_outside_review
+269490,Doctor's Best,Pure Collagen Types 1 and 3 Powder,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+269491,Doctor's Best,Collagen Types 1 and 3 1000 mg,generic,60.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+269620,Doctor's Best,Collagen Types 1 and 3 1000 mg,generic,60.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+269666,Doctor's Best,Fish Collagen with Naticol 5 g,generic,54.4,Poor,no_known_catalog_concern,11.4,0.0,collagen,label_purpose_outside_review
+269677,Doctor's Best,Collagen Types 1 and 3 Powder Summer Peach Flavor,generic,56.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+273460,Nature's Way,Ginkgold 120 mg,generic,58.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+274457,Garden of Life MyKind Organics,Maximum Strength Turmeric,generic,48.2,Poor,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+277379,Member's Mark,Turmeric Curcumin Complex,generic,51.9,Poor,no_known_catalog_concern,11.4,0.0,turmeric,declared_preparation_outside_review
+277684,Pure Encapsulations,Glucosamine MSM,generic,64.6,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+277688,Pure Encapsulations,Glucosamine/MSM,generic,64.6,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+286148,Double Wood Supplements,Collagen Biotin Gummies,generic,77.3,Good,no_known_catalog_concern,16.2,11.1,collagen,reviewed_preparation_no_credit
+293939,Pure Encapsulations,Collagen JS,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,declared_preparation_outside_review+reviewed_preparation_no_credit
+293998,Pure Encapsulations,L-Methionine,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+294008,Pure Encapsulations,LVR Formula,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+294061,Pure Encapsulations,UltraNutrient,multi_or_prenatal,68.9,Needs improvement,caution,0.0,16.7,turmeric,reviewed_preparation_no_credit
+294352,BulkSupplements.com,Turmeric Extract (1000 mg),generic,57.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+294353,BulkSupplements.com,Turmeric Extract (1000 mg),generic,57.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+294418,BulkSupplements.com,L-Methionine 500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+294419,BulkSupplements.com,L-Methionine 500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+295509,Pure Encapsulations,Collagen JS,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,declared_preparation_outside_review+reviewed_preparation_no_credit
+295528,Pure Encapsulations,LVR Formula,generic,66.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+295533,Pure Encapsulations,UltraNutrient,multi_or_prenatal,68.9,Needs improvement,caution,0.0,16.7,turmeric,reviewed_preparation_no_credit
+295534,Pure Encapsulations,UltraNutrient,multi_or_prenatal,68.9,Needs improvement,caution,0.0,16.7,turmeric,reviewed_preparation_no_credit
+299906,SR Sports Research,Collagen Peptides Dark Chocolate,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+299951,SR Sports Research,Collagen Beauty Complex Strawberry Lemonade,generic,58.6,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+302649,Doctor's Best,Collagen Types 1 and 3 500 mg,generic,54.9,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+303969,OLLY,Post-Game Recover Pineapple Punch,generic,72.5,Good,no_known_catalog_concern,11.4,11.1,turmeric,reviewed_preparation_no_credit
+306375,Nutricost Organic,Organic Turmeric Podwer 2 g Unflavored,generic,56.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,declared_preparation_outside_review
+306396,Nutricost,Turmeric 2300 mg,generic,63.9,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,declared_preparation_outside_review+reviewed_preparation_no_credit
+307577,Jarrow Formulas,Curcumin 95 500 mg,generic,57.6,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+307578,Jarrow Formulas,Curcumin 95 500 mg,generic,57.6,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+308219,Nature's Bounty Optimal Solutions,"Hair, Skin & Nails",multi_or_prenatal,79.7,Very good,no_known_catalog_concern,17.1,20.0,collagen,reviewed_preparation_no_credit
+309608,Sports Research,Collagen Peptides Unflavored,generic,71.4,Good,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+312185,BulkSupplements.com,L-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312186,BulkSupplements.com,L-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312187,BulkSupplements.com,L-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312188,BulkSupplements.com,L-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312413,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312414,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312415,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312416,BulkSupplements.com,DL-Methionine,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312888,BulkSupplements.com,DL-Methionine 1000 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+312932,BulkSupplements.com,Marine Collagen 5 g Capsules,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+312958,BulkSupplements.com,Turmeric Extract (Curcumin) 1000 mg Veg Capsules,generic,57.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+315978,OLLY,Collagen Gummy Rings Peach Bellini,generic,62.2,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+317000,Nutricost,"Turmeric 2,300 mg",generic,60.9,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,declared_preparation_outside_review+reviewed_preparation_no_credit
+317611,GNC AMP Advanced Muscle Performance,Women's Ultra Mega Active Multivitamin without Iron,multi_or_prenatal,73.7,Good,caution,10.0,20.0,turmeric,reviewed_preparation_no_credit
+317815,up&up,"Collagen + C 2,500 mg/60 mg",generic,49.9,Poor,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+326244,SR Sports Research,Collagen Beauty Complex Unflavored,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+326245,Sports Research,Collagen Peptides Dark Chocolate,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+326247,Sports Research,Collagen Peptides Unflavored,generic,71.4,Good,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+326266,Sports Research,Marine Collagen Unflavored,generic,71.4,Good,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+326268,Sports Research,Multi Collagen 1600 mg,generic,44.8,Poor,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+326287,Sports Research,Turmeric Curcumin 500 mg,generic,64.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+326298,Sports Research,Collagen Peptides Unflavored,generic,71.4,Good,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+326299,Sports Research,Collagen Peptides Vanilla,generic,71.4,Good,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+327973,Nature's Way,Ginkgold Max 120 mg,generic,59.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+328068,Nature's Way,Turmeric Premium Extract 500 mg,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+328282,Life Extension,ArthroMax Advanced NT2 Collagen & ApresFlex,generic,81.4,Very good,no_known_catalog_concern,11.4,12.2,collagen,declared_preparation_outside_review
+328400,Life Extension,Collagen Peptides for Skin & Joints,generic,55.9,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+328464,Life Extension,Ginkgo Biloba Certified Extract 120 mg,generic,59.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+328603,Life Extension,NT2 Collagen 40 mg,generic,56.9,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,declared_preparation_outside_review
+329892,BulkSupplements.com,Marine Collagen Powder 2500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+329893,BulkSupplements.com,Marine Collagen Capsules 2500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+329935,BulkSupplements.com,Collegen Peptides Powder 11 g,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+329936,BulkSupplements.com,Collagen Peptides Powder 11 g,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+329937,BulkSupplements.com,Collagen Peptides Powder 11 g,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+329938,BulkSupplements.com,Collagen Peptides Powder 11 g,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+329958,BulkSupplements.com,Organic Ginkgo Biloba Powder 2000 mg,generic,54.4,Poor,no_known_catalog_concern,11.4,0.0,ginkgo,declared_preparation_outside_review
+329959,BulkSupplements.com,Organic Ginkgo Biloba Powder 2000 mg,generic,54.4,Poor,no_known_catalog_concern,11.4,0.0,ginkgo,declared_preparation_outside_review
+329960,BulkSupplements.com,Organic Ginkgo Biloba Powder 2000 mg,generic,54.4,Poor,no_known_catalog_concern,11.4,0.0,ginkgo,declared_preparation_outside_review
+329961,BulkSupplements.com,Organic Ginkgo Biloba Powder 2000 mg,generic,54.4,Poor,no_known_catalog_concern,11.4,0.0,ginkgo,declared_preparation_outside_review
+330088,BulkSupplements.com,Turmeric Curcumin 500 mg,generic,57.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+330089,BulkSupplements.com,Turmeric Curcumin 500 mg Veg Capsules,generic,57.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+330090,BulkSupplements.com,Turmeric Curcumin 1000mg Veg Capsules,generic,57.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+330091,BulkSupplements.com,Turmeric Curcumin Veg Capsules 1000 mg,generic,57.1,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+331018,BulkSupplements.com,Chicken Collagen Powder 2500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+331020,BulkSupplements.com,Chicken Collagen Powder 2500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+331021,BulkSupplements.com,Porcine Collagen Powder 2500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+331022,BulkSupplements.com,Porcine Collagen Powder 2500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+331029,BulkSupplements.com,Turmeric Extract Powder 1000 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+331030,BulkSupplements.com,Turmeric Extract Powder 1000 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+331032,BulkSupplements.com,Turmeric Extract Powder 1000 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+331033,BulkSupplements.com,Turmeric Extract Powder 1000 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+331179,BulkSupplements.com,L-Methionine Powder 1000 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+331181,BulkSupplements.com,L-Methionine Powder 1000 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,methionine,reviewed_null
+331293,BulkSupplements.com,Marine Collagen Powder 2500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+331294,BulkSupplements.com,Marine Collagen Powder 2500 mg,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit
+331498,GNC,"Advanced Hair, Skin & Nails Formula",multi_or_prenatal,59.9,Needs improvement,no_known_catalog_concern,12.3,3.3,collagen,reviewed_preparation_no_credit
+332949,Nature's Way,Turmeric Premium Extract 500 mg,generic,64.4,Needs improvement,no_known_catalog_concern,11.4,0.0,turmeric,reviewed_preparation_no_credit
+333750,Nature's Way,Ginkgold 120 mg,generic,59.6,Needs improvement,no_known_catalog_concern,11.4,0.0,ginkgo,reviewed_preparation_no_credit
+PG_SUB_F4BDF40C828A43EAAA54980F44AD372E,,Hydrolyzed Collagen,generic,62.4,Needs improvement,no_known_catalog_concern,11.4,0.0,collagen,reviewed_preparation_no_credit

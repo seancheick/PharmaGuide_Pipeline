@@ -137,6 +137,7 @@ SKIP_SUPABASE=0
 SKIP_FLUTTER=0
 SKIP_PRODUCT_IMAGES=0
 SUPABASE_DRY_RUN=0
+RELEASE_SIGN_ARGS=()
 EMERGENCY_CATALOG=0
 KEEP_VERSIONS=2
 SCORING_SNAPSHOT_GATE_RAN=0
@@ -158,6 +159,9 @@ while (($# > 0)); do
     --emergency-catalog) EMERGENCY_CATALOG=1; shift ;;
     --skip-product-images) SKIP_PRODUCT_IMAGES=1; shift ;;
     --supabase-dry-run)  SUPABASE_DRY_RUN=1; shift ;;
+    --release-manifest)  RELEASE_SIGN_ARGS+=(--release-manifest "$2"); shift 2 ;;
+    --release-signature) RELEASE_SIGN_ARGS+=(--release-signature "$2"); shift 2 ;;
+    --release-rules-dir) RELEASE_SIGN_ARGS+=(--rules-dir "$2"); shift 2 ;;
     --keep-versions)     KEEP_VERSIONS="${2:?--keep-versions requires N}"; shift 2 ;;
     --flutter-repo)      FLUTTER_REPO="${2:?--flutter-repo requires path}"; shift 2 ;;
     -h|--help)
@@ -167,6 +171,10 @@ while (($# > 0)); do
     *) echo "Unknown flag: $1" >&2; exit 2 ;;
   esac
 done
+
+if (( ${#RELEASE_SIGN_ARGS[@]} > 0 )); then
+  RELEASE_SIGN_ARGS+=(--rule-pin "$FLUTTER_REPO/tool/interaction_db.release.json")
+fi
 
 info()  { printf '\033[36m[release]\033[0m %s\n' "$*"; }
 ok()    { printf '\033[32m[release] OK:\033[0m %s\n' "$*"; }
@@ -853,6 +861,22 @@ fi
 # 0 with status="up_to_date" when nothing changed.
 # ---------------------------------------------------------------------------
 
+# Once a production key is pinned, stop here with the build ready to sign. Signing
+# happens away from this machine, and a rerun with the signed files finds every
+# earlier step up to date. sync_to_supabase.py verifies them and refuses a mismatch.
+require_signed_release_or_stop() {
+  (( ${#RELEASE_SIGN_ARGS[@]} > 0 )) && return 0
+  "$PG_PYTHON" scripts/release_manifest.py unsigned-allowed >/dev/null && return 0
+  err "This release must be signed. The build in $DIST_DIR is ready, and nothing was published."
+  err "Build and sign its manifest (docs/RELEASE_SIGNING_RUNBOOK.md), then rerun with:"
+  err "  --release-manifest release.json --release-signature release.sig"
+  return 1
+}
+
+if (( SKIP_SUPABASE == 0 )); then
+  require_signed_release_or_stop || exit 1
+fi
+
 # Fail early before expensive uploads if a reviewer reopened an approval while
 # the pipeline ran. The authoritative fence still occurs inside the atomic
 # manifest-activation transaction below; this precheck is only an early exit.
@@ -867,7 +891,7 @@ fi
 if (( SKIP_SUPABASE == 0 )); then
   if (( SUPABASE_DRY_RUN == 1 )); then
     info "Step 5/8: Syncing dist/ to Supabase (DRY-RUN)..."
-    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" --dry-run
+    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" --dry-run ${RELEASE_SIGN_ARGS[@]+"${RELEASE_SIGN_ARGS[@]}"}
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
     "$PG_PYTHON" "$CATALOG_STATE_SCRIPT" --check-input-binding "$CATALOG_INPUT_BINDING"
@@ -878,7 +902,7 @@ if (( SKIP_SUPABASE == 0 )); then
     REMOTE_CATALOG_STATE=unknown
     run_strict_gate "Supabase catalog sync" \
       "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
-      --submission-output-dir "$SUBMISSION_OUTPUT_DIR"
+      --submission-output-dir "$SUBMISSION_OUTPUT_DIR" ${RELEASE_SIGN_ARGS[@]+"${RELEASE_SIGN_ARGS[@]}"}
     REMOTE_CATALOG_STATE=confirmed_current
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"

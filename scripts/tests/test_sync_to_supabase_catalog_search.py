@@ -415,8 +415,10 @@ def catalog_sql():
     with tempfile.TemporaryDirectory(prefix="pg-mcp-", dir="/tmp") as root:
         root = Path(root)
         def run(name, *args, input=None):
+            # Postgres refuses to start without a valid locale in the environment.
             return subprocess.run([str(binaries / name), *map(str, args)], input=input,
-                                  text=True, capture_output=True, check=True).stdout
+                                  text=True, capture_output=True, check=True,
+                                  env={**os.environ, "LC_ALL": "C"}).stdout
         run("initdb", "-D", root / "db", "-A", "trust", "-U", "postgres", "--no-locale", "--encoding=UTF8")
         run("pg_ctl", "-D", root / "db", "-l", root / "log", "-o",
             f"-F -k {root} -c listen_addresses=''", "-w", "start")

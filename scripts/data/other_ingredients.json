@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
     "last_updated": "2026-11-02",
-    "total_entries": 738,
+    "total_entries": 739,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -14439,7 +14439,8 @@
       "id": "PII_OYSTER_EXTRACT",
       "standard_name": "Oyster Extract",
       "aliases": [
-        "oyster extract"
+        "oyster extract",
+        "oyster whole extract"
       ],
       "category": "active_pending_relocation",
       "is_additive": false,
@@ -14466,6 +14467,37 @@
         "metabolites": []
       },
       "cui": "C2962915",
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "PII_OYSTER_SHELL_EXTRACT",
+      "standard_name": "Oyster Shell Extract",
+      "aliases": [
+        "oyster shell extract"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": "functional",
+      "allergen": true,
+      "allergen_type": "shellfish",
+      "notes": "Printed as Oyster Extract (Ostrea gigas Thunberg) (Shell) on DSLD 294580, 294581 and 294582. No calcium or zinc amount is declared or inferred.",
+      "common_uses": [],
+      "last_updated": "2026-11-02",
+      "external_ids": {
+        "unii": "5I0R0U8ZL0"
+      },
+      "gsrs": {
+        "substance_name": "CRASSOSTREA GIGAS SHELL",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
       "functional_roles": [],
       "is_active_only": true
     },
