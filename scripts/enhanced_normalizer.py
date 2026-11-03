@@ -9743,7 +9743,10 @@ class EnhancedDSLDNormalizer:
         source_path: str,
     ) -> bool:
         """Retain one dosed omega owner when forms are attributes only."""
-        if self._source_path_is_inactive(source_path) or ingredient.get("nestedRows"):
+        if self._source_path_is_inactive(source_path):
+            return False
+        nested = ingredient.get("nestedRows")
+        if nested and not self._is_undosed_omega_source_wrapper(ingredient, nested, source_path):
             return False
         quantity, unit = self._extract_primary_mass_unit(ingredient)
         if quantity is None or str(unit or "").strip().lower() not in {
@@ -9757,6 +9760,8 @@ class EnhancedDSLDNormalizer:
             "gram(s)",
         }:
             return False
+        if nested:
+            return True
         forms = [
             form
             for form in ingredient.get("forms") or []
@@ -9769,6 +9774,34 @@ class EnhancedDSLDNormalizer:
                 source_path,
             )
             for form in forms
+        )
+
+    def _is_undosed_omega_source_wrapper(
+        self,
+        ingredient: Dict[str, Any],
+        nested: List[Dict[str, Any]],
+        source_path: str,
+    ) -> bool:
+        """An undosed oil row that only itemizes a total's DHA and EPA.
+
+        "Total Omega-3 300 mg" over "Fish Oil" over DHA and EPA (260262) says
+        what 75188 says in forms: the total is the only printed amount. A label
+        printing the oil with its own mass has a separate top-level row that
+        owns identity, and its total stays a rollup.
+        """
+        if len(nested) != 1 or not isinstance(nested[0], dict):
+            return False
+        wrapper = nested[0]
+        children = wrapper.get("nestedRows") or []
+        return (
+            "oil" in self.matcher.preprocess_text(str(wrapper.get("name") or "")).split()
+            and self._extract_primary_mass_unit(wrapper)[0] is None
+            and bool(children)
+            and all(
+                isinstance(child, dict)
+                and self._is_zero_dose_omega_molecular_form_attribute(ingredient, child, source_path)
+                for child in children
+            )
         )
 
     def _stamp_expanded_form_cleaner_contract(self, row: Dict[str, Any], source_path: str) -> None:
