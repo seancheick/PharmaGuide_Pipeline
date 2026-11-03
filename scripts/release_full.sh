@@ -161,7 +161,7 @@ while (($# > 0)); do
     --keep-versions)     KEEP_VERSIONS="${2:?--keep-versions requires N}"; shift 2 ;;
     --flutter-repo)      FLUTTER_REPO="${2:?--flutter-repo requires path}"; shift 2 ;;
     -h|--help)
-      sed -n '2,102p' "$0" | sed 's/^# \{0,1\}//'
+      sed -n '2,106p' "$0" | sed 's/^# \{0,1\}//'
       exit 0
       ;;
     *) echo "Unknown flag: $1" >&2; exit 2 ;;
