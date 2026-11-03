@@ -73,4 +73,4 @@ This batch says to discount the agent figure heavily. Of the five reviews, one f
 
 - The replay covers products containing a batch ingredient, not the whole catalog, and the corpus was selected before the view correction.
 - 232321 and the 21 methionine products that did not finish are not traced.
-- `origin/main` moved during this work. I did not merge it or rerun the replay on it.
+- `origin/main` is merged in. Its 23 new commits are release and signing work and touch no file this batch changed, so I did not rerun the replay on it.
