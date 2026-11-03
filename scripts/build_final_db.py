@@ -11557,6 +11557,18 @@ def build_final_db(
             ),
         )
 
+    # NULL sends the app to its older all-clear rule, so a release candidate never
+    # contains one. The build stops as a whole, so no product is dropped over it.
+    if strict:
+        missing_safety_status = c.execute(
+            "SELECT COUNT(*) FROM products_core WHERE safety_assessment_status IS NULL"
+        ).fetchone()[0]
+        if missing_safety_status:
+            raise ValueError(
+                f"Strict mode: {missing_safety_status} products have no "
+                "safety_assessment_status. Re-score them from the current code."
+            )
+
     # ── V4 category percentiles (backfill, ranked over the shipped cohort) ──
     # Runs LAST — after UPC dedup and the NOT_SCORED sweep — so each cohort
     # counts only rows that actually ship. Ranks quality_score_v4_100 within

@@ -604,6 +604,24 @@ def test_partial_assessments_are_not_ranked_and_do_not_shift_complete_ranks():
     assert rows["811"][3] == 5 and rows["811"][1] == 80.0 and rows["811"][2] == 20.0
 
 
+def test_a_strict_build_refuses_a_product_with_no_safety_assessment_status(tmp_path):
+    # NULL would send the app to its older all-clear rule, so a release candidate
+    # never contains one. The whole build stops; no single product is dropped.
+    scored = _artifact_from_canned("999", _canned_v4())
+    assert scored["safety_assessment_status"] in {"complete", "incomplete"}
+    scored.pop("safety_assessment_status")
+    with pytest.raises(ValueError, match="safety_assessment_status"):
+        _run_build(tmp_path, [make_enriched()], [scored], strict=True)
+
+
+def test_a_strict_build_writes_the_safety_assessment_status(tmp_path):
+    scored = _artifact_from_canned("999", _canned_v4())
+    _, out = _run_build(tmp_path, [make_enriched()], [scored], strict=True)
+    with sqlite3.connect(out / "pharmaguide_core.db") as conn:
+        rows = conn.execute("SELECT safety_assessment_status FROM products_core").fetchall()
+    assert rows == [(scored["safety_assessment_status"],)]
+
+
 def test_build_core_row_includes_flutter_convenience_fields():
     enriched = make_enriched()
     scored = make_scored()
