@@ -1,0 +1,58 @@
+{
+ "canonical": "diosmin",
+ "labels": 3,
+ "stored": "positive_weak",
+ "as_read": "Diosmin alone at 450 to 600 mg improves venous symptoms in small trials, but the placebo trial names no primary outcome and the trials naming a primary outcome have no placebo; the stored Cochrane is class-level.",
+ "route": "packet_no_credit",
+ "positive_named": [
+  "33808784",
+  "32206351",
+  "38109425",
+  "32348101"
+ ],
+ "studies_to_add": [
+  {
+   "pmid": "33808784",
+   "study_type": "rct",
+   "sample_size": 72,
+   "primary_endpoint": "not named in the abstract; leg circumference, VAS, GIS and VCSS monitored",
+   "effect_direction": "positive",
+   "quote": "The results of this study showed that the administration of low-dose μsmin® Plus was safe and effective in relieving symptoms and improving QoL in subjects with CVD."
+  },
+  {
+   "pmid": "32206351",
+   "study_type": "rct",
+   "sample_size": 114,
+   "primary_endpoint": "Change in lower-limb symptom intensity on VAS, noninferiority to micronized diosmin 900 mg plus hesperidin 100 mg",
+   "effect_direction": "positive",
+   "quote": "Nonmicronized diosmin 600 mg was proven to have a noninferior efficacy compared to micronized diosmin 900 mg plus hesperidin 100 mg, associated with greater ease in swallowing the tablet."
+  },
+  {
+   "pmid": "38109425",
+   "study_type": "rct",
+   "sample_size": 330,
+   "primary_endpoint": "Lower-extremity swelling on days 1, 2, 3 and 14 after knee replacement",
+   "effect_direction": "positive",
+   "quote": "The primary outcome was lower-extremity swelling 1, 2, 3, and 14 days postoperatively."
+  }
+ ],
+ "stop_list": [
+  "MPFF row and Diosmin row both carry canonical diosmin on Youthful Legs (232420, 328799); fields can't separate the mixture from diosmin alone, and MPFF placebo trials were not read.",
+  "32206351's PubMed abstract has garbled result sentences; its numbers were not used. Main session's quote check may need that sentence only.",
+  "No label's amount exactly matches a trial with a named primary outcome (450 and 900 mg against 600 mg and 1.8 g/day); 33808784 matches 450 mg but names no primary outcome."
+ ],
+ "clinician_items": [
+  "33141449: phlebotonics as a class probably increase adverse events slightly compared with placebo (RR 1.14, moderate certainty); gastrointestinal most frequent; only short-term safety data.",
+  "32348101: diosmin 600 mg added to rivaroxaban and compression over 12 months, no difference in recurrent DVT or adverse events; open-label, 90 patients."
+ ],
+ "stored_rating_note": "Stored positive_weak cites only the class-level Cochrane review. The direction is not out of line, but the citation has no diosmin-specific result; 33808784 and 32206351 are the direct studies.",
+ "pmids_read": [
+  "33141449",
+  "33808784",
+  "38109425",
+  "32206351",
+  "34556990",
+  "32348101"
+ ],
+ "unread_notes": "Abstracts only. Hits seen and not read: 42033360 (adjunct in acute DVT), 40855727 (open-label pelvic varicose), 41161507 (diosmin plus hesperidin after knee replacement), 39861707, 40265772, 40101859, 40920881, 40348378, 38298753, 38015554, 34027293 (reviews), 32597889 (Detravenol), 30199057 (hemorrhoid meta-analysis, translated title), 42616207, 41214827, 38940246, 29934701, 27815700 (combinations). One search used; no separate MPFF search."
+}

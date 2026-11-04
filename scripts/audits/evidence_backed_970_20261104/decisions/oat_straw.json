@@ -1,0 +1,56 @@
+{
+ "canonical": "oat_straw",
+ "labels": 3,
+ "stored": "positive_weak",
+ "as_read": "Mixed cognition results for branded green oat herb extracts in healthy adults, mostly acute and no primary outcome named; labels print oat straw extract 500 mg with no purpose.",
+ "route": "no_qualifying",
+ "quote": {
+  "pmid": "22690320",
+  "text": "Chronic WGOE supplementation did not affect any measures of cognition."
+ },
+ "positive_named": [
+  "26618715",
+  "34658781",
+  "32485993",
+  "23221935",
+  "21711204",
+  "36657906"
+ ],
+ "proposed_decision_text": "These three labels print oat straw extract at 500 mg, with no purpose text in the positioning read. No study read meets the standard for what they print, and these are abstracts only. The trials tested branded green oat herb extracts, and none of the abstracts names a primary outcome. Single doses of 800 mg Neuravena improved speed on a global measure and some recall and executive tasks in adults aged 40 to 65 (26618715). In 20 healthy people, 800 mg Neuravena reduced EEG measures and sped performance (34658781). In older adults, 1600 mg but not 2400 mg reduced Stroop errors (21711204). A 29-day trial of cognitaven in 132 healthy adults found improved working memory and multitasking at 430 mg and 1290 mg against placebo, and 430 mg is the only arm close to these labels (32485993). Against that, 12 weeks of 1500 mg/day Neuravena did not affect any measure of cognition in older adults (22690320), while a 24-week crossover in 37 older adults at the same 1500 mg/day found better vasodilator responses than placebo, a surrogate at three times the label amount (23221935). A 2023 systematic review of six trials says the conclusions should be interpreted with caution and that long-term supplementation did not improve cognition (36657906). A cognition or vascular purpose is not on these labels.",
+ "studies_to_add": [
+  {
+   "pmid": "22690320",
+   "study_type": "rct",
+   "sample_size": 37,
+   "primary_endpoint": "not named in the abstract; cognitive test battery",
+   "effect_direction": "null",
+   "quote": "Chronic WGOE supplementation did not affect any measures of cognition."
+  },
+  {
+   "pmid": "32485993",
+   "study_type": "rct",
+   "sample_size": 132,
+   "primary_endpoint": "not named in the abstract; cognitive tasks, mood and stressor response",
+   "effect_direction": "positive",
+   "quote": "The results showed that both a single dose of 1290 mg and, to a greater extent, supplementation for four weeks with both 430 mg and 1290 mg green oat extract resulted in significantly improved performance on a computerised version of the Corsi Blocks working memory task and a multitasking task (verbal serial subtractions and computerised tracking) in comparison to placebo."
+  }
+ ],
+ "stop_list": [
+  "Fields can't say whether a label's oat straw extract is the same material as Neuravena or cognitaven; labels print no ratio, harvest stage or brand.",
+  "22690320 and 23221935 appear to be the same crossover (37 older adults, 1500 mg/day, 12-week arms); don't count them as independent. That is read from the abstracts' shared numbers, and neither abstract says so."
+ ],
+ "clinician_items": [
+  "23221935: resting blood pressure did not alter; dose and duration were well tolerated in older adults. No pregnancy, bleeding, liver or interaction data in the abstracts read."
+ ],
+ "stored_rating_note": "Stored positive_weak rests on 26618715, single doses at 800 and 1600 mg, with no primary outcome named and no sample size printed. Chronic null 22690320 isn't on the stored record.",
+ "pmids_read": [
+  "26618715",
+  "36657906",
+  "34658781",
+  "32485993",
+  "23221935",
+  "22690320",
+  "21711204"
+ ],
+ "unread_notes": "Abstracts only; pm.py showed no PMC ids. Hits not read: 21563962 (EEG in healthy subjects), 38962436 (smoking reduction, Journal Article with no RCT tag), 794001 (1976 smokers), 41647446 (oat grain extract, another part). One search used."
+}

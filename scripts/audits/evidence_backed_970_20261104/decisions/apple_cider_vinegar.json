@@ -1,0 +1,15 @@
+{"canonical": "apple_cider_vinegar", "labels": 39, "stored": "positive_weak",
+ "as_read": "Mixed: pooled liquid vinegar results favor it with high heterogeneity and a retracted trial in one pool; the only solid-form trial is one capsule RCT in women with PCOS on metformin.",
+ "route": "packet_no_credit",
+ "positive_named": ["42215584", "41010525", "34187442", "28292654"],
+ "studies_to_add": [
+  {"pmid": "42215584", "study_type": "rct", "sample_size": 94, "primary_endpoint": "changes in insulin resistance and metabolic syndrome components", "effect_direction": "positive_weak", "quote": "Primary outcomes were changes in IR and MetS components"},
+  {"pmid": "41010525", "study_type": "systematic_review_meta", "sample_size": 789, "primary_endpoint": "body weight, BMI, waist circumference and other anthropometric measures", "effect_direction": "positive_weak", "quote": "10 RCTs comprising a total of 789 participants were eligible for inclusion in this meta-analysis"}],
+ "stop_list": ["Liquid doses in mL can't be expressed as a mass dose; they stay in regimen text."],
+ "clinician_items": ["41010525: the pooled weight result lists Abou-Khalil 2024 (38966098), retracted per 41789013; the review doesn't mention a retraction and that trial isn't in the passage naming high risk-of-bias trials.",
+  "15983536: esophageal injury reported with ACV tablets; eight tablet products varied in pH, acid content and label claims, and the authors doubt ACV was in fact an ingredient.",
+  "39238884: case report, acute pancreatitis in an 84-year-old possibly linked to a weight-loss supplement containing ACV. One case, causality not established.",
+  "23373303: case report, erosive tooth wear in a 15-year-old from a daily glass of liquid ACV."],
+ "stored_rating_note": "Stored positive_weak rests on vinegar taken with a meal (28292654, type not stated in the abstract) and 14694010, a letter with no abstract on PubMed, stored as clinical_study_abstract_unavailable. Neither is about apple cider vinegar capsules, gummies or powders.",
+ "pmids_read": ["28292654", "14694010", "41010525", "34187442", "42215584", "41351751", "38966098", "41789013", "39238884", "40771528", "39882285", "19963157", "34055150", "15983536", "23373303"],
+ "unread_notes": "14694010, 40771528 and 39882285 have no abstract on PubMed: title only. Full text passages read for 41010525 (PMC12472926) and 42215584 (PMC13454303); Table 2 of 41010525 and funding of 42215584 not read. Kannan 2024, effervescent tablets, is outside PubMed and not read. 37451111 (network meta-analysis of six herbs) seen as a search hit, not read. First search was malformed and returned noise, so only two searches were useful."}

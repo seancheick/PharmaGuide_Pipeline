@@ -1,0 +1,78 @@
+{
+  "canonical": "d_beta_hydroxybutyrate_bhb",
+  "labels": 19,
+  "stored": "mixed (one stored trial, 29338584, read as raised plasma BHB with no performance effect)",
+  "as_read": "Ketone salt trials on target for these labels are null or harmful for performance and cognition and null between groups for body composition, a systematic review could not conclude any benefit or detriment, and positives are one short trial in asthenia and a pooled review not specific to salts.",
+  "route": "null_literature",
+  "quote": {
+    "pmid": "29451991",
+    "text": "In conclusion, βHB did not improve high-intensity cycling or cognitive performance measures; however, these findings might be partially explained by the absolute dosing protocol used for βHB in the present study as opposed to a relative (g/kg) dosing protocol used in previous research."
+  },
+  "positive_named": [
+    "39575959",
+    "42063954"
+  ],
+  "proposed_decision_text": "These 19 labels print beta-hydroxybutyrate mineral salts with no isomer stated: goBHB 4-in-1 ketone salt blends at 13,908 mg (266599, and 269325 and 306186 titled 11.7 g BHB) or unquantified in a matrix (268231, 326259), a 10 g three-mineral blend (219652), potassium and sodium salts at 12,973 mg BHB (77152), calcium salts at 6,541 mg (77111) or 1,238 mg (311247 to 311250), potassium at 9 g (266471, 270720), and magnesium at 7 g (269726) or 1,350 mg (329630, 329631, 329633, 329634). In healthy men, 11.38 g of BHB before exercise did not improve cycling or cognitive measures (29451991). In healthy men, 0.3 g/kg of ketone salts lowered time-trial power by about 7% (28750585). In 19 trained cyclists, two 0.38 g/kg doses did not change lactate, perceived exertion or efficiency, and 13 reported gastrointestinal symptoms (29338584). In 51 overweight or obese adults on a low-calorie diet, racemic BHB mineral salts twice daily for 8 weeks produced within-group fat loss, but group by time interactions for body composition were not significant (41305632). In a 24-hour crossover of 8 healthy adults, 38.7 g/day of ketone salts did not improve regulation of energy balance (37202059). A systematic review of 10 trials found that heterogeneity makes it difficult to conclude any benefit or detriment on physical performance (31586177). The evidence conflicts in two places: a 15-day placebo-controlled study of 86 patients with asthenia reported better cognition on BHB salts, with no primary outcome or dose in the abstract (39575959), and a 2026 meta-analysis found a modest cognitive improvement across exogenous ketones of all types, including esters, with no salt-specific estimate in the abstract (42063954). Conflicting evidence with no clear benefit; no Evidence credit.",
+  "preparation_differences": [
+    "311247, 311248, 311249, 311250 (calcium BHB 1,238 mg) and 329630, 329631, 329633, 329634 (magnesium BHB 1,350 mg) print about a tenth of the 11.38 g tested in 29451991, the closest absolute dose read.",
+    "268231 and 326259 (Keto +Plus, 13 actives) print goBHB in a matrix with no amount.",
+    "Single-mineral labels (calcium, magnesium or potassium alone) have no trial naming that salt in the abstracts read. Abstracts mostly say ketone salts without the cation. 41305632 and 36963874 state racemic; no label prints an isomer."
+  ],
+  "product_state_note": "Census fix2: every BHB row is evaluated_limited_or_negative except the Calcium Beta Hydroxybutyrate row on 266599 (not_applicable). Product state differs because of the mineral rows: 7 labels (269726, 329630, 329631, 329633, 329634, 266471, 270720) show evaluated_applicable with ev 15.6 and 5 (77111, 311247 to 311250) show evaluated_authority with ev 11.1. That credit does not come from these BHB rows. Main session may want to check that a 9 g potassium BHB label earning credit through its mineral row is intended; I did not trace it.",
+  "studies_to_add": [
+    {
+      "pmid": "29451991",
+      "study_type": "rct",
+      "sample_size": 15,
+      "primary_endpoint": "not named in the abstract; cognitive challenge and Wingate performance",
+      "effect_direction": "null",
+      "quote": "In conclusion, βHB did not improve high-intensity cycling or cognitive performance measures; however, these findings might be partially explained by the absolute dosing protocol used for βHB in the present study as opposed to a relative (g/kg) dosing protocol used in previous research."
+    },
+    {
+      "pmid": "28750585",
+      "study_type": "rct",
+      "sample_size": 10,
+      "primary_endpoint": "not named in the abstract; substrate oxidation and 150-kJ time-trial",
+      "effect_direction": "negative",
+      "quote": "Ingestion of ketone salts prior to exercise increases fat oxidation during steady-state exercise but impairs high-intensity exercise performance."
+    },
+    {
+      "pmid": "41305632",
+      "study_type": "rct",
+      "sample_size": 51,
+      "primary_endpoint": "not named in the abstract; body composition and metabolic markers",
+      "effect_direction": "null",
+      "quote": "Group × time interactions were not significant for these body composition variables (p > 0.05)."
+    },
+    {
+      "pmid": "31586177",
+      "study_type": "systematic_review_meta",
+      "sample_size": 112,
+      "primary_endpoint": "lower-body power and endurance performance",
+      "effect_direction": "null",
+      "quote": "Heterogeneity across studies makes it difficult to conclude any benefit or detriment to consuming ketone supplements on physical performance."
+    }
+  ],
+  "clinician_items": [
+    "29338584: gastrointestinal symptoms in 13 of 19 participants at 0.38 g/kg twice before exercise.",
+    "28750585: time-trial power about 7% lower after 0.3 g/kg ketone salts (-16 W, p = 0.029); a performance harm rather than a safety event, flagged for the wording of any claim."
+  ],
+  "stored_rating_note": "Stored mixed rests on one trial whose metabolic changes are surrogates and whose performance measures were unchanged. As read, null fits the salts better; not changed here.",
+  "pmids_read": [
+    "29338584",
+    "41305632",
+    "40525864",
+    "39804761",
+    "39575959",
+    "41773904",
+    "42063954",
+    "41097203",
+    "42958814",
+    "29451991",
+    "28750585",
+    "31586177",
+    "36963874",
+    "37202059"
+  ],
+  "unread_notes": "Abstracts only. Two searches (counts 123 and 20). Not used for salts because they tested something else: 40525864 (R-BHB acid with 1,3-butanediol), 39804761 and 41773904 (ketone monoester), 41097203 (review, favours esters, covers MCT). 42958814 (recovery meta-analysis, limited benefit) is not salt-specific. 36963874 is a salts-on-ketogenic-diet trial reporting ketonemia and glucose, surrogate only. 32330107 and 35213817 are combinations with caffeine and were seen only as search excerpts, not opened. 40431405 and 40035490 were not opened. The 39575959 abstract does not state dose or a primary outcome, so whether it qualifies under rule 2 is not decided."
+}

@@ -1,0 +1,1123 @@
+{
+  "record_id": "INGR_HAWTHORN",
+  "labels": 20,
+  "stored_direction": "positive_strong",
+  "direction_as_read": "mixed: older small trials and two pre-2008 meta-analyses favour leaf and flower extract for heart failure symptoms and exercise capacity, while SPICE, the largest trial, and HERB CHF, both add-on to contemporary therapy, were null on their primary outcomes; blood pressure evidence is inconsistent",
+  "decision": "closed_no_credit",
+  "summary": "Stored as positive_strong on one 2003 meta-analysis. A later Cochrane review (18254076) repeats that benefit for symptoms and maximal workload, but both reviews predate SPICE and HERB CHF. SPICE, 2681 patients on WS 1442 900 mg/day for 24 months, had no significant effect on time to first cardiac event (19019730). HERB CHF, 120 patients on 450 mg twice daily, found no difference in 6 minute walk distance and concluded no symptomatic or functional benefit (19789403). Smaller trials report exercise gains, some on liquid fresh-berry extract in drops (12833999, 11715631), and blood pressure results are inconsistent (16762125, 40732315). The two primary-positive fresh-berry trials are liquid extracts in drops, while berry labels here print dry extract, powder or whole berry. Leaf and flower labels print 150 to 500 mg per serving, against the 900 mg/day WS 1442 arms.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_19019730",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "19019730"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "WS 1442",
+        "manufacturer": "Dr. Willmar Schwabe Pharmaceuticals"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_heart_failure",
+      "purpose": "heart_failure_morbidity_mortality",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_19019730",
+      "population": {
+        "age_group": "adult",
+        "description": "2681 adults with NYHA class II or III heart failure and LVEF of 35% or less, on add-on treatment."
+      },
+      "study_design": "Randomised, double-blind, placebo-controlled multicenter trial (SPICE), 24 months",
+      "outcomes": [
+        {
+          "name": "Time to first cardiac event: 620 versus 606 days, HR 0.95, 95% CI 0.82 to 1.10, p = 0.476",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Cardiac mortality HR 0.89, 95% CI 0.73 to 1.09, p = 0.269",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "A lower sudden cardiac death rate is reported only in the subgroup with LVEF of 25% or more; the abstract says the data may indicate this, and it is not carried as a finding here.",
+        "Funding isn't stated in the abstract. Manufacturer taken from 12817526, which names the maker of WS 1442.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          900
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "WS 1442 900 mg/day or placebo for 24 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19019730",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_19789403",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "19789403"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "WS 1442",
+        "manufacturer": "Dr. Willmar Schwabe Pharmaceuticals"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_heart_failure",
+      "purpose": "heart_failure_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_19789403",
+      "population": {
+        "age_group": "adult",
+        "description": "120 ambulatory patients aged 18 or over with NYHA class II-III heart failure on conventional medical therapy."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled trial (HERB CHF), 6 months",
+      "outcomes": [
+        {
+          "name": "Change in 6 minute walk distance at 6 months: no significant difference, p = 0.61",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Quality of life, functional capacity, neurohormones, oxidative stress and inflammation: no significant differences",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "LVEF: modest difference favouring hawthorn, p = 0.04",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "This abstract says only hawthorn; 18490196, a retrospective analysis of the same trial, identifies the material as WS 1442 at 900 mg.",
+        "Significantly more adverse events on hawthorn (p = 0.02), most non-cardiac: on clinician_items.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          900
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Hawthorn 450 mg twice daily or placebo for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19789403",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_12040357",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "12040357"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "WS 1442",
+        "manufacturer": "Dr. Willmar Schwabe Pharmaceuticals"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_heart_failure",
+      "purpose": "exercise_capacity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_12040357",
+      "population": {
+        "age_group": "adult",
+        "description": "209 patients with chronic stable NYHA class III heart failure on preexisting diuretic treatment."
+      },
+      "study_design": "Randomized, placebo-controlled, three-arm multicenter trial, 16 weeks",
+      "outcomes": [
+        {
+          "name": "Maximal tolerated workload: 1800 mg/day significantly better than placebo and than 900 mg/day",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Patient-rated heart failure symptoms reduced more than placebo at both doses",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and gives no effect sizes or p values.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          900,
+          1800
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "WS 1442 1800 mg or 900 mg per day, or placebo, for 16 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12040357",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_11515715",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "11515715"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "WS 1442",
+        "manufacturer": "Dr. Willmar Schwabe Pharmaceuticals"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_heart_failure",
+      "purpose": "exercise_capacity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_11515715",
+      "population": {
+        "age_group": "adult",
+        "description": "40 outpatients with NYHA class II congestive heart failure."
+      },
+      "study_design": "Randomised, placebo-controlled, double-blind trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Exercise tolerance: +66.3 versus -105.3 W x min, p = 0.06",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The authors call this borderline significant and conclude the extract is clinically effective; the primary between-group result did not reach p < 0.05.",
+        "Small trial. Capsule strength isn't in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "WS 1442, standardised to 18.75% oligomeric procyanidines, 3 x 1 capsule for 12 weeks; mg not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "11515715",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_12833999",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "12833999"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Crataegus oxyacantha and Crataegus monogyna",
+        "plant_part": "fresh berries"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_heart_failure",
+      "purpose": "exercise_capacity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_12833999",
+      "population": {
+        "age_group": "adult",
+        "description": "143 patients with NYHA class II cardiac failure, mean age 64.8 years."
+      },
+      "study_design": "Randomised, double-blind, placebo-controlled, parallel-group multicentre trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "Exercise tolerance: 8.3 watts in favour of extract, p = 0.045 (ITT)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Subjective cardiac symptoms did not change significantly; overall efficacy ratings similar between groups",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Liquid fresh-berry extract dosed in drops, so no mg dose. Not the same as the dry berry extracts and powders these labels print.",
+        "Funding isn't stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "liquid drops"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Crataegisan, 3 times 30 drops daily for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12833999",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_11715631",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "11715631"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Crataegus, species not reported",
+        "plant_part": "fresh berries"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_heart_failure",
+      "purpose": "exercise_capacity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_11715631",
+      "population": {
+        "age_group": "adult",
+        "description": "88 patients with NYHA class II congestive heart failure."
+      },
+      "study_design": "Three-month placebo-controlled, randomized, double-blind trial",
+      "outcomes": [
+        {
+          "name": "Total exercise time: +38.9 seconds versus placebo, 95% CI 5.7 to 72.1",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Minnesota Questionnaire total score fell 31% versus 18% on placebo; no between-group test given in the abstract",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Liquid fresh-berry extract dosed in drops, so no mg dose.",
+        "English abstract of a German paper.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "liquid drops"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Rob 10, 3 x 25 drops daily for three months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "11715631",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_16762125",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "16762125"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Crataegus laevigata",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hypertension_type_2_diabetes",
+      "purpose": "blood_pressure",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_16762125",
+      "population": {
+        "age_group": "adult",
+        "description": "79 patients with type 2 diabetes in UK general practice; 71% on hypotensive drugs."
+      },
+      "study_design": "Randomised controlled trial, 16 weeks",
+      "outcomes": [
+        {
+          "name": "Diastolic blood pressure: significant group difference favouring hawthorn, p = 0.035",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Systolic blood pressure: no group difference, p = 0.329",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Plant part of the extract isn't stated in the abstract. Blinding isn't stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Hawthorn extract 1200 mg daily or placebo for 16 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "16762125",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_18254076",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "18254076"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Crataegus",
+        "plant_part": "leaf and flower"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_heart_failure",
+      "purpose": "heart_failure_symptoms_and_physiology",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_18254076",
+      "population": {
+        "age_group": "adult",
+        "description": "Fourteen trials of leaf and flower extract monopreparations; ten trials, 855 patients NYHA I to III, in the pooled analysis."
+      },
+      "study_design": "Cochrane systematic review and meta-analysis of double-blind placebo-controlled RCTs, search to June 2006",
+      "outcomes": [
+        {
+          "name": "Maximal workload WMD 5.35 W, 95% CI 0.71 to 10.00, n = 380",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Shortness of breath and fatigue WMD -5.47, 95% CI -8.68 to -2.26, n = 239",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Mortality and morbidity: not reported apart from one trial, three deaths on active and one on control",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Search ended June 2006, before SPICE (19019730, 2008) and HERB CHF (19789403, 2009) were published.",
+        "Doses aren't in the abstract. Mostly an adjunct to conventional treatment.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Leaf and flower extract monopreparations; doses not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "18254076",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_12798455",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "12798455"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_heart_failure",
+      "purpose": "heart_failure_symptoms_and_physiology",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_12798455",
+      "population": {
+        "age_group": "adult",
+        "description": "Thirteen trials of monopreparations; eight trials, 632 patients NYHA I to III, in the pooled analysis."
+      },
+      "study_design": "Meta-analysis of randomized, double-blind, placebo-controlled trials",
+      "outcomes": [
+        {
+          "name": "Maximal workload WMD 7 W, 95% CI 3 to 11, p < 0.01, n = 310",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Dyspnea and fatigue improved significantly versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Earlier, smaller review with a similar inclusion rule to 18254076, published before SPICE and HERB CHF.",
+        "Doses and extracts aren't in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Monopreparations; doses not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "12798455",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hawthorn_40732315",
+      "components": [
+        "INGR_HAWTHORN"
+      ],
+      "source_pmids": [
+        "40732315"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "hypertension",
+      "purpose": "blood_pressure",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hawthorn_40732315",
+      "population": {
+        "age_group": "adult",
+        "description": "Six placebo-controlled studies, 428 participants."
+      },
+      "study_design": "Meta-analysis of randomized placebo-controlled trials, treatment 10 weeks to 6 months",
+      "outcomes": [
+        {
+          "name": "Systolic pressure MD -6.65 mmHg; abstract prints 95% CI -11.72 to 1.59",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Diastolic pressure MD -7.19 mmHg, 95% CI -15.17 to 0.79, non-significant",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract calls systolic significant, but the interval as printed crosses zero; the full text would have to settle it.",
+        "Authors ask for larger trials to establish dosing, duration and efficacy.",
+        "Preparations aren't named in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "250 to 1200 mg/day across trials.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40732315",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "18490196": "Retrospective analysis of HERB CHF: identifies the material as WS 1442 and reports earlier heart failure progression on it; on clinician_items.",
+    "42277690": "Network meta-analysis across 15 plant extracts, with no hawthorn effect estimate in the abstract.",
+    "39583031": "Hawthorn fruit extract drink crossover, 61 participants: no significant effect versus placebo; sugared drink, no mg dose, no primary outcome named.",
+    "40573097": "Powdered hawthorn fruit 900 mg/day, 36 completers: facial skin and telomere outcomes, a purpose these labels don't carry.",
+    "32595244": "Partly blinded pilot comparing WS 1442 doses with Nordic walking, no placebo arm.",
+    "22458601": "Short crossover of a standardized extract on flow mediated dilation, 21 adults: no dose-response. Surrogate only, and the abstract doesn't settle whether the listed doses were per dose or per day.",
+    "12817526": "Digoxin interaction pharmacokinetic study in 8 healthy volunteers, not an efficacy trial; names the maker of WS 1442 and is on clinician_items."
+  },
+  "stop_or_hold": "Doses of the two fresh-berry trials are in drops (12833999, 11715631) and stay in the regimen text; dose values can't express them.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "19019730",
+      "title_fetched": "The efficacy and safety of Crataegus extract WS 1442 in patients with heart failure: the SPICE trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19019730/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19789403",
+      "title_fetched": "Hawthorn Extract Randomized Blinded Chronic Heart Failure (HERB CHF) trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19789403/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12040357",
+      "title_fetched": "Efficacy and safety of crataegus extract WS 1442 in comparison with placebo in patients with chronic stable New York Heart Association class-III heart failure.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12040357/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11515715",
+      "title_fetched": "Clinical efficacy of crataegus extract WS 1442 in congestive heart failure NYHA class II.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11515715/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12833999",
+      "title_fetched": "A randomised double blind placebo controlled clinical trial of a standardised extract of fresh Crataegus berries (Crataegisan) in the treatment of patients with congestive heart failure NYHA II.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12833999/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11715631",
+      "title_fetched": "[Actions of standardized extracts of Crataegus berries on exercise tolerance and quality of life in patients with congestive heart failure].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11715631/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16762125",
+      "title_fetched": "Hypotensive effects of hawthorn for patients with diabetes taking prescription drugs: a randomised controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16762125/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18254076",
+      "title_fetched": "Hawthorn extract for treating chronic heart failure.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18254076/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12798455",
+      "title_fetched": "Hawthorn extract for treating chronic heart failure: meta-analysis of randomized trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12798455/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40732315",
+      "title_fetched": "Hawthorn (Crataegus spp.) Clinically Significantly Reduces Blood Pressure in Hypertension: A Meta-Analysis of Randomized Placebo-Controlled Clinical Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40732315/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18490196",
+      "title_fetched": "The effect of Crataegus oxycantha Special Extract WS 1442 on clinical progression in patients with mild to moderate symptoms of heart failure.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18490196/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42277690",
+      "title_fetched": "Efficacy of plant extracts in heart failure patients: a systematic review and network meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42277690/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39583031",
+      "title_fetched": "Effects of Hawthorn Fruit Extract Drink in Chinese Patients With Mild Hypertension and/or Hyperlipidaemia: A Randomized, Double-Blind, Placebo-Controlled, Crossover Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39583031/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40573097",
+      "title_fetched": "Effects of Hawthorn Fruit Supplementation on Facial Skin Phenotypes and Leukocyte Telomere Length Stratified by TERT Polymorphisms.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40573097/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32595244",
+      "title_fetched": "SAFETY AND EFFECTS OF CRATAEGUS EXTRACT WS 1442 AND NORDIC WALKING ON LIPID PROFILE AND ENDOTHELIAL FUNCTION: A RANDOMIZED, PARTIALLY BLINDED PILOT STUDY IN OVERWEIGHT VOLUNTEERS.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32595244/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22458601",
+      "title_fetched": "Effect of hawthorn standardized extract on flow mediated dilation in prehypertensive and mildly hypertensive adults: a randomized, controlled cross-over trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22458601/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12817526",
+      "title_fetched": "Interaction study between digoxin and a preparation of hawthorn (Crataegus oxyacantha).",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12817526/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_HAWTHORN",
+    "standard_name": "Hawthorn",
+    "aliases": [
+      "Hawthorn (Crataegus spp.) extract",
+      "Hawthorn Berry Extract",
+      "Hawthorn Berry Fruit Extract",
+      "Hawthorn Berry",
+      "Hawthorn Flower, Leaf Extract",
+      "Hawthorn",
+      "Hawthorn Leaf Extract",
+      "Hawthorn extract",
+      "Hawthorn leaves & flowers extract",
+      "organic Hawthorn powder"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "19019730",
+      "19789403",
+      "12040357",
+      "11515715",
+      "12833999",
+      "11715631",
+      "16762125",
+      "18254076",
+      "12798455",
+      "40732315"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: older small trials and two pre-2008 meta-analyses favour leaf and flower extract for heart failure symptoms and exercise capacity, while SPICE, the largest trial, and HERB CHF, both add-on to contemporary therapy, were null on their primary outcomes; blood pressure evidence is inconsistent. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "time to first cardiac event",
+      "6 minute walk distance",
+      "exercise tolerance",
+      "heart failure symptoms",
+      "blood pressure"
+    ],
+    "health_goals_supported": [],
+    "notes": "Stored as positive_strong on one 2003 meta-analysis. A later Cochrane review (18254076) repeats that benefit for symptoms and maximal workload, but both reviews predate SPICE and HERB CHF. SPICE, 2681 patients on WS 1442 900 mg/day for 24 months, had no significant effect on time to first cardiac event (19019730). HERB CHF, 120 patients on 450 mg twice daily, found no difference in 6 minute walk distance and concluded no symptomatic or functional benefit (19789403). Smaller trials report exercise gains, some on liquid fresh-berry extract in drops (12833999, 11715631), and blood pressure results are inconsistent (16762125, 40732315). The two primary-positive fresh-berry trials are liquid extracts in drops, while berry labels here print dry extract, powder or whole berry. Leaf and flower labels print 150 to 500 mg per serving, against the 900 mg/day WS 1442 arms.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with chronic heart failure, NYHA class I to III, mostly on conventional therapy; a smaller set of adults with raised blood pressure",
+      "supported_outcomes": [
+        "time to first cardiac event",
+        "6 minute walk distance",
+        "exercise tolerance",
+        "heart failure symptoms",
+        "blood pressure"
+      ],
+      "source_pmids": [
+        "19019730",
+        "19789403",
+        "12040357",
+        "11515715",
+        "12833999",
+        "11715631",
+        "16762125",
+        "18254076",
+        "12798455",
+        "40732315"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Stored as positive_strong on one 2003 meta-analysis. A later Cochrane review (18254076) repeats that benefit for symptoms and maximal workload, but both reviews predate SPICE and HERB CHF. SPICE, 2681 patients on WS 1442 900 mg/day for 24 months, had no significant effect on time to first cardiac event (19019730). HERB CHF, 120 patients on 450 mg twice daily, found no difference in 6 minute walk distance and concluded no symptomatic or functional benefit (19789403). Smaller trials report exercise gains, some on liquid fresh-berry extract in drops (12833999, 11715631), and blood pressure results are inconsistent (16762125, 40732315). The two primary-positive fresh-berry trials are liquid extracts in drops, while berry labels here print dry extract, powder or whole berry. Leaf and flower labels print 150 to 500 mg per serving, against the 900 mg/day WS 1442 arms. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19019730",
+        "title": "The efficacy and safety of Crataegus extract WS 1442 in patients with heart failure: the SPICE trial.",
+        "citation": "European journal of heart failure (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19019730/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.ejheart.2008.10.004"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19789403",
+        "title": "Hawthorn Extract Randomized Blinded Chronic Heart Failure (HERB CHF) trial.",
+        "citation": "European journal of heart failure (2009)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19789403/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, N.I.H., Extramural"
+        ],
+        "doi": "10.1093/eurjhf/hfp116"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12040357",
+        "title": "Efficacy and safety of crataegus extract WS 1442 in comparison with placebo in patients with chronic stable New York Heart Association class-III heart failure.",
+        "citation": "American heart journal (2002)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12040357/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1067/mhj.2002.121463"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11515715",
+        "title": "Clinical efficacy of crataegus extract WS 1442 in congestive heart failure NYHA class II.",
+        "citation": "Phytomedicine : international journal of phytotherapy and phytopharmacology (2001)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11515715/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1078/0944-7113-00041"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12833999",
+        "title": "A randomised double blind placebo controlled clinical trial of a standardised extract of fresh Crataegus berries (Crataegisan) in the treatment of patients with congestive heart failure NYHA II.",
+        "citation": "Phytomedicine : international journal of phytotherapy and phytopharmacology (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12833999/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1078/0944-7113-00312"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11715631",
+        "title": "[Actions of standardized extracts of Crataegus berries on exercise tolerance and quality of life in patients with congestive heart failure].",
+        "citation": "Arzneimittel-Forschung (2001)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11715631/",
+        "publication_types": [
+          "Clinical Trial",
+          "English Abstract",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1055/s-0031-1300117"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16762125",
+        "title": "Hypotensive effects of hawthorn for patients with diabetes taking prescription drugs: a randomised controlled trial.",
+        "citation": "The British journal of general practice : the journal of the Royal College of General Practitioners (2006)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16762125/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "18254076",
+        "title": "Hawthorn extract for treating chronic heart failure.",
+        "citation": "The Cochrane database of systematic reviews (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18254076/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD005312.pub2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12798455",
+        "title": "Hawthorn extract for treating chronic heart failure: meta-analysis of randomized trials.",
+        "citation": "The American journal of medicine (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12798455/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1016/s0002-9343(03)00131-1"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40732315",
+        "title": "Hawthorn (Crataegus spp.) Clinically Significantly Reduces Blood Pressure in Hypertension: A Meta-Analysis of Randomized Placebo-Controlled Clinical Trials.",
+        "citation": "Pharmaceuticals (Basel, Switzerland) (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40732315/",
+        "publication_types": [
+          "Journal Article",
+          "Review"
+        ],
+        "doi": "10.3390/ph18071027"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: hawthorn effect_direction null, agent review; the contexts below are the reading behind it."
+}

@@ -1,0 +1,298 @@
+{
+  "record_id": "INGR_CHLOROPHYLL",
+  "labels": 12,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "one good RCT positive on an aflatoxin biomarker at 300 mg/day, a purpose no label prints; no controlled oral trial of odor, skin or digestion among the papers read",
+  "decision": "closed_no_credit",
+  "summary": "Eleven labels print chlorophyllin at 100 or 132 mg and one prints chlorophyll at 50 mg; printed purposes are skin, digestive and metabolic, or none. The stored paper (7350215) is an uncontrolled 1980 report of 62 nursing home patients. 11724948 is a real RCT of 100 mg chlorophyllin three times a day in 180 adults, with a named primary endpoint, positive on a urinary aflatoxin biomarker; it doesn't test a purpose these labels print. 16417778 reports leukopenia response with no named primary outcome. No plain chlorophyll efficacy trial was found in the two searches; 19952359 is a three-volunteer unblinded pharmacokinetic study. Topical trials are not used.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_chlorophyll_11724948",
+      "components": [
+        "INGR_CHLOROPHYLL"
+      ],
+      "source_pmids": [
+        "11724948"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "chlorophyllin"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "aflatoxin_exposure",
+      "purpose": "aflatoxin_biomarker_reduction",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_chlorophyll_11724948",
+      "population": {
+        "age_group": "adult",
+        "description": "180 healthy adults from Qidong, China, at high risk from dietary aflatoxin."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled; 4 months",
+      "outcomes": [
+        {
+          "name": "Urinary aflatoxin-N7-guanine at 3 months: 55% lower median than placebo (P = 0.036)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "A biomarker of exposure; no clinical outcome. Population has unavoidable dietary aflatoxin exposure.",
+        "No label read here prints this purpose.",
+        "Detected in 105 of 169 available samples.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          300
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 120,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "100 mg chlorophyllin three times a day at meals for 4 months.",
+        "normalization": {
+          "basis": "100 mg t.i.d. as printed; daily total is simple addition. 4 months entered as 120 days."
+        },
+        "source_provenance": {
+          "pmid": "11724948",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_chlorophyll_16417778",
+      "components": [
+        "INGR_CHLOROPHYLL"
+      ],
+      "source_pmids": [
+        "16417778"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "sodium copper chlorophyllin"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "leukopenia",
+      "purpose": "white_cell_count",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_chlorophyll_16417778",
+      "population": {
+        "age_group": "adult",
+        "description": "105 patients with leukopenia of various causes: 60 YBK, 30 leucogen, 15 vitamin C as placebo."
+      },
+      "study_design": "Randomized, three arms; 1 month",
+      "outcomes": [
+        {
+          "name": "Total effective rate 85% vs 26.7% on placebo (P < 0.01); similar to leucogen",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome; response categories undefined.",
+        "Vitamin C tablets served as placebo. No label prints this purpose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          120
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 30,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Sodium copper chlorophyllin (Yebaike) 40 mg three times per day for 1 month.",
+        "normalization": {
+          "basis": "40 mg t.i.d. as printed; daily total is simple addition. 1 month entered as 30 days."
+        },
+        "source_provenance": {
+          "pmid": "16417778",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "7350215": "Stored. Test group of 62 nursing home patients with no control or stated dose; abstract calls it helpful for odors.",
+    "12628519": "Report of the same chemoprevention trial as 11724948; no dose printed in the abstract.",
+    "15043988": "7 trimethylaminuria patients, 180 mg/day for 3 weeks, no control arm stated.",
+    "19952359": "Unblinded pharmacokinetic crossover, 3 volunteers given 150 mg with a microdose of aflatoxin.",
+    "21541030": "Chlorophyllin given only within a combined inhibitor diet with crucifers and yogurt.",
+    "31581743": "Feasibility trial of green leafy vegetables, not the supplement.",
+    "24670123": "Systematic review whose abstract gives no findings; full text isn't open."
+  },
+  "stop_or_hold": "One label prints plain chlorophyll, not chlorophyllin; the fields here can't record that the RCT's material is chlorophyllin only other than through excluded form terms.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "11724948",
+      "title_fetched": "Chlorophyllin intervention reduces aflatoxin-DNA adducts in individuals at high risk for liver cancer.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11724948/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16417778",
+      "title_fetched": "Analysis of the therapeutic effect of sodium copper chlorophyllin tablet in treating 60 cases of leukopenia.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16417778/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "7350215",
+      "title_fetched": "Use of chlorophyllin in the care of geriatric patients.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7350215/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12628519",
+      "title_fetched": "Chemoprevention with chlorophyllin in individuals exposed to dietary aflatoxin.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12628519/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15043988",
+      "title_fetched": "Effects of the dietary supplements, activated charcoal and copper chlorophyllin, on urinary excretion of trimethylamine in Japanese trimethylaminuria patients.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15043988/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19952359",
+      "title_fetched": "Effects of chlorophyll and chlorophyllin on low-dose aflatoxin B(1) pharmacokinetics in human volunteers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19952359/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21541030",
+      "title_fetched": "Inhibition of fried meat-induced colorectal DNA damage and altered systemic genotoxicity in humans by crucifera, chlorophyllin, and yogurt.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21541030/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31581743",
+      "title_fetched": "Primary Outcomes of a Randomized Controlled Crossover Trial to Explore the Effects of a High Chlorophyll Dietary Intervention to Reduce Colon Cancer Risk in Adults: The Meat and Three Greens (M3G) Feasibility Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31581743/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24670123",
+      "title_fetched": "An evidence-based systematic review of chlorophyll by the Natural Standard Research Collaboration.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24670123/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_CHLOROPHYLL",
+    "standard_name": "Chlorophyllin (chlorophyll)",
+    "aliases": [
+      "Chlorophyllin"
+    ],
+    "category": "antioxidant",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "11724948",
+      "16417778"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "one good RCT positive on an aflatoxin biomarker at 300 mg/day, a purpose no label prints; no controlled oral trial of odor, skin or digestion among the papers read. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "urinary aflatoxin-N7-guanine"
+    ],
+    "health_goals_supported": [],
+    "notes": "Eleven labels print chlorophyllin at 100 or 132 mg and one prints chlorophyll at 50 mg; printed purposes are skin, digestive and metabolic, or none. The stored paper (7350215) is an uncontrolled 1980 report of 62 nursing home patients. 11724948 is a real RCT of 100 mg chlorophyllin three times a day in 180 adults, with a named primary endpoint, positive on a urinary aflatoxin biomarker; it doesn't test a purpose these labels print. 16417778 reports leukopenia response with no named primary outcome. No plain chlorophyll efficacy trial was found in the two searches; 19952359 is a three-volunteer unblinded pharmacokinetic study. Topical trials are not used.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with high dietary aflatoxin exposure",
+      "supported_outcomes": [
+        "urinary aflatoxin-N7-guanine"
+      ],
+      "source_pmids": [
+        "11724948",
+        "16417778"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Eleven labels print chlorophyllin at 100 or 132 mg and one prints chlorophyll at 50 mg; printed purposes are skin, digestive and metabolic, or none. The stored paper (7350215) is an uncontrolled 1980 report of 62 nursing home patients. 11724948 is a real RCT of 100 mg chlorophyllin three times a day in 180 adults, with a named primary endpoint, positive on a urinary aflatoxin biomarker; it doesn't test a purpose these labels print. 16417778 reports leukopenia response with no named primary outcome. No plain chlorophyll efficacy trial was found in the two searches; 19952359 is a three-volunteer unblinded pharmacokinetic study. Topical trials are not used. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "Chlorophyll"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11724948",
+        "title": "Chlorophyllin intervention reduces aflatoxin-DNA adducts in individuals at high risk for liver cancer.",
+        "citation": "Proceedings of the National Academy of Sciences of the United States of America (2001)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11724948/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, U.S. Gov't, P.H.S."
+        ],
+        "doi": "10.1073/pnas.251536898"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16417778",
+        "title": "Analysis of the therapeutic effect of sodium copper chlorophyllin tablet in treating 60 cases of leukopenia.",
+        "citation": "Chinese journal of integrative medicine (2005)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16417778/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/BF02835789"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: chlorophyll no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

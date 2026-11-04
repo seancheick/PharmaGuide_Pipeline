@@ -1,0 +1,496 @@
+{
+  "record_id": "INGR_PYGEUM",
+  "labels": 11,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive but limited: one 1990 placebo RCT at 100 mg/day and a pooled review with combinations, small and short trials; label amounts are 500 and 5000 mg",
+  "decision": "closed_no_credit",
+  "summary": "Ten labels print pygeum bark extract at 500 or 5000 mg with no purpose text; one prints 100 mg alongside saw palmetto. A 1990 placebo-controlled RCT in 263 BPH patients on 50 mg twice daily (1702916) reports 66% vs 31% improved. Cochrane and a journal paper reporting the same counts (11869585, 11099686) pool 18 RCTs that include combination products and call them small and short with varied doses. 10475357 has no placebo. No newer placebo RCT turned up in two searches; a 2020 review (31627963) rates its evidence level IV. The tested amount, 100 mg/day, is below 10 of the 11 labels; those labels' extract ratios aren't printed.",
+  "question_for_clinician": "1702916 gave pygeum extract 50 mg twice daily against placebo to 263 men with BPH and reports 66% vs 31% improved; its abstract names no primary outcome. Cochrane (11869585) pools 18 small trials that include combinations. Ten labels print pygeum bark extract with no purpose text. An abstract's silence on a primary outcome is a limit of the read, not a finding. Does this support credit for these labels? 1702916's full text settles the primary outcome.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pygeum_1702916",
+      "components": [
+        "INGR_PYGEUM"
+      ],
+      "source_pmids": [
+        "1702916"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Pygeum africanum",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "benign_prostatic_hyperplasia",
+      "purpose": "lower_urinary_tract_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pygeum_1702916",
+      "population": {
+        "age_group": "adult",
+        "description": "263 patients with micturition disorders from BPH, 8 centres in Germany, France and Austria."
+      },
+      "study_design": "Multicentre, double-blind, placebo-controlled; 60 days",
+      "outcomes": [
+        {
+          "name": "Overall assessment: micturition improved in 66% vs 31% on placebo (p < 0.001)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Residual urine, uroflowmetry and pollakiuria differed significantly from placebo in therapeutic response",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Abstract says evaluation was 'mainly based on quantitative parameters' and names no single primary outcome or effect size per parameter.",
+        "Abstract prints neither plant part nor standardization.",
+        "No label here prints 100 mg/day alone.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 60,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "50 mg extract capsule morning and evening for 60 days.",
+        "normalization": {
+          "basis": "50 mg twice daily as printed; daily total is simple addition."
+        },
+        "source_provenance": {
+          "pmid": "1702916",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pygeum_11869585",
+      "components": [
+        "INGR_PYGEUM"
+      ],
+      "source_pmids": [
+        "11869585"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Pygeum africanum",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "benign_prostatic_hyperplasia",
+      "purpose": "lower_urinary_tract_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pygeum_11869585",
+      "population": {
+        "age_group": "adult",
+        "description": "18 RCTs, 1562 men with BPH; mean 64 days."
+      },
+      "study_design": "Cochrane systematic review",
+      "outcomes": [
+        {
+          "name": "Combined urologic symptoms and flow: moderately large improvement over placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Peak urine flow up 23%, residual urine down 24%",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Preparations 'alone or in combination'; abstract doesn't split results by that. Only one trial reported allocation concealment.",
+        "Authors: studies small, short, with varied doses and preparations, and rarely used validated measures.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Varied doses; not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "11869585",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pygeum_11099686",
+      "components": [
+        "INGR_PYGEUM"
+      ],
+      "source_pmids": [
+        "11099686"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Pygeum africanum",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "benign_prostatic_hyperplasia",
+      "purpose": "lower_urinary_tract_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pygeum_11099686",
+      "population": {
+        "age_group": "adult",
+        "description": "18 RCTs, 1562 men; placebo pooling from 6 studies."
+      },
+      "study_design": "Systematic review and quantitative meta-analysis",
+      "outcomes": [
+        {
+          "name": "Combined symptoms and flow against placebo: effect size -0.8 SD (-1.4 to -0.3)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Overall symptom improvement risk ratio 2.1 (1.40 to 3.1)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Same counts as 11869585 (18 RCTs, 1562 men) and overlapping searches; don't count the two as independent.",
+        "Includes combination preparations; abstract doesn't separate them.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Varied doses; not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "11099686",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pygeum_10475357",
+      "components": [
+        "INGR_PYGEUM"
+      ],
+      "source_pmids": [
+        "10475357"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Pygeum africanum",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "benign_prostatic_hyperplasia",
+      "purpose": "dosing_schedule_comparison",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pygeum_10475357",
+      "population": {
+        "age_group": "adult",
+        "description": "209 men with symptomatic BPH completed the 2-month comparison."
+      },
+      "study_design": "Randomized, double-blind, parallel comparison of 50 mg twice daily vs 100 mg once daily; 10-month open extension; no placebo",
+      "outcomes": [
+        {
+          "name": "IPSS improved 38% and 35%, Qmax up 16% and 19% from baseline; arms similar",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "No placebo, so improvement can't be separated from placebo response.",
+        "Named 'main' parameters: IPSS, QOL, Qmax.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 60,
+        "administration_frequency": "once or twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Extract 50 mg twice daily or 100 mg once daily for 2 months, then 100 mg once daily for 10 months open.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "10475357",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "9787978": "Open three-centre study, 85 patients, no control arm.",
+    "1723220": "Uncontrolled, 18 patients, 200 mg/day.",
+    "19526878": "Uncontrolled, 27 patients on Tadenan.",
+    "31627963": "Non-exhaustive review; rates use as evidence level IV, expert opinion.",
+    "23058996": "Phytotherapy systematic review; conclusions described as inconsistent because of small numbers, lack of placebo control or short follow-up.",
+    "18423748": "Review relying on systematic reviews for P. africanum."
+  },
+  "stop_or_hold": "Fields can't compare label amounts with trial extract: labels print 500 and 5000 mg with no ratio or sterol content, trial abstracts print 100 mg/day with no part or standardization. 2441479 is a 1987 controlled trial with no abstract in PubMed and wasn't read.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "1702916",
+      "title_fetched": "[Efficacy of Pygeum africanum extract in the medical therapy of urination disorders due to benign prostatic hyperplasia: evaluation of objective and subjective parameters. A placebo-controlled double-blind multicenter study].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1702916/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11869585",
+      "title_fetched": "Pygeum africanum for benign prostatic hyperplasia.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11869585/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11099686",
+      "title_fetched": "Pygeum africanum for the treatment of patients with benign prostatic hyperplasia: a systematic review and quantitative meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11099686/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "10475357",
+      "title_fetched": "Comparison of once and twice daily dosage forms of Pygeum africanum extract in patients with benign prostatic hyperplasia: a randomized, double-blind study, with long-term open label extension.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10475357/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "9787978",
+      "title_fetched": "Efficacy and acceptability of tadenan (Pygeum africanum extract) in the treatment of benign prostatic hyperplasia (BPH): a multicentre trial in central Europe.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9787978/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "1723220",
+      "title_fetched": "[Urological and sexual evaluation of treatment of benign prostatic disease using Pygeum africanum at high doses].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1723220/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19526878",
+      "title_fetched": "[Tadenan treatment of prostatic adenoma].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19526878/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31627963",
+      "title_fetched": "Review of the experience and evidence of Pygeum africanum in urological practice.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31627963/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23058996",
+      "title_fetched": "[Phytotherapy in urology. Current scientific evidence of its application in benign prostatic hyperplasia and prostate adenocarcinoma].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23058996/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18423748",
+      "title_fetched": "Phytotherapy for lower urinary tract symptoms secondary to benign prostatic hyperplasia.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18423748/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_PYGEUM",
+    "standard_name": "Pygeum (Pygeum africanum bark extract)",
+    "aliases": [
+      "Pygeum africanum Bark Extract",
+      "Pygeum africanum bark extract"
+    ],
+    "category": "hormonal_endocrine",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "1702916",
+      "11869585",
+      "11099686",
+      "10475357"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive but limited: one 1990 placebo RCT at 100 mg/day and a pooled review with combinations, small and short trials; label amounts are 500 and 5000 mg. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "urologic symptoms",
+      "urine flow"
+    ],
+    "health_goals_supported": [],
+    "notes": "Ten labels print pygeum bark extract at 500 or 5000 mg with no purpose text; one prints 100 mg alongside saw palmetto. A 1990 placebo-controlled RCT in 263 BPH patients on 50 mg twice daily (1702916) reports 66% vs 31% improved. Cochrane and a journal paper reporting the same counts (11869585, 11099686) pool 18 RCTs that include combination products and call them small and short with varied doses. 10475357 has no placebo. No newer placebo RCT turned up in two searches; a 2020 review (31627963) rates its evidence level IV. The tested amount, 100 mg/day, is below 10 of the 11 labels; those labels' extract ratios aren't printed.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Men with symptomatic benign prostatic hyperplasia",
+      "supported_outcomes": [
+        "urologic symptoms",
+        "urine flow"
+      ],
+      "source_pmids": [
+        "1702916",
+        "11869585",
+        "11099686",
+        "10475357"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Ten labels print pygeum bark extract at 500 or 5000 mg with no purpose text; one prints 100 mg alongside saw palmetto. A 1990 placebo-controlled RCT in 263 BPH patients on 50 mg twice daily (1702916) reports 66% vs 31% improved. Cochrane and a journal paper reporting the same counts (11869585, 11099686) pool 18 RCTs that include combination products and call them small and short with varied doses. 10475357 has no placebo. No newer placebo RCT turned up in two searches; a 2020 review (31627963) rates its evidence level IV. The tested amount, 100 mg/day, is below 10 of the 11 labels; those labels' extract ratios aren't printed. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "1702916",
+        "title": "[Efficacy of Pygeum africanum extract in the medical therapy of urination disorders due to benign prostatic hyperplasia: evaluation of objective and subjective parameters. A placebo-controlled double-blind multicenter study].",
+        "citation": "Wiener klinische Wochenschrift (1990)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/1702916/",
+        "publication_types": [
+          "Clinical Trial",
+          "English Abstract",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11869585",
+        "title": "Pygeum africanum for benign prostatic hyperplasia.",
+        "citation": "The Cochrane database of systematic reviews (2002)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11869585/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD001044"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11099686",
+        "title": "Pygeum africanum for the treatment of patients with benign prostatic hyperplasia: a systematic review and quantitative meta-analysis.",
+        "citation": "The American journal of medicine (2000)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11099686/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/s0002-9343(00)00604-5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "10475357",
+        "title": "Comparison of once and twice daily dosage forms of Pygeum africanum extract in patients with benign prostatic hyperplasia: a randomized, double-blind study, with long-term open label extension.",
+        "citation": "Urology (1999)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10475357/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/s0090-4295(99)00147-8"
+      }
+    ]
+  }
+}

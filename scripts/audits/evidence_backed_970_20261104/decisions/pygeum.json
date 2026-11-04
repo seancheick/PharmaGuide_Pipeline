@@ -1,0 +1,9 @@
+{"canonical":"pygeum","labels":11,"stored":"positive_moderate","as_read":"Positive but limited: one 1990 placebo RCT at 100 mg/day whose abstract names no primary outcome, and a pooled review that mixes combinations; labels print 500 and 5000 mg mostly.",
+"route":"packet_no_credit",
+"positive_named":["1702916","11869585","11099686"],
+"studies_to_add":[{"pmid":"1702916","study_type":"rct","sample_size":263,"primary_endpoint":"not named in the abstract; evaluation mainly on residual urine, uroflowmetry and pollakiuria","effect_direction":"positive","quote":"Overall assessment at the end of therapy, showed that micturition improved in 66% of the patients treated with Pygeum africanum extract, as compared with an improvement of 31% in the placebo group."}],
+"stop_list":["fields can't compare label amounts with trial extract: no ratio or sterol content on labels, no part or standardization in the trial abstracts","label 867 is a saw palmetto combination at 100 mg"],
+"clinician_items":["1702916: gastrointestinal side effects in 5 patients on extract, 3 of whom stopped treatment."],
+"stored_rating_note":"positive_moderate rests on 11869585, which pools preparations alone or in combination and calls the studies small and short with varied doses; positive_weak reads closer.",
+"pmids_read":["11869585","11099686","1702916","10475357","9787978","1723220","19526878","31627963","23058996","18423748"],
+"unread_notes":"Abstracts only. 2441479 (1987 controlled trial vs placebo) has no abstract and wasn't read. Rule 2's 'primary outcome' is arguable for 1702916: abstract says 'mainly based on quantitative parameters'. Full text not checked; the route doesn't change if it names one, since the question is already open for a clinician. Second search run with a larger limit to see its older hits; same query."}

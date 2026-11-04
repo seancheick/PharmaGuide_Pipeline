@@ -1,0 +1,466 @@
+{
+  "record_id": "INGR_ENGLISH_IVY",
+  "labels": 4,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "Positive on named primary cough outcomes for the EA 575 extract at 105 mg/day in maker-funded placebo trials; an independent systematic review calls the effects minimal at best and of uncertain clinical importance",
+  "decision": "closed_no_credit",
+  "summary": "All four labels print generic English ivy leaf extract, 50 mg or 86 mg, with no extract name or ratio; the rows carry an immune purpose, and two also carry an infant tag. Maker-funded placebo trials of EA 575 liquid in adults found primary cough outcomes favored the extract (29441845, 31832428), with a two-trial meta-analysis confirming it (36414647). A systematic review of ivy leaf preparations rated risk of bias high and called effects minimal at best and of uncertain clinical importance (33523253).",
+  "question_for_clinician": "31832428 and 36414647 meet rule 2 for EA 575 at 105 mg/day, positive on the primary outcome, and 29441845 does too except for an amount in its abstract. Should these labels get credit, given they print a generic extract with no ratio, at 50 or 86 mg, an immune purpose rather than a cough purpose, and an infant tag on two labels, while the trials tested one liquid extract in adults, with maker funding? Agent recommendation: no credit in this review, because the labels can't be shown to contain the tested extract.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_english_ivy_29441845",
+      "components": [
+        "INGR_ENGLISH_IVY"
+      ],
+      "source_pmids": [
+        "29441845"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "EA 575 (Prospan)",
+        "manufacturer": "Engelhard Arzneimittel GmbH & Co. KG"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "acute_cough",
+      "purpose": "cough_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_english_ivy_29441845",
+      "population": {
+        "age_group": "adult",
+        "description": "181 adult patients with acute cough."
+      },
+      "study_design": "Randomized, placebo-controlled, double-blind, multicentre trial, one week of treatment",
+      "outcomes": [
+        {
+          "name": "Cough severity on VAS, area under the curve over 7 days: statistically significant reduction versus placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Bronchitis Severity Score and Verbal Category Descriptive score: reductions versus placebo",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract says three times a day but gives no amount, so the dose stays pending here.",
+        "Abstract gives no effect size for the primary outcome.",
+        "Tested a liquid of a specific extract; these labels don't name EA 575.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "liquid"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Ivy leaves cough liquid containing EA 575 or placebo three times a day for one week; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29441845",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_english_ivy_31832428",
+      "components": [
+        "INGR_ENGLISH_IVY"
+      ],
+      "source_pmids": [
+        "31832428"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "EA 575 (Prospan)",
+        "manufacturer": "Engelhard Arzneimittel GmbH & Co. KG"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "acute_bronchitis",
+      "purpose": "cough_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_english_ivy_31832428",
+      "population": {
+        "age_group": "adult",
+        "description": "209 adult patients with acute bronchitis."
+      },
+      "study_design": "Randomized, placebo-controlled, multicentre, double-blind trial, 1 week of treatment and 2 weeks of observation",
+      "outcomes": [
+        {
+          "name": "Change in Bronchitis Severity Score, visit 1 to visit 5, pooled verum versus pooled placebo: superiority of verum",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "VCD score and VAS: superiority of verum over placebo",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Engelhard, the maker, supplied all necessary funding and the product; an author is an employee and a company employee gave writing support.",
+        "The authors note no minimal clinically important difference has been published for this score in this indication.",
+        "Tested a liquid of a specific extract; these labels don't name EA 575.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          105
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 7,
+        "administration_frequency": "two or three times daily",
+        "dosage_forms": [
+          "liquid"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "105 mg/day EA 575 ivy leaves dry extract (drug/extract ratio 5-7.5/1), given as 5 mL three times a day or 7.5 mL twice a day, or placebo, for 1 week.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31832428",
+          "location": "Full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_english_ivy_36414647",
+      "components": [
+        "INGR_ENGLISH_IVY"
+      ],
+      "source_pmids": [
+        "36414647"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "EA 575 (Prospan)",
+        "manufacturer": "Engelhard Arzneimittel GmbH & Co. KG"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "acute_respiratory_tract_infection_with_cough",
+      "purpose": "cough_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_english_ivy_36414647",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with acute respiratory tract infection, EA 575 n = 228, placebo n = 162."
+      },
+      "study_design": "Individual patient data meta-analysis of two double-blind, randomized, placebo-controlled trials, 7 days of treatment and 7 days without",
+      "outcomes": [
+        {
+          "name": "Bronchitis Severity Score, main efficacy outcome: reduction of 8.6 on EA 575 and 6.2 on placebo at day 7, p < 0.001",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Cough-free at end of follow-up: 56.2% on EA 575, 25.6% on placebo",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Supported by the maker, which provided all trial data; authors report personal fees from it.",
+        "The authors say a limitation is that only two studies were eligible, performed by essentially the same research team.",
+        "Same preparation and likely overlapping with the trials above; the included PMIDs were not extracted, so this doesn't count as independent evidence here.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "EA 575 liquid at 15 mL/day, corresponding to 105 mg/day of extract per the full text, for 7 days.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "36414647",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_english_ivy_33523253",
+      "components": [
+        "INGR_ENGLISH_IVY"
+      ],
+      "source_pmids": [
+        "33523253"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "acute_upper_respiratory_infection_or_bronchitis",
+      "purpose": "cough_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_english_ivy_33523253",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults and children in 6 randomized trials, 1 controlled trial and 4 observational studies of ivy leaf mono- or combination preparations."
+      },
+      "study_design": "Updated systematic review, searches December 2009 to January 2020",
+      "outcomes": [
+        {
+          "name": "Three trials reported more rapid reduction in cough severity or frequency; effects minimal at best and of uncertain clinical importance",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Pools mono- and combination preparations.",
+        "The authors rate reporting quality low and risk of bias high.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several ivy leaf regimens; not listed in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "33523253",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "40430571": "Open-label comparison of EA 575 with two combination products, no placebo; primary endpoint was non-inferiority.",
+    "41576988": "Narrative review of EA 575 that adds no independent trial read here.",
+    "12725580": "Review in children with bronchial asthma; only one primary trial had a placebo control, and the preparations were drops, syrup and suppositories."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "29441845",
+      "title_fetched": "A randomized, controlled, double-blind, multi-center trial to evaluate the efficacy and safety of a liquid containing ivy leaves dry extract (EA 575®) vs. placebo in the treatment of adults with acute cough.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29441845/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31832428",
+      "title_fetched": "Efficacy of two dosing schemes of a liquid containing ivy leaves dry extract EA 575 versus placebo in the treatment of acute bronchitis in adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31832428/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "36414647",
+      "title_fetched": "Ivy leaves extract EA 575 in the treatment of cough during acute respiratory tract infections: meta-analysis of double-blind, randomized, placebo-controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36414647/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "33523253",
+      "title_fetched": "Ivy leaf (Hedera helix) for acute upper respiratory tract infections: an updated systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33523253/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40430571",
+      "title_fetched": "Efficacy and Safety of a Single Ivy Extract Versus Two Herbal Extract Combinations in Patients with Acute Bronchitis: A Multi-Center, Randomized, Open-Label Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40430571/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41576988",
+      "title_fetched": "Efficacy and Safety of Ivy Leaf Dry Extract EA 575 in Cough Management: An Updated Review of Clinical Evidence.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41576988/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12725580",
+      "title_fetched": "Efficacy of dry extract of ivy leaves in children with bronchial asthma--a review of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12725580/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_ENGLISH_IVY",
+    "standard_name": "English Ivy",
+    "aliases": [
+      "English Ivy Leaf Extract",
+      "English Ivy extract",
+      "English Ivy leaf extract"
+    ],
+    "category": "immune",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "29441845",
+      "31832428",
+      "36414647",
+      "33523253"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Positive on named primary cough outcomes for the EA 575 extract at 105 mg/day in maker-funded placebo trials; an independent systematic review calls the effects minimal at best and of uncertain clinical importance. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "cough severity",
+      "Bronchitis Severity Score"
+    ],
+    "health_goals_supported": [],
+    "notes": "All four labels print generic English ivy leaf extract, 50 mg or 86 mg, with no extract name or ratio; the rows carry an immune purpose, and two also carry an infant tag. Maker-funded placebo trials of EA 575 liquid in adults found primary cough outcomes favored the extract (29441845, 31832428), with a two-trial meta-analysis confirming it (36414647). A systematic review of ivy leaf preparations rated risk of bias high and called effects minimal at best and of uncertain clinical importance (33523253).",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with acute cough or acute bronchitis taking EA 575 ivy leaf dry extract liquid",
+      "supported_outcomes": [
+        "cough severity",
+        "Bronchitis Severity Score"
+      ],
+      "source_pmids": [
+        "29441845",
+        "31832428",
+        "36414647",
+        "33523253"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "All four labels print generic English ivy leaf extract, 50 mg or 86 mg, with no extract name or ratio; the rows carry an immune purpose, and two also carry an infant tag. Maker-funded placebo trials of EA 575 liquid in adults found primary cough outcomes favored the extract (29441845, 31832428), with a two-trial meta-analysis confirming it (36414647). A systematic review of ivy leaf preparations rated risk of bias high and called effects minimal at best and of uncertain clinical importance (33523253). Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29441845",
+        "title": "A randomized, controlled, double-blind, multi-center trial to evaluate the efficacy and safety of a liquid containing ivy leaves dry extract (EA 575®) vs. placebo in the treatment of adults with acute cough.",
+        "citation": "Die Pharmazie (2016)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29441845/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1691/ph.2016.6712"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31832428",
+        "title": "Efficacy of two dosing schemes of a liquid containing ivy leaves dry extract EA 575 versus placebo in the treatment of acute bronchitis in adults.",
+        "citation": "ERJ open research (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31832428/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1183/23120541.00019-2019"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36414647",
+        "title": "Ivy leaves extract EA 575 in the treatment of cough during acute respiratory tract infections: meta-analysis of double-blind, randomized, placebo-controlled trials.",
+        "citation": "Scientific reports (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36414647/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1038/s41598-022-24393-1"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33523253",
+        "title": "Ivy leaf (Hedera helix) for acute upper respiratory tract infections: an updated systematic review.",
+        "citation": "European journal of clinical pharmacology (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33523253/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1007/s00228-021-03090-4"
+      }
+    ]
+  }
+}

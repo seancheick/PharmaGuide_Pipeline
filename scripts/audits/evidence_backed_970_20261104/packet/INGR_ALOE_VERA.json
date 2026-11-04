@@ -1,0 +1,863 @@
+{
+  "record_id": "INGR_ALOE_VERA",
+  "labels": 15,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed: IBS meta-analysis positive but the largest trial is not superior to control and the pilot missed its primary endpoint; glycaemic meta-analyses favour aloe with authors flagging poor quality, heterogeneity and unstandardized preparations",
+  "decision": "closed_no_credit",
+  "summary": "The labels print aloe extract, aerial part or leaf extract, gel, powder or concentrate at up to 470 mg, some with digestive and metabolic purposes. For IBS, a three-trial meta-analysis favours aloe (30153721), yet a pilot missed its primary endpoint (26405698), the largest trial was not superior to inulin (32314514), and the only clear subgroup result is post hoc (34646359). For glycaemia, meta-analyses favour aloe (27009750, 27347994), and their authors cite high heterogeneity, poor quality and a need for standardized preparations. No abstract read links a result to a preparation these labels print at a stated amount.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_aloe_vera_30153721",
+      "components": [
+        "INGR_ALOE_VERA"
+      ],
+      "source_pmids": [
+        "30153721"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aloe vera",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "irritable_bowel_syndrome",
+      "purpose": "digestive_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_aloe_vera_30153721",
+      "population": {
+        "age_group": "adult",
+        "description": "Three RCTs, 151 patients with IBS."
+      },
+      "study_design": "Systematic review and meta-analysis of placebo-controlled RCTs, to December 2017",
+      "outcomes": [
+        {
+          "name": "Change in IBS symptom severity: SMD 0.41 (95% CI 0.07-0.75, P = 0.020), favouring aloe vera",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Response rate: pooled RR 1.69 (95% CI 1.05-2.73, P = 0.030)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Three small trials; the abstract does not name them or their preparations.",
+        "It predates the 160-patient 32314514, which was not superior to control.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "30153721",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_aloe_vera_32314514",
+      "components": [
+        "INGR_ALOE_VERA"
+      ],
+      "source_pmids": [
+        "32314514"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aloe barbadensis",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "irritable_bowel_syndrome",
+      "purpose": "digestive_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_aloe_vera_32314514",
+      "population": {
+        "age_group": "adult",
+        "description": "160 IBS patients completed, Rome III, all subtypes."
+      },
+      "study_design": "Randomized double-blind trial versus inulin control, 4 weeks",
+      "outcomes": [
+        {
+          "name": "IBS symptom severity fell in both groups with no difference between groups (P = .62)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Responders: 39% aloe versus 45% control (P = .49)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "Control is inulin, an active comparator, rather than placebo.",
+        "Dose not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Aloe extract for 4 weeks; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32314514",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_aloe_vera_26405698",
+      "components": [
+        "INGR_ALOE_VERA"
+      ],
+      "source_pmids": [
+        "26405698"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "AVH200",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "irritable_bowel_syndrome",
+      "purpose": "digestive_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_aloe_vera_26405698",
+      "population": {
+        "age_group": "adult",
+        "description": "68 adults with IBS by Rome III criteria."
+      },
+      "study_design": "Randomized double-blind placebo-controlled pilot, 4 weeks",
+      "outcomes": [
+        {
+          "name": "Authors state the primary endpoint was not met; responders 55% versus 31% (p=0.09)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Overall severity fell on aloe (p=0.003) but not placebo, no difference between groups (p=0.10)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract does not say which measure was the primary endpoint; the responder figure is the first reported.",
+        "Authors say it may have been underpowered.",
+        "Dose not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "AVH200 for four weeks; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "26405698",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_aloe_vera_34646359",
+      "components": [
+        "INGR_ALOE_VERA"
+      ],
+      "source_pmids": [
+        "34646359"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aloe barbadensis",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "irritable_bowel_syndrome_diarrhoea",
+      "purpose": "digestive_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_aloe_vera_34646359",
+      "population": {
+        "age_group": "adult",
+        "description": "213 IBS patients pooled from two controlled studies; IBS-D subgroup aloe n = 38, control n = 33."
+      },
+      "study_design": "Post hoc subgroup analysis of two randomized double-blind controlled studies, 4 weeks",
+      "outcomes": [
+        {
+          "name": "IBS-D: symptom severity difference between groups p = 0.01; responders 58% versus 30% (p = 0.02)",
+          "hierarchy": "post_hoc",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        },
+        {
+          "name": "Not superior to control in other IBS subtypes",
+          "hierarchy": "post_hoc",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "Post hoc. Dose not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Aloe extract orally for 4 weeks; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "34646359",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_aloe_vera_27009750",
+      "components": [
+        "INGR_ALOE_VERA"
+      ],
+      "source_pmids": [
+        "27009750"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aloe vera",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "prediabetes_type_2_diabetes",
+      "purpose": "glycaemic_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_aloe_vera_27009750",
+      "population": {
+        "age_group": "adult",
+        "description": "Eight trials, 470 patients, 235 each with prediabetes and type 2 diabetes."
+      },
+      "study_design": "Systematic review and meta-analysis of RCTs, to January 2016",
+      "outcomes": [
+        {
+          "name": "Prediabetes: FPG -0.22 mmol/L (95% CI -0.32 to -0.12), no effect on HbA1c",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Type 2 diabetes: FPG -1.17 mmol/L (P = 0.05, marginal); HbA1c -11 mmol/mol (P = 0.01)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors cite limitations and high heterogeneity and call for standardized preparations.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "27009750",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_aloe_vera_27347994",
+      "components": [
+        "INGR_ALOE_VERA"
+      ],
+      "source_pmids": [
+        "27347994"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aloe vera",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "prediabetes_early_diabetes",
+      "purpose": "glycaemic_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_aloe_vera_27347994",
+      "population": {
+        "age_group": "adult",
+        "description": "Five RCTs, 415 participants with prediabetes or early non-treated diabetes."
+      },
+      "study_design": "Systematic review and meta-analysis of RCTs, to January 2016",
+      "outcomes": [
+        {
+          "name": "FBG WMD -30.05 mg/dL (p = 0.02); HbA1c WMD -0.41% (p < 0.00001); lipids improved",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors call the results inconclusive, given the small number and poor quality of RCTs.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "27347994",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_aloe_vera_25883909",
+      "components": [
+        "INGR_ALOE_VERA"
+      ],
+      "source_pmids": [
+        "25883909"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aloe vera",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "prediabetes",
+      "purpose": "glycaemic_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_aloe_vera_25883909",
+      "population": {
+        "age_group": "adult",
+        "description": "72 subjects with pre-diabetes in three groups."
+      },
+      "study_design": "Double-blind randomized placebo-controlled trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "FBS down at week 4 versus placebo in the 300 mg group (p = 0.001); HbA1c down at week 8 in that group (p = 0.042)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Total and LDL cholesterol down at week 8 only in the 500 mg group",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "Abstract doesn't settle whether 300 and 500 mg are per capsule or per day, so the daily amount stays in the regimen text.",
+        "Results differ by dose and time point.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Capsules twice a day: Aloe vera 300 mg, 500 mg, or placebo, for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "25883909",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_aloe_vera_38952774",
+      "components": [
+        "INGR_ALOE_VERA"
+      ],
+      "source_pmids": [
+        "38952774"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aloe vera",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hemodialysis",
+      "purpose": "cardiovascular_risk_factors",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_aloe_vera_38952774",
+      "population": {
+        "age_group": "adult",
+        "description": "50 hemodialysis patients."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "hs-CRP, total cholesterol and LDL lower and HDL higher",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome and does not say the comparisons were between groups.",
+        "Hemodialysis population; not a label purpose or population.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2 Aloe vera capsules daily for 8 weeks (500 mg/day).",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "38952774",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "34563809": "Overview of four systematic reviews rating moderate to high quality; gives no preparation or dose and overlaps the meta-analyses used.",
+    "27152917": "Meta-analysis of change from baseline; publication bias for FPG; overlaps the meta-analyses used.",
+    "23735317": "Aloe QDM complex, a named gel complex whose composition isn't in the abstract; dose not in the abstract.",
+    "34385093": "Processed aloe vera gel and influenza vaccine; seroprotection primary endpoint not different; not a label purpose."
+  },
+  "stop_or_hold": "Fields can't tie the IBS or glucose results to a preparation these labels print: no abstract read gives both a preparation and an amount matching a label, 25 mg gel and 100:1 concentrate rows have no comparable trial. Results split by purpose (digestive and metabolic).",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "30153721",
+      "title_fetched": "Aloe vera Is Effective and Safe in Short-term Treatment of Irritable Bowel Syndrome: A Systematic Review and Meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30153721/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32314514",
+      "title_fetched": "Randomized clinical trial: Effects of Aloe barbadensis Mill. extract on symptoms, fecal microbiota and fecal metabolite profiles in patients with irritable bowel syndrome.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32314514/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26405698",
+      "title_fetched": "A Pilot Study of the Effect of Aloe barbadensis Mill. Extract (AVH200®) in Patients with Irritable Bowel Syndrome: a Randomized, Double-Blind, Placebo-Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26405698/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34646359",
+      "title_fetched": "Aloe barbadensis Mill. extract improves symptoms in IBS patients with diarrhoea: post hoc analysis of two randomized double-blind controlled studies.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34646359/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27009750",
+      "title_fetched": "Effect of Aloe vera on glycaemic control in prediabetes and type 2 diabetes: a systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27009750/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27347994",
+      "title_fetched": "Efficacy of Aloe Vera Supplementation on Prediabetes and Early Non-Treated Diabetic Patients: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27347994/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25883909",
+      "title_fetched": "Improvement of glucose and lipid profile status with Aloe vera in pre-diabetic subjects: a randomized controlled-trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25883909/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38952774",
+      "title_fetched": "Aloe vera supplementation improves cardiovascular risk factors in hemodialysis patients: A randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38952774/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34563809",
+      "title_fetched": "Effectiveness of aloe vera in patients with type 2 Diabetes Mellitus and pre-diabetes: An overview of systematic reviews.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34563809/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27152917",
+      "title_fetched": "Reduction of Fasting Blood Glucose and Hemoglobin A1c Using Oral Aloe Vera: A Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27152917/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23735317",
+      "title_fetched": "Metabolic effects of aloe vera gel complex in obese prediabetes and early non-treated diabetic patients: randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23735317/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34385093",
+      "title_fetched": "Effect of processed aloe vera gel on immunogenicity in inactivated quadrivalent influenza vaccine and upper respiratory tract infection in healthy adults: A randomized double-blind placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34385093/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_ALOE_VERA",
+    "standard_name": "Aloe Vera",
+    "aliases": [
+      "Aloe Vera",
+      "Aloe vera Aerial Part Extract",
+      "Aloe vera Aerial Parts Extract",
+      "Aloe vera Concentrate",
+      "Aloe vera Leaf Extract",
+      "Aloe vera extract",
+      "Aloe vera powder",
+      "Aloe vera gel"
+    ],
+    "category": "digestive_gut",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "30153721",
+      "32314514",
+      "26405698",
+      "34646359",
+      "27009750",
+      "27347994",
+      "25883909",
+      "38952774"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: IBS meta-analysis positive but the largest trial is not superior to control and the pilot missed its primary endpoint; glycaemic meta-analyses favour aloe with authors flagging poor quality, heterogeneity and unstandardized preparations. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "IBS symptom severity",
+      "fasting glucose and HbA1c"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print aloe extract, aerial part or leaf extract, gel, powder or concentrate at up to 470 mg, some with digestive and metabolic purposes. For IBS, a three-trial meta-analysis favours aloe (30153721), yet a pilot missed its primary endpoint (26405698), the largest trial was not superior to inulin (32314514), and the only clear subgroup result is post hoc (34646359). For glycaemia, meta-analyses favour aloe (27009750, 27347994), and their authors cite high heterogeneity, poor quality and a need for standardized preparations. No abstract read links a result to a preparation these labels print at a stated amount.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with irritable bowel syndrome; adults with prediabetes or type 2 diabetes",
+      "supported_outcomes": [
+        "IBS symptom severity",
+        "fasting glucose and HbA1c"
+      ],
+      "source_pmids": [
+        "30153721",
+        "32314514",
+        "26405698",
+        "34646359",
+        "27009750",
+        "27347994",
+        "25883909",
+        "38952774"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print aloe extract, aerial part or leaf extract, gel, powder or concentrate at up to 470 mg, some with digestive and metabolic purposes. For IBS, a three-trial meta-analysis favours aloe (30153721), yet a pilot missed its primary endpoint (26405698), the largest trial was not superior to inulin (32314514), and the only clear subgroup result is post hoc (34646359). For glycaemia, meta-analyses favour aloe (27009750, 27347994), and their authors cite high heterogeneity, poor quality and a need for standardized preparations. No abstract read links a result to a preparation these labels print at a stated amount. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "30153721",
+        "title": "Aloe vera Is Effective and Safe in Short-term Treatment of Irritable Bowel Syndrome: A Systematic Review and Meta-analysis.",
+        "citation": "Journal of neurogastroenterology and motility (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30153721/",
+        "publication_types": [
+          "Journal Article",
+          "Review"
+        ],
+        "doi": "10.5056/jnm18077"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32314514",
+        "title": "Randomized clinical trial: Effects of Aloe barbadensis Mill. extract on symptoms, fecal microbiota and fecal metabolite profiles in patients with irritable bowel syndrome.",
+        "citation": "Neurogastroenterology and motility (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32314514/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1111/nmo.13860"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "26405698",
+        "title": "A Pilot Study of the Effect of Aloe barbadensis Mill. Extract (AVH200®) in Patients with Irritable Bowel Syndrome: a Randomized, Double-Blind, Placebo-Controlled Study.",
+        "citation": "Journal of gastrointestinal and liver diseases : JGLD (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26405698/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.15403/jgld.2014.1121.243.sst"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34646359",
+        "title": "Aloe barbadensis Mill. extract improves symptoms in IBS patients with diarrhoea: post hoc analysis of two randomized double-blind controlled studies.",
+        "citation": "Therapeutic advances in gastroenterology (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34646359/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1177/17562848211048133"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "27009750",
+        "title": "Effect of Aloe vera on glycaemic control in prediabetes and type 2 diabetes: a systematic review and meta-analysis.",
+        "citation": "Journal of clinical pharmacy and therapeutics (2016)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27009750/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1111/jcpt.12382"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "27347994",
+        "title": "Efficacy of Aloe Vera Supplementation on Prediabetes and Early Non-Treated Diabetic Patients: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+        "citation": "Nutrients (2016)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27347994/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.3390/nu8070388"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25883909",
+        "title": "Improvement of glucose and lipid profile status with Aloe vera in pre-diabetic subjects: a randomized controlled-trial.",
+        "citation": "Journal of diabetes and metabolic disorders (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25883909/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1186/s40200-015-0137-2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38952774",
+        "title": "Aloe vera supplementation improves cardiovascular risk factors in hemodialysis patients: A randomized, double-blind, placebo-controlled trial.",
+        "citation": "Avicenna journal of phytomedicine (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38952774/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.22038/AJP.2023.23447"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: aloe_vera effect_direction null, agent review; the contexts below are the reading behind it."
+}

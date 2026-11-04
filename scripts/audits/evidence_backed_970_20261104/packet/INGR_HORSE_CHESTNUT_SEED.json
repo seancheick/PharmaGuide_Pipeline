@@ -1,0 +1,625 @@
+{
+  "record_id": "INGR_HORSE_CHESTNUT_SEED",
+  "labels": 9,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive for short-term symptoms and leg volume in chronic venous insufficiency per Cochrane (23152216), with caveats; extract not superior to placebo in advanced disease (11747472) and null on healing of venous ulcers in an underpowered trial (16620045)",
+  "decision": "closed_no_credit",
+  "summary": "Nine labels print horse chestnut seed extract at 250 to 500 mg with no aescin in the rows, and two carry a metabolic claim, not a venous one. This is the strongest evidence in this batch: Cochrane's 2012 update of oral mono-preparations reports less leg pain in six of seven placebo-controlled trials and a 32.1 mL leg volume difference, short term, with caveats (23152216). A 240-patient trial of 50 mg aescin twice daily reduced leg volume versus placebo and was equivalent to compression stockings (8569363), though its abstract says efficacy (oedema reduction) rather than primary outcome. Against this, extract was not superior to placebo in advanced disease (11747472) and ulcer healing was not significantly different in an underpowered trial (16620045). The studied doses are stated as aescin, while the labels print extract mass, except one comparison at 600 mg/d (8737631). Abstracts, plus full text passages for 11747472.",
+  "question_for_clinician": "Does Cochrane 23152216 and the 240-patient trial 8569363 (50 mg aescin twice daily) support credit for seed extract labels that print 250 to 500 mg of extract with no aescin in the rows and no venous claim? Agent recommendation: no credit for these rows, because the studied aescin dose can't be matched to them. The evidence itself is not weak, so a label printing aescin at the studied dose would be a different question.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_horse_chestnut_seed_23152216",
+      "components": [
+        "INGR_HORSE_CHESTNUT_SEED"
+      ],
+      "source_pmids": [
+        "23152216"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aesculus hippocastanum",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_venous_insufficiency",
+      "purpose": "venous_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_horse_chestnut_seed_23152216",
+      "population": {
+        "age_group": "adult",
+        "description": "People with chronic venous insufficiency; six placebo-controlled trials (n = 502) for leg volume."
+      },
+      "study_design": "Cochrane systematic review and meta-analysis of randomized trials of oral mono-preparations; combinations excluded",
+      "outcomes": [
+        {
+          "name": "Leg pain reduced versus placebo in six of seven placebo-controlled trials",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Leg volume favored extract, weighted mean difference 32.1 mL (95% CI 13.49 to 50.72)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and no dose.",
+        "Authors say several caveats exist and larger definitive trials are required; short-term only.",
+        "The full text could not be retrieved from Europe PMC (HTTP 500) despite a PMC id, PMC7144685.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral horse chestnut seed extract mono-preparations; doses are not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "23152216",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_horse_chestnut_seed_8569363",
+      "components": [
+        "INGR_HORSE_CHESTNUT_SEED"
+      ],
+      "source_pmids": [
+        "8569363"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aesculus hippocastanum",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_venous_insufficiency",
+      "purpose": "venous_edema",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_horse_chestnut_seed_8569363",
+      "population": {
+        "age_group": "adult",
+        "description": "240 patients with chronic venous insufficiency."
+      },
+      "study_design": "Randomized partially blinded placebo-controlled parallel trial with a compression stocking arm, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Lower leg volume fell 43.8 mL with extract and rose 9.8 mL with placebo (p = 0.005)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Extract equivalent to compression stockings (p = 0.001), though compression could not be proven as standard",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names oedema reduction as the efficacy aim but does not use the term primary outcome.",
+        "Dose stated as aescin; labels print extract mass with no aescin in the rows.",
+        "Funding is not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dried horse chestnut seed extract, 50 mg aescin, twice daily, for 12 weeks.",
+        "normalization": {
+          "basis": "Aescin amount as printed in the source, 50 mg twice daily; extract mass is not stated, so no extract mass is recorded."
+        },
+        "source_provenance": {
+          "pmid": "8569363",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_horse_chestnut_seed_11747472",
+      "components": [
+        "INGR_HORSE_CHESTNUT_SEED"
+      ],
+      "source_pmids": [
+        "11747472"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Venostasin retard",
+        "manufacturer": "Klinge Pharma"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "advanced_chronic_venous_insufficiency",
+      "purpose": "venous_edema",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_horse_chestnut_seed_11747472",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with chronic venous insufficiency Grade II and IIIa in a multicentre study; numbers not extracted."
+      },
+      "study_design": "Report of two randomized trials against placebo and compression; the first is the early disease trial, the second advanced disease",
+      "outcomes": [
+        {
+          "name": "Advanced disease: extract not superior to placebo on leg volume, while compression was",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Early disease: extract and compression superior to placebo and equivalent",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The advanced disease trial is reported from a manufacturer's final study report (Klinge Pharma).",
+        "Sample sizes and numeric results not extracted.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One capsule of extract standardized to 50 mg aescin, twice daily (Venostasin retard).",
+        "normalization": {
+          "basis": "Aescin amount as printed in the source, 50 mg twice daily; extract mass is not stated, so no extract mass is recorded."
+        },
+        "source_provenance": {
+          "pmid": "11747472",
+          "location": "Full text Methods",
+          "source_url": "https://europepmc.org/article/PMC/PMC61039"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_horse_chestnut_seed_8737631",
+      "components": [
+        "INGR_HORSE_CHESTNUT_SEED"
+      ],
+      "source_pmids": [
+        "8737631"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aesculus hippocastanum",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_venous_insufficiency",
+      "purpose": "venous_edema",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_horse_chestnut_seed_8737631",
+      "population": {
+        "age_group": "adult",
+        "description": "137 postmenopausal women with chronic venous insufficiency grade II who finished according to protocol."
+      },
+      "study_design": "Multicenter randomized comparison with oxerutins after a placebo run-in; no placebo arm during treatment",
+      "outcomes": [
+        {
+          "name": "Leg volume area under the baseline curve fell by 3,004 mL.d with extract; oxerutins 1,000 mg/d were proven equivalent or better",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "unresolved",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No concurrent placebo arm.",
+        "Main confirmative criterion concerns the oxerutin comparison.",
+        "Reported per protocol.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Horse chestnut extract 600 mg/d; the abstract states 12 weeks for the oxerutin arm's maintenance phase and does not state a separate duration for this arm.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "8737631",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_horse_chestnut_seed_16620045",
+      "components": [
+        "INGR_HORSE_CHESTNUT_SEED"
+      ],
+      "source_pmids": [
+        "16620045"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Aesculus hippocastanum",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "venous_leg_ulcers",
+      "purpose": "ulcer_healing",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_horse_chestnut_seed_16620045",
+      "population": {
+        "age_group": "adult",
+        "description": "54 patients with venous leg ulcers from a South Australian community nursing service."
+      },
+      "study_design": "Triple-blind randomized placebo-controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Healed ulcers and change in wound area, depth, volume, pain and exudate: not significantly different",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Wound slough percentage and dressing changes at week 12 favored extract",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and no dose.",
+        "Authors say the sample was small and the trial underpowered.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral horsechestnut seed extract for 12 weeks; the amount is not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "16620045",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "15106197": "Stored 2004 version of the Cochrane review; superseded by the 2012 update 23152216, read here.",
+    "12518108": "Meta-analysis mixing 13 trials with observational studies; supports the same direction, no doses in the abstract.",
+    "33983078": "Network meta-analysis of venoactive drugs; the abstract gives no horse chestnut result.",
+    "42066876": "Expert review of venoactive drugs; no trial data for horse chestnut in the abstract.",
+    "40348378": "Review of venoactive compounds; no horse chestnut result in the abstract.",
+    "39507581": "Trial description of aescin 120 mg/day after third molar surgery, no results in the abstract, and purified aescin.",
+    "19682880": "Purified escin 60 mg/day in varicocele with composite medicines in all groups; not the labeled extract.",
+    "15364642": "Open uncontrolled tablet study.",
+    "16636364": "Cost analysis of the trial 16620045."
+  },
+  "stop_or_hold": "Fields can't express an aescin dose against labels that print only extract mass.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "23152216",
+      "title_fetched": "Horse chestnut seed extract for chronic venous insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23152216/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "8569363",
+      "title_fetched": "Comparison of leg compression stocking and oral horse-chestnut seed extract therapy in patients with chronic venous insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8569363/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11747472",
+      "title_fetched": "Rational therapy of chronic venous insufficiency--chances and limits of the therapeutic use of horse-chestnut seeds extract.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11747472/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "8737631",
+      "title_fetched": "Comparative clinical efficacy and tolerability of oxerutins and horse chestnut extract in patients with chronic venous insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8737631/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16620045",
+      "title_fetched": "Clinical efficacy of horsechestnut seed extract in the treatment of venous ulceration.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16620045/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15106197",
+      "title_fetched": "Horse chestnut seed extract for chronic venous insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15106197/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12518108",
+      "title_fetched": "Efficacy, routine effectiveness, and safety of horsechestnut seed extract in the treatment of chronic venous insufficiency. A meta-analysis of randomized controlled trials and large observational studies.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12518108/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33983078",
+      "title_fetched": "Systematic literature review and network Meta-analysis of sulodexide and other drugs in chronic venous disease.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33983078/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42066876",
+      "title_fetched": "Venoactive drugs in the management of chronic venous disease: A critical appraisal of the evidence and comparison with international guidelines.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42066876/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40348378",
+      "title_fetched": "The role of venoactive compounds in the treatment of chronic venous disease.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40348378/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39507581",
+      "title_fetched": "Comparison of the efficacy of aescin and diclofenac sodium in the management of postoperative sequelae and their effect on salivary Prostaglandin E2 and serum C-reactive protein levels after surgical removal of impacted mandibular third molar: a randomized, double-blind, controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39507581/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19682880",
+      "title_fetched": "Escin improves sperm quality in male patients with varicocele-associated infertility.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19682880/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15364642",
+      "title_fetched": "An open study to assess the safety and efficacy of Aesculus hippocastanum tablets (Aesculaforce 50mg) in the treatment of chronic venous insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15364642/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16636364",
+      "title_fetched": "Using horsechestnut seed extract in the treatment of venous leg ulcers: a cost-benefit analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16636364/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_HORSE_CHESTNUT_SEED",
+    "standard_name": "Horse Chestnut Seed",
+    "aliases": [
+      "Horse Chestnut Seed Extract",
+      "Horse Chestnut seed extract"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "23152216",
+      "8569363",
+      "11747472",
+      "8737631",
+      "16620045"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive for short-term symptoms and leg volume in chronic venous insufficiency per Cochrane (23152216), with caveats; extract not superior to placebo in advanced disease (11747472) and null on healing of venous ulcers in an underpowered trial (16620045). Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Leg pain",
+      "Leg volume"
+    ],
+    "health_goals_supported": [],
+    "notes": "Nine labels print horse chestnut seed extract at 250 to 500 mg with no aescin in the rows, and two carry a metabolic claim, not a venous one. This is the strongest evidence in this batch: Cochrane's 2012 update of oral mono-preparations reports less leg pain in six of seven placebo-controlled trials and a 32.1 mL leg volume difference, short term, with caveats (23152216). A 240-patient trial of 50 mg aescin twice daily reduced leg volume versus placebo and was equivalent to compression stockings (8569363), though its abstract says efficacy (oedema reduction) rather than primary outcome. Against this, extract was not superior to placebo in advanced disease (11747472) and ulcer healing was not significantly different in an underpowered trial (16620045). The studied doses are stated as aescin, while the labels print extract mass, except one comparison at 600 mg/d (8737631). Abstracts, plus full text passages for 11747472.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with chronic venous insufficiency",
+      "supported_outcomes": [
+        "Leg pain",
+        "Leg volume"
+      ],
+      "source_pmids": [
+        "23152216",
+        "8569363",
+        "11747472",
+        "8737631",
+        "16620045"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Nine labels print horse chestnut seed extract at 250 to 500 mg with no aescin in the rows, and two carry a metabolic claim, not a venous one. This is the strongest evidence in this batch: Cochrane's 2012 update of oral mono-preparations reports less leg pain in six of seven placebo-controlled trials and a 32.1 mL leg volume difference, short term, with caveats (23152216). A 240-patient trial of 50 mg aescin twice daily reduced leg volume versus placebo and was equivalent to compression stockings (8569363), though its abstract says efficacy (oedema reduction) rather than primary outcome. Against this, extract was not superior to placebo in advanced disease (11747472) and ulcer healing was not significantly different in an underpowered trial (16620045). The studied doses are stated as aescin, while the labels print extract mass, except one comparison at 600 mg/d (8737631). Abstracts, plus full text passages for 11747472. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23152216",
+        "title": "Horse chestnut seed extract for chronic venous insufficiency.",
+        "citation": "The Cochrane database of systematic reviews (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23152216/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD003230.pub4"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "8569363",
+        "title": "Comparison of leg compression stocking and oral horse-chestnut seed extract therapy in patients with chronic venous insufficiency.",
+        "citation": "Lancet (London, England) (1996)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/8569363/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/s0140-6736(96)90467-5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11747472",
+        "title": "Rational therapy of chronic venous insufficiency--chances and limits of the therapeutic use of horse-chestnut seeds extract.",
+        "citation": "BMC cardiovascular disorders (2001)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11747472/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1186/1471-2261-1-5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "8737631",
+        "title": "Comparative clinical efficacy and tolerability of oxerutins and horse chestnut extract in patients with chronic venous insufficiency.",
+        "citation": "Arzneimittel-Forschung (1996)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/8737631/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16620045",
+        "title": "Clinical efficacy of horsechestnut seed extract in the treatment of venous ulceration.",
+        "citation": "Journal of wound care (2006)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16620045/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.12968/jowc.2006.15.4.26898"
+      }
+    ]
+  }
+}

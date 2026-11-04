@@ -1,0 +1,1087 @@
+{
+  "record_id": "INGR_TURMERIC",
+  "labels": 39,
+  "stored_direction": "unset (effect_direction null; applicability_unestablished)",
+  "direction_as_read": "mixed: pooled knee pain benefit with low certainty and high heterogeneity; imaging and biomarker outcomes mostly null; a named-primary trial splits between pain and effusion",
+  "decision": "closed_no_credit",
+  "summary": "Of the 39 labels, 20 print 93 to 95% curcuminoids or standardized to curcuminoids, 13 an extract with no stated standard, 2 a 10:1 ratio alone and 1 a 4:1 ratio; Meriva, Curcumin C3 Complex and CurcuWIN (20%) each sit alone on one label, and 243134 prints CurcuWIN beside a 95% row. Two trials meet the rule with a verified dose: NR-INF-02 500 mg twice daily was better than placebo on named primaries (23242572), and CuraMed 500 mg three times daily beat placebo on physical tests but was not reported significant on WOMAC pain (29316908). Neither preparation is on these labels. Syntheses favor knee pain with low certainty (33511486, 40731001).",
+  "question_for_clinician": "23242572 and 29316908 meet the review rule for a Curcuma longa extract at or near some labels' amount, but neither names a preparation these labels print. Does any credit reach an unbranded 95% curcuminoid extract? Agent recommendation: no credit; curcuminoid content differs across preparations and 11 labels print an extract row of 150 mg or less.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_23242572",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "23242572"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "NR-INF-02",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "primary_knee_osteoarthritis",
+      "purpose": "knee_pain_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_23242572",
+      "population": {
+        "age_group": "adult",
+        "description": "120 patients with primary knee osteoarthritis, 37 males and 83 females, across four arms."
+      },
+      "study_design": "Randomized single-blind placebo-controlled trial, 42 days; NR-INF-02, glucosamine sulfate, or both, against placebo",
+      "outcomes": [
+        {
+          "name": "VAS pain and WOMAC function at each visit, NR-INF-02 better than placebo (p < 0.05)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Rescue medication use lower than placebo (p < 0.01)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Single blind and 42 days. NR-INF-02 is a named extract and no label here prints it; the abstract gives no curcuminoid content.",
+        "Arm sizes are not stated in the abstract. Funding not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 42,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "NR-INF-02 500 mg twice daily for 42 days; placebo 400 mg twice daily.",
+        "normalization": {
+          "basis": "500 mg twice daily as printed in the abstract, summed to the daily amount."
+        },
+        "source_provenance": {
+          "pmid": "23242572",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_29316908",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "29316908"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "CuraMed",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "osteoarthritis",
+      "purpose": "joint_pain_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_29316908",
+      "population": {
+        "age_group": "adult",
+        "description": "201 patients aged 40 to 70 with osteoarthritis across three arms."
+      },
+      "study_design": "Randomized double-blind placebo-controlled three-arm trial, 12 weeks; the third arm adds boswellic acid and is not used here",
+      "outcomes": [
+        {
+          "name": "Physical performance tests, CuraMed better than placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "WOMAC joint pain index: significant against placebo only with the boswellic acid combination, not named as significant for CuraMed",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "CuraMed is a curcuminoid complex with turmeric volatile oil; no label here prints it.",
+        "The abstract names several primary measures and gives no estimates. 12 weeks. The abstract's positive conclusion on pain rests partly on the combination arm.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "three times a day",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "CuraMed 500 mg capsules (333 mg curcuminoids) three times a day for 12 weeks.",
+        "normalization": {
+          "basis": "500 mg three times a day as printed in the abstract, summed to the daily amount."
+        },
+        "source_provenance": {
+          "pmid": "29316908",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_32926799",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "32926799"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Curcuma longa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "knee_osteoarthritis_effusion_synovitis",
+      "purpose": "knee_pain",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_32926799",
+      "population": {
+        "age_group": "adult",
+        "description": "70 participants with symptomatic knee osteoarthritis and ultrasonography-defined effusion-synovitis, 36 on extract and 34 on placebo."
+      },
+      "study_design": "Randomized double-blind placebo-controlled single-center trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Knee pain on VAS, -9.1 mm versus placebo (95% CI -17.8 to -0.4, P = 0.039)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Effusion-synovitis volume on MRI, no change (3.2 mL, CI -0.3 to 6.8)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "WOMAC knee pain improved; cartilage composition not",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract gives 2 capsules a day and no mg amount, so the dose is not verified here.",
+        "Funded by University of Tasmania and Natural Remedies Private Limited. Authors state modest sample size and short duration.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2 capsules of Curcuma longa extract or matched placebo per day for 12 weeks; mg amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32926799",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_34652861",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "34652861"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Curcuma longa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "functional_dyspepsia",
+      "purpose": "dyspepsia_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_34652861",
+      "population": {
+        "age_group": "adult",
+        "description": "132 patients with functional dyspepsia by ROME IV: 45 curcumin, 43 omeprazole, 44 placebo."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 4 weeks",
+      "outcomes": [
+        {
+          "name": "SODA pain and non-pain scores at 4 weeks better than placebo (P < 0.001, P < 0.008)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No significant difference from omeprazole",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract, and the abstract gives no dose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Curcuma longa Linn; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "34652861",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_31351488",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "31351488"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Flexofytol",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "knee_osteoarthritis",
+      "purpose": "knee_pain_cartilage_biomarker",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_31351488",
+      "population": {
+        "age_group": "adult",
+        "description": "150 patients with knee osteoarthritis followed for 90 days across three arms."
+      },
+      "study_design": "Double-blind multicenter randomized placebo-controlled three-arm trial, retrospectively registered",
+      "outcomes": [
+        {
+          "name": "Patient Global Assessment of Disease Activity, both doses decreased more than placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Serum sColl2-1, no difference between groups",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "VAS pain at day 90, -29.5 and -36.5 mm versus -8 mm (p = 0.018)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Global KOOS, changes comparable across arms",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Bio-optimized extract; the abstract names Flexofytol only in the registration line and gives no mg amounts. Registered retrospectively.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Low and high doses of bio-optimized Curcuma longa extract; amounts not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31351488",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_41053771",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "41053771"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "curcumin in a turmeric capsule"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hand_osteoarthritis",
+      "purpose": "hand_pain_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_41053771",
+      "population": {
+        "age_group": "older_adult",
+        "description": "27 patients over 50 with hand osteoarthritis, 13 curcumin and 14 placebo."
+      },
+      "study_design": "Pilot double-blind randomized controlled trial, 3 months",
+      "outcomes": [
+        {
+          "name": "VAS pain and DASH: no significant difference at one month; at three months significant against baseline in the curcumin group",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "The abstract reports third-month results against baseline, not between groups, yet its conclusion says compared to placebo.",
+        "Pilot of 27. The stated dose is 170 mg/day of curcumin, not the capsule's extract mass, and hand joints are not the stored scope's knee population.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          170
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 90,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Turmeric capsule containing curcumin 170 mg/day or placebo for three months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41053771",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_28443702",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "28443702"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Curcuma longa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "nonalcoholic_fatty_liver_disease",
+      "purpose": "glycemic_indices_leptin",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_28443702",
+      "population": {
+        "age_group": "adult",
+        "description": "46 patients with NAFLD aged 20 to 60, BMI 24.9 to 40, 23 per group."
+      },
+      "study_design": "Double-blind randomized controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Glucose, insulin, HOMA-IR and leptin decreased versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Weight, BMI and liver enzymes, no significant change versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Whole turmeric powder, the only powder trial read; 306396 and 317000 alone print powder (2150 mg with 150 mg extract). No primary outcome named in the abstract, and no label's positioning read here names liver.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          3000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Six capsules of 500 mg turmeric powder daily for 12 weeks.",
+        "normalization": {
+          "basis": "6 x 500 mg as printed in the abstract, summed to the daily amount."
+        },
+        "source_provenance": {
+          "pmid": "28443702",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_33511486",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "33511486"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Curcuma longa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "knee_osteoarthritis",
+      "purpose": "knee_pain_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_33511486",
+      "population": {
+        "age_group": "adult",
+        "description": "16 RCTs of up to 16 weeks, 1810 adults with knee osteoarthritis; 11 against placebo and 5 against NSAIDs."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "Knee pain versus placebo, SMD -0.82 (95% CI -1.17 to -0.47), I2 86.23%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Physical function versus placebo, SMD -0.75 (95% CI -1.18 to -0.33), I2 90.05%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Biochemical markers and imaging, no significant between-group differences",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "All types of turmeric extract are pooled. Short-term, heterogeneous, moderate risk of bias, with less improvement at higher BMI.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Turmeric extracts of all types at several regimens; not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "33511486",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_40731001",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "40731001"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Curcuma longa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "knee_osteoarthritis",
+      "purpose": "knee_pain",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_40731001",
+      "population": {
+        "age_group": "adult",
+        "description": "17 studies in adults with knee osteoarthritis."
+      },
+      "study_design": "Systematic review and network meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "WOMAC pain: conventional curcuminoids MD -3.17 (-5.50, -0.83); bioavailability-enhanced MD -2.47 (-3.27, -1.67), both against placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The authors rate certainty low. Regimens not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Conventional and bioavailability-enhanced curcuminoid preparations at several regimens; not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40731001",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turmeric_38576215",
+      "components": [
+        "INGR_TURMERIC"
+      ],
+      "source_pmids": [
+        "38576215"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "knee_osteoarthritis",
+      "purpose": "knee_pain_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turmeric_38576215",
+      "population": {
+        "age_group": "adult",
+        "description": "11 meta-analyses of randomized controlled trials in knee osteoarthritis."
+      },
+      "study_design": "Umbrella meta-analysis of meta-analyses",
+      "outcomes": [
+        {
+          "name": "VAS and WOMAC total, function, pain and stiffness decreased",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Overlap among included meta-analyses is not addressed in the abstract. Curcumin preparations are not separated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Curcumin supplementation at several regimens; not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "38576215",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "38945354": "Umbrella meta-analysis of biomarkers across curcumin preparations; surrogate outcomes, no regimen stated.",
+    "40615851": "Meta-analysis of serum biomarkers in knee osteoarthritis; surrogate outcomes, no regimen in the portion read.",
+    "25688638": "Curcuminoids 1500 mg/day with piperine 15 mg/day; not the ingredient alone, and oxidative stress outcomes.",
+    "32656820": "Acute liver injury case series and review of case reports; not an efficacy study. Listed for the clinician."
+  },
+  "stop_or_hold": "306396 and 317000 print whole turmeric powder 2150 mg beside a 150 mg extract row. The stored text says ratio extracts finish as outside these studies, but excluded_form_terms lists only 4:1, so 10:1 and 25:1 rows match the extract term. Record id INGR_TURMERIC already exists as a reference record; a human should decide whether this draft belongs on it.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "23242572",
+      "title_fetched": "Safety and efficacy of Curcuma longa extract in the treatment of painful knee osteoarthritis: a randomized placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23242572/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29316908",
+      "title_fetched": "Efficacy and safety of curcumin and its combination with boswellic acid in osteoarthritis: a comparative, randomized, double-blind, placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29316908/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32926799",
+      "title_fetched": "Effectiveness of Curcuma longa Extract for the Treatment of Symptoms and Effusion-Synovitis of Knee Osteoarthritis : A Randomized Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32926799/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34652861",
+      "title_fetched": "Curcuma longa Linn versus omeprazole in treatment of functional dyspepsia: A randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34652861/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31351488",
+      "title_fetched": "Bio-optimized Curcuma longa extract is efficient on knee osteoarthritis pain: a double-blind multicenter randomized placebo controlled three-arm study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31351488/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41053771",
+      "title_fetched": "Efficacy and safety of curcumin in patients with hand osteoarthritis: a pilot double-blinded randomised controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41053771/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28443702",
+      "title_fetched": "Turmeric Supplementation Improves Serum Glucose Indices and Leptin Levels in Patients with Nonalcoholic Fatty Liver Diseases.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28443702/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33511486",
+      "title_fetched": "Efficacy and Safety of Turmeric Extracts for the Treatment of Knee Osteoarthritis: a Systematic Review and Meta-analysis of Randomised Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33511486/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40731001",
+      "title_fetched": "Effect of turmeric products on knee osteoarthritis: a systematic review and network meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40731001/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38576215",
+      "title_fetched": "The efficacy of curcumin in relieving osteoarthritis: A meta-analysis of meta-analyses.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38576215/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38945354",
+      "title_fetched": "The effects of curcumin supplementation on biomarkers of inflammation, oxidative stress, and endothelial function: A meta-analysis of meta-analyses.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38945354/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40615851",
+      "title_fetched": "Effects of curcumin on serum inflammatory biomarkers in patients with knee osteoarthritis: a systematic review and meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40615851/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25688638",
+      "title_fetched": "Mitigation of Systemic Oxidative Stress by Curcuminoids in Osteoarthritis: Results of a Randomized Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25688638/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32656820",
+      "title_fetched": "Acute liver injury following turmeric use in Tuscany: An analysis of the Italian Phytovigilance database and systematic review of case reports.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32656820/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_TURMERIC",
+    "standard_name": "Turmeric extract (review draft)",
+    "aliases": [
+      "Curcuma longa rhizome extract",
+      "Meriva Curcuma longa L. rhizome extract",
+      "standardized Turmeric extract",
+      "Tumeric",
+      "Turmeric (Curcuma longa) extract",
+      "Turmeric rhizome extract",
+      "Turmeric Rhizome Extract",
+      "Turmeric Rhizome, Root Extract",
+      "Turmeric Root and Rhizome Extract",
+      "Turmeric root and rhizome extract",
+      "Turmeric Root Extract",
+      "Turmeric root extract"
+    ],
+    "category": "joint_bone",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "23242572",
+      "29316908",
+      "32926799",
+      "34652861",
+      "31351488",
+      "41053771",
+      "28443702",
+      "33511486",
+      "40731001",
+      "38576215"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: pooled knee pain benefit with low certainty and high heterogeneity; imaging and biomarker outcomes mostly null; a named-primary trial splits between pain and effusion. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "joint"
+    ],
+    "health_goals_supported": [],
+    "notes": "Of the 39 labels, 20 print 93 to 95% curcuminoids or standardized to curcuminoids, 13 an extract with no stated standard, 2 a 10:1 ratio alone and 1 a 4:1 ratio; Meriva, Curcumin C3 Complex and CurcuWIN (20%) each sit alone on one label, and 243134 prints CurcuWIN beside a 95% row. Two trials meet the rule with a verified dose: NR-INF-02 500 mg twice daily was better than placebo on named primaries (23242572), and CuraMed 500 mg three times daily beat placebo on physical tests but was not reported significant on WOMAC pain (29316908). Neither preparation is on these labels. Syntheses favor knee pain with low certainty (33511486, 40731001).",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with knee osteoarthritis",
+      "supported_outcomes": [
+        "joint"
+      ],
+      "source_pmids": [
+        "23242572",
+        "29316908",
+        "32926799",
+        "34652861",
+        "31351488",
+        "41053771",
+        "28443702",
+        "33511486",
+        "40731001",
+        "38576215"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Of the 39 labels, 20 print 93 to 95% curcuminoids or standardized to curcuminoids, 13 an extract with no stated standard, 2 a 10:1 ratio alone and 1 a 4:1 ratio; Meriva, Curcumin C3 Complex and CurcuWIN (20%) each sit alone on one label, and 243134 prints CurcuWIN beside a 95% row. Two trials meet the rule with a verified dose: NR-INF-02 500 mg twice daily was better than placebo on named primaries (23242572), and CuraMed 500 mg three times daily beat placebo on physical tests but was not reported significant on WOMAC pain (29316908). Neither preparation is on these labels. Syntheses favor knee pain with low certainty (33511486, 40731001). Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "4:1",
+        "turmeric powder",
+        "root powder",
+        "rhizome powder"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23242572",
+        "title": "Safety and efficacy of Curcuma longa extract in the treatment of painful knee osteoarthritis: a randomized placebo-controlled trial.",
+        "citation": "Inflammopharmacology (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23242572/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/s10787-012-0163-3"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29316908",
+        "title": "Efficacy and safety of curcumin and its combination with boswellic acid in osteoarthritis: a comparative, randomized, double-blind, placebo-controlled study.",
+        "citation": "BMC complementary and alternative medicine (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29316908/",
+        "publication_types": [
+          "Clinical Trial, Phase II",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1186/s12906-017-2062-z"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32926799",
+        "title": "Effectiveness of Curcuma longa Extract for the Treatment of Symptoms and Effusion-Synovitis of Knee Osteoarthritis : A Randomized Trial.",
+        "citation": "Annals of internal medicine (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32926799/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.7326/M20-0990"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34652861",
+        "title": "Curcuma longa Linn versus omeprazole in treatment of functional dyspepsia: A randomized, double-blind, placebo-controlled trial.",
+        "citation": "Journal of gastroenterology and hepatology (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34652861/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1111/jgh.15705"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31351488",
+        "title": "Bio-optimized Curcuma longa extract is efficient on knee osteoarthritis pain: a double-blind multicenter randomized placebo controlled three-arm study.",
+        "citation": "Arthritis research & therapy (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31351488/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1186/s13075-019-1960-5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41053771",
+        "title": "Efficacy and safety of curcumin in patients with hand osteoarthritis: a pilot double-blinded randomised controlled trial.",
+        "citation": "BMC complementary medicine and therapies (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41053771/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1186/s12906-025-05096-2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "28443702",
+        "title": "Turmeric Supplementation Improves Serum Glucose Indices and Leptin Levels in Patients with Nonalcoholic Fatty Liver Diseases.",
+        "citation": "Journal of the American College of Nutrition (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28443702/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/07315724.2016.1267597"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33511486",
+        "title": "Efficacy and Safety of Turmeric Extracts for the Treatment of Knee Osteoarthritis: a Systematic Review and Meta-analysis of Randomised Controlled Trials.",
+        "citation": "Current rheumatology reports (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33511486/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1007/s11926-020-00975-8"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40731001",
+        "title": "Effect of turmeric products on knee osteoarthritis: a systematic review and network meta-analysis.",
+        "citation": "BMC complementary medicine and therapies (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40731001/",
+        "publication_types": [
+          "Journal Article",
+          "Network Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1186/s12906-025-05045-z"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38576215",
+        "title": "The efficacy of curcumin in relieving osteoarthritis: A meta-analysis of meta-analyses.",
+        "citation": "Phytotherapy research : PTR (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38576215/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/ptr.8153"
+      }
+    ]
+  }
+}

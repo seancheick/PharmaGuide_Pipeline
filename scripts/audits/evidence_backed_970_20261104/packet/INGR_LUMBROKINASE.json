@@ -1,0 +1,290 @@
+{
+  "record_id": "INGR_LUMBROKINASE",
+  "labels": 2,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive on named primary vascular outcomes in one add-on trial whose abstract gives no dose, with no placebo trial read",
+  "decision": "held: abstract of 24229674 gives no capsule amount; its full text is needed to tell whether it meets the review's standard for labels printing 40 mg and 150 mg",
+  "summary": "The stored trial is the only oral controlled trial read with named primary outcomes: enteric-coated capsules added to standard stroke treatment for a year lowered total vascular events, 2.08% vs 6.78% (24229674). Its abstract gives no amount and states no blinding or placebo. An uncontrolled pilot of 10 reported better myocardial perfusion (19416019). A 35-trial meta-analysis in acute stroke reports better Barthel and NIHSS scores (40933244), but its abstract states no route or dose. The LUCENT placebo trial is a protocol only (35410433); no result was found.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lumbrokinase_24229674",
+      "components": [
+        "INGR_LUMBROKINASE"
+      ],
+      "source_pmids": [
+        "24229674"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "secondary_ischemic_stroke_prevention",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lumbrokinase_24229674",
+      "population": {
+        "age_group": "adult",
+        "description": "310 hospitalized patients with ischemic stroke, 192 on lumbrokinase and 118 controls."
+      },
+      "study_design": "Multicenter randomized parallel-group controlled trial, standard stroke treatment with or without enteric-coated lumbrokinase capsules, 12 months",
+      "outcomes": [
+        {
+          "name": "Total vascular end points, 2.08% vs 6.78%, P<0.05",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Cerebral vascular events, 1.04% vs 5.93%, P<0.05",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Plasma fibrinogen, carotid IMT, vulnerable plaques and carotid plaque volume favored treatment",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract gives no capsule amount or frequency, so the labels' 40 mg and 150 mg can't be compared with it.",
+        "Abstract doesn't state blinding or a placebo; the control is standard treatment alone. Arm sizes are unequal.",
+        "Primary outcomes are listed as a set; the abstract reports totals, not each one.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Enteric-coated lumbrokinase capsules added to standard stroke treatment for 12 months; amount not in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "24229674",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lumbrokinase_19416019",
+      "components": [
+        "INGR_LUMBROKINASE"
+      ],
+      "source_pmids": [
+        "19416019"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "uncontrolled_intervention",
+      "component_registration_status": "fully_registered",
+      "condition": "stable_angina",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lumbrokinase_19416019",
+      "population": {
+        "age_group": "adult",
+        "description": "10 patients with coronary artery disease and stable angina."
+      },
+      "study_design": "Single-armed pilot cohort, oral lumbrokinase added to standard therapy, 30 days",
+      "outcomes": [
+        {
+          "name": "Summed Stress Score and Summed Difference Score fell 39% and 37%",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Angina improved in 6 of 10",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "No control group. Amount not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral lumbrokinase for 30 consecutive days on top of standard therapy; amount not in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19416019",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "40933244": "Meta-analysis of 35 RCTs in acute ischemic stroke with supportive care; primary outcomes Barthel Index and NIHSS improved. The abstract doesn't state route or dose, so it isn't entered as oral. Authors urge cautious use.",
+    "11321442": "Single-blind randomized trial in cerebral infarction, 31 vs 20; abstract states no route, dose or primary outcome.",
+    "29093246": "60 pulmonary embolism patients described as retrospectively analyzed and as randomly divided; lumbrokinase with heparin and warfarin; no route, dose or primary outcome in the abstract.",
+    "27011386": "Safety crossover of DLBS1033 490 mg three times daily in 20 healthy adults; no efficacy outcome.",
+    "35410433": "Protocol for lumbrokinase plus aspirin vs placebo plus aspirin in acute stroke; no results."
+  },
+  "stop_or_hold": "24229674: full text needed for the capsule amount. pm.py prints no PMC id, so full text was not tried.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "24229674",
+      "title_fetched": "Oral fibrinogen-depleting agent lumbrokinase for secondary ischemic stroke prevention: results from a multicenter, randomized, parallel-group and controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24229674/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19416019",
+      "title_fetched": "Improved myocardial perfusion in stable angina pectoris by oral lumbrokinase: a pilot study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19416019/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40933244",
+      "title_fetched": "Therapeutic Potential of Lumbrokinase in Acute Ischemic Stroke: A Meta-Analysis of Efficacy and Safety.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40933244/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11321442",
+      "title_fetched": "Changes in coagulation and tissue plasminogen activator after the treatment of cerebral infarction with lumbrokinase.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11321442/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29093246",
+      "title_fetched": "[Effect of lumbrokinase on patients with acute and moderate risk pulmonary thromboembolism].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29093246/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27011386",
+      "title_fetched": "The Safety and Tolerability of Lumbrokinase DLBS1033 in Healthy Adult Subjects.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27011386/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35410433",
+      "title_fetched": "Efficacy and safety of lumbrokinase plus aspirin versus aspirin alone for acute ischemic stroke (LUCENT): study protocol for a multicenter randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35410433/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_LUMBROKINASE",
+    "standard_name": "Lumbrokinase",
+    "aliases": [
+      "Lumbrokinase"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "24229674",
+      "19416019"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive on named primary vascular outcomes in one add-on trial whose abstract gives no dose, with no placebo trial read. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Total vascular end points",
+      "Cerebral vascular events"
+    ],
+    "health_goals_supported": [],
+    "notes": "The stored trial is the only oral controlled trial read with named primary outcomes: enteric-coated capsules added to standard stroke treatment for a year lowered total vascular events, 2.08% vs 6.78% (24229674). Its abstract gives no amount and states no blinding or placebo. An uncontrolled pilot of 10 reported better myocardial perfusion (19416019). A 35-trial meta-analysis in acute stroke reports better Barthel and NIHSS scores (40933244), but its abstract states no route or dose. The LUCENT placebo trial is a protocol only (35410433); no result was found.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults after ischemic stroke on standard treatment",
+      "supported_outcomes": [
+        "Total vascular end points",
+        "Cerebral vascular events"
+      ],
+      "source_pmids": [
+        "24229674",
+        "19416019"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The stored trial is the only oral controlled trial read with named primary outcomes: enteric-coated capsules added to standard stroke treatment for a year lowered total vascular events, 2.08% vs 6.78% (24229674). Its abstract gives no amount and states no blinding or placebo. An uncontrolled pilot of 10 reported better myocardial perfusion (19416019). A 35-trial meta-analysis in acute stroke reports better Barthel and NIHSS scores (40933244), but its abstract states no route or dose. The LUCENT placebo trial is a protocol only (35410433); no result was found. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "24229674",
+        "title": "Oral fibrinogen-depleting agent lumbrokinase for secondary ischemic stroke prevention: results from a multicenter, randomized, parallel-group and controlled clinical trial.",
+        "citation": "Chinese medical journal (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24229674/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19416019",
+        "title": "Improved myocardial perfusion in stable angina pectoris by oral lumbrokinase: a pilot study.",
+        "citation": "Journal of alternative and complementary medicine (New York, N.Y.) (2009)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19416019/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1089/acm.2008.0506"
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{"canonical":"jujube","labels":12,"stored":"positive_weak","as_read":"The one fitting extract trial was null on its primary outcome with secondary metabolic gains; the stored sleep result is a seed trial, not the fruit extract the labels print.",
+"route":"packet_no_credit",
+"positive_named":["33385511","19142004","42577773","38648942","40964206","40399274"],
+"studies_to_add":[{"pmid":"41618368","study_type":"rct","sample_size":196,"primary_endpoint":"pregnancy occurrence","effect_direction":"null","quote":"No significant differences in pregnancy as primary outcome were found (Ziziphus jujuba: 10, Metformin: 7, Myoinositol: 5, Placebo: 4; p > 0.05)."}],
+"stop_list":["fields can't express that 15 g in 41618368 is extract powder blended 50% with Avicel","19142004 prints no amount in the abstract"],
+"stored_rating_note":"positive_weak rests on 33385511, a 12-person feasibility crossover of Z. spinosa seed granules; labels print fruit extract.",
+"pmids_read":["33385511","40399274","38648942","42577773","40964206","41618368","41592108","19142004","37014010","34939363"],
+"unread_notes":"Abstracts only, except 41618368 (PMC12879483, methods passages). Methods say 'dry jujube' and don't use the word fruit, name a variety or say wild. Listed in search but not opened: syrup and oxymel trials 39799261, 38094286, 39512402; not described as anything here."}

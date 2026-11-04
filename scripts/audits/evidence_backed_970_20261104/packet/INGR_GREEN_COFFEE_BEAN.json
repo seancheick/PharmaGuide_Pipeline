@@ -1,0 +1,606 @@
+{
+  "record_id": "INGR_GREEN_COFFEE_BEAN",
+  "labels": 22,
+  "stored_direction": "mixed",
+  "direction_as_read": "mixed: pooled analyses disagree on body weight (32507437 and 20871849 significant, 31398662 not), a 12-week 800 mg/day RCT was null (36134465), and the source of the stored rating is poor quality or a within-group comparison",
+  "decision": "closed_no_credit",
+  "summary": "Nine labels declare chlorogenic acids (40 to 50% where a percent is printed; 176168 prints none), including CoffeeGenic and Svetol. Thirteen print a green coffee extract with no chlorogenic acid figure: 330008, 330971, 330972, 330973 print 10:1 at 800 mg; 312583 to 312586 and 312901 print Coffea arabica bean extract; 252516, 253660, 253665, 253672 print extract at 250 mg. Where a purpose shows, it is weight or metabolic (59208 and Decaf Thermo Igniter); 73326 prints antioxidant support. Meta-analyses of randomized trials find body weight -1.23 kg (32507437) and -2.47 kg with all studies at high risk of bias (20871849), and another of 16 trials finds a significant BMI reduction with no significant change in body weight overall, and its authors support use, mainly at a starting BMI of 25 or more (31398662). A 12-week trial of 800 mg/day of decaffeinated extract in 44 obese breast cancer survivors found no significant effect (36134465). The one trial with a verified dose (16820341) gave 140 mg/day chlorogenic acid to 28 people with mild hypertension, reports blood pressure within groups, and matches no label purpose. Abstracts only. Reference only, no Evidence credit.",
+  "question_for_clinician": "Do pooled weight results of -1.23 kg (32507437) and -2.47 kg with all trials at high risk of bias (20871849), a pooled BMI reduction with no significant overall weight change (31398662), and a null 800 mg/day RCT in obese breast cancer survivors (36134465), support any credit for labels printing a chlorogenic-acid standardized green coffee extract? 16820341 is the closest single trial with a stated dose but is a 28-person blood pressure study. A second point: the 13 labels with no chlorogenic acid figure have no matching studied amount. Agent recommendation: no credit for all 22.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_green_coffee_bean_32507437",
+      "components": [
+        "INGR_GREEN_COFFEE_BEAN"
+      ],
+      "source_pmids": [
+        "32507437"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bean"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_or_general_adults",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_green_coffee_bean_32507437",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 15 randomized clinical trials of green coffee extract, 897 participants in total."
+      },
+      "study_design": "Systematic review and dose-response meta-analysis of randomized clinical trials",
+      "outcomes": [
+        {
+          "name": "Body weight -1.23 kg (95% CI -1.64 to -0.82) versus control",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "BMI -0.48 kg/m2 (95% CI -0.78 to -0.18) versus control",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Body fat percentage and waist-to-hip ratio showed no significant effect",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and no extract identity or included doses.",
+        "No significant association between chlorogenic acid dose and anthropometric change.",
+        "The abstract gives no risk of bias rating, does not list the included trials and does not say whether any was retracted.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Green coffee extract at varied doses; the abstract states no dose range.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "32507437",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_green_coffee_bean_31398662",
+      "components": [
+        "INGR_GREEN_COFFEE_BEAN"
+      ],
+      "source_pmids": [
+        "31398662"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bean"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_or_general_adults",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_green_coffee_bean_31398662",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 16 randomized controlled trials from 13 articles of green coffee extract or chlorogenic acid."
+      },
+      "study_design": "Systematic review and dose-response meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "Body weight -0.585 kg (95% CI -1.498 to 0.329, p = 0.210), not significant",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "BMI -0.403 kg/m2 (95% CI -0.800 to -0.005, p = 0.047)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Waist circumference -0.847 cm (95% CI -1.764 to 0.071, p = 0.070), not significant",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Pools green coffee extract with chlorogenic acid interventions; the abstract does not separate them.",
+        "Authors conclude in support of use although body weight itself was not significant.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Green coffee extract or chlorogenic acid at varied doses; the abstract states no dose range.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "31398662",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_green_coffee_bean_20871849",
+      "components": [
+        "INGR_GREEN_COFFEE_BEAN"
+      ],
+      "source_pmids": [
+        "20871849"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bean"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_or_general_adults",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_green_coffee_bean_20871849",
+      "population": {
+        "age_group": "adult",
+        "description": "Participants in 3 pooled randomized clinical trials of green coffee extract, from 5 eligible trials."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized clinical trials",
+      "outcomes": [
+        {
+          "name": "Body weight -2.47 kg (95% CI -4.23 to -0.72) versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "All studies were associated with a high risk of bias and there was significant heterogeneity.",
+        "The authors call the results promising, the studies poor quality, and ask for more rigorous trials.",
+        "The abstract names no primary outcome, dose or extract identity.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Green coffee extract; the abstract states no dose.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "20871849",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_green_coffee_bean_36134465",
+      "components": [
+        "INGR_GREEN_COFFEE_BEAN"
+      ],
+      "source_pmids": [
+        "36134465"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bean"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "obesity_in_breast_cancer_survivors",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_green_coffee_bean_36134465",
+      "population": {
+        "age_group": "adult",
+        "description": "44 breast cancer survivors with obesity aged 18 to 70, mean BMI 31.62, randomized 22 and 22."
+      },
+      "study_design": "Double-blind randomized placebo-controlled clinical trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Weight, waist circumference, fat percentage, muscle percentage and visceral fat: no significant difference in change between groups",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Decaffeinated extract in a specific clinical population; CGA content not stated in the abstract.",
+        "44 participants may be underpowered; the abstract gives no power statement.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          800
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "two capsules daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Two 400 mg capsules of decaffeinated green coffee extract daily for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36134465",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_green_coffee_bean_16820341",
+      "components": [
+        "INGR_GREEN_COFFEE_BEAN"
+      ],
+      "source_pmids": [
+        "16820341"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bean"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_essential_hypertension",
+      "purpose": "blood_pressure_lowering",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_green_coffee_bean_16820341",
+      "population": {
+        "age_group": "adult",
+        "description": "28 patients with mild hypertension randomized to chlorogenic acid from green coffee bean extract or placebo."
+      },
+      "study_design": "Placebo-controlled randomized clinical trial",
+      "outcomes": [
+        {
+          "name": "Systolic and diastolic blood pressure decreased significantly in the chlorogenic acid group and not in the placebo group",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "No difference between groups in body mass index",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and reports a within-group comparison, not a between-group effect.",
+        "28 participants; duration not stated in the abstract.",
+        "The dose is chlorogenic acid, not extract; extract amount not stated.",
+        "No label reached by this packet carries a blood pressure purpose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          140
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Chlorogenic acid 140 mg/day from green coffee bean extract, or placebo.",
+        "normalization": {
+          "basis": "Chlorogenic acid amount as printed; the extract amount is not stated and was not converted."
+        },
+        "source_provenance": {
+          "pmid": "16820341",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "37341701": "Umbrella review of 5 meta-analyses; re-pools earlier reviews (body weight -1.22 kg), so not independent of the ones used.",
+    "39368321": "Meta-analysis of 10 RCTs on blood pressure and heart rate; no label here carries a blood pressure purpose. Subgroup: no effect on blood pressure in females.",
+    "31429515": "Meta-analysis of blood pressure; no label here carries a blood pressure purpose.",
+    "37432380": "Crossover of 29 people, green coffee polyphenols 300 mg twice daily with oat beta-glucan arms; the abstract does not give a green coffee arm result on weight and names no primary outcome.",
+    "24338784": "Svetol: human adipocytes in vitro, not a human trial.",
+    "20302380": "Svetol: in vitro enzyme study, not a human trial."
+  },
+  "stop_or_hold": "Fields cannot express that the 13 labels without a chlorogenic acid figure differ from the 9 that declare one. No Svetol or CoffeeGenic trial surfaced in the branded search (2 hits, both in vitro).",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "32507437",
+      "title_fetched": "The effect of green coffee extract supplementation on anthropometric measures in adults: A comprehensive systematic review and dose-response meta-analysis of randomized clinical trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32507437/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31398662",
+      "title_fetched": "The effect of green-coffee extract supplementation on obesity: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31398662/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20871849",
+      "title_fetched": "The use of green coffee extract as a weight loss supplement: a systematic review and meta-analysis of randomised clinical trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20871849/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36134465",
+      "title_fetched": "Effects of decaffeinated green coffee extract supplementation on anthropometric indices, blood glucose, leptin, adiponectin and neuropeptide Y (NPY) in breast cancer survivors: a randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36134465/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16820341",
+      "title_fetched": "The blood pressure-lowering effect and safety of chlorogenic acid from green coffee bean extract in essential hypertension.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16820341/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37341701",
+      "title_fetched": "The effect of green coffee extract supplementation on obesity indices: critical umbrella review of interventional meta-analyses.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37341701/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39368321",
+      "title_fetched": "The effects of green coffee bean extract on blood pressure and heart rate: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39368321/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31429515",
+      "title_fetched": "The effect of green coffee extract supplementation on blood pressure: A systematic review and meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31429515/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37432380",
+      "title_fetched": "Dietary Supplements Containing Oat Beta-Glucan and/or Green Coffee (Poly)phenols Showed Limited Effect in Modulating Cardiometabolic Risk Biomarkers in Overweight/Obese Patients without a Lifestyle Intervention.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37432380/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24338784",
+      "title_fetched": "Lipolytic activity of Svetol®, a decaffeinated green coffee bean extract.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24338784/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20302380",
+      "title_fetched": "Contribution of chlorogenic acids to the inhibition of human hepatic glucose-6-phosphatase activity in vitro by Svetol, a standardized decaffeinated green coffee extract.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20302380/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_GREEN_COFFEE_BEAN",
+    "standard_name": "Green Coffee Bean Extract",
+    "aliases": [
+      "CoffeeGenic Green Coffee extract",
+      "Green Coffee Bean Extract",
+      "Green Coffee bean extract",
+      "Svetol Green Coffee bean extract"
+    ],
+    "category": "metabolic_blood_sugar",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "32507437",
+      "31398662",
+      "20871849",
+      "36134465",
+      "16820341"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: pooled analyses disagree on body weight (32507437 and 20871849 significant, 31398662 not), a 12-week 800 mg/day RCT was null (36134465), and the source of the stored rating is poor quality or a within-group comparison. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "body weight",
+      "BMI",
+      "blood pressure"
+    ],
+    "health_goals_supported": [],
+    "notes": "Nine labels declare chlorogenic acids (40 to 50% where a percent is printed; 176168 prints none), including CoffeeGenic and Svetol. Thirteen print a green coffee extract with no chlorogenic acid figure: 330008, 330971, 330972, 330973 print 10:1 at 800 mg; 312583 to 312586 and 312901 print Coffea arabica bean extract; 252516, 253660, 253665, 253672 print extract at 250 mg. Where a purpose shows, it is weight or metabolic (59208 and Decaf Thermo Igniter); 73326 prints antioxidant support. Meta-analyses of randomized trials find body weight -1.23 kg (32507437) and -2.47 kg with all studies at high risk of bias (20871849), while another of 16 trials finds no significant change in body weight (31398662). A 12-week trial of 800 mg/day of decaffeinated extract in 44 obese breast cancer survivors found no significant effect (36134465). The one trial with a verified dose (16820341) gave 140 mg/day chlorogenic acid to 28 people with mild hypertension, reports blood pressure within groups, and matches no label purpose. Abstracts only. Reference only, no Evidence credit.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Overweight and general adults in weight trials; adults with mild hypertension in one blood pressure trial",
+      "supported_outcomes": [
+        "body weight",
+        "BMI",
+        "blood pressure"
+      ],
+      "source_pmids": [
+        "32507437",
+        "31398662",
+        "20871849",
+        "36134465",
+        "16820341"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Nine labels declare chlorogenic acids (40 to 50% where a percent is printed; 176168 prints none), including CoffeeGenic and Svetol. Thirteen print a green coffee extract with no chlorogenic acid figure: 330008, 330971, 330972, 330973 print 10:1 at 800 mg; 312583 to 312586 and 312901 print Coffea arabica bean extract; 252516, 253660, 253665, 253672 print extract at 250 mg. Where a purpose shows, it is weight or metabolic (59208 and Decaf Thermo Igniter); 73326 prints antioxidant support. Meta-analyses of randomized trials find body weight -1.23 kg (32507437) and -2.47 kg with all studies at high risk of bias (20871849), while another of 16 trials finds no significant change in body weight (31398662). A 12-week trial of 800 mg/day of decaffeinated extract in 44 obese breast cancer survivors found no significant effect (36134465). The one trial with a verified dose (16820341) gave 140 mg/day chlorogenic acid to 28 people with mild hypertension, reports blood pressure within groups, and matches no label purpose. Abstracts only. Reference only, no Evidence credit. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32507437",
+        "title": "The effect of green coffee extract supplementation on anthropometric measures in adults: A comprehensive systematic review and dose-response meta-analysis of randomized clinical trials.",
+        "citation": "Complementary therapies in medicine (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32507437/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.ctim.2020.102424"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31398662",
+        "title": "The effect of green-coffee extract supplementation on obesity: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+        "citation": "Phytomedicine : international journal of phytotherapy and phytopharmacology (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31398662/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.phymed.2019.153018"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20871849",
+        "title": "The use of green coffee extract as a weight loss supplement: a systematic review and meta-analysis of randomised clinical trials.",
+        "citation": "Gastroenterology research and practice (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20871849/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1155/2011/382852"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36134465",
+        "title": "Effects of decaffeinated green coffee extract supplementation on anthropometric indices, blood glucose, leptin, adiponectin and neuropeptide Y (NPY) in breast cancer survivors: a randomized clinical trial.",
+        "citation": "Food & function (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36134465/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1039/d2fo00983h"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16820341",
+        "title": "The blood pressure-lowering effect and safety of chlorogenic acid from green coffee bean extract in essential hypertension.",
+        "citation": "Clinical and experimental hypertension (New York, N.Y. : 1993) (2006)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16820341/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/10641960600798655"
+      }
+    ]
+  }
+}

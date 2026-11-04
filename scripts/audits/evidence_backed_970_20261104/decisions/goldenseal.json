@@ -1,0 +1,90 @@
+{
+ "canonical": "goldenseal",
+ "labels": 28,
+ "stored": "mixed; the only stored study is a CYP3A pharmacokinetic crossover (17495878), and the stored text says efficacy is not established by it",
+ "as_read": "No oral efficacy trial of goldenseal found; the human trials read measure drug interactions, and 'null' here means no affirmative finding, not that goldenseal was tested and failed.",
+ "route": "rejection",
+ "quote": {
+  "pmid": "32683037",
+  "text": "Thus, large randomized, double-blind clinical studies need to be conducted on goldenseal supplements and their main alkaloids to provide more evidence on the mechanisms responsible for the pharmaceutical activity, clinical efficacy and safety of these products."
+ },
+ "how_labels_reach_pending": "Census fix2: all 28 labels read applicability_unestablished with a goldenseal row of driver literature_reviewed_human_clinical_evidence, state evaluated_limited_or_negative, so pending2.py counts them until the canonical is closed. 22 of the 28 are single-ingredient by active count.",
+ "preparations": {
+  "root_powder_or_plain": "Goldenseal powder 500 mg on 9 (312567, 312568, 312569, 312570, 312899, 252471, 253532, 253548, 253552); raw Goldenseal powder 520 mg on 216316; plain Goldenseal 250 mg to 1 g on 11 (306211, 12825, 18339, 35875, 63684, 273462, 273463, 304661, 304662, 327975, 332924). 304661, 304662 say Herb in the title and the rest say Root.",
+  "extract": "Goldenseal Root Extract 125 mg on 18370, 699, 74602 (with echinacea), 200 mg on 697, 63713, 600 mg on 306226; 4:1 at 100 mg on 178680. 699, 74602, 697, 63713 print 5% hydrastine; 18370 prints 1:4.5."
+ },
+ "rejection": {
+  "preparation": "Hydrastis canadensis root, powder or extract, oral",
+  "aliases": [
+   "Goldenseal",
+   "Goldenseal powder",
+   "raw Goldenseal powder",
+   "Goldenseal Root Extract",
+   "Goldenseal root extract",
+   "Goldenseal extract (root) 4:1 concentrated extract"
+  ],
+  "excluded_form_terms": [
+   "goldenseal"
+  ],
+  "reviewed_trial_pmids": [
+   "17495878",
+   "17079360",
+   "15900287",
+   "39943692"
+  ],
+  "search": "PubMed, (goldenseal[tiab] OR \"Hydrastis canadensis\"[tiab]) AND (randomized[tiab] OR randomised[tiab] OR placebo[tiab] OR trial[tiab] OR \"systematic review\"[tiab] OR humans[mh]): 93, newest 30 listed. Then efficacy, treatment, symptoms, infection, immune or trial terms, excluding homeopathic and in vitro, with humans[mh]: 21, all listed. By title and opening text, none is an oral efficacy trial of goldenseal alone; the human trials are pharmacokinetic interaction studies.",
+  "labels_reached": [
+   "12825",
+   "178680",
+   "18339",
+   "18370",
+   "216316",
+   "252471",
+   "253532",
+   "253548",
+   "253552",
+   "273462",
+   "273463",
+   "304661",
+   "304662",
+   "306211",
+   "306226",
+   "312567",
+   "312568",
+   "312569",
+   "312570",
+   "312899",
+   "327975",
+   "332924",
+   "35875",
+   "63684",
+   "63713",
+   "697",
+   "699",
+   "74602"
+  ]
+ },
+ "stop_list": [
+  "327975 forms read Berberine; berberine trials are a different material and do not transfer here. No separate record is proposed."
+ ],
+ "clinician_items": [
+  "17495878: midazolam AUC 107.9 to 175.3 ng x h/ml after 14 days of goldenseal in 16 healthy volunteers; the authors warn of significant interactions with CYP3A substrates.",
+  "15900287: about 40% inhibition of CYP2D6 in a 28-day supplementation study of 12 healthy volunteers.",
+  "33174626: midazolam AUC GMR 1.43 and metformin AUC GMR 0.77 in 16 healthy volunteers; authors note possible unfavorable effects on glucose control.",
+  "39943692: in type 2 diabetes aggregate metformin AUC ratio 0.93, within the no-effect range, but about 20% lower at 500 to 750 mg metformin.",
+  "17079360: digoxin Cmax up 14% at 3210 mg daily goldenseal; no other significant digoxin parameter.",
+  "32683037: narrative review reports possible neurotoxic, hepatotoxic and phototoxic activities of goldenseal extract and its alkaloids.",
+  "21372858: NTP 2-year feed studies: clear evidence of carcinogenic activity of goldenseal root powder in male and female F344/N rats, some evidence in male B6C3F1 mice, none in female mice. Animal data, listed for the clinician; 21 of these labels print powder or plain goldenseal rows at 250 mg to 1 g."
+ ],
+ "stored_rating_note": "Stored effect_direction mixed rests on a drug-interaction study, which says nothing about efficacy. Its applicability text already says efficacy is not established.",
+ "pmids_read": [
+  "17495878",
+  "17079360",
+  "15900287",
+  "39943692",
+  "33174626",
+  "32683037",
+  "21372858"
+ ],
+ "unread_notes": "Abstracts only. Read at their opening only and not described: 42048162, 40403579, 37541764, 33164294 (pregnancy review), 14677798 (a photosensitivity case on a three-ingredient supplement), 22855269, 23747414. 17079360, 15900287 and 39943692 were cut at 1500 characters, past their main results."
+}

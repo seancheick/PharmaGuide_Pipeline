@@ -1,0 +1,24 @@
+{
+"canonical": "picrorhiza",
+"labels": 1,
+"stored": "positive_weak",
+"as_read": "The label prints a 50 mg kutkin-standardized extract among seven actives for stomach and intestinal lining; the only single-ingredient trials found tested root powder in acute viral hepatitis and a different kutki extract in COVID-19.",
+"route": "no_qualifying",
+"quote": {
+"pmid": "9715310",
+"text": "In a randomised, double-blind placebo controlled trial in patients diagnosed to have acute viral hepatitis (HBsAg negative), Pk root powder 375 mg three times a day was given for 2 weeks (n = 15) or a matching placebo (n = 18) was given."
+},
+"positive_named": [
+"9715310",
+"38320447"
+],
+"proposed_decision_text": "The one label (DSLD 59242, CarnoSoothe With PicroProtect) prints PicroProtect Picrorhiza kurroa extract 50 mg, standardized to 4% kutkin, among seven actives, and states a purpose of protecting the stomach and intestinal lining. Abstracts only. PMID 9715310 tested root powder at 375 mg three times daily for 2 weeks in acute viral hepatitis, with significant differences in bilirubin, SGOT and SGPT against placebo in 33 patients; it is a different preparation and purpose, and names no primary outcome. PMID 38320447 tested AEV01, a patented kutki extract, at 100 mg three times daily with standard care in 70 older adults with mild COVID-19, with positive results; the abstract does not name PicroProtect, the purpose differs, and it names no primary outcome. PMID 35986358 tested Livogen Plus, a combination that includes picroliv root. PMID 9805236 is a laboratory study of cultured human blood cells exposed to Picroliv. No study meets the rule for this label, so no credit is proposed.",
+"stored_rating_note": "The stored material_form says picroside-standardized root powder capsules; that matches PMID 9715310 and not the 4% kutkin PicroProtect extract on this label.",
+"pmids_read": [
+"9715310",
+"38320447",
+"35986358",
+"9805236"
+],
+"unread_notes": "Abstracts only. Searches: (Picrorhiza OR PicroProtect OR picroside OR kutki OR kutkin OR picroliv) (randomized OR trial OR placebo), count 37, first 20 listed; Picrorhiza kurroa[tiab] AND (patients OR volunteers OR subjects OR clinical) AND humans[mh], count 14. No hit named PicroProtect. Not opened: 25031533 (AKL1, described in PubMed as a botanical nutraceutical), reviews 39835553, 10383482, 9855566, 12472966. No statement about them is made."
+}

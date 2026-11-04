@@ -1,0 +1,15 @@
+{"canonical": "d_ribose", "labels": 26, "stored": "positive_weak",
+ "as_read": "Mixed: controlled exercise trials are mostly null, and cardiac trials are positive in patients at 15 g/day or more, far above most label servings.",
+ "route": "packet_no_credit",
+ "positive_named": ["35644694", "14607200", "1354276", "29296106", "32778175", "17109576"],
+ "studies_to_add": [
+  {"pmid": "11641371", "study_type": "rct", "sample_size": 19, "primary_endpoint": "not named; repeated maximal exercise and muscle ATP recovery", "effect_direction": "null", "quote": "Oral ribose supplementation with 4-g doses four times a day does not beneficially impact on postexercise muscle ATP recovery and maximal intermittent exercise performance."},
+  {"pmid": "12660407", "study_type": "rct", "sample_size": 19, "primary_endpoint": "not named; anaerobic capacity and metabolic markers", "effect_direction": "null", "quote": "Results indicate that oral ribose supplementation (10 g/d for 5 d) does not affect anaerobic exercise capacity or metabolic markers in trained subjects as evaluated in this study."},
+  {"pmid": "35644694", "study_type": "rct", "sample_size": 216, "primary_endpoint": "seven outcome measures, no primary named in the passages read", "effect_direction": "positive_weak", "quote": "In conclusion, ubiquinol and d-ribose reduced the symptoms of HFpEF and increased the EF."}],
+ "stop_list": ["14660478 dose in mg/kg and 32778175 per-dose schedule can't be a mass-per-day value; regimen text only.", "12580655 gives 32 g over 36 hours, not a daily amount; regimen text only."],
+ "clinician_items": ["24272966: dose-related falls in serum glucose up to 26.3 mg/dL (30.3% of baseline) in the first 60 minutes at 2.5 to 10 g, with an insulin response, in 12 healthy subjects. Relevant to anyone on glucose-lowering drugs.",
+  "36551203: narrative review warns of glycation capacity and predicted cytotoxicity of free ribose. Theoretical in the abstract, no clinical data given.",
+  "8815168: five McArdle's patients on 60 g/day reported disliking it; no harm stated in the abstract."],
+ "stored_rating_note": "Stored positive_weak rests on one open-label uncontrolled pilot (17109576); the stored text says no placebo-controlled efficacy is established. It leaves out the controlled exercise trials and cardiac trials read here.",
+ "pmids_read": ["17109576", "36551203", "35644694", "11641371", "12580655", "12660407", "14660478", "16377979", "16521849", "16937963", "29296106", "32778175", "18178380", "14607200", "1354276", "19200398", "8815168", "19627222", "20804365", "24272966"],
+ "unread_notes": "35644694 read in the methods and results passages through NCBI PMC (PMC9576187); Europe PMC returned an error. Other papers abstract only. 20804365 has no abstract. Combination trials seen as hits and not read: 35684021 (nicotinamide plus ribose), 31861049 (creatine plus ribose), 22692117 (repletion drink), 14636104 (effervescent creatine, ribose, glutamine). Protocol 29606104, 6122873 and 3935926 seen and not read. Two of three searches were swamped by PARP and chemistry hits, so older or differently titled trials may have been missed."}

@@ -1,0 +1,1323 @@
+{
+  "record_id": "INGR_COLLAGEN",
+  "labels": 44,
+  "stored_direction": "unset (effect_direction null; applicability_unestablished)",
+  "direction_as_read": "mixed: named positive trials and pooled skin benefit, absent in high-quality and non-pharmaceutical-funded subgroups",
+  "decision": "closed_no_credit",
+  "summary": "44 of the 48 labels print hydrolyzed collagen or peptides, some as Verisol or Peptan. Small placebo trials with a named primary outcome favor these preparations for activity-related knee pain and skin elasticity (33562729, 32009486, 18416885). A 2025 meta-analysis finds the skin benefit absent in high-quality and non-pharmaceutical-funded studies (40324552). 13 labels print 11 g to 12 g, above the 1.2 g to 10 g amounts in the trials read. The signed hold on INGR_COLLAGEN_PEPTIDES is unchanged.",
+  "question_for_clinician": "33562729 meets the review rule: 5 g alone, 180 adults, a named primary outcome favoring collagen peptides over placebo, as do 32009486 and 18416885. Does this change the signed A059/A148 hold on INGR_COLLAGEN_PEPTIDES for any hydrolyzed row, given that high-quality studies in 40324552 showed no skin effect? Agent recommendation: no credit, keep the hold.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_33562729",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "33562729"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "type I collagen peptides, mean 3 kDa"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "exercise_related_knee_pain",
+      "purpose": "joint_comfort",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_33562729",
+      "population": {
+        "age_group": "adult",
+        "description": "180 active men and women aged 18 to 30 with exercise-related knee pain and no diagnosed joint disease completed the trial."
+      },
+      "study_design": "Randomized placebo-controlled trial, 12 weeks; blinding not stated in the abstract",
+      "outcomes": [
+        {
+          "name": "Exercise-induced knee pain on VAS, -21.9 mm versus -15.6 mm with placebo (p = 0.024)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Pain at rest and after squats",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Young adults without joint disease, so not the knee osteoarthritis population the stored scope names.",
+        "Type I collagen peptides, mean 3 kDa; the material is not named by brand in the abstract, so correspondence to a label's material is not established.",
+        "A 6.3 mm between-group difference; the abstract does not address clinical importance. Frequency not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "5 g of specific collagen peptides or placebo over 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33562729",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_32009486",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "32009486"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "marine collagen hydrolysate"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_aging_postmenopausal",
+      "purpose": "skin_elasticity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_32009486",
+      "population": {
+        "age_group": "older_adult",
+        "description": "36 post-menopausal women enrolled."
+      },
+      "study_design": "Prospective randomized double-blind placebo-controlled trial, 4 weeks with 4 weeks of follow-up",
+      "outcomes": [
+        {
+          "name": "Skin elasticity by cutometer on left and right cheeks, higher than placebo (p = .006, .03)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "36 participants and 4 weeks. Cutometer elasticity is a measurement, not a patient-reported outcome.",
+        "Marine source per the abstract's conclusion; the marine labels print 2.5 g to 10 g.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Daily 5 g oral marine collagen hydrolysate or placebo for 4 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32009486",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_24401291",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "24401291"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Verisol",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_aging_women",
+      "purpose": "eye_wrinkles",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_24401291",
+      "population": {
+        "age_group": "adult",
+        "description": "114 women aged 45 to 65, 57 in each group."
+      },
+      "study_design": "Double-blind placebo-controlled randomized trial, 8 weeks with a 4-week regression phase",
+      "outcomes": [
+        {
+          "name": "Eye wrinkle volume reduced versus placebo after 4 and 8 weeks (p < 0.05; 20% at 8 weeks)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Procollagen I and elastin in a biopsy subgroup higher; fibrillin not significant",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract.",
+        "Funding not stated in the abstract. Verisol is named, and 9 labels print it at 2.5 g.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          2.5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2.5 g of Verisol bioactive collagen peptide or placebo once daily for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "24401291",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_18416885",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "18416885"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "CH-Alpha",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "activity_related_joint_pain_athletes",
+      "purpose": "joint_comfort",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_18416885",
+      "population": {
+        "age_group": "adult",
+        "description": "147 varsity or club athletes with activity-related joint pain and no evidence of joint disease randomized; data from 97 evaluated."
+      },
+      "study_design": "Prospective randomized placebo-controlled double-blind trial, 24 weeks",
+      "outcomes": [
+        {
+          "name": "Change in VAS pain, mobility and inflammation parameters; six pain parameters favored collagen hydrolysate",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "97 of 147 evaluated. The primary efficacy parameter spans several VAS scales, and six parameters are reported as significant.",
+        "Liquid formulation, CH-Alpha.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          10
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 168,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "25 mL of liquid containing 10 g collagen hydrolysate (CH-Alpha) or a xanthan placebo for 24 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "18416885",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_22500661",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "22500661"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_joint_pain",
+      "purpose": "joint_comfort",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_22500661",
+      "population": {
+        "age_group": "adult",
+        "description": "200 patients of both genders aged at least 50 with joint pain of at least 30 mm on VAS."
+      },
+      "study_design": "Multicenter randomized double-blind placebo-controlled trial, 6 months",
+      "outcomes": [
+        {
+          "name": "Clinical responders (at least 20% VAS improvement) at 6 months, 51.6% versus 36.5% (p<0.05)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Clinical responders at 3 months, 44.1% versus 39.6% (p = 0.53)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract describes the responder comparison but does not call it primary.",
+        "The authors ask for more studies. The amount is below every hydrolyzed row but one on these labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Collagen hydrolysate 1200 mg/day or placebo during 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "22500661",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_21251991",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "21251991"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_knee_osteoarthritis",
+      "purpose": "knee_cartilage_imaging",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_21251991",
+      "population": {
+        "age_group": "adult",
+        "description": "30 randomized subjects with mild knee osteoarthritis, allowed prior analgesics."
+      },
+      "study_design": "Single-center randomized placebo-controlled double-blind pilot trial, 24 and 48 weeks",
+      "outcomes": [
+        {
+          "name": "dGEMRIC T1 change at 24 weeks: medial and lateral tibial regions favored collagen hydrolysate; no change in the other four regions",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Clinical outcomes, no significant difference",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "A pilot of 30 testing whether imaging can detect change; dose not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "A formulation of collagen hydrolysate or placebo; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21251991",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_33774639",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "33774639"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_condition_women",
+      "purpose": "skin_hydration",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_33774639",
+      "population": {
+        "age_group": "adult",
+        "description": "99 healthy Japanese women aged 35 to 50, 33 in each group."
+      },
+      "study_design": "Randomized placebo-controlled double-blind trial, 12 weeks, retrospectively registered",
+      "outcomes": [
+        {
+          "name": "Stratum corneum and epidermal water content increased and TEWL decreased",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Skin elasticity and thickness unchanged",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract; which dose arm carries the result is not separated in the abstract.",
+        "Retrospectively registered.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1,
+          5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1 g or 5 g of collagen peptides or placebo once daily for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33774639",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_29337906",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "29337906"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "specific collagen peptides"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "postmenopausal_reduced_bmd",
+      "purpose": "bone_mineral_density",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_29337906",
+      "population": {
+        "age_group": "older_adult",
+        "description": "131 postmenopausal women with primary age-related reduction in BMD enrolled, 102 completed, all in the ITT analysis."
+      },
+      "study_design": "Randomized placebo-controlled double-blind trial, 12 months",
+      "outcomes": [
+        {
+          "name": "Change in spine and femoral neck BMD after 12 months, greater than control (p = 0.030, p = 0.003)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Bone is outside the stored scope's supported outcomes (skin, joint). A bone result does not carry a skin or joint credit; some of these labels position for bone.",
+        "Calcium or vitamin D co-therapy, if any, is not stated in the abstract. The material is not named by brand in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 365,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "12-month daily oral 5 g specific collagen peptides or placebo.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29337906",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_40324552",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "40324552"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_aging",
+      "purpose": "skin_hydration_elasticity_wrinkles",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_40324552",
+      "population": {
+        "age_group": "adult",
+        "description": "23 RCTs with 1474 participants."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized controlled trials, by funding source and study quality",
+      "outcomes": [
+        {
+          "name": "All RCTs: hydration, elasticity and wrinkles improved",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Studies without pharmaceutical funding: no effect on hydration, elasticity or wrinkles",
+          "hierarchy": "post_hoc",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "post_hoc_subgroup"
+        },
+        {
+          "name": "High-quality studies: no significant effect in all categories",
+          "hierarchy": "post_hoc",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "Doses, preparations and included trials not listed in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Collagen supplements at several regimens; not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40324552",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_37432180",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "37432180"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_aging",
+      "purpose": "skin_hydration_elasticity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_37432180",
+      "population": {
+        "age_group": "adult",
+        "description": "26 RCTs with 1721 patients."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "Skin hydration and elasticity improved versus placebo (p < 0.00001)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The review identifies several biases in the included RCTs and calls for larger trials. Regimens not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Hydrolyzed collagen at several regimens; not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "37432180",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_33742704",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "33742704"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_aging",
+      "purpose": "skin_hydration_elasticity_wrinkles",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_33742704",
+      "population": {
+        "age_group": "adult",
+        "description": "19 studies, 1,125 participants aged 20 to 70, 95% women."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized double-blind controlled trials",
+      "outcomes": [
+        {
+          "name": "Pooled hydration, elasticity and wrinkles favored hydrolyzed collagen over placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Regimens and included trials not listed in the abstract; its conclusion names 90 days of ingestion.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral hydrolyzed collagen at several regimens; not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "33742704",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_39212129",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "39212129"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "knee_osteoarthritis",
+      "purpose": "knee_pain_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_39212129",
+      "population": {
+        "age_group": "adult",
+        "description": "11 RCTs, 870 participants with knee osteoarthritis, 451 on collagen and 419 on placebo."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "Function, MD -6.46 (95% CI -9.52, -3.40), I2 75%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Pain, MD -13.63 (95% CI -20.67, -6.58), I2 88%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "High heterogeneity. Collagen-based supplements are pooled, and the abstract does not separate hydrolyzed from undenatured material or from co-actives.",
+        "The signed note on INGR_COLLAGEN_PEPTIDES records an unresolved active-comparator and repeated-outcome problem in osteoarthritis pooling; not re-examined here.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral collagen-based supplements at several regimens; not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "39212129",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_collagen_42342959",
+      "components": [
+        "INGR_COLLAGEN"
+      ],
+      "source_pmids": [
+        "42342959"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_aging",
+      "purpose": "skin_health",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_collagen_42342959",
+      "population": {
+        "age_group": "adult",
+        "description": "25 RCTs of 13 to 236 participants; most in healthy volunteers, seven in patients with chronic disease."
+      },
+      "study_design": "Systematic literature review of randomized controlled trials, synthesized descriptively",
+      "outcomes": [
+        {
+          "name": "Hydration improved in 10 of 15 trials, elasticity in 10 of 13, wrinkle depth or volume in 9 of 10",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No pooling. The majority of included trials were rated at high risk of bias, and the authors call the evidence preliminary.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral hydrolyzed collagen at several regimens; not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "42342959",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "31919527": "Whey versus collagen peptides, muscle protein synthesis; the stored note retires it until its corrigendum is read, and the corrigendum has no abstract.",
+    "33301004": "Corrigendum notice to 31919527; PubMed carries the title only, so its content is unread.",
+    "26561784": "Bioactive collagen peptides 2.5 g for cellulite; a purpose outside the stored scope, no primary outcome named."
+  },
+  "stop_or_hold": "The review scope leaves plain Collagen rows (81931, 29262) open, and BioCell rows (293939, 295509) outside these studies; this packet does not reach them. The record id INGR_COLLAGEN would sit beside signed INGR_COLLAGEN_PEPTIDES, which holds the same meaning; a human should decide whether this belongs on that record.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "33562729",
+      "title_fetched": "The Influence of Specific Bioactive Collagen Peptides on Knee Joint Discomfort in Young Physically Active Adults: A Randomized Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33562729/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32009486",
+      "title_fetched": "Four-weeks daily intake of oral collagen hydrolysate results in improved skin elasticity, especially in sun-exposed areas: a randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32009486/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24401291",
+      "title_fetched": "Oral intake of specific bioactive collagen peptides reduces skin wrinkles and increases dermal matrix synthesis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24401291/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18416885",
+      "title_fetched": "24-Week study on the use of collagen hydrolysate as a dietary supplement in athletes with activity-related joint pain.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18416885/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22500661",
+      "title_fetched": "Effect of collagen hydrolysate in articular pain: a 6-month randomized, double-blind, placebo controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22500661/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21251991",
+      "title_fetched": "Change in knee osteoarthritis cartilage detected by delayed gadolinium enhanced magnetic resonance imaging following treatment with collagen hydrolysate: a pilot randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21251991/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33774639",
+      "title_fetched": "Oral Supplementation of Collagen Peptides Improves Skin Hydration by Increasing the Natural Moisturizing Factor Content in the Stratum Corneum: A Randomized, Double-Blind, Placebo-Controlled Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33774639/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29337906",
+      "title_fetched": "Specific Collagen Peptides Improve Bone Mineral Density and Bone Markers in Postmenopausal Women-A Randomized Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29337906/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40324552",
+      "title_fetched": "Effects of Collagen Supplements on Skin Aging: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40324552/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37432180",
+      "title_fetched": "Effects of Oral Collagen for Skin Anti-Aging: A Systematic Review and Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37432180/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33742704",
+      "title_fetched": "Effects of hydrolyzed collagen supplementation on skin aging: a systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33742704/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39212129",
+      "title_fetched": "Effect of collagen supplementation on knee osteoarthritis: an updated systematic review and meta-analysis of randomised controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39212129/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42342959",
+      "title_fetched": "Efficacy and safety of hydrolyzed collagen supplementation on skin health outcomes: a systematic literature review of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42342959/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31919527",
+      "title_fetched": "Whey protein but not collagen peptides stimulate acute and longer-term muscle protein synthesis with and without resistance exercise in healthy older women: a randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31919527/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33301004",
+      "title_fetched": "Corrigendum for Oikawa et al, \"Whey protein but not collagen peptides stimulate acute and longer-term muscle protein synthesis with and without resistance exercise in healthy older women: a randomized controlled trial\" Am J Clin Nutr 2020;111(3):708-18. https://doi.org/10.1093/ajcn/nqz332.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33301004/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26561784",
+      "title_fetched": "Dietary Supplementation with Specific Collagen Peptides Has a Body Mass Index-Dependent Beneficial Effect on Cellulite Morphology.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26561784/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_COLLAGEN",
+    "standard_name": "Hydrolyzed collagen (review draft)",
+    "aliases": [
+      "Bovine Collagen Peptides, Hydrolyzed",
+      "Bovine Collagen, Hydrolyzed",
+      "Collagen, Hydrolyzed",
+      "Fish Collagen, Hydrolyzed",
+      "hydrolyzed Bovine Collagen Peptides",
+      "Hydrolyzed Collagen from bovine (cow) hide",
+      "Hydrolyzed Collagen I & III",
+      "Hydrolyzed Collagen Type 1 & 3",
+      "hydrolyzed Collagen Type 1",
+      "Hydrolyzed Collagen Types 1 & 3",
+      "Hydrolyzed Marine Collagen Peptides",
+      "Marine Collagen Peptides, Hydrolyzed",
+      "Peptan",
+      "Porcine Collagen, Hydrolyzed",
+      "Verisol Bioactive Collagen Peptides",
+      "VERISOL Bioactive Collagen Peptides",
+      "Verisol Bioactive Collagen"
+    ],
+    "category": "joint_bone",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "33562729",
+      "32009486",
+      "24401291",
+      "18416885",
+      "22500661",
+      "21251991",
+      "33774639",
+      "29337906",
+      "40324552",
+      "37432180",
+      "33742704",
+      "39212129",
+      "42342959"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: named positive trials and pooled skin benefit, absent in high-quality and non-pharmaceutical-funded subgroups. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "skin",
+      "joint"
+    ],
+    "health_goals_supported": [],
+    "notes": "44 of the 48 labels print hydrolyzed collagen or peptides, some as Verisol or Peptan. Small placebo trials with a named primary outcome favor these preparations for activity-related knee pain and skin elasticity (33562729, 32009486, 18416885). A 2025 meta-analysis finds the skin benefit absent in high-quality and non-pharmaceutical-funded studies (40324552). 13 labels print 11 g to 12 g, above the 1.2 g to 10 g amounts in the trials read. The signed hold on INGR_COLLAGEN_PEPTIDES is unchanged.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Mostly women aged 20 to 70 in skin trials; adults with activity-related knee pain or knee osteoarthritis",
+      "supported_outcomes": [
+        "skin",
+        "joint"
+      ],
+      "source_pmids": [
+        "33562729",
+        "32009486",
+        "24401291",
+        "18416885",
+        "22500661",
+        "21251991",
+        "33774639",
+        "29337906",
+        "40324552",
+        "37432180",
+        "33742704",
+        "39212129",
+        "42342959"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "44 of the 48 labels print hydrolyzed collagen or peptides, some as Verisol or Peptan. Small placebo trials with a named primary outcome favor these preparations for activity-related knee pain and skin elasticity (33562729, 32009486, 18416885). A 2025 meta-analysis finds the skin benefit absent in high-quality and non-pharmaceutical-funded studies (40324552). 13 labels print 11 g to 12 g, above the 1.2 g to 10 g amounts in the trials read. The signed hold on INGR_COLLAGEN_PEPTIDES is unchanged. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "biocell",
+        "undenatured",
+        "uc-ii",
+        "uc ii",
+        "nt2"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33562729",
+        "title": "The Influence of Specific Bioactive Collagen Peptides on Knee Joint Discomfort in Young Physically Active Adults: A Randomized Controlled Trial.",
+        "citation": "Nutrients (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33562729/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu13020523"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32009486",
+        "title": "Four-weeks daily intake of oral collagen hydrolysate results in improved skin elasticity, especially in sun-exposed areas: a randomized, double-blind, placebo-controlled trial.",
+        "citation": "The Journal of dermatological treatment (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32009486/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/09546634.2020.1725412"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "24401291",
+        "title": "Oral intake of specific bioactive collagen peptides reduces skin wrinkles and increases dermal matrix synthesis.",
+        "citation": "Skin pharmacology and physiology (2014)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24401291/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1159/000355523"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "18416885",
+        "title": "24-Week study on the use of collagen hydrolysate as a dietary supplement in athletes with activity-related joint pain.",
+        "citation": "Current medical research and opinion (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18416885/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1185/030079908x291967"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "22500661",
+        "title": "Effect of collagen hydrolysate in articular pain: a 6-month randomized, double-blind, placebo controlled study.",
+        "citation": "Complementary therapies in medicine (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22500661/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.ctim.2011.12.007"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21251991",
+        "title": "Change in knee osteoarthritis cartilage detected by delayed gadolinium enhanced magnetic resonance imaging following treatment with collagen hydrolysate: a pilot randomized controlled trial.",
+        "citation": "Osteoarthritis and cartilage (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21251991/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.joca.2011.01.001"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33774639",
+        "title": "Oral Supplementation of Collagen Peptides Improves Skin Hydration by Increasing the Natural Moisturizing Factor Content in the Stratum Corneum: A Randomized, Double-Blind, Placebo-Controlled Clinical Trial.",
+        "citation": "Skin pharmacology and physiology (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33774639/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1159/000513988"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29337906",
+        "title": "Specific Collagen Peptides Improve Bone Mineral Density and Bone Markers in Postmenopausal Women-A Randomized Controlled Study.",
+        "citation": "Nutrients (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29337906/",
+        "publication_types": [
+          "Clinical Trial, Phase III",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu10010097"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40324552",
+        "title": "Effects of Collagen Supplements on Skin Aging: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+        "citation": "The American journal of medicine (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40324552/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1016/j.amjmed.2025.04.034"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37432180",
+        "title": "Effects of Oral Collagen for Skin Anti-Aging: A Systematic Review and Meta-Analysis.",
+        "citation": "Nutrients (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37432180/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Systematic Review",
+          "Journal Article"
+        ],
+        "doi": "10.3390/nu15092080"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33742704",
+        "title": "Effects of hydrolyzed collagen supplementation on skin aging: a systematic review and meta-analysis.",
+        "citation": "International journal of dermatology (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33742704/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1111/ijd.15518"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39212129",
+        "title": "Effect of collagen supplementation on knee osteoarthritis: an updated systematic review and meta-analysis of randomised controlled trials.",
+        "citation": "Clinical and experimental rheumatology (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39212129/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.55563/clinexprheumatol/kflfr5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42342959",
+        "title": "Efficacy and safety of hydrolyzed collagen supplementation on skin health outcomes: a systematic literature review of randomized controlled trials.",
+        "citation": "European journal of clinical nutrition (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42342959/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1038/s41430-026-01778-3"
+      }
+    ]
+  }
+}

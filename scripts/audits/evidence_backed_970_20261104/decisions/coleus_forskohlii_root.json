@@ -1,0 +1,23 @@
+{
+ "canonical": "coleus_forskohlii_root",
+ "labels": 5,
+ "stored": "positive_moderate",
+ "as_read": "Small 12-week trials of a 10% forskolin extract at 500 mg/day report body fat or weight changes, with none naming a primary outcome, and a 2026 systematic review calls the weight and body composition findings inconsistent.",
+ "route": "no_qualifying",
+ "quote": {
+  "pmid": "42847203",
+  "text": "Evidence suggests that C. forskohlii extract may reduce fat mass and body fat percentage; however, findings regarding weight loss and overall body composition have been inconsistent."
+ },
+ "positive_named": ["16129715", "42678522", "26593941", "16749416", "39001919"],
+ "proposed_decision_text": "The labels print Coleus forskohlii extract: 100 mg on a product named Forskolin 10 mg, 50 mg of root extract on another single-ingredient product, and 250 mg in two fat burner products with 10 and 11 ingredients. A fifth product is named Coleus Forskohlii 500 mg, and the review table holds no amount row for it. No study read meets the standard of a randomized trial or meta-analysis of the ingredient alone, oral, with a stated dose, population and primary outcome with a direction. The body composition trials all gave about 250 mg of 10% forskolin extract twice daily and name no primary outcome. In 30 overweight men, body fat percentage and fat mass fell versus placebo (16129715, abstract only). In 23 mildly overweight women, body mass tended to differ and fat mass did not differ significantly (18500958, abstract and full text passages). In 30 overweight adults on a hypocaloric diet, insulin and insulin resistance improved versus placebo while waist and hip reductions occurred in both groups (26593941, abstract and full text passages). A 2026 quasi-randomized trial in 60 overweight adults reported lower body weight and waist circumference versus placebo; it is not fully randomized (42678522, abstract and full text passages). A 2026 systematic review of four randomized trials calls the weight and body composition findings inconsistent and asks for high-quality trials (42847203). Oral forskolin 10 mg/day had fewer asthma attacks than inhaled cromoglycate (16749416) and no lung function difference from inhaled beclomethasone (20515580), both single-blind against active drugs, with no primary outcome named. Oral forskolin capsules improved a smell score after COVID-19 (39001919), with no dose in the abstract and a purpose these labels do not carry. The full text of 16129715 wasn't open, so its statement of a primary outcome rests on the abstract. The evidence does not support credit for these labels, and it does not show that the extract fails.",
+ "stop_list": [
+  "Fields can't express forskolin content against extract mass: trials used 250 mg of a 10% extract twice daily, and the label rows read here state extract mass only, at doses from 50 to 250 mg per row. Serving counts weren't read."
+ ],
+ "clinician_items": [
+  "42847203: systematic review says adverse effects were generally mild and infrequent, and asks for long-term trials on safety.",
+  "20515580: one forskolin-treated patient had a mild asthma attack in 2 months; none on beclomethasone. Forskolin replaced an inhaled controller in this comparison."
+ ],
+ "stored_rating_note": "Stored positive_moderate rests on one 30-man trial (16129715) with no named primary outcome in its abstract. 18500958, the same regimen in women, found no significant fat mass difference, and 42847203 calls the findings inconsistent. Moderate overstates this.",
+ "pmids_read": ["16129715", "42847203", "42678522", "26593941", "39001919", "18500958", "20515580", "16749416"],
+ "unread_notes": "Full text passages opened for 26593941 (PMC4663611), 18500958 (PMC2129145) and 42678522 (PMC13537049), and a word search found no named primary outcome in any of them; 26593941 powers on total energy intake, which it calls one of the major measured outcomes, not a primary outcome. Others abstracts only; PubMed shows no PMC id for 16129715, 39001919 and 42847203. Two searches: 107 and 30 hits. Seen by title, not opened: 37686725 and 26771282, 22731245, 23241939 (multi-ingredient), 33351209, 36479472, 30738773, 33150931, 26005506. Eye drop and intravenous forskolin derivative papers weren't used. 18500958 abstract read to 1500 characters, its conclusion cut. 42678522 full text describes the study arms inconsistently in one limitations passage (30 patients and 30 healthy controls), which I didn't resolve."
+}

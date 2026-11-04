@@ -1,0 +1,65 @@
+{
+ "canonical": "licorice",
+ "labels": 2,
+ "stored": "positive_moderate",
+ "as_read": "Trials with a named primary outcome tested GutGard for dyspepsia (positive) and extracts for COVID-19 (one null, one positive on ICU stay); no trial read tested unspecified licorice root at the labels' 500 or 900 mg for a purpose these labels carry.",
+ "route": "no_qualifying",
+ "quote": {
+  "pmid": "37847472",
+  "text": "Licorice had no beneficial effect on the clinical symptoms of COVID-19."
+ },
+ "positive_named": [
+  "21747893",
+  "39262414",
+  "35785498",
+  "27113136",
+  "39080737",
+  "41952865"
+ ],
+ "proposed_decision_text": "Both labels print the single word Licorice, at 500 mg (306329) and 900 mg (251625), under product names reading Licorice Root, with no extract ratio, brand, glycyrrhizin content or flavonoid standard; 251625 is positioned for digestion and 306329 has no positioning. The stored trial, 21747893, reports a significant fall in dyspepsia symptom scores against placebo, but it tested GutGard 75 mg twice daily, a named extract these labels don't print. 37847472 named primary outcomes and found no difference in moderate COVID-19 at 760 mg three times a day, and 39262414 found a shorter ICU stay as its primary outcome with a 760 mg D-reglis tablet in critically ill COVID-19 patients; neither is a purpose these labels carry. 35785498 (1,000 mg/day powder of root extract in women with NAFLD), 27113136 (0.2 g/day ethanolic extract in hypercholesterolemia), 39080737 and 41952865 (1.5 g/day extract with a low-calorie diet in PCOS) report positive results, but their abstracts name no primary outcome and their purposes aren't on these labels. 29670847 (1.5 g/day extract with a low-calorie diet) found the anti-obesity effects no stronger than diet alone, and also names no primary outcome. 31574343 and 32802108 used a syrup. 29433679 pools 26 clinical trials of licorice consumption without separating preparations in the abstract, finding small falls in body weight and BMI with a rise in diastolic pressure, and 39079711 pools preparations alone or combined with other herbs. Abstracts only. No study read meets the review's standard for what these labels print.",
+ "studies_to_add": [
+  {
+   "pmid": "37847472",
+   "study_type": "rct",
+   "sample_size": 60,
+   "primary_endpoint": "SPO2, body temperature and respiratory rate after the intervention",
+   "effect_direction": "null",
+   "quote": "The findings indicated that SPO2, body temperature, and RR had no significant difference between the groups at the end of the intervention."
+  },
+  {
+   "pmid": "39262414",
+   "study_type": "rct",
+   "sample_size": 52,
+   "primary_endpoint": "ICU stay length",
+   "effect_direction": "positive",
+   "quote": "The ICU stay was significantly lower in the licorice group than in the placebo group (P = 0.015)."
+  }
+ ],
+ "stop_list": [
+  "39262414 states a 760 mg tablet but no daily frequency in the abstract.",
+  "The labels print no glycyrrhizin content, so no record can say which of the pooled blood pressure findings applies to them."
+ ],
+ "clinician_items": [
+  "28660884: pooled trials of products with at least 100 mg glycyrrhizic acid daily raised systolic and diastolic blood pressure and lowered plasma potassium, renin activity and aldosterone; the abstract opens by noting case reports of severe adverse events including deaths after chronic ingestion. These labels print no glycyrrhizin content.",
+  "39519602: interventions with glycyrrhizic acid as the main component raised blood pressure; flavonoid-dominated ones had no significant effect.",
+  "29433679: licorice consumption raised diastolic blood pressure in pooled trials; the authors say hypertensive patients should avoid it."
+ ],
+ "stored_rating_note": "positive_moderate fits GutGard only. The stored applicability text is GutGard-specific and neither label prints GutGard or any extract standard. Null 37847472 and diet-only-equivalent 29670847 aren't stored.",
+ "pmids_read": [
+  "21747893",
+  "39080737",
+  "41952865",
+  "39519602",
+  "39262414",
+  "35785498",
+  "29433679",
+  "39079711",
+  "31574343",
+  "27113136",
+  "28660884",
+  "37847472",
+  "29670847",
+  "32802108"
+ ],
+ "unread_notes": "Abstracts only; no full text opened. 39079711, 39519602 and 28660884 were read to 1500 characters, so their closing sentences were not read. Search hits not opened beyond the listing's first lines, so nothing is claimed about them: 28761824, 27614124, 29296112, 32162239, 27643690, 27755159, 37304220, 36870516. Searches: 141 and 54 hits."
+}

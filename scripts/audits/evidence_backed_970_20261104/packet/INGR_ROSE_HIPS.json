@@ -1,0 +1,806 @@
+{
+  "record_id": "INGR_ROSE_HIPS",
+  "labels": 10,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive_weak: one small rosehip extract trial meets the bar on a surrogate (25834460); the osteoarthritis evidence is seed and shell powder at 5 g/day, manufacturer supported (18407528), and a 120-person powder trial showed no between-group difference (41599942)",
+  "decision": "closed_no_credit",
+  "summary": "Seven labels print rosehip fruit extract 500 mg and three print rose hips at 7.5 to 20 mg inside vitamin C products that carry an immune claim. The stored evidence is seed and shell powder at 5 g/day in osteoarthritis (16195164), a preparation and amount no label prints. One study of extract meets the reading bar: 32 preobese adults on 100 mg/day for 12 weeks, where abdominal fat area, a stated primary outcome, fell more than placebo while body fat percent only tended to (25834460). Other oral trials name no primary outcome in the abstract (42831964, 29024081), test powder (19818588, 18407528) or a 40 g food amount (22166897). A 120-person powder trial found no between-group difference in WOMAC (41599942). No immune trial was found in the search. Abstracts only.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rose_hips_25834460",
+      "components": [
+        "INGR_ROSE_HIPS"
+      ],
+      "source_pmids": [
+        "25834460"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "fruit extract as named by the source; plant part not otherwise reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "preobese_adults_body_fat",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rose_hips_25834460",
+      "population": {
+        "age_group": "adult",
+        "description": "32 preobese adults with body mass index of at least 25 and below 30, no dietary intervention."
+      },
+      "study_design": "Single-center double-blind randomized placebo-controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Abdominal total and visceral fat area decreased more than placebo at week 12",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Body fat percent tended to decrease versus placebo; not stated as significant",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "unresolved",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Body weight and body mass index decreased more than placebo",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "One small single-center trial on an imaging surrogate.",
+        "Extract standardization and funding are not stated in the abstract.",
+        "Studied 100 mg/day of extract; labels print 500 mg of extract without marker content, so the amounts are not comparable.",
+        "The abstract gives no between-group numbers for the primary outcomes.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One tablet containing 100 mg of rosehip extract once each day for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "25834460",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rose_hips_42831964",
+      "components": [
+        "INGR_ROSE_HIPS"
+      ],
+      "source_pmids": [
+        "42831964"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rosa canina",
+        "plant_part": "fruit"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "type_2_diabetes_with_orthostatic_hypotension",
+      "purpose": "orthostatic_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rose_hips_42831964",
+      "population": {
+        "age_group": "adult",
+        "description": "60 adults with type 2 diabetes and orthostatic hypotension in Yazd; 57 completed."
+      },
+      "study_design": "Randomized double-blind placebo-controlled parallel-group trial, four weeks",
+      "outcomes": [
+        {
+          "name": "Orthostatic Intolerance Questionnaire scores fell more than placebo (P = 0.001)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "More participants no longer met criteria for orthostatic hypotension (prevalence ratio 2.57)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Authors call the results preliminary and ask for confirmation in larger multicenter trials.",
+        "A purpose the labels do not carry.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "two capsules daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Rosehip fruit extract, two capsules daily, each containing 500 mg, for four weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42831964",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rose_hips_29024081",
+      "components": [
+        "INGR_ROSE_HIPS"
+      ],
+      "source_pmids": [
+        "29024081"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rosa canina",
+        "plant_part": "fruit"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "urinary_tract_infection_after_cesarean",
+      "purpose": "urinary_tract_infection_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rose_hips_29024081",
+      "population": {
+        "age_group": "adult",
+        "description": "400 women after cesarean section with negative urine culture, in Tabriz, Iran."
+      },
+      "study_design": "Triple-blind randomized placebo-controlled trial, 20 days",
+      "outcomes": [
+        {
+          "name": "Urinary tract infection lower than control at day 7 to 10 (odds ratio 0.22) and day 20 (odds ratio 0.32)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Cystitis incidence: no significant difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Capsule content (extract or powder) is not stated beyond R. canina fruit.",
+        "A purpose and population the labels do not carry.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 20,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "500 mg capsules containing R. canina, twice daily from the second day after cesarean section, for 20 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29024081",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rose_hips_18407528",
+      "components": [
+        "INGR_ROSE_HIPS"
+      ],
+      "source_pmids": [
+        "18407528"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rosa canina",
+        "plant_part": "hip powder"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "osteoarthritis_pain",
+      "purpose": "joint_pain",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rose_hips_18407528",
+      "population": {
+        "age_group": "adult",
+        "description": "287 patients with osteoarthritis across three randomized trials, median duration 3 months."
+      },
+      "study_design": "Meta-analysis of randomized placebo-controlled trials",
+      "outcomes": [
+        {
+          "name": "Pain reduced versus placebo, effect size 0.37 (95% CI 0.13 to 0.60), the stated primary outcome",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "All three trials were supported by the manufacturer (Hyben-Vital International).",
+        "Rose hip powder, not the fruit extract the 500 mg labels print.",
+        "Authors say the data are sparse and ask for independent replication.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Hip powder of Rosa canina; the abstract does not state the doses of the included trials.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "18407528",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rose_hips_19818588",
+      "components": [
+        "INGR_ROSE_HIPS"
+      ],
+      "source_pmids": [
+        "19818588"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rosa canina",
+        "plant_part": "hip powder"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "rheumatoid_arthritis",
+      "purpose": "joint_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rose_hips_19818588",
+      "population": {
+        "age_group": "adult",
+        "description": "89 patients with rheumatoid arthritis, 90% female, mean age 56.6, at clinics in Berlin and Copenhagen."
+      },
+      "study_design": "Double-blind placebo-controlled randomized trial, 6 months",
+      "outcomes": [
+        {
+          "name": "Health Assessment Questionnaire disability at 6 months favored rose hip (adjusted p = 0.032)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "HAQ pain scale and pain medication: no difference",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "DAS-28: not significant (p = 0.056)",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Capsulated powder at 5 g/day; no label here prints powder at that amount.",
+        "Funding is not stated in the abstract beyond the record's non-government support tag.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 180,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Capsulated rose-hip powder 5 g daily for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19818588",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rose_hips_16195164",
+      "components": [
+        "INGR_ROSE_HIPS"
+      ],
+      "source_pmids": [
+        "16195164"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rosa canina",
+        "plant_part": "seed and shell powder"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hip_or_knee_osteoarthritis",
+      "purpose": "joint_pain",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rose_hips_16195164",
+      "population": {
+        "age_group": "adult",
+        "description": "94 patients with osteoarthritis of the hip or knee."
+      },
+      "study_design": "Randomized placebo-controlled double-blind crossover trial, two 3-month periods",
+      "outcomes": [
+        {
+          "name": "WOMAC pain reduced versus placebo at 3 weeks (p<0.014)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Rescue medication use declined (p<0.027)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "WOMAC disability, stiffness and severity not altered at 3 weeks, decreased at 3 months",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Seed and shell powder at 5 g/day, not the fruit extract the labels print.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 90,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "5 g of the herbal remedy (seed and shell powder) daily for 3 months, then crossover.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "16195164",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rose_hips_41599942",
+      "components": [
+        "INGR_ROSE_HIPS"
+      ],
+      "source_pmids": [
+        "41599942"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rosa canina",
+        "plant_part": "fruit powder"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hip_or_knee_osteoarthritis",
+      "purpose": "joint_pain",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rose_hips_41599942",
+      "population": {
+        "age_group": "adult",
+        "description": "120 participants with hip or knee osteoarthritis in a multicenter trial, NCT01459939."
+      },
+      "study_design": "Secondary analysis of a multicenter double-blind randomized placebo-controlled trial",
+      "outcomes": [
+        {
+          "name": "WOMAC pain and function at 6 and 12 weeks: no statistically significant between-group difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Dose per kilogram correlated with improvement in the active group only",
+          "hierarchy": "post_hoc",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "Post-hoc reanalysis; the positive finding is a correlation, not a randomized comparison.",
+        "The abstract states no dose in mg or g.",
+        "Standardized powder, not the fruit extract the labels print.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Standardized Rosa canina powder at fixed doses; the amount is not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41599942",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "18384191": "Stored systematic review: powder exploratory studies, effect sizes not determined; no included trial list in the abstract.",
+    "38283449": "Systematic review of rosehip on LDL and glucose: mixed effects; no trial list or pooled estimate in the abstract.",
+    "26234471": "Powder, three capsules/day with no mg in the abstract; primary knee moment positive in 100 participants.",
+    "22166897": "40 g/day rose hip powder drink in 31 obese adults: food amount."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "25834460",
+      "title_fetched": "Daily intake of rosehip extract decreases abdominal visceral fat in preobese subjects: a randomized, double-blind, placebo-controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25834460/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42831964",
+      "title_fetched": "Effects of rosehip (Rosa canina) supplementation on orthostatic intolerance symptoms in patients with type 2 diabetes: a randomized double-blind placebo-controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42831964/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29024081",
+      "title_fetched": "The effect of Rosa (L. Rosa canina) on the incidence of urinary tract infection in the puerperium: A randomized placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29024081/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18407528",
+      "title_fetched": "Does the hip powder of Rosa canina (rosehip) reduce pain in osteoarthritis patients?--a meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18407528/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19818588",
+      "title_fetched": "Rose hip herbal remedy in patients with rheumatoid arthritis - a randomised controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19818588/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16195164",
+      "title_fetched": "A powder made from seeds and shells of a rose-hip subspecies (Rosa canina) reduces symptoms of knee and hip osteoarthritis: a randomized, double-blind, placebo-controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16195164/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41599942",
+      "title_fetched": "Using Dose-Response Correlation Re-Analyzing to Distinguish Placebo from Standardized Rose-Hip Powder (Lito) in a Clinical Trial on Osteoarthritis Where Data Initially Looked Identical.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41599942/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18384191",
+      "title_fetched": "A systematic review on the Rosa canina effect and efficacy profiles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18384191/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38283449",
+      "title_fetched": "Effects of Daily Intake of Rosehip Extract on Low-Density Lipoprotein Cholesterol and Blood Glucose Levels: A Systematic Review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38283449/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26234471",
+      "title_fetched": "Improved gait in persons with knee related mobility limitations by a rosehip food supplement: A randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26234471/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22166897",
+      "title_fetched": "Effects of rose hip intake on risk markers of type 2 diabetes and cardiovascular disease: a randomized, double-blind, cross-over investigation in obese persons.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22166897/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_ROSE_HIPS",
+    "standard_name": "Rose Hips",
+    "aliases": [
+      "Rose Hip Fruit Extract",
+      "Rosehip Fruit Extract",
+      "Rose Hips"
+    ],
+    "category": "anti_inflammatory",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "25834460",
+      "42831964",
+      "29024081",
+      "18407528",
+      "19818588",
+      "16195164",
+      "41599942"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive_weak: one small rosehip extract trial meets the bar on a surrogate (25834460); the osteoarthritis evidence is seed and shell powder at 5 g/day, manufacturer supported (18407528), and a 120-person powder trial showed no between-group difference (41599942). Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Abdominal fat area",
+      "Osteoarthritis pain",
+      "Rheumatoid arthritis disability"
+    ],
+    "health_goals_supported": [],
+    "notes": "Seven labels print rosehip fruit extract 500 mg and three print rose hips at 7.5 to 20 mg inside vitamin C products that carry an immune claim. The stored evidence is seed and shell powder at 5 g/day in osteoarthritis (16195164), a preparation and amount no label prints. One study of extract meets the reading bar: 32 preobese adults on 100 mg/day for 12 weeks, where abdominal fat area, a stated primary outcome, fell more than placebo while body fat percent only tended to (25834460). Other oral trials name no primary outcome in the abstract (42831964, 29024081), test powder (19818588, 18407528) or a 40 g food amount (22166897). A 120-person powder trial found no between-group difference in WOMAC (41599942). No immune trial was found in the search. Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Preobese adults (extract); adults with osteoarthritis or rheumatoid arthritis (powder)",
+      "supported_outcomes": [
+        "Abdominal fat area",
+        "Osteoarthritis pain",
+        "Rheumatoid arthritis disability"
+      ],
+      "source_pmids": [
+        "25834460",
+        "42831964",
+        "29024081",
+        "18407528",
+        "19818588",
+        "16195164",
+        "41599942"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Seven labels print rosehip fruit extract 500 mg and three print rose hips at 7.5 to 20 mg inside vitamin C products that carry an immune claim. The stored evidence is seed and shell powder at 5 g/day in osteoarthritis (16195164), a preparation and amount no label prints. One study of extract meets the reading bar: 32 preobese adults on 100 mg/day for 12 weeks, where abdominal fat area, a stated primary outcome, fell more than placebo while body fat percent only tended to (25834460). Other oral trials name no primary outcome in the abstract (42831964, 29024081), test powder (19818588, 18407528) or a 40 g food amount (22166897). A 120-person powder trial found no between-group difference in WOMAC (41599942). No immune trial was found in the search. Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25834460",
+        "title": "Daily intake of rosehip extract decreases abdominal visceral fat in preobese subjects: a randomized, double-blind, placebo-controlled clinical trial.",
+        "citation": "Diabetes, metabolic syndrome and obesity : targets and therapy (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25834460/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.2147/DMSO.S78623"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42831964",
+        "title": "Effects of rosehip (Rosa canina) supplementation on orthostatic intolerance symptoms in patients with type 2 diabetes: a randomized double-blind placebo-controlled clinical trial.",
+        "citation": "Daru : journal of Faculty of Pharmacy, Tehran University of Medical Sciences (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42831964/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/s40199-026-00657-3"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29024081",
+        "title": "The effect of Rosa (L. Rosa canina) on the incidence of urinary tract infection in the puerperium: A randomized placebo-controlled trial.",
+        "citation": "Phytotherapy research : PTR (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29024081/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1002/ptr.5950"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "18407528",
+        "title": "Does the hip powder of Rosa canina (rosehip) reduce pain in osteoarthritis patients?--a meta-analysis of randomized controlled trials.",
+        "citation": "Osteoarthritis and cartilage (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18407528/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Review"
+        ],
+        "doi": "10.1016/j.joca.2008.03.001"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19818588",
+        "title": "Rose hip herbal remedy in patients with rheumatoid arthritis - a randomised controlled trial.",
+        "citation": "Phytomedicine : international journal of phytotherapy and phytopharmacology (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19818588/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.phymed.2009.09.003"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16195164",
+        "title": "A powder made from seeds and shells of a rose-hip subspecies (Rosa canina) reduces symptoms of knee and hip osteoarthritis: a randomized, double-blind, placebo-controlled clinical trial.",
+        "citation": "Scandinavian journal of rheumatology (2005)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16195164/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/03009740510018624"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41599942",
+        "title": "Using Dose-Response Correlation Re-Analyzing to Distinguish Placebo from Standardized Rose-Hip Powder (Lito) in a Clinical Trial on Osteoarthritis Where Data Initially Looked Identical.",
+        "citation": "Nutrients (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41599942/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Multicenter Study"
+        ],
+        "doi": "10.3390/nu18020331"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: rose_hips no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

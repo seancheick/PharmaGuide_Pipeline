@@ -1,0 +1,684 @@
+{
+  "record_id": "INGR_CLA",
+  "labels": 76,
+  "stored_direction": "mixed",
+  "direction_as_read": "mixed: pooled trials show small body composition changes of doubtful clinical value; high-quality subgroups and several trials are null",
+  "decision": "closed_no_credit",
+  "summary": "The labels print conjugated linoleic acid or CLA at 500 mg to 4000 mg a serving; 4 print Clarinol and 5 print Tonalin. Pooled trials show small statistically significant changes (37671495, 17490954, 21990002), but the high-quality subgroup shows no fat-mass change (37671495), and the long-term review says the evidence does not convincingly show a clinically relevant effect (21990002). One 8-week crossover of Clarinol G-80 at 3.5 g/day was null (21593349). No abstract read names Tonalin as a tested material. Exercise performance is null in pooled data (36048508) and one trial (26003683). Abstracts only.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cla_37671495",
+      "components": [
+        "INGR_CLA"
+      ],
+      "source_pmids": [
+        "37671495"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "general_adult",
+      "purpose": "body_composition",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cla_37671495",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults; 70 RCTs with 96 effect sizes and 4159 participants, searched up to March 2022."
+      },
+      "study_design": "Systematic review and dose-response meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "Body mass WMD -0.35 and fat mass WMD -0.44 overall",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "High-quality subgroup: no change in fat mass or body fat percentage",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract.",
+        "The effects are small, and the abstract says weight loss may not reach clinical importance.",
+        "The abstract as read was cut near its end by the reading limit; the sentences used are complete.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several CLA doses; dose-response analysis; values not stated in the part of the abstract read.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "37671495",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cla_21990002",
+      "components": [
+        "INGR_CLA"
+      ],
+      "source_pmids": [
+        "21990002"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_obesity",
+      "purpose": "long_term_body_composition",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cla_21990002",
+      "population": {
+        "age_group": "adult",
+        "description": "Overweight and obese individuals; 7 of 15 identified RCTs lasting at least 6 months."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized clinical trials",
+      "outcomes": [
+        {
+          "name": "Weight -0.70 kg (95% CI -1.09 to -0.32) favouring CLA",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Fat -1.33 kg (95% CI -1.79 to -0.86) favouring CLA; authors say not convincingly clinically relevant",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Four of the included RCTs had serious flaws in reporting their methodology.",
+        "No primary outcome named in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Doses not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "21990002",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cla_17490954",
+      "components": [
+        "INGR_CLA"
+      ],
+      "source_pmids": [
+        "17490954"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "general_human",
+      "purpose": "fat_mass_reduction",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cla_17490954",
+      "population": {
+        "age_group": "adult",
+        "description": "Humans; 18 randomized double-blind placebo-controlled trials with validated body composition assessment."
+      },
+      "study_design": "Meta-analysis of randomized trials",
+      "outcomes": [
+        {
+          "name": "Fat mass -0.09 +/- 0.08 kg/wk against placebo at the median 3.2 g/day",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Dates to 2007; 3 of the 18 were single-isomer studies, and isomer comparisons were inconclusive.",
+        "Effect is adjusted to the median dose, not an assigned dose.",
+        "No primary outcome named in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          3200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Median 3.2 g/day across trials, adjusted estimate.",
+        "normalization": {
+          "basis": "Median dose across trials as printed in the abstract."
+        },
+        "source_provenance": {
+          "pmid": "17490954",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cla_32560516",
+      "components": [
+        "INGR_CLA"
+      ],
+      "source_pmids": [
+        "32560516"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_obesity_women",
+      "purpose": "body_composition",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cla_32560516",
+      "population": {
+        "age_group": "adult",
+        "description": "74 obese or overweight women."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Total body fat mass and percentage reduced against placebo (p = 0.0007, p = 0.0006)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract.",
+        "PMID 28071044 also reports 74 women on 3 g/day for 12 weeks and finds no effect on weight, BMI or waist; the abstracts don't say whether these are one trial, so they aren't counted as two independent results.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          3000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "CLA 3 g/day or placebo for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32560516",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cla_21593349",
+      "components": [
+        "INGR_CLA"
+      ],
+      "source_pmids": [
+        "21593349"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Clarinol G-80",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_hypercholesterolemia_men",
+      "purpose": "body_composition_and_lipids",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cla_21593349",
+      "population": {
+        "age_group": "adult",
+        "description": "27 overweight, borderline hypercholesterolemic men aged 18-60 y."
+      },
+      "study_design": "Double-blinded, 3-phase crossover trial, 8-week phases with 4-week washouts, safflower oil control",
+      "outcomes": [
+        {
+          "name": "Body weight, body composition and blood lipids unchanged against control",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract; 27 participants.",
+        "Also tested a c9,t11 isomer arm, which is not on these labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          3500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "3.5 g/day of Clarinol G-80, a 50:50 mixture of trans 10, cis 12 and cis 9, trans 11 CLA, for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21593349",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cla_26003683",
+      "components": [
+        "INGR_CLA"
+      ],
+      "source_pmids": [
+        "26003683"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "50:50 c9,t11 and t10,c12 CLA"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_young_men",
+      "purpose": "aerobic_capacity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cla_26003683",
+      "population": {
+        "age_group": "adult",
+        "description": "80 non-trained healthy young men."
+      },
+      "study_design": "Double-blind, placebo-controlled randomized trial, 8 weeks, soybean oil placebo",
+      "outcomes": [
+        {
+          "name": "VO2 max and time to exhaustion unchanged against placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Weight, BMI and waist circumference unchanged against placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          3200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "50:50 mixture of cis-9,trans-11 and trans-10,cis-12 CLA, 4 x 0.8 g/day for 8 weeks.",
+        "normalization": {
+          "basis": "4 x 0.8 g as printed in the abstract, summed to the daily amount."
+        },
+        "source_provenance": {
+          "pmid": "26003683",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "29672124": "Meta-analysis of 13 placebo-controlled trials in overweight and obese subjects; small changes, and its authors say efficacy was not clinically considerable. Overlaps the reviews used.",
+    "36048508": "Meta-analysis of CLA with exercise; no effect on body weight, exercise performance or lipids; lower body fat and insulin resistance. Cited in the summary, not extracted as a context.",
+    "32684362": "66 Chinese adults, 3.2 g/day for 12 weeks; trunk muscle mass rose, no primary named; both groups had lifestyle counseling.",
+    "28071044": "74 women, 3 g/day for 12 weeks; hip circumference lower, no effect on body weight, BMI or waist; may overlap 32560516.",
+    "31256599": "54 adults with class I obesity, 3000 mg/day for 3 months; results largely reported as within-group changes, no primary named.",
+    "36270407": "Meta-analysis of liver enzymes and MDA; for the clinician list.",
+    "42112190": "EFSA safety statement on Clarinol and Tonalin TG 80, not a trial; for the clinician list."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "37671495",
+      "title_fetched": "The effects of conjugated linoleic acid supplementation on anthropometrics and body composition indices in adults: a systematic review and dose-response meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37671495/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21990002",
+      "title_fetched": "The efficacy of long-term conjugated linoleic acid (CLA) supplementation on body composition in overweight and obese individuals: a systematic review and meta-analysis of randomized clinical trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21990002/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17490954",
+      "title_fetched": "Efficacy of conjugated linoleic acid for reducing fat mass: a meta-analysis in humans.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17490954/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32560516",
+      "title_fetched": "Body Fat Changes and Liver Safety in Obese and Overweight Women Supplemented with Conjugated Linoleic Acid: A 12-Week Randomised, Double-Blind, Placebo-Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32560516/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21593349",
+      "title_fetched": "Conjugated linoleic acid supplementation for 8 weeks does not affect body composition, lipid profile, or safety biomarkers in overweight, hyperlipidemic men.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21593349/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26003683",
+      "title_fetched": "Conjugated Linoleic Acid Supplementation has no Impact on Aerobic Capacity of Healthy Young Men.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26003683/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29672124",
+      "title_fetched": "The effects of supplementation with conjugated linoleic acid on anthropometric indices and body composition in overweight and obese subjects: A systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29672124/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36048508",
+      "title_fetched": "Effects of conjugated linoleic acid and exercise on body composition and obesity: a systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36048508/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32684362",
+      "title_fetched": "Conjugated linoleic acid supplements preserve muscle in high-body-fat adults: A double-blind, randomized, placebo trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32684362/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28071044",
+      "title_fetched": "Twelve weeks CLA supplementation decreases the hip circumference in overweight and obese women. A double-blind, randomized, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28071044/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31256599",
+      "title_fetched": "The Effect of Conjugated Linoleic Acid Supplementation on Body Composition, Serum Insulin and Leptin in Obese Adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31256599/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36270407",
+      "title_fetched": "The effects of conjugated linoleic acid supplementation on liver function enzymes and malondialdehyde in adults: A GRADE-assessed systematic review and dose-response meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36270407/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42112190",
+      "title_fetched": "Statement on the safety of the \"conjugated linoleic acid (CLA) rich oils\" Clarinol® and Tonalin® TG 80 as Novel Food ingredients.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42112190/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_CLA",
+    "standard_name": "Conjugated Linoleic Acid",
+    "aliases": [
+      "Conjugated Linoleic Acid",
+      "CLA",
+      "CLA Complex",
+      "Conjugated Linoleic Acid, Powder",
+      "Clarinol CLA",
+      "Clarinol CLA Complex",
+      "Tonalin",
+      "Tonalin CLA",
+      "Tonalin Conjugated Linoleic Acid Complex"
+    ],
+    "category": "metabolic_blood_sugar",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "37671495",
+      "21990002",
+      "17490954",
+      "32560516",
+      "21593349",
+      "26003683"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: pooled trials show small body composition changes of doubtful clinical value; high-quality subgroups and several trials are null. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "fat mass",
+      "body weight"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print conjugated linoleic acid or CLA at 500 mg to 4000 mg a serving; 4 print Clarinol and 5 print Tonalin. Pooled trials show small statistically significant changes (37671495, 17490954, 21990002), but the high-quality subgroup shows no fat-mass change (37671495), and the long-term review says the evidence does not convincingly show a clinically relevant effect (21990002). One 8-week crossover of Clarinol G-80 at 3.5 g/day was null (21593349). No abstract read names Tonalin as a tested material. Exercise performance is null in pooled data (36048508) and one trial (26003683). Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults, including overweight and obese adults",
+      "supported_outcomes": [
+        "fat mass",
+        "body weight"
+      ],
+      "source_pmids": [
+        "37671495",
+        "21990002",
+        "17490954",
+        "32560516",
+        "21593349",
+        "26003683"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print conjugated linoleic acid or CLA at 500 mg to 4000 mg a serving; 4 print Clarinol and 5 print Tonalin. Pooled trials show small statistically significant changes (37671495, 17490954, 21990002), but the high-quality subgroup shows no fat-mass change (37671495), and the long-term review says the evidence does not convincingly show a clinically relevant effect (21990002). One 8-week crossover of Clarinol G-80 at 3.5 g/day was null (21593349). No abstract read names Tonalin as a tested material. Exercise performance is null in pooled data (36048508) and one trial (26003683). Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37671495",
+        "title": "The effects of conjugated linoleic acid supplementation on anthropometrics and body composition indices in adults: a systematic review and dose-response meta-analysis.",
+        "citation": "The British journal of nutrition (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37671495/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Systematic Review",
+          "Journal Article"
+        ],
+        "doi": "10.1017/S0007114523001861"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21990002",
+        "title": "The efficacy of long-term conjugated linoleic acid (CLA) supplementation on body composition in overweight and obese individuals: a systematic review and meta-analysis of randomized clinical trials.",
+        "citation": "European journal of nutrition (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21990002/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1007/s00394-011-0253-9"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "17490954",
+        "title": "Efficacy of conjugated linoleic acid for reducing fat mass: a meta-analysis in humans.",
+        "citation": "The American journal of clinical nutrition (2007)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17490954/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1093/ajcn/85.5.1203"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32560516",
+        "title": "Body Fat Changes and Liver Safety in Obese and Overweight Women Supplemented with Conjugated Linoleic Acid: A 12-Week Randomised, Double-Blind, Placebo-Controlled Trial.",
+        "citation": "Nutrients (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32560516/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu12061811"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21593349",
+        "title": "Conjugated linoleic acid supplementation for 8 weeks does not affect body composition, lipid profile, or safety biomarkers in overweight, hyperlipidemic men.",
+        "citation": "The Journal of nutrition (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21593349/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.3945/jn.110.135087"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "26003683",
+        "title": "Conjugated Linoleic Acid Supplementation has no Impact on Aerobic Capacity of Healthy Young Men.",
+        "citation": "Lipids (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26003683/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1007/s11745-015-4031-y"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: cla effect_direction null, agent review; the contexts below are the reading behind it."
+}

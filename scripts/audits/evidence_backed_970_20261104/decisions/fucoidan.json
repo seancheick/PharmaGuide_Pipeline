@@ -1,0 +1,56 @@
+{
+ "canonical": "fucoidan",
+ "labels": 2,
+ "stored": "positive_moderate",
+ "as_read": "Small, inconsistent marker-level results across varied fucoidans; no abstract read names a primary outcome and none tests the labels' 70% fucoidan for an immune purpose.",
+ "route": "no_qualifying",
+ "quote": {
+  "pmid": "42806726",
+  "text": "Well-designed, adequately powered randomised controlled trials using well-characterised fucoidan and clinically meaningful outcomes are required to establish the clinical efficacy of fucoidan in humans."
+ },
+ "positive_named": [
+  "36307493",
+  "39645105",
+  "41124892",
+  "42488927"
+ ],
+ "proposed_decision_text": "These two labels print Fucoidan 70% 300 mg in the product name, with one row at 600 mg and no seaweed species in the rows, positioned for immune support. No study read meets the standard for what they print, and these are abstracts only. None of the abstracts names a primary outcome. Two small crossovers tested an Undaria pinnatifida fucoidan at 1 g/day in active adults: in 12 men, differences between supplement groups in immune markers were modest (38247026), and in 16 adults, few differences were seen between conditions, with higher interleukin-6 and interleukin-10 at 30 minutes after exercise and no effect on performance (37331983). In 20 patients with asthma on regular treatment, an oligo-fucoidan raised FEV1/FVC and lowered IL-8, with no dose in the abstract (36307493). In 70 people with prediabetes, 1000 mg daily lowered TNF-alpha, IL-6 and LPS compared with placebo, a marker result at a different purpose (39645105). An oligo-fucoidan improved grip strength in 60 older adults (41124892) and an Undaria fucoidan improved prostate symptom scores in 95 men (42488927), neither with a dose in the abstract nor an immune purpose. A 2026 systematic review calls the evidence limited, heterogeneous and inconsistent and says better trials are required (42806726).",
+ "studies_to_add": [
+  {
+   "pmid": "39645105",
+   "study_type": "rct",
+   "sample_size": 70,
+   "primary_endpoint": "not named in the abstract; glycolipid metabolism, systemic inflammation, gut microbiota",
+   "effect_direction": "positive",
+   "quote": "Following the 12-week intervention period, subjects consuming fucoidan exhibited a lower increase in GSP and a notable reduction in TNF-α, IL-6 and LPS compared to those receiving placebo (P < 0.05)."
+  },
+  {
+   "pmid": "38247026",
+   "study_type": "rct",
+   "sample_size": 12,
+   "primary_endpoint": "not named in the abstract; faecal and salivary mucosal immune markers",
+   "effect_direction": "null",
+   "quote": "Concentrations of salivary biomarkers varied significantly over time in response to acute exercise, however differences between supplementation groups were modest."
+  }
+ ],
+ "stop_list": [
+  "Fields can't express fucoidan species, molecular weight or purity; trials range across oligo-fucoidan and Undaria extract at >85%, labels print 70% with no species in the rows.",
+  "302659 printed no row under this canonical in labels.py, so its row name and amount weren't read. Its amount here comes only from the product name.",
+  "Fucoidan 1 g/day trials are about 1.7 to 3.3 times the labels' 600 and 300 mg, depending on the serving; serving counts weren't read beyond the row."
+ ],
+ "clinician_items": [
+  "36307493: creatinine fell significantly at weeks 12 and 24 in the fucoidan group, in asthma patients on regular treatment; abstract gives no explanation. No bleeding data in the abstracts read.",
+  "42806726: fucoidan consistently well tolerated, no serious adverse events, across five studies; abstract doesn't address anticoagulant interaction."
+ ],
+ "stored_rating_note": "Stored positive_moderate rests on a 20-patient adjunct asthma trial with no primary outcome in the abstract and an oligo-fucoidan dose stored as 4 x 550 mg twice daily from PMC9616827, which was not opened here. The 2026 systematic review (42806726) doesn't support moderate.",
+ "pmids_read": [
+  "36307493",
+  "42806726",
+  "38247026",
+  "37331983",
+  "39645105",
+  "41124892",
+  "42488927"
+ ],
+ "unread_notes": "Abstracts only. PMC9616827 for 36307493 is named in the stored record, not shown by pm.py, so not opened. Hits not read: 40732054 (Saccharina latissima, gut), 37548312 and 39010853 (H. pylori), 40960276 and 37822243 (cancer adjunct), 40868223 (fibroids pilot), 41249370 (blend), 42966155 (combination), 41826384, 42470849, and the rest of a 48-hit search beyond the 25 shown. One search used."
+}

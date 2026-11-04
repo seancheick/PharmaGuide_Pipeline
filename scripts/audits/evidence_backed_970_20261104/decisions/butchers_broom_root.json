@@ -1,0 +1,28 @@
+{
+ "canonical": "butchers_broom_root",
+ "labels": 4,
+ "stored": "positive_moderate",
+ "as_read": "One placebo RCT of a ruscus extract alone in women with chronic venous insufficiency is positive on its named primary outcome, but the abstract prints no mg dose; every other trial or meta-analysis read tested a combination.",
+ "route": "held",
+ "positive_named": [
+  "12040966"
+ ],
+ "settling_paper": "PMID 12040966 (2002, full text; pm.py showed no PMC id): the mg dose and extract ratio of Fagorutin Ruscus Kapseln. The abstract says only 'in the recommended daily dosage according to the German monograph'. With the dose it would be packet_no_credit; if the extract cannot be matched to root mg, no_qualifying.",
+ "stop_list": [
+  "Row canonical on all 4 labels is butcher_s_broom while the74 and the stored record use butchers_broom_root, so labels.py printed empty rows; rows read directly: Butcher's Broom 940 mg (251524, 77634) and 720 mg (317107, 327889). Main session may want to check this id drift.",
+  "Fields can't compare an extract at a monograph dose with labels printing root mg with no ratio; rows state no extract.",
+  "Label text: 251524 'Traditional leg vein support'; 327889 'Traditional herb with 720 mg butcher's broom root per 2-capsule serving'. Other label panels were only partly printed."
+ ],
+ "clinician_items": [
+  "12040966: of 48 adverse events across both groups, 22 were in the ruscus group and one was considered related to the study medication (unlikely); no pregnancy, bleeding, liver or interaction data in the abstract."
+ ],
+ "stored_rating_note": "Stored positive_moderate rests on this single trial, whose outcome is leg volume and symptoms in women; stored applicability already says the abstract does not give the amount. Abstract says 166 included, 148 in the intent-to-treat analysis, so the stored sample size is the analysed number.",
+ "pmids_read": [
+  "12040966",
+  "35893088",
+  "28225220",
+  "14612852",
+  "3048951"
+ ],
+ "unread_notes": "Abstracts only. Hits seen and not read: 10917578, 10811525 (open-label Cyclo 3 Fort vs hydroxyethyl rutoside), 8721977 (Cyclo 3 Fort lymphedema), 2668140, 3554800 (Ruscus with hesperidin methyl chalcone or trimethylhesperidin), 2227746 (topical), 22801396 (venoactive meta-analysis of ankle edema), 33983078, 40348378, 39419127, 38015554, 32052951, 31112025, 29063748, 20707877 (reviews). 28225220 abstract cut at 1300 characters; not read past that. Two searches used."
+}

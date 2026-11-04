@@ -1,0 +1,59 @@
+{
+  "canonical": "gamma_linolenic_acid",
+  "labels": 11,
+  "stored": "mixed",
+  "as_read": "Mixed: pooled benefit in rheumatoid arthritis with doses not stated, null in eczema, noninferior to alpha-lipoic acid on one of two primary outcomes in neuropathy, and a surrogate blood pressure result in one trial.",
+  "route": "packet_no_credit",
+  "positive_named": [
+    "31701699",
+    "21328257",
+    "33534427"
+  ],
+  "preparation_differences": [
+    "Borage named as source: 181851 (299 mg), 232718 (300 mg), 328569 (400 mg) in the row form; 223170 (480 mg), 218723 and 77205 (300 mg) through a separate borage oil row.",
+    "Mixed omega blend including borage oil: 304676, 327995, 332936 (MEGA 3/6/9, 165 mg, 10 actives, with omega-3 rows).",
+    "Safflower oil printed as source: 65773 (GNC, 250 mg). No study read tested GLA from safflower.",
+    "No source printed: 222789 (Complete Omega, 245 mg, 9 actives with EPA and DHA).",
+    "Amount: labels print 165 to 480 mg GLA. 31701699 used 320 mg/day (in range); 34606560 used 880 mg/day; 21816071 used 3.2 g/day; 21328257 states no dose."
+  ],
+  "product_state_note": "Four labels (222789, 304676, 327995, 332936) show evaluated_authority with ev 10.4 in census fix2. That credit comes from other rows on those labels, not from the GLA row; not traced further.",
+  "studies_to_add": [
+    {
+      "pmid": "31701699",
+      "study_type": "rct",
+      "sample_size": 100,
+      "primary_endpoint": "Mean changes in pain intensity on VAS and total symptom score over 12 weeks versus alpha-lipoic acid",
+      "effect_direction": "mixed",
+      "quote": "GLA treatment in patients with painful DPN was noninferior to ALA in terms of reducing pain intensity measured by the VAS over 12 weeks."
+    },
+    {
+      "pmid": "33534427",
+      "study_type": "rct",
+      "sample_size": 96,
+      "primary_endpoint": "not named in the abstract; blood pressure and body composition",
+      "effect_direction": "positive_weak",
+      "quote": "There was a significant reduction in the systolic and diastolic pressure as well as a significant change in waist-hip ratio (P < 0.01) in the drug group as compared with the placebo group."
+    }
+  ],
+  "stop_list": [
+    "fields can't express that 65773 prints a safflower source no study read tested",
+    "fields can't express that a GLA row and a separate borage oil row on 223170, 218723 and 77205 are one exposure"
+  ],
+  "clinician_items": [
+    "21328257: adverse events GLA 20% versus placebo 3%, not statistically different (relative risk 4.24, 95% CI 0.78 to 22.99).",
+    "23633319: 'In these studies, along with the placebos, EPO and BO have the same, fairly common, mild, transient adverse effects, which are mainly gastrointestinal.' The abstract adds that short-term studies do not examine long-term use, and a case report warned of a potential risk of inflammation, thrombosis and immunosuppression with evening primrose oil taken for more than one year; that part concerns evening primrose oil, not printed on these labels."
+  ],
+  "stored_rating_note": "Stored mixed stands. Stored applicability_decision calls the RA evidence moderate, which is the review's own wording; the abstract also says many trials are hampered by design flaws. 21652584 (same year) finds no consistent evidence for any substance reviewed and says the evidence does not support current use in RA, while noting positive borage trials.",
+  "cross_ingredient_note": "Same literature as decisions/borage_seed_oil.json (route packet_no_credit); routes agree. I did not cite that packet's 8214997, 14670885 or 17513402 because I did not read them in this session.",
+  "pmids_read": [
+    "21328257",
+    "23633319",
+    "34606560",
+    "33534427",
+    "21816071",
+    "31701699",
+    "38295879",
+    "21652584"
+  ],
+  "unread_notes": "Abstracts only. Two searches. The first (count 156) had a precedence fault in my query (OR GLA matched unrelated papers); only 34606560 and 33534427 were useful from it. The second (count 48) was properly bounded. Not opened, and not described here: 34200727 (mastalgia meta-analysis of evening primrose oil), 38360611, 40418820, 31738736, 23625331, 31076942. These are evening primrose oil or other purposes, not preparations these labels print, except that 34200727 could matter if the 218723 and 77205 'women' positioning were read as a breast pain purpose; it is not on the label data I saw."
+}

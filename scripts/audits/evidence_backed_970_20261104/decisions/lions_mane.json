@@ -1,0 +1,10 @@
+{"canonical":"lions_mane","labels":21,"stored":"positive_moderate","as_read":"Mixed: small positive cognition trials at higher powder amounts, null or task-specific acute results, and no chronic trial of an extract at the labels' amounts.","route":"packet_no_credit",
+"positive_named":["18844328","31413233","38004235","38140277","32581767"],
+"studies_to_add":[
+{"pmid":"31413233","study_type":"rct","primary_endpoint":"not named; MMSE, Benton and verbal paired-associate tests","effect_direction":"positive_weak","quote":"MMSE alone showed that oral intake of H. erinaceus significantly improved cognitive functions and prevented from the deterioration."},
+{"pmid":"38004235","study_type":"rct","sample_size":41,"primary_endpoint":"not named; cognition, stress and mood","effect_direction":"mixed","quote":"However, null and limited negative findings were also observed."},
+{"pmid":"40276537","study_type":"rct","sample_size":18,"primary_endpoint":"not named; composite cognition and mood","effect_direction":"null","quote":"In conclusion, acute consumption of H. erinaceus fruiting body did not demonstrate a significant overall improvement in cognitive performance and mood compared to the placebo and any benefits may be task or domain specific."}],
+"clinician_items":["32581767: four subjects dropped out of the study due to abdominal discomfort, nausea and skin rash.","40959699: the review lists stomach discomfort, headache and allergic reactions as potential side effects."],
+"stored_rating_note":"positive_moderate rests on one 30-person trial with a post-stopping fall in scores; too strong. Stored study_type and direction don't reflect the small size. The labels print extract or 1 g powder, not the tablets at 3 g/day.",
+"pmids_read":["18844328","31413233","38004235","40276537","38140277","32581767","20834180","40959699","36582308","42884628"],
+"unread_notes":"Abstracts only; 31413233 has no amount or sample size in the abstract, and its full text wasn't opened, so its dose is extraction_pending. 3932005 (1985, chronic atrophic gastritis) has no abstract on PubMed and is not cited. Other search listings were narrative reviews or blends."}

@@ -1,0 +1,171 @@
+{
+  "record_id": "INGR_LARCH_ARABINOGALACTAN",
+  "labels": 5,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "Weakly positive: a pilot of ResistAid 4.5 g/day raised vaccine antibody response for 2 of 7 pneumococcal subtypes, with no effect on other immune markers",
+  "decision": "closed_no_credit",
+  "summary": "Four labels print arabinogalactan 500 mg and one powder prints 2.4 g with other ingredients; two labels carry an immune purpose in the rows read. The one trial read, a Lonza-funded pilot of larch arabinogalactan ResistAid 4.5 g/day in 45 healthy adults, found a greater IgG response than placebo for 2 of 7 primary pneumococcal subtypes (20796315). The review of other trials isn't complete: the searches listed only the most recent hits, so older larch trials weren't seen.",
+  "question_for_clinician": "20796315 meets rule 2 for ResistAid at 4.5 g/day, with 2 of 7 primary antibody endpoints positive. Should these labels get credit, given they print arabinogalactan at 500 mg or 2.4 g with no brand or species, and the outcome is a surrogate from one sponsor-funded pilot? Agent recommendation: no credit in this review. Older larch trials weren't seen in the listed search hits and should be checked before a final ruling.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_larch_arabinogalactan_20796315",
+      "components": [
+        "INGR_LARCH_ARABINOGALACTAN"
+      ],
+      "source_pmids": [
+        "20796315"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "ResistAid",
+        "manufacturer": "Lonza"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "pneumococcal_vaccine_response",
+      "purpose": "immune_response_to_vaccine",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_larch_arabinogalactan_20796315",
+      "population": {
+        "age_group": "adult",
+        "description": "45 healthy adults not previously vaccinated against Streptococcus pneumoniae."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, parallel-group pilot study, 72 days, with vaccination at day 30",
+      "outcomes": [
+        {
+          "name": "Pneumococcal IgG, 7 subtypes: greater response than placebo in 2 subtypes (18C, 23F) at days 51 and 72; the other 5 did not reach significance",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Salivary IgA, white cell count, inflammatory cytokines and complement: no effect in the abstract",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Pilot study; the authors say no power calculation could be performed.",
+        "Seven primary endpoints; the passages read don't name a correction for that.",
+        "Lonza supplied the product and gave financial support for all aspects of the study.",
+        "A vaccine antibody response is a surrogate; no infection outcome.",
+        "Dose is 4.5 g/day; four labels print 500 mg and one prints 2.4 g with other ingredients.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          4.5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 72,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "powder"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "ResistAid 4.5 g powder mixed in a beverage once daily in the morning, or placebo, for 72 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "20796315",
+          "location": "Abstract and full text methods"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "39419484": "Arabinogalactan-rich hyuganatsu orange juice for bone turnover: a citrus source in a drink, not larch, and a purpose these labels don't carry.",
+    "41133092": "Ex vivo incubation of fecal samples from ten donors: no ingestion by people."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "20796315",
+      "title_fetched": "Proprietary arabinogalactan extract increases antibody response to the pneumonia vaccine: a randomized, double-blind, placebo-controlled, pilot study in healthy volunteers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20796315/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "39419484",
+      "title_fetched": "Citrus tamurana Hort. ex Tanaka (Hyuganatsu orange)-derived arabinogalactan suppresses bone turnover in postmenopausal women: A randomized placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39419484/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41133092",
+      "title_fetched": "Evaluating the prebiotic activity of arabinogalactan on the human gut microbiota using 16S rRNA gene sequencing and Raman-activated cell sorting.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41133092/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_LARCH_ARABINOGALACTAN",
+    "standard_name": "Larch Arabinogalactan",
+    "aliases": [
+      "Arabinogalactan"
+    ],
+    "category": "immune",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "20796315"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Weakly positive: a pilot of ResistAid 4.5 g/day raised vaccine antibody response for 2 of 7 pneumococcal subtypes, with no effect on other immune markers. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "pneumococcal IgG response"
+    ],
+    "health_goals_supported": [],
+    "notes": "Four labels print arabinogalactan 500 mg and one powder prints 2.4 g with other ingredients; two labels carry an immune purpose in the rows read. The one trial read, a Lonza-funded pilot of larch arabinogalactan ResistAid 4.5 g/day in 45 healthy adults, found a greater IgG response than placebo for 2 of 7 primary pneumococcal subtypes (20796315). The review of other trials isn't complete: the searches listed only the most recent hits, so older larch trials weren't seen.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy adults receiving pneumococcal vaccination",
+      "supported_outcomes": [
+        "pneumococcal IgG response"
+      ],
+      "source_pmids": [
+        "20796315"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Four labels print arabinogalactan 500 mg and one powder prints 2.4 g with other ingredients; two labels carry an immune purpose in the rows read. The one trial read, a Lonza-funded pilot of larch arabinogalactan ResistAid 4.5 g/day in 45 healthy adults, found a greater IgG response than placebo for 2 of 7 primary pneumococcal subtypes (20796315). The review of other trials isn't complete: the searches listed only the most recent hits, so older larch trials weren't seen. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20796315",
+        "title": "Proprietary arabinogalactan extract increases antibody response to the pneumonia vaccine: a randomized, double-blind, placebo-controlled, pilot study in healthy volunteers.",
+        "citation": "Nutrition journal (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20796315/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1186/1475-2891-9-32"
+      }
+    ]
+  }
+}

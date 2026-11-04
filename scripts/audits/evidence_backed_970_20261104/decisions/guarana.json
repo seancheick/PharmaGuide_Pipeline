@@ -1,0 +1,39 @@
+{
+ "canonical": "guarana",
+ "labels": 6,
+ "stored": "positive_moderate",
+ "as_read": "Conflicting evidence with no clear benefit: a less than trivial pooled cognitive effect, null and positive cancer fatigue meta-analyses, and small acute performance trials, with no guarana-alone metabolic trial found for what these labels print.",
+ "route": "null_literature",
+ "quote": {
+  "pmid": "36678305",
+  "text": "The ESs for guarana averaged across a variety of cognitive measures and outcome variables were less than trivial (Hedge’s g = 0.076, p = 0.14)."
+ },
+ "positive_named": [
+  "16533867",
+  "36146946",
+  "37898479",
+  "38958672",
+  "42646867",
+  "39536249"
+ ],
+ "proposed_decision_text": "The labels print guarana seed extract or guarana extract at 200 mg to 1000 mg with energy or metabolic purposes where a purpose is printed, and they print no caffeine content. A meta-analysis of eight placebo-controlled acute studies in 328 participants found an overall cognitive effect less than trivial, with a small faster response time and no change in accuracy (PMID 36678305). A double-blind crossover in 20 participants found 500 mg guarana did not influence cognitive performance or provide consistent mood benefit (PMID 38931247). For fatigue in cancer patients, one meta-analysis found guarana no better than placebo (PMID 34146166) while another found a benefit with high heterogeneity (PMID 39536249). A randomized trial of guarana 50 mg twice daily in 60 head and neck cancer patients on chemoradiotherapy concluded it was not beneficial for that population (PMID 27322597). Small acute trials report positive results: memory and alertness ratings at lower doses in 26 adults (PMID 16533867), reaction time and alertness in 25 participants on a weight-based dose (PMID 36146946), trail making and pre-exercise passing in 32 soccer players (PMID 42646867), a trivial to small cycling work gain with 500 mg containing 130 mg caffeine (PMID 37898479) and intermittent running after 3 g of seed powder (PMID 38958672). This reads as conflicting evidence with no clear benefit, and no guarana-alone metabolic trial was found for what these labels print. This is an abstracts-based review, with the open full text of 36678305 searched only for design terms.",
+ "clinician_items": [
+  "42646867: guarana 300 mg raised mean exercise heart rate and slowed early heart rate recovery in 32 soccer players.",
+  "37898479 and 38931247: 500 mg of guarana contained 130 mg caffeine, and the labels here print up to 1000 mg with no caffeine amount.",
+  "27322597: guarana 50 mg twice daily during chemoradiotherapy: significantly worse quality of life after the second chemotherapy cycle, worse weight loss after treatment and more analgesic use than placebo; authors propose it is not beneficial for this population."
+ ],
+ "stored_rating_note": "positive_moderate rests on 16533867 alone, 26 adults, acute doses of 37.5 mg to 300 mg of PC-102, with no primary outcome named; PubMed lists it as a controlled clinical trial and the abstract says counterbalanced. The null meta-analyses are not stored.",
+ "pmids_read": [
+  "16533867",
+  "36678305",
+  "39536249",
+  "34146166",
+  "37898479",
+  "38931247",
+  "36146946",
+  "42646867",
+  "38958672",
+  "27322597"
+ ],
+ "unread_notes": "Abstracts only, except a keyword search of 36678305's open full text, which found neither 'randomized' nor 'primary', so it isn't treated as a meta-analysis of RCTs with a named primary outcome. 37111219 and 37111221 are a comment and a reply on that meta-analysis with no abstract; not described. 25695932 is open label, nonrandomized, and not opened. Combination products (38367243, 37111136, 35458131, 30300016, 26612980, 23207186, 16418760, 17052970) not opened. Dose values for 36146946 are in mg/kg and remain in text."
+}

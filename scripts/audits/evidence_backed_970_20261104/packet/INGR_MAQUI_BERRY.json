@@ -1,0 +1,365 @@
+{
+  "record_id": "INGR_MAQUI_BERRY",
+  "labels": 1,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive but thin for tear production in one 74-person trial of the label's own preparation and dose, with no primary outcome named in the abstract",
+  "decision": "held: PMID 31193920 tests the label's preparation at the label's dose, and its abstract names no primary outcome, so rule 2 can't be met or ruled out without the full text",
+  "summary": "One label (DSLD 232478, Tear Support with MaquiBright 60 mg) prints MaquiBright Aristotelia chilensis berry standardized extract 60 mg as its only active. PMID 31193920 randomized 74 Japanese visual display workers to MaquiBright 60 mg or placebo for 4 weeks; Schirmer's test and some symptom scores favoured MaquiBright, with no primary outcome named in the abstract. PMID 37026311 (20 patients) points the same way at an unstated amount. PMID 42351960 calls the ocular evidence the most consistent for maqui while rating overall certainty moderate to very low. The stored record's trial, PMID 26400431, tested Delphinol at 162 mg anthocyanins three times daily for oxidative stress markers, reported as change from baseline, which is not this label's preparation amount or purpose. Abstracts only.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_maqui_berry_31193920",
+      "components": [
+        "INGR_MAQUI_BERRY"
+      ],
+      "source_pmids": [
+        "31193920"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "MaquiBright",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "eye_dryness_and_fatigue",
+      "purpose": "tear_production_and_dry_eye_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_maqui_berry_31193920",
+      "population": {
+        "age_group": "adult",
+        "description": "74 Japanese adults aged 30-60 with eye dryness, eye fatigue and at least 4 hours of visual display work daily."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, per the title; 4 weeks; 74 participants assigned equally to MaquiBright or placebo",
+      "outcomes": [
+        {
+          "name": "Schirmer's test lacrimal fluid production before visual display load, higher than placebo at 4 weeks (increase 6.4 mm, P = 0.005)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Eye fatigue and stiff shoulder symptoms by VAS, and bothersome ocular symptoms by DEQS, after visual display load, greater reduction than placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome, so hierarchy stays not_reported.",
+        "PubMed lists no publication type for this record; the randomized design comes from the title.",
+        "Tear break-up time, pupillary response and flicker test were measured; the abstract gives no result for them.",
+        "Single 4-week study in visual display workers.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          60
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "one capsule daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "MaquiBright 60 mg or placebo 0 mg, one capsule daily for 4 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31193920",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_maqui_berry_37026311",
+      "components": [
+        "INGR_MAQUI_BERRY"
+      ],
+      "source_pmids": [
+        "37026311"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "berry"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "dry_eye_disease",
+      "purpose": "dry_eye_signs_and_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_maqui_berry_37026311",
+      "population": {
+        "age_group": "adult",
+        "description": "20 patients with dry eye disease."
+      },
+      "study_design": "Randomized to maqui-berry extract or placebo; assessed before treatment and 2 months after; blinding not stated in the abstract",
+      "outcomes": [
+        {
+          "name": "OSDI score decrease and Schirmer's test 1 increase compared with placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Tear break-up time and corneal staining, no significant change between groups",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Tear inflammatory markers IL-1b, IL-6, IL-17A, TNFa and MMP9 lower, IL-10 higher, compared with placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and prints no extract amount; no dose invented here.",
+        "The abstract does not say the extract was MaquiBright.",
+        "20 patients only.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Maqui-berry extract or placebo for 2 months; amount not printed in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "37026311",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_maqui_berry_42351960",
+      "components": [
+        "INGR_MAQUI_BERRY"
+      ],
+      "source_pmids": [
+        "42351960"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "mixed_adult_populations",
+      "purpose": "oral_maqui_supplementation",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_maqui_berry_42351960",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in twelve clinical trials published between 2014 and 2023."
+      },
+      "study_design": "Systematic review following PRISMA 2020 with RoB 2/ROBINS-I and GRADE",
+      "outcomes": [
+        {
+          "name": "Ocular domain: tear production, dry eye symptoms and tear inflammatory markers improved",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Certainty of evidence ranged from moderate to very low; the authors ask for larger long-term randomized trials before definitive recommendations.",
+        "The abstract gives no pooled estimate and no certainty rating for the ocular domain alone.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several oral maqui regimens; not itemised in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "42351960",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "26400431": "Stored trial. Delphinol, 162 mg anthocyanins 3 times daily, oxidative stress primary outcome reported against baseline, no blood pressure, lipid or anthropometric differences at week 4; not the label's amount or purpose.",
+    "25208615": "Uncontrolled pilot of MaquiBright 30 mg and 60 mg in 13 volunteers; no placebo arm."
+  },
+  "stop_or_hold": "PMID 31193920 full text is needed for the primary outcome. PMID 37026311 also needs its amount before it can count.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "31193920",
+      "title_fetched": "Effects of MaquiBright® on improving eye dryness and fatigue in humans: A randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31193920/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37026311",
+      "title_fetched": "Effect of maqui-berry extract in dry eye disease - A clinical and molecular analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37026311/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42351960",
+      "title_fetched": "Clinical Evidence on the Health Effects of Aristotelia chilensis (Maqui Berry) Supplementation: A Systematic Review of Human Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42351960/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26400431",
+      "title_fetched": "A Randomized Clinical Trial Evaluating the Efficacy of an Anthocyanin-Maqui Berry Extract (Delphinol®) on Oxidative Stress Biomarkers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26400431/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25208615",
+      "title_fetched": "MaquiBright™ standardized maqui berry extract significantly increases tear fluid production and ameliorates dry eye-related symptoms in a clinical pilot trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25208615/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_MAQUI_BERRY",
+    "standard_name": "Maqui Berry (Aristotelia chilensis)",
+    "aliases": [
+      "MaquiBright Aristotelia chilensis berry standardized extract"
+    ],
+    "category": "antioxidant",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "31193920",
+      "37026311",
+      "42351960"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive but thin for tear production in one 74-person trial of the label's own preparation and dose, with no primary outcome named in the abstract. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "tear production by Schirmer's test",
+      "eye fatigue symptoms",
+      "dry eye quality of life score"
+    ],
+    "health_goals_supported": [],
+    "notes": "One label (DSLD 232478, Tear Support with MaquiBright 60 mg) prints MaquiBright Aristotelia chilensis berry standardized extract 60 mg as its only active. PMID 31193920 randomized 74 Japanese visual display workers to MaquiBright 60 mg or placebo for 4 weeks; Schirmer's test and some symptom scores favoured MaquiBright, with no primary outcome named in the abstract. PMID 37026311 (20 patients) points the same way at an unstated amount. PMID 42351960 calls the ocular evidence the most consistent for maqui while rating overall certainty moderate to very low. The stored record's trial, PMID 26400431, tested Delphinol at 162 mg anthocyanins three times daily for oxidative stress markers, reported as change from baseline, which is not this label's preparation amount or purpose. Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with eye dryness and fatigue doing daily visual display work",
+      "supported_outcomes": [
+        "tear production by Schirmer's test",
+        "eye fatigue symptoms",
+        "dry eye quality of life score"
+      ],
+      "source_pmids": [
+        "31193920",
+        "37026311",
+        "42351960"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "One label (DSLD 232478, Tear Support with MaquiBright 60 mg) prints MaquiBright Aristotelia chilensis berry standardized extract 60 mg as its only active. PMID 31193920 randomized 74 Japanese visual display workers to MaquiBright 60 mg or placebo for 4 weeks; Schirmer's test and some symptom scores favoured MaquiBright, with no primary outcome named in the abstract. PMID 37026311 (20 patients) points the same way at an unstated amount. PMID 42351960 calls the ocular evidence the most consistent for maqui while rating overall certainty moderate to very low. The stored record's trial, PMID 26400431, tested Delphinol at 162 mg anthocyanins three times daily for oxidative stress markers, reported as change from baseline, which is not this label's preparation amount or purpose. Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31193920",
+        "title": "Effects of MaquiBright® on improving eye dryness and fatigue in humans: A randomized, double-blind, placebo-controlled trial.",
+        "citation": "Journal of traditional and complementary medicine (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31193920/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1016/j.jtcme.2018.11.001"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37026311",
+        "title": "Effect of maqui-berry extract in dry eye disease - A clinical and molecular analysis.",
+        "citation": "Indian journal of ophthalmology (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37026311/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.4103/IJO.IJO_2909_22"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42351960",
+        "title": "Clinical Evidence on the Health Effects of Aristotelia chilensis (Maqui Berry) Supplementation: A Systematic Review of Human Trials.",
+        "citation": "Antioxidants (Basel, Switzerland) (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42351960/",
+        "publication_types": [
+          "Journal Article",
+          "Review"
+        ],
+        "doi": "10.3390/antiox15060654"
+      }
+    ]
+  }
+}

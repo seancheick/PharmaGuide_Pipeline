@@ -1,0 +1,189 @@
+{
+  "record_id": "INGR_AGMATINE",
+  "labels": 14,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "positive_weak: one 14-day placebo-controlled trial at 2670 mg/day in lumbar radiculopathy, with 38 of 99 randomized participants not analyzed; the rest is open-label",
+  "decision": "closed_no_credit",
+  "summary": "The labels print agmatine sulfate or agmatine at 600 to 1000 mg a serving, with no radiculopathy claim. One trial meets the reading bar: 2670 mg/day for 14 days in herniated lumbar disc radiculopathy, with named primary outcomes favoring agmatine sulfate over placebo (20447305). It is a single short trial, analyzed 61 of 99 randomized, and tested well above what these labels print. Other human studies read are an uncontrolled case series in small fiber neuropathy (32102167), a five-person open-label case series in OCD (41717561), and a combination product in spinal cord injury (42713349). Abstracts only.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_agmatine_20447305",
+      "components": [
+        "INGR_AGMATINE"
+      ],
+      "source_pmids": [
+        "20447305"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "agmatine sulfate"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "lumbar_disc_radiculopathy",
+      "purpose": "neuropathic_pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_agmatine_20447305",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with herniated lumbar disc-associated radiculopathy; 51 randomized to agmatine sulfate and 48 to placebo, 31 and 30 analyzed."
+      },
+      "study_design": "Open-label dose escalation for safety, followed by a randomized double-blind placebo-controlled trial",
+      "outcomes": [
+        {
+          "name": "Average pain measures improved 26.7% of baseline versus 6.0% with placebo (P <= 0.05)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Quality of life scores improved 70.8% of baseline versus 20.0% with placebo (P <= 0.05)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "One trial, one condition, 14 days of treatment.",
+        "99 randomized and 61 analyzed; the abstract does not explain the loss of 38 participants.",
+        "The abstract lists sensorimotor deficits as a primary measure and gives no result for it.",
+        "Studied 2670 mg/day; these labels print 600 to 1000 mg a serving and carry no radiculopathy claim.",
+        "Daily dose frequency isn't stated in the abstract; funding isn't stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          2670
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 14,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Agmatine sulfate 2.670 g/day for 14 days in the randomized phase; the earlier open-label phase escalated 1.335 to 3.560 g/day for 10 to 21 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "20447305",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "32102167": "Open-label case series, 12 recruited and 11 completed, no control group, painful small fiber neuropathy.",
+    "41717561": "Open-label case series of five adults with treatment-resistant OCD, added to SSRIs, no control group.",
+    "42713349": "Fixed combination of inosine monophosphate, agmatine sulphate and L-carnosine; not the ingredient alone.",
+    "24140462": "Rat safety study, not human."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "20447305",
+      "title_fetched": "Safety and Efficacy of Dietary Agmatine Sulfate in Lumbar Disc-associated Radiculopathy. An Open-label, Dose-escalating Study Followed by a Randomized, Double-blind, Placebo-controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20447305/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32102167",
+      "title_fetched": "Evidence for Dietary Agmatine Sulfate Effectiveness in Neuropathies Associated with Painful Small Fiber Neuropathy. A Pilot Open-Label Consecutive Case Series Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32102167/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41717561",
+      "title_fetched": "Agmatine augmentation in treatment-resistant obsessive-compulsive disorder: a prospective open-label case series.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41717561/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42713349",
+      "title_fetched": "Efficacy and Safety of Fixed Dose Combination of Inosine Monophosphate, Agmatine Sulphate, and L-Carnosine (CGXNW) as Add-on Therapy for the Management of Spinal Cord Injury - A Randomized Controlled Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42713349/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24140462",
+      "title_fetched": "Evidence for oral agmatine sulfate safety--a 95-day high dosage pilot study with rats.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24140462/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_AGMATINE",
+    "standard_name": "Agmatine",
+    "aliases": [
+      "Agmatine Sulfate",
+      "Agmatine"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "20447305"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive_weak: one 14-day placebo-controlled trial at 2670 mg/day in lumbar radiculopathy, with 38 of 99 randomized participants not analyzed; the rest is open-label. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "neuropathic pain",
+      "health-related quality of life"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print agmatine sulfate or agmatine at 600 to 1000 mg a serving, with no radiculopathy claim. One trial meets the reading bar: 2670 mg/day for 14 days in herniated lumbar disc radiculopathy, with named primary outcomes favoring agmatine sulfate over placebo (20447305). It is a single short trial, analyzed 61 of 99 randomized, and tested well above what these labels print. Other human studies read are an uncontrolled case series in small fiber neuropathy (32102167), a five-person open-label case series in OCD (41717561), and a combination product in spinal cord injury (42713349). Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with herniated lumbar disc-associated radiculopathy",
+      "supported_outcomes": [
+        "neuropathic pain",
+        "health-related quality of life"
+      ],
+      "source_pmids": [
+        "20447305"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print agmatine sulfate or agmatine at 600 to 1000 mg a serving, with no radiculopathy claim. One trial meets the reading bar: 2670 mg/day for 14 days in herniated lumbar disc radiculopathy, with named primary outcomes favoring agmatine sulfate over placebo (20447305). It is a single short trial, analyzed 61 of 99 randomized, and tested well above what these labels print. Other human studies read are an uncontrolled case series in small fiber neuropathy (32102167), a five-person open-label case series in OCD (41717561), and a combination product in spinal cord injury (42713349). Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20447305",
+        "title": "Safety and Efficacy of Dietary Agmatine Sulfate in Lumbar Disc-associated Radiculopathy. An Open-label, Dose-escalating Study Followed by a Randomized, Double-blind, Placebo-controlled Trial.",
+        "citation": "Pain medicine (Malden, Mass.) (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20447305/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1111/j.1526-4637.2010.00808.x"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: agmatine no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}
