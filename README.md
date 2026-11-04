@@ -81,9 +81,9 @@ display those audit numbers as product quality.
 
 A product with a banned substance is **always** BLOCKED -- no amount of quality points overrides safety.
 
-The legacy /80 scorer still runs for review queues, detail-blob scaffolding, and
-audit compatibility. It is not the shipped score contract; final exports do not
-contain `score_quality_80` or `score_display_80`.
+V4 is the production scoring engine. The physical schema 2 catalog retains
+whole-number compatibility mirrors. The Flutter projection reads
+`quality_score_v4_100` and leaves those mirrors out.
 
 ---
 
