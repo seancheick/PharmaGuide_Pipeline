@@ -64,6 +64,29 @@ Evidence assesses the scientific support applicable to the principal active ingr
 - [ ] Finish the remaining image delivery source checks before Sean starts the next run. The publisher uses the image hash as its object name and verifies an existing object before reuse. The existing Flutter image resolver supports the new and older paths.
 - [ ] Verify the rebuilt catalog and phone after the run. Recheck the 42 Product Safety pages, including the submitted product whose citations needed the exporter fix. Repeat the rule gate against the final artifact, refresh alert matching, and verify the signed phone build. The 74-ingredient research draft remains deferred.
 
+### November 4 — ingredient Evidence independent of marketing claims
+
+Sean approved a catalog-wide change. Evidence evaluates the qualified research for the principal actives in the verified formula. Manufacturer benefit claims are assessed separately against those findings. Adding, removing or changing a benefit claim on an otherwise identical product must not change Evidence points. Preserve real differences in composition, preparation, intended population and studied context. Label directions supply exposure for Dose and Safety. They do not establish efficacy.
+
+Owner: `scoring_input_contract.py` for source-backed Evidence subjects and roles, `clinical_applicability.py` for research qualification and claim alignment, `evidence_resolver.py` for the canonical Evidence decision, and the existing scorer, export and app consumers. Reuse those owners and the existing registries.
+
+- [ ] Pin identical-formula tests with absent, aligned, unrelated and unclassified marketing copy. Test multi-claim and multi-active attribution, genuine population/form exclusions, completed no-credit reviews and earned credit on mixed formulas. Run through raw-label intake, scoring and export. Include Thorne 336362, claim-free vitamin C, CoQ10, EPA/DHA, protein, probiotics and botanicals, with coverage of all seven modules.
+- [ ] Separate ingredient research qualification from claim substantiation at the existing applicability owner. Audit claim-based exclusions, secondary purpose checks, role promotion and module routing for indirect marketing gates. Keep source, approval, preparation, studied outcome and population constraints. Dose and Safety retain their existing owners. Keep claim results scoped to the benefit assessed.
+- [ ] Replay the catalog using identical label facts and changed marketing, and compare Evidence points, source and reviewed context selection. Trace old false-zero products by cause. Require an explicit reason where qualified positive research cannot contribute, and preserve research scope in the app. Use the same tests for new labels.
+- [ ] Eliminate avoidable partials. Close a finished review with its actual conclusion, including no qualifying support. Repair identity and matching defects. Make exceptional unresolved material facts specific to the affected check while preserving verified product information. Count closures and remaining reasons from the same candidate.
+- [ ] Treat #374 as a Thorne regression and vocabulary correction. Its green checks do not establish claim independence. Require the broader invariant and catalog/app proof before calling Evidence complete.
+
+### November 4 — catalog-wide assessment completion
+
+Owner: the existing Evidence resolver, assessment readiness and scored artifact, with export and app consumers. Use the recorded ingredient assessments and release blockers to rank work. Keep clinical claims, nutritional roles, dose and profile safety separate.
+
+- [ ] Integrate #372 after its exact-head gates. The reviewed findings can close at no credit. Unresolved material findings remain pending and earned credit is preserved.
+- [ ] Recount against one identified scored/export candidate. The November 4 local scored census found 6,459 partial of 15,447, with Evidence the only recorded blocker for 6,099. The saved catalog had 6,543 partial. Keep the two baselines separate.
+- [ ] Resolve recurring Evidence decisions in batches by ingredient, preparation and use. Initial upper bounds from the stored rows are 174 BCAA, 170 EPA/DHA, 153 L-carnitine, 111 elderberry and 63 TMG/betaine. These count labels with no recorded blocker outside that group. They are not expected score changes or promises of closure. Recount on main after #372, then measure distinct labels actually closed per batch and rerank.
+- [ ] Review probiotics by strain and resolve label-specific dose and identity cases by source. Separate unread text from genuine nondisclosure. A material unknown must say which check it limits. Eight intentionally non-scoreable products and one remediation case appeared partial with no release blocker in the baseline. Verify their specific disposition and app wording.
+- [ ] Make the consumer explanation specific to the affected check on Product Detail and Compare. Lead with verified label contents, directions and warnings. Keep a finished no-credit assessment, an open review and an intentional non-scoreable decision distinct. Preserve applicable credit when a supporting ingredient is unresolved.
+- [ ] Track products completed, remaining causes, any intentional limitation and measured numerical/safety changes. Use affected labels plus unaffected controls. Close remaining actionable gaps before the final candidate acceptance.
+
 ### November 3 — required product-wide Evidence correctness, after Claude's current batch
 
 **Sean's explicit instruction:** missing research, unfinished processing or incorrect matching must never look like a scientific conclusion that a product has no evidence. This applies to every product and all seven scoring modules. Start after Claude finishes the active correctness batch; reconcile what that batch already fixes, then complete the remaining work **before numerical calibration**. This requirement is accepted, not another policy question to reopen.
