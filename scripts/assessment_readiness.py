@@ -1749,26 +1749,69 @@ def _positive(value: Any) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0
 
 
-def _hidden_upper_limit_rows(rows: list, hidden: list) -> list:
+def _hidden_upper_limit_rows(rows: list, hidden: list, servings: Any) -> list:
     """Hidden rows of a nutrient with an upper limit that no other row on the label prints."""
     from evidence_resolver import rda_ul_reference_entry
     printed = {row.get("canonical_id") for row in rows if has_source_printed_amount(row)}
-    return [row for row in hidden if row.get("canonical_id") and row.get("canonical_id") not in printed
-            and _safe_dict(rda_ul_reference_entry(canonical_id=row["canonical_id"], name=row.get("name"))).get("highest_ul")]
+    unknown = [row for row in hidden if row.get("canonical_id") and row.get("canonical_id") not in printed
+               and not _carotene_outside_the_preformed_limit(row)
+               and _safe_dict(rda_ul_reference_entry(canonical_id=row["canonical_id"], name=row.get("name"))).get("highest_ul")]
+    return [row for row in unknown if not _printed_percent_rules_out_an_excess(row, unknown, servings)]
+
+
+def _carotene_outside_the_preformed_limit(row: Mapping[str, Any]) -> bool:
+    """The vitamin A limit covers preformed vitamin A only (rda_optimal_uls.json)."""
+    name = str(row.get("name") or "").lower()
+    return row.get("canonical_id") == "vitamin_a" and "caroten" in name and not re.search(r"retin|palmitate|acetate", name)
+
+
+def _adult_percent(row: Mapping[str, Any]) -> float | None:
+    """The row's largest printed %DV, when every percent it prints is on the adult DV."""
+    variants = [variant for variant in _safe_list(row.get("quantityVariants")) if _positive(_safe_dict(variant).get("daily_value"))]
+    groups = {row.get("daily_value_target_group"), *(variant.get("daily_value_target_group") for variant in variants)}
+    percents = [value for value in (row.get("dailyValue"), *(variant["daily_value"] for variant in variants)) if _positive(value)]
+    return max(percents) if percents and groups == {"adult_4_plus"} else None
+
+
+def _printed_percent_rules_out_an_excess(row: Mapping[str, Any], unknown: list, servings: Any) -> bool:
+    """A printed %DV bounds the amount: under the limit rules out an excess, at or over it
+    shows nothing, so the row stays unknown (integrator's ruling, November 4). The bound
+    uses the higher of the current and pre-2016 DV. It answers this check only: the row
+    stays dose-less, and Dose, the score and warning amounts never read it. A limit scoped
+    to one form holds too, since that form's share can't exceed the whole.
+    """
+    from evidence_resolver import rda_ul_reference_entry
+    from rda_ul_calculator import UL_SCREENING_POPULATIONS
+    from scoring_reference_resolver import upper_limit_bound_dv
+    canonical = row["canonical_id"]
+    dv = upper_limit_bound_dv(canonical)
+    entry = _safe_dict(rda_ul_reference_entry(canonical_id=canonical, name=row.get("name")))
+    if not dv or dv.get("unit") != entry.get("unit") or not _positive(servings):
+        return False
+    percents = [_adult_percent(other) for other in unknown if other.get("canonical_id") == canonical]
+    adult = UL_SCREENING_POPULATIONS["general_adult"]
+    limits = [item["ul"] for item in _safe_list(entry.get("data"))
+              if item.get("group") in adult["groups"] and item.get("age_range") in adult["ages"] and _positive(item.get("ul"))]
+    if not limits or None in percents:
+        return False
+    return sum(percents) / 100 * dv["bound"] * servings < min(limits)
+
+
+def _upper_limit_rows_unknown(product: Mapping[str, Any]) -> list:
+    rows = active_label_rows(product.get("activeIngredients"))
+    return _hidden_upper_limit_rows(rows, _hidden_amount_rows(rows), _safe_dict(product.get("serving_basis")).get("max_servings_per_day"))
 
 
 def upper_limit_amounts_unknown(product: Mapping[str, Any]) -> int:
     """Upper-limit checks the label's missing amount stops. An unknown amount is never
     a zero, so no all-clear can stand (Sean, November 4). Status alone: quality, a
     found caution and the safety outcome don't read this."""
-    rows = active_label_rows(product.get("activeIngredients"))
-    return len(_hidden_upper_limit_rows(rows, _hidden_amount_rows(rows)))
+    return len(_upper_limit_rows_unknown(product))
 
 
 def upper_limit_amounts_undisclosed(product: Mapping[str, Any]) -> int:
     """Those checks where the label prints nothing for the nutrient, not even a percent."""
-    rows = active_label_rows(product.get("activeIngredients"))
-    return sum(not _positive(row.get("dailyValue")) for row in _hidden_upper_limit_rows(rows, _hidden_amount_rows(rows)))
+    return sum(not _positive(row.get("dailyValue")) for row in _upper_limit_rows_unknown(product))
 
 
 def _hidden_amount_rows(rows: list) -> list:
@@ -1780,10 +1823,10 @@ def _hidden_amount_rows(rows: list) -> list:
 
 
 def _safety_check_needs_a_hidden_amount(product: Mapping[str, Any], rows: list, hidden: list) -> bool:
-    if _hidden_upper_limit_rows(rows, hidden):
+    servings = _safe_dict(product.get("serving_basis")).get("max_servings_per_day")
+    if _hidden_upper_limit_rows(rows, hidden, servings):
         return True
     by_path = {row.get("raw_source_path"): row for row in rows}
-    servings = _safe_dict(product.get("serving_basis")).get("max_servings_per_day")
     for alert in _safe_list(_safe_dict(product.get("interaction_profile")).get("ingredient_alerts")):
         canonical = _safe_dict(_safe_dict(alert).get("subject_ref")).get("canonical_id")
         for hit in [*_safe_list(alert.get("condition_hits")), *_safe_list(alert.get("drug_class_hits"))]:

@@ -8825,6 +8825,7 @@ class EnhancedDSLDNormalizer:
             "quantity": quantity,
             "unit": unit,
             "dailyValue": daily_value,
+            "daily_value_target_group": self._daily_value_target_group_from_variants(quantity_variants),
             # P0.3: Preserve all quantity variants for multi-serving products
             "quantityVariants": quantity_variants if len(quantity_variants) > 1 else None,
 
