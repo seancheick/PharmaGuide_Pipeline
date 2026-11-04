@@ -19,7 +19,7 @@ FINISHED = {
     "product_safety_status": "no_known_catalog_concern",
     "safety_gate": {"ingredient_assessment_complete": True, "ingredient_assessment_errors": []},
     "dose_safety": {"state_counts": {"material_but_unresolved": 0}},
-    "release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": 0},
+    "release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": 0, "upper_limit_amounts_unknown": 0},
     "evidence_result_state": "evaluated_applicable",
 }
 
@@ -29,7 +29,7 @@ def _status(**changes):
 
 
 def _open(*blockers):
-    return {"is_complete": False, "blockers": list(blockers), "unread_printed_nutrient_amounts": 0}
+    return {"is_complete": False, "blockers": list(blockers), "unread_printed_nutrient_amounts": 0, "upper_limit_amounts_unknown": 0}
 
 
 def test_finished_checks_are_complete():
@@ -110,8 +110,11 @@ def test_any_other_blocker_is_incomplete(blocker):
     {"release": {"is_complete": False, "blockers": "evidence_assessment_incomplete"}},
     {"release": {"is_complete": False, "blockers": [None]}},
     {"release": {"is_complete": True, "blockers": []}},
-    {"release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": 2}},
-    {"release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": None}},
+    {"release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": 2, "upper_limit_amounts_unknown": 0}},
+    {"release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": None, "upper_limit_amounts_unknown": 0}},
+    {"release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": 0, "upper_limit_amounts_unknown": 1}},
+    {"release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": 0, "upper_limit_amounts_unknown": None}},
+    {"release": {"is_complete": True, "blockers": [], "unread_printed_nutrient_amounts": 0}},
 ])
 def test_anything_unknown_or_unfinished_fails_closed(changes):
     assert _status(**changes) == "incomplete"
@@ -213,6 +216,27 @@ def test_an_unread_nutrient_on_a_sports_label_is_incomplete_without_holding_its_
     assert release["unread_printed_nutrient_amounts"] > 0
     assert release["unfinished_source_assessment"] is None
     assert scored["safety_assessment_status"] == "incomplete"
+
+
+@pytest.mark.parametrize("label, unknown, score", [
+    ("a9_upper_limit_293959_raw.json", 1, 61.5),  # Vitamin E, nothing printed.
+    ("a9_upper_limit_16725_raw.json", 4, 60.3),   # Iron and three more, %DV with no amount the check can read.
+])
+def test_an_upper_limit_nutrient_with_no_amount_withholds_only_the_all_clear(pipeline, label, unknown, score):
+    """An unknown amount is never a zero (Sean, November 4). Quality and the outcome stand."""
+    scored = _score(pipeline, label)
+    assert scored["assessment_readiness"]["release_assessment"]["upper_limit_amounts_unknown"] == unknown
+    assert scored["safety_assessment_status"] == "incomplete"
+    assert scored["product_safety_status"] == "no_known_catalog_concern"
+    assert scored["quality_assessment_status"] == "complete"
+    assert scored["quality_score_v4_100"] == score
+
+
+def test_a_printed_zero_is_an_amount_the_upper_limit_check_can_read(pipeline):
+    """294543 prints Vitamin D 0 mcg, so nothing is unknown."""
+    scored = _score(pipeline, "a9_upper_limit_294543_raw.json")
+    assert scored["assessment_readiness"]["release_assessment"]["upper_limit_amounts_unknown"] == 0
+    assert scored["safety_assessment_status"] == "complete"
 
 
 def test_a_ban_stays_blocked_with_no_score(pipeline):
