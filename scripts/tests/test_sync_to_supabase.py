@@ -1365,34 +1365,21 @@ def test_a_malformed_image_path_is_refused(tmp_path, remote_path):
     assert result['failed'] == 1
 
 
-def test_an_image_already_there_is_not_downloaded_or_sent_again(tmp_path):
-    entry = _hash_image(tmp_path, '1.webp', b'one')
-
-    def refuse(*_args):
-        raise AssertionError('thousands of images are not re-downloaded on every run')
-
+@pytest.mark.parametrize(
+    ("remote_bytes", "skipped", "failed"),
+    [(b"one", 1, 0), (b"two", 0, 1), (b"on", 0, 1)],
+)
+def test_existing_hash_named_image_requires_matching_bytes(tmp_path, remote_bytes, skipped, failed):
+    entry = _hash_image(tmp_path, "1.webp", b"one")
     result, uploads, _listed = _upload_hash_images(
-        tmp_path, {'1': entry},
+        tmp_path, {"1": entry},
         listing=lambda _prefix: [{
-            'name': f"{entry['sha256']}.webp", 'metadata': {'size': len(b'one')},
+            "name": f"{entry['sha256']}.webp", "metadata": {"size": len(remote_bytes)},
         }],
-        download_fn=refuse,
+        download_fn=lambda *_args: remote_bytes,
     )
     assert uploads == []
-    assert result == {'uploaded': 0, 'skipped': 1, 'failed': 0}
-
-
-def test_a_hash_named_object_of_the_wrong_size_is_never_replaced(tmp_path):
-    entry = _hash_image(tmp_path, '1.webp', b'one')
-    result, uploads, _listed = _upload_hash_images(
-        tmp_path, {'1': entry},
-        listing=lambda _prefix: [{
-            'name': f"{entry['sha256']}.webp", 'metadata': {'size': 2},
-        }],
-        download_fn=lambda *_args: b'on',
-    )
-    assert uploads == []
-    assert result == {'uploaded': 0, 'skipped': 0, 'failed': 1}
+    assert result == {"uploaded": 0, "skipped": skipped, "failed": failed}
 
 
 def _catalog_with_images(tmp_path, rows):

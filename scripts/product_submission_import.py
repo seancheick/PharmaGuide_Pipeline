@@ -1728,19 +1728,19 @@ def copy_approved_product_images(
                 )
                 continue
             indexed = image_index.get(product_id)
-            local_path = (
-                product_image_remote_path(
-                    hashlib.sha256(webp_path.read_bytes()).hexdigest()
-                )
+            local_hash = (
+                hashlib.sha256(webp_path.read_bytes()).hexdigest()
                 if webp_path.is_file()
                 else None
             )
+            local_path = product_image_remote_path(local_hash) if local_hash else None
             if (
                 local_path is not None
                 and existing[0] == f"product-images/{local_path}"
                 and isinstance(indexed, dict)
                 and indexed.get("filename") == filename
                 and indexed.get("remote_path") == local_path
+                and indexed.get("sha256") == local_hash
                 and receipt.get("image_approval_revision")
                 == receipt.get("approval_revision")
             ):

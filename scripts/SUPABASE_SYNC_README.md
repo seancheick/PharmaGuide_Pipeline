@@ -152,7 +152,7 @@ Every sync publishes the catalog twice in `v{version}/`: the plain file and its 
 
 - **Only hash-named objects get the one-year cache.** The name can't come to mean anything else, and a corrected picture gets a new name. They're create-only, and products with identical pictures share one object.
 - **Older paths keep resolving, so they are never deleted.** The bundled catalog points at root names such as `1024.webp`, and earlier catalogs may point at `v<version>/`. Those keep the storage default (`no-cache`), and no code removes anything from this bucket.
-- **Sync refuses a catalog that would show the wrong picture.** Before any write, each row with an index entry must name that entry's object, and a row naming a hash must have an entry. Each image's bytes must then hash to its own path. A rollback keeps hash-named paths, and moves only version-folder paths.
+- **Sync refuses a catalog that would show the wrong picture.** Before any write, each row with an index entry must name that entry's object, and a row naming a hash must have an entry. Before activation, each image's bytes must hash to its own path. An existing object is verified by its bytes before it is reused. A rollback keeps hash-named paths, and moves only version-folder paths.
 - **An image already uploaded** is recognized by its name and size, so a run doesn't download thousands of images to re-check them.
 
 ### Version checking

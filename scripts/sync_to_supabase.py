@@ -44,6 +44,7 @@ from supabase_client import (
     CACHE_CONTROL_IMMUTABLE,
     STORAGE_BUCKET,
     core_db_remote_path,
+    is_hash_named_product_image,
     product_image_remote_path,
 )
 from audit_source_of_truth_contract import check_v4_pillar_contract
@@ -943,7 +944,6 @@ def validate_build_output(build_dir, manifest):
 # ---------------------------------------------------------------------------
 
 PRODUCT_IMAGE_BUCKET = "product-images"
-PRODUCT_IMAGE_HASH_PREFIX = "sha256/"
 
 
 def load_product_image_index(build_dir):
@@ -956,10 +956,6 @@ def load_product_image_index(build_dir):
             with open(candidate) as f:
                 return json.load(f), os.path.dirname(candidate)
     return None, None
-
-
-def _is_hash_named_image(remote_path):
-    return isinstance(remote_path, str) and remote_path.startswith(PRODUCT_IMAGE_HASH_PREFIX)
 
 
 def validate_product_image_bindings(db_path, index):
@@ -988,7 +984,7 @@ def validate_product_image_bindings(db_path, index):
         if declared is not None:
             if url != f"{prefix}{declared}":
                 mismatched.append(str(dsld_id))
-        elif url.startswith(f"{prefix}{PRODUCT_IMAGE_HASH_PREFIX}"):
+        elif url.startswith(prefix) and is_hash_named_product_image(url.removeprefix(prefix)):
             mismatched.append(str(dsld_id))
     if mismatched:
         source = "the product image index" if index else "no product image index"
@@ -1009,7 +1005,7 @@ def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retri
                 content_type="image/webp",
                 upsert=not immutable,
                 cache_control=(
-                    CACHE_CONTROL_IMMUTABLE if _is_hash_named_image(remote_path) else None
+                    CACHE_CONTROL_IMMUTABLE if is_hash_named_product_image(remote_path) else None
                 ),
             ),
             retries=retries,
@@ -1022,13 +1018,9 @@ def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retri
 
 def _upload_image_task_with_factory(client_getter, upload_fn, bucket, local_path, remote_path,
                                     retries, base_delay, download_fn=None,
-                                    remote_exists=False, immutable=False, remote_size=0):
+                                    remote_exists=False, immutable=False):
     client = client_getter()
     if remote_exists:
-        # The name is the hash of what was uploaded there, create-only. Re-downloading
-        # thousands of images on every run would prove nothing the size doesn't.
-        if _is_hash_named_image(remote_path) and remote_size == os.path.getsize(local_path):
-            return "skipped"
         if download_fn is None:
             if immutable:
                 return {
@@ -1099,7 +1091,7 @@ def upload_product_images(
         local_path = os.path.join(image_dir, filename)
         declared_remote_path = entry.get("remote_path")
         remote_path = declared_remote_path or filename
-        if _is_hash_named_image(remote_path):
+        if is_hash_named_product_image(remote_path):
             if not os.path.isfile(local_path):
                 errors.append({"remote_path": remote_path, "error": "Indexed local image is missing"})
                 continue
@@ -1133,7 +1125,7 @@ def upload_product_images(
         uploads.append({"local_path": local_path, "remote_path": remote_path})
 
     # Discover existing remote images to skip re-uploads
-    existing_sizes = {}
+    existing_paths = set()
     try:
         for image_prefix in sorted({os.path.dirname(u["remote_path"]) for u in uploads}):
             page_size = 1000
@@ -1145,11 +1137,9 @@ def upload_product_images(
                 )
                 for item in page or []:
                     name = item.get("name", "")
-                    metadata = item.get("metadata", {}) or {}
-                    size = metadata.get("size") or metadata.get("contentLength") or 0
                     if name:
                         remote_name = f"{image_prefix}/{name}" if image_prefix else name
-                        existing_sizes[remote_name] = int(size) if size else 0
+                        existing_paths.add(remote_name)
                 if not page:
                     break
                 offset += len(page)
@@ -1169,9 +1159,8 @@ def upload_product_images(
             return _upload_image_task_with_factory(
                 client_getter, upload_fn, PRODUCT_IMAGE_BUCKET,
                 upload["local_path"], upload["remote_path"], retries, base_delay,
-                download_fn, upload["remote_path"] in existing_sizes,
-                catalog_version is not None or _is_hash_named_image(upload["remote_path"]),
-                existing_sizes.get(upload["remote_path"], 0),
+                download_fn, upload["remote_path"] in existing_paths,
+                catalog_version is not None or is_hash_named_product_image(upload["remote_path"]),
             )
         for error in _bounded_results(executor, one, uploads, max_workers * 2):
             if error == "skipped":

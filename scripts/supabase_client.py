@@ -74,6 +74,13 @@ def core_db_compressed_remote_path(db_version):
     return f"{core_db_remote_path(db_version)}.gz"
 
 
+PRODUCT_IMAGE_HASH_PREFIX = "sha256/"
+
+
+def is_hash_named_product_image(remote_path):
+    return isinstance(remote_path, str) and remote_path.startswith(PRODUCT_IMAGE_HASH_PREFIX)
+
+
 def product_image_remote_path(image_sha256):
     """Object key in the product-images bucket for an image with these bytes.
 
@@ -81,7 +88,7 @@ def product_image_remote_path(image_sha256):
     corrected picture has a new name. Older names stay published, because a phone's
     catalog can still point at them.
     """
-    return f"sha256/{image_sha256[:2]}/{image_sha256}.webp"
+    return f"{PRODUCT_IMAGE_HASH_PREFIX}{image_sha256[:2]}/{image_sha256}.webp"
 
 
 def rules_db_remote_path(rules_version):

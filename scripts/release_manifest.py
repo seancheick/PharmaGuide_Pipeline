@@ -48,6 +48,7 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import (
 
 from release_interaction_artifact import compute_sha256, strip_sha256_prefix
 from supabase_client import (
+    is_hash_named_product_image,
     core_db_compressed_remote_path,
     core_db_remote_path,
     rules_db_remote_path,
@@ -722,7 +723,7 @@ def _write_rollback_image_index(source_index, destination, db_version):
     for entry in index.values():
         # A hash-named image is the same object in every release.
         remote_path = entry.get("remote_path")
-        if remote_path is not None and not remote_path.startswith("sha256/"):
+        if remote_path is not None and not is_hash_named_product_image(remote_path):
             entry["remote_path"] = f"v{db_version}/{entry['filename']}"
     with open(destination, "w", encoding="utf-8") as handle:
         json.dump(index, handle, indent=2, sort_keys=True)

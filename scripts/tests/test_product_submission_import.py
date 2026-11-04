@@ -1305,6 +1305,11 @@ def test_approved_product_picture_is_webp_indexed_and_bound_to_catalog(
         )
 
     assert import_again() == {"copied": 0, "failed": 0, "skipped": 1}
+    index_path = image_dir / "product_image_index.json"
+    index[product_id]["sha256"] = "0" * 64
+    index_path.write_text(json.dumps(index))
+    assert import_again() == {"copied": 1, "failed": 0, "skipped": 0}
+    assert json.loads(index_path.read_text())[product_id]["sha256"] == digest
     with sqlite3.connect(catalog) as connection:
         connection.execute("update products_core set image_thumbnail_url = null")
     assert import_again() == {"copied": 1, "failed": 0, "skipped": 0}
