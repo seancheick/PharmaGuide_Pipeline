@@ -489,10 +489,12 @@ def test_unreadable_trust_refuses_the_test_project(gate_file, trust_file, conten
 
 def test_committed_trust_file_is_well_formed_and_keeps_production_apart():
     trust = json.loads((Path(rm.__file__).parent / "config" / "release_trust.json").read_text())
-    assert set(trust) == {"production_project_ref", "test_hosts", "production_keys", "test_keys"}
+    assert set(trust) == {
+        "production_project_ref", "test_hosts", "production_keys", "test_keys", "alert_feed_keys",
+    }
     assert re.fullmatch(r"[a-z0-9]{20}", trust["production_project_ref"])
     assert not any(trust["production_project_ref"] in host for host in trust["test_hosts"])
-    for group in ("production_keys", "test_keys"):
+    for group in ("production_keys", "test_keys", "alert_feed_keys"):
         for key_id, public in trust[group].items():
             assert rm.KEY_ID_PATTERN.fullmatch(key_id)
             assert len(bytes.fromhex(public)) == 32
