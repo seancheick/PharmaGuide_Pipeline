@@ -1745,7 +1745,7 @@ def _is_nested_under(parent_path: str, row: Dict[str, Any]) -> bool:
 
 
 def _identity_named_in_product_title(
-    product: Dict[str, Any], row: Dict[str, Any], rows: List[Dict[str, Any]],
+    product: Dict[str, Any], row: Dict[str, Any], rows: List[Dict[str, Any]], *, subject_words: bool = False,
 ) -> bool:
     """Whether the title names this blend child; a flavor phrase names none.
 
@@ -1754,7 +1754,7 @@ def _identity_named_in_product_title(
     names a member.
     """
     title = _role_title_text(_norm(product.get("product_name") or product.get("fullName")), rows)
-    return _named_in_title(row, title, label_rows=rows)
+    return _named_in_title(row, title, label_rows=rows, subject_words=subject_words)
 
 
 def _loose_identity_named_in_product_title(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
@@ -6701,6 +6701,23 @@ _ROLE_TITLE_ALIASES_BY_CANONICAL = {
     ),
 }
 
+# Words a title uses for an ingredient without printing its name: a genus, a
+# class or a brand. Only completion reads them (`subject_words`). They assign no
+# role, so they move no score.
+_TITLE_SUBJECT_WORDS_BY_CANONICAL = {
+    "elderberry": ("sambucus",),
+    "fish_oil": ("fish",),
+    "epa": ("omega", "omegas"),
+    "dha": ("omega", "omegas"),
+    "chaga": ("mushroom", "mushrooms"),
+    "lions_mane": ("mushroom", "mushrooms"),
+    "maitake": ("mushroom", "mushrooms"),
+    "reishi": ("mushroom", "mushrooms"),
+    "shiitake": ("mushroom", "mushrooms"),
+    "maca": ("reparagen",),
+    "cat_s_claw": ("reparagen",),
+}
+
 # Fraction of the largest comparable-unit (mass) row a row must reach to count
 # as a "major" formulation component by mass alone (L5).
 _ROLE_MASS_MAJOR_FRACTION = 0.25
@@ -6873,7 +6890,10 @@ def _single_word_names(word: str, *, label_word: bool, material_dropped: bool = 
     return bool(owners) and all(len(identities) == 1 for identities in owners.values())
 
 
-def _named_in_title(row: Dict[str, Any], title_norm: str, *, label_rows: Optional[List[Dict[str, Any]]] = None) -> bool:
+def _named_in_title(
+    row: Dict[str, Any], title_norm: str, *, label_rows: Optional[List[Dict[str, Any]]] = None,
+    subject_words: bool = False,
+) -> bool:
     if not title_norm:
         return False
     # Whole-token match, NOT substring: "iron" must not match inside
@@ -6912,6 +6932,8 @@ def _named_in_title(row: Dict[str, Any], title_norm: str, *, label_rows: Optiona
             label_names.update(part for part in [outside] + parts[1::2] if part)
     label_names.discard("")
     candidates.extend(sorted(label_names - set(candidates)))
+    if subject_words and title_tokens.intersection(_TITLE_SUBJECT_WORDS_BY_CANONICAL.get(canonical, ())):
+        return True
     curated_aliases = _ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ())
     # Curated identity aliases may be shorter than the generic four-character
     # title-token floor (notably D2/D3). Their canonical-scoped allowlist is

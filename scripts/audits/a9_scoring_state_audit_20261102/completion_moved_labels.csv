@@ -1,0 +1,974 @@
+dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
+779,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,1,50 Plus
+780,multi_or_prenatal,75.5,Good,20.0,evaluated_authority,1,Heart
+781,multi_or_prenatal,73.9,Good,20.0,evaluated_authority,1,Energy & Metabolism
+1851,multi_or_prenatal,78.2,Good,13.3,evaluated_authority,2,Liver Formula
+2223,multi_or_prenatal,48.7,Poor,6.7,evaluated_authority,11,Refine
+2694,generic,57.6,Needs improvement,0.0,applicability_unestablished,1,Nattokinase Heart Health Formula
+2713,multi_or_prenatal,73.3,Good,10.0,evaluated_authority,1,Zinc Magnesium Aspartate
+2715,sports,71.1,Good,10.4,evaluated_applicable,2,Amino Complex 4400
+3565,multi_or_prenatal,74.1,Good,20.0,evaluated_authority,6,Mega Men
+3566,multi_or_prenatal,74.1,Good,20.0,evaluated_authority,1,Mega Men
+3788,multi_or_prenatal,78.4,Good,20.0,evaluated_authority,1,Heart Health Support Pack
+4231,b_complex,71.1,Good,20.0,evaluated_authority,1,B-50 Balanced B-Complex
+4290,multi_or_prenatal,50.4,Poor,6.7,evaluated_authority,2,Amplified N.O. Loaded Fruit Punch
+5772,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport (Full Strength)
+5818,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport (Full Strength)
+5861,multi_or_prenatal,50.4,Poor,6.7,evaluated_authority,2,Amplified N.O. Loaded Blue Raspberry
+5862,multi_or_prenatal,64.0,Needs improvement,10.0,evaluated_authority,4,Amplified Endurance Booster Blue Raspberry
+5864,multi_or_prenatal,64.0,Needs improvement,10.0,evaluated_authority,1,Amplified Endurance Booster Orange
+5872,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport
+5877,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,1,Mega Men
+5885,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport
+9707,multi_or_prenatal,78.2,Good,20.0,evaluated_authority,1,Cholesterol Plus
+9740,multi_or_prenatal,73.5,Good,20.0,evaluated_authority,1,Men's 50+ Advantage
+9766,multi_or_prenatal,71.5,Good,20.0,evaluated_authority,1,Women's 50+ Advantage
+12200,multi_or_prenatal,62.6,Needs improvement,10.0,evaluated_authority,2,Regular Strength Estroblend
+12933,multi_or_prenatal,76.5,Good,16.7,evaluated_authority,1,Women's Complete MultiVitamin Formula
+15870,multi_or_prenatal,64.8,Needs improvement,13.3,evaluated_authority,1,Heart Health Black Cherry
+15920,multi_or_prenatal,66.5,Needs improvement,13.3,evaluated_authority,1,Complete Vitamin Shake Mix Chocolate
+17476,generic,50.1,Poor,0.0,evaluated_authority,0,Flex-A-Min Super Glucosamine 2000 Plus
+18450,multi_or_prenatal,70.3,Good,10.0,evaluated_authority,1,Liver Health Formula
+18453,fiber_digestive,49.9,Poor,7.3,evaluated_applicable,0,Healthy Digestion Formula Refreshing Citrus
+18529,multi_or_prenatal,64.0,Needs improvement,10.0,evaluated_authority,4,Amplified Endurance Booster Blue Raspberry
+19143,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,1,Centrum Specialist Heart
+19423,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,1,Mega Men
+19854,multi_or_prenatal,70.4,Good,20.0,evaluated_authority,1,Women's Daily Active Metabolism
+20181,multi_or_prenatal,74.7,Good,20.0,evaluated_authority,1,Multivitamin Men's 50+ Advanced
+25491,generic,80.0,Very good,11.8,evaluated_authority,3,Daily Immune Defense
+25592,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport
+25606,sports,74.7,Good,15.6,evaluated_applicable,4,Hybrid Creatine Complex Fruit Punch
+25839,generic,72.3,Good,15.6,evaluated_applicable,1,One Daily Bone Health + UC-II For Joints
+26420,generic,62.4,Needs improvement,0.0,applicability_unestablished,1,Natural Lecithin Concentrate (From Soy) 400 mg
+26583,multi_or_prenatal,75.5,Good,16.7,evaluated_authority,1,Women's Daily Multivitamin Formula
+26905,multi_or_prenatal,58.8,Needs improvement,10.0,evaluated_authority,3,Airborne
+26993,multi_or_prenatal,79.9,Very good,16.7,evaluated_authority,1,"Hair, Skin & Nails Formula"
+27160,multi_or_prenatal,73.6,Good,20.0,evaluated_authority,1,50 Plus
+27287,multi_or_prenatal,61.8,Needs improvement,10.0,evaluated_authority,1,Bone & Joint Health Formula
+27311,multi_or_prenatal,61.8,Needs improvement,10.0,evaluated_authority,1,Bone & Joint Health Formula
+27312,multi_or_prenatal,68.6,Needs improvement,10.0,evaluated_authority,1,Enhanced Sleep Formula
+27358,sports,77.7,Good,15.6,evaluated_applicable,4,Hybrid Creatine Complex Unflavored
+27447,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,6,Mega Men
+27810,sports,53.9,Poor,15.6,evaluated_applicable,0,Amplified Wheybolic Extreme 60 Ripped French Vanilla
+28968,multi_or_prenatal,64.7,Needs improvement,16.7,evaluated_authority,18,Living Multi Optimal Formula
+28969,multi_or_prenatal,69.0,Needs improvement,20.0,evaluated_authority,20,Living Multi Optimal Men's Formula
+28970,multi_or_prenatal,64.7,Needs improvement,16.7,evaluated_authority,18,Living Multi Optimal Formula
+28976,multi_or_prenatal,69.5,Good,20.0,evaluated_authority,8,Living Multi Optimal Women's Formula
+28980,multi_or_prenatal,69.5,Good,20.0,evaluated_authority,13,Living Multi Optimal Women's Formula
+28984,multi_or_prenatal,45.4,Poor,6.7,evaluated_authority,4,Perfect Food Raw
+28986,multi_or_prenatal,48.7,Poor,6.7,evaluated_authority,12,Refine
+29101,multi_or_prenatal,80.8,Very good,20.0,evaluated_authority,1,Diabetes Support Packs
+29118,multi_or_prenatal,59.0,Needs improvement,20.0,evaluated_authority,2,Men's Complete Daily Packs
+29143,b_complex,68.6,Needs improvement,10.0,evaluated_authority,1,B-Complex With B-12
+29282,multi_or_prenatal,78.2,Good,20.0,evaluated_authority,8,Women's 50+
+29421,multi_or_prenatal,64.4,Needs improvement,20.0,evaluated_authority,5,Liquid Multivitamin Formula Ornage-Mango Flavor
+31054,multi_or_prenatal,70.3,Good,10.0,evaluated_authority,3,Menopause Support Formula
+31062,multi_or_prenatal,62.0,Needs improvement,16.7,evaluated_authority,2,Super Foods 25 Berry Flavor
+31064,sports,57.9,Needs improvement,15.6,evaluated_applicable,0,Amplified Wheybolic Extreme 60 Ripped Chocolate Fudge
+31992,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,6,Mega Men
+33327,sports,66.7,Needs improvement,7.3,evaluated_applicable,2,Re-Pump Fruit Punch
+33341,sports,62.2,Needs improvement,7.3,evaluated_applicable,2,Re-Pump Watermelon
+33535,multi_or_prenatal,73.7,Good,20.0,evaluated_authority,6,Mega Men
+33588,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,6,Mega Men Multivitamin
+35680,generic,59.9,Needs improvement,0.0,applicability_unestablished,1,Original Apple Cider Vinegar
+35685,b_complex,63.1,Needs improvement,20.0,evaluated_authority,1,Time-Released High Potency B-100 Balanced B-Complex
+37146,multi_or_prenatal,73.6,Good,20.0,evaluated_authority,13,Men's Multi Ultra Man
+37147,multi_or_prenatal,58.8,Needs improvement,20.0,evaluated_authority,2,Women's Complete Daily Packs
+37227,multi_or_prenatal,57.8,Needs improvement,3.3,evaluated_authority,2,Re-Power Orange
+37248,multi_or_prenatal,55.2,Needs improvement,3.3,evaluated_authority,2,Re-Power Fruit Punch
+39982,generic,70.1,Good,12.2,evaluated_applicable,1,Bilberry Standardized
+40306,b_complex,63.5,Needs improvement,20.0,evaluated_authority,6,Alive! B-Complex
+42326,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport (Full Strength)
+42349,sports,74.9,Good,15.6,evaluated_applicable,0,Amplified Wheybolic Extreme 60 Original Chocolate
+42357,sports,73.9,Good,15.6,evaluated_applicable,0,Amplified Wheybolic Extreme 60 Original Cookies & Cream
+42360,sports,72.9,Good,15.6,evaluated_applicable,0,Amplified Wheybolic Extreme 60 Original Banana Cream
+43987,multi_or_prenatal,43.9,Poor,6.7,evaluated_authority,4,Perfect Food Raw
+44121,multi_or_prenatal,64.5,Needs improvement,13.3,evaluated_authority,4,Oceans 3 Better Brain
+44483,generic,63.4,Needs improvement,0.0,applicability_unestablished,1,Resveratrol 500 mg
+45086,generic,56.2,Needs improvement,0.0,evaluated_authority,0,Oceanic Silica
+45101,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport (Full Strength)
+45107,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport Full Strength
+47532,multi_or_prenatal,56.5,Needs improvement,3.3,evaluated_authority,1,Energize & Burn Fruit Punch
+47785,generic,56.6,Needs improvement,0.0,applicability_unestablished,2,Super MiraForte With Standardized Lignans
+47815,multi_or_prenatal,58.2,Needs improvement,20.0,evaluated_authority,1,Life Extension Mix Tablets
+48186,sports,64.1,Needs improvement,15.6,evaluated_applicable,2,Amplified Wheybolic Extreme 60 Power Chocolate Fudge
+49176,multi_or_prenatal,65.5,Needs improvement,20.0,evaluated_authority,12,Ultra Mega Green Men's
+49199,multi_or_prenatal,65.6,Needs improvement,20.0,evaluated_authority,12,Ultra Mega Green Men's Multivitamin
+49495,multi_or_prenatal,78.3,Good,20.0,evaluated_authority,7,Your Life Multi Men's 50+
+49630,sports,50.8,Poor,0.0,applicability_unestablished,1,Amplified Creatine XXX Power Orange Twist
+49632,sports,68.1,Needs improvement,15.6,evaluated_applicable,2,Amplified Wheybolic Extreme 60 Power Strawberry
+49634,sports,68.1,Needs improvement,15.6,evaluated_applicable,2,Amplified Wheybolic Extreme 60 Power Strawberry
+57160,multi_or_prenatal,61.3,Needs improvement,16.7,evaluated_authority,1,Ultra Nourish-Hair
+58801,generic,63.0,Needs improvement,0.0,applicability_unestablished,1,Fibrinogen Resist With Nattokinase
+59053,b_complex,71.4,Good,20.0,evaluated_authority,1,Complete B-Complex
+59208,generic,65.9,Needs improvement,0.0,applicability_unestablished,1,CoffeeGenic Weight Management With Green Coffee Extract
+59213,generic,51.1,Poor,0.0,applicability_unestablished,1,Silymarin 100 mg
+59829,generic,47.5,Poor,0.0,applicability_unestablished,2,Super Miraforte With Standardized Lignans
+60154,multi_or_prenatal,72.1,Good,20.0,evaluated_authority,12,High Potency Ultra Man
+60225,multi_or_prenatal,70.9,Good,20.0,evaluated_authority,0,High Potency Ultra Woman
+60601,generic,62.1,Needs improvement,0.0,applicability_unestablished,1,Super-Absorbable Co-Q10
+60716,multi_or_prenatal,58.2,Needs improvement,20.0,evaluated_authority,1,Life Extension Mix Tablets Without Copper
+60901,multi_or_prenatal,58.2,Needs improvement,20.0,evaluated_authority,1,Life Extension Mix Tablets
+62416,multi_or_prenatal,59.0,Needs improvement,13.3,evaluated_authority,1,Un-Stress
+62632,generic,45.4,Poor,0.0,applicability_unestablished,1,Trans-Resveratrol 100 With ResVinol
+62634,generic,46.1,Poor,0.0,applicability_unestablished,1,Trans-Resveratrol 200 With ResVinol
+62818,generic,59.1,Needs improvement,0.0,applicability_unestablished,2,Natural Estrogen With Pomegranate Extract
+63342,generic,59.8,Needs improvement,10.4,evaluated_applicable,2,Quercetin Strength
+63347,generic,59.8,Needs improvement,10.4,evaluated_applicable,2,Quercetin Strength
+63367,multi_or_prenatal,59.5,Needs improvement,20.0,evaluated_authority,1,Active Chocolate
+63919,sports,63.6,Needs improvement,15.6,evaluated_applicable,1,Ravage Fruit Punch
+63920,sports,63.0,Needs improvement,15.6,evaluated_applicable,1,Ravage Grape
+63921,sports,63.0,Needs improvement,15.6,evaluated_applicable,1,Ravage Cherry Limeade
+63922,sports,63.6,Needs improvement,15.6,evaluated_applicable,1,Ravage Fruit Punch
+63973,sports,63.6,Needs improvement,15.6,evaluated_applicable,1,Ravage Lemon Lime
+63974,sports,63.6,Needs improvement,15.6,evaluated_applicable,1,Ravage Raspberry Twist
+64214,multi_or_prenatal,57.8,Needs improvement,10.0,evaluated_authority,3,Airborne Original Zesty Orange
+64219,multi_or_prenatal,56.4,Needs improvement,10.0,evaluated_authority,3,Airborne Original Pink Grapefruit
+64233,multi_or_prenatal,74.8,Good,20.0,evaluated_authority,3,Airborne Everyday
+64269,multi_or_prenatal,56.4,Needs improvement,10.0,evaluated_authority,1,Airborne Dual Action Citrus
+64271,multi_or_prenatal,55.4,Needs improvement,10.0,evaluated_authority,1,Airborne Dual Action Tropical Fruit
+64273,multi_or_prenatal,62.9,Needs improvement,10.0,evaluated_authority,1,Airborne Dual Action
+64333,multi_or_prenatal,52.9,Poor,20.0,evaluated_authority,2,Life Extension Mix Tablets With Extra Niacin & Without Copper
+64491,generic,55.7,Needs improvement,11.1,evaluated_authority,2,Chromium Ultra
+64494,multi_or_prenatal,58.9,Needs improvement,20.0,evaluated_authority,1,Life Extension Mix Tablets
+64625,multi_or_prenatal,58.8,Needs improvement,20.0,evaluated_authority,1,Life Extension Mix Tablets Without Copper
+64631,multi_or_prenatal,58.9,Needs improvement,20.0,evaluated_authority,1,Life Extension Mix Powder Without Copper
+65709,multi_or_prenatal,86.2,Very good,20.0,evaluated_authority,2,"Extra Strength Hair, Skin & Nails"
+65751,multi_or_prenatal,81.7,Very good,20.0,evaluated_authority,1,Teen Multivitamin For Boys
+65765,multi_or_prenatal,79.9,Very good,20.0,evaluated_authority,2,Teen Multivitamin For Girls
+65870,multi_or_prenatal,79.4,Good,20.0,evaluated_authority,5,Alive! Men's 50+
+65926,multi_or_prenatal,77.4,Good,20.0,evaluated_authority,6,Alive! Men's 50+ Gummy Vitamins
+65951,multi_or_prenatal,75.2,Good,20.0,evaluated_authority,4,Alive! Women's 50+ Gummy Vitamins
+66301,multi_or_prenatal,74.4,Good,20.0,evaluated_authority,4,Alive! Women's Gummy Vitamins
+66519,multi_or_prenatal,87.1,Very good,20.0,evaluated_authority,1,Completia Diabetic Multi-Vitamin
+66879,multi_or_prenatal,76.3,Good,16.7,evaluated_authority,9,Men's Once Daily
+66950,generic,60.9,Needs improvement,0.0,applicability_unestablished,1,Agmatine Complex
+67280,multi_or_prenatal,73.5,Good,20.0,evaluated_authority,12,Ultra Mega Green Women's Multivitamin
+67350,multi_or_prenatal,75.4,Good,20.0,evaluated_authority,1,Heart
+67354,multi_or_prenatal,68.3,Needs improvement,20.0,evaluated_authority,3,Perfect Weight
+68954,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,6,Mega Men
+69304,sports,57.3,Needs improvement,10.4,evaluated_applicable,2,Iso-Peptide Protein Chocolate
+69334,sports,56.7,Needs improvement,0.0,applicability_unestablished,1,Amplified Creatine XXX Power Fruit Punch
+69425,sports,68.4,Needs improvement,15.6,evaluated_applicable,2,Amplified Wheybolic Extreme 60 Power Strawberries & Cream
+69507,sports,39.6,Poor,0.0,research_present_applicability_unestablished,3,Women's Advanced Protein Cinnamon Bun
+69529,multi_or_prenatal,78.4,Good,16.7,evaluated_authority,1,"Hair, Skin & Nails Formula"
+69611,multi_or_prenatal,59.0,Needs improvement,10.0,evaluated_authority,1,Airborne Dual Action Citrus
+69734,multi_or_prenatal,61.5,Needs improvement,20.0,evaluated_authority,1,Active Vanilla
+70021,multi_or_prenatal,65.1,Needs improvement,20.0,evaluated_authority,1,Sport Chocolate
+70034,multi_or_prenatal,65.4,Needs improvement,20.0,evaluated_authority,1,Sport Vanilla
+70131,multi_or_prenatal,74.0,Good,20.0,evaluated_authority,1,Heart
+70152,multi_or_prenatal,67.0,Needs improvement,10.0,evaluated_authority,1,Enhanced Sleep Formula
+70292,sports,44.4,Poor,0.0,research_present_applicability_unestablished,3,Women's Advanced Protein Chocolate Cupcake
+70319,multi_or_prenatal,75.4,Good,20.0,evaluated_authority,2,Mega Men Sport
+70584,multi_or_prenatal,62.3,Needs improvement,20.0,evaluated_authority,12,Ultra Mega Green Men's Multivitamin
+72514,multi_or_prenatal,61.4,Needs improvement,10.0,evaluated_authority,3,Hot Soothing Mix Natural Honey Lemon Flavor
+72524,multi_or_prenatal,74.8,Good,20.0,evaluated_authority,3,Immune Support Plus Multivitamin
+73627,generic,60.6,Needs improvement,0.0,applicability_unestablished,0,Glucosamine MSM Complex
+73806,multi_or_prenatal,64.5,Needs improvement,20.0,evaluated_authority,1,Female Multiple
+74427,multi_or_prenatal,82.2,Very good,20.0,evaluated_authority,1,Adult Multivitamin Gummies
+74494,b_complex,70.6,Good,20.0,evaluated_authority,1,B-Complex Big 100
+74587,sports,70.8,Good,10.4,evaluated_applicable,2,XR Series BCAA Advanced XR Berry Fusion
+74605,sports,35.3,Poor,0.0,research_present_applicability_unestablished,3,Women's Advanced Protein Vanilla Ice Cream
+74658,generic,56.4,Needs improvement,0.0,applicability_unestablished,2,Cherry Complex
+74747,multi_or_prenatal,68.4,Needs improvement,6.7,evaluated_authority,1,Healthy Blood Sugar Formula
+74828,sports,58.4,Needs improvement,0.0,applicability_unestablished,2,BCAA Complex Chew Tropical Punch
+74832,multi_or_prenatal,79.5,Very good,10.0,evaluated_authority,1,Eye Health Formula
+74861,multi_or_prenatal,71.7,Good,20.0,evaluated_authority,13,Ultra Mega Green Men's Sport
+74872,sports,67.6,Needs improvement,15.6,evaluated_applicable,2,Amplified Wheybolic Extreme 60 Power French Vanilla
+74903,multi_or_prenatal,73.1,Good,20.0,evaluated_authority,12,Ultra Mega Green Women's Active
+75121,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,1,Mega Men Soft Chew Multivitamin Fruit Punch
+75129,multi_or_prenatal,65.5,Needs improvement,20.0,evaluated_authority,12,Ultra Mega Green Men's
+75150,multi_or_prenatal,78.4,Good,16.7,evaluated_authority,1,"Hair, Skin & Nails Formula"
+75308,multi_or_prenatal,77.2,Good,16.7,evaluated_authority,1,Ultra NourishHair
+75311,multi_or_prenatal,77.2,Good,16.7,evaluated_authority,1,Ultra NourishHair
+76009,multi_or_prenatal,77.3,Good,16.7,evaluated_authority,1,Ultra NourishHair
+76837,fiber_digestive,61.9,Needs improvement,0.0,applicability_unestablished,1,Dairy Digestant
+77052,multi_or_prenatal,69.6,Good,6.7,evaluated_authority,4,Energy Complex
+77064,multi_or_prenatal,74.4,Good,13.3,evaluated_authority,3,Mood Complex
+77227,sports,65.7,Needs improvement,7.3,evaluated_applicable,1,Pre-Workout Complex Blue Raspberry
+77254,multi_or_prenatal,66.5,Needs improvement,20.0,evaluated_authority,1,Male Multiple
+77261,sports,66.2,Needs improvement,7.3,evaluated_applicable,1,Pre-Workout For Women Strawberry
+77801,multi_or_prenatal,57.4,Needs improvement,20.0,evaluated_authority,10,Alive! Max3 Daily
+78128,sports,57.3,Needs improvement,10.4,evaluated_applicable,2,Iso-Peptide Protein Mixed Berry
+78148,sports,69.0,Needs improvement,15.6,evaluated_applicable,0,LIT Gummy Worm
+78153,generic,77.5,Good,15.6,evaluated_applicable,0,Neuro Shred
+78269,multi_or_prenatal,88.3,Very good,20.0,evaluated_authority,6,"Alive! Hair, Skin & Nails Strawberry Flavored"
+78312,multi_or_prenatal,73.0,Good,20.0,evaluated_authority,12,Ultra Mega Green Women's
+78320,multi_or_prenatal,73.0,Good,20.0,evaluated_authority,12,Ultra Mega Green Women's
+78510,multi_or_prenatal,75.3,Good,20.0,evaluated_authority,3,Energy & Metabolism
+78522,multi_or_prenatal,75.3,Good,20.0,evaluated_authority,3,Energy & Metabolism
+78549,multi_or_prenatal,62.6,Needs improvement,3.3,evaluated_authority,1,"Advanced Hair, Skin & Nails Formula"
+78820,generic,65.9,Needs improvement,0.0,applicability_unestablished,0,MSM 1000 mg
+79131,multi_or_prenatal,75.2,Good,20.0,evaluated_authority,1,Mega Men Energy & Metabolism Multivitamin
+79142,multi_or_prenatal,59.9,Needs improvement,3.3,evaluated_authority,1,"Advanced Hair, Skin & Nails Formula"
+79158,multi_or_prenatal,78.4,Good,16.7,evaluated_authority,1,"Hair, Skin & Nails Formula"
+79524,generic,61.1,Needs improvement,0.0,applicability_unestablished,1,Standardized African Mango
+79635,multi_or_prenatal,73.4,Good,13.3,evaluated_authority,5,SystemWell Ultimate Immunity
+80495,multi_or_prenatal,59.0,Needs improvement,20.0,evaluated_authority,21,Alive! Multi-Vitamin
+81799,multi_or_prenatal,77.3,Good,20.0,evaluated_authority,1,Earth Source Multi-Nutrient
+81927,multi_or_prenatal,79.7,Very good,20.0,evaluated_authority,1,Daily Multivitamin
+81929,generic,73.0,Good,11.1,evaluated_authority,1,Biotin Plus
+82175,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune + Super Orange
+82349,b_complex,66.6,Needs improvement,20.0,evaluated_authority,1,Balanced B50
+82403,multi_or_prenatal,75.0,Good,20.0,evaluated_authority,1,Cellular Antioxidant Formula
+82410,multi_or_prenatal,53.4,Poor,10.0,evaluated_authority,3,On-The-Go Packets Very Berry
+82700,multi_or_prenatal,58.5,Needs improvement,3.3,evaluated_authority,1,Energize & Burn Unflavored
+82782,multi_or_prenatal,78.9,Good,20.0,evaluated_authority,1,Lean Shake Burn Vanilla Creme
+82898,sports,55.3,Needs improvement,0.0,applicability_unestablished,0,Hydrolyzed Whey Protein
+174600,multi_or_prenatal,79.3,Good,20.0,evaluated_authority,3,RAW One For Men
+174605,multi_or_prenatal,79.1,Good,20.0,evaluated_authority,1,RAW One For Women
+176181,multi_or_prenatal,73.2,Good,20.0,evaluated_authority,12,Ultra Mega Green Women's Multivitamin
+176249,multi_or_prenatal,73.2,Good,20.0,evaluated_authority,12,Ultra Mega Green Women's Multivitamin
+177046,multi_or_prenatal,72.0,Good,20.0,evaluated_authority,1,Platinum 50+ Natural Peach Flavor
+177234,generic,58.5,Needs improvement,11.1,evaluated_authority,1,Calcium
+177246,generic,58.5,Needs improvement,11.1,evaluated_authority,1,Calcium
+177369,multi_or_prenatal,84.6,Very good,20.0,evaluated_authority,2,Women's One Daily California Blend
+177500,multi_or_prenatal,75.3,Good,10.0,evaluated_authority,3,Kids Daily B-Centered
+178051,multi_or_prenatal,84.6,Very good,20.0,evaluated_authority,2,Women's One Daily California Blend
+178096,multi_or_prenatal,84.6,Very good,20.0,evaluated_authority,2,Women's One Daily California Blend
+178316,multi_or_prenatal,63.5,Needs improvement,20.0,evaluated_authority,1,Men's Multivitamin
+178352,multi_or_prenatal,58.2,Needs improvement,10.0,evaluated_authority,1,Beta-Immune Booster Zesty Orange
+178355,multi_or_prenatal,60.2,Needs improvement,10.0,evaluated_authority,1,Beta-Immune Booster Very Berry
+178383,multi_or_prenatal,63.5,Needs improvement,20.0,evaluated_authority,1,Men's Multivitamin
+178643,multi_or_prenatal,69.9,Good,20.0,evaluated_authority,1,Diabetes Daily Pack
+179514,multi_or_prenatal,82.0,Very good,20.0,evaluated_authority,2,Diabetes Health Pack
+180206,multi_or_prenatal,58.2,Needs improvement,10.0,evaluated_authority,1,Beta-Immune Booster Zesty Orange
+180213,multi_or_prenatal,57.9,Needs improvement,10.0,evaluated_authority,3,Airborne Citrus
+180214,multi_or_prenatal,57.4,Needs improvement,10.0,evaluated_authority,3,Airborne Berry
+180345,multi_or_prenatal,58.2,Needs improvement,10.0,evaluated_authority,1,Airborne Zesty Orange
+180346,multi_or_prenatal,56.9,Needs improvement,10.0,evaluated_authority,3,Airborne Lemon-Lime
+180349,multi_or_prenatal,54.6,Needs improvement,10.0,evaluated_authority,3,Airborne Very Berry
+180413,generic,72.3,Good,12.2,evaluated_applicable,1,Bilberry
+180456,multi_or_prenatal,54.6,Needs improvement,10.0,evaluated_authority,3,Airborne Very Berry
+180457,multi_or_prenatal,54.6,Needs improvement,10.0,evaluated_authority,3,Airborne Very Berry
+180581,multi_or_prenatal,57.1,Needs improvement,10.0,evaluated_authority,3,Airborne Original Lemon Lime
+181859,generic,60.4,Needs improvement,0.0,applicability_unestablished,0,Optimal BP Management
+182149,multi_or_prenatal,77.2,Good,20.0,evaluated_authority,1,Lean Shake Burn Cookies & Cream
+182627,multi_or_prenatal,58.7,Needs improvement,20.0,evaluated_authority,3,Life Extension Mix Tablets
+182633,multi_or_prenatal,58.7,Needs improvement,20.0,evaluated_authority,2,Life Extension Mix Tablets with Extra Niacin
+182644,multi_or_prenatal,58.7,Needs improvement,20.0,evaluated_authority,3,Life Extension Mix Tablets without Copper
+183007,multi_or_prenatal,82.0,Very good,20.0,evaluated_authority,1,Men's Pure Pack
+183201,generic,61.5,Needs improvement,0.0,applicability_unestablished,2,PureDefense w/NAC
+183217,multi_or_prenatal,64.7,Needs improvement,3.3,evaluated_authority,1,Osteo EasySticks Natural Apple-Cinnamon Flavor
+183280,multi_or_prenatal,78.2,Good,10.0,evaluated_authority,1,SeroPlus
+183301,multi_or_prenatal,81.8,Very good,20.0,evaluated_authority,1,Women's Pure Pack
+183541,multi_or_prenatal,75.7,Good,20.0,evaluated_authority,2,Mega Men Sport Multivitamin
+184225,generic,61.1,Needs improvement,0.0,applicability_unestablished,2,DGL Plus
+184296,multi_or_prenatal,80.9,Very good,20.0,evaluated_authority,1,Athletic Nutrients
+184364,generic,61.1,Needs improvement,0.0,applicability_unestablished,2,DGL Plus
+184821,multi_or_prenatal,79.0,Good,13.3,evaluated_authority,2,LiquiNutrients Natural Lemon Creme Flavor
+184827,multi_or_prenatal,81.3,Very good,20.0,evaluated_authority,2,PureFood Nutrients
+185118,multi_or_prenatal,70.6,Good,3.3,evaluated_authority,1,Mitochondria-ATP
+185315,multi_or_prenatal,80.0,Very good,20.0,evaluated_authority,3,PureLean Natural Chocolate Flavor
+187549,generic,64.7,Needs improvement,0.0,applicability_unestablished,2,Resveratrol Extra
+187551,generic,64.7,Needs improvement,0.0,applicability_unestablished,2,Resveratrol Extra
+187612,generic,64.6,Needs improvement,0.0,applicability_unestablished,2,Saw Palmetto Plus
+187614,generic,64.6,Needs improvement,0.0,applicability_unestablished,2,Saw Palmetto Plus
+188671,generic,64.6,Needs improvement,0.0,applicability_unestablished,2,Saw Palmetto Plus
+188758,multi_or_prenatal,80.0,Very good,20.0,evaluated_authority,3,PureLean Natural Vanilla Bean Flavor
+188777,multi_or_prenatal,82.0,Very good,20.0,evaluated_authority,3,PureLean (with Stevia) Natural Vanilla Bean Flavor
+191022,generic,57.8,Needs improvement,0.0,applicability_unestablished,1,High Potency CLA 1250
+191080,multi_or_prenatal,72.4,Good,20.0,evaluated_authority,4,Mega Men Sport
+200725,multi_or_prenatal,62.9,Needs improvement,13.3,evaluated_authority,4,Sweet Defense
+200745,multi_or_prenatal,62.9,Needs improvement,13.3,evaluated_authority,4,Sweet Defense
+201278,generic,74.3,Good,11.1,evaluated_authority,0,Extra Strength Glucosamine Chondroitin MSM with Ester-C
+201405,multi_or_prenatal,66.5,Needs improvement,20.0,evaluated_authority,1,Male Multiple
+201420,multi_or_prenatal,66.5,Needs improvement,20.0,evaluated_authority,1,Male Multiple
+201480,multi_or_prenatal,71.0,Good,10.0,evaluated_authority,1,Liv-A-Tox
+201611,generic,61.7,Needs improvement,0.0,applicability_unestablished,1,Resveratrol 100 mg
+201803,multi_or_prenatal,82.8,Very good,20.0,evaluated_authority,7,Alive! Children's Chewable Multi-Vitamin
+201812,multi_or_prenatal,86.4,Very good,20.0,evaluated_authority,7,Alive! Prenatal Multi-Vitamin with Plant DHA Strawberry Flavored
+202152,multi_or_prenatal,57.9,Needs improvement,10.0,evaluated_authority,3,Airborne Original Zesty Orange
+202156,multi_or_prenatal,57.9,Needs improvement,10.0,evaluated_authority,3,Airborne Original Zesty Orange
+202226,multi_or_prenatal,58.2,Needs improvement,10.0,evaluated_authority,1,Airborne More Than Just Vitamin C Zesty Orange
+204080,generic,59.5,Needs improvement,0.0,evaluated_authority,0,Silica Gel Citrus Flavored
+204083,generic,59.5,Needs improvement,0.0,evaluated_authority,0,Silica Gel Citrus Flavored
+204501,multi_or_prenatal,54.7,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Chocolate
+204521,multi_or_prenatal,54.7,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Coffee
+204687,multi_or_prenatal,75.8,Good,20.0,evaluated_authority,1,Centrum MultiGummies Multi + Antioxidants
+204732,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,4,Raw Organic Perfect Food Apple
+204886,generic,52.6,Poor,0.0,applicability_unestablished,1,Pomegranate Plus
+205161,multi_or_prenatal,82.8,Very good,20.0,evaluated_authority,7,Alive! Super Fruits Women's
+205165,multi_or_prenatal,82.9,Very good,20.0,evaluated_authority,7,Alive! Super Fruits Women's 50+
+205167,multi_or_prenatal,81.2,Very good,20.0,evaluated_authority,7,Alive! Super Fruits Kids
+206489,multi_or_prenatal,74.3,Good,20.0,evaluated_authority,3,Kids' Super Foods Multi Go Go Grape
+207182,multi_or_prenatal,65.2,Needs improvement,20.0,evaluated_authority,12,Ultra Mega Green Men's
+207322,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Super Orange
+207330,multi_or_prenatal,69.7,Good,16.7,evaluated_authority,1,Immune+ Cherry
+207364,multi_or_prenatal,69.7,Good,16.7,evaluated_authority,1,Immune+ Cherry
+207461,multi_or_prenatal,72.3,Good,20.0,evaluated_authority,1,"Hair, Skin & Nails Strawberry Cream Flavored Coating"
+210537,generic,69.3,Needs improvement,11.1,evaluated_authority,1,"Biotin 10,000 mcg Wild Berry Flavor"
+210595,multi_or_prenatal,70.5,Good,10.0,evaluated_authority,6,"Skin, Nails & Hair"
+210704,multi_or_prenatal,75.5,Good,20.0,evaluated_authority,2,Mega Men Sport Multivitamin
+210815,generic,44.4,Poor,0.0,applicability_unestablished,1,Endothelial Defense Pomegranate Complete
+210981,generic,69.0,Needs improvement,10.4,evaluated_applicable,0,Bio-Quercetin
+211331,multi_or_prenatal,70.5,Good,20.0,evaluated_authority,1,Macros Chocolate Chip Muffin
+211594,multi_or_prenatal,66.0,Needs improvement,16.7,evaluated_authority,1,"Hair, Skin & Nails Supplement"
+212054,generic,63.4,Needs improvement,0.0,applicability_unestablished,1,Trans-Pterostilbene 50 mg
+212353,generic,64.4,Needs improvement,0.0,evaluated_authority,0,JarroSil 10 mg
+212457,multi_or_prenatal,53.8,Poor,6.7,evaluated_authority,2,Relax-O-Zyme
+212473,multi_or_prenatal,73.1,Good,10.0,evaluated_authority,5,ThymuPlex Immune Formula
+212476,multi_or_prenatal,75.4,Good,13.3,evaluated_authority,3,Stress End
+212633,generic,77.3,Good,11.1,evaluated_authority,1,Energizing Iron with Eleuthero
+212968,multi_or_prenatal,56.4,Needs improvement,10.0,evaluated_authority,3,Airborne Original Very Berry
+212984,multi_or_prenatal,59.8,Needs improvement,10.0,evaluated_authority,3,Airborne Original Zesty Orange
+213042,multi_or_prenatal,63.3,Needs improvement,10.0,evaluated_authority,3,Airborne Zesty Orange
+213056,multi_or_prenatal,64.5,Needs improvement,10.0,evaluated_authority,3,Airborne Zesty Orange
+213305,multi_or_prenatal,81.2,Very good,20.0,evaluated_authority,3,Lean Essentials Multivitamin
+213508,fiber_digestive,52.9,Poor,0.0,applicability_unestablished,1,Hunger Support Orange Mango
+213713,generic,60.0,Needs improvement,0.0,applicability_unestablished,1,Advanced Glucosamine Complex
+213715,generic,60.0,Needs improvement,0.0,applicability_unestablished,1,Advanced Glucosamine Complex
+213953,generic,77.6,Good,11.1,evaluated_authority,0,Body Essential Silica Caps with Calcium
+214014,multi_or_prenatal,82.6,Very good,20.0,evaluated_authority,1,Earth Source Multi-Nutrient
+214042,multi_or_prenatal,82.8,Very good,20.0,evaluated_authority,7,Alive! Super Fruits Women's Complete Multi
+214215,multi_or_prenatal,66.9,Needs improvement,20.0,evaluated_authority,1,Female Multiple
+214982,generic,70.1,Good,10.4,evaluated_applicable,1,L-Theanine Complex
+216405,generic,63.9,Needs improvement,0.0,evaluated_authority,0,Vegetal Silica
+216887,multi_or_prenatal,61.8,Needs improvement,16.7,evaluated_authority,12,Multi II Vegetable Capsules
+218010,multi_or_prenatal,74.6,Good,20.0,evaluated_authority,2,Kangavites Complete Multivitamin & Mineral Natural Bouncin' Berry Flavor
+218013,multi_or_prenatal,74.8,Good,20.0,evaluated_authority,2,Kangavites Complete Multivitamin & Mineral Natural Bouncin' Berry Flavor
+218029,multi_or_prenatal,76.7,Good,10.0,evaluated_authority,1,Advanced Antioxidant Formula
+218034,multi_or_prenatal,64.5,Needs improvement,20.0,evaluated_authority,1,Female Multiple
+218177,multi_or_prenatal,64.5,Needs improvement,20.0,evaluated_authority,1,Female Multiple
+218240,generic,61.6,Needs improvement,0.0,applicability_unestablished,0,Triple Strength Glucosamin Chondroitin MSM
+218432,generic,63.9,Needs improvement,0.0,applicability_unestablished,0,MSM Powder
+218464,multi_or_prenatal,73.9,Good,20.0,evaluated_authority,1,Centrum Heart
+218685,generic,56.2,Needs improvement,0.0,evaluated_authority,0,Oceanic Silica
+218842,multi_or_prenatal,75.9,Good,16.7,evaluated_authority,1,Vitamins Only
+218876,generic,67.6,Needs improvement,12.2,evaluated_applicable,0,Ginger Root
+219690,multi_or_prenatal,70.6,Good,3.3,evaluated_authority,1,Mitochondria-ATP
+219842,sports,69.1,Needs improvement,15.6,evaluated_applicable,1,LIT AF Gummy Worm
+219914,sports,70.1,Good,15.6,evaluated_applicable,1,LIT AF Icy Fireworks
+219916,sports,69.1,Needs improvement,15.6,evaluated_applicable,1,LIT AF Cotton Candy
+219919,sports,70.6,Good,15.6,evaluated_applicable,1,LIT AF Apple Juice
+219921,sports,69.1,Needs improvement,15.6,evaluated_applicable,1,LIT AF Lemon Ice
+219923,sports,69.1,Needs improvement,15.6,evaluated_applicable,1,LIT AF Sweet & Tart
+219977,multi_or_prenatal,69.4,Needs improvement,13.3,evaluated_authority,5,Brain Health Formula
+219987,multi_or_prenatal,68.0,Needs improvement,10.0,evaluated_authority,1,Liver Health Formula
+219992,multi_or_prenatal,79.1,Good,10.0,evaluated_authority,2,Eye Health Formula
+220074,sports,72.5,Good,10.4,evaluated_applicable,2,Wheybolic Chocolate Fudge
+220082,sports,58.0,Needs improvement,10.4,evaluated_applicable,2,Wheybolic Ripped Chocolate Fudge
+220108,sports,50.0,Poor,10.4,evaluated_applicable,2,Wheybolic Ripped Classic Vanilla
+220125,multi_or_prenatal,70.2,Good,20.0,evaluated_authority,1,Macros Maple Brown Sugar
+220132,multi_or_prenatal,70.5,Good,20.0,evaluated_authority,1,Macros Banana Nut Bread
+220137,multi_or_prenatal,70.2,Good,20.0,evaluated_authority,1,Macros Rolled Oats & Honey
+220191,sports,49.0,Poor,10.4,evaluated_applicable,2,Wheybolic Ripped Strawberries and Cream
+220211,sports,50.0,Poor,10.4,evaluated_applicable,2,Wheybolic Ripped Cookies and Cream
+220790,multi_or_prenatal,64.5,Needs improvement,20.0,evaluated_authority,1,Male Multiple
+221166,sports,51.0,Poor,10.4,evaluated_applicable,2,Wheybolic Ripped Chocolate Peanut Butter
+221372,sports,65.0,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Chocolate Frosting
+221377,sports,65.0,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Chocolate Frosting
+221379,sports,64.0,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Vanilla Custard
+221423,sports,64.0,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Vanilla Custard
+221432,sports,64.0,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Cookies & Cream
+221436,sports,64.5,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Strawberry
+221458,sports,64.5,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Strawberry
+221460,sports,64.5,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Chocolate Lava Cake
+221471,sports,64.5,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate S'mores
+222791,generic,55.6,Needs improvement,0.0,applicability_unestablished,1,Full Spectrum Curcumin Sleep Ease
+222792,generic,53.4,Poor,0.0,applicability_unestablished,1,Full Spectrum Curcumin Brain Works
+222846,generic,71.3,Good,12.2,evaluated_applicable,0,Bilberry 500 mg Unflavored
+222860,generic,68.1,Needs improvement,12.2,evaluated_applicable,0,Bilberry 1200 mg
+227960,fiber_digestive,67.9,Needs improvement,7.3,evaluated_applicable,1,Fortify Daily Prebiotic Fiber Raspberry Lemonade Flavored
+227969,b_complex,78.4,Good,20.0,evaluated_authority,1,B-Complex 50
+228007,b_complex,78.4,Good,20.0,evaluated_authority,1,B-Complex 50
+228010,b_complex,66.9,Needs improvement,20.0,evaluated_authority,1,B-Complex 100
+228017,b_complex,67.4,Needs improvement,20.0,evaluated_authority,1,B-Complex 100
+228317,multi_or_prenatal,61.3,Needs improvement,20.0,evaluated_authority,3,Formula VM-2000
+228355,multi_or_prenatal,64.5,Needs improvement,20.0,evaluated_authority,1,Female Multiple
+228524,sports,72.5,Good,10.4,evaluated_applicable,2,Wheybolic Classic Vanilla
+228798,multi_or_prenatal,74.7,Good,20.0,evaluated_authority,4,50 Plus
+228799,multi_or_prenatal,74.7,Good,20.0,evaluated_authority,4,50 Plus
+228831,sports,77.1,Good,15.6,evaluated_applicable,0,100% Whey Unflavored
+228833,sports,70.1,Good,15.6,evaluated_applicable,0,100% Whey Vanilla Cream
+228838,sports,70.1,Good,15.6,evaluated_applicable,0,100% Whey Creamy Strawberry
+228843,multi_or_prenatal,68.5,Needs improvement,10.0,evaluated_authority,1,Liver Health Formula
+228906,multi_or_prenatal,71.2,Good,20.0,evaluated_authority,5,Multivitamin Diabetic Support
+228971,multi_or_prenatal,73.7,Good,20.0,evaluated_authority,3,Multivitamin Energy & Metabolism
+228979,multi_or_prenatal,73.7,Good,20.0,evaluated_authority,3,Multivitamin Energy & Metabolism
+229164,multi_or_prenatal,74.3,Good,16.7,evaluated_authority,1,"Hair, Skin & Nails"
+229169,multi_or_prenatal,74.3,Good,16.7,evaluated_authority,1,"Hair, Skin & Nails Beauty Basics"
+229202,multi_or_prenatal,73.2,Good,16.7,evaluated_authority,1,Ultra NourishHair Beauty Basics
+229228,multi_or_prenatal,73.2,Good,16.7,evaluated_authority,1,Ultra NourishHair Beauty Basics
+229829,generic,79.2,Good,11.1,evaluated_authority,1,Energizing Iron
+229866,generic,69.7,Good,7.3,evaluated_applicable,1,DGL Licorice Flavored
+229869,generic,70.2,Good,7.3,evaluated_applicable,1,DGL
+229935,generic,73.2,Good,7.3,evaluated_applicable,1,DGL Ultra
+229974,multi_or_prenatal,80.9,Very good,16.7,evaluated_authority,1,Probiotic + Multivitamin Gummies Mixed Berry
+230157,multi_or_prenatal,78.3,Good,10.0,evaluated_authority,3,Flawless Complexion Berry Fresh
+230349,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,4,Women's Super Foods Multi Lively Elderberry
+231332,multi_or_prenatal,64.5,Needs improvement,20.0,evaluated_authority,1,Female Multiple
+231333,multi_or_prenatal,64.5,Needs improvement,20.0,evaluated_authority,1,Female Multiple
+231851,multi_or_prenatal,57.4,Needs improvement,6.7,evaluated_authority,1,Dr. Strum's Intensive Bone Formula
+232452,generic,63.0,Needs improvement,10.4,evaluated_applicable,0,Bio-Quercetin
+232748,generic,50.3,Poor,0.0,applicability_unestablished,1,Endothelial Defense Pomegranate Plus
+232753,generic,66.8,Needs improvement,10.4,evaluated_applicable,0,Fast-C and Bio-Quercetin Phytosome
+232923,generic,43.4,Poor,0.0,evaluated_null,1,Cognitex Elite Pregnenolone
+233128,multi_or_prenatal,58.9,Needs improvement,10.0,evaluated_authority,8,"Hair, Skin & Nails"
+233152,multi_or_prenatal,82.6,Very good,20.0,evaluated_authority,9,Men 55+
+233217,multi_or_prenatal,82.2,Very good,20.0,evaluated_authority,8,Men
+233218,multi_or_prenatal,79.6,Very good,20.0,evaluated_authority,10,Prenatal
+233266,multi_or_prenatal,82.6,Very good,20.0,evaluated_authority,9,Women 55+
+233268,multi_or_prenatal,81.6,Very good,20.0,evaluated_authority,9,Women
+233274,multi_or_prenatal,50.8,Poor,6.7,evaluated_authority,3,Organic Fit Chocolate Flavor
+233332,multi_or_prenatal,50.8,Poor,6.7,evaluated_authority,3,Organic Fit Vanilla Flavor
+233617,multi_or_prenatal,67.6,Needs improvement,10.0,evaluated_authority,4,Oceans 3 Healthy Hormones
+233625,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,9,Men's Multi
+233630,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,9,Men's Multi
+233632,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,9,Men's Multi 40+
+233635,multi_or_prenatal,77.7,Good,16.7,evaluated_authority,8,Men's Once Daily
+233636,multi_or_prenatal,57.9,Needs improvement,10.0,evaluated_authority,8,Organic Plant Collagen Builder
+233640,multi_or_prenatal,78.0,Good,16.7,evaluated_authority,9,Women's Multi 40+
+233644,multi_or_prenatal,80.3,Very good,20.0,evaluated_authority,10,Prenatal Multi
+233648,multi_or_prenatal,81.0,Very good,20.0,evaluated_authority,9,Women's Multi 40+
+233649,multi_or_prenatal,78.4,Good,20.0,evaluated_authority,10,Prenatal Once Daily
+233650,multi_or_prenatal,77.5,Good,16.7,evaluated_authority,10,Women's Multi
+233653,multi_or_prenatal,76.9,Good,16.7,evaluated_authority,9,Women's Once Daily
+233686,b_complex,72.4,Good,20.0,evaluated_authority,6,B-Complex
+235637,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,9,Men's Multi
+235638,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,9,Men's Multi
+235641,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,9,Men's Multi 40+
+235642,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,9,Men's Multi 40+
+235643,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,9,Men's Multi 40+
+235646,multi_or_prenatal,81.0,Very good,20.0,evaluated_authority,10,Women's Multi
+235647,multi_or_prenatal,81.0,Very good,20.0,evaluated_authority,10,Women's Multi
+235648,multi_or_prenatal,81.5,Very good,20.0,evaluated_authority,9,Women's Multi 40+
+235649,multi_or_prenatal,81.5,Very good,20.0,evaluated_authority,9,Women's Multi 40+
+235651,multi_or_prenatal,80.7,Very good,20.0,evaluated_authority,8,Men's Once Daily
+235652,multi_or_prenatal,80.7,Very good,20.0,evaluated_authority,8,Men's Once Daily
+235653,multi_or_prenatal,80.7,Very good,20.0,evaluated_authority,8,Men's Once Daily
+236745,multi_or_prenatal,78.9,Good,20.0,evaluated_authority,4,Raw Prenatal
+236774,multi_or_prenatal,79.9,Very good,20.0,evaluated_authority,9,Women's Once Daily
+236775,multi_or_prenatal,79.9,Very good,20.0,evaluated_authority,9,Women's Once Daily
+236776,multi_or_prenatal,79.9,Very good,20.0,evaluated_authority,9,Women's Once Daily
+236778,multi_or_prenatal,80.3,Very good,20.0,evaluated_authority,10,Prenatal Multi
+236779,multi_or_prenatal,80.0,Very good,20.0,evaluated_authority,10,Prenatal Multi
+236780,multi_or_prenatal,80.0,Very good,20.0,evaluated_authority,10,Prenatal Multi
+236782,multi_or_prenatal,78.4,Good,20.0,evaluated_authority,10,Prenatal Once Daily
+236783,multi_or_prenatal,78.4,Good,20.0,evaluated_authority,10,Prenatal Once Daily
+236784,multi_or_prenatal,78.4,Good,20.0,evaluated_authority,10,Prenatal Once Daily
+236866,b_complex,64.0,Needs improvement,20.0,evaluated_authority,2,Raw B-Complex
+236873,multi_or_prenatal,81.7,Very good,20.0,evaluated_authority,1,Raw One for Women
+236882,multi_or_prenatal,78.9,Good,20.0,evaluated_authority,4,Raw Prenatal
+239586,multi_or_prenatal,70.3,Good,16.7,evaluated_authority,1,"Hair, Skin & Nails"
+239836,multi_or_prenatal,87.0,Very good,20.0,evaluated_authority,2,"Extra Strength Hair, Skin & Nails"
+240136,multi_or_prenatal,75.6,Good,16.7,evaluated_authority,3,Men's Super Foods Multi Mighty Grape
+240149,multi_or_prenatal,65.1,Needs improvement,3.3,evaluated_authority,1,Healthy Hair
+240237,multi_or_prenatal,80.4,Very good,16.7,evaluated_authority,2,Baby & Me
+241347,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,4,Raw Organic Perfect Food Apple
+241349,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,4,Raw Organic Perfect Food Apple
+241350,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,4,Raw Organic Perfect Food Chocolate
+241351,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,4,Raw Organic Perfect Food Chocolate
+241353,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,4,Raw Organic Perfect Food Original
+241354,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,4,Raw Organic Perfect Food Original
+241355,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,4,Raw Organic Perfect Food Original
+241360,multi_or_prenatal,54.7,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Chocolate
+241362,multi_or_prenatal,54.7,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Chocolate
+241363,multi_or_prenatal,54.7,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Coffee
+241365,multi_or_prenatal,54.7,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Coffee
+241368,multi_or_prenatal,47.7,Poor,10.0,evaluated_authority,3,Raw Organic Fit Original
+241369,multi_or_prenatal,47.7,Poor,10.0,evaluated_authority,3,Raw Organic Fit Original
+241379,multi_or_prenatal,59.2,Needs improvement,13.3,evaluated_authority,1,RAW Enzymes Men 50 & Wiser
+241380,multi_or_prenatal,59.2,Needs improvement,13.3,evaluated_authority,1,RAW Enzymes Women 50 & Wiser
+241704,multi_or_prenatal,46.7,Poor,13.3,evaluated_authority,11,Raw Beauty Mint Chocolate Chip Infusion
+241705,multi_or_prenatal,46.5,Poor,13.3,evaluated_authority,12,Raw Beauty Tahitian Vanilla & Berry Infusion
+242477,generic,52.4,Poor,0.0,applicability_unestablished,1,Full Spectrum Curcumin Sleep Ease
+242529,multi_or_prenatal,59.0,Needs improvement,20.0,evaluated_authority,10,Alive! Max3 Potency Multivitamin
+242545,multi_or_prenatal,86.0,Very good,20.0,evaluated_authority,2,"Extra Strength Hair, Skin & Nails"
+242549,multi_or_prenatal,86.0,Very good,20.0,evaluated_authority,2,"Extra Strength Hair, Skin & Nails"
+242552,multi_or_prenatal,58.9,Needs improvement,20.0,evaluated_authority,10,Alive! Max3 Daily Potency Multivitamin
+242553,multi_or_prenatal,86.0,Very good,20.0,evaluated_authority,2,"Extra Strength Hair, Skin & Nails"
+242555,multi_or_prenatal,86.0,Very good,20.0,evaluated_authority,2,"Extra Strength Hair, Skin & Nails"
+242773,multi_or_prenatal,73.0,Good,10.0,evaluated_authority,6,"Skin, Nails & Hair"
+242778,multi_or_prenatal,73.0,Good,10.0,evaluated_authority,6,"Skin, Nails & Hair"
+242946,generic,70.9,Good,11.1,evaluated_authority,1,BetaBoost + Vitamin C Citrus
+242998,b_complex,67.4,Needs improvement,20.0,evaluated_authority,1,B-Complex 150 Timed-Release
+243050,sports,72.5,Good,10.4,evaluated_applicable,2,Wheybolic Chocolate Fudge
+243091,sports,69.1,Needs improvement,15.6,evaluated_applicable,1,LIT AF Grape
+243094,sports,76.6,Good,15.6,evaluated_applicable,1,LIT AF Iced Tea Lemonade
+243102,sports,57.3,Needs improvement,10.4,evaluated_applicable,2,Iso-Peptide Protein Vanilla
+243255,multi_or_prenatal,81.0,Very good,20.0,evaluated_authority,10,Women's Multi
+243499,multi_or_prenatal,65.4,Needs improvement,10.0,evaluated_authority,2,Staminol Ultra
+243513,multi_or_prenatal,73.8,Good,16.7,evaluated_authority,1,Ultra NourishHair
+243680,multi_or_prenatal,79.1,Good,10.0,evaluated_authority,2,Eye Health Formula
+243688,multi_or_prenatal,74.3,Good,16.7,evaluated_authority,1,"Hair, Skin & Nails Beauty Basics"
+243724,multi_or_prenatal,60.1,Needs improvement,3.3,evaluated_authority,1,"Hair, Skin & Nails"
+243765,generic,54.4,Poor,0.0,applicability_unestablished,2,Cherry Complex
+244232,sports,57.9,Needs improvement,10.4,evaluated_applicable,2,Precision BCAA Mango Melon
+246080,multi_or_prenatal,71.8,Good,20.0,evaluated_authority,1,Detox Pure Pack
+246089,multi_or_prenatal,84.3,Very good,20.0,evaluated_authority,5,Alive! Adult Gummy Multivitamin
+246189,multi_or_prenatal,81.7,Very good,20.0,evaluated_authority,4,Longevity Nutrients
+246190,multi_or_prenatal,81.7,Very good,20.0,evaluated_authority,4,Longevity Nutrients
+246281,generic,58.4,Needs improvement,0.0,applicability_unestablished,2,Melatonin 10 mg Strawberry
+246351,multi_or_prenatal,91.5,Excellent,20.0,evaluated_authority,2,NeuroMood Pure Pack
+246423,multi_or_prenatal,82.8,Very good,20.0,evaluated_authority,1,PureLean Natural Vanilla Bean Flavor
+247322,multi_or_prenatal,85.8,Very good,20.0,evaluated_authority,2,UltraDetox 10-Day Pure Pack
+248718,generic,76.8,Good,11.8,evaluated_authority,1,Immune
+248748,sports,84.3,Very good,15.6,evaluated_applicable,1,Pulse Fruit Punch
+248750,sports,76.3,Good,15.6,evaluated_applicable,1,Pulse Stim-Free Fruit Punch
+248755,multi_or_prenatal,66.2,Needs improvement,20.0,evaluated_authority,2,Triumph Women's
+248756,multi_or_prenatal,66.5,Needs improvement,20.0,evaluated_authority,3,Triumph Men's Sport Multivitamin
+249493,multi_or_prenatal,87.3,Very good,20.0,evaluated_authority,5,Alive! Daily Support Prenatal MultiVitamin Strawberry Flavored
+249518,multi_or_prenatal,66.3,Needs improvement,20.0,evaluated_authority,1,Doctor's Choice Multivitamin 45+ Women
+249741,sports,63.3,Needs improvement,7.3,evaluated_applicable,1,Preseries Bulk Blue Raspberry
+250044,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Blueberry-Acai
+250046,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Blueberry-Acai
+250047,multi_or_prenatal,69.7,Good,16.7,evaluated_authority,1,Immune+ Cherry
+250065,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Citrus
+250070,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Citrus
+250075,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Raspberry
+250078,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Raspberry
+250087,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Super Orange
+250088,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Super Orange
+250091,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Super Orange
+250095,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Raspberry
+250097,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Super Orange
+250332,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Raspberry
+250334,multi_or_prenatal,69.2,Needs improvement,16.7,evaluated_authority,1,Immune+ Super Orange
+250989,b_complex,56.2,Needs improvement,20.0,evaluated_authority,3,B-UnStressed
+250990,b_complex,55.7,Needs improvement,20.0,evaluated_authority,3,B-UnStressed
+251291,multi_or_prenatal,89.0,Very good,20.0,evaluated_authority,1,Multi for Women 55+
+251333,multi_or_prenatal,90.2,Excellent,20.0,evaluated_authority,1,Baby & Me 2 Postnatal Multi
+251339,multi_or_prenatal,90.2,Excellent,20.0,evaluated_authority,1,Baby & Me 2 Postnatal Multi
+251349,multi_or_prenatal,85.2,Very good,20.0,evaluated_authority,7,Women Over 40 One Daily
+251366,b_complex,55.7,Needs improvement,20.0,evaluated_authority,3,B-UnStressed
+251469,multi_or_prenatal,83.9,Very good,20.0,evaluated_authority,5,Alive! Men's Energy Complete Multivitamin
+251484,multi_or_prenatal,82.0,Very good,20.0,evaluated_authority,5,Alive! Women's 50+ Complete Multi-Vitamin
+251485,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,5,Alive! Women's Energy Complete Multivitamin
+251553,multi_or_prenatal,84.3,Very good,20.0,evaluated_authority,1,Doctor's Choice Multivitamin 50+ Men
+251847,generic,66.4,Needs improvement,0.0,applicability_unestablished,1,Milk Thistle
+251946,multi_or_prenatal,54.8,Needs improvement,6.7,evaluated_authority,2,Metabolic Advantage
+252349,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
+252445,sports,54.0,Poor,0.0,applicability_unestablished,0,Beta Alanine (600 mg)
+252902,multi_or_prenatal,81.9,Very good,20.0,evaluated_authority,1,Kids Happy & Healthy Multi Blue Raspberry Flavor
+253051,multi_or_prenatal,86.1,Very good,20.0,evaluated_authority,2,"Extra Strength Hair, Skin & Nails"
+253097,multi_or_prenatal,76.0,Good,20.0,evaluated_authority,1,Adult Multi 50+
+253098,multi_or_prenatal,79.0,Good,20.0,evaluated_authority,1,Adult Multi
+253194,multi_or_prenatal,79.0,Good,20.0,evaluated_authority,1,Men's Multi
+253304,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
+253309,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
+253312,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
+253622,sports,54.0,Poor,0.0,applicability_unestablished,0,Beta Alanine (600 mg)
+253637,sports,53.5,Poor,0.0,applicability_unestablished,0,Beta Alanine 500 mg
+253650,sports,53.5,Poor,0.0,applicability_unestablished,0,Beta Alanine 500 mg
+254136,multi_or_prenatal,79.0,Good,20.0,evaluated_authority,1,Women's Multi 50+
+254204,multi_or_prenatal,79.4,Good,20.0,evaluated_authority,2,Women's Multi
+256480,multi_or_prenatal,86.4,Very good,20.0,evaluated_authority,1,Kids Happy & Healthy Multi Blue Raspberry Flavor
+256970,multi_or_prenatal,79.9,Very good,16.7,evaluated_authority,1,Kids Daily Multi
+256984,multi_or_prenatal,85.7,Very good,20.0,evaluated_authority,2,Centrum Men's Multi
+256991,multi_or_prenatal,85.0,Very good,20.0,evaluated_authority,2,Centrum Women's Multi
+257000,multi_or_prenatal,74.3,Good,10.0,evaluated_authority,2,Centrum Natural Beauty
+257002,multi_or_prenatal,74.5,Good,20.0,evaluated_authority,1,Centrum Specialist Heart Multivitamin
+257004,multi_or_prenatal,74.5,Good,20.0,evaluated_authority,1,Centrum Specialist Heart Multivitamin
+257098,generic,56.5,Needs improvement,0.0,applicability_unestablished,1,Melatonin Berry Good Sleep 3 mg Berry
+257114,multi_or_prenatal,83.8,Very good,20.0,evaluated_authority,1,Multivitamin for Daily Stress Relief
+257189,multi_or_prenatal,78.5,Good,20.0,evaluated_authority,1,Centrum MultiGummies Multi+ Antioxidants
+259308,generic,78.1,Good,12.2,evaluated_applicable,1,Bilberry 160 mg
+259335,multi_or_prenatal,83.7,Very good,20.0,evaluated_authority,2,Multivitamin for Daily Energy
+259396,multi_or_prenatal,83.5,Very good,20.0,evaluated_authority,1,Kids Happy & Healthy Multi Blue Raspberry Flavored
+259473,multi_or_prenatal,78.5,Good,16.7,evaluated_authority,1,Multi Vitamin+ Citrus Flavored
+259495,multi_or_prenatal,64.9,Needs improvement,3.3,evaluated_authority,4,PMS
+259627,generic,75.7,Good,15.6,evaluated_applicable,4,Urinary with Cranberry
+259629,multi_or_prenatal,74.1,Good,6.7,evaluated_authority,2,Vision
+259712,generic,55.8,Needs improvement,0.0,evaluated_authority,1,Silica
+259815,multi_or_prenatal,74.1,Good,20.0,evaluated_authority,1,Mega Men Multivitamin
+261865,multi_or_prenatal,59.1,Needs improvement,6.7,evaluated_authority,2,Daily Pure Pack Energy
+261916,multi_or_prenatal,58.9,Needs improvement,10.0,evaluated_authority,3,Airborne Original Lemon Lime Effervescent Tablets
+261919,multi_or_prenatal,58.4,Needs improvement,10.0,evaluated_authority,3,Airborne Original Very Berry
+263856,multi_or_prenatal,77.3,Good,20.0,evaluated_authority,1,Earth Source Multi-Nutrient
+263869,generic,78.4,Good,11.1,evaluated_authority,1,Ester-C plus 500 mg Vitamin C
+264159,generic,76.9,Good,11.1,evaluated_authority,1,Ester-C Plus 500 mg Vitamin C
+265080,generic,63.4,Needs improvement,0.0,applicability_unestablished,1,Trans-Pterostilbene 50 mg
+265197,multi_or_prenatal,83.5,Very good,20.0,evaluated_authority,7,Men Over 40 One Daily
+265223,multi_or_prenatal,89.2,Very good,20.0,evaluated_authority,2,Multi for Men 55+
+265227,multi_or_prenatal,89.4,Very good,20.0,evaluated_authority,1,Multi for Women 55+
+265249,generic,80.6,Very good,11.1,evaluated_authority,1,Vegan B12
+265286,multi_or_prenatal,85.1,Very good,20.0,evaluated_authority,2,Women's One Daily California Blend
+265287,multi_or_prenatal,84.6,Very good,20.0,evaluated_authority,2,Women's One Daily California Blend
+265305,generic,78.1,Good,11.8,evaluated_authority,1,Daily Immune Support
+266767,multi_or_prenatal,93.5,Excellent,20.0,evaluated_authority,2,Prenatal Multi + DHA 200mg
+267299,multi_or_prenatal,64.9,Needs improvement,10.0,evaluated_authority,5,Gluten-Free Support
+267343,generic,53.2,Poor,10.4,evaluated_applicable,0,Quercetin Recovery+
+267345,generic,61.8,Needs improvement,10.4,evaluated_applicable,0,Quercetin Drop Uric Acid
+267349,generic,58.9,Needs improvement,0.0,applicability_unestablished,2,Melatonin Max Strength 10 mg Natural Strawberry Flavor
+267359,generic,53.6,Poor,0.0,applicability_unestablished,2,Melatonin 3 mg Sugar Free
+267363,generic,53.6,Poor,0.0,applicability_unestablished,2,Melatonin 3 mg Sugar Free
+267606,multi_or_prenatal,83.8,Very good,20.0,evaluated_authority,2,Multivitamin for Daily Immune Support
+267615,multi_or_prenatal,85.1,Very good,20.0,evaluated_authority,5,Women's One Daily
+267617,multi_or_prenatal,85.1,Very good,20.0,evaluated_authority,5,Women's One Daily
+267620,multi_or_prenatal,85.5,Very good,20.0,evaluated_authority,5,Women's One Daily
+267621,multi_or_prenatal,85.5,Very good,20.0,evaluated_authority,5,Women's One Daily
+267660,multi_or_prenatal,80.1,Very good,13.3,evaluated_authority,1,Ultra Hair
+267674,multi_or_prenatal,83.9,Very good,20.0,evaluated_authority,5,Alive! Energy 50+ Complete Multivitamin
+267694,multi_or_prenatal,58.8,Needs improvement,20.0,evaluated_authority,9,Alive! Max3 Potency Multivitamin
+267699,multi_or_prenatal,58.7,Needs improvement,20.0,evaluated_authority,9,Alive! Max3 Potency Multivitamin
+268686,multi_or_prenatal,58.7,Needs improvement,13.3,evaluated_authority,5,Supergreens Gummies
+269579,generic,59.9,Needs improvement,0.0,applicability_unestablished,1,Hyaluronic Acid + Chondroitin Sulfate
+269587,generic,58.1,Needs improvement,0.0,applicability_unestablished,1,Glucosamine Chondroitin MSM + Hyaluronic Acid
+270298,generic,59.8,Needs improvement,0.0,applicability_unestablished,1,CLA 800 mg
+270556,multi_or_prenatal,79.8,Very good,20.0,evaluated_authority,1,One A Day Kids with Nature's Medley
+270613,generic,69.7,Good,7.3,evaluated_applicable,0,Nitric Oxide Booster
+271645,generic,53.6,Poor,0.0,applicability_unestablished,2,Melatonin 1.5 mg Natural Tropical Peach Flavor
+271754,generic,53.1,Poor,0.0,applicability_unestablished,2,Melatonin Sugarfree
+273212,multi_or_prenatal,84.0,Very good,20.0,evaluated_authority,5,Alive! Women's 50+
+273215,multi_or_prenatal,83.2,Very good,20.0,evaluated_authority,5,Alive! Multi-Vitamin Adult Gummies
+273258,multi_or_prenatal,84.0,Very good,20.0,evaluated_authority,5,Alive! Men's 50+
+273376,multi_or_prenatal,80.8,Very good,20.0,evaluated_authority,5,Alive! Teen Complete Multi for Him
+273383,multi_or_prenatal,78.5,Good,13.3,evaluated_authority,1,Derma Klear Akne-Zyme
+273476,multi_or_prenatal,73.7,Good,10.0,evaluated_authority,4,ThymuPlex
+273479,multi_or_prenatal,85.5,Very good,16.7,evaluated_authority,3,ViraPlex
+273621,multi_or_prenatal,81.7,Very good,13.3,evaluated_authority,1,Hair Ultra Softgels
+273676,sports,36.9,Poor,0.0,research_present_applicability_unestablished,1,MD Protein Fit Creamy Vanilla Flavor
+273685,sports,36.9,Poor,0.0,research_present_applicability_unestablished,1,MD Protein Sustainable Plant-Based Creamy Vanilla Flavor
+273864,generic,59.8,Needs improvement,0.0,applicability_unestablished,1,CLA 95% 1250 mg
+273868,multi_or_prenatal,57.6,Needs improvement,10.0,evaluated_authority,4,Immune Support Orange Flavor
+273882,multi_or_prenatal,76.6,Good,20.0,evaluated_authority,9,Women's Multi 40+
+274138,generic,61.8,Needs improvement,10.4,evaluated_applicable,0,Quercetin Drop Uric Acid 500 mg
+274148,generic,53.2,Poor,10.4,evaluated_applicable,0,Quercetin Recovery 500 mg
+274376,sports,88.6,Very good,15.6,evaluated_applicable,0,Whey+ Dutch Chocolate
+274461,multi_or_prenatal,79.1,Good,20.0,evaluated_authority,9,Men's Multi 40+
+274468,multi_or_prenatal,79.1,Good,20.0,evaluated_authority,9,Men's Multi
+274473,multi_or_prenatal,74.7,Good,16.7,evaluated_authority,8,Men's Once Daily
+274498,multi_or_prenatal,54.7,Needs improvement,10.0,evaluated_authority,8,Organic Plant Collagen Builder
+274520,multi_or_prenatal,76.8,Good,20.0,evaluated_authority,10,Prenatal Multi
+274532,multi_or_prenatal,78.4,Good,20.0,evaluated_authority,10,Prenatal Once Daily
+274598,multi_or_prenatal,78.5,Good,16.7,evaluated_authority,9,Women's Multi 40+
+274616,multi_or_prenatal,76.4,Good,20.0,evaluated_authority,9,Women's Once Daily
+274620,sports,59.7,Needs improvement,15.6,evaluated_applicable,0,Concept X Gummy Worm
+274686,multi_or_prenatal,66.7,Needs improvement,16.7,evaluated_authority,1,Raw Enzymes Men 50 & Wiser
+274728,multi_or_prenatal,52.2,Poor,13.3,evaluated_authority,5,Raw Organic Perfect Food Alkalizer & Detoxifier Lemon Ginger
+274840,multi_or_prenatal,64.4,Needs improvement,20.0,evaluated_authority,3,Liquid Fruit Punch
+274887,multi_or_prenatal,83.1,Very good,20.0,evaluated_authority,1,Raw One For Men
+274893,multi_or_prenatal,81.7,Very good,20.0,evaluated_authority,1,Raw One for Women
+274909,multi_or_prenatal,78.5,Good,20.0,evaluated_authority,2,Men
+275039,multi_or_prenatal,78.2,Good,20.0,evaluated_authority,1,Raw One For Men
+275056,multi_or_prenatal,78.0,Good,20.0,evaluated_authority,2,Perfect Weight
+275080,multi_or_prenatal,76.1,Good,20.0,evaluated_authority,3,Raw Prenatal
+275119,multi_or_prenatal,42.1,Poor,6.7,evaluated_authority,3,Raw Organic Perfect Food Chocolate
+275997,multi_or_prenatal,66.3,Needs improvement,16.7,evaluated_authority,12,Organic Multivitamin
+276596,multi_or_prenatal,66.2,Needs improvement,20.0,evaluated_authority,2,Liquid Multivitamin Formula Orange Mango Flavor
+277036,multi_or_prenatal,74.7,Good,16.7,evaluated_authority,8,Men's Once Daily
+277037,multi_or_prenatal,76.1,Good,20.0,evaluated_authority,9,Prenatal Multi
+277038,multi_or_prenatal,78.4,Good,20.0,evaluated_authority,10,Prenatal Once Daily
+277039,multi_or_prenatal,75.0,Good,16.7,evaluated_authority,10,Women's Multi
+277040,multi_or_prenatal,76.4,Good,20.0,evaluated_authority,9,Women's Once Daily
+277045,multi_or_prenatal,81.7,Very good,20.0,evaluated_authority,1,Raw One for Women
+277516,sports,36.9,Poor,0.0,research_present_applicability_unestablished,1,MD Protein Fit Fair Trade Rich Chocolate Flavor
+277518,sports,36.9,Poor,0.0,research_present_applicability_unestablished,1,MD Protein Sustainable Plant-Based Fair Trade Rich Chocolate Flavor
+277678,multi_or_prenatal,74.1,Good,6.7,evaluated_authority,3,GlucoFunction
+277679,multi_or_prenatal,74.1,Good,6.7,evaluated_authority,3,GlucoFunction
+277703,multi_or_prenatal,81.0,Very good,10.0,evaluated_authority,3,Hair/Skin/Nails Ultra
+277710,multi_or_prenatal,82.9,Very good,20.0,evaluated_authority,1,Longevity Nutrients
+277773,multi_or_prenatal,72.2,Good,20.0,evaluated_authority,4,Men's Nutrients
+277774,multi_or_prenatal,72.2,Good,20.0,evaluated_authority,4,Men's Nutrients
+277796,multi_or_prenatal,76.1,Good,20.0,evaluated_authority,3,Raw Prenatal
+278259,multi_or_prenatal,63.8,Needs improvement,3.3,evaluated_authority,2,ProSoothe II
+278301,generic,61.5,Needs improvement,0.0,applicability_unestablished,2,PureDefense w/NAC
+278454,multi_or_prenatal,84.4,Very good,20.0,evaluated_authority,1,Essential for Women Mint Essenced
+278475,generic,57.8,Needs improvement,0.0,applicability_unestablished,1,CLA 1250 Max Potency
+280354,multi_or_prenatal,93.8,Excellent,20.0,evaluated_authority,2,Postnatal Multi + DHA
+280356,multi_or_prenatal,93.2,Excellent,20.0,evaluated_authority,2,Prenatal Folic Acid + DHA
+286334,generic,53.1,Poor,0.0,applicability_unestablished,2,SleepWell Melatonin 3 mg
+286393,generic,55.1,Needs improvement,0.0,applicability_unestablished,2,Melatonin Max Strength 10 mg Natural Strawberry Flavor
+287367,b_complex,69.6,Good,20.0,evaluated_authority,1,Balanced B Complex
+287428,multi_or_prenatal,82.8,Very good,20.0,evaluated_authority,1,Longevity Nutrients
+287462,multi_or_prenatal,63.8,Needs improvement,3.3,evaluated_authority,2,PMS Essentials
+287483,multi_or_prenatal,78.2,Good,10.0,evaluated_authority,1,"Skin, Nails & Hair 2"
+288088,multi_or_prenatal,80.5,Very good,16.7,evaluated_authority,1,"Extra Strength Hair, Skin & Nails"
+288344,multi_or_prenatal,80.1,Very good,20.0,evaluated_authority,1,Men
+291373,multi_or_prenatal,73.1,Good,13.3,evaluated_authority,1,Ultra Strength Hair
+293237,multi_or_prenatal,84.7,Very good,20.0,evaluated_authority,2,Alive! Garden Goodness Women's Multivitamin
+293239,multi_or_prenatal,89.7,Excellent,20.0,evaluated_authority,6,"Alive! Hair, Skin & Nails Multivitamin Strawberry Flavored"
+293243,multi_or_prenatal,67.4,Needs improvement,20.0,evaluated_authority,8,Alive! Men's Ultra Potency Complete Multivitamin
+293250,multi_or_prenatal,80.9,Very good,20.0,evaluated_authority,7,Alive! Teen Complete Multi for Her Citrus Burst Flavored
+293252,multi_or_prenatal,84.3,Very good,20.0,evaluated_authority,8,Alive! Women's Energy Complete Multivitamin
+293270,generic,62.4,Needs improvement,0.0,applicability_unestablished,1,DGL Ultra 75 mg Chocolate Flavored
+293395,generic,60.6,Needs improvement,0.0,applicability_unestablished,1,Pomegranate
+293406,generic,64.3,Needs improvement,0.0,applicability_unestablished,1,Organic Flax Oil
+293418,generic,54.1,Poor,0.0,applicability_unestablished,2,Resveratrol-Forte
+293953,multi_or_prenatal,80.2,Very good,10.0,evaluated_authority,2,Daily Pure Pack Mood Balance
+293955,multi_or_prenatal,77.2,Good,16.7,evaluated_authority,3,Daily Pure Pack PureLean Weight Support
+294002,generic,63.9,Needs improvement,0.0,applicability_unestablished,1,Liposomal Glutathione Liquid
+294043,multi_or_prenatal,63.2,Needs improvement,3.3,evaluated_authority,1,ProSoothe II
+294047,multi_or_prenatal,70.0,Good,16.7,evaluated_authority,1,PureLean Nutrients
+294074,multi_or_prenatal,69.5,Good,16.7,evaluated_authority,4,Women's Nutrients
+295197,generic,64.3,Needs improvement,0.0,applicability_unestablished,1,Organic Flax Oil
+295198,generic,64.3,Needs improvement,0.0,applicability_unestablished,1,Organic Flax Oil
+295210,multi_or_prenatal,69.1,Needs improvement,13.3,evaluated_authority,7,SystemWell Ultimate Immunity
+295773,sports,72.6,Good,7.3,evaluated_applicable,1,Bulk Strawberry Kiwi
+297157,multi_or_prenatal,69.5,Good,16.7,evaluated_authority,4,Women's Nutrients
+297614,multi_or_prenatal,74.9,Good,16.7,evaluated_authority,2,50 & Wiser Women
+297618,multi_or_prenatal,78.6,Good,20.0,evaluated_authority,3,50 & Wiser Women
+297619,multi_or_prenatal,78.7,Good,20.0,evaluated_authority,2,Men
+297620,multi_or_prenatal,78.6,Good,20.0,evaluated_authority,1,Men
+297621,multi_or_prenatal,78.6,Good,20.0,evaluated_authority,2,50 & Wiser Men
+297622,multi_or_prenatal,75.6,Good,16.7,evaluated_authority,2,50 & Wiser Men
+297626,multi_or_prenatal,78.5,Good,20.0,evaluated_authority,3,Women
+297628,multi_or_prenatal,77.4,Good,20.0,evaluated_authority,2,Family
+297629,multi_or_prenatal,55.0,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Coffee Flavor
+297630,multi_or_prenatal,55.0,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Chocolate Flavor
+297637,multi_or_prenatal,55.0,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Chocolate Flavor
+297638,multi_or_prenatal,56.3,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Chocolate Flavor
+297639,multi_or_prenatal,55.2,Needs improvement,10.0,evaluated_authority,3,Raw Organic Fit Chocolate Flavor
+297640,multi_or_prenatal,53.5,Poor,10.0,evaluated_authority,3,Raw Organic Fit Vanilla Flavor
+297641,multi_or_prenatal,53.5,Poor,10.0,evaluated_authority,3,Raw Organic Fit Vanilla Flavor
+297642,multi_or_prenatal,53.5,Poor,10.0,evaluated_authority,3,Raw Organic Fit Vanilla Flavor
+297643,multi_or_prenatal,53.5,Poor,10.0,evaluated_authority,3,Raw Organic Fit Vanilla Flavor
+297646,multi_or_prenatal,74.9,Good,13.3,evaluated_authority,3,Oceans 3 Better Brain
+297647,multi_or_prenatal,68.0,Needs improvement,10.0,evaluated_authority,4,Oceans 3 Healthy Hormones
+297648,multi_or_prenatal,48.0,Poor,10.0,evaluated_authority,3,Raw Organic Fit Original Flavor
+297649,multi_or_prenatal,48.2,Poor,10.0,evaluated_authority,3,Raw Organic Fit Original Flavor
+297685,multi_or_prenatal,63.2,Needs improvement,16.7,evaluated_authority,2,Liquid Multivitamin Formula Fruit Punch Flavor
+297686,multi_or_prenatal,63.2,Needs improvement,16.7,evaluated_authority,2,Liquid Multivitamin Formula Orange Mango Flavor
+299028,multi_or_prenatal,81.1,Very good,20.0,evaluated_authority,1,Athletic Nutrients
+299029,multi_or_prenatal,80.9,Very good,20.0,evaluated_authority,2,Athletic Pure Pack
+299032,generic,77.2,Good,11.8,evaluated_authority,2,Balanced Immune
+299735,multi_or_prenatal,84.9,Very good,20.0,evaluated_authority,1,PureLean Natural Vanilla Bean Flavor
+299738,multi_or_prenatal,83.3,Very good,20.0,evaluated_authority,1,PureResponse Multivitamin
+299743,multi_or_prenatal,81.1,Very good,20.0,evaluated_authority,1,Athletic Nutrients
+299753,multi_or_prenatal,78.2,Good,10.0,evaluated_authority,1,SeroPlus
+299905,generic,55.8,Needs improvement,0.0,applicability_unestablished,1,CLA 1250
+299926,generic,76.8,Good,11.1,evaluated_authority,1,Blood Builder Iron
+299928,generic,76.8,Good,11.1,evaluated_authority,1,Blood Builder Iron
+300082,sports,55.0,Needs improvement,7.3,evaluated_applicable,0,LIT Iced Tea Lemonade
+302512,multi_or_prenatal,67.4,Needs improvement,20.0,evaluated_authority,8,Alive! Men's Ultra Potency Complete Multivitamin
+302515,multi_or_prenatal,67.5,Needs improvement,20.0,evaluated_authority,8,Alive! Women's Ultra Potency Complete Multivitamin
+302650,multi_or_prenatal,65.5,Needs improvement,6.7,evaluated_authority,2,Comprehensive Prostate Formula
+302663,generic,59.4,Needs improvement,0.0,applicability_unestablished,1,Glucosamine Chondroitin MSM + Hyaluronic Acid
+302664,generic,57.2,Needs improvement,0.0,applicability_unestablished,0,Glucosamine Chondroitin MSM + UCII
+302665,generic,60.0,Needs improvement,0.0,applicability_unestablished,0,Glucosamine Chondroitin MSM with OptiMSM
+302666,generic,60.0,Needs improvement,0.0,applicability_unestablished,0,Glucosamine Chondroitin MSM with OptiMSM
+302667,generic,60.0,Needs improvement,0.0,applicability_unestablished,0,Glucosamine Chondroitin MSM with OptiMSM
+302677,generic,73.1,Good,12.2,evaluated_applicable,0,High Potency Ginger Root Extract 250 mg
+302681,generic,61.9,Needs improvement,0.0,applicability_unestablished,1,Hyaluronic Acid + Chondroitin Sufate
+302682,generic,61.9,Needs improvement,0.0,applicability_unestablished,1,Hyaluronic Acid + Chondroitin Sulfate
+302691,generic,62.4,Needs improvement,0.0,applicability_unestablished,0,MSM with OptiMSM 1000 mg
+302714,generic,60.4,Needs improvement,0.0,applicability_unestablished,1,Vegan Glucosamine Chondroitin MSM
+302763,multi_or_prenatal,83.7,Very good,20.0,evaluated_authority,3,Daily Diabetes Health Pack
+303533,sports,76.5,Good,7.3,evaluated_applicable,1,Pulse Fruit Punch
+304333,multi_or_prenatal,60.3,Needs improvement,10.0,evaluated_authority,2,Healthy Testosterone
+304563,multi_or_prenatal,70.3,Good,6.7,evaluated_authority,1,Daily Stress Support
+304564,multi_or_prenatal,70.3,Good,6.7,evaluated_authority,1,Daily Stress Support
+304619,multi_or_prenatal,83.8,Very good,20.0,evaluated_authority,7,Alive! Complete Premium Prenatal Multivitamin
+304621,multi_or_prenatal,76.5,Good,20.0,evaluated_authority,6,Alive! Diabetic Multivitamin
+304638,multi_or_prenatal,73.9,Good,20.0,evaluated_authority,1,Mega Men Energy & Metabolism Multivitamin
+305834,multi_or_prenatal,79.5,Very good,20.0,evaluated_authority,1,Multivitamin + Immune
+305837,multi_or_prenatal,79.8,Very good,20.0,evaluated_authority,1,Multivitamin + Focus
+306358,multi_or_prenatal,85.3,Very good,20.0,evaluated_authority,1,Multivitamin
+306360,multi_or_prenatal,84.3,Very good,20.0,evaluated_authority,2,Multivitamin for Men
+306380,multi_or_prenatal,52.1,Poor,6.7,evaluated_authority,1,PRE-SF Blue Raspberry
+306381,sports,75.7,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Blue Raspberry
+306382,sports,61.8,Needs improvement,7.3,evaluated_applicable,1,Pre-Workout Complex Blue Raspberry
+307574,generic,60.2,Needs improvement,0.0,applicability_unestablished,1,Colostrum Prime Life 400 mg
+307580,generic,45.8,Poor,0.0,applicability_unestablished,1,DIM+CDG
+307595,multi_or_prenatal,51.4,Poor,6.7,evaluated_authority,3,Glucose Optimizer
+307647,generic,80.8,Very good,11.1,evaluated_authority,1,Magnesium Optimizer
+307726,generic,54.8,Needs improvement,0.0,applicability_unestablished,4,Resveratrol Synergy
+307740,generic,62.9,Needs improvement,0.0,applicability_unestablished,1,trans-Pterostilbene 50 mg
+307744,multi_or_prenatal,66.1,Needs improvement,3.3,evaluated_authority,1,Vision Optimizer
+307745,multi_or_prenatal,66.1,Needs improvement,3.3,evaluated_authority,1,Vision Optimizer
+308245,multi_or_prenatal,52.1,Poor,6.7,evaluated_authority,1,PRE-SF Peach Mango
+308246,multi_or_prenatal,52.1,Poor,6.7,evaluated_authority,1,PRE-SF Pink Lemonade
+308247,sports,73.7,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Blue Raspberry
+308248,sports,75.2,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Fruit Punch
+308249,sports,75.7,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Grape
+308250,sports,75.7,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Peach Mango
+308251,sports,75.7,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Watermelon
+308324,multi_or_prenatal,67.9,Needs improvement,10.0,evaluated_authority,1,Ultra Testosterone
+309959,sports,70.2,Good,7.3,evaluated_applicable,1,Preseries Lean Pre-Workout Tropical Punch
+309960,sports,68.7,Needs improvement,7.3,evaluated_applicable,1,Preseries Stim-Free Blue Raspberry
+310921,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
+310922,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
+310924,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
+310927,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
+311801,sports,75.2,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Fruit Punch
+311872,sports,75.7,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Grape
+311873,sports,75.7,Good,15.6,evaluated_applicable,1,PRE Pre-Workout Complex Peach Mango
+312259,multi_or_prenatal,50.6,Poor,3.3,evaluated_authority,2,Energize & Burn Fruit Punch
+313073,multi_or_prenatal,69.0,Needs improvement,20.0,evaluated_authority,2,Sport Multivitamin
+313832,generic,70.4,Good,12.2,evaluated_applicable,0,Lutein & Zeaxanthin Mango
+313913,multi_or_prenatal,76.6,Good,20.0,evaluated_authority,1,MediClear Orange Vanilla Flavored
+313925,multi_or_prenatal,61.7,Needs improvement,20.0,evaluated_authority,1,VeganPro Complex Chocolate Flavored
+314033,multi_or_prenatal,77.5,Good,20.0,evaluated_authority,1,Teen Multivitamin for Boys 12-17
+315309,multi_or_prenatal,65.6,Needs improvement,10.0,evaluated_authority,2,Liver Health Formula
+315329,multi_or_prenatal,75.7,Good,16.0,evaluated_authority,2,Multivitamin Prenatal Gummy Raspberry Lemonade
+315355,multi_or_prenatal,77.3,Good,10.0,evaluated_authority,1,Stress Reset
+315593,sports,56.3,Needs improvement,0.0,applicability_unestablished,0,Beta Alanine 1500 mg
+315813,generic,56.7,Needs improvement,0.0,applicability_unestablished,1,Saw Palmetto
+315846,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,2,Mega Men Sport Multivitamin
+315853,multi_or_prenatal,67.9,Needs improvement,10.0,evaluated_authority,1,Ultra Testosterone
+316791,sports,65.2,Needs improvement,15.6,evaluated_applicable,1,Tri-Phase Lemonade
+317027,multi_or_prenatal,76.5,Good,20.0,evaluated_authority,6,Completia Diabetic Multivitamin
+317028,multi_or_prenatal,76.5,Good,20.0,evaluated_authority,6,Completia Diabetic Multivitamin
+317046,multi_or_prenatal,83.2,Very good,20.0,evaluated_authority,5,Alive! Adult Premium Gummies
+317100,multi_or_prenatal,81.6,Very good,20.0,evaluated_authority,5,Alive! Women's 50+ Premium Gummy Multivitamin
+317105,multi_or_prenatal,81.5,Very good,20.0,evaluated_authority,5,Alive! Women's Premium Gummy Multivitamin
+317607,multi_or_prenatal,69.0,Needs improvement,20.0,evaluated_authority,2,Sport Multivitamin
+317610,sports,66.9,Needs improvement,15.6,evaluated_applicable,1,Tri-Phase Cherry Limeade
+317960,multi_or_prenatal,75.4,Good,6.7,evaluated_authority,4,Daily Stress Formula
+317961,multi_or_prenatal,75.4,Good,6.7,evaluated_authority,4,Daily Stress Formula
+317964,multi_or_prenatal,79.1,Good,13.3,evaluated_authority,1,LiquiNutrients Natural Lemon Creme Flavor
+318106,sports,67.3,Needs improvement,15.6,evaluated_applicable,1,LIT AF Iced Tea Lemonade
+318108,sports,72.5,Good,15.6,evaluated_applicable,0,LIT Jolly Rancher Blue Raspberry
+319385,sports,67.2,Needs improvement,15.6,evaluated_applicable,1,Tri-Phase Lemonade
+319386,sports,67.2,Needs improvement,15.6,evaluated_applicable,1,Tri-Phase Lemon Lime
+319907,sports,70.1,Good,15.6,evaluated_applicable,1,LIT AF Gummy Worm
+319908,sports,72.1,Good,15.6,evaluated_applicable,1,LIT AF Icy Fireworks
+319921,sports,61.3,Needs improvement,15.6,evaluated_applicable,0,LIT Jolly Rancher Cherry
+319922,sports,74.0,Good,15.6,evaluated_applicable,0,LIT Orange Mango
+320589,multi_or_prenatal,59.2,Needs improvement,13.3,evaluated_authority,1,Raw Enzymes Men
+321349,multi_or_prenatal,55.5,Needs improvement,13.3,evaluated_authority,1,Living Calcium Advanced
+321352,multi_or_prenatal,72.9,Good,13.3,evaluated_authority,3,Oceans 3 Better Brain
+321354,multi_or_prenatal,68.4,Needs improvement,10.0,evaluated_authority,4,Oceans 3 Healthy Hormones
+321377,b_complex,68.9,Needs improvement,20.0,evaluated_authority,5,B-Complex
+321378,multi_or_prenatal,76.5,Good,20.0,evaluated_authority,8,Women's Multi
+321389,b_complex,64.0,Needs improvement,20.0,evaluated_authority,1,Raw B-Complex
+321390,b_complex,64.0,Needs improvement,20.0,evaluated_authority,1,Raw B-Complex
+321393,generic,69.6,Good,11.1,evaluated_authority,1,"Raw D3 2,000 IU (50 mcg)"
+321394,generic,69.6,Good,11.1,evaluated_authority,1,"Raw D3 2,000 IU (50 mcg)"
+321395,generic,59.4,Needs improvement,11.1,evaluated_authority,1,"Raw D3 5,000 IU"
+321402,multi_or_prenatal,77.8,Good,20.0,evaluated_authority,2,Women
+321826,sports,63.3,Needs improvement,15.6,evaluated_applicable,0,LIT Spiced Cider
+321975,multi_or_prenatal,77.1,Good,20.0,evaluated_authority,3,Multi-Vitamin Elite A.M.
+323076,multi_or_prenatal,77.1,Good,20.0,evaluated_authority,1,Basic Nutrients 2/Day
+323084,multi_or_prenatal,80.6,Very good,20.0,evaluated_authority,1,MediClear-SGS Vanilla Flavored
+323127,fiber_digestive,51.5,Poor,0.0,applicability_unestablished,2,Prebiotic + Pomegranate Berry
+323133,sports,83.7,Very good,15.6,evaluated_applicable,0,Whey Protein Isolate Vanilla Flavored
+323711,multi_or_prenatal,82.9,Very good,20.0,evaluated_authority,1,Essential for Men
+326289,generic,57.8,Needs improvement,0.0,applicability_unestablished,1,Vegan CLA 1250
+326290,generic,57.8,Needs improvement,0.0,applicability_unestablished,1,Vegan CLA 1250
+326296,generic,59.8,Needs improvement,0.0,applicability_unestablished,1,CLA 1250
+326297,generic,57.8,Needs improvement,0.0,applicability_unestablished,1,CLA 1250
+327306,multi_or_prenatal,80.2,Very good,20.0,evaluated_authority,1,MediClear-SGS Chocolate Flavored
+327402,multi_or_prenatal,72.8,Good,16.7,evaluated_authority,7,Kids Multivitamin Powder
+327416,multi_or_prenatal,57.6,Needs improvement,10.0,evaluated_authority,4,Multivitamin Liquid
+327552,multi_or_prenatal,86.7,Very good,20.0,evaluated_authority,2,Baby & Me 2 Prenatal Multi
+327554,b_complex,69.6,Good,20.0,evaluated_authority,1,Balanced B Complex
+327555,b_complex,69.6,Good,20.0,evaluated_authority,1,Balanced B Complex
+327564,b_complex,81.3,Very good,20.0,evaluated_authority,2,Kid's B Complex
+327565,multi_or_prenatal,80.8,Very good,20.0,evaluated_authority,2,Kids One Daily
+327569,multi_or_prenatal,84.6,Very good,20.0,evaluated_authority,7,Men's One Daily Multivitamin
+327571,multi_or_prenatal,88.4,Very good,20.0,evaluated_authority,1,Men's Advanced Multivitamin
+327572,multi_or_prenatal,85.6,Very good,16.7,evaluated_authority,2,Men's 40+ Advanced Multivitamin
+327573,multi_or_prenatal,87.2,Very good,20.0,evaluated_authority,3,Men's 55+ Advanced Multivitamin
+327574,multi_or_prenatal,89.0,Very good,20.0,evaluated_authority,2,Women's Advanced Multivitamin
+327575,multi_or_prenatal,88.7,Very good,20.0,evaluated_authority,2,Women's 40+ Advanced Multivitamin
+327576,multi_or_prenatal,87.4,Very good,20.0,evaluated_authority,2,Women's 55+ Advanced Multivitamin
+327589,multi_or_prenatal,85.1,Very good,20.0,evaluated_authority,10,Women's 40+ One Daily Multivitamin
+327590,multi_or_prenatal,85.5,Very good,20.0,evaluated_authority,8,Women's One Daily Multivitamin
+327595,multi_or_prenatal,78.2,Good,10.0,evaluated_authority,1,"Skin, Nails & Hair 2"
+327854,b_complex,76.4,Good,20.0,evaluated_authority,7,Alive! B-Complex Gummy Mango Flavored
+327855,multi_or_prenatal,86.3,Very good,20.0,evaluated_authority,8,Alive! Daily Energy Complete Multivitamin
+327857,multi_or_prenatal,80.4,Very good,20.0,evaluated_authority,7,Alive! Kids Gummy Multivitamin
+327858,multi_or_prenatal,80.4,Very good,20.0,evaluated_authority,7,Alive! Kids Premium Gummy Multivitamin
+327864,multi_or_prenatal,83.4,Very good,20.0,evaluated_authority,7,Alive! Men's 50+ Premium Gummy Multivitamin
+327866,multi_or_prenatal,77.1,Good,16.0,evaluated_authority,7,Alive! Prenatal Multivitamin Gummy
+327868,multi_or_prenatal,80.8,Very good,20.0,evaluated_authority,1,Alive! Women's Gummy Multivitamin Mixed Berry Flavor
+327877,generic,70.1,Good,12.2,evaluated_applicable,1,Bilberry
+327878,generic,70.1,Good,12.2,evaluated_applicable,1,Bilberry Premium Extract
+327882,multi_or_prenatal,69.3,Needs improvement,10.0,evaluated_authority,2,Blood Sugar Manager
+327919,multi_or_prenatal,74.5,Good,10.0,evaluated_authority,4,Complete Liver Cleanse
+327947,generic,62.9,Needs improvement,0.0,applicability_unestablished,1,DGL Sugar Free Licorice Flavored
+327948,generic,62.4,Needs improvement,0.0,applicability_unestablished,1,DGL Licorice Flavored
+327949,generic,62.4,Needs improvement,0.0,applicability_unestablished,1,DGL Ultra 75 mg Chocolate Flavored
+327983,generic,65.9,Needs improvement,0.0,applicability_unestablished,1,Horse Chestnut 250 mg
+327985,generic,65.9,Needs improvement,0.0,applicability_unestablished,1,Hydraplenish with OptiMSM
+328010,generic,64.3,Needs improvement,0.0,applicability_unestablished,1,Organic Flax Oil Super Lignan
+328011,generic,64.3,Needs improvement,0.0,applicability_unestablished,1,Organic Flax Oil Super Lignan
+328038,generic,55.3,Needs improvement,0.0,applicability_unestablished,2,Resveratrol-Forte 175 mg
+328054,generic,58.0,Needs improvement,0.0,applicability_unestablished,1,Saw Palmetto 160 mg
+328055,generic,57.4,Needs improvement,0.0,applicability_unestablished,1,Saw Palmetto 160 mg
+328073,multi_or_prenatal,69.1,Needs improvement,13.3,evaluated_authority,2,SystemWell Ultimate Immune
+328074,multi_or_prenatal,69.1,Needs improvement,13.3,evaluated_authority,2,SystemWell Ultimate Immune
+328078,generic,73.1,Good,11.1,evaluated_authority,1,Ultimate Iron
+328097,multi_or_prenatal,74.1,Good,20.0,evaluated_authority,15,Alive! Complete Liquid Multivitamin Max Potency Citrus Flavored
+328098,multi_or_prenatal,72.7,Good,10.0,evaluated_authority,5,"Alive! Hair, Skin & Nails Strawberry Flavored"
+328099,multi_or_prenatal,86.2,Very good,20.0,evaluated_authority,2,Alive! Men's 50+ Complete Multivitamin
+328102,multi_or_prenatal,86.2,Very good,20.0,evaluated_authority,2,Alive! Men's Complete Multivitamin
+328103,multi_or_prenatal,86.0,Very good,20.0,evaluated_authority,3,Alive! Men's Complete Multivitamin
+328104,multi_or_prenatal,83.9,Very good,20.0,evaluated_authority,1,Alive! Men's Gummy Multivitamin Fruit Flavored
+328105,multi_or_prenatal,83.9,Very good,20.0,evaluated_authority,1,Alive! Men's Gummy Multivitamin Fruit Flavored
+328106,multi_or_prenatal,84.2,Very good,20.0,evaluated_authority,1,Alive! Men's Gummy Multivitamin
+328108,multi_or_prenatal,67.4,Needs improvement,20.0,evaluated_authority,8,Alive! Men's Ultra Multivitamin
+328109,multi_or_prenatal,86.2,Very good,20.0,evaluated_authority,2,Alive! Men's 50+ Complete Multivitamin
+328111,multi_or_prenatal,67.4,Needs improvement,20.0,evaluated_authority,8,Alive! Men's 50+ Ultra Multivitamin
+328112,multi_or_prenatal,86.2,Very good,20.0,evaluated_authority,1,Alive! Women's 50+ Complete Multivitamin
+328113,multi_or_prenatal,86.2,Very good,20.0,evaluated_authority,1,Alive! Women's 50+ Complete Multivitamin
+328115,multi_or_prenatal,80.9,Very good,20.0,evaluated_authority,1,Alive! Women's 50+ Multivitamin Gummy Mixed Berry Flavored
+328117,multi_or_prenatal,80.7,Very good,20.0,evaluated_authority,1,Alive! Women's 50+ Multivitamin Gummy Mixed Berry Flavored
+328119,multi_or_prenatal,67.4,Needs improvement,20.0,evaluated_authority,8,Alive! Women's 50+ Ultra Multivitamin
+328120,multi_or_prenatal,86.1,Very good,20.0,evaluated_authority,1,Alive! Women's Complete Multivitamin
+328121,multi_or_prenatal,86.3,Very good,20.0,evaluated_authority,1,Alive! Women's Complete Multivitamin
+328126,multi_or_prenatal,88.2,Very good,20.0,evaluated_authority,1,Alpha Betic
+328436,multi_or_prenatal,57.5,Needs improvement,6.7,evaluated_authority,1,Dr. Strum's Intensive Bone Formula
+328442,generic,50.3,Poor,0.0,applicability_unestablished,1,Endothelial Defense Pomegranate Plus
+328514,multi_or_prenatal,57.0,Needs improvement,20.0,evaluated_authority,2,Life Extension Mix Capsules
+328515,multi_or_prenatal,58.7,Needs improvement,20.0,evaluated_authority,2,Life Extension Mix Capsules without Copper
+328516,multi_or_prenatal,58.9,Needs improvement,20.0,evaluated_authority,2,Life Extension Mix Powder
+328517,multi_or_prenatal,58.9,Needs improvement,20.0,evaluated_authority,3,Life Extension Mix Tablets
+328518,multi_or_prenatal,57.5,Needs improvement,20.0,evaluated_authority,2,Life Extension Mix Tablets with Extra Niacin
+328519,multi_or_prenatal,57.2,Needs improvement,20.0,evaluated_authority,2,Life Extension Mix Tablets without Copper
+328616,generic,58.6,Needs improvement,0.0,applicability_unestablished,1,Optimized Resveratrol
+328719,generic,54.6,Needs improvement,0.0,applicability_unestablished,2,Super Miraforte with Standardized Lignans
+328750,generic,60.1,Needs improvement,0.0,applicability_unestablished,1,Triple Action Cruciferous Vegetable Extract and Resveratrol
+328819,multi_or_prenatal,77.1,Good,20.0,evaluated_authority,1,Basic Nutrients 2/Day
+328820,generic,73.3,Good,10.4,evaluated_applicable,0,Berberine
+328830,multi_or_prenatal,95.5,Exceptional,20.0,evaluated_authority,1,Basic Prenatal
+328833,multi_or_prenatal,72.1,Good,20.0,evaluated_authority,3,A.M.
+328834,multi_or_prenatal,80.0,Very good,16.7,evaluated_authority,1,P.M.
+328840,generic,65.7,Needs improvement,0.0,applicability_unestablished,1,Quercetin Complex
+330290,generic,56.6,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract Powder 500 mg
+330291,generic,56.6,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract Powder 500 mg
+330292,generic,56.6,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract Powder 500 mg
+330293,generic,56.6,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract 500 mg
+330833,sports,59.2,Needs improvement,15.6,evaluated_applicable,0,Concept X Sweet & Tart
+330835,sports,64.2,Needs improvement,7.3,evaluated_applicable,0,LIT Gummy Worm Zero Sugar
+330836,sports,72.5,Good,15.6,evaluated_applicable,0,LIT Blue Raspberry
+330838,sports,72.5,Good,15.6,evaluated_applicable,0,LIT Jolly Rancher Blue Raspberry
+330840,sports,71.0,Good,15.6,evaluated_applicable,0,LIT Jolly Rancher Watermelon
+330841,sports,74.0,Good,15.6,evaluated_applicable,0,LIT Orange Mango
+331350,multi_or_prenatal,75.9,Good,6.7,evaluated_authority,1,Methylated Multi-Vitamin
+331484,multi_or_prenatal,76.5,Good,20.0,evaluated_authority,1,Multivitamin Energy & Metabolism
+331485,multi_or_prenatal,76.5,Good,20.0,evaluated_authority,1,Multivitamin Energy & Metabolism
+331658,multi_or_prenatal,76.3,Good,20.0,evaluated_authority,1,Energy & Metabolism
+332156,multi_or_prenatal,77.0,Good,16.0,evaluated_authority,7,Alive! Premium Prenatal Gummies Strawberry & Lemon Flavored
+332876,multi_or_prenatal,85.7,Very good,20.0,evaluated_authority,9,Men's 40+ One Daily Multivitamin
+332877,multi_or_prenatal,84.6,Very good,20.0,evaluated_authority,7,Men's One Daily Multivitamin
+332878,multi_or_prenatal,84.6,Very good,20.0,evaluated_authority,7,Men's One Daily Multivitamin
+332879,multi_or_prenatal,89.0,Very good,20.0,evaluated_authority,2,Women's Advanced Multivitamin
+332881,multi_or_prenatal,85.1,Very good,20.0,evaluated_authority,10,Women's 40+ One Daily Multivitamin
+332882,multi_or_prenatal,85.1,Very good,20.0,evaluated_authority,10,Women's 40+ One Daily Multivitamin
+332889,multi_or_prenatal,86.0,Very good,20.0,evaluated_authority,1,Alive! Women's 50+ Complete Multivitamin
+332890,multi_or_prenatal,80.9,Very good,20.0,evaluated_authority,1,Alive! Women's 50+ Multivitamin Gummy
+332959,multi_or_prenatal,80.8,Very good,20.0,evaluated_authority,1,Alive! Women's Gummy Multivitamin Mixed Berry Flavored
+332960,multi_or_prenatal,80.6,Very good,20.0,evaluated_authority,1,Alive! Women's Gummy Multivitamin Mixed Berry Flavored
+333765,generic,60.6,Needs improvement,0.0,applicability_unestablished,1,Pomegranate Premium Extract
+333872,multi_or_prenatal,58.8,Needs improvement,20.0,evaluated_authority,1,Alive! Max3 Potency Adult Complete Multivitamin Tablets with Iron
+333889,multi_or_prenatal,83.5,Very good,20.0,evaluated_authority,7,Alive! Men's Premium Gummy Multivitamin
+333892,multi_or_prenatal,67.4,Needs improvement,20.0,evaluated_authority,8,Alive! Men's Ultra Multivitamin
+334077,multi_or_prenatal,76.3,Good,20.0,evaluated_authority,1,Energy & Metabolism
+334078,multi_or_prenatal,76.3,Good,20.0,evaluated_authority,1,Energy & Metabolism
+334420,multi_or_prenatal,83.0,Very good,20.0,evaluated_authority,7,Alive! Men's Gummy Multivitamin Zero Sugar Peach Flavored
+334421,multi_or_prenatal,83.0,Very good,20.0,evaluated_authority,7,Alive! Women's Gummy Multivitamin Zero Sugar Strawberry Flavored
+334591,multi_or_prenatal,70.4,Good,20.0,evaluated_authority,1,Lean Shake Burn Chocolate Fudge
+334592,multi_or_prenatal,69.8,Good,20.0,evaluated_authority,1,Lean Shake Burn Strawberry
+335662,sports,70.1,Good,15.6,evaluated_applicable,1,LIT AF Gummy Worm
+336012,multi_or_prenatal,75.5,Good,20.0,evaluated_authority,2,Mega Men Sport Multivitamin
+336315,multi_or_prenatal,72.1,Good,20.0,evaluated_authority,3,A.M.
+336316,multi_or_prenatal,80.0,Very good,16.7,evaluated_authority,1,P.M.
+336626,generic,62.4,Needs improvement,0.0,applicability_unestablished,0,MSM Powder with OptiMSM
+336846,b_complex,66.0,Needs improvement,20.0,evaluated_authority,5,B-Complex
+336877,multi_or_prenatal,76.0,Good,20.0,evaluated_authority,22,One Daily Superfood Multi-Vitamin No Iron
+337202,multi_or_prenatal,86.6,Very good,20.0,evaluated_authority,3,Alive! Garden Goodness Men's Multi-Vitamin
+337231,multi_or_prenatal,83.8,Very good,20.0,evaluated_authority,1,Alive! Men's 50+ Multivitamin Gummy
+337232,multi_or_prenatal,75.6,Good,20.0,evaluated_authority,8,Alive! Men's 50+ Ultra Potency Complete Multivitamin
+337233,multi_or_prenatal,75.6,Good,20.0,evaluated_authority,8,Alive! Men's 50+ Ultra Potency Complete Multivitamin
+337236,multi_or_prenatal,83.0,Very good,20.0,evaluated_authority,7,Alive! Women's Gummy Multivitamin Zero Sugar Strawberry Flavored
+337238,multi_or_prenatal,76.0,Good,20.0,evaluated_authority,1,Alive! Women's Ultra Multivitamin
+337437,multi_or_prenatal,82.6,Very good,20.0,evaluated_authority,1,Men's with Nature's Medley
+337717,multi_or_prenatal,76.0,Good,20.0,evaluated_authority,23,One Daily Superfood Multi-Vitamin No Iron
+337864,multi_or_prenatal,85.0,Very good,16.7,evaluated_authority,1,Multi-Vitamin Elite P.M.
+337877,sports,83.7,Very good,15.6,evaluated_applicable,0,Whey Protein Isolate Chocolate Flavored
+337949,multi_or_prenatal,88.7,Very good,20.0,evaluated_authority,2,Multi +
+PG_SUB_1D092114B51240BBB72F9650AA562605,multi_or_prenatal,58.6,Needs improvement,6.7,evaluated_authority,4,C4 Sport Fruit Juicy Red
+PG_SUB_A16D69D675C44BC58B24B5214A2CC427,sports,67.7,Needs improvement,7.3,evaluated_applicable,0,Woke AF Nootropic Pre-Workout Miami

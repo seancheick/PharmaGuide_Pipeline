@@ -293,6 +293,8 @@ class ProductEvidenceResolution:
     is_assessment_complete: bool
     unresolved_blockers: List[str]
     owner_contributions: Dict[str, int]
+    # Finished only because the open review was out of scope, so not a finding yet.
+    review_open_outside_scope: bool = False
 
 
 _OMEGA_EVIDENCE_CANONICALS = {
@@ -1674,6 +1676,45 @@ def _evidence_owner_selection(
     }, set()
 
 
+def evidence_required_canonicals(
+    product: Mapping[str, Any],
+    *,
+    module: Optional[str] = None,
+) -> Set[str]:
+    """The owners whose open review can hold a product's Evidence conclusion.
+
+    Credit still belongs to every owner.  Completion asks only about an owner the
+    label is about, read on materiality alone: named in the title or a claim, or
+    heavy against the rest of the label.  A route's list of recognized actives
+    does not make a minor row the subject.  A member of a named or heavy blend
+    still counts: it inherits the blend's tier, so its review can move the
+    Evidence answer.  When no owner qualifies, every owner stays, because nothing
+    else answers for a label with no evident subject.
+    """
+    from scoring_input_contract import MATERIAL_ROLES, classify_ingredient_roles
+
+    prod_dict = product if isinstance(product, dict) else dict(product or {})
+    owners = evidence_owner_canonicals(prod_dict, module=module)
+    rows, _, others, _ = _evidence_subject_roles(prod_dict, module)
+    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others, materiality_only=True)
+    material_blends = {
+        str(row.get("raw_source_path") or "")
+        for row, role in zip(others, roles[len(rows):])
+        if role.get("role") in MATERIAL_ROLES and row.get("raw_source_path")
+    }
+    required = {
+        canonical
+        for row, role in zip(rows, roles)
+        if (canonical := str(row.get("canonical_id") or "").strip().lower()) in owners
+        and (role.get("role") in MATERIAL_ROLES or any(
+            str(row.get("raw_source_path") or "").startswith((blend + ".nestedRows[", blend + ".forms["))
+            or str(row.get("parent_source_path") or "") == blend
+            for blend in material_blends
+        ))
+    }
+    return required or owners
+
+
 def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] = None) -> Dict[str, Set[str]]:
     """Read explicit-purpose provenance from the existing role result."""
     from scoring_input_contract import classify_ingredient_roles
@@ -1813,7 +1854,19 @@ def resolve_product_evidence(
             owner_counts[o] = owner_counts.get(o, 0) + 1
 
     # Composition logic
-    dispositions = [r.disposition for r in resolutions]
+    # An unresolved identity holds whatever the row's role; an open review holds
+    # only where it could answer for the product.
+    required = evidence_required_canonicals(prod_dict, module=module) if owner_scoped else None
+    scoped = [
+        r.disposition for r, row in zip(resolutions, assessable_rows)
+        if required is None
+        or r.disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
+        or str(row.get("canonical_id") or "").strip().lower() in required
+    ]
+    # A required row that isn't an efficacy subject answers nothing, so the other
+    # owners still do.
+    dispositions = ([r.disposition for r in resolutions]
+                    if all(d == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value for d in scoped) else scoped)
     all_blockers = [b for r in resolutions for b in r.blocking_reasons]
 
     overall, complete = compose_product_resolution_state(dispositions)
@@ -1827,6 +1880,8 @@ def resolve_product_evidence(
         is_assessment_complete=complete,
         unresolved_blockers=list(set(all_blockers)),
         owner_contributions=owner_counts,
+        review_open_outside_scope=complete and not compose_product_resolution_state(
+            [r.disposition for r in resolutions])[1],
     )
 
 
