@@ -978,3 +978,28 @@ def test_a_preformed_share_above_the_line_still_blocks(enricher):
     assert share["quantity"] == 12500.0
     assert enricher._preformed_share_row(row, {"forms": forms, "notes": ""}) is None
     assert enricher._preformed_share_row(row, None) is None
+
+
+# A mixture with no canonical identity and no alpha figure may hold any share of alpha.
+# It stays out of the exact figure and still reaches the upper bound (Dr Pham E3).
+def test_a_mixture_with_no_identity_still_reaches_the_vitamin_e_high(enriched):
+    product = enriched("232315")
+    [row] = [
+        r for r in _rows(product)
+        if r.get("canonical_id") == "vitamin_e" and r.get("dose_role") not in NOT_AN_EXPOSURE
+    ]
+    exposure = row["safety_exposure"]
+    assert exposure["low_per_day"] == pytest.approx(60.3)
+    assert exposure["high_per_day"] == pytest.approx(1070.3)
+    [(status, _)] = _vitamin_e_decision(product)
+    assert status == "form_unknown"
+
+
+# 400 IU is activity, not a mass its children can be compared to. The rows below it are one
+# material with it, not further doses (Dr Pham E3). Dose keeps reading the printed alpha row.
+def test_rows_below_a_vitamin_e_total_in_iu_are_one_structure_with_it(enriched):
+    product = enriched("2528")
+    [(status, amount)] = _vitamin_e_decision(product)
+    assert status == "below_threshold"
+    assert amount == pytest.approx(268.0)
+    assert score_product_v4(product)["quality_pillars_v4"]["dose"]["score"] == 20.0

@@ -20690,13 +20690,23 @@ class SupplementEnricherV3:
         """The range every vitamin E dose rule judges, from the rows the RDA owner kept.
 
         A single exact row keeps its own evaluation. Otherwise distinct exposures
-        add: exact rows at their figure, form-range rows at their low and high.
+        add: exact rows at their figure, form-range rows at their low and high. Rows
+        below a total printed in IU are one material with it, not further doses. IU
+        is activity, so no mass rule can link them, and they keep their rows for Dose.
         """
         rows = [
             row for row in (product.get("rda_ul_data") or {}).get("analyzed_ingredients") or []
             if isinstance(row, dict)
             and row.get("canonical_id") == "vitamin_e"
             and row.get("dose_role") not in {"form_component", "ul_scoped_component"}
+        ]
+        activity_totals = [
+            f"{row.get('raw_source_path')}.nestedRows[" for row in rows
+            if row.get("raw_source_path") and str(row.get("unit") or "").strip().lower() == "iu"
+        ]
+        rows = [
+            row for row in rows
+            if not str(row.get("raw_source_path") or "").startswith(tuple(activity_totals))
         ]
         low = high = 0.0
         for row in rows:
@@ -22592,6 +22602,7 @@ class SupplementEnricherV3:
         family_rows: List[Tuple[Dict[str, Any], float, str]],
         active_ingredients: List[Dict[str, Any]],
         compound_owners: Dict[int, Dict[str, Any]],
+        label_rows: List[Dict[str, Any]],
     ) -> None:
         """Add `low_per_day` and `high_per_day` to a form-range row's safety exposure.
 
@@ -22602,7 +22613,9 @@ class SupplementEnricherV3:
         it, a printed parent counting once against its children. A form printed inside
         the row is part of its figure. Printed alpha ranges narrow that: at least the
         declaration or the printed minimums, at most the declaration plus the printed
-        maximums. Non-alpha forms are not alpha exposure.
+        maximums. Non-alpha forms are not alpha exposure. A mixture the scoring
+        contract leaves out has no identity to score, but it still has mass, so the
+        full label rows supply the high figure.
         """
         by_path = {
             str(row.get("raw_source_path")): row
@@ -22621,6 +22634,9 @@ class SupplementEnricherV3:
             if row.get("printed_alpha_range_mg")
         ]
         amounts = {path: amount_mg for _, amount_mg, path in family_rows if path}
+        for row in label_rows:
+            if isinstance(row, dict) and row.get("raw_source_path"):
+                by_path.setdefault(str(row["raw_source_path"]), row)
 
         def _can_hold_alpha(row: Dict[str, Any]) -> bool:
             # Gamma, delta, beta and tocotrienols on their own stay an open clinical
@@ -25829,6 +25845,7 @@ class SupplementEnricherV3:
                         vitamin_e_family_rows,
                         active_ingredients,
                         compound_owners,
+                        active_label_rows(product.get("activeIngredients") or []),
                     )
                 if (
                     unresolved_vitamin_e_refs
