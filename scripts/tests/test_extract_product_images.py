@@ -1,3 +1,4 @@
+import hashlib
 import os
 import json
 import sqlite3
@@ -26,6 +27,25 @@ def test_dsld_pdf_extraction_excludes_submission_and_non_dsld_ids(tmp_path):
     ]
 
 
+def test_safety_suppressed_row_needs_no_image(tmp_path):
+    db_path = tmp_path / "catalog.db"
+    with sqlite3.connect(db_path) as conn:
+        conn.execute(
+            "CREATE TABLE products_core (dsld_id TEXT, image_url TEXT, "
+            "image_thumbnail_url TEXT, quality_score_status TEXT)"
+        )
+        conn.execute(
+            "INSERT INTO products_core VALUES ('12345', 'label.pdf', "
+            "'product-images/12345.webp', 'suppressed_safety')"
+        )
+    assert load_products_from_db(str(db_path)) == []
+    (tmp_path / "12345.webp").write_bytes(b"optional")
+    index = {"12345": {"filename": "12345.webp"}}
+    assert backfill_image_thumbnail_urls(str(db_path), str(tmp_path), index)["updated"] == 0
+    with sqlite3.connect(db_path) as conn:
+        assert conn.execute("SELECT image_thumbnail_url FROM products_core").fetchone() == (None,)
+
+
 def test_cleaner_does_not_invent_dsld_pdf_for_submission():
     from enhanced_normalizer import EnhancedDSLDNormalizer
 
@@ -42,7 +62,7 @@ def test_release_image_probe_uses_exact_dsld_targets_not_file_count(tmp_path, mi
     with sqlite3.connect(db_path) as conn:
         conn.execute("CREATE TABLE products_core (dsld_id TEXT, image_url TEXT, image_thumbnail_url TEXT)")
         conn.executemany("INSERT INTO products_core VALUES (?, ?, ?)", [
-            ("12345", "https://api.ods.od.nih.gov/dsld/s3/pdf/12345.pdf", "product-images/12345.webp"),
+            ("12345", "https://api.ods.od.nih.gov/dsld/s3/pdf/12345.pdf", _hash_url(b"webp")),
             ("PG_SUB_1", "https://api.ods.od.nih.gov/dsld/s3/pdf/PG_SUB_1.pdf", None),
         ])
     image_dir = tmp_path / "images"
@@ -145,6 +165,64 @@ def test_pdf_renderer_honors_explicit_diagnostic_width(tmp_path):
     with Image.open(output) as image:
         assert image.width == 240
         assert image.height > image.width
+
+
+def _hash_url(content):
+    digest = hashlib.sha256(content).hexdigest()
+    return f"product-images/sha256/{digest[:2]}/{digest}.webp"
+
+
+def _probe_catalog(tmp_path, url):
+    db_path = tmp_path / "catalog.db"
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("CREATE TABLE products_core (dsld_id TEXT, image_url TEXT, image_thumbnail_url TEXT)")
+        conn.execute("INSERT INTO products_core VALUES (?, ?, ?)", (
+            "12345", "https://api.ods.od.nih.gov/dsld/s3/pdf/12345.pdf", url,
+        ))
+    image_dir = tmp_path / "images"
+    image_dir.mkdir()
+    (image_dir / "12345.webp").write_bytes(b"webp")
+    return str(db_path), str(image_dir)
+
+
+@pytest.mark.parametrize("url,needed", [
+    (_hash_url(b"webp"), False),
+    (_hash_url(b"another picture"), True),
+    ("product-images/12345.webp", True),
+    ("product-images/v2026.11.02.191010/12345.webp", True),
+    (None, True),
+])
+def test_a_catalog_needs_extraction_unless_each_row_names_its_files_bytes(tmp_path, url, needed):
+    from extract_product_images import needs_image_extraction
+    db_path, image_dir = _probe_catalog(tmp_path, url)
+    assert needs_image_extraction(db_path, image_dir) is needed
+
+
+def test_extraction_names_each_image_by_its_bytes_and_binds_the_row_to_it(tmp_path):
+    from extract_product_images import run_extraction
+    db_path, image_dir = _probe_catalog(tmp_path, "product-images/12345.webp")
+    (tmp_path / "export_manifest.json").write_text(json.dumps({"db_version": "2026.11.03.120000"}))
+    run_extraction(db_path, image_dir, batch_delay=0)
+    index = json.loads((tmp_path / "images" / "product_image_index.json").read_text())
+    digest = hashlib.sha256(b"webp").hexdigest()
+    assert index["12345"]["sha256"] == digest
+    assert index["12345"]["remote_path"] == f"sha256/{digest[:2]}/{digest}.webp"
+    with sqlite3.connect(db_path) as conn:
+        assert conn.execute("SELECT image_thumbnail_url FROM products_core").fetchone() == (
+            _hash_url(b"webp"),
+        )
+
+
+def test_a_changed_picture_gets_a_new_path_and_never_reuses_the_old_one(tmp_path):
+    from extract_product_images import run_extraction
+    db_path, image_dir = _probe_catalog(tmp_path, None)
+    run_extraction(db_path, image_dir, batch_delay=0)
+    (tmp_path / "images" / "12345.webp").write_bytes(b"a corrected photo")
+    run_extraction(db_path, image_dir, batch_delay=0)
+    with sqlite3.connect(db_path) as conn:
+        assert conn.execute("SELECT image_thumbnail_url FROM products_core").fetchone() == (
+            _hash_url(b"a corrected photo"),
+        )
 
 
 def test_backfill_image_thumbnail_urls_updates_existing_images(tmp_path):

@@ -29,8 +29,10 @@ from typing import Any, Callable, Iterable
 from uuid import UUID
 
 import env_loader  # noqa: F401  # Load the project .env without overriding shell vars.
+from core_export_model import safety_suppressed_product_ids
 from normalization import QUANTITY_OPERATORS, parse_servings_per_container
 from PIL import Image, ImageOps
+from supabase_client import product_image_remote_path
 from submission_review.gtin import (
     canonical_normalized_gtin14,
     is_valid_gtin as _is_valid_gtin,
@@ -1683,13 +1685,13 @@ def copy_approved_product_images(
     if not catalog_path.is_file():
         raise SubmissionImportError("catalog database is missing")
     manifest = _load_catalog_manifest(catalog_path) or {}
-    catalog_version = str(manifest.get("db_version") or "").strip()
     excluded = manifest.get("excluded_by_gate") or []
     held_ids = {
         row.get("dsld_id") for row in excluded
         if isinstance(row, dict) and isinstance(row.get("dsld_id"), str)
     } if isinstance(excluded, list) else set()
 
+    removed_index_entries = False
     copied = 0
     failed = 0
     skipped = 0
@@ -1702,18 +1704,25 @@ def copy_approved_product_images(
         raise SubmissionImportError("catalog image schema is unavailable") from exc
 
     try:
+        suppressed_ids = safety_suppressed_product_ids(connection)
         for submission_id, receipt in sorted(receipts.items()):
             if not isinstance(receipt, dict):
                 raise SubmissionImportError("import receipt row is malformed")
             product_id = str(receipt.get("product_id") or "")
             if not product_id.startswith("PG_SUB_"):
                 continue
+            if product_id in suppressed_ids:
+                connection.execute(
+                    "UPDATE products_core SET image_thumbnail_url = NULL WHERE dsld_id = ?",
+                    (product_id,),
+                )
+                if product_id in image_index:
+                    image_index.pop(product_id)
+                    removed_index_entries = True
+                skipped += 1
+                continue
             filename = f"{product_id}.webp"
             webp_path = image_dir / filename
-            remote_path = (
-                f"v{catalog_version}/{filename}" if catalog_version else filename
-            )
-            expected_url = f"product-images/{remote_path}"
             existing = connection.execute(
                 "select image_thumbnail_url from products_core where dsld_id = ?",
                 (product_id,),
@@ -1731,21 +1740,26 @@ def copy_approved_product_images(
                     file=sys.stderr,
                 )
                 continue
-            indexed = image_index.get(product_id)
-            if (
-                existing[0] == expected_url
-                and isinstance(indexed, dict)
-                and indexed.get("filename") == filename
-                and indexed.get("remote_path") == remote_path
-                and webp_path.is_file()
-                and indexed.get("sha256")
-                == hashlib.sha256(webp_path.read_bytes()).hexdigest()
-                and receipt.get("image_approval_revision")
-                == receipt.get("approval_revision")
-            ):
-                skipped += 1
-                continue
             try:
+                indexed = image_index.get(product_id)
+                local_hash = (
+                    hashlib.sha256(webp_path.read_bytes()).hexdigest()
+                    if webp_path.is_file()
+                    else None
+                )
+                local_path = product_image_remote_path(local_hash) if local_hash else None
+                if (
+                    local_path is not None
+                    and existing[0] == f"product-images/{local_path}"
+                    and isinstance(indexed, dict)
+                    and indexed.get("filename") == filename
+                    and indexed.get("remote_path") == local_path
+                    and indexed.get("sha256") == local_hash
+                    and receipt.get("image_approval_revision")
+                    == receipt.get("approval_revision")
+                ):
+                    skipped += 1
+                    continue
                 payload_hash = receipt.get("approval_payload_sha256")
                 if payload_hash:
                     lookup: dict[str, object] = {
@@ -1806,10 +1820,11 @@ def copy_approved_product_images(
                 webp_bytes = _render_catalog_webp(source_bytes, content_type)
                 _atomic_write_bytes(webp_path, webp_bytes)
                 webp_hash = hashlib.sha256(webp_bytes).hexdigest()
+                remote_path = product_image_remote_path(webp_hash)
                 updated = connection.execute(
                     "update products_core set image_thumbnail_url = ? "
                     "where dsld_id = ?",
-                    (expected_url, product_id),
+                    (f"product-images/{remote_path}", product_id),
                 ).rowcount
                 if updated != 1:
                     raise SubmissionImportError(
@@ -1836,12 +1851,13 @@ def copy_approved_product_images(
     finally:
         connection.close()
 
-    if copied:
+    if copied or removed_index_entries:
         _atomic_write_text(
             index_path,
             json.dumps(image_index, ensure_ascii=False, indent=2, sort_keys=True)
             + "\n",
         )
+    if copied:
         _atomic_write_text(
             receipt_path,
             json.dumps(receipt_document, indent=2, sort_keys=True) + "\n",

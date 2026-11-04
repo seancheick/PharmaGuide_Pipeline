@@ -1236,6 +1236,243 @@ def test_release_images_refuse_different_bytes_at_an_existing_versioned_path(tmp
     assert result == {'uploaded': 0, 'skipped': 0, 'failed': 1}
 
 
+def _hash_image(directory, name, content):
+    """An image on disk and the index entry the extractor writes for it."""
+    from supabase_client import product_image_remote_path
+    (directory / name).write_bytes(content)
+    digest = hashlib.sha256(content).hexdigest()
+    return {
+        'filename': name,
+        'remote_path': product_image_remote_path(digest),
+        'sha256': digest,
+        'size_bytes': len(content),
+    }
+
+
+def _upload_hash_images(tmp_path, index, listing=None, download_fn=None):
+    from sync_to_supabase import upload_product_images
+    (tmp_path / 'product_image_index.json').write_text(json.dumps(index))
+    uploads = []
+    listed = []
+
+    def lister(_client, _bucket, prefix, limit, offset):
+        listed.append(prefix)
+        return [] if listing is None or offset else listing(prefix)
+
+    def upload(_client, bucket, remote_path, local_path, **kwargs):
+        uploads.append({'bucket': bucket, 'path': remote_path, 'local': local_path, **kwargs})
+
+    result = upload_product_images(
+        object(), str(tmp_path), upload, lister, max_workers=1, retries=0,
+        download_fn=download_fn, catalog_version='release-2',
+    )
+    return result, uploads, listed
+
+
+def test_a_hash_named_image_is_create_only_with_the_long_cache(tmp_path):
+    import supabase_client
+    entry = _hash_image(tmp_path, '1.webp', b'one')
+    digest = entry['sha256']
+    result, uploads, listed = _upload_hash_images(tmp_path, {'1': entry})
+    assert result == {'uploaded': 1, 'skipped': 0, 'failed': 0}
+    assert uploads == [{
+        'bucket': 'product-images',
+        'path': f'sha256/{digest[:2]}/{digest}.webp',
+        'local': str(tmp_path / '1.webp'),
+        'content_type': 'image/webp',
+        'upsert': False,
+        'cache_control': supabase_client.CACHE_CONTROL_IMMUTABLE,
+    }]
+    assert listed == [f'sha256/{digest[:2]}']
+
+
+def test_a_version_folder_image_gets_no_long_cache_because_its_name_is_not_its_bytes(tmp_path):
+    from sync_to_supabase import upload_product_images
+    (tmp_path / 'image.webp').write_bytes(b'new')
+    (tmp_path / 'product_image_index.json').write_text(json.dumps({
+        '1': {'filename': 'image.webp', 'remote_path': 'vrelease-2/image.webp'},
+    }))
+    options = []
+    upload_product_images(
+        object(), str(tmp_path), lambda *a, **kw: options.append(kw),
+        lambda *a, **kw: [], max_workers=1, retries=0, catalog_version='release-2',
+    )
+    assert options[0]['cache_control'] is None
+    assert options[0]['upsert'] is False
+
+
+def test_a_mutable_image_name_keeps_the_storage_default_and_never_the_long_cache(tmp_path):
+    from sync_to_supabase import upload_product_images
+    (tmp_path / 'image.webp').write_bytes(b'new')
+    (tmp_path / 'product_image_index.json').write_text(json.dumps({
+        '1': {'filename': 'image.webp'},
+    }))
+    options = []
+    upload_product_images(
+        object(), str(tmp_path), lambda *a, **kw: options.append(kw),
+        lambda *a, **kw: [], max_workers=1, retries=0,
+    )
+    assert options[0]['cache_control'] is None
+    assert options[0]['upsert'] is True
+
+
+def test_products_with_the_same_picture_share_one_object(tmp_path):
+    first = _hash_image(tmp_path, '1.webp', b'same')
+    second = _hash_image(tmp_path, '2.webp', b'same')
+    result, uploads, _listed = _upload_hash_images(tmp_path, {'1': first, '2': second})
+    assert [upload['path'] for upload in uploads] == [first['remote_path']]
+    assert result == {'uploaded': 1, 'skipped': 1, 'failed': 0}
+
+
+def test_an_image_whose_bytes_changed_after_indexing_is_refused(tmp_path):
+    entry = _hash_image(tmp_path, '1.webp', b'one')
+    (tmp_path / '1.webp').write_bytes(b'not what the catalog names')
+    result, uploads, _listed = _upload_hash_images(tmp_path, {'1': entry})
+    assert uploads == []
+    assert result['failed'] == 1
+
+
+def test_an_index_that_swaps_two_products_pictures_is_refused(tmp_path):
+    first = _hash_image(tmp_path, '1.webp', b'one')
+    second = _hash_image(tmp_path, '2.webp', b'two')
+    swapped = {
+        '1': {**first, 'remote_path': second['remote_path'], 'sha256': second['sha256']},
+        '2': {**second, 'remote_path': first['remote_path'], 'sha256': first['sha256']},
+    }
+    result, uploads, _listed = _upload_hash_images(tmp_path, swapped)
+    assert uploads == []
+    assert result['failed'] == 2
+
+
+def test_an_entry_whose_recorded_hash_disagrees_with_its_path_is_refused(tmp_path):
+    entry = _hash_image(tmp_path, '1.webp', b'one')
+    result, uploads, _listed = _upload_hash_images(
+        tmp_path, {'1': {**entry, 'sha256': '0' * 64}},
+    )
+    assert uploads == []
+    assert result['failed'] == 1
+
+
+@pytest.mark.parametrize('remote_path', [
+    'sha256/aa/../../evil.webp', 'sha256/aa/short.webp', '../elsewhere.webp',
+])
+def test_a_malformed_image_path_is_refused(tmp_path, remote_path):
+    entry = _hash_image(tmp_path, '1.webp', b'one')
+    result, uploads, _listed = _upload_hash_images(
+        tmp_path, {'1': {**entry, 'remote_path': remote_path}},
+    )
+    assert uploads == []
+    assert result['failed'] == 1
+
+
+@pytest.mark.parametrize(
+    ("remote_bytes", "skipped", "failed"),
+    [(b"one", 1, 0), (b"two", 0, 1), (b"on", 0, 1)],
+)
+def test_existing_hash_named_image_requires_matching_bytes(tmp_path, remote_bytes, skipped, failed):
+    entry = _hash_image(tmp_path, "1.webp", b"one")
+    result, uploads, _listed = _upload_hash_images(
+        tmp_path, {"1": entry},
+        listing=lambda _prefix: [{
+            "name": f"{entry['sha256']}.webp", "metadata": {"size": len(remote_bytes)},
+        }],
+        download_fn=lambda *_args: remote_bytes,
+    )
+    assert uploads == []
+    assert result == {"uploaded": 0, "skipped": skipped, "failed": failed}
+
+
+def _catalog_with_images(tmp_path, rows):
+    db_path = tmp_path / 'pharmaguide_core.db'
+    with sqlite3.connect(db_path) as conn:
+        conn.execute('CREATE TABLE products_core (dsld_id TEXT, image_thumbnail_url TEXT)')
+        conn.executemany('INSERT INTO products_core VALUES (?, ?)', rows)
+    return str(db_path)
+
+
+def test_every_row_may_name_its_own_image(tmp_path):
+    from sync_to_supabase import validate_product_image_bindings
+    first = _hash_image(tmp_path, '1.webp', b'one')
+    second = _hash_image(tmp_path, '2.webp', b'two')
+    db_path = _catalog_with_images(tmp_path, [
+        ('1', f"product-images/{first['remote_path']}"),
+        ('2', f"product-images/{second['remote_path']}"),
+        ('3', None),
+    ])
+    validate_product_image_bindings(db_path, {'1': first, '2': second})
+
+
+@pytest.mark.parametrize("wrong_thumbnail", [None, "other_product"])
+def test_an_indexed_row_must_name_its_own_image(tmp_path, wrong_thumbnail):
+    from sync_to_supabase import validate_product_image_bindings
+    first = _hash_image(tmp_path, '1.webp', b'one')
+    second = _hash_image(tmp_path, '2.webp', b'two')
+    db_path = _catalog_with_images(tmp_path, [
+        ('1', wrong_thumbnail and f"product-images/{second['remote_path']}"),
+        ('2', f"product-images/{second['remote_path']}"),
+    ])
+    with pytest.raises(ValueError, match='1'):
+        validate_product_image_bindings(db_path, {'1': first, '2': second})
+
+
+def test_a_row_naming_a_hash_image_that_no_entry_publishes_stops_the_release(tmp_path):
+    from sync_to_supabase import validate_product_image_bindings
+    other = _hash_image(tmp_path, '2.webp', b'two')
+    db_path = _catalog_with_images(tmp_path, [
+        ('1', f"product-images/{other['remote_path']}"),
+        ('2', f"product-images/{other['remote_path']}"),
+    ])
+    with pytest.raises(ValueError, match='1'):
+        validate_product_image_bindings(db_path, {'2': other})
+    with pytest.raises(ValueError, match='no product image index'):
+        validate_product_image_bindings(db_path, None)
+
+
+def test_older_image_paths_still_publish(tmp_path):
+    from sync_to_supabase import validate_product_image_bindings
+    db_path = _catalog_with_images(tmp_path, [
+        ('1', 'product-images/vrelease-2/1.webp'),
+        ('2', 'product-images/2.webp'),
+        ('3', 'https://example.com/3.webp'),
+    ])
+    validate_product_image_bindings(
+        db_path, {'1': {'filename': '1.webp', 'remote_path': 'vrelease-2/1.webp'}},
+    )
+    validate_product_image_bindings(db_path, {
+        '1': {'filename': '1.webp', 'remote_path': 'vrelease-2/1.webp'},
+        '2': {'filename': '2.webp'},
+    })
+
+
+def test_sync_stops_before_any_write_when_a_row_names_another_products_image(tmp_path, monkeypatch):
+    import supabase_client
+    import sync_to_supabase as syncer
+
+    _make_build_output(str(tmp_path), product_count=1)
+    images = tmp_path / 'product_images'
+    images.mkdir()
+    entry = _hash_image(images, '1.webp', b'one')
+    other = hashlib.sha256(b'two').hexdigest()
+    (images / 'product_image_index.json').write_text(json.dumps({'1': entry}))
+    with sqlite3.connect(tmp_path / 'pharmaguide_core.db') as conn:
+        conn.execute('ALTER TABLE products_core ADD COLUMN image_thumbnail_url TEXT')
+        conn.execute(
+            'UPDATE products_core SET image_thumbnail_url = ?',
+            (f'product-images/sha256/{other[:2]}/{other}.webp',),
+        )
+    manifest = json.loads((tmp_path / 'export_manifest.json').read_text())
+    digest = hashlib.sha256((tmp_path / 'pharmaguide_core.db').read_bytes()).hexdigest()
+    manifest['checksum'] = f'sha256:{digest}'
+    (tmp_path / 'export_manifest.json').write_text(json.dumps(manifest))
+    monkeypatch.setattr(supabase_client, 'get_supabase_client', lambda: object())
+    monkeypatch.setattr(supabase_client, 'fetch_current_manifest', lambda _c: None)
+    writes = []
+    monkeypatch.setattr(supabase_client, 'upload_file', lambda *a, **k: writes.append(a))
+    with pytest.raises(ValueError, match='names an image'):
+        syncer.sync(str(tmp_path), max_workers=1, retry_count=0)
+    assert writes == []
+
+
 @pytest.mark.parametrize('same_catalog,image_failed,core_missing', [
     (False, True, False), (True, True, False), (True, False, False), (True, False, True)])
 def test_sync_repairs_independent_phases_before_activation(tmp_path, monkeypatch, same_catalog, image_failed, core_missing):

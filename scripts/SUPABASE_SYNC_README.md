@@ -146,6 +146,16 @@ Every sync publishes the catalog twice in `v{version}/`: the plain file and its 
 - **Signed releases** carry the same facts as `catalog.compressed`, with `path`, `sha256`, `size` and `decompressed_size`. `format` stays 1, and older keyed builds ignore the key. A release signed before compression stays valid.
 - **On the phone:** if the gzip can't deliver (its hash is wrong, it won't unpack to the catalog, or it's missing), the app falls back to the plain file. A network or disk failure does neither: the partial is kept and the next check resumes it.
 
+### Product images
+
+`products_core.image_thumbnail_url` holds `product-images/<object path>`, and every app build reads that path the same way. New catalogs use `sha256/<first two hex>/<sha256 of the image>.webp`, written by `extract_product_images.py` and the submission image import.
+
+- **Only hash-named objects get the one-year cache.** The name can't come to mean anything else, and a corrected picture gets a new name. They're create-only, and products with identical pictures share one object.
+- **Older paths keep resolving, so they are never deleted.** The bundled catalog points at root names such as `1024.webp`, and earlier catalogs may point at `v<version>/`. Those keep the storage default (`no-cache`), and no code removes anything from this bucket.
+- **Sync refuses a catalog that would show the wrong picture.** Before any write, each row with an index entry must name that entry's object, and a row naming a hash must have an entry. Before activation, each image's bytes must hash to its own path. An existing object is verified by its bytes before it is reused. A rollback keeps hash-named paths, and moves only version-folder paths.
+- **Safety-suppressed products** keep their catalog row and warnings without an image dependency. The image preparation step leaves their thumbnail URL empty before signing.
+- **An image already uploaded** is discovered by its object name. Sync downloads and verifies its bytes before reuse.
+
 ### Version checking
 
 The script compares the local `export_manifest.json` to the current Supabase manifest:

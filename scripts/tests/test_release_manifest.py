@@ -1189,6 +1189,29 @@ def test_rollback_moves_version_bound_images_to_the_new_version(tmp_path, key, h
     assert ("upload", f"v{new_version}/1.webp", False) in harness.events
 
 
+def test_rollback_keeps_hash_named_images_where_they_are(tmp_path):
+    catalog = _make_catalog(tmp_path / "catalog")
+    digest = "a" * 64
+    hash_path = f"sha256/aa/{digest}.webp"
+    (catalog / "product_image_index.json").write_text(json.dumps({
+        "1": {"filename": "1.webp", "remote_path": hash_path, "sha256": digest},
+    }))
+    with sqlite3.connect(catalog / "pharmaguide_core.db") as conn:
+        conn.execute("ALTER TABLE products_core ADD COLUMN image_thumbnail_url TEXT")
+        conn.execute("UPDATE products_core SET image_thumbnail_url = ?", (f"product-images/{hash_path}",))
+    manifest = json.loads((catalog / "export_manifest.json").read_text())
+    manifest["checksum"] = f"sha256:{_sha(catalog / 'pharmaguide_core.db')}"
+    (catalog / "export_manifest.json").write_text(json.dumps(manifest))
+    output = tmp_path / "rollback"
+    rm.prepare_rollback(catalog, output, db_version="2099.01.01.000000")
+    index = json.loads((output / "product_image_index.json").read_text())
+    assert index["1"]["remote_path"] == hash_path
+    with sqlite3.connect(output / "pharmaguide_core.db") as conn:
+        assert {row[0] for row in conn.execute("SELECT image_thumbnail_url FROM products_core")} == {
+            f"product-images/{hash_path}",
+        }
+
+
 def test_rollback_leaves_unversioned_image_urls_alone(tmp_path):
     source = _make_catalog(tmp_path / "good")
     conn = sqlite3.connect(source / "pharmaguide_core.db")

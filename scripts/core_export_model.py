@@ -252,3 +252,16 @@ def build_projection_manifest(*, export_schema_version: str) -> dict[str, Any]:
             "columns": list(server_columns),
         },
     }
+
+
+def safety_suppressed_product_ids(connection) -> set[str]:
+    """Find catalog rows whose safety result must ship without optional images."""
+    columns = {row[1] for row in connection.execute("PRAGMA table_info(products_core)")}
+    if "quality_score_status" not in columns:
+        return set()
+    return {
+        str(row[0])
+        for row in connection.execute(
+            "SELECT dsld_id FROM products_core WHERE quality_score_status = 'suppressed_safety'"
+        )
+    }
