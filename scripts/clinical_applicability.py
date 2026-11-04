@@ -126,13 +126,15 @@ def _valid_policy(policy: Any) -> bool:
     if "studied_population" in policy and not isinstance(policy["studied_population"], str):
         return False
     for field in ("dosage_forms", "required_form_terms", "supported_outcomes", "source_pmids",
-                  "excluded_canonical_ids", "excluded_form_terms", "excluded_claim_terms"):
+                  "excluded_canonical_ids", "excluded_form_terms", "excluded_claim_terms",
+                  "excluded_claim_terms_when_alone"):
         if field in policy and (
             not isinstance(policy[field], list)
             or any(not isinstance(value, str) or not value.strip() for value in policy[field])
         ):
             return False
-        if field in {"excluded_canonical_ids", "excluded_form_terms", "excluded_claim_terms"} and any(
+        if field in {"excluded_canonical_ids", "excluded_form_terms", "excluded_claim_terms",
+                     "excluded_claim_terms_when_alone"} and any(
             not _key(value) for value in policy.get(field, [])
         ):
             return False
@@ -432,6 +434,21 @@ def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
         if any(find_affirmative_label_match(patterns[title], clause) for title, clause in clauses):
             return True
     return False
+
+
+def _claim_excluded_when_alone(product: Mapping, policy: Mapping) -> bool:
+    """A term that excludes the record only when no claim it supports stands beside it.
+
+    Sean's decision, 2026-11-04, for melatonin only: a label claiming sleep and
+    jet lag is judged on each. The sleep research still meets the sleep claim, and
+    jet lag earns nothing until a reviewed jet-lag context exists.
+    """
+    terms = policy.get("excluded_claim_terms_when_alone")
+    if not terms or not _excluded_claim_matches(product, {"excluded_claim_terms": terms}):
+        return False
+    from evidence_resolver import evidence_indication_categories
+    supported = evidence_indication_categories(" ".join(policy.get("supported_outcomes") or []))
+    return not native_product_positioning_categories(product, purposes_only=True) & supported
 
 
 def _valid_native_claim_scope(context: Mapping) -> bool:
@@ -1085,7 +1102,7 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
     if policy.get("scope") != "ingredient":
         return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
-    if _excluded_claim_matches(product, policy):
+    if _excluded_claim_matches(product, policy) or _claim_excluded_when_alone(product, policy):
         return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
     # Every approved, source-bound context is a condition scope: no claim is
     # required, but its population and the label's claims decide whether it

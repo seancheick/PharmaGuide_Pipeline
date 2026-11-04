@@ -95,3 +95,62 @@ def test_a_brand_reached_by_its_alternate_name_still_meets_its_exclusions(pipeli
     scored = build_scored_artifact(enriched)
     assert scored["quality_pillars_v4"]["evidence"]["score"] == 0
     assert scored["quality_assessment_status"] == "partial"
+
+
+MELATONIN = "INGR_MELATONIN"
+
+
+def _melatonin_rejection(enriched):
+    return {m["id"]: m["reason_code"] for m in enriched["evidence_data"]["rejected_clinical_matches"]}.get(MELATONIN)
+
+
+def _with_claims(pipeline, label, *claims):
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / label).read_text())
+    raw["statements"] = [{"type": "Formulation re: Other", "notes": claim} for claim in claims]
+    return enricher.enrich_product(normalizer.normalize_product(raw))[0]
+
+
+def test_a_jet_lag_mention_beside_a_sleep_claim_keeps_the_sleep_evidence(pipeline):
+    """Sean's decision, 2026-11-04. 17393 claims sleep and names people with jet lag."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = _enrich(pipeline, "evidence_truth_17393_raw.json")
+    assert MELATONIN in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
+    assert build_scored_artifact(enriched)["quality_pillars_v4"]["evidence"]["score"] > 0
+
+
+def test_one_sentence_combining_sleep_and_jet_lag_keeps_the_sleep_evidence(pipeline):
+    enriched = _with_claims(pipeline, "evidence_truth_17393_raw.json", "For sleep support and help with jet lag")
+    assert MELATONIN in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
+
+
+@pytest.mark.parametrize("claim", ["Helps with jet lag", "Jet lag relief", "For travelers with jetlag"])
+def test_a_jet_lag_claim_alone_earns_nothing_from_the_sleep_evidence(pipeline, claim):
+    """The record has no reviewed jet-lag context, so this claim has no evidence to meet."""
+    enriched = _with_claims(pipeline, "evidence_truth_17393_raw.json", claim)
+    assert MELATONIN not in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
+    assert _melatonin_rejection(enriched) == "label_purpose_evidence_mismatch"
+
+
+def test_the_decision_covers_jet_lag_and_no_other_signed_melatonin_term(pipeline):
+    """178273 claims sleep and names jet lag or shift work; shift work still excludes."""
+    enriched = _enrich(pipeline, "evidence_truth_178273_raw.json")
+    assert MELATONIN not in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
+    assert _melatonin_rejection(enriched) == "label_purpose_evidence_mismatch"
+
+
+def test_a_jet_lag_mention_does_not_lift_a_preparation_the_review_excludes(pipeline):
+    """246281 claims both, in a gummy. The signed dosage forms still decide."""
+    enriched = _enrich(pipeline, "evidence_truth_246281_raw.json")
+    assert MELATONIN not in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
+    assert _melatonin_rejection(enriched) == "clinical_delivery_mismatch"
+
+
+def test_only_melatonin_carries_the_decision():
+    from clinical_applicability import reviewed_entries
+
+    carrying = [key for key, record in reviewed_entries().items()
+                if (record.get("applicability") or {}).get("excluded_claim_terms_when_alone")]
+    assert carrying == [MELATONIN]
+    assert reviewed_entries()[MELATONIN]["applicability"]["excluded_claim_terms_when_alone"] == ["jet lag", "jetlag"]
