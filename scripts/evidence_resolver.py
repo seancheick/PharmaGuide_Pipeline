@@ -1045,6 +1045,17 @@ def resolve_evidence_for_row(
                     if (isinstance(scope, Mapping) and scope.get("require_source_label_form") is True
                             and scope.get("required_form_terms")):
                         matching_studies.append(study)
+    # Typed nutrient totals can acquire a reviewed source through the scorer's
+    # existing strict source join (for example whey named in the ingredient
+    # list). Completion consumes that same verified join, not a second matcher.
+    if product and source_ref and row_dict.get("scoring_input_kind") == "product_level_evidence":
+        from scoring_v4.modules.generic_evidence import resolved_clinical_matches, _clinical_source_id
+        from clinical_applicability import reviewed_entries
+        for match in resolved_clinical_matches(dict(product), owner_scoped=True, assess_amount=False)[0]:
+            if source_ref in (match.get("matched_source_row_refs") or []):
+                reference = reviewed_entries().get(_clinical_source_id(match))
+                if reference:
+                    matching_studies.append(reference)
     # Deduplicate studies by ID
     seen_ids = set()
     deduped_studies = []

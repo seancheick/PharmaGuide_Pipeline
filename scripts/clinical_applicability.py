@@ -768,7 +768,7 @@ def context_delivery_matches(product: Mapping, context: Mapping) -> bool:
             return text
         for pattern, named_route in (
             (r"\b(?:enteral|feeding tube)\b", "enteral_tube"),
-            (r"\bvaginal\b", "vaginal"), (r"\b(?:topical|transdermal)\b", "topical"),
+            (r"\b(?:intra)?vaginal\b", "vaginal"), (r"\b(?:topical|transdermal)\b", "topical"),
             (r"\bsublingual\b", "sublingual"), (r"\b(?:intranasal|nasal)\b", "intranasal"),
             (r"\b(?:inhaled|inhalation)\b", "inhaled"),
             (r"\bintravenous\b", "iv"), (r"\bintramuscular\b", "im"),

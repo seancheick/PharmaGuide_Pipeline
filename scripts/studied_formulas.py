@@ -1206,6 +1206,9 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             context, applicability_class, class_reason)
         if delivery_comparison == "delivery_route_mismatch":
             applicability, reason, credit = "not_established", "clinical_delivery_mismatch", 0.0
+        population_applicability = assess_context_population(product, context)
+        if population_applicability != "eligible":
+            applicability, reason, credit = "not_established", "clinical_population_mismatch", 0.0
         result.append({**deepcopy(context), "status": "source_context_recorded",
             "dose_comparison": comparison, "label_daily_cfu": amount,
             "dose_applicability_class": applicability_class,
@@ -1213,7 +1216,7 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             "source_row_ref": row.get("source_row_ref"),
             "delivery_comparison": delivery_comparison,
             "claimed_purpose_assessment": assess_native_claimed_purpose(product, context),
-            "population_applicability": assess_context_population(product, context),
+            "population_applicability": population_applicability,
             "clinical_applicability": applicability,
             "applicability_reason": reason})
     return result

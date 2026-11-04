@@ -220,7 +220,7 @@ def test_review_status_vocabulary_is_closed():
         assert not studied_formulas.valid_native_study_context(context(review_status=status), "STRAIN_LGG")
 
 
-@pytest.mark.parametrize('form', ['vaginal', 'topical', 'sublingual'])
+@pytest.mark.parametrize('form', ['vaginal', 'intravaginal capsule', 'topical', 'sublingual'])
 def test_native_oral_context_cannot_credit_another_administration_route(registry, form):
     registry['STRAIN_LGG']['study_contexts'] = [approved(study_design='rct')]
     product = strain_product(dose=1e9)
@@ -256,3 +256,13 @@ def test_native_nonoral_delivery_cannot_credit_oral_label(registry, delivery):
     source['dose']['dosage_forms'] = [delivery]
     registry['STRAIN_LGG']['study_contexts'] = [source]
     assert score_evidence(strain_product(dose=1e9))['score'] == 0
+
+
+@pytest.mark.parametrize('title', ['Prenatal probiotic', 'Children probiotic'])
+def test_population_conflict_cannot_establish_dose_applicability(registry, title):
+    registry['STRAIN_LGG']['study_contexts'] = [approved(study_design='rct')]
+    product = {**strain_product(dose=1e9), 'product_name': title}
+    assert score_evidence(product)['score'] == 0
+    row = assessment(product)
+    assert row['dose_applicable'] is False
+    assert all(c['clinical_applicability'] == 'not_established' for c in row['study_contexts'])

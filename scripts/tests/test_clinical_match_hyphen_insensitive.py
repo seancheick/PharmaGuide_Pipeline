@@ -287,6 +287,8 @@ def test_real_protein_source_in_ingredient_list_keeps_evidence(enricher):
     assert decision["matched_source_row_refs"] == ["ingredientRows[2]"]
     payload = score_evidence(product, owner_scoped=True)
     assert "INGR_WHEY_PROTEIN" in payload["metadata"]["recovered_matches"]
+    from scoring_v4.scored_artifact import build_scored_artifact
+    assert build_scored_artifact(product)["quality_assessment_status"] == "complete"
 
 
 @pytest.mark.parametrize("product_id, qualifies", [("42306", True), ("42289", False)])
