@@ -323,6 +323,8 @@ unfinished: 62 (34 caution, 19 blocked, 9 no known catalog concern), 12 of them 
 Making a title word also assign a role was measured and left out (`title_alias_score_moves.csv`): 690 labels replayed with `_ROLE_TITLE_ALIASES_BY_CANONICAL` widened, 25 changed,
 24 scores, 4 tiers, 0 catalog safety. #338 reads the word for completion only, so none of this ships here.
 
+**Rulings (integrator, November 3).** 70588 is rejected for now and 26436 doesn't change; both went to the calibration register (LEDGER D32, D33). Sambucus and 259813 wait for elderberry's review. The 14 multi-with-omega labels, 243141 and 251695 stay listed, not landed.
+
 | Group | Labels | Move | Driver | Corrects Evidence attribution? |
 |---|---|---|---|---|
 | Multi with omega | 200971, 251319, 257181, 179598, 179629, 180141, 180302, 180313, 211272, 211279, 270966, 270967, 333881, 230194 | Formulation down 0.1 to 0.7 | EPA and DHA join `panel_form_quality` `avg_bio_score` | No |
