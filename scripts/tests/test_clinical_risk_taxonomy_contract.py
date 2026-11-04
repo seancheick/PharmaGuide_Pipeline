@@ -151,10 +151,21 @@ def test_every_selectable_condition_has_an_active_rule_consumer(blob):
     )
 
 
+def test_a_label_statement_to_men_has_a_flag_the_profile_can_derive(blob):
+    flags = {entry["id"]: entry for entry in blob["profile_flags"]}
+    assert flags["sex_male"]["capture_mode"] == "derived_from_sex"
+    assert flags["sex_male"]["source_sex"] == "Male"
+
+
 def test_profile_capture_modes_keep_every_active_rule_reachable(blob):
     conditions = {entry["id"] for entry in blob["conditions"]}
     flags = {entry["id"]: entry for entry in blob["profile_flags"]}
-    allowed_modes = {"derived_from_condition", "user_selectable", "reserved"}
+    allowed_modes = {
+        "derived_from_condition",
+        "derived_from_sex",
+        "user_selectable",
+        "reserved",
+    }
 
     active_references = set()
     for payload in _active_rule_payloads():
@@ -171,6 +182,14 @@ def test_profile_capture_modes_keep_every_active_rule_reachable(blob):
         else:
             assert source_condition_id is None, (
                 f"{flag_id}: only derived flags may declare source_condition_id"
+            )
+        if mode == "derived_from_sex":
+            assert entry.get("source_sex") in {"Male", "Female"}, (
+                f"{flag_id}: sex-derived flag needs the profile's stored value"
+            )
+        else:
+            assert "source_sex" not in entry, (
+                f"{flag_id}: only sex-derived flags may declare source_sex"
             )
 
     missing = active_references - flags.keys()
