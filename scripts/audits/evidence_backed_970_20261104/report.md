@@ -421,7 +421,7 @@ These three carry `documented_review_scope`. A row that declares a reviewed prep
 - **On main:** that row reads `evaluated_limited_or_negative`, so 239062 is complete with Evidence 0. `test_documented_review_finishes_a_declared_preparation_at_no_credit` pins this.
 - **On #354:** `_resolved_evidence_assessment` maps that reason to `not_yet_evaluated`, so 239062 is partial with blocker `evidence_assessment_incomplete`. #354 renames the pin to `test_documented_positive_review_waits_for_its_scoring_path`.
 
-Ginkgo's stored record has `effect_direction: null` in the sense of no direction (`None`), and its text describes null prevention trials, so "positive" doesn't describe it. This is code on #354, not data, so this PR doesn't change it. No data route closes declared rows and keeps undeclared rows open: the null route would close `Ginkgo Biloba` and `Ginkgo Biloba Leaf Extract`, which `test_undeclared_preparation_stays_open` keeps open. 16 ginkgo labels stay in the pending count until this is decided.
+Ginkgo's stored `effect_direction` is `None`, and its text describes null prevention trials, so "positive" doesn't describe it. This is code on #354, not data, so this PR doesn't change it. No data route closes declared rows and keeps undeclared rows open: the null route would close `Ginkgo Biloba` and `Ginkgo Biloba Leaf Extract`, which `test_undeclared_preparation_stays_open` keeps open. 16 ginkgo labels stay in the pending count until this is decided.
 
 ### For Dr. Pham, batch 4 (no record written)
 
@@ -432,7 +432,8 @@ Ginkgo's stored record has `effect_direction: null` in the sense of no direction
 - **yerba_mate_leaf:** 41244043 lists mucosal irritation, insomnia, tachycardia, angina, headache and gastrointestinal discomfort. 29117073 reports a rise in resting plasma adrenaline, and these labels are multi-stimulant formulas. The cancer association papers 29909900, 38689010 and 29490609 were not read.
 - **gamma_linolenic_acid:** 21328257 reports adverse events at 20% versus 3%, not statistically different.
 - **milk_basic_protein:** 17482742 says MBP products are labelled as containing milk.
-- **lycopene:** the stored rows include a rat study and a narrative review, the 41641880 abstract has an MD outside its CI, and Lyc-O-Mato labels 1832, 224633 and 63244 print a tomato complex while 31035474 tested synthetic lycopene.
+- **ginkgo:** the 41641880 abstract prints MD -0.06 with a 95% CI of -1.00 to -0.20, which doesn't contain the MD, on global clinical status in dementia.
+- **lycopene:** the stored rows include a rat study (36422550) and a narrative review (27840359), and Lyc-O-Mato labels 1832, 224633 and 63244 print a tomato complex while 31035474 tested synthetic lycopene.
 
 ### Limits
 
