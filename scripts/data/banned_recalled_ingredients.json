@@ -22488,7 +22488,7 @@
         "cow bitter",
         "tansy oil"
       ],
-      "reason": "Tansy contains thujone (a GABA-A antagonist neurotoxin) and other terpenoid constituents that are abortifacient, hepatotoxic, and can cause seizures at supplement-relevant doses. Historical use as an abortifacient is linked to multiple fatalities. Essential oil is more toxic than dried herb. Pregnancy use is not clinically acceptable.",
+      "reason": "Tansy essential oil can contain thujone, a neurotoxic compound associated with seizures. Thujone exposure varies by preparation, and whole-plant products should not be assumed free of this risk.",
       "status": "high_risk",
       "class_tags": [
         "neurotoxic",
@@ -22539,10 +22539,11 @@
       "entity_type": "ingredient",
       "match_mode": "active",
       "ban_context": "substance",
-      "safety_warning": "Tansy contains thujone, a neurotoxin that can cause seizures, liver injury, and miscarriage. Historical abortifacient use is linked to maternal deaths. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Neurotoxic herb, seizures and miscarriage. Stop using and talk to your doctor.",
+      "safety_warning": "Tansy essential oil can contain thujone, a neurotoxic compound associated with seizures. Thujone exposure varies by preparation, and whole-plant products should not be assumed free of this risk.",
+      "safety_warning_one_liner": "Tansy may contain thujone, a neurotoxic compound linked to seizures.",
       "review": {
         "status": "validated",
+        "notes": "Consumer copy replaced 2026-11-03 per Sean; the 2026-04-26 review predates this text.",
         "last_reviewed_at": "2026-04-26",
         "next_review_due": "2026-10-26",
         "reviewed_by": "dr_pham_clinical_signoff",
@@ -22566,6 +22567,11 @@
             "date": "2026-09-26",
             "change": "CUI C1256219 -> C0331409. UMLS: C1256219 is 'Tanacetum vulgare, flower essence' (Pharmacologic Substance; MTH/CHV/ALT atoms only), a flower-remedy preparation, not the herb or oil this entry covers. C0331409 is 'Tanacetum vulgare' (Plant; NCBI, MSH, SNOMEDCT_US; common name tansy), matching the Plant-concept anchoring of the file's other single-species botanicals. No shipped detail blob or frozen enriched product references this entry.",
             "by": "claude-audit"
+          },
+          {
+            "date": "2026-11-03",
+            "change": "reason, safety_warning and safety_warning_one_liner rewritten. Wording from Sean, 2026-11-03: the card reaches everyone, so it carries no pregnancy language, and the definitive miscarriage, abortifacient and fatality claims are gone. display_mode_default unchanged. The pregnancy warning lives on RULE_BANNED_TANSY_PREGNANCY, gated on pregnancy.",
+            "by": "claude"
           }
         ]
       },

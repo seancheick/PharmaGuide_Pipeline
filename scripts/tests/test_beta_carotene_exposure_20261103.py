@@ -104,6 +104,28 @@ def test_a_vitamin_a_figure_raises_no_concern(enricher, dsld_id, condition):
     assert {d["evaluation_status"] for d in _decisions(product, condition)} == {"amount_unknown"}
 
 
+@pytest.mark.parametrize("condition", ["current_smoker", "former_smoker", "asbestos_exposure"])
+def test_unread_beta_carotene_mass_keeps_check_open_without_a_caution(enricher, condition):
+    label = _label(mixture_mcg=1000)
+    label["ingredientRows"][0]["quantity"][0].update(quantity=None, unit="NP")
+    product = _enrich(enricher, label)
+    decisions = _decisions(product, condition)
+    assert decisions
+    assert {d["evaluation_status"] for d in decisions} == {"form_unknown"}
+    assert {d["consumer_disposition"] for d in decisions} == {"suppress"}
+    assert all(d["dose_evaluation"] is None for d in decisions)
+    assert product["interaction_profile"]["condition_summary"][condition]["highest_severity"] == "informational"
+
+
+def test_real_201405_keeps_the_unread_child_incomplete(enricher):
+    raw = json.loads((FIXTURES / "standardized_twin_201405_raw.json").read_text())
+    product = _enrich(enricher, raw)
+    decisions = _decisions(product)
+    assert any(d["evaluation_status"] == "form_unknown" for d in decisions)
+    assert {d["consumer_disposition"] for d in decisions} == {"suppress"}
+    assert product["interaction_profile"]["condition_summary"]["current_smoker"]["highest_severity"] == "informational"
+
+
 def test_a_declaration_from_beta_carotene_alone_keeps_its_conversion(enricher):
     status, decision = _one_decision(_enrich(enricher, _raw("178431")))
     assert status == "above_threshold"

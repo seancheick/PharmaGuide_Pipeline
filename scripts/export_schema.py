@@ -63,6 +63,7 @@ _WARNING_REF_DYNAMIC_FIELDS = (
     "dose_floor_status",
     "profile_gate",
     "source_producers",
+    "source_rule_ids",
     "evidence_level",
     "sources",
 )
@@ -308,6 +309,10 @@ def _resolved_warning(
     if "source_producers" in ref:
         resolved["source_producers"] = copy.deepcopy(
             _safe_list(ref.get("source_producers"))
+        )
+    if "source_rule_ids" in ref:
+        resolved["source_rule_ids"] = copy.deepcopy(
+            _safe_list(ref.get("source_rule_ids"))
         )
     return resolved
 

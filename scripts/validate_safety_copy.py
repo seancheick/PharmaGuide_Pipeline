@@ -311,6 +311,26 @@ def validate_banned_recalled_entry(
 # ---------------------------------------------------------------------------
 
 
+def _copy_is_in_its_review_file(sub_rule: Dict[str, Any]) -> bool:
+    """True when the headline and body are word for word in the named review.
+
+    Reviewed clinical wording passes through verbatim, so the authoring limits
+    on length and framing don't apply to it. Any rewording falls back to them.
+    """
+    review = sub_rule.get("clinical_review")
+    if not isinstance(review, dict):
+        return False
+    if not all(str(review.get(key) or "").strip() for key in ("reviewer", "reviewed_at", "file")):
+        return False
+    audits = (Path(__file__).parent / "audits").resolve()
+    path = (Path(__file__).parent / str(review["file"])).resolve()
+    if audits not in path.parents or not path.is_file():
+        return False
+    text = path.read_text(encoding="utf-8")
+    copy_fields = (sub_rule.get("alert_headline"), sub_rule.get("alert_body"))
+    return all(isinstance(value, str) and value.strip() in text for value in copy_fields)
+
+
 def validate_interaction_sub_rule(
     rule_id: str,
     sub_rule_kind: str,  # "condition_rule" | "drug_class_rule" |
@@ -328,6 +348,7 @@ def validate_interaction_sub_rule(
 
     sev_lower = (severity or "").strip().lower()
     is_severe = sev_lower in ("avoid", "contraindicated")
+    reviewed = _copy_is_in_its_review_file(sub_rule)
 
     # alert_headline contract.
     if ah is None:
@@ -337,7 +358,7 @@ def validate_interaction_sub_rule(
         res.fail(f"{tag}: alert_headline must be string")
     else:
         s = ah.strip()
-        if not (20 <= len(s) <= 60):
+        if not reviewed and not (20 <= len(s) <= 60):
             res.fail(f"{tag}: alert_headline length {len(s)} outside [20, 60]")
         # No SCREAMING verbs — block the specific alarm words the old
         # derived copy would have produced. Medical acronyms (MAOI, FDA,
@@ -359,9 +380,9 @@ def validate_interaction_sub_rule(
         res.fail(f"{tag}: alert_body must be string")
     else:
         s = ab.strip()
-        if not (60 <= len(s) <= 200):
+        if not reviewed and not (60 <= len(s) <= 200):
             res.fail(f"{tag}: alert_body length {len(s)} outside [60, 200]")
-        if is_severe and not CONDITIONAL_FRAMING.search(s):
+        if not reviewed and is_severe and not CONDITIONAL_FRAMING.search(s):
             res.fail(
                 f"{tag}: alert_body for severity={sev_lower!r} must use "
                 f"conditional framing ('if you take', 'talk to', etc.) — "
