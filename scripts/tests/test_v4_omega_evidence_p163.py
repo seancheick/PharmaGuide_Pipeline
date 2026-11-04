@@ -497,3 +497,19 @@ def test_generic_omega_release_receipt_rejects_stale_or_inflated_authority(chang
     else:
         evidence['metadata']['primary_evidence_floor_decisive'] = False
     assert not _current_omega_authority_receipt(product, evidence)
+
+
+@pytest.mark.parametrize("name,brand,groups,expected", [
+    ("Omega DHA", "Prenatal Labs", [], 10.4),
+    ("Omega DHA", "SPM Labs", [], 10.4),
+    ("Not for prenatal use DHA", "", [], 10.4),
+    ("Omega DHA", "", ["Pregnant women"], 11.1),
+    ("Prenatal DHA", "", [], 11.1),
+])
+def test_omega_population_uses_affirmative_targeting_not_branding(name, brand, groups, expected):
+    from evidence_resolver import resolve_omega_evidence_standard
+    product = _epa_dha_product(name=name)
+    product.update(brand_name=brand, targetGroups=groups)
+    result = resolve_omega_evidence_standard(product)
+    assert result["score"] == expected
+    assert result["prenatal_outcome_credit_awarded"] is False

@@ -312,8 +312,8 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     carrier-oil mass.
     """
     from scoring_input_contract import (
-        PRENATAL_TITLE_RE,
         epa_dha_amounts_per_serving,
+        _route_product_label_text,
     )
     from serving_frequency import resolve_daily_serving_range
     from scoring_v4.quality_score_config import block
@@ -344,11 +344,14 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     minimum = total_ps * servings_min if total_ps > 0 else 0.0
     maximum = total_ps * servings_max if total_ps > 0 else 0.0
     dha_minimum = dha_ps * servings_min if dha_ps > 0 else 0.0
-    title = " ".join(
-        str(prod.get(key) or "")
-        for key in ("product_name", "fullName", "brand_name", "brandName")
-    )
-    prenatal = bool(PRENATAL_TITLE_RE.search(title))
+    title = _route_product_label_text(prod)
+    from clinical_applicability import assess_context_population
+    # Select the existing pregnancy intake authority using the same affirmative
+    # targeting decision as clinical contexts, never a brand or negated title.
+    # This is the authority's population, not a new efficacy study or approval.
+    prenatal = assess_context_population(prod, {
+        "population": {"age_group": "adult", "description": "Pregnant women"},
+    }) == "eligible"
 
     # Read magnitudes only from the shared config, never from clinical data.
     weak_score = float(policy["omega_reviewed_weak"]["pillar_score"])
