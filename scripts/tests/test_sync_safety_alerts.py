@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -533,7 +534,7 @@ def test_the_commands_build_sign_and_refuse_as_the_runbook_says(tmp_path, monkey
     assert events == []
 
 
-def _publish_with_fakes(dist_dir, monkeypatch, *, current=None, existing=None):
+def _publish_with_fakes(dist_dir, monkeypatch, *, current=None, existing=None, dispatch=None):
     """Run the real publish path against a fake client, recording every step."""
     monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
     monkeypatch.setenv("SAFETY_ALERT_DISPATCH_SECRET", "test-secret")
@@ -586,7 +587,7 @@ def _publish_with_fakes(dist_dir, monkeypatch, *, current=None, existing=None):
         lambda _client, _bucket, remote, _local, **_kw: events.append(("upload", remote)),
     )
     monkeypatch.setattr(
-        sync_safety_alerts, "_dispatch_release", lambda _id: events.append(("dispatch", None))
+        sync_safety_alerts, "_dispatch_release", dispatch or (lambda _id: events.append(("dispatch", None)))
     )
     sync_safety_alerts.sync(dist_dir)
     return events
@@ -664,3 +665,92 @@ def test_the_real_trust_file_pins_nothing_yet():
     trust = json.loads(committed.read_text(encoding="utf-8"))
     assert trust["alert_feed_keys"] == {}
     assert TEST_PUBLIC_HEX not in trust["production_keys"].values()
+
+
+def test_live_publication_excludes_another_process_and_releases_after_failure(tmp_path, monkeypatch):
+    """A second worktree cannot pass sequence validation during another publish."""
+    import multiprocessing
+
+    context = multiprocessing.get_context("fork")
+    reached_current = context.Event()
+    release_first = context.Event()
+    child_result = context.Queue()
+    lock_path = tmp_path / "publication.lock"
+    monkeypatch.setattr(sync_safety_alerts, "_PUBLICATION_LOCK", lock_path, raising=False)
+    _stage_all(tmp_path)
+    _sign_staged(tmp_path, sequence=6)
+    monkeypatch.setattr(sync_safety_alerts, "_dispatch_configuration", lambda: None)
+    monkeypatch.setattr(sync_safety_alerts, "get_supabase_client", object)
+    parent_pid = os.getpid()
+    parent_reads = []
+
+    def current(_):
+        if os.getpid() == parent_pid:
+            parent_reads.append(True)
+        else:
+            reached_current.set()
+            if not release_first.wait(10):
+                raise RuntimeError("probe timed out")
+        return 5, None
+
+    def stop_after_read(*args, **kwargs):
+        raise RuntimeError("probe upload failure")
+
+    monkeypatch.setattr(sync_safety_alerts, "_current_sequence", current)
+    monkeypatch.setattr(sync_safety_alerts, "upload_file", stop_after_read)
+
+    def first_publish():
+        try:
+            sync_safety_alerts.sync(tmp_path)
+        except RuntimeError as error:
+            child_result.put(str(error))
+
+    first = context.Process(target=first_publish)
+    first.start()
+    try:
+        assert reached_current.wait(10), "first publisher never reached sequence validation"
+        with pytest.raises(RuntimeError, match="another safety-alert publication is running"):
+            sync_safety_alerts.sync(tmp_path)
+        assert not parent_reads, "contending publisher must not even read live sequence"
+    finally:
+        release_first.set()
+        first.join(10)
+        if first.is_alive():
+            first.terminate()
+            first.join()
+    assert child_result.get(timeout=2) == "probe upload failure"
+    # Failed publication releases its OS lock; an explicit retry can proceed.
+    with pytest.raises(RuntimeError, match="probe upload failure"):
+        sync_safety_alerts.sync(tmp_path)
+    assert parent_reads == [True]
+
+
+def test_live_publication_holds_process_lock_through_dispatch(tmp_path, monkeypatch):
+    import multiprocessing
+
+    context = multiprocessing.get_context("fork")
+    result = context.Queue()
+    monkeypatch.setattr(sync_safety_alerts, "_PUBLICATION_LOCK", tmp_path / "publication.lock")
+    _stage_all(tmp_path)
+    _sign_staged(tmp_path, sequence=6)
+
+    def competing_publish():
+        sync_safety_alerts._dispatch_release = lambda _id: None
+        try:
+            sync_safety_alerts.sync(tmp_path)
+            result.put("unexpected publication")
+        except RuntimeError as error:
+            result.put(str(error))
+
+    def dispatch(_release_id):
+        competitor = context.Process(target=competing_publish)
+        competitor.start()
+        try:
+            assert result.get(timeout=10) == "another safety-alert publication is running"
+        finally:
+            competitor.join(10)
+            if competitor.is_alive():
+                competitor.terminate()
+                competitor.join()
+
+    _publish_with_fakes(tmp_path, monkeypatch, dispatch=dispatch)

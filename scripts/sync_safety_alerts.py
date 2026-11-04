@@ -15,6 +15,7 @@ Steps: docs/RELEASE_SIGNING_RUNBOOK.md.
 from __future__ import annotations
 
 import argparse
+import fcntl
 import hashlib
 import json
 import os
@@ -36,6 +37,10 @@ from release_manifest import (
 )
 from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, get_supabase_client, upload_file
 
+
+# One operator account, shared by every worktree and staged release directory.
+# This is local serialization, not a distributed database compare-and-swap.
+_PUBLICATION_LOCK = Path.home() / ".cache" / "pharmaguide" / "safety-alert-publish.lock"
 
 FEED_FILENAME = "safety_alerts.json"
 EXTENDED_FEED_FILENAME = "safety_alerts_extended.json"
@@ -187,11 +192,24 @@ def _load_extended(dist_dir: Path, manifest: Dict[str, Any], feed: Dict[str, Any
 
 def sync(dist_dir: Path, *, dry_run: bool = False, test_project: bool = False) -> Dict[str, Any]:
     staged = load_staged_release(dist_dir, test_project=test_project)
-    # Installed builds never read this key, and the dispatcher never reads `manifest`.
-    manifest = {**staged["manifest"], "signed_feed": staged["signed_feed"]}
     if dry_run:
         return {"status": "dry_run", **staged}
 
+    _PUBLICATION_LOCK.parent.mkdir(parents=True, exist_ok=True)
+    # Keep the descriptor open through sequence validation, remote writes,
+    # promotion and dispatch. Never unlink the lock: that permits a new inode
+    # to be locked while another publisher still holds the old one.
+    with _PUBLICATION_LOCK.open("a") as lock:
+        try:
+            fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            raise RuntimeError("another safety-alert publication is running") from error
+        return _publish_staged(staged)
+
+
+def _publish_staged(staged: Dict[str, Any]) -> Dict[str, Any]:
+    # Installed builds never read this key, and the dispatcher never reads `manifest`.
+    manifest = {**staged["manifest"], "signed_feed": staged["signed_feed"]}
     # Missing local configuration must fail before upload or promotion. Dispatch
     # can still fail remotely after promotion, but that is a retryable delivery
     # failure, not permission to publish without a configured dispatcher.
