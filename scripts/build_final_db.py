@@ -3834,7 +3834,7 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
     )
     # Context events have no ingredient/risk-rule identity. Preserve distinct
     # event scope and claim categories rather than losing their authored copy.
-    if w.get("type") in {"manufacturer_violation", "marketing_claim"}:
+    if w.get("type") in {"manufacturer_violation", "marketing_claim", "label_statement"}:
         return (_norm(w.get("type")), _norm(w.get("source")), _norm(w.get("detail")), _norm(w.get("source_urls")))
 
     # A card with no rule, subject or ingredient (harmful additive, dietary) is
@@ -6899,6 +6899,112 @@ def _classify_product_role(
     }
 
 
+_LABEL_STATEMENT_NEGATIVE = re.compile(
+    r"\b(do not|don['’]t|should not|must not|not to be|no to be|not for|not intended"
+    r"|not recommended|not suitable|never|avoid)\b"
+)
+_LABEL_STATEMENT_UNLESS = re.compile(r"\b(unless|except)\b|under the (direct )?supervision|on the advice")
+_LABEL_STATEMENT_DOSE_LIMIT = re.compile(r"not exceed|not take more than|more than \d")
+_LABEL_STATEMENT_CONSULT = re.compile(
+    r"consult|ask |doctor|physician|health.?care|practitioner|professional|talk to|check with"
+    r"|seek|advice|advise|pharmacist|provider|clinician|midwife|obstetric"
+)
+_LABEL_STATEMENT_TTC = re.compile(
+    r"conceiv|(attempting|trying|planning|considering|likely|may|might)( on)?( to)?"
+    r"( become| becoming| get)? ?pregnan|planning on pregnancy|child.?bearing"
+)
+_LABEL_STATEMENT_NURSING = re.compile(r"nursing|nurisng|lactat|breast.?feed")
+_LABEL_STATEMENT_TO_MEN = re.compile(r"\bmen if attempting")
+_LABEL_STATEMENT_FLAGS = {
+    "pregnancy": "pregnant", "lactation": "breastfeeding", "ttc": "trying_to_conceive",
+}
+
+
+def _label_statement_gate(gate_type: str, conditions: List[str], flags: List[str]) -> Dict:
+    return {
+        "gate_type": gate_type,
+        "requires": {"conditions_any": conditions, "drug_classes_any": [], "profile_flags_any": flags},
+        "excludes": {
+            "conditions_any": [], "drug_classes_any": [], "profile_flags_any": [],
+            "product_forms_any": [], "nutrient_forms_any": [],
+        },
+        "dose": None,
+    }
+
+
+def _label_statement_audience(sentence: str) -> List[str]:
+    rest = _LABEL_STATEMENT_TTC.sub(" ", sentence)
+    return [
+        condition for condition, named in (
+            ("pregnancy", "pregnan" in rest),
+            ("lactation", bool(_LABEL_STATEMENT_NURSING.search(rest))),
+            ("ttc", rest != sentence),
+        ) if named
+    ]
+
+
+def _classify_label_statement(sentence: str) -> Optional[Tuple[str, List[str]]]:
+    """Severity and audience of one label sentence, or None when it isn't a firm one.
+
+    The groups Sean approved on 2026-11-03: a plain "do not use" or "not intended"
+    is avoid, one that allows a clinician's say-so is caution. Being told to consult
+    someone, a dose limit and contraception advice stay out. Without an "unless", the
+    words after a consult instruction can't make it firm ("If pregnant, ask your
+    doctor, and never ...").
+    """
+    text = re.sub(r"\s+", " ", sentence).strip().casefold()
+    if "{chart}" in text:
+        return None
+    if _LABEL_STATEMENT_TO_MEN.search(text):
+        return "avoid", ["ttc"]
+    if _LABEL_STATEMENT_DOSE_LIMIT.search(text):
+        return None
+    allows_clinician = bool(_LABEL_STATEMENT_UNLESS.search(text))
+    if not allows_clinician:
+        consult = _LABEL_STATEMENT_CONSULT.search(text)
+        text = text[:consult.start()] if consult else text
+    audience = _label_statement_audience(text)
+    if not audience or not _LABEL_STATEMENT_NEGATIVE.search(text):
+        return None
+    return ("caution" if allows_clinician else "avoid"), audience
+
+
+def _label_statement_warnings(enriched: Dict) -> List[Dict]:
+    """A label's own firm pregnancy statement, shown word for word to those it names.
+
+    `condition_ids` keeps it hidden from everyone else: the app never hides an
+    untagged hard warning. "Label warning" is the only text not from the label.
+    """
+    result = []
+    seen = set()
+    for statement in safe_list(enriched.get("statements")):
+        notes = statement.get("notes") if isinstance(statement, dict) else None
+        if not isinstance(notes, str):
+            continue
+        for sentence in re.split(r"(?<=[.!?;])\s+", notes):
+            sentence = sentence.strip()
+            classified = _classify_label_statement(sentence)
+            identity = re.sub(r"\s+", " ", sentence).casefold()
+            if classified is None or identity in seen:
+                continue
+            seen.add(identity)
+            severity, audience = classified
+            gate = (
+                _label_statement_gate("combination", ["ttc"], ["sex_male", "sex_unstated"])
+                if _LABEL_STATEMENT_TO_MEN.search(identity)
+                else _label_statement_gate("profile_flag", [], [_LABEL_STATEMENT_FLAGS[c] for c in audience])
+            )
+            result.append({
+                "type": "label_statement", "source": "label_statements",
+                "severity": severity, "display_mode_default": "suppress",
+                "evidence_level": "ungraded", "title": "Label warning",
+                "detail": sentence, "alert_body": sentence,
+                "condition_ids": audience, "drug_class_ids": [],
+                "profile_gate": gate, "source_urls": [],
+            })
+    return result
+
+
 def _product_context_warnings(enriched: Dict) -> List[Dict]:
     """Project existing assessments as context, never as product-specific bans.
 
@@ -6948,6 +7054,7 @@ def _product_context_warnings(enriched: Dict) -> List[Dict]:
             "detail": f"The label contains wording flagged as a {safe_str(row.get('type'))}. Label wording does not establish that this supplement is FDA-approved or proven to treat disease. This flag is a claim check, not a finding about its ingredients.",
             "source_urls": [ods_url],
         })
+    result.extend(_label_statement_warnings(enriched))
     return result
 
 
