@@ -352,7 +352,7 @@ def test_benefit_copy_does_not_change_evidence_in_any_scoring_module(surface):
         required = evidence_required_canonicals(case.product, module=module)
         evidence = baseline["quality_pillars_v4"]["evidence"]
         for copy in ("Supports cognitive performance.", "Helps maintain hydration within the cells.",
-                     "Supports sleep.", "Immune support.", "Joint health.", "Heart health.", "Weight loss."):
+                     "Supports sleep.", "Immune support.", "Joint health.", "Heart health.", "Weight loss.", "Supports digestive health."):
             product = deepcopy(case.product)
             if surface == "title":
                 for key in ("product_name", "fullName"):

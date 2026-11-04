@@ -4301,7 +4301,7 @@ _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
 )
 _ROUTE_SPORTS_NAME_EXCLUSION_RE = re.compile(
     r"\b(nac|n-acetyl|theanine|tryptophan|5-htp|sam-e|"
-    r"digestive|enzyme|enzymes|keratin|lactoferrin|collagen)\b",
+    r"enzyme|enzymes|keratin|lactoferrin|collagen)\b",
     re.IGNORECASE,
 )
 _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS = set(B_COMPLEX_DISQUALIFY_CANONICALS)
@@ -5299,7 +5299,6 @@ def _route_fiber_digestive_decision(
     *,
     features: Optional[Dict[str, Any]] = None,
 ) -> tuple[bool, str, List[str]]:
-    del name_text  # Product-title intent is measured centrally by route_features.
     facts = features or _route_feature_vector(product)
     if (
         facts.get("title_systemic_enzyme_intent")
@@ -5318,7 +5317,11 @@ def _route_fiber_digestive_decision(
         if has_fiber_evidence:
             evidence.append("fiber_label_evidence")
         return True, "fiber_title_intent", evidence
-    if facts.get("title_digestive_intent"):
+    if facts.get("title_digestive_intent") and (
+        re.search(r"\b(?:enzymes?|betaine\s+hcl|pancrea\w*)\b", name_text or "", re.I)
+        or int(facts.get("observed_digestive_enzyme_row_count") or 0)
+        or int(facts.get("observed_dual_use_enzyme_row_count") or 0)
+    ):
         evidence = ["digestive_title_intent"]
         if int(facts.get("observed_digestive_enzyme_row_count") or 0):
             evidence.append("dedicated_digestive_enzyme")
