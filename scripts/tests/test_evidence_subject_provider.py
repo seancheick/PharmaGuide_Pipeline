@@ -152,7 +152,7 @@ def test_only_evidence_owners_are_added_beyond_the_label_actives(enricher, enric
     )
     assert "creatine_monohydrate" in visited
     assert visited <= label_actives | evidence_owner_canonicals(product)
-    assert "l_glutamine" not in visited
+    assert "l_glutamine" in visited & evidence_owner_canonicals(product)
 
 
 def test_a_blend_total_is_not_a_member_dose_for_applicability(enriched):
@@ -209,18 +209,18 @@ def test_enrichment_keeps_undosed_reviewed_match_without_promising_a_member_dose
 
 
 def test_printed_inulin_child_supports_anchor_without_borrowing_blend_mass(enriched):
-    from clinical_applicability import assess_clinical_applicability
     from dose_assessment import positive_clinical_benchmark
     product = enriched["251338"]
-    # The actual source context is explicitly unqualified. Retain its exact
-    # child ownership without converting that identity into benefit credit.
-    match = next(m for m in product["evidence_data"]["rejected_clinical_matches"] if m["id"] == "INGR_INULIN")
-    assert match["reason_code"] == "clinical_sources_ineligible"
-    assert match["matched_source_row_refs"] == ["ingredientRows[7].nestedRows[0]"]
-    result = assess_clinical_applicability(product, match, assess_amount=False)
-    assert result["status"] == "unresolved"
-    assert result["reason_code"] == "clinical_sources_ineligible"
+    # The printed Inulin child has no individual amount. Its blend identity
+    # stays available, but cannot borrow the blend mass or clear a source hold.
+    from clinical_applicability import reviewed_entries
+    assert not any(m["id"] == "INGR_INULIN" for m in product["evidence_data"]["clinical_matches"])
     row = next(r for r in get_evidence_subject_rows(product) if r.get("canonical_id") == "inulin")
+    assert row["raw_source_path"] == "ingredientRows[7]"
+    from scoring_input_contract import is_lent_blend_mass
+    assert is_lent_blend_mass(row)
+    from evidence_resolver import clinical_record_sources_eligible
+    assert not clinical_record_sources_eligible(reviewed_entries()["INGR_INULIN"])
     assert positive_clinical_benchmark(product, row) is None
 
 

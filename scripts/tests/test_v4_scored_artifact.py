@@ -529,7 +529,7 @@ def test_one_scoring_pass_derives_each_product_view_once(
     count("_build_scoring_classification",
           lambda product, *, route_module, classification_origin: (route_module, classification_origin))
     count("_classify_rows",
-          lambda product, module, rows, materiality_only: (module, materiality_only) if rows is None else ("rows",))
+          lambda product, module, rows, materiality_only, evidence: (module, materiality_only, evidence) if rows is None else ("rows",))
 
     def record(name, key_of):
         original = getattr(contract, name)
@@ -548,9 +548,20 @@ def test_one_scoring_pass_derives_each_product_view_once(
            lambda product, *, route_module=None, classification_origin="compatibility_derived":
            (route_module, classification_origin))
     record("classify_ingredient_roles",
-           lambda product, *, module=None, rows=None, materiality_only=False:
-           (module, materiality_only) if rows is None else None)
+           lambda product, *, module=None, rows=None, materiality_only=False, evidence=False:
+           (module, materiality_only, evidence) if rows is None else None)
 
+    original_score = scored_artifact.score_product_v4
+
+    def score_with_repeated_roles(product):
+        # Explicit callers exercise both cached role views; Evidence consumers
+        # may pass their own subject rows, which intentionally bypass this cache.
+        for evidence in (False, True):
+            contract.classify_ingredient_roles(product, module="generic", evidence=evidence)
+            contract.classify_ingredient_roles(product, module="generic", evidence=evidence)
+        return original_score(product)
+
+    monkeypatch.setattr(scored_artifact, "score_product_v4", score_with_repeated_roles)
     scored_artifact.build_scored_artifact(_product())
 
     builds = {key: n for key, n in derived.items() if key[0] == "_build_scoring_ingredients"}

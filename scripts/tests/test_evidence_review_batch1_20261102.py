@@ -128,10 +128,11 @@ def test_undeclared_preparation_stays_open(cid, name):
     assert _review_state(resolution) == "not_yet_evaluated"
 
 
-def test_signed_collagen_record_keeps_its_hold():
+def test_finished_collagen_literature_cannot_grant_held_clinical_credit():
     resolution = _resolve_label_row("collagen", "Hydrolyzed Collagen")
-    assert resolution.reason_code == "clinical_sources_ineligible"
-    assert _review_state(resolution) == "not_yet_evaluated"
+    assert resolution.reason_code == "literature_reviewed_human_clinical_evidence"
+    assert resolution.points_eligible is False
+    assert _review_state(resolution) == "evaluated_limited_or_negative"
 
 
 def test_documented_scope_needs_a_source_this_review_read(records):
@@ -174,7 +175,7 @@ def test_fiber_review_stays_out_of_the_data():
 @pytest.mark.parametrize("cid, name, reason", [
     ("l_carnitine", "L-Carnitine", "clinical_sources_ineligible"),
     ("elderberry", "Elderberry", "clinical_sources_ineligible"),
-    ("tmg_betaine", "Betaine Anhydrous", "clinical_sources_ineligible"),
+    ("tmg_betaine", "Betaine Anhydrous", "literature_reviewed_human_clinical_evidence"),
     ("phytosterols", "Plant Sterols", "clinical_sources_ineligible"),
     ("taurine", "Taurine", "clinical_source_contexts_missing"),
     ("grape_seed_extract", "Grape Seed Extract", "clinical_sources_ineligible"),
@@ -185,7 +186,7 @@ def test_records_waiting_on_clinician_stay_held(cid, name, reason):
     resolution = resolve_evidence_for_canonical(cid, name=name)
     assert resolution.reason_code == reason
     assert resolution.points_eligible is False
-    assert resolution.blocking_reasons
+    assert _review_state(resolution) == "not_yet_evaluated"
 
 
 @pytest.mark.parametrize("cid, pmid", [("ginkgo", "19017911"), ("collagen", "31919527")])

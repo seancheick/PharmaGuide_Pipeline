@@ -51,10 +51,16 @@ def test_299v_sen_null_symptom_result_cannot_invent_dose_or_supply_positive_cred
     assert any(o['direction'] == 'null' for o in context['outcomes'])
 
 
-def test_broad_digestive_health_cannot_borrow_the_scoped_299v_ibs_contexts():
+def test_broad_digestive_claim_does_not_erase_scoped_299v_ingredient_evidence():
     _clinical_strain_registry.cache_clear()
     product = strain_product(dose=1e10, clinical_id='STRAIN_PLANTARUM_299V', name='Lactobacillus plantarum 299v')
     product['product_name'] = 'Digestive Health Probiotic'
     result = score_evidence(product)
-    assert result['score'] == 0
-    assert result['metadata']['evidence_result_state'] == 'research_present_applicability_unestablished'
+    assert result['score'] == 16
+    assert result['metadata']['evidence_result_state'] == 'evaluated_applicable'
+    product['product_name'] = 'Probiotic'
+    control = score_evidence(product)
+    assert result['score'] == control['score']
+    # This metadata records category overlap, not a new trial or wider outcome.
+    assert result['metadata']['claim_alignment']['reason'] == 'direct_category_overlap'
+    assert result['metadata']['claim_alignment']['matched_categories'] == ['digestive']

@@ -2108,7 +2108,6 @@ def test_claim_absence_does_not_turn_unqualified_outcomes_into_affirmative_credi
     current = owner.reviewed_entries()
     record = deepcopy(current['INGR_CREATINE_MONOHYDRATE'])
     context = next(c for c in record['study_contexts'] if c.get('scoring_eligible') is True)
-    context['outcomes'] = outcomes
     record['study_contexts'] = [context]
     monkeypatch.setattr(owner, 'reviewed_entries', lambda: {**current, record['id']: record})
     row = _row('creatine_monohydrate', 'Creatine Monohydrate', quantity=3000)
@@ -2116,6 +2115,8 @@ def test_claim_absence_does_not_turn_unqualified_outcomes_into_affirmative_credi
                'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]},
                'activeIngredients': [row], 'evidence_data': {'clinical_matches': [{**record,
                    'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    assert score_evidence(product, apply_primary_floor=True)['score'] > 0
+    context['outcomes'] = outcomes
     assert score_evidence(product, apply_primary_floor=True)['score'] == 0
     artifact = build_scored_artifact(product)
     assert artifact['_v4_module_breakdown']['dimensions']['evidence']['score'] == 0
