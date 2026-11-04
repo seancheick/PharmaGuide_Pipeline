@@ -72,7 +72,6 @@ def test_a_finished_rejection_of_human_studies_says_they_did_not_qualify(pipelin
 
 
 @pytest.mark.parametrize("label", [
-    "evidence_truth_76837_raw.json",   # Reviewed research the scorer doesn't read: another cause.
     "evidence_truth_252353_raw.json",  # A reference-only record: human research isn't established.
 ])
 def test_the_did_not_qualify_sentence_stays_off_every_other_cause(pipeline, label):
@@ -82,6 +81,28 @@ def test_the_did_not_qualify_sentence_stays_off_every_other_cause(pipeline, labe
     assert evidence["score"] == 0
     assert NOT_ESTABLISHED in evidence["reason"]
     assert DID_NOT_QUALIFY not in evidence["reason"]
+
+
+def test_reviewed_research_without_a_scoring_path_remains_pending(pipeline):
+    """76837 has reviewed positive literature, but the scorer cannot award it yet."""
+    from assessment_readiness import evidence_review_open
+    from build_final_db import build_detail_blob
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = _enrich(pipeline, "evidence_truth_76837_raw.json")
+    scored = build_scored_artifact(enriched)
+    evidence = scored["quality_pillars_v4"]["evidence"]
+    assert scored["quality_assessment_status"] == "partial"
+    assert evidence_review_open(scored["assessment_readiness"]["release_assessment"])
+    assert evidence["score"] == 0  # No new clinical credit or magnitude policy.
+    assert evidence["display_state"] == "not_yet_reviewed"
+    assert "review pending" in evidence["reason"]
+    assert NOT_ESTABLISHED not in evidence["reason"]
+    assert DID_NOT_QUALIFY not in evidence["reason"]
+    blob = build_detail_blob(enriched, scored)
+    assert blob["quality_assessment_status"] == "partial"
+    assert blob["quality_pillars_v4"]["evidence"] == evidence
+    assert blob["product_safety_status"] == scored["product_safety_status"]
 
 
 def test_an_open_review_never_says_the_studies_did_not_qualify(pipeline):
