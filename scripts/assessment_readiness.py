@@ -19,6 +19,8 @@ from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, 
 from scoring_input_contract import (
     MATERIAL_ROLES,
     ROLE_ADJUNCT,
+    ROLE_CLAIM_PROMINENT,
+    active_label_rows,
     build_scoring_classification,
     classify_ingredient_roles,
     get_scoring_ingredients,
@@ -158,6 +160,8 @@ _NONHUMAN_STUDY_TYPES = frozenset({
     "animal_study",
     "in_vitro",
 })
+_OWNER_SCOPED_EVIDENCE_MODULES = frozenset({"generic", "fiber_digestive", "sports"})
+_AUTHORITY_PANEL_MODULES = frozenset({"multi_or_prenatal", "b_complex"})
 _ROUTE_INCOMPLETE_REASON_CODES = frozenset({
     "protein_identity_or_mass_missing",
 })
@@ -366,6 +370,9 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
             and (resolution.owner_facts["nutrition_authority"].get("is_essential") is True
                  or resolution.reason_code == "dietary_reference_intake_authority_established")):
         return EVIDENCE_EVALUATED_SUPPORTED, resolution.reason_code, EVIDENCE_APPLICABILITY_NUTRITION_AUTHORITY
+    if disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
+        # A finished answer from an authority that sets no intake earns no credit.
+        return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
     if (disposition in {
             EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value,
             EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
@@ -374,7 +381,8 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
                    and "backed_clinical_studies" in resolution.owner_facts))):
         return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
     if (disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-            and "literature_evidence" in resolution.owner_facts):
+            and ("literature_evidence" in resolution.owner_facts
+                 or "backed_clinical_studies" in resolution.owner_facts)):
         state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
                  else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
         return state, resolution.reason_code, None
@@ -416,7 +424,7 @@ def evaluate_evidence_assessment(
     # them outside the individual Evidence question.
     rows, roles = subjects + other_rows, subject_roles + other_roles
     matches, recovered_matches = resolved_clinical_matches(
-        dict(product), owner_scoped=module in {"generic", "fiber_digestive", "sports"}
+        dict(product), owner_scoped=module in _OWNER_SCOPED_EVIDENCE_MODULES
     )
     indexed_matches = [
         (match, _match_identity_keys(match))
@@ -1514,7 +1522,11 @@ def evaluate_release_assessment(
                         if (receipt.get("status") not in {"applicable", "assessed_studied_formula"}
                                 or receipt.get("scope_qualification_complete") is not True):
                             blockers.append("clinical_applicability_unreviewed:" + str(receipt.get("id") or "unknown"))
-        elif not _is_ready(str(_safe_dict(readiness.get("evidence")).get("readiness") or "")):
+        elif ((_panel_primary_open(product, readiness) if module in _AUTHORITY_PANEL_MODULES
+               else _required_evidence_review_open(product, readiness, module))
+              or _evidence_presents_as_unreviewed(module_breakdown)
+              or (not _is_ready(str(_safe_dict(readiness.get("evidence")).get("readiness") or ""))
+                  and _dose_rests_on_a_hidden_amount(module_breakdown))):
             blockers.append("evidence_assessment_incomplete")
         # The scoring owner records only records used by the winning generic
         # path. Missing applicability cannot publish provisional legacy credit.
@@ -1523,14 +1535,16 @@ def evaluate_release_assessment(
                    and row.get("scoring_input_kind") == "product_level_evidence"
                    and row.get("evidence_applicability") == EVIDENCE_APPLICABILITY_MODULE_AGGREGATE
                    for row in _safe_list(_safe_dict(readiness.get("evidence")).get("ingredient_assessments"))):
-                from evidence_resolver import EvidenceDisposition, resolve_product_evidence
+                from evidence_resolver import EvidenceDisposition, evidence_required_canonicals, resolve_product_evidence
                 from scoring_v4.modules.generic_evidence import evidence_completeness_gap
 
                 aggregate = resolve_product_evidence(dict(product), owner_scoped=True, module=module)
                 gap = evidence_completeness_gap(dict(product), aggregate, owner_scoped=True)
+                required = {_norm(canonical) for canonical in evidence_required_canonicals(dict(product), module=module)}
                 pending_applicability = any(
                     resolution.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
                     and _resolved_evidence_assessment(resolution)[0] == EVIDENCE_NOT_YET_EVALUATED
+                    and _norm(resolution.canonical_id) in required
                     for resolution in aggregate.resolutions
                 )
                 if gap or pending_applicability:
@@ -1561,8 +1575,340 @@ def evaluate_release_assessment(
                         blockers.append("contributing_source_review_incomplete:" + str(receipt.get("id") or "unknown"))
             elif float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0:
                 blockers.append("contributing_evidence_receipts_missing")
+    from scoring_v4.scored_artifact import _held_assessment_label
+    # A source-bound hold on an unfinished Evidence review stands while that review
+    # is open, so the narrower completion rule doesn't lift it. Finishing it does.
+    if "evidence_assessment_incomplete" not in blockers and any(
+            row.get("state") == EVIDENCE_NOT_YET_EVALUATED
+            for row in _safe_list(_safe_dict(readiness.get("evidence")).get("ingredient_assessments"))
+            if isinstance(row, Mapping)):
+        if "evidence_assessment_incomplete" in (_held_assessment_label(dict(product)).get("blockers") or []):
+            blockers.append("evidence_assessment_incomplete")
+    # A source-bound hold matches its exact blockers, so a new one would release its score.
+    if not intentional and not _held_assessment_label(dict(product)):
+        blockers.extend(_hidden_amount_blockers(product, module_breakdown))
     return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
-            "unfinished_source_assessment": unfinished_source}
+            "unfinished_source_assessment": unfinished_source,
+            "unread_printed_nutrient_amounts": unread_printed_nutrient_amounts(product),
+            "upper_limit_amounts_unknown": upper_limit_amounts_unknown(product),
+            "upper_limit_amounts_undisclosed": upper_limit_amounts_undisclosed(product)}
+
+
+#: Every release blocker that belongs to the Evidence review. Any other blocker,
+#: including one added later, means a check other than Evidence is unfinished.
+_EVIDENCE_RELEASE_BLOCKERS = frozenset({
+    "evidence_assessment_incomplete",
+    "omega_evidence_assessment_incomplete",
+    "probiotic_evidence_assessment_incomplete",
+    "probiotic_contributing_evidence_receipts_missing",
+    "probiotic_contributing_context_incomplete",
+    "contributing_evidence_receipts_missing",
+    "contributing_source_review_incomplete",
+    "clinical_applicability_unreviewed",
+})
+#: The omega owner keeps Evidence open only for unresolved EPA/DHA material
+#: identity (omega_evidence._evidence_result_state), which is not a pending review.
+_BLOCKERS_THAT_LEAVE_SAFETY_FINISHED = (_EVIDENCE_RELEASE_BLOCKERS - {
+    "omega_evidence_assessment_incomplete"}) | {"hidden_amount_quality_open"}
+_KNOWN_SAFETY_OUTCOMES = frozenset({"blocked", "unsafe", "caution", "no_known_catalog_concern"})
+#: The upper-limit check skipped these rows without reading their amount.
+_UNREAD_NUTRIENT_AMOUNT_STATUSES = frozenset({
+    "skipped_unit_unrecognized",
+    "skipped_amount_not_declared",
+})
+
+
+def unread_printed_nutrient_amounts(product: Mapping[str, Any]) -> int:
+    """Nutrients with a reference record whose printed number the owner could not read.
+
+    An amount the label never printed is the label's limitation and is not counted.
+    """
+    count = 0
+    for row in _safe_list(_safe_dict(product.get("rda_ul_data")).get("adequacy_results")):
+        if not isinstance(row, Mapping) or row.get("ul_status") not in _UNREAD_NUTRIENT_AMOUNT_STATUSES:
+            continue
+        printed = row.get("original_quantity")
+        if (row.get("data_by_group") and isinstance(printed, (int, float))
+                and not isinstance(printed, bool) and printed > 0):
+            count += 1
+    return count
+
+
+def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mapping[str, Any], module: Any) -> bool:
+    """Whether an unreviewed row can change this product's Evidence answer.
+
+    The rows stay recorded as unreviewed either way; this only decides whether
+    they hold the product. Unknown rows hold it.
+    """
+    evidence = _safe_dict(readiness.get("evidence"))
+    if _is_ready(str(evidence.get("readiness") or "")):
+        return False
+    if module not in _OWNER_SCOPED_EVIDENCE_MODULES:
+        return True
+    from evidence_resolver import evidence_required_canonicals
+    required = {_norm(canonical) for canonical in evidence_required_canonicals(dict(product), module=module)}
+    open_refs = set(_safe_list(evidence.get("not_yet_evaluated_row_refs")))
+    open_rows = [row for row in _safe_list(evidence.get("ingredient_assessments"))
+                 if isinstance(row, Mapping) and row.get("source_row_ref") in open_refs]
+    return (not open_rows or len(open_rows) < len(open_refs)
+            or any(_norm(row.get("canonical_id")) in required for row in open_rows)
+            or _title_names_an_open_row(product, open_rows))
+
+
+def _panel_primary_open(product: Mapping[str, Any], readiness: Mapping[str, Any]) -> bool:
+    """An add-in the label is about holds a panel product while it goes unread.
+
+    The essential-nutrient panel owns this question and other add-ins earn nothing
+    here, so their rows stay audit metadata as omega's do.
+    """
+    evidence = _safe_dict(readiness.get("evidence"))
+    open_refs = set(_safe_list(evidence.get("not_yet_evaluated_row_refs")))
+    open_rows = [row for row in _safe_list(evidence.get("ingredient_assessments"))
+                 if isinstance(row, Mapping) and row.get("source_row_ref") in open_refs]
+    return (any(row.get("role") == ROLE_CLAIM_PROMINENT for row in open_rows)
+            or _title_names_an_open_row(product, open_rows))
+
+
+def _title_names_an_open_row(product: Mapping[str, Any], open_rows: list) -> bool:
+    """An unread ingredient the title is about holds the product, whatever its role."""
+    from scoring_input_contract import _identity_named_in_product_title
+    rows = [dict(row) for row in open_rows]
+    return any(_identity_named_in_product_title(dict(product), row, rows, subject_words=True) for row in rows)
+
+
+def _dose_rests_on_a_hidden_amount(module_breakdown: Any) -> bool:
+    """An amount the label hides could still move Dose, so an unread row can't be waved through.
+
+    A finished review with a hidden amount stays complete on neutral Dose.
+    """
+    dose = _safe_dict(_safe_dict(_safe_dict(module_breakdown).get("dimensions")).get("dose"))
+    return any(_safe_dict(entry).get("assessment") == "hidden_amount_neutral"
+               for entry in _safe_list(_safe_dict(dose.get("metadata")).get("dose_contributions")))
+
+
+def _dose_reads_a_hidden_amount(module_breakdown: Any) -> bool:
+    """Dose gave a neutral or blend-total reading because the label hides an amount."""
+    from scoring_v4.quality_score import _undisclosed_component_dose_reason
+    dose = _safe_dict(_safe_dict(_safe_dict(module_breakdown).get("dimensions")).get("dose"))
+    return (_dose_rests_on_a_hidden_amount(module_breakdown)
+            or bool(_safe_dict(dose.get("metadata")).get("hidden_amount_purpose_ingredients"))
+            or _undisclosed_component_dose_reason(dose) is not None)
+
+
+def _hidden_amount_blockers(product: Mapping[str, Any], module_breakdown: Any) -> List[str]:
+    """A hidden amount holds a finished label only where it could change the answer.
+
+    Not disclosing is otherwise a known fact, and the label finishes. Each hold is
+    status alone: the neutral Dose reading stands either way.
+    """
+    if not _dose_reads_a_hidden_amount(module_breakdown):
+        return []
+    rows = active_label_rows(product.get("activeIngredients"))
+    hidden = _hidden_amount_rows(rows)
+    blockers = []
+    if _safety_check_needs_a_hidden_amount(product, rows, hidden):
+        blockers.append("hidden_amount_safety_open")
+    if _blend_hides_a_split_between_ingredients(hidden):
+        blockers.append("hidden_amount_quality_open")
+    return blockers
+
+
+def _positive(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0
+
+
+def _hidden_upper_limit_rows(rows: list, hidden: list, servings: Any) -> list:
+    """Hidden rows of a nutrient with an upper limit that no other row on the label prints."""
+    from evidence_resolver import rda_ul_reference_entry
+    printed = {row.get("canonical_id") for row in rows if has_source_printed_amount(row)}
+    unknown = [row for row in hidden if row.get("canonical_id") and row.get("canonical_id") not in printed
+               and not _carotene_outside_the_preformed_limit(row)
+               and _safe_dict(rda_ul_reference_entry(canonical_id=row["canonical_id"], name=row.get("name"))).get("highest_ul")]
+    return [row for row in unknown if not _printed_percent_rules_out_an_excess(row, unknown, servings)]
+
+
+def _carotene_outside_the_preformed_limit(row: Mapping[str, Any]) -> bool:
+    """The vitamin A limit covers preformed vitamin A only (rda_optimal_uls.json)."""
+    name = str(row.get("name") or "").lower()
+    return row.get("canonical_id") == "vitamin_a" and "caroten" in name and not re.search(r"retin|palmitate|acetate", name)
+
+
+def _adult_percent(row: Mapping[str, Any]) -> float | None:
+    """The row's largest printed %DV, when every percent it prints is on the adult DV.
+    A column that also prints a child's percent keeps its adult one for this check.
+    """
+    variants = [_safe_dict(variant) for variant in _safe_list(
+        row.get("quantityVariants") or _safe_dict(row.get("raw_taxonomy")).get("quantityVariants"))]
+    printed = [variant for variant in variants if _positive(variant.get("daily_value"))]
+    groups = {row.get("daily_value_target_group"), *(variant.get("daily_value_target_group") for variant in printed)}
+    percents = [value for value in (row.get("dailyValue"), *(variant["daily_value"] for variant in printed)) if _positive(value)]
+    if percents and groups == {"adult_4_plus"}:
+        return max(percents)
+    return max((variant["adult_daily_value"] for variant in variants if variant.get("adult_daily_value")), default=None)
+
+
+def _printed_percent_rules_out_an_excess(row: Mapping[str, Any], unknown: list, servings: Any) -> bool:
+    """A printed %DV bounds the amount: under the limit rules out an excess, at or over it
+    shows nothing, so the row stays unknown (integrator's ruling, November 4). The bound
+    uses the higher of the current and pre-2016 DV. It answers this check only: the row
+    stays dose-less, and Dose, the score and warning amounts never read it. A limit scoped
+    to one form holds too, since that form's share can't exceed the whole.
+    """
+    from evidence_resolver import rda_ul_reference_entry
+    from rda_ul_calculator import UL_SCREENING_POPULATIONS
+    from scoring_reference_resolver import upper_limit_bound_dv
+    canonical = row["canonical_id"]
+    dv = upper_limit_bound_dv(canonical)
+    entry = _safe_dict(rda_ul_reference_entry(canonical_id=canonical, name=row.get("name")))
+    if not dv or dv.get("unit") != entry.get("unit") or not _positive(servings):
+        return False
+    percents = [_adult_percent(other) for other in unknown if other.get("canonical_id") == canonical]
+    adult = UL_SCREENING_POPULATIONS["general_adult"]
+    limits = [item["ul"] for item in _safe_list(entry.get("data"))
+              if item.get("group") in adult["groups"] and item.get("age_range") in adult["ages"] and _positive(item.get("ul"))]
+    if not limits or None in percents:
+        return False
+    return sum(percents) / 100 * dv["bound"] * servings < min(limits)
+
+
+def _upper_limit_rows_unknown(product: Mapping[str, Any]) -> list:
+    rows = active_label_rows(product.get("activeIngredients"))
+    return _hidden_upper_limit_rows(rows, _hidden_amount_rows(rows), _safe_dict(product.get("serving_basis")).get("max_servings_per_day"))
+
+
+def upper_limit_amounts_unknown(product: Mapping[str, Any]) -> int:
+    """Upper-limit checks the label's missing amount stops. An unknown amount is never
+    a zero, so no all-clear can stand (Sean, November 4). Status alone: quality, a
+    found caution and the safety outcome don't read this."""
+    return len(_upper_limit_rows_unknown(product))
+
+
+def upper_limit_amounts_undisclosed(product: Mapping[str, Any]) -> int:
+    """Those checks where the label prints nothing for the nutrient, not even a percent."""
+    return sum(not _positive(row.get("dailyValue")) for row in _upper_limit_rows_unknown(product))
+
+
+def _hidden_amount_rows(rows: list) -> list:
+    """Rows present without an amount. "0 NP" printed as 0% DV is a measured zero, not one."""
+    from identity.interaction import label_row_establishes_presence
+    return [row for row in rows
+            if not has_source_printed_amount(row, allow_zero=True) and not _positive(row.get("quantity"))
+            and label_row_establishes_presence(row)]
+
+
+def _safety_check_needs_a_hidden_amount(product: Mapping[str, Any], rows: list, hidden: list) -> bool:
+    servings = _safe_dict(product.get("serving_basis")).get("max_servings_per_day")
+    if _hidden_upper_limit_rows(rows, hidden, servings):
+        return True
+    by_path = {row.get("raw_source_path"): row for row in rows}
+    for alert in _safe_list(_safe_dict(product.get("interaction_profile")).get("ingredient_alerts")):
+        canonical = _safe_dict(_safe_dict(alert).get("subject_ref")).get("canonical_id")
+        for hit in [*_safe_list(alert.get("condition_hits")), *_safe_list(alert.get("drug_class_hits"))]:
+            decision = _safe_dict(_safe_dict(hit).get("dose_threshold_evaluation"))
+            if decision.get("evaluation_status") != "amount_unknown":
+                continue
+            rule = _safe_dict(decision.get("decision_rule"))
+            if any(_blend_could_reach(by_path.get(row.get("parent_source_path")), rule, servings)
+                   for row in hidden if row.get("canonical_id") == canonical):
+                return True
+    return False
+
+
+#: Threshold units are mass of the ingredient or of a marker in it, which the blend
+#: bounds. "mg egcg" and "mcg rae" read by their first word; IU has no mass bound.
+_THRESHOLD_UNIT_MG = {"mg": 1.0, "g": 1000.0, "mcg": 0.001}
+
+
+def _blend_could_reach(blend: Any, rule: Mapping[str, Any], servings: Any) -> bool:
+    """Whether the whole blend could reach the threshold. Anything unbounded could."""
+    from scoring_input_contract import _role_mass_mg
+    total = _role_mass_mg(blend) if isinstance(blend, dict) else None
+    per_mg = _THRESHOLD_UNIT_MG.get(str(rule.get("threshold_unit") or "").strip().lower().split(" ")[0])
+    if total is None or per_mg is None or not _positive(rule.get("threshold")):
+        return True
+    if rule.get("basis") != "per_day":
+        return total >= rule["threshold"] * per_mg
+    return not _positive(servings) or total * servings >= rule["threshold"] * per_mg
+
+
+def _blend_hides_a_split_between_ingredients(hidden: list) -> bool:
+    """One blend hides how it divides between different ingredients.
+
+    A sole ingredient's amount is the blend total, and one with no blend has no split.
+    """
+    blends: Dict[str, set] = {}
+    for row in hidden:
+        if row.get("parent_source_path") and row.get("canonical_id") and has_scoring_identity(row):
+            blends.setdefault(row["parent_source_path"], set()).add(row["canonical_id"])
+    return any(len(ingredients) > 1 for ingredients in blends.values())
+
+
+def _evidence_presents_as_unreviewed(module_breakdown: Any) -> bool:
+    from scoring_v4.quality_score import evidence_display_state
+    state = retained_evidence_result_state(module_breakdown)
+    return bool(state) and evidence_display_state(state) == "not_yet_reviewed"
+
+
+def retained_evidence_result_state(module_breakdown: Any) -> Any:
+    """The Evidence result state a scored module recorded, if it reached Evidence."""
+    evidence = _safe_dict(_safe_dict(_safe_dict(module_breakdown).get("dimensions")).get("evidence"))
+    metadata = _safe_dict(evidence.get("metadata"))
+    return (metadata.get("evidence_result_state")
+            or _safe_dict(metadata.get("generic_evidence_metadata")).get("evidence_result_state"))
+
+
+def _is_evidence_blocker(blocker: Any) -> bool:
+    return isinstance(blocker, str) and blocker.split(":", 1)[0] in _EVIDENCE_RELEASE_BLOCKERS
+
+
+def evidence_review_open(release: Mapping[str, Any]) -> bool:
+    """True when a release blocker says the Evidence review itself is unfinished."""
+    return any(_is_evidence_blocker(blocker) for blocker in _safe_list(release.get("blockers")))
+
+
+UPPER_LIMIT_AMOUNT_UNDISCLOSED = "upper_limit_amount_undisclosed"
+
+
+def safety_assessment_status(
+    *, quality_score_status: Any, product_safety_status: Any, safety_gate: Any,
+    dose_safety: Any, release: Any, evidence_result_state: Any,
+) -> str:
+    """Whether the catalog safety checks finished: ``complete`` or ``incomplete``.
+
+    A fact, separate from Evidence and overall quality: an open Evidence review
+    alone leaves this complete, but an unresolved identity or unread dose found
+    while assessing Evidence does not. It reports only ``complete`` when each input
+    proves it, so anything missing or unrecognized is incomplete. It never softens
+    a found concern, and ``incomplete`` never overrides a blocked product.
+    """
+    gate, dose, assessment = _safe_dict(safety_gate), _safe_dict(dose_safety), _safe_dict(release)
+    blockers = assessment.get("blockers")
+    dose_counts = dose.get("state_counts")
+    finished = (
+        quality_score_status in {"scored", "suppressed_safety"}
+        and product_safety_status in _KNOWN_SAFETY_OUTCOMES
+        and gate.get("ingredient_assessment_complete") is True
+        and not gate.get("ingredient_assessment_errors")
+        and gate.get("needs_review") is not True
+        and isinstance(dose_counts, dict) and dose_counts.get("material_but_unresolved", 0) == 0
+        and assessment.get("unread_printed_nutrient_amounts") == 0
+        and assessment.get("upper_limit_amounts_unknown") == 0
+        and evidence_result_state != "identity_material_unresolved"
+        and isinstance(blockers, list)
+        and all(isinstance(blocker, str)
+                and blocker.split(":", 1)[0] in _BLOCKERS_THAT_LEAVE_SAFETY_FINISHED
+                for blocker in blockers)
+    )
+    return "complete" if finished else "incomplete"
+
+
+def safety_assessment_reason(release: Any) -> str | None:
+    """The reason the app may name beside ``incomplete``, or None for its generic text.
+
+    Named only where Sean's explanation is true (November 4): a label printing a %DV
+    does disclose something, so it keeps the generic text.
+    """
+    return UPPER_LIMIT_AMOUNT_UNDISCLOSED if _positive(_safe_dict(release).get("upper_limit_amounts_undisclosed")) else None
 
 
 def _current_evidence_dimension_receipt(enriched: Mapping, module: str, evidence: Mapping) -> bool:
@@ -1611,7 +1957,8 @@ def _current_evidence_dimension_receipt(enriched: Mapping, module: str, evidence
 def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> bool:
     """Validate retained science against a current, lineage-verified source.
 
-    Completion remains false. Only the missing Evidence review may remain open;
+    Completion remains false. Only the missing Evidence review or a hidden label
+    amount may remain open;
     this consumes the existing applicability and numerical-path receipts, never
     assembles a product score or grants an implicit clinical approval.
     """
@@ -1627,7 +1974,8 @@ def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> boo
     evidence = _safe_dict(_safe_dict(module.get("dimensions")).get("evidence"))
     meta = _safe_dict(evidence.get("metadata"))
     safety = _safe_dict(scored.get("_v4_safety_gate"))
-    allowed_blockers = {"evidence_assessment_incomplete", "probiotic_evidence_assessment_incomplete"}
+    allowed_blockers = {"evidence_assessment_incomplete", "probiotic_evidence_assessment_incomplete",
+                        "hidden_amount_safety_open", "hidden_amount_quality_open"}
     if module.get("module") == "omega":
         allowed_blockers.add("omega_evidence_assessment_incomplete")
     if module.get("module") == "probiotic":

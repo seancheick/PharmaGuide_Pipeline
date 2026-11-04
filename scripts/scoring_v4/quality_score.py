@@ -32,7 +32,8 @@ from scoring_v4.penalty_registry import (
     penalty_spec,
 )
 from scoring_v4.pillar_explanations import (
-    CONSUMER, attach_pillar_explanations, audit_fact, facts_block, _proprietary_blend_facts,
+    CONSUMER, FINISHED_REVIEW_RECORD_COUNT_FACT, attach_pillar_explanations, audit_fact,
+    every_strain_count_printed, facts_block, _proprietary_blend_facts,
 )
 
 _CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
@@ -643,6 +644,9 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
             and _band(val, weight) == "high"
         ):
             reason = (
+                "The label prints a live-culture count for every strain; "
+                "their individual weights in the blend are not listed."
+                if every_strain_count_printed(metadata) else
                 "Most amounts are disclosed, but ingredients in a proprietary "
                 "blend are listed without their individual amounts."
             )
@@ -1108,6 +1112,53 @@ _EVIDENCE_ZERO_CLASS_FALLBACK = {
 }
 
 
+_EVIDENCE_OPEN_REVIEW_REASON = (
+    "Some research on this label earned credit, but our review of the rest "
+    "is still open, so this assessment is not finished."
+)
+_EVIDENCE_UNREVIEWED_ROWS_NOTE = (
+    "Other ingredients on this label weren't individually reviewed, which does not "
+    "mean they lack clinical evidence."
+)
+
+
+def note_unreviewed_rows(pillar: Dict[str, Any]) -> Dict[str, Any]:
+    """Keep a finished Evidence conclusion from reading as a review of every row."""
+    if pillar.get("display_state") == "not_yet_reviewed":
+        return pillar
+    return {**pillar, "reason": f"{pillar.get('reason') or ''} {_EVIDENCE_UNREVIEWED_ROWS_NOTE}".strip()}
+
+
+def mark_evidence_review_open(pillar: Dict[str, Any], *, review_open_outside_scope: bool = False) -> Dict[str, Any]:
+    """Present an Evidence pillar whose review the release owner found unfinished.
+
+    Scoring only sees the winning result state, so one authority-backed row can
+    read as a finished review while another active is still pending. The points
+    and receipt stay; only the claim that the review ended moves, including its
+    record count. A recorded applicability finding stays: it says what the
+    research does not establish, and quality_assessment_status carries the rest.
+    A finding that exists only because the open row fell out of scope isn't
+    recorded yet, so an unfinished label keeps saying the review is pending.
+    """
+    state = pillar.get("display_state")
+    if state != "assessed" and not (review_open_outside_scope and state == "applicability_unestablished"):
+        return pillar
+    marked = {
+        **pillar,
+        "display_state": "not_yet_reviewed",
+        "reason": (_EVIDENCE_OPEN_REVIEW_REASON if _num(pillar.get("score")) > 0
+                   else _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]),
+    }
+    explanation = pillar.get("explanation")
+    if explanation:
+        facts = [fact for fact in explanation.get("facts") or []
+                 if fact.get("id") != FINISHED_REVIEW_RECORD_COUNT_FACT]
+        marked["explanation"] = {**explanation, "facts": facts}
+        if not facts:
+            del marked["explanation"]
+    return marked
+
+
 def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
                      cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Category-aware evidence fit against reviewed engine/purpose ceilings.
@@ -1179,8 +1230,7 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     if val > 0 and evidence_display_state(result_state) == "not_yet_reviewed":
         # Credit already earned cannot finish the assessment while other
         # research on the label is still under review.
-        reason = ("Some research on this label earned credit, but our review of the rest "
-                  "is still open, so this assessment is not finished.")
+        reason = _EVIDENCE_OPEN_REVIEW_REASON
     pillar = {
         "score": val,
         "max": weight,

@@ -13,7 +13,7 @@ import json
 from typing import Any
 
 
-CORE_EXPORT_MODEL_VERSION = "1.1.0"
+CORE_EXPORT_MODEL_VERSION = "1.2.0"
 
 PRODUCTS_CORE_COLUMNS = (
     "dsld_id",
@@ -43,6 +43,8 @@ PRODUCTS_CORE_COLUMNS = (
     "quality_score_status",
     "product_safety_status",
     "quality_assessment_status",
+    "safety_assessment_status",
+    "safety_assessment_reason",
     "quality_tier",
     "quality_score_suppressed_reason",
     "v4_module",

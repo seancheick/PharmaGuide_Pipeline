@@ -23,6 +23,9 @@ from constants import CLEANER_NON_SCORABLE_ROLES
 from assessment_readiness import (
     ENFORCED_READINESS_DIMENSIONS,
     has_canonical_enforced_dimensions,
+    retained_evidence_result_state,
+    safety_assessment_reason,
+    safety_assessment_status,
 )
 
 
@@ -933,6 +936,23 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
             if completion_only:
                 # Candidate quarantine/export checks still run after assembly.
                 continue
+            if product.get("safety_assessment_status") != safety_assessment_status(
+                    quality_score_status=product.get("quality_score_status"),
+                    product_safety_status=product.get("product_safety_status"),
+                    safety_gate=product.get("_v4_safety_gate"),
+                    dose_safety=product.get("dose_safety_evaluation"),
+                    release=_safe_dict(product.get("assessment_readiness")).get("release_assessment"),
+                    evidence_result_state=retained_evidence_result_state(product.get("_v4_module_breakdown"))):
+                # The app reads this column; it must follow from the
+                # facts retained beside it.
+                findings.append(Finding("SCORING_SAFETY_ASSESSMENT_STATUS_MISMATCH",
+                    f"{pid}: safety_assessment_status {product.get('safety_assessment_status')!r} "
+                    "does not follow from its recorded safety facts", str(file_path)))
+            if product.get("safety_assessment_reason") != safety_assessment_reason(
+                    _safe_dict(product.get("assessment_readiness")).get("release_assessment")):
+                findings.append(Finding("SCORING_SAFETY_ASSESSMENT_REASON_MISMATCH",
+                    f"{pid}: safety_assessment_reason {product.get('safety_assessment_reason')!r} "
+                    "does not follow from its recorded safety facts", str(file_path)))
             typed_suppressed_dose_failure = False
             verdict = str(product.get("verdict") or "").upper()
             diag = _scoring_diag(product)
