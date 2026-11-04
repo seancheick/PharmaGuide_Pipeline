@@ -22678,9 +22678,10 @@ class SupplementEnricherV3:
                 _tree_mg(child, family, servings) for child in family
                 if child.rpartition(".nestedRows[")[0] == path
             )
-            # A printed alpha allocation narrows only its own mixture. Other
-            # roots (or child mixtures) keep their unallocated mass bound.
-            if any(child.startswith(f"{path}.") for child in printed):
+            # A reviewed alpha allocation narrows its direct mixture only,
+            # never an outer blend containing that mixture as one component.
+            # Other roots/child mixtures keep their unallocated mass bound.
+            if any(child.rpartition(".nestedRows[")[0] == path for child in printed):
                 return children
             return max(mass, children)
 

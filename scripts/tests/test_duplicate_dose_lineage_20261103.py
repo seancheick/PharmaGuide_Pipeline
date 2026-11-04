@@ -1057,3 +1057,21 @@ def test_a_nested_unprinted_mixture_survives_its_siblings_alpha_range(enricher):
                                     {id(mixture): owner}, rows)
     assert row["safety_exposure"]["low_per_day"] == 100
     assert row["safety_exposure"]["high_per_day"] == 1639
+
+
+def test_a_nested_alpha_allocation_does_not_allocate_the_outer_mixture(enricher):
+    owner = {"name": "Vitamin E", "canonical_id": "vitamin_e", "quantity": 100,
+             "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+    outer = {"name": "Mixed Tocopherols", "canonical_id": "vitamin_e", "quantity": 500,
+             "unit": "mg", "raw_source_path": "ingredientRows[1]"}
+    inner = {"name": "Mixed Tocopherols", "canonical_id": "vitamin_e", "quantity": 100,
+             "unit": "mg", "raw_source_path": "ingredientRows[1].nestedRows[0]"}
+    alpha = {"name": "Alpha-Tocopherol", "canonical_id": "vitamin_e", "quantity": 39,
+             "unit": "mg", "raw_source_path": "ingredientRows[1].nestedRows[0].nestedRows[0]",
+             "printed_alpha_range_mg": {"low": 27, "high": 39}}
+    row = {"dose_role": "declared_total", "servings_per_day_max": 1,
+           "safety_exposure": {"per_day": 100, "unit": "mg"}}
+    rows = [owner, outer, inner, alpha]
+    enricher._stamp_vitamin_e_ranges([(row, 100, owner["raw_source_path"])], rows,
+                                    {id(outer): owner}, rows)
+    assert row["safety_exposure"]["high_per_day"] == 600
