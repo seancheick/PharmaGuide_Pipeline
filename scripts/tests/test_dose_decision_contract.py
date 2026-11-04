@@ -405,6 +405,17 @@ def test_unknown_vitamin_e_form_is_clinical_uncertainty_not_converter_defect():
     assert decision["release_blocking"] is False
 
 
+def _adult_ul_outcome(selected, decision):
+    """Keep the adult boundary assertion on the adult outcome of a split result."""
+    if decision["evaluation_status"] != "age_dependent":
+        return selected, decision
+    assert decision["consumer_disposition"] == "review"
+    assert decision["release_blocking"] is False
+    assert set(decision["age_outcomes"]) == {"14-18", "19+"}
+    adult = decision["age_outcomes"]["19+"]
+    return adult["clinical_severity"], adult
+
+
 def _vitamin_e_pregnancy_ul_decision(ingredient: dict, servings: float = 1.0):
     """The production pregnancy UL rule, not a test copy of its threshold."""
     import json
@@ -479,6 +490,7 @@ def test_vitamin_e_pregnancy_ul_compares_ul_exposure_bounds(
     """
     selected, decision = _vitamin_e_pregnancy_ul_decision(ingredient)
 
+    selected, decision = _adult_ul_outcome(selected, decision)
     assert decision["evaluation_status"] == status
     assert selected == severity
     assert decision["consumer_disposition"] == disposition
@@ -589,6 +601,7 @@ def test_vitamin_a_pregnancy_ul_counts_only_preformed_vitamin_a(
         "caution",
     )
 
+    selected, decision = _adult_ul_outcome(selected, decision)
     assert decision["evaluation_status"] == status
     assert selected == severity
     assert decision["consumer_disposition"] == disposition
@@ -987,6 +1000,7 @@ def test_preformed_vitamin_a_threshold_preserves_exact_mcg_boundary(target, amou
          "unit": "mcg", "matched_form": "retinyl palmitate"},
         1.0, "caution",
     )
+    selected, decision = _adult_ul_outcome(selected, decision)
     assert decision["evaluation_status"] == status
     assert decision["consumer_disposition"] == ("suppress" if amount == 3000 else "block")
     assert selected == ("caution" if amount == 3000 else "contraindicated" if target == "pregnancy" else "avoid")
@@ -1000,6 +1014,7 @@ def test_unknown_vitamin_a_boundary_never_assumes_a_retinol_fraction(amount, sta
         {"name": "Vitamin A", "standard_name": "Vitamin A", "quantity": amount, "unit": "mcg"},
         1.0, "caution",
     )
+    _selected, decision = _adult_ul_outcome(_selected, decision)
     assert decision["evaluation_status"] == status
     assert decision["consumer_disposition"] == disposition
 
