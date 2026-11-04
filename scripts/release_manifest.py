@@ -26,12 +26,15 @@ rules. Its statement is a different document, and its keys are pinned apart.
 import argparse
 import base64
 import getpass
+import gzip
+import hashlib
 import json
 import os
 import re
 import shutil
 import sqlite3
 import sys
+import zlib
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -44,7 +47,11 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import (
 )
 
 from release_interaction_artifact import compute_sha256, strip_sha256_prefix
-from supabase_client import core_db_remote_path, rules_db_remote_path
+from supabase_client import (
+    core_db_compressed_remote_path,
+    core_db_remote_path,
+    rules_db_remote_path,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 GATE_PATH = REPO_ROOT / "scripts" / "config" / "remote_rules_gate.json"
@@ -52,6 +59,8 @@ TRUST_PATH = REPO_ROOT / "scripts" / "config" / "release_trust.json"
 
 RELEASE_FORMAT = 1
 CATALOG_DB = "pharmaguide_core.db"
+CATALOG_GZ = f"{CATALOG_DB}.gz"
+CATALOG_GZ_DESCRIPTOR = f"{CATALOG_GZ}.json"
 CATALOG_MANIFEST = "export_manifest.json"
 RULES_DB = "interaction_db.sqlite"
 RULES_MANIFEST = "interaction_db_manifest.json"
@@ -69,6 +78,7 @@ _TOP_LEVEL_KEYS = {
     "min_rules_version", "blocked_versions",
 }
 _ENTRY_KEYS = {"version", "path", "sha256", "schema_version", "min_app_version"}
+_COMPRESSED_KEYS = {"path", "sha256", "size", "decompressed_size"}
 
 ALERT_FEED_PURPOSE = "safety_alert_feed"
 ALERT_FEED_PATH_PATTERN = re.compile(r"safety-alerts/sha256/([0-9a-f]{64})\.json")
@@ -127,6 +137,32 @@ def _validate_entry(entry, label, remote_path):
         )
 
 
+def _validate_compressed(compressed, remote_path):
+    """The gzip of the catalog, an optional cheaper way to fetch the same bytes.
+
+    Builds that predate it ignore this key and fetch ``catalog.path``, so it never
+    raises the format. The bytes that activate are still the ones ``catalog.sha256``
+    names, on every build.
+    """
+    _refuse_unless(
+        isinstance(compressed, dict) and set(compressed) == _COMPRESSED_KEYS,
+        f"catalog.compressed must have exactly {sorted(_COMPRESSED_KEYS)}",
+    )
+    _refuse_unless(
+        compressed["path"] == remote_path,
+        f"catalog.compressed.path must be {remote_path}, got {compressed['path']!r}",
+    )
+    _refuse_unless(
+        isinstance(compressed["sha256"], str) and SHA256_PATTERN.fullmatch(compressed["sha256"]),
+        "catalog.compressed.sha256 must be 64 lowercase hex characters",
+    )
+    for field in ("size", "decompressed_size"):
+        _refuse_unless(
+            type(compressed[field]) is int and compressed[field] > 0,
+            f"catalog.compressed.{field} must be a positive integer",
+        )
+
+
 def validate_release(release):
     """Refuse anything that is not exactly the published contract."""
     _refuse_unless(
@@ -150,7 +186,14 @@ def validate_release(release):
     catalog = release["catalog"]
     _refuse_unless(isinstance(catalog, dict), "catalog must be an object")
     _catalog_version(catalog.get("version"), "catalog")
-    _validate_entry(catalog, "catalog", core_db_remote_path(catalog["version"]))
+    _validate_entry(
+        {key: value for key, value in catalog.items() if key != "compressed"},
+        "catalog", core_db_remote_path(catalog["version"]),
+    )
+    if "compressed" in catalog:
+        _validate_compressed(
+            catalog["compressed"], core_db_compressed_remote_path(catalog["version"]),
+        )
 
     minimum = _semver(release["min_rules_version"], "min_rules_version")
     rules = release["rules"]
@@ -224,6 +267,72 @@ def _text(value):
     return "" if value is None else str(value)
 
 
+def _gzip_contents(path):
+    """Return (sha256, size) of what a gzip file decompresses to, or None if it can't."""
+    digest = hashlib.sha256()
+    size = 0
+    try:
+        with gzip.open(path, "rb") as handle:
+            for chunk in iter(lambda: handle.read(1 << 20), b""):
+                digest.update(chunk)
+                size += len(chunk)
+    except (OSError, EOFError, zlib.error):
+        return None
+    return digest.hexdigest(), size
+
+
+def ensure_compressed_catalog(db_path, db_version):
+    """Write the catalog's gzip beside it and return its ``catalog.compressed`` entry.
+
+    A gz already there is kept only if it decompresses to exactly this catalog, so a
+    signed entry stays true between ``build`` and ``sync``. The output doesn't depend on
+    the time or the file name, and it replaces the old one only once it is proved whole.
+    """
+    db_path = Path(db_path)
+    gz_path = db_path.with_name(CATALOG_GZ)
+    expected = compute_sha256(db_path), db_path.stat().st_size
+    if not gz_path.is_file() or _gzip_contents(gz_path) != expected:
+        temporary = gz_path.with_name(f"{CATALOG_GZ}.tmp")
+        try:
+            with open(db_path, "rb") as source, open(temporary, "wb") as target:
+                with gzip.GzipFile(
+                    filename="", mode="wb", compresslevel=9, fileobj=target, mtime=0,
+                ) as compressor:
+                    shutil.copyfileobj(source, compressor, 1 << 20)
+            _refuse_unless(
+                _gzip_contents(temporary) == expected,
+                f"{CATALOG_GZ} does not decompress to the catalog it was made from",
+            )
+            os.replace(temporary, gz_path)
+        finally:
+            temporary.unlink(missing_ok=True)
+    return {
+        "path": core_db_compressed_remote_path(db_version),
+        "sha256": compute_sha256(gz_path),
+        "size": gz_path.stat().st_size,
+        "decompressed_size": expected[1],
+    }
+
+
+def write_compressed_descriptor(output_dir, compressed, *, db_version, sha256):
+    """Describe the gz for a build with no release keys, which can't read signed fields.
+
+    It vouches for nothing: such a build uses it only if ``decompressed_sha256`` equals
+    the checksum in its manifest row, and the result must then hash to that checksum.
+    """
+    path = Path(output_dir) / CATALOG_GZ_DESCRIPTOR
+    path.write_text(json.dumps({
+        "format": 1,
+        "version": db_version,
+        "path": compressed["path"],
+        "sha256": compressed["sha256"],
+        "size": compressed["size"],
+        "decompressed_sha256": sha256,
+        "decompressed_size": compressed["decompressed_size"],
+    }, sort_keys=True), encoding="utf-8")
+    return str(path)
+
+
 def _embedded_db_version(db_path):
     # Older builds refuse a download whose embedded version differs from the manifest.
     uri = Path(db_path).resolve().as_uri() + "?mode=ro"
@@ -254,6 +363,7 @@ def _catalog_entry(catalog_dir):
         "sha256": sha256,
         "schema_version": _text(manifest.get("schema_version")),
         "min_app_version": _text(manifest.get("min_app_version", "1.0.0")),
+        "compressed": ensure_compressed_catalog(db_path, version),
     }
 
 
@@ -541,11 +651,12 @@ def check_remote_rules_gate(release, *, test_project=False):
 
 
 def load_signed_release(manifest_path, signature_path, *, local_manifest, rules_dir,
-                        test_project=False):
+                        compressed=None, test_project=False):
     """Prove a signed release is genuine and describes this build.
 
     Called before any Storage write. Publishing needs no private key: the public
-    keys it checks against are pinned in the repo.
+    keys it checks against are pinned in the repo. ``compressed`` is this build's own
+    ``catalog.compressed`` entry, which a release that names one must equal.
     """
     if test_project:
         require_test_destination()
@@ -565,6 +676,13 @@ def load_signed_release(manifest_path, signature_path, *, local_manifest, rules_
         _refuse_unless(
             catalog[field] == value,
             f"release manifest catalog.{field} is {catalog[field]} but this build has {value}",
+        )
+
+    if "compressed" in catalog:
+        _refuse_unless(
+            catalog["compressed"] == compressed,
+            f"release manifest catalog.compressed is {catalog['compressed']} but this "
+            f"build has {compressed}",
         )
 
     rules_local_path = None
