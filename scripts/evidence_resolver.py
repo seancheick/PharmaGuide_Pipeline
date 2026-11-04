@@ -1627,8 +1627,8 @@ def evidence_owner_canonicals(
     """Return the principal ingredient identities for Evidence.
 
     Ingredient roles remain owned by ``scoring_input_contract``.  Evidence
-    consumes that classification with one precedence rule: explicit route or
-    title owners win; otherwise material-major rows own the assessment.  When
+    consumes that classification: explicit route/title owners and objectively
+    material-major rows jointly own the assessment.  When
     neither signal exists, retain every assessable identity so an opaque blend
     cannot silently discard its ingredients.  Roles are read against the whole
     label (a blend total still weighs in the product, so 5 mg of boron beside a
@@ -1649,9 +1649,9 @@ def evidence_prominent_row_keys(
     """The label rows the product is about, as ``evidence_row_key`` values.
 
     The same owner decision as ``evidence_owner_canonicals``, read per row
-    instead of per identity: the subject rows that set the winning tier (route
-    driver or title identity; otherwise material-major), including the
-    disclosed members of a blend in that tier.  The retain-everything fallback
+    instead of per identity: the subject rows with a principal role (route
+    driver, title identity or material-major), including the
+    disclosed members of a named or material blend. The retain-everything fallback
     has no prominent row.  Primary-evidence selection consumes this instead of
     choosing by mass, so another ingredient's amount never changes which
     ingredient the label declares.  Prominence grants no amount: a member whose
@@ -1702,13 +1702,14 @@ def _evidence_owner_selection(
             )
         ]
 
-    for accepted in ({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}, {ROLE_MAJOR}):
-        owners = tier_rows(accepted)
-        if owners:
-            return (
-                {str(row.get("canonical_id") or "").strip().lower() for row in owners},
-                {evidence_row_key(row) for row in owners},
-            )
+    # A route driver does not demote another objectively major active. Roles
+    # come from the shared classifier; inherit only eligible real subjects.
+    owners = tier_rows({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT, ROLE_MAJOR})
+    if owners:
+        return (
+            {str(row.get("canonical_id") or "").strip().lower() for row in owners},
+            {evidence_row_key(row) for row in owners},
+        )
     # A sole known active is what a single-ingredient label is about even
     # when its amount uses volume/CFU rather than a mass or its title is a brand.
     # Structural totals and lent masses cannot establish this fallback.
