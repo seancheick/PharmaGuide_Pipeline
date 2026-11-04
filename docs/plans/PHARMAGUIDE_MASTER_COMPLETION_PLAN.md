@@ -76,6 +76,8 @@ Owner: `scoring_input_contract.py` for source-backed Evidence subjects and roles
 - [ ] Eliminate avoidable partials. Close a finished review with its actual conclusion, including no qualifying support. Repair identity and matching defects. Make exceptional unresolved material facts specific to the affected check while preserving verified product information. Count closures and remaining reasons from the same candidate.
 - [ ] Treat #374 as a Thorne regression and vocabulary correction. Its green checks do not establish claim independence. Require the broader invariant and catalog/app proof before calling Evidence complete.
 
+Audit checkpoint: #376 now includes #372's reviewed records. Shared source joins, protein completion, omega mixed-formula credit, population/delivery guards, benefit-only routing and panel completion have fail-first regressions and independent review. A finished no-credit preparation review is distinct from a held source. The exact20-product export passed Product Detail and Compare at app d1f18080 (30 widget/provider tests; no device claim). Frozen15447 comparison, final CI/local gates and integration remain open. See the current LEDGER and `/Users/seancheick/pg_quality/evidence-audit-376` for receipts; old catalog counts are not candidate totals.
+
 ### November 4 — catalog-wide assessment completion
 
 Owner: the existing Evidence resolver, assessment readiness and scored artifact, with export and app consumers. Use the recorded ingredient assessments and release blockers to rank work. Keep clinical claims, nutritional roles, dose and profile safety separate.

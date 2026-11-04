@@ -19,7 +19,6 @@ from probiotic_measurements import AFU_REVIEW_REASON, pending_afu_measurements, 
 from scoring_input_contract import (
     MATERIAL_ROLES,
     ROLE_ADJUNCT,
-    ROLE_CLAIM_PROMINENT,
     active_label_rows,
     build_scoring_classification,
     classify_ingredient_roles,
