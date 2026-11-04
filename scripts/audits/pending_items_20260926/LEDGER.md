@@ -4385,6 +4385,24 @@ Integrated preflight passed publication access, checkout alignment, manufacturer
 
 Sean now owns execution. Resume the prepared input set through snapshot, then run `scripts/test.sh release`, then `scripts/release_full.sh`; stop on any failure. The existing verified-construction receipt prevents duplicate assembly. The standard future full workflow remains `bash batch_run_all_datasets.sh --resume`. Final producer completion, catalog validation, source-based movement review, publication, Flutter bundle qualification, actual phone acceptance and post-construction interruption/reuse measurement remain pending. Durable evidence and the single current operator handoff are under `.claude/state/release_loop_recovery/` and `.claude/state/CURRENT_HANDOFF.md`; do not restart an agent-owned run while Sean is operating.
 
+## November 2 — not-scored identity and dose blockers sorted (Claude)
+
+**Class:** curated data (form aliases and one other-ingredient alias). **Owner:** `ingredient_quality_map.json::source_form_aliases` and `aliases`, `other_ingredients.json`. Will NOT create a new scorer, parser path, status, form, botanical or dose reference.
+
+Of the 2026.11.02 build's 249 `not_scored` labels, this sorts the 74 identity-blocked and 61 dose-blocked per label row: identity is 19 our gap (12 fixed and scored here, 6 fixed by PR #335 and not redone, and 328649, where one row is fixed and another stays held), 46 Sean's decision and 9 real label limits; dose is 37 real label limits and 24 Sean's decision. The dose group has no curated or parser gap. 25 dose labels are exact editions Sean approved as held on October 30. Frozen replay of 152 labels moved 12 to scored; no safety status, safety verdict, dose safety, additive or allergen changed. 285637 gains the chamomile interaction alert because its chamomile row now resolves. 121 controls kept their status and score.
+
+**Correction, November 3.** The first commit, `47a3ea25d`, scored 39 labels. CI failed on 7 pinned labels, and checking every alias against this ledger and earlier audits found more rows held on purpose, including D21 species and Q32 tokens. `f0f7e406c` puts them back: 27 labels return to `not_scored`, the two test pins that commit changed are restored, and the rows become decisions C9 to C13. Receipts, withdrawn fixes and the full sort are in `scripts/audits/not_scored_blockers_20261102/`.
+
+**Sean's decision, November 3, 2026.** Asked "Should #339 hold all 29 labels, as it now recommends?", Sean answered "Yes, hold all 29" (relayed by the coordinating session). C9 to C13 stay held: C9 312947, 306204, 328434; C10 47590, 29066, 27808, 28993, 214676, 214952, 231826, 62816, 188790, 246350, 246370; C11 43662, 43947, 63330, 63463, 63475, 259374; C12 312640, 312713, 330886; C13 256962, 66513, 27203, 220021, 287389, 328649. C11 is included, so the FoodState beet root and hemp rows keep their scores withheld. C13 follows `scoring_reference_resolver.py::unknown_form_quality`: "A named form IQM does not recognize stays unmapped for curation." C1 to C8 stay open.
+
+**Sean's decisions on three more labels, November 3, 2026** (relayed by the coordinating session). These aliases are removed, and the three rows move to the held test. 9 of 135 now score, measured for each label from its raw label through `build_scored_artifact`; the list is in `per_product.md`.
+
+- **241290, Lovely Legs:** "Hold Lovely Legs 241290. The current mapping does not justify its score." The panel prints "Diosmin (95% Diosmin in a citrus bioflavonoid complex with hesperidin) 600 mg". The `citrus bioflavonoid complex` alias on `diosmin (unspecified)` is removed.
+- **294296, cherry:** "Hold cherry 294296. Species identification is settled; preparation assessment is not." The `prunus avium fruit extract, powder` alias on `dark sweet cherry powder` is removed.
+- **295001, CLA, first stage: a temporary hold.** The label prints safflower as the source and does not print 80%, so the `safflower` alias on `cla 80%` is unsupported and is removed. The row returns to `not_scored`. **Second stage, on a separate branch, not in this PR:** a qualified correction recognizes safflower as the source only if the existing nondisclosure owner then supplies the floor, with no 80% preparation, branded identity, absorption claim or clinical credit. Any score change from that stage is measured and reported separately from the 9.
+
+These dispositions cover only these labels. They are not clinical approval and do not approve publication.
+
 
 ## November 2 — why products sit below the coverage floor (branch `claude/low-coverage-identity-20261102`)
 
