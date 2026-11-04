@@ -21031,8 +21031,11 @@ class SupplementEnricherV3:
                 # only a range straddling the threshold is form_unknown. The
                 # exported amount is the proven minimum: stack totals sum it
                 # across products, so a bound must never stand in for exposure.
+                # A bound with no bridge to the threshold's unit decides nothing.
                 low, high = ul_bounds
-                low_comparison = self._compare_threshold(low, comparator, threshold_value)
+                low_comparison = (
+                    None if low is None else self._compare_threshold(low, comparator, threshold_value)
+                )
                 if (
                     quantity_upper is not None
                     and ingredient.get("quantity_operator") == ">"
@@ -21042,7 +21045,11 @@ class SupplementEnricherV3:
                     # The printed lower endpoint is excluded. Keep its number
                     # unchanged while comparing the actual open interval.
                     low_comparison = comparator in {">", ">="}
-                if low_comparison == self._compare_threshold(high, comparator, threshold_value):
+                if (
+                    low is not None
+                    and high is not None
+                    and low_comparison == self._compare_threshold(high, comparator, threshold_value)
+                ):
                     range_comparison = low_comparison
                     converted_amount = low
                     conversion_method = "ul_exposure_bound" if low != high else "ul_exposure"
