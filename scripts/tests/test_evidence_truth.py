@@ -105,6 +105,17 @@ def test_reviewed_research_without_a_scoring_path_remains_pending(pipeline):
     assert blob["product_safety_status"] == scored["product_safety_status"]
 
 
+def test_a_finished_review_with_no_stated_direction_stays_complete(pipeline):
+    """239062: ginkgo's record states no direction and says a declared extract finishes at no credit."""
+    from assessment_readiness import evidence_review_open
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    scored = build_scored_artifact(_enrich(pipeline, "evidence_truth_239062_raw.json"))
+    assert scored["quality_assessment_status"] == "complete"
+    assert not evidence_review_open(scored["assessment_readiness"]["release_assessment"])
+    assert scored["quality_pillars_v4"]["evidence"]["score"] == 0
+
+
 def test_an_open_review_never_says_the_studies_did_not_qualify(pipeline):
     from scoring_v4.scored_artifact import build_scored_artifact
 

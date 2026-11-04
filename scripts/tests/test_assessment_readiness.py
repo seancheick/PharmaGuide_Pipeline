@@ -1300,7 +1300,7 @@ def test_readiness_consumes_concluded_resolver_reviews_without_completing_pendin
         canonical_id=row["canonical_id"], ingredient_name=row["name"],
         matched_owners=owners, disposition=disposition, points_eligible=False,
         applicability_status="test", reason_code=reason,
-        owner_facts={"literature_evidence": {}} if "backed_clinical_studies" in owners else {},
+        owner_facts={"literature_evidence": {"effect_direction": "positive_weak"}} if "backed_clinical_studies" in owners else {},
     )
     monkeypatch.setattr(evidence_resolver, "resolve_evidence_for_row", lambda *a, **k: result)
     assessment = evaluate_evidence_assessment(_product(row), module="generic")
