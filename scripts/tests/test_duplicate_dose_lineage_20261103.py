@@ -593,7 +593,12 @@ def test_an_exact_vitamin_e_row_has_no_range(enricher):
     assert "low_per_day" not in row["safety_exposure"]
 
 
-def test_a_printed_range_does_not_survive_a_changed_row():
+@pytest.mark.parametrize("name,unit,amount", [
+    ("Alpha-Tocopherol", "mg", 41),
+    ("Alpha-Tocopherol", "mcg", 39),
+    ("Gamma-Tocopherol", "mg", 39),
+])
+def test_a_printed_range_does_not_survive_a_changed_row(name, unit, amount):
     """A manufacturer revision must not inherit an old printed range."""
     normalizer = EnhancedDSLDNormalizer()
     normalizer._label_corrections_by_dsld_id = {
@@ -604,8 +609,8 @@ def test_a_printed_range_does_not_survive_a_changed_row():
     }
     same = [{"name": "Alpha-Tocopherol", "raw_source_path": "ingredientRows[0]",
              "quantity": [{"quantity": 39, "unit": "mg"}]}]
-    changed = [{"name": "Alpha-Tocopherol", "raw_source_path": "ingredientRows[0]",
-                "quantity": [{"quantity": 41, "unit": "mg"}]}]
+    changed = [{"name": name, "raw_source_path": "ingredientRows[0]",
+                "quantity": [{"quantity": amount, "unit": unit}]}]
     assert normalizer._apply_label_corrections(same, "1")[0]["printed_alpha_range_mg"] == {"low": 27, "high": 39}
     assert "printed_alpha_range_mg" not in normalizer._apply_label_corrections(changed, "1")[0]
 

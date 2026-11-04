@@ -5933,7 +5933,15 @@ class EnhancedDSLDNormalizer:
         def stamp_printed_ranges(rows):
             for row in rows:
                 printed = printed_ranges.get(row.get("raw_source_path"))
-                if printed and [q.get("quantity") for q in row.get("quantity") or []] == [printed["high"]]:
+                quantities = row.get("quantity") or []
+                if (
+                    printed
+                    and row.get("name") == product_entry.get("raw_ingredient_text")
+                    and len(quantities) == 1
+                    and isinstance(quantities[0], dict)
+                    and quantities[0].get("unit") == "mg"
+                    and quantities[0].get("quantity") == printed["high"]
+                ):
                     row["printed_alpha_range_mg"] = dict(printed)
                 stamp_printed_ranges(row.get("nestedRows") or [])
 
