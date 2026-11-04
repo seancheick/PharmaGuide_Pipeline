@@ -452,6 +452,27 @@ Dose owns adequacy, so Evidence isn't withheld for a lower amount. Where prepara
 
 A scan of label statements for these trials' purposes turned up matches for weight on african_mango, rose_hips and blood_orange_extract labels. They were false positives ("sold by weight", "trans fat").
 
+### Final measurement
+
+Labels were re-enriched by name, with no catalog build and no pipeline run. Before and after use the same code tree, so only this PR's data differs. Labels from batches 3 and 4 were measured on main at aa65ec72d. The final group and the reopened labels were measured on main at eba750a54. #354 was measured at 72e2e22ed, except the pending count below, which uses c44fd1816.
+
+**Pending, measured:** 666 of 1,484 stay pending on #354's head with this data, and 818 are finished. Pending means the blocker `evidence_assessment_incomplete` and Evidence shown as not yet reviewed. 664 were measured from raw labels. Colostrum Health Revival and Hydrolyzed Collagen (PG_SUB ids) have no raw file on hand, so they were scored from their stored enrichment. The projection said 668. The two differences are 33233, whose l_glutamine row is `module_scoped_product_projection`, and 67289, a formula where yerba mate isn't the driver. Both are complete.
+
+| Labels with a row this batch touched | Main | #354 |
+|---|---|---|
+| Measured | 2,636 | 2,636 |
+| Score, tier, status moves | 0 | 0 |
+| Evidence, Dose and other pillar moves | 0 | 0 |
+| Safety moves | 0 | 0 |
+| Partial to complete | 0 | 625 |
+| Sentence changes | 541 | 770 |
+
+4 of the 2,640 labels were not measured here because they have PG_SUB ids with no raw file under the path used. Main's completion doesn't move because it already reads these rows as finished.
+
+**#354's remaining 752 labels on the final data:** 41 go from partial to complete, with 0 score, tier, Evidence, pillar or safety moves. 363 stay partial and 348 stay complete.
+
+**Credit:** nothing earns credit. These measurements don't include the October 28 pre-approval, which is still Sean's ruling.
+
 ### For Dr. Pham, batch 4 (no record written)
 
 - **uva_ursi_leaf:** 34111592 reports pyelonephritis in 8 women on uva ursi versus 2 on fosfomycin (p 0.067), and its authors conclude more safety concerns than fosfomycin. 30685500 recorded no upper tract infections. 12162475 is pharmacokinetic and bears on hydroquinone exposure.
