@@ -196,6 +196,10 @@ def test_lysine_rationale_names_the_positive_trial_and_the_review_it_conflicts_w
     ("theobromine", ["23595874", "37615657"], "TB was not effective on HDL-CH"),
     ("hawthorn", ["12798455", "18254076"], "Hawthorn provides no symptomatic or functional benefit"),
     ("cla", ["37671495", "17490954"], "data from high-quality studies failed to show"),
+    ("d_beta_hydroxybutyrate_bhb", ["39575959", "42063954"], "did not improve high-intensity cycling"),
+    ("uva_ursi_leaf", ["34111592"], "We found no evidence of an effect of either intervention"),
+    ("coffeeberry", ["33498314", "39064791"], "does not have a beneficial effect on mood"),
+    ("gamma_linolenic_acid", ["21328257", "31701699"], "lack effect on eczema"),
 ])
 def test_conflicting_rationale_names_both_sides(canonical, positive, null_quote):
     decision = _literature_record(canonical)["applicability_decision"]
@@ -209,6 +213,9 @@ def test_conflicting_rationale_names_both_sides(canonical, positive, null_quote)
     ("goldenseal", ["17495878", "32683037"]),
     ("agmatine", ["20447305"]),
     ("l_glutamine", ["30108163", "39397201"]),
+    ("lignans", ["17987126", "24606716", "19352068"]),
+    ("yerba_mate_leaf", ["26408319", "33374524"]),
+    ("coffee_fruit", ["23312069", "37299382"]),
 ])
 def test_no_qualifying_decision_names_the_human_research_it_read(canonical, tested_elsewhere):
     decision = _literature_record(canonical)["applicability_decision"]

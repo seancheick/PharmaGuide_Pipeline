@@ -182,7 +182,7 @@ Agent review, abstracts mainly, November 4, 2026. No credit, no clinician approv
 - **Closed, conflicting with no clear benefit (4):** alpha_linolenic_acid (10), cla (76), lycopene (23), zeaxanthin (32).
 - **Closed, no qualifying study for these labels (2):** goldenseal (28), l_glutamine (81).
 - **Pending, packet for Sean's ruling:** collagen (48), gamma_linolenic_acid (11), glutathione (35), green_coffee_bean (22), milk_basic_protein (1), turmeric (39).
-- **Not touched:** ginkgo. Its November 3 review already finishes declared preparations through `documented_review_scope`, and `test_undeclared_preparation_stays_open` keeps undeclared rows open. The read found on-target null trials (20040554, 22959217), which changes nothing about that ruling. `scripts/audits/evidence_backed_970_20261104/decisions` holds the read.
+- **Not touched:** ginkgo. On main its November 3 review finishes declared preparations through `documented_review_scope`. On #354 it does not: see "Ginkgo, turmeric and collagen on #354" below. `test_undeclared_preparation_stays_open` keeps undeclared rows open either way, and the read found on-target null trials (20040554, 22959217).
 
 ### Ingredients on the no qualifying route
 
@@ -392,3 +392,50 @@ Three of the 4 `olive_fruit` labels read are named Olive Leaf Extract. Both ids 
 - **zeaxanthin:** 35653117: AREDS2 long-term follow-up; beta carotene nearly doubled lung cancer risk, with no significant increase with lutein/zeaxanthin.
 - **zeaxanthin:** 24638908: no differences in adverse events by treatment group.
 - **zeaxanthin:** 36247822: no serious adverse events in the glaucoma trial.
+
+## Batch 4: the last of the 21
+
+Agent review, abstracts only, November 4, 2026. No credit, no clinician approval. All 23 quotes and study rows were checked live against PubMed before applying.
+
+### Closed
+
+- **Conflicting or null:** d_beta_hydroxybutyrate_bhb (19 labels, 29451991), gamma_linolenic_acid (11, 23633319), uva_ursi_leaf (11, 30685500), linoleic_acid (6, 23386268), omega_6_fatty_acids (4, 30488422), coffeeberry (1, 37299382).
+- **No qualifying study:** lignans (9, 19352068 is a methods sentence, quoted for the sesamin dose), yerba_mate_leaf (3, 41244043), coffee_fruit (1, 23312069).
+
+The no-qualifying list across all batches is the `NO_QUALIFYING` set in `test_evidence_backed_970_20261104.py`, read from `literature_corrections.json`.
+
+### Moved out of pending on my read, for you to overrule
+
+The reading agent routed gamma_linolenic_acid to a packet. It closes as conflicting, the same way borage_seed_oil did: Cochrane finds oral borage and evening primrose oils lack effect on eczema (23633319), Cochrane also finds moderate evidence of some benefit in rheumatoid arthritis with no doses in the abstract (21328257), and another review says the evidence does not support their use in rheumatoid arthritis (21652584). Delete its entry from `literature_corrections.json` to reverse this.
+
+### Stayed pending
+
+- **green_coffee_bean (22):** all three meta-analyses favor it on some weight measure (32507437, 20871849, 31398662), though 20871849 says every trial was of poor quality. The one null trial is in obese breast cancer survivors (36134465). That isn't a conflict I can state as plainly as the others. This batch also corrects its packet, which described 31398662 as a null pooled result. It reports a significant BMI reduction, no significant overall weight change, and authors who support use.
+- **milk_basic_protein (1):** four small trials at the label's 40 mg report BMD gains against one larger null trial (19296044). Full text of 17048062 and 16133638 would settle whether BMD was a declared primary outcome.
+- **glutathione (35), collagen (48), turmeric (39):** agent reads kept these pending, with their packets.
+
+### Ginkgo, turmeric and collagen on #354
+
+These three carry `documented_review_scope`. A row that declares a reviewed preparation, such as "24% flavone glycosides" on 239062 and 213097, resolves to `resolved_by_reviewed_clinical_evidence` with reason `literature_reviewed_human_clinical_evidence` and no points.
+
+- **On main:** that row reads `evaluated_limited_or_negative`, so 239062 is complete with Evidence 0. `test_documented_review_finishes_a_declared_preparation_at_no_credit` pins this.
+- **On #354:** `_resolved_evidence_assessment` maps that reason to `not_yet_evaluated`, so 239062 is partial with blocker `evidence_assessment_incomplete`. #354 renames the pin to `test_documented_positive_review_waits_for_its_scoring_path`.
+
+Ginkgo's stored record has `effect_direction: null` in the sense of no direction (`None`), and its text describes null prevention trials, so "positive" doesn't describe it. This is code on #354, not data, so this PR doesn't change it. No data route closes declared rows and keeps undeclared rows open: the null route would close `Ginkgo Biloba` and `Ginkgo Biloba Leaf Extract`, which `test_undeclared_preparation_stays_open` keeps open. 16 ginkgo labels stay in the pending count until this is decided.
+
+### For Dr. Pham, batch 4 (no record written)
+
+- **uva_ursi_leaf:** 34111592 reports pyelonephritis in 8 women on uva ursi versus 2 on fosfomycin (p 0.067), and its authors conclude more safety concerns than fosfomycin. 30685500 recorded no upper tract infections. 12162475 is pharmacokinetic and bears on hydroquinone exposure.
+- **d_beta_hydroxybutyrate_bhb:** 29338584 reports gastrointestinal symptoms in 13 of 19 participants at 0.38 g/kg. 28750585 reports time-trial power about 7% lower.
+- **linoleic_acid, omega_6_fatty_acids:** 23386268 reports higher all-cause mortality (HR 1.62) when linoleic acid replaced saturated fat after a coronary event. 21118617 reports RR 1.13 for n-6 specific diets.
+- **coffeeberry:** 37299382 reports more mental fatigue and lower sustained-attention accuracy at 100 mg, which its authors say to read with caution.
+- **yerba_mate_leaf:** 41244043 lists mucosal irritation, insomnia, tachycardia, angina, headache and gastrointestinal discomfort. 29117073 reports a rise in resting plasma adrenaline, and these labels are multi-stimulant formulas. The cancer association papers 29909900, 38689010 and 29490609 were not read.
+- **gamma_linolenic_acid:** 21328257 reports adverse events at 20% versus 3%, not statistically different.
+- **milk_basic_protein:** 17482742 says MBP products are labelled as containing milk.
+- **lycopene:** the stored rows include a rat study and a narrative review, the 41641880 abstract has an MD outside its CI, and Lyc-O-Mato labels 1832, 224633 and 63244 print a tomato complex while 31035474 tested synthetic lycopene.
+
+### Limits
+
+- linoleic_acid and omega_6_fatty_acids close on cardiovascular outcomes. Some labels also carry joint or skin purposes, and no on-target oral trial for those was found in what was read.
+- An agent reported label 78153 as carrying `neurofactor`. The census row reads `coffeeberry`, so this record does reach it. The `coffeeberry`, `coffee_fruit` and `neurofactor` ids describe nearly the same material and may be worth merging.
+- 12 BHB labels show Evidence above 0 through mineral rows, 7 at 15.6 and 5 at 11.1, and 4 GLA labels show 10.4 through other rows. None of that comes from these rows, and it wasn't traced.

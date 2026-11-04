@@ -5,7 +5,7 @@
   "direction_as_read": "mixed: benefit in rheumatoid arthritis pooled across oils at doses not stated, null in eczema, noninferior to alpha-lipoic acid on one of two primary outcomes in neuropathy, surrogate blood pressure results in one trial",
   "decision": "closed_no_credit",
   "summary": "The 11 labels print GLA at 165 to 480 mg. Six name borage oil as the source (181851, 232718, 328569 as the row form; 223170, 218723, 77205 as a separate borage row), three carry it in a mixed omega blend that includes borage oil (304676, 327995, 332936), one prints safflower oil (65773) and one prints no source in an omega product (222789). For rheumatoid arthritis, Cochrane finds moderate evidence of some benefit from GLA oils (21328257), though the abstract states no doses. For eczema, oral borage and evening primrose oils lack effect (23633319). The one trial here with a named primary outcome and a label-range dose found 320 mg/day noninferior to alpha-lipoic acid on pain but not on total symptoms, with no placebo, in painful diabetic neuropathy (31701699), a purpose no label carries. Borage oil 1,000 mg lowered blood pressure against vitamin E (33534427). Borage oil at 880 mg GLA/day showed no effect on metabolic rate or BMI (34606560). Abstracts only. Reference only, no Evidence credit.",
-  "question_for_clinician": "31701699 meets the study test: GLA alone at 320 mg/day, named primary outcomes, stated population. But it has no placebo, misses noninferiority on total symptoms, and its purpose is on no label. 21328257 is a positive pooled result for rheumatoid arthritis with doses not in the abstract, and six labels carry a joint purpose; 21816071 used 3.2 g GLA/day against these labels' 165 to 480 mg. Does any of this support credit for these labels? 65773 prints GLA from safflower oil, which no study read tested. Agent recommendation: no credit for all 11, consistent with the borage_seed_oil packet.",
+  "question_for_clinician": null,
   "study_contexts": [
     {
       "context_schema_version": "1.1.0",
@@ -583,5 +583,6 @@
         "doi": "10.1039/d1fo01887f"
       }
     ]
-  }
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: gamma_linolenic_acid effect_direction null, agent review; the contexts below are the reading behind it."
 }
