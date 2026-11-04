@@ -15,6 +15,13 @@
       "date": "2026-11-04"
     },
     {
+      "rule_key": "RULE_BANNED_BITTER_ORANGE_PREGNANCY#dose:0",
+      "rule_fingerprint": "removed:sha256:9420add6bc21699a8a43bfac9f91f1e665b9fae9dfeeb439e7367233cdd0afa5",
+      "reason": "Bitter orange and synephrine (review items 1-3): retire the pregnancy-specific 3 mg cutoff. The separate pregnancy and breastfeeding avoid warnings remain regardless of declared amount.",
+      "reviewer": "Dr. Pham, clinical review 2026-11-03; attested by Sean in chat 2026-11-03: \"Yes, she approved it\". Transcribed by Codex; no agent reviewed clinically.",
+      "date": "2026-11-04"
+    },
+    {
       "rule_key": "RULE_BANNED_BITTER_ORANGE_PREGNANCY#pregnancy_lactation",
       "rule_fingerprint": "sha256:37a22d776d07c679d0c401f97265f61a5970bf1a139061814e2a96758eb4da81",
       "reason": "Bitter orange and synephrine (review items 1-3): pregnancy and breastfeeding tier reads avoid regardless of declared amount.",
@@ -75,6 +82,13 @@
       "rule_fingerprint": "sha256:5dc1cf274d67ae238af304d039b2724af8b98f84bf8bbd9e42ffb502332e22b7",
       "reason": "Vitamin A ages 14-18, breastfeeding (review items B and C): 2,800 mcg RAE at avoid, unknown age reads age-dependent review. Card wording for this row approved by Sean 2026-11-04.",
       "reviewer": "Dr. Pham, clinical review 2026-11-03; attested by Sean in chat 2026-11-03: \"Yes, she approved it\". Transcribed by Claude; no agent reviewed clinically.",
+      "date": "2026-11-04"
+    },
+    {
+      "rule_key": "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS#dose:0",
+      "rule_fingerprint": "sha256:02bc72552597f60f237a05efe7abc9a4c56f18490443e5438542305cd7040ce5",
+      "reason": "The existing pregnancy dose rule retains its 1,000 mg limit and uses review for an unresolved form-dependent exposure, as recorded in 1636e00be4f3777667a606849cf5c8ed93a7d45b. The separate 14–18 age rule carries the lower limit.",
+      "reviewer": "Dr. Pham, 2026-10-28 form-dependent exposure review recorded in 1636e00be4f3777667a606849cf5c8ed93a7d45b. Transcribed by Codex from that record.",
       "date": "2026-11-04"
     },
     {
