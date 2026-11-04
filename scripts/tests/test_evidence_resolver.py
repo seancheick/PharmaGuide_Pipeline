@@ -1749,3 +1749,14 @@ def test_resolver_preserves_canonical_noncredit_reason(monkeypatch, reason):
     assert result.points_eligible is False
     assert result.reason_code == reason
     assert result.blocking_reasons == [reason]
+
+
+@pytest.mark.parametrize("canonical", ["l_glutamine", "glutathione", "green_coffee_bean"])
+def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
+    from assessment_readiness import EVIDENCE_NOT_YET_EVALUATED, _resolved_evidence_assessment
+
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert result.owner_facts["literature_evidence"]["effect_direction"] == "mixed"
+    assert result.reason_code == "literature_applicability_unestablished"
+    assert not result.points_eligible
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED

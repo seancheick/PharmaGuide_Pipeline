@@ -1,5 +1,12 @@
 ## November 4 — active Claude audit and repairs
 
+## November 4 — pre-build Evidence review resumed
+
+Sean moved the 74-ingredient review before the next catalog build. The three unfinished mixed reviews (L-glutamine, glutathione and green coffee bean) now use the literature registry's structured applicability state. The canonical resolver and assessment readiness consume it. Study direction and clinical credit are unchanged. Three regressions failed on the baseline. The focused resolver and result-state suites passed 251 tests with the fix.
+
+The candidate still needs exact-head CI and bounded catalog validation. Draft #366 conflicts with main in the clinical-study registry and has local draft edits in its worktree. Reconcile and audit the remainder against current main, verify applicable clinical approval and recount with current inputs before the user-owned run.
+
+
 Owner: existing pipeline vitamin E/caffeine bound helpers and assessment readiness; app reset lifecycle, compressed download staging and shared Stack dose providers. Evidence: fail-first tests, exact-source CI, frozen-label export receipts and production-provider probes below. Will NOT create new clinical thresholds, research credit, public status or a parallel warning engine.
 
 Pipeline #351 final candidate `5564c78dfb15431c45368d09b9b2efd180cc38a5` includes #344, #349 and #348 plus current main. It repairs independent vitamin E mixture bounds/direct-parent allocation, strict caffeine lower bounds and skipped-form exposure; compressed catalog delivery remains additive. Five frozen full raw controls preserve Clean/Enrich/Score/blob hashes. Independent source review accepted; 466 named owner/consumer tests pass. Combined local:564 passed/24 declared optional skips, skip guard green. The missing Garden of Life cleaned test artifact was recreated for raw label222758 only in an isolated mirror; no shared artifact/manifest or corpus rebuild. Hosted CI 41784684927 passed all 4 shards and merge readiness (27,769 passed/192 declared skips). #351 merged at 316d8ad69d10bf94fc3527ebab6bd21647aa8b7b; fetched main contains the exact candidate.
