@@ -2000,18 +2000,23 @@ class EnhancedDSLDNormalizer:
         return None
 
     def _daily_value_group_for_analysis(self, dv_groups: List[Dict]) -> Dict:
-        """The group whose percent a quantity column reports: adults when they have one.
+        """The group whose percent a quantity column reports: the first that prints one.
 
-        82319 prints adults 0% beside children 60% in its child column, so a
-        zero or blank adult percent does not displace the group that has one.
+        82319 prints children 0%, adults 60% in one column, and the reverse in
+        the other, so a zero or blank percent does not displace a printed one.
         """
         for group in dv_groups:
-            if (
-                self._daily_value_target_group_from_dv_group(group) == "adult_4_plus"
-                and (self._safe_float(group.get("percent"), "daily_value", None) or 0) > 0
-            ):
+            if (self._safe_float(group.get("percent"), "daily_value", None) or 0) > 0:
                 return group
         return dv_groups[0]
+
+    def _adult_daily_value(self, dv_groups: Any) -> Dict[str, float]:
+        """The adult percent a column prints, for the upper-limit bound. Never shown or exported."""
+        for group in dv_groups if isinstance(dv_groups, list) else []:
+            percent = self._safe_float(group.get("percent"), "daily_value", None) or 0
+            if percent > 0 and self._daily_value_target_group_from_dv_group(group) == "adult_4_plus":
+                return {"adult_daily_value": percent}
+        return {}
 
     def _daily_value_target_group_from_variants(self, variants: List[Dict]) -> Optional[str]:
         """Return the FDA target group of the selected column, whose percent the row carries."""
@@ -10370,6 +10375,7 @@ class EnhancedDSLDNormalizer:
                 variant["daily_value"] = daily_value
             if daily_value_target_group:
                 variant["daily_value_target_group"] = daily_value_target_group
+            variant.update(self._adult_daily_value(dv_groups))
 
             return quantity, unit, daily_value, [variant]
 
@@ -10410,6 +10416,7 @@ class EnhancedDSLDNormalizer:
                         variant["daily_value"] = dv
                     if daily_value_target_group:
                         variant["daily_value_target_group"] = daily_value_target_group
+                    variant.update(self._adult_daily_value(dv_groups))
 
                     quantity_variants.append(variant)
                 else:
