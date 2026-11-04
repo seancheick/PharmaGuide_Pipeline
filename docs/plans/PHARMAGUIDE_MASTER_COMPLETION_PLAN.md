@@ -52,6 +52,16 @@ Owner: `scripts/sync_safety_alerts.py::sync`, `EnhancedDSLDNormalizer._apply_lab
 
 Detailed dated audit: `/Users/seancheick/pg_quality/codex_takeover_20261103/AUDIT_FOLLOWUP_20261103.md`. The Evidence phase below remains mandatory before numerical calibration. Preserve active lane ownership; publication remains separate.
 
+### November 4 — Evidence scope and release acceptance
+
+Evidence assesses the scientific support applicable to the principal active ingredients. An established nutritional role can earn credit on a claim-free label. Evaluate specific advertised outcomes separately and retain the studied population, preparation and endpoint in the explanation. Personal compatibility uses the existing safety and profile owners.
+
+- [x] Pin vitamin C 1,000 mg nutritional credit with a blank claim, an immune-support claim and a cold-prevention claim. Pin ordinary EPA+DHA Evidence for a blank claim, Heart Health and explicit triglyceride lowering.
+- [x] Preserve the affirmative sleep claim after a separate negated qualifier in the melatonin applicability path.
+- [ ] Verify the scored artifact, catalog, Product Detail and Compare show material pending research as pending while preserving earned points. Use the completed zero explanation only for a finished assessment. Trace claim-free CoQ10 and separately scoped ALA, DHA-only and other omega preparations through the existing owners. Keep specialized clinical outcomes tied to their studied population.
+- [ ] Schedule the 74-ingredient scientific review after the build. Keep source citations and review provenance in structured records. Obtain batch sign-off for genuinely new positive clinical credit under the existing process. The October 28 attestation covers its recorded batch.
+- [ ] Before the build, verify Product Safety reasons and sources across the 42 affected caution pages, the affected beta-carotene products in FitScore and Stack, and the combined clinical and label-warning app/pipeline contracts. Run the release rule gate against the final fingerprints.
+
 ### November 3 — required product-wide Evidence correctness, after Claude's current batch
 
 **Sean's explicit instruction:** missing research, unfinished processing or incorrect matching must never look like a scientific conclusion that a product has no evidence. This applies to every product and all seven scoring modules. Start after Claude finishes the active correctness batch; reconcile what that batch already fixes, then complete the remaining work **before numerical calibration**. This requirement is accepted, not another policy question to reopen.
