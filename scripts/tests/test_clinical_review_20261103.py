@@ -142,3 +142,55 @@ def test_hypertension_entries_of_the_hypertension_rule_did_not_move():
     assert digest(rule["drug_class_rules"]) == (
         "368708e929844e953a4e21ff7a2de1acf962c519619abba85287021a20506993"
     )
+
+
+# --- Tansy (section 4 and question D) ---------------------------------------
+
+TANSY_WARNING = "Do not use tansy supplements or tansy essential oil during pregnancy."
+TANSY_EXPLANATION = (
+    "Tansy essential oil can contain thujone, a neurotoxic compound associated with convulsions. "
+    "The amount of thujone varies by preparation, and pregnancy safety has not been established. "
+    "PharmaGuide classifies oral tansy preparations as contraindicated during pregnancy as a "
+    "precaution because of their potential toxicity and reproductive-safety concerns."
+)
+
+
+def test_expected_tansy_copy_is_her_copy():
+    assert f"Warning: {TANSY_WARNING}" in REVIEW
+    assert f"Explanation: {TANSY_EXPLANATION}" in REVIEW
+
+
+def test_tansy_keeps_severity_with_limited_evidence_and_her_words(enricher):
+    hit = _hits(enricher, "BANNED_TANSY")["pregnancy"]
+    assert hit["severity"] == "contraindicated"
+    assert hit["evidence_level"] == "limited"
+    assert hit["alert_headline"] == TANSY_WARNING
+    assert hit["alert_body"] == TANSY_EXPLANATION
+    assert hit["mechanism"] == TANSY_EXPLANATION
+    assert hit["action"] == TANSY_WARNING
+
+
+def test_tansy_cites_the_two_papers_she_named(enricher):
+    hit = _hits(enricher, "BANNED_TANSY")["pregnancy"]
+    assert hit["sources"] == [
+        "https://pubmed.ncbi.nlm.nih.gov/33673548/",
+        "https://pubmed.ncbi.nlm.nih.gov/10725394/",
+    ]
+
+
+def test_tansy_makes_no_miscarriage_claim_on_the_pregnancy_card(enricher):
+    hit = _hits(enricher, "BANNED_TANSY")["pregnancy"]
+    for field in ("alert_headline", "alert_body", "mechanism", "action", "informational_note"):
+        assert "miscarriage" not in hit[field].lower()
+
+
+def test_tansy_breastfeeding_tier_did_not_move(enricher):
+    hit = _hits(enricher, "BANNED_TANSY")["lactation"]
+    assert hit["severity"] == "avoid"
+    assert TANSY_WARNING not in hit["alert_body"]
+
+
+def test_tansy_review_is_attributed_to_her():
+    rule = RULES["RULE_BANNED_TANSY_PREGNANCY"]
+    assert "Dr. Pham" in rule["review_owner"]
+    assert rule["last_reviewed"] == "2026-11-03"

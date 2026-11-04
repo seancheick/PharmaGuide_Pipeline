@@ -21824,15 +21824,16 @@
         {
           "condition_id": "pregnancy",
           "severity": "contraindicated",
-          "evidence_level": "established",
-          "mechanism": "Tansy essential oil can contain substantial beta-thujone, a neurotoxic constituent associated with convulsions; the cited review advises avoiding thujone-rich oils during pregnancy. Whole-plant products do not establish their preparation or thujone exposure, so pregnancy use is contraindicated under the existing precautionary rule. The available citation does not establish a clinical miscarriage rate for whole-plant products.",
-          "action": "Do not use in pregnancy.",
+          "evidence_level": "limited",
+          "mechanism": "Tansy essential oil can contain thujone, a neurotoxic compound associated with convulsions. The amount of thujone varies by preparation, and pregnancy safety has not been established. PharmaGuide classifies oral tansy preparations as contraindicated during pregnancy as a precaution because of their potential toxicity and reproductive-safety concerns.",
+          "action": "Do not use tansy supplements or tansy essential oil during pregnancy.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/33673548/"
+            "https://pubmed.ncbi.nlm.nih.gov/33673548/",
+            "https://pubmed.ncbi.nlm.nih.gov/10725394/"
           ],
-          "alert_headline": "Unsafe during pregnancy",
-          "alert_body": "Tansy contains thujone and other toxic constituents. If you are pregnant, do not use it.",
-          "informational_note": "Tansy contains toxic compounds and is not clinically acceptable in pregnancy.",
+          "alert_headline": "Do not use tansy supplements or tansy essential oil during pregnancy.",
+          "alert_body": "Tansy essential oil can contain thujone, a neurotoxic compound associated with convulsions. The amount of thujone varies by preparation, and pregnancy safety has not been established. PharmaGuide classifies oral tansy preparations as contraindicated during pregnancy as a precaution because of their potential toxicity and reproductive-safety concerns.",
+          "informational_note": "The amount of thujone varies by preparation, and pregnancy safety has not been established.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -21852,7 +21853,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-03",
+            "file": "audits/clinical_review_20261103/DR_PHAM_REVIEW_20261103.md"
+          }
         }
       ],
       "drug_class_rules": [],
@@ -21887,8 +21893,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03)"
     },
     {
       "id": "RULE_BANNED_BITTER_ORANGE_PREGNANCY",
