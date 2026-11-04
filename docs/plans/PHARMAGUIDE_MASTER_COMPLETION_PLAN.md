@@ -1,5 +1,16 @@
 # PharmaGuide master completion plan
 
+### November 3 — verified alert-feed delivery and app reconciliation
+
+Owner: `scripts/sync_safety_alerts.py::sync` and `release_manifest.py` for publication/signing; Flutter `SafetyAlertRepository` for verified delivery and `retryProfileLoad` for profile recovery. Evidence: paired PR347/app198 review and fail-first regressions. Will NOT create a second publisher, safety evaluator or key store.
+
+- [x] Reconcile app197 with app199: Product Detail Retry now retries the canonical failed profile load; saved-pregnancy-profile regression and all94 connected tests pass, analysis clean. App199 retains independently known interactions/recalls during profile failure. Integration/combined CI is still pending.
+- [x] Reproduce and fix overlapping signed-feed downloads overwriting newer warning/cache data; app198 adds monotonic serialized cache commit. Source qualification only; final combined consumer checks pending.
+- [x] Reproduce and serialize overlapping local publishes through dispatch. Pipeline347 uses a same-user cross-worktree lock; this is not a distributed database lock and does not authorize multiple publishing hosts.
+- [x] Sean generated encrypted signing keys and signed the reviewed feed locally. Public pins match both repos; actual signed-feed dry-run verifies checksumff018061. Dispatcher credential configured and accepted by a non-dispatching HTTP400 probe. Private keys/password never printed or read by Codex.
+- [ ] Integrate exact qualified pipeline347/app202 candidates after hosted CI, publish and fetch through the real consumer. App202 contains197/199 and the follow-up to independently merged198. Live `safety_alert_releases` was empty during this review. Wording/retry fixes alone do not make a feed available.
+- [ ] Retain the approved final-catalog matching check and actual signed-build/device acceptance. No feed, catalog or app release is claimed by the source fixes. Local signing setup is prepared under `~/pg_quality/alert_candidate_20261103/`; passwords/private keys must never be sent in chat.
+
 ### November 3 — approved label-warning scope, including men trying to conceive
 
 Sean confirmed groups A/B/C: firm prohibitions and not-intended/not-recommended warnings use existing `avoid`; clinician-conditional prohibitions use existing `caution`; evidence is `ungraded`. Title: "Label warning". Preserve the label sentence verbatim. Ordinary consult-your-doctor boilerplate remains excluded. These are label-sourced warnings, not newly graded clinical evidence.
