@@ -387,14 +387,9 @@ def assemble_scored_artifact(
     pillars = v4.get("quality_pillars_v4")
     if (status == "scored" and _safe_dict(pillars).get("evidence")
             and evidence_review_open(assessment_readiness["release_assessment"])):
-        from evidence_resolver import resolve_product_evidence
         from scoring_v4.quality_score import mark_evidence_review_open
         v4 = {**v4, "quality_pillars_v4": {
-            **pillars, "evidence": mark_evidence_review_open(
-                pillars["evidence"],
-                review_open_outside_scope=resolve_product_evidence(
-                    enriched_product, owner_scoped=True, module=_safe_dict(module_breakdown).get("module"),
-                ).review_open_outside_scope)}}
+            **pillars, "evidence": mark_evidence_review_open(pillars["evidence"])}}
     elif (status == "scored" and _safe_dict(pillars).get("evidence")
           and any(row.get("state") == "not_yet_evaluated" for row in
                   _safe_dict(assessment_readiness.get("evidence")).get("ingredient_assessments") or [])):

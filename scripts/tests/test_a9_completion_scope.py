@@ -453,16 +453,16 @@ def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label)
     assert evidence["reason"] == _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
 
 
-def test_a_recorded_applicability_finding_stays_on_an_unfinished_label(pipeline):
+def test_an_unfinished_label_says_its_review_is_pending(pipeline):
     from scoring_v4.quality_score import _EVIDENCE_ZERO_REASON
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    # Nothing fell out of scope here. Splitting this sentence belongs to the Evidence work.
     scored = build_scored_artifact(_enrich(pipeline, "a9_review_pending_252468_raw.json"))
     evidence = scored["quality_pillars_v4"]["evidence"]
     assert scored["quality_assessment_status"] == "partial"
-    assert evidence["display_state"] == "applicability_unestablished"
-    assert evidence["reason"] == _EVIDENCE_ZERO_REASON["applicability_unestablished"]
+    assert evidence["evidence_result_state"] == "applicability_unestablished"
+    assert evidence["display_state"] == "not_yet_reviewed"
+    assert evidence["reason"] == _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
 
 
 @pytest.mark.parametrize("label", ["178728", "231921"])
