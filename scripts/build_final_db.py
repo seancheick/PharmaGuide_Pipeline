@@ -3849,6 +3849,8 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
     dose_state = (
         _norm(w.get("dose_floor_status"))
         + _norm(safe_dict(w.get("dose_decision")).get("consumer_disposition"))
+        # An unknown amount can't merge away beside a known one: it stays readable.
+        + (safe_dict(w.get("dose_decision")).get("evaluated_daily_amount") is not None,)
         if interaction_subject
         else ()
     )
@@ -3889,9 +3891,10 @@ def _warning_completeness_score(w: Dict[str, Any]) -> tuple:
     """Higher-is-better ordering for picking which duplicate to keep.
 
     Tiers (tuple, compared lexicographically by Python):
-      1. # of rich alert_* fields populated (0/1/2)
-      2. # of authored safety_*/detail fields populated (0-6)
-      3. total char-length of all populated string fields (tiebreaker)
+      1. the evaluated daily amount: reading the smaller row would read low
+      2. # of rich alert_* fields populated (0/1/2)
+      3. # of authored safety_*/detail fields populated (0-6)
+      4. total char-length of all populated string fields (tiebreaker)
     """
     rich = sum(
         1 for f in _DEDUP_COPY_SCORE_FIELDS_RICH
@@ -3905,7 +3908,8 @@ def _warning_completeness_score(w: Dict[str, Any]) -> tuple:
         len(w.get(f)) for f in _DEDUP_COPY_SCORE_FIELDS_RICH + _DEDUP_COPY_SCORE_FIELDS_AUTHORED
         if isinstance(w.get(f), str)
     )
-    return (rich, authored, total_chars)
+    amount = safe_dict(w.get("dose_decision")).get("evaluated_daily_amount") or 0
+    return (amount, rich, authored, total_chars)
 
 
 def _dedup_warnings(warnings_list: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
@@ -7947,7 +7951,10 @@ def build_detail_blob(
             continue
         ing_name = safe_str(alert.get("ingredient_name"))
         subject_ref = safe_dict(alert.get("subject_ref"))
-        ingredient_canonical_id = safe_str(subject_ref.get("canonical_id"))
+        # A rule on one form of a nutrient warns on that form's exposure.
+        ingredient_canonical_id = safe_str(
+            alert.get("exposure_canonical_id") or subject_ref.get("canonical_id")
+        )
         for ch in safe_list(alert.get("condition_hits")):
             if isinstance(ch, dict):
                 dose_eval = ch.get("dose_threshold_evaluation")

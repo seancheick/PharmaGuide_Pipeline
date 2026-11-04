@@ -21970,6 +21970,11 @@ class SupplementEnricherV3:
                     "condition_hits": condition_hits,
                     "drug_class_hits": drug_hits,
                     "dose_hits": dose_hits,
+                    **(
+                        {"exposure_canonical_id": rule["exposure_canonical_id"]}
+                        if rule.get("exposure_canonical_id")
+                        else {}
+                    ),
                 })
 
                 for condition_hit in condition_hits:

@@ -878,10 +878,54 @@ def test_a_scoped_rule_reads_the_nested_row_of_its_form(enriched):
         for h in a["condition_hits"] if h["condition_id"] == "current_smoker"
     ]
     assert compact_dose_decision(hit["dose_decision"])["evaluated_daily_amount"] == pytest.approx(2812.5)
-    [card] = _dose_cards(product, rule_id)
-    assert card["condition_ids"] == RISK_FACTORS
-    assert card["dose_decision"]["evaluated_daily_amount"] == pytest.approx(2812.5)
-    assert card["dose_decision"]["evaluation_status"] == "below_threshold"
+
+
+# The two lung-cancer rules measure one exposure, supplemental beta-carotene per day
+# (Dr Pham, PHASE3_CLINICAL_POLICY_20260921.md section 5).
+LUNG_RULES = ("RULE_IQM_BETA_CAROTENE_LUNG_CANCER", "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER")
+
+
+def _lung_cards(product, condition="current_smoker"):
+    return [
+        w for w in build_detail_blob(product, score_product_v4(product))["warnings"]
+        if w.get("source_rule_id") in LUNG_RULES and condition in (w.get("condition_ids") or [])
+    ]
+
+
+@pytest.mark.parametrize("dsld_id", ["178431", "80495", "294483"])
+def test_both_lung_cancer_rules_warn_on_the_beta_carotene_exposure(enriched, dsld_id):
+    assert {w["ingredient_canonical_id"] for w in _lung_cards(enriched(dsld_id))} == {"beta_carotene"}
+
+
+def test_a_preformed_rule_keeps_its_vitamin_a_subject(enriched):
+    product = enriched("80495")
+    warnings = build_detail_blob(product, score_product_v4(product))["warnings"]
+    assert {
+        w["ingredient_canonical_id"] for w in warnings
+        if w.get("source_rule_id") == "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE"
+    } == {"vitamin_a"}
+
+
+def test_a_product_with_both_rules_carries_one_amount_per_tier(enriched):
+    """80495 prints the beta-carotene mass, 5,625 mcg, under its Vitamin A row."""
+    cards = _lung_cards(enriched("80495"))
+    assert sorted(
+        (w["dose_decision"]["decision_rule"]["threshold"], w["dose_decision"]["evaluated_daily_amount"])
+        for w in cards
+    ) == [(7500.0, 2812.5), (10000.0, 2812.5)]
+
+
+def test_two_rows_of_one_exposure_keep_the_larger_amount(enriched):
+    """228355 prints Vitamin A 4,500 mcg as beta-carotene, then Mixed Carotenoids 172 mcg."""
+    assert sorted(w["dose_decision"]["evaluated_daily_amount"] for w in _lung_cards(enriched("228355"))) == [4500.0, 4500.0]
+
+
+def test_an_unknown_amount_stays_beside_a_known_one(enriched):
+    """220806's Beta-Carotene row prints no amount. Its unknown must stay readable."""
+    assert {
+        (w["dose_decision"]["decision_rule"]["threshold"], w["dose_decision"].get("evaluated_daily_amount"))
+        for w in _lung_cards(enriched("220806"))
+    } == {(7500.0, 4500.0), (10000.0, 4500.0), (10000.0, None)}
 
 
 @pytest.mark.parametrize("dsld_id", ["19170", "28483", "16730"])
