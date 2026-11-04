@@ -2564,8 +2564,17 @@ def test_ingredient_evidence_is_invariant_to_manufacturer_benefit_claims():
                "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
     baseline = score_evidence(product, owner_scoped=True)
     assert baseline["score"] > 0
-    for claim in ("Supports lean muscle mass.", "Supports cognitive performance.",
-                  "Creatine monohydrate helps maintain hydration within the cells."):
+    for claim, expected_claim_state in (
+        ("Supports lean body mass.", "aligned"),
+        ("Supports cognitive performance.", "unrelated"),
+        ("Creatine monohydrate helps maintain hydration within the cells.", "ambiguous"),
+    ):
         variant = {**product, "statements": [{"type": "Formulation re: Other", "notes": claim}]}
         result = score_evidence(variant, owner_scoped=True)
         assert result["score"] == baseline["score"], claim
+        matches, _ = resolved_clinical_matches(variant, assess_amount=False, owner_scoped=True)
+        record = next(m for m in matches if m["id"] == "INGR_CREATINE_MONOHYDRATE")
+        decision = record["applicability_assessment"]
+        assert decision["claim_alignment"]["state"] == expected_claim_state
+        assert decision["population_applicability"]["context_ids"] == [
+            "creatine_monohydrate_resistance_training_body_composition_39074168"]
