@@ -22629,10 +22629,10 @@ class SupplementEnricherV3:
             and (owner := compound_owners.get(id(row))) is not None
             and str(owner.get("canonical_id") or "") == "vitamin_e"
         }
-        printed = [
-            row["printed_alpha_range_mg"] for row in by_path.values()
+        printed = {
+            path: row["printed_alpha_range_mg"] for path, row in by_path.items()
             if row.get("printed_alpha_range_mg")
-        ]
+        }
         amounts = {path: amount_mg for _, amount_mg, path in family_rows if path}
         for row in label_rows:
             if isinstance(row, dict) and row.get("raw_source_path"):
@@ -22647,6 +22647,8 @@ class SupplementEnricherV3:
             return "mixed" in name or not re.search(r"\b(?:gamma|delta|beta)\b", name)
 
         def _tree_mg(path: str, family: List[str], servings: float) -> float:
+            if path in printed:
+                return printed[path]["high"] * servings
             row = by_path[path]
             mass = amounts.get(path)
             if mass is None:
@@ -22656,6 +22658,10 @@ class SupplementEnricherV3:
                 _tree_mg(child, family, servings) for child in family
                 if child.rpartition(".nestedRows[")[0] == path
             )
+            # A printed alpha allocation narrows only its own mixture. Other
+            # roots (or child mixtures) keep their unallocated mass bound.
+            if any(child.startswith(f"{path}.") for child in printed):
+                return children
             return max(mass, children)
 
         for rda_row, amount_mg, path in family_rows:
@@ -22679,14 +22685,14 @@ class SupplementEnricherV3:
                 else None
             )
             low, high = bounds if bounds is not None else (amount_mg, amount_mg)
-            if path in owners and printed:
-                low = max(low, sum(item["low"] for item in printed) * servings)
-                high += sum(item["high"] for item in printed) * servings
-            elif path in owners:
+            if path in owners:
                 family = [
                     other for other, row in by_path.items()
                     if other != path and not other.startswith(f"{path}.") and _can_hold_alpha(row)
                 ]
+                low = max(low, sum(
+                    printed[other]["low"] for other in family if other in printed
+                ) * servings)
                 high += sum(
                     _tree_mg(root, family, servings) for root in family
                     if root.rpartition(".nestedRows[")[0] not in family

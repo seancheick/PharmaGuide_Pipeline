@@ -1003,3 +1003,18 @@ def test_rows_below_a_vitamin_e_total_in_iu_are_one_structure_with_it(enriched):
     assert status == "below_threshold"
     assert amount == pytest.approx(268.0)
     assert score_product_v4(product)["quality_pillars_v4"]["dose"]["score"] == 20.0
+
+
+def test_a_printed_alpha_range_does_not_hide_another_unprinted_mixture(enricher):
+    """A revised second mixture has mass but no reviewed alpha allocation."""
+    raw = json.loads((FIXTURES / "dose_lineage_64845_raw.json").read_text())
+    raw["ingredientRows"][2]["quantity"][0]["quantity"] = 1500
+    raw["ingredientRows"][2]["nestedRows"] = []
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    [declared] = _rows(product, "Vitamin E")
+    exposure = declared["safety_exposure"]
+    # Two directed daily servings: the unchanged first mixture's printed high is
+    # 39 mg, while the second still permits up to its whole 1500 mg mass.
+    assert exposure["high_per_day"] == pytest.approx(exposure["per_day"] + (39 + 1500) * 2)
+    [(status, _)] = _vitamin_e_decision(product)
+    assert status == "form_unknown"
