@@ -613,8 +613,8 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
     ``absent``: no recognized claim. ``aligned``/``mixed``: at least one claim
     shares the outcome's indication. ``unrelated``: every claim is elsewhere.
     ``ambiguous``: a recognized claim no category places. Alignment never
-    earns more than absence; it only decides whether an unrelated claim
-    stops this context from crediting the product. Qualifying findings bound
+    earns more than absence. This describes claim support; ingredient Evidence
+    callers do not use unrelated claims to veto credit. Qualifying findings bound
     the relationship; a signed scope may narrow it, never promote a null one.
     """
     from evidence_resolver import evidence_indication_categories

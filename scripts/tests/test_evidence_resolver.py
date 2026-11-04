@@ -1710,3 +1710,17 @@ def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
     assert result.reason_code == "literature_applicability_unestablished"
     assert not result.points_eligible
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+
+
+@pytest.mark.parametrize("canonical", ["casein", "pea_protein", "rice_protein"])
+def test_primary_protein_source_does_not_delegate_to_itself(canonical):
+    row = {"name": canonical, "canonical_id": canonical, "mapped": True,
+           "bio_score": 10, "quantity": 25, "unit": "g",
+           "raw_source_path": "ingredientRows[0]",
+           "scoring_input_kind": "product_level_evidence",
+           "evidence_type": "sports_primary_dose"}
+    product = {"product_name": canonical, "activeIngredients": [row],
+               "ingredient_quality_data": {"ingredients_scorable": [row]}}
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert not result.points_eligible

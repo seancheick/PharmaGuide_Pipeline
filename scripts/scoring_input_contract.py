@@ -4300,12 +4300,8 @@ _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
     re.IGNORECASE,
 )
 _ROUTE_SPORTS_NAME_EXCLUSION_RE = re.compile(
-    r"\b(nac|n-acetyl|theanine|tryptophan|5-htp|sam-e|sleep|calm|mood|stress|"
+    r"\b(nac|n-acetyl|theanine|tryptophan|5-htp|sam-e|"
     r"digestive|enzyme|enzymes|keratin|lactoferrin|collagen)\b",
-    re.IGNORECASE,
-)
-_ROUTE_B_COMPLEX_EXCLUSION_RE = re.compile(
-    r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|recovery|mass\s*gainer)\b",
     re.IGNORECASE,
 )
 _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS = set(B_COMPLEX_DISQUALIFY_CANONICALS)
@@ -4950,8 +4946,6 @@ def _route_b_complex_decision(
         return False, "b_complex_disqualifying_active", sorted(
             canonicals & _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS
         )
-    if _ROUTE_B_COMPLEX_EXCLUSION_RE.search(name_text or ""):
-        return False, "b_complex_conflicting_product_intent", ["conflicting_product_intent"]
     if facts.get("title_multivitamin_intent"):
         return False, "explicit_multivitamin_intent", ["explicit_multivitamin_intent"]
 
@@ -5139,7 +5133,7 @@ def _route_is_sports_class(
     # unambiguous sports-hero name (creatine / beta-alanine / citrulline / HMB / BCAA /
     # EAA / pre-workout), is a sports product even when the ergogenic actives are
     # undisclosed in a proprietary blend or listed only as an aggregate. The existing
-    # NAC/theanine/sleep/collagen exclusion still applies, and the name-only path must
+    # NAC/theanine/collagen identity exclusion still applies, and the name-only path must
     # not hijack a genuine multivitamin. Parts 2-3 (gate fail-open + dose credit for
     # disclosed non-classic actives) make this net-positive, which is why the earlier
     # routing-only version was reverted.
@@ -5309,6 +5303,8 @@ def _route_fiber_digestive_decision(
     facts = features or _route_feature_vector(product)
     if (
         facts.get("title_systemic_enzyme_intent")
+        and (int(facts.get("observed_systemic_enzyme_row_count") or 0)
+             or int(facts.get("observed_dual_use_enzyme_row_count") or 0))
         and not facts.get("title_explicit_digestive_context")
     ):
         return False, "systemic_enzyme_intent", ["systemic_enzyme_intent"]

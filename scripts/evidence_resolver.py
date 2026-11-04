@@ -1314,7 +1314,7 @@ def resolve_evidence_for_row(
             from scoring_input_contract import get_evidence_subject_rows, ROUTE_FEATURE_PROTEIN_CANONICALS
             protein_sources = ([source for source in get_evidence_subject_rows(product or {})
                                 if source.get("canonical_id") in ROUTE_FEATURE_PROTEIN_CANONICALS - {"protein"}]
-                               if row_dict.get("evidence_type") == "sports_primary_dose" else [])
+                               if canonical == "protein" and row_dict.get("evidence_type") == "sports_primary_dose" else [])
             source_results = ([resolve_evidence_for_row(source, product) for source in protein_sources]
                               if row_dict.get("evidence_type") == "sports_primary_dose" else [])
             sources_complete = bool(source_results) and compose_product_resolution_state(

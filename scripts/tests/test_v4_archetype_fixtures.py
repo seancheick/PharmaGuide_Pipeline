@@ -351,7 +351,8 @@ def test_benefit_copy_does_not_change_evidence_in_any_scoring_module(surface):
         modules.add(module)
         required = evidence_required_canonicals(case.product, module=module)
         evidence = baseline["quality_pillars_v4"]["evidence"]
-        for copy in ("Supports cognitive performance.", "Helps maintain hydration within the cells."):
+        for copy in ("Supports cognitive performance.", "Helps maintain hydration within the cells.",
+                     "Supports sleep.", "Immune support.", "Joint health.", "Heart health.", "Weight loss."):
             product = deepcopy(case.product)
             if surface == "title":
                 for key in ("product_name", "fullName"):
@@ -363,7 +364,7 @@ def test_benefit_copy_does_not_change_evidence_in_any_scoring_module(surface):
                 })
             scored = validation.build_scored_artifact(product)
             actual = scored["quality_pillars_v4"]["evidence"]
-            assert scored["_v4_module"] == module, case.archetype
+            assert scored["_v4_module"] == module, (case.archetype, copy)
             assert scored["quality_assessment_status"] == baseline["quality_assessment_status"], case.archetype
             assert evidence_required_canonicals(product, module=module) == required, case.archetype
             assert actual["score"] == evidence["score"], case.archetype
