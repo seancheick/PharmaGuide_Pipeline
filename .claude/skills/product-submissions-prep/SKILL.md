@@ -149,6 +149,11 @@ before your first submission. The essentials:
 - one row per printed line; a printed "(as X)" goes into `form_text`; only a
   blend header has children (`parent_index`).
 
+Keep nutrition declarations in the evidence reading for photo verification.
+After `record`, check that recognized amounts populate `label.json.nutritionalInfo`
+and the console's Nutrition amounts fields. Ingredient rows are for the label's
+active ingredients and blends. Other Ingredients stays in its own field.
+
 Then check every box you drew:
 
 ```bash

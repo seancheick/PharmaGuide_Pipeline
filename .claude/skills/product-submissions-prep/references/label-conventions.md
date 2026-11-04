@@ -84,17 +84,24 @@ sources + region), not bare objects/strings: `record` refuses a bare one. Only
   - `percent_dv`: the printed %DV number (`1111`), or null. `*`/`†` "Daily
     Value not established" means null.
   - `is_blend_header` / `parent_index`: only a blend or complex header has
-    children; children point at the header's index. Never express a form as
-    a child row.
+    children; children point at the header's index. Copy the blend total
+    and the ingredients indented beneath that blend from the photo. Leave a
+    child's amount blank when the label gives only the blend total. A form
+    printed in parentheses stays on its own ingredient row.
   - `status`: `read`, `partial` or `unreadable` for the row as a whole.
-  - **Calories, Total Fat, Total Carbohydrate, Sugars, Protein or Sodium printed
-    inside the Supplement Facts panel** is a row like any other: one row per
-    printed line, amount and unit as printed (`20` + `Calories`). Clean files it
-    under Nutrition Facts, never as an active ingredient. Do not also type it into
-    the console's Nutrition Facts fields. Tell the reviewer in your report that the
-    row is intentional; moving it is harmless since 2026-10-22 (Clean keeps the
-    typed value) but duplicating it is not needed. A label whose panel is titled
-    "Nutrition Facts" is a food: see SKILL.md.
+  - **Nutrition amounts printed inside Supplement Facts** use one evidence
+    row per printed line in `reading.json`, with exact text, amount, %DV,
+    and crop. Keep the rows flat. For example, `Total Carbohydrate` 1 g,
+    `Total Sugars` 1 g, and `Includes 1 g Added Sugars` 1 g (2% DV) are
+    overlapping declarations. On the label, Total Sugars is under Total
+    Carbohydrate, and Added Sugars is under Total Sugars. Keep the photos'
+    printed amounts and order. Flutter renders that hierarchy from the
+    dedicated fields. Never sum them. The draft mapper moves
+    recognized panel lines into `label.json.nutritionalInfo`, where the
+    console's **Nutrition amounts** section reads them. Check those fields
+    after `record`. Preserve printed zeroes and bounds. Resolve reported gaps
+    in that section from the photo and leave undeclared fields blank.
+    A standalone "Nutrition Facts" food panel still follows SKILL.md.
 - **other_ingredients**: `text` is the full printed list, verbatim, one
   string, without the "Other Ingredients:" heading. `disclosure_hint`:
   - `present`: a list is printed, **wherever it sits**: below the panel, in

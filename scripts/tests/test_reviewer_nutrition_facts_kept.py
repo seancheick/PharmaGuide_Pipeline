@@ -104,3 +104,27 @@ def test_negative_amounts_and_malformed_containers_are_ignored() -> None:
         product = copy.deepcopy(_BASE)
         product["nutritionalInfo"] = container
         assert "calories" not in _clean(product)
+
+
+def test_dedicated_nutrition_amounts_reach_the_flutter_blob() -> None:
+    from build_final_db import build_detail_blob
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    product = copy.deepcopy(_BASE)
+    product["nutritionalInfo"] = {
+        "calories": {"amount": 0, "unit": "kcal"},
+        "sugars": {"amount": 1, "unit": "g"},
+        "addedSugars": {"amount": 1, "unit": "g"},
+        "cholesterol": {"amount": 5, "unit": "mg", "operator": "<"},
+        "sodium": {"amount": 0, "unit": "mg"},
+    }
+    clean = EnhancedDSLDNormalizer().normalize_product(product)
+    assert [row["name"] for row in clean["activeIngredients"]] == ["Micronized Creatine Monohydrate"]
+    clean["nutrition_summary"] = SupplementEnricherV3()._collect_nutrition_summary(clean)
+    info = build_detail_blob(clean, {})["nutrition_detail"]
+    assert info["calories_per_serving"] == 0
+    assert info["total_sugars_g"] == 1
+    assert info["added_sugars_g"] == 1
+    assert info["cholesterol_mg"] == 5
+    assert info["sodium_mg"] == 0
+    assert info["quantity_operators"]["cholesterol_mg"] == "<"

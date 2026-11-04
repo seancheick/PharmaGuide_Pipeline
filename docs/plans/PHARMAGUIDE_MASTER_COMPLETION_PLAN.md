@@ -1,5 +1,14 @@
 # PharmaGuide master completion plan
 
+### November 4 — nutrition amounts from submissions
+
+Owner: `submission_review/extraction/to_manual_label.py::to_manual_label` for the existing `nutritionalInfo` payload, `enhanced_normalizer.py::normalize_product` and `enrich_supplements_v3.py::_collect_nutrition_summary` for nutrition values, and Flutter `buildNutritionSection` for display. Evidence: fail-first mapper check, real-label Clean → Enrich → Score → blob replay, and live manifest/blob audit. Will NOT create: a second nutrition payload, scorer, or review attestation.
+
+- [x] Route new photo-grounded nutrition amounts to the dedicated console fields. Preserve the evidence draft and legacy label rows. Verify supported amounts, zeroes, printed bounds, and separate Active and Other Ingredients sections.
+- [x] Audit the 38 approvals (35 imported source files and three pending import). Eleven had nutrition amounts in source. All 15 blobs tied to the current released catalog were readable. Prenatal Advanced and Omega-3 Fatty Acids lack live nutrition details; their approved labels already contain the values. A rebuilt artifact restores them without reopening approvals.
+- [ ] Qualify the paired candidate in CI, rebuild the catalog from the earliest invalidated stage, and verify the rebuilt release with the app before publication.
+
+
 ### November 4 — independent audit of active Claude work
 
 Owner: `enrich_supplements_v3.py::_stamp_vitamin_e_ranges/_distinct_caffeine_dose/_evaluate_dose_thresholds_for_target`; app `AccountSwitchGuard` / `AccountStorage` reset lifecycle and `SyncService::_stageFromCompressed`. Evidence: independently reproduced boundary cases and the qualification PRs below. Will NOT create another safety evaluator, clinical policy, release status or research registry.

@@ -511,6 +511,9 @@ Added in v1.3.2. Always present (even when all values are `null` — no null-che
 | `dietary_fiber_g`       | float or null | grams                                                        |
 | `total_sugars_g`        | float or null | grams; a printed bound ("<1 g") keeps its stated amount, with the qualifier in `quantity_operators` |
 | `polyunsaturated_fat_g` | float or null | grams; a Nutrition Facts value, never an active or quality credit. Added 2026-10-29. |
+| `saturated_fat_g`, `trans_fat_g`, `monounsaturated_fat_g` | float or null | Declared fat subtypes, in grams. |
+| `added_sugars_g` | float or null | Declared added sugars, in grams. Included in total sugars. |
+| `cholesterol_mg`, `sodium_mg` | float or null | Declared amount, in milligrams. |
 | `quantity_operators`    | object        | Printed qualifier per key above, e.g. `{"protein_g": "<"}` for "Protein <1 g" (one of `<`, `<=`, `>`, `>=`, `~`). Empty when every value is exact. The number stays the printed amount; display must prefix the operator and never show a bound as exact. Added 2026-10-29. |
 
 Source: `enriched.nutrition_summary` ← `product.nutritionalInfo.*`.amount` (and `.operator`). Not scored — transparency only.
