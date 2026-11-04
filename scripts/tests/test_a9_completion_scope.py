@@ -336,3 +336,45 @@ def test_a_missing_amount_with_no_benchmark_cant_hold_the_product(pipeline):
     assert "lemon" not in {entry["ingredient"] for entry in dose["dose_contributions"]}
     assert {item["metadata"]["benchmark"] for item in dose["specialized_purpose_assessments"]} == {"absent"}
     assert scored["quality_assessment_status"] == "complete"
+
+
+@pytest.mark.parametrize("label, open_row", [
+    pytest.param("a9_panel_primary_250328_raw.json", "elderberry", id="title_names_elderberry"),
+    pytest.param("a9_panel_primary_49568_raw.json", "keratin", id="title_names_keratin"),
+    pytest.param("a9_panel_primary_204802_raw.json", "fish_oil", id="title_names_omega3"),
+])
+def test_a_panel_label_holds_on_an_unread_ingredient_it_is_about(pipeline, label, open_row):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = _enrich(pipeline, label)
+    scored = build_scored_artifact(enriched)
+
+    assert scored["_v4_module_breakdown"]["module"] in {"multi_or_prenatal", "b_complex"}
+    assert open_row in {row["canonical_id"] for row in _unreviewed_rows(scored)}
+    assert scored["quality_assessment_status"] == "partial"
+    assert "evidence_assessment_incomplete" in scored["assessment_readiness"]["release_assessment"]["blockers"]
+
+
+@pytest.mark.parametrize("label", ["a9_review_pending_312894_raw.json", "a9_review_pending_2505_raw.json"])
+def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label):
+    from scoring_v4.quality_score import _EVIDENCE_ZERO_REASON
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # Dropping the open row from scope can't turn an unfinished review into a finding.
+    scored = build_scored_artifact(_enrich(pipeline, label))
+    evidence = scored["quality_pillars_v4"]["evidence"]
+    assert scored["quality_assessment_status"] == "partial"
+    assert evidence["display_state"] == "not_yet_reviewed"
+    assert evidence["reason"] == _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
+
+
+def test_a_recorded_applicability_finding_stays_on_an_unfinished_label(pipeline):
+    from scoring_v4.quality_score import _EVIDENCE_ZERO_REASON
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # Nothing fell out of scope here. Splitting this sentence belongs to the Evidence work.
+    scored = build_scored_artifact(_enrich(pipeline, "a9_review_pending_252468_raw.json"))
+    evidence = scored["quality_pillars_v4"]["evidence"]
+    assert scored["quality_assessment_status"] == "partial"
+    assert evidence["display_state"] == "applicability_unestablished"
+    assert evidence["reason"] == _EVIDENCE_ZERO_REASON["applicability_unestablished"]

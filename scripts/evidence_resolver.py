@@ -293,6 +293,8 @@ class ProductEvidenceResolution:
     is_assessment_complete: bool
     unresolved_blockers: List[str]
     owner_contributions: Dict[str, int]
+    # Finished only because the open review was out of scope, so not a finding yet.
+    review_open_outside_scope: bool = False
 
 
 _OMEGA_EVIDENCE_CANONICALS = {
@@ -1878,6 +1880,8 @@ def resolve_product_evidence(
         is_assessment_complete=complete,
         unresolved_blockers=list(set(all_blockers)),
         owner_contributions=owner_counts,
+        review_open_outside_scope=complete and not compose_product_resolution_state(
+            [r.disposition for r in resolutions])[1],
     )
 
 
