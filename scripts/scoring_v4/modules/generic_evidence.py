@@ -205,6 +205,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     matches, recovered_matches = resolved_clinical_matches(
         product,
         owner_scoped=owner_scoped,
+        assess_amount=False,
     )
     if accepted_matches is not None:
         # A category may narrow the shared applicability result, never add a
@@ -226,11 +227,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     scoped_matches: List[Dict[str, Any]] = []
     scoped_recovered_matches: List[Dict[str, Any]] = []
     flags: List[str] = []
-    if owner_scoped:
-        from scoring_input_contract import classify_ingredient_roles
-        for role in classify_ingredient_roles(product):
-            if str(role.get("role_reason", "")).startswith("named_in_label_function_claim:"):
-                _append_once(flags, "EXPLICIT_LABEL_PURPOSE_OWNER:" + str(role["canonical_id"]) + ":" + role["role_reason"].split(":", 1)[1])
     sub_clinical_canonicals: set[str] = set()  # compatibility metadata; Dose owns this assessment
 
     for entry in matches:
@@ -245,8 +241,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         if owner_canonicals and matched_owner not in owner_canonicals:
             continue
         if owner_scoped and not evidence_record_matches_declared_purpose(
-                product, {"canonical_id": matched_owner}, entry):
-            _append_once(flags, "LABEL_PURPOSE_EVIDENCE_MISMATCH:" + str(matched_owner))
+                product, {"canonical_id": matched_owner}, entry, require_claim_alignment=False):
+            _append_once(flags, "CLINICAL_SCOPE_EVIDENCE_MISMATCH:" + str(matched_owner))
             continue
 
         entry_id = _entry_id(entry)
@@ -394,7 +390,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         source_id = _clinical_source_id(entry)
         if source_id in reviewed_entries():
             entry = {**entry, "id": source_id}
-        decision = assess_clinical_applicability(product, entry, assess_amount=False)
+        decision = assess_clinical_applicability(product, entry, assess_amount=False, require_claim_alignment=False)
         if (entry.get("evidence_origin") == "verified_formula_contract"
                 and entry.get("applicability_assessment", {}).get("status") == "assessed_studied_formula"):
             decision = {"status": "applicable", "reason_code": "reviewed_formula_contract"}
@@ -677,7 +673,8 @@ def resolved_clinical_matches(
             if _entry_id(entry) not in recovered_ids
         ]
         matches.extend(recovered_matches)
-    matches, _ = filter_clinical_matches(product, matches, assess_amount=assess_amount)
+    matches, _ = filter_clinical_matches(product, matches, assess_amount=assess_amount,
+                                        require_claim_alignment=False)
     from studied_formulas import formula_clinical_match, formula_identity_clinical_match
     formula = (formula_clinical_match(product) if assess_amount
                else formula_identity_clinical_match(product))

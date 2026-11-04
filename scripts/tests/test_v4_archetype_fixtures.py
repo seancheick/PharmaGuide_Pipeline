@@ -335,3 +335,24 @@ def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
     assert artifact["quality_score_confidence"] == "moderate"
     assert artifact["quality_score_v4_100"] == 80.0
     assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
+
+
+def test_benefit_copy_does_not_change_evidence_in_any_scoring_module():
+    from scoring_v4.router import VALID_CLASSES
+
+    validation = _validation_module()
+    modules = set()
+    for case in validation.load_fixture_suite().cases:
+        baseline = validation.build_scored_artifact(deepcopy(case.product))
+        modules.add(baseline["_v4_module"])
+        evidence = baseline["quality_pillars_v4"]["evidence"]
+        for copy in ("Supports cognitive performance.", "Helps maintain hydration within the cells."):
+            product = deepcopy(case.product)
+            product.setdefault("statements", []).append({
+                "type": "Formulation re: Other", "notes": copy,
+            })
+            scored = validation.build_scored_artifact(product)
+            actual = scored["quality_pillars_v4"]["evidence"]
+            assert actual["score"] == evidence["score"], case.archetype
+            assert actual["evidence_result_state"] == evidence["evidence_result_state"], case.archetype
+    assert modules == set(VALID_CLASSES)

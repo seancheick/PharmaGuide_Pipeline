@@ -490,7 +490,7 @@ def _clinical_matches(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     # same as scoring/readiness, never a second raw-list confidence shortcut.
     if not product.get("evidence_data") and product.get("clinical_evidence"):
         product = {**product, "evidence_data": product["clinical_evidence"]}
-    return resolved_clinical_matches(product)[0]
+    return resolved_clinical_matches(product, assess_amount=False)[0]
 
 
 def _ingredient_identity_confidences(product: Dict[str, Any]) -> Iterable[float]:

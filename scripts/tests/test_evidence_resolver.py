@@ -24,7 +24,6 @@ import evidence_resolver as er
 from evidence_resolver import EvidenceDisposition, OWNER_CAPABILITY_MAP
 
 
-
 def _approved_test_source(entry, *, name="Synthetic Material", pmid="28661438", outcome="Perceived Stress Scale"):
     """Explicit synthetic approval for mechanics tests, never a clinical record edit."""
     source = dict(entry)
@@ -115,6 +114,10 @@ def test_nonpositive_projection_does_not_complete_an_unqualified_generic_source(
         "evidence_data": {"clinical_matches": [{**source, "matched_canonical_ids": ["synthetic_material"],
             "matched_source_row_refs": ["ingredientRows[0]"]}]}}
     resolution = er.resolve_evidence_for_row(row, product)
+    if change == "unrelated":
+        assert resolution.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+        assert resolution.points_eligible is False
+        return
     assert resolution.disposition != EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert resolution.points_eligible is False
     pillar = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
@@ -1010,10 +1013,6 @@ def test_phase4_final_sweep_standardized_clinical_botanicals():
         assert res.points_eligible is False  # Shadow mode invariant
 
 
-
-
-
-
 def test_declared_nutrient_total_is_not_an_undisclosed_blend():
     row = {'canonical_id': 'vitamin_b9_folate', 'name': 'Folate',
            'quantity': 1333, 'unit': 'mcg DFE', 'is_parent_total': True,
@@ -1038,13 +1037,11 @@ def test_real_disclosed_extract_and_theanine_are_not_missing_or_blend():
                 assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
                 assert result.points_eligible is False
             else:
-                # INGR_L_THEANINE credit is now scoped to Focus & Mental
-                # Clarity (Dr. Pham-approved closure, 2026-10-28); the source
-                # does not support this label's stress purpose.
+                # Reviewed focus research remains available on a label that
+                # advertises stress. The claim assessment owns that mismatch.
                 assert row["canonical_id"] == "l_theanine"
-                assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-                assert result.points_eligible is False
-                assert result.blocking_reasons == ["label_purpose_evidence_mismatch"]
+                assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+                assert result.points_eligible is True
 
 
 @pytest.mark.parametrize('quantity,unit', [(200, 'mg'), (0.2, 'g'), (200000, 'mcg')])
@@ -1070,63 +1067,7 @@ def test_resolver_uses_shared_daily_units_and_any_applicable_record(monkeypatch,
     assert er.resolve_evidence_for_row(row, product).disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
 
 
-def test_descriptive_goal_tag_and_endpoint_text_cannot_create_a_supported_purpose():
-    """Item 12 (Sean, 2026-10-28): consumer goals, relevance tags, endpoint prose and
-    primary_outcome describe a record; they never establish the purpose it supports."""
-    entry = {'primary_outcome': 'Reduce Stress/Anxiety',
-             'health_goals_supported': ['Reduce Stress/Anxiety', 'Sleep Quality'],
-             'endpoint_relevance_tags': ['stress_mood', 'sleep'],
-             'key_endpoints': ['perceived stress', 'sleep quality']}
-    assert er._evidence_entry_purposes(entry) == set()
-
-
-def test_clinician_approved_scoring_context_establishes_its_studied_purpose():
-    entry = _approved_test_source({"id": "TEST_PURPOSE_SOURCE", "study_type": "rct_single"})
-    entry.pop("id")  # Inline source-owned context; no missing registry record fallback.
-    approved = entry["study_contexts"][0]
-    pending = {**approved, 'review_status': 'source_verified_pending_clinical_review',
-               'condition': 'knee_joint_discomfort', 'outcomes': [{'name': 'joint pain'}]}
-    held = {**approved, 'scoring_eligible': False, 'condition': 'bowel_regularity', 'outcomes': []}
-    purposes = er._evidence_entry_purposes({**entry, 'study_contexts': [approved, pending, held]})
-    assert 'mood' in purposes
-    assert not purposes & er.evidence_indication_categories('joint pain bowel regularity')
-
-
-@pytest.mark.parametrize('change', [
-    {'clinical_review': {}},
-    {'scoring_eligible': False},
-    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'secondary', 'kind': 'patient_important', 'direction': 'positive'}]},
-    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'primary', 'kind': 'patient_important', 'direction': 'null'}]},
-    {'outcomes': [{'name': 'Perceived Stress Scale', 'hierarchy': 'primary', 'kind': 'patient_important', 'direction': 'positive',
-                   'outcome_role': 'within_group_change'}]},
-])
-def test_purpose_extraction_cannot_bypass_qualifying_context(change):
-    entry = _approved_test_source({"id": "TEST_PURPOSE_GUARD", "study_type": "rct_single"})
-    entry.pop("id")
-    context = entry["study_contexts"][0]
-    assert er._evidence_entry_purposes(entry) == {'mood'}  # Positive control prevents a vacuous guard.
-    assert er._evidence_entry_purposes({**entry, 'study_contexts': [{**context, **change}]}) == set()
-
-
-def test_enriched_match_cannot_stand_in_for_a_missing_curated_record():
-    """Sean, 2026-10-28: an enriched match carrying a registry id that the clinical
-    registry does not hold is an unresolved source, not its own authority."""
-    match = {'id': 'NOT_IN_REGISTRY', 'applicability': {'scope': 'ingredient',
-             'supported_outcomes': ['stress_mood']}}
-    assert er._evidence_entry_purposes(match) == set()
-
-
-def test_curated_record_owns_purpose_for_an_enriched_match():
-    """Enriched clinical matches carry no study_contexts; the curated record decides."""
-    from clinical_applicability import reviewed_entries
-    record = reviewed_entries()['BRAND_KSM66']
-    match = {'id': 'BRAND_KSM66', 'health_goals_supported': ['Joint & Bone Health']}
-    assert er._evidence_entry_purposes(match) == er._evidence_entry_purposes(record)
-    assert er._evidence_entry_purposes(match) == er.evidence_indication_categories(
-        ' '.join(record['applicability']['supported_outcomes']))
-
-
-def test_literature_resolution_cannot_substitute_another_claimed_purpose(monkeypatch):
+def test_literature_resolution_is_independent_of_another_claimed_purpose(monkeypatch):
     import json
     from scoring_input_contract import get_scoring_ingredients
     product = json.loads((Path(__file__).parent / 'fixtures/stress_gut_evidence_enriched.json').read_text())[0]
@@ -1142,8 +1083,8 @@ def test_literature_resolution_cannot_substitute_another_claimed_purpose(monkeyp
              'studied_dose_exposure': {'values': [100], 'unit': 'mg'}}
     monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'l_theanine': entry})
     result = er.resolve_evidence_for_row(row, product)
-    assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert result.reason_code == 'label_purpose_evidence_mismatch'
+    assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert not result.points_eligible  # The literature fallback is not a scoring registry.
 
 
 @pytest.mark.parametrize('printed, projected, expected', [
@@ -1207,19 +1148,6 @@ def test_subject_census_duplicate_and_empty_products_fail():
     product = {'id':'1','subject_count':0,'subjects':[], 'is_assessment_complete':True}
     with pytest.raises(ValueError, match='Duplicate'):
         census.summarize([product, product])
-
-
-def test_reviewed_outcome_scope_does_not_promote_null_population_descriptions():
-    entry = {'primary_outcome':'Cardiovascular Health', 'key_endpoints':['HIV-infected women: immune endpoints null', 'Children: adjunctive findings'],
-             'applicability':{'scope':'ingredient','supported_outcomes':['metabolic']}}
-    assert er._evidence_entry_purposes(entry) == set()  # scope prose alone is no accepted context
-    approved = _approved_test_source({"id": "TEST_METABOLIC_SCOPE", **entry}, outcome="Blood glucose")
-    # The context owns the source; the signed scope narrows rather than invents its outcome.
-    approved.pop("id")
-    approved["applicability"]["source_pmids"] = ["28661438"]
-    assert er._evidence_entry_purposes(approved) == {'metabolic'}
-    approved["applicability"]["source_pmids"] = ["99999999"]
-    assert er._evidence_entry_purposes(approved) == set()
 
 
 @pytest.mark.parametrize('tamper', [False, True])
@@ -1415,7 +1343,6 @@ def test_preparation_research_is_acknowledged_without_generic_clinical_credit(ca
         owner = json.loads((SCRIPTS_ROOT / "data" / source_owner).read_text())
         entries = owner[source_owner.removesuffix(".json")]
         assert canonical in {entry["id"].casefold() for entry in entries}
-
 
 
 def test_monostearate_review_records_actual_bounded_search_without_free_glycerol_credit():

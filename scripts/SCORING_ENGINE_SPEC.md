@@ -266,6 +266,11 @@ Since config 1.26.0 (V4.1 Step 4) every fact earns or loses points once:
   - Pillar reasons are one sentence; each explanation fact carries
     `audience` (`consumer` | `audit`), with at most one consumer fact per
     pillar (see `scripts/FINAL_EXPORT_SCHEMA_V1.md`).
+- Evidence credits qualifying research for the verified ingredient, preparation,
+  outcomes and studied population. Manufacturer benefit copy does not qualify or
+  disqualify that research. Claim alignment is a separate explanation in the
+  clinical assessment, and a studied outcome does not substantiate unrelated
+  advertised benefits. Label directions inform exposure through Dose and Safety.
 - Probiotic research certainty counts only when it applies to the product.
 - A score is `partial` when the unfinished work is ours (an unresolved
   benchmark identity, or a printed nutrient or sugars amount we could not

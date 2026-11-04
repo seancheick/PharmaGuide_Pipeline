@@ -1052,7 +1052,11 @@ def test_primavie_native_trial_cannot_substitute_unrelated_declared_purpose(enri
          'statements':[{'type':'Formula re: Contains','notes':f'Shilajit supports {purpose}.'}], 'otherIngredients':{'ingredients':[]}}
     product,_=enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     artifact=build_scored_artifact(product)
-    assert (artifact['quality_pillars_v4']['evidence']['score'] > 0) is accepted
+    assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+    matches, _ = resolved_clinical_matches(product)
+    match = next(m for m in matches if "PRIMAVIE" in m["id"])
+    alignment = match["applicability_assessment"]["claim_alignment"]["state"]
+    assert (alignment in {"aligned", "mixed"}) is accepted
 
 
 @pytest.mark.parametrize('context', [
@@ -2275,9 +2279,12 @@ def test_condition_and_signed_scope_cannot_promote_a_null_sleep_outcome(monkeypa
         'ingredient_quality_data': {'ingredients_scorable': [row]},
         'evidence_data': {'clinical_matches': [{**source, 'matched_canonical_ids': ['synthetic_material'],
             'matched_source_row_refs': ['ingredientRows[0]']}]}}
-    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+    entry = product["evidence_data"]["clinical_matches"][0]
+    assert assess_clinical_applicability(product, entry, assess_amount=False)["status"] == "not_applicable"
+    score = build_scored_artifact(product)['quality_pillars_v4']['evidence']['score']
+    assert score > 0
     product['product_name'] = 'Supports stress relief'
-    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] > 0
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == score
 
 
 def test_exact_unknown_category_condition_still_matches_its_positive_patient_outcome():
@@ -2548,3 +2555,17 @@ def test_ucii_signed_knee_scope_cannot_become_bone_only_credit(claim, expected):
     assert decision["status"] == expected
     if expected == "not_applicable":
         assert decision["reason_code"] == "label_purpose_evidence_mismatch"
+
+
+def test_ingredient_evidence_is_invariant_to_manufacturer_benefit_claims():
+    row = _row("creatine_monohydrate", "Creatine Monohydrate", quantity=5000,
+               ref="ingredientRows[0]")
+    product = {"product_name": "Creatine", "activeIngredients": [row],
+               "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
+    baseline = score_evidence(product, owner_scoped=True)
+    assert baseline["score"] > 0
+    for claim in ("Supports lean muscle mass.", "Supports cognitive performance.",
+                  "Creatine monohydrate helps maintain hydration within the cells."):
+        variant = {**product, "statements": [{"type": "Formulation re: Other", "notes": claim}]}
+        result = score_evidence(variant, owner_scoped=True)
+        assert result["score"] == baseline["score"], claim

@@ -7442,6 +7442,7 @@ def classify_ingredient_roles(
     module: Optional[str] = None,
     rows: Optional[List[Dict[str, Any]]] = None,
     materiality_only: bool = False,
+    evidence: bool = False,
 ) -> List[Dict[str, Any]]:
     """Classify every scoring row's role (compatibility mode, Phase 2).
 
@@ -7463,11 +7464,11 @@ def classify_ingredient_roles(
         # product's own scoring rows are reused within a pass.
         return scoped_product_view(
             product,
-            ("ingredient_roles", module, materiality_only),
-            lambda: _classify_rows(product, module, None, materiality_only),
+            ("ingredient_roles", module, materiality_only, evidence),
+            lambda: _classify_rows(product, module, None, materiality_only, evidence),
             lambda roles: [dict(role) for role in roles],
         )
-    return _classify_rows(product, module, rows, materiality_only)
+    return _classify_rows(product, module, rows, materiality_only, evidence)
 
 
 def _classify_rows(
@@ -7475,11 +7476,14 @@ def _classify_rows(
     module: Optional[str],
     rows: Optional[List[Dict[str, Any]]],
     materiality_only: bool,
+    evidence: bool,
 ) -> List[Dict[str, Any]]:
     product = product or {}
     if rows is None:
         rows = get_scoring_ingredients(product, strict=True).rows
     ctx = _role_context(product, module, rows)
+    if evidence:
+        ctx["statements"] = []
     if materiality_only:
         ctx = {**ctx, "driver_canonicals": set(), "module": None}
     return [_classify_one(row, ctx) for row in rows]

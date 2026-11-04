@@ -1106,7 +1106,7 @@ def resolve_evidence_for_row(
             scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
             if source_ref:
                 scoped["matched_source_row_refs"] = [source_ref]
-            decision = assess_clinical_applicability(scope_product, scoped, assess_amount=False)
+            decision = assess_clinical_applicability(scope_product, scoped, assess_amount=False, require_claim_alignment=False)
             if decision["status"] == "unresolved":
                 record_states.append("unresolved")
                 unresolved_reasons.append(decision["reason_code"])
@@ -1414,7 +1414,7 @@ def resolve_evidence_for_row(
             source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
             if source_ref:
                 scoped["matched_source_row_refs"] = [source_ref]
-            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False)
+            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False, require_claim_alignment=False)
             if decision["status"] not in {"applicable", "not_curated"}:
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
@@ -1436,7 +1436,7 @@ def resolve_evidence_for_row(
             source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
             if source_ref:
                 scoped["matched_source_row_refs"] = [source_ref]
-            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False)
+            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False, require_claim_alignment=False)
             if decision["status"] == "applicable":
                 material_form_matched = True
             elif decision["reason_code"] in _DOCUMENTED_REVIEW_CONCLUSIONS:
@@ -1469,16 +1469,6 @@ def resolve_evidence_for_row(
                     owner_facts=owner_facts,
                     blocking_reasons=blocking_reasons,
                 )
-
-        claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
-        if claimed_purposes and not (claimed_purposes & _evidence_entry_purposes(lit_entry)):
-            return EvidenceResolution(
-                canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False, applicability_status="applicability_unestablished",
-                reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
-                blocking_reasons=["label_purpose_evidence_mismatch"],
-            )
 
         return EvidenceResolution(
             canonical_id=canonical,
@@ -1549,7 +1539,7 @@ def _evidence_subject_roles(product: Mapping[str, Any], module: Optional[str]):
         for row in get_scoring_ingredients(prod_dict, strict=True).rows
         if evidence_row_key(row) not in subject_keys
     ]
-    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others)
+    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others, evidence=True)
     return rows, roles[: len(rows)], others, roles[len(rows):]
 
 
@@ -1713,64 +1703,15 @@ def evidence_required_canonicals(
     return required or owners
 
 
-def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] = None) -> Dict[str, Set[str]]:
-    """Read explicit-purpose provenance from the existing role result."""
-    from scoring_input_contract import classify_ingredient_roles
-    purposes: Dict[str, Set[str]] = {}
-    for role in classify_ingredient_roles(dict(product), module=module):
-        reason = str(role.get("role_reason") or "")
-        if reason.startswith("named_in_label_function_claim:"):
-            purposes.setdefault(str(role["canonical_id"]), set()).update(reason.split(":", 1)[1].split(","))
-    return purposes
-
-
-def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
-    """Purposes a clinical record supports, from reviewed sources only.
-
-    Approved, scoring-eligible contexts supply qualifying outcome names; a
-    signed applicability scope may narrow those names within its sources.
-    Consumer goals, relevance tags, endpoint prose and
-    primary_outcome describe a record; they never establish a supported
-    purpose on their own (Sean, 2026-10-28). An enriched clinical match is
-    judged by its curated record, which owns the contexts.
-    """
-    from clinical_applicability import reviewed_entries, qualifying_purpose_outcomes
-    from probiotic_measurements import context_accepted_for_scoring
-    from scoring_v4.modules.generic_evidence import _clinical_source_id
-    registry_backed = bool(entry.get("id") or entry.get("study_id") or entry.get("source_data"))
-    # A registry-backed match (recovered matches included) is judged only by its
-    # curated record; a missing record is an unresolved source. A literature
-    # record is its own owner.
-    record = reviewed_entries().get(_clinical_source_id(dict(entry))) if registry_backed else entry
-    if record is None:
-        return set()
-    scope = record.get("applicability") or {}
-    sources = set(map(str, scope.get("source_pmids") or [])) if isinstance(scope, Mapping) else set()
-    reviewed = []
-    for context in record.get("study_contexts") or []:
-        if not context_accepted_for_scoring(context):
-            continue
-        if sources and not sources.intersection(map(str, context.get("source_pmids") or [])):
-            continue
-        outcomes, _ = qualifying_purpose_outcomes(context)
-        reviewed.extend(str(outcome.get("name") or "") for outcome in outcomes)
-    purposes = evidence_indication_categories(" ".join(reviewed))
-    signed = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
-    if signed:
-        purposes &= evidence_indication_categories(" ".join(map(str, signed)))
-    return purposes
-
-
 def evidence_record_matches_declared_purpose(
     product: Mapping[str, Any], row: Mapping[str, Any], entry: Mapping[str, Any],
+    *, require_claim_alignment: bool = True,
 ) -> bool:
     """Return whether a clinical record supports this row's declared purpose.
 
-    The shared role result is the single source of label-purpose provenance.
-    An ingredient without an ingredient-scoped purpose claim keeps the normal
-    identity/preparation applicability path. When the label does declare a
-    purpose, the record must support at least one of those same indication
-    categories before Evidence or Dose may use it.
+    Bind the record to the same ingredient row for both uses. Dose may
+    require a declared purpose for its benchmark; Evidence qualification
+    uses the reviewed research independently of label advertising.
     """
     from clinical_applicability import assess_clinical_applicability
     # The applicability owner evaluates preparation, population and qualifying
@@ -1782,7 +1723,8 @@ def evidence_record_matches_declared_purpose(
     if source:
         scoped.setdefault("matched_source_row_refs", [source])
     scoped.setdefault("ingredient", row.get("name") or row.get("standard_name"))
-    decision = assess_clinical_applicability(product, scoped, assess_amount=False)
+    decision = assess_clinical_applicability(product, scoped, assess_amount=False,
+                                             require_claim_alignment=require_claim_alignment)
     # A fresh reference projection retains what the source evaluated, never
     # affirmative eligibility. Its source, population and claim were still
     # checked by the same canonical owner above.

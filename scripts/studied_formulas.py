@@ -843,7 +843,7 @@ def reviewed_strains_without_qualifying_evidence(strain_assessments) -> bool:
             from clinical_applicability import _valid_native_claim_scope
             if (not context_accepted_for_scoring(context)
                     or not _valid_native_claim_scope(context)
-                    or context.get("claimed_purpose_assessment", {}).get("status") != "not_applicable"):
+                    or context.get("population_applicability") not in {"explicit_conflict", "special_targeting_absent"}):
                 return False
             reviewed_exclusion = True
         return reviewed_exclusion

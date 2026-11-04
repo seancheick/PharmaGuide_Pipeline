@@ -98,7 +98,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             for entry in owned:
                 if entry.get("id") == family["family"]:
                     decision = (formula if formula.get("status") == "assessed_studied_formula"
-                                else assess_clinical_applicability(product, entry, assess_amount=False))
+                                else assess_clinical_applicability(product, entry, assess_amount=False, require_claim_alignment=False))
                     contributing_records.append({"id": entry.get("id"), **decision,
                         "source_review": assess_clinical_source_review(entry),
                         "scope_qualification_complete": bool(decision.get("studied_population")
@@ -187,12 +187,9 @@ def _family_component_points(family: dict, formula: dict, relevance: dict, consi
 def _applicability_weight(family: dict, formula: dict, relevance: dict) -> float:
     """Product applicability from the shared scientific decision, never from marketing.
 
-    Sean, October 28, 2026 (PR #280): an aligned claim and no claim earn the
-    same points for the same eligible research. A studied formula, an approved
-    native context or a registry record the shared applicability owner accepted
-    applies in full. A legacy record whose eligibility was never reviewed keeps
-    the claim-independent broad weight; an unrelated positioning still earns
-    nothing. Claim alignment stays explanation metadata.
+    Studied formulas, approved native contexts, and accepted registry records
+    receive their existing direct weight. Claim alignment is explanation
+    metadata for advertising and is independent of ingredient Evidence.
     """
     weights = _EM["alignment_weights"]
     if formula.get("status") == "assessed_studied_formula" or family.get("source") == "native_context":
@@ -200,7 +197,7 @@ def _applicability_weight(family: dict, formula: dict, relevance: dict) -> float
     if (family.get("source") == "registry"
             and (family.get("decision") or {}).get("status") == "applicable"):
         return weights["direct"]
-    return 0.0 if relevance["level"] == "none" else weights["broad"]
+    return weights["broad"]
 
 
 def _strongest_single_family_certainty(
@@ -406,9 +403,8 @@ def _eligible_native_contexts(assessment: dict) -> list[tuple[str, dict]]:
                     or not valid_native_study_context(context, clinical_id)
                     or not _qualifying_outcomes(context)):
                 continue
-            # The shared applicability owner decided claim and population on
-            # this label: no claim is required, an unrelated claim or a
-            # special population without targeting keeps the context out.
+            # The shared applicability owner checks population separately
+            # from what the manufacturer advertises.
             if not _native_context_applies(context):
                 continue
             result.append((clinical_id, context))
@@ -416,8 +412,9 @@ def _eligible_native_contexts(assessment: dict) -> list[tuple[str, dict]]:
 
 
 def _native_context_applies(context: dict) -> bool:
-    return (context.get("claimed_purpose_assessment", {}).get("status") == "applicable"
-            and context.get("population_applicability") == "eligible")
+    from clinical_applicability import _valid_native_claim_scope
+    return (context.get("population_applicability") == "eligible"
+            and ("applicability" not in context or _valid_native_claim_scope(context)))
 
 
 def _human_research_reviewed(uncredited_row: Dict[str, Any], assessment: Dict[str, Any]) -> bool:

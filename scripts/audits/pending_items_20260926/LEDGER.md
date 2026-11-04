@@ -1,5 +1,12 @@
 ## November 4 — active Claude audit and repairs
 
+## November 4 — claim-independent Evidence candidate
+
+The shared applicability owner now separates ingredient research qualification from claim alignment. Evidence consumes verified source, preparation, outcome and population scope without marketing or exposure gates. The existing claim check and purpose-specific Dose remain separate. Evidence uses the canonical role classifier without function-claim promotion. Native probiotic qualification uses its reviewed strain and population facts.
+
+The fail-first creatine test reproduced 0 versus positive points when only the advertised benefit changed. The candidate has an all-seven-module scoring fixture invariant and a raw-to-detail replay of 11 real labels. Thorne creatine and Life Extension ubiquinol both hold 15.6 Evidence across four wording variants. Casein and the selected omega-3 and psyllium examples still need independent scoring-path investigation. No complete catalog, app acceptance or release is claimed. Receipt: `/Users/seancheick/pg_quality/evidence-independence.R0txGv`.
+
+
 Owner: existing pipeline vitamin E/caffeine bound helpers and assessment readiness; app reset lifecycle, compressed download staging and shared Stack dose providers. Evidence: fail-first tests, exact-source CI, frozen-label export receipts and production-provider probes below. Will NOT create new clinical thresholds, research credit, public status or a parallel warning engine.
 
 Pipeline #351 final candidate `5564c78dfb15431c45368d09b9b2efd180cc38a5` includes #344, #349 and #348 plus current main. It repairs independent vitamin E mixture bounds/direct-parent allocation, strict caffeine lower bounds and skipped-form exposure; compressed catalog delivery remains additive. Five frozen full raw controls preserve Clean/Enrich/Score/blob hashes. Independent source review accepted; 466 named owner/consumer tests pass. Combined local:564 passed/24 declared optional skips, skip guard green. The missing Garden of Life cleaned test artifact was recreated for raw label222758 only in an isolated mirror; no shared artifact/manifest or corpus rebuild. Hosted CI 41784684927 passed all 4 shards and merge readiness (27,769 passed/192 declared skips). #351 merged at 316d8ad69d10bf94fc3527ebab6bd21647aa8b7b; fetched main contains the exact candidate.
