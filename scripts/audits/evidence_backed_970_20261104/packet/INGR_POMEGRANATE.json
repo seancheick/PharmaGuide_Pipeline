@@ -1,0 +1,617 @@
+{
+  "record_id": "INGR_POMEGRANATE",
+  "labels": 44,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "mixed: pooled blood pressure benefit, juice-led, I² above 90%; extract evidence thin",
+  "decision": "held: extract subgroup of the 2024 meta-analysis (38410857) can't be read; no open full text",
+  "summary": "A 2024 meta-analysis pools 22 RCTs with very high heterogeneity and leans on juice. A 2017 review of 8 RCTs says the evidence fails to convince. The extract trial's primary outcome is IL-6; its blood pressure result is secondary, so it can't carry a blood pressure credit. The stored note that the extract subgroup's diastolic result wasn't significant can't be verified from what's open.",
+  "question_for_clinician": "Is a surrogate IL-6 result in one manufacturer-funded trial enough for any credit? Agent recommendation: no.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pomegranate_38410857",
+      "components": [
+        "INGR_POMEGRANATE"
+      ],
+      "source_pmids": [
+        "38410857"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Punica granatum",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "blood_pressure",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pomegranate_38410857",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 22 RCTs, pomegranate in different forms."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "SBP WMD -7.87 mmHg (95% CI -10.34 to -5.39)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "DBP WMD -3.23 mmHg (95% CI -5.37 to -1.09)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "I² 90.0% for SBP and 91.8% for DBP.",
+        "Authors' conclusion points at juice; form subgroups not readable.",
+        "Most labels here are extract or powder, not juice.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Different forms and amounts; not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "38410857",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pomegranate_29173650",
+      "components": [
+        "INGR_POMEGRANATE"
+      ],
+      "source_pmids": [
+        "29173650"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Punica granatum",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "blood_pressure",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pomegranate_29173650",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 8 RCTs, 619 participants, juice or capsules."
+      },
+      "study_design": "Systematic review without pooling",
+      "outcomes": [
+        {
+          "name": "'Fails to convincingly show' a blood pressure benefit: 2 of 8 trials favored pomegranate for SBP",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Trials varied in reporting quality; 3 of 8 reported no between-group SBP comparison.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Juice or capsules; amounts not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "29173650",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pomegranate_40218993",
+      "components": [
+        "INGR_POMEGRANATE"
+      ],
+      "source_pmids": [
+        "40218993"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Punica granatum",
+        "plant_part": "fruit",
+        "standardization": "36% punicalagins, 1.3% ellagic acid; supplier Euromed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "low_grade_inflammation",
+      "purpose": "prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pomegranate_40218993",
+      "population": {
+        "age_group": "adult",
+        "description": "76 of 86 eligible adults aged 55 to 70 completed; apparently healthy, obesity excluded, more women and normal-weight participants."
+      },
+      "study_design": "Two-arm double-blind placebo-controlled parallel trial, NCT05588479",
+      "outcomes": [
+        {
+          "name": "IL-6 fell, treatment by time p=0.02",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "SBP fell 5.22 mmHg within the extract group, p=0.04",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "DBP not significant, p=0.3",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Funded by the extract's supplier, Euromed; the paper says the funder had no role.",
+        "Blood pressure is a secondary outcome here, so it can't carry credit.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          740
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "two capsules daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Two 370 mg capsules daily for 12 weeks; 36% punicalagins, 1.3% ellagic acid",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "40218993",
+          "location": "Full text Methods",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11990117/"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pomegranate_25826143",
+      "components": [
+        "INGR_POMEGRANATE"
+      ],
+      "source_pmids": [
+        "25826143"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Punica granatum",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiovascular_risk_in_hemodialysis",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pomegranate_25826143",
+      "population": {
+        "age_group": "adult",
+        "description": "33 hemodialysis patients."
+      },
+      "study_design": "Randomized placebo-controlled trial, 6 months",
+      "outcomes": [
+        {
+          "name": "BP differences no longer significant after controlling for baseline",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Paraoxonase-1 activity up 26.6%, no effect on other markers",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Dialysis population; does not transfer to general adults.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 180,
+        "administration_frequency": "daily, 7 days a week",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1,000 mg purified polyphenol extract capsule daily for 6 months",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "25826143",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_pomegranate_34498307",
+      "components": [
+        "INGR_POMEGRANATE"
+      ],
+      "source_pmids": [
+        "34498307"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Punica granatum",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "nonalcoholic_fatty_liver_disease",
+      "purpose": "treatment",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_pomegranate_34498307",
+      "population": {
+        "age_group": "adult",
+        "description": "44 patients with NAFLD."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Total cholesterol, triglycerides, fasting glucose, weight and DBP improved against placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "LDL-C and insulin unchanged",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Disease population; amount per tablet not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Two tablets of pomegranate extract; amount not in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "34498307",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "39499092": "2025 meta-analysis title reports lack of efficacy on insulin resistance; excerpt only, read in full before citing.",
+    "39016077": "Flower tablets for aphthous stomatitis: one oral trial of flower, unrelated to these labels' purposes.",
+    "37605174": "Peel in NAFLD, not these preparations.",
+    "25051173": "Acute exercise.",
+    "27644475": "Acute exercise.",
+    "29433376": "16 stroke patients.",
+    "24659610": "Combination.",
+    "24614693": "Combination."
+  },
+  "stop_or_hold": "10 powder labels (5 g): no powder trial read yet. 6 labels pair Pomella with a flower extract row of unstated amount: flower evidence is mostly animal, but the row can't be separated from the extract on the same label.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "38410857",
+      "title_fetched": "The effects of pomegranate consumption on blood pressure in adults: A systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38410857/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29173650",
+      "title_fetched": "Evidence for the effectiveness of pomegranate supplementation for blood pressure management is weak: A systematic review of randomized clinical trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29173650/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40218993",
+      "title_fetched": "Effects of Pomegranate Extract on Inflammatory Markers and Cardiometabolic Risk Factors in Adults Aged 55-70 Years: A Randomised Controlled Parallel Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40218993/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "25826143",
+      "title_fetched": "Effects of Pomegranate Extract Supplementation on Cardiovascular Risk Factors and Physical Function in Hemodialysis Patients.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25826143/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34498307",
+      "title_fetched": "The effect of pomegranate extract on anthropometric indices, serum lipids, glycemic indicators, and blood pressure in patients with nonalcoholic fatty liver disease: A randomized double-blind clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34498307/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39499092",
+      "title_fetched": "Lack of Efficacy of Pomegranate Supplementation on Insulin Resistance and Sensitivity: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39499092/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39016077",
+      "title_fetched": "Evaluation of the Effects of Punica granatum Flower Tablets on Pain and Healing of Minor Recurrent Aphthous Stomatitis: A Randomized Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39016077/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37605174",
+      "title_fetched": "Pomegranate (Punica granatum L.) peel extract ameliorates metabolic syndrome risk factors in patients with non-alcoholic fatty liver disease: a randomized double-blind clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37605174/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25051173",
+      "title_fetched": "Effects of pomegranate extract on blood flow and running time to exhaustion.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25051173/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27644475",
+      "title_fetched": "Effects of pomegranate extract on blood flow and vessel diameter after high-intensity exercise in young, healthy adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27644475/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29433376",
+      "title_fetched": "Pomegranate supplementation improves cognitive and functional recovery following ischemic stroke: A randomized trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29433376/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24659610",
+      "title_fetched": "Multiple dietary supplements do not affect metabolic and cardio-vascular health.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24659610/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24614693",
+      "title_fetched": "A double-blind, placebo-controlled randomised trial evaluating the effect of a polyphenol-rich whole food supplement on PSA progression in men with prostate cancer--the U.K. NCRN Pomi-T study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24614693/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_POMEGRANATE",
+    "standard_name": "Pomegranate",
+    "aliases": [
+      "Pomegranate Fruit Extract",
+      "Pomegranate extract",
+      "Pomegranate Whole Fruit Extract",
+      "Pomegranate 5:1 extract"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "38410857",
+      "29173650",
+      "40218993",
+      "25826143",
+      "34498307"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: pooled blood pressure benefit, juice-led, I² above 90%; extract evidence thin. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Blood pressure"
+    ],
+    "health_goals_supported": [],
+    "notes": "A 2024 meta-analysis pools 22 RCTs with very high heterogeneity and leans on juice. A 2017 review of 8 RCTs says the evidence fails to convince. The extract trial's primary outcome is IL-6; its blood pressure result is secondary, so it can't carry a blood pressure credit. The stored note that the extract subgroup's diastolic result wasn't significant can't be verified from what's open.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults in trials of pomegranate juice or extract; see each context",
+      "supported_outcomes": [
+        "Blood pressure"
+      ],
+      "source_pmids": [
+        "38410857",
+        "29173650",
+        "40218993",
+        "25826143",
+        "34498307"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "A 2024 meta-analysis pools 22 RCTs with very high heterogeneity and leans on juice. A 2017 review of 8 RCTs says the evidence fails to convince. The extract trial's primary outcome is IL-6; its blood pressure result is secondary, so it can't carry a blood pressure credit. The stored note that the extract subgroup's diastolic result wasn't significant can't be verified from what's open. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "seed oil",
+        "flower",
+        "peel"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38410857",
+        "title": "The effects of pomegranate consumption on blood pressure in adults: A systematic review and meta-analysis.",
+        "citation": "Phytotherapy research : PTR (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38410857/",
+        "publication_types": [
+          "Systematic Review",
+          "Journal Article",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1002/ptr.8170"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29173650",
+        "title": "Evidence for the effectiveness of pomegranate supplementation for blood pressure management is weak: A systematic review of randomized clinical trials.",
+        "citation": "Nutrition research (New York, N.Y.) (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29173650/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.nutres.2017.07.007"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40218993",
+        "title": "Effects of Pomegranate Extract on Inflammatory Markers and Cardiometabolic Risk Factors in Adults Aged 55-70 Years: A Randomised Controlled Parallel Trial.",
+        "citation": "Nutrients (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40218993/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu17071235"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25826143",
+        "title": "Effects of Pomegranate Extract Supplementation on Cardiovascular Risk Factors and Physical Function in Hemodialysis Patients.",
+        "citation": "Journal of medicinal food (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25826143/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1089/jmf.2014.0103"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34498307",
+        "title": "The effect of pomegranate extract on anthropometric indices, serum lipids, glycemic indicators, and blood pressure in patients with nonalcoholic fatty liver disease: A randomized double-blind clinical trial.",
+        "citation": "Phytotherapy research : PTR (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34498307/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1002/ptr.7249"
+      }
+    ]
+  }
+}

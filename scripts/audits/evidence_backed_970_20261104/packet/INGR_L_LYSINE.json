@@ -1,0 +1,561 @@
+{
+  "record_id": "INGR_L_LYSINE",
+  "labels": 49,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "null at review level; older trials conflict",
+  "decision": "closed_no_credit",
+  "summary": "Herpes recurrence is the only purpose with direct trials. Two small older trials favor lysine, one does not, and the 2015 Cochrane review failed to find evidence of efficacy. The Ghana trial studied people at risk of lysine inadequacy.",
+  "question_for_clinician": "Should any herpes trial carry credit against the Cochrane finding? Agent recommendation: no.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_lysine_26252373",
+      "components": [
+        "INGR_L_LYSINE"
+      ],
+      "source_pmids": [
+        "26252373"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "recurrent_herpes_labialis",
+      "purpose": "prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_lysine_26252373",
+      "population": {
+        "age_group": "adult",
+        "description": "Immunocompetent people in 32 RCTs (2,640 participants) across 19 preventive treatments, lysine among them."
+      },
+      "study_design": "Cochrane systematic review of randomized trials",
+      "outcomes": [
+        {
+          "name": "Lysine: review failed to find any evidence of efficacy in preventing herpes labialis",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Lysine is one of 19 treatments; the lysine trials and doses were not extracted because the Cochrane full text would not load.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several lysine regimens; not extracted.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "26252373",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_lysine_3115841",
+      "components": [
+        "INGR_L_LYSINE"
+      ],
+      "source_pmids": [
+        "3115841"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "recurrent_herpes_simplex",
+      "purpose": "prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_lysine_3115841",
+      "population": {
+        "age_group": "adult",
+        "description": "52 completers with recurrent herpes simplex (27 lysine, 25 placebo; 12 men, 40 women)."
+      },
+      "study_design": "Double-blind placebo-controlled multicenter trial",
+      "outcomes": [
+        {
+          "name": "2.4 fewer infections on average, p<0.05",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Severity and healing time reduced, p<0.05",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Completers only; number randomized not in the abstract. Published 1987.",
+        "Abstract does not designate a primary outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          3000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 180,
+        "administration_frequency": "3 times a day",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1,000 mg L-lysine per dose, as monohydrochloride tablets, 3 times a day for 6 months",
+        "normalization": {
+          "basis": "Printed 1,000 mg L-lysine per dose times 3; 6 months counted as 180 days."
+        },
+        "source_provenance": {
+          "pmid": "3115841",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_lysine_6435961",
+      "components": [
+        "INGR_L_LYSINE"
+      ],
+      "source_pmids": [
+        "6435961"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "recurrent_herpes_simplex",
+      "purpose": "prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_lysine_6435961",
+      "population": {
+        "age_group": "adult",
+        "description": "41 nonimmunocompromised patients with recurrent herpes simplex."
+      },
+      "study_design": "Randomized double-blind placebo-controlled crossover trial",
+      "outcomes": [
+        {
+          "name": "1,248 mg/day: evidence of decreased recurrence rate",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "624 mg/day: not effective",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Neither dose shortened healing time",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Effect size not in the abstract. Published 1984.",
+        "Most labels here print 500 to 1,000 mg; dose fit is the Dose pillar's question.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1248,
+          624
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily; schedule not in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1,248 mg/day or 624 mg/day L-lysine monohydrochloride",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "6435961",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_lysine_6419679",
+      "components": [
+        "INGR_L_LYSINE"
+      ],
+      "source_pmids": [
+        "6419679"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "recurrent_herpes_simplex",
+      "purpose": "prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_lysine_6419679",
+      "population": {
+        "age_group": "adult",
+        "description": "21 patients in good general health with frequently recurring herpes simplex."
+      },
+      "study_design": "Double-blind placebo-controlled trial",
+      "outcomes": [
+        {
+          "name": "No substantial benefit on frequency, duration or severity",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Small trial. Published 1984.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "3 times a day",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "400 mg lysine hydrochloride three times a day",
+        "normalization": {
+          "basis": "Printed 400 mg as lysine hydrochloride times 3; not converted to free lysine."
+        },
+        "source_provenance": {
+          "pmid": "6419679",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_lysine_20720257",
+      "components": [
+        "INGR_L_LYSINE"
+      ],
+      "source_pmids": [
+        "20720257"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "morbidity_in_low_income_community",
+      "purpose": "prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_lysine_20720257",
+      "population": {
+        "age_group": "mixed",
+        "description": "271 men, women and children in poor peri-urban households in Accra; 30% of men, 50% of women and 15% of children at risk of lysine inadequacy."
+      },
+      "study_design": "Double-blind randomized placebo-controlled trial",
+      "outcomes": [
+        {
+          "name": "Children: fewer diarrheal episodes, OR 0.52, P=0.046",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Men: fewer coryza episodes, OR 0.60, P=0.05",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Population at risk of inadequacy does not represent ordinary supplement buyers.",
+        "Several primary outcomes across subgroups.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1 g lysine per day",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "20720257",
+          "location": "Abstract",
+          "source_url": "https://doi.org/10.3945/ajcn.2009.28834"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "15159538": "Wheat fortification in poor Syrian communities: food exposure, dose not in the abstract.",
+    "17510493": "Lysine with arginine, not lysine alone.",
+    "16117182": "Lysine with arginine, not lysine alone.",
+    "3919651": "Letter about the 1984 failure trial."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "26252373",
+      "title_fetched": "Interventions for prevention of herpes simplex labialis (cold sores on the lips).",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26252373/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "3115841",
+      "title_fetched": "Success of L-lysine therapy in frequently recurrent herpes simplex infection. Treatment and prophylaxis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3115841/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "6435961",
+      "title_fetched": "Treatment of recurrent herpes simplex infections with L-lysine monohydrochloride.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6435961/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "6419679",
+      "title_fetched": "Failure of lysine in frequently recurrent herpes simplex infection. Treatment and prophylaxis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6419679/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20720257",
+      "title_fetched": "Effect of lysine supplementation on health and morbidity in subjects belonging to poor peri-urban households in Accra, Ghana.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20720257/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15159538",
+      "title_fetched": "Lysine fortification reduces anxiety and lessens stress in family members in economically weak communities in Northwest Syria.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15159538/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17510493",
+      "title_fetched": "Oral treatment with L-lysine and L-arginine reduces anxiety and basal cortisol levels in healthy humans.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17510493/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16117182",
+      "title_fetched": "Subchronic treatment with amino acid mixture of L-lysine and L-arginine modifies neuroendocrine activation during psychosocial stress in subjects with high trait anxiety.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16117182/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "3919651",
+      "title_fetched": "Failure of lysine in frequently recurrent herpes simplex infection.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3919651/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_L_LYSINE",
+    "standard_name": "L-Lysine",
+    "aliases": [
+      "L-Lysine Hydrochloride"
+    ],
+    "category": "immune",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "26252373",
+      "3115841",
+      "6435961",
+      "6419679",
+      "20720257"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "null",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "null at review level; older trials conflict. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Herpes simplex recurrence"
+    ],
+    "health_goals_supported": [],
+    "notes": "Herpes recurrence is the only purpose with direct trials. Two small older trials favor lysine, one does not, and the 2015 Cochrane review failed to find evidence of efficacy. The Ghana trial studied people at risk of lysine inadequacy.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Recurrent herpes simplex and herpes labialis in immunocompetent adults",
+      "supported_outcomes": [
+        "Herpes simplex recurrence"
+      ],
+      "source_pmids": [
+        "26252373",
+        "3115841",
+        "6435961",
+        "6419679",
+        "20720257"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Herpes recurrence is the only purpose with direct trials. Two small older trials favor lysine, one does not, and the 2015 Cochrane review failed to find evidence of efficacy. The Ghana trial studied people at risk of lysine inadequacy. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "26252373",
+        "title": "Interventions for prevention of herpes simplex labialis (cold sores on the lips).",
+        "citation": "The Cochrane database of systematic reviews (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26252373/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD010095.pub2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "3115841",
+        "title": "Success of L-lysine therapy in frequently recurrent herpes simplex infection. Treatment and prophylaxis.",
+        "citation": "Dermatologica (1987)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/3115841/",
+        "publication_types": [
+          "Clinical Trial",
+          "Controlled Clinical Trial",
+          "Journal Article"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "6435961",
+        "title": "Treatment of recurrent herpes simplex infections with L-lysine monohydrochloride.",
+        "citation": "Cutis (1984)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/6435961/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "6419679",
+        "title": "Failure of lysine in frequently recurrent herpes simplex infection. Treatment and prophylaxis.",
+        "citation": "Archives of dermatology (1984)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/6419679/",
+        "publication_types": [
+          "Clinical Trial",
+          "Controlled Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20720257",
+        "title": "Effect of lysine supplementation on health and morbidity in subjects belonging to poor peri-urban households in Accra, Ghana.",
+        "citation": "The American journal of clinical nutrition (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20720257/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.3945/ajcn.2009.28834"
+      }
+    ]
+  }
+}
