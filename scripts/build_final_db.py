@@ -7056,10 +7056,14 @@ def _append_dose_only_rows(ingredients: List[Dict], analyzed_rows: Any) -> None:
 
     No upper limit keeps it out of analyzed_ingredients and a strict primary contract
     keeps it out of ingredients, so no dose reader sees it. Only the dose contract ships;
-    the label row stays in display_ingredients and scoring never reads this array. A row
-    with an exported parent or child is already represented there. A component stays out.
+    the label row stays in display_ingredients and scoring never reads this array. A total
+    with an exported child is already represented there. So is a child whose identity is
+    exported anywhere, but a parent of another identity does not carry it: Guarana's mass
+    is not the caffeine under it. A component stays out.
     """
-    exported = [safe_str(row.get("raw_source_path")) for row in ingredients]
+    exported = [
+        (safe_str(row.get("raw_source_path")), row.get("canonical_id")) for row in ingredients
+    ]
     for row in safe_list(analyzed_rows):
         if not isinstance(row, dict) or row.get("ul_gate_eligible") is True:
             continue
@@ -7070,12 +7074,14 @@ def _append_dose_only_rows(ingredients: List[Dict], analyzed_rows: Any) -> None:
             or not row.get("canonical_id")
             or row.get("dose_role") in {"form_component", "ul_scoped_component"}
             or not all(value is not None for value in daily)
-            or any(
-                other and (other == path or other.startswith(f"{path}.") or path.startswith(f"{other}."))
-                for other in exported
+            or any(other and (other == path or other.startswith(f"{path}.")) for other, _ in exported)
+            or (
+                any(other and path.startswith(f"{other}.") for other, _ in exported)
+                and row["canonical_id"] in {identity for _, identity in exported}
             )
         ):
             continue
+        exported.append((path, row["canonical_id"]))
         ingredients.append({
             "name": safe_str(row.get("ingredient")),
             "canonical_id": row["canonical_id"],
