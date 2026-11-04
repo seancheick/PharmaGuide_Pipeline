@@ -1,0 +1,12 @@
+{"canonical": "l_serine", "labels": 16, "stored": "positive_moderate",
+ "as_read": "Positive only in one 18-patient RCT in a rare genetic neuropathy at 400 mg/kg/day; no study meets rule 2 for plain L-serine at label amounts for a general purpose.",
+ "route": "packet_no_credit",
+ "positive_named": ["30626650", "25197619"],
+ "stop_list": ["Dose fields can't express 400 mg/kg/day (30626650); it stays in regimen text."],
+ "clinician_items": [
+  "28527102: phase I in 20 ALS patients, 0.5 to 15 g twice daily: two withdrew for gastrointestinal side effects; three deaths, which the authors call about the expected number.",
+  "34201370: healthy men, graded 3 to 12 g/day over 4-week periods: no treatment-related adverse events; authors set a NOAEL of 12 g/day.",
+  "30626650: no serious adverse effects related to L-serine at 400 mg/kg/day in HSAN1."],
+ "stored_rating_note": "positive_moderate overstates a single 18-patient rare-disease RCT at a weight-based dose; the stored applicability text already says it doesn't establish general benefit.",
+ "pmids_read": ["30626650","41265180","37242260","36028887","32520991","28527102","38380699","25197619","34201370","29070712"],
+ "unread_notes": "Abstracts only; pm.py cut 37242260, 36028887, 29070712 and a few others at the length requested and a re-read of the two ends hit HTTP 429, so their closing sentences are unread and nothing is asserted from them. Not opened: 36758276 (observational GRIN2B), 38144875 (protocol), 32773395 (systematic review of hereditary neuropathy therapies). D-serine papers are a different ingredient."}

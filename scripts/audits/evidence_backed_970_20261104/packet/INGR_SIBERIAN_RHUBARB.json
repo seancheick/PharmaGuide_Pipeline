@@ -1,0 +1,383 @@
+{
+  "record_id": "INGR_SIBERIAN_RHUBARB",
+  "labels": 1,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive on a named primary outcome in two trials of about 110 women each, of the same extract the label prints; the abstracts do not state funding or independent replication",
+  "decision": "closed_no_credit",
+  "summary": "One label (DSLD 232725, Menopause 731) prints ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract 4 mg as its only active. PMID 16894335 (109 women) and PMID 19161045 (112 women) each report a significant fall in Menopause Rating Scale total score against placebo at 12 weeks, on a named primary outcome. Neither abstract prints the tablet's mg amount; PMID 42416823 prints 4 mg daily for a 112-woman randomized phase. Agent review gives no credit in this work; the question stays open for a human ruling. Abstracts only.",
+  "question_for_clinician": "PMID 19161045 and PMID 16894335 test the label's exact extract on a named primary outcome in perimenopausal women. Do they justify credit to ERr 731 4 mg daily for menopausal symptoms, once the tablet's mg amount is confirmed from the full text, since the abstracts give it only as one tablet? Agent recommendation: this is a real candidate for your ruling, limited to ERr 731 and to perimenopausal symptoms; no credit is given by this review.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_rhubarb_16894335",
+      "components": [
+        "INGR_SIBERIAN_RHUBARB"
+      ],
+      "source_pmids": [
+        "16894335"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "ERr 731",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "perimenopausal_climacteric_complaints",
+      "purpose": "menopausal_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_rhubarb_16894335",
+      "population": {
+        "age_group": "adult",
+        "description": "109 perimenopausal women with climacteric complaints (ERr 731 n = 54, placebo n = 55)."
+      },
+      "study_design": "Multicenter, prospective, randomized, double-blind, placebo-controlled; 12 weeks",
+      "outcomes": [
+        {
+          "name": "Primary: change in Menopause Rating Scale II total score after 12 weeks, significantly lower with ERr 731 than placebo (P < 0.0001)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Number and severity of hot flushes from week 4 (P < 0.0001)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Menopause-specific quality of life at week 12 (P < 0.05)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract gives one enteric-coated tablet daily and no amount in mg; no dose invented here.",
+        "Funding is not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One enteric-coated tablet of ERr 731 or placebo daily for 12 weeks; amount not printed in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "16894335",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_rhubarb_19161045",
+      "components": [
+        "INGR_SIBERIAN_RHUBARB"
+      ],
+      "source_pmids": [
+        "19161045"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "ERr 731",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "perimenopausal_menopausal_symptoms",
+      "purpose": "menopausal_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_rhubarb_19161045",
+      "population": {
+        "age_group": "adult",
+        "description": "112 perimenopausal women with menopausal symptoms (ERr 731 n = 56, placebo n = 56)."
+      },
+      "study_design": "Multicenter, randomized, placebo-controlled; 12 weeks",
+      "outcomes": [
+        {
+          "name": "Primary: change in Menopause Rating Scale total score from day 0 to day 84, 27.0 to 12.4 with ERr 731 against 27.0 to 24.0 with placebo (P < .0001)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Hot flushes and hot flush weekly weighted score (P < .0001)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract gives one enteric-coated tablet daily and no amount in mg; no dose invented here.",
+        "PubMed tags this record Meta-Analysis as well as Randomized Controlled Trial; the abstract describes a single trial.",
+        "Funding is not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One enteric-coated tablet of ERr 731 or placebo daily for 12 weeks; amount not printed in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19161045",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_rhubarb_42416823",
+      "components": [
+        "INGR_SIBERIAN_RHUBARB"
+      ],
+      "source_pmids": [
+        "42416823"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "ERr 731",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "perimenopausal_climacteric_complaints",
+      "purpose": "menopausal_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_rhubarb_42416823",
+      "population": {
+        "age_group": "adult",
+        "description": "112 perimenopausal women aged 45-55 with Menopausal Rating Scale of at least 18; 89 continued into the open-label phase."
+      },
+      "study_design": "12-week randomized controlled phase followed by a 52-week open-label observational phase, with descriptive statistics and exploratory t-tests",
+      "outcomes": [
+        {
+          "name": "Climacteric complaints during the randomized phase, significantly reduced compared with placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Symptom severity across domains to week 52 in the open-label phase, where all participants received ERr 731",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "This abstract is the only source read that prints 4 mg daily. Its 112 women match the size of PMID 19161045, but it does not cite that trial, so reading them as the same trial is an inference.",
+        "The open-label phase has no control group.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          4
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "ERr 731 4 mg daily or placebo during the 12-week randomized phase; all participants received ERr 731 during the open-label phase.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42416823",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "17213754": "Stored trial. Same size and arms as PMID 16894335 (109 women, 54 and 55), reporting anxiety and well-being; the abstract names no primary outcome and prints one tablet, no mg. Positive for anxiety on the Hamilton scale.",
+    "18978638": "Open observational extension, 48 plus 48 weeks, of the 109-woman trial; no concurrent control, though PubMed tags it Randomized Controlled Trial.",
+    "42973544": "Narrative review; the abstract mentions rhapontic rhubarb among small randomized trials and gives no data for it."
+  },
+  "stop_or_hold": "The mg amount of the tablet in PMID 16894335 and PMID 19161045 is not in their abstracts, so their dose fields stay extraction_pending and 4 mg sits only on PMID 42416823.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "16894335",
+      "title_fetched": "Efficacy and safety of a special extract of Rheum rhaponticum (ERr 731) in perimenopausal women with climacteric complaints: a 12-week randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16894335/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19161045",
+      "title_fetched": "Confirmation of the efficacy of ERr 731 in perimenopausal women with menopausal symptoms.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19161045/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42416823",
+      "title_fetched": "The special extract ERr 731® from the root of rhapontic rhubarb (Rheum rhaponticum): efficacy in headache/migraine and further climacteric complaints in women in the perimenopause.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42416823/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17213754",
+      "title_fetched": "The special extract ERr 731 of the roots of Rheum rhaponticum decreases anxiety and improves health state and general well-being in perimenopausal women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17213754/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18978638",
+      "title_fetched": "Long-term efficacy and safety of the special extract ERr 731 of Rheum rhaponticum in perimenopausal women with menopausal symptoms.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18978638/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42973544",
+      "title_fetched": "Plant-derived nutrition and perimenopausal emotional health: current evidence and research priorities.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42973544/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_SIBERIAN_RHUBARB",
+    "standard_name": "Siberian Rhubarb (Rheum rhaponticum) ERr 731",
+    "aliases": [
+      "ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract"
+    ],
+    "category": "hormonal_endocrine",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "16894335",
+      "19161045",
+      "42416823"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive on a named primary outcome in two trials of about 110 women each, of the same extract the label prints; the abstracts do not state funding or independent replication. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Menopause Rating Scale total score",
+      "hot flushes",
+      "menopause-specific quality of life"
+    ],
+    "health_goals_supported": [],
+    "notes": "One label (DSLD 232725, Menopause 731) prints ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract 4 mg as its only active. PMID 16894335 (109 women) and PMID 19161045 (112 women) each report a significant fall in Menopause Rating Scale total score against placebo at 12 weeks, on a named primary outcome. Neither abstract prints the tablet's mg amount; PMID 42416823 prints 4 mg daily for a 112-woman randomized phase. Agent review gives no credit in this work; the question stays open for a human ruling. Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Perimenopausal women with climacteric complaints",
+      "supported_outcomes": [
+        "Menopause Rating Scale total score",
+        "hot flushes",
+        "menopause-specific quality of life"
+      ],
+      "source_pmids": [
+        "16894335",
+        "19161045",
+        "42416823"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "One label (DSLD 232725, Menopause 731) prints ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract 4 mg as its only active. PMID 16894335 (109 women) and PMID 19161045 (112 women) each report a significant fall in Menopause Rating Scale total score against placebo at 12 weeks, on a named primary outcome. Neither abstract prints the tablet's mg amount; PMID 42416823 prints 4 mg daily for a 112-woman randomized phase. Agent review gives no credit in this work; the question stays open for a human ruling. Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16894335",
+        "title": "Efficacy and safety of a special extract of Rheum rhaponticum (ERr 731) in perimenopausal women with climacteric complaints: a 12-week randomized, double-blind, placebo-controlled trial.",
+        "citation": "Menopause (New York, N.Y.) (2006)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16894335/",
+        "publication_types": [
+          "Clinical Trial, Phase III",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1097/01.gme.0000240632.08182.e4"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19161045",
+        "title": "Confirmation of the efficacy of ERr 731 in perimenopausal women with menopausal symptoms.",
+        "citation": "Alternative therapies in health and medicine (2009)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19161045/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Randomized Controlled Trial"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42416823",
+        "title": "The special extract ERr 731® from the root of rhapontic rhubarb (Rheum rhaponticum): efficacy in headache/migraine and further climacteric complaints in women in the perimenopause.",
+        "citation": "Frontiers in pharmacology (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42416823/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3389/fphar.2026.1831343"
+      }
+    ]
+  }
+}

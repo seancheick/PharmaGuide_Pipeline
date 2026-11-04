@@ -1,0 +1,765 @@
+{
+  "record_id": "INGR_WHITE_WILLOW_BARK",
+  "labels": 9,
+  "stored_direction": "positive_strong",
+  "direction_as_read": "mixed: positive primary outcome in low back pain with a clear salicin dose response (10936472), moderate quality per Cochrane (25536022); conflicting in osteoarthritis (11406860 positive, 15517622 null); null in an underpowered rheumatoid arthritis trial",
+  "decision": "closed_no_credit",
+  "summary": "Nine labels print willow or white willow bark extract at 400 to 1,600 mg, or willow or bark powder at 200 to 680 mg, and the rows show no salicin. One label carries a joint claim. Every placebo-controlled trial read states its dose as salicin (120 or 240 mg/day), so a label's extract mass can't be matched to a studied dose. For low back pain, 10936472 meets the reading bar on its primary outcome, and Cochrane rates the placebo comparison as moderate quality (25536022). For osteoarthritis the trials conflict (11406860 positive at 2 weeks, 15517622 null at 6 weeks; 19140170 calls this conflicting), and 37895439 pools arthritis trials while calling certainty inadequate. Rheumatoid arthritis was null in 26 patients. Abstracts only.",
+  "question_for_clinician": "Does the low back pain trial (10936472, 120 and 240 mg salicin/day) and the Cochrane rating (25536022) support credit for willow bark labels that print extract or powder mass with no salicin in the rows? Agent recommendation: no credit, because the studied exposure can't be matched to what these labels print.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_white_willow_bark_10936472",
+      "components": [
+        "INGR_WHITE_WILLOW_BARK"
+      ],
+      "source_pmids": [
+        "10936472"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bark"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "low_back_pain_exacerbation",
+      "purpose": "pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_white_willow_bark_10936472",
+      "population": {
+        "age_group": "adult",
+        "description": "210 patients with an exacerbation of chronic low back pain and current pain of at least 5 of 10; 191 completed."
+      },
+      "study_design": "Randomized double-blind placebo-controlled three-arm trial, 4 weeks, tramadol as sole rescue",
+      "outcomes": [
+        {
+          "name": "Pain-free without tramadol at least 5 days in the final week: 39% high dose, 21% low dose, 6% placebo (P <0.001)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Fewer patients needed tramadol than on placebo (P <0.001)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Dose stated as salicin only; labels print extract mass with no salicin in the rows.",
+        "Species not stated in the abstract.",
+        "One patient had a severe allergic reaction, perhaps to the extract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          120,
+          240
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral willow bark extract with 120 mg (low dose) or 240 mg (high dose) of salicin, for 4 weeks. This abstract does not say per day; 25536022 describes daily doses.",
+        "normalization": {
+          "basis": "Salicin amount as printed in the source; extract mass is not stated, so no extract mass is recorded."
+        },
+        "source_provenance": {
+          "pmid": "10936472",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_white_willow_bark_11406860",
+      "components": [
+        "INGR_WHITE_WILLOW_BARK"
+      ],
+      "source_pmids": [
+        "11406860"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bark"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "osteoarthritis",
+      "purpose": "pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_white_willow_bark_11406860",
+      "population": {
+        "age_group": "adult",
+        "description": "78 patients with osteoarthritis (39 per group)."
+      },
+      "study_design": "Double-blind randomized placebo-controlled trial, 2 weeks",
+      "outcomes": [
+        {
+          "name": "WOMAC pain favored extract (difference 6.5 mm, 95% CI 0.2 to 12.7, p = 0.047)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Two weeks only; lower CI bound near zero.",
+        "Dose stated as salicin only; labels print extract mass.",
+        "The extract is described as chemically standardized without species in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          240
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 14,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Willow bark extract in a dose corresponding to 240 mg salicin/day for 2 weeks.",
+        "normalization": {
+          "basis": "Salicin amount as printed in the source; extract mass is not stated, so no extract mass is recorded."
+        },
+        "source_provenance": {
+          "pmid": "11406860",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_white_willow_bark_15517622",
+      "components": [
+        "INGR_WHITE_WILLOW_BARK"
+      ],
+      "source_pmids": [
+        "15517622"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bark"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "osteoarthritis_and_rheumatoid_arthritis",
+      "purpose": "pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_white_willow_bark_15517622",
+      "population": {
+        "age_group": "adult",
+        "description": "127 outpatients with hip or knee osteoarthritis and 26 outpatients with active rheumatoid arthritis, in two trials."
+      },
+      "study_design": "Two randomized double-blind controlled trials, 6 weeks; the osteoarthritis trial had a diclofenac arm",
+      "outcomes": [
+        {
+          "name": "Osteoarthritis: WOMAC pain versus placebo not significant (p = 0.55)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Rheumatoid arthritis: pain on VAS versus placebo not significant (p = 0.93)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The rheumatoid arthritis trial had 13 patients per arm; 19140170 calls it grossly underpowered.",
+        "Dose stated as salicin only.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          240
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 42,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Willow bark extract corresponding to 240 mg of salicin/day for 6 weeks.",
+        "normalization": {
+          "basis": "Salicin amount as printed in the source; extract mass is not stated, so no extract mass is recorded."
+        },
+        "source_provenance": {
+          "pmid": "15517622",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_white_willow_bark_31126541",
+      "components": [
+        "INGR_WHITE_WILLOW_BARK"
+      ],
+      "source_pmids": [
+        "31126541"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bark"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "primary_dysmenorrhea",
+      "purpose": "pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_white_willow_bark_31126541",
+      "population": {
+        "age_group": "adult",
+        "description": "96 female students with level two or three primary dysmenorrhea."
+      },
+      "study_design": "Randomized crossover trial with mefenamic acid as active control; no placebo",
+      "outcomes": [
+        {
+          "name": "Pain on VAS lower with salix than mefenamic acid over time (P < 0.001)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Bleeding level: no significant difference (P = 0.31)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "No placebo arm.",
+        "The salicin content is not stated in the abstract.",
+        "A purpose the labels do not carry.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          400
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Salix capsule 400 mg daily.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31126541",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_white_willow_bark_25536022",
+      "components": [
+        "INGR_WHITE_WILLOW_BARK"
+      ],
+      "source_pmids": [
+        "25536022"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Salix alba",
+        "plant_part": "bark"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "nonspecific_low_back_pain",
+      "purpose": "pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_white_willow_bark_25536022",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with nonspecific low back pain; for Salix alba, two placebo-controlled trials with 261 participants."
+      },
+      "study_design": "Cochrane systematic review of randomized trials of herbal medicine",
+      "outcomes": [
+        {
+          "name": "Salix alba standardized to 120 mg or 240 mg salicin probably better than placebo for short-term pain and rescue medication, moderate quality evidence",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Short-term only.",
+        "Doses stated as salicin; labels print extract mass.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Daily doses of Salix alba standardized to 120 mg or 240 mg salicin.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "25536022",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_white_willow_bark_37895439",
+      "components": [
+        "INGR_WHITE_WILLOW_BARK"
+      ],
+      "source_pmids": [
+        "37895439"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bark"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "arthritis",
+      "purpose": "pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_white_willow_bark_37895439",
+      "population": {
+        "age_group": "adult",
+        "description": "329 patients with arthritis in six randomized trials reported in five studies."
+      },
+      "study_design": "Meta-analysis of randomized trials, fixed-effect model",
+      "outcomes": [
+        {
+          "name": "Pain relief and physical status differed significantly from placebo; effect sizes not in the abstract",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors say certainty and evidence are inadequate because of potential bias.",
+        "The abstract names no primary outcome and gives no doses or effect sizes.",
+        "The abstract does not list its trials.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Willow bark; doses are not stated in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "37895439",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_white_willow_bark_19140170",
+      "components": [
+        "INGR_WHITE_WILLOW_BARK"
+      ],
+      "source_pmids": [
+        "19140170"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "bark"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "musculoskeletal_pain",
+      "purpose": "pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_white_willow_bark_19140170",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with low back pain, osteoarthritis or rheumatoid arthritis across the included trials."
+      },
+      "study_design": "Systematic review of clinical trials, four confirmatory and four exploratory designs",
+      "outcomes": [
+        {
+          "name": "Moderate evidence of effectiveness for ethanolic extract in low back pain",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Osteoarthritis: conflicting results between one exploratory and one confirmatory study",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Rheumatoid arthritis: no significant effect in one underpowered study",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "All studies used ethanolic extracts up to 240 mg salicin/day for up to six weeks; the labels do not print the solvent or salicin.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Ethanolic extracts with daily doses up to 240 mg salicin over periods of up to six weeks.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "19140170",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "11752510": "Open randomized post-marketing comparison with rofecoxib, no placebo, no named primary outcome.",
+    "11345689": "Platelet aggregation substudy in 51 patients; a safety finding, listed for the clinician."
+  },
+  "stop_or_hold": "Fields can't express a salicin-equivalent dose against a label that prints only extract mass.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "10936472",
+      "title_fetched": "Treatment of low back pain exacerbations with willow bark extract: a randomized double-blind study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10936472/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11406860",
+      "title_fetched": "Efficacy and tolerability of a standardized willow bark extract in patients with osteoarthritis: randomized placebo-controlled, double blind clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11406860/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15517622",
+      "title_fetched": "Efficacy and safety of willow bark extract in the treatment of osteoarthritis and rheumatoid arthritis: results of 2 randomized double-blind controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15517622/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31126541",
+      "title_fetched": "A double-blind controlled crossover study to investigate the efficacy of salix extract on primary dysmenorrhea.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31126541/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25536022",
+      "title_fetched": "Herbal medicine for low-back pain.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25536022/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37895439",
+      "title_fetched": "Willow Bark (Salix spp.) Used for Pain Relief in Arthritis: A Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37895439/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19140170",
+      "title_fetched": "A systematic review on the effectiveness of willow bark for musculoskeletal pain.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19140170/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11752510",
+      "title_fetched": "Treatment of low back pain with a herbal or synthetic anti-rheumatic: a randomized controlled study. Willow bark extract for low back pain.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11752510/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11345689",
+      "title_fetched": "Effect of salicis cortex extract on human platelet aggregation.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_WHITE_WILLOW_BARK",
+    "standard_name": "White Willow Bark",
+    "aliases": [
+      "White Willow Bark Extract",
+      "White Willow bark extract",
+      "White Willow Bark Powder",
+      "Willow",
+      "Willow bark extract"
+    ],
+    "category": "anti_inflammatory",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "10936472",
+      "11406860",
+      "15517622",
+      "31126541",
+      "25536022",
+      "37895439",
+      "19140170"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: positive primary outcome in low back pain with a clear salicin dose response (10936472), moderate quality per Cochrane (25536022); conflicting in osteoarthritis (11406860 positive, 15517622 null); null in an underpowered rheumatoid arthritis trial. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Low back pain",
+      "Osteoarthritis pain"
+    ],
+    "health_goals_supported": [],
+    "notes": "Nine labels print willow or white willow bark extract at 400 to 1,600 mg, or willow or bark powder at 200 to 680 mg, and the rows show no salicin. One label carries a joint claim. Every placebo-controlled trial read states its dose as salicin (120 or 240 mg/day), so a label's extract mass can't be matched to a studied dose. For low back pain, 10936472 meets the reading bar on its primary outcome, and Cochrane rates the placebo comparison as moderate quality (25536022). For osteoarthritis the trials conflict (11406860 positive at 2 weeks, 15517622 null at 6 weeks; 19140170 calls this conflicting), and 37895439 pools arthritis trials while calling certainty inadequate. Rheumatoid arthritis was null in 26 patients. Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with low back pain or osteoarthritis",
+      "supported_outcomes": [
+        "Low back pain",
+        "Osteoarthritis pain"
+      ],
+      "source_pmids": [
+        "10936472",
+        "11406860",
+        "15517622",
+        "31126541",
+        "25536022",
+        "37895439",
+        "19140170"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Nine labels print willow or white willow bark extract at 400 to 1,600 mg, or willow or bark powder at 200 to 680 mg, and the rows show no salicin. One label carries a joint claim. Every placebo-controlled trial read states its dose as salicin (120 or 240 mg/day), so a label's extract mass can't be matched to a studied dose. For low back pain, 10936472 meets the reading bar on its primary outcome, and Cochrane rates the placebo comparison as moderate quality (25536022). For osteoarthritis the trials conflict (11406860 positive at 2 weeks, 15517622 null at 6 weeks; 19140170 calls this conflicting), and 37895439 pools arthritis trials while calling certainty inadequate. Rheumatoid arthritis was null in 26 patients. Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "10936472",
+        "title": "Treatment of low back pain exacerbations with willow bark extract: a randomized double-blind study.",
+        "citation": "The American journal of medicine (2000)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/10936472/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/s0002-9343(00)00442-3"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11406860",
+        "title": "Efficacy and tolerability of a standardized willow bark extract in patients with osteoarthritis: randomized placebo-controlled, double blind clinical trial.",
+        "citation": "Phytotherapy research : PTR (2001)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11406860/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1002/ptr.981"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "15517622",
+        "title": "Efficacy and safety of willow bark extract in the treatment of osteoarthritis and rheumatoid arthritis: results of 2 randomized double-blind controlled trials.",
+        "citation": "The Journal of rheumatology (2004)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15517622/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31126541",
+        "title": "A double-blind controlled crossover study to investigate the efficacy of salix extract on primary dysmenorrhea.",
+        "citation": "Complementary therapies in medicine (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31126541/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.ctim.2019.04.002"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25536022",
+        "title": "Herbal medicine for low-back pain.",
+        "citation": "The Cochrane database of systematic reviews (2014)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25536022/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, N.I.H., Extramural",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD004504.pub4"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37895439",
+        "title": "Willow Bark (Salix spp.) Used for Pain Relief in Arthritis: A Meta-Analysis of Randomized Controlled Trials.",
+        "citation": "Life (Basel, Switzerland) (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37895439/",
+        "publication_types": [
+          "Journal Article",
+          "Review"
+        ],
+        "doi": "10.3390/life13102058"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19140170",
+        "title": "A systematic review on the effectiveness of willow bark for musculoskeletal pain.",
+        "citation": "Phytotherapy research : PTR (2009)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19140170/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/ptr.2747"
+      }
+    ]
+  }
+}

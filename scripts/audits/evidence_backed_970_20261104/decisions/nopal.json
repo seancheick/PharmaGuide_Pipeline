@@ -1,0 +1,35 @@
+{
+"canonical": "nopal",
+"labels": 1,
+"stored": "positive_weak",
+"as_read": "The label prints 700 mg of nopal stem powder and its label text states no purpose; trials read tested other extracts or fiber at gram amounts, and the one nopal powder study found no change.",
+"route": "no_qualifying",
+"quote": {
+"pmid": "32160071",
+"text": "These results indicate that advanced maturation NP does not have influence in bone health, BMI, and body composition in adult women."
+},
+"positive_named": [
+"22805855",
+"32935904",
+"38474715",
+"33006504"
+],
+"proposed_decision_text": "The one label (Nopal, Dr Juan Santo Remedio, id PG_SUB_4D246163F6CD468CA82B5E023468B9C1) prints Nopal Cactus Stem Powder (Opuntia ficus-indica) 700 mg, two capsules daily, with no purpose in its label text. Abstracts only. PMID 22805855 tested a cladode and fruit-skin extract, 1,000 mg twice around a glucose load, in six healthy men in a crossover, with lower glucose area under the curve; it is an extract, an acute test and names no primary outcome. PMID 32935904 tested extracted nopal fiber at 10 to 30 g per day for one week in IBS, positive at 20 and 30 g, a gram amount far from this label, with no primary outcome named. PMID 32160071 gave 5 g of nopal powder daily for 24 weeks to women aged 40 to 60, with no significant change in bone density, BMI, body fat or serum calcium; the abstract does not report randomization. PMID 38474715 tested Odilia, 300 mg of an extract, in gut dysbiosis, positive, with no primary outcome named. PMID 33006504 tested an ethanolic stem extract for cognition; overall it did not differ from placebo, with a positive subgroup aged 70 or younger. No study meets the rule for this label, so no credit is proposed.",
+"stop_list": [
+"Label text states no purpose, so no trial's purpose can be matched to it"
+],
+"clinician_items": [
+"32935904: nopal fiber at 30 g per day induced more loose stools.",
+"Label itself, not a study: the label prints a California Proposition 65 warning for chemicals including lead."
+],
+"stored_rating_note": "positive_weak rests on six men in an acute crossover of an extract (PMID 22805855), not stem powder.",
+"pmids_read": [
+"22805855",
+"32935904",
+"32160071",
+"38474715",
+"33006504",
+"32619212"
+],
+"unread_notes": "Abstracts only; 32619212 is a 14-person crossover of 7.5 g fiber doses on MRI measures and is not relied on. One search, count 50, first 25 listed: (nopal OR \"Opuntia\" OR \"prickly pear\" OR NeOpuntia OR Litramine) (randomized OR placebo OR meta-analysis OR clinical trial) AND humans[mh]. Juice and fruit studies, combinations such as 33724592, and reviews such as 31604414 were not opened, and no statement about them is made. Later hits in the 50 were not listed."
+}

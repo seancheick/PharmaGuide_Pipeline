@@ -1,0 +1,315 @@
+{
+  "record_id": "INGR_L_SERINE",
+  "labels": 16,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive_weak: one small RCT in a rare genetic neuropathy at 400 mg/kg/day, plus small sleep and circadian studies with no named primary outcome; nothing tests plain L-serine at 500 to 2000 mg for a general purpose",
+  "decision": "closed_no_credit",
+  "summary": "The only study meeting the rule is an 18-patient RCT in hereditary sensory and autonomic neuropathy type 1 at 400 mg/kg/day, positive on its primary outcome (30626650). These labels print 500 to 2000 mg per serving of plain L-serine; one carries cognitive and sleep purposes. Sleep crossovers report subjective improvement, but the abstract gives no dose, no sample size and no primary outcome (25197619). Other human work is a combination with EPA (32520991), a phase I study with historical controls (28527102), children with GRIN variants (41265180, 38380699), or circadian timing measures (36028887, 29070712).",
+  "question_for_clinician": "25197619 reports better subjective sleep quality on waking after L-serine, and one label carries a sleep purpose; the abstract gives no dose, sample size or primary outcome. 30626650 is positive on its primary in a rare neuropathy, a purpose no label prints. An abstract's silence is a limit of the read, not a finding. Does 25197619 support credit for the sleep label? Its full text settles dose, sample size and primary outcome.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_serine_30626650",
+      "components": [
+        "INGR_L_SERINE"
+      ],
+      "source_pmids": [
+        "30626650"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hereditary_sensory_autonomic_neuropathy_type_1",
+      "purpose": "slow_neuropathy_progression",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_serine_30626650",
+      "population": {
+        "age_group": "adult",
+        "description": "18 patients aged 18-70 with symptomatic HSAN1; 16 completed."
+      },
+      "study_design": "Randomized, placebo-controlled, parallel-group trial with open-label extension; 1 year controlled",
+      "outcomes": [
+        {
+          "name": "CMTNS at 1 year: -1.5 units relative to placebo, 95% CI -2.8 to -0.1, p = 0.03",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Deoxysphinganine: 59% decrease versus 11% increase, p < 0.001",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Rare genetic disease, not a general neurological population.",
+        "Dose is by body weight and far above label amounts in most adults; no conversion made.",
+        "Small trial. Funding isn't stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "L-serine 400 mg/kg/day or placebo for 1 year; all participants on L-serine in the second year.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "30626650",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_serine_25197619",
+      "components": [
+        "INGR_L_SERINE"
+      ],
+      "source_pmids": [
+        "25197619"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "dissatisfaction_with_sleep",
+      "purpose": "sleep_quality",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_serine_25197619",
+      "population": {
+        "age_group": "adult",
+        "description": "Healthy subjects dissatisfied with their sleep; numbers not in the abstract."
+      },
+      "study_design": "Two randomized double-blinded crossover studies",
+      "outcomes": [
+        {
+          "name": "Study 1 sleep initiation and maintenance factors improved versus placebo (p = 0.02 and p = 0.008)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Study 2 two subjective sleep items better versus placebo (p = 0.04 and p = 0.03)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Nighttime awakenings by actigraphy: trend only, p = 0.08",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and gives neither the dose nor the sample size.",
+        "Authors conclude only that intake may improve human sleep.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "L-serine or placebo 30 min before going to bed; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "25197619",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "36028887": "33 students, 3.0 g before bed for 2 weeks, double-blind but the abstract doesn't state randomization. DLMO change differed (p = 0.04); no significant change in sleeping habits; no primary outcome named.",
+    "29070712": "Mainly a mouse study; the human part reports DLMO phase advance after bright light. Dose and sample not in the abstract as read.",
+    "37242260": "Open crossover with no placebo arm, 160 subjects across four supplements, L-serine 300 mg/day; abstract cut at the length read.",
+    "32520991": "Combination of 594 mg L-serine and 149 mg EPA, so not the ingredient alone.",
+    "28527102": "Phase I in 20 ALS patients at 0.5 to 15 g twice daily, compared with matched historical placebo controls; on clinician_items.",
+    "41265180": "Double-blind n-of-1 trials in 4 children with GRIN2B variants; dose not in the abstract.",
+    "38380699": "Non-randomized open-label single-arm trial in children with GRIN variants.",
+    "34201370": "Tolerance study of graded doses in healthy men, not efficacy; on clinician_items."
+  },
+  "stop_or_hold": "Dose values can't express 400 mg/kg/day (30626650); it stays in regimen text. This blocks eligibility for that study as drafted unless a clinician rules on the weight-based dose.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "30626650",
+      "title_fetched": "Randomized trial of l-serine in patients with hereditary sensory and autonomic neuropathy type 1.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30626650/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25197619",
+      "title_fetched": "Effects of L-serine ingestion on human sleep.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25197619/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36028887",
+      "title_fetched": "Intake of L-serine before bedtime prevents the delay of the circadian phase in real life.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36028887/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29070712",
+      "title_fetched": "l-Serine Enhances Light-Induced Circadian Phase Resetting in Mice and Humans.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29070712/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37242260",
+      "title_fetched": "Analysis of the Effects of Known Sleep-Support Supplements in Relation to Life Habits, Sleep Conditions, and Sleep Problems.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37242260/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32520991",
+      "title_fetched": "l-Serine and EPA Relieve Chronic Low-Back and Knee Pain in Adults: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32520991/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28527102",
+      "title_fetched": "Studies of Environmental Risk Factors in Amyotrophic Lateral Sclerosis (ALS) and a Phase I Clinical Trial of L-Serine.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28527102/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41265180",
+      "title_fetched": "Potential benefits of l-serine in children with GRIN2B loss-of-function variants: Randomized n-of-1 trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41265180/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38380699",
+      "title_fetched": "L-serine treatment in patients with GRIN-related encephalopathy: a phase 2A, non-randomized study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38380699/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34201370",
+      "title_fetched": "Subchronic Tolerance Trials of Graded Oral Supplementation with Phenylalanine or Serine in Healthy Adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34201370/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_L_SERINE",
+    "standard_name": "L-Serine",
+    "aliases": [
+      "L-Serine"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "30626650",
+      "25197619"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive_weak: one small RCT in a rare genetic neuropathy at 400 mg/kg/day, plus small sleep and circadian studies with no named primary outcome; nothing tests plain L-serine at 500 to 2000 mg for a general purpose. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Charcot-Marie-Tooth Neuropathy Score",
+      "plasma deoxysphinganine",
+      "subjective sleep quality"
+    ],
+    "health_goals_supported": [],
+    "notes": "The only study meeting the rule is an 18-patient RCT in hereditary sensory and autonomic neuropathy type 1 at 400 mg/kg/day, positive on its primary outcome (30626650). These labels print 500 to 2000 mg per serving of plain L-serine; one carries cognitive and sleep purposes. Sleep crossovers report subjective improvement, but the abstract gives no dose, no sample size and no primary outcome (25197619). Other human work is a combination with EPA (32520991), a phase I study with historical controls (28527102), children with GRIN variants (41265180, 38380699), or circadian timing measures (36028887, 29070712).",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults aged 18 to 70 with symptomatic hereditary sensory and autonomic neuropathy type 1",
+      "supported_outcomes": [
+        "Charcot-Marie-Tooth Neuropathy Score",
+        "plasma deoxysphinganine",
+        "subjective sleep quality"
+      ],
+      "source_pmids": [
+        "30626650",
+        "25197619"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The only study meeting the rule is an 18-patient RCT in hereditary sensory and autonomic neuropathy type 1 at 400 mg/kg/day, positive on its primary outcome (30626650). These labels print 500 to 2000 mg per serving of plain L-serine; one carries cognitive and sleep purposes. Sleep crossovers report subjective improvement, but the abstract gives no dose, no sample size and no primary outcome (25197619). Other human work is a combination with EPA (32520991), a phase I study with historical controls (28527102), children with GRIN variants (41265180, 38380699), or circadian timing measures (36028887, 29070712). Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "30626650",
+        "title": "Randomized trial of l-serine in patients with hereditary sensory and autonomic neuropathy type 1.",
+        "citation": "Neurology (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30626650/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1212/WNL.0000000000006811"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25197619",
+        "title": "Effects of L-serine ingestion on human sleep.",
+        "citation": "SpringerPlus (2014)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25197619/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1186/2193-1801-3-456"
+      }
+    ]
+  }
+}

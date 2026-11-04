@@ -144,11 +144,11 @@ def test_resolver_uses_shared_clinical_preparation_scope_without_amount_gate(mon
     assert supported.points_eligible is True  # one mg must not become an Evidence amount gate
 
 
-def test_ala_has_verified_mixed_determination_without_marine_credit():
+def test_ala_has_verified_conflicting_determination_without_marine_credit():
     result = er.resolve_evidence_for_canonical("alpha_linolenic_acid", name="Alpha-Linolenic Acid")
-    assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert result.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert result.points_eligible is False
-    assert result.owner_facts["literature_evidence"]["effect_direction"] == "mixed"
+    assert result.owner_facts["literature_evidence"]["effect_direction"] == "null"
     assert "32114706" in result.owner_facts["literature_evidence"]["pmids"]
 
 
@@ -441,48 +441,50 @@ def test_product_evidence_composition():
     assert prod_res.owner_contributions.get("nutrition_authority") == 2
 
 
-# ============================================================================
+# =====================================================================
+
 # Phase 4 Literature Resolution & False-Transfer Canaries
-# ============================================================================
+# =====================================================================
+
 
 def test_carotenoid_policy_zeaxanthin_areds2():
     """Zeaxanthin requires indication-specific clinical evidence (AREDS2), not generic antioxidant credit."""
-    # Zeaxanthin at 2 mg (studied AREDS2 dose) resolves to reviewed clinical evidence
+    # AREDS2 was null on its primary and zeaxanthin alone found no visual benefit: conflicting review, 2026-11-04
     res = er.resolve_evidence_for_canonical("zeaxanthin", dose_value=2.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert "backed_clinical_studies" in res.matched_owners
     assert res.points_eligible is False  # Shadow mode: resolver does not award points directly
 
     # Amount does not change Evidence applicability; Dose owns the 2 mg comparison.
     res_sub = er.resolve_evidence_for_canonical("zeaxanthin", dose_value=0.5, dose_unit="mg")
-    assert res_sub.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_sub.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert "dose_below_clinical_trial_minimum" not in res_sub.blocking_reasons
 
 
 def test_carotenoid_policy_lycopene():
     """Lycopene requires indication-specific human evidence (CVD/prostate), not generic antioxidant authority."""
-    # Lycopene at >= 10 mg matches studied clinical range
+    # Cardiovascular and PSA syntheses are null against older positive pooling: conflicting review, 2026-11-04
     res = er.resolve_evidence_for_canonical("lycopene", dose_value=15.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert "backed_clinical_studies" in res.matched_owners
     assert res.points_eligible is False
 
     # Lycopene at 1 mg keeps the same Evidence disposition.
     res_sub = er.resolve_evidence_for_canonical("lycopene", dose_value=1.0, dose_unit="mg")
-    assert res_sub.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_sub.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
 
 
 def test_bcaa_sports_amino_dose_applicability_not_points():
     """BCAAs/sports amino acids: threshold is applicability fact, NOT points creation."""
-    # L-Leucine at 3000 mg (>= 2500 mg MPS threshold) matches clinical dose applicability
+    # L-Leucine's review closed as conflicting evidence with no clear benefit (2026-11-04).
+    # A dose above or below 2500 mg changes neither that result nor points.
     res_high = er.resolve_evidence_for_canonical("l_leucine", dose_value=3000.0, dose_unit="mg")
-    assert res_high.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_high.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert res_high.points_eligible is False  # Does NOT award points; existing scorer decides
 
-    # L-Leucine below 2500 mg keeps Evidence; sports Dose owns adequacy.
     res_low = er.resolve_evidence_for_canonical("l_leucine", dose_value=500.0, dose_unit="mg")
-    assert res_low.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-    assert res_low.applicability_status == "applicable_reviewed_trials"
+    assert res_low.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+    assert res_low.applicability_status == "reviewed_null_evidence"
 
 
 def test_silica_provenance_context_handling():
@@ -886,10 +888,11 @@ def test_phase4_batch5_standardized_clinical_botanicals():
     # black_garlic (aged garlic extract), olive_fruit_extract (leaf extract) and fucoxanthin
     # (combination) were studied as a different preparation.
     botanicals = [
-        "citrus_bergamot", "coleus_forskohlii_root", "african_mango",
-        "eps_7630", "english_ivy", "turkey_tail", "diosmin",
-        "puerarin", "ashwagandha_root", "green_tea_leaf", "arjuna",
-        "dgl_deglycyrrhizinated_licorice", "mastic_gum", "cocoa",
+        # coleus_forskohlii_root, african_mango, turkey_tail, puerarin, arjuna and cocoa closed
+        # at no credit in the 970-label review (test_evidence_backed_970_20261104.py).
+        "citrus_bergamot", "eps_7630", "english_ivy", "diosmin",
+        "ashwagandha_root", "green_tea_leaf",
+        "dgl_deglycyrrhizinated_licorice", "mastic_gum",
     ]
     for cid in botanicals:
         res = er.resolve_evidence_for_canonical(cid)
@@ -1002,8 +1005,9 @@ def test_phase4_final_sweep_culinary_food_matrices():
 def test_phase4_final_sweep_standardized_clinical_botanicals():
     """Final sweep standardized clinical bioactives with live NCBI-verified studies."""
     clinical_cids = [
+        # fucoidan and diamine_oxidase closed at no credit in the 970-label review.
         "siberian_rhubarb", "african_geranium", "lumbrokinase",
-        "fucoidan", "maqui_berry", "diamine_oxidase", "capsaicin"
+        "maqui_berry", "capsaicin"
     ]
     for cid in clinical_cids:
         res = er.resolve_evidence_for_canonical(cid)
@@ -1134,7 +1138,7 @@ def test_subject_census_uses_named_undosed_subjects_and_keeps_identity_debt(monk
     result = census.census_product({'id':123,'name':'Blend'})
     assert result['subject_count'] == 2
     assert result['subjects'][0]['source_row_ref'] == 'ingredientRows[0].children[0]'
-    assert result['subjects'][0]['disposition'] == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert result['subjects'][0]['disposition'] == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert result['is_assessment_complete'] is False
     summary = census.summarize([result])
     assert summary['partial_products'] == 1
@@ -1695,3 +1699,14 @@ def test_primary_protein_projection_is_not_completed_by_a_carrier_review():
     assert resolution.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert resolution.points_eligible is False
     assert resolution.blocking_reasons
+
+
+@pytest.mark.parametrize("canonical", ["l_glutamine", "glutathione", "green_coffee_bean"])
+def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
+    from assessment_readiness import EVIDENCE_NOT_YET_EVALUATED, _resolved_evidence_assessment
+
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert result.owner_facts["literature_evidence"]["applicability_status"] == "applicability_unestablished"
+    assert result.reason_code == "literature_applicability_unestablished"
+    assert not result.points_eligible
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED

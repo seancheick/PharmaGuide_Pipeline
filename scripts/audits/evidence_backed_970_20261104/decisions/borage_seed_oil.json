@@ -1,0 +1,8 @@
+{"canonical":"borage_seed_oil","labels":16,"stored":"positive_moderate","as_read":"Mixed: null for eczema in a primary-endpoint trial and Cochrane, some benefit in rheumatoid arthritis at high GLA doses pooled across oils, and single trials on blood pressure and weight.",
+"route":"packet_no_credit",
+"positive_named":["8214997","21328257","33534427","17513402"],
+"stop_list":["Labels print oil mass and trials mostly print GLA, so doses can't be compared without a conversion the sources don't give","Several labels are omega blends","Fields can't hold null for skin alongside weak positive for joint"],
+"clinician_items":["23633319: oral borage and evening primrose oil have mild, transient, mainly gastrointestinal adverse effects, and long-term use is not examined. The cited thrombosis and warfarin-bleeding reports concern evening primrose oil, not borage oil."],
+"stored_rating_note":"positive_moderate rests on one 37-patient RA trial at 1.4 g/d GLA whose authors say usual intake is far lower; the record does not reflect the null eczema trial or Cochrane, though labels carry a skin purpose.",
+"pmids_read":["8214997","23633319","14670885","21328257","21652584","34606560","33534427","18761778","15214949","17513402","12663296","20579590"],
+"unread_notes":"Abstracts only. Search returned 55, 40 listed; I read those on oral borage oil alone and left unread the listed combinations and formula-feeding trials (including 24553997 omega-3 plus GLA, 28528342 and 18318715 multi-ingredient products, 25485197 and 19811112 seed oil combinations). 20579590 read to 1500 characters, not to its conclusion."}

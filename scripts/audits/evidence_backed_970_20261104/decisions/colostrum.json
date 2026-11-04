@@ -1,0 +1,10 @@
+{"canonical": "colostrum", "labels": 8, "stored": "positive_weak",
+ "as_read": "Small positive trials at label-range amounts on self-reported respiratory symptoms, a positive adult meta-analysis at 10 g to 20 g daily, and mixed laboratory immune markers at high doses.",
+ "route": "packet_no_credit",
+ "positive_named": ["37630816", "37111143", "27462401", "21148400", "32987647"],
+ "studies_to_add": [
+  {"pmid": "37630816", "study_type": "rct", "sample_size": 57, "primary_endpoint": "frequency of days with any URTI symptoms; average gravity score of URTI symptoms (named primary in open full text)", "effect_direction": "positive_weak", "quote": "Colostrum supplementation in pre-school children is well tolerated, safe and provides protection from frequency of URTIs and their gravity."},
+  {"pmid": "27462401", "study_type": "systematic_review_meta", "sample_size": 152, "primary_endpoint": "rate ratio of URS days (named primary in open full text)", "effect_direction": "positive_weak", "quote": "Five trials (152 participants) met the inclusion criteria, all of which involved individuals involved in regular exercise training."}],
+ "stored_rating_note": "positive_weak stands, but the stored record rests on 21148400 alone, a 12 person surrogate study with no dose in its abstract; the rule 2 trial 37630816 and meta-analysis 27462401 are not stored.",
+ "pmids_read": ["21148400","37630816","37111143","27462401","29274034","42249952","39497827","38004173","33396972","32987647","42626164","35745242","25727914","28290057","30551120","33077128"],
+ "unread_notes": "Full text opened (design, dose, primary outcome, funding passages only) for 37630816, 37111143 and 27462401. Others abstracts only. No named primary outcome in 37111143's full text by keyword search. 42799681 (blend) and 42409313 (zinc-fortified) are combinations, not opened. 42197039 (body fat and lipids, a purpose the labels do not print) not opened."}

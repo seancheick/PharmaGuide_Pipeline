@@ -1,0 +1,683 @@
+{
+  "record_id": "INGR_GLUTATHIONE",
+  "labels": 35,
+  "stored_direction": "mixed",
+  "direction_as_read": "mixed: oral glutathione raises body stores and changed skin melanin measures in small trials; clinical outcomes are unresolved or null",
+  "decision": "closed_no_credit",
+  "summary": "Most labels print reduced or L-glutathione at 50 to 500 mg a serving. Three are liposomal (294002, 184557, 315656), two are S-acetyl-L-glutathione at 100 mg (241943, 323065), one prints Setria (227921), and one is named Glutathione-SR (284225). One RCT meets the reading bar for reduced glutathione: 250 or 1,000 mg/day for 6 months raised body stores in healthy adults (24791752), a biomarker result. Insulin sensitivity rose in 20 obese men on 1000 mg/day (33740389). A 500 mg acne trial was not significant on markers (41014073), and a trial in children with cystic fibrosis was null on its primary (32960827). Reviews of skin outcomes are split (39444151, 30895708). Abstracts only.",
+  "question_for_clinician": "Does one 6-month RCT showing raised glutathione stores at 250 and 1000 mg/day (24791752), with no clinical outcome, support any credit for reduced glutathione labels at 50 to 500 mg a serving? Agent recommendation: no credit. Liposomal, S-acetyl and Setria labels are outside this question.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_glutathione_24791752",
+      "components": [
+        "INGR_GLUTATHIONE"
+      ],
+      "source_pmids": [
+        "24791752"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "reduced glutathione, oral"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_adults",
+      "purpose": "body_glutathione_stores",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_glutathione_24791752",
+      "population": {
+        "age_group": "adult",
+        "description": "54 non-smoking healthy adults."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 6 months, two dose arms",
+      "outcomes": [
+        {
+          "name": "Glutathione in blood, erythrocytes, plasma and lymphocytes raised; high-dose erythrocyte, plasma and lymphocyte levels up 30-35% at 6 months",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Natural killer cytotoxicity more than doubled against placebo at 3 months, high dose, in a subset",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Tissue glutathione is a biomarker, not a clinical benefit; levels returned to baseline after a 1-month washout.",
+        "The abstract calls the immune markers secondary but doesn't use the word primary for glutathione stores.",
+        "The abstract doesn't name a branded material.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          250,
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 182,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral glutathione 250 or 1,000 mg/day for 6 months.",
+        "normalization": {
+          "basis": "6 months as printed; days are approximate."
+        },
+        "source_provenance": {
+          "pmid": "24791752",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_glutathione_33740389",
+      "components": [
+        "INGR_GLUTATHIONE"
+      ],
+      "source_pmids": [
+        "33740389"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "reduced glutathione, oral"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "obesity_with_or_without_t2dm",
+      "purpose": "insulin_sensitivity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_glutathione_33740389",
+      "population": {
+        "age_group": "adult",
+        "description": "20 obese males: 10 with type 2 diabetes and 10 without."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 3 weeks",
+      "outcomes": [
+        {
+          "name": "Whole body insulin sensitivity by clamp increased in the glutathione group",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Markers of oxidative stress did not change",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract; 20 participants; 3 weeks.",
+        "Results are stated by group without a between-group estimate in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 21,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1000 mg glutathione per day or placebo for 3 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33740389",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_glutathione_41014073",
+      "components": [
+        "INGR_GLUTATHIONE"
+      ],
+      "source_pmids": [
+        "41014073"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "glutathione, oral"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "acne_vulgaris",
+      "purpose": "acne_improvement",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_glutathione_41014073",
+      "population": {
+        "age_group": "adult",
+        "description": "40 subjects with mild to moderate acne vulgaris."
+      },
+      "study_design": "Randomized placebo-controlled trial, 4 weeks",
+      "outcomes": [
+        {
+          "name": "Serum nitric oxide and IL-1 alpha reductions did not reach significance",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract.",
+        "The abstract gives 31.8% clinical improvement in the glutathione group and no placebo comparison.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "500 mg oral glutathione once daily for 4 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41014073",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_glutathione_35624890",
+      "components": [
+        "INGR_GLUTATHIONE"
+      ],
+      "source_pmids": [
+        "35624890"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "glutathione, oral"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "type_2_diabetes",
+      "purpose": "glycemic_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_glutathione_35624890",
+      "population": {
+        "age_group": "adult",
+        "description": "250 diabetic individuals on anti-diabetic therapy (125 given glutathione) and 104 non-diabetic individuals, aged 30 to 78 years."
+      },
+      "study_design": "Described in its title as a randomized clinical trial; 6 months with anti-diabetic therapy, no placebo stated",
+      "outcomes": [
+        {
+          "name": "HbA1c fell significantly only in the over-55 post hoc subgroup",
+          "hierarchy": "post_hoc",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        },
+        {
+          "name": "Blood glutathione raised and 8-OHdG lowered within 3 months in diabetic individuals",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract; the positive HbA1c result is post hoc.",
+        "PubMed publication types do not index it as randomized.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 182,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "500 mg oral glutathione daily for six months, added to anti-diabetic therapy.",
+        "normalization": {
+          "basis": "Six months as printed; days are approximate."
+        },
+        "source_provenance": {
+          "pmid": "35624890",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_glutathione_32960827",
+      "components": [
+        "INGR_GLUTATHIONE"
+      ],
+      "source_pmids": [
+        "32960827"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "reduced glutathione, oral"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cystic_fibrosis_children",
+      "purpose": "growth",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_glutathione_32960827",
+      "population": {
+        "age_group": "pediatric",
+        "description": "Pancreatic insufficient children with cystic fibrosis aged 2 to 10 years; 58 completed."
+      },
+      "study_design": "Multicenter randomized placebo-controlled double-blind phase II trial, 24 weeks",
+      "outcomes": [
+        {
+          "name": "Change in weight-for-age z-score, -0.08 (95% CI -0.22 to 0.06; P = 0.25)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Young children with cystic fibrosis; these labels are general adult supplements.",
+        "Dose isn't stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Reduced glutathione or placebo orally daily for 24 weeks; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32960827",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_glutathione_39444151",
+      "components": [
+        "INGR_GLUTATHIONE"
+      ],
+      "source_pmids": [
+        "39444151"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_hyperpigmentation",
+      "purpose": "skin_lightening",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_glutathione_39444151",
+      "population": {
+        "age_group": "adult",
+        "description": "People in glutathione skin-lightening and melasma studies; oral, topical and IV routes are reviewed."
+      },
+      "study_design": "Systematic review, past 10 years",
+      "outcomes": [
+        {
+          "name": "Five RCTs and one open-arm study of oral glutathione report a lower melanin index than placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No pooled estimate in the abstract; about equal numbers of studies at low and high risk of bias.",
+        "PMID 30895708 calls the skin-whitening evidence inconclusive.",
+        "These labels' positioning read carries no skin claim.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral glutathione 250 mg once a day, 250 mg twice a day and 500 mg once a day across the studies.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "39444151",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "30895708": "Systematic review of four skin studies; calls the evidence inconclusive; no pooled estimate. Cited as a conflict in the skin context.",
+    "37935462": "Stool microbiome analysis from a diabetic trial; 500 mg/day; no clinical outcome.",
+    "34150674": "Oral liposomal glutathione in type 2 diabetes for 3 months; dose not in abstract; outcomes are oxidative stress, cytokines and in vitro granulomas.",
+    "41897500": "Single-dose bioavailability crossover in 14 healthy adults and a 30-day single-arm phase of a micellar product; not efficacy. Calls Setria liposomal.",
+    "41559937": "Open-label single-dose pharmacokinetics of a liposomal product in 12 healthy subjects plus cell work; not efficacy.",
+    "39436083": "One group pretest-posttest in 26 hemodialysis patients; uncontrolled.",
+    "42683004": "EFSA safety opinion on S-acetyl glutathione as a novel food; not an efficacy trial; for the clinician list."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "24791752",
+      "title_fetched": "Randomized controlled trial of oral glutathione supplementation on body stores of glutathione.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24791752/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33740389",
+      "title_fetched": "The effects of 3 weeks of oral glutathione supplementation on whole body insulin sensitivity in obese males with and without type 2 diabetes: a randomized trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33740389/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41014073",
+      "title_fetched": "Effectiveness of oral glutathione in reducing nitric oxide and IL-1α concentrations for clinical improvement in mild to moderate acne vulgaris: a randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41014073/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35624890",
+      "title_fetched": "Randomized Clinical Trial of How Long-Term Glutathione Supplementation Offers Protection from Oxidative Damage and Improves HbA1c in Elderly Type 2 Diabetic Patients.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35624890/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32960827",
+      "title_fetched": "Oral Glutathione and Growth in Cystic Fibrosis: A Multicenter, Randomized, Placebo-controlled, Double-blind Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32960827/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39444151",
+      "title_fetched": "Glutathione as a skin-lightening agent and in melasma: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39444151/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30895708",
+      "title_fetched": "The clinical effect of glutathione on skin color and other related skin conditions: A systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30895708/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37935462",
+      "title_fetched": "Effect of long-term oral glutathione supplementation on gut microbiome of type 2 diabetic individuals.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37935462/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34150674",
+      "title_fetched": "Effects of Oral Liposomal Glutathione in Altering the Immune Responses Against Mycobacterium tuberculosis and the Mycobacterium bovis BCG Strain in Individuals With Type 2 Diabetes.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34150674/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41897500",
+      "title_fetched": "A Targeted Metabolomic Assessment of Oral Glutathione Bioavailability and Safety in Humans: A Randomized Crossover Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41897500/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41559937",
+      "title_fetched": "Liposomal glutathione outperforms plain glutathione in uptake, cell regeneration and systemic availability: evidence from cellular and human models.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41559937/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39436083",
+      "title_fetched": "The effect of reduced L-glutathione supplementation on TNF-α, hs-CRP, and neutrophil-lymphocyte ratio in maintenance hemodialysis patients.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39436083/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42683004",
+      "title_fetched": "Safety of S-acetyl glutathione as an novel food pursuant to Regulation (EU) 2015/2283.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42683004/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_GLUTATHIONE",
+    "standard_name": "Glutathione",
+    "aliases": [
+      "Glutathione",
+      "Glutathione Reduced",
+      "Glutathione, Reduced",
+      "L-Glutathione"
+    ],
+    "category": "antioxidant",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "24791752",
+      "33740389",
+      "41014073",
+      "35624890",
+      "32960827",
+      "39444151"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: oral glutathione raises body stores and changed skin melanin measures in small trials; clinical outcomes are unresolved or null. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "glutathione body stores"
+    ],
+    "health_goals_supported": [],
+    "notes": "Most labels print reduced or L-glutathione at 50 to 500 mg a serving. Three are liposomal (294002, 184557, 315656), two are S-acetyl-L-glutathione at 100 mg (241943, 323065), one prints Setria (227921), and one is named Glutathione-SR (284225). One RCT meets the reading bar for reduced glutathione: 250 or 1,000 mg/day for 6 months raised body stores in healthy adults (24791752), a biomarker result. Insulin sensitivity rose in 20 obese men on 1000 mg/day (33740389). A 500 mg acne trial was not significant on markers (41014073), and a trial in children with cystic fibrosis was null on its primary (32960827). Reviews of skin outcomes are split (39444151, 30895708). Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy adults, for glutathione body stores",
+      "supported_outcomes": [
+        "glutathione body stores"
+      ],
+      "source_pmids": [
+        "24791752",
+        "33740389",
+        "41014073",
+        "35624890",
+        "32960827",
+        "39444151"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Most labels print reduced or L-glutathione at 50 to 500 mg a serving. Three are liposomal (294002, 184557, 315656), two are S-acetyl-L-glutathione at 100 mg (241943, 323065), one prints Setria (227921), and one is named Glutathione-SR (284225). One RCT meets the reading bar for reduced glutathione: 250 or 1,000 mg/day for 6 months raised body stores in healthy adults (24791752), a biomarker result. Insulin sensitivity rose in 20 obese men on 1000 mg/day (33740389). A 500 mg acne trial was not significant on markers (41014073), and a trial in children with cystic fibrosis was null on its primary (32960827). Reviews of skin outcomes are split (39444151, 30895708). Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "S-Acetyl",
+        "Liposomal",
+        "Setria"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "24791752",
+        "title": "Randomized controlled trial of oral glutathione supplementation on body stores of glutathione.",
+        "citation": "European journal of nutrition (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24791752/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1007/s00394-014-0706-z"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33740389",
+        "title": "The effects of 3 weeks of oral glutathione supplementation on whole body insulin sensitivity in obese males with and without type 2 diabetes: a randomized trial.",
+        "citation": "Applied physiology, nutrition, and metabolism = Physiologie appliquee, nutrition et metabolisme (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33740389/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1139/apnm-2020-1099"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41014073",
+        "title": "Effectiveness of oral glutathione in reducing nitric oxide and IL-1α concentrations for clinical improvement in mild to moderate acne vulgaris: a randomized controlled trial.",
+        "citation": "Acta dermatovenerologica Alpina, Pannonica, et Adriatica (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41014073/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "35624890",
+        "title": "Randomized Clinical Trial of How Long-Term Glutathione Supplementation Offers Protection from Oxidative Damage and Improves HbA1c in Elderly Type 2 Diabetic Patients.",
+        "citation": "Antioxidants (Basel, Switzerland) (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35624890/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3390/antiox11051026"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32960827",
+        "title": "Oral Glutathione and Growth in Cystic Fibrosis: A Multicenter, Randomized, Placebo-controlled, Double-blind Trial.",
+        "citation": "Journal of pediatric gastroenterology and nutrition (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32960827/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1097/MPG.0000000000002948"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39444151",
+        "title": "Glutathione as a skin-lightening agent and in melasma: a systematic review.",
+        "citation": "International journal of dermatology (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39444151/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1111/ijd.17535"
+      }
+    ]
+  }
+}

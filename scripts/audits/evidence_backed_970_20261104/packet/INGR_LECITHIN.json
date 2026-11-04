@@ -1,0 +1,854 @@
+{
+  "record_id": "INGR_LECITHIN",
+  "labels": 33,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "null: conflicting evidence with no clear benefit; controlled trials on lipids and cognition are null, and the positives are within-group or secondary",
+  "decision": "closed_no_credit",
+  "summary": "The stored rating rests on one small trial reporting change from baseline (21490917). A Cochrane review finds randomized evidence does not support lecithin in dementia (12917896). A double-blind trial in hyperlipidaemic men found no independent lipid effect (9683394), and an emulsifier trial found no cholesterol difference (40816342). Positive results are within-group (21490917, 17006376), secondary (15662899), one scale among several (29310653), or a non-randomized acute stroke study (16200721). All this is soy or unspecified lecithin; no sunflower lecithin trial was found, and 6 of 33 labels print it.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lecithin_12917896",
+      "components": [
+        "INGR_LECITHIN"
+      ],
+      "source_pmids": [
+        "12917896"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "dementia_and_cognitive_impairment",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lecithin_12917896",
+      "population": {
+        "age_group": "adult",
+        "description": "Twelve randomized trials: Alzheimer's disease (265 patients), Parkinsonian dementia (21), subjective memory problems (90)."
+      },
+      "study_design": "Cochrane systematic review and meta-analysis of randomized placebo-controlled trials",
+      "outcomes": [
+        {
+          "name": "No trials reported any clear clinical benefit for Alzheimer's disease or Parkinsonian dementia",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "One trial in subjective memory problems strongly favored lecithin",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Few trials contributed to meta-analyses. A moderate effect can't be ruled out, per the authors.",
+        "Register search date is May 2002.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Lecithin versus placebo for more than one day; amounts not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "12917896",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lecithin_9683394",
+      "components": [
+        "INGR_LECITHIN"
+      ],
+      "source_pmids": [
+        "9683394"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hyperlipidemia",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lecithin_9683394",
+      "population": {
+        "age_group": "adult",
+        "description": "20 free-living hyperlipidaemic men."
+      },
+      "study_design": "Double-blind randomized three-arm trial, 4 weeks: yoghurt, yoghurt with soya bean lecithin, yoghurt with sunflower oil",
+      "outcomes": [
+        {
+          "name": "Total, HDL and LDL cholesterol, triglycerides, apolipoproteins, Lp(a): no significant effect",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Plasma fibrinogen and macromolecular protein complex: no effect",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Small. Primary outcome isn't named.",
+        "20 g/day in frozen yoghurt is far above most label amounts.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          20
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "food"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "20 g soya bean lecithin a day in frozen yoghurt for 4 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "9683394",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lecithin_21490917",
+      "components": [
+        "INGR_LECITHIN"
+      ],
+      "source_pmids": [
+        "21490917"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hypercholesterolemia",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lecithin_21490917",
+      "population": {
+        "age_group": "adult",
+        "description": "30 volunteers aged 58-70 with hypercholesterolemia, 20 on lecithin per the methods."
+      },
+      "study_design": "Described in the methods as double-blind with a placebo capsule; abstract reports change from baseline only",
+      "outcomes": [
+        {
+          "name": "Total cholesterol down 40.66% and 42.00% at one and two months from baseline",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "LDL down 42.05% and 56.15% at one and two months from baseline",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Change from baseline; no between-group effect is claimed in the abstract.",
+        "Randomization isn't stated in the passages read.",
+        "Stored evidence for this record.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One 500 mg soy lecithin capsule daily, followed at one and two months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21490917",
+          "location": "Abstract and Methods",
+          "source_url": "https://europepmc.org/article/PMC/PMC3065734"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lecithin_17006376",
+      "components": [
+        "INGR_LECITHIN"
+      ],
+      "source_pmids": [
+        "17006376"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "postmenopausal_endothelial_function",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lecithin_17006376",
+      "population": {
+        "age_group": "adult",
+        "description": "25 healthy postmenopausal women, 22 completed."
+      },
+      "study_design": "Randomized double-blind placebo-controlled crossover, 4-week periods, 4-week washouts",
+      "outcomes": [
+        {
+          "name": "Flow-mediated dilation: no significant difference between treatment groups",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "HDL/LDL ratio raised versus baseline with soy lecithin alone",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Lipid change is reported relative to baseline, and the abstract gives no direct lecithin versus placebo contrast for it.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          20
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Soy lecithin 20 g/day for 4 weeks, alone or with soy isoflavone protein 25 g/day.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "17006376",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lecithin_29310653",
+      "components": [
+        "INGR_LECITHIN"
+      ],
+      "source_pmids": [
+        "29310653"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "fatigue_in_middle_aged_women",
+      "purpose": "energy_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lecithin_29310653",
+      "population": {
+        "age_group": "adult",
+        "description": "96 women aged 40-60 with fatigue, 89 completed."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "Chalder Fatigue Scale: no significant difference (P = 0.79)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "POMS vigor improved at 1200 mg/day versus placebo (P = 0.02)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Diastolic pressure (P = 0.05) and cardio-ankle vascular index (P = 0.03) improved at 1200 mg/day",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Abstract doesn't name a primary outcome. Several fatigue scales were used and the positive result is one of them.",
+        "No correction for multiple outcomes is stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600,
+          1200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Tablets of soy lecithin 600 or 1200 mg/day for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29310653",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lecithin_15662899",
+      "components": [
+        "INGR_LECITHIN"
+      ],
+      "source_pmids": [
+        "15662899"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_cognitive_disorders",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lecithin_15662899",
+      "population": {
+        "age_group": "adult",
+        "description": "96 ambulatory patients over 55 with mild cognitive disorders."
+      },
+      "study_design": "Prospective randomized double-blind placebo-controlled trial, 84 days",
+      "outcomes": [
+        {
+          "name": "Overall SCAG score, main target measure: 18.7 versus 16.4 points (p = 0.1620)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "SCAG response 85.4% versus 62.5% (p = 0.018)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Lecithin fluid; composition and amount aren't in the abstract, so it may not match the labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "liquid"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Buerlecithin fluid for 84 days; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "15662899",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lecithin_14760514",
+      "components": [
+        "INGR_LECITHIN"
+      ],
+      "source_pmids": [
+        "14760514"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognition_young_adults",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lecithin_14760514",
+      "population": {
+        "age_group": "adult",
+        "description": "400 young adult females."
+      },
+      "study_design": "Randomized double-blind trial, 3 days: placebo, lecithin, carnitine, or both",
+      "outcomes": [
+        {
+          "name": "Hypothesis that memory would be helped by lecithin, carnitine and glucose was not supported",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Three days only. The abstract states the hypothesis result across supplements, not lecithin alone.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1.6
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 3,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Lecithin 1.6 g/day in capsules for 3 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "14760514",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lecithin_40816342",
+      "components": [
+        "INGR_LECITHIN"
+      ],
+      "source_pmids": [
+        "40816342"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_adults_emulsifier_exposure",
+      "purpose": "digestive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lecithin_40816342",
+      "population": {
+        "age_group": "adult",
+        "description": "60 healthy participants on an emulsifier-free diet, randomized among five emulsifier or additive arms and no additive."
+      },
+      "study_design": "Exploratory double-blind placebo-controlled randomized trial, 4 weeks",
+      "outcomes": [
+        {
+          "name": "Calprotectin, CRP, LBP, cholesterol and other metabolic markers: no differences between placebo and emulsifiers",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Pooled emulsifier statement; soy lecithin isn't reported separately in the abstract.",
+        "Dose isn't in the abstract. Given in brownies.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "food"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Soy lecithin in brownies for 4 weeks; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "40816342",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "16200721": "Positive. 542 patients with acute cerebral infarction divided into groups, randomization not stated, soybean lecithin 10 g tid added to conventional treatment. Not a label purpose or dose.",
+    "35831742": "Enteric phosphatidylcholine microencapsulated with Eudragit S-100 for ulcerative colitis. Not on these labels.",
+    "37513677": "Soy phospholipid beverage was the comparator to a milk product, not a tested intervention."
+  },
+  "stop_or_hold": "Six labels print sunflower lecithin (312986, 294357, 294358, 330077, 330078, 330079), with no trial found. Four Amino rows print liquid soy lecithin at 45 mg, and three rows show no amount.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "12917896",
+      "title_fetched": "Lecithin for dementia and cognitive impairment.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12917896/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "9683394",
+      "title_fetched": "Lecithin has no effect on serum lipoprotein, plasma fibrinogen and macro molecular protein complex levels in hyperlipidaemic men in a double-blind controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9683394/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21490917",
+      "title_fetched": "Influence of soy lecithin administration on hypercholesterolemia.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21490917/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "17006376",
+      "title_fetched": "Effect of soy isoflavone protein and soy lecithin on endothelial function in healthy postmenopausal women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17006376/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29310653",
+      "title_fetched": "Effect of soy lecithin on fatigue and menopausal symptoms in middle-aged women: a randomized, double-blind, placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29310653/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15662899",
+      "title_fetched": "[Improvement in quality of life in the elderly. Results of a placebo-controlled study on the efficacy and tolerability of lecithin fluid in patients with impaired cognitive functions].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15662899/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "14760514",
+      "title_fetched": "The influence on cognition of the interactions between lecithin, carnitine and carbohydrate.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14760514/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40816342",
+      "title_fetched": "Effect of Five Dietary Emulsifiers on Inflammation, Permeability, and the Gut Microbiome: A Placebo-controlled Randomized Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40816342/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16200721",
+      "title_fetched": "[Curative effect of soybean lecithin on cerebral infarction].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16200721/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35831742",
+      "title_fetched": "[Efficacy of enteric lecithin (phosphatidylcholine) in the treatment of ulcerative colitis: a meta-analysis].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35831742/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37513677",
+      "title_fetched": "Milk-Fat-Globule-Membrane-Enriched Dairy Milk Compared with a Soy-Lecithin-Enriched Beverage Did Not Adversely Affect Endotoxemia or Biomarkers of Gut Barrier Function and Cardiometabolic Risk in Adults with Metabolic Syndrome: A Randomized Controlled Crossover Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37513677/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_LECITHIN",
+    "standard_name": "Lecithin",
+    "aliases": [
+      "Lecithin",
+      "Lecithin Granules",
+      "Soy Lecithin",
+      "Sunflower Lecithin",
+      "liquid Soy Lecithin"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "12917896",
+      "9683394",
+      "21490917",
+      "17006376",
+      "29310653",
+      "15662899",
+      "14760514",
+      "40816342"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "null",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "null: conflicting evidence with no clear benefit; controlled trials on lipids and cognition are null, and the positives are within-group or secondary. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "serum lipids",
+      "dementia and cognition",
+      "fatigue"
+    ],
+    "health_goals_supported": [],
+    "notes": "The stored rating rests on one small trial reporting change from baseline (21490917). A Cochrane review finds randomized evidence does not support lecithin in dementia (12917896). A double-blind trial in hyperlipidaemic men found no independent lipid effect (9683394), and an emulsifier trial found no cholesterol difference (40816342). Positive results are within-group (21490917, 17006376), secondary (15662899), one scale among several (29310653), or a non-randomized acute stroke study (16200721). All this is soy or unspecified lecithin; no sunflower lecithin trial was found, and 6 of 33 labels print it.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with hyperlipidemia; patients with dementia or cognitive impairment; middle-aged women with fatigue",
+      "supported_outcomes": [
+        "serum lipids",
+        "dementia and cognition",
+        "fatigue"
+      ],
+      "source_pmids": [
+        "12917896",
+        "9683394",
+        "21490917",
+        "17006376",
+        "29310653",
+        "15662899",
+        "14760514",
+        "40816342"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The stored rating rests on one small trial reporting change from baseline (21490917). A Cochrane review finds randomized evidence does not support lecithin in dementia (12917896). A double-blind trial in hyperlipidaemic men found no independent lipid effect (9683394), and an emulsifier trial found no cholesterol difference (40816342). Positive results are within-group (21490917, 17006376), secondary (15662899), one scale among several (29310653), or a non-randomized acute stroke study (16200721). All this is soy or unspecified lecithin; no sunflower lecithin trial was found, and 6 of 33 labels print it. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "enteric phosphatidylcholine",
+        "lecithin-based delivery form",
+        "phytosome"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12917896",
+        "title": "Lecithin for dementia and cognitive impairment.",
+        "citation": "The Cochrane database of systematic reviews (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12917896/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD001015"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "9683394",
+        "title": "Lecithin has no effect on serum lipoprotein, plasma fibrinogen and macro molecular protein complex levels in hyperlipidaemic men in a double-blind controlled study.",
+        "citation": "European journal of clinical nutrition (1998)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9683394/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1038/sj.ejcn.1600580"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21490917",
+        "title": "Influence of soy lecithin administration on hypercholesterolemia.",
+        "citation": "Cholesterol (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21490917/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1155/2010/824813"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "17006376",
+        "title": "Effect of soy isoflavone protein and soy lecithin on endothelial function in healthy postmenopausal women.",
+        "citation": "Menopause (New York, N.Y.) (2007)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17006376/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1097/01.gme.0000227404.83686.1b"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29310653",
+        "title": "Effect of soy lecithin on fatigue and menopausal symptoms in middle-aged women: a randomized, double-blind, placebo-controlled study.",
+        "citation": "Nutrition journal (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29310653/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1186/s12937-018-0314-5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "15662899",
+        "title": "[Improvement in quality of life in the elderly. Results of a placebo-controlled study on the efficacy and tolerability of lecithin fluid in patients with impaired cognitive functions].",
+        "citation": "MMW Fortschritte der Medizin (2004)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15662899/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "English Abstract",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "14760514",
+        "title": "The influence on cognition of the interactions between lecithin, carnitine and carbohydrate.",
+        "citation": "Psychopharmacology (2004)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14760514/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/s00213-004-1773-2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40816342",
+        "title": "Effect of Five Dietary Emulsifiers on Inflammation, Permeability, and the Gut Microbiome: A Placebo-controlled Randomized Trial.",
+        "citation": "Clinical gastroenterology and hepatology : the official clinical practice journal of the American Gastroenterological Association (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40816342/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.cgh.2025.08.005"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: lecithin effect_direction null, agent review; the contexts below are the reading behind it."
+}

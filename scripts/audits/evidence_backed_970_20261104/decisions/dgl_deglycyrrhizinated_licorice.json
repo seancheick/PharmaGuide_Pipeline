@@ -1,0 +1,12 @@
+{"canonical": "dgl_deglycyrrhizinated_licorice", "labels": 7, "stored": "positive_moderate",
+ "as_read": "Positive for the GutGard extract on dyspepsia and reflux symptoms in two maker-linked trials, null for older Caved-S ulcer trials, and no trial read of a generic 300 mg extract.",
+ "route": "packet_no_credit",
+ "positive_named": ["21747893", "39929150", "23606875"],
+ "studies_to_add": [
+  {"pmid": "39929150", "study_type": "rct", "sample_size": 200, "primary_endpoint": "change in GERD-HRQL and GERD Symptom Assessment Scale", "effect_direction": "positive_weak", "quote": "Participants in the GutGard® group reported a significantly better quality of life at the end of the intervention period (p = 0.014)."},
+  {"pmid": "4584640", "study_type": "rct", "sample_size": 38, "primary_endpoint": "not named; ulcer area change and complete healing", "effect_direction": "null", "quote": "Our study was not able to demonstrate any healing effect of the liquorice extract (Caved-S) on gastric ulcer."},
+  {"pmid": "4933135", "study_type": "rct", "sample_size": 47, "primary_endpoint": "not named", "effect_direction": "null", "quote": "No advantage of deglycyrrhizinated liquorice over placebo was found."}],
+ "clinician_items": ["21747893 and 39929150: the same brand is specified with glycyrrhizin at 0.5% w/w or less in the first and at 3.0% w/w or less in the second; 39929150 names glycyrrhizin as causing electrolyte imbalance, hypertension and water retention. The stored record carries only the 0.5% figure."],
+ "stored_rating_note": "positive_moderate fits GutGard only. The stored applicability text is GutGard-specific, but 3 labels print generic deglycyrrhizinated extract at 300 mg. Null trials 4584640 and 4933135 aren't stored. Stored glycyrrhizin limit of 0.5% conflicts with 39929150.",
+ "pmids_read": ["21747893","39929150","23606875","4584640","4933135","33919894","31464895"],
+ "unread_notes": "Full text passages opened for 21747893, 39929150 and 23606875. 370079 (1978 duodenal ulcer) and 5640926 (1968 ulcers) have no abstract in PubMed and are not described. Search returned 22; other hits were animal, topical or oral-mucosa studies by title. Caved-S's composition wasn't in either abstract; if it's a combination, those two null trials would not count as the ingredient alone. A second search for generic DGL wasn't run; DGL appears in the first query."}

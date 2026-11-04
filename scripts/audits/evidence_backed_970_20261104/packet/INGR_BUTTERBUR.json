@@ -1,0 +1,714 @@
+{
+  "record_id": "INGR_BUTTERBUR",
+  "labels": 25,
+  "stored_direction": "positive_strong",
+  "direction_as_read": "positive_weak: migraine prevention with Petadolex root extract at 150 mg/day; 100 mg/day was not significant in the larger trial, and no other preparation on these labels was tested",
+  "decision": "closed_no_credit",
+  "summary": "Efficacy is specific to one material and one purpose. Two adult RCTs of the root extract Petadolex report fewer migraine attacks: the larger at 150 mg/day but not 100 mg/day (15623680), and a small trial at 100 mg/day whose reanalysis notes major shortcomings (14752215). Reviews call the evidence moderate (16987643) or positive but limited (32310327), not strong. A small child trial is null after treatment and positive at follow-up (17659990). Only 3 of 25 labels name Petadolex. No trial of whole-herb extract was found, and 6 labels print it.",
+  "question_for_clinician": "Two adult RCTs support Petadolex at 150 mg/day for migraine, yet 22 of 25 labels aren't Petadolex and the liver items on clinician_items are unresolved. Should any label get credit? Agent recommendation: no credit, with direction at most positive_weak, Petadolex root extract only.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_butterbur_15623680",
+      "components": [
+        "INGR_BUTTERBUR"
+      ],
+      "source_pmids": [
+        "15623680"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Petadolex",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_butterbur_15623680",
+      "population": {
+        "age_group": "adult",
+        "description": "245 patients aged 18-65 with migraine and 2 to 6 attacks a month."
+      },
+      "study_design": "Three-arm randomized placebo-controlled parallel-group trial, 4 months",
+      "outcomes": [
+        {
+          "name": "Attack frequency down 48% at 75 mg bid versus 26% on placebo (p = 0.0012)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Attack frequency down 36% at 50 mg bid versus 26% on placebo (p = 0.127)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "At least 50% fewer attacks at 4 months: 68% at 75 mg bid versus 49% on placebo (p < 0.05)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Reported from the per-protocol analysis.",
+        "Abstract says only standardized special root extract; review 16987643 identifies the trial material as Petadolex.",
+        "Funding isn't stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100,
+          150
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Root extract 75 mg or 50 mg twice daily for 4 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "15623680",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_butterbur_14752215",
+      "components": [
+        "INGR_BUTTERBUR"
+      ],
+      "source_pmids": [
+        "14752215"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Petadolex",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_butterbur_14752215",
+      "population": {
+        "age_group": "adult",
+        "description": "60 patients with migraine, 33 on butterbur and 27 on placebo."
+      },
+      "study_design": "Independent reanalysis of a randomized placebo-controlled parallel-group trial",
+      "outcomes": [
+        {
+          "name": "Mean monthly attacks 3.4 to 1.8 at 3 months on butterbur (p = 0.0024); 2.9 to 2.6 on placebo (n.s.)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Responders 45% versus 15%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The reanalysis says the original protocol and analysis had a number of major shortcomings.",
+        "Authors call it a small trial and say butterbur may be effective.",
+        "Abstract gives no p value for the responder comparison.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Two 25 mg capsules twice daily for 3 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "14752215",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_butterbur_17659990",
+      "components": [
+        "INGR_BUTTERBUR"
+      ],
+      "source_pmids": [
+        "17659990"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Petadolex",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "pediatric_migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_butterbur_17659990",
+      "population": {
+        "age_group": "child",
+        "description": "Primary school children with migraine: butterbur n = 19, music therapy n = 20, placebo n = 19."
+      },
+      "study_design": "Randomized, partly double-blind, placebo-controlled explorative parallel-group trial, 12 weeks plus follow-up",
+      "outcomes": [
+        {
+          "name": "Headache frequency post-treatment: only music therapy superior to placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Headache frequency at 6-month follow-up: butterbur superior to placebo (p = 0.044)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Explorative and small. Completers analysis. All groups improved during baseline.",
+        "Dose isn't in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Petadolex for 12 weeks; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "17659990",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_butterbur_16987643",
+      "components": [
+        "INGR_BUTTERBUR"
+      ],
+      "source_pmids": [
+        "16987643"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Petadolex",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_butterbur_16987643",
+      "population": {
+        "age_group": "adult",
+        "description": "Two RCTs, 293 patients (60 and 233), both of Petadolex."
+      },
+      "study_design": "Systematic review, narrative; no pooling",
+      "outcomes": [
+        {
+          "name": "Moderate evidence of effectiveness for the higher dose",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors say further rigorous studies are required before it can be recommended as an alternative option.",
+        "Published 2006.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "150 mg versus 100 mg versus placebo over 3 to 4 months.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "16987643",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_butterbur_32310327",
+      "components": [
+        "INGR_BUTTERBUR"
+      ],
+      "source_pmids": [
+        "32310327"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Petasites hybridus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_butterbur_32310327",
+      "population": {
+        "age_group": "adult",
+        "description": "Nineteen randomized controlled studies across several single-ingredient herbs, butterbur among them."
+      },
+      "study_design": "Systematic review with Cochrane risk-of-bias assessment",
+      "outcomes": [
+        {
+          "name": "Positive, albeit limited evidence for butterbur",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Risk of bias was high for many studies across the review.",
+        "Butterbur counts and preparations aren't in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "32310327",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "11410074": "Original report of the 60-patient trial reanalysed in 14752215.",
+    "22529203": "2012 AAN guideline, Level A. NCCIH (nccih.nih.gov/health/butterbur, November 2024) lists it as retired and says the Academy stopped recommending butterbur in 2015. Not used as support.",
+    "22683887": "Canadian guideline, strong recommendation; quality of evidence for butterbur isn't in the abstract.",
+    "39853578": "Narrative review; on clinician_items.",
+    "35585841": "Narrative review of Petadolex by authors reporting their own safety data; on clinician_items.",
+    "31083451": "Spontaneous report and preclinical analysis; on clinician_items.",
+    "12864764": "Safety report with no numbers in the abstract; on clinician_items.",
+    "37394426": "Rat study of three products; on clinician_items.",
+    "15836592": "Open-label, 108 children, no control group.",
+    "41908273": "Retrospective, uncontrolled, Petamig brand, 120 patients.",
+    "15281472": "Allergic rhinitis, 50 mg twice daily for 2 weeks; primary outcome and symptoms null versus placebo. Extract isn't identified in the part read; not a label purpose.",
+    "15080820": "Perennial rhinitis, 16 patients, 1 week, challenge response. Not a label purpose.",
+    "11799030": "Ze 339 CO2 extract, which 40558112 names a leaf extract; active comparator. Not on these labels.",
+    "40558112": "Narrative review of the leaf extract Ze 339; not on these labels.",
+    "16784008": "Ze 339; no effect on skin test reactivity. Not on these labels.",
+    "38603736": "Pools several medicinal plants; no butterbur-only estimate in the part read.",
+    "15005644": "Asthma, open non-randomized. Not a label purpose.",
+    "14720270": "Asthma add-on, 16 patients, 1 week, surrogate markers. Not a label purpose.",
+    "16520304": "Abstract has no findings.",
+    "23472485": "Overview across 50 herbal medicines; lists Petasites hybridus among those with minor adverse effects."
+  },
+  "stop_or_hold": "Fields can't say the evidence belongs to Petadolex while most labels are other products: 8 print Butterbur Root Extract, 8 Butterbur extract, 6 Whole Herb Extract, 3 Petadolex. Two Petadolex rows print 50 mg a serving. PA-free status wasn't checked on label images.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "15623680",
+      "title_fetched": "Petasites hybridus root (butterbur) is an effective preventive treatment for migraine.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15623680/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "14752215",
+      "title_fetched": "The first placebo-controlled trial of a special butterbur root extract for the prevention of migraine: reanalysis of efficacy criteria.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14752215/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17659990",
+      "title_fetched": "Butterbur root extract and music therapy in the prevention of childhood migraine: an explorative study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17659990/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16987643",
+      "title_fetched": "Effectiveness of Petasites hybridus preparations in the prophylaxis of migraine: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16987643/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32310327",
+      "title_fetched": "Herbal treatments for migraine: A systematic review of randomised-controlled studies.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32310327/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11410074",
+      "title_fetched": "An extract of Petasites hybridus is effective in the prophylaxis of migraine.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11410074/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22529203",
+      "title_fetched": "Evidence-based guideline update: NSAIDs and other complementary treatments for episodic migraine prevention in adults: report of the Quality Standards Subcommittee of the American Academy of Neurology and the American Headache Society.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22529203/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22683887",
+      "title_fetched": "Canadian Headache Society guideline for migraine prophylaxis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22683887/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39853578",
+      "title_fetched": "Nutraceuticals and Headache 2024: Riboflavin, Coenzyme Q10, Feverfew, Magnesium, Melatonin, and Butterbur.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39853578/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35585841",
+      "title_fetched": "Petasites for Migraine Prevention: New Data on Mode of Action, Pharmacology and Safety. A Narrative Review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35585841/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31083451",
+      "title_fetched": "Hepatobiliary Events in Migraine Therapy with Herbs-The Case of Petadolex, A Petasites Hybridus Extract.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31083451/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12864764",
+      "title_fetched": "Safety of a patented special butterbur root extract for migraine prevention.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12864764/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37394426",
+      "title_fetched": "Application to Butterbur Products of a Suggested Daily Intake-Based Safety Evaluation of Individual Herbal Supplements with Cytochrome P450 Expression as a Major Index.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37394426/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15836592",
+      "title_fetched": "Migraine prevention in children and adolescents: results of an open study with a special butterbur root extract.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15836592/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41908273",
+      "title_fetched": "Efficacy of Petasites hybridus in migraine prophylaxis: the first real-world study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41908273/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15281472",
+      "title_fetched": "Effects of butterbur treatment in intermittent allergic rhinitis: a placebo-controlled evaluation.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15281472/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15080820",
+      "title_fetched": "A placebo-controlled evaluation of butterbur and fexofenadine on objective and subjective outcomes in perennial allergic rhinitis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15080820/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11799030",
+      "title_fetched": "Randomised controlled trial of butterbur and cetirizine for treating seasonal allergic rhinitis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11799030/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40558112",
+      "title_fetched": "Efficacy and Safety of P. hybridus Leaf Extract Ze 339 for the Treatment of Allergic Rhinitis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40558112/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16784008",
+      "title_fetched": "The butterbur extract petasin has no effect on skin test reactivity induced by different stimuli: a randomized, double-blind crossover study using histamine, codeine, methacholine, and aeroallergen solutions.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16784008/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38603736",
+      "title_fetched": "Medicinal plants for allergic rhinitis: A systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38603736/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15005644",
+      "title_fetched": "Petasites hybridus (Butterbur root) extract in the treatment of asthma--an open trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15005644/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "14720270",
+      "title_fetched": "Butterbur, a herbal remedy, confers complementary anti-inflammatory activity in asthmatic patients receiving inhaled corticosteroids.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14720270/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16520304",
+      "title_fetched": "Butterbur: an evidence-based systematic review by the natural standard research collaboration.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16520304/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23472485",
+      "title_fetched": "Adverse effects of herbal medicines: an overview of systematic reviews.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23472485/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_BUTTERBUR",
+    "standard_name": "Butterbur",
+    "aliases": [
+      "Butterbur Root Extract",
+      "Butterbur Whole Herb Extract",
+      "Butterbur extract",
+      "Purple Butterbur (Petadolex brand) root extract",
+      "Purple Butterbur Root Extract"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "15623680",
+      "14752215",
+      "17659990",
+      "16987643",
+      "32310327"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive_weak: migraine prevention with Petadolex root extract at 150 mg/day; 100 mg/day was not significant in the larger trial, and no other preparation on these labels was tested. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "migraine attack frequency"
+    ],
+    "health_goals_supported": [],
+    "notes": "Efficacy is specific to one material and one purpose. Two adult RCTs of the root extract Petadolex report fewer migraine attacks: the larger at 150 mg/day but not 100 mg/day (15623680), and a small trial at 100 mg/day whose reanalysis notes major shortcomings (14752215). Reviews call the evidence moderate (16987643) or positive but limited (32310327), not strong. A small child trial is null after treatment and positive at follow-up (17659990). Only 3 of 25 labels name Petadolex. No trial of whole-herb extract was found, and 6 labels print it.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with migraine, 2 to 6 attacks a month",
+      "supported_outcomes": [
+        "migraine attack frequency"
+      ],
+      "source_pmids": [
+        "15623680",
+        "14752215",
+        "17659990",
+        "16987643",
+        "32310327"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Efficacy is specific to one material and one purpose. Two adult RCTs of the root extract Petadolex report fewer migraine attacks: the larger at 150 mg/day but not 100 mg/day (15623680), and a small trial at 100 mg/day whose reanalysis notes major shortcomings (14752215). Reviews call the evidence moderate (16987643) or positive but limited (32310327), not strong. A small child trial is null after treatment and positive at follow-up (17659990). Only 3 of 25 labels name Petadolex. No trial of whole-herb extract was found, and 6 labels print it. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "whole herb",
+        "leaf",
+        "Ze 339"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "15623680",
+        "title": "Petasites hybridus root (butterbur) is an effective preventive treatment for migraine.",
+        "citation": "Neurology (2004)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15623680/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1212/01.wnl.0000147290.68260.11"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "14752215",
+        "title": "The first placebo-controlled trial of a special butterbur root extract for the prevention of migraine: reanalysis of efficacy criteria.",
+        "citation": "European neurology (2004)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14752215/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1159/000076535"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "17659990",
+        "title": "Butterbur root extract and music therapy in the prevention of childhood migraine: an explorative study.",
+        "citation": "European journal of pain (London, England) (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17659990/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.ejpain.2007.06.003"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16987643",
+        "title": "Effectiveness of Petasites hybridus preparations in the prophylaxis of migraine: a systematic review.",
+        "citation": "Phytomedicine : international journal of phytotherapy and phytopharmacology (2006)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16987643/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.phymed.2006.02.008"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32310327",
+        "title": "Herbal treatments for migraine: A systematic review of randomised-controlled studies.",
+        "citation": "Phytotherapy research : PTR (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32310327/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/ptr.6701"
+      }
+    ]
+  }
+}

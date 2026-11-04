@@ -1,0 +1,612 @@
+{
+  "record_id": "INGR_COLOSTRUM",
+  "labels": 8,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "Small positive trials at label-range amounts on self-reported respiratory symptoms, a positive adult meta-analysis at 10 g to 20 g daily, and null or mixed laboratory immune markers at higher doses",
+  "decision": "closed_no_credit",
+  "summary": "The labels print bovine colostrum or colostrum at 400 mg to 900 mg, and a 1 g proprietary concentrate, mostly with an immune purpose. One trial meets the rule: 500 mg to 1 g daily in healthy pre-school children, with symptom frequency and gravity named as primary outcomes in the full text and both favouring colostrum (37630816). It was small, used self-report, had uneven exclusions and had a manufacturer tie. The adult meta-analysis is positive but used 10 g or 20 g daily, and its own trials did not make symptoms primary (27462401).",
+  "question_for_clinician": "37630816 meets rule 2 on its face for 500 mg bovine colostrum: RCT, colostrum alone with a banana carrier, primary outcomes named in the full text, both positive. Should any of the 8 labels get credit on this? Agent recommendation: no credit, direction stays positive_weak. The one rule 2 trial is 57 pre-school children with self-reported symptoms, a post-randomization response filter and a manufacturer tie, and adult evidence at label amounts (37111143) names no primary outcome.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_colostrum_37630816",
+      "components": [
+        "INGR_COLOSTRUM"
+      ],
+      "source_pmids": [
+        "37630816"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "upper_respiratory_tract_infection_prevention",
+      "purpose": "immune_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_colostrum_37630816",
+      "population": {
+        "age_group": "child",
+        "description": "57 healthy pre-school children aged 3 to 7 years analysed (35 colostrum, 22 placebo) at kindergartens in Poland."
+      },
+      "study_design": "Triple-blind, randomized, placebo-controlled trial with dried whey placebo; 45 days of supplementation, 21 weeks of daily survey follow-up",
+      "outcomes": [
+        {
+          "name": "Frequency of days with any URTI symptoms: 31% median reduction versus placebo, significant until week 20",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Average gravity score of URTI symptoms: 37% median reduction versus placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Children only; these labels print no age group and carry a general immune purpose.",
+        "Symptoms were reported by online survey and not confirmed by testing.",
+        "Before the start, 14 participants were excluded for not collecting product (2 colostrum, 12 placebo), and 13 more were excluded from analysis for poor survey response (5 colostrum, 8 placebo), so the analysis isn't full intention to treat and group sizes are uneven.",
+        "Material was freeze-dried colostrum collected within 2 hours of calving, mixed 1 to 1 with banana powder; no label prints the collection time.",
+        "The manufacturer supplied the product free of charge, and one author is paid by the manufacturer.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500,
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 45,
+        "administration_frequency": "once or twice daily",
+        "dosage_forms": [
+          "sachet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "500 mg sachets: 2 per day for 15 days, then 1 per day for 30 days; a further 8 consecutive doses per protocol.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "37630816",
+          "location": "Abstract and full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_colostrum_37111143",
+      "components": [
+        "INGR_COLOSTRUM"
+      ],
+      "source_pmids": [
+        "37111143"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "upper_respiratory_tract_infection_prevention",
+      "purpose": "immune_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_colostrum_37111143",
+      "population": {
+        "age_group": "adult",
+        "description": "Young adult medical students, as a higher-risk group, and health science students; sample size not carried here."
+      },
+      "study_design": "Randomized, triple-blind, placebo-controlled trial, 107 days",
+      "outcomes": [
+        {
+          "name": "Frequency and severity of URTI symptoms lower on colostrum than placebo among medical students compared with health science peers",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "A search of the open full text finds no named primary outcome.",
+        "Symptoms were self-reported by online questionnaire.",
+        "One author is paid by the manufacturer.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500,
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 45,
+        "administration_frequency": "once or twice daily",
+        "dosage_forms": [
+          "sachet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Sachets of 500 mg freeze-dried colostrum with 500 mg banana: 0.5 to 1.0 g/day over 45 days, then again over 7 days from day 87.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "37111143",
+          "location": "Abstract and full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_colostrum_27462401",
+      "components": [
+        "INGR_COLOSTRUM"
+      ],
+      "source_pmids": [
+        "27462401"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "upper_respiratory_symptoms_in_exercise_training",
+      "purpose": "immune_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_colostrum_27462401",
+      "population": {
+        "age_group": "adult",
+        "description": "Five trials, 152 healthy adults in regular exercise training."
+      },
+      "study_design": "Systematic review and meta-analysis of randomised controlled trials, 8 to 12 week follow-up",
+      "outcomes": [
+        {
+          "name": "Incidence rate of upper respiratory symptom days: rate ratio 0.56, 95% CI 0.43 to 0.72",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Upper respiratory symptom episodes: rate ratio 0.62, 95% CI 0.40 to 0.99",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Four of the five trials were judged moderate or high risk of bias.",
+        "Trials used 10 g or 20 g daily, more than ten times the amounts on these labels.",
+        "The review says symptom outcomes were not primary in any of the five trials.",
+        "The review's disclosure names a collaborative project with a colostrum supplier, The Golden Dairy Ltd.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Powdered bovine colostrum 10 g or 20 g daily across five trials.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "27462401",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_colostrum_21148400",
+      "components": [
+        "INGR_COLOSTRUM"
+      ],
+      "source_pmids": [
+        "21148400"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "exercise_induced_gut_permeability",
+      "purpose": "gut_barrier",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_colostrum_21148400",
+      "population": {
+        "age_group": "adult",
+        "description": "Twelve volunteers doing standardized exercise."
+      },
+      "study_design": "Double-blind, placebo-controlled crossover, 14 days per arm",
+      "outcomes": [
+        {
+          "name": "Rise in 5 h urinary lactulose-to-rhamnose ratio after exercise truncated by 80% on colostrum",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and states no daily dose.",
+        "The abstract doesn't say the crossover was randomized.",
+        "Very small surrogate study, not a digestive symptom outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "14 days of colostrum or placebo; dose not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21148400",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_colostrum_32987647",
+      "components": [
+        "INGR_COLOSTRUM"
+      ],
+      "source_pmids": [
+        "32987647"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "intestinal_permeability",
+      "purpose": "gut_barrier",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_colostrum_32987647",
+      "population": {
+        "age_group": "adult",
+        "description": "31 healthy athletes in four groups."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled trial of colostrum harvested at 2, 24 or 72 h after delivery",
+      "outcomes": [
+        {
+          "name": "Lactulose/mannitol permeability fell with 2 h and 24 h colostrum; change significant for 2 h colostrum versus placebo and 72 h colostrum",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "About 8 athletes per group on average, and the aim was a quality test across harvest times.",
+        "No label prints the harvest time.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Colostrum 2 x 500 mg harvested at 2, 24 or 72 h, or whey placebo; duration not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32987647",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "35745242": "Systematic review of nine gut permeability studies in athletes; the abstract calls for well-designed trials and gives no pooled effect.",
+    "29274034": "20 g/day in 31 men: no difference in summed skin response, greater sensitivity at low antigen doses. Far above label amounts; laboratory immune model.",
+    "42249952": "Acute 30 g plus 5 g plus 5 g around cycling, 16 men: mixed laboratory immune markers. Far above label amounts.",
+    "39497827": "25 g/day for 12 weeks, 28 athletes: higher post-exercise salivary SIgA, no effect on blood immunoglobulins. Far above label amounts; no clinical outcome.",
+    "38004173": "24 week crossover in 28 football players: higher IgG and lower inflammatory markers, no effect on performance; the abstract states no dose and no primary outcome.",
+    "33396972": "3.2 g twice daily for 24 weeks in 20 young female basketball players: no significant effects on immune indicators apart from an IL-10 change in both groups.",
+    "25727914": "20 g/day for 4 weeks, 20 participants: greater fMLP-stimulated oxidative burst, no effect on other immune markers. Far above label amounts.",
+    "33077128": "14 days in 10 males: no effect on salivary lactoferrin or lysozyme; the abstract states no dose.",
+    "28290057": "20 g/day crossover, 18 males: lower post-exercise permeability, used as a positive control. Far above label amounts.",
+    "30551120": "Early enteral colostrum in ICU patients: lower endotoxin, zonulin and diarrhea; enteral critical care setting, no dose in the abstract.",
+    "42626164": "Children with kidney anomalies and recurrent UTIs: overall reduction not significant, RR 0.84, p = 0.22; a purpose these labels do not carry."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "37630816",
+      "title_fetched": "Six Weeks of Supplementation with Bovine Colostrum Effectively Reduces URTIs Symptoms Frequency and Gravity for Up to 20 Weeks in Pre-School Children.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37630816/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "37111143",
+      "title_fetched": "Moderate Dose Bovine Colostrum Supplementation in Prevention of Upper Respiratory Tract Infections in Medical University Students: A Randomized, Triple Blind, Placebo-Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37111143/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "27462401",
+      "title_fetched": "Bovine colostrum supplementation and upper respiratory symptoms during exercise training: a systematic review and meta-analysis of randomised controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27462401/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "21148400",
+      "title_fetched": "The nutriceutical bovine colostrum truncates the increase in gut permeability caused by heavy exercise in athletes.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21148400/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32987647",
+      "title_fetched": "Post-Delivery Milking Delay Influence on the Effect of Oral Supplementation with Bovine Colostrum as Measured with Intestinal Permeability Test.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32987647/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35745242",
+      "title_fetched": "A Systematic Review of the Influence of Bovine Colostrum Supplementation on Leaky Gut Syndrome in Athletes: Diagnostic Biomarkers and Future Directions.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35745242/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29274034",
+      "title_fetched": "The effects of bovine colostrum supplementation on in vivo immunity following prolonged exercise: a randomised controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29274034/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42249952",
+      "title_fetched": "Effects of acute bovine colostrum supplementation on immune responses to prolonged cycling: a randomised crossover trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42249952/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39497827",
+      "title_fetched": "The effect of 12-week high-dose Colostrum Bovinum supplementation on immunological, hematological and biochemical markers in endurance athletes: a randomized crossover placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39497827/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38004173",
+      "title_fetched": "Long-Term Bovine Colostrum Supplementation in Football Players.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38004173/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33396972",
+      "title_fetched": "Effects of Long-Term Supplementation of Bovine Colostrum on the Immune System in Young Female Basketball Players. Randomized Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33396972/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25727914",
+      "title_fetched": "Influence of 4 weeks of bovine colostrum supplementation on neutrophil and mucosal immune responses to prolonged cycling.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25727914/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33077128",
+      "title_fetched": "Effects of exercise in hot and humid conditions and bovine colostrum on salivary immune markers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33077128/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28290057",
+      "title_fetched": "Intestinal fatty acid-binding protein and gut permeability responses to exercise.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28290057/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30551120",
+      "title_fetched": "Effects of early enteral bovine colostrum supplementation on intestinal permeability in critically ill patients: A randomized, double-blind, placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30551120/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42626164",
+      "title_fetched": "Bovine colostrum for prevention of recurrent urinary tract infections in susceptible children: A randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42626164/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_COLOSTRUM",
+    "standard_name": "Colostrum",
+    "aliases": [
+      "Bovine Colostrum",
+      "Colostrum",
+      "Proprietary ARMRA Colostrum™ Concentrate (Bovine)"
+    ],
+    "category": "immune",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "37630816",
+      "37111143",
+      "27462401",
+      "21148400",
+      "32987647"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Small positive trials at label-range amounts on self-reported respiratory symptoms, a positive adult meta-analysis at 10 g to 20 g daily, and null or mixed laboratory immune markers at higher doses. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "frequency of days with upper respiratory symptoms",
+      "gravity of upper respiratory symptoms",
+      "intestinal permeability"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print bovine colostrum or colostrum at 400 mg to 900 mg, and a 1 g proprietary concentrate, mostly with an immune purpose. One trial meets the rule: 500 mg to 1 g daily in healthy pre-school children, with symptom frequency and gravity named as primary outcomes in the full text and both favouring colostrum (37630816). It was small, used self-report, had uneven exclusions and had a manufacturer tie. The adult meta-analysis is positive but used 10 g or 20 g daily, and its own trials did not make symptoms primary (27462401).",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy pre-school children and young adults at raised risk of respiratory infection; adults in regular exercise training at much higher doses",
+      "supported_outcomes": [
+        "frequency of days with upper respiratory symptoms",
+        "gravity of upper respiratory symptoms",
+        "intestinal permeability"
+      ],
+      "source_pmids": [
+        "37630816",
+        "37111143",
+        "27462401",
+        "21148400",
+        "32987647"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print bovine colostrum or colostrum at 400 mg to 900 mg, and a 1 g proprietary concentrate, mostly with an immune purpose. One trial meets the rule: 500 mg to 1 g daily in healthy pre-school children, with symptom frequency and gravity named as primary outcomes in the full text and both favouring colostrum (37630816). It was small, used self-report, had uneven exclusions and had a manufacturer tie. The adult meta-analysis is positive but used 10 g or 20 g daily, and its own trials did not make symptoms primary (27462401). Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37630816",
+        "title": "Six Weeks of Supplementation with Bovine Colostrum Effectively Reduces URTIs Symptoms Frequency and Gravity for Up to 20 Weeks in Pre-School Children.",
+        "citation": "Nutrients (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37630816/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.3390/nu15163626"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37111143",
+        "title": "Moderate Dose Bovine Colostrum Supplementation in Prevention of Upper Respiratory Tract Infections in Medical University Students: A Randomized, Triple Blind, Placebo-Controlled Trial.",
+        "citation": "Nutrients (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37111143/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.3390/nu15081925"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "27462401",
+        "title": "Bovine colostrum supplementation and upper respiratory symptoms during exercise training: a systematic review and meta-analysis of randomised controlled trials.",
+        "citation": "BMC sports science, medicine & rehabilitation (2016)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27462401/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1186/s13102-016-0047-8"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21148400",
+        "title": "The nutriceutical bovine colostrum truncates the increase in gut permeability caused by heavy exercise in athletes.",
+        "citation": "American journal of physiology. Gastrointestinal and liver physiology (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21148400/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1152/ajpgi.00281.2010"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32987647",
+        "title": "Post-Delivery Milking Delay Influence on the Effect of Oral Supplementation with Bovine Colostrum as Measured with Intestinal Permeability Test.",
+        "citation": "Medicina (Kaunas, Lithuania) (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32987647/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/medicina56100495"
+      }
+    ]
+  }
+}

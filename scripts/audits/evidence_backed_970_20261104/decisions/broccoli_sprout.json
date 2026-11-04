@@ -1,0 +1,34 @@
+{
+"canonical": "broccoli_sprout",
+"labels": 1,
+"stored": "positive_moderate",
+"as_read": "The label prints a whole plant concentrate with 800 mcg sulforaphane beside nicotinamide riboside and resveratrol in a longevity product; trials tested beverages or capsules of unstated amount for other purposes, and the one trial naming a primary outcome did not meet it.",
+"route": "no_qualifying",
+"quote": {
+"pmid": "39929977",
+"text": "BSE did not meet the prespecified primary outcome, and the overall effect in individuals with prediabetes was a 0.2 mmol l-1 reduction in fasting blood glucose (95% confidence interval -0.44 to -0.01; P = 0.04)."
+},
+"positive_named": [
+"24913818",
+"26604653",
+"31268126"
+],
+"proposed_decision_text": "The one label (DSLD 313541, NR Longevity) prints Broccoli Sprout, Whole Plant Concentrate 200 mg with Sulforaphane 800 mcg, alongside nicotinamide riboside and trans-resveratrol, in a product positioned for aging and longevity. Abstracts only. PMID 24913818 tested a beverage providing 600 umol glucoraphanin and 40 umol sulforaphane daily, with higher urinary excretion of benzene and acrolein conjugates than placebo; it is a beverage, the outcome is a biomarker, no primary outcome is named, and the dose is in umol. PMID 31268126 tested graded concentrations of a broccoli sprout beverage for benzene detoxication, significant at the full dose (+63.2%) and not at one-half or one-fifth. PMID 39929977 tested a broccoli sprout extract in 74 people with prediabetes and did not meet its prespecified primary outcome; the abstract prints no amount. PMID 26604653 tested capsules in 52 men with fatty liver, reporting falls in ALT and gamma-GTP from baseline with no such fall on placebo, with no primary outcome named and no amount printed. No study meets the rule for this label, so no credit is proposed.",
+"stop_list": [
+"Trial doses in umol stay in the regimen text and are not converted",
+"labels.py prints no row with canonical broccoli_sprout on this label: the Broccoli Sprout row's canonical id is empty and the Sulforaphane row's is sulforaphane"
+],
+"clinician_items": [
+"39929977: gastro-intestinal side effects with broccoli sprout extract, no severe adverse events.",
+"30735751: beverage for 84 days in 45 women did not affect thyroid-stimulating hormone, free thyroxine, thyroglobulin or thyroid autoimmunity; the abstract notes broccoli sprout products have been suspected of thyroidal toxicity."
+],
+"stored_rating_note": "positive_moderate rests on urinary conjugate excretion from a beverage (PMID 24913818); no patient-important outcome, and not what this label prints.",
+"pmids_read": [
+"24913818",
+"39929977",
+"26604653",
+"31268126",
+"30735751"
+],
+"unread_notes": "Abstracts only. Label rows read directly. One search, count 40, first 25 listed: (\"broccoli sprout\" OR \"broccoli sprouts\") (randomized OR placebo OR meta-analysis) AND (capsule OR powder OR supplement OR extract OR concentrate) AND humans[mh]. Not opened: 33920642, 27130714, 27832073, 42228225, 40944125, 26820305, 25522265 and others. No statement about them is made; the brief's review was limited, so this batch does not claim all broccoli sprout trials were read. The quote from 39929977 has one PubMed special space in '0.2 mmol l-1', normalized to a plain space here."
+}

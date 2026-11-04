@@ -1,0 +1,701 @@
+{
+  "record_id": "INGR_ROSEMARY",
+  "labels": 13,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "mixed: small, separate positive trials in different populations, one with a named primary outcome (41312013), a null trial at 4 g in fatty liver disease, and acute impairment at 6 g",
+  "decision": "closed_no_credit",
+  "summary": "Eleven labels print rosemary extract 500 mg and two print rosemary leaf 700 mg, with no positioning category. One study meets the reading bar: a sponsor-funded 4-week crossover in 40 healthy adults with 200 mg/day of an extract standardized to rosmarinic acid and diterpenes, where trait anxiety on the STAI, its stated primary outcome, improved versus placebo while cortisol and VAS scores did not differ (41312013). Other oral trials are small, in different populations, and name no primary outcome in the abstract: COPD (37758539), students (29389474), major depression as an adjunct (36343423), fatty liver disease, null versus placebo at 4 g (35318738). The stored trial is single doses with benefit at 750 mg and impairment at 6,000 mg (21877951). Only 41312013 was read in full text passages; the others are abstracts only.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rosemary_41312013",
+      "components": [
+        "INGR_ROSEMARY"
+      ],
+      "source_pmids": [
+        "41312013"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Salvia rosmarinus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "everyday_stress_in_healthy_adults",
+      "purpose": "stress_and_anxiety",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rosemary_41312013",
+      "population": {
+        "age_group": "adult",
+        "description": "40 healthy Japanese adults aged 20 to 60 who reported daily stress, in the crossover study."
+      },
+      "study_design": "Randomized double-blind placebo-controlled crossover trial with a 4-week washout, after a separate 4-week open-label safety study in 22 adults",
+      "outcomes": [
+        {
+          "name": "Trait anxiety on the STAI improved after 4 weeks versus placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Low-frequency/high-frequency heart rate variability ratio decreased",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "State anxiety fell after a single dose before a mental workload test",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Salivary cortisol and visual analog scale scores: no significant difference",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "One small crossover in healthy adults; no clinical anxiety population.",
+        "Funded by NIPPN Corporation, which also provided the extract.",
+        "Extract is standardized to rosmarinic acid and diterpenes and comes from essential oil extraction residue; the labels print rosemary extract without these values.",
+        "Studied 200 mg/day of extract; labels print 500 mg of extract or 700 mg of leaf, so the amounts are not comparable without marker content.",
+        "Numeric between-group results and the analyzed count were not extracted.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "two capsules daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Two capsules daily for 4 weeks, each with 100 mg rosemary extract powder (2 capsules: rosmarinic acid 5 mg, carnosic acid and carnosol 8 mg), in each crossover period; 4-week washout.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41312013",
+          "location": "Abstract, Methods and Table 1",
+          "source_url": "https://europepmc.org/article/PMC/PMC12646844"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rosemary_37758539",
+      "components": [
+        "INGR_ROSEMARY"
+      ],
+      "source_pmids": [
+        "37758539"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "copd_with_cognitive_impairment_outcomes",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rosemary_37758539",
+      "population": {
+        "age_group": "adult",
+        "description": "77 patients with COPD aged 40 to 80."
+      },
+      "study_design": "Triple-blind randomized controlled trial with corn powder capsule control, two months",
+      "outcomes": [
+        {
+          "name": "Total cognitive function (MoCA-B) higher than control after adjusting for obstructive sleep apnea (P = 0.014)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "London Chest Activity of Daily Living: no between-group difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Between-group significance is reported after adjustment for sleep apnea; the abstract's IADL results differ between the unadjusted and adjusted analyses.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Rosemary hydroalcoholic extract capsules 500 mg twice a day for two months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "37758539",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rosemary_29389474",
+      "components": [
+        "INGR_ROSEMARY"
+      ],
+      "source_pmids": [
+        "29389474"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rosmarinus officinalis",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "university_students_memory_mood_sleep",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rosemary_29389474",
+      "population": {
+        "age_group": "adult",
+        "description": "68 university students."
+      },
+      "study_design": "Double-blind randomized controlled trial, one month",
+      "outcomes": [
+        {
+          "name": "Memory, anxiety, depression and most sleep scales improved versus control",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Sleep latency and sleep duration components: no significant difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Preparation (extract or leaf) is not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Rosemary 500 mg twice daily for one month.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29389474",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rosemary_36343423",
+      "components": [
+        "INGR_ROSEMARY"
+      ],
+      "source_pmids": [
+        "36343423"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "major_depressive_disorder",
+      "purpose": "mood_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rosemary_36343423",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with major depressive disorder; number not stated in the abstract."
+      },
+      "study_design": "Randomized double-blind placebo-controlled adjunctive trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "HADS anxiety subscale and Beck Depression Inventory decreased versus control at 8 weeks",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome, sample size or capsule mass.",
+        "Adjunctive use; background treatment not detailed in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One rosemary capsule twice a day for 8 weeks; rosmarinic acid 21.13 mg/g dried plant; capsule mass not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36343423",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rosemary_35318738",
+      "components": [
+        "INGR_ROSEMARY"
+      ],
+      "source_pmids": [
+        "35318738"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "nonalcoholic_fatty_liver_disease",
+      "purpose": "metabolic_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rosemary_35318738",
+      "population": {
+        "age_group": "adult",
+        "description": "110 patients with nonalcoholic fatty liver disease, all with a weight loss diet and activity advice."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "Liver enzymes, glycemic markers, lipids and anthropometrics: no significant difference from placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "HOMA beta-cell dysfunction differed between groups (p = .014)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "4 g of leaf powder is far above the 700 mg leaf labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          4
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Rosemary leaf powder 4 g for 8 weeks; the abstract does not say per day.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "35318738",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_rosemary_21877951",
+      "components": [
+        "INGR_ROSEMARY"
+      ],
+      "source_pmids": [
+        "21877951"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rosmarinus officinalis",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "older_adults_acute_cognition",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_rosemary_21877951",
+      "population": {
+        "age_group": "older_adult",
+        "description": "28 older adults, mean age 75."
+      },
+      "study_design": "Randomized double-blind placebo-controlled crossover study of a placebo and four single doses, 7-day washout",
+      "outcomes": [
+        {
+          "name": "Speed of memory improved at 750 mg versus placebo (P=.01)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Speed of memory impaired at 6,000 mg (P<.01)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Other cognitive measures: deleterious effects, less consistent",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Single doses, tested 1 to 6 hours after; no repeated intake.",
+        "The abstract names no primary outcome.",
+        "The middle two doses are not given in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          750,
+          6000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "single dose",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dried rosemary leaf powder, single doses including 750 mg and 6,000 mg, with a 7-day washout.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21877951",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "33233510": "Post-hoc subgroup of a men's trial, rosemary group n = 8; dose not in the abstract.",
+    "31333746": "Rosemary capsules 250 mg against mefenamic acid in dysmenorrhea, no placebo; only equal changes reported.",
+    "41909864": "Combined rosemary and ginger extract; not the ingredient alone.",
+    "37699014": "Blend of Aloe vera, Poria cocos and rosemary; not the ingredient alone."
+  },
+  "stop_or_hold": "Marker-standardized amounts (rosmarinic acid, diterpenes) can't be compared with labels that print extract mass only. The abstract of 35318738 does not say whether 4 g is per day.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "41312013",
+      "title_fetched": "Safety and stress-reducing effects of rosemary extract: an open-label trial and randomized double-blind crossover study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41312013/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "37758539",
+      "title_fetched": "The effect of rosemary hydroalcoholic extract on cognitive function and activities of daily living of patients with chronic obstructive pulmonary disease (COPD): A clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37758539/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29389474",
+      "title_fetched": "Effects of Rosmarinus officinalis L. on memory performance, anxiety, depression, and sleep quality in university students: A randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29389474/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36343423",
+      "title_fetched": "Rosemary as an adjunctive treatment in patients with major depressive disorder: A randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36343423/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35318738",
+      "title_fetched": "Effect of rosemary leaf powder with weight loss diet on lipid profile, glycemic status, and liver enzymes in patients with nonalcoholic fatty liver disease: A randomized, double-blind clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35318738/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21877951",
+      "title_fetched": "Short-term study on the effects of rosemary on cognitive function in an elderly population.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21877951/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33233510",
+      "title_fetched": "Effects of Continuous Intake of Rosemary Extracts on Mental Health in Working Generation Healthy Japanese Men: Post-Hoc Testing of a Randomized Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33233510/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31333746",
+      "title_fetched": "Comparison of Rosemary and Mefenamic Acid Capsules on Menstrual Bleeding and Primary Dysmenorrhea: A Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31333746/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41909864",
+      "title_fetched": "Protective effects of rosemary and ginger extracts on DNA integrity, oxidative stress, and vascular endothelial function: a pilot randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41909864/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37699014",
+      "title_fetched": "Rapid increase in immune surveillance and expression of NKT and γδT cell activation markers after consuming a nutraceutical supplement containing Aloe vera gel, extracts of Poria cocos and rosemary. A randomized placebo-controlled cross-over trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37699014/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_ROSEMARY",
+    "standard_name": "Rosemary",
+    "aliases": [
+      "Rosemary Leaf, Stem Extract",
+      "Rosemary extract",
+      "Rosemary"
+    ],
+    "category": "sleep_mood",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "41312013",
+      "37758539",
+      "29389474",
+      "36343423",
+      "35318738",
+      "21877951"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: small, separate positive trials in different populations, one with a named primary outcome (41312013), a null trial at 4 g in fatty liver disease, and acute impairment at 6 g. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "trait anxiety",
+      "heart rate variability"
+    ],
+    "health_goals_supported": [],
+    "notes": "Eleven labels print rosemary extract 500 mg and two print rosemary leaf 700 mg, with no positioning category. One study meets the reading bar: a sponsor-funded 4-week crossover in 40 healthy adults with 200 mg/day of an extract standardized to rosmarinic acid and diterpenes, where trait anxiety on the STAI, its stated primary outcome, improved versus placebo while cortisol and VAS scores did not differ (41312013). Other oral trials are small, in different populations, and name no primary outcome in the abstract: COPD (37758539), students (29389474), major depression as an adjunct (36343423), fatty liver disease, null versus placebo at 4 g (35318738). The stored trial is single doses with benefit at 750 mg and impairment at 6,000 mg (21877951). Only 41312013 was read in full text passages; the others are abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy adults with everyday stress (standardized extract); small trials in COPD, students and major depression",
+      "supported_outcomes": [
+        "trait anxiety",
+        "heart rate variability"
+      ],
+      "source_pmids": [
+        "41312013",
+        "37758539",
+        "29389474",
+        "36343423",
+        "35318738",
+        "21877951"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Eleven labels print rosemary extract 500 mg and two print rosemary leaf 700 mg, with no positioning category. One study meets the reading bar: a sponsor-funded 4-week crossover in 40 healthy adults with 200 mg/day of an extract standardized to rosmarinic acid and diterpenes, where trait anxiety on the STAI, its stated primary outcome, improved versus placebo while cortisol and VAS scores did not differ (41312013). Other oral trials are small, in different populations, and name no primary outcome in the abstract: COPD (37758539), students (29389474), major depression as an adjunct (36343423), fatty liver disease, null versus placebo at 4 g (35318738). The stored trial is single doses with benefit at 750 mg and impairment at 6,000 mg (21877951). Only 41312013 was read in full text passages; the others are abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41312013",
+        "title": "Safety and stress-reducing effects of rosemary extract: an open-label trial and randomized double-blind crossover study.",
+        "citation": "Journal of clinical biochemistry and nutrition (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41312013/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3164/jcbn.25-157"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37758539",
+        "title": "The effect of rosemary hydroalcoholic extract on cognitive function and activities of daily living of patients with chronic obstructive pulmonary disease (COPD): A clinical trial.",
+        "citation": "Explore (New York, N.Y.) (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37758539/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.explore.2023.09.008"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29389474",
+        "title": "Effects of Rosmarinus officinalis L. on memory performance, anxiety, depression, and sleep quality in university students: A randomized clinical trial.",
+        "citation": "Complementary therapies in clinical practice (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29389474/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.ctcp.2017.11.004"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36343423",
+        "title": "Rosemary as an adjunctive treatment in patients with major depressive disorder: A randomized, double-blind, placebo-controlled trial.",
+        "citation": "Complementary therapies in clinical practice (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36343423/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.1016/j.ctcp.2022.101685"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "35318738",
+        "title": "Effect of rosemary leaf powder with weight loss diet on lipid profile, glycemic status, and liver enzymes in patients with nonalcoholic fatty liver disease: A randomized, double-blind clinical trial.",
+        "citation": "Phytotherapy research : PTR (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35318738/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1002/ptr.7446"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21877951",
+        "title": "Short-term study on the effects of rosemary on cognitive function in an elderly population.",
+        "citation": "Journal of medicinal food (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21877951/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1089/jmf.2011.0005"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: rosemary no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

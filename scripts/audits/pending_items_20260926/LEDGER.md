@@ -1,10 +1,15 @@
 ## November 4 — active Claude audit and repairs
 
-## November 4 — claim-independent Evidence candidate
+## November 4 — combined Evidence qualification (#372 + #376)
 
-The shared applicability owner now separates ingredient research qualification from claim alignment. Evidence consumes verified source, preparation, outcome and population scope without marketing or exposure gates. The existing claim check and purpose-specific Dose remain separate. Evidence uses the canonical role classifier without function-claim promotion. Native probiotic qualification uses its reviewed strain and population facts.
+Owner: `clinical_applicability.py::assess_clinical_applicability`, `evidence_resolver.py::resolve_evidence_for_row` / `resolve_omega_evidence_standard`, and the existing native probiotic assessment. Evidence: fail-first shared applicability and omega regressions. Will NOT create a second scorer, clinical approval, product override, or arbitrary score floor.
 
-The fail-first creatine test reproduced 0 versus positive points when only the advertised benefit changed. The candidate has an all-seven-module scoring fixture invariant and a raw-to-detail replay of 11 real labels. Thorne creatine and Life Extension ubiquinol both hold 15.6 Evidence across four wording variants. Casein and the selected omega-3 and psyllium examples still need independent scoring-path investigation. No complete catalog, app acceptance or release is claimed. Receipt: `/Users/seancheick/pg_quality/evidence-independence.R0txGv`.
+The candidate combines #372's 95-ingredient review records and explicit pending states for L-glutamine, glutathione and green coffee bean with #376's claim-independent Evidence. #372 passed hosted CI at cbf6106ff; that is not combined-candidate validation. Existing clinical provenance remains unchanged.
+
+Audit corrections: adding a non-omega ingredient no longer erases EPA/DHA's reviewed contribution; a primary protein projection cannot be completed by a carrier/non-efficacy literature record. Study route conflicts are checked by shared applicability for generic and native contexts. Explicit lactation exclusions remain binding; unrelated exclusions and negated exclusions do not. Ordinary oral dosage-form variation is not a route mismatch. Claim alignment remains separate.
+
+Checks before integration: omega fail-first 0 versus 10.4, then 26 focused cases; 70 saved-catalog omega owner/assembly checks passed without skips. Native/applicability slice 617 passed, with six additional lactation controls. All seven module fixtures preserve Evidence score, required owners, completion and reason across benefit statements and title additions. Complete frozen-catalog replay, combined CI, local gate and exact exported Product Detail/Compare acceptance remain OPEN. No final count, release readiness or publication claimed. Six real-label diagnostic artifacts: `/Users/seancheick/pg_quality/evidence-audit-376`.
+
 
 
 Owner: existing pipeline vitamin E/caffeine bound helpers and assessment readiness; app reset lifecycle, compressed download staging and shared Stack dose providers. Evidence: fail-first tests, exact-source CI, frozen-label export receipts and production-provider probes below. Will NOT create new clinical thresholds, research credit, public status or a parallel warning engine.

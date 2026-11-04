@@ -1,0 +1,73 @@
+{
+ "canonical": "atp",
+ "labels": 2,
+ "stored": "positive_moderate",
+ "as_read": "Positive for Peak ATP at 400 mg on strength in small trials naming no primary outcome, with null results on other measures; nothing read tested the labels' 150 mg, and an acute dose-response trial placed the minimal effective dose at 400 mg.",
+ "route": "no_qualifying",
+ "quote": {
+  "pmid": "34957398",
+  "text": "Conclusions: In this study, the effective minimal dose of acute oral ATP supplementation during resistance exercise to increase performance was determined to be 400 mg, while as little as 100 mg showed improvements in perceived exertion."
+ },
+ "positive_named": [
+  "24330670",
+  "28080323",
+  "38535745",
+  "25006331",
+  "37599676"
+ ],
+ "proposed_decision_text": "Both labels print Peak ATP at 150 mg, one as adenosine 5'-triphosphate disodium with alpha lipoic acid in a two-ingredient product (213851) and one alone (213850). The stored trial gave 400 mg of disodium ATP for 2 weeks to 42 healthy men and reports held muscle excitability and higher later-bout peak power against baseline, with no primary outcome named (28080323). A 12-week trial at 400 mg/day reports greater strength, jump power and muscle thickness than placebo in resistance-trained men, and names no primary outcome (24330670). A meta-analysis of five RCTs with 121 men found greater maximal strength, no difference in repetitions or anaerobic power, and credits 400 mg (38535745). Two 14-day crossovers at 400 mg in 20 adults found no difference in 3-minute test performance (37092374), and better reaction time with no difference in mood or cognition measures (37599676). A single 400 mg dose didn't improve strength indicators in 18 men but reduced fatigue as exercise went on (38193939). 25006331 reports higher blood flow in a pilot of 12 with no control group described. The only trial read that went below 400 mg was acute, in 20 men: 200 mg did not differ significantly from placebo on repetitions and 100 mg showed no improvement over placebo on performance (34957398). No study read tested 150 mg, and no abstract read names a primary outcome. Abstracts only. No study read meets the review's standard for what these labels print.",
+ "studies_to_add": [
+  {
+   "pmid": "38535745",
+   "study_type": "systematic_review_meta",
+   "sample_size": 121,
+   "primary_endpoint": "not named; maximal strength, maximum repetitions, maximum anaerobic power",
+   "effect_direction": "positive_weak",
+   "quote": "In conclusion, supplementation with 400 mg of ATP doses can improve maximal muscle strength in resistance-trained men."
+  },
+  {
+   "pmid": "24330670",
+   "study_type": "rct",
+   "sample_size": 0,
+   "primary_endpoint": "not named; strength, power, muscle thickness",
+   "effect_direction": "positive",
+   "quote": "Our results suggest oral ATP supplementation may enhance muscular adaptations following 12-weeks of resistance training, and prevent decrements in performance following overreaching."
+  },
+  {
+   "pmid": "34957398",
+   "study_type": "rct",
+   "sample_size": 20,
+   "primary_endpoint": "not named; repetitions and weight lifted across 400, 200 and 100 mg",
+   "effect_direction": "mixed",
+   "quote": "200 mg ATP numerically increased set 1 repetitions (+4% p = 0.47), while 100 mg ATP showed no improvements over placebo."
+  },
+  {
+   "pmid": "37092374",
+   "study_type": "rct",
+   "sample_size": 20,
+   "primary_endpoint": "not named; 3-minute all-out test performance",
+   "effect_direction": "null",
+   "quote": "These findings indicate that 3MT performance was not significantly impacted by PeakATP® supplementation."
+  }
+ ],
+ "stop_list": [
+  "24330670's abstract states no sample size, so sample_size is 0; don't enter it until checked.",
+  "213851 adds alpha lipoic acid; the trials read are of ATP alone."
+ ],
+ "clinician_items": [
+  "22510240: single 5000 mg doses of oral ATP raised uric acid about 50% over placebo in 8 healthy volunteers when released in the proximal small intestine or by naso-duodenal tube; blood ATP did not rise. Far above these labels' 150 mg."
+ ],
+ "stored_rating_note": "positive_moderate rests on a 400 mg trial reporting peak power against baseline, and 150 mg labels are below every positive dose read. Null 37092374 isn't stored. The stored record's preparation does match the labels' brand.",
+ "pmids_read": [
+  "28080323",
+  "38535745",
+  "38193939",
+  "37599676",
+  "34957398",
+  "24330670",
+  "37092374",
+  "25006331",
+  "22510240"
+ ],
+ "unread_notes": "Abstracts only. 29045315 and 30276192 (single 400 mg doses in 11 people each) seen only in the listing and not used. Searches: 73 and 36 hits; most hits were off topic."
+}

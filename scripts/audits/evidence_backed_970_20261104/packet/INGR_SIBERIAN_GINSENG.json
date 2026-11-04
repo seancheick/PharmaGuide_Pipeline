@@ -1,0 +1,904 @@
+{
+  "record_id": "INGR_SIBERIAN_GINSENG",
+  "labels": 27,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "mixed: conflicting evidence with no clear benefit; one 9-man endurance trial positive, two other endurance trials and the placebo-controlled fatigue trial null",
+  "decision": "closed_no_credit",
+  "summary": "The stored positive rests on one crossover trial in 9 men (21793317). Two other endurance trials found nothing (8778554, 11099371). The placebo-controlled fatigue trial (14971626) did not show overall efficacy, and a 144-person stress trial (23740477) found the effect of adding ES negligible. Small positives are transient (15207399), surrogate (38525193) or acute edema (27333960). 16 of 27 labels print a powder row; only the edema trial names powder.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_ginseng_14971626",
+      "components": [
+        "INGR_SIBERIAN_GINSENG"
+      ],
+      "source_pmids": [
+        "14971626"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Eleutherococcus senticosus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_fatigue",
+      "purpose": "energy_fatigue",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_ginseng_14971626",
+      "population": {
+        "age_group": "adult",
+        "description": "96 adults with unexplained fatigue of at least 6 months randomized; 76 gave 2-month data."
+      },
+      "study_design": "Randomized, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "Mean fatigue change at 2 months, full sample: no significant difference from placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Less severe fatigue subgroup, 45 subjects, P = 0.04 unadjusted for multiple comparisons",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "Abstract states neither dose nor preparation, so it can't be matched to powder or extract labels.",
+        "Abstract: 'Overall efficacy was not demonstrated.'",
+        "20 of 96 gave no 2-month data.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dose and preparation not stated in the abstract; 2 months of follow-up.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "14971626",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_ginseng_8778554",
+      "components": [
+        "INGR_SIBERIAN_GINSENG"
+      ],
+      "source_pmids": [
+        "8778554"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Eleutherococcus senticosus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "endurance_performance",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_ginseng_8778554",
+      "population": {
+        "age_group": "adult",
+        "description": "20 highly trained distance runners, matched pairs."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, parallel",
+      "outcomes": [
+        {
+          "name": "HR, VO2, VE, RER, RPE, time to exhaustion and serum lactate: no significant differences from placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Liquid extract measured in mL; not comparable by mass with capsule labels.",
+        "Small sample.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 42,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "liquid_extract"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "3.4 ml of extract daily for 6 weeks; not a mass dose, left unconverted.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "8778554",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_ginseng_11099371",
+      "components": [
+        "INGR_SIBERIAN_GINSENG"
+      ],
+      "source_pmids": [
+        "11099371"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Eleutherococcus senticosus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "endurance_performance",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_ginseng_11099371",
+      "population": {
+        "age_group": "adult",
+        "description": "9 highly trained male cyclists."
+      },
+      "study_design": "Randomized, double-blind, crossover",
+      "outcomes": [
+        {
+          "name": "Steady-state substrate use and 10-km time trial: no significant differences from placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Only 7 days of supplementation before each trial.",
+        "Abstract doesn't say whether this was powder or extract.",
+        "Very small sample.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 7,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1,200 mg/day for 7 days before each trial.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "11099371",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_ginseng_21793317",
+      "components": [
+        "INGR_SIBERIAN_GINSENG"
+      ],
+      "source_pmids": [
+        "21793317"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Eleutherococcus senticosus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "endurance_performance",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_ginseng_21793317",
+      "population": {
+        "age_group": "adult",
+        "description": "9 recreationally trained college men."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, crossover, 4-week washout",
+      "outcomes": [
+        {
+          "name": "Endurance time up 23% (P < 0.05), described as a major finding",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "VO2 peak up 12% (P < 0.05)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Very small sample; no primary outcome named in the abstract.",
+        "Abstract says 800 mg/d of ES and doesn't say standardized extract, though the stored record does.",
+        "Contradicted on endurance by 8778554 and 11099371.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          800
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "800 mg/day for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21793317",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_ginseng_23740477",
+      "components": [
+        "INGR_SIBERIAN_GINSENG"
+      ],
+      "source_pmids": [
+        "23740477"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Eleutherococcus senticosus",
+        "plant_part": "root"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "stress_related_fatigue",
+      "purpose": "stress_fatigue",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_ginseng_23740477",
+      "population": {
+        "age_group": "adult",
+        "description": "144 adults with asthenia and reduced working capacity from chronic stress."
+      },
+      "study_design": "Randomized, three arms: ES extract, stress management training, both; multicenter",
+      "outcomes": [
+        {
+          "name": "Almost all parameters improved over time without group differences",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Mental fatigue and restlessness favored combination over ES alone",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No placebo arm, so improvement over time on ES alone can't be attributed to ES.",
+        "Abstract: 'Effects of adding ES to SMT are, if any, negligible.'",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          120
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "120 mg/day root extract for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "23740477",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_ginseng_15207399",
+      "components": [
+        "INGR_SIBERIAN_GINSENG"
+      ],
+      "source_pmids": [
+        "15207399"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Eleutherococcus senticosus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "quality_of_life_older_adults",
+      "purpose": "quality_of_life",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_ginseng_15207399",
+      "population": {
+        "age_group": "older_adult",
+        "description": "20 hypertensive, digitalized volunteers aged 65 or over."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "SF-36v2 social functioning higher at 4 weeks (p = 0.02), not persisting at 8 weeks",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Very small sample; effect gone by 8 weeks.",
+        "70% on ES vs 20% on placebo guessed active therapy, a blinding concern.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          300
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dry extract 300 mg/day for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "15207399",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_ginseng_38525193",
+      "components": [
+        "INGR_SIBERIAN_GINSENG"
+      ],
+      "source_pmids": [
+        "38525193"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Eleutherococcus senticosus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiac_autonomic_function",
+      "purpose": "autonomic_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_ginseng_38525193",
+      "population": {
+        "age_group": "older_adult",
+        "description": "28 community-dwelling older adults, mean age 72.5."
+      },
+      "study_design": "Double-blind, randomized, controlled",
+      "outcomes": [
+        {
+          "name": "Group-by-time interaction for CVRR, HF and delta LF/HF",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Surrogate only; no label purpose rests on it.",
+        "Abstract gives neither dose nor preparation.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Supplement twice daily for 4 weeks; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "38525193",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_siberian_ginseng_27333960",
+      "components": [
+        "INGR_SIBERIAN_GINSENG"
+      ],
+      "source_pmids": [
+        "27333960"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Eleutherococcus senticosus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "lower_limb_edema",
+      "purpose": "edema",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_siberian_ginseng_27333960",
+      "population": {
+        "age_group": "adult",
+        "description": "50 healthy women."
+      },
+      "study_design": "Two-way randomized crossover, acute",
+      "outcomes": [
+        {
+          "name": "Lower-limb edema attenuated at 2 and 4 hours compared with control",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The only trial read that names powder, the form on most of these labels, but it tests a single acute intake for edema, a purpose no label makes.",
+        "Abstract gives no amount and no blinding.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "powder"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Siberian ginseng powder, single ingestion; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "27333960",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "10641044": "Taiga Wurzel vs Echinacea, no placebo; 25 drops three times daily; changes against baseline.",
+    "2963645": "10 ml ethanolic extract three times daily; lymphocyte counts only, a surrogate.",
+    "11798012": "8 mL/day ethanolic extract in athletes; testosterone:cortisol ratio fell, no immune change; hormones only.",
+    "34087398": "Narrative review of 46 Soviet-era studies; says ES 'appears to exhibit benefits'; mostly 2 ml extract/day; no pooled effect.",
+    "33650944": "Systematic review of 52 HPA-axis trials; no Siberian ginseng result in the abstract; effects unclear for most.",
+    "24683218": "Adolescent bipolar add-on to lithium versus fluoxetine; no placebo; not a label purpose.",
+    "15190050": "Single 3 g dose before OGTT in 12 people; glycemic comparison across ginseng types, not a benefit trial.",
+    "31979283": "Leaf extract combined with Drynaria; not these labels.",
+    "42543377": "Compound granules, a multi-herb combination."
+  },
+  "stop_or_hold": "8778554 doses in mL stay in regimen text, and 14971626, 38525193, 27333960 have no dose in the abstract. No open full text was found for the six key trials, so powder versus extract can't be separated in the fatigue and 800/1,200 mg trials.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "14971626",
+      "title_fetched": "Randomized controlled trial of Siberian ginseng for chronic fatigue.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14971626/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "8778554",
+      "title_fetched": "Effect of Eleutherococcus senticosus on submaximal and maximal exercise performance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8778554/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11099371",
+      "title_fetched": "The effect of siberian ginseng (Eleutherococcus senticosus) on substrate utilization and performance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11099371/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21793317",
+      "title_fetched": "The effect of eight weeks of supplementation with Eleutherococcus senticosus on endurance capacity and metabolism in human.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21793317/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23740477",
+      "title_fetched": "No benefit adding eleutherococcus senticosus to stress management training in stress-related fatigue/weakness, impaired work or concentration, a randomized controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23740477/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15207399",
+      "title_fetched": "Effects of Siberian ginseng (Eleutherococcus senticosus maxim.) on elderly quality of life: a randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15207399/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38525193",
+      "title_fetched": "Effects of continuous supplementation of Acanthopanax senticosus Harms on the cardiac autonomic function of community-dwelling elderly individuals during resting and standing tests: a randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38525193/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27333960",
+      "title_fetched": "Antiedema effects of Siberian ginseng in humans and its molecular mechanism of lymphatic vascular function in vitro.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27333960/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "10641044",
+      "title_fetched": "The influence of active components of Eleutherococcus senticosus on cellular defence and physical fitness in man.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10641044/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "2963645",
+      "title_fetched": "Flow-cytometric studies with eleutherococcus senticosus extract as an immunomodulatory agent.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2963645/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11798012",
+      "title_fetched": "The effects of Eleutherococcus senticosus and Panax ginseng on steroidal hormone indices of stress and lymphocyte subset numbers in endurance athletes.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11798012/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34087398",
+      "title_fetched": "Findings of Russian literature on the clinical application of Eleutherococcus senticosus (Rupr. & Maxim.): A narrative review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34087398/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33650944",
+      "title_fetched": "Modulation of the hypothalamic-pituitary-adrenal (HPA) axis by plants and phytonutrients: a systematic review of human trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33650944/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24683218",
+      "title_fetched": "Comparison of the Addition of Siberian Ginseng (Acanthopanax senticosus) Versus Fluoxetine to Lithium for the Treatment of Bipolar Disorder in Adolescents: A Randomized, Double-Blind Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24683218/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15190050",
+      "title_fetched": "Decreasing, null and increasing effects of eight popular types of ginseng on acute postprandial glycemic indices in healthy humans: the role of ginsenosides.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15190050/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31979283",
+      "title_fetched": "Combined Treatment with Two Water Extracts of Eleutherococcus senticosus Leaf and Rhizome of Drynaria fortunei Enhances Cognitive Function: A Placebo-Controlled, Randomized, Double-Blind Study in Healthy Adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31979283/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42543377",
+      "title_fetched": "[Compound Ciwujia Granules for chronic fatigue syndrome with syndrome of deficiency of both heart and spleen: a multicenter, randomized, double-blind, double-dummy, positive drug-controlled trial].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42543377/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_SIBERIAN_GINSENG",
+    "standard_name": "Siberian ginseng (Eleuthero)",
+    "aliases": [
+      "Eleuthero extract",
+      "Eleuthero powder",
+      "Eleuthero root extract",
+      "Eleuthero",
+      "Eleuthero, Powder",
+      "Siberian Eleuthero root extract",
+      "Siberian Eleuthero",
+      "Siberian Root Extract",
+      "Siberian Root Powder",
+      "Siberian Root",
+      "Siberian root & rhizome powder",
+      "Siberian root extract",
+      "Siberian root powder",
+      "standardized Eleuthero extract"
+    ],
+    "category": "adaptogen_stress",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "14971626",
+      "8778554",
+      "11099371",
+      "21793317",
+      "23740477",
+      "15207399",
+      "38525193",
+      "27333960"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: conflicting evidence with no clear benefit; one 9-man endurance trial positive, two other endurance trials and the placebo-controlled fatigue trial null. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "endurance performance",
+      "fatigue"
+    ],
+    "health_goals_supported": [],
+    "notes": "The stored positive rests on one crossover trial in 9 men (21793317). Two other endurance trials found nothing (8778554, 11099371). The placebo-controlled fatigue trial (14971626) did not show overall efficacy, and a 144-person stress trial (23740477) found the effect of adding ES negligible. Small positives are transient (15207399), surrogate (38525193) or acute edema (27333960). 16 of 27 labels print a powder row; only the edema trial names powder.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Trained men and adults with unexplained or stress-related fatigue",
+      "supported_outcomes": [
+        "endurance performance",
+        "fatigue"
+      ],
+      "source_pmids": [
+        "14971626",
+        "8778554",
+        "11099371",
+        "21793317",
+        "23740477",
+        "15207399",
+        "38525193",
+        "27333960"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The stored positive rests on one crossover trial in 9 men (21793317). Two other endurance trials found nothing (8778554, 11099371). The placebo-controlled fatigue trial (14971626) did not show overall efficacy, and a 144-person stress trial (23740477) found the effect of adding ES negligible. Small positives are transient (15207399), surrogate (38525193) or acute edema (27333960). 16 of 27 labels print a powder row; only the edema trial names powder. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "14971626",
+        "title": "Randomized controlled trial of Siberian ginseng for chronic fatigue.",
+        "citation": "Psychological medicine (2004)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14971626/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't",
+          "Research Support, U.S. Gov't, P.H.S."
+        ],
+        "doi": "10.1017/s0033291703008791"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "8778554",
+        "title": "Effect of Eleutherococcus senticosus on submaximal and maximal exercise performance.",
+        "citation": "Medicine and science in sports and exercise (1996)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/8778554/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1097/00005768-199604000-00013"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11099371",
+        "title": "The effect of siberian ginseng (Eleutherococcus senticosus) on substrate utilization and performance.",
+        "citation": "International journal of sport nutrition and exercise metabolism (2000)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11099371/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1123/ijsnem.10.4.444"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21793317",
+        "title": "The effect of eight weeks of supplementation with Eleutherococcus senticosus on endurance capacity and metabolism in human.",
+        "citation": "The Chinese journal of physiology (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21793317/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.4077/cjp.2010.amk018"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23740477",
+        "title": "No benefit adding eleutherococcus senticosus to stress management training in stress-related fatigue/weakness, impaired work or concentration, a randomized controlled study.",
+        "citation": "Pharmacopsychiatry (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23740477/",
+        "publication_types": [
+          "Clinical Trial, Phase IV",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1055/s-0033-1347178"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "15207399",
+        "title": "Effects of Siberian ginseng (Eleutherococcus senticosus maxim.) on elderly quality of life: a randomized clinical trial.",
+        "citation": "Archives of gerontology and geriatrics. Supplement (2004)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/15207399/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.archger.2004.04.012"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38525193",
+        "title": "Effects of continuous supplementation of Acanthopanax senticosus Harms on the cardiac autonomic function of community-dwelling elderly individuals during resting and standing tests: a randomized controlled trial.",
+        "citation": "Frontiers in cardiovascular medicine (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38525193/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3389/fcvm.2024.1336676"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "27333960",
+        "title": "Antiedema effects of Siberian ginseng in humans and its molecular mechanism of lymphatic vascular function in vitro.",
+        "citation": "Nutrition research (New York, N.Y.) (2016)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27333960/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.nutres.2016.02.012"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: siberian_ginseng effect_direction null, agent review; the contexts below are the reading behind it."
+}

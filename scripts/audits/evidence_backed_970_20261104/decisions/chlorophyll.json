@@ -1,0 +1,9 @@
+{"canonical":"chlorophyll","labels":12,"stored":"positive_weak","as_read":"One RCT of 100 mg chlorophyllin three times daily was positive on an aflatoxin biomarker, a purpose no label prints; the stored odor report is uncontrolled.",
+"route":"packet_no_credit",
+"positive_named":["11724948","16417778","7350215","15043988"],
+"studies_to_add":[{"pmid":"11724948","study_type":"rct","sample_size":180,"primary_endpoint":"urinary aflatoxin-N7-guanine adducts at 3 months","effect_direction":"positive","quote":"Chlorophyllin consumption at each meal led to an overall 55% reduction (P = 0.036) in median urinary levels of this aflatoxin biomarker compared with those taking placebo."}],
+"rejection":{"preparation":"plain chlorophyll, as on label 315657","aliases":["Chlorophyll"],"excluded_form_terms":["Chlorophyll"],"reviewed_trial_pmids":[],"search":"(chlorophyllin OR chlorophyll[Title]) AND oral or supplement terms AND trial or review terms, 36 hits; chlorophyllin AND human and purpose terms, 75 hits, first 20 listed. No oral efficacy trial of plain chlorophyll seen; only 19952359, an unblinded pharmacokinetic study in 3 volunteers. Second search not read past 20.","labels_reached":["315657"]},
+"stop_list":["fields can't state 12 labels split: 11 chlorophyllin, 1 chlorophyll, except by excluded term"],
+"stored_rating_note":"positive_weak rests on 7350215, an uncontrolled 1980 report with no dose or duration.",
+"pmids_read":["7350215","11724948","12628519","15043988","16417778","19952359","21541030","24670123","31581743"],
+"unread_notes":"Abstracts only. 11724948 has PMC64728, marked not open by Europe PMC, and wasn't opened. Topical trials (26091384, 26461829, 29942425) seen in the list and not opened, not described. 11724948 did not appear in the search list I read; 12628519 describes the trial and I opened 11724948 directly by PMID, without a third search, and its title and content confirm it."}

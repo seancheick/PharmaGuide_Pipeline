@@ -1,0 +1,10 @@
+{"canonical": "turkey_rhubarb_root", "labels": 7, "stored": "positive_weak",
+ "as_read": "One small positive 30 day RCT of Rheum palmatum root extract on intestinal transit, dosed by rhein-equivalent content the labels do not print.",
+ "route": "packet_no_credit",
+ "positive_named": ["36499011"],
+ "studies_to_add": [{"pmid": "36499011", "study_type": "rct", "sample_size": 42, "primary_endpoint": "intestinal transit (named primary endpoint in open full text)", "effect_direction": "positive_weak", "quote": "Stool frequency and consistency, and perceived change in transit problem, transit speed and difficulty in evacuating, investigated by validated questionnaires, were improved in both groups of RE-treated volunteers compared to placebo."}],
+ "stop_list": ["Dose fields hold rhein-equivalent mg for 36499011; they can't express that labels print 500 mg extract with no anthraquinone content."],
+ "clinician_items": ["36499011: open full text says the number of subjects complaining of diarrhea or loose stools increased significantly in the 25 mg rhein-equivalent group; abstract calls 30 days safe even at the higher dose."],
+ "stored_rating_note": "positive_weak fits the single trial. Already rests on 36499011 alone; the label amount isn't comparable to the stored dose, which the stored text already says.",
+ "pmids_read": ["36499011","37153797","29208203","39997764","28844213"],
+ "unread_notes": "Full text of 36499011 opened for design, dose, primary endpoint and funding passages only. Others abstracts, cut at 1100 characters, used only to place them outside the labels. Search 1 was noisy (Rheum matched rheumatology); search 2 restricted to titles returned 35, first 25 reviewed by title. Formula and add-on meta-analyses (32187391, 32188181, 29672966, 27693773, 26645518, 25617260, 25453529, 28573250, 36339579) and topical trials (32693116, 33607823, 32951726) not opened, since their titles put them outside these labels."}

@@ -1,0 +1,945 @@
+{
+  "record_id": "INGR_BORAGE_SEED_OIL",
+  "labels": 16,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed: null for eczema in a primary-endpoint trial and Cochrane; some benefit in rheumatoid arthritis at high GLA doses, with pooling across oils; single trials on blood pressure and weight",
+  "decision": "closed_no_credit",
+  "summary": "The labels print borage oil at 200 to 1,650 mg, some in omega blends, with joint, skin, immune, metabolic and cardiovascular purposes. For eczema, the largest trial's primary endpoint was null (14670885) and Cochrane finds oral borage oil lacks effect (23633319). For rheumatoid arthritis, one 37-patient trial at 1.4 g/d GLA was positive (8214997), with authors noting usual intake is far lower; a Cochrane review pools GLA from three oils (21328257); another review says the evidence does not support current use (21652584). One trial at 1,000 mg in hypertensive postmenopausal women reports lower blood pressure, with no primary outcome named (33534427). Weight results conflict (34606560, 17513402).",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_14670885",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "14670885"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "atopic_eczema",
+      "purpose": "atopic_eczema",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_14670885",
+      "population": {
+        "age_group": "adult",
+        "description": "151 adults and children with atopic eczema, 140 evaluable including 69 children."
+      },
+      "study_design": "Single-centre randomised double-blind placebo-controlled parallel-group trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Change in SASSAD total sign score: difference 1.4 points in favour of placebo (95% CI -2.2 to 5.0, P = 0.45)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No significant differences in the other assessments",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors conclude gamma linolenic acid is not beneficial in atopic dermatitis.",
+        "The 920 mg is the adult amount; the mg for children is not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          920
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Adults four capsules twice daily (920 mg gamma linolenic acid); children two capsules twice daily, for 12 weeks.",
+        "normalization": {
+          "basis": "Amount printed as gamma-linolenic acid in borage oil, not as oil mass; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "14670885",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_23633319",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "23633319"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "atopic_eczema",
+      "purpose": "atopic_eczema",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_23633319",
+      "population": {
+        "age_group": "adult",
+        "description": "27 studies, 1596 participants; 8 studies of oral borage oil."
+      },
+      "study_design": "Cochrane systematic review and meta-analysis of randomised trials, search to August 2012",
+      "outcomes": [
+        {
+          "name": "Authors: oral borage oil and evening primrose oil lack effect on eczema, with improvement similar to placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Pools by oil; the abstract text read does not give a borage oil-only amount.",
+        "Long-term use not examined.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "23633319",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_8214997",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "8214997"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "rheumatoid_arthritis",
+      "purpose": "rheumatoid_arthritis_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_8214997",
+      "population": {
+        "age_group": "adult",
+        "description": "37 patients with rheumatoid arthritis and active synovitis."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, cotton seed oil placebo, 24 weeks",
+      "outcomes": [
+        {
+          "name": "Reduction in signs and symptoms of disease activity versus placebo (P < 0.05); tender joints down 36%, swollen joint count down 28%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Overall clinical response (significant change in four measures) better on treatment (P < 0.05)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Outcomes are listed but none is called primary.",
+        "Authors say the usual intake is far lower than this dose and that it should not be viewed as therapy for any disease.",
+        "Small. Sample per arm not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1.4
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1.4 g/d gammalinolenic acid in borage seed oil for 24 weeks.",
+        "normalization": {
+          "basis": "Amount printed as gamma-linolenic acid in borage oil, not as oil mass; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "8214997",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_21328257",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "21328257"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "rheumatoid_arthritis",
+      "purpose": "rheumatoid_arthritis_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_21328257",
+      "population": {
+        "age_group": "adult",
+        "description": "22 studies of herbal therapies in rheumatoid arthritis; seven on GLA-containing oils."
+      },
+      "study_design": "Cochrane systematic review update, search October 2010",
+      "outcomes": [
+        {
+          "name": "GLA oils: pain intensity MD -32.83 on a 100 point scale (95% CI -56.25 to -9.42); disability MD -15.75% (95% CI -27.06 to -4.44)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Pools evening primrose, borage and blackcurrant seed oils; no borage-only estimate.",
+        "Authors rate this moderate evidence of some benefit and note design flaws and inadequate reporting across trials.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "21328257",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_21652584",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "21652584"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "rheumatoid_arthritis",
+      "purpose": "rheumatoid_arthritis_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_21652584",
+      "population": {
+        "age_group": "adult",
+        "description": "Randomized trials of 18 complementary medicines in rheumatoid arthritis; two on borage seed oil."
+      },
+      "study_design": "Systematic review with Jadad quality scoring, to August 2010; no pooling",
+      "outcomes": [
+        {
+          "name": "Borage seed oil trials (n = 2) positive and may warrant further investigation; available evidence does not support current use of the reviewed substances in rheumatoid arthritis",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Doses aren't in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "21652584",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_33534427",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "33534427"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "postmenopausal_hypertension",
+      "purpose": "blood_pressure",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_33534427",
+      "population": {
+        "age_group": "adult",
+        "description": "96 postmenopausal hypertensive women."
+      },
+      "study_design": "Prospective double-blind randomized trial, borage oil plus vitamin E versus vitamin E, 6 months",
+      "outcomes": [
+        {
+          "name": "Systolic and diastolic pressure and waist-hip ratio reduced versus the vitamin E group (P < 0.01)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome; its power calculation uses systolic pressure.",
+        "Effect sizes aren't in the abstract.",
+        "Single trial, short term per the authors.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1,000 mg of borage oil rich in gamma-linolenic acid plus vitamin E for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33534427",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_34606560",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "34606560"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_young_adults",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_34606560",
+      "population": {
+        "age_group": "adult",
+        "description": "Overweight young adults with a family history of obesity; number not in the abstract."
+      },
+      "study_design": "Randomized controlled trial, 6 weeks",
+      "outcomes": [
+        {
+          "name": "No effect on resting metabolic rate or body mass index",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Plasma triglycerides lower and HDL cholesterol higher; total and LDL cholesterol and glucose unchanged",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome, comparator or sample size.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          880
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Borage oil (880 mg GLA per day) for 6 weeks.",
+        "normalization": {
+          "basis": "Amount printed as gamma-linolenic acid in borage oil, not as oil mass; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "34606560",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_17513402",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "17513402"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "formerly_obese_adults",
+      "purpose": "weight_regain",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_17513402",
+      "population": {
+        "age_group": "adult",
+        "description": "50 formerly obese adults after major weight loss."
+      },
+      "study_design": "Randomized double-blind trial versus olive oil, 1 year, stopped early and unblinded",
+      "outcomes": [
+        {
+          "name": "Weight regain 1.8 kg on GLA versus 7.6 kg on controls in those completing at least 50 weeks (13 and 17 subjects)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        },
+        {
+          "name": "Weight regain did not differ among those completing under 50 weeks",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "5 g/d of oil is well above any label amount.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "890 mg/d of GLA (5 g/d borage oil) for 1 y.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "17513402",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_borage_seed_oil_18761778",
+      "components": [
+        "INGR_BORAGE_SEED_OIL"
+      ],
+      "source_pmids": [
+        "18761778"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Borago officinalis",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "women_skin_condition",
+      "purpose": "skin_condition",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_borage_seed_oil_18761778",
+      "population": {
+        "age_group": "adult",
+        "description": "Two groups of women on flaxseed or borage oil, plus a placebo group; numbers not in the abstract."
+      },
+      "study_design": "Randomized trial, 12 weeks, medium-chain fatty acid placebo",
+      "outcomes": [
+        {
+          "name": "Skin hydration, water loss, roughness and scaling improved compared with week 0",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Comparison reported against week 0, not between groups, except that placebo changed only for hydration.",
+        "Abstract names no primary outcome.",
+        "Dose given as total fatty acids.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          2.2
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2.2 g total fatty acids/d for 12 weeks; oil mass not in the abstract.",
+        "normalization": {
+          "basis": "Amount printed as total fatty acids, not as oil mass; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "18761778",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "12663296": "Infants at high familial risk, 100 mg GLA; prevention, not a label population.",
+    "15214949": "Dogs, and a combination with fish oil. Not human.",
+    "20579590": "Narrative review of 12 oral or topical trials in atopic dermatitis; results variable; superseded here by 23633319."
+  },
+  "stop_or_hold": "Labels print oil mass and trials mostly print GLA, so doses cannot be compared without a conversion the sources do not give. Several labels are omega blends (fish, flax, EPA/GLA). Fields can't hold null for skin alongside weak positive for joint on one ingredient.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "14670885",
+      "title_fetched": "Efficacy and tolerability of borage oil in adults and children with atopic eczema: randomised, double blind, placebo controlled, parallel group trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14670885/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23633319",
+      "title_fetched": "Oral evening primrose oil and borage oil for eczema.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23633319/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "8214997",
+      "title_fetched": "Treatment of rheumatoid arthritis with gammalinolenic acid.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8214997/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21328257",
+      "title_fetched": "Herbal therapy for treating rheumatoid arthritis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21328257/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21652584",
+      "title_fetched": "Evidence for the efficacy of complementary and alternative medicines in the management of rheumatoid arthritis: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21652584/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33534427",
+      "title_fetched": "Is there a beneficial effect of gamma-linolenic acid supplementation on body fat in postmenopausal hypertensive women? A prospective randomized double-blind placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33534427/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34606560",
+      "title_fetched": "Borage oil intake by overweight young adults: no effect on metabolic rate; beneficial effects on plasma triglyceride and HDL cholesterol readings.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34606560/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17513402",
+      "title_fetched": "Gamma-linolenate reduces weight regain in formerly obese humans.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17513402/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18761778",
+      "title_fetched": "Intervention with flaxseed and borage oil supplements modulates skin condition in women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18761778/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12663296",
+      "title_fetched": "Gamma-linolenic acid supplementation for prophylaxis of atopic dermatitis--a randomized controlled trial in infants at high familial risk.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12663296/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15214949",
+      "title_fetched": "A randomized, controlled study to evaluate the steroid sparing effect of essential fatty acid supplementation in the treatment of canine atopic dermatitis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15214949/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20579590",
+      "title_fetched": "Borage oil in the treatment of atopic dermatitis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20579590/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_BORAGE_SEED_OIL",
+    "standard_name": "Borage Seed Oil",
+    "aliases": [
+      "Borage (Borago officinalis) Oil",
+      "Borage Oil",
+      "Borage Seed Oil"
+    ],
+    "category": "anti_inflammatory",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "14670885",
+      "23633319",
+      "8214997",
+      "21328257",
+      "21652584",
+      "33534427",
+      "34606560",
+      "17513402",
+      "18761778"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: null for eczema in a primary-endpoint trial and Cochrane; some benefit in rheumatoid arthritis at high GLA doses, with pooling across oils; single trials on blood pressure and weight. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "atopic eczema severity",
+      "rheumatoid arthritis signs and symptoms"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print borage oil at 200 to 1,650 mg, some in omega blends, with joint, skin, immune, metabolic and cardiovascular purposes. For eczema, the largest trial's primary endpoint was null (14670885) and Cochrane finds oral borage oil lacks effect (23633319). For rheumatoid arthritis, one 37-patient trial at 1.4 g/d GLA was positive (8214997), with authors noting usual intake is far lower; a Cochrane review pools GLA from three oils (21328257); another review says the evidence does not support current use (21652584). One trial at 1,000 mg in hypertensive postmenopausal women reports lower blood pressure, with no primary outcome named (33534427). Weight results conflict (34606560, 17513402).",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with rheumatoid arthritis; adults and children with atopic eczema",
+      "supported_outcomes": [
+        "atopic eczema severity",
+        "rheumatoid arthritis signs and symptoms"
+      ],
+      "source_pmids": [
+        "14670885",
+        "23633319",
+        "8214997",
+        "21328257",
+        "21652584",
+        "33534427",
+        "34606560",
+        "17513402",
+        "18761778"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print borage oil at 200 to 1,650 mg, some in omega blends, with joint, skin, immune, metabolic and cardiovascular purposes. For eczema, the largest trial's primary endpoint was null (14670885) and Cochrane finds oral borage oil lacks effect (23633319). For rheumatoid arthritis, one 37-patient trial at 1.4 g/d GLA was positive (8214997), with authors noting usual intake is far lower; a Cochrane review pools GLA from three oils (21328257); another review says the evidence does not support current use (21652584). One trial at 1,000 mg in hypertensive postmenopausal women reports lower blood pressure, with no primary outcome named (33534427). Weight results conflict (34606560, 17513402). Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "14670885",
+        "title": "Efficacy and tolerability of borage oil in adults and children with atopic eczema: randomised, double blind, placebo controlled, parallel group trial.",
+        "citation": "BMJ (Clinical research ed.) (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14670885/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1136/bmj.327.7428.1385"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23633319",
+        "title": "Oral evening primrose oil and borage oil for eczema.",
+        "citation": "The Cochrane database of systematic reviews (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23633319/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD004416.pub2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "8214997",
+        "title": "Treatment of rheumatoid arthritis with gammalinolenic acid.",
+        "citation": "Annals of internal medicine (1993)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/8214997/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't",
+          "Research Support, U.S. Gov't, P.H.S."
+        ],
+        "doi": "10.7326/0003-4819-119-9-199311010-00001"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21328257",
+        "title": "Herbal therapy for treating rheumatoid arthritis.",
+        "citation": "The Cochrane database of systematic reviews (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21328257/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD002948.pub2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21652584",
+        "title": "Evidence for the efficacy of complementary and alternative medicines in the management of rheumatoid arthritis: a systematic review.",
+        "citation": "Rheumatology (Oxford, England) (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21652584/",
+        "publication_types": [
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1093/rheumatology/ker119"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33534427",
+        "title": "Is there a beneficial effect of gamma-linolenic acid supplementation on body fat in postmenopausal hypertensive women? A prospective randomized double-blind placebo-controlled trial.",
+        "citation": "Menopause (New York, N.Y.) (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33534427/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1097/GME.0000000000001740"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34606560",
+        "title": "Borage oil intake by overweight young adults: no effect on metabolic rate; beneficial effects on plasma triglyceride and HDL cholesterol readings.",
+        "citation": "Food & function (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34606560/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1039/d1fo01887f"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "17513402",
+        "title": "Gamma-linolenate reduces weight regain in formerly obese humans.",
+        "citation": "The Journal of nutrition (2007)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17513402/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1093/jn/137.6.1430"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "18761778",
+        "title": "Intervention with flaxseed and borage oil supplements modulates skin condition in women.",
+        "citation": "The British journal of nutrition (2009)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18761778/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1017/S0007114508020321"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: borage_seed_oil effect_direction null, agent review; the contexts below are the reading behind it."
+}

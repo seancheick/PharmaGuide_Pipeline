@@ -1,0 +1,1148 @@
+{
+  "record_id": "INGR_L_ORNITHINE",
+  "labels": 20,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed: small stress and fatigue positives, one null exercise trial; L-ornithine L-aspartate benefit only in cirrhosis at much higher doses",
+  "decision": "closed_no_credit",
+  "summary": "Labels split into 12 ornithine HCl rows and 8 L-ornithine L-aspartate rows, which aren't one evidence set. The stored trial's fatigue result in all 17 people reads as a within-trial comparison; its placebo differences are in women only. Small trials at 400 to 1,600 mg show stress and mood changes, mostly without named primary outcomes. LOLA trials are in cirrhosis at 15 to 18 g a day against 3 g on the label, and Cochrane is very uncertain.",
+  "question_for_clinician": "Can small stress and fatigue trials in healthy Japanese adults credit 500 to 1,000 mg ornithine HCl, and should cirrhosis LOLA data be kept off 3 g supplement labels? Agent recommendation: no credit to either; hepatic encephalopathy treatment is not a supplement purpose.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_19083482",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "19083482"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-ornithine hydrochloride"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "exercise_fatigue",
+      "purpose": "physical_fatigue",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_19083482",
+      "population": {
+        "age_group": "adult",
+        "description": "17 healthy volunteers."
+      },
+      "study_design": "Double-blind, placebo-controlled, 2-way crossover",
+      "outcomes": [
+        {
+          "name": "Subjective fatigue lower at postrecovery compared with postload (P < .01)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Female subgroup: fatigue lower than placebo (P < .05)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        },
+        {
+          "name": "Female subgroup: smaller fall in pedaling speed than placebo (P < .05)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "The full-sample fatigue result reads as postrecovery vs postload, not ornithine vs placebo; the between-group results are in women only.",
+        "6,000 mg on the task day is well above any label here.",
+        "No primary outcome named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          2000,
+          6000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 8,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "L-ornithine hydrochloride 2,000 mg/d for 7 days and 6,000 mg/d for 1 day.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19083482",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_20717126",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "20717126"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-ornithine hydrochloride"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "exercise_performance",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_20717126",
+      "population": {
+        "age_group": "adult",
+        "description": "14 trained young adults."
+      },
+      "study_design": "Placebo-controlled crossover; randomization not stated in the abstract",
+      "outcomes": [
+        {
+          "name": "Exercise time and maximal capacity: no significant differences",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Plasma ammonia higher after exhaustion with ornithine",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "unresolved",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Single dose before exercise.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "single dose",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "L-ornithine hydrochloride 0.1 g/kg body mass, single dose; weight-based, left unconverted.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "20717126",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_21431425",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "21431425"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-ornithine hydrochloride"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "exercise_performance",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_21431425",
+      "population": {
+        "age_group": "adult",
+        "description": "10 trained young adults."
+      },
+      "study_design": "Placebo-controlled; randomization not stated in the abstract",
+      "outcomes": [
+        {
+          "name": "Peak rpm greater than placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Very small, single dose.",
+        "Authors say the effect may not depend on ammonia metabolism.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "single dose",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "L-ornithine hydrochloride 0.1 g/kg body mass, single dose; weight-based, left unconverted.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21431425",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_24889392",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "24889392"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "stress_sleep",
+      "purpose": "stress_sleep",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_24889392",
+      "population": {
+        "age_group": "adult",
+        "description": "52 healthy Japanese adults with slight stress and fatigue."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "Serum cortisol and cortisol/DHEA-S lower than placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Anger reduced and perceived sleep quality improved",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract doesn't say whether 400 mg is base or HCl; labels print HCl.",
+        "No primary outcome named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          400
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "L-ornithine 400 mg/day for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "24889392",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_39768508",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "39768508"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "social_stress_fatigue",
+      "purpose": "stress_fatigue",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_39768508",
+      "population": {
+        "age_group": "adult",
+        "description": "65 healthy participants."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, parallel",
+      "outcomes": [
+        {
+          "name": "Saliva cortisol: no effect",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "POMS fatigue-inertia and anger-hostility improved the morning after TSST",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Lab stressor; no primary outcome named.",
+        "Abstract doesn't say whether 1,600 mg is base or HCl.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 7,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "L-ornithine 1,600 mg for 7 days, plus intake before the test.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39768508",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_23414576",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "23414576"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "after_alcohol",
+      "purpose": "next_morning_fatigue",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_23414576",
+      "population": {
+        "age_group": "adult",
+        "description": "11 healthy Japanese 'flushers' in experiment 1."
+      },
+      "study_design": "Randomized, placebo-controlled, double-masked, crossover",
+      "outcomes": [
+        {
+          "name": "Next-morning fatigue and lassitude scores lower; cortisol lower",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Very small; after drinking alcohol, not a label use.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          400
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 1,
+        "administration_frequency": "single dose",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Ornithine 400 mg after alcohol.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "23414576",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_29969301",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "29969301"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "circadian_phase",
+      "purpose": "sleep_circadian",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_29969301",
+      "population": {
+        "age_group": "adult",
+        "description": "28 healthy adults."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, crossover",
+      "outcomes": [
+        {
+          "name": "Dim light melatonin onset delayed 15 minutes",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "unresolved",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Marker only; a delay isn't a sleep benefit.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          400
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 7,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "L-ornithine 400 mg capsules for 7 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29969301",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_29762873",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "29762873"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-ornithine L-aspartate"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "hepatic_encephalopathy",
+      "purpose": "hepatic_encephalopathy",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_29762873",
+      "population": {
+        "age_group": "adult",
+        "description": "People with cirrhosis; 36 RCTs identified, data from 29 trials, 1,891 participants."
+      },
+      "study_design": "Cochrane systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Possible benefit on mortality, hepatic encephalopathy and serious adverse events vs placebo or no intervention; authors very uncertain",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "L-ornithine L-aspartate only, in cirrhosis, oral and IV. Very low quality evidence.",
+        "Trial sequential analyses: insufficient evidence.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "29762873",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_38403493",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "38403493"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-ornithine L-aspartate"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "minimal_hepatic_encephalopathy",
+      "purpose": "hepatic_encephalopathy",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_38403493",
+      "population": {
+        "age_group": "adult",
+        "description": "6 RCTs, 292 cirrhosis patients."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Reversal of MHE RR 2.264 (1.528 to 3.352)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Progression to overt encephalopathy RR 0.220 (0.076 to 0.637)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Oral subgroup reversal of MHE RR 2.648 (1.593 to 4.402)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "L-ornithine L-aspartate in cirrhosis; a disease treatment.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "38403493",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_24033861",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "24033861"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-ornithine L-aspartate"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "minimal_hepatic_encephalopathy",
+      "purpose": "hepatic_encephalopathy",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_24033861",
+      "population": {
+        "age_group": "adult",
+        "description": "64 cirrhosis outpatients with minimal encephalopathy."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "Psychometric battery, CFF and quality of life: no differences from placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Fewer overt encephalopathy episodes at 6 months, 5% vs 37.9%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "5 g three times daily, against 3 g on the label rows.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          15
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 60,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral LOLA 5 g t.i.d. for 60 days.",
+        "normalization": {
+          "basis": "5 g t.i.d. as printed; daily total is simple addition."
+        },
+        "source_provenance": {
+          "pmid": "24033861",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_ornithine_9625322",
+      "components": [
+        "INGR_L_ORNITHINE"
+      ],
+      "source_pmids": [
+        "9625322"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-ornithine L-aspartate"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_hepatic_encephalopathy",
+      "purpose": "hepatic_encephalopathy",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_ornithine_9625322",
+      "population": {
+        "age_group": "adult",
+        "description": "66 cirrhosis patients with hyperammonemia and encephalopathy."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "Number Connection Test and mental state grade improved vs placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Fasting and postprandial ammonia improved vs placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "18 g per day in patients, against 3 g on the label rows.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          18
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 14,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral LOLA 18 g per day for 14 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "9625322",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "30302048": "2018 meta-analysis, 10 RCTs, LOLA in cirrhosis; positive for mental state; overlaps the area of 29762873 and 38403493.",
+    "17151582": "LOLA vs lactulose in 20 patients; no placebo.",
+    "26785372": "BCAA plus ornithine aspartate combination.",
+    "40506665": "Tea catechins plus ornithine combination.",
+    "40323503": "Safety review only; moved to clinician items."
+  },
+  "stop_or_hold": "0.1 g/kg regimens in 20717126 and 21431425 stay in regimen text. Fields can't express the base-versus-salt question: three abstracts say L-ornithine without saying HCl, and no mass was converted.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "19083482",
+      "title_fetched": "L-ornithine supplementation attenuates physical fatigue in healthy volunteers by modulating lipid and amino acid metabolism.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19083482/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20717126",
+      "title_fetched": "The effect of L-ornithine hydrochloride ingestion on performance during incremental exhaustive ergometer bicycle exercise and ammonia metabolism during and after exercise.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20717126/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21431425",
+      "title_fetched": "Effect of L-ornithine hydrochloride ingestion on intermittent maximal anaerobic cycle ergometer performance and fatigue recovery after exercise.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21431425/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24889392",
+      "title_fetched": "Randomised controlled trial of the effects of L-ornithine on stress markers and sleep quality in healthy workers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24889392/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39768508",
+      "title_fetched": "Effects of Oral Ingestion of L-Ornithine on Mental Stress and Fatigue Based on the Trier Social Stress Test in Healthy Humans: A Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39768508/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23414576",
+      "title_fetched": "A randomized, double-masked, placebo-controlled crossover trial on the effects of L-ornithine on salivary cortisol and feelings of fatigue of flushers the morning after alcohol consumption.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23414576/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29969301",
+      "title_fetched": "A randomized, double-blind and placebo-controlled crossover trial on the effect of l-ornithine ingestion on the human circadian clock.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29969301/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29762873",
+      "title_fetched": "L-ornithine L-aspartate for prevention and treatment of hepatic encephalopathy in people with cirrhosis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29762873/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38403493",
+      "title_fetched": "Efficacy of L-ornithine L-aspartate for minimal hepatic encephalopathy in patients with cirrhosis: A meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38403493/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24033861",
+      "title_fetched": "Oral l-ornithine-l-aspartate in minimal hepatic encephalopathy: A randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24033861/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "9625322",
+      "title_fetched": "Oral L-ornithine-L-aspartate therapy of chronic hepatic encephalopathy: results of a placebo-controlled double-blind study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9625322/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30302048",
+      "title_fetched": "Efficacy of l-Ornithine l-Aspartate for the Treatment of Hepatic Encephalopathy and Hyperammonemia in Cirrhosis: Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30302048/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17151582",
+      "title_fetched": "Efficacy of oral L-ornithine-L-aspartate in cirrhotic patients with hyperammonemic hepatic encephalopathy. Results of a randomized, lactulose-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17151582/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26785372",
+      "title_fetched": "Effects of supplementation with branched chain amino acids and ornithine aspartate on plasma ammonia and central fatigue during exercise in healthy men.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26785372/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40506665",
+      "title_fetched": "The effects of acute and chronic oral tea catechins and ornithine supplementation on exercise-induced ammonia accumulation and cycling performance in healthy young men: a randomized, double-blind, cross-over, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40506665/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40323503",
+      "title_fetched": "Safety assessment of L-ornithine oral intake in healthy subjects: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40323503/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_L_ORNITHINE",
+    "standard_name": "L-Ornithine",
+    "aliases": [
+      "L-Ornithine HCl",
+      "L-Ornithine Hydrochloride",
+      "L-Ornithine L-Aspartate",
+      "L-Ornithine"
+    ],
+    "category": "sports_performance",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "19083482",
+      "20717126",
+      "21431425",
+      "24889392",
+      "39768508",
+      "23414576",
+      "29969301",
+      "29762873",
+      "38403493",
+      "24033861",
+      "9625322"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: small stress and fatigue positives, one null exercise trial; L-ornithine L-aspartate benefit only in cirrhosis at much higher doses. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "subjective fatigue",
+      "stress and mood scores"
+    ],
+    "health_goals_supported": [],
+    "notes": "Labels split into 12 ornithine HCl rows and 8 L-ornithine L-aspartate rows, which aren't one evidence set. The stored trial's fatigue result in all 17 people reads as a within-trial comparison; its placebo differences are in women only. Small trials at 400 to 1,600 mg show stress and mood changes, mostly without named primary outcomes. LOLA trials are in cirrhosis at 15 to 18 g a day against 3 g on the label, and Cochrane is very uncertain.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy adults under exercise or stress; cirrhosis patients for L-ornithine L-aspartate",
+      "supported_outcomes": [
+        "subjective fatigue",
+        "stress and mood scores"
+      ],
+      "source_pmids": [
+        "19083482",
+        "20717126",
+        "21431425",
+        "24889392",
+        "39768508",
+        "23414576",
+        "29969301",
+        "29762873",
+        "38403493",
+        "24033861",
+        "9625322"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Labels split into 12 ornithine HCl rows and 8 L-ornithine L-aspartate rows, which aren't one evidence set. The stored trial's fatigue result in all 17 people reads as a within-trial comparison; its placebo differences are in women only. Small trials at 400 to 1,600 mg show stress and mood changes, mostly without named primary outcomes. LOLA trials are in cirrhosis at 15 to 18 g a day against 3 g on the label, and Cochrane is very uncertain. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19083482",
+        "title": "L-ornithine supplementation attenuates physical fatigue in healthy volunteers by modulating lipid and amino acid metabolism.",
+        "citation": "Nutrition research (New York, N.Y.) (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19083482/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.nutres.2008.08.008"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20717126",
+        "title": "The effect of L-ornithine hydrochloride ingestion on performance during incremental exhaustive ergometer bicycle exercise and ammonia metabolism during and after exercise.",
+        "citation": "European journal of clinical nutrition (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20717126/",
+        "publication_types": [
+          "Clinical Trial",
+          "Controlled Clinical Trial",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1038/ejcn.2010.149"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21431425",
+        "title": "Effect of L-ornithine hydrochloride ingestion on intermittent maximal anaerobic cycle ergometer performance and fatigue recovery after exercise.",
+        "citation": "European journal of applied physiology (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21431425/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1007/s00421-011-1896-1"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "24889392",
+        "title": "Randomised controlled trial of the effects of L-ornithine on stress markers and sleep quality in healthy workers.",
+        "citation": "Nutrition journal (2014)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24889392/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1186/1475-2891-13-53"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39768508",
+        "title": "Effects of Oral Ingestion of L-Ornithine on Mental Stress and Fatigue Based on the Trier Social Stress Test in Healthy Humans: A Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Trial.",
+        "citation": "Journal of clinical medicine (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39768508/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3390/jcm13247583"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23414576",
+        "title": "A randomized, double-masked, placebo-controlled crossover trial on the effects of L-ornithine on salivary cortisol and feelings of fatigue of flushers the morning after alcohol consumption.",
+        "citation": "BioPsychoSocial medicine (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23414576/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1186/1751-0759-7-6"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29969301",
+        "title": "A randomized, double-blind and placebo-controlled crossover trial on the effect of l-ornithine ingestion on the human circadian clock.",
+        "citation": "Chronobiology international (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29969301/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/07420528.2018.1490315"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29762873",
+        "title": "L-ornithine L-aspartate for prevention and treatment of hepatic encephalopathy in people with cirrhosis.",
+        "citation": "The Cochrane database of systematic reviews (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29762873/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD012410.pub2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38403493",
+        "title": "Efficacy of L-ornithine L-aspartate for minimal hepatic encephalopathy in patients with cirrhosis: A meta-analysis of randomized controlled trials.",
+        "citation": "Arab journal of gastroenterology : the official publication of the Pan-Arab Association of Gastroenterology (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38403493/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.ajg.2024.01.006"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "24033861",
+        "title": "Oral l-ornithine-l-aspartate in minimal hepatic encephalopathy: A randomized, double-blind, placebo-controlled trial.",
+        "citation": "Hepatology research : the official journal of the Japan Society of Hepatology (2014)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24033861/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1111/hepr.12235"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "9625322",
+        "title": "Oral L-ornithine-L-aspartate therapy of chronic hepatic encephalopathy: results of a placebo-controlled double-blind study.",
+        "citation": "Journal of hepatology (1998)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/9625322/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/s0168-8278(98)80237-7"
+      }
+    ]
+  }
+}

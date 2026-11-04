@@ -1,0 +1,10 @@
+{"canonical":"olive_leaf_powder","labels":1,"stored":"positive_moderate",
+"as_read":"Mixed for blood pressure: a 621-person placebo-controlled trial and a meta-analysis are positive, a 56-person olive extract trial is null, and the stored trial at the label's amount has no placebo arm. The label row's canonical id is olive_leaf.",
+"route":"packet_no_credit",
+"positive_named":["21036583","40990594","42303499"],
+"studies_to_add":[{"pmid":"40990594","study_type":"rct","sample_size":621,"primary_endpoint":"Change in 24-h SBP and DBP from baseline to week 12","effect_direction":"positive","quote":"The primary outcome was the change in 24-h SBP and DBP from baseline to week-12."}],
+"stop_list":["40990594 prints no extract or amount, so its dose stays extraction_pending","21036583 prints no sample size and has an active comparator only","No abstract read links Benolea to EFLA 943 or any tested extract"],
+"clinician_items":["38287654: in the meta-analysis, fasting glycemia in studies using a low dose of olive leaf extract showed a significant result favoring the control group."],
+"stored_rating_note":"positive_moderate rests on PMID 21036583, with no placebo arm and a within-group primary outcome. The stored record does not hold the null trial PMID 41805711.",
+"pmids_read":["21036583","42303499","38287654","40990594","41805711"],
+"unread_notes":"Abstracts only. Label row read directly with canonical olive_leaf because labels.py printed no olive_leaf_powder row. One search, count 54, first 25 listed; query combined olive leaf, Benolea, EFLA 943, Olea europaea leaf and oleuropein with blood pressure or randomized terms. Not opened: 41848522, 39828996, 41935461 (a combination with potassium by its title), and other hits on knee osteoarthritis, menopause, diabetes, COVID-19 and periodontitis, which are off the label's vascular purpose. The search did not reach 29 further hits. No statement about any of them is made."}

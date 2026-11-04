@@ -1,0 +1,29 @@
+{
+"canonical": "diamine_oxidase",
+"labels": 1,
+"stored": "positive_moderate",
+"as_read": "The label prints 4.2 mg porcine kidney extract for breakdown of dietary histamine; the only placebo-controlled trials read give no mg amount, name no primary outcome and show no clear overall between-group benefit, and the stored study is open-label.",
+"route": "no_qualifying",
+"quote": {
+"pmid": "29475774",
+"text": "The reduction of pain hours observed in placebo group (0.9 h) could explain the lack of significant differences between both study groups."
+},
+"positive_named": [
+"31807350",
+"29475774",
+"29698966"
+],
+"proposed_decision_text": "The one label (DSLD 317962, DAO Enzyme) prints Porcine Kidney Extract 4.2 mg providing 0.55 mU diamine oxidase activity, one capsule 2 to 3 times daily with meals, and says it promotes breakdown of dietary histamine. Abstracts only. PMID 31807350, the stored study, is an open-label pilot in 28 patients with histamine intolerance with no control arm, reporting symptom improvement; it gives no capsule amount. PMID 29475774 randomized 100 patients with episodic migraine and DAO deficiency to DAO or placebo for one month: attack duration fell by 1.4 h within the DAO group, 0.9 h with placebo, with no significant difference between groups, and number of attacks and pain intensity fell similarly in both. It names no primary outcome and gives no amount. PMID 29698966, a crossover in 22 patients with chronic spontaneous urticaria of whom 20 completed, reports a UAS-7 reduction against placebo only in those with low serum DAO, names no primary outcome and gives capsules with no amount. None of these abstracts says the enzyme came from porcine kidney. No study meets the rule for this label, so no credit is proposed.",
+"stop_list": [
+"Label activity is in mU and HDU; these stay in the regimen text and are not converted",
+"Trial abstracts print capsules only, so no mg comparison with 4.2 mg is possible"
+],
+"stored_rating_note": "positive_moderate rests on an uncontrolled open-label pilot of 28 patients (PMID 31807350).",
+"pmids_read": [
+"31807350",
+"29475774",
+"29698966",
+"40865824"
+],
+"unread_notes": "Abstracts only. PMID 40865824 is a narrative review with no results in the part read, cut at 1300 characters, and is not relied on. One search, count 28, first 25 listed: (\"diamine oxidase\" OR DAO OR \"DAOsin\") (supplementation OR supplement OR oral OR enzyme) (randomized OR placebo OR trial OR systematic review) (histamine OR migraine OR urticaria OR intolerance) AND humans[mh]. Other hits measured DAO levels or tested something else by their titles and were not opened; no statement about them is made. The quote from 29475774 has a PubMed special space in '0.9 h', normalized to a plain space here."
+}

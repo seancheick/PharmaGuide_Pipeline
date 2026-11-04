@@ -1,0 +1,58 @@
+{
+ "canonical": "english_ivy",
+ "labels": 4,
+ "stored": "positive_weak",
+ "as_read": "Positive on named primary cough outcomes for EA 575 at 105 mg/day in maker-funded placebo trials, while an independent systematic review calls the effects minimal at best and of uncertain clinical importance.",
+ "route": "packet_no_credit",
+ "positive_named": [
+  "29441845",
+  "31832428",
+  "36414647"
+ ],
+ "studies_to_add": [
+  {
+   "pmid": "31832428",
+   "study_type": "rct",
+   "sample_size": 209,
+   "primary_endpoint": "change in Bronchitis Severity Score between visits 1 and 5",
+   "effect_direction": "positive_weak",
+   "quote": "Superiority of verum over placebo was during and at the end of treatment, as measured by BSS."
+  },
+  {
+   "pmid": "29441845",
+   "study_type": "rct",
+   "sample_size": 181,
+   "primary_endpoint": "cough severity on VAS, area under the curve over 7 days",
+   "effect_direction": "positive_weak",
+   "quote": "The evaluation of the VAS, BSS and VCD score revealed that subjects treated with ivy leaves cough liquid showed statistically significant and clinically relevant reductions in CS, severity of symptoms associated with cough and bronchitis compared to the placebo group."
+  },
+  {
+   "pmid": "36414647",
+   "study_type": "systematic_review_meta",
+   "sample_size": 390,
+   "primary_endpoint": "Bronchitis Severity Score, named the main efficacy outcome",
+   "effect_direction": "positive_weak",
+   "quote": "EA 575 reduces effectively the intensity of acute cough associated with ARTIs and leads to a significant acceleration of recovery."
+  }
+ ],
+ "stop_list": [
+  "Fields can't express a drug/extract ratio: 31832428 tested EA 575 at a ratio of 5-7.5/1, and these labels print extract mass with no ratio, so label mg can't be equated with 105 mg/day of EA 575.",
+  "29441845 stays extraction_pending: its abstract gives frequency only, and I didn't take an amount from another paper."
+ ],
+ "clinician_items": [
+  "Labels 327886 and 212385 carry an infant tag in the label data and an 86 mg row. The trials used for the question were in adults. 12725580 covers children with asthma, with little placebo data. Whether an infant tag is acceptable on these two labels is for a clinician.",
+  "33523253: no serious adverse effects reported across ivy leaf studies, and the review concludes the preparations are safe for acute cough while rating risk of bias high.",
+  "36414647: adverse event rates comparable to placebo; no safety signals observed."
+ ],
+ "stored_rating_note": "Stored positive_weak cites a systematic review that calls effects minimal at best, and that fits. It doesn't cite 29441845, 31832428 or 36414647, the placebo trials of EA 575. The stored text says no EA 575 dose is established by that abstract; 31832428 full text gives 105 mg/day.",
+ "pmids_read": [
+  "33523253",
+  "36414647",
+  "40430571",
+  "41576988",
+  "29441845",
+  "31832428",
+  "12725580"
+ ],
+ "unread_notes": "Full text passages opened for 31832428 (PMC6899337) and 36414647 (PMC9681772). PubMed shows PMC8275562 for 33523253, which wasn't opened. 29441845 shows no PMC id. Two searches: 55 and 17 hits. Seen by title and not opened: 42839197 and 40376625 and 42739377 and 42196994 (reviews), 41807028 (active comparator), 38889376, 33921227, 36749235 (with Coptidis rhizome), 38323572, 30587469, 28650326, 17063641 (multi-ingredient by title), 24916707, 21802921, 20976077. Whether the two trials in 36414647 are 29441845 and 31832428 isn't confirmed by what I read; the packet says so. The immune purpose on the labels is my reading of the label data; a cough or bronchial purpose may sit on a part of the label that labels.py doesn't print, and the product name Bronchial Soothe suggests one."
+}

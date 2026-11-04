@@ -1,0 +1,399 @@
+{
+  "record_id": "INGR_LACTASE",
+  "labels": 11,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive on breath hydrogen and symptoms in single-dose lactose challenges, with one of two pre-specified primary comparisons not reaching significance; infant colic evidence inconclusive",
+  "decision": "closed_no_credit",
+  "summary": "Six labels print lactase with no amount and five print 50 or 690 mg; none shown here prints FCC or ALU activity, which is how the trials dose it. 36149331 is the only trial read with a named primary outcome: 4662 FCC lactase beat placebo in one crossover (P < 0.001) and not in the other (P = 0.102). 33490624 and the stored 20391953 are positive with no named primary or amount. All are single challenges, not ongoing use. One label prints an infant purpose; the colic systematic review (38426798) calls the evidence inconclusive.",
+  "question_for_clinician": "Lactase has a plausible, repeatedly positive short-term effect, but trials dose by FCC or similar activity and labels print mg or nothing. Can credit be given without a printed activity? Agent recommendation: no credit for these labels as printed; if credit is considered, tie it to a printed activity near the studied 4662 FCC, and limit it to lactose intolerance in adults.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lactase_36149331",
+      "components": [
+        "INGR_LACTASE"
+      ],
+      "source_pmids": [
+        "36149331"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "lactose_intolerance",
+      "purpose": "lactose_digestion",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lactase_36149331",
+      "population": {
+        "age_group": "adult",
+        "description": "Participants with lactose intolerance in two trials, Booster Alpha and Booster Omega; numbers not in the abstract."
+      },
+      "study_design": "Two randomized crossover trials, placebo- and lactase-controlled, 1-week washouts, with a lactose challenge",
+      "outcomes": [
+        {
+          "name": "Breath hydrogen iAUC, Booster Alpha: lactase superior to placebo (ratio 0.190, P < 0.001)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Breath hydrogen iAUC, Booster Omega: lactase not superior to placebo (ratio 0.493, P = 0.102)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Abdominal pain and flatulence odds lower with lactase in Booster Alpha",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Dose is in FCC units; left in regimen text with no conversion. Labels print mg or no amount, so comparison isn't possible.",
+        "Single-dose challenge. The study's test product is a probiotic; lactase is the active control.",
+        "Sample sizes not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once per challenge",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "4662 FCC lactase taken with the lactose challenge, single dose per period.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36149331",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lactase_33490624",
+      "components": [
+        "INGR_LACTASE"
+      ],
+      "source_pmids": [
+        "33490624"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "lactose_intolerance",
+      "purpose": "lactose_digestion",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lactase_33490624",
+      "population": {
+        "age_group": "adult",
+        "description": "47 adults with breath-test confirmed lactose intolerance."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled crossover, 1-week washout",
+      "outcomes": [
+        {
+          "name": "Cumulative breath hydrogen over 180 min 55% lower than placebo; P < 0.05 for mean levels",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Mean clinical score improved (P < 0.05)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome and gives no tablet amount.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "chewable tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Lactase chewable tablets at the lactose test; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33490624",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lactase_20391953",
+      "components": [
+        "INGR_LACTASE"
+      ],
+      "source_pmids": [
+        "20391953"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "lactose_intolerance",
+      "purpose": "lactose_digestion",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lactase_20391953",
+      "population": {
+        "age_group": "adult",
+        "description": "60 lactose intolerant patients, 20 per group: tilactase, placebo, L. reuteri."
+      },
+      "study_design": "Randomized, three arms, with control breath test",
+      "outcomes": [
+        {
+          "name": "Breath-test normalization rate higher than placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Peak hydrogen and clinical score better than placebo (p < 0.0001)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Stored study. Abstract lists outcomes without naming a primary and gives no amount.",
+        "Single dose 15 minutes before the breath test.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Tilactase 15 minutes before the control breath test; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "20391953",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "15674309": "Enzyme added to milk, 3000 and 6000 UI; not taken as a supplement, doses in UI.",
+    "19021701": "134 subjects, placebo test first, then low or standard dose in U; not randomized in the abstract, dose in U.",
+    "27706451": "Non-inferiority against an active comparator, no placebo, 42 days, one tablet three times a day; no amount in the abstract.",
+    "25042846": "24 maldigesters, five arms including yogurt culture combinations; doses in FCC.",
+    "42668931": "50 children aged 6-24 months, drops in milk against lactose-free formula; not a supplement label population.",
+    "38426798": "Infant colic review, five RCTs, no difference pooled; 'remain inconclusive'.",
+    "30504935": "Infant colic drops, five drops per feed; no amount in mg; high-level result only."
+  },
+  "stop_or_hold": "Fields can't express FCC, ALU, UI or U doses, and the labels print none of them on the lactase row. 36149331 dose stays in the regimen text and blocks any comparison with 690 mg labels.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "36149331",
+      "title_fetched": "Bifidobacterium animalis subsp. lactis Bi-07 supports lactose digestion in vitro and in randomized, placebo- and lactase-controlled clinical trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36149331/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33490624",
+      "title_fetched": "Effect of lactase on symptoms and hydrogen breath levels in lactose intolerance: A crossover placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33490624/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20391953",
+      "title_fetched": "The effect of oral supplementation with Lactobacillus reuteri or tilactase in lactose intolerant patients: randomized trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20391953/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15674309",
+      "title_fetched": "Effect of exogenous beta-galactosidase in patients with lactose malabsorption and intolerance: a crossover double-blind placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15674309/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19021701",
+      "title_fetched": "Beneficial effects of oral tilactase on patients with hypolactasia.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19021701/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27706451",
+      "title_fetched": "ORAL ADMINISTRATION OF EXOGENOUS LACTASE IN TABLETS FOR PATIENTS DIAGNOSED WITH LACTOSE INTOLERANCE DUE TO PRIMARY HYPOLACTASIA.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27706451/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25042846",
+      "title_fetched": "A combination of acid lactase from Aspergillus oryzae and yogurt bacteria improves lactose digestion in lactose maldigesters synergistically: A randomized, controlled, double-blind cross-over trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25042846/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42668931",
+      "title_fetched": "Comparison of the effectiveness of oral lactase enzyme and lactose-free formula in the management of secondary lactose intolerance in persistent and severe persistent diarrhea.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42668931/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38426798",
+      "title_fetched": "Effect of lactase supplementation on infant colic: Systematic review of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38426798/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30504935",
+      "title_fetched": "Clinical Efficacy Of Lactase Enzyme Supplement In Infant Colic: A Randomised Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30504935/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_LACTASE",
+    "standard_name": "Lactase",
+    "aliases": [
+      "Lactase"
+    ],
+    "category": "digestive_gut",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "36149331",
+      "33490624",
+      "20391953"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive on breath hydrogen and symptoms in single-dose lactose challenges, with one of two pre-specified primary comparisons not reaching significance; infant colic evidence inconclusive. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "breath hydrogen",
+      "lactose intolerance symptoms"
+    ],
+    "health_goals_supported": [],
+    "notes": "Six labels print lactase with no amount and five print 50 or 690 mg; none shown here prints FCC or ALU activity, which is how the trials dose it. 36149331 is the only trial read with a named primary outcome: 4662 FCC lactase beat placebo in one crossover (P < 0.001) and not in the other (P = 0.102). 33490624 and the stored 20391953 are positive with no named primary or amount. All are single challenges, not ongoing use. One label prints an infant purpose; the colic systematic review (38426798) calls the evidence inconclusive.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with lactose intolerance in single-dose lactose challenges",
+      "supported_outcomes": [
+        "breath hydrogen",
+        "lactose intolerance symptoms"
+      ],
+      "source_pmids": [
+        "36149331",
+        "33490624",
+        "20391953"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Six labels print lactase with no amount and five print 50 or 690 mg; none shown here prints FCC or ALU activity, which is how the trials dose it. 36149331 is the only trial read with a named primary outcome: 4662 FCC lactase beat placebo in one crossover (P < 0.001) and not in the other (P = 0.102). 33490624 and the stored 20391953 are positive with no named primary or amount. All are single challenges, not ongoing use. One label prints an infant purpose; the colic systematic review (38426798) calls the evidence inconclusive. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36149331",
+        "title": "Bifidobacterium animalis subsp. lactis Bi-07 supports lactose digestion in vitro and in randomized, placebo- and lactase-controlled clinical trials.",
+        "citation": "The American journal of clinical nutrition (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36149331/",
+        "publication_types": [
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1093/ajcn/nqac264"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33490624",
+        "title": "Effect of lactase on symptoms and hydrogen breath levels in lactose intolerance: A crossover placebo-controlled study.",
+        "citation": "JGH open : an open access journal of gastroenterology and hepatology (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33490624/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1002/jgh3.12463"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20391953",
+        "title": "The effect of oral supplementation with Lactobacillus reuteri or tilactase in lactose intolerant patients: randomized trial.",
+        "citation": "European review for medical and pharmacological sciences (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20391953/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ]
+      }
+    ]
+  }
+}

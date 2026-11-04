@@ -1,0 +1,869 @@
+{
+  "record_id": "INGR_NICOTINAMIDE_RIBOSIDE",
+  "labels": 7,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "Raises blood NAD+ reliably, but clinical primary outcomes are null in cognition and long-COVID, worse than placebo in Parkinson disease, and positive in one peripheral artery disease trial",
+  "decision": "closed_no_credit",
+  "summary": "The labels print nicotinamide riboside hydrogen malate at 415 mg on five labels, nicotinamide riboside chloride at 300 mg on one and nicotinamide riboside at 150 mg on one, with aging, energy or muscle purposes. Blood NAD+ rises with dose (31278280). At 1 g/day and above, cognition primary outcomes were null (42478598, 41357333, 39817194, 37994989), the Parkinson phase 3 favored placebo (42848371), and one peripheral artery disease trial favored nicotinamide riboside on walking (38871717). No trial tested the hydrogen malate salt or measured a longevity outcome at the label amounts.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nicotinamide_riboside_42848371",
+      "components": [
+        "INGR_NICOTINAMIDE_RIBOSIDE"
+      ],
+      "source_pmids": [
+        "42848371"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "early_parkinson_disease",
+      "purpose": "disease_modification",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nicotinamide_riboside_42848371",
+      "population": {
+        "age_group": "adult",
+        "description": "410 adults aged 35 or over with Parkinson disease diagnosed within 2 years, Hoehn and Yahr stage below 3; 393 in the primary analysis."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, phase 3 multicenter trial (NOPARK), 52 weeks",
+      "outcomes": [
+        {
+          "name": "Change in total MDS-UPDRS: adjusted mean difference 2.72 points, 95% CI 0.47 to 4.98, P = .02, favoring placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Non-Motor Symptoms Scale worsened more on nicotinamide riboside, P = .009",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Four of five key secondary outcomes showed no significant difference",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Patients with Parkinson disease, a condition these labels do not name.",
+        "Dose is about three times the highest label amount.",
+        "The abstract doesn't name the salt form; full text retrieval returned an error.",
+        "Worse primary outcome on nicotinamide riboside: on clinician_items.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 364,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral nicotinamide riboside 500 mg twice daily or matching placebo for 52 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42848371",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nicotinamide_riboside_42478598",
+      "components": [
+        "INGR_NICOTINAMIDE_RIBOSIDE"
+      ],
+      "source_pmids": [
+        "42478598"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "amnestic_mild_cognitive_impairment",
+      "purpose": "cognitive_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nicotinamide_riboside_42478598",
+      "population": {
+        "age_group": "adult",
+        "description": "42 older adults with amnestic mild cognitive impairment completed (22 nicotinamide riboside, 20 placebo)."
+      },
+      "study_design": "Double-blind, randomized, placebo-controlled parallel-arm pilot, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Cognitive function: no improvement",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Total cerebral blood flow and blood pressure: no improvement",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Blood NAD+ increased twofold",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Pilot size.",
+        "Product supplied by the maker of Niagen under a material transfer agreement; grant funding is named in the full text.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Nicotinamide riboside 500 mg twice daily, as 250 mg capsules, or placebo for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42478598",
+          "location": "Full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nicotinamide_riboside_41357333",
+      "components": [
+        "INGR_NICOTINAMIDE_RIBOSIDE"
+      ],
+      "source_pmids": [
+        "41357333"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "long_covid",
+      "purpose": "cognitive_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nicotinamide_riboside_41357333",
+      "population": {
+        "age_group": "adult",
+        "description": "58 community-dwelling adults with long-COVID, randomized 2:1."
+      },
+      "study_design": "Double-blind, placebo-controlled trial with placebo lead-in phase, 24 weeks",
+      "outcomes": [
+        {
+          "name": "Cognition (ECog, RBANS, TMT-B): no significant between-group differences, p = 0.47 to 0.74",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Fatigue, sleep, anxiety and depression: no significant between-group differences",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Within-group changes after 10 weeks of nicotinamide riboside in post-hoc exploratory analysis",
+          "hierarchy": "post_hoc",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Dose above the labels.",
+        "Supported in part by Niagen Bioscience.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          2000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Nicotinamide riboside 2000 mg/day for 20 weeks, or placebo for 10 weeks then nicotinamide riboside for 10 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41357333",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nicotinamide_riboside_39817194",
+      "components": [
+        "INGR_NICOTINAMIDE_RIBOSIDE"
+      ],
+      "source_pmids": [
+        "39817194"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "subjective_cognitive_decline_or_mci",
+      "purpose": "cognitive_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nicotinamide_riboside_39817194",
+      "population": {
+        "age_group": "adult",
+        "description": "46 adults over 55 with subjective cognitive decline or mild cognitive impairment randomized; 37 completed."
+      },
+      "study_design": "Crossover, double-blind, randomized, placebo-controlled trial, 8 weeks active treatment",
+      "outcomes": [
+        {
+          "name": "RBANS: no significant between-group difference",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Plasma pTau217: 7% reduction with nicotinamide riboside versus 18% increase on placebo, p = 0.02",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Biomarker finding only; the authors say cognition was not altered.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Nicotinamide riboside 1 g/day for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39817194",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nicotinamide_riboside_37994989",
+      "components": [
+        "INGR_NICOTINAMIDE_RIBOSIDE"
+      ],
+      "source_pmids": [
+        "37994989"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_cognitive_impairment",
+      "purpose": "cognitive_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nicotinamide_riboside_37994989",
+      "population": {
+        "age_group": "adult",
+        "description": "20 older adults with mild cognitive impairment."
+      },
+      "study_design": "Placebo-controlled randomized pilot, 10 weeks",
+      "outcomes": [
+        {
+          "name": "MoCA remained stable throughout the study",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Blood NAD+ increased 2.6-fold, p < 0.001",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract says the primary objective was safety and names MoCA change as the primary outcome.",
+        "Very small.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 70,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dose escalation to a final dose of 1 g/day over a 10-week study.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "37994989",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nicotinamide_riboside_38871717",
+      "components": [
+        "INGR_NICOTINAMIDE_RIBOSIDE"
+      ],
+      "source_pmids": [
+        "38871717"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "peripheral_artery_disease",
+      "purpose": "walking_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nicotinamide_riboside_38871717",
+      "population": {
+        "age_group": "adult",
+        "description": "90 people with lower extremity peripheral artery disease across three groups."
+      },
+      "study_design": "Randomized, double-blind clinical trial (NICE), 6 months, with nicotinamide riboside alone, with resveratrol, or placebo",
+      "outcomes": [
+        {
+          "name": "6-minute walk at 6 months, nicotinamide riboside alone versus placebo: between-group difference +17.6 m, 90% CI +1.8 to infinity",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "One-sided 90% confidence interval.",
+        "The authors call for a larger trial.",
+        "A condition these labels do not name.",
+        "Product supplied by ChromaDex; funded by the American Heart Association.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "pill"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Nicotinamide riboside 1,000 mg daily as 250 mg pills, nicotinamide riboside 1000 mg with 125 mg resveratrol daily, or placebo, for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "38871717",
+          "location": "Full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nicotinamide_riboside_31278280",
+      "components": [
+        "INGR_NICOTINAMIDE_RIBOSIDE"
+      ],
+      "source_pmids": [
+        "31278280"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_healthy_adults",
+      "purpose": "nad_repletion",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nicotinamide_riboside_31278280",
+      "population": {
+        "age_group": "adult",
+        "description": "Overweight but otherwise healthy men and women; the stored record gives 140 participants."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled trial of NIAGEN nicotinamide riboside chloride, 8 weeks",
+      "outcomes": [
+        {
+          "name": "Whole blood NAD+ rose 22%, 51% and 142% by dose within 2 weeks",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "This is the salt printed on one label, at the label's 300 mg arm, but the outcomes are blood and urine metabolites, not a health outcome.",
+        "Full text names urinary MeNAM at 8 weeks as the primary outcome variable and reports dose-dependent rises relative to baseline; a surrogate, not carried as an outcome here.",
+        "ChromaDex funded the study and two authors are employees; one author is an adviser with licensed intellectual property.",
+        "Sample size comes from the stored record, not the abstract.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100,
+          300,
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "NIAGEN 100, 300 or 1000 mg or placebo for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31278280",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nicotinamide_riboside_40275690",
+      "components": [
+        "INGR_NICOTINAMIDE_RIBOSIDE"
+      ],
+      "source_pmids": [
+        "40275690"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "age_related_muscle_loss",
+      "purpose": "muscle_mass_and_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nicotinamide_riboside_40275690",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with mean age range 60.9 to 83 years across RCTs of nicotinamide riboside or NMN."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "Authors: current evidence does not support nicotinamide riboside or NMN for preserving muscle mass and function over age 60; pooled results reported are for NMN and nicotinamide riboside findings are narrative",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Nicotinamide riboside results are narrative and include a positive walking result in peripheral artery disease and lower physical scores in mild cognitive impairment.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Varied regimens of nicotinamide riboside or NMN; doses not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40275690",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "27721479": "Stored record: pharmacokinetics in humans, single doses of 100, 300 and 1,000 mg, and a mouse arm. Not an efficacy trial.",
+    "39548320": "COPD, 40 patients: sputum IL-8 primary fell, -52.6%, P = 0.030. The abstract states no dose; a purpose these labels do not carry.",
+    "41655607": "Systematic review of NAD-related compounds: human effects on functional and healthspan outcomes heterogeneous and often null; mixes NR, NMN and parenteral routes.",
+    "41540253": "Open-label 14 day comparison of NAD+ boosters in 65 healthy adults: NAD+ biomarker only."
+  },
+  "stop_or_hold": "42848371's salt form is unconfirmed because the full text wasn't retrievable.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "42848371",
+      "title_fetched": "Nicotinamide Riboside for Patients With Early-Stage Parkinson Disease: The NOPARK Randomized Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42848371/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42478598",
+      "title_fetched": "A phase-II randomized controlled pilot study of nicotinamide riboside supplementation in older adults with amnestic mild cognitive impairment.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42478598/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "41357333",
+      "title_fetched": "Effects of nicotinamide riboside on NAD+ levels, cognition, and symptom recovery in long-COVID: a randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41357333/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39817194",
+      "title_fetched": "Cognitive and Alzheimer's disease biomarker effects of oral nicotinamide riboside (NR) supplementation in older adults with subjective cognitive decline and mild cognitive impairment.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39817194/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37994989",
+      "title_fetched": "A randomized placebo-controlled trial of nicotinamide riboside in older adults with mild cognitive impairment.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37994989/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38871717",
+      "title_fetched": "Nicotinamide riboside for peripheral artery disease: the NICE randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38871717/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "31278280",
+      "title_fetched": "Safety and Metabolism of Long-term Administration of NIAGEN (Nicotinamide Riboside Chloride) in a Randomized, Double-Blind, Placebo-controlled Clinical Trial of Healthy Overweight Adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31278280/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "40275690",
+      "title_fetched": "The Effect of Nicotinamide Mononucleotide and Riboside on Skeletal Muscle Mass and Function: A Systematic Review and Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40275690/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27721479",
+      "title_fetched": "Nicotinamide riboside is uniquely and orally bioavailable in mice and humans.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27721479/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39548320",
+      "title_fetched": "Effect of nicotinamide riboside on airway inflammation in COPD: a randomized, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39548320/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41655607",
+      "title_fetched": "NAD⁺ supplementation for anti-aging and wellness: A PRISMA-guided systematic review of preclinical and clinical evidence.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41655607/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41540253",
+      "title_fetched": "The differential impact of three different NAD+ boosters on circulatory NAD and microbial metabolism in humans.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41540253/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_NICOTINAMIDE_RIBOSIDE",
+    "standard_name": "Nicotinamide Riboside",
+    "aliases": [
+      "Nicotinamide Riboside Chloride",
+      "Nicotinamide Riboside"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "42848371",
+      "42478598",
+      "41357333",
+      "39817194",
+      "37994989",
+      "38871717",
+      "31278280",
+      "40275690"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Raises blood NAD+ reliably, but clinical primary outcomes are null in cognition and long-COVID, worse than placebo in Parkinson disease, and positive in one peripheral artery disease trial. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "MDS-UPDRS total score",
+      "cognitive function",
+      "6-minute walk",
+      "blood NAD+"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print nicotinamide riboside hydrogen malate at 415 mg on five labels, nicotinamide riboside chloride at 300 mg on one and nicotinamide riboside at 150 mg on one, with aging, energy or muscle purposes. Blood NAD+ rises with dose (31278280). At 1 g/day and above, cognition primary outcomes were null (42478598, 41357333, 39817194, 37994989), the Parkinson phase 3 favored placebo (42848371), and one peripheral artery disease trial favored nicotinamide riboside on walking (38871717). No trial tested the hydrogen malate salt or measured a longevity outcome at the label amounts.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Older adults with cognitive impairment, adults with long-COVID, adults with early Parkinson disease or peripheral artery disease, and overweight healthy adults",
+      "supported_outcomes": [
+        "MDS-UPDRS total score",
+        "cognitive function",
+        "6-minute walk",
+        "blood NAD+"
+      ],
+      "source_pmids": [
+        "42848371",
+        "42478598",
+        "41357333",
+        "39817194",
+        "37994989",
+        "38871717",
+        "31278280",
+        "40275690"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print nicotinamide riboside hydrogen malate at 415 mg on five labels, nicotinamide riboside chloride at 300 mg on one and nicotinamide riboside at 150 mg on one, with aging, energy or muscle purposes. Blood NAD+ rises with dose (31278280). At 1 g/day and above, cognition primary outcomes were null (42478598, 41357333, 39817194, 37994989), the Parkinson phase 3 favored placebo (42848371), and one peripheral artery disease trial favored nicotinamide riboside on walking (38871717). No trial tested the hydrogen malate salt or measured a longevity outcome at the label amounts. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "hydrogen malate"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42848371",
+        "title": "Nicotinamide Riboside for Patients With Early-Stage Parkinson Disease: The NOPARK Randomized Clinical Trial.",
+        "citation": "JAMA (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42848371/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1001/jama.2026.18828"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42478598",
+        "title": "A phase-II randomized controlled pilot study of nicotinamide riboside supplementation in older adults with amnestic mild cognitive impairment.",
+        "citation": "Alzheimer's & dementia : the journal of the Alzheimer's Association (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42478598/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Clinical Trial, Phase II"
+        ],
+        "doi": "10.1002/alz.71605"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41357333",
+        "title": "Effects of nicotinamide riboside on NAD+ levels, cognition, and symptom recovery in long-COVID: a randomized controlled trial.",
+        "citation": "EClinicalMedicine (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41357333/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1016/j.eclinm.2025.103633"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39817194",
+        "title": "Cognitive and Alzheimer's disease biomarker effects of oral nicotinamide riboside (NR) supplementation in older adults with subjective cognitive decline and mild cognitive impairment.",
+        "citation": "Alzheimer's & dementia (New York, N. Y.) (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39817194/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1002/trc2.70023"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37994989",
+        "title": "A randomized placebo-controlled trial of nicotinamide riboside in older adults with mild cognitive impairment.",
+        "citation": "GeroScience (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37994989/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article",
+          "Research Support, N.I.H., Extramural"
+        ],
+        "doi": "10.1007/s11357-023-00999-9"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38871717",
+        "title": "Nicotinamide riboside for peripheral artery disease: the NICE randomized clinical trial.",
+        "citation": "Nature communications (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38871717/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1038/s41467-024-49092-5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31278280",
+        "title": "Safety and Metabolism of Long-term Administration of NIAGEN (Nicotinamide Riboside Chloride) in a Randomized, Double-Blind, Placebo-controlled Clinical Trial of Healthy Overweight Adults.",
+        "citation": "Scientific reports (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31278280/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1038/s41598-019-46120-z"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40275690",
+        "title": "The Effect of Nicotinamide Mononucleotide and Riboside on Skeletal Muscle Mass and Function: A Systematic Review and Meta-Analysis.",
+        "citation": "Journal of cachexia, sarcopenia and muscle (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40275690/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1002/jcsm.13799"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: nicotinamide_riboside effect_direction null, agent review; the contexts below are the reading behind it."
+}
