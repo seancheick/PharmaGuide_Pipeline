@@ -20101,6 +20101,14 @@ class SupplementEnricherV3:
             return bool(row_forms) and row_forms <= scope
         return bool(row_forms & scope)
 
+    def _preformed_share_row(self, row: Dict, label_row: Optional[Dict]) -> Optional[Dict]:
+        """A mixed Vitamin A row at the preformed share its label row declares, if any."""
+        fraction = _explicit_mixed_vitamin_a_preformed_fraction(label_row or {})
+        quantity = self._to_float_safe(row.get("quantity"))
+        if fraction is None or quantity is None:
+            return None
+        return {**row, "quantity": quantity * fraction}
+
     def _nested_row_of_rule_form(
         self, rule: Dict, owner: Dict, rows: List[Dict]
     ) -> Optional[Dict]:
@@ -21647,6 +21655,16 @@ class SupplementEnricherV3:
                         "unit_normalized": "mg",
                         "dose_source": "distinct_vitamin_e_range",
                     }
+                elif (
+                    rule_subject.get("canonical_id") == "vitamin_a"
+                    and rule.get("form_scope")
+                    and not any("carotene" in str(form).lower() for form in rule["form_scope"])
+                ):
+                    # A rule on preformed forms judges the share the label declares.
+                    # With no declared share the row's own unknown-form path decides.
+                    dose_row = self._preformed_share_row(
+                        base_dose_row, label_rows_by_path.get(ingredient.get("raw_source_path"))
+                    ) or dose_row
                 if declared_owner is not None and (
                     subject["db"] == "ingredient_quality_map"
                     and
@@ -21682,7 +21700,6 @@ class SupplementEnricherV3:
                         continue
                     if evidence and valid_evidence and evidence not in valid_evidence:
                         continue
-                    rule_severity = severity
                     adjusted_severity, threshold_eval = self._evaluate_dose_thresholds_for_target(
                         thresholds=thresholds,
                         target_type="condition",
@@ -21715,7 +21732,7 @@ class SupplementEnricherV3:
                     for src in sources:
                         source_set.add(src)
                     tier_copy = (threshold_eval or {}).get("matched_copy") or {}
-                    condition_hit = {
+                    condition_hits.append({
                         "condition_id": condition_id,
                         "severity": severity,
                         "evidence_level": evidence or None,
@@ -21733,38 +21750,7 @@ class SupplementEnricherV3:
                         "min_effective_dose": min_effective_dose,
                         "dose_floor_status": dose_floor_status,
                         "profile_gate": cond_rule.get("profile_gate"),
-                    }
-                    condition_hits.append(condition_hit)
-                    # A stack total can meet a higher tier than any one product,
-                    # and the readers take one threshold from each decision.
-                    for tier in thresholds:
-                        decision_rule = (threshold_eval or {}).get("decision_rule") or {}
-                        if not (
-                            isinstance(tier, dict)
-                            and str(tier.get("scope") or "").strip().lower() == "condition"
-                            and str(tier.get("target_id") or "").strip().lower() == condition_id
-                            and self._to_float_safe(tier.get("value")) != decision_rule.get("threshold")
-                        ):
-                            continue
-                        tier_severity, tier_eval = self._evaluate_dose_thresholds_for_target(
-                            thresholds=[tier],
-                            target_type="condition",
-                            target_id=condition_id,
-                            ingredient=dose_row,
-                            servings_per_day_max=servings_per_day_max,
-                            base_severity=rule_severity,
-                            materiality=cond_rule.get("materiality"),
-                        )
-                        tier_copy = (tier_eval or {}).get("matched_copy") or {}
-                        condition_hits.append({
-                            **condition_hit,
-                            "severity": tier_severity,
-                            "dose_threshold_evaluation": tier_eval,
-                            "dose_decision": tier_eval,
-                            "action": tier_copy.get("action") or cond_rule.get("action"),
-                            "alert_headline": tier_copy.get("alert_headline") or cond_rule.get("alert_headline"),
-                            "alert_body": tier_copy.get("alert_body") or cond_rule.get("alert_body"),
-                        })
+                    })
 
                 explicit_condition_ids = {
                     str(hit.get("condition_id") or "").strip().lower()
@@ -21916,6 +21902,17 @@ class SupplementEnricherV3:
                     dose_hits.append({
                         "severity": severity,
                         "sources": sources,
+                        # The card itself is for every viewer. A stack total can only
+                        # meet a tier a warning targets, so name who shares this tier.
+                        "condition_ids": sorted({
+                            str(tier.get("target_id") or "").strip().lower()
+                            for tier in thresholds
+                            if isinstance(tier, dict)
+                            and tier.get("scope") == "condition"
+                            and tier.get("value") == threshold.get("value")
+                            and tier.get("unit") == threshold.get("unit")
+                            and tier.get("comparator") == threshold.get("comparator")
+                        }),
                         "dose_threshold_evaluation": threshold_eval,
                         "dose_decision": threshold_eval,
                         "alert_headline": threshold.get("alert_headline"),

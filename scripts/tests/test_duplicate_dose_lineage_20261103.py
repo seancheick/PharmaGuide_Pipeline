@@ -825,17 +825,26 @@ def test_a_compound_row_keeps_its_elemental_child_as_owner(enriched):
 
 
 # Beta-carotene dose tiers. A stack total can only meet a tier a product's warning carries.
-SMOKER_RULE_TIERS = {7500.0, 10000.0}
+# The 10,000 tier's card is for every viewer, so it has no profile gate; its authored
+# risk factors let a stack rule read it.
+RISK_FACTORS = ["asbestos_exposure", "current_smoker", "former_smoker"]
+
+
+def _dose_cards(product, rule_id):
+    return [
+        w for w in build_detail_blob(product, score_product_v4(product))["warnings"]
+        if w.get("source_rule_id") == rule_id and (w.get("profile_gate") or {}).get("gate_type") == "dose"
+    ]
 
 
 def _tiers(product, rule_id, condition="current_smoker"):
-    return {
-        hit["dose_decision"]["decision_rule"]["threshold"]: hit
+    return [
+        hit["dose_decision"]["decision_rule"]["threshold"]
         for alert in product["interaction_profile"]["ingredient_alerts"]
         if alert["rule_id"] == rule_id
         for hit in alert["condition_hits"]
         if hit["condition_id"] == condition
-    }
+    ]
 
 
 @pytest.mark.parametrize(
@@ -845,41 +854,78 @@ def _tiers(product, rule_id, condition="current_smoker"):
         ("178431", "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER"),
     ],
 )
-def test_each_dose_tier_is_its_own_decision(enriched, dsld_id, rule_id):
+def test_the_dose_card_carries_the_higher_tier_to_its_risk_factors(enriched, dsld_id, rule_id):
     """Each label is 7,500 mcg RAE a day: it meets the lower tier and not the higher."""
-    tiers = _tiers(enriched(dsld_id), rule_id)
-    assert set(tiers) == SMOKER_RULE_TIERS
-    assert tiers[7500.0]["dose_decision"]["evaluation_status"] == "above_threshold"
-    assert tiers[7500.0]["dose_decision"]["consumer_disposition"] == "review"
-    assert tiers[7500.0]["severity"] == "caution"
-    assert tiers[10000.0]["dose_decision"]["evaluation_status"] == "below_threshold"
-    assert tiers[10000.0]["dose_decision"]["consumer_disposition"] == "suppress"
-    assert tiers[10000.0]["severity"] == "informational"
-    assert tiers[10000.0]["dose_decision"]["decision_rule"]["consumer_disposition_if_met"] == "review"
-
-
-def test_each_dose_tier_reaches_the_export(enriched):
-    product = enriched("294483")
-    decisions = {
-        (w["dose_decision"]["decision_rule"]["threshold"], w["dose_decision"]["evaluated_daily_amount"])
-        for w in build_detail_blob(product, score_product_v4(product))["warnings"]
-        if "current_smoker" in (w.get("condition_ids") or []) and w.get("dose_decision")
-    }
-    assert decisions == {(7500.0, 7500.0), (10000.0, 7500.0)}
+    product = enriched(dsld_id)
+    assert _tiers(product, rule_id) == [7500.0]
+    [card] = _dose_cards(product, rule_id)
+    assert card["condition_ids"] == RISK_FACTORS
+    decision = card["dose_decision"]
+    assert decision["decision_rule"]["threshold"] == 10000.0
+    assert decision["evaluated_daily_amount"] == pytest.approx(7500.0)
+    assert decision["evaluation_status"] == "below_threshold"
+    assert decision["consumer_disposition"] == "suppress"
+    assert not (card["profile_gate"].get("requires") or {}).get("conditions_any")
 
 
 def test_a_scoped_rule_reads_the_nested_row_of_its_form(enriched):
     """80495 prints Vitamin A 15000 IU (33% retinyl, 67% beta-carotene), then Beta-Carotene
     5625 mcg. The nested amount is 2,812.5 mcg RAE; the row's even form split would give 2,250."""
-    tiers = _tiers(enriched("80495"), "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER")
-    assert set(tiers) == SMOKER_RULE_TIERS
-    for hit in tiers.values():
-        decision = compact_dose_decision(hit["dose_decision"])
-        assert decision["evaluation_status"] == "below_threshold"
-        assert decision["evaluated_daily_amount"] == pytest.approx(2812.5)
+    rule_id = "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER"
+    product = enriched("80495")
+    [hit] = [
+        h for a in product["interaction_profile"]["ingredient_alerts"] if a["rule_id"] == rule_id
+        for h in a["condition_hits"] if h["condition_id"] == "current_smoker"
+    ]
+    assert compact_dose_decision(hit["dose_decision"])["evaluated_daily_amount"] == pytest.approx(2812.5)
+    [card] = _dose_cards(product, rule_id)
+    assert card["condition_ids"] == RISK_FACTORS
+    assert card["dose_decision"]["evaluated_daily_amount"] == pytest.approx(2812.5)
+    assert card["dose_decision"]["evaluation_status"] == "below_threshold"
 
 
 @pytest.mark.parametrize("dsld_id", ["19170", "28483", "16730"])
 def test_a_control_with_no_beta_carotene_row_does_not_gain_a_tier(enriched, dsld_id):
-    assert not _tiers(enriched(dsld_id), "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER")
-    assert not _tiers(enriched(dsld_id), "RULE_IQM_BETA_CAROTENE_LUNG_CANCER")
+    for rule_id in ("RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER", "RULE_IQM_BETA_CAROTENE_LUNG_CANCER"):
+        assert not _tiers(enriched(dsld_id), rule_id)
+        assert not _dose_cards(enriched(dsld_id), rule_id)
+
+
+# The pregnancy rule is scoped to preformed forms: "carotenoids are not handled by this
+# threshold rule". A label declaring the preformed share states the amount it judges.
+def _pregnancy_decisions(product):
+    return {
+        hit["condition_id"]: (hit["severity"], compact_dose_decision(hit["dose_decision"]))
+        for alert in product["interaction_profile"]["ingredient_alerts"]
+        if alert["rule_id"] == "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE"
+        for hit in alert["condition_hits"]
+        if hit["condition_id"] in {"pregnancy", "ttc"}
+    }
+
+
+@pytest.mark.parametrize(
+    "dsld_id,preformed_iu",
+    [("80495", 4950.0), ("278001", 5000.0), ("66380", 7525.0), ("200725", 7050.0)],
+)
+def test_a_declared_preformed_share_is_what_the_pregnancy_rule_reads(enriched, dsld_id, preformed_iu):
+    """80495 prints Vitamin A 15000 IU as 33% retinyl acetate, 67% beta-carotene."""
+    for severity, decision in _pregnancy_decisions(enriched(dsld_id)).values():
+        assert decision["evaluation_status"] == "below_threshold"
+        assert decision["consumer_disposition"] == "suppress"
+        assert decision["evaluated_daily_amount"] == pytest.approx(preformed_iu, rel=0.01)
+        assert severity == "caution"
+
+
+def test_a_mixed_row_with_no_declared_share_stays_unresolved(enriched):
+    for _, decision in _pregnancy_decisions(enriched("16730")).values():
+        assert decision["evaluation_status"] == "form_unknown"
+        assert decision["consumer_disposition"] == "review"
+
+
+def test_a_preformed_share_above_the_line_still_blocks(enricher):
+    row = {"name": "Vitamin A", "canonical_id": "vitamin_a", "quantity": 25000.0, "unit": "IU"}
+    forms = [{"name": "Beta-Carotene"}, {"name": "Retinyl Acetate"}]
+    share = enricher._preformed_share_row(row, {"forms": forms, "notes": "as 50% Retinyl Acetate, 50% Beta Carotene"})
+    assert share["quantity"] == 12500.0
+    assert enricher._preformed_share_row(row, {"forms": forms, "notes": ""}) is None
+    assert enricher._preformed_share_row(row, None) is None

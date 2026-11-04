@@ -3849,7 +3849,6 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
     dose_state = (
         _norm(w.get("dose_floor_status"))
         + _norm(safe_dict(w.get("dose_decision")).get("consumer_disposition"))
-        + _norm(safe_dict(safe_dict(w.get("dose_decision")).get("decision_rule")).get("threshold"))
         if interaction_subject
         else ()
     )
@@ -8037,6 +8036,7 @@ def build_detail_blob(
                     "severity_contextual": _INTERACTION_CONTEXTUAL_SEVERITY.get(raw_sev, raw_sev),
                     "display_mode_default": _INTERACTION_DISPLAY_MODE.get(raw_sev, "suppress"),
                     "title": f"{ing_name} / dose",
+                    "condition_ids": safe_list(hit.get("condition_ids")),
                     "detail": safe_str(hit.get("alert_body")),
                     "alert_headline": hit.get("alert_headline"),
                     "alert_body": hit.get("alert_body"),
