@@ -1733,12 +1733,20 @@ def _carotene_outside_the_preformed_limit(row: Mapping[str, Any]) -> bool:
     return row.get("canonical_id") == "vitamin_a" and "caroten" in name and not re.search(r"retin|palmitate|acetate", name)
 
 
+def _label_quantity_variants(row: Mapping[str, Any]) -> list:
+    return [
+        _safe_dict(variant)
+        for variant in _safe_list(
+            row.get("quantityVariants") or _safe_dict(row.get("raw_taxonomy")).get("quantityVariants")
+        )
+    ]
+
+
 def _adult_percent(row: Mapping[str, Any]) -> float | None:
     """The row's largest printed %DV, when every percent it prints is on the adult DV.
     A column that also prints a child's percent keeps its adult one for this check.
     """
-    variants = [_safe_dict(variant) for variant in _safe_list(
-        row.get("quantityVariants") or _safe_dict(row.get("raw_taxonomy")).get("quantityVariants"))]
+    variants = _label_quantity_variants(row)
     printed = [variant for variant in variants if _positive(variant.get("daily_value"))]
     groups = {row.get("daily_value_target_group"), *(variant.get("daily_value_target_group") for variant in printed)}
     percents = [value for value in (row.get("dailyValue"), *(variant["daily_value"] for variant in printed)) if _positive(value)]
@@ -1785,7 +1793,15 @@ def upper_limit_amounts_unknown(product: Mapping[str, Any]) -> int:
 
 def upper_limit_amounts_undisclosed(product: Mapping[str, Any]) -> int:
     """Those checks where the label prints nothing for the nutrient, not even a percent."""
-    return sum(not _positive(row.get("dailyValue")) for row in _upper_limit_rows_unknown(product))
+    return sum(
+        not _positive(row.get("dailyValue"))
+        and not any(
+            _positive(variant.get(key))
+            for variant in _label_quantity_variants(row)
+            for key in ("daily_value", "adult_daily_value")
+        )
+        for row in _upper_limit_rows_unknown(product)
+    )
 
 
 def _hidden_amount_rows(rows: list) -> list:
