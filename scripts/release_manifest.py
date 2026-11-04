@@ -16,6 +16,11 @@ and the key custody rules are in docs/RELEASE_SIGNING_RUNBOOK.md.
     python scripts/release_manifest.py verify --manifest release.json \\
         --signature release.sig --public-key key.pub.pem
     python scripts/release_manifest.py prepare-rollback --source-dir GOOD --output-dir NEW
+    python scripts/release_manifest.py sign-alert-feed --statement safety_alerts_release.json \\
+        --key-file /outside/the/repo/key.pem --output safety_alerts_release.sig
+
+The safety-alert feed uses the same canonical text, signature format and key file
+rules. Its statement is a different document, and its keys are pinned apart.
 """
 
 import argparse
@@ -64,6 +69,12 @@ _TOP_LEVEL_KEYS = {
     "min_rules_version", "blocked_versions",
 }
 _ENTRY_KEYS = {"version", "path", "sha256", "schema_version", "min_app_version"}
+
+ALERT_FEED_PURPOSE = "safety_alert_feed"
+ALERT_FEED_PATH_PATTERN = re.compile(r"safety-alerts/sha256/([0-9a-f]{64})\.json")
+_ALERT_FEED_KEYS = {
+    "format", "purpose", "key_id", "release_sequence", "base_feed", "extended_feed",
+}
 
 
 class ReleaseManifestError(ValueError):
@@ -304,11 +315,15 @@ def load_private_key(key_file):
     return key
 
 
+def _signature_over(text, key_id, private_key):
+    signature = base64.b64encode(private_key.sign(text.encode("utf-8"))).decode("ascii")
+    return f"{key_id}:{signature}"
+
+
 def sign_release(text, private_key):
     """Return ``release_signature`` for canonical manifest text."""
     release = parse_release(text)
-    signature = base64.b64encode(private_key.sign(text.encode("utf-8"))).decode("ascii")
-    release_signature = f"{release['key_id']}:{signature}"
+    release_signature = _signature_over(text, release["key_id"], private_key)
     verify_release(text, release_signature, private_key.public_key())
     return release_signature
 
@@ -333,10 +348,8 @@ def parse_signature(release_signature, key_id):
     return signature
 
 
-def verify_release(text, release_signature, public_key):
-    """Raise unless the signature covers exactly these bytes."""
-    release = parse_release(text)
-    signature = parse_signature(release_signature, release["key_id"])
+def _require_signature_covers(text, release_signature, key_id, public_key):
+    signature = parse_signature(release_signature, key_id)
     _refuse_unless(isinstance(public_key, Ed25519PublicKey), "public key must be Ed25519")
     try:
         public_key.verify(signature, text.encode("utf-8"))
@@ -344,6 +357,12 @@ def verify_release(text, release_signature, public_key):
         raise ReleaseManifestError(
             "signature does not verify against this manifest and key"
         ) from None
+
+
+def verify_release(text, release_signature, public_key):
+    """Raise unless the signature covers exactly these bytes."""
+    release = parse_release(text)
+    _require_signature_covers(text, release_signature, release["key_id"], public_key)
     return release
 
 
@@ -406,22 +425,96 @@ def require_signed_when_keys_are_pinned():
     )
 
 
-def _verify_against_pinned_key(text, release_signature, release, test_project):
-    """Check the signature here, in the publish path, against a key in the repo."""
-    trust = _read_trust()
-    group = "test_keys" if test_project else "production_keys"
-    public = trust[group].get(release["key_id"])
+def _pinned_public_key(key_id, group):
+    keys = _read_trust().get(group)
+    public = keys.get(key_id) if isinstance(keys, dict) else None
     _refuse_unless(
         isinstance(public, str),
-        f"signing key {release['key_id']} is not pinned in {TRUST_PATH.name} {group}",
+        f"signing key {key_id} is not pinned in {TRUST_PATH.name} {group}",
     )
     try:
-        public_key = Ed25519PublicKey.from_public_bytes(bytes.fromhex(public))
+        return Ed25519PublicKey.from_public_bytes(bytes.fromhex(public))
     except ValueError:
         raise ReleaseManifestError(
-            f"signing key {release['key_id']} in {TRUST_PATH.name} is not a valid Ed25519 key"
+            f"signing key {key_id} in {TRUST_PATH.name} is not a valid Ed25519 key"
         ) from None
-    verify_release(text, release_signature, public_key)
+
+
+def _verify_against_pinned_key(text, release_signature, release, test_project):
+    """Check the signature here, in the publish path, against a key in the repo."""
+    group = "test_keys" if test_project else "production_keys"
+    verify_release(text, release_signature, _pinned_public_key(release["key_id"], group))
+
+
+def _validate_alert_feed_entry(entry, label):
+    _refuse_unless(
+        isinstance(entry, dict) and set(entry) == {"path", "checksum"},
+        f"{label} must have exactly path and checksum",
+    )
+    match = isinstance(entry["path"], str) and ALERT_FEED_PATH_PATTERN.fullmatch(entry["path"])
+    _refuse_unless(
+        match and entry["checksum"] == f"sha256:{match.group(1)}",
+        f"{label} must name a content-addressed feed",
+    )
+
+
+def validate_alert_feed_statement(statement):
+    """Refuse anything but this document, so a signature can't be reused across documents."""
+    _refuse_unless(
+        isinstance(statement, dict)
+        and set(statement) == _ALERT_FEED_KEYS
+        and statement["purpose"] == ALERT_FEED_PURPOSE,
+        f"this is not a safety-alert statement: it must have exactly {sorted(_ALERT_FEED_KEYS)}",
+    )
+    _refuse_unless(
+        type(statement["format"]) is int and statement["format"] == RELEASE_FORMAT,
+        f"unsupported statement format: {statement['format']!r}",
+    )
+    _refuse_unless(
+        isinstance(statement["key_id"], str) and KEY_ID_PATTERN.fullmatch(statement["key_id"]),
+        f"invalid key_id: {statement['key_id']!r}",
+    )
+    sequence = statement["release_sequence"]
+    _refuse_unless(
+        type(sequence) is int and 0 < sequence <= MAX_SEQUENCE,
+        f"release_sequence must be a positive integer, got {sequence!r}",
+    )
+    _validate_alert_feed_entry(statement["base_feed"], "base_feed")
+    if statement["extended_feed"] is not None:
+        _validate_alert_feed_entry(statement["extended_feed"], "extended_feed")
+
+
+def parse_alert_feed_statement(text):
+    try:
+        statement = json.loads(text)
+    except json.JSONDecodeError:
+        raise ReleaseManifestError("safety-alert statement is not valid JSON") from None
+    _refuse_unless(
+        canonical_text(statement) == text,
+        "safety-alert statement is not canonical JSON; rebuild it instead of editing it",
+    )
+    validate_alert_feed_statement(statement)
+    return statement
+
+
+def sign_alert_feed(text, private_key):
+    """Return the signature for a canonical safety-alert statement."""
+    statement = parse_alert_feed_statement(text)
+    signature = _signature_over(text, statement["key_id"], private_key)
+    _require_signature_covers(text, signature, statement["key_id"], private_key.public_key())
+    return signature
+
+
+def verify_alert_feed_against_pin(text, signature, *, test_project=False):
+    """There is no unsigned phase: with nothing pinned, every feed is refused."""
+    if test_project:
+        require_test_destination()
+    statement = parse_alert_feed_statement(text)
+    group = "test_keys" if test_project else "alert_feed_keys"
+    _require_signature_covers(
+        text, signature, statement["key_id"], _pinned_public_key(statement["key_id"], group),
+    )
+    return statement
 
 
 def check_remote_rules_gate(release, *, test_project=False):
@@ -628,6 +721,13 @@ def _parse_args(argv):
     sign.add_argument("--key-file", required=True)
     sign.add_argument("--output", required=True)
 
+    alert_feed = commands.add_parser(
+        "sign-alert-feed", help="Sign a safety-alert statement with a private key file",
+    )
+    alert_feed.add_argument("--statement", required=True)
+    alert_feed.add_argument("--key-file", required=True)
+    alert_feed.add_argument("--output", required=True)
+
     commands.add_parser(
         "unsigned-allowed", help="Exit 0 only while an unsigned publish is still allowed",
     )
@@ -664,6 +764,10 @@ def _run(args):
         print(f"Wrote {args.output}")
     elif args.command == "sign":
         signature = sign_release(_read_text(args.manifest), load_private_key(args.key_file))
+        _write_text(args.output, signature)
+        print(f"Wrote {args.output} (key ID {signature.partition(':')[0]})")
+    elif args.command == "sign-alert-feed":
+        signature = sign_alert_feed(_read_text(args.statement), load_private_key(args.key_file))
         _write_text(args.output, signature)
         print(f"Wrote {args.output} (key ID {signature.partition(':')[0]})")
     elif args.command == "unsigned-allowed":

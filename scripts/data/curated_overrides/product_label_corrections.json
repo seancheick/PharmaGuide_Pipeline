@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions. Existing canonical PG_SUB_ product identities may use this same exact-product correction owner. Reviewed physicalState metadata binds its original object and permits only explicit name/langualCodeDescription strings; it does not rewrite an approval or infer a dosage form. Reviewed nutritionalInfo metadata binds the whole original typed object and may add printed Nutrition Facts entries of amount/unit with an optional printed qualifier operator (<, <=, >, >=, ~); a metadata-only repair keeps the source serving rows unchanged.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-11-01",
-    "total_entries": 238,
+    "last_updated": "2026-11-03",
+    "total_entries": 252,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -11805,6 +11805,573 @@
           }
         ]
       }
+    },
+    "228934": {
+      "brand": "GNC Total Lean",
+      "product_name": "CLA Soft Chew Strawberry Banana Smoothie",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[4]",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 9507,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 9507,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Supplement Facts panel prints CLA with Clarinol. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/228934",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/228934.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "183546": {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product_name": "CLA",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 4000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 9507,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 9507,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Supplement Facts panel prints CLA with Clarinol. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/183546",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/183546.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "213306": {
+      "brand": "GNC Total Lean",
+      "product_name": "CLA Powder Vanilla Wafer",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[4]",
+      "raw_quantity_value": 3.4,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Supplement Facts panel prints CLA with Clarinol. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/213306",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/213306.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "1059": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Maximum CLA",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[3]",
+      "raw_quantity_value": 1300,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA) (Clarinol®) 1300 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/1059",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/1059.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "227855": {
+      "brand": "Nature's Way",
+      "product_name": "CLA-1300 Max Potency",
+      "raw_ingredient_text": "Clarinol CLA Complex",
+      "corrected_ingredient_text": "Clarinol CLA",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 1.3,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 284805,
+          "prefix": "providing",
+          "percent": 78,
+          "name": "Conjugated Linoleic Acid",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": "G199I91G4B"
+        }
+      ],
+      "correction_fields": [
+        "name"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Clarinol® CLA Complex 1.3 g, providing 78% conjugated linoleic acid (1,014 mg)\" and the front panel prints \"Patented Clarinol® CLA\". The structured row name does not match the existing Clarinol form, so the row scored as an unspecified form. Adding Clarinol as a second form would make the cleaner read this one-ingredient row as a blend header, so this product-scoped correction instead sets the working name to the existing form name and keeps the printed amount and the printed 78% form. It adds no alias and does not change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/227855",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/227855.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "176175": {
+      "brand": "GNC Pro Performance AMP",
+      "product_name": "CLA",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 4000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA) (from Safflower Oil)(Clarinol®) 4000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/176175",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/176175.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "4259": {
+      "brand": "GNC Women's Ultra Mega",
+      "product_name": "CLA 1000",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[3]",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints CLA with \"(Clarinol®) 1000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/4259",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/4259.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "220140": {
+      "brand": "GNC Beyond Raw",
+      "product_name": "Re-Built Mass XP Vanilla",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[1].nestedRows[1]",
+      "raw_quantity_value": 1,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Total Fat callout beside the panel prints \"CLA (Conjugated Linoleic Acid as Clarinol®) 1 g\" and Other Ingredients prints the same source. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/220140",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/220140.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "220238": {
+      "brand": "GNC Beyond Raw",
+      "product_name": "Re-Built Mass XP Strawberry",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[1].nestedRows[1]",
+      "raw_quantity_value": 1,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Total Fat callout beside the panel prints \"CLA (Conjugated Linoleic Acid as Clarinol®) 1 g\" and Other Ingredients prints the same source. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/220238",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/220238.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "220239": {
+      "brand": "GNC Beyond Raw",
+      "product_name": "Re-Built Mass XP Peanut Butter",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[1].nestedRows[1]",
+      "raw_quantity_value": 1,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Total Fat callout beside the panel prints \"CLA (Conjugated Linoleic Acid as Clarinol®) 1 g\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/220239",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/220239.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "26318": {
+      "brand": "GNC Pro Performance",
+      "product_name": "CLA 1000",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA)(Clarinol®) 1000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/26318",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/26318.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "65945": {
+      "brand": "GNC Women's Ultra Mega",
+      "product_name": "CLA 1000",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA)(Clarinol®) 1000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/65945",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/65945.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "66895": {
+      "brand": "GNC Pro Performance",
+      "product_name": "CLA 1000",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA)(Clarinol®) 1000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/66895",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/66895.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "70326": {
+      "brand": "GNC Pro Performance AMP",
+      "product_name": "CLA",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 4000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints CLA with \"(Clarinol®) 4000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/70326",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/70326.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
     }
   }
 }
