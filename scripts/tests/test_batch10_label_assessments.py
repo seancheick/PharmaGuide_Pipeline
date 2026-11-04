@@ -33,10 +33,23 @@ def test_declared_elemental_magnesium_is_not_added_to_its_source_mass(assessment
     assert magnesium[0]["amount"] == daily
     assert magnesium[0]["over_ul"] is (daily > 350)
     assert magnesium[0]["reference"]["ul_basis"] == "supplemental_only"
-    for source_material in (r for r in all_magnesium if not r.get("scoring_eligible")):
-        assert source_material["skip_ul_reason"] == "compound_duplicate_row"
+    assert magnesium[0]["dose_role"] == "declared_total"
+    assert magnesium[0]["parent_label_key"] is None
+    source_materials = [r for r in all_magnesium if not r.get("scoring_eligible")]
+    assert len(source_materials) == (0 if pid == "25501" else 1)
+    for source_material in source_materials:
+        assert source_material["skip_ul_reason"] == "form_component_of_declared_total"
+        assert source_material["dose_role"] == "form_component"
+        assert source_material["parent_label_key"] == magnesium[0]["source_label_key"]
+        assert source_material["source_label_key"] != magnesium[0]["source_label_key"]
         assert source_material["pct_ul"] is None
         assert not source_material["over_ul"]
+        analyzed = next(r for r in enriched["rda_ul_data"]["analyzed_ingredients"]
+                        if r["source_label_key"] == source_material["source_label_key"])
+        assert analyzed["raw_source_path"] == "ingredientRows[0].nestedRows[0]"
+        assert analyzed["dose_role"] == "form_component"
+        assert analyzed["parent_label_key"] == magnesium[0]["source_label_key"]
+        assert analyzed["quantity"] == source["ingredientRows"][0]["nestedRows"][0]["quantity"][0]["quantity"]
     assert resolve_daily_serving_range(enriched) == ((2, 2, False) if daily == 400 else (1, 1, False))
     if daily == 400:
         assert magnesium[0]["over_ul_amount"] == 50

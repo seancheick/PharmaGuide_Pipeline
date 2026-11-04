@@ -2000,18 +2000,23 @@ class EnhancedDSLDNormalizer:
         return None
 
     def _daily_value_group_for_analysis(self, dv_groups: List[Dict]) -> Dict:
-        """The group whose percent a quantity column reports: adults when they have one.
+        """The group whose percent a quantity column reports: the first that prints one.
 
-        82319 prints adults 0% beside children 60% in its child column, so a
-        zero or blank adult percent does not displace the group that has one.
+        82319 prints children 0%, adults 60% in one column, and the reverse in
+        the other, so a zero or blank percent does not displace a printed one.
         """
         for group in dv_groups:
-            if (
-                self._daily_value_target_group_from_dv_group(group) == "adult_4_plus"
-                and (self._safe_float(group.get("percent"), "daily_value", None) or 0) > 0
-            ):
+            if (self._safe_float(group.get("percent"), "daily_value", None) or 0) > 0:
                 return group
         return dv_groups[0]
+
+    def _adult_daily_value(self, dv_groups: Any) -> Dict[str, float]:
+        """The adult percent a column prints, for the upper-limit bound. Never shown or exported."""
+        for group in dv_groups if isinstance(dv_groups, list) else []:
+            percent = self._safe_float(group.get("percent"), "daily_value", None) or 0
+            if percent > 0 and self._daily_value_target_group_from_dv_group(group) == "adult_4_plus":
+                return {"adult_daily_value": percent}
+        return {}
 
     def _daily_value_target_group_from_variants(self, variants: List[Dict]) -> Optional[str]:
         """Return the FDA target group of the selected column, whose percent the row carries."""
@@ -5939,6 +5944,27 @@ class EnhancedDSLDNormalizer:
         for r in ingredient_rows:
             rewrite(r)
 
+        # A printed "typical distribution" is label evidence; DSLD keeps only its
+        # upper end as an exact amount. A changed row does not inherit the range.
+        printed_ranges = product_entry.get("printed_alpha_tocopherol_ranges") or {}
+
+        def stamp_printed_ranges(rows):
+            for row in rows:
+                printed = printed_ranges.get(row.get("raw_source_path"))
+                quantities = row.get("quantity") or []
+                if (
+                    printed
+                    and row.get("name") == product_entry.get("raw_ingredient_text")
+                    and len(quantities) == 1
+                    and isinstance(quantities[0], dict)
+                    and quantities[0].get("unit") == "mg"
+                    and quantities[0].get("quantity") == printed["high"]
+                ):
+                    row["printed_alpha_range_mg"] = dict(printed)
+                stamp_printed_ranges(row.get("nestedRows") or [])
+
+        stamp_printed_ranges(ingredient_rows)
+
         # Validate the entire reviewed group before mutating any membership.
         def set_reviewed_depth(row, depth, provenance, parent_row):
             row["parentBlend"] = parent_row.get("name")
@@ -8879,6 +8905,8 @@ class EnhancedDSLDNormalizer:
             result["dose_role"] = "declared_total"
         if dose_data_quality:
             result["dose_data_quality"] = dose_data_quality
+        if ing.get("printed_alpha_range_mg"):
+            result["printed_alpha_range_mg"] = ing["printed_alpha_range_mg"]
         if ing.get("_label_correction_applied"):
             source_correction = {
                 "provenance_tag": ing.get("_label_correction_provenance"),
@@ -10347,6 +10375,7 @@ class EnhancedDSLDNormalizer:
                 variant["daily_value"] = daily_value
             if daily_value_target_group:
                 variant["daily_value_target_group"] = daily_value_target_group
+            variant.update(self._adult_daily_value(dv_groups))
 
             return quantity, unit, daily_value, [variant]
 
@@ -10387,6 +10416,7 @@ class EnhancedDSLDNormalizer:
                         variant["daily_value"] = dv
                     if daily_value_target_group:
                         variant["daily_value_target_group"] = daily_value_target_group
+                    variant.update(self._adult_daily_value(dv_groups))
 
                     quantity_variants.append(variant)
                 else:

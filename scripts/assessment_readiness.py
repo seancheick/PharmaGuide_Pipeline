@@ -1766,11 +1766,17 @@ def _carotene_outside_the_preformed_limit(row: Mapping[str, Any]) -> bool:
 
 
 def _adult_percent(row: Mapping[str, Any]) -> float | None:
-    """The row's largest printed %DV, when every percent it prints is on the adult DV."""
-    variants = [variant for variant in _safe_list(row.get("quantityVariants")) if _positive(_safe_dict(variant).get("daily_value"))]
-    groups = {row.get("daily_value_target_group"), *(variant.get("daily_value_target_group") for variant in variants)}
-    percents = [value for value in (row.get("dailyValue"), *(variant["daily_value"] for variant in variants)) if _positive(value)]
-    return max(percents) if percents and groups == {"adult_4_plus"} else None
+    """The row's largest printed %DV, when every percent it prints is on the adult DV.
+    A column that also prints a child's percent keeps its adult one for this check.
+    """
+    variants = [_safe_dict(variant) for variant in _safe_list(
+        row.get("quantityVariants") or _safe_dict(row.get("raw_taxonomy")).get("quantityVariants"))]
+    printed = [variant for variant in variants if _positive(variant.get("daily_value"))]
+    groups = {row.get("daily_value_target_group"), *(variant.get("daily_value_target_group") for variant in printed)}
+    percents = [value for value in (row.get("dailyValue"), *(variant["daily_value"] for variant in printed)) if _positive(value)]
+    if percents and groups == {"adult_4_plus"}:
+        return max(percents)
+    return max((variant["adult_daily_value"] for variant in variants if variant.get("adult_daily_value")), default=None)
 
 
 def _printed_percent_rules_out_an_excess(row: Mapping[str, Any], unknown: list, servings: Any) -> bool:

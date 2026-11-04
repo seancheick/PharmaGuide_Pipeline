@@ -657,14 +657,26 @@ def test_a_child_only_column_stays_on_the_child_dv():
     assert row["daily_value_target_group"] == "children_1_3"
 
 
-@pytest.mark.parametrize("groups", [((CHILD, 33), (ADULT, 20)), ((ADULT, 20), (CHILD, 33))])
-def test_a_column_printing_both_groups_reports_the_adult_percent(groups):
-    # 277314 prints children and adults in one column, children first.
+@pytest.mark.parametrize("groups, shown, group", [
+    (((CHILD, 33), (ADULT, 20)), 33.0, "children_1_3"),  # 179590 keeps the 53% it prints for a child.
+    (((ADULT, 20), (CHILD, 33)), 20.0, "adult_4_plus"),
+    (((CHILD, 60), (ADULT, 0)), 60.0, "children_1_3"),  # 82319's child column.
+    (((CHILD, 0), (ADULT, 60)), 60.0, "adult_4_plus"),  # 82319's adult column.
+])
+def test_a_column_shows_the_percent_it_reports_and_keeps_the_adult_one_for_the_bound(groups, shown, group):
     row = _cleaned_active(_raw_product([_iodine_row([_dv_entry(1, 1, 30, "mcg", *groups)])]))
-    assert (row["dailyValue"], row["daily_value_target_group"]) == (20.0, "adult_4_plus")
+    assert (row["dailyValue"], row["daily_value_target_group"]) == (shown, group)
+    variant = row["raw_taxonomy"]["quantityVariants"][0]
+    adult = dict(groups)[ADULT]
+    assert variant.get("adult_daily_value") == (float(adult) if adult else None)
 
 
-def test_a_placeholder_adult_zero_does_not_displace_the_child_percent():
-    # 82319's child column prints children 60% and adults 0%.
-    row = _cleaned_active(_raw_product([_iodine_row([_dv_entry(1, 1, 54, "mcg", (CHILD, 60), (ADULT, 0))])]))
-    assert (row["dailyValue"], row["daily_value_target_group"]) == (60.0, "children_1_3")
+def test_the_adult_percent_kept_for_the_bound_is_never_exported():
+    raw = json.loads((ROOT / "scripts/tests/fixtures/a9_upper_limit_277314_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    vitamin_d = next(row for row in enriched["activeIngredients"] if row["name"] == "Vitamin D")
+    assert vitamin_d["raw_taxonomy"]["quantityVariants"][0]["adult_daily_value"] == 2.0
+    blob = build_detail_blob(enriched, _minimal_scored())
+    assert "adult_daily_value" not in json.dumps(blob, default=str)
+    vitamin_a = next(row for row in blob["ingredients"] if row["name"] == "Vitamin A")
+    assert vitamin_a["dailyValue"] == 7.0  # What the label prints for a child, adults 2%.

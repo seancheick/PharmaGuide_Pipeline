@@ -234,6 +234,7 @@ def test_an_upper_limit_nutrient_with_no_amount_withholds_only_the_all_clear(pip
 @pytest.mark.parametrize("label, status, reason", [
     ("a9_upper_limit_293959_raw.json", "incomplete", "upper_limit_amount_undisclosed"),
     ("a9_upper_limit_16725_raw.json", "complete", None),  # Its %DV bounds rule out an excess.
+    ("a9_upper_limit_277314_raw.json", "complete", None),  # Vitamin D <2% for children and adults in one column.
     ("a9_upper_limit_243679_raw.json", "incomplete", None),  # Niacin's bound crosses, and it prints a percent.
     ("a9_upper_limit_297685_raw.json", "complete", None),  # Gamma-carotene is outside the preformed limit.
     ("a9_upper_limit_12634_raw.json", "complete", None),

@@ -315,7 +315,9 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
         lambda *_args, **_kwargs: None,
     )
     monkeypatch.setattr(supabase_client, "list_storage_paths", lambda *a, **kw:
-                        [{"name": "pharmaguide_core.db"}] if kw.get("offset", 0) == 0 else [])
+                        [{"name": "pharmaguide_core.db"}, {"name": "pharmaguide_core.db.gz"},
+                         {"name": "pharmaguide_core.db.gz.json"}]
+                        if kw.get("offset", 0) == 0 else [])
     catalog_search_versions = []
     monkeypatch.setattr(
         sync_to_supabase,
@@ -328,10 +330,10 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
     monkeypatch.setattr(sync_to_supabase, "upload_detail_blobs",
                         lambda **kw: (0, [], 0, 3))
     def download(_c, _b, path):
-        if path.endswith("/pharmaguide_core.db"):
-            return (tmp_path / "pharmaguide_core.db").read_bytes()
-        if path.endswith("/detail_index.json"):
-            return (tmp_path / "detail_index.json").read_bytes()
+        for name in ("pharmaguide_core.db", "pharmaguide_core.db.gz",
+                     "pharmaguide_core.db.gz.json", "detail_index.json"):
+            if path.endswith(f"/{name}"):
+                return (tmp_path / name).read_bytes()
         raise FileNotFoundError(path)
     monkeypatch.setattr(supabase_client, "download_file", download)
     result = sync_to_supabase.sync(str(tmp_path))
@@ -390,7 +392,8 @@ def test_sync_bounds_release_cache_but_keeps_hashed_blobs_immutable(
     prefix = f"v{local['db_version']}/"
     mutable = {path: opts for path, opts in uploads.items() if path.startswith(prefix)}
     assert set(mutable) == {
-        prefix + "pharmaguide_core.db", prefix + "detail_index.json",
+        prefix + "pharmaguide_core.db", prefix + "pharmaguide_core.db.gz",
+        prefix + "pharmaguide_core.db.gz.json", prefix + "detail_index.json",
         *(prefix + f"share_index/{shard}.json" for shard in sync.SHARE_INDEX_SHARDS),
     }
     assert all(0 <= int(opts["cache_control"]) <= 60 for opts in mutable.values())

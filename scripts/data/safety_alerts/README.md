@@ -178,7 +178,7 @@ to its public alert page, so automated collection is not sufficient publication 
 
 ## When a ban can't wait on rule review
 
-A ban or recall reaches phones through `run_safety_alert_publish.sh`, which never waits on the gate.
+A ban or recall reaches phones through `run_safety_alert_publish.sh`, which never waits on the gate. It does need a signature from Sean's alert key, and refuses without one; the steps are in `docs/RELEASE_SIGNING_RUNBOOK.md`.
 Only a catalog carrying it can be held up. If unrelated rule review is the only thing holding it, add
 a dated entry to `rule_gate_emergency_overrides.json` and run
 `release_full.sh --emergency-catalog --skip-flutter`:

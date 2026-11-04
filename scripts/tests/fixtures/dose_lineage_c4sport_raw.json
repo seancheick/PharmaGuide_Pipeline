@@ -1,0 +1,500 @@
+{
+  "id": "PG_SUB_1D092114B51240BBB72F9650AA562605",
+  "brandName": "Cellucor",
+  "fullName": "C4 Sport Fruit Juicy Red",
+  "ingredientRows": [
+    {
+      "forms": [],
+      "ingredientGroup": "Calories",
+      "name": "Calories",
+      "nestedRows": [],
+      "order": 1,
+      "quantity": [
+        {
+          "quantity": 10,
+          "unit": "Calories"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Total Carbohydrate",
+      "name": "Total Carbohydrate",
+      "nestedRows": [],
+      "order": 2,
+      "quantity": [
+        {
+          "quantity": 1,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Total Sugars",
+      "name": "Total Sugars",
+      "nestedRows": [],
+      "order": 3,
+      "quantity": [
+        {
+          "quantity": 0,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Added Sugars",
+      "name": "Added Sugars",
+      "nestedRows": [],
+      "notes": "Printed %DV: 0",
+      "order": 4,
+      "quantity": [
+        {
+          "quantity": 0,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Pyridoxal-5-Phosphate"
+        }
+      ],
+      "ingredientGroup": "Vitamin B6",
+      "name": "Vitamin B6 (as Pyridoxal-5-Phosphate)",
+      "nestedRows": [],
+      "notes": "Printed %DV: 200",
+      "order": 5,
+      "quantity": [
+        {
+          "quantity": 3.4,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "6S-5-Methyltetrahydrofolate calcium salt"
+        }
+      ],
+      "ingredientGroup": "Folate",
+      "name": "Folate (as 6S-5-Methyltetrahydrofolate calcium salt)",
+      "nestedRows": [],
+      "notes": "Printed %DV: 25",
+      "order": 6,
+      "quantity": [
+        {
+          "quantity": 100,
+          "unit": "mcg DFE"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Methylcobalamin"
+        }
+      ],
+      "ingredientGroup": "Vitamin B12",
+      "name": "Vitamin B12 (as Methylcobalamin)",
+      "nestedRows": [],
+      "notes": "Printed %DV: 250",
+      "order": 7,
+      "quantity": [
+        {
+          "quantity": 6,
+          "unit": "mcg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Calcium",
+      "name": "Calcium",
+      "nestedRows": [],
+      "notes": "Printed %DV: 2",
+      "order": 8,
+      "quantity": [
+        {
+          "quantity": 25,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Dipotassium Phosphate"
+        }
+      ],
+      "ingredientGroup": "Phosphorus",
+      "name": "Phosphorus (as Dipotassium Phosphate)",
+      "nestedRows": [],
+      "notes": "Printed %DV: 6",
+      "order": 9,
+      "quantity": [
+        {
+          "quantity": 75,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Magnesium Citrate"
+        }
+      ],
+      "ingredientGroup": "Magnesium",
+      "name": "Magnesium (as Magnesium Citrate)",
+      "nestedRows": [],
+      "notes": "Printed %DV: 5",
+      "order": 10,
+      "quantity": [
+        {
+          "quantity": 20,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Sea Salt"
+        }
+      ],
+      "ingredientGroup": "Chloride",
+      "name": "Chloride (from Sea Salt)",
+      "nestedRows": [],
+      "notes": "Printed %DV: 15",
+      "order": 11,
+      "quantity": [
+        {
+          "quantity": 340,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Sea Salt"
+        }
+      ],
+      "ingredientGroup": "Sodium",
+      "name": "Sodium (from Sea Salt)",
+      "nestedRows": [],
+      "notes": "Printed %DV: 10",
+      "order": 12,
+      "quantity": [
+        {
+          "quantity": 225,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [
+        {
+          "name": "Dipotassium Phosphate"
+        }
+      ],
+      "ingredientGroup": "Potassium",
+      "name": "Potassium (as Dipotassium Phosphate)",
+      "nestedRows": [],
+      "notes": "Printed %DV: 4",
+      "order": 13,
+      "quantity": [
+        {
+          "quantity": 190,
+          "unit": "mg"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Performance Booster Matrix",
+      "name": "Performance Booster Matrix",
+      "nestedRows": [
+        {
+          "forms": [],
+          "ingredientGroup": "Beta-Alanine",
+          "name": "CarnoSyn® Beta-Alanine",
+          "nestedRows": [],
+          "order": 15,
+          "quantity": [
+            {
+              "quantity": 2,
+              "unit": "g"
+            }
+          ]
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "L-Arginine",
+          "name": "L-Arginine",
+          "nestedRows": [],
+          "order": 16,
+          "quantity": [
+            {
+              "quantity": 2,
+              "unit": "g"
+            }
+          ]
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Betaine",
+          "name": "BetaPower® Betaine Anhydrous",
+          "nestedRows": [],
+          "order": 17,
+          "quantity": [
+            {
+              "quantity": 1.25,
+              "unit": "g"
+            }
+          ]
+        },
+        {
+          "forms": [
+            {
+              "name": "NO3-T®"
+            }
+          ],
+          "ingredientGroup": "Creatine Nitrate",
+          "name": "Creatine Nitrate (as NO3-T®)",
+          "nestedRows": [],
+          "order": 18,
+          "quantity": [
+            {
+              "quantity": 1,
+              "unit": "g"
+            }
+          ]
+        }
+      ],
+      "order": 14,
+      "quantity": [
+        {
+          "quantity": 6.25,
+          "unit": "g"
+        }
+      ]
+    },
+    {
+      "forms": [],
+      "ingredientGroup": "Explosive Energy & Focus Complex",
+      "name": "Explosive Energy & Focus Complex",
+      "nestedRows": [
+        {
+          "forms": [],
+          "ingredientGroup": "Taurine",
+          "name": "Taurine",
+          "nestedRows": [],
+          "order": 20,
+          "quantity": [
+            {
+              "quantity": 1,
+              "unit": "g"
+            }
+          ]
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Caffeine",
+          "name": "Caffeine Anhydrous",
+          "nestedRows": [],
+          "order": 21,
+          "quantity": [
+            {
+              "quantity": 200,
+              "unit": "mg"
+            }
+          ]
+        },
+        {
+          "forms": [],
+          "ingredientGroup": "Huperzia serrata",
+          "name": "Toothed Clubmoss (Huperzia serrata) aerial parts extract (std. 1% Huperzine A)",
+          "nestedRows": [],
+          "order": 22,
+          "quantity": [
+            {
+              "quantity": 5,
+              "unit": "mg"
+            }
+          ]
+        }
+      ],
+      "order": 19,
+      "quantity": [
+        {
+          "quantity": 1.205,
+          "unit": "g"
+        }
+      ]
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Citric Acid"
+      },
+      {
+        "name": "Malic Acid"
+      },
+      {
+        "name": "Natural & Artificial Flavors"
+      },
+      {
+        "name": "Silicon Dioxide"
+      },
+      {
+        "name": "Calcium Silicate"
+      },
+      {
+        "name": "Potassium Citrate"
+      },
+      {
+        "name": "Sucralose"
+      },
+      {
+        "name": "Vegetable Juice (Color)"
+      },
+      {
+        "name": "Acesulfame Potassium"
+      }
+    ]
+  },
+  "otherIngredientsDisclosure": "present",
+  "physicalState": {
+    "langualCodeDescription": "Powder",
+    "name": "Powder"
+  },
+  "servingSizes": [
+    {
+      "maxQuantity": 12.6,
+      "minQuantity": 12.6,
+      "order": 1,
+      "unit": "g"
+    }
+  ],
+  "servingsPerContainer": "20",
+  "statements": [
+    {
+      "notes": "FRUIT JUICY RED® NATURALLY & ARTIFICIALLY FLAVORED",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "HAWAIIAN PUNCH®",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "NSF CERTIFIED SPORT",
+      "type": "Seals/Symbols"
+    },
+    {
+      "notes": "20 SERVINGS",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "DIETARY SUPPLEMENT / NET WT 252 g (8.9 oz)",
+      "type": "FDA Statement of Identity"
+    },
+    {
+      "notes": "200mg CAFFEINE",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "2g CARNOSYN® BETA-ALANINE",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "6 KEY ELECTROLYTES",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "ON THE FIELD OR IN THE GYM, THIS NSF® CERTIFIED PRE-WORKOUT‡ HELPS FUEL YOUR PERFORMANCE & HYDRATION.*",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "EXPLOSIVE ENERGY* Increased training intensity with 200mg of caffeine.*",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "MUSCULAR ENDURANCE*^ High-performance training powered by CarnoSyn® Beta-Alanine, Creatine, Arginine and BetaPower®.*",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "ELITE HYDRATION* Replenish key minerals lost during training with critical electrolytes.*",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "NSF CERTIFIED FOR SPORT® Tested and certified for professional and collegiate athletes.‡",
+      "type": "Seals/Symbols"
+    },
+    {
+      "notes": "^Studies have shown benefits of CarnoSyn® Beta-Alanine to be correlated with cumulative use. Some individuals may experience a harmless tingling sensation, which is attributable to Beta-Alanine.",
+      "type": "Precautions re: All Other"
+    },
+    {
+      "notes": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+      "type": "FDA Disclaimer Statement"
+    },
+    {
+      "notes": "SUGGESTED USE Take one serving (approx. 1 scoop) of C4 Sport® with 8 fl. oz. of water and consume 20-30 minutes before training.",
+      "type": "Suggested/Recommended/Usage/Directions"
+    },
+    {
+      "notes": "WARNING THIS PRODUCT IS ONLY INTENDED FOR HEALTHY ADULTS, 18 YEARS OF AGE OR OLDER. Do not use if pregnant, nursing, or currently taking PDE-5 inhibitors or nitrates for chest pain. Do not take this product before first consulting a licensed, qualified, health care professional if you are taking any other dietary supplement, prescription drug, or over-the-counter medication; or if, you suspect you have or have been treated for, diagnosed with, or have a family history of any medical condition. This product contains caffeine and should not be used by individuals wishing to eliminate caffeine from their diet or in combination with caffeine or stimulants from other sources. Do not use if sensitive to caffeine. Discontinue use 2 weeks prior to surgery. Immediately discontinue use and contact a medical doctor if you experience any adverse reaction to this product. Do not use this product continuously for more than 8 weeks. Do not use if the safety seal is broken or missing.",
+      "type": "Precautions re: Pregnant or Nursing or Prescription Medications"
+    },
+    {
+      "notes": "Store in a cool, dry place.",
+      "type": "Storage"
+    },
+    {
+      "notes": "KEEP OUT OF REACH OF CHILDREN.",
+      "type": "Precautions re: Children"
+    },
+    {
+      "notes": "^Based on cumulative global sales of C4® branded pre-workout products.",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Made in the U.S.A. using strategically sourced foreign and domestic ingredients and components.",
+      "type": "General Statements: All Other Content"
+    },
+    {
+      "notes": "Cellucor®, C4® and C4 Sport® are trademarks of and distributed by: nutrabolt® Austin, TX 78746 | 1.866.927.9686 www.Cellucor.com",
+      "type": "General Statements: All Other Content"
+    }
+  ],
+  "offMarket": 0,
+  "upcSku": "0842595131550",
+  "src": "local/manual_labels/product_submissions/PG_SUB_1D092114B51240BBB72F9650AA562605",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "approval_revision": 1,
+    "approval_payload_sha256": "f59cbd7a405f8c87e945aeddda56ccb4b8f4d04f7dd27b06b205b011b641c3bc",
+    "source_kind": "private_product_submission",
+    "source_record_id": "1d092114-b512-40bb-b72f-9650aa562605",
+    "label_verified_at": "2026-10-30",
+    "review_status": "verified",
+    "reviewer": "PharmaGuide Clinical Team"
+  },
+  "label_record_metadata": {
+    "approval_revision": 1,
+    "approval_payload_sha256": "f59cbd7a405f8c87e945aeddda56ccb4b8f4d04f7dd27b06b205b011b641c3bc",
+    "source_name": "PharmaGuide verified product submission",
+    "source_record_id": "1d092114-b512-40bb-b72f-9650aa562605",
+    "source_date": "2026-10-30",
+    "source_updated_date": "2026-10-30",
+    "product_status": "active",
+    "lineage_key": "pharmaguide_submission:1d092114-b512-40bb-b72f-9650aa562605",
+    "reviewed_at": "2026-10-30T06:34:57.31624+00:00"
+  }
+}
