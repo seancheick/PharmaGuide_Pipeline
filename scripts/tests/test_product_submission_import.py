@@ -1281,15 +1281,33 @@ def test_approved_product_picture_is_webp_indexed_and_bound_to_catalog(
         assert rendered.size == (900, 600)
     index = json.loads((image_dir / "product_image_index.json").read_text())
     assert index[product_id]["filename"] == f"{product_id}.webp"
-    assert index[product_id]["remote_path"] == f"vrelease-2/{product_id}.webp"
-    assert index[product_id]["sha256"] == hashlib.sha256(
-        webp_path.read_bytes()
-    ).hexdigest()
+    digest = hashlib.sha256(webp_path.read_bytes()).hexdigest()
+    assert index[product_id]["sha256"] == digest
+    assert index[product_id]["remote_path"] == f"sha256/{digest[:2]}/{digest}.webp"
     with sqlite3.connect(catalog) as connection:
         assert connection.execute(
             "select image_thumbnail_url from products_core where dsld_id = ?",
             (product_id,),
-        ).fetchone() == (f"product-images/vrelease-2/{product_id}.webp",)
+        ).fetchone() == (f"product-images/sha256/{digest[:2]}/{digest}.webp",)
+
+    def import_again():
+        return copy_approved_product_images(
+            output_dir=manual_dir,
+            catalog_db=catalog,
+            product_images_dir=image_dir,
+            rpc=lambda name, payload: [{
+                "bucket_id": "product-submission-photos",
+                "object_path": "user/submission/front.jpg",
+                "content_type": "image/png",
+                "content_sha256": source_hash,
+            }],
+            download=lambda bucket, path: source_bytes,
+        )
+
+    assert import_again() == {"copied": 0, "failed": 0, "skipped": 1}
+    with sqlite3.connect(catalog) as connection:
+        connection.execute("update products_core set image_thumbnail_url = null")
+    assert import_again() == {"copied": 1, "failed": 0, "skipped": 0}
 
 
 def test_label_mismatch_preserves_existing_dsld_identity():
@@ -2283,9 +2301,13 @@ def test_promoted_legacy_receipt_without_payload_hash_uses_server_derived_image_
     assert "approval_payload_sha256" not in receipts[legacy_submission]
     with sqlite3.connect(catalog) as connection:
         urls = dict(connection.execute("select dsld_id, image_thumbnail_url from products_core"))
+    def named_by_bytes(pid):
+        digest = hashlib.sha256((image_dir / f"{pid}.webp").read_bytes()).hexdigest()
+        return f"product-images/sha256/{digest[:2]}/{digest}.webp"
+
     assert urls == {
-        product_id: f"product-images/vrelease-3/{product_id}.webp",
-        legacy_product: f"product-images/vrelease-3/{legacy_product}.webp",
+        product_id: named_by_bytes(product_id),
+        legacy_product: named_by_bytes(legacy_product),
     }
 
 

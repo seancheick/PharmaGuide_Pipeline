@@ -720,7 +720,9 @@ _IMAGE_URL_PREFIX = "product-images/"
 def _write_rollback_image_index(source_index, destination, db_version):
     index = _read_json(source_index)
     for entry in index.values():
-        if entry.get("remote_path") is not None:
+        # A hash-named image is the same object in every release.
+        remote_path = entry.get("remote_path")
+        if remote_path is not None and not remote_path.startswith("sha256/"):
             entry["remote_path"] = f"v{db_version}/{entry['filename']}"
     with open(destination, "w", encoding="utf-8") as handle:
         json.dump(index, handle, indent=2, sort_keys=True)
@@ -732,9 +734,10 @@ def prepare_rollback(source_dir, output_dir, *, db_version=None, newer_than=None
     Keyed builds roll back by sequence alone. Builds without keys only ever move to
     a newer db_version, and they refuse a file whose embedded version differs from
     the manifest, so the version is stamped inside the catalog and its hash changes.
-    Sync uploads images under the new version and old versions get pruned, so an image
-    path that names the source version moves with it. Everything else in the product
-    rows, and the detail blobs, stay exactly as they were.
+    Sync uploads version-folder images under the new version and old versions get
+    pruned, so an image path that names the source version moves with it. A hash-named
+    path stays. Everything else in the product rows, and the detail blobs, stay exactly
+    as they were.
     """
     source = Path(source_dir).resolve()
     output = Path(output_dir).resolve()

@@ -74,6 +74,16 @@ def core_db_compressed_remote_path(db_version):
     return f"{core_db_remote_path(db_version)}.gz"
 
 
+def product_image_remote_path(image_sha256):
+    """Object key in the product-images bucket for an image with these bytes.
+
+    The name can't come to mean anything else, so it alone gets the long cache. A
+    corrected picture has a new name. Older names stay published, because a phone's
+    catalog can still point at them.
+    """
+    return f"sha256/{image_sha256[:2]}/{image_sha256}.webp"
+
+
 def rules_db_remote_path(rules_version):
     """Immutable Storage path of an interaction rules file named by a signed release."""
     return f"rules/{rules_version}/interaction_db.sqlite"

@@ -26,6 +26,8 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+from supabase_client import product_image_remote_path
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -395,19 +397,6 @@ def load_products_from_db(db_path: str) -> list[tuple[str, str]]:
             if re.fullmatch(r"[0-9]+", str(product_id))]
 
 
-def catalog_image_prefix(db_path: str) -> str:
-    manifest_path = os.path.join(
-        os.path.dirname(os.path.abspath(db_path)), "export_manifest.json"
-    )
-    if not os.path.exists(manifest_path):
-        return ""
-    with open(manifest_path, "r", encoding="utf-8") as handle:
-        version = str(json.load(handle).get("db_version") or "").strip()
-    if not version or "/" in version or ".." in version:
-        raise ValueError("export manifest has an invalid db_version")
-    return f"v{version}/"
-
-
 def needs_image_extraction(db_path: str, image_dir: str) -> bool:
     """Check the exact same DSLD targets the extractor will process.
 
@@ -415,7 +404,6 @@ def needs_image_extraction(db_path: str, image_dir: str) -> bool:
     thumbnail. Submission IDs with stale synthetic PDF URLs are never targets.
     """
     targets = load_products_from_db(db_path)
-    image_prefix = catalog_image_prefix(db_path)
     with sqlite3.connect(db_path) as conn:
         thumbnails = dict(conn.execute(
             "SELECT dsld_id, image_thumbnail_url FROM products_core"
@@ -423,8 +411,10 @@ def needs_image_extraction(db_path: str, image_dir: str) -> bool:
     for product_id, _ in targets:
         filename = f"{product_id}.webp"
         path = os.path.join(image_dir, filename)
-        if (thumbnails.get(product_id) != f"product-images/{image_prefix}{filename}"
-                or not os.path.isfile(path) or os.path.getsize(path) == 0):
+        if not os.path.isfile(path) or os.path.getsize(path) == 0:
+            return True
+        expected = f"product-images/{product_image_remote_path(file_sha256(path))}"
+        if thumbnails.get(product_id) != expected:
             return True
     return False
 
@@ -534,9 +524,8 @@ def run_extraction(
                 processed, total, downloaded, skipped, failed, elapsed,
             )
 
-    image_prefix = catalog_image_prefix(db_path)
     for entry in index.values():
-        entry["remote_path"] = f"{image_prefix}{entry['filename']}"
+        entry["remote_path"] = product_image_remote_path(entry["sha256"])
 
     # Write index
     index_path = os.path.join(output_dir, "product_image_index.json")
@@ -592,8 +581,8 @@ def backfill_image_thumbnail_urls(db_path: str, image_dir: str, index: dict) -> 
     """Populate products_core.image_thumbnail_url for extracted thumbnails.
 
     The value intentionally includes the Supabase bucket prefix for compatibility
-    with the v1.4.0 export schema (`product-images/{dsld_id}.webp`). Flutter
-    normalizes this to an object key before building the public URL.
+    with the v1.4.0 export schema. Flutter normalizes this to an object key before
+    building the public URL, so every build reads a hash-named path the same way.
     """
     updated = 0
     conn = sqlite3.connect(db_path)

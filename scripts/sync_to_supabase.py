@@ -40,7 +40,12 @@ DEFAULT_PROGRESS_EVERY = 500
 sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
 from release_safety.transient import is_transient_error
-from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, core_db_remote_path
+from supabase_client import (
+    CACHE_CONTROL_IMMUTABLE,
+    STORAGE_BUCKET,
+    core_db_remote_path,
+    product_image_remote_path,
+)
 from audit_source_of_truth_contract import check_v4_pillar_contract
 
 # A catalog version is single-use. Version-stamped objects are immutable once
@@ -938,6 +943,7 @@ def validate_build_output(build_dir, manifest):
 # ---------------------------------------------------------------------------
 
 PRODUCT_IMAGE_BUCKET = "product-images"
+PRODUCT_IMAGE_HASH_PREFIX = "sha256/"
 
 
 def load_product_image_index(build_dir):
@@ -952,6 +958,47 @@ def load_product_image_index(build_dir):
     return None, None
 
 
+def _is_hash_named_image(remote_path):
+    return isinstance(remote_path, str) and remote_path.startswith(PRODUCT_IMAGE_HASH_PREFIX)
+
+
+def validate_product_image_bindings(db_path, index):
+    """Refuse a catalog whose rows would show the wrong picture or none at all.
+
+    A row with its own index entry must name that entry's object. A row naming a hash
+    must have one, since only an entry publishes that object. Older paths with no entry
+    are what catalogs have always carried, and they stay publishable.
+    """
+    connection = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+    try:
+        columns = {row[1] for row in connection.execute("PRAGMA table_info(products_core)")}
+        if "image_thumbnail_url" not in columns:
+            return
+        rows = connection.execute(
+            "SELECT dsld_id, image_thumbnail_url FROM products_core "
+            "WHERE image_thumbnail_url IS NOT NULL"
+        ).fetchall()
+    finally:
+        connection.close()
+    prefix = f"{PRODUCT_IMAGE_BUCKET}/"
+    mismatched = []
+    for dsld_id, url in rows:
+        entry = (index or {}).get(str(dsld_id))
+        declared = entry.get("remote_path") if isinstance(entry, dict) else None
+        if declared is not None:
+            if url != f"{prefix}{declared}":
+                mismatched.append(str(dsld_id))
+        elif url.startswith(f"{prefix}{PRODUCT_IMAGE_HASH_PREFIX}"):
+            mismatched.append(str(dsld_id))
+    if mismatched:
+        source = "the product image index" if index else "no product image index"
+        raise ValueError(
+            f"Catalog row names an image that {source} publishes for another product "
+            f"or not at all: {len(mismatched)} rows, such as {mismatched[:5]}. Re-run "
+            "extract_product_images.py and the submission image import."
+        )
+
+
 def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retries,
                        base_delay, immutable=False):
     """Upload a single .webp image to Supabase Storage."""
@@ -961,7 +1008,9 @@ def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retri
                 client, bucket, remote_path, local_path,
                 content_type="image/webp",
                 upsert=not immutable,
-                cache_control=CACHE_CONTROL_IMMUTABLE if immutable else None,
+                cache_control=(
+                    CACHE_CONTROL_IMMUTABLE if _is_hash_named_image(remote_path) else None
+                ),
             ),
             retries=retries,
             base_delay=base_delay,
@@ -973,9 +1022,13 @@ def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retri
 
 def _upload_image_task_with_factory(client_getter, upload_fn, bucket, local_path, remote_path,
                                     retries, base_delay, download_fn=None,
-                                    remote_exists=False, immutable=False):
+                                    remote_exists=False, immutable=False, remote_size=0):
     client = client_getter()
     if remote_exists:
+        # The name is the hash of what was uploaded there, create-only. Re-downloading
+        # thousands of images on every run would prove nothing the size doesn't.
+        if _is_hash_named_image(remote_path) and remote_size == os.path.getsize(local_path):
+            return "skipped"
         if download_fn is None:
             if immutable:
                 return {
@@ -1036,32 +1089,9 @@ def upload_product_images(
         print(f"  [DRY RUN] Would upload {total} product images to {PRODUCT_IMAGE_BUCKET}")
         return {"uploaded": 0, "skipped": total, "failed": 0}
 
-    # Discover existing remote images to skip re-uploads
-    existing_sizes = {}
-    try:
-        image_prefix = f"v{catalog_version}" if catalog_version is not None else ""
-        page_size = 1000
-        offset = 0
-        while True:
-            page = list_fn(
-                client, PRODUCT_IMAGE_BUCKET, image_prefix,
-                limit=page_size, offset=offset,
-            )
-            for item in page or []:
-                name = item.get("name", "")
-                metadata = item.get("metadata", {}) or {}
-                size = metadata.get("size") or metadata.get("contentLength") or 0
-                if name:
-                    remote_name = f"{image_prefix}/{name}" if image_prefix else name
-                    existing_sizes[remote_name] = int(size) if size else 0
-            if not page:
-                break
-            offset += len(page)
-    except Exception:
-        pass  # Bucket may not exist yet — upload all
-
     # Build upload list
     uploads = []
+    seen_remote_paths = set()
     skipped = 0
     errors = []
     for dsld_id, entry in sorted(index.items()):
@@ -1069,7 +1099,21 @@ def upload_product_images(
         local_path = os.path.join(image_dir, filename)
         declared_remote_path = entry.get("remote_path")
         remote_path = declared_remote_path or filename
-        if catalog_version is not None and declared_remote_path is not None:
+        if _is_hash_named_image(remote_path):
+            if not os.path.isfile(local_path):
+                errors.append({"remote_path": remote_path, "error": "Indexed local image is missing"})
+                continue
+            digest = _compute_file_sha256(local_path)
+            if remote_path != product_image_remote_path(digest) or entry.get("sha256") != digest:
+                errors.append({
+                    "remote_path": remote_path,
+                    "error": f"Indexed product image {dsld_id} is not named by its bytes",
+                })
+                continue
+            if remote_path in seen_remote_paths:
+                skipped += 1
+                continue
+        elif catalog_version is not None and declared_remote_path is not None:
             expected_prefix = f"v{catalog_version}/"
             if (
                 not isinstance(remote_path, str)
@@ -1085,12 +1129,32 @@ def upload_product_images(
         if not os.path.isfile(local_path):
             errors.append({"remote_path": remote_path, "error": "Indexed local image is missing"})
             continue
-        local_size = os.path.getsize(local_path)
-        uploads.append({
-            "local_path": local_path,
-            "remote_path": remote_path,
-            "remote_exists": remote_path in existing_sizes,
-        })
+        seen_remote_paths.add(remote_path)
+        uploads.append({"local_path": local_path, "remote_path": remote_path})
+
+    # Discover existing remote images to skip re-uploads
+    existing_sizes = {}
+    try:
+        for image_prefix in sorted({os.path.dirname(u["remote_path"]) for u in uploads}):
+            page_size = 1000
+            offset = 0
+            while True:
+                page = list_fn(
+                    client, PRODUCT_IMAGE_BUCKET, image_prefix,
+                    limit=page_size, offset=offset,
+                )
+                for item in page or []:
+                    name = item.get("name", "")
+                    metadata = item.get("metadata", {}) or {}
+                    size = metadata.get("size") or metadata.get("contentLength") or 0
+                    if name:
+                        remote_name = f"{image_prefix}/{name}" if image_prefix else name
+                        existing_sizes[remote_name] = int(size) if size else 0
+                if not page:
+                    break
+                offset += len(page)
+    except Exception:
+        pass  # Bucket may not exist yet — upload all
 
     uploaded = 0
     start = time.time()
@@ -1105,7 +1169,9 @@ def upload_product_images(
             return _upload_image_task_with_factory(
                 client_getter, upload_fn, PRODUCT_IMAGE_BUCKET,
                 upload["local_path"], upload["remote_path"], retries, base_delay,
-                download_fn, upload["remote_exists"], catalog_version is not None,
+                download_fn, upload["remote_path"] in existing_sizes,
+                catalog_version is not None or _is_hash_named_image(upload["remote_path"]),
+                existing_sizes.get(upload["remote_path"], 0),
             )
         for error in _bounded_results(executor, one, uploads, max_workers * 2):
             if error == "skipped":
@@ -1471,6 +1537,7 @@ def sync(
     product_count = local["product_count"]
     checksum = local["checksum"]
     build_stats = validate_build_output(build_dir, local)
+    validate_product_image_bindings(build_stats["db_path"], load_product_image_index(build_dir)[0])
     from release_manifest import ensure_compressed_catalog, write_compressed_descriptor
     compressed = ensure_compressed_catalog(build_stats["db_path"], version)
     compressed_descriptor_path = write_compressed_descriptor(

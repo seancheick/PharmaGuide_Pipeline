@@ -31,6 +31,7 @@ from uuid import UUID
 import env_loader  # noqa: F401  # Load the project .env without overriding shell vars.
 from normalization import QUANTITY_OPERATORS, parse_servings_per_container
 from PIL import Image, ImageOps
+from supabase_client import product_image_remote_path
 from submission_review.gtin import (
     canonical_normalized_gtin14,
     is_valid_gtin as _is_valid_gtin,
@@ -1683,7 +1684,6 @@ def copy_approved_product_images(
     if not catalog_path.is_file():
         raise SubmissionImportError("catalog database is missing")
     manifest = _load_catalog_manifest(catalog_path) or {}
-    catalog_version = str(manifest.get("db_version") or "").strip()
     excluded = manifest.get("excluded_by_gate") or []
     held_ids = {
         row.get("dsld_id") for row in excluded
@@ -1710,10 +1710,6 @@ def copy_approved_product_images(
                 continue
             filename = f"{product_id}.webp"
             webp_path = image_dir / filename
-            remote_path = (
-                f"v{catalog_version}/{filename}" if catalog_version else filename
-            )
-            expected_url = f"product-images/{remote_path}"
             existing = connection.execute(
                 "select image_thumbnail_url from products_core where dsld_id = ?",
                 (product_id,),
@@ -1732,14 +1728,19 @@ def copy_approved_product_images(
                 )
                 continue
             indexed = image_index.get(product_id)
+            local_path = (
+                product_image_remote_path(
+                    hashlib.sha256(webp_path.read_bytes()).hexdigest()
+                )
+                if webp_path.is_file()
+                else None
+            )
             if (
-                existing[0] == expected_url
+                local_path is not None
+                and existing[0] == f"product-images/{local_path}"
                 and isinstance(indexed, dict)
                 and indexed.get("filename") == filename
-                and indexed.get("remote_path") == remote_path
-                and webp_path.is_file()
-                and indexed.get("sha256")
-                == hashlib.sha256(webp_path.read_bytes()).hexdigest()
+                and indexed.get("remote_path") == local_path
                 and receipt.get("image_approval_revision")
                 == receipt.get("approval_revision")
             ):
@@ -1806,10 +1807,11 @@ def copy_approved_product_images(
                 webp_bytes = _render_catalog_webp(source_bytes, content_type)
                 _atomic_write_bytes(webp_path, webp_bytes)
                 webp_hash = hashlib.sha256(webp_bytes).hexdigest()
+                remote_path = product_image_remote_path(webp_hash)
                 updated = connection.execute(
                     "update products_core set image_thumbnail_url = ? "
                     "where dsld_id = ?",
-                    (expected_url, product_id),
+                    (f"product-images/{remote_path}", product_id),
                 ).rowcount
                 if updated != 1:
                     raise SubmissionImportError(
