@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-11-02",
+    "last_updated": "2026-11-04",
     "total_entries": 739,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -7133,7 +7133,8 @@
         "Cranberry juice solids",
         "veg. juice",
         "vegetable and fruit juice",
-        "vegetable juice"
+        "vegetable juice",
+        "Vegetable & Fruit Juice (color)"
       ],
       "category": "sweetener_natural",
       "is_additive": false,
@@ -7216,7 +7217,8 @@
         "pumpkin juice concentrate",
         "raspberry juice concentrate",
         "strawberry juice concentrate",
-        "watermelon juice concentrate"
+        "watermelon juice concentrate",
+        "aronia juice concentrate"
       ],
       "category": "flavor_natural",
       "is_additive": true,

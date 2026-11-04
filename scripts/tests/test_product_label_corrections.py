@@ -1323,3 +1323,28 @@ def test_lemon_tea_original_panel_conflict_does_not_invent_fifty_mg():
     assert [r['name'] for r in children] == ['150 mg Caffeine', '300 mg Caffeine']
     assert [r['quantity'][0]['quantity'] for r in children] == [50, 300]
     assert all(q['operator'] == 'ambiguous' for r in children for q in r['quantity'])
+
+
+def test_alpha_gpc_preparation_keeps_printed_mass_separate_from_active_dose():
+    from copy import deepcopy
+
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    product_id = "PG_SUB_A16D69D675C44BC58B24B5214A2CC427"
+    label = "GPCgold™ (Alpha GPC 50%)"
+    raw = {
+        "name": label,
+        "raw_source_path": "ingredientRows[8]",
+        "quantity": [{"quantity": 200, "unit": "mg"}],
+    }
+    [working] = normalizer._apply_label_corrections([deepcopy(raw)], product_id)
+    assert working["name"] == "Alpha GPC"
+    assert working["quantity"] == [{"quantity": 100, "unit": "mg"}]
+    assert working["_pre_correction_quantity"] == raw["quantity"]
+    assert working["_label_display_name"] == label
+
+    changed = deepcopy(raw)
+    changed["quantity"][0]["quantity"] = 300
+    assert normalizer._apply_label_corrections([deepcopy(changed)], product_id) == [changed]
+    assert normalizer._apply_label_corrections([deepcopy(raw)], "different-product") == [raw]
