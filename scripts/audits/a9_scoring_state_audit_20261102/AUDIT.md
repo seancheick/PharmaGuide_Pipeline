@@ -163,6 +163,8 @@ result. The counts below include them.
 |---|---|---|---|
 | 6,343 | 5,417 | 973 | 47 |
 
+**Delta after the dose batch (#342, #343, #344, #351), November 4.** Raw to score with and without #338, on main `e70c3cf2e` and on the base before those PRs (`5897977c2`), one label list across all four arms: 516 named labels (every label #344's replay tables move, each new label correction, the 89 holds this PR adds, 40 moved labels as controls), plus the 40 source-bound holds. One label changes the table above: 295001 starts scoring under #343 (52.8) and is complete on both sides, so partial reads 6,342 to 5,416. 973, 47, 32 and the 40 holds stand. On main, #338 moves 0 scores, tiers, score statuses or catalog safety statuses. The 32 score moves on these labels are the dose batch's own and all sit in #344's replay table; the one safety move is 27350, caution to no known concern. The 119 upper-limit labels match their recount on every field: hold 46, reason 35. Not measured: `PG_SUB_1D092114B51240BBB72F9650AA562605`, a submission with no raw label in the local corpus. Labels outside this list keep the census result.
+
 The 47 were complete before #338 and now hold on a hidden amount (`completion_holds_added.csv`).
 
 **What moved: nothing that scores.** Score, tier, score status, pillars, catalog safety status, verdict: 0 moves.
