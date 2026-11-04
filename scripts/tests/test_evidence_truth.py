@@ -199,3 +199,33 @@ def test_only_melatonin_carries_the_decision():
                 if (record.get("applicability") or {}).get("excluded_claim_terms_when_alone")]
     assert carrying == [MELATONIN]
     assert reviewed_entries()[MELATONIN]["applicability"]["excluded_claim_terms_when_alone"] == ["jet lag", "jetlag"]
+
+
+def _projection_case(*rows):
+    return {"evidence": {"ingredient_assessments": [
+        {"canonical_id": name.lower(), "name": name, "reason_code": reason} for name, reason in rows]}}
+
+
+PROJECTION = "module_scoped_product_projection"
+
+
+@pytest.mark.parametrize("rows, rejected, required, expected", [
+    ([("Quercetin", PROJECTION)], ["Quercetin"], {"quercetin"}, True),  # 328840: the only row is the projection.
+    ([("Nattokinase", "clinical_form_mismatch"), ("Nattokinase", PROJECTION)], ["Nattokinase"], {"nattokinase"}, True),  # 24619's shape.
+    ([("Garlic", "clinical_form_mismatch"), ("Cayenne", PROJECTION)], ["Garlic"], {"garlic", "cayenne"}, False),  # 251530: Cayenne has no rejection.
+    ([("Quercetin", PROJECTION)], [], {"quercetin"}, False),  # No rejection at all.
+    ([("Nattokinase", "literature_reviewed_human_clinical_evidence"), ("Nattokinase", PROJECTION)], ["Nattokinase"], {"nattokinase"}, False),  # The other row is another cause.
+])
+def test_a_rejection_counts_whichever_row_holds_it(rows, rejected, required, expected):
+    from assessment_readiness import evidence_studies_did_not_qualify
+    product = {"evidence_data": {"rejected_clinical_matches": [
+        {"id": "INGR_COQ10", "ingredient": name, "reason_code": "label_purpose_evidence_mismatch"} for name in rejected]}}
+    assert evidence_studies_did_not_qualify(product, _projection_case(*rows), required) is expected
+
+
+def test_a_label_whose_only_row_is_the_projection_reads_the_rejection(pipeline):
+    """328840: its one required row is the projection, and INGR_QUERCETIN was rejected for its purpose."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    evidence = build_scored_artifact(_enrich(pipeline, "evidence_truth_328840_raw.json"))["quality_pillars_v4"]["evidence"]
+    assert evidence["reason"].startswith(DID_NOT_QUALIFY)

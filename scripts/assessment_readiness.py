@@ -1678,8 +1678,9 @@ def evidence_studies_did_not_qualify(product: Mapping[str, Any], readiness: Mapp
             if isinstance(row, Mapping) and _norm(row.get("canonical_id")) in required]
     rejected = _safe_list(_safe_dict(product.get("evidence_data")).get("rejected_clinical_matches"))
     records = reviewed_entries()
+    # A projection row carries no reason of its own, so its rejection answers for it.
     return bool(rows) and all(
-        row.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS and any(
+        row.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS | {"module_scoped_product_projection"} and any(
             isinstance(match, Mapping) and match.get("ingredient") == row.get("name")
             and match.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS
             and _safe_dict(records.get(match.get("id"))).get("study_type") in _HUMAN_STUDY_TYPES
