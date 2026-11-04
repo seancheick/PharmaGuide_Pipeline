@@ -405,6 +405,17 @@ def test_unknown_vitamin_e_form_is_clinical_uncertainty_not_converter_defect():
     assert decision["release_blocking"] is False
 
 
+def _adult_answer(selected: str, decision: dict):
+    """What a stated adult age reads. Where the 14-18 limit reads differently,
+    that is one of the decision's age outcomes and an unknown age reads a review."""
+    outcome = (decision.get("age_outcomes") or {}).get("19+")
+    if outcome is None:
+        return selected, decision
+    assert decision["evaluation_status"] == "age_dependent"
+    assert decision["consumer_disposition"] == "review"
+    return outcome["clinical_severity"], outcome
+
+
 def _vitamin_e_pregnancy_ul_decision(ingredient: dict, servings: float = 1.0):
     """The production pregnancy UL rule, not a test copy of its threshold."""
     import json
@@ -477,7 +488,7 @@ def test_vitamin_e_pregnancy_ul_compares_ul_exposure_bounds(
     authors as review (Dr Pham, 2026-10-28).
     https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/
     """
-    selected, decision = _vitamin_e_pregnancy_ul_decision(ingredient)
+    selected, decision = _adult_answer(*_vitamin_e_pregnancy_ul_decision(ingredient))
 
     assert decision["evaluation_status"] == status
     assert selected == severity
@@ -580,14 +591,14 @@ def test_vitamin_a_pregnancy_ul_counts_only_preformed_vitamin_a(
     silence and not a confirmed retinol exceedance.
     https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/
     """
-    selected, decision = SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+    selected, decision = _adult_answer(*SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
         _rule("RULE_IQM_VITAMIN_A_PREGNANCY_DOSE")["dose_thresholds"],
         "condition",
         target,
         {"name": "Vitamin A", "standard_name": "Vitamin A", **ingredient},
         1.0,
         "caution",
-    )
+    ))
 
     assert decision["evaluation_status"] == status
     assert selected == severity
@@ -980,13 +991,13 @@ def test_declared_alpha_activity_retains_mass_threshold_comparison(name):
 @pytest.mark.parametrize("target", ["pregnancy", "ttc"])
 @pytest.mark.parametrize("amount,status", [(3000, "below_threshold"), (3001, "above_threshold"), (3003, "above_threshold")])
 def test_preformed_vitamin_a_threshold_preserves_exact_mcg_boundary(target, amount, status):
-    selected, decision = SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+    selected, decision = _adult_answer(*SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
         _rule("RULE_IQM_VITAMIN_A_PREGNANCY_DOSE")["dose_thresholds"],
         "condition", target,
         {"name": "Vitamin A", "standard_name": "Vitamin A", "quantity": amount,
          "unit": "mcg", "matched_form": "retinyl palmitate"},
         1.0, "caution",
-    )
+    ))
     assert decision["evaluation_status"] == status
     assert decision["consumer_disposition"] == ("suppress" if amount == 3000 else "block")
     assert selected == ("caution" if amount == 3000 else "contraindicated" if target == "pregnancy" else "avoid")
@@ -994,12 +1005,12 @@ def test_preformed_vitamin_a_threshold_preserves_exact_mcg_boundary(target, amou
 
 @pytest.mark.parametrize("amount,status,disposition", [(3000, "below_threshold", "suppress"), (3001, "form_unknown", "review")])
 def test_unknown_vitamin_a_boundary_never_assumes_a_retinol_fraction(amount, status, disposition):
-    _selected, decision = SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
+    _selected, decision = _adult_answer(*SupplementEnricherV3()._evaluate_dose_thresholds_for_target(
         _rule("RULE_IQM_VITAMIN_A_PREGNANCY_DOSE")["dose_thresholds"],
         "condition", "pregnancy",
         {"name": "Vitamin A", "standard_name": "Vitamin A", "quantity": amount, "unit": "mcg"},
         1.0, "caution",
-    )
+    ))
     assert decision["evaluation_status"] == status
     assert decision["consumer_disposition"] == disposition
 
