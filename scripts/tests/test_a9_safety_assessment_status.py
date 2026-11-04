@@ -232,6 +232,18 @@ def test_an_upper_limit_nutrient_with_no_amount_withholds_only_the_all_clear(pip
     assert scored["quality_score_v4_100"] == score
 
 
+@pytest.mark.parametrize("label, status, reason", [
+    ("a9_upper_limit_293959_raw.json", "incomplete", "upper_limit_amount_undisclosed"),
+    ("a9_upper_limit_16725_raw.json", "incomplete", None),  # Prints a percent, so the sentence would be false.
+    ("a9_upper_limit_12634_raw.json", "complete", None),
+    ("a9_upper_limit_294543_raw.json", "complete", None),
+])
+def test_the_reason_is_named_only_where_the_label_discloses_nothing(pipeline, label, status, reason):
+    scored = _score(pipeline, label)
+    assert scored["safety_assessment_status"] == status
+    assert scored["safety_assessment_reason"] == reason
+
+
 @pytest.mark.parametrize("label", [
     "a9_upper_limit_294543_raw.json",  # Vitamin D 0 mcg.
     "a9_upper_limit_12634_raw.json",   # Vitamins A and C, calcium and iron, "0 NP" printed as 0% DV.
@@ -255,6 +267,19 @@ def test_a_ban_stays_blocked_with_no_score(pipeline):
 def test_the_column_is_declared_for_the_app():
     assert "safety_assessment_status" in PRODUCTS_CORE_COLUMNS
     assert "safety_assessment_status" in APP_CORE_COLUMNS
+    assert "safety_assessment_reason" in APP_CORE_COLUMNS
+
+
+@pytest.mark.parametrize("value, expected", [
+    ("upper_limit_amount_undisclosed", "upper_limit_amount_undisclosed"),
+    (None, None),
+    ("", None),
+    ("something_else", None),
+])
+def test_the_reason_column_carries_only_a_declared_value(value, expected):
+    from build_final_db import _safety_assessment_reason_value
+
+    assert _safety_assessment_reason_value({"safety_assessment_reason": value}) == expected
 
 
 @pytest.mark.parametrize("value, expected", [

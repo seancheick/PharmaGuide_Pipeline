@@ -623,6 +623,18 @@ def test_a_strict_build_writes_the_safety_assessment_status(tmp_path):
     assert rows == [(scored["safety_assessment_status"],)]
 
 
+@pytest.mark.parametrize("change, expected", [
+    ({"safety_assessment_reason": "upper_limit_amount_undisclosed"}, "upper_limit_amount_undisclosed"),
+    ({}, None),  # Scored before the field existed: still builds, and the app keeps its generic text.
+])
+def test_a_strict_build_writes_the_safety_assessment_reason(tmp_path, change, expected):
+    scored = {**_artifact_from_canned("999", _canned_v4()), **change}
+    _, out = _run_build(tmp_path, [make_enriched()], [scored], strict=True)
+    with sqlite3.connect(out / "pharmaguide_core.db") as conn:
+        rows = conn.execute("SELECT safety_assessment_reason FROM products_core").fetchall()
+    assert rows == [(expected,)]
+
+
 def test_build_core_row_includes_flutter_convenience_fields():
     enriched = make_enriched()
     scored = make_scored()

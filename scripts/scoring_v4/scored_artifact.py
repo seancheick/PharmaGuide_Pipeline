@@ -362,6 +362,7 @@ def assemble_scored_artifact(
     unfinished = unfinished_source_assessment(enriched_product, _safe_dict(module_breakdown))
     from assessment_readiness import (
         evaluate_release_assessment, evidence_review_open, retained_evidence_result_state,
+        safety_assessment_reason,
         safety_assessment_status,
     )
     assessment_readiness = {**assessment_readiness, "release_assessment": evaluate_release_assessment(
@@ -492,6 +493,7 @@ def assemble_scored_artifact(
             release=assessment_readiness["release_assessment"],
             evidence_result_state=retained_evidence_result_state(module_breakdown),
         ),
+        "safety_assessment_reason": safety_assessment_reason(assessment_readiness["release_assessment"]),
         "assessment_readiness": assessment_readiness,
         "dose_safety_evaluation": dose_safety,
         "quality_tier": v4.get("quality_tier"),
