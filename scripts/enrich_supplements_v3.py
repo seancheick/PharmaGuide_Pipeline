@@ -20862,10 +20862,14 @@ class SupplementEnricherV3:
                 # only a range straddling the threshold is form_unknown. The
                 # exported amount is the proven minimum: stack totals sum it
                 # across products, so a bound must never stand in for exposure.
+                # A bound with no bridge to the threshold's unit decides nothing.
                 low, high = ul_bounds
-                if self._compare_threshold(
-                    low, comparator, threshold_value
-                ) == self._compare_threshold(high, comparator, threshold_value):
+                if (
+                    low is not None
+                    and high is not None
+                    and self._compare_threshold(low, comparator, threshold_value)
+                    == self._compare_threshold(high, comparator, threshold_value)
+                ):
                     converted_amount = low
                     conversion_method = "ul_exposure_bound" if low != high else "ul_exposure"
                 else:
