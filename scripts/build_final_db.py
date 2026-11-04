@@ -6955,15 +6955,13 @@ def _classify_label_statement(sentence: str) -> Optional[Tuple[str, List[str]]]:
     text = re.sub(r"\s+", " ", sentence).strip().casefold()
     if "{chart}" in text:
         return None
-    if _LABEL_STATEMENT_TO_MEN.search(text):
-        return "avoid", ["ttc"]
     if _LABEL_STATEMENT_DOSE_LIMIT.search(text):
         return None
     allows_clinician = bool(_LABEL_STATEMENT_UNLESS.search(text))
     if not allows_clinician:
         consult = _LABEL_STATEMENT_CONSULT.search(text)
         text = text[:consult.start()] if consult else text
-    audience = _label_statement_audience(text)
+    audience = ["ttc"] if _LABEL_STATEMENT_TO_MEN.search(text) else _label_statement_audience(text)
     if not audience or not _LABEL_STATEMENT_NEGATIVE.search(text):
         return None
     return ("caution" if allows_clinician else "avoid"), audience
@@ -6991,7 +6989,7 @@ def _label_statement_warnings(enriched: Dict) -> List[Dict]:
             severity, audience = classified
             gate = (
                 _label_statement_gate("combination", ["ttc"], ["sex_male", "sex_unstated"])
-                if _LABEL_STATEMENT_TO_MEN.search(identity)
+                if audience == ["ttc"] and _LABEL_STATEMENT_TO_MEN.search(identity)
                 else _label_statement_gate("profile_flag", [], [_LABEL_STATEMENT_FLAGS[c] for c in audience])
             )
             result.append({
