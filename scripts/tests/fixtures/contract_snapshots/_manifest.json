@@ -1303,6 +1303,19 @@
       ],
       "source_commit": "2ef348106 (certification renewal PR #324/#325), independently replayed at 1d9c7631",
       "notes": "Source-grounded expectation update only: the renewed USP Verified directory no longer contains Ritual record USP_VERIFIED_6B8C09641894 (Essential for Women Multivitamin 18+). Verification drops 10 to 8 through the existing claimed-only assessment; total 86.4 to 84.4. Main and integration candidate replay the same raw label with identical Clean/Enrich/Score/detail-blob hashes. All other pillars, label amounts, identities, review states and warnings are unchanged. No certification was inferred from a brand name. CVS18141 is repaired at the title-role owner and its existing 59.9 snapshot is retained, not rebaselined. Fifteen-label raw replay: only18141 changes;14 controls identical. Receipts: .claude/state/final_release_audit/."
+    },
+    {
+      "date": "2026-11-03",
+      "dsld_ids": [
+        241353,
+        274498,
+        278454,
+        288344,
+        306381,
+        327416
+      ],
+      "source_commit": "3143d026e (PR #338), replayed from the frozen corpus a9_corpus_20261103",
+      "notes": "Status only: Sean's completion rule, November 3. Each label's open rows can't change its Evidence answer, so quality_assessment_status moves partial to complete. Score, tier, safety and every other frozen field are unchanged, and the other 27 snapshots match."
     }
   ]
 }

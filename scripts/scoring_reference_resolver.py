@@ -49,6 +49,7 @@ from typing import Any, Dict, List, Optional, Tuple
 _DATA_DIR = Path(__file__).resolve().parent / "data"
 _THERAPEUTIC_PATH = _DATA_DIR / "rda_therapeutic_dosing.json"
 _RDA_UL_PATH = _DATA_DIR / "rda_optimal_uls.json"
+_DAILY_VALUES_PATH = _DATA_DIR / "daily_values.json"
 _BOTANICAL_IDENTITY_PATH = _DATA_DIR / "botanical_ingredients.json"
 _IQM_PATH = _DATA_DIR / "ingredient_quality_map.json"
 
@@ -383,6 +384,19 @@ def rda_ul_reference_entry(
     """Return the exact RDA/UL nutrition authority entry for an ingredient via canonical keys/aliases."""
     entry, _ = _lookup(_rda_ul_index(), _identity_keys(canonical_id, name, aliases))
     return entry
+
+
+@lru_cache(maxsize=1)
+def _upper_limit_bound_dvs() -> Dict[str, Dict[str, Any]]:
+    try:
+        return json.loads(_DAILY_VALUES_PATH.read_text()).get("upper_limit_bound_dvs") or {}
+    except Exception:  # pragma: no cover
+        return {}
+
+
+def upper_limit_bound_dv(canonical_id: Any) -> Optional[Dict[str, Any]]:
+    """The highest adult Daily Value a printed percent could have meant, in the limit's unit."""
+    return _upper_limit_bound_dvs().get(canonical_id)
 
 
 @lru_cache(maxsize=1)

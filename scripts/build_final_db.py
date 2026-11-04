@@ -56,6 +56,7 @@ from audit_evidence_utils import (
 )
 from audit_identity_integrity import audit_product
 from brand_identity import BrandIdentity, BrandRegistry
+from assessment_readiness import UPPER_LIMIT_AMOUNT_UNDISCLOSED
 from core_export_model import (
     PRODUCTS_CORE_COLUMNS,
     build_projection_manifest,
@@ -2395,6 +2396,8 @@ CREATE TABLE IF NOT EXISTS products_core (
     quality_score_status            TEXT,
     product_safety_status           TEXT,
     quality_assessment_status       TEXT,
+    safety_assessment_status        TEXT,
+    safety_assessment_reason        TEXT,
     quality_tier                    TEXT,
     quality_score_suppressed_reason TEXT,
     v4_module                       TEXT,
@@ -3013,6 +3016,9 @@ def build_decision_highlights(enriched: Dict, scored: Dict) -> Dict[str, Any]:
         positive = "Quality score unavailable; review the label information and recorded safety warnings."
     elif safe_bool(enriched.get("is_trusted_manufacturer")) and safe_bool(enriched.get("has_full_disclosure")):
         positive = "Trusted manufacturer with full label disclosure."
+    elif assessment_status in {"partial", "failed"}:
+        # Evidence and score bands praise a result that is not finished yet.
+        positive = "Some quality signals are present, but this assessment isn't finished."
     elif v4_evidence >= 12:
         positive = "Backed by meaningful clinical evidence."
     elif score_100 >= 75:
@@ -9095,6 +9101,14 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     # V4 cutover: evidence copy reads the v4 evidence pillar (/20), not v3 section C.
     v4_evidence = safe_float(safe_dict(safe_dict(scored.get("quality_pillars_v4")).get("evidence")).get("score"), 0)
 
+    quality_status = safe_str(scored.get("quality_score_status"))
+    assessment_open = safe_str(scored.get("quality_assessment_status")).lower() in {"partial", "failed"}
+    # An unfinished assessment publishes no number or tier: same rule as the
+    # public share index (sync_to_supabase._share_disposition).
+    if assessment_open:
+        score_100 = None
+    assessment_unavailable = assessment_open or quality_status in {"not_scored", "suppressed_safety"}
+
     # Title with score emoji
     score_emoji = ""
     if score_100:
@@ -9110,9 +9124,6 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     # Limit title length for social platforms
     if len(share_title) > 200:
         share_title = share_title[:197] + "..."
-
-    quality_status = safe_str(scored.get("quality_score_status"))
-    assessment_unavailable = quality_status in {"not_scored", "suppressed_safety"}
 
     # Description
     positive_signals = []
@@ -9134,7 +9145,7 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     share_description = f"A {grade.lower()} quality supplement"
     if positive_signals:
         share_description += f" with {', '.join(positive_signals[:2])}"
-    share_description += ". Analyzed by PharmaGuide for safety, purity, and evidence."
+    share_description += ". Quality analyzed by PharmaGuide; this is not a safety rating."
     if quality_status == "not_scored":
         share_description = (
             "Quality score unavailable. The quality assessment is incomplete. "
@@ -9143,6 +9154,11 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     elif quality_status == "suppressed_safety":
         share_description = (
             "Quality score withheld. Review this product’s recorded safety warnings."
+        )
+    elif assessment_open:
+        share_description = (
+            "Quality assessment is incomplete. Review the label information "
+            "and recorded safety warnings."
         )
 
     if len(share_description) > 300:
@@ -10870,6 +10886,18 @@ def compute_v4_category_percentiles(
     return updates
 
 
+def _safety_assessment_status_value(scored: Dict) -> Optional[str]:
+    """Only a declared value reaches the column; anything else is NULL, meaning not known."""
+    value = scored.get("safety_assessment_status")
+    return value if value in {"complete", "incomplete"} else None
+
+
+def _safety_assessment_reason_value(scored: Dict) -> Optional[str]:
+    """Only a declared reason reaches the column; NULL leaves the app's generic text."""
+    value = scored.get("safety_assessment_reason")
+    return value if value == UPPER_LIMIT_AMOUNT_UNDISCLOSED else None
+
+
 def build_core_row(
     enriched: Dict,
     scored: Dict,
@@ -11023,6 +11051,8 @@ def build_core_row(
         safe_str(effective_scored.get("quality_score_status")) or None,
         safe_str(effective_scored.get("product_safety_status")) or None,
         safe_str(effective_scored.get("quality_assessment_status")) or None,
+        _safety_assessment_status_value(effective_scored),
+        _safety_assessment_reason_value(effective_scored),
         safe_str(effective_scored.get("quality_tier")) or None,
         safe_str(effective_scored.get("quality_score_suppressed_reason")) or None,
         safe_str(effective_scored.get("_v4_module")) or None,
@@ -11714,16 +11744,31 @@ def build_final_db(
             ),
         )
 
+    # NULL says the safety checks are not known, so a release candidate never
+    # contains one. The build stops as a whole, so no product is dropped over it.
+    if strict:
+        missing_safety_status = c.execute(
+            "SELECT COUNT(*) FROM products_core WHERE safety_assessment_status IS NULL"
+        ).fetchone()[0]
+        if missing_safety_status:
+            raise ValueError(
+                f"Strict mode: {missing_safety_status} products have no "
+                "safety_assessment_status. Re-score them from the current code."
+            )
+
     # ── V4 category percentiles (backfill, ranked over the shipped cohort) ──
     # Runs LAST — after UPC dedup and the NOT_SCORED sweep — so each cohort
     # counts only rows that actually ship. Ranks quality_score_v4_100 within
     # percentile_category, mirroring score_supplements._attach_category_percentiles.
     # Reading products_core means banned-/safety-suppressed products (status !=
-    # 'scored') self-exclude; cohorts smaller than 5 stay NULL (unranked).
+    # 'scored') self-exclude; cohorts smaller than 5 stay NULL (unranked). A rank
+    # reads as a finished result, so unfinished assessments neither get one nor
+    # shift the ranks of finished ones.
     pct_rows = c.execute(
         "SELECT dsld_id, percentile_category, quality_score_v4_100 "
         "FROM products_core "
         "WHERE quality_score_status = 'scored' "
+        "AND quality_assessment_status = 'complete' "
         "AND quality_score_v4_100 IS NOT NULL "
         "AND percentile_category IS NOT NULL AND percentile_category != ''"
     ).fetchall()

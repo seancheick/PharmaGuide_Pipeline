@@ -1,0 +1,447 @@
+dsld_id,score_status,module,what_holds_it,product
+802,not_scored,,Other check: dose_assessment_incomplete,Maximum Nutrition Vanilla Creme
+855,not_scored,,Other check: dose_assessment_incomplete,Oil Of Oregano
+1646,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic Complex 1
+2246,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Soft Chews Natural Citrus Flavor
+2505,scored,fiber_digestive,"Required row: research on file, applicability undecided",Enhanced Super Digestive Enzymes With Probiotics
+4282,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Thermo Burst Hardcore
+12077,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Clear Soluble Fiber Supplement
+12144,not_scored,,Other check: identity_assessment_incomplete,TripleFlex
+12932,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Gummies
+13041,not_scored,,Other check: identity_assessment_incomplete,Gummie Multi Vitamin Daily Formula
+14168,scored,generic,"Required row: research on file, applicability undecided",Rampant
+16765,not_scored,,Other check: dose_assessment_incomplete,ProCrunch Lite Peanut Butter Cup
+16766,not_scored,,Other check: dose_assessment_incomplete,ProCrunch Lite Cinnamon Bun
+16827,not_scored,,Other check: dose_assessment_incomplete,ProCrunch Lite Chocolate Crisp
+18538,not_scored,,Other check: identity_assessment_incomplete,Amplified Creatine XXX Blue Raspberry
+19067,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Digestive Health Probiotic
+25501,not_scored,,Other check: identity_assessment_incomplete,High Absorption 100% Chelated Magnesium
+25583,not_scored,,Other check: dose_assessment_incomplete,Breakfast Squares Oatmeal Chocolate Chip
+25915,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Supplement Sugar Free
+26568,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Well Gummies
+27203,not_scored,,Other check: identity_assessment_incomplete,Maximum Nutrition Berry
+28491,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fruits of Life
+29040,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Raw Fiber Beyond Organic Fiber
+29042,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Raw Fiber Beyond Organic Fiber
+29049,not_scored,,Other check: dose_assessment_incomplete,Breakfast Squares Iced Cinnamon Bun
+29054,not_scored,,Other check: dose_assessment_incomplete,Breakfast Squares Strawberries & Cream
+31105,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Clear Mixing Super Fiber
+40603,not_scored,,Other check: identity_assessment_incomplete,Capture
+43649,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,MegaZymes
+43650,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,MegaZymes
+44384,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Natural Advanced Carotenoid Complex
+45194,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probi 20 Billion
+46742,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Capsules
+46747,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Powder Orange Smooth
+47339,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Gummies
+54775,scored,generic,"Required row: research on file, applicability undecided",Sytrinol
+59067,not_scored,,Other check: identity_assessment_incomplete,GH Pituitary Support Day Formula
+59451,scored,generic,"Required row: research on file, applicability undecided",Advanced Bio-Curcumin With Ginger & Turmerones
+59635,not_scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Advanced Oral Hygiene
+60467,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Acidophilus
+60498,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Acidophilus
+60560,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,FlorAssist
+60571,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Endothelial Defense With GliSODin
+61935,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Optimized Resveratrol 250 mg With Synergistic Grape-Berry Actives
+62816,not_scored,,Other check: identity_assessment_incomplete,Natural Glucose
+62845,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+62991,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic Acidophilus
+62998,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,FLORASSIST Mood
+63044,scored,generic,"Required row: research on file, applicability undecided",FucoThin
+63774,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Raw Digestive Complex
+63926,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Celadrin Complex With Glucosamine
+64458,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+64459,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+64707,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Artichoke Leaf Extract 500 mg
+64709,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Artichoke Leaf Extract 500 mg
+65064,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,FLORASSIST Oral Hygiene
+65691,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+66822,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Organic Digest +Tropical Fruit Flavor
+66953,scored,sports,"Required row: research on file, applicability undecided",Essential Amino Acids
+67530,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Liquid Fiber Sugar Free Orange
+69317,scored,sports,"Required row: research on file, applicability undecided",Iso-Peptide Protein Chocolate
+69501,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Joint Health
+69504,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Digestive Enzymes
+69692,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Digestive Enzyme Blend
+70066,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,SuperFoods Supreme Berry flavor
+70588,scored,generic,"Required row: research on file, applicability undecided",Vegetable Omega Complex
+73305,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotics Gummies
+74379,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Cardio-Health
+74383,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Cardio-Health Probiotics
+74394,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Chitosan With Glucomannan
+74446,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+74718,scored,sports,"Required row: research on file, applicability undecided",Essential Amino Acids
+75897,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Optifiber
+76239,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Cardio-Health
+76840,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Super Digestive Enzymes
+78296,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Primadophilus Fortify Gummy Probiotic Berry Flavored
+78355,not_scored,,Not scored: not scoreable by intent,Coconut Oil
+79228,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Thisilyn Digestive Cleanse
+79233,scored,fiber_digestive,"Required row: research on file, applicability undecided",Thisilyn Daily Cleanse
+79431,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Comfort Zone Digestive Complex
+80096,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Digestive Enzymes
+80302,not_scored,generic,Evidence aggregate: resolver result unfinished on a required row,Nurturalax 2
+81368,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Advanced Acidophilus
+81801,scored,generic,"Required row: research on file, applicability undecided",Flavonoid Complex With Sytrinol 150 mg
+82367,scored,sports,Evidence aggregate: resolver result unfinished on a required row,Pea Protein With ProHydrolase
+82601,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Enzyme Blend - AM Packet
+82603,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber and Prebiotic Blend Packet
+82604,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Enzyme Blend - PM Packet
+82954,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Rich Fruit & Veggie Purifying Complex
+173708,scored,generic,Required row: applicability undecided and resolver unfinished,FYI Restore
+173920,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Raw Fiber Beyond Organic Fiber
+176071,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Super Digestive Enzymes
+177088,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber+Calcium
+178562,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Children's Probiotic Gummies
+178597,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber
+178600,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber
+178603,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber
+178604,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber
+178609,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber Orange Smooth
+178611,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber Orange Smooth
+178613,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber Orange Smooth
+178615,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber Orange Smooth
+178659,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber Orange Smooth
+178662,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber Orange Smooth
+178663,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber Orange Smooth
+178664,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber
+178713,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+178783,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Natural Fiber Capsules
+178797,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Supplement Sugar Free
+179625,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Gummies
+179639,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Gummies
+179987,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Adult Gummies
+180210,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic Assorted Fruit Flavors
+180290,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Digestive Probiotics Advanced Dual Action
+180336,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Digestive Probiotics Daily Balance 10 Billion
+180385,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Digestive Probiotics + Energy B12 Dual Action
+182263,scored,generic,"Required row: research on file, applicability undecided",Advanced Cortisol Balance
+182620,scored,generic,"Required row: research on file, applicability undecided",Moducare
+182829,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Digestion GB
+182831,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Digestion GB
+184730,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic 123
+187602,scored,generic,"Required row: research on file, applicability undecided",Seditol
+199521,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Fortify Gummy Probiotic 6 Billion Berry Flavored
+200156,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Fortify Kids Probiotics 10 Billion Fruit Punch Flavored
+201941,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Fortify Dual Action Urinary Health 20 Billion
+202097,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Primadophilus Optima Kids Probiotics 10 Billion Fruit Punch Flavored
+202109,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Primadophilus Optima Kids Probiotics 10 Billion Vanilla Flavored
+204591,scored,generic,"Required row: research on file, applicability undecided",Elderberry Immune Gummy
+204669,scored,generic,"Required row: research on file, applicability undecided",Extra Strength Turmeric
+204676,scored,generic,"Required row: research on file, applicability undecided",Turmeric Gummy
+204683,scored,generic,"Required row: research on file, applicability undecided",Turmeric Pain Relief
+205179,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Digest Ease
+207331,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Capsules
+208587,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Break it Down. Organic Pineapple
+208593,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Break it Down. Organic Pineapple
+209374,scored,generic,"Required row: research on file, applicability undecided",Bladder Support Go-Less plus Cranberry with Cranberex
+209440,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Digestive Enzymes
+210533,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Natural Daily Fiber
+210718,scored,generic,"Required row: research on file, applicability undecided",Advanced Bio-Curcumin
+211458,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+212298,scored,generic,"Required row: research on file, applicability undecided",Cholesterol Shield
+212398,not_scored,,Other check: dose_assessment_incomplete,Colon Pure Unflavored
+212411,not_scored,,Other check: dose_assessment_incomplete,Colon Pure Natural Citrus Flavor
+213086,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Airborne + Probiotic Assorted Fruit Flavors
+213312,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Chitosan with Glucomannan
+213448,scored,generic,"Required row: research on file, applicability undecided",Boron Complex 3 mg
+213536,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Purifying Complex Spiced Apple
+213829,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Acid-Ease
+213831,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Gluten Defense
+213941,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Celadrin Glucosamine Complex
+214405,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic Solutions Prenatal 20 Billion CFUs
+214956,scored,generic,"Required row: research on file, applicability undecided",Sytrinol 150 mg
+219289,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Synbiotic GG
+220275,scored,generic,"Required row: research on file, applicability undecided",Joint Health
+220276,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Digestive Enzymes
+222918,not_scored,,"Not scored: completeness gate, no score-eligible active identity",Brewers Yeast Unflavored
+223563,not_scored,,Other check: dose_assessment_incomplete,Postnatal Multivitamin
+223572,not_scored,,Other check: dose_assessment_incomplete,Prenatal Multivitamin
+227922,scored,fiber_digestive,"Required row: research on file, applicability undecided",Thisilyn Cleanse Part II
+228873,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Cleansing Fiber Sachet
+229119,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Break it Down. Organic Pineapple
+230979,scored,fiber_digestive,"Required row: research on file, applicability undecided",Part II: Digestive Health Blend
+231262,scored,fiber_digestive,"Required row: research on file, applicability undecided",Dipan-9
+231904,scored,generic,"Required row: research on file, applicability undecided",Krill Healthy Joint Formula
+232097,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Throat Health
+232151,scored,generic,"Required row: research on file, applicability undecided",Boron 3 mg
+232243,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Extraordinary Enzymes
+232321,scored,generic,Evidence aggregate: resolver result unfinished on a required row,VenoFlow
+232400,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Heart Health
+232775,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Winter Immune Support
+232945,scored,multi_or_prenatal,Multi route: nutrient panel reached no nutrient,Keto Fit Fair Trade Chocolate
+232952,scored,multi_or_prenatal,Multi route: nutrient panel reached no nutrient,Keto Fit Vanilla
+232979,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Organic Digest+ Tropical Fruit Flavor
+233013,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Organic Fiber Delicious Citrus Flavor
+233016,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Organic Fiber Unflavored
+233050,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Prenatal Daily Care 20 Billion CFU Guaranteed
+233091,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Critical Care 80 Billion CFU Guaranteed
+233105,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Organic Kids Daily Care 5 Billion CFU Guaranteed Tasty Berry Cherry
+233110,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Men's Daily Care 40 Billion CFU Guaranteed
+235659,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Super Seed Beyond Fiber
+236913,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Acidophilus Probiotic
+236951,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Acidophilus Probiotic
+239871,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Powder
+239891,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Supplement
+241284,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Flora Cleanse
+241286,scored,generic,"Required row: research on file, applicability undecided",FucoThin
+241290,not_scored,,Other check: identity_assessment_incomplete,Lovely Legs
+241676,scored,generic,"Required row: research on file, applicability undecided",Collagen Love
+241684,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Flatter Me
+242572,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic GX
+242615,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Omega-Zyme
+242948,scored,generic,"Required row: research on file, applicability undecided",Airborne Elderberry Flavor
+243236,scored,generic,"Required row: research on file, applicability undecided",Extra Strength Turmeric
+243324,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Apple Cider Vinegar Probiotic Gummies
+243676,scored,generic,"Required row: research on file, applicability undecided",Joint Health
+243686,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Digestive Enzymes
+246048,scored,generic,"Required row: research on file, applicability undecided",DIM Detox
+246350,not_scored,,Other check: identity_assessment_incomplete,Metabolic Xtra
+247319,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Saccharomyces Boulardii
+249507,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,CompleteGest
+250114,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Women's Probiotic Berry Flavor
+250636,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Prenatal Wellness Probiotic Mixed Fruit Flavor
+251027,scored,generic,"Required row: research on file, applicability undecided",Complex C
+251029,scored,generic,"Required row: research on file, applicability undecided",Complex C
+251071,scored,generic,"Required row: research on file, applicability undecided",Daily Maca Plus For Men
+251077,scored,generic,"Required row: research on file, applicability undecided",Daily Maca Plus for Women
+251338,scored,fiber_digestive,"Required row: research on file, applicability undecided",Centrum Immune & Digestive Support
+251551,scored,generic,"Required row: research on file, applicability undecided",DIM-plus
+251616,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail Grass 440 mg
+251856,scored,generic,"Required row: research on file, applicability undecided",Sytrinol
+251908,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Fortify Gummy Probiotic 6 Billion Berry Flavored
+252441,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract
+252560,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Acerola Extract (25% Vitamin C)
+252704,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail P.E 7%
+252753,scored,generic,"Required row: research on file, applicability undecided",Triphala
+252767,not_scored,,Other check: dose_assessment_incomplete,Vitamin B12 (Cyanocobalamin)
+252769,not_scored,,Other check: dose_assessment_incomplete,Vitamin B12 (Methylcobalamin)
+252842,not_scored,,Other check: identity_assessment_incomplete,Sodium Citrate
+252847,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+252849,not_scored,,Other check: identity_assessment_incomplete,Sodium D-Aspartate
+253081,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+253359,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Acerola Extract (25% Vitamin C)
+253399,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract
+253403,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract
+253404,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract
+254192,scored,generic,"Required row: research on file, applicability undecided",Triphala
+254196,scored,generic,"Required row: research on file, applicability undecided",Triphala
+254198,scored,generic,"Required row: research on file, applicability undecided",Triphala
+254394,not_scored,,Other check: dose_assessment_incomplete,Vitamin B12 (Cyanocobalamin)
+254395,not_scored,,Other check: dose_assessment_incomplete,Vitamin B12 (Cyanocobalamin)
+254396,not_scored,,Other check: dose_assessment_incomplete,Vitamin B12 (Cyanocobalamin)
+254404,not_scored,,Other check: dose_assessment_incomplete,Vitamin B12 (Methylcobalamin)
+254413,not_scored,,Other check: dose_assessment_incomplete,Vitamin B12 (Methylcobalamin)
+254415,not_scored,,Other check: dose_assessment_incomplete,Vitamin B12 (Methylcobalamin)
+254473,not_scored,,Other check: identity_assessment_incomplete,Sodium Citrate
+254474,not_scored,,Other check: identity_assessment_incomplete,Sodium Citrate
+254475,not_scored,,Other check: identity_assessment_incomplete,Sodium Citrate
+254479,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+254480,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+254481,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+254485,not_scored,,Other check: identity_assessment_incomplete,Sodium D-Aspartate
+254486,not_scored,,Other check: identity_assessment_incomplete,Sodium D-Aspartate
+254487,not_scored,,Other check: identity_assessment_incomplete,Sodium D-Aspartate
+254795,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail P.E 7%
+254796,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail P.E 7%
+254797,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail P.E 7%
+254958,scored,fiber_digestive,"Required row: research on file, applicability undecided",Centrum Immune & Digestive Support
+256077,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Broad Spectrum Formula
+256930,scored,generic,"Required row: research on file, applicability undecided",Platinum Series Restore Immune with Zinc
+256996,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,MegaFlora Kids Probiotic
+257008,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,MegaFlora Women's Probiotic
+259262,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Acid Ease
+259374,not_scored,,Other check: identity_assessment_incomplete,Organic Hemp Powder Protein & Fiber
+259714,scored,sports,"Required row: research on file, applicability undecided",Essential Amino Complete Raspberry Iced Tea
+259817,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Men's Prostate
+259832,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Men's Prostate Formula
+259886,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Break it Down
+259891,scored,generic,"Required row: research on file, applicability undecided",Renewable Energy. Ceremonial Matcha
+261618,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,PureBi-Ome Intensive
+263873,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probi 20
+264105,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Advanced Acidophilus
+267311,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Well Sugar Free Gummies 5 G
+267340,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,100 Billion Probiotic
+267643,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber 5 g
+267662,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Happy Hoo-Ha
+267907,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Primadophilus Kids Cherry Flavored
+267922,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Primadophilus Kids Cherry Flavored
+267923,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Primadophilus Kids Orange Flavored
+268432,scored,generic,"Required row: research on file, applicability undecided",Liquid Elderberry
+269428,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Digestive Enzymes 335 mg
+269689,not_scored,,Other check: identity_assessment_incomplete,High Absorption Magnesium Powder Sweet Peach
+270235,not_scored,,Other check: identity_assessment_incomplete,High Absorption Magnesium 105 mg
+270511,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Lactase Enzyme Complex
+270737,not_scored,,Other check: identity_assessment_incomplete,Sodium Chloride 1000 mg
+270961,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Gummies
+271092,scored,generic,"Required row: research on file, applicability undecided",Turmeric Curcumin
+271554,scored,generic,"Required row: research on file, applicability undecided",Turmeric Curcumin
+271663,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Well Sugar free Gummies
+273379,scored,generic,"Required row: research on file, applicability undecided",AloeLax with Fennel Seed 340 mg
+273812,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Organic Apple Cider Vinegar Gummies 2 BIL CFU
+273865,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Daily Fiber Orange Smooth
+274013,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Organic Digest+ Tropical Fruit Flavor
+274135,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Organic Fiber Unflavored
+274270,scored,generic,"Required row: research on file, applicability undecided",fucoTHIN
+274420,scored,generic,"Required row: research on file, applicability undecided",Elderberry Immune Gummy
+274426,scored,generic,"Required row: research on file, applicability undecided",Extra Strength Turmeric
+274561,scored,generic,"Required row: research on file, applicability undecided",Turmeric Gummy
+274833,scored,fiber_digestive,"Required row: research on file, applicability undecided",Super Seed
+275355,scored,generic,"Required row: research on file, applicability undecided",FYI Ultra
+276001,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Optifiber
+277021,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Acidophilus Probiotic
+277025,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Probiotic Gummies
+277404,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Gummies
+277520,scored,generic,"Required row: research on file, applicability undecided",Kids Elderberry & Sleep
+277667,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Digestive Enzyme Chewables Natural Mixed Berry Flavor
+278019,scored,fiber_digestive,"Required row: research on file, applicability undecided",Pancreatic Enzyme Formula
+278020,scored,fiber_digestive,"Required row: research on file, applicability undecided",Pancreatic Enzyme Formula
+278021,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Pancreatic VegEnzymes
+278251,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic 123
+278554,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Natural Daily Fiber
+287368,scored,generic,"Required row: research on file, applicability undecided",Balanced Minerals
+287478,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,MegaFlora Women's Probiotic
+291789,scored,generic,"Required row: research on file, applicability undecided",Moducare
+293269,not_scored,,Other check: identity_assessment_incomplete,CoQ10 100 mg
+293272,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Esberitox
+293273,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Esberitox
+293279,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Fiber Delights Vanilla Flavored
+293957,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Digestive Enzymes Ultra
+293966,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Gluten/Dairy Digest
+293967,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Gluten/Dairy Digest
+293969,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Heartburn Essentials
+294039,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,ProbioMood (Capsules)
+294041,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic G.I.
+294273,not_scored,sports,Other check: dose_amount_unread,Whey Protein (Grass-Fed)
+294580,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Oyster Extract
+294581,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Oyster Extract
+294582,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Oyster Extract
+295001,not_scored,,Other check: identity_assessment_incomplete,Conjugated Linoleic Acid (CLA)
+295107,not_scored,generic,Evidence aggregate: resolver result unfinished on a required row,Nurturalax 3
+295203,scored,generic,"Required row: research on file, applicability undecided",Sambucus Elderberry Immune Lozenges
+295514,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Heartburn Essentials
+295532,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotic G.I.
+297659,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Women's Probiotic Gummies Berry Flavor
+297696,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,HSO Probiotic Formula
+297698,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,HSO Probiotic Formula
+298029,scored,fiber_digestive,"Required row: research on file, applicability undecided",Pancreatic Enzymes
+298940,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Well Gummies
+299053,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Gluten/Dairy Digest
+299744,not_scored,,Other check: identity_assessment_incomplete,Biotin Complex Hair & Skin
+302668,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Gluten Rescue with Glutalytic
+302674,not_scored,,Other check: identity_assessment_incomplete,High Absorption Magnesium 100 mg
+302675,not_scored,,Other check: identity_assessment_incomplete,High Absorption Magnesium Powder
+304633,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Eyebright Herbal Blend
+305905,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Fiber Gummy
+306183,scored,sports,"Required row: research on file, applicability undecided",BCAA+ Peach Mango
+306204,not_scored,,Other check: identity_assessment_incomplete,Creatine 3 g Peach Mango
+306291,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Sacro-B
+307557,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Jarro-Dophilus Baby
+307586,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Fem Dophilus
+307587,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Fem Dophilus 5 Billion CFU
+307588,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Fem Dophilus 1 Billion CFU
+307589,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Fem Dophilus 1 Billion CFU
+307621,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Ideal Bowel Support 10 Billion CFU
+307626,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Jarro-Dophilus Infant 1 Billion CFU
+307631,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Jarro-Dophilus 10 Billion CFU Allergen Free
+307734,scored,generic,"Required row: research on file, applicability undecided",Shilajit Fulvic Acid Complex 250 mg
+307773,scored,sports,"Required row: research on file, applicability undecided",BCAA+ Raspberry Lemonade
+311132,not_scored,,Other check: identity_assessment_incomplete,Oat Straw Extract (Avena Sativa)
+311133,not_scored,,Other check: identity_assessment_incomplete,Oat Straw Extract (Avena Sativa)
+311134,not_scored,,Other check: identity_assessment_incomplete,Oat Straw Extract (Avena Sativa)
+311135,not_scored,,Other check: identity_assessment_incomplete,Oat Straw Extract (Avena Sativa)
+311301,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract
+311302,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract
+311303,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract
+311304,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract
+311572,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+311573,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+311574,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+311575,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+311576,not_scored,,Other check: identity_assessment_incomplete,Sodium Citrate
+311577,not_scored,,Other check: identity_assessment_incomplete,Sodium Citrate
+311578,not_scored,,Other check: identity_assessment_incomplete,Sodium Citrate
+311579,not_scored,,Other check: identity_assessment_incomplete,Sodium Citrate
+311580,not_scored,,Other check: identity_assessment_incomplete,Sodium D-Aspartate
+311581,not_scored,,Other check: identity_assessment_incomplete,Sodium D-Aspartate
+311582,not_scored,,Other check: identity_assessment_incomplete,Sodium D-Aspartate
+311583,not_scored,,Other check: identity_assessment_incomplete,Sodium D-Aspartate
+311852,not_scored,sports,Other check: dose_amount_unread,Whey Protein (Grass-Fed)
+312024,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail Powder
+312025,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail Powder
+312026,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail Powder
+312027,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail Powder
+312355,not_scored,sports,Other check: dose_amount_unread,Whey Protein (Grass-Fed)
+312356,not_scored,sports,Other check: dose_amount_unread,Whey Protein (Grass-Fed)
+312357,not_scored,sports,Other check: dose_amount_unread,Whey Protein (Grass-Fed)
+312894,scored,sports,"Required row: research on file, applicability undecided",EAA Essential Amino Acids 1000 mg Capsules
+313338,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Mood Improve
+315306,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Focus & Memory
+315691,not_scored,,Not scored: not scoreable by intent,Potassium Iodide Tablets 130 mg
+315977,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Beat The Bloat
+318195,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Prebiotic GOS
+321338,scored,generic,"Required row: research on file, applicability undecided",FYI Ultra
+321351,scored,generic,"Required row: research on file, applicability undecided",Multi-Sourced Collagen Turmeric Apple Cinnamon Flavor
+321357,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Omega-Zyme Ultra Ultimate Digestive Enzyme Blend
+321943,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Cardiovascular Optimizer
+321966,scored,fiber_digestive,"Required row: research on file, applicability undecided",Advanced Digestive Enzymes
+322515,not_scored,,Other check: identity_assessment_incomplete,High Absorption Magnesium 200 mg
+323062,scored,generic,"Required row: research on file, applicability undecided",Calming Day Lemon
+323130,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Sacro-B
+326253,scored,fiber_digestive,Required row: applicability undecided and resolver unfinished,Digestive Enzymes
+326283,scored,sports,"Required row: research on file, applicability undecided",Pre Sweat Watermelon Yuzu
+327398,scored,generic,"Required row: research on file, applicability undecided",Grass Fed Collagen Protein Fair Trade Chocolate
+327399,scored,generic,"Required row: research on file, applicability undecided",Grass Fed Collagen Protein Vanilla Flavor
+327409,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotics 10 Billion Gummies Orange Dream Flavor
+327412,scored,generic,"Required row: research on file, applicability undecided",Turmeric
+327767,scored,generic,"Required row: research on file, applicability undecided",Extra Strength Turmeric
+327777,scored,generic,"Required row: research on file, applicability undecided",Liquid Elderberry Sambucus Complex
+327974,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,Gluten Defense
+327984,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail Grass 440 mg
+327997,scored,fiber_digestive,"Required row: research on file, applicability undecided",Mega-Zyme Pancreatic & Systemic Enzymes
+328006,not_scored,,Other check: identity_assessment_incomplete,Oregano Oil
+328029,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Primadophilus Kids Probiotic Chewables Cherry Flavored
+328090,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Women's 3-in-1 Probiotic Gummy Orange Flavored
+328408,scored,generic,"Required row: research on file, applicability undecided",Cortisol-Stress Balance
+328434,not_scored,,Other check: identity_assessment_incomplete,Dopa-Mind
+328444,scored,generic,"Required row: research on file, applicability undecided",Enhanced Sex for Women 50+
+328465,not_scored,,Other check: identity_assessment_incomplete,Ginseng Energy Boost
+328471,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Grapeseed Extract 100 mg
+328581,scored,generic,"Required row: research on file, applicability undecided",Mushroom Immune
+328803,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Heart Health
+328828,scored,fiber_digestive,"Required row: research on file, applicability undecided",Pancreatic Enzymes
+328844,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Women's Daily Probiotic
+329658,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Acerola Extract Powder 500 mg
+329726,not_scored,,Not scored: not scoreable by intent,Maltodextrin Powder
+329727,not_scored,,Not scored: not scoreable by intent,Maltodextrin Powder 30 g
+329728,not_scored,,Not scored: not scoreable by intent,Maltodextrin Powder
+329729,not_scored,,Not scored: not scoreable by intent,Maltodextrin Powder 30 g
+330072,not_scored,,Other check: dose_assessment_incomplete,Silicon Dioxide Powder
+330192,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Oyster Extract Powder 500 mg
+330215,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Oyster Extract Powder 500 mg
+330523,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract Powder 500 mg
+330524,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract Powder 500 mg
+330525,not_scored,,"Other check: dose_assessment_incomplete, identity_assessment_incomplete",Cascara Sagrada Extract Powder 500 mg
+330687,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotics 10 Billion Gummies Orange Dream Flavor
+330765,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+330766,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+330767,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB Powder 10 g
+330768,not_scored,,Other check: identity_assessment_incomplete,Sodium BHB
+330834,scored,sports,Evidence aggregate: resolver result unfinished on a required row,Concept X Orange Mango
+330900,scored,generic,"Required row: research on file, applicability undecided",Triphala
+330902,scored,generic,"Required row: research on file, applicability undecided",Triphala Powder 1000 mg
+331202,not_scored,generic,Other check: dose_benchmark_identity_unresolved,Horsetail Powder 450 mg
+332937,scored,fiber_digestive,"Required row: research on file, applicability undecided",Mega-Zyme Pancreatic & Systemic Enzymes
+332954,scored,probiotic,Other check: probiotic_contributing_context_incomplete,Women's 3-in-1 Probiotic Gummy Orange Flavored
+333715,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,CompleteGest
+333744,scored,generic,Evidence aggregate: resolver result unfinished on a required row,Eyebright Premium Blend 694 mg
+333910,scored,generic,"Required row: research on file, applicability undecided",DIM-plus
+333911,scored,generic,"Required row: research on file, applicability undecided",DIM-plus
+334123,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Women's Daily Care 40 Billion CFU Guaranteed
+334127,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Probiotics Kids 5 Billion Strawberry Flavor
+336100,not_scored,,Other check: identity_assessment_incomplete,Hair Growth
+336306,scored,fiber_digestive,Evidence aggregate: resolver result unfinished on a required row,FiberMend
+337209,scored,generic,"Required row: research on file, applicability undecided",Cholesterol Shield
+337239,scored,generic,"Required row: research on file, applicability undecided",AloeLax with Fennel Seed 340 mg
+337873,scored,probiotic,Other check: probiotic_evidence_assessment_incomplete,Sacro-B
+PG_SUB_3584FB6BA2DA4497B0A88B524CD45ACB,not_scored,generic,Source-bound label hold,B-6 / Folic Acid / B-12
