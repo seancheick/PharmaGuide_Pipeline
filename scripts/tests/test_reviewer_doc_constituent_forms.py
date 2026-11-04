@@ -34,7 +34,9 @@ from v4_reviewer_benchmark_freeze import (  # noqa: E402
     _rollup_unit,
 )
 
-BLOBS = ROOT / "dist" / "detail_blobs"
+from release_artifact_paths import catalog_dist_dir  # noqa: E402
+
+BLOBS = catalog_dist_dir() / "detail_blobs"
 
 
 def _packet_actives(detail):
