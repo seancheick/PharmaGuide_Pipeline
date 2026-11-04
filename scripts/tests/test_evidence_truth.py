@@ -71,6 +71,91 @@ def test_a_finished_rejection_of_human_studies_says_they_did_not_qualify(pipelin
     assert NOT_ESTABLISHED not in evidence["reason"]
 
 
+def _closed_record(monkeypatch, canonical, decision):
+    """The review closes goldenseal on #366; this tree's data doesn't hold that record yet."""
+    import evidence_resolver
+
+    records = dict(evidence_resolver._load_literature_evidence())
+    records[canonical] = {**records[canonical], "applicability_status": "no_qualifying_human_evidence",
+                          "effect_direction": None, "qualifying_human_studies": [],
+                          "applicability_decision": decision,
+                          "verification_provenance": {**records[canonical]["verification_provenance"],
+                                                      "verified_by": "Agent review of PubMed abstracts"}}
+    monkeypatch.setattr(evidence_resolver, "_load_literature_evidence", lambda: records)
+
+
+@pytest.mark.parametrize("decision, expected", [
+    # Sean's ruling names this state: the decision names the human studies it read.
+    ("Finished review with no qualifying study for these labels. PMID 17495878 is a drug interaction study.", True),
+    # An older record: related research, often a mixture or another route.
+    ("Bounded PubMed source-content review: related research inspected (PMID 15798997). A four-herb mixture.", False),
+    ("Reproducible literature search identified zero qualifying trials for standalone goldenseal.", False),
+])
+def test_a_no_qualifying_closure_says_so_when_it_names_human_studies(pipeline, monkeypatch, decision, expected):
+    """252471 Goldenseal, whose only required row closes through its literature record."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = _enrich(pipeline, "evidence_truth_252471_raw.json")
+    _closed_record(monkeypatch, "goldenseal", decision)
+    scored = build_scored_artifact(enriched)
+    evidence = scored["quality_pillars_v4"]["evidence"]
+    assert scored["quality_assessment_status"] == "complete"
+    assert evidence["score"] == 0
+    assert evidence["reason"].startswith(DID_NOT_QUALIFY) is expected
+    assert evidence["reason"].startswith("We reviewed the research but found no qualifying") is not expected
+
+
+def test_a_closure_answers_for_a_label_whose_only_row_is_the_projection(pipeline, monkeypatch):
+    """251619 Kudzu Root: its one required row is the projection, and that record closed."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = _enrich(pipeline, "evidence_truth_251619_raw.json")
+    _closed_record(monkeypatch, "puerarin", "Finished review with no qualifying study for these labels. PMID 22578529.")
+    evidence = build_scored_artifact(enriched)["quality_pillars_v4"]["evidence"]
+    assert evidence["score"] == 0
+    assert evidence["reason"].startswith(DID_NOT_QUALIFY)
+
+
+@pytest.mark.parametrize("rows, required, expected", [
+    # 183349: coconut water is another required row, and no study answers for it.
+    ([("l_glutamine", "reproducible_search_found_no_qualifying_human_studies"),
+      ("coconut_water", "whole_food_matrix_not_efficacy_relevant")], {"l_glutamine", "coconut_water"}, False),
+    # 259595: the closed row isn't what the probiotic label's Evidence reads.
+    ([("bacillus_subtilis", "no_reviewed_evidence_assessment"),
+      ("l_glutamine", "reproducible_search_found_no_qualifying_human_studies")], {"bacillus_subtilis"}, False),
+])
+def test_a_closure_answers_only_for_its_own_required_row(monkeypatch, rows, required, expected):
+    from assessment_readiness import evidence_studies_did_not_qualify
+
+    _closed_record(monkeypatch, "l_glutamine", "Finished review with no qualifying study for these labels. PMID 30108163.")
+    readiness = {"evidence": {"ingredient_assessments": [
+        {"canonical_id": canonical, "name": canonical, "reason_code": reason} for canonical, reason in rows]}}
+    assert evidence_studies_did_not_qualify({}, readiness, required) is expected
+
+
+def test_every_listed_no_qualifying_closure_reads_seans_sentence():
+    """The rule matches the decision's opening words, so the review's whole list is pinned to it.
+
+    The list arrives with #366, which lands after this; until then there is nothing to read.
+    """
+    from assessment_readiness import evidence_studies_did_not_qualify
+    from evidence_resolver import resolve_evidence_for_row
+    from scoring_v4.quality_score import _EVIDENCE_ZERO_REASON, mark_evidence_studies_did_not_qualify
+
+    corrections = FIXTURES.parent.parent / "audits" / "evidence_backed_970_20261104" / "literature_corrections.json"
+    listed = json.loads(corrections.read_text()) if corrections.exists() else {}
+    no_qualifying = sorted(c for c, fix in listed.items() if fix.get("result") == "no_qualifying_human_evidence")
+    for canonical in no_qualifying:
+        row = {"canonical_id": canonical, "name": canonical, "raw_source_text": canonical,
+               "source_label_name": canonical, "raw_source_path": "activeIngredients[0]",
+               "source_section": "activeIngredients"}
+        reason = resolve_evidence_for_row(row, {"activeIngredients": [row], "ingredients_scorable": [row]}).reason_code
+        readiness = {"evidence": {"ingredient_assessments": [{**row, "reason_code": reason}]}}
+        assert evidence_studies_did_not_qualify({}, readiness, {canonical}), canonical
+    pillar = {"score": 0, "reason": _EVIDENCE_ZERO_REASON["no_qualifying_human_evidence"]}
+    assert mark_evidence_studies_did_not_qualify(pillar)["reason"] == DID_NOT_QUALIFY
+
+
 @pytest.mark.parametrize("label", [
     "evidence_truth_252353_raw.json",  # A reference-only record: human research isn't established.
 ])

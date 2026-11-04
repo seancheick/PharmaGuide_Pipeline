@@ -1674,9 +1674,22 @@ _HUMAN_STUDY_TYPES = frozenset({
 })
 
 
+def _closed_on_named_human_studies(row: Mapping[str, Any]) -> bool:
+    """A finished literature review with no qualifying study that names the human studies it read.
+
+    This result carries no study rows, so the decision is what names them. Its
+    opening words are pinned against the review's list in test_evidence_truth.py.
+    """
+    from evidence_resolver import _load_literature_evidence
+    record = _safe_dict(_load_literature_evidence().get(_norm(row.get("canonical_id"))))
+    return (row.get("reason_code") in {"reproducible_search_found_no_qualifying_human_studies",
+                                       "module_scoped_product_projection"}
+            and str(record.get("applicability_decision") or "").startswith("Finished review with no qualifying study"))
+
+
 def evidence_studies_did_not_qualify(product: Mapping[str, Any], readiness: Mapping[str, Any],
                                      required: Any) -> bool:
-    """Every required row ended at a human study rejected for this preparation or purpose.
+    """Every required row ended at human studies rejected for this preparation or purpose.
 
     A reference-only record doesn't establish human research, and research the
     scorer never reads or a review still open is another cause (Sean, November 4).
@@ -1689,6 +1702,7 @@ def evidence_studies_did_not_qualify(product: Mapping[str, Any], readiness: Mapp
     records = reviewed_entries()
     # A projection row carries no reason of its own, so its rejection answers for it.
     return bool(rows) and all(
+        _closed_on_named_human_studies(row) or
         row.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS | {"module_scoped_product_projection"} and any(
             isinstance(match, Mapping) and match.get("ingredient") == row.get("name")
             and match.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS

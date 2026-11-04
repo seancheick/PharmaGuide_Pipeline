@@ -1129,7 +1129,8 @@ _EVIDENCE_UNREVIEWED_ROWS_NOTE = (
 
 def mark_evidence_studies_did_not_qualify(pillar: Dict[str, Any]) -> Dict[str, Any]:
     """Say why a finished zero is a zero when reviewed human studies were rejected."""
-    if pillar.get("score") or pillar.get("reason") != _EVIDENCE_ZERO_REASON["applicability_unestablished"]:
+    if pillar.get("score") or pillar.get("reason") not in {
+            _EVIDENCE_ZERO_REASON["applicability_unestablished"], _EVIDENCE_ZERO_REASON["no_qualifying_human_evidence"]}:
         return pillar
     return {**pillar, "reason": _EVIDENCE_STUDIES_DID_NOT_QUALIFY_REASON}
 
