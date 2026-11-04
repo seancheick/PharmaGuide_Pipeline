@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 656,
       "total_forms": 1476,
-      "total_form_aliases": 12304,
+      "total_form_aliases": 12306,
       "parents_with_parent_aliases": 151,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-10-31",
+    "last_updated": "2026-11-03",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1889,7 +1889,11 @@
           "range_low": 0.087,
           "range_high": 0.65,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "mixed carotenoids",
+          "mixed carotenoids from african oil palm fruit extract"
+        ]
       },
       "retinyl palmitate": {
         "bio_score": 14,
@@ -26883,7 +26887,10 @@
             }
           ]
         },
-        "form_evidence_axis": "systemic_bioavailability"
+        "form_evidence_axis": "systemic_bioavailability",
+        "source_form_aliases": [
+          "asian ginseng root extract, fermented"
+        ]
       },
       "black ginseng": {
         "bio_score": 11,
@@ -42105,7 +42112,10 @@
           "range_low": 0.52,
           "range_high": 0.78,
           "quality": "moderate"
-        }
+        },
+        "source_form_aliases": [
+          "ganoderma lucidum mushroom fruiting body extract"
+        ]
       },
       "reishi standardized extract": {
         "bio_score": 11,
@@ -50434,7 +50444,8 @@
         },
         "dosage_importance": 1.0,
         "source_form_aliases": [
-          "linum usitatissimum oil"
+          "linum usitatissimum oil",
+          "omega-9"
         ]
       },
       "flaxseed meal/powder": {
@@ -50553,7 +50564,8 @@
           "matricin",
           "chamomille flower",
           "chamomille flower powder",
-          "chomomile flower powder"
+          "chomomile flower powder",
+          "organic chamomile (flower) extract"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -50862,7 +50874,8 @@
           "55% Carvacrol",
           "carvacrol",
           "oregano carvacrol",
-          "p-cymene-2-ol"
+          "p-cymene-2-ol",
+          "oregano flower, leaf oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

@@ -1,3 +1,9 @@
+## November 3 — independent Claude audit: alert publisher preflight
+
+Owner: `scripts/sync_safety_alerts.py::sync/_dispatch_release`; evidence: publisher call order and fail-first `test_missing_dispatch_config_stops_before_any_remote_operation` (missing URL and secret). Will NOT create another publisher, credential store, clinical rule or public status. Infrastructure correction: validate existing local dispatch configuration before any remote operation; retain dry-run without credentials and existing post-promotion delivery retry semantics.
+
+Two regression cases failed before the production fix; publisher/sync/contract slice passed 126 tests afterwards. Independent source/test review found no blockers; `git diff --check` passes. No local corpus required for this infrastructure-only change. Hosted exact-candidate CI remains pending; no merge, alert publication, deployment or delivery proof. Claude's dose/readiness/label-warning lanes remain owned there; this fix does not resolve feed approval or signing.
+
 ## October 30 — exact-source held publication candidate (Codex)
 
 **Class:** behavioral Score/config and test-contract correction. **Owner Check:** `scoring_v4/scored_artifact.py::_held_assessment_label` and `scoring_v4/config/quality_score.json::suppression.held_assessment_labels` own exact-source score unavailability; `assessment_readiness.py::evaluate_release_assessment` keeps the scientific blockers; `audit_source_of_truth_contract.py::audit_scoring` and `build_final_db.py::validate_export_contract` own release/export containment. The source matrix, glossary and call sites were checked. Will NOT create a new scorer, registry, public status, Dose benchmark, Evidence approval or global partial-score exception.
@@ -4379,6 +4385,24 @@ Integrated preflight passed publication access, checkout alignment, manufacturer
 
 Sean now owns execution. Resume the prepared input set through snapshot, then run `scripts/test.sh release`, then `scripts/release_full.sh`; stop on any failure. The existing verified-construction receipt prevents duplicate assembly. The standard future full workflow remains `bash batch_run_all_datasets.sh --resume`. Final producer completion, catalog validation, source-based movement review, publication, Flutter bundle qualification, actual phone acceptance and post-construction interruption/reuse measurement remain pending. Durable evidence and the single current operator handoff are under `.claude/state/release_loop_recovery/` and `.claude/state/CURRENT_HANDOFF.md`; do not restart an agent-owned run while Sean is operating.
 
+## November 2 — not-scored identity and dose blockers sorted (Claude)
+
+**Class:** curated data (form aliases and one other-ingredient alias). **Owner:** `ingredient_quality_map.json::source_form_aliases` and `aliases`, `other_ingredients.json`. Will NOT create a new scorer, parser path, status, form, botanical or dose reference.
+
+Of the 2026.11.02 build's 249 `not_scored` labels, this sorts the 74 identity-blocked and 61 dose-blocked per label row: identity is 19 our gap (12 fixed and scored here, 6 fixed by PR #335 and not redone, and 328649, where one row is fixed and another stays held), 46 Sean's decision and 9 real label limits; dose is 37 real label limits and 24 Sean's decision. The dose group has no curated or parser gap. 25 dose labels are exact editions Sean approved as held on October 30. Frozen replay of 152 labels moved 12 to scored; no safety status, safety verdict, dose safety, additive or allergen changed. 285637 gains the chamomile interaction alert because its chamomile row now resolves. 121 controls kept their status and score.
+
+**Correction, November 3.** The first commit, `47a3ea25d`, scored 39 labels. CI failed on 7 pinned labels, and checking every alias against this ledger and earlier audits found more rows held on purpose, including D21 species and Q32 tokens. `f0f7e406c` puts them back: 27 labels return to `not_scored`, the two test pins that commit changed are restored, and the rows become decisions C9 to C13. Receipts, withdrawn fixes and the full sort are in `scripts/audits/not_scored_blockers_20261102/`.
+
+**Sean's decision, November 3, 2026.** Asked "Should #339 hold all 29 labels, as it now recommends?", Sean answered "Yes, hold all 29" (relayed by the coordinating session). C9 to C13 stay held: C9 312947, 306204, 328434; C10 47590, 29066, 27808, 28993, 214676, 214952, 231826, 62816, 188790, 246350, 246370; C11 43662, 43947, 63330, 63463, 63475, 259374; C12 312640, 312713, 330886; C13 256962, 66513, 27203, 220021, 287389, 328649. C11 is included, so the FoodState beet root and hemp rows keep their scores withheld. C13 follows `scoring_reference_resolver.py::unknown_form_quality`: "A named form IQM does not recognize stays unmapped for curation." C1 to C8 stay open.
+
+**Sean's decisions on three more labels, November 3, 2026** (relayed by the coordinating session). These aliases are removed, and the three rows move to the held test. 9 of 135 now score, measured for each label from its raw label through `build_scored_artifact`; the list is in `per_product.md`.
+
+- **241290, Lovely Legs:** "Hold Lovely Legs 241290. The current mapping does not justify its score." The panel prints "Diosmin (95% Diosmin in a citrus bioflavonoid complex with hesperidin) 600 mg". The `citrus bioflavonoid complex` alias on `diosmin (unspecified)` is removed.
+- **294296, cherry:** "Hold cherry 294296. Species identification is settled; preparation assessment is not." The `prunus avium fruit extract, powder` alias on `dark sweet cherry powder` is removed.
+- **295001, CLA, first stage: a temporary hold.** The label prints safflower as the source and does not print 80%, so the `safflower` alias on `cla 80%` is unsupported and is removed. The row returns to `not_scored`. **Second stage, on a separate branch, not in this PR:** a qualified correction recognizes safflower as the source only if the existing nondisclosure owner then supplies the floor, with no 80% preparation, branded identity, absorption claim or clinical credit. Any score change from that stage is measured and reported separately from the 9.
+
+These dispositions cover only these labels. They are not clinical approval and do not approve publication.
+
 
 ## November 2 — why products sit below the coverage floor (branch `claude/low-coverage-identity-20261102`)
 
@@ -4417,3 +4441,31 @@ Six were real gaps and are fixed: two Oyster Whole Extract labels (330192, 33021
 ## November 3 — first Evidence review batch
 
 **Class:** behavioral curated data plus a resolver path for a documented review; no score moves. **Owner:** `literature_evidence_records.json`, `evidence_resolver.py::resolve_evidence_for_row`, `clinical_applicability.py::_assess_legacy_signed_scope`. Applies Sean's November 3 decisions: a documented, source-qualified agent review may close an ordinary assessment with no clinician signature, and never names an agent as a clinician. Turmeric, ginkgo and collagen carry `documented_review_scope`, which Dose does not read; methionine closes as a reviewed null; fiber stays withheld, and 59635, 241707 and 276704 stay held. Replay of 2,063 frozen labels: 199 partial to complete, plus 1 user submission read from stored enrichment, 0 held to scored, 0 score, tier, Dose, Evidence-point or safety moves, 0 of 150 controls changed. Report and per-product lists: `scripts/audits/evidence_review_batch1_20261102/`.
+
+## November 3 — independent Claude audit follow-through
+
+Owner: existing alert publisher, normalizer correction, completion/export and Flutter safety/storage owners. Evidence: source review, fail-first probes and focused tests. Will NOT create another scoring/clinical owner or public contract.
+
+Publisher preflight repair: PR #345 at `d3432e949`, 126 focused tests pass; CI pending, no merge. Dose range identity/unit guard and #344 stale-test repairs are now integrated by their owner at `c4fda94d1`; the nine configured range rows remain unchanged. New candidate CI is pending; active replay untouched by this audit. Independently verified #194 merged and 62 Home/Stack tests pass; completion slice 116 passes; cipher slice 31 passes. No new confirmed privacy defect. Final replay, paired consumer/device acceptance, approved label warnings and publication gates remain open. No clinical sign-off or live delivery proof.
+
+Durable findings, patch links, exact limits and next order: `/Users/seancheick/pg_quality/codex_takeover_20261103/AUDIT_FOLLOWUP_20261103.md`. Required product-wide Evidence repair below is unchanged; neither wording-only changes nor a CoQ10-only fix close it. This register update is documentation-only.
+
+<a id="evidence-correctness-20261103"></a>
+## November 3 — product-wide Evidence correctness queued after Claude
+
+**Goal / authorization:** Sean explicitly required the Evidence fix across all products, and explicitly requested it in the main project plan so Claude picks it up after the active batch. Missing research, unfinished processing and incorrect matching must never be presented as scientific zero. **Status: planned; not implemented, measured, integrated or release-validated.** Complete before numerical calibration; reconcile Claude's delivered work first and do not compete with active lanes.
+
+Owner: existing `clinical_applicability`, `evidence_resolver`, Evidence adapters, `assessment_readiness`, `scored_artifact`, export and Flutter/API consumers. Evidence: saved231852 reports no credited entries, rejects `INGR_COQ10` for `label_purpose_evidence_mismatch`, and leaves `INGR_UBIQUINOL` unresolved for `clinical_source_contexts_missing`; source symbols and current plan/register inspected. Will NOT create a second scorer, registry, public field/status, unsupported Evidence bonus or product-specific patch.
+
+Next unchecked deliveries: (1) source-qualified shared matching/processing repair; (2) full-catalog, all-module census of potentially lost positive credit with valid exclusions and completed-zero controls; (3) consistent Evidence/total/tier/readiness explanations across actual export, app and API consumers. Preserve earned primary credit when adjuncts earn zero; separate ingredient versus formula claims, Evidence versus Dose, and quality versus safety. An empty lookup is not a completed research review. Completed no-qualifying-positive/null/non-applicable determinations remain complete; unresolved required research remains unresolved without masquerading as a scientific zero. No fixed CoQ10 replacement score is approved.
+
+Acceptance and validation: [master-plan checklist](../../../docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md#november-3--required-product-wide-evidence-correctness-after-claudes-current-batch), with detailed packet at `/Users/seancheick/pg_quality/rubric_calibration_20261103/PREPARATION_BRIEF.md`. Require source-qualified receipts, fail-first owner/consumer regressions, frozen affected/control comparisons, exact-candidate CI and applicable local checks, plus actual consumer parity. A single-label fix or presentation-only change is insufficient. Coordinate necessary regeneration from actual fingerprints after the bounded batch; no competing run.
+
+This update is **documentation/process only**. Existing baseline evidence and all production code/data remain unchanged. Full documentation diff/reference review and `git diff --check` are the applicable local checks; no pytest/corpus run or CI result is claimed. This plan records requirements, not a runtime merge or publication receipt.
+
+
+## November 3 — label-warning approval and male conception coverage
+
+Sean explicitly includes label warnings for men trying to conceive using the existing condition. A/B `avoid`, C `caution`, `ungraded` provenance and "Label warning" title are approved; no repeat approval needed. Owner: existing label extraction/export and Flutter profile warning pathway, with `ttc` in reference taxonomy and `ProfileState.conditionsForEvaluator`; evidence: source search and Sean's instruction. Will NOT create a condition, severity or separate warning engine. A4 must revisit the excluded men's statements, retain exact audience distinctions, prove matched caution prevents all-clear, and test actual profiles plus Stack/AI/PDF. No male warning is declared implemented by this documentation entry. See the master-plan acceptance checklist.
+
+Confirmed audience limitation: the existing Dart profile gate has no sex input, so TTC alone cannot distinguish male- versus female-specific sentences. Extend the canonical gate and its cross-language contract, not the condition taxonomy; acceptance must include sex-specific and unknown-sex cases.
