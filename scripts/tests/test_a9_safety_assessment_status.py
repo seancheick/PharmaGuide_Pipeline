@@ -220,7 +220,7 @@ def test_an_unread_nutrient_on_a_sports_label_is_incomplete_without_holding_its_
 
 @pytest.mark.parametrize("label, unknown, score", [
     ("a9_upper_limit_293959_raw.json", 1, 61.5),  # Vitamin E, nothing printed.
-    ("a9_upper_limit_16725_raw.json", 4, 60.3),   # Iron and three more, %DV with no amount the check can read.
+    ("a9_upper_limit_16725_raw.json", 2, 60.3),   # Calcium and iron, %DV with no amount the check can read.
 ])
 def test_an_upper_limit_nutrient_with_no_amount_withholds_only_the_all_clear(pipeline, label, unknown, score):
     """An unknown amount is never a zero (Sean, November 4). Quality and the outcome stand."""
@@ -232,9 +232,13 @@ def test_an_upper_limit_nutrient_with_no_amount_withholds_only_the_all_clear(pip
     assert scored["quality_score_v4_100"] == score
 
 
-def test_a_printed_zero_is_an_amount_the_upper_limit_check_can_read(pipeline):
-    """294543 prints Vitamin D 0 mcg, so nothing is unknown."""
-    scored = _score(pipeline, "a9_upper_limit_294543_raw.json")
+@pytest.mark.parametrize("label", [
+    "a9_upper_limit_294543_raw.json",  # Vitamin D 0 mcg.
+    "a9_upper_limit_12634_raw.json",   # Vitamins A and C, calcium and iron, "0 NP" printed as 0% DV.
+])
+def test_a_printed_zero_is_an_amount_the_upper_limit_check_can_read(pipeline, label):
+    """A measured zero leaves nothing unknown, however DSLD records it."""
+    scored = _score(pipeline, label)
     assert scored["assessment_readiness"]["release_assessment"]["upper_limit_amounts_unknown"] == 0
     assert scored["safety_assessment_status"] == "complete"
 

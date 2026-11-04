@@ -1733,8 +1733,11 @@ def upper_limit_amounts_unknown(product: Mapping[str, Any]) -> int:
 
 
 def _hidden_amount_rows(rows: list) -> list:
+    """Rows present without an amount. "0 NP" printed as 0% DV is a measured zero, not one."""
+    from identity.interaction import label_row_establishes_presence
     return [row for row in rows
-            if not has_source_printed_amount(row, allow_zero=True) and not _positive(row.get("quantity"))]
+            if not has_source_printed_amount(row, allow_zero=True) and not _positive(row.get("quantity"))
+            and label_row_establishes_presence(row)]
 
 
 def _safety_check_needs_a_hidden_amount(product: Mapping[str, Any], rows: list, hidden: list) -> bool:
