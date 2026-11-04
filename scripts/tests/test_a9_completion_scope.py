@@ -125,7 +125,6 @@ def test_a_blend_member_completes_only_on_its_own_reviewed_decision(pipeline):
     pytest.param("a9_title_subject_293389_raw.json", "elderberry", id="genus_sambucus"),
     pytest.param("a9_title_subject_251695_raw.json", "elderberry", id="genus_sambucus_with_vitamin_c_credit"),
     pytest.param("a9_title_subject_178674_raw.json", "fish_oil", id="source_fish"),
-    pytest.param("a9_title_subject_221657_raw.json", "epa", id="class_omega"),
     pytest.param("a9_title_subject_243141_raw.json", "reishi", id="class_mushroom"),
     pytest.param("a9_title_subject_25921_raw.json", "maca", id="brand_reparagen"),
 ])
@@ -501,3 +500,14 @@ def test_a_measured_zero_isnt_a_hidden_amount(pipeline):
     print_zero(raw["ingredientRows"])
     scored = build_scored_artifact(enricher.enrich_product(normalizer.normalize_product(raw))[0])
     assert SAFETY_OPEN not in _release_blockers(scored)
+
+
+def test_mixed_formula_keeps_its_reviewed_omega_ingredient_complete(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    scored = build_scored_artifact(_enrich(pipeline, "a9_title_subject_221657_raw.json"))
+    assert scored["quality_assessment_status"] == "complete"
+    rows = scored["assessment_readiness"]["evidence"]["ingredient_assessments"]
+    for canonical in ("epa", "dha"):
+        row = next(row for row in rows if row["canonical_id"] == canonical)
+        assert row["state"] == "evaluated_supported"
+        assert row["reason_code"] == "dietary_reference_intake_authority_established"
