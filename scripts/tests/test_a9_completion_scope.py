@@ -475,3 +475,21 @@ def test_a_hidden_amount_hold_doesnt_lift_a_withheld_score(pipeline, label):
     assert scored["quality_score_status"] == "not_scored"
     assert scored["quality_score_v4_100"] is None
     assert scored["score_unavailable_reason"] == "release_assessment_incomplete"
+
+
+def test_a_measured_zero_isnt_a_hidden_amount(pipeline):
+    # "Boron 0 mg" is a printed answer, so there is nothing for the upper-limit check to wait on.
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / "a9_hidden_amount_71650_raw.json").read_text())
+
+    def print_zero(rows):
+        for row in rows:
+            if row.get("name") == "Boron":
+                row["quantity"][0].update(quantity=0, unit="mg")
+            print_zero(row.get("nestedRows") or [])
+
+    print_zero(raw["ingredientRows"])
+    scored = build_scored_artifact(enricher.enrich_product(normalizer.normalize_product(raw))[0])
+    assert SAFETY_OPEN not in _release_blockers(scored)

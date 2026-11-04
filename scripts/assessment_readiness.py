@@ -1702,7 +1702,8 @@ def _hidden_amount_blockers(product: Mapping[str, Any], module_breakdown: Any) -
     if not _dose_reads_a_hidden_amount(module_breakdown):
         return []
     rows = active_label_rows(product.get("activeIngredients"))
-    hidden = [row for row in rows if not has_source_printed_amount(row) and not _positive(row.get("quantity"))]
+    hidden = [row for row in rows
+              if not has_source_printed_amount(row, allow_zero=True) and not _positive(row.get("quantity"))]
     blockers = []
     if _safety_check_needs_a_hidden_amount(product, rows, hidden):
         blockers.append("hidden_amount_safety_open")

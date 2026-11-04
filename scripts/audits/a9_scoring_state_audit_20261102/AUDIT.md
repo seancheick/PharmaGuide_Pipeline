@@ -288,11 +288,10 @@ these amounts (21 CFR 101.36(c)) and that alone doesn't hold anything. Owner: `a
 Totals: 49 held, 10 with safety, 35 finish. 180 labels carry a hidden-amount code once partial labels are counted (179 quality, 42 safety), and all newly partial labels are among the 84.
 0 score, tier, status, pillar, verdict or catalog safety moves. All 49 still pass `_retained_evidence_is_publishable`.
 
-**A rule, not a list, so it doesn't match the ruling exactly.** The rule reads the label's structure: production can't try amounts, and the ruling's sort came from a probe that did. It holds more than "I and J finish" on
-12196, 29207, 39973, 74214, 212574, 272970, 308198, 74547, and it holds D, and it misses two size movers (251557, 251572, two Echinacea species at the top level, Formulation only).
+**A rule, not a list, so it doesn't match the ruling exactly.** The rule reads the label's structure: production can't try amounts, and the ruling's sort came from a probe that did. It holds more than "I and J finish" on 12196, 29207, 39973, 74214, 212574, 272970, 308198, 74547, and it holds D, and it misses two size movers (251557, 251572, two Echinacea species at the top level, Formulation only). Kept as written by the integrator: over-holding a little, status only, beats a label-by-label fit.
 
 **Known limits.**
-- The gate is the 84's fact pattern. The same facts sit outside it on complete labels where Dose reads no hidden amount: `amount_unknown` hits on 534 (359 multi), upper-limit nutrients with no amount on 264, blends hiding a split on 1,407. Those aren't held.
+- The gate is the 84's fact pattern. The same facts sit outside it on complete labels where Dose reads no hidden amount: `amount_unknown` hits on 534 (359 multi), an upper-limit nutrient with no amount on 258: 176 print a measured zero, 3 print 0% DV, 62 print a %DV with no amount, and only 17 print nothing, and blends hiding a split on 1,407. None are held. The 534 get the per-user incomplete check on page and Stack, and a blend split can't change a safety result. Whether the 17 hold is with Sean.
 - Yerba mate (202690, 259856): only the ginseng hit reads `amount_unknown` at base. The yerba hypertension hits read no evaluation until an amount exists. The label holds, on ginseng.
 - Unknown daily servings count as reachable, so a per-day threshold with no serving basis holds.
 - A source-bound label hold matches its exact blockers, so these codes aren't added to a held label. The first version released four withheld scores (231921, 295107, 80302, 178728) at 22.7 to 25. The measurement caught it, and `test_a_hidden_amount_hold_doesnt_lift_a_withheld_score` pins it.
