@@ -1526,7 +1526,9 @@ def evaluate_release_assessment(
             if _evidence_presents_as_unreviewed(module_breakdown):
                 blockers.append("evidence_assessment_incomplete")
         elif (_required_evidence_review_open(product, readiness, module)
-              or _evidence_presents_as_unreviewed(module_breakdown)):
+              or _evidence_presents_as_unreviewed(module_breakdown)
+              or (not _is_ready(str(_safe_dict(readiness.get("evidence")).get("readiness") or ""))
+                  and _dose_rests_on_a_hidden_amount(module_breakdown))):
             blockers.append("evidence_assessment_incomplete")
         # The scoring owner records only records used by the winning generic
         # path. Missing applicability cannot publish provisional legacy credit.
@@ -1655,6 +1657,16 @@ def _title_names_an_open_row(product: Mapping[str, Any], open_rows: list) -> boo
     from scoring_input_contract import _identity_named_in_product_title
     rows = [dict(row) for row in open_rows]
     return any(_identity_named_in_product_title(dict(product), row, rows, subject_words=True) for row in rows)
+
+
+def _dose_rests_on_a_hidden_amount(module_breakdown: Any) -> bool:
+    """An amount the label hides could still move Dose, so an unread row can't be waved through.
+
+    A finished review with a hidden amount stays complete on neutral Dose.
+    """
+    dose = _safe_dict(_safe_dict(_safe_dict(module_breakdown).get("dimensions")).get("dose"))
+    return any(_safe_dict(entry).get("assessment") == "hidden_amount_neutral"
+               for entry in _safe_list(_safe_dict(dose.get("metadata")).get("dose_contributions")))
 
 
 def _evidence_presents_as_unreviewed(module_breakdown: Any) -> bool:
