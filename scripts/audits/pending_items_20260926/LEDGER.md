@@ -1,3 +1,9 @@
+## November 3 — independent Claude audit: alert publisher preflight
+
+Owner: `scripts/sync_safety_alerts.py::sync/_dispatch_release`; evidence: publisher call order and fail-first `test_missing_dispatch_config_stops_before_any_remote_operation` (missing URL and secret). Will NOT create another publisher, credential store, clinical rule or public status. Infrastructure correction: validate existing local dispatch configuration before any remote operation; retain dry-run without credentials and existing post-promotion delivery retry semantics.
+
+Two regression cases failed before the production fix; publisher/sync/contract slice passed 126 tests afterwards. Independent source/test review found no blockers; `git diff --check` passes. No local corpus required for this infrastructure-only change. Hosted exact-candidate CI remains pending; no merge, alert publication, deployment or delivery proof. Claude's dose/readiness/label-warning lanes remain owned there; this fix does not resolve feed approval or signing.
+
 ## October 30 — exact-source held publication candidate (Codex)
 
 **Class:** behavioral Score/config and test-contract correction. **Owner Check:** `scoring_v4/scored_artifact.py::_held_assessment_label` and `scoring_v4/config/quality_score.json::suppression.held_assessment_labels` own exact-source score unavailability; `assessment_readiness.py::evaluate_release_assessment` keeps the scientific blockers; `audit_source_of_truth_contract.py::audit_scoring` and `build_final_db.py::validate_export_contract` own release/export containment. The source matrix, glossary and call sites were checked. Will NOT create a new scorer, registry, public status, Dose benchmark, Evidence approval or global partial-score exception.
