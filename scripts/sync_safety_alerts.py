@@ -96,6 +96,10 @@ def sync(dist_dir: Path, *, dry_run: bool = False) -> Dict[str, Any]:
     if dry_run:
         return {"status": "dry_run", **staged}
 
+    # Missing local configuration must fail before upload or promotion. Dispatch
+    # can still fail remotely after promotion, but that is a retryable delivery
+    # failure, not permission to publish without a configured dispatcher.
+    _dispatch_configuration()
     client = get_supabase_client()
     # Before anything can name it: a build must never be told to fetch a missing file.
     if "extended_feed_path" in staged:
@@ -154,9 +158,8 @@ def sync(dist_dir: Path, *, dry_run: bool = False) -> Dict[str, Any]:
     return {"status": "published", "release_id": release_id, **staged}
 
 
-def _dispatch_release(release_id: str) -> None:
-    """Invoke the server-only dispatcher after atomic release promotion."""
-    import requests
+def _dispatch_configuration() -> tuple[str, str]:
+    """Validate local dispatch prerequisites without contacting the server."""
     import env_loader  # noqa: F401
 
     url = os.environ.get("SUPABASE_URL", "").rstrip("/")
@@ -165,6 +168,14 @@ def _dispatch_release(release_id: str) -> None:
         raise RuntimeError(
             "SUPABASE_URL and SAFETY_ALERT_DISPATCH_SECRET are required to dispatch safety alerts"
         )
+    return url, secret
+
+
+def _dispatch_release(release_id: str) -> None:
+    """Invoke the server-only dispatcher after atomic release promotion."""
+    import requests
+
+    url, secret = _dispatch_configuration()
     response = requests.post(
         f"{url}/functions/v1/dispatch-safety-alert-release",
         headers={"x-safety-alert-dispatch-secret": secret},
