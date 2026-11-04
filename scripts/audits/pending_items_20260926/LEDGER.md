@@ -4417,3 +4417,31 @@ Six were real gaps and are fixed: two Oyster Whole Extract labels (330192, 33021
 ## November 3 — first Evidence review batch
 
 **Class:** behavioral curated data plus a resolver path for a documented review; no score moves. **Owner:** `literature_evidence_records.json`, `evidence_resolver.py::resolve_evidence_for_row`, `clinical_applicability.py::_assess_legacy_signed_scope`. Applies Sean's November 3 decisions: a documented, source-qualified agent review may close an ordinary assessment with no clinician signature, and never names an agent as a clinician. Turmeric, ginkgo and collagen carry `documented_review_scope`, which Dose does not read; methionine closes as a reviewed null; fiber stays withheld, and 59635, 241707 and 276704 stay held. Replay of 2,063 frozen labels: 199 partial to complete, plus 1 user submission read from stored enrichment, 0 held to scored, 0 score, tier, Dose, Evidence-point or safety moves, 0 of 150 controls changed. Report and per-product lists: `scripts/audits/evidence_review_batch1_20261102/`.
+
+## November 3 — independent Claude audit follow-through
+
+Owner: existing alert publisher, normalizer correction, completion/export and Flutter safety/storage owners. Evidence: source review, fail-first probes and focused tests. Will NOT create another scoring/clinical owner or public contract.
+
+Publisher preflight repair: PR #345 at `d3432e949`, 126 focused tests pass; CI pending, no merge. Dose range identity/unit guard and #344 stale-test repairs are now integrated by their owner at `c4fda94d1`; the nine configured range rows remain unchanged. New candidate CI is pending; active replay untouched by this audit. Independently verified #194 merged and 62 Home/Stack tests pass; completion slice 116 passes; cipher slice 31 passes. No new confirmed privacy defect. Final replay, paired consumer/device acceptance, approved label warnings and publication gates remain open. No clinical sign-off or live delivery proof.
+
+Durable findings, patch links, exact limits and next order: `/Users/seancheick/pg_quality/codex_takeover_20261103/AUDIT_FOLLOWUP_20261103.md`. Required product-wide Evidence repair below is unchanged; neither wording-only changes nor a CoQ10-only fix close it. This register update is documentation-only.
+
+<a id="evidence-correctness-20261103"></a>
+## November 3 — product-wide Evidence correctness queued after Claude
+
+**Goal / authorization:** Sean explicitly required the Evidence fix across all products, and explicitly requested it in the main project plan so Claude picks it up after the active batch. Missing research, unfinished processing and incorrect matching must never be presented as scientific zero. **Status: planned; not implemented, measured, integrated or release-validated.** Complete before numerical calibration; reconcile Claude's delivered work first and do not compete with active lanes.
+
+Owner: existing `clinical_applicability`, `evidence_resolver`, Evidence adapters, `assessment_readiness`, `scored_artifact`, export and Flutter/API consumers. Evidence: saved231852 reports no credited entries, rejects `INGR_COQ10` for `label_purpose_evidence_mismatch`, and leaves `INGR_UBIQUINOL` unresolved for `clinical_source_contexts_missing`; source symbols and current plan/register inspected. Will NOT create a second scorer, registry, public field/status, unsupported Evidence bonus or product-specific patch.
+
+Next unchecked deliveries: (1) source-qualified shared matching/processing repair; (2) full-catalog, all-module census of potentially lost positive credit with valid exclusions and completed-zero controls; (3) consistent Evidence/total/tier/readiness explanations across actual export, app and API consumers. Preserve earned primary credit when adjuncts earn zero; separate ingredient versus formula claims, Evidence versus Dose, and quality versus safety. An empty lookup is not a completed research review. Completed no-qualifying-positive/null/non-applicable determinations remain complete; unresolved required research remains unresolved without masquerading as a scientific zero. No fixed CoQ10 replacement score is approved.
+
+Acceptance and validation: [master-plan checklist](../../../docs/plans/PHARMAGUIDE_MASTER_COMPLETION_PLAN.md#november-3--required-product-wide-evidence-correctness-after-claudes-current-batch), with detailed packet at `/Users/seancheick/pg_quality/rubric_calibration_20261103/PREPARATION_BRIEF.md`. Require source-qualified receipts, fail-first owner/consumer regressions, frozen affected/control comparisons, exact-candidate CI and applicable local checks, plus actual consumer parity. A single-label fix or presentation-only change is insufficient. Coordinate necessary regeneration from actual fingerprints after the bounded batch; no competing run.
+
+This update is **documentation/process only**. Existing baseline evidence and all production code/data remain unchanged. Full documentation diff/reference review and `git diff --check` are the applicable local checks; no pytest/corpus run or CI result is claimed. This plan records requirements, not a runtime merge or publication receipt.
+
+
+## November 3 — label-warning approval and male conception coverage
+
+Sean explicitly includes label warnings for men trying to conceive using the existing condition. A/B `avoid`, C `caution`, `ungraded` provenance and "Label warning" title are approved; no repeat approval needed. Owner: existing label extraction/export and Flutter profile warning pathway, with `ttc` in reference taxonomy and `ProfileState.conditionsForEvaluator`; evidence: source search and Sean's instruction. Will NOT create a condition, severity or separate warning engine. A4 must revisit the excluded men's statements, retain exact audience distinctions, prove matched caution prevents all-clear, and test actual profiles plus Stack/AI/PDF. No male warning is declared implemented by this documentation entry. See the master-plan acceptance checklist.
+
+Confirmed audience limitation: the existing Dart profile gate has no sex input, so TTC alone cannot distinguish male- versus female-specific sentences. Extend the canonical gate and its cross-language contract, not the condition taxonomy; acceptance must include sex-specific and unknown-sex cases.

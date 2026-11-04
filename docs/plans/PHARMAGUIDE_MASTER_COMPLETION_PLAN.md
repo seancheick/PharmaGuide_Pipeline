@@ -1,5 +1,45 @@
 # PharmaGuide master completion plan
 
+### November 3 — approved label-warning scope, including men trying to conceive
+
+Sean confirmed groups A/B/C: firm prohibitions and not-intended/not-recommended warnings use existing `avoid`; clinician-conditional prohibitions use existing `caution`; evidence is `ungraded`. Title: "Label warning". Preserve the label sentence verbatim. Ordinary consult-your-doctor boilerplate remains excluded. These are label-sourced warnings, not newly graded clinical evidence.
+
+**Sean's additional instruction:** do not discard a warning because it concerns men trying to conceive. Match explicit male conception warnings to the existing Trying to conceive condition and the label's actual audience. Pregnancy-only, nursing-only and female-specific conception statements must not automatically become warnings for men. Generic conception wording and sex-specific wording must remain distinguishable; do not invent a new condition or infer a fertility hazard from a product name.
+
+Owner: existing label-warning extraction/export owner and Flutter profile/condition warning pathway; `ProfileState.conditionsForEvaluator` and selectable `ttc` taxonomy already exist. Evidence: `rg 'ttc|trying_to_conceive'` in the app profile providers/reference taxonomy and Sean's November 3 instruction. Will NOT create another warning surface, scorer, condition or clinical registry.
+
+**Confirmed implementation gap:** the current Dart `UserProfile`/`ProfileGateEvaluator` and `InteractionWarning.matchesProfile` do not accept sex. Mapping male-specific or female-specific sentences to sex-neutral TTC alone would broaden their audience. Extend `scripts/profile_gate_evaluator.py` and Flutter `lib/services/warnings/profile_gate_evaluator.dart` consistently across Python, export and Dart using the existing profile sex value; qualify exact audience and unknown-sex behavior before shipping. No new phone condition is needed. This contract work remains unimplemented; A4 must not silently treat TTC alone as sufficient.
+
+- [ ] A4: re-review the previously excluded men's statements and other explicit conception statements against exact label text; report inclusion/exclusion reasons. Counts from the earlier pregnancy-only pass are not acceptance of male scope.
+- [ ] Prove male TTC plus matching male warning displays verbatim; male without TTC and nonmatching audience controls do not receive it. Retain separate pregnancy, nursing and conception controls through actual profile providers, not only injected page fixtures.
+- [ ] Prove matched `caution` plus `ungraded` remains actionable and prevents an all-clear. Do not reinterpret ungraded label provenance as no evidence, silently drop it, or escalate to `avoid` to work around a consumer defect.
+- [ ] Verify product page/scan, Stack, AI brief and clinician PDF share the same matching result; profile changes remove stale warnings. Keep global scores, tiers and product safety statuses unchanged; matched personal warnings must still affect the user's review state.
+- [ ] Integrate with the corrected dose owner after #344, qualify the combined candidate and retain the no-catalog-publication gap until warnings and compatible app readers are ready. Quick Check without a label remains outside this source pathway.
+
+### November 3 — independent Claude audit follow-through
+
+Owner: `scripts/sync_safety_alerts.py::sync`, `EnhancedDSLDNormalizer._apply_label_corrections`, existing completion/export/Flutter readers. Evidence: fail-first probes, focused tests, fetched PR/check state and the audit packet. Will NOT create another scorer, registry, clinical rule or public status.
+
+- [ ] Integrate and qualify alert publisher credential preflight (PR #345, `d3432e949`; 126 focused checks pass; full CI pending, not merged).
+- [ ] Qualify #344 at `c4fda94d1`: the ingredient/unit guard for reviewed vitamin E ranges and strengthened tests repairing two stale CI reason pins are now integrated on the branch; exact-candidate CI remains pending. Patches and proof: `/Users/seancheick/pg_quality/codex_takeover_20261103/dose_range_review/` and `batch10_ci_review/`. The nine configured range rows are unchanged against the previous source; final candidate gates remain required.
+- [ ] Finish combined dose/identity replay and reader crossing proof, paired #338/#177 completion, approved A/B/C pregnancy/nursing/conception label-warning delivery and encrypted-app acceptance before final catalog/phone qualification. #194 is merged; independently rerun Home/Stack checks pass (62). Do not mistake this for device proof.
+
+Detailed dated audit: `/Users/seancheick/pg_quality/codex_takeover_20261103/AUDIT_FOLLOWUP_20261103.md`. The Evidence phase below remains mandatory before numerical calibration. Preserve active lane ownership; publication remains separate.
+
+### November 3 — required product-wide Evidence correctness, after Claude's current batch
+
+**Sean's explicit instruction:** missing research, unfinished processing or incorrect matching must never look like a scientific conclusion that a product has no evidence. This applies to every product and all seven scoring modules. Start after Claude finishes the active correctness batch; reconcile what that batch already fixes, then complete the remaining work **before numerical calibration**. This requirement is accepted, not another policy question to reopen.
+
+Owner: `scripts/clinical_applicability.py`, `scripts/evidence_resolver.py`, existing Evidence module adapters, `scripts/assessment_readiness.py::evaluate_release_assessment`, `scripts/scoring_v4/scored_artifact.py::_quality_assessment_status`, export and Flutter/API consumers. Evidence: direct saved CoQ10 Enrich/Score trace, owner symbol searches, and Sean's November 3 instruction. Will NOT create another scorer, evidence registry, public field/status, neutral Evidence bonus or label-specific patch.
+
+- [ ] **Shared qualification repair:** reproduce CoQ10 231852's purpose-matching rejection and missing ubiquinol study contexts; qualify exact sources/form/purpose and repair demonstrated defects for all affected products through their existing owners. No automatic restoration to 15.6 or target total of 77.8/79.
+- [ ] **Catalog-wide lost-credit audit:** cover all scored, partial and withheld products across every module. Trace retained research through applicability, aggregation and export; classify valid exclusions, completed zero-credit assessments, unresolved work and defects. Inspect both existing literature and scoring paths, preserving provenance. Correct finite reproduced causes and measure affected labels plus unaffected controls.
+- [ ] **Publication and consumer contract:** unresolved required research must not become a completed Evidence zero or a misleading completed total/tier. Preserve primary earned credit when an adjunct earns none. Completed low/no-evidence reviews remain complete; a legitimate zero means no qualifying positive credit, not no studies. Keep ingredient/formula claims, Dose adequacy and personal safety separate. Verify hero, breakdown, Home/list/search/comparison and relevant API consumers against the same decision.
+- [ ] **Acceptance:** fail-first owner/consumer cases for eligible primary research, zero-credit adjuncts, unchanged scientific purpose under wording changes, completed zero versus unresolved processing, retained safety warnings, deterministic replay and all-module/export/app parity. Reuse completed source reviews; do not invent credit, bypass clinical holds or reopen every reviewed-zero ingredient. Qualified clinical questions remain with the existing reviewer.
+- [ ] **Validation and handoff:** frozen affected/control measurements, exact-candidate CI and applicable local checks, source receipts and actual consumer proof. Inspect fingerprints and coordinate any necessary regeneration once through the integrator. A CoQ10-only fix, wording change or presentation-only PR cannot close this phase.
+
+The [existing execution register](../../scripts/audits/pending_items_20260926/LEDGER.md#evidence-correctness-20261103) owns progress. Detailed preparation and acceptance packet: `/Users/seancheick/pg_quality/rubric_calibration_20261103/PREPARATION_BRIEF.md` and `LESSONS_REGISTER.md`. The requirements above are self-contained so the private packet is not required to discover this work. Recorded only; implementation, measurement and release acceptance remain pending. Do not interrupt or take over Claude's active lanes.
+
 ### November 2 — release-loop recovery
 
 Owner: `build_final_db.py::_omit_unresolved_export_amounts`, `audit_raw_to_final.py::_check_line_integrity`, `release_safety/catalog_diff.py::diff_catalogs`, `audits/run_verification_gate.py::run_gate`, `promote_release_artifacts.py::catalog_build_is_current`, `audit_source_of_truth_contract.py::audit_scoring`. Evidence: reproduced27findings on27808/28993, retained four-product blob hashes, failure/retry harnesses and the existing LEDGER. Will NOT create another quantity classifier, scorer, approvals registry, release engine or freshness system.
