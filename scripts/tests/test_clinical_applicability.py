@@ -2578,3 +2578,20 @@ def test_ingredient_evidence_is_invariant_to_manufacturer_benefit_claims():
         assert decision["claim_alignment"]["state"] == expected_claim_state
         assert decision["population_applicability"]["context_ids"] == [
             "creatine_monohydrate_resistance_training_body_composition_39074168"]
+
+
+def test_supported_sleep_and_excluded_shift_work_claims_are_both_retained():
+    row = _row("melatonin", "Melatonin", quantity=3)
+    product = {
+        "product_name": "Melatonin", "physicalState": {"name": "Capsule"},
+        "activeIngredients": [row], "ingredient_quality_data": {"ingredients_scorable": [row]},
+        "statements": [{"type": "Formulation re: Other",
+                        "notes": "Supports sleep. Helps with shift work."}],
+    }
+    result = assess_clinical_applicability(
+        product, {"id": "INGR_MELATONIN", "matched_source_row_refs": ["ingredientRows[0]"]},
+        assess_amount=False, require_claim_alignment=False,
+    )
+    assert result["status"] == "applicable"
+    assert result["claim_alignment"]["state"] == "mixed"
+    assert result["claim_alignment"]["excluded_terms"] == ["shift work"]

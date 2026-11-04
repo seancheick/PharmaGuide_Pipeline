@@ -338,13 +338,16 @@ def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
 
 
 def test_benefit_copy_does_not_change_evidence_in_any_scoring_module():
+    from evidence_resolver import evidence_required_canonicals
     from scoring_v4.router import VALID_CLASSES
 
     validation = _validation_module()
     modules = set()
     for case in validation.load_fixture_suite().cases:
         baseline = validation.build_scored_artifact(deepcopy(case.product))
-        modules.add(baseline["_v4_module"])
+        module = baseline["_v4_module"]
+        modules.add(module)
+        required = evidence_required_canonicals(case.product, module=module)
         evidence = baseline["quality_pillars_v4"]["evidence"]
         for copy in ("Supports cognitive performance.", "Helps maintain hydration within the cells."):
             product = deepcopy(case.product)
@@ -353,6 +356,9 @@ def test_benefit_copy_does_not_change_evidence_in_any_scoring_module():
             })
             scored = validation.build_scored_artifact(product)
             actual = scored["quality_pillars_v4"]["evidence"]
+            assert scored["_v4_module"] == module, case.archetype
+            assert scored["quality_assessment_status"] == baseline["quality_assessment_status"], case.archetype
+            assert evidence_required_canonicals(product, module=module) == required, case.archetype
             assert actual["score"] == evidence["score"], case.archetype
             assert actual["evidence_result_state"] == evidence["evidence_result_state"], case.archetype
     assert modules == set(VALID_CLASSES)

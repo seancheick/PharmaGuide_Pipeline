@@ -417,14 +417,15 @@ _PRECAUTION_CLAUSE = re.compile(
     r"\b(?:consult|ask (?:your|a)|talk (?:to|with)|if you (?:are|have)|warning|caution|keep out of reach)\b", re.I)
 
 
-def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
+def _matched_excluded_claim_terms(product: Mapping, terms: list[str]) -> list[str]:
     """Match only affirmative label claims, never warnings, precautions or metadata."""
     excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
     titles = {str(product.get(field) or "") for field in ("product_name", "fullName")} - {""}
     clauses = [(text in titles, clause) for text in native_product_positioning_texts(product)
                if text and text not in excluded
                for clause in re.split(r"[.;!?\r\n]+", text) if not _PRECAUTION_CLAUSE.search(clause)]
-    for term in policy.get("excluded_claim_terms", []):
+    matched = []
+    for term in terms:
         words = _key(term).split()
         exact = r"[\s_-]+".join(re.escape(word) for word in words)
         claimed = (rf"(?:{_CLAIM_VERB}\b.*?(?<!\w){exact}|{exact}[\s_-]+{_CLAIM_NOUN})"
@@ -432,8 +433,12 @@ def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
         patterns = {True: re.compile(r"(?<!\w)" + exact + r"(?!\w)", re.I),
                     False: re.compile(r"(?<!\w)" + claimed + r"(?!\w)", re.I)}
         if any(find_affirmative_label_match(patterns[title], clause) for title, clause in clauses):
-            return True
-    return False
+            matched.append(term)
+    return matched
+
+
+def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
+    return bool(_matched_excluded_claim_terms(product, policy.get("excluded_claim_terms", [])))
 
 
 def _claim_excluded_when_alone(product: Mapping, policy: Mapping) -> bool:
@@ -1116,8 +1121,8 @@ def assess_clinical_applicability(
         return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
     if policy.get("scope") != "ingredient":
         return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
-    claim_excluded = _excluded_claim_matches(product, policy) or _claim_excluded_when_alone(product, policy)
-    if require_claim_alignment and claim_excluded:
+    excluded_terms = _matched_excluded_claim_terms(product, policy.get("excluded_claim_terms", []))
+    if require_claim_alignment and (excluded_terms or _claim_excluded_when_alone(product, policy)):
         return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
     # Review scope and population qualify the research. Advertising is
     # evaluated separately, including exclusions on claim substantiation.
@@ -1139,8 +1144,12 @@ def assess_clinical_applicability(
     if not reference.get("study_contexts") and not scope:
         scope = _assess_legacy_signed_scope(product, entry, reference, policy,
                                             require_claim_alignment=require_claim_alignment)
-    if claim_excluded and "claim_alignment" in scope:
-        scope["claim_alignment"] = {**scope["claim_alignment"], "state": "unrelated"}
+    if not require_claim_alignment and "claim_alignment" in scope:
+        excluded_terms += _matched_excluded_claim_terms(product, policy.get("excluded_claim_terms_when_alone", []))
+        if excluded_terms:
+            alignment = scope["claim_alignment"]
+            alignment["state"] = "mixed" if alignment["state"] in {"aligned", "mixed"} else "unrelated"
+            alignment["excluded_terms"] = list(dict.fromkeys(excluded_terms))
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
         physical = physical.get("name")

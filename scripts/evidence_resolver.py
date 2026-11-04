@@ -1672,7 +1672,7 @@ def evidence_required_canonicals(
     """The owners whose open review can hold a product's Evidence conclusion.
 
     Credit still belongs to every owner.  Completion asks only about an owner the
-    label is about, read on materiality alone: named in the title or a claim, or
+    label is about, read on materiality alone: named in the title or
     heavy against the rest of the label.  A route's list of recognized actives
     does not make a minor row the subject.  A member of a named or heavy blend
     still counts: it inherits the blend's tier, so its review can move the
@@ -1684,7 +1684,7 @@ def evidence_required_canonicals(
     prod_dict = product if isinstance(product, dict) else dict(product or {})
     owners = evidence_owner_canonicals(prod_dict, module=module)
     rows, _, others, _ = _evidence_subject_roles(prod_dict, module)
-    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others, materiality_only=True)
+    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others, materiality_only=True, evidence=True)
     material_blends = {
         str(row.get("raw_source_path") or "")
         for row, role in zip(others, roles[len(rows):])

@@ -239,7 +239,9 @@ def test_a_brand_claim_exclusion_is_separate_from_ingredient_credit(pipeline):
 
     enriched = _enrich(pipeline, "evidence_truth_17550_raw.json")
     match = next(m for m in enriched["evidence_data"]["clinical_matches"] if m["id"] == "BRAND_KANEKA_UBIQUINOL")
-    assert match["applicability_assessment"]["claim_alignment"]["state"] == "unrelated"
+    alignment = match["applicability_assessment"]["claim_alignment"]
+    assert alignment["state"] == "mixed"
+    assert "energy production" in alignment["excluded_terms"]
     assert build_scored_artifact(enriched)["quality_pillars_v4"]["evidence"]["score"] > 0
 
 
