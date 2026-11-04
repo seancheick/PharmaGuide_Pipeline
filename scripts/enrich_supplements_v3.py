@@ -21930,7 +21930,7 @@ class SupplementEnricherV3:
         # does not already warn about: a (rule, target) fired at the same or higher
         # severity by another row is not repeated.
         repeat_checked_rows: set = set()
-        fired_targets: Dict[Tuple[Any, str, str], float] = {}
+        fired_targets: Dict[Tuple[Any, str, str, bool], float] = {}
         for row in skipped:
             if isinstance(row, dict):
                 all_ingredient_rows.append(("ingredients_skipped", row))
@@ -22372,20 +22372,29 @@ class SupplementEnricherV3:
                     })
 
                 rule_key = rule.get("id")
+                beta_carotene_rule = dose_row.get("beta_carotene_mass_required", False)
+
+                def _fired_key(kind: str, target: str, hit: Dict) -> Tuple[Any, str, str, bool]:
+                    # A below-threshold row and an unread row can share a severity.
+                    # Only the unread row tells the consumer the check is incomplete.
+                    decision = hit.get("dose_decision") or {}
+                    unread = beta_carotene_rule and decision.get("evaluation_status") == "form_unknown"
+                    return rule_key, kind, target, unread
+
                 if id(ingredient) in repeat_checked_rows:
-                    def _new(kind: str, target: str, severity: Any) -> bool:
-                        weight = severity_weights.get(str(severity or ""), 0.0)
-                        return fired_targets.get((rule_key, kind, target), -1.0) < weight
+                    def _new(kind: str, target: str, hit: Dict) -> bool:
+                        weight = severity_weights.get(str(hit.get("severity") or ""), 0.0)
+                        return fired_targets.get(_fired_key(kind, target, hit), -1.0) < weight
 
                     condition_hits = [
                         h for h in condition_hits
-                        if _new("condition", h["condition_id"], h.get("severity"))
+                        if _new("condition", h["condition_id"], h)
                     ]
                     drug_hits = [
                         h for h in drug_hits
-                        if _new("drug_class", h["drug_class_id"], h.get("severity"))
+                        if _new("drug_class", h["drug_class_id"], h)
                     ]
-                    dose_hits = [h for h in dose_hits if _new("dose", "", h.get("severity"))]
+                    dose_hits = [h for h in dose_hits if _new("dose", "", h)]
                     if not condition_hits and not drug_hits and not dose_hits:
                         continue
                 elif not condition_hits and not drug_hits and not dose_hits and not pregnancy_block:
@@ -22396,7 +22405,7 @@ class SupplementEnricherV3:
                     ("dose", None, dose_hits),
                 ):
                     for hit in hits:
-                        fired_key = (rule_key, kind, hit[target_key] if target_key else "")
+                        fired_key = _fired_key(kind, hit[target_key] if target_key else "", hit)
                         fired_targets[fired_key] = max(
                             fired_targets.get(fired_key, -1.0),
                             severity_weights.get(str(hit.get("severity") or ""), 0.0),

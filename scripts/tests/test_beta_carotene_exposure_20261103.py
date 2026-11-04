@@ -382,3 +382,46 @@ def test_no_other_label_takes_this_path(enricher):
     status, decision = _one_decision(product)
     assert status == "amount_unknown"
     assert decision["dose_evaluation"] is None
+
+
+@pytest.mark.parametrize("nested", [False, True], ids=["top_level", "blend_child"])
+def test_known_beta_carotene_does_not_clear_an_independent_unread_row(enricher, nested):
+    raw = _label(5000)
+    source = json.loads((FIXTURES / "standardized_twin_201405_raw.json").read_text())
+    [parent] = [row for row in source["ingredientRows"] if row["name"] == "Carotenoid Mix"]
+    [unread] = [row for row in parent["nestedRows"] if row["name"] == "Beta-Carotene"]
+    known = {
+        **unread,
+        "order": 1,
+        "quantity": [{**unread["quantity"][0], "quantity": 10000, "unit": "mcg"}],
+    }
+    raw["ingredientRows"] = [known]
+    if nested:
+        parent["name"] = "Proprietary Blend"
+        parent["quantity"][0].update(quantity=0, unit="NP")
+        parent["nestedRows"] = [unread]
+        raw["ingredientRows"].append(parent)
+    else:
+        raw["ingredientRows"].append(unread)
+
+    product = _enrich(enricher, raw)
+    assert {decision["evaluation_status"] for decision in _decisions(product)} == {
+        "below_threshold", "form_unknown",
+    }
+    assert {
+        hit["dose_decision"]["evaluation_status"]
+        for alert in product["interaction_profile"]["ingredient_alerts"]
+        if alert.get("rule_id") == "RULE_IQM_BETA_CAROTENE_LUNG_CANCER"
+        for hit in alert["dose_hits"]
+    } == {"below_threshold", "form_unknown"}
+    blob = build_detail_blob(product, score_product_v4(product))
+    decisions = [
+        w["dose_decision"] for w in blob["warnings"]
+        if w.get("ingredient_canonical_id") == "beta_carotene"
+        and w.get("condition_ids") == ["current_smoker"]
+    ]
+    assert {decision["evaluation_status"] for decision in decisions} == {
+        "below_threshold", "form_unknown",
+    }
+    assert {decision["consumer_disposition"] for decision in decisions} == {"suppress"}
+    assert {decision["evaluated_daily_amount"] for decision in decisions} == {5000.0, None}
