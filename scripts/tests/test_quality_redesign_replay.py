@@ -300,3 +300,11 @@ def test_snapshot_resolves_paths_before_switching_to_checkout(tmp_path, monkeypa
     monkeypatch.setattr(replay.subprocess, 'run', run)
     replay.snapshot(checkout, 'frozen', 'manifest.json', 'snapshot.jsonl')
     assert replay.read_rows(tmp_path / 'snapshot.jsonl') == [{'id': '1'}]
+
+
+def test_freeze_raw_refuses_icloud_placeholders(tmp_path, monkeypatch):
+    root = raw_corpus(tmp_path, [('A', {'id': 1})])
+    monkeypatch.setattr(replay, 'is_icloud_placeholder', lambda path: True)
+    with pytest.raises(ValueError, match='iCloud placeholders'):
+        replay.freeze_raw(root, [1], tmp_path / 'frozen', tmp_path / 'manifest.json')
+    assert not (tmp_path / 'frozen').exists()

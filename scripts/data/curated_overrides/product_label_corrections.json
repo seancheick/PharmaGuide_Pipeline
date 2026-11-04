@@ -7,7 +7,7 @@
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions. Existing canonical PG_SUB_ product identities may use this same exact-product correction owner. Reviewed physicalState metadata binds its original object and permits only explicit name/langualCodeDescription strings; it does not rewrite an approval or infer a dosage form. Reviewed nutritionalInfo metadata binds the whole original typed object and may add printed Nutrition Facts entries of amount/unit with an optional printed qualifier operator (<, <=, >, >=, ~); a metadata-only repair keeps the source serving rows unchanged.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-11-03",
-    "total_entries": 254,
+    "total_entries": 256,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -12372,6 +12372,64 @@
       "review_date": "2026-11-03",
       "scope": "dsld_id_only",
       "provenance_tag": "official_label_form_correction"
+    },
+    "184325": {
+      "brand": "Pure Encapsulations",
+      "product_name": "Beta Carotene (with Mixed Carotenoids)",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/184325",
+        "https://www.pureencapsulationspro.com/media/pdf_upload/PURE_PIS_BetaCarotene_final.pdf"
+      ],
+      "reviewer": "Sean's ruling, 2026-11-04; Claude read the DSLD label and the manufacturer sheet; no clinical sign-off asserted",
+      "review_date": "2026-11-04",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_quantity_value": 7500,
+      "raw_quantity_unit": "mcg",
+      "correction_fields": [
+        "manufacturer_composition"
+      ],
+      "evidence": "The panel prints Vitamin A 7,500 mcg with mixed carotenoids and no fraction. The manufacturer sheet (April 2021) states the typical capsule at 14,280 mcg beta-carotene plus 720 mcg of four other carotenoids. The five total 15,000 mcg, which at the 0.5 supplemental factor is the panel figure. The vitamin A row is unchanged. Only the lung-risk assessment reads this mass. \"Current formula\" rests on the sheet still being hosted by the manufacturer; its product page could not be read.",
+      "provenance_tag": "manufacturer_typical_composition",
+      "manufacturer_composition": {
+        "beta_carotene_mcg_per_serving": 14280,
+        "basis": "typical",
+        "source_url": "https://www.pureencapsulationspro.com/media/pdf_upload/PURE_PIS_BetaCarotene_final.pdf",
+        "source_date": "2021-04",
+        "raw_product_version_code": "code: BE1 v8",
+        "raw_source_sha256": "5e358e3bc9c22d32fbbde7941f38e4d46ac0ca10899156db9678addca69a90c0"
+      }
+    },
+    "184326": {
+      "brand": "Pure Encapsulations",
+      "product_name": "Beta Carotene (with Mixed Carotenoids)",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/184326",
+        "https://www.pureencapsulationspro.com/media/pdf_upload/PURE_PIS_BetaCarotene_final.pdf"
+      ],
+      "reviewer": "Sean's ruling, 2026-11-04; Claude read the DSLD label and the manufacturer sheet; no clinical sign-off asserted",
+      "review_date": "2026-11-04",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Vitamin A",
+      "corrected_ingredient_text": "Vitamin A",
+      "raw_source_path": "ingredientRows[0]",
+      "raw_quantity_value": 7500,
+      "raw_quantity_unit": "mcg",
+      "correction_fields": [
+        "manufacturer_composition"
+      ],
+      "evidence": "The panel prints Vitamin A 7,500 mcg with mixed carotenoids and no fraction. The manufacturer sheet (April 2021) states the typical capsule at 14,280 mcg beta-carotene plus 720 mcg of four other carotenoids. The five total 15,000 mcg, which at the 0.5 supplemental factor is the panel figure. The vitamin A row is unchanged. Only the lung-risk assessment reads this mass. \"Current formula\" rests on the sheet still being hosted by the manufacturer; its product page could not be read.",
+      "provenance_tag": "manufacturer_typical_composition",
+      "manufacturer_composition": {
+        "beta_carotene_mcg_per_serving": 14280,
+        "basis": "typical",
+        "source_url": "https://www.pureencapsulationspro.com/media/pdf_upload/PURE_PIS_BetaCarotene_final.pdf",
+        "source_date": "2021-04",
+        "raw_product_version_code": "code: BE9 v6",
+        "raw_source_sha256": "5fb0a7d4673b1b596e3e121b12ed07a8851f2a5dd2409876a777003a286c4a19"
+      }
     },
     "218076": {
       "brand": "Solgar",
