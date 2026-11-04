@@ -1,3 +1,15 @@
+## November 3 — signed feed concurrency and app integration follow-up
+
+Owner: `scripts/sync_safety_alerts.py::sync` and `release_manifest.py` for publication/signing; Flutter `SafetyAlertRepository` for verified delivery and `retryProfileLoad` for profile recovery. Evidence: paired PR347/app198 review and fail-first regressions. Will NOT create a second publisher, safety evaluator or key store.
+
+- [x] Reconcile app197 with app199: Product Detail Retry now retries the canonical failed profile load; saved-pregnancy-profile regression and all94 connected tests pass, analysis clean. App199 retains independently known interactions/recalls during profile failure. Integration/combined CI is still pending.
+- [x] Reproduce and fix overlapping signed-feed downloads overwriting newer warning/cache data; app198 adds monotonic serialized cache commit. Source qualification only; final combined consumer checks pending.
+- [x] Reproduce and serialize overlapping local publishes through dispatch. Pipeline347 uses a same-user cross-worktree lock; this is not a distributed database lock and does not authorize multiple publishing hosts.
+- [ ] Integrate exact qualified app/pipeline candidates after hosted CI, pin Sean-held public signing keys, sign the reviewed feed, verify dispatch configuration, publish and fetch through the real consumer. Live `safety_alert_releases` was empty during this review. Wording/retry fixes alone do not make a feed available.
+- [ ] Retain the approved final-catalog matching check and actual signed-build/device acceptance. No feed, catalog or app release is claimed by the source fixes. Local signing setup is prepared under `~/pg_quality/alert_candidate_20261103/`; passwords/private keys must never be sent in chat.
+
+Validation class: behavioral app/publisher infrastructure. Fail-first receipts `FEED_CONCURRENT_RED.log`, `ALERT_PUBLISH_LOCK_RED.log`, `PR197_PROFILE_RED.log`; focused green79 signing repository,43 publisher,94 product-detail tests; scoped/full app analysis clean. Final combined candidate checks and exact-head CI remain pending. No corpus run is required for publisher infrastructure; no clinical data or catalog verdict changed.
+
 ## November 3 — independent Claude audit: alert publisher preflight
 
 Owner: `scripts/sync_safety_alerts.py::sync/_dispatch_release`; evidence: publisher call order and fail-first `test_missing_dispatch_config_stops_before_any_remote_operation` (missing URL and secret). Will NOT create another publisher, credential store, clinical rule or public status. Infrastructure correction: validate existing local dispatch configuration before any remote operation; retain dry-run without credentials and existing post-promotion delivery retry semantics.
