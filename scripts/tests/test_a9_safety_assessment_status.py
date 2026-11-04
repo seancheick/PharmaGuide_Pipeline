@@ -48,6 +48,7 @@ def test_the_dose_owner_omits_a_state_it_did_not_count():
     "contributing_evidence_receipts_missing",
     "contributing_source_review_incomplete:some_record",
     "clinical_applicability_unreviewed:some_record",
+    "hidden_amount_quality_open",
 ])
 def test_an_evidence_only_gap_leaves_the_safety_checks_complete(blocker):
     assert _status(release=_open(blocker)) == "complete"
@@ -74,6 +75,7 @@ def test_a_product_with_no_evidence_result_is_not_held_for_one():
     "dose_assessment_incomplete",
     "dose_benchmark_identity_unresolved",
     "dose_amount_unread",
+    "hidden_amount_safety_open",
     "verification_assessment_incomplete",
     "route_assessment_incomplete",
     "identity_migration_inference",

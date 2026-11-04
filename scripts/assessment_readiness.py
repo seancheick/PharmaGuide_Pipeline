@@ -20,6 +20,7 @@ from scoring_input_contract import (
     MATERIAL_ROLES,
     ROLE_ADJUNCT,
     ROLE_CLAIM_PROMINENT,
+    active_label_rows,
     build_scoring_classification,
     classify_ingredient_roles,
     get_scoring_ingredients,
@@ -1583,6 +1584,8 @@ def evaluate_release_assessment(
         from scoring_v4.scored_artifact import _held_assessment_label
         if "evidence_assessment_incomplete" in (_held_assessment_label(dict(product)).get("blockers") or []):
             blockers.append("evidence_assessment_incomplete")
+    if not intentional:
+        blockers.extend(_hidden_amount_blockers(product, module_breakdown))
     return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
             "unfinished_source_assessment": unfinished_source,
             "unread_printed_nutrient_amounts": unread_printed_nutrient_amounts(product)}
@@ -1602,8 +1605,8 @@ _EVIDENCE_RELEASE_BLOCKERS = frozenset({
 })
 #: The omega owner keeps Evidence open only for unresolved EPA/DHA material
 #: identity (omega_evidence._evidence_result_state), which is not a pending review.
-_BLOCKERS_THAT_LEAVE_SAFETY_FINISHED = _EVIDENCE_RELEASE_BLOCKERS - {
-    "omega_evidence_assessment_incomplete"}
+_BLOCKERS_THAT_LEAVE_SAFETY_FINISHED = (_EVIDENCE_RELEASE_BLOCKERS - {
+    "omega_evidence_assessment_incomplete"}) | {"hidden_amount_quality_open"}
 _KNOWN_SAFETY_OUTCOMES = frozenset({"blocked", "unsafe", "caution", "no_known_catalog_concern"})
 #: The upper-limit check skipped these rows without reading their amount.
 _UNREAD_NUTRIENT_AMOUNT_STATUSES = frozenset({
@@ -1678,6 +1681,88 @@ def _dose_rests_on_a_hidden_amount(module_breakdown: Any) -> bool:
     dose = _safe_dict(_safe_dict(_safe_dict(module_breakdown).get("dimensions")).get("dose"))
     return any(_safe_dict(entry).get("assessment") == "hidden_amount_neutral"
                for entry in _safe_list(_safe_dict(dose.get("metadata")).get("dose_contributions")))
+
+
+def _dose_reads_a_hidden_amount(module_breakdown: Any) -> bool:
+    """Dose gave a neutral or blend-total reading because the label hides an amount."""
+    from scoring_v4.quality_score import _undisclosed_component_dose_reason
+    dose = _safe_dict(_safe_dict(_safe_dict(module_breakdown).get("dimensions")).get("dose"))
+    return (_dose_rests_on_a_hidden_amount(module_breakdown)
+            or bool(_safe_dict(dose.get("metadata")).get("hidden_amount_purpose_ingredients"))
+            or _undisclosed_component_dose_reason(dose) is not None)
+
+
+def _hidden_amount_blockers(product: Mapping[str, Any], module_breakdown: Any) -> List[str]:
+    """A hidden amount holds a finished label only where it could change the answer.
+
+    Not disclosing is otherwise a known fact, and the label finishes. Each hold is
+    status alone: the neutral Dose reading stands either way.
+    """
+    if not _dose_reads_a_hidden_amount(module_breakdown):
+        return []
+    rows = active_label_rows(product.get("activeIngredients"))
+    hidden = [row for row in rows if not has_source_printed_amount(row) and not _positive(row.get("quantity"))]
+    blockers = []
+    if _safety_check_needs_a_hidden_amount(product, rows, hidden):
+        blockers.append("hidden_amount_safety_open")
+    if _blend_hides_a_split_between_ingredients(hidden):
+        blockers.append("hidden_amount_quality_open")
+    return blockers
+
+
+def _positive(value: Any) -> bool:
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0
+
+
+def _safety_check_needs_a_hidden_amount(product: Mapping[str, Any], rows: list, hidden: list) -> bool:
+    from evidence_resolver import rda_ul_reference_entry
+    printed = {row.get("canonical_id") for row in rows if has_source_printed_amount(row)}
+    if any(row.get("canonical_id") and row.get("canonical_id") not in printed
+           and _safe_dict(rda_ul_reference_entry(canonical_id=row["canonical_id"], name=row.get("name"))).get("highest_ul")
+           for row in hidden):
+        return True
+    by_path = {row.get("raw_source_path"): row for row in rows}
+    servings = _safe_dict(product.get("serving_basis")).get("max_servings_per_day")
+    for alert in _safe_list(_safe_dict(product.get("interaction_profile")).get("ingredient_alerts")):
+        canonical = _safe_dict(_safe_dict(alert).get("subject_ref")).get("canonical_id")
+        for hit in [*_safe_list(alert.get("condition_hits")), *_safe_list(alert.get("drug_class_hits"))]:
+            decision = _safe_dict(_safe_dict(hit).get("dose_threshold_evaluation"))
+            if decision.get("evaluation_status") != "amount_unknown":
+                continue
+            rule = _safe_dict(decision.get("decision_rule"))
+            if any(_blend_could_reach(by_path.get(row.get("parent_source_path")), rule, servings)
+                   for row in hidden if row.get("canonical_id") == canonical):
+                return True
+    return False
+
+
+#: Threshold units are mass of the ingredient or of a marker in it, which the blend
+#: bounds. "mg egcg" and "mcg rae" read by their first word; IU has no mass bound.
+_THRESHOLD_UNIT_MG = {"mg": 1.0, "g": 1000.0, "mcg": 0.001}
+
+
+def _blend_could_reach(blend: Any, rule: Mapping[str, Any], servings: Any) -> bool:
+    """Whether the whole blend could reach the threshold. Anything unbounded could."""
+    from scoring_input_contract import _role_mass_mg
+    total = _role_mass_mg(blend) if isinstance(blend, dict) else None
+    per_mg = _THRESHOLD_UNIT_MG.get(str(rule.get("threshold_unit") or "").strip().lower().split(" ")[0])
+    if total is None or per_mg is None or not _positive(rule.get("threshold")):
+        return True
+    if rule.get("basis") != "per_day":
+        return total >= rule["threshold"] * per_mg
+    return not _positive(servings) or total * servings >= rule["threshold"] * per_mg
+
+
+def _blend_hides_a_split_between_ingredients(hidden: list) -> bool:
+    """One blend hides how it divides between different ingredients.
+
+    A sole ingredient's amount is the blend total, and one with no blend has no split.
+    """
+    blends: Dict[str, set] = {}
+    for row in hidden:
+        if row.get("parent_source_path") and row.get("canonical_id") and has_scoring_identity(row):
+            blends.setdefault(row["parent_source_path"], set()).add(row["canonical_id"])
+    return any(len(ingredients) > 1 for ingredients in blends.values())
 
 
 def _evidence_presents_as_unreviewed(module_breakdown: Any) -> bool:
@@ -1781,7 +1866,8 @@ def _current_evidence_dimension_receipt(enriched: Mapping, module: str, evidence
 def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> bool:
     """Validate retained science against a current, lineage-verified source.
 
-    Completion remains false. Only the missing Evidence review may remain open;
+    Completion remains false. Only the missing Evidence review or a hidden label
+    amount may remain open;
     this consumes the existing applicability and numerical-path receipts, never
     assembles a product score or grants an implicit clinical approval.
     """
@@ -1797,7 +1883,8 @@ def _retained_evidence_is_publishable(scored: Mapping, enriched: Mapping) -> boo
     evidence = _safe_dict(_safe_dict(module.get("dimensions")).get("evidence"))
     meta = _safe_dict(evidence.get("metadata"))
     safety = _safe_dict(scored.get("_v4_safety_gate"))
-    allowed_blockers = {"evidence_assessment_incomplete", "probiotic_evidence_assessment_incomplete"}
+    allowed_blockers = {"evidence_assessment_incomplete", "probiotic_evidence_assessment_incomplete",
+                        "hidden_amount_safety_open", "hidden_amount_quality_open"}
     if module.get("module") == "omega":
         allowed_blockers.add("omega_evidence_assessment_incomplete")
     if module.get("module") == "probiotic":

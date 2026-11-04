@@ -7,6 +7,10 @@ materially dosed owner, a member of such a blend, or the ingredient the title na
 also holds while Dose rests on an amount the label hides. Other supporting rows don't
 hold, and this is never a reason to relabel them as reviewed (Sean, November 3, 2026).
 
+A hidden amount on a finished label holds it when a safety check needs that amount or
+when one blend hides the split between different ingredients. Not disclosing is
+otherwise a known fact, and the label finishes.
+
 Every label here is a real DSLD label, measured on the code before this rule
 (all read partial) and after it.
 """
@@ -38,7 +42,7 @@ HELD = [
     pytest.param("a9_completion_252753_raw.json", EVIDENCE, id="triphala_owner"),
     pytest.param("a9_completion_232321_raw.json", EVIDENCE, id="named_blend_member"),
     pytest.param("a9_completion_256990_raw.json", EVIDENCE, id="member_of_a_heavy_blend"),
-    pytest.param("a9_completion_312441_raw.json", EVIDENCE, id="sports_whole_product_blend"),
+    pytest.param("a9_completion_312441_raw.json", [*EVIDENCE, "hidden_amount_quality_open"], id="sports_whole_product_blend"),
     pytest.param("a9_evidence_identity_gap_307560_raw.json", EVIDENCE, id="evidence_identity_gap"),
     pytest.param("a9_omega_identity_gap_252496_raw.json", ["omega_evidence_assessment_incomplete"], id="omega"),
     pytest.param("probiotic_cfu_guarantee_12091_raw.json", ["probiotic_evidence_assessment_incomplete"], id="probiotic"),
@@ -143,6 +147,7 @@ def test_an_unread_ingredient_the_title_names_holds_the_product(pipeline, label,
     monkeypatch.setattr(assessment_readiness, "_title_names_an_open_row", lambda *_: False)
     # 178674 also hides its borage amount, which holds it on its own.
     monkeypatch.setattr(assessment_readiness, "_dose_rests_on_a_hidden_amount", lambda *_: False)
+    monkeypatch.setattr(assessment_readiness, "_hidden_amount_blockers", lambda *_: [])
     unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
     monkeypatch.setattr(assessment_readiness, "_title_names_an_open_row", original)
     assert unheld["quality_assessment_status"] == "complete"
@@ -295,6 +300,8 @@ def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, lab
     import assessment_readiness
     from scoring_v4.scored_artifact import build_scored_artifact
 
+    # This hold alone: the blend rules below can hold these labels as well.
+    monkeypatch.setattr(assessment_readiness, "_hidden_amount_blockers", lambda *_: [])
     enriched = _enrich(pipeline, label)
     held = build_scored_artifact(json.loads(json.dumps(enriched)))
     assert held["quality_assessment_status"] == "partial"
@@ -315,27 +322,105 @@ def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, lab
             == {key: pillar["score"] for key, pillar in unheld["quality_pillars_v4"].items()})
 
 
-def test_every_row_read_keeps_a_hidden_amount_complete(pipeline):
+SAFETY_OPEN, QUALITY_OPEN = "hidden_amount_safety_open", "hidden_amount_quality_open"
+
+
+def _release_blockers(scored):
+    return scored["assessment_readiness"]["release_assessment"]["blockers"]
+
+
+@pytest.mark.parametrize("label, subject", [
+    pytest.param("a9_hidden_amount_251530_raw.json", "garlic", id="threshold_reachable_inside_the_blend"),
+    pytest.param("a9_hidden_amount_71650_raw.json", "boron", id="upper_limit_with_no_amount_anywhere"),
+])
+def test_a_hidden_amount_a_safety_check_needs_holds_both_statuses(pipeline, label, subject):
+    from scoring_input_contract import active_label_rows, has_source_printed_amount
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    # Neutral Dose on a finished label is the accepted policy, and this doesn't reopen it.
-    scored = build_scored_artifact(_enrich(pipeline, "a9_hidden_amount_74586_raw.json"))
-    labels = {entry["assessment"] for entry in scored["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]["dose_contributions"]}
-    assert "hidden_amount_neutral" in labels
-    assert not _unreviewed_rows(scored)
-    assert scored["quality_assessment_status"] == "complete"
+    enriched = _enrich(pipeline, label)
+    assert any(row.get("canonical_id") == subject and not has_source_printed_amount(row)
+               for row in active_label_rows(enriched["activeIngredients"]))
+    scored = build_scored_artifact(enriched)
+    assert scored["quality_assessment_status"] == "partial"
+    assert scored["safety_assessment_status"] == "incomplete"
+    assert SAFETY_OPEN in _release_blockers(scored)
+    assert not any(blocker.startswith("evidence_") for blocker in _release_blockers(scored))
 
 
-def test_a_missing_amount_with_no_benchmark_cant_hold_the_product(pipeline):
+def test_a_threshold_the_blend_cant_reach_leaves_the_safety_checks_finished(pipeline):
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    # Lemon prints no amount inside its 1 g blend. It adds no Dose line, and the
-    # vinegar it sits beside has no benchmark an amount could be read against.
+    # Garlic's lowest threshold is 600 mg a day. The label's 1.06 g blend reaches it;
+    # the same blend at 100 mg can't, whatever the split and the directions allow.
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / "a9_hidden_amount_251530_raw.json").read_text())
+    blend = next(row for row in raw["ingredientRows"] if row.get("nestedRows"))
+    for quantity in blend["quantity"]:
+        quantity.update(quantity=0.1 if quantity["unit"].startswith("Gram") else 100)
+    scored = build_scored_artifact(enricher.enrich_product(normalizer.normalize_product(raw))[0])
+    assert SAFETY_OPEN not in _release_blockers(scored)
+
+
+def test_a_restated_nutrient_isnt_an_upper_limit_with_no_amount(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # Vitamin C prints 60 mg at the top and repeats inside the blend with none.
+    scored = build_scored_artifact(_enrich(pipeline, "a9_hidden_amount_20035_raw.json"))
+    assert SAFETY_OPEN not in _release_blockers(scored)
+    assert QUALITY_OPEN in _release_blockers(scored)
+    assert scored["quality_assessment_status"] == "partial"
+
+
+@pytest.mark.parametrize("label", ["a9_hidden_amount_243303_raw.json", "a9_hidden_amount_74586_raw.json"])
+def test_a_blend_hiding_its_split_holds_the_label_on_status_alone(pipeline, label, monkeypatch):
+    import assessment_readiness
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = _enrich(pipeline, label)
+    held = build_scored_artifact(json.loads(json.dumps(enriched)))
+    assert held["quality_assessment_status"] == "partial"
+    assert QUALITY_OPEN in _release_blockers(held)
+    # This is about quality, so it doesn't reopen the Evidence review.
+    assert not any(blocker.startswith("evidence_") for blocker in _release_blockers(held))
+
+    monkeypatch.setattr(assessment_readiness, "_hidden_amount_blockers", lambda *_: [])
+    unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
+    assert unheld["quality_assessment_status"] == "complete"
+    for field in ("quality_score_v4_100", "quality_tier", "quality_score_status", "product_safety_status", "verdict"):
+        assert held[field] == unheld[field]
+    assert ({key: pillar["score"] for key, pillar in held["quality_pillars_v4"].items()}
+            == {key: pillar["score"] for key, pillar in unheld["quality_pillars_v4"].items()})
+    assert (held["quality_pillars_v4"]["evidence"]["reason"] == unheld["quality_pillars_v4"]["evidence"]["reason"])
+
+
+def test_a_blend_hold_only_touches_the_quality_status(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
     scored = build_scored_artifact(_enrich(pipeline, "a9_hidden_amount_243303_raw.json"))
-    dose = scored["_v4_module_breakdown"]["dimensions"]["dose"]["metadata"]
-    assert "lemon" not in {entry["ingredient"] for entry in dose["dose_contributions"]}
-    assert {item["metadata"]["benchmark"] for item in dose["specialized_purpose_assessments"]} == {"absent"}
+    assert scored["safety_assessment_status"] == "complete"
+
+
+@pytest.mark.parametrize("label", [
+    # UC-II is the blend's only child, so the blend total is its amount.
+    pytest.param("a9_hidden_amount_239447_raw.json", id="only_child_of_a_blend"),
+    # No blend to split: not disclosing is itself the known fact.
+    pytest.param("a9_hidden_amount_284197_raw.json", id="no_parent_blend"),
+])
+def test_a_hidden_amount_with_no_split_to_resolve_finishes(pipeline, label):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    scored = build_scored_artifact(_enrich(pipeline, label))
     assert scored["quality_assessment_status"] == "complete"
+    assert _release_blockers(scored) == []
+
+
+def test_a_hidden_amount_hold_can_still_publish_its_retained_score(pipeline):
+    from assessment_readiness import _retained_evidence_is_publishable
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # The release audit fails any partial label this can't vouch for.
+    enriched = _enrich(pipeline, "a9_hidden_amount_243303_raw.json")
+    assert _retained_evidence_is_publishable(build_scored_artifact(json.loads(json.dumps(enriched))), enriched)
 
 
 @pytest.mark.parametrize("label, open_row", [
