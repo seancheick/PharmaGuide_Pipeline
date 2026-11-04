@@ -463,3 +463,15 @@ def test_a_recorded_applicability_finding_stays_on_an_unfinished_label(pipeline)
     assert scored["quality_assessment_status"] == "partial"
     assert evidence["display_state"] == "applicability_unestablished"
     assert evidence["reason"] == _EVIDENCE_ZERO_REASON["applicability_unestablished"]
+
+
+@pytest.mark.parametrize("label", ["178728", "231921"])
+def test_a_hidden_amount_hold_doesnt_lift_a_withheld_score(pipeline, label):
+    # A source-bound hold matches its exact blockers, so a new one must not release the score.
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    scored = build_scored_artifact(_enrich(pipeline, f"a9_hidden_amount_{label}_raw.json"))
+    assert "hidden_amount_quality_open" in _release_blockers(scored)
+    assert scored["quality_score_status"] == "not_scored"
+    assert scored["quality_score_v4_100"] is None
+    assert scored["score_unavailable_reason"] == "release_assessment_incomplete"
