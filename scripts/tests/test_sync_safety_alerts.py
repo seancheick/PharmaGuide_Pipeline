@@ -660,10 +660,14 @@ def test_the_runbook_names_the_real_commands_and_pins():
         assert needle in runbook, needle
 
 
-def test_the_real_trust_file_pins_nothing_yet():
+def test_the_real_trust_file_pins_only_the_custodian_alert_key():
     committed = Path(release_manifest.__file__).parent / "config" / "release_trust.json"
     trust = json.loads(committed.read_text(encoding="utf-8"))
-    assert trust["alert_feed_keys"] == {}
+    assert trust["alert_feed_keys"] == {
+        "alert-feed-2026-11": "86931cbd3b7ccff1fdd2564a582964d96fe1ce7417f9dd57fea4e5af6cad46fa",
+    }
+    assert trust["production_keys"] == {}
+    assert TEST_PUBLIC_HEX not in trust["alert_feed_keys"].values()
     assert TEST_PUBLIC_HEX not in trust["production_keys"].values()
 
 

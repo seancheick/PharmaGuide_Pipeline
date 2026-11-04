@@ -6,5 +6,7 @@
   ],
   "production_keys": {},
   "test_keys": {},
-  "alert_feed_keys": {}
+  "alert_feed_keys": {
+    "alert-feed-2026-11": "86931cbd3b7ccff1fdd2564a582964d96fe1ce7417f9dd57fea4e5af6cad46fa"
+  }
 }
