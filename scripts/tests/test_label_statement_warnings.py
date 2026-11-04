@@ -45,6 +45,7 @@ def _fires(warning, viewer):
 
 
 @pytest.mark.parametrize("sentence,severity,conditions", [
+    ("Not for use in men if attempting to conceive unless advised by a physician.", "caution", ["ttc"]),
     ("Warning: Do not use if you are pregnant.", "avoid", ["pregnancy"]),
     ("Do not use if pregnant or nursing.", "avoid", ["pregnancy", "lactation"]),
     ("Not to be taken by pregnant or lactating women.", "avoid", ["pregnancy", "lactation"]),
@@ -75,6 +76,7 @@ def test_firm_statement_carries_its_severity_and_audience(sentence, severity, co
     "Do not take more than 2 capsules if pregnant.",
     "Women of childbearing potential should consider an effective method of contraception during the use of this product.",
     "For use before, during and after pregnancy.",
+    "Suitable for use in men if attempting to conceive.",
     "Do not use if seal is broken. If pregnant, consult your doctor.",
     "Do not use if seal is broken, consult your doctor if pregnant.",
     "If pregnant, ask your doctor, and never share this bottle.",
