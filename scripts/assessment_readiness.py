@@ -1589,7 +1589,8 @@ def evaluate_release_assessment(
         blockers.extend(_hidden_amount_blockers(product, module_breakdown))
     return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
             "unfinished_source_assessment": unfinished_source,
-            "unread_printed_nutrient_amounts": unread_printed_nutrient_amounts(product)}
+            "unread_printed_nutrient_amounts": unread_printed_nutrient_amounts(product),
+            "upper_limit_amounts_unknown": upper_limit_amounts_unknown(product)}
 
 
 #: Every release blocker that belongs to the Evidence review. Any other blocker,
@@ -1702,8 +1703,7 @@ def _hidden_amount_blockers(product: Mapping[str, Any], module_breakdown: Any) -
     if not _dose_reads_a_hidden_amount(module_breakdown):
         return []
     rows = active_label_rows(product.get("activeIngredients"))
-    hidden = [row for row in rows
-              if not has_source_printed_amount(row, allow_zero=True) and not _positive(row.get("quantity"))]
+    hidden = _hidden_amount_rows(rows)
     blockers = []
     if _safety_check_needs_a_hidden_amount(product, rows, hidden):
         blockers.append("hidden_amount_safety_open")
@@ -1716,12 +1716,29 @@ def _positive(value: Any) -> bool:
     return isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0
 
 
-def _safety_check_needs_a_hidden_amount(product: Mapping[str, Any], rows: list, hidden: list) -> bool:
+def _hidden_upper_limit_rows(rows: list, hidden: list) -> list:
+    """Hidden rows of a nutrient with an upper limit that no other row on the label prints."""
     from evidence_resolver import rda_ul_reference_entry
     printed = {row.get("canonical_id") for row in rows if has_source_printed_amount(row)}
-    if any(row.get("canonical_id") and row.get("canonical_id") not in printed
-           and _safe_dict(rda_ul_reference_entry(canonical_id=row["canonical_id"], name=row.get("name"))).get("highest_ul")
-           for row in hidden):
+    return [row for row in hidden if row.get("canonical_id") and row.get("canonical_id") not in printed
+            and _safe_dict(rda_ul_reference_entry(canonical_id=row["canonical_id"], name=row.get("name"))).get("highest_ul")]
+
+
+def upper_limit_amounts_unknown(product: Mapping[str, Any]) -> int:
+    """Upper-limit checks the label's missing amount stops. An unknown amount is never
+    a zero, so no all-clear can stand (Sean, November 4). Status alone: quality, a
+    found caution and the safety outcome don't read this."""
+    rows = active_label_rows(product.get("activeIngredients"))
+    return len(_hidden_upper_limit_rows(rows, _hidden_amount_rows(rows)))
+
+
+def _hidden_amount_rows(rows: list) -> list:
+    return [row for row in rows
+            if not has_source_printed_amount(row, allow_zero=True) and not _positive(row.get("quantity"))]
+
+
+def _safety_check_needs_a_hidden_amount(product: Mapping[str, Any], rows: list, hidden: list) -> bool:
+    if _hidden_upper_limit_rows(rows, hidden):
         return True
     by_path = {row.get("raw_source_path"): row for row in rows}
     servings = _safe_dict(product.get("serving_basis")).get("max_servings_per_day")
@@ -1813,6 +1830,7 @@ def safety_assessment_status(
         and gate.get("needs_review") is not True
         and isinstance(dose_counts, dict) and dose_counts.get("material_but_unresolved", 0) == 0
         and assessment.get("unread_printed_nutrient_amounts") == 0
+        and assessment.get("upper_limit_amounts_unknown") == 0
         and evidence_result_state != "identity_material_unresolved"
         and isinstance(blockers, list)
         and all(isinstance(blocker, str)
