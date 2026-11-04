@@ -1482,6 +1482,12 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
                                 contract_error = (
                                     "unknown form is missing an explicit matching disposition policy"
                                 )
+                            elif status == "age_dependent" and (
+                                disposition != "review" or not decision.get("age_outcomes")
+                            ):
+                                contract_error = (
+                                    "age-dependent result must review and carry its age outcomes"
+                                )
 
                             if contract_error:
                                 findings.append(Finding(

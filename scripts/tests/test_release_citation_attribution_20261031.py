@@ -43,7 +43,7 @@ def test_tansy_pregnancy_source_does_not_claim_demonstrated_miscarriage():
     pregnancy = next(c for c in rule["condition_rules"] if c["condition_id"] == "pregnancy")
     assert "Whole tansy plants can induce miscarriage" not in pregnancy["mechanism"]
     assert pregnancy["severity"] == "contraindicated"
-    assert pregnancy["action"] == "Do not use in pregnancy."
+    assert pregnancy["action"] == "Do not use tansy supplements or tansy essential oil during pregnancy."
 
 
 def test_other_source_lists_exclude_wrong_topic_papers():

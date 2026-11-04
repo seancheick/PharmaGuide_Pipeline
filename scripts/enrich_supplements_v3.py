@@ -428,6 +428,12 @@ def _rda_mass_unit_key(value) -> Optional[str]:
     return None
 
 
+# Di-caffeine malate is two caffeine molecules and one malate: 2 x 194.19 of 522.47
+# by mass. An estimate from composition, never an assay of the product (Dr Pham, E1).
+DICAFFEINE_MALATE_CAFFEINE_FRACTION = 388.38 / 522.47
+_DICAFFEINE_MALATE_NAME = re.compile(r"infinergy|di-?\s?caffeine\s+malate", re.I)
+
+
 def _explicit_mixed_vitamin_a_preformed_fraction(
     ingredient: Dict[str, Any],
 ) -> Optional[float]:
@@ -20620,22 +20626,52 @@ class SupplementEnricherV3:
         return "suppress"
 
     @staticmethod
-    def _amount_unknown_copy(thresholds: List[Dict[str, Any]]) -> Dict[str, str]:
+    def _amount_unknown_copy(
+        thresholds: List[Dict[str, Any]], state: str = "amount_unknown"
+    ) -> Dict[str, str]:
         """Authored copy for a dose-dependent rule the label's amount cannot evaluate.
 
         Mirrors the ``*_if_met`` tier copy: a threshold may carry
         ``alert_headline_if_amount_unknown`` (and body/action) so an unknown amount
-        reads as "can't assess", never as the above-threshold concern.
+        reads as "can't assess", never as the above-threshold concern. The same
+        applies to ``form_unknown``, ``compound_estimate``, ``age_dependent`` and
+        ``age_dependent_bound``.
         """
         for threshold in thresholds:
             copy = {
-                field: threshold[f"{field}_if_amount_unknown"]
+                field: threshold[f"{field}_if_{state}"]
                 for field in ("alert_headline", "alert_body", "action")
-                if isinstance(threshold, dict) and threshold.get(f"{field}_if_amount_unknown")
+                if isinstance(threshold, dict) and threshold.get(f"{field}_if_{state}")
             }
             if copy:
                 return copy
         return {}
+
+    def _estimate_carries_crossing(
+        self,
+        thresholds: List[Dict[str, Any]],
+        ingredient: Dict[str, Any],
+        servings_per_day_max: float,
+    ) -> Optional[Dict[str, Any]]:
+        """The row whose limit this open range reaches only through a compound's estimated share."""
+        upper = ingredient.get("quantity_upper_without_estimate")
+        unit = self._normalize_threshold_unit(ingredient.get("unit"))
+        if upper is None or not unit:
+            return None
+        for threshold in thresholds:
+            if not threshold.get("severity_if_compound_estimate"):
+                continue
+            basis = str(threshold.get("basis") or "per_day").strip().lower()
+            converted = self._convert_mass(
+                upper * (float(servings_per_day_max) if basis == "per_day" else 1.0),
+                unit,
+                self._normalize_threshold_unit(threshold.get("unit")),
+            )
+            if converted is not None and not self._compare_threshold(
+                converted, str(threshold.get("comparator") or "").strip(), self._to_float_safe(threshold.get("value"))
+            ):
+                return threshold
+        return None
 
     def _dose_decision_rule(
         self,
@@ -20705,6 +20741,7 @@ class SupplementEnricherV3:
         )
         low = high = 0.0
         strict_lower = False
+        estimated_share = 0.0
         unreconciled: List[float] = []
         for row in counted:
             exposure = read(row)
@@ -20715,7 +20752,10 @@ class SupplementEnricherV3:
             elif exposure.per_serving_amount is None:
                 continue
             elif row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
-                high += exposure.per_serving_amount
+                if _DICAFFEINE_MALATE_NAME.search(str(row.get("name") or "")):
+                    estimated_share += exposure.per_serving_amount * DICAFFEINE_MALATE_CAFFEINE_FRACTION
+                else:
+                    high += exposure.per_serving_amount
             elif quantity_is_unresolved(row):
                 unreconciled.append(exposure.per_serving_amount)
             else:
@@ -20727,6 +20767,8 @@ class SupplementEnricherV3:
         if unreconciled:
             low += max(unreconciled)
             high += sum(unreconciled)
+        upper_without_estimate = high
+        high += estimated_share
         if high <= 0:
             return None
         return {
@@ -20737,6 +20779,11 @@ class SupplementEnricherV3:
                 id(row) for row in candidates
                 if is_caffeine(row) and read(row).per_serving_amount
             },
+            **(
+                {"compound_share_estimated": True, "quantity_upper_without_estimate": upper_without_estimate}
+                if estimated_share
+                else {}
+            ),
         }
 
     def _distinct_vitamin_e_dose(
@@ -20781,6 +20828,81 @@ class SupplementEnricherV3:
             "quantity": low / servings_per_day_max,
             "quantity_upper": high / servings_per_day_max,
         }
+
+    def _age_dependent_decision(
+        self,
+        base_severity: str,
+        general: Tuple[str, Optional[Dict[str, Any]]],
+        scoped: Tuple[str, Optional[Dict[str, Any]]],
+        age_scoped: List[Dict[str, Any]],
+    ) -> Tuple[str, Optional[Dict[str, Any]]]:
+        """Combine the general (19+) limit with the limit for a younger bracket.
+
+        The label decides the amount, so this is settled here; only the person's
+        age is left for the device. Where both limits read the same, age doesn't
+        matter. Otherwise the top level is the answer for an unknown age, which is
+        also what a build without an age check shows: a review, neither a
+        clearance nor an adult excess.
+        """
+        def outcome(severity: str, decision: Dict[str, Any]) -> Dict[str, Any]:
+            return {**decision, "clinical_severity": severity}
+
+        general_severity, general_decision = general
+        scoped_severity, scoped_decision = scoped
+        if not general_decision or not scoped_decision:
+            return general_severity, general_decision
+        for severity, decision in (scoped, general):
+            if decision.get("release_blocking"):
+                return severity, decision
+        settled = ("evaluation_status", "clinical_severity", "consumer_disposition")
+        general_outcome = outcome(general_severity, general_decision)
+        scoped_outcome = outcome(scoped_severity, scoped_decision)
+        if all(general_outcome[key] == scoped_outcome[key] for key in settled):
+            return general_severity, general_decision
+        brackets = sorted({
+            str(bracket)
+            for threshold in age_scoped
+            for bracket in threshold.get("age_brackets") or []
+        })
+        decision = {
+            **general_decision,
+            "matched_threshold": False,
+            "evaluation_status": "age_dependent",
+            "clinical_severity": base_severity,
+            "consumer_disposition": "review",
+            "selected_from": "base_severity",
+            "selected_severity": base_severity,
+            "thresholds_checked": [
+                *(general_decision.get("thresholds_checked") or []),
+                *(scoped_decision.get("thresholds_checked") or []),
+            ],
+            "age_outcomes": {
+                **{bracket: scoped_outcome for bracket in brackets},
+                "19+": general_outcome,
+            },
+        }
+        decision.pop("matched_copy", None)
+        decision.pop("reason", None)
+        # The wording says what is known about each limit. An adult who could also
+        # be over has no age card, so the rule's own card stays.
+        age_state = {
+            ("above_threshold", "below_threshold"): "age_dependent",
+            ("form_unknown", "below_threshold"): "age_dependent_bound",
+        }.get((scoped_outcome["evaluation_status"], general_outcome["evaluation_status"]))
+        age_copy = self._amount_unknown_copy(age_scoped, age_state) if age_state else {}
+        if age_copy:
+            decision["matched_copy"] = age_copy
+        return base_severity, decision
+
+    @staticmethod
+    def _stamp_age_outcome_copy(
+        decision: Optional[Dict[str, Any]], copy_fields: Dict[str, Any]
+    ) -> None:
+        """Give each age outcome the whole card it shows, since the top level has its own."""
+        for outcome in ((decision or {}).get("age_outcomes") or {}).values():
+            tier_copy = outcome.pop("matched_copy", None) or {}
+            for field, base in copy_fields.items():
+                outcome[field] = tier_copy.get(field) or base
 
     def _distinct_beta_carotene_dose(
         self, product: Dict[str, Any], rows: List[Dict[str, Any]], rules: List[Dict[str, Any]],
@@ -20848,7 +20970,10 @@ class SupplementEnricherV3:
                     or re.match(r"vitamin\s+a\b", str(label.get("name") or ""), re.IGNORECASE)
                 )
                 maximum = 0.0 if activity else self._to_float_safe(exposure.get("per_day")) or 0.0
-                activity_only = activity_only or bool(activity)
+                declared_unit = self._normalize_threshold_unit(label.get("unit") or row.get("unit"))
+                activity_only = activity_only or (
+                    bool(activity) and declared_unit not in {"mg rae", "mcg dfe", "mg dfe", "mg ne"}
+                )
                 high += maximum
                 if row.get("canonical_id") == "beta_carotene":
                     exposure.update(low_per_day=0.0, high_per_day=maximum)
@@ -20891,12 +21016,37 @@ class SupplementEnricherV3:
         if not relevant:
             return base_severity, None
 
+        age_scoped = [threshold for threshold in relevant if threshold.get("age_brackets")]
+        if age_scoped:
+            def decide(rows: List[Dict[str, Any]]) -> Tuple[str, Optional[Dict[str, Any]]]:
+                return self._evaluate_dose_thresholds_for_target(
+                    rows, target_type, target_id, ingredient,
+                    servings_per_day_max, base_severity, materiality,
+                )
+
+            return self._age_dependent_decision(
+                base_severity,
+                decide([threshold for threshold in relevant if not threshold.get("age_brackets")]),
+                decide([
+                    {key: value for key, value in threshold.items() if key != "age_brackets"}
+                    for threshold in age_scoped
+                ]),
+                age_scoped,
+            )
+
         quantity = self._to_float_safe(ingredient.get("quantity"))
         unit = self._normalize_threshold_unit(ingredient.get("unit"))
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
+        beta_carotene_mass_required = bool(ingredient.get("beta_carotene_mass_required"))
+        unsupported_beta_carotene_unit = (
+            beta_carotene_mass_required
+            and unit not in self._MASS_FACTORS_MG
+            and unit not in {"iu", "mcg rae"}
+        )
         if (
-            quantity is None
+            unsupported_beta_carotene_unit
+            or quantity is None
             or (quantity <= 0 and ingredient.get("quantity_upper") is None)
             or not unit
         ):
@@ -20914,6 +21064,18 @@ class SupplementEnricherV3:
                     "release_blocking": False,
                     "dose_evaluation": None,
                     "decision_rule": self._dose_decision_rule(policy, materiality, base_severity),
+                }
+            if beta_carotene_mass_required and not ingredient.get("activity_only"):
+                severity = str(policy.get("severity_if_not_met") or "informational").strip().lower()
+                return severity, {
+                    "evaluated": False,
+                    "reason": "dose_form_not_disclosed",
+                    "evaluation_status": "form_unknown",
+                    "clinical_severity": severity,
+                    "consumer_disposition": "suppress",
+                    "release_blocking": False,
+                    "dose_evaluation": None,
+                    "decision_rule": self._dose_decision_rule(policy, materiality, severity),
                 }
             if ingredient.get("activity_only"):
                 # A vitamin A figure isn't a beta-carotene amount the rule could find
@@ -21226,6 +21388,26 @@ class SupplementEnricherV3:
                     or "suppress"
                 ).strip().lower()
                 details["release_blocking"] = False
+                form_unknown_copy = self._amount_unknown_copy(relevant, "form_unknown")
+                if form_unknown_copy:
+                    details["matched_copy"] = form_unknown_copy
+                estimate_row = self._estimate_carries_crossing(
+                    relevant, ingredient, servings_per_day_max
+                )
+                if estimate_row:
+                    # Still no proven crossing and the exported amount stays the proven
+                    # minimum; only what the viewer is told changes.
+                    severity_candidate = str(estimate_row["severity_if_compound_estimate"]).strip().lower()
+                    disposition = str(estimate_row["consumer_disposition_if_compound_estimate"]).strip().lower()
+                    details["clinical_severity"] = severity_candidate
+                    details["selected_severity"] = severity_candidate
+                    details["selected_from"] = "severity_if_compound_estimate"
+                    details["consumer_disposition"] = disposition
+                    details["decision_rule"] = {
+                        **self._dose_decision_rule(estimate_row, materiality, base_severity),
+                        "unknown_form_disposition": disposition,
+                    }
+                    details["matched_copy"] = self._amount_unknown_copy([estimate_row], "compound_estimate")
             elif marker_amount_unknown:
                 details["reason"] = "dose_amount_not_disclosed"
                 amount_unknown_copy = self._amount_unknown_copy(relevant)
@@ -21766,6 +21948,16 @@ class SupplementEnricherV3:
             enriched if isinstance(enriched, dict) else {},
             [row for _, row in all_ingredient_rows],
         )
+        if caffeine_dose and caffeine_dose.get("compound_share_estimated"):
+            # The confirmed figure stays per_day; the range records the estimate beside it.
+            for rda_row in (enriched.get("rda_ul_data") or {}).get("analyzed_ingredients") or []:
+                servings = self._to_float_safe(rda_row.get("servings_per_day_max"))
+                if rda_row.get("canonical_id") == "caffeine" and servings:
+                    rda_row["safety_exposure"].update(
+                        low_per_day=caffeine_dose["quantity"] * servings,
+                        high_per_day=caffeine_dose["quantity_upper"] * servings,
+                    )
+                    break
         vitamin_e_dose = self._distinct_vitamin_e_dose(
             enriched if isinstance(enriched, dict) else {}, servings_per_day_max
         )
@@ -21875,6 +22067,7 @@ class SupplementEnricherV3:
                         "quantity": caffeine_dose["quantity"],
                         "quantity_upper": caffeine_dose["quantity_upper"],
                         "quantity_operator": caffeine_dose["quantity_operator"],
+                        "quantity_upper_without_estimate": caffeine_dose.get("quantity_upper_without_estimate"),
                         "unit": "mg",
                         "unit_normalized": "mg",
                         "dose_source": "distinct_caffeine_total",
@@ -21905,10 +22098,15 @@ class SupplementEnricherV3:
                     and not any("carotene" in str(form).lower() for form in rule["form_scope"])
                 ):
                     # A rule on preformed forms judges the share the label declares.
-                    # With no declared share the row's own unknown-form path decides.
-                    dose_row = self._preformed_share_row(
+                    # A mixed row declaring none holds 0 to all of it, which is
+                    # how the unknown-form path reads the amount.
+                    share_row = self._preformed_share_row(
                         base_dose_row, label_rows_by_path.get(ingredient.get("raw_source_path"))
-                    ) or dose_row
+                    )
+                    if share_row is not None:
+                        dose_row = share_row
+                    elif self._row_form_ids(base_dose_row) - set(rule["form_scope"]):
+                        dose_row = {**dose_row, "matched_form": None}
                 if declared_owner is not None and (
                     subject["db"] == "ingredient_quality_map"
                     and
@@ -21928,6 +22126,11 @@ class SupplementEnricherV3:
                     dose_row = self._nested_row_of_rule_form(
                         rule, declared_owner, ingredients
                     ) or {**base_dose_row, "quantity": None}
+
+                if "beta_carotene" in {
+                    rule_subject.get("canonical_id"), rule.get("exposure_canonical_id")
+                }:
+                    dose_row = {**dose_row, "beta_carotene_mass_required": True}
 
                 condition_hits: List[Dict[str, Any]] = []
                 drug_hits: List[Dict[str, Any]] = []
@@ -21976,6 +22179,10 @@ class SupplementEnricherV3:
                     for src in sources:
                         source_set.add(src)
                     tier_copy = (threshold_eval or {}).get("matched_copy") or {}
+                    self._stamp_age_outcome_copy(threshold_eval, {
+                        field: cond_rule.get(field)
+                        for field in ("alert_headline", "alert_body", "action")
+                    })
                     condition_hits.append({
                         "condition_id": condition_id,
                         "severity": severity,

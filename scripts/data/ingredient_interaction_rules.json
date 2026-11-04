@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.3.0",
-    "last_updated": "2026-11-01",
+    "last_updated": "2026-11-03",
     "total_entries": 155,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 155,
@@ -484,10 +484,10 @@
         "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "moderate",
-        "notes": "NCCIH advises pregnancy and breastfeeding caution. Sean approved an avoid precaution at all supplement doses on 2026-10-28; the sources do not establish a 3 mg/day pregnancy severity cutoff.",
-        "alert_headline": "Avoid during pregnancy or breastfeeding",
-        "alert_body": "Avoid bitter-orange supplements during pregnancy or breastfeeding. Safety is uncertain, and the synephrine amount may be unknown or differ from the label.",
-        "informational_note": "Pregnancy and breastfeeding precaution applies regardless of disclosed synephrine amount.",
+        "notes": "Dr. Pham, 2026-11-03: avoid oral bitter-orange supplements during pregnancy and breastfeeding regardless of declared amount, because a safe supplemental exposure has not been established. No pregnancy-specific 3 mg cutoff. Ordinary culinary quantities are a separate matter.",
+        "alert_headline": "Avoid bitter-orange supplements during pregnancy or breastfeeding.",
+        "alert_body": "Avoid bitter-orange supplements during pregnancy or breastfeeding. Safety during pregnancy and breastfeeding has not been established. Bitter-orange supplements may contain synephrine, and the amount may be undisclosed or differ from the label. Choose an alternative and discuss supplement use with a healthcare professional.",
+        "informational_note": "Safety during pregnancy and breastfeeding has not been established.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -513,8 +513,8 @@
           "https://www.nccih.nih.gov/health/bitter-orange"
         ]
       },
-      "last_reviewed": "2026-10-28",
-      "review_owner": "Sean (policy ruling); Codex (source verification)",
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03); Sean (policy ruling)",
       "dose_thresholds": []
     },
     {
@@ -1892,7 +1892,7 @@
           "scope": "condition",
           "target_id": "pregnancy",
           "basis": "per_day",
-          "comparator": ">",
+          "comparator": ">=",
           "value": 200,
           "unit": "mg",
           "severity_if_met": "avoid",
@@ -1916,13 +1916,21 @@
             },
             "dose": {
               "basis": "per_day",
-              "comparator": ">",
+              "comparator": ">=",
               "value": 200,
               "unit": "mg",
               "severity_if_met": "avoid",
               "severity_if_not_met": "monitor"
             }
-          }
+          },
+          "alert_headline_if_met": "High caffeine intake during pregnancy",
+          "alert_body_if_met": "This supplement provides 200 mg or more of caffeine a day. ACOG recommends keeping total daily caffeine intake below 200 mg during pregnancy, including caffeine from drinks, foods and supplements. Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise.",
+          "action_if_met": "Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise.",
+          "severity_if_compound_estimate": "avoid",
+          "consumer_disposition_if_compound_estimate": "block",
+          "alert_headline_if_compound_estimate": "High caffeine intake during pregnancy",
+          "alert_body_if_compound_estimate": "This supplement may provide 200 mg or more of caffeine a day. ACOG recommends keeping total daily caffeine intake below 200 mg during pregnancy, including caffeine from drinks, foods and supplements. Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise.",
+          "action_if_compound_estimate": "Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise."
         },
         {
           "scope": "condition",
@@ -1996,8 +2004,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, pregnancy threshold and copy); estimate-range wording approved by Sean 2026-11-04; pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_CHROMIUM_GLUCOSE",
@@ -7397,6 +7405,42 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "Dose and form dependent risk is primarily tied to preformed retinoids.",
+          "action": "Monitoring is advised during breastfeeding.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+          ],
+          "alert_headline": "Breastfeeding: monitoring is advised",
+          "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
+          "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -7425,7 +7469,10 @@
               "drug_classes_any": [],
               "profile_flags_any": [],
               "product_forms_any": [],
-              "nutrient_forms_any": []
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
             },
             "dose": {
               "basis": "per_day",
@@ -7435,7 +7482,13 @@
               "severity_if_met": "contraindicated",
               "severity_if_not_met": "caution"
             }
-          }
+          },
+          "alert_headline_if_form_unknown": "Vitamin A form needs review",
+          "alert_body_if_form_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_form_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "alert_headline_if_amount_unknown": "Vitamin A form needs review",
+          "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional."
         },
         {
           "scope": "condition",
@@ -7474,7 +7527,206 @@
               "severity_if_met": "avoid",
               "severity_if_not_met": "caution"
             }
+          },
+          "alert_headline_if_form_unknown": "Vitamin A form needs review",
+          "alert_body_if_form_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_form_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "alert_headline_if_amount_unknown": "Vitamin A form needs review",
+          "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional."
+        },
+        {
+          "scope": "condition",
+          "target_id": "lactation",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 10000,
+          "unit": "iu",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "alert_headline_if_met": "Breastfeeding: avoid use",
+          "action_if_met": "Avoid use during breastfeeding.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 10000,
+              "unit": "iu",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
           }
+        },
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2800,
+          "unit": "mcg RAE",
+          "severity_if_met": "contraindicated",
+          "severity_if_not_met": "caution",
+          "unknown_form_disposition": "review",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 2800,
+              "unit": "mcg RAE",
+              "severity_if_met": "contraindicated",
+              "severity_if_not_met": "caution"
+            }
+          },
+          "alert_headline_if_form_unknown": "Vitamin A form needs review",
+          "alert_body_if_form_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_form_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "alert_headline_if_amount_unknown": "Vitamin A form needs review",
+          "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "age_brackets": [
+            "14-18"
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
+        },
+        {
+          "scope": "condition",
+          "target_id": "ttc",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2800,
+          "unit": "mcg RAE",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "caution",
+          "unknown_form_disposition": "review",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "ttc"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 2800,
+              "unit": "mcg RAE",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "caution"
+            }
+          },
+          "alert_headline_if_form_unknown": "Vitamin A form needs review",
+          "alert_body_if_form_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_form_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "alert_headline_if_amount_unknown": "Vitamin A form needs review",
+          "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "age_brackets": [
+            "14-18"
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
+        },
+        {
+          "scope": "condition",
+          "target_id": "lactation",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2800,
+          "unit": "mcg RAE",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "alert_headline_if_met": "Breastfeeding: avoid use",
+          "action_if_met": "Avoid use during breastfeeding.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 2800,
+              "unit": "mcg RAE",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          },
+          "age_brackets": [
+            "14-18"
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
         }
       ],
       "pregnancy_lactation": {
@@ -7512,8 +7764,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, form filter, review note and section C breastfeeding, section B age limits); age card wording approved by Sean 2026-11-04; pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_NIACIN_DIABETES",
@@ -8037,6 +8289,40 @@
           "direction": "harmful",
           "materiality": "presence",
           "min_effective_dose": null
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
+          "action": "Monitoring is advised during breastfeeding.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/",
+            "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
+          ],
+          "alert_headline": "Breastfeeding: monitoring is advised",
+          "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+          "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -8111,6 +8397,132 @@
               "severity_if_not_met": "monitor"
             }
           }
+        },
+        {
+          "scope": "condition",
+          "target_id": "lactation",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 1000,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "alert_headline_if_met": "Breastfeeding: avoid use",
+          "action_if_met": "Avoid use during breastfeeding.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 1000,
+              "unit": "mg",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 800,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 800,
+              "unit": "mg",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          },
+          "age_brackets": [
+            "14-18"
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
+        },
+        {
+          "scope": "condition",
+          "target_id": "lactation",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 800,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "alert_headline_if_met": "Breastfeeding: avoid use",
+          "action_if_met": "Avoid use during breastfeeding.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 800,
+              "unit": "mg",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          },
+          "age_brackets": [
+            "14-18"
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
         }
       ],
       "pregnancy_lactation": {
@@ -8148,8 +8560,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-27",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding, section B age limits); age card wording approved by Sean 2026-11-04; pharmaguide_clinical_team"
     },
     {
       "id": "RULE_INGREDIENT_VITAMIN_K",
@@ -21824,15 +22236,16 @@
         {
           "condition_id": "pregnancy",
           "severity": "contraindicated",
-          "evidence_level": "established",
-          "mechanism": "Tansy essential oil can contain substantial beta-thujone, a neurotoxic constituent associated with convulsions; the cited review advises avoiding thujone-rich oils during pregnancy. Whole-plant products do not establish their preparation or thujone exposure, so pregnancy use is contraindicated under the existing precautionary rule. The available citation does not establish a clinical miscarriage rate for whole-plant products.",
-          "action": "Do not use in pregnancy.",
+          "evidence_level": "limited",
+          "mechanism": "Tansy essential oil can contain thujone, a neurotoxic compound associated with convulsions. The amount of thujone varies by preparation, and pregnancy safety has not been established. PharmaGuide classifies oral tansy preparations as contraindicated during pregnancy as a precaution because of their potential toxicity and reproductive-safety concerns.",
+          "action": "Do not use tansy supplements or tansy essential oil during pregnancy.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/33673548/"
+            "https://pubmed.ncbi.nlm.nih.gov/33673548/",
+            "https://pubmed.ncbi.nlm.nih.gov/10725394/"
           ],
-          "alert_headline": "Unsafe during pregnancy",
-          "alert_body": "Tansy contains thujone and other toxic constituents. If you are pregnant, do not use it.",
-          "informational_note": "Tansy contains toxic compounds and is not clinically acceptable in pregnancy.",
+          "alert_headline": "Do not use tansy supplements or tansy essential oil during pregnancy.",
+          "alert_body": "Tansy essential oil can contain thujone, a neurotoxic compound associated with convulsions. The amount of thujone varies by preparation, and pregnancy safety has not been established. PharmaGuide classifies oral tansy preparations as contraindicated during pregnancy as a precaution because of their potential toxicity and reproductive-safety concerns.",
+          "informational_note": "The amount of thujone varies by preparation, and pregnancy safety has not been established.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -21852,7 +22265,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-03",
+            "file": "audits/clinical_review_20261103/DR_PHAM_REVIEW_20261103.md"
+          }
         }
       ],
       "drug_class_rules": [],
@@ -21887,8 +22305,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03)"
     },
     {
       "id": "RULE_BANNED_BITTER_ORANGE_PREGNANCY",
@@ -21901,15 +22319,14 @@
           "condition_id": "pregnancy",
           "severity": "avoid",
           "evidence_level": "probable",
-          "mechanism": "Synephrine is a sympathomimetic; pregnancy is not the place for stimulant-driven cardiovascular stress.",
-          "action": "Do not use supplement-dose bitter orange in pregnancy.",
+          "mechanism": "Safety during pregnancy and breastfeeding has not been established. Bitter-orange supplements may contain synephrine, and the amount may be undisclosed or differ from the label. Choose an alternative and discuss supplement use with a healthcare professional.",
+          "action": "Avoid bitter-orange supplements during pregnancy or breastfeeding.",
           "sources": [
-            "https://www.nccih.nih.gov/health/bitter-orange",
-            "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
+            "https://www.nccih.nih.gov/health/bitter-orange"
           ],
-          "alert_headline": "Stimulant — avoid in pregnancy",
-          "alert_body": "Bitter orange contains synephrine, a stimulant that can stress the cardiovascular system. If you are pregnant, avoid supplement-dose bitter orange.",
-          "informational_note": "Bitter orange contains synephrine and is not appropriate in pregnancy.",
+          "alert_headline": "Avoid bitter-orange supplements during pregnancy or breastfeeding.",
+          "alert_body": "Safety during pregnancy and breastfeeding has not been established. Bitter-orange supplements may contain synephrine, and the amount may be undisclosed or differ from the label. Choose an alternative and discuss supplement use with a healthcare professional.",
+          "informational_note": "Safety during pregnancy and breastfeeding has not been established.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -21929,7 +22346,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-03",
+            "file": "audits/clinical_review_20261103/DR_PHAM_REVIEW_20261103.md"
+          }
         }
       ],
       "drug_class_rules": [],
@@ -21938,10 +22360,10 @@
         "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "moderate",
-        "notes": "NCCIH advises pregnancy and breastfeeding caution. Sean approved an avoid precaution at all supplement doses on 2026-10-28; the sources do not establish a 3 mg/day pregnancy severity cutoff.",
-        "alert_headline": "Avoid during pregnancy or breastfeeding",
-        "alert_body": "Avoid bitter-orange supplements during pregnancy or breastfeeding. Safety is uncertain, and the synephrine amount may be unknown or differ from the label.",
-        "informational_note": "Pregnancy and breastfeeding precaution applies regardless of disclosed synephrine amount.",
+        "notes": "Dr. Pham, 2026-11-03: avoid oral bitter-orange supplements during pregnancy and breastfeeding regardless of declared amount, because a safe supplemental exposure has not been established. No pregnancy-specific 3 mg cutoff. Ordinary culinary quantities are a separate matter.",
+        "alert_headline": "Avoid bitter-orange supplements during pregnancy or breastfeeding.",
+        "alert_body": "Avoid bitter-orange supplements during pregnancy or breastfeeding. Safety during pregnancy and breastfeeding has not been established. Bitter-orange supplements may contain synephrine, and the amount may be undisclosed or differ from the label. Choose an alternative and discuss supplement use with a healthcare professional.",
+        "informational_note": "Safety during pregnancy and breastfeeding has not been established.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -21964,12 +22386,12 @@
         "direction": "harmful",
         "materiality": "presence",
         "sources": [
-          "https://www.nccih.nih.gov/health/bitter-orange",
-          "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
+          "https://www.nccih.nih.gov/health/bitter-orange"
         ]
       },
-      "last_reviewed": "2026-10-28",
-      "review_owner": "Sean (policy ruling); Codex (source verification)"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03); Sean (policy ruling)",
+      "notes": "Archived Health Canada guidance (2010 notice, historical regulatory context only; NCCIH is the primary source): https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/legislation-guidelines/guidance-documents/notice-use-synephrine.html"
     },
     {
       "id": "RULE_BOTAN_GINKGO_PREGNANCY",

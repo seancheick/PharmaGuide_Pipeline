@@ -725,3 +725,60 @@ def test_depletion_exemplars_pass_strict():
             f"depletion exemplar {draft['_target']} failed strict validator: "
             f"{result.errors}"
         )
+
+
+# ---------------------------------------------------------------------------
+# Clinician-reviewed copy passes through word for word
+# ---------------------------------------------------------------------------
+
+REVIEWED_FILE = "audits/clinical_review_20261103/DR_PHAM_REVIEW_20261103.md"
+REVIEWED_HEADLINE = "Do not use tansy supplements or tansy essential oil during pregnancy."
+REVIEWED_BODY = (
+    "Tansy essential oil can contain thujone, a neurotoxic compound associated with convulsions. "
+    "The amount of thujone varies by preparation, and pregnancy safety has not been established. "
+    "PharmaGuide classifies oral tansy preparations as contraindicated during pregnancy as a "
+    "precaution because of their potential toxicity and reproductive-safety concerns."
+)
+
+
+def _reviewed_rule(**overrides):
+    sub = {
+        "condition_id": "pregnancy",
+        "severity": "contraindicated",
+        "alert_headline": REVIEWED_HEADLINE,
+        "alert_body": REVIEWED_BODY,
+        "informational_note": "Pregnancy safety has not been established for this preparation.",
+        "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-03",
+            "file": REVIEWED_FILE,
+        },
+    }
+    sub.update(overrides)
+    return {"id": "RULE_X", "condition_rules": [sub]}
+
+
+def test_copy_found_word_for_word_in_its_review_file_passes():
+    assert validate_interaction_rule(_reviewed_rule()).errors == []
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"alert_body": REVIEWED_BODY.replace("can contain", "contains")},
+        {"alert_headline": REVIEWED_HEADLINE.replace("Do not use", "Never use")},
+        {"clinical_review": None},
+        {"clinical_review": {"reviewer": "Dr. Pham", "reviewed_at": "2026-11-03"}},
+        {"clinical_review": {"reviewer": "Dr. Pham", "reviewed_at": "2026-11-03", "file": "audits/no_such_file.md"}},
+        {"clinical_review": {"reviewer": "", "reviewed_at": "2026-11-03", "file": REVIEWED_FILE}},
+        {"clinical_review": {"reviewer": "Dr. Pham", "reviewed_at": "2026-11-03", "file": "../AGENTS.md"}},
+    ],
+)
+def test_reworded_or_unattributed_copy_keeps_the_limits(overrides):
+    errors = validate_interaction_rule(_reviewed_rule(**overrides)).errors
+    assert any("length" in error for error in errors)
+
+
+def test_a_review_field_does_not_waive_the_informational_note_limits():
+    errors = validate_interaction_rule(_reviewed_rule(informational_note="Avoid this.")).errors
+    assert any("informational_note" in error for error in errors)

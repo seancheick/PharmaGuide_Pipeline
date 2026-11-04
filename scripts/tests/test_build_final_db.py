@@ -2943,6 +2943,24 @@ def test_watchlist_is_exported_as_warning_but_not_blocking_reason():
     assert any(w["type"] == "watchlist_substance" for w in blob["warnings"])
 
 
+def test_watchlist_safety_flag_retains_registry_citations():
+    enriched = make_enriched()
+    enriched["contaminant_data"]["banned_substances"] = {
+        "substances": [],
+        "safety_flags": [{
+            "source_db": "banned_recalled_ingredients",
+            "entry_id": "WATCH_WITHAFERIN_A",
+            "status": "watchlist",
+        }],
+    }
+    blob = build_detail_blob(enriched, make_scored(verdict="CAUTION"))
+    [warning] = [row for row in blob["warnings"]
+                 if row.get("matched_rule_id") == "WATCH_WITHAFERIN_A"]
+    assert warning["type"] == "watchlist_substance"
+    assert warning["source_urls"]
+    assert warning["safety_warning"]
+
+
 def test_resolver_only_watchlist_warning_keeps_watchlist_semantics():
     enriched = make_enriched()
     enriched["activeIngredients"] = []
