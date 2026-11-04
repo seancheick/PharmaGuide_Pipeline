@@ -428,6 +428,12 @@ def _rda_mass_unit_key(value) -> Optional[str]:
     return None
 
 
+# Di-caffeine malate is two caffeine molecules and one malate: 2 x 194.19 of 522.47
+# by mass. An estimate from composition, never an assay of the product (Dr Pham, E1).
+DICAFFEINE_MALATE_CAFFEINE_FRACTION = 388.38 / 522.47
+_DICAFFEINE_MALATE_NAME = re.compile(r"infinergy|di-?\s?caffeine\s+malate", re.I)
+
+
 def _explicit_mixed_vitamin_a_preformed_fraction(
     ingredient: Dict[str, Any],
 ) -> Optional[float]:
@@ -20694,6 +20700,7 @@ class SupplementEnricherV3:
         )
         low = high = 0.0
         strict_lower = False
+        compound_share_estimated = False
         unreconciled: List[float] = []
         for row in counted:
             exposure = read(row)
@@ -20704,7 +20711,11 @@ class SupplementEnricherV3:
             elif exposure.per_serving_amount is None:
                 continue
             elif row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
-                high += exposure.per_serving_amount
+                if _DICAFFEINE_MALATE_NAME.search(str(row.get("name") or "")):
+                    high += exposure.per_serving_amount * DICAFFEINE_MALATE_CAFFEINE_FRACTION
+                    compound_share_estimated = True
+                else:
+                    high += exposure.per_serving_amount
             elif quantity_is_unresolved(row):
                 unreconciled.append(exposure.per_serving_amount)
             else:
@@ -20726,6 +20737,7 @@ class SupplementEnricherV3:
                 id(row) for row in candidates
                 if is_caffeine(row) and read(row).per_serving_amount
             },
+            **({"compound_share_estimated": True} if compound_share_estimated else {}),
         }
 
     def _distinct_vitamin_e_dose(
@@ -21703,6 +21715,16 @@ class SupplementEnricherV3:
             enriched if isinstance(enriched, dict) else {},
             [row for _, row in all_ingredient_rows],
         )
+        if caffeine_dose and caffeine_dose.get("compound_share_estimated"):
+            # The confirmed figure stays per_day; the range records the estimate beside it.
+            for rda_row in (enriched.get("rda_ul_data") or {}).get("analyzed_ingredients") or []:
+                servings = self._to_float_safe(rda_row.get("servings_per_day_max"))
+                if rda_row.get("canonical_id") == "caffeine" and servings:
+                    rda_row["safety_exposure"].update(
+                        low_per_day=caffeine_dose["quantity"] * servings,
+                        high_per_day=caffeine_dose["quantity_upper"] * servings,
+                    )
+                    break
         vitamin_e_dose = self._distinct_vitamin_e_dose(
             enriched if isinstance(enriched, dict) else {}, servings_per_day_max
         )

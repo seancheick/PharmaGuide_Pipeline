@@ -839,3 +839,62 @@ def test_a_new_age_row_never_moves_the_gate_key_of_an_older_row():
         for row in rows:
             seen_age_row = seen_age_row or bool(row.get("age_brackets"))
             assert not seen_age_row or row.get("age_brackets"), "append age rows at the end"
+
+
+# --- E1: 249741 caffeine ----------------------------------------------------
+
+@pytest.fixture(scope="module")
+def caffeine_label_249741(enricher):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw = json.loads(
+        (ROOT / "tests" / "fixtures" / "dose_lineage_249741_raw.json").read_text(encoding="utf-8")
+    )
+    return enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))[0]
+
+
+def _caffeine_row(product):
+    [row] = [
+        row
+        for row in product["rda_ul_data"]["analyzed_ingredients"]
+        if row.get("canonical_id") == "caffeine"
+    ]
+    return row
+
+
+def test_the_compound_counts_as_its_estimated_caffeine_not_its_mass(caffeine_label_249741):
+    exposure = _caffeine_row(caffeine_label_249741)["safety_exposure"]
+    assert exposure["per_day"] == 180.0
+    assert exposure["low_per_day"] == 180.0
+    assert exposure["high_per_day"] == pytest.approx(202.3, abs=0.05)
+
+
+def test_the_estimate_is_within_her_stated_composition():
+    from enrich_supplements_v3 import DICAFFEINE_MALATE_CAFFEINE_FRACTION as fraction
+
+    assert 22.2 <= 30 * fraction <= 22.5
+
+
+def test_180_confirmed_with_an_estimate_above_200_is_never_a_proven_crossing(caffeine_label_249741):
+    hits = [
+        hit
+        for alert in caffeine_label_249741["interaction_profile"]["ingredient_alerts"]
+        if alert["rule_id"] == "RULE_INGREDIENT_CAFFEINE"
+        for hit in alert["condition_hits"]
+        if hit["condition_id"] == "pregnancy"
+    ]
+    assert hits
+    for hit in hits:
+        assert hit["dose_threshold_evaluation"]["evaluation_status"] == "form_unknown"
+
+
+def test_another_caffeine_blend_header_keeps_its_whole_mass_as_the_upper_bound(enricher):
+    rows = [
+        {"name": "Caffeine Anhydrous", "canonical_id": "caffeine", "quantity": 180.0, "unit": "mg",
+         "raw_source_path": "ingredientRows[0]"},
+        {"name": "Energy Blend", "canonical_id": "caffeine", "quantity": 30.0, "unit": "mg",
+         "raw_source_path": "ingredientRows[1]", "skip_reason": "blend_header_total_weight_only"},
+    ]
+    dose = enricher._distinct_caffeine_dose({}, rows)
+    assert (dose["quantity"], dose["quantity_upper"]) == (180.0, 210.0)
+    assert "compound_share_estimated" not in dose
