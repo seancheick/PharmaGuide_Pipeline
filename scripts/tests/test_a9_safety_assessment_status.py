@@ -306,6 +306,20 @@ def test_only_a_row_that_is_itself_a_carotene_leaves_the_preformed_limit(name, u
     assert _unknown([{"canonical_id": "vitamin_a", "name": name, "quantity": 0.0, "unit": "NP", "dailyValue": None}]) == unknown
 
 
+@pytest.mark.parametrize("variant", [
+    {"adult_daily_value": 300.0},
+    {"daily_value": 300.0, "daily_value_target_group": "adult_4_plus"},
+    {},
+])
+def test_upper_limit_reason_counts_percent_on_another_label_column(variant):
+    from assessment_readiness import upper_limit_amounts_undisclosed, upper_limit_amounts_unknown
+
+    row = _dv_row(percent=None, quantityVariants=[variant])
+    product = {"activeIngredients": [row], "serving_basis": {"max_servings_per_day": 1}}
+    assert upper_limit_amounts_unknown(product) == 1
+    assert upper_limit_amounts_undisclosed(product) == (0 if variant else 1)
+
+
 def test_the_percent_bound_reaches_no_amount_score_or_warning(pipeline):
     """16725 prints Iron 30% DV. The all-clear returns; the row stays dose-less."""
     scored = _score(pipeline, "a9_upper_limit_16725_raw.json")
