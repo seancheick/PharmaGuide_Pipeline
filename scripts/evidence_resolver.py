@@ -446,6 +446,29 @@ def _norm(val: Any) -> str:
     return str(val or "").strip().lower()
 
 
+def _held_clinical_source_pmids(entry: Mapping[str, Any]) -> Set[str]:
+    """Source-integrity exclusions, wherever the canonical record stores them.
+
+    A record-level credit hold is not itself a retraction. An explicit source
+    integrity hold, including one recorded on a context, follows that PMID.
+    """
+    held = {
+        str(ref["pmid"])
+        for ref in entry.get("references_structured") or []
+        if isinstance(ref, Mapping) and ref.get("pmid")
+        and (ref.get("retracted") or ref.get("expression_of_concern")
+             or ref.get("scoring_eligible") is False)
+    }
+    held.update(
+        str(pmid)
+        for context in entry.get("study_contexts") or []
+        if isinstance(context, Mapping)
+        and context.get("source_integrity") in {"retracted", "expression_of_concern"}
+        for pmid in context.get("source_pmids") or []
+    )
+    return held
+
+
 def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, source_pmids=None) -> bool:
     """Honor source holds, joined to the context and optional signed source scope."""
     if entry.get("scoring_eligible") is False or is_reference_only(entry):
@@ -459,9 +482,7 @@ def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, 
                     if re.fullmatch(r"[1-9][0-9]*", str(pmid))}
         declared.update(str(ref["pmid"]) for ref in references
                         if isinstance(ref, Mapping) and ref.get("pmid"))
-        excluded = {str(ref["pmid"]) for ref in references
-                    if isinstance(ref, Mapping) and ref.get("pmid")
-                    and not clinical_record_sources_eligible({"references_structured": [ref]})}
+        excluded = _held_clinical_source_pmids(entry)
         eligible = declared - excluded
         if source_pmids is not None:
             eligible &= {str(pmid) for pmid in source_pmids}
@@ -1204,13 +1225,7 @@ def resolve_evidence_for_row(
     lit_idx = _load_literature_evidence()
     lit_entry = lit_idx.get(canonical) or lit_idx.get(norm_name)
     if lit_entry:
-        held_pmids = {
-            str(ref.get("pmid"))
-            for study in deduped_studies
-            for ref in study.get("references_structured") or []
-            if isinstance(ref, Mapping) and ref.get("pmid")
-            and not clinical_record_sources_eligible({"references_structured": [ref]})
-        }
+        held_pmids = set().union(*(_held_clinical_source_pmids(study) for study in deduped_studies))
         if held_pmids & {str(study.get("pmid")) for study in lit_entry.get("qualifying_human_studies") or []}:
             return EvidenceResolution(
                 canonical_id=canonical, ingredient_name=name,

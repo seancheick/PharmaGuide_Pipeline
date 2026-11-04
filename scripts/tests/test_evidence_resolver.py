@@ -1761,19 +1761,31 @@ def test_missing_source_context_cannot_be_completed_by_nutrient_authority(monkey
         EvidenceDisposition.RESOLVED_BY_AUTHORITY.value, result.disposition])[1]
 
 
-@pytest.mark.parametrize('source_hold', ['retracted', 'expression_of_concern', 'scoring_eligible'])
-def test_literature_fallback_cannot_hide_a_hold_on_the_same_source(monkeypatch, source_hold):
+@pytest.mark.parametrize('same_source', [True, False])
+@pytest.mark.parametrize('source_hold', ['retracted', 'expression_of_concern', 'scoring_eligible',
+                                         'context_retracted', 'context_expression_of_concern'])
+def test_literature_fallback_cannot_hide_a_hold_on_the_same_source(monkeypatch, source_hold, same_source):
     source = _approved_test_source({'id': 'TEST_SOURCE_HOLD', 'study_type': 'rct_single',
                                    'effect_direction': 'positive_strong'})
-    source['references_structured'][0][source_hold] = False if source_hold == 'scoring_eligible' else True
+    if source_hold.startswith('context_'):
+        source['study_contexts'][0]['source_integrity'] = source_hold.removeprefix('context_')
+        source['study_contexts'][0]['scoring_eligible'] = False
+    else:
+        source['references_structured'][0][source_hold] = False if source_hold == 'scoring_eligible' else True
     monkeypatch.setattr(er, '_backed_studies_index', lambda: {'synthetic_material': [source]})
     monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'synthetic_material': {
         'verification_result': 'authoritative_pubmed_verified',
         'verification_provenance': {'all_pmids_verified': True, 'retractions_found': False},
         'effect_direction': 'mixed', 'applicability_status': 'applicable',
-        'qualifying_human_studies': [{'pmid': '28661438'}]}})
+        'qualifying_human_studies': [{'pmid': '28661438' if same_source else '23439798'}]}})
     row = {'name': 'Synthetic Material', 'canonical_id': 'synthetic_material'}
     result = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
-    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert not result.points_eligible
-    assert result.blocking_reasons
+    if same_source:
+        assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+        assert result.blocking_reasons == ["clinical_sources_ineligible"]
+    else:
+        # A separate completed literature conclusion grants no clinical credit
+        # but is not erased by the unrelated source's hold.
+        assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+        assert not result.blocking_reasons
