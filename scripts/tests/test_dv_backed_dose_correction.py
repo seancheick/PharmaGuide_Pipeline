@@ -612,3 +612,59 @@ def test_dv_plausibility_audit_reports_corrected_and_uncorrected_mismatches(tmp_
     csv_text = output.read_text(encoding="utf-8")
     assert "corrected" in csv_text
     assert "uncorrected_dv_mismatch" in csv_text
+
+
+@pytest.mark.parametrize("label, group", [
+    ("Adults and children 4 or more years of age", "adult_4_plus"),
+    ("Children less than 4 years of age", "children_1_3"),
+    ("Pregnant and Lactating", "pregnant_lactating"),
+    ("Infants", "infants"),
+])
+def test_each_dsld_target_group_reads_as_its_own_daily_value(label, group):
+    assert EnhancedDSLDNormalizer()._normalize_daily_value_target_group(label) == group
+
+
+def _iodine_row(quantity):
+    return {"name": "Iodine", "category": "mineral", "ingredientGroup": "Iodine", "quantity": quantity}
+
+
+def _dv_entry(order, serving, amount, unit, *groups):
+    return {
+        "servingSizeOrder": order, "servingSizeQuantity": serving, "operator": "=",
+        "quantity": amount, "unit": unit, "servingSizeUnit": "Gummy(ies)",
+        "dailyValueTargetGroup": [{"name": name, "operator": "=", "percent": percent} for name, percent in groups],
+    }
+
+
+CHILD = "Children less than 4 years of age"
+ADULT = "Adults and children 4 or more years of age"
+
+
+def test_unit_repair_reads_the_dv_of_the_column_it_takes_the_percent_from():
+    # 82582: the first column is a child placeholder, the 30 "mg" and its 20% are the adult column.
+    row = _cleaned_active(_raw_product([_iodine_row([
+        _dv_entry(1, 1, 0, "NP", (CHILD, 21)),
+        _dv_entry(2, 2, 30, "mg", (ADULT, 20)),
+    ])]))
+    assert (row["quantity"], row["unit"], row["dailyValue"]) == (30.0, "mcg", 20.0)
+    assert row["daily_value_target_group"] == "adult_4_plus"
+
+
+def test_a_child_only_column_stays_on_the_child_dv():
+    # 18 "mg" at 20% proves 18 mcg only on the child DV of 90 mcg; the adult DV would read 30.
+    row = _cleaned_active(_raw_product([_iodine_row([_dv_entry(1, 1, 18, "mg", (CHILD, 20))])]))
+    assert (row["quantity"], row["unit"]) == (18.0, "mcg")
+    assert row["daily_value_target_group"] == "children_1_3"
+
+
+@pytest.mark.parametrize("groups", [((CHILD, 33), (ADULT, 20)), ((ADULT, 20), (CHILD, 33))])
+def test_a_column_printing_both_groups_reports_the_adult_percent(groups):
+    # 277314 prints children and adults in one column, children first.
+    row = _cleaned_active(_raw_product([_iodine_row([_dv_entry(1, 1, 30, "mcg", *groups)])]))
+    assert (row["dailyValue"], row["daily_value_target_group"]) == (20.0, "adult_4_plus")
+
+
+def test_a_placeholder_adult_zero_does_not_displace_the_child_percent():
+    # 82319's child column prints children 60% and adults 0%.
+    row = _cleaned_active(_raw_product([_iodine_row([_dv_entry(1, 1, 54, "mcg", (CHILD, 60), (ADULT, 0))])]))
+    assert (row["dailyValue"], row["daily_value_target_group"]) == (60.0, "children_1_3")

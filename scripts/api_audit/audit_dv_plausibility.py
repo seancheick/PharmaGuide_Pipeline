@@ -56,7 +56,7 @@ def _normalize_target_group(value: Any) -> str | None:
         return "pregnant_lactating"
     if "infant" in key or "12_month" in key:
         return "infants"
-    if "children" in key and ("1_3" in key or "1_through_3" in key):
+    if "children" in key and ("1_3" in key or "1_through_3" in key or "less_than_4" in key):
         return "children_1_3"
     if "adult" in key or "4" in key:
         return "adult_4_plus"

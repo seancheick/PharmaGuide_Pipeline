@@ -1976,7 +1976,7 @@ class EnhancedDSLDNormalizer:
             return "pregnant_lactating"
         if "infant" in key or "12_month" in key:
             return "infants"
-        if "children" in key and ("1_3" in key or "1_through_3" in key):
+        if "children" in key and ("1_3" in key or "1_through_3" in key or "less_than_4" in key):
             return "children_1_3"
         if "adult" in key or "4" in key:
             return "adult_4_plus"
@@ -1999,11 +1999,24 @@ class EnhancedDSLDNormalizer:
                 return normalized
         return None
 
+    def _daily_value_group_for_analysis(self, dv_groups: List[Dict]) -> Dict:
+        """The group whose percent a quantity column reports: adults when they have one.
+
+        82319 prints adults 0% beside children 60% in its child column, so a
+        zero or blank adult percent does not displace the group that has one.
+        """
+        for group in dv_groups:
+            if (
+                self._daily_value_target_group_from_dv_group(group) == "adult_4_plus"
+                and (self._safe_float(group.get("percent"), "daily_value", None) or 0) > 0
+            ):
+                return group
+        return dv_groups[0]
+
     def _daily_value_target_group_from_variants(self, variants: List[Dict]) -> Optional[str]:
-        """Return the first explicit FDA target group preserved on quantity variants."""
-        for variant in variants or []:
-            if not isinstance(variant, dict):
-                continue
+        """Return the FDA target group of the selected column, whose percent the row carries."""
+        variants = [variant for variant in variants or [] if isinstance(variant, dict)]
+        for variant in sorted(variants, key=lambda variant: variant.get("selected_for_analysis") is not True):
             for field in ("daily_value_target_group", "context"):
                 normalized = self._normalize_daily_value_target_group(variant.get(field))
                 if normalized:
@@ -10308,7 +10321,7 @@ class EnhancedDSLDNormalizer:
             daily_value_target_group = None
             dv_groups = quantities.get("dailyValueTargetGroup", [])
             if dv_groups and isinstance(dv_groups, list):
-                first_dv_group = dv_groups[0]
+                first_dv_group = self._daily_value_group_for_analysis(dv_groups)
                 # A printed 0% is kept (0.0); no printed percent stays None.
                 # They differ: "Vitamin A 0%" is a panel zero, a row with no
                 # percent is listed without an amount (register Q23).
@@ -10353,7 +10366,7 @@ class EnhancedDSLDNormalizer:
                     daily_value_target_group = None
                     dv_groups = q.get("dailyValueTargetGroup", [])
                     if dv_groups and isinstance(dv_groups, list):
-                        first_dv_group = dv_groups[0]
+                        first_dv_group = self._daily_value_group_for_analysis(dv_groups)
                         dv = self._safe_float(first_dv_group.get("percent"), "daily_value", None)
                         daily_value_target_group = self._daily_value_target_group_from_dv_group(first_dv_group)
 
