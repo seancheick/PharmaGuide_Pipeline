@@ -2351,7 +2351,10 @@
           "drug_classes_any": [],
           "profile_flags_any": [],
           "product_forms_any": [],
-          "nutrient_forms_any": []
+          "nutrient_forms_any": [
+            "beta_carotene",
+            "mixed_carotenoids"
+          ]
         },
         "dose": {
           "basis": "per_day",
@@ -2398,7 +2401,10 @@
           "drug_classes_any": [],
           "profile_flags_any": [],
           "product_forms_any": [],
-          "nutrient_forms_any": []
+          "nutrient_forms_any": [
+            "beta_carotene",
+            "mixed_carotenoids"
+          ]
         },
         "dose": {
           "basis": "per_day",

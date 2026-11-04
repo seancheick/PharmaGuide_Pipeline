@@ -526,3 +526,113 @@ def test_mixed_row_within_the_limit_even_if_all_preformed_has_no_card(enricher):
         enricher, 1500, "mcg RAE", MIXED_CAROTENES, forms=[MIXED_CAROTENES, "retinyl acetate"]
     )["pregnancy"]
     assert _outcome(hit)[1:] == ("below_threshold", "suppress")
+
+
+# --- Breastfeeding (section C) ----------------------------------------------
+
+VITAMIN_E = "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS"
+ALPHA_TOCOPHEROL = "d-alpha-tocopherol"
+OVER_LIMIT_HEADLINE = "Breastfeeding: avoid use"
+
+
+def _vitamin_e(enricher, quantity, unit="mg", form=ALPHA_TOCOPHEROL, forms=None, **row):
+    return _nutrient_hits(enricher, "vitamin_e", VITAMIN_E, quantity, unit, form, forms, **row)
+
+
+def _at_age(hit, bracket="19+"):
+    """What a person of this age is shown, read the way the device reads it."""
+    decision = hit["dose_threshold_evaluation"]
+    outcome = (decision.get("age_outcomes") or {}).get(bracket)
+    if outcome is None:
+        return hit["severity"], decision["evaluation_status"], decision["consumer_disposition"]
+    return outcome["clinical_severity"], outcome["evaluation_status"], outcome["consumer_disposition"]
+
+
+@pytest.mark.parametrize(
+    "hits",
+    [
+        lambda enricher: _vitamin_a(enricher, 12000, "IU", RETINYL),
+        lambda enricher: _vitamin_e(enricher, 1500),
+    ],
+)
+def test_confirmed_above_the_limit_while_breastfeeding_reads_avoid(enricher, hits):
+    hit = hits(enricher)["lactation"]
+    assert _outcome(hit) == ("avoid", "above_threshold", "block")
+    assert hit["alert_headline"] == OVER_LIMIT_HEADLINE
+    assert hit["action"] == "Avoid use during breastfeeding."
+    assert hit["profile_gate"]["requires"]["profile_flags_any"] == ["breastfeeding"]
+
+
+def test_vitamin_a_is_never_contraindicated_while_breastfeeding():
+    rows = [
+        row
+        for row in RULES[VITAMIN_A]["dose_thresholds"]
+        if row["target_id"] == "lactation"
+    ]
+    assert rows and {row["severity_if_met"] for row in rows} == {"avoid"}
+
+
+@pytest.mark.parametrize(
+    "hits",
+    [
+        lambda enricher: _vitamin_a(enricher, 2000, "IU", RETINYL),
+        lambda enricher: _vitamin_e(enricher, 100),
+    ],
+)
+def test_within_the_limit_while_breastfeeding_has_no_over_limit_warning(enricher, hits):
+    assert _outcome(hits(enricher)["lactation"])[1:] == ("below_threshold", "suppress")
+
+
+@pytest.mark.parametrize(
+    "hits",
+    [
+        lambda enricher: _vitamin_a(enricher, 12000, "IU", UNSPECIFIED_A),
+        lambda enricher: _vitamin_a(enricher, None, "", UNSPECIFIED_A),
+        lambda enricher: _vitamin_e(enricher, None, ""),
+        lambda enricher: _vitamin_e(enricher, 1200, "IU", form="vitamin e (unspecified)"),
+    ],
+)
+def test_unresolved_form_or_amount_while_breastfeeding_reads_review(enricher, hits):
+    hit = hits(enricher)["lactation"]
+    assert hit["severity"] == "monitor"
+    assert hit["dose_threshold_evaluation"]["evaluation_status"] in {
+        "form_unknown",
+        "amount_unknown",
+    }
+    assert hit["dose_threshold_evaluation"]["consumer_disposition"] == "review"
+    assert hit["alert_headline"] != OVER_LIMIT_HEADLINE
+
+
+def test_carotenoids_stay_out_of_the_breastfeeding_limit(enricher):
+    assert _vitamin_a(enricher, 25000, "IU", MIXED_CAROTENES) == {}
+
+
+def test_one_breastfeeding_card_per_rule(enricher):
+    profile_hits = [
+        hit
+        for hit in _vitamin_e(enricher, 1500).values()
+        if hit["condition_id"] == "lactation"
+    ]
+    assert len(profile_hits) == 1
+
+
+def test_bleeding_and_medication_rules_keep_running_within_the_limit(enricher):
+    row = {
+        "canonical_id": "vitamin_e",
+        "canonical_source_db": "ingredient_quality_map",
+        "name": "Vitamin E",
+        "standard_name": "Vitamin E",
+        "quantity": 100,
+        "unit": "mg",
+        "raw_source_path": "ingredientRows[0]",
+        "form_id": ALPHA_TOCOPHEROL,
+        "matched_form": ALPHA_TOCOPHEROL,
+    }
+    profile = enricher._collect_interaction_profile(
+        {"activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row]}}
+    )
+    alert = next(a for a in profile["ingredient_alerts"] if a["rule_id"] == VITAMIN_E)
+    assert {"bleeding_disorders", "surgery_scheduled", "lactation"} <= {
+        hit["condition_id"] for hit in alert["condition_hits"]
+    }
+    assert "anticoagulants" in {hit["drug_class_id"] for hit in alert["drug_class_hits"]}

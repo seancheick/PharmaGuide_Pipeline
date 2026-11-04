@@ -7400,6 +7400,42 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "Dose and form dependent risk is primarily tied to preformed retinoids.",
+          "action": "Monitoring is advised during breastfeeding.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+          ],
+          "alert_headline": "Breastfeeding: monitoring is advised",
+          "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
+          "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -7493,6 +7529,47 @@
           "alert_headline_if_amount_unknown": "Vitamin A form needs review",
           "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
           "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional."
+        },
+        {
+          "scope": "condition",
+          "target_id": "lactation",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 10000,
+          "unit": "iu",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "alert_headline_if_met": "Breastfeeding: avoid use",
+          "action_if_met": "Avoid use during breastfeeding.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 10000,
+              "unit": "iu",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -7531,7 +7608,7 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-11-03",
-      "review_owner": "Dr. Pham (clinical review 2026-11-03, form filter and review note); pharmaguide_clinical_team"
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, form filter, review note and section C breastfeeding); pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_NIACIN_DIABETES",
@@ -8055,6 +8132,40 @@
           "direction": "harmful",
           "materiality": "presence",
           "min_effective_dose": null
+        },
+        {
+          "condition_id": "lactation",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
+          "action": "Monitoring is advised during breastfeeding.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/",
+            "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
+          ],
+          "alert_headline": "Breastfeeding: monitoring is advised",
+          "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+          "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -8129,6 +8240,44 @@
               "severity_if_not_met": "monitor"
             }
           }
+        },
+        {
+          "scope": "condition",
+          "target_id": "lactation",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 1000,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "alert_headline_if_met": "Breastfeeding: avoid use",
+          "action_if_met": "Avoid use during breastfeeding.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 1000,
+              "unit": "mg",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -8166,8 +8315,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-27",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding); pharmaguide_clinical_team"
     },
     {
       "id": "RULE_INGREDIENT_VITAMIN_K",
