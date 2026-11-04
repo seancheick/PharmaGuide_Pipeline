@@ -16,6 +16,7 @@ def product(quantity=120, low=1, high=4, directions=True):
         'scoring_eligible': True, 'ul_gate_eligible': True,
     }], safety_flags=[{'nutrient': 'Magnesium', 'pct_ul': pct, 'amount': quantity * high,
                        'ul': 350, 'ul_gate_eligible': True}] if pct > 100 else [])
+    p['activeIngredients'], p['inactiveIngredients'] = [{'name': 'Magnesium'}], []
     if directions:
         p['serving_basis'] = {'min_servings_per_day': low, 'max_servings_per_day': high,
                               'servings_per_day_source': 'directions'}

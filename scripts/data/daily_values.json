@@ -1,10 +1,10 @@
 {
   "_metadata": {
     "description": "FDA labeling Daily Values used for Supplement Facts %DV cross-checks",
-    "purpose": "daily_value_unit_plausibility",
-    "schema_version": "1.0.0",
-    "last_updated": "2026-08-13",
-    "verified_date": "2026-08-13",
+    "purpose": "daily_value_unit_plausibility; upper_limit_bound_dvs bounds a printed %DV for the upper-limit check only",
+    "schema_version": "1.1.0",
+    "last_updated": "2026-11-04",
+    "verified_date": "2026-11-04",
     "sources": [
       {
         "label": "21 CFR 101.9(c)(8)(iv) RDI table",
@@ -13,6 +13,14 @@
       {
         "label": "FDA Daily Value and Percent Daily Value reference guide",
         "url": "https://www.fda.gov/files/food/published/DV-Percent-DV-Nutrition-Facts-Label_09072023.pdf"
+      },
+      {
+        "label": "21 CFR 101.9(c)(8)(iv), 2024 edition: current RDIs, adults and children 4 years and over",
+        "url": "https://www.govinfo.gov/content/pkg/CFR-2024-title21-vol2/xml/CFR-2024-title21-vol2-sec101-9.xml"
+      },
+      {
+        "label": "21 CFR 101.9(c)(8)(iv), 2015 edition: RDIs before the 2016 rule",
+        "url": "https://www.govinfo.gov/content/pkg/CFR-2015-title21-vol2/xml/CFR-2015-title21-vol2-sec101-9.xml"
       }
     ],
     "total_entries": 13
@@ -196,6 +204,139 @@
         "children_1_3": 80,
         "pregnant_lactating": 400
       }
+    }
+  },
+  "upper_limit_bound_dvs": {
+    "calcium": {
+      "standard_name": "Calcium",
+      "unit": "mg",
+      "current_dv": 1300,
+      "pre_2016_dv": 1000,
+      "bound": 1300
+    },
+    "iron": {
+      "standard_name": "Iron",
+      "unit": "mg",
+      "current_dv": 18,
+      "pre_2016_dv": 18,
+      "bound": 18
+    },
+    "vitamin_a": {
+      "standard_name": "Vitamin A",
+      "unit": "mcg RAE",
+      "current_dv": 900,
+      "pre_2016_dv": 1500,
+      "bound": 1500,
+      "notes": "Pre-2016 DV 5,000 IU x 0.3 mcg RAE per IU retinol (unit_conversions.json). Total vitamin A activity, so it also bounds the preformed share."
+    },
+    "vitamin_c": {
+      "standard_name": "Vitamin C",
+      "unit": "mg",
+      "current_dv": 90,
+      "pre_2016_dv": 60,
+      "bound": 90
+    },
+    "vitamin_d": {
+      "standard_name": "Vitamin D",
+      "unit": "mcg",
+      "current_dv": 20,
+      "pre_2016_dv": 10,
+      "bound": 20,
+      "notes": "Pre-2016 DV 400 IU = 10 mcg."
+    },
+    "vitamin_e": {
+      "standard_name": "Vitamin E",
+      "unit": "mg alpha-tocopherol",
+      "current_dv": 30,
+      "pre_2016_dv": 27.3,
+      "bound": 30,
+      "notes": "Limit is mass of supplemental alpha-tocopherol. Current DV 15 mg = 30 mg all rac (101.9(c)(8)(iv) note 4). Pre-2016 DV 30 IU at 1,100 IU synthetic = 1,000 mg (rda_optimal_uls.json)."
+    },
+    "vitamin_b3_niacin": {
+      "standard_name": "Niacin",
+      "unit": "mg NE",
+      "current_dv": 16,
+      "pre_2016_dv": 20,
+      "bound": 20
+    },
+    "vitamin_b6_pyridoxine": {
+      "standard_name": "Vitamin B6",
+      "unit": "mg",
+      "current_dv": 1.7,
+      "pre_2016_dv": 2,
+      "bound": 2
+    },
+    "vitamin_b9_folate": {
+      "standard_name": "Folate",
+      "unit": "mcg DFE",
+      "current_dv": 400,
+      "pre_2016_dv": 680,
+      "bound": 680,
+      "notes": "Pre-2016 DV 400 mcg, which could be all folic acid: x 1.7 mcg DFE per mcg, the conversion rda_optimal_uls.json stores its limit with."
+    },
+    "phosphorus": {
+      "standard_name": "Phosphorus",
+      "unit": "mg",
+      "current_dv": 1250,
+      "pre_2016_dv": 1000,
+      "bound": 1250
+    },
+    "iodine": {
+      "standard_name": "Iodine",
+      "unit": "mcg",
+      "current_dv": 150,
+      "pre_2016_dv": 150,
+      "bound": 150
+    },
+    "magnesium": {
+      "standard_name": "Magnesium",
+      "unit": "mg",
+      "current_dv": 420,
+      "pre_2016_dv": 400,
+      "bound": 420
+    },
+    "zinc": {
+      "standard_name": "Zinc",
+      "unit": "mg",
+      "current_dv": 11,
+      "pre_2016_dv": 15,
+      "bound": 15
+    },
+    "selenium": {
+      "standard_name": "Selenium",
+      "unit": "mcg",
+      "current_dv": 55,
+      "pre_2016_dv": 70,
+      "bound": 70
+    },
+    "copper": {
+      "standard_name": "Copper",
+      "unit": "mcg",
+      "current_dv": 900,
+      "pre_2016_dv": 2000,
+      "bound": 2000,
+      "notes": "0.9 mg and 2.0 mg."
+    },
+    "manganese": {
+      "standard_name": "Manganese",
+      "unit": "mg",
+      "current_dv": 2.3,
+      "pre_2016_dv": 2,
+      "bound": 2.3
+    },
+    "molybdenum": {
+      "standard_name": "Molybdenum",
+      "unit": "mcg",
+      "current_dv": 45,
+      "pre_2016_dv": 75,
+      "bound": 75
+    },
+    "chloride": {
+      "standard_name": "Chloride",
+      "unit": "mg",
+      "current_dv": 2300,
+      "pre_2016_dv": 3400,
+      "bound": 3400
     }
   }
 }
