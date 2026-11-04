@@ -663,6 +663,27 @@ def test_a_low_above_the_limit_establishes_the_excess(enricher):
     assert decision["evaluation_status"] == "above_threshold"
 
 
+@pytest.mark.parametrize(
+    "unit",
+    ["mg EGCG", "mg andrographolide", "mg_caffeine_equivalent", "mg_glycyrrhizin", "IU", "iu", "mcg RAE"],
+)
+def test_a_range_with_no_bridge_to_the_threshold_unit_could_not_be_evaluated(enricher, unit):
+    """A throw here is caught by enrich_product, which blanks the whole product."""
+    decision = enricher._evaluate_dose_thresholds_for_target(
+        thresholds=[{"scope": "condition", "target_id": "pregnancy", "basis": "per_day",
+                     "comparator": ">", "value": 400, "unit": unit,
+                     "severity_if_met": "avoid", "severity_if_not_met": "monitor"}],
+        target_type="condition",
+        target_id="pregnancy",
+        ingredient={"name": "Caffeine", "standard_name": "Caffeine", "quantity": 150.0,
+                    "quantity_upper": 250.0, "unit": "mg"},
+        servings_per_day_max=1.0,
+        base_severity="monitor",
+    )[1]
+    assert decision["evaluation_status"] == "form_unknown"
+    assert [c["reason"] for c in decision["thresholds_checked"]] == ["form_unknown"]
+
+
 # Transcription errors the label settles. Each label was read.
 def test_a_calcium_row_mistyped_as_vitamin_c_stops_adding_to_vitamin_c(enriched):
     """263869 prints Calcium 55 mg (as Ester-C Calcium Ascorbate); DSLD calls it Vitamin C."""
@@ -671,6 +692,14 @@ def test_a_calcium_row_mistyped_as_vitamin_c_stops_adding_to_vitamin_c(enriched)
     [calcium] = [r for r in _rows(product) if r.get("canonical_id") == "calcium"]
     assert calcium["quantity"] == 55.0
     assert _exposure(calcium) == pytest.approx(110.0)
+
+
+@pytest.mark.parametrize("dsld_id", ["218076", "63487"])
+def test_a_carotenoid_mix_printed_in_micrograms_is_not_read_in_milligrams(enriched, dsld_id):
+    """Both panels print Carotenoid Mix 86 mcg; DSLD types mg, a thousandfold."""
+    _, blob = _exported(enriched, dsld_id)
+    [mix] = [r for r in blob["display_ingredients"] if r.get("raw_source_path") == "ingredientRows[30]"]
+    assert mix["exact_dose_text"] == "86 mcg"
 
 
 def test_thiamine_printed_in_milligrams_is_not_read_in_micrograms(enriched):
@@ -753,19 +782,75 @@ def test_a_component_never_comes_back_as_a_dose_row(enriched, dsld_id):
     assert not counted
 
 
+def _dose_row(path, name, canonical_id, amount=150.0, unit="mg"):
+    return {"raw_source_path": path, "ingredient": name, "canonical_id": canonical_id,
+            "dose_role": "declared_total", "ul_gate_eligible": False,
+            "per_day_min": amount, "per_day_max": amount, "converted_unit": unit}
+
+
+def _exported_row(path, canonical_id):
+    return {"raw_source_path": path, "canonical_id": canonical_id}
+
+
 def test_a_row_represented_by_its_exported_parent_is_not_added():
     from build_final_db import _append_dose_only_rows
 
-    ingredients = [{"raw_source_path": "ingredientRows[0]", "name": "BCAA"}]
+    ingredients = [_exported_row("ingredientRows[0]", "caffeine")]
+    _append_dose_only_rows(
+        ingredients, [_dose_row("ingredientRows[0].nestedRows[0]", "Caffeine Anhydrous", "caffeine")]
+    )
+    assert len(ingredients) == 1
+
+
+def test_a_parent_of_another_identity_does_not_carry_its_child():
+    """Guarana's own mass is not the caffeine under it, so the caffeine still ships."""
+    from build_final_db import _append_dose_only_rows
+
+    ingredients = [_exported_row("ingredientRows[0]", "guarana")]
+    _append_dose_only_rows(
+        ingredients, [_dose_row("ingredientRows[0].nestedRows[0]", "Caffeine", "caffeine")]
+    )
+    assert [r["canonical_id"] for r in ingredients] == ["guarana", "caffeine"]
+
+
+def test_a_child_is_not_added_beside_its_identity_exported_elsewhere():
+    """Caffeine printed again below a source can be the same physical amount."""
+    from build_final_db import _append_dose_only_rows
+
+    ingredients = [
+        _exported_row("ingredientRows[0]", "guarana"),
+        _exported_row("ingredientRows[1]", "caffeine"),
+    ]
+    _append_dose_only_rows(
+        ingredients, [_dose_row("ingredientRows[0].nestedRows[0]", "Caffeine", "caffeine")]
+    )
+    assert len(ingredients) == 2
+
+
+def test_a_total_is_not_added_above_its_exported_children():
+    """211339 prints BCAAs 16.1 g over the leucine, isoleucine and valine it is made of."""
+    from build_final_db import _append_dose_only_rows
+
+    ingredients = [_exported_row("ingredientRows[0].nestedRows[0]", "l_leucine")]
+    _append_dose_only_rows(
+        ingredients,
+        [_dose_row("ingredientRows[0]", "Branched-Chain Amino Acids", "branched_chain_amino_acids", 16.1, "g")],
+    )
+    assert len(ingredients) == 1
+
+
+def test_one_amount_missing_as_parent_and_child_ships_once():
+    from build_final_db import _append_dose_only_rows
+
+    ingredients = []
     _append_dose_only_rows(
         ingredients,
         [
-            {"raw_source_path": "ingredientRows[0].nestedRows[0]", "ingredient": "Leucine",
-             "canonical_id": "leucine", "dose_role": "declared_total", "ul_gate_eligible": False,
-             "per_day_min": 2.5, "per_day_max": 2.5, "converted_unit": "g"},
+            _dose_row("ingredientRows[0]", "Caffeine", "caffeine"),
+            _dose_row("ingredientRows[0].nestedRows[0]", "Caffeine Anhydrous", "caffeine"),
         ],
     )
-    assert len(ingredients) == 1
+    assert [r["raw_source_path"] for r in ingredients] == ["ingredientRows[0]"]
 
 
 def test_a_row_the_analyzed_export_keeps_is_not_added():

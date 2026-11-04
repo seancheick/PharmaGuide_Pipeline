@@ -6309,6 +6309,34 @@ class EnhancedDSLDNormalizer:
                 h["canonical_id"] = "digestive_enzymes"
                 h["canonical_source_db"] = "ingredient_quality_map"
 
+    @staticmethod
+    def _reviewed_source_digest(raw_data: Dict[str, Any]) -> str:
+        source = {key: raw_data.get(key) for key in ("ingredientRows", "servingSizes", "statements")}
+        return hashlib.sha256(json.dumps(source, sort_keys=True, ensure_ascii=False,
+                                         separators=(",", ":")).encode()).hexdigest()
+
+    def _manufacturer_composition(self, raw_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        """A reviewed manufacturer composition, bound to the exact label edition.
+
+        A changed edition keeps the record's existence but none of its amounts, so
+        the assessment reads as unresolved instead of falling back to the panel.
+        """
+        entry = self._label_corrections_by_dsld_id.get(str(raw_data.get("id"))) or {}
+        record = entry.get("manufacturer_composition")
+        if not record:
+            return None
+        if (
+            self._reviewed_source_digest(raw_data) != record.get("raw_source_sha256")
+            or raw_data.get("productVersionCode") != record.get("raw_product_version_code")
+        ):
+            return {"bound": False}
+        return {
+            "bound": True,
+            **{key: record[key] for key in (
+                "beta_carotene_mcg_per_serving", "basis", "source_url", "source_date",
+            )},
+        }
+
     def _apply_reviewed_serving_basis(self, raw_data: Dict[str, Any]) -> Dict[str, Any]:
         """Apply an exact-source panel repair through the existing correction owner.
 
@@ -6320,10 +6348,7 @@ class EnhancedDSLDNormalizer:
         repair = entry.get("serving_basis_correction")
         if not repair:
             return raw_data
-        source = {key: raw_data.get(key) for key in ("ingredientRows", "servingSizes", "statements")}
-        digest = hashlib.sha256(json.dumps(source, sort_keys=True, ensure_ascii=False,
-                                          separators=(",", ":")).encode()).hexdigest()
-        if digest != repair.get("raw_source_sha256"):
+        if self._reviewed_source_digest(raw_data) != repair.get("raw_source_sha256"):
             raise ValueError(f"Reviewed serving source changed for DSLD {raw_data.get('id')}")
         # Metadata repairs use the same exact-source authority, with explicit
         # original values for fields outside the panel/statement digest.
@@ -6420,6 +6445,7 @@ class EnhancedDSLDNormalizer:
         """
         try:
             raw_data = self._apply_reviewed_serving_basis(raw_data)
+            manufacturer_composition = self._manufacturer_composition(raw_data)
             self._display_ingredients_buffer = []
             self._display_source_rows = []
             self._label_ledger_omissions = []
@@ -7038,6 +7064,7 @@ class EnhancedDSLDNormalizer:
                 "bundleName": raw_data.get("bundleName"),
                 "brandIpSymbol": raw_data.get("brandIpSymbol"),
                 "productVersionCode": raw_data.get("productVersionCode"),
+                "manufacturer_composition": manufacturer_composition,
                 "entryDate": raw_data.get("entryDate"),
                 "updatedDate": raw_data.get("updatedDate"),
                 "pdf": raw_data.get("pdf"),
