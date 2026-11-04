@@ -694,6 +694,14 @@ def test_a_calcium_row_mistyped_as_vitamin_c_stops_adding_to_vitamin_c(enriched)
     assert _exposure(calcium) == pytest.approx(110.0)
 
 
+@pytest.mark.parametrize("dsld_id", ["218076", "63487"])
+def test_a_carotenoid_mix_printed_in_micrograms_is_not_read_in_milligrams(enriched, dsld_id):
+    """Both panels print Carotenoid Mix 86 mcg; DSLD types mg, a thousandfold."""
+    _, blob = _exported(enriched, dsld_id)
+    [mix] = [r for r in blob["display_ingredients"] if r.get("raw_source_path") == "ingredientRows[30]"]
+    assert mix["exact_dose_text"] == "86 mcg"
+
+
 def test_thiamine_printed_in_milligrams_is_not_read_in_micrograms(enriched):
     """328514 prints 125 mg, 10417% of the 1.2 mg Daily Value."""
     [thiamine] = _rows(enriched("328514"), "Thiamine")
