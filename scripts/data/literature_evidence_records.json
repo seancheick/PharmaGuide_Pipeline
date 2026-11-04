@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-03",
+    "last_updated": "2026-11-04",
     "total_entries": 844,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
@@ -205,9 +205,81 @@
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "This umbrella review presents the results of the Working Group on Nutritional Interventions."
           }
+        },
+        {
+          "pmid": "35845777",
+          "study_type": "systematic_review_meta",
+          "sample_size": 1418,
+          "primary_endpoint": "Sarcopenia-related measures including lean mass, handgrip, leg press",
+          "effect_direction": "null",
+          "title": "The Effect of Leucine Supplementation on Sarcopenia-Related Measures in Older Adults: A Systematic Review and Meta-Analysis of 17 Randomized Controlled Trials.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The Effect of Leucine Supplementation on Sarcopenia-Related Measures in Older Adults: A Systematic Review and Meta-Analysis of 17 Randomized Controlled Trials.",
+            "human_subjects_verified": false,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/35845777/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "Leucine-isolated supplementation did not improve muscle mass and strength in elderly."
+          }
+        },
+        {
+          "pmid": "32079916",
+          "study_type": "rct",
+          "sample_size": 25,
+          "primary_endpoint": "not named; leg-press 1RM and muscle cross-sectional area",
+          "effect_direction": "null",
+          "title": "Leucine Supplementation Has No Further Effect on Training-induced Muscle Adaptations.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Leucine Supplementation Has No Further Effect on Training-induced Muscle Adaptations.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32079916/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "High-dose leucine supplementation did not enhance gains in muscle strength and mass after a 12-wk RT program in young resistance-trained males consuming adequate amounts of dietary protein."
+          }
+        },
+        {
+          "pmid": "40926079",
+          "study_type": "rct",
+          "sample_size": 19,
+          "primary_endpoint": "myofibrillar fractional synthesis rate",
+          "effect_direction": "null",
+          "title": "Resistance training, but not leucine, increased basal muscle protein synthesis and reversed frailty in older women consuming optimized protein intake.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Resistance training, but not leucine, increased basal muscle protein synthesis and reversed frailty in older women consuming optimized protein intake.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/40926079/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "Leucine had no added anabolic benefit."
+          }
+        },
+        {
+          "pmid": "32230954",
+          "study_type": "rct",
+          "sample_size": 50,
+          "primary_endpoint": "effect on sarcopenia and respiratory muscle function",
+          "effect_direction": "positive_weak",
+          "title": "Effects of Leucine Administration in Sarcopenia: A Randomized and Placebo-controlled Clinical Trial.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of Leucine Administration in Sarcopenia: A Randomized and Placebo-controlled Clinical Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32230954/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "The use of l-leucine supplementation can have some beneficial effects on sarcopenia and could be considered for the treatment of sarcopenia in older individuals."
+          }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "null",
       "population_context": "Young men and older/young adults in acute EAA or protein-beverage studies; the broader nutritional umbrella review includes older adults with and without sarcopenia.",
       "studied_dose_exposure": {
         "values": [
@@ -219,11 +291,11 @@
         "unit": "mg",
         "basis": "per_serving_threshold"
       },
-      "applicability_decision": "Acute muscle-protein-synthesis surrogate studies used leucine within EAA mixtures (6.7 g with 26% or 41% leucine) or whey-protein beverages (3 or 5 g total leucine). The cited umbrella review found muscle-mass benefit in sarcopenic older adults, but not healthy older adults, and no clear benefit for muscle strength or physical performance. These sources do not establish a universal standalone 2-3 g clinical threshold or general-population efficacy without the studied preparation and population context.",
+      "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. A meta-analysis of 17 RCTs found leucine alone had no effect on lean mass, handgrip or leg press in older adults (PMID 35845777). Free leucine added nothing to resistance training in young men (PMID 32079916), frail older women (PMID 40926079) or midlife women (PMID 31577520). Two small trials are positive: walking time in institutionalized older adults on 6 g/day (PMID 32230954) and fat-free mass during energy restriction on 3 g/day (PMID 37923932). An umbrella review favors leucine for muscle mass in sarcopenia without saying in its abstract whether that is free leucine (PMID 32483625), and a 2025 meta-analysis calls its evidence low quality and limited when leucine is used alone (PMID 40805998). The stored trials tested an amino acid mixture (PMID 16507602) and a whey drink (PMID 24284442), measuring protein synthesis over hours. The evidence conflicts with no clear benefit for the free leucine on these labels. PMID 35845777 states: 'Leucine-isolated supplementation did not improve muscle mass and strength in elderly.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 35845777; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
+        "verified_at": "2026-11-04T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -284,7 +356,8 @@
         "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
-      }
+      },
+      "applicability_status": "reviewed_null_evidence"
     },
     {
       "canonical_id": "tmg_betaine",
@@ -724,48 +797,8 @@
         "PubMed"
       ],
       "records_screened": 70,
-      "qualifying_human_studies": [
-        {
-          "pmid": "24246368",
-          "title": "Could capsaicinoids help to support weight management? A systematic review and meta-analysis of energy intake data.",
-          "study_type": "meta_analysis_rct",
-          "sample_size": 191,
-          "dose": ">= 2 mg capsaicinoids",
-          "duration": "acute and multi-day",
-          "outcome": "reduced energy intake by 74 kcal per meal",
-          "effect_direction": "positive_weak",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Could capsaicinoids help to support weight management? A systematic review and meta-analysis of energy intake data.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24246368/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "From the studies, 19 effect sizes were extracted an"
-          }
-        },
-        {
-          "pmid": "23844093",
-          "title": "Acute effects of capsaicin on energy expenditure and fat oxidation in negative energy balance.",
-          "study_type": "randomized_controlled_trial",
-          "dose": "2.56 mg capsaicin/meal",
-          "duration": "acute",
-          "outcome": "in 25% negative energy balance, 2.56 mg capsaicin per meal counteracted the fall in diet-induced thermogenesis and resting energy expenditure and raised fat oxidation",
-          "effect_direction": "positive_weak",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Acute effects of capsaicin on energy expenditure and fat oxidation in negative energy balance.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23844093/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "An induced negative energy balance of 25% was effectively a 20.5% negative energy balance due to adapting mec"
-          }
-        }
-      ],
-      "effect_direction": "positive_weak",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
       "population_context": "Overweight and healthy adults",
       "studied_dose_exposure": {
         "values": [
@@ -775,11 +808,11 @@
         "unit": "mg",
         "basis": "active_capsaicinoids_per_meal"
       },
-      "applicability_decision": "A meta-analysis of capsaicinoid trials reports that at least 2 mg capsaicinoids taken before a meal was needed to reduce ad libitum energy intake; a respiration-chamber study gave 2.56 mg capsaicin per meal. Crude ground pepper without a capsaicinoid declaration does not establish that exposure.",
+      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Labels print cayenne at 450 to 500 mg or an extract, or give no amount, and no row shows a capsaicinoid amount. The one trial read at that form and amount gave 11 men a single 500 mg dose with 1.25 mg capsaicin (PMID 24267043). Pooled capsaicin trials report a weight difference of 0.51 kg without separating whole cayenne or extract (PMID 36938807). A pooled single-meal result points to at least 2 mg of capsaicinoids (PMID 24246368), an exposure these labels do not print. Gut symptom trials used red pepper powder at 2.5 g/day (PMID 12030948) and enteric-coated pills (PMID 21573941). No study read tested these labels' preparation with a named primary outcome. Abstracts read; full texts not opened, so this does not say the preparation was tested and failed. PMID 24267043 states: 'These results suggest that acute ingestion of 500 mg of cayenne (1.25 mg capsaicin) or evodiamine is not effective at inducing thermogenesis and increasing fat oxidation at rest or during exercise in men.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; packet/INGR_CAYENNE_PEPPER.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
+        "verified_at": "2026-11-04T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -829,7 +862,8 @@
         "owner": "scripts/data/literature_evidence_records.json::cayenne_pepper",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      }
+      },
+      "applicability_status": "no_qualifying_human_evidence"
     },
     {
       "canonical_id": "pomegranate",
@@ -952,9 +986,45 @@
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "To assess the effects of interventions for the prevention of HSL in people of all ages."
           }
+        },
+        {
+          "pmid": "6435961",
+          "study_type": "rct",
+          "sample_size": 41,
+          "primary_endpoint": "herpes simplex recurrence rate, severity and healing time",
+          "effect_direction": "mixed",
+          "title": "Treatment of recurrent herpes simplex infections with L-lysine monohydrochloride.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Treatment of recurrent herpes simplex infections with L-lysine monohydrochloride.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/6435961/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "A dose of 624 mg a day was not effective."
+          }
+        },
+        {
+          "pmid": "6419679",
+          "study_type": "rct",
+          "sample_size": 21,
+          "primary_endpoint": "herpes simplex episode frequency, duration and severity",
+          "effect_direction": "null",
+          "title": "Failure of lysine in frequently recurrent herpes simplex infection. Treatment and prophylaxis.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Failure of lysine in frequently recurrent herpes simplex infection. Treatment and prophylaxis.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/6419679/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "we were unable to detect any substantial benefit of lysine therapy"
+          }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "null",
       "population_context": "Adults with recurrent herpes simplex labialis outbreaks",
       "studied_dose_exposure": {
         "values": [
@@ -964,11 +1034,11 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "One older placebo-controlled trial tested 1 g L-lysine three times daily for six months (3 g/day) and reported fewer recurrent HSV infections. The 2015 prevention review found no evidence of efficacy for lysine. These sources support no established 1 g/day threshold or universal continuous efficacy range.",
+      "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. An older placebo-controlled trial reported fewer recurrent herpes simplex infections at 3 g/day for 6 months in 52 completers (PMID 3115841). A crossover trial in 41 patients reported fewer recurrences at 1,248 mg/day but not at 624 mg/day (PMID 6435961), and a trial in 21 patients found no substantial benefit at 1,200 mg/day (PMID 6419679). The 2015 Cochrane prevention review states: 'We failed to find any evidence of efficacy for lysine' (PMID 26252373). Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; packet/INGR_L_LYSINE.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
+        "verified_at": "2026-11-04T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -1018,7 +1088,8 @@
         "owner": "scripts/dose_assessment.py::positive_clinical_benchmark",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_neutral_unsupported_threshold_removal_20261018"
-      }
+      },
+      "applicability_status": "reviewed_null_evidence"
     },
     {
       "canonical_id": "gamma_linolenic_acid",
@@ -3549,9 +3620,45 @@
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "The results showed a reduction of 40.66% and 42.00% in total cholesterol and of 42.05% and 56.15% in LDL cholesterol after treatment for one and two months, respectiv"
           }
+        },
+        {
+          "pmid": "12917896",
+          "study_type": "systematic_review_meta",
+          "sample_size": 376,
+          "primary_endpoint": "clinical benefit in dementia or cognitive impairment",
+          "effect_direction": "null",
+          "title": "Lecithin for dementia and cognitive impairment.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Lecithin for dementia and cognitive impairment.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/12917896/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "No trials reported any clear clinical benefit of lecithin for Alzheimer's disease or Parkinsonian dementia."
+          }
+        },
+        {
+          "pmid": "9683394",
+          "study_type": "rct",
+          "sample_size": 20,
+          "primary_endpoint": "not named; serum lipoprotein, plasma fibrinogen and macromolecular protein complex",
+          "effect_direction": "null",
+          "title": "Lecithin has no effect on serum lipoprotein, plasma fibrinogen and macro molecular protein complex levels in hyperlipidaemic men in a double-blind controlled study.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Lecithin has no effect on serum lipoprotein, plasma fibrinogen and macro molecular protein complex levels in hyperlipidaemic men in a double-blind controlled study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/9683394/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "Lecithin treatment had no independent effects on serum lipoprotein, plasma fibrinogen or MPC levels in hyperlipidaemic men."
+          }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "null",
       "population_context": "adults with hyperlipidemia",
       "studied_dose_exposure": {
         "values": [
@@ -3559,14 +3666,15 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "A double-blind, placebo-controlled clinical study enrolled 30 hypercholesterolemic adults aged 58-70, with 20 receiving 500 mg/day soy lecithin for 2 months. Random allocation was not established in the full text (PMC3065734). Total and LDL cholesterol fell from the lecithin group baseline; the reported percentages do not establish a between-group treatment effect.",
+      "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. A Cochrane review of twelve randomized trials reports no clear clinical benefit of lecithin in Alzheimer's or Parkinsonian dementia, though one trial in subjective memory problems favored it (12917896). A double-blind trial of 20 g/day soya bean lecithin in 20 hyperlipidaemic men found no independent effect on serum lipoproteins (9683394), and an exploratory trial of five emulsifiers including soy lecithin found no cholesterol difference from placebo (40816342). The evidence conflicts, with no clear benefit: a 500 mg/day capsule trial reports total and LDL cholesterol falls of 40% to 56% from baseline, not a between-group effect (21490917); 20 g/day raised the HDL/LDL ratio from baseline with no difference in flow-mediated dilation (17006376); 1200 mg/day improved vigor and two cardiovascular measures while a fatigue scale was unchanged (29310653); a lecithin fluid missed its main target measure and improved a secondary responder measure (15662899); and soybean lecithin 10 g three times a day was reported effective in acute cerebral infarction in a study that doesn't state randomization (16200721). No trial of sunflower lecithin was found. PMID 12917896 states: 'Evidence from randomized trials does not support the use of lecithin in the treatment of patients with dementia.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 12917896; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
+        "verified_at": "2026-11-04T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "reviewed_null_evidence"
     },
     {
       "canonical_id": "prebiotics",
@@ -4026,27 +4134,8 @@
         "Cochrane Library"
       ],
       "records_screened": 28,
-      "qualifying_human_studies": [
-        {
-          "pmid": "11666126",
-          "title": "Total triterpenic fraction of Centella asiatica in the treatment of venous hypertension: a clinical, prospective, randomized trial using a combined microcirculatory model.",
-          "study_type": "single_blind_randomized_controlled_trial",
-          "dose": "60-120 mg/day TTFCA",
-          "outcome": "laser Doppler flux, transcutaneous PO2/PCO2 and symptom scores improved versus placebo, more at 120 mg/day",
-          "effect_direction": "positive_moderate",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Total triterpenic fraction of Centella asiatica in the treatment of venous hypertension: a clinical, prospective, randomized trial using a combined microcirculatory model.",
-            "human_subjects_verified": true,
-            "topic_match_verified": false,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/11666126/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "All tests provided a significant difference between drug-treated groups and the placebo group, thereby allowing a distinction to be made between the higher (120 mg daily) and the lower (60 mg daily) dose of TTFCA."
-          }
-        }
-      ],
-      "effect_direction": "positive_moderate",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
       "population_context": "patients with venous hypertension and edema",
       "studied_dose_exposure": {
         "values": [
@@ -4056,11 +4145,11 @@
         "unit": "mg",
         "basis": "ttfca_daily"
       },
-      "applicability_decision": "In a single-blind, placebo-controlled trial in venous hypertensive microangiopathy, 60 and 120 mg/day TTFCA improved microcirculatory measures versus placebo; symptom effects were larger at 120 mg/day.",
+      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Labels print herb powder, whole herb extract, or leaf or aerial extract, and none prints the total triterpenic fraction. The stored venous result tested that fraction in a single-blind trial (PMID 11666126), and a review of venous trials says its conclusion needs caution (PMID 23533507). A cognition meta-analysis reports no significant difference from placebo across domains (PMID 28878245). A diabetes trial found no adjusted difference in its primary outcome, HbA1c (PMID 41383475), and an add-on trial found no additional cognitive effect (PMID 36420467). Extract trials reporting working memory (PMID 18191355) and chair stand (PMID 19880441) results name no primary outcome in their abstracts. A macular pigment trial tested a named extract, CA-HE50, that these labels do not print (PMID 41901080). Abstracts read; full texts not opened, so this does not say the preparation was tested and failed. PMID 28878245 states: 'In conclusion, there is not strong evidence to support the use of C. asiatica for cognitive function improvement in each cognitive domain.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; packet/INGR_GOTU_KOLA.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
+        "verified_at": "2026-11-04T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -4099,7 +4188,8 @@
         "owner": "scripts/data/literature_evidence_records.json::gotu_kola",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      }
+      },
+      "applicability_status": "no_qualifying_human_evidence"
     },
     {
       "canonical_id": "stinging_nettle",
@@ -5228,9 +5318,63 @@
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "D-ribose, which was well-tolerated, resulted in a significant improvement in all five vis"
           }
+        },
+        {
+          "pmid": "12660407",
+          "study_type": "rct",
+          "sample_size": 19,
+          "primary_endpoint": "not named in the abstract; repetitive high-intensity exercise capacity",
+          "effect_direction": "null",
+          "title": "Effects of oral D-ribose supplementation on anaerobic capacity and selected metabolic markers in healthy males.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of oral D-ribose supplementation on anaerobic capacity and selected metabolic markers in healthy males.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/12660407/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "Results indicate that oral ribose supplementation (10 g/d for 5 d) does not affect anaerobic exercise capacity or metabolic markers in trained subjects as evaluated in this study."
+          }
+        },
+        {
+          "pmid": "16937963",
+          "study_type": "rct",
+          "sample_size": 11,
+          "primary_endpoint": "not named in the abstract; Wingate peak and mean power",
+          "effect_direction": "null",
+          "title": "Effects of ribose as an ergogenic aid.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of ribose as an ergogenic aid.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/16937963/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "These results suggest that ribose had no effect on performance when taken orally, at the dose suggested by the distributor."
+          }
+        },
+        {
+          "pmid": "35644694",
+          "study_type": "rct",
+          "sample_size": 216,
+          "primary_endpoint": "not named in the abstract; heart failure symptom scores and ejection fraction",
+          "effect_direction": "positive_weak",
+          "title": "Effects of Ubiquinol and/or D-ribose in Patients With Heart Failure With Preserved Ejection Fraction.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of Ubiquinol and/or D-ribose in Patients With Heart Failure With Preserved Ejection Fraction.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/35644694/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "In conclusion, ubiquinol and d-ribose reduced the symptoms of HFpEF and increased the EF."
+          }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "null",
       "population_context": "Patients with fibromyalgia and/or chronic fatigue syndrome",
       "studied_dose_exposure": {
         "values": [
@@ -5239,14 +5383,15 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "An open-label, uncontrolled pilot gave 5 g D-ribose three times daily (280 g in total) to 41 patients with fibromyalgia or chronic fatigue syndrome; symptom scores improved. No placebo-controlled efficacy or dose threshold is established.",
+      "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Controlled exercise trials are mostly null (PMIDs 11641371, 12660407, 12580655, 16937963), and in rowers dextrose improved 2,000 m time more than ribose (PMID 16377979). Cardiac results are positive in patients at much higher amounts than the 1.4 to 5.1 g these labels print per serving: a phase 2 trial in 216 patients with heart failure at 15 g/day (PMID 35644694), a crossover in 15 patients with heart failure (PMID 14607200), and 60 g/day for 3 days in 20 men with coronary disease (PMID 1354276). The stored study has no control group (PMID 17109576). PMID 12660407 states: 'Results indicate that oral ribose supplementation (10 g/d for 5 d) does not affect anaerobic exercise capacity or metabolic markers in trained subjects as evaluated in this study.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; packet/INGR_D_RIBOSE.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
+        "verified_at": "2026-11-04T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      }
+      },
+      "applicability_status": "reviewed_null_evidence"
     },
     {
       "canonical_id": "dong_quai",
@@ -6821,9 +6966,81 @@
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "The aim of this study was to examine the effects of Eleutherococcus senticosus (ES) supplementation on endurance capacity, cardiovascular functions and metabolism of recreationally trained males for 8 weeks."
           }
+        },
+        {
+          "pmid": "14971626",
+          "study_type": "rct",
+          "sample_size": 96,
+          "primary_endpoint": "not named in the abstract; mean change in a fatigue measure at 1 and 2 months",
+          "effect_direction": "null",
+          "title": "Randomized controlled trial of Siberian ginseng for chronic fatigue.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Randomized controlled trial of Siberian ginseng for chronic fatigue.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/14971626/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "Overall efficacy was not demonstrated."
+          }
+        },
+        {
+          "pmid": "8778554",
+          "study_type": "rct",
+          "sample_size": 20,
+          "primary_endpoint": "not named in the abstract; submaximal and maximal treadmill performance",
+          "effect_direction": "null",
+          "title": "Effect of Eleutherococcus senticosus on submaximal and maximal exercise performance.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of Eleutherococcus senticosus on submaximal and maximal exercise performance.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/8778554/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "The data do not support an ergogenic effect of ESML supplementation on selected metabolic, performance, or psychologic parameters associated with submaximal and maximal aerobic exercise tasks."
+          }
+        },
+        {
+          "pmid": "11099371",
+          "study_type": "rct",
+          "sample_size": 9,
+          "primary_endpoint": "not named in the abstract; substrate use and 10-km time trial",
+          "effect_direction": "null",
+          "title": "The effect of siberian ginseng (Eleutherococcus senticosus) on substrate utilization and performance.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The effect of siberian ginseng (Eleutherococcus senticosus) on substrate utilization and performance.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/11099371/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "In contrast with previous reports, the results of this study suggest that ES supplementation does not alter steady-state substrate utilization or 10-km cycling performance time."
+          }
+        },
+        {
+          "pmid": "23740477",
+          "study_type": "rct",
+          "sample_size": 144,
+          "primary_endpoint": "not named in the abstract; cognitive, stress, fatigue and physiological scales",
+          "effect_direction": "null",
+          "title": "No benefit adding eleutherococcus senticosus to stress management training in stress-related fatigue/weakness, impaired work or concentration, a randomized controlled study.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "No benefit adding eleutherococcus senticosus to stress management training in stress-related fatigue/weakness, impaired work or concentration, a randomized controlled study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23740477/",
+            "verified_at": "2026-11-04T00:00:00+00:00",
+            "abstract_evidence_quote": "Effects of adding ES to SMT are, if any, negligible."
+          }
         }
       ],
-      "effect_direction": "positive_weak",
+      "effect_direction": "null",
       "population_context": "Recreationally trained men",
       "studied_dose_exposure": {
         "values": [
@@ -6832,11 +7049,11 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "800 mg/day Eleutherococcus senticosus for 8 weeks improved endurance time and VO2 peak in a crossover trial in 9 recreationally trained men.",
+      "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Evidence on Eleutherococcus senticosus conflicts and shows no clear benefit. A randomized placebo-controlled trial in 96 adults with chronic fatigue reported that overall efficacy was not demonstrated (PMID 14971626). A trial in 20 distance runners reported that the data do not support an ergogenic effect (PMID 8778554), and a crossover in 9 cyclists found no difference in substrate use or 10-km time (PMID 11099371). A 144-person stress trial described any effect of adding it to stress training as negligible (PMID 23740477). One crossover in 9 recreationally trained men reported 23% longer endurance time at 800 mg/day (PMID 21793317). A 20-person trial in older adults found higher social functioning at 4 weeks that did not persist at 8 weeks (PMID 15207399). A 28-person trial reported surrogate autonomic changes (PMID 38525193), and a crossover in 50 women reported less lower-limb edema hours after powder (PMID 27333960). The fatigue and 800 and 1,200 mg trial abstracts do not state whether powder or extract was tested, so this reads the plant across preparations and doesn't say a powder failed. PMID 14971626 states: 'Overall efficacy was not demonstrated.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 14971626; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
+        "verified_at": "2026-11-04T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -6875,7 +7092,8 @@
         "owner": "scripts/data/literature_evidence_records.json::siberian_ginseng",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      }
+      },
+      "applicability_status": "reviewed_null_evidence"
     },
     {
       "canonical_id": "borage_seed_oil",
@@ -7709,36 +7927,15 @@
         "Cochrane Library"
       ],
       "records_screened": 22,
-      "qualifying_human_studies": [
-        {
-          "pmid": "2899663",
-          "title": "Randomised double-blind placebo-controlled trial of feverfew in migraine prevention.",
-          "study_type": "randomized_controlled_trial",
-          "sample_size": 72,
-          "dose": "one capsule of dried feverfew leaves daily (amount not given in the abstract)",
-          "duration": "4 months",
-          "outcome": "significant reduction in the frequency of migraine attacks with no serious adverse effects",
-          "effect_direction": "positive_moderate",
-          "verification_provenance": {
-            "pmid_verified": true,
-            "authoritative_live_title": "Randomised double-blind placebo-controlled trial of feverfew in migraine prevention.",
-            "human_subjects_verified": true,
-            "topic_match_verified": true,
-            "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/2899663/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "Treatment with feverfew was associated with a reduction in the mean number and severity of attacks in each two-month period, and in the degree of"
-          }
-        }
-      ],
-      "effect_direction": "positive_moderate",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
       "population_context": "adults with recurrent migraine headaches",
       "studied_dose_exposure": {},
-      "applicability_decision": "One capsule of dried feverfew leaves daily for 4 months reduced migraine frequency and severity versus placebo in a crossover RCT (72 randomized, 59 analysed); the abstract gives no mg or parthenolide amount.",
+      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Labels print flower, leaf or unspecified feverfew extract, or herb or powder, and none prints MIG-99. The one positive primary result read tested MIG-99, a CO2 extract: 1.9 against 1.3 fewer attacks per month on placebo (PMID 16232154). The dose study of the same extract states it failed to show a significant effect in general (PMID 12230594). A crossover of a dried alcoholic extract found the same number of attacks in both groups (PMID 23195074). The stored 1988 crossover gave dried leaf with no amount in its abstract (PMID 2899663). A 2025 meta-analysis reports a reduction with limits from bias and does not split results by preparation in its abstract (PMID 41422534). Abstracts read; full texts not opened, so this does not say the preparation was tested and failed. The Cochrane review, PMID 25892430, states: 'However, this constitutes low quality evidence, which needs to be confirmed in larger rigorous trials with stable feverfew extracts and clearly defined migraine populations before firm conclusions can be drawn.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; packet/INGR_FEVERFEW.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
+        "verified_at": "2026-11-04T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -7777,7 +7974,8 @@
         "owner": "scripts/data/literature_evidence_records.json::feverfew",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      }
+      },
+      "applicability_status": "no_qualifying_human_evidence"
     },
     {
       "canonical_id": "l_norvaline",

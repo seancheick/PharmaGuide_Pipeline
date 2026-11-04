@@ -1,21 +1,21 @@
 rank,canonical_id,labels,stored_direction,batch,recommended_decision
-1,l_lysine,49,positive_weak,top5,closed_no_credit
+1,l_lysine,49,positive_weak,top5,closed_no_credit: literature null
 2,l_tyrosine,45,positive_weak,top5,"held: daily dose missing from the abstracts of 25598314, 24433977 and 29980424, and their full texts are not open"
 3,pomegranate,44,positive_weak,top5,held: extract subgroup of the 2024 meta-analysis (38410857) can't be read; no open full text
 4,nattokinase,41,positive_moderate,top5,"held: doses are in fibrinolytic units, and the schema has no such unit"
 5,mct_oil,40,positive_weak,top5,"held: the 13 trials in 25636220 aren't extracted (no open full text), and the benefit is shown for replacing other fat, not for adding MCT"
-6,apple_cider_vinegar,39,positive_weak,not read yet,
-7,l_leucine,36,positive_weak,not read yet,
-8,lecithin,33,positive_weak,not read yet,
-9,siberian_ginseng,27,positive_weak,not read yet,
-10,cayenne_pepper,26,positive_weak,not read yet,
-11,d_ribose,26,positive_weak,not read yet,
-12,butterbur,25,positive_strong,not read yet,
-13,blueberry,24,positive_weak,not read yet,
-14,gotu_kola,22,positive_moderate,not read yet,
-15,lions_mane,21,positive_moderate,not read yet,
-16,feverfew,20,positive_moderate,not read yet,
-17,l_ornithine,20,positive_moderate,not read yet,
+6,apple_cider_vinegar,39,positive_weak,batch2,pending: capsule RCT 42215584
+7,l_leucine,36,positive_weak,batch2,closed_no_credit: literature null
+8,lecithin,33,positive_weak,batch2,closed_no_credit: literature null
+9,siberian_ginseng,27,positive_weak,batch2,closed_no_credit: literature null
+10,cayenne_pepper,26,positive_weak,batch2,closed_no_credit: no_qualifying_human_evidence
+11,d_ribose,26,positive_weak,batch2,closed_no_credit: literature null
+12,butterbur,25,positive_strong,batch2,pending: 19 labels; 6 whole herb labels closed by INGR_BUTTERBUR_WHOLE_HERB
+13,blueberry,24,positive_weak,batch2,pending: extract trial 29882843
+14,gotu_kola,22,positive_moderate,batch2,closed_no_credit: no_qualifying_human_evidence
+15,lions_mane,21,positive_moderate,batch2,pending: tablet trial 18844328
+16,feverfew,20,positive_moderate,batch2,closed_no_credit: no_qualifying_human_evidence
+17,l_ornithine,20,positive_moderate,batch2,pending: 12 labels; 8 aspartate labels closed by INGR_L_ORNITHINE_L_ASPARTATE
 18,hawthorn,20,positive_strong,not read yet,
 19,theobromine,19,positive_weak,not read yet,
 20,activated_charcoal,19,positive_moderate,not read yet,

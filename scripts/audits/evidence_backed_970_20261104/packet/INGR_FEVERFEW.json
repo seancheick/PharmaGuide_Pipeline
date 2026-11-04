@@ -1,0 +1,800 @@
+{
+  "record_id": "INGR_FEVERFEW",
+  "labels": 20,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed: modest migraine benefit in a CO2 extract and a pooled analysis, low quality; null trials too, and the preparations differ from the labels",
+  "decision": "closed_no_credit",
+  "summary": "Cochrane 2015 calls the migraine evidence low quality after a 0.6 attack per month difference in the largest trial (16232154). A 2025 meta-analysis (41422534) finds a modest reduction with bias limits. MIG-99 failed in ITT in the dose study (12230594), and another crossover found no effect (23195074). The stored trial is dried leaf with no amount given. 300 and 380 mg flower extract labels, powder rows and plain herb rows were not tested at these forms in anything read. Stored positive_moderate overstates this.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_feverfew_25892430",
+      "components": [
+        "INGR_FEVERFEW"
+      ],
+      "source_pmids": [
+        "25892430"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Tanacetum parthenium",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_feverfew_25892430",
+      "population": {
+        "age_group": "adult",
+        "description": "6 double-blind RCTs, 561 patients."
+      },
+      "study_design": "Cochrane systematic review; no pooling possible",
+      "outcomes": [
+        {
+          "name": "Largest trial, n = 218: 0.6 fewer attacks per month than placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Earlier trials: positives all small; two rigorous trials null; overall mixed and inconclusive",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors: low quality evidence, to be confirmed with stable extracts before firm conclusions.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "25892430",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_feverfew_41422534",
+      "components": [
+        "INGR_FEVERFEW"
+      ],
+      "source_pmids": [
+        "41422534"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Tanacetum parthenium",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_feverfew_41422534",
+      "population": {
+        "age_group": "adult",
+        "description": "9 double-masked RCTs, 899 participants."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Attack frequency IV -1.11 (-1.23 to -0.99), I2 28%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Duration IV -4.43 (-7.63 to -1.23), I2 98%",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Pain severity IV -0.63 (-1.48 to 0.21), not significant",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors note risks of selection and attrition bias limiting quality.",
+        "Abstract doesn't split results by preparation; included PMIDs not extracted.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "41422534",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_feverfew_16232154",
+      "components": [
+        "INGR_FEVERFEW"
+      ],
+      "source_pmids": [
+        "16232154"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Tanacetum parthenium",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_feverfew_16232154",
+      "population": {
+        "age_group": "adult",
+        "description": "170 patients with IHS migraine, intention to treat."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, multicentre, parallel",
+      "outcomes": [
+        {
+          "name": "Attacks per 28 days: down 1.9 vs 1.3 on placebo (P = 0.0456)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "MIG-99, a CO2 extract, is the tested material. No label here prints it.",
+        "Difference of 0.6 attacks per month; P just under 0.05.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          18.75
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 112,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "MIG-99 6.25 mg three times daily for 16 weeks.",
+        "normalization": {
+          "basis": "6.25 mg t.i.d. as printed; daily total is simple addition."
+        },
+        "source_provenance": {
+          "pmid": "16232154",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_feverfew_12230594",
+      "components": [
+        "INGR_FEVERFEW"
+      ],
+      "source_pmids": [
+        "12230594"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Tanacetum parthenium",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_feverfew_12230594",
+      "population": {
+        "age_group": "adult",
+        "description": "147 patients with migraine with or without aura."
+      },
+      "study_design": "Randomized, double-blind, multicentre, adaptive, three doses vs placebo",
+      "outcomes": [
+        {
+          "name": "Attacks in last 28 days, ITT: no significant difference",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Predefined subgroup of 49 with at least 4 baseline attacks: dose-dependent decrease (P = 0.001)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors: 'MIG-99 failed to show a significant migraine prophylactic effect in general.'",
+        "MIG-99 CO2 extract only.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "MIG-99 2.08, 6.25 or 18.75 mg three times daily for 12 weeks; per-dose amounts.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12230594",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_feverfew_23195074",
+      "components": [
+        "INGR_FEVERFEW"
+      ],
+      "source_pmids": [
+        "23195074"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Tanacetum parthenium",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_feverfew_23195074",
+      "population": {
+        "age_group": "adult",
+        "description": "50 patients who hadn't used feverfew; 44 completed."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, crossover, 9 months",
+      "outcomes": [
+        {
+          "name": "Same number of migraine attacks in both treatments",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Dried alcoholic extract with 0.5 mg parthenolide; extract mass not stated.",
+        "Enrolled feverfew-naive patients, unlike the positive trials, as the authors say.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One capsule a day with 0.5 mg parthenolide; extract amount not stated.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "23195074",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_feverfew_2899663",
+      "components": [
+        "INGR_FEVERFEW"
+      ],
+      "source_pmids": [
+        "2899663"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Tanacetum parthenium",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "migraine_prevention",
+      "purpose": "migraine_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_feverfew_2899663",
+      "population": {
+        "age_group": "adult",
+        "description": "72 volunteers randomized, 59 with full data."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, crossover, 4 months each",
+      "outcomes": [
+        {
+          "name": "Reduced mean number and severity of attacks in each 2-month period",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Attack duration unaltered",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Dried leaf, no mg in the abstract; labels print mostly flower extract.",
+        "No primary outcome named; 13 of 72 lost from full analysis.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One capsule of dried feverfew leaves daily for 4 months; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "2899663",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_feverfew_2673080",
+      "components": [
+        "INGR_FEVERFEW"
+      ],
+      "source_pmids": [
+        "2673080"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Tanacetum parthenium",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "rheumatoid_arthritis",
+      "purpose": "joint_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_feverfew_2673080",
+      "population": {
+        "age_group": "adult",
+        "description": "41 women with symptomatic rheumatoid arthritis."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "No important clinical or laboratory differences over 6 weeks",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors: 'no apparent benefit from oral feverfew in rheumatoid arthritis.'",
+        "Dried chopped feverfew, small sample.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          70,
+          86
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 42,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dried chopped feverfew 70-86 mg once daily for 6 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "2673080",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "14973986": "Earlier Cochrane version, superseded by 25892430.",
+    "10908545": "Earlier Cochrane version; opening part of the abstract only.",
+    "9950629": "1998 review, superseded; says effectiveness wasn't established beyond reasonable doubt.",
+    "22435410": "2009 review, no pooling; suggests benefit for subsets; COX-2 concern moved to clinician items.",
+    "32310327": "2020 review of herbal migraine treatments; feverfew findings mixed.",
+    "22961605": "150 mg/day arm compared with acupuncture and no placebo.",
+    "10719691": "Uncontrolled, 24 patients, 5 ml of sap.",
+    "22096324": "General narrative review of pharmacology."
+  },
+  "stop_or_hold": "Label doses and parthenolide content can't be compared with trial material: labels print 0.2% to 0.7% parthenolide on a few rows and nothing on the 300 mg flower extract rows. 2899663 and 23195074 have no extract mass in the abstract. MIG-99 3-dose regimen left unvalued because it isn't one assigned dose.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "25892430",
+      "title_fetched": "Feverfew for preventing migraine.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25892430/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41422534",
+      "title_fetched": "Systematic review and meta-analysis of Tanacetum parthenium: evaluating its efficacy in migraine relief.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41422534/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16232154",
+      "title_fetched": "Efficacy and safety of 6.25 mg t.i.d. feverfew CO2-extract (MIG-99) in migraine prevention--a randomized, double-blind, multicentre, placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16232154/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12230594",
+      "title_fetched": "The efficacy and safety of Tanacetum parthenium (feverfew) in migraine prophylaxis--a double-blind, multicentre, randomized placebo-controlled dose-response study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12230594/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23195074",
+      "title_fetched": "Herbal medicines in migraine prevention Randomized double-blind placebo-controlled crossover trial of a feverfew preparation.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23195074/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "2899663",
+      "title_fetched": "Randomised double-blind placebo-controlled trial of feverfew in migraine prevention.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2899663/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "2673080",
+      "title_fetched": "Feverfew in rheumatoid arthritis: a double blind, placebo controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2673080/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "14973986",
+      "title_fetched": "Feverfew for preventing migraine.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14973986/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "10908545",
+      "title_fetched": "Feverfew for preventing migraine.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10908545/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "9950629",
+      "title_fetched": "Feverfew as a preventive treatment for migraine: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9950629/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22435410",
+      "title_fetched": "Feverfew for migraine prophylaxis: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22435410/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32310327",
+      "title_fetched": "Herbal treatments for migraine: A systematic review of randomised-controlled studies.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32310327/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22961605",
+      "title_fetched": "The combined effect of acupuncture and Tanacetum parthenium on quality of life in women with headache: randomised study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22961605/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "10719691",
+      "title_fetched": "[Feverfew as a prophylactic treatment of migraine].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10719691/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22096324",
+      "title_fetched": "Feverfew (Tanacetum parthenium L.): A systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22096324/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_FEVERFEW",
+    "standard_name": "Feverfew (Tanacetum parthenium)",
+    "aliases": [
+      "Feverfew Flower Extract",
+      "Feverfew extract",
+      "Feverfew flower extract",
+      "Feverfew",
+      "Feverfew leaf extract",
+      "standardized Feverfew extract",
+      "raw Feverfew powder"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "25892430",
+      "41422534",
+      "16232154",
+      "12230594",
+      "23195074",
+      "2899663",
+      "2673080"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: modest migraine benefit in a CO2 extract and a pooled analysis, low quality; null trials too, and the preparations differ from the labels. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "migraine frequency"
+    ],
+    "health_goals_supported": [],
+    "notes": "Cochrane 2015 calls the migraine evidence low quality after a 0.6 attack per month difference in the largest trial (16232154). A 2025 meta-analysis (41422534) finds a modest reduction with bias limits. MIG-99 failed in ITT in the dose study (12230594), and another crossover found no effect (23195074). The stored trial is dried leaf with no amount given. 300 and 380 mg flower extract labels, powder rows and plain herb rows were not tested at these forms in anything read. Stored positive_moderate overstates this.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with recurrent migraine",
+      "supported_outcomes": [
+        "migraine frequency"
+      ],
+      "source_pmids": [
+        "25892430",
+        "41422534",
+        "16232154",
+        "12230594",
+        "23195074",
+        "2899663",
+        "2673080"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Cochrane 2015 calls the migraine evidence low quality after a 0.6 attack per month difference in the largest trial (16232154). A 2025 meta-analysis (41422534) finds a modest reduction with bias limits. MIG-99 failed in ITT in the dose study (12230594), and another crossover found no effect (23195074). The stored trial is dried leaf with no amount given. 300 and 380 mg flower extract labels, powder rows and plain herb rows were not tested at these forms in anything read. Stored positive_moderate overstates this. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25892430",
+        "title": "Feverfew for preventing migraine.",
+        "citation": "The Cochrane database of systematic reviews (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25892430/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1002/14651858.CD002286.pub3"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41422534",
+        "title": "Systematic review and meta-analysis of Tanacetum parthenium: evaluating its efficacy in migraine relief.",
+        "citation": "Natural product research (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41422534/",
+        "publication_types": [
+          "Journal Article",
+          "Review"
+        ],
+        "doi": "10.1080/14786419.2025.2602038"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16232154",
+        "title": "Efficacy and safety of 6.25 mg t.i.d. feverfew CO2-extract (MIG-99) in migraine prevention--a randomized, double-blind, multicentre, placebo-controlled study.",
+        "citation": "Cephalalgia : an international journal of headache (2005)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16232154/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1111/j.1468-2982.2005.00950.x"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12230594",
+        "title": "The efficacy and safety of Tanacetum parthenium (feverfew) in migraine prophylaxis--a double-blind, multicentre, randomized placebo-controlled dose-response study.",
+        "citation": "Cephalalgia : an international journal of headache (2002)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12230594/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1046/j.1468-2982.2002.00396.x"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23195074",
+        "title": "Herbal medicines in migraine prevention Randomized double-blind placebo-controlled crossover trial of a feverfew preparation.",
+        "citation": "Phytomedicine : international journal of phytotherapy and phytopharmacology (1996)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23195074/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1016/S0944-7113(96)80057-2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "2899663",
+        "title": "Randomised double-blind placebo-controlled trial of feverfew in migraine prevention.",
+        "citation": "Lancet (London, England) (1988)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/2899663/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/s0140-6736(88)92289-1"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "2673080",
+        "title": "Feverfew in rheumatoid arthritis: a double blind, placebo controlled study.",
+        "citation": "Annals of the rheumatic diseases (1989)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/2673080/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1136/ard.48.7.547"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: feverfew applicability_status no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

@@ -4,8 +4,9 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
     "last_updated": "2026-11-04",
-    "total_entries": 211,
+    "total_entries": 213,
     "changelog": [
+      "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
       "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
@@ -46114,6 +46115,167 @@
             "Randomized Controlled Trial",
             "Research Support, Non-U.S. Gov't"
           ]
+        }
+      ]
+    },
+    {
+      "id": "INGR_BUTTERBUR_WHOLE_HERB",
+      "standard_name": "Butterbur Whole Herb Extract",
+      "aliases": [
+        "Butterbur Whole Herb Extract"
+      ],
+      "category": "general_herbs",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_multiple",
+      "published_studies": [
+        "15623680",
+        "14752215"
+      ],
+      "score_contribution": "tier_3",
+      "effect_direction": "null",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "The placebo-controlled migraine trials read here gave a standardized Petasites hybridus root extract, so they do not establish a whole herb extract. No whole-herb efficacy trial was found. Null records that no affirmative finding exists for this preparation, not that it was tested and failed. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "key_endpoints": [
+        "No efficacy endpoint tested for a butterbur whole herb extract"
+      ],
+      "endpoint_relevance_tags": [],
+      "health_goals_supported": [],
+      "notes": "Preparation rejection only: this record says nothing about butterbur root extract, whose separate review is in scripts/audits/evidence_backed_970_20261104/packet. PubMed search on November 4, 2026: butterbur, petasites, petadolex or Ze 339 with trial, review or guideline publication types, 97 records, titles scanned; butterbur with liver, pyrrolizidine, whole herb or aerial part, 52 records, the 30 most recent titles scanned. No title or abstract read names a whole-herb trial. Not every abstract was opened. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "last_updated": "2026-11-04",
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "whole herb"
+        ],
+        "source_pmids": [
+          "15623680",
+          "14752215"
+        ],
+        "studied_population": "Adults with migraine given a standardized Petasites hybridus root extract.",
+        "supported_outcomes": [
+          "Migraine attack frequency"
+        ],
+        "reviewed_at": "2026-11-04",
+        "reason": "The reviewed human studies gave a standardized butterbur root extract. No efficacy trial of a whole herb extract was found, so these studies do not qualify for this preparation. Agent review (Claude), 2026-11-04; not clinician reviewed."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "15623680",
+          "title": "Petasites hybridus root (butterbur) is an effective preventive treatment for migraine.",
+          "citation": "Neurology (2004)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15623680/",
+          "publication_types": [
+            "Clinical Trial",
+            "Comparative Study",
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "doi": "10.1212/01.wnl.0000147290.68260.11"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "14752215",
+          "title": "The first placebo-controlled trial of a special butterbur root extract for the prevention of migraine: reanalysis of efficacy criteria.",
+          "citation": "European neurology (2004)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/14752215/",
+          "publication_types": [
+            "Clinical Trial",
+            "Comparative Study",
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "doi": "10.1159/000076535"
+        }
+      ]
+    },
+    {
+      "id": "INGR_L_ORNITHINE_L_ASPARTATE",
+      "standard_name": "L-Ornithine L-Aspartate",
+      "aliases": [
+        "L-Ornithine L-Aspartate"
+      ],
+      "category": "liver_detox",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_multiple",
+      "published_studies": [
+        "29762873",
+        "38403493",
+        "9625322"
+      ],
+      "score_contribution": "tier_3",
+      "effect_direction": "null",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "The human research read here enrolled people with cirrhosis and hepatic encephalopathy, including a trial at 18 g per day (PMID 9625322). The 2018 Cochrane review rates much of that evidence very low quality (PMID 29762873). No trial of this ingredient alone outside liver disease was found, so these studies do not establish a benefit for a general supplement label. Null records that no affirmative finding exists for that use, not that it was tested and failed. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "key_endpoints": [
+        "No efficacy endpoint tested for this ingredient alone outside liver disease"
+      ],
+      "endpoint_relevance_tags": [],
+      "health_goals_supported": [],
+      "notes": "Preparation and purpose rejection only: this record says nothing about L-ornithine hydrochloride, whose separate review is in scripts/audits/evidence_backed_970_20261104/packet. PubMed search for trials outside cirrhosis on November 4, 2026 returned 2 records: PMID 41653037, a narrative review in metabolic fatty liver disease that asks for further research, and PMID 26785372, which gave it with branched chain amino acids in 11 trained men. Labels print 3 g per serving. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "last_updated": "2026-11-04",
+      "applicability": {
+        "scope": "ingredient",
+        "excluded_form_terms": [
+          "aspartate",
+          "lola"
+        ],
+        "source_pmids": [
+          "29762873",
+          "38403493",
+          "9625322"
+        ],
+        "studied_population": "People with cirrhosis and overt or minimal hepatic encephalopathy.",
+        "supported_outcomes": [
+          "Hepatic encephalopathy"
+        ],
+        "reviewed_at": "2026-11-04",
+        "reason": "The reviewed human studies enrolled people with cirrhosis and hepatic encephalopathy. No trial of this ingredient alone outside liver disease was found, so these studies do not qualify for the purpose of this product. Agent review (Claude), 2026-11-04; not clinician reviewed."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "29762873",
+          "title": "L-ornithine L-aspartate for prevention and treatment of hepatic encephalopathy in people with cirrhosis.",
+          "citation": "The Cochrane database of systematic reviews (2018)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29762873/",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Systematic Review"
+          ],
+          "doi": "10.1002/14651858.CD012410.pub2"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38403493",
+          "title": "Efficacy of L-ornithine L-aspartate for minimal hepatic encephalopathy in patients with cirrhosis: A meta-analysis of randomized controlled trials.",
+          "citation": "Arab journal of gastroenterology : the official publication of the Pan-Arab Association of Gastroenterology (2024)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38403493/",
+          "publication_types": [
+            "Journal Article",
+            "Meta-Analysis",
+            "Systematic Review"
+          ],
+          "doi": "10.1016/j.ajg.2024.01.006"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "9625322",
+          "title": "Oral L-ornithine-L-aspartate therapy of chronic hepatic encephalopathy: results of a placebo-controlled double-blind study.",
+          "citation": "Journal of hepatology (1998)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9625322/",
+          "publication_types": [
+            "Clinical Trial",
+            "Journal Article",
+            "Randomized Controlled Trial"
+          ],
+          "doi": "10.1016/s0168-8278(98)80237-7"
         }
       ]
     }

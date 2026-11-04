@@ -68,3 +68,141 @@ def test_packet_drafts_pass_the_authoring_rules_and_carry_no_approval():
 def test_packet_drafts_stay_outside_the_data_file():
     packeted = {path.stem for path in (AUDIT / "packet").glob("*.json")}
     assert not packeted & set(reviewed_entries())
+
+
+def _audit_module(name):
+    spec = importlib.util.spec_from_file_location(name, AUDIT / f"{name}.py")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+REJECTIONS = _audit_module("records").RECORDS
+CORRECTIONS = _audit_module("records").LITERATURE_CORRECTIONS
+
+
+def _literature_record(canonical):
+    payload = json.loads((ROOT / "data" / "literature_evidence_records.json").read_text(encoding="utf-8"))
+    return {r["canonical_id"]: r for r in payload["literature_evidence_records"]}[canonical]
+
+
+@pytest.mark.parametrize("record_id,name,canonical", [
+    ("INGR_BUTTERBUR_WHOLE_HERB", "Butterbur Whole Herb Extract", "butterbur"),
+    ("INGR_L_ORNITHINE_L_ASPARTATE", "L-Ornithine L-Aspartate", "l_ornithine"),
+])
+def test_preparation_rejection_refuses_the_row_it_was_written_for(record_id, name, canonical):
+    row = {"name": name, "canonical_id": canonical, "quantity": 150, "unit": "mg",
+           "raw_source_path": "ingredientRows[0]"}
+    entry = {**reviewed_entries()[record_id], "ingredient": name, "matched_source_row_refs": ["ingredientRows[0]"]}
+    result = assess_clinical_applicability({"activeIngredients": [row]}, entry, assess_amount=False)
+    assert result["status"] == "not_applicable"
+    assert result["reason_code"] == "clinical_form_excluded"
+
+
+@pytest.mark.parametrize("record_id,other_preparations", [
+    ("INGR_BUTTERBUR_WHOLE_HERB", {"butterbur", "butterbur extract", "butterbur root extract", "petadolex"}),
+    ("INGR_L_ORNITHINE_L_ASPARTATE", {"ornithine", "l-ornithine", "l-ornithine hcl", "l-ornithine hydrochloride"}),
+])
+def test_preparation_rejection_cannot_reach_a_different_preparation(record_id, other_preparations):
+    record = reviewed_entries()[record_id]
+    names = {record["standard_name"].lower(), *(alias.lower() for alias in record["aliases"])}
+    assert not names & other_preparations
+
+
+@pytest.mark.parametrize("record", REJECTIONS, ids=lambda record: record["id"])
+def test_every_rejection_earns_nothing_and_cites_what_it_read(record):
+    stored = reviewed_entries()[record["id"]]
+    text = json.dumps(stored)
+    assert stored["effect_direction"] == "null"
+    assert not stored.get("study_contexts")
+    assert "Agent review (Claude)" in stored["applicability"]["reason"]
+    assert "not that it was tested and failed" in stored["effect_direction_rationale"]
+    assert "clinician_approved" not in text and "Dr. Pham" not in text
+    cited = {ref["pmid"] for ref in stored["references_structured"]}
+    assert cited == set(stored["published_studies"])
+    assert set(stored["applicability"]["source_pmids"]) <= cited
+
+
+NULL_RESULTS = sorted(c for c, fix in CORRECTIONS.items() if fix.get("result") != "no_qualifying_human_evidence")
+NO_QUALIFYING = sorted(c for c, fix in CORRECTIONS.items() if fix.get("result") == "no_qualifying_human_evidence")
+
+
+def _resolve(canonical):
+    from evidence_resolver import _load_literature_evidence, resolve_evidence_for_row
+    _load_literature_evidence.cache_clear()
+    row = {"canonical_id": canonical, "name": canonical, "raw_source_text": canonical,
+           "source_label_name": canonical, "raw_source_path": "activeIngredients[0]",
+           "source_section": "activeIngredients"}
+    return resolve_evidence_for_row(row, {"activeIngredients": [row], "ingredients_scorable": [row]})
+
+
+@pytest.mark.parametrize("canonical", NULL_RESULTS)
+def test_conflicting_review_closes_without_credit(canonical):
+    resolution = _resolve(canonical)
+    assert resolution.disposition == "reviewed_null_unfavorable"
+    assert resolution.points_eligible is False
+    assert not resolution.blocking_reasons
+
+
+@pytest.mark.parametrize("canonical", NO_QUALIFYING)
+def test_no_qualifying_review_closes_without_credit_or_studies(canonical):
+    resolution = _resolve(canonical)
+    assert resolution.disposition == "no_qualifying_human_evidence"
+    assert resolution.points_eligible is False
+    assert not resolution.blocking_reasons
+    record = _literature_record(canonical)
+    assert record["qualifying_human_studies"] == []
+    assert record["effect_direction"] is None
+    assert CORRECTIONS[canonical]["quotes"][0]["quote"] in record["applicability_decision"]
+
+
+@pytest.mark.parametrize("canonical", sorted(CORRECTIONS))
+def test_literature_correction_is_named_as_agent_review_and_quotes_its_source(canonical):
+    record = _literature_record(canonical)
+    decision = record["applicability_decision"]
+    assert decision.startswith(("Conflicting human evidence", "Finished review with no qualifying study"))
+    assert "not clinician reviewed" in decision
+    assert "no clinician approval" in record["verification_provenance"]["verified_by"]
+    assert "clinician_approved" not in json.dumps(record) and "Dr. Pham" not in json.dumps(record)
+    # These words reroute a decision to "applicability unestablished", which doesn't finish a label.
+    assert not any(word in decision.lower() for word in ("applicability unestablished", "prohibited", "blocked"))
+
+
+@pytest.mark.parametrize("canonical", NULL_RESULTS)
+def test_conflicting_review_keeps_the_studies_it_read(canonical):
+    record = _literature_record(canonical)
+    for study in CORRECTIONS[canonical]["studies"]:
+        row = next(row for row in record["qualifying_human_studies"] if row["pmid"] == study["pmid"])
+        assert row["verification_provenance"]["abstract_evidence_quote"] == study["quote"]
+
+
+def test_lysine_rationale_names_the_positive_trial_and_the_review_it_conflicts_with():
+    decision = _literature_record("l_lysine")["applicability_decision"]
+    assert "PMID 3115841" in decision and "PMID 26252373" in decision
+    assert "We failed to find any evidence of efficacy for lysine" in decision
+
+
+@pytest.mark.parametrize("canonical,positive,null_quote", [
+    ("l_leucine", ["32230954", "37923932"],
+     "Leucine-isolated supplementation did not improve muscle mass and strength in elderly."),
+    ("lecithin", ["21490917", "29310653"],
+     "Evidence from randomized trials does not support the use of lecithin in the treatment of patients with dementia."),
+    ("siberian_ginseng", ["21793317", "15207399"], "Overall efficacy was not demonstrated."),
+    ("d_ribose", ["35644694", "14607200", "1354276"],
+     "does not affect anaerobic exercise capacity or metabolic markers in trained subjects"),
+])
+def test_conflicting_rationale_names_both_sides(canonical, positive, null_quote):
+    decision = _literature_record(canonical)["applicability_decision"]
+    assert null_quote in decision
+    assert all(pmid in decision for pmid in positive)
+
+
+@pytest.mark.parametrize("canonical,tested_elsewhere", [
+    ("cayenne_pepper", ["24267043", "36938807", "24246368"]),
+    ("gotu_kola", ["11666126", "28878245", "41383475", "41901080"]),
+    ("feverfew", ["16232154", "12230594", "41422534", "25892430"]),
+])
+def test_no_qualifying_decision_names_the_human_research_it_read(canonical, tested_elsewhere):
+    decision = _literature_record(canonical)["applicability_decision"]
+    assert all(f"PMID {pmid}" in decision or f"PMID {pmid}" in decision.replace("PMIDs ", "PMID ") for pmid in tested_elsewhere)
+    assert "does not say the preparation was tested and failed" in decision

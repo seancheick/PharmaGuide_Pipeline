@@ -1,0 +1,995 @@
+{
+  "record_id": "INGR_BLUEBERRY",
+  "labels": 24,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "mixed: some cognition and vascular signals from food-amount freeze-dried fruit, extract evidence thin, and several null results",
+  "decision": "closed_no_credit",
+  "summary": "The labels sell extract, concentrate or powder at 100-800 mg per row. The stored review and most trials used freeze-dried fruit in food amounts, 20-26 g/day in the two trials that state it (36972800, 42251891). That evidence is itself mixed: one trial improved vascular and memory measures (36972800), and another found nothing on its primary biomarkers or on cognitive tests (42251891). Pooled results help episodic memory (40856863) but not most other tasks, or mood (35676847), and cardiovascular risk factors show insufficient evidence (33066847). Two extract trials come close to the labels, using one 100 mg proprietary purified extract for months (29882843) and single doses (38674870); effects were subtle, on few outcomes. No label row shows anthocyanin content, so label exposure can't be matched to the studied extract.",
+  "question_for_clinician": "Do a proprietary 100 mg extract trial with a 3-month memory result (29882843) and acute extract studies (38674870) qualify unstandardized extract at 100-800 mg per row? Agent recommendation: no credit.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_29882843",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "29882843"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognitive_aging",
+      "purpose": "memory_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_29882843",
+      "population": {
+        "age_group": "adult",
+        "description": "122 older adults, 65-80 years."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 6 months, extract and two powder arms",
+      "outcomes": [
+        {
+          "name": "Delayed word recognition better on the extract at 3 months",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Corsi Block trend at 3 months",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Systolic blood pressure lower on the extract vs placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The closest trial to these labels, but a proprietary purified extract; the abstract calls it 100 mg and names it WBE111. Labels print other amounts and no anthocyanin content.",
+        "Abstract names no primary outcome and reports the memory result at 3 months, not at 6; many tasks tested.",
+        "Abstract reports no positive result for the 500 mg or 1000 mg powder arms and doesn't give their numbers.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          100
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Purified extract 100 mg (WBE111) daily for 6 months; powder 500 mg or 1000 mg arms",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29882843",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_38674870",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "38674870"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognitive_aging",
+      "purpose": "memory_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_38674870",
+      "population": {
+        "age_group": "adult",
+        "description": "Healthy older adults, 68-75 years: 28 in one study and 45 in the other."
+      },
+      "study_design": "Two randomized double-blind crossover placebo-controlled studies, single doses",
+      "outcomes": [
+        {
+          "name": "Executive function dip at 4 h on placebo only",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Executive function reaction time faster at the post-lunch dip on 222 mg",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No other notable benefits on cognitive and cardiovascular outcomes in the second study",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Acute only. Authors say effects were subtle, on a small number of outcomes; no primary outcome named in the abstract.",
+        "Blood pressure effect in the first study not replicated as a notable benefit in the second.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          111,
+          222,
+          444,
+          888
+        ],
+        "dose_status": "verified",
+        "dose_basis": "single_challenge",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Single dose of wild blueberry extract 111, 222, 444 or 888 mg; 222 mg in the second study",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "38674870",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_36972800",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "36972800"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognitive_aging",
+      "purpose": "vascular_and_cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_36972800",
+      "population": {
+        "age_group": "adult",
+        "description": "61 healthy older individuals, 65-80 years."
+      },
+      "study_design": "Double-blind parallel randomized controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Flow-mediated dilation +0.86% (95% CI 0.56 to 1.17), P<0.001",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "24 h ambulatory systolic BP -3.59 mmHg (95% CI -6.95 to -0.23), P=0.037",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Immediate recall and task-switch accuracy better, P<0.05",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "26 g/day freeze-dried powder with 302 mg anthocyanins, a food amount many times above these labels' per-row amounts of 100-800 mg.",
+        "Abstract names no primary outcome; authors equate it to 178 g fresh fruit.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          26
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "26 g of freeze-dried wild blueberry powder (302 mg anthocyanins) daily for 12 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36972800",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_42251891",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "42251891"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognitive_aging",
+      "purpose": "brain_health",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_42251891",
+      "population": {
+        "age_group": "adult",
+        "description": "57 cognitively healthy adults, mean age about 73."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 24 weeks",
+      "outcomes": [
+        {
+          "name": "Serum p-tau181, interaction p=0.10",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Serum NFL, interaction p=0.58",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Diastolic BP reduced, interaction p=0.015",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No effect on cognitive tests",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "20 g/day freeze-dried powder, a food amount far above these labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          20
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 168,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "20 g/d freeze-dried blueberry powder for 24 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42251891",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_36066009",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "36066009"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_cognitive_decline",
+      "purpose": "memory_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_36066009",
+      "population": {
+        "age_group": "adult",
+        "description": "Older adults with cognitive issues by MoCA, 44 blueberry and 42 placebo, plus a reference group of 45."
+      },
+      "study_design": "Double-blind randomized placebo-controlled trial, 6 months",
+      "outcomes": [
+        {
+          "name": "Speed of processing improved relative to placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Lyophilized wild blueberry powder; amount not stated in the abstract, nor a primary outcome.",
+        "Abstract prints no effect sizes or p values.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Lyophilized wild blueberry powder daily for 6 months; amount not in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36066009",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_30999017",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "30999017"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "cognition_and_mood",
+      "purpose": "memory_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_30999017",
+      "population": {
+        "age_group": "adult",
+        "description": "12 studies: children (5), young adults (1), older people with no known impairment (4) or indicated impairment (2)."
+      },
+      "study_design": "Systematic review of RCTs",
+      "outcomes": [
+        {
+          "name": "8 of 12 studies reported improved cognitive measures",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Mood: one study improved, four did not",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Freeze-dried fruit in 9, whole in 2, concentrate in 1; no extract study.",
+        "Authors say differences in design, dose and anthocyanins hinder comparison.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Various doses and durations; not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "30999017",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_40856863",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "40856863"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cognitive_decline",
+      "purpose": "memory_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_40856863",
+      "population": {
+        "age_group": "adult",
+        "description": "Older adults with MCI or subjective cognitive decline; 9 RCTs, 513 patients."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Episodic memory SMD 0.34 (95% CI 0.11 to 0.57)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Processing speed SMD -0.33 (95% CI -0.85 to 0.19)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Working memory SMD 0.09 (95% CI -0.21 to 0.39)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Forms and doses not in the abstract, so it can't show which of these labels it reaches.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Chronic blueberry consumption; regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40856863",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_35676847",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "35676847"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cognition_and_mood",
+      "purpose": "memory_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_35676847",
+      "population": {
+        "age_group": "adult",
+        "description": "14 randomized trials included, 6 pooled."
+      },
+      "study_design": "Systematic review and mini meta-analysis",
+      "outcomes": [
+        {
+          "name": "Mood score WMD 0.03 (95% CI -0.80 to 0.87)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Attention reaction time and accuracy, one-back accuracy: no significant effect",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Two-back accuracy WMD 0.08 (95% CI 0.02 to 0.13), P=0.005",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Few studies pooled; forms not separated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "35676847",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_blueberry_33066847",
+      "components": [
+        "INGR_BLUEBERRY"
+      ],
+      "source_pmids": [
+        "33066847"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiovascular_risk_factors",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_blueberry_33066847",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 11 RCTs of blueberry supplements."
+      },
+      "study_design": "Systematic review and meta-analysis of RCTs",
+      "outcomes": [
+        {
+          "name": "Triglycerides MD -0.27 mmol/L (95% CI -0.57 to 0.17), p=0.06",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No difference for other risk factors",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors: current evidence is insufficient to show a benefit. Weight subgroup favored powder or freeze-dried forms.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "33066847",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "40195645": "Fermented blueberry leaf tea, 200 mL three times daily, for sleep; leaf tea isn't the fruit extract on these labels."
+  },
+  "stop_or_hold": "Labels print no anthocyanin content. Alaska and oval-leaf blueberry rows have no amount and appear only in combination products. Product 216669 is named as a leaf extract; the one leaf trial read is a fermented leaf tea (40195645), not a capsule.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "29882843",
+      "title_fetched": "A Randomized, Double-Blinded, Placebo-Controlled Study to Compare the Safety and Efficacy of Low Dose Enhanced Wild Blueberry Powder and Wild Blueberry Extract (ThinkBlue™) in Maintenance of Episodic and Working Memory in Older Adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29882843/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38674870",
+      "title_fetched": "Wild Blueberry Extract Intervention in Healthy Older Adults: A Multi-Study, Randomised, Controlled Investigation of Acute Cognitive and Cardiovascular Effects.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38674870/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36972800",
+      "title_fetched": "Wild blueberry (poly)phenols can improve vascular function and cognitive performance in healthy older individuals: a double-blind randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36972800/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42251891",
+      "title_fetched": "Effects of a 24-week intervention with freeze-dried blueberries on brain health in older adults: A randomized double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42251891/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36066009",
+      "title_fetched": "Six-month intervention with wild blueberries improved speed of processing in mild cognitive decline: a double-blind, placebo-controlled, randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36066009/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30999017",
+      "title_fetched": "The effect of blueberry interventions on cognitive performance and mood: A systematic review of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30999017/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40856863",
+      "title_fetched": "Blueberries for brainpower: A systematic review and meta-analysis with Bayesian post hoc analysis of RCTS exploring cognitive function in the elderly with prior cognitive decline.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40856863/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35676847",
+      "title_fetched": "The Potential Effect of Blueberry on Cognitive Health and Mood State based on Human Intervention Studies: Systematic Review and Mini Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35676847/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33066847",
+      "title_fetched": "Blueberry and cardiovascular disease risk factors: A systematic review and meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33066847/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40195645",
+      "title_fetched": "Effects of dietary fermented blueberry leaf tea on sleep: a randomized double-blind controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40195645/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_BLUEBERRY",
+    "standard_name": "Blueberry",
+    "aliases": [
+      "Alaska Blueberry",
+      "Oval-leaf Blueberry",
+      "Blueberry Fruit Extract",
+      "Blueberry Fruit Extract, Wild",
+      "BlueActiv",
+      "Blueberry Whole Concentrate",
+      "Blueberry Whole Fruit Extract, Wild",
+      "Blueberry extract",
+      "Blueberry fruit extract",
+      "Wild Blueberry whole extract",
+      "BlueActiv Wild Blueberry extract",
+      "Wild Blueberry",
+      "standardized Blueberry extract",
+      "raw Blueberry powder"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "29882843",
+      "38674870",
+      "36972800",
+      "42251891",
+      "36066009",
+      "30999017",
+      "40856863",
+      "35676847",
+      "33066847"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: some cognition and vascular signals from food-amount freeze-dried fruit, extract evidence thin, and several null results. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Memory and cognition",
+      "Vascular function and blood pressure"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels sell extract, concentrate or powder at 100-800 mg per row. The stored review and most trials used freeze-dried fruit in food amounts, 20-26 g/day in the two trials that state it (36972800, 42251891). That evidence is itself mixed: one trial improved vascular and memory measures (36972800), and another found nothing on its primary biomarkers or on cognitive tests (42251891). Pooled results help episodic memory (40856863) but not most other tasks, or mood (35676847), and cardiovascular risk factors show insufficient evidence (33066847). Two extract trials come close to the labels, using one 100 mg proprietary purified extract for months (29882843) and single doses (38674870); effects were subtle, on few outcomes. No label row shows anthocyanin content, so label exposure can't be matched to the studied extract.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Older adults, with or without cognitive decline",
+      "supported_outcomes": [
+        "Memory and cognition",
+        "Vascular function and blood pressure"
+      ],
+      "source_pmids": [
+        "29882843",
+        "38674870",
+        "36972800",
+        "42251891",
+        "36066009",
+        "30999017",
+        "40856863",
+        "35676847",
+        "33066847"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels sell extract, concentrate or powder at 100-800 mg per row. The stored review and most trials used freeze-dried fruit in food amounts, 20-26 g/day in the two trials that state it (36972800, 42251891). That evidence is itself mixed: one trial improved vascular and memory measures (36972800), and another found nothing on its primary biomarkers or on cognitive tests (42251891). Pooled results help episodic memory (40856863) but not most other tasks, or mood (35676847), and cardiovascular risk factors show insufficient evidence (33066847). Two extract trials come close to the labels, using one 100 mg proprietary purified extract for months (29882843) and single doses (38674870); effects were subtle, on few outcomes. No label row shows anthocyanin content, so label exposure can't be matched to the studied extract. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29882843",
+        "title": "A Randomized, Double-Blinded, Placebo-Controlled Study to Compare the Safety and Efficacy of Low Dose Enhanced Wild Blueberry Powder and Wild Blueberry Extract (ThinkBlue™) in Maintenance of Episodic and Working Memory in Older Adults.",
+        "citation": "Nutrients (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29882843/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu10060660"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38674870",
+        "title": "Wild Blueberry Extract Intervention in Healthy Older Adults: A Multi-Study, Randomised, Controlled Investigation of Acute Cognitive and Cardiovascular Effects.",
+        "citation": "Nutrients (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38674870/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu16081180"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36972800",
+        "title": "Wild blueberry (poly)phenols can improve vascular function and cognitive performance in healthy older individuals: a double-blind randomized controlled trial.",
+        "citation": "The American journal of clinical nutrition (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36972800/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.ajcnut.2023.03.017"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42251891",
+        "title": "Effects of a 24-week intervention with freeze-dried blueberries on brain health in older adults: A randomized double-blind, placebo-controlled trial.",
+        "citation": "Clinical nutrition ESPEN (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42251891/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.clnesp.2026.103377"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36066009",
+        "title": "Six-month intervention with wild blueberries improved speed of processing in mild cognitive decline: a double-blind, placebo-controlled, randomized clinical trial.",
+        "citation": "Nutritional neuroscience (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36066009/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.1080/1028415X.2022.2117475"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "30999017",
+        "title": "The effect of blueberry interventions on cognitive performance and mood: A systematic review of randomized controlled trials.",
+        "citation": "Brain, behavior, and immunity (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30999017/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.bbi.2019.04.001"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40856863",
+        "title": "Blueberries for brainpower: A systematic review and meta-analysis with Bayesian post hoc analysis of RCTS exploring cognitive function in the elderly with prior cognitive decline.",
+        "citation": "Biogerontology (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40856863/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1007/s10522-025-10308-w"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "35676847",
+        "title": "The Potential Effect of Blueberry on Cognitive Health and Mood State based on Human Intervention Studies: Systematic Review and Mini Meta-Analysis.",
+        "citation": "CNS & neurological disorders drug targets (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35676847/",
+        "publication_types": [
+          "Systematic Review",
+          "Meta-Analysis",
+          "Journal Article"
+        ],
+        "doi": "10.2174/1871527321666220608085852"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33066847",
+        "title": "Blueberry and cardiovascular disease risk factors: A systematic review and meta-analysis of randomized controlled trials.",
+        "citation": "Complementary therapies in medicine (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33066847/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.ctim.2020.102389"
+      }
+    ]
+  }
+}

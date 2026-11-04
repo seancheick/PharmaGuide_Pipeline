@@ -1,0 +1,880 @@
+{
+  "record_id": "INGR_CAYENNE_PEPPER",
+  "labels": 26,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "mixed: modest pooled capsaicin effect on weight, null at the labels' amount in one acute trial, and small positive gut trials at other doses",
+  "decision": "closed_no_credit",
+  "summary": "These labels sell whole cayenne (450-500 mg) or an extract (500 mg), and no label row shows a capsaicinoid amount. Two product names show heat units, which can't be read as a dose. Pooled capsaicin trials show a modest weight effect, about 0.5 kg (36938807); the abstract doesn't separate whole cayenne or extract. The one trial at the label form and amount, 500 mg cayenne with 1.25 mg capsaicin, was a single dose in 11 men and showed no thermogenic effect (24267043). Red pepper powder helped in small gut symptom trials, at 2.5 g/day (12030948) and in enteric-coated pills (21573941); neither is what these labels print. The evidence doesn't show benefit for the labels as printed.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cayenne_pepper_24267043",
+      "components": [
+        "INGR_CAYENNE_PEPPER"
+      ],
+      "source_pmids": [
+        "24267043"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "thermogenesis",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cayenne_pepper_24267043",
+      "population": {
+        "age_group": "adult",
+        "description": "11 men."
+      },
+      "study_design": "Randomized crossover, single dose, cayenne vs evodiamine vs placebo",
+      "outcomes": [
+        {
+          "name": "No Supplement x Test interaction for energy expenditure or markers of fat oxidation, P>.05",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The only trial read at the labels' amount and form, but a single acute dose with 11 men and metabolic outcomes only.",
+        "Abstract names no primary outcome; species isn't named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "single_challenge",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "500 mg cayenne pepper (1.25 mg capsaicin), single dose",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "24267043",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cayenne_pepper_12030948",
+      "components": [
+        "INGR_CAYENNE_PEPPER"
+      ],
+      "source_pmids": [
+        "12030948"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "functional_dyspepsia",
+      "purpose": "digestive_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cayenne_pepper_12030948",
+      "population": {
+        "age_group": "adult",
+        "description": "30 patients with functional dyspepsia, without reflux disease or IBS."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 5 weeks",
+      "outcomes": [
+        {
+          "name": "Overall symptom, epigastric pain, fullness and nausea scores lower than placebo from week 3",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Small; 2.5 g/day is about five times the labels' per-unit amount, and the capsaicin content isn't in the abstract.",
+        "Abstract names no primary outcome; no p values printed in the abstract; species not named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          2.5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 35,
+        "administration_frequency": "before meals",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2.5 g/day red pepper powder before meals for 5 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12030948",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cayenne_pepper_21573941",
+      "components": [
+        "INGR_CAYENNE_PEPPER"
+      ],
+      "source_pmids": [
+        "21573941"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "irritable_bowel_syndrome",
+      "purpose": "digestive_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cayenne_pepper_21573941",
+      "population": {
+        "age_group": "adult",
+        "description": "50 patients with IBS by Rome II, 23 assigned red pepper and 27 placebo."
+      },
+      "study_design": "Randomized double-blind placebo-controlled preliminary study, 6 weeks",
+      "outcomes": [
+        {
+          "name": "Abdominal pain and bloating improved from pre-treatment on red pepper, unlike placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Final patient evaluation of effectiveness better than placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors call it preliminary. Coat dissolves in the colon; the labels' capsules aren't described that way.",
+        "Dropouts and dose reductions affect the completers; see the clinician items. Capsaicin content not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 42,
+        "administration_frequency": "4 pills a day",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "4 pills/day, each 150 mg red pepper powder, enteric-coated, for 6 weeks",
+        "normalization": {
+          "basis": "Daily total of 4 x 150 mg as printed; dose lowered to 2 pills a day in 8 patients."
+        },
+        "source_provenance": {
+          "pmid": "21573941",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cayenne_pepper_32578488",
+      "components": [
+        "INGR_CAYENNE_PEPPER"
+      ],
+      "source_pmids": [
+        "32578488"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Capsifen",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cayenne_pepper_32578488",
+      "population": {
+        "age_group": "adult",
+        "description": "24 healthy overweight subjects."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 28 days",
+      "outcomes": [
+        {
+          "name": "Body weight -2.1% vs placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Body mass index -2.2% vs placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Reduced appetite and uncontrolled eating vs placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "A standardized sustained-release extract with fenugreek fiber, stating 4 mg capsaicinoids/day; these labels print no capsaicinoid amount or such a formulation.",
+        "Small, 28 days; abstract names no primary outcome and prints no funding statement.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "once a day",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "200 mg x 1/day Capsifen (4 mg capsaicinoids/day) for 28 days",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32578488",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cayenne_pepper_36938807",
+      "components": [
+        "INGR_CAYENNE_PEPPER"
+      ],
+      "source_pmids": [
+        "36938807"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_obesity",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cayenne_pepper_36938807",
+      "population": {
+        "age_group": "adult",
+        "description": "Overweight or obese adults; 15 RCTs, 762 individuals."
+      },
+      "study_design": "Systematic review and meta-analysis of RCTs",
+      "outcomes": [
+        {
+          "name": "Body weight WMD -0.51 kg (95% CI -0.86 to -0.15)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "BMI WMD -0.25 kg/m2 (95% CI -0.35 to -0.15)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Waist WMD -1.12 cm (95% CI -2.00 to -0.24)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors call the effects rather modest. Capsaicin in whatever form the trials used; the abstract doesn't separate whole cayenne or extract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "36938807",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cayenne_pepper_24246368",
+      "components": [
+        "INGR_CAYENNE_PEPPER"
+      ],
+      "source_pmids": [
+        "24246368"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "energy_intake",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cayenne_pepper_24246368",
+      "population": {
+        "age_group": "adult",
+        "description": "191 participants in 8 trials combined out of 10 included."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Ad libitum energy intake -309.9 kJ at the meal, p<0.001",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "I2 75.7%; authors urge caution and ask for long-term trials.",
+        "Authors suggest at least 2 mg capsaicinoids; the labels print no capsaicinoid amount. Single-meal outcome, not weight.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Minimum of 2 mg capsaicinoids suggested; regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "24246368",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cayenne_pepper_23844093",
+      "components": [
+        "INGR_CAYENNE_PEPPER"
+      ],
+      "source_pmids": [
+        "23844093"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "energy_balance",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cayenne_pepper_23844093",
+      "population": {
+        "age_group": "adult",
+        "description": "Subjects in four 36 h respiration chamber sessions; number not in the abstract."
+      },
+      "study_design": "Randomized controlled trial, crossover by session",
+      "outcomes": [
+        {
+          "name": "Fat oxidation at 75%CAPS higher than 100%Control, p=0.03",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Blood pressure did not differ between conditions",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Acute; metabolic outcomes only. Abstract doesn't state how the pepper was given.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          2.56
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "with every meal",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2.56 mg capsaicin (1.03 g red chili pepper, 39,050 SHU) with every meal",
+        "normalization": {
+          "basis": "Capsaicin per meal as printed; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "23844093",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_cayenne_pepper_33998636",
+      "components": [
+        "INGR_CAYENNE_PEPPER"
+      ],
+      "source_pmids": [
+        "33998636"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "glycemic_control",
+      "purpose": "blood_sugar",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_cayenne_pepper_33998636",
+      "population": {
+        "age_group": "adult",
+        "description": "14 controlled trials."
+      },
+      "study_design": "Systematic review and meta-analysis of controlled trials",
+      "outcomes": [
+        {
+          "name": "Long-term fasting glucose WMD 0.03 mmol/L (95% CI -0.05 to 0.12)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors conclude neither benefit nor harm for glucose and insulin. Form heterogeneity noted.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "33998636",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "33262398": "Capsicum annuum pooled across 11 studies: LDL SMD -0.39, body weight marginal P=0.09; prediction interval crosses zero; forms not separated.",
+    "41856833": "Red pepper/capsaicin and cardiovascular markers: total cholesterol and diastolic results depended on one study; no effect on the rest.",
+    "33063385": "Pools capsaicinoids and capsinoids on resting metabolic rate; capsinoids aren't what these labels print.",
+    "38141553": "Capsiate 12 mg/day, a nonpungent analog, with resistance training; different compound.",
+    "29530622": "Single 2 mg capsaicin dose in young people with obesity; no change in energy intake or appetite; form isn't cayenne as printed.",
+    "33291700": "Single 2 g chili dose; gastric accommodation physiology, not a treatment trial."
+  },
+  "stop_or_hold": "Labels print no capsaicinoid amount; heat units (40,000 SHU or STU in two product names) stay as label text and aren't converted.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "24267043",
+      "title_fetched": "Capsaicin and evodiamine ingestion does not augment energy expenditure and fat oxidation at rest or after moderately-intense exercise.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24267043/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12030948",
+      "title_fetched": "The treatment of functional dyspepsia with red pepper.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12030948/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21573941",
+      "title_fetched": "Effect of red pepper on symptoms of irritable bowel syndrome: preliminary study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21573941/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32578488",
+      "title_fetched": "Influence of a Novel Food-Grade Formulation of Red Chili Extract (Capsicum annum) on Overweight Subjects: Randomized, Double-Blinded, Placebo-Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32578488/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36938807",
+      "title_fetched": "The effects of capsaicin intake on weight loss among overweight and obese subjects: a systematic review and meta-analysis of randomised controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36938807/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24246368",
+      "title_fetched": "Could capsaicinoids help to support weight management? A systematic review and meta-analysis of energy intake data.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24246368/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23844093",
+      "title_fetched": "Acute effects of capsaicin on energy expenditure and fat oxidation in negative energy balance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23844093/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33998636",
+      "title_fetched": "Short- and long-term effects of capsaicin supplementation on glycemic control: a systematic review and meta-analysis of controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33998636/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33262398",
+      "title_fetched": "Effects of Capsicum annuum supplementation on the components of metabolic syndrome: a systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33262398/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41856833",
+      "title_fetched": "The effect of red pepper/capsaicin on cardiovascular risk factors: a systematic review, meta-analysis, and GRADE assessment.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41856833/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33063385",
+      "title_fetched": "The effect of Capsaicinoids or Capsinoids in red pepper on thermogenesis in healthy adults: A systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33063385/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38141553",
+      "title_fetched": "Ten weeks of Capsicum annuum L. extract supplementation did not change adipose tissue-derived hormones, appetite, body composition, and muscle strength when combined with resistance training in healthy untrained men: A clinical trial study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38141553/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29530622",
+      "title_fetched": "Acute administration of capsaicin increases resting energy expenditure in young obese subjects without affecting energy intake, appetite, and circulating levels of orexigenic/anorexigenic peptides.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29530622/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33291700",
+      "title_fetched": "Acute Effects of Red Chili, a Natural Capsaicin Receptor Agonist, on Gastric Accommodation and Upper Gastrointestinal Symptoms in Healthy Volunteers and Gastroesophageal Reflux Disease Patients.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33291700/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_CAYENNE_PEPPER",
+    "standard_name": "Cayenne Pepper",
+    "aliases": [
+      "Cayenne Fruit Extract",
+      "Cayenne Pepper",
+      "Cayenne extract",
+      "Cayenne fruit extract",
+      "Cayenne pepper",
+      "Cayenne"
+    ],
+    "category": "metabolic_blood_sugar",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "24267043",
+      "12030948",
+      "21573941",
+      "32578488",
+      "36938807",
+      "24246368",
+      "23844093",
+      "33998636"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: modest pooled capsaicin effect on weight, null at the labels' amount in one acute trial, and small positive gut trials at other doses. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Body weight",
+      "Energy intake",
+      "Digestive symptoms"
+    ],
+    "health_goals_supported": [],
+    "notes": "These labels sell whole cayenne (450-500 mg) or an extract (500 mg), and no label row shows a capsaicinoid amount. Two product names show heat units, which can't be read as a dose. Pooled capsaicin trials show a modest weight effect, about 0.5 kg (36938807); the abstract doesn't separate whole cayenne or extract. The one trial at the label form and amount, 500 mg cayenne with 1.25 mg capsaicin, was a single dose in 11 men and showed no thermogenic effect (24267043). Red pepper powder helped in small gut symptom trials, at 2.5 g/day (12030948) and in enteric-coated pills (21573941); neither is what these labels print. The evidence doesn't show benefit for the labels as printed.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Overweight or obese adults, and small groups with functional dyspepsia or IBS",
+      "supported_outcomes": [
+        "Body weight",
+        "Energy intake",
+        "Digestive symptoms"
+      ],
+      "source_pmids": [
+        "24267043",
+        "12030948",
+        "21573941",
+        "32578488",
+        "36938807",
+        "24246368",
+        "23844093",
+        "33998636"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "These labels sell whole cayenne (450-500 mg) or an extract (500 mg), and no label row shows a capsaicinoid amount. Two product names show heat units, which can't be read as a dose. Pooled capsaicin trials show a modest weight effect, about 0.5 kg (36938807); the abstract doesn't separate whole cayenne or extract. The one trial at the label form and amount, 500 mg cayenne with 1.25 mg capsaicin, was a single dose in 11 men and showed no thermogenic effect (24267043). Red pepper powder helped in small gut symptom trials, at 2.5 g/day (12030948) and in enteric-coated pills (21573941); neither is what these labels print. The evidence doesn't show benefit for the labels as printed. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "24267043",
+        "title": "Capsaicin and evodiamine ingestion does not augment energy expenditure and fat oxidation at rest or after moderately-intense exercise.",
+        "citation": "Nutrition research (New York, N.Y.) (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24267043/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.nutres.2013.08.007"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12030948",
+        "title": "The treatment of functional dyspepsia with red pepper.",
+        "citation": "Alimentary pharmacology & therapeutics (2002)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12030948/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1046/j.1365-2036.2002.01280.x"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21573941",
+        "title": "Effect of red pepper on symptoms of irritable bowel syndrome: preliminary study.",
+        "citation": "Digestive diseases and sciences (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21573941/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/s10620-011-1740-9"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32578488",
+        "title": "Influence of a Novel Food-Grade Formulation of Red Chili Extract (Capsicum annum) on Overweight Subjects: Randomized, Double-Blinded, Placebo-Controlled Study.",
+        "citation": "Journal of dietary supplements (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32578488/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/19390211.2020.1780363"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36938807",
+        "title": "The effects of capsaicin intake on weight loss among overweight and obese subjects: a systematic review and meta-analysis of randomised controlled trials.",
+        "citation": "The British journal of nutrition (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36938807/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Systematic Review",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1017/S0007114523000697"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "24246368",
+        "title": "Could capsaicinoids help to support weight management? A systematic review and meta-analysis of energy intake data.",
+        "citation": "Appetite (2014)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24246368/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.appet.2013.11.005"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23844093",
+        "title": "Acute effects of capsaicin on energy expenditure and fat oxidation in negative energy balance.",
+        "citation": "PloS one (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23844093/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1371/journal.pone.0067786"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33998636",
+        "title": "Short- and long-term effects of capsaicin supplementation on glycemic control: a systematic review and meta-analysis of controlled trials.",
+        "citation": "Food & function (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33998636/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1039/d1fo00595b"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: cayenne_pepper applicability_status no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

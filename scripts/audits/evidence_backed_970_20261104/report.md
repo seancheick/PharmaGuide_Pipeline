@@ -1,4 +1,4 @@
-# Evidence review of the 74 ingredients behind 970 labels: top-5 batch
+# Evidence review of the 74 ingredients behind 970 labels
 
 Agent review (Claude), November 4, 2026. No clinician approval is claimed or written. Nothing is published.
 
@@ -54,7 +54,8 @@ The driver is the row reason: on the 37, each N-acetyl row now reads `clinical_f
 
 ## For Dr. Pham (no record written)
 
-- **Nattokinase and clotting:** prolonged closure time and aPTT against placebo after 8 weeks (PMID 31070609); aPTT prolonged after one dose, within normal range (PMID 26109079). Worth a safety look, separate from Evidence.
+- **Nattokinase and clotting:** prolonged closure time and aPTT against placebo after 8 weeks (PMID 31070609); aPTT prolonged after one dose, within normal range (PMID 26109079). `RULE_IQM_NATTOKINASE_BLEEDING` already covers anticoagulants and antiplatelets at `avoid`. Question for her: does the clotting-time finding change anything beyond that? The rule isn't edited here.
+- **Stored ratings:** nattokinase `positive_moderate` and pomegranate `positive_weak` stay on her list.
 - **Nattokinase and metabolic markers:** total cholesterol and glucose higher in the meta-analysis (PMID 39076715).
 - **N-acetyl-L-tyrosine:** a liver-failure case on a fat burner containing it among other ingredients; the authors found no prior report for those substances (PMID 32192741). No attribution can be drawn.
 - **Eligibility:** each packet ends in one question for her.
@@ -73,20 +74,86 @@ The driver is the row reason: on the 37, each N-acetyl row now reads `clinical_f
 - Not read: the Cochrane review's full text (Europe PMC failed), so its lysine trials aren't extracted. Most tyrosine, pomegranate and MCT full texts aren't open.
 - PMID 24287284's PDF stays unread after a fetch was refused.
 - Pomegranate 10 powder labels: no powder trial read yet.
-- Not counted: how many of the 970 carry the projection row that blocks #354's sentence.
 - The search for each top-5 ingredient isn't a systematic review.
 
-## Option for lysine, not in this PR
+## Lysine, closed in this PR
 
-`literature_evidence_records.json` stores lysine as `positive_weak`, while its own `applicability_decision` says the 2015 review found no evidence of efficacy. Setting `effect_direction` to `null` uses the existing no-credit path that methionine took in #340, with no clinician gate and no new record.
+`l_lysine` now has `effect_direction: null`, the no-credit path methionine took in #340. The rationale names the positive trials (PMIDs 3115841, 6435961), a null trial (PMID 6419679) and the Cochrane sentence "We failed to find any evidence of efficacy for lysine" (PMID 26252373). It reads as conflicting evidence with no clear benefit, and it's marked agent review, not clinician reviewed.
 
-Probed on scratch copies, all 49 labels:
+## Batch 2: next 12 ingredients, plus lysine
 
-| | Main | #354 tree |
-|---|---|---|
+| Ingredient | Labels | Stored | Result | Field |
+|---|---:|---|---|---|
+| l_lysine | 49 | positive_weak | **Closed:** conflicting, no clear benefit | literature `null` |
+| l_leucine | 36 | positive_weak | **Closed:** conflicting, no clear benefit | literature `null` |
+| lecithin | 33 | positive_weak | **Closed:** conflicting, no clear benefit | literature `null` |
+| siberian_ginseng | 27 | positive_weak | **Closed:** conflicting, no clear benefit | literature `null` |
+| d_ribose | 26 | positive_weak | **Closed:** exercise mostly null; cardiac positives in patients at far higher amounts | literature `null` |
+| cayenne_pepper | 26 | positive_weak | **Closed:** no qualifying study for these labels | `no_qualifying_human_evidence` |
+| gotu_kola | 22 | positive_moderate | **Closed:** no qualifying study for these labels | `no_qualifying_human_evidence` |
+| feverfew | 20 | positive_moderate | **Closed:** no qualifying study for these labels | `no_qualifying_human_evidence` |
+| butterbur, whole herb extract | 6 of 25 | positive_strong | **Closed:** root extract trials only | rejection `INGR_BUTTERBUR_WHOLE_HERB` |
+| l_ornithine, L-aspartate | 8 of 20 | positive_moderate | **Closed:** cirrhosis trials only | rejection `INGR_L_ORNITHINE_L_ASPARTATE` |
+| apple_cider_vinegar | 39 | positive_weak | Pending: capsule RCT in PCOS (42215584) | packet |
+| blueberry | 24 | positive_weak | Pending: 100 mg extract trial, WBE111 (29882843) | packet |
+| lions_mane | 21 | positive_moderate | Pending: 3 g/day tablet trial (18844328) | packet |
+| butterbur, the rest | 19 of 25 | positive_strong | Pending: Petadolex RCTs (15623680, 14752215); liver items | packet |
+| l_ornithine, the rest | 12 of 20 | positive_moderate | Pending: stress and fatigue trials; results table of 19083482 unread | packet |
+
+### The three ways a review closes
+
+No field here is new, and none gives credit.
+
+1. **Literature `null`:** an abstract says directly there's no benefit, and a positive trial exists. The rationale names both sides. The label reads "We reviewed the human research and it did not establish a clear benefit for these ingredients."
+2. **`no_qualifying_human_evidence`:** the review finished and no study meets rule 2 for what these labels print. The owner's rule is that this result carries no studies, so `applicability_decision` names each one and why it falls short; the packet keeps the full reading. The label reads "We reviewed the research but found no qualifying human clinical evidence of benefit applicable to this product." 152 records already use this result.
+3. **Backed rejection:** one preparation differs from what was studied, and the ingredient's other preparations stay open. The label shows Sean's sentence on #354.
+
+An ingredient with a study that meets rule 2 for a preparation its labels print stays pending for Sean's ruling. Its packet holds the question.
+
+`applicability_status: applicability_unestablished` and a reference-only record do not finish a label: probed on cayenne, both left all 26 at partial on #354.
+
+### Measurement
+
+Raw label through clean, enrich and the scored artifact, by name, base against candidate, on the 253 labels these closures reach.
+
+| | Main (aa65ec72d) | #354 (72e2e22ed) |
+|---|---:|---:|
 | Score, tier, Evidence or Dose moved | 0 | 0 |
 | Safety status moved | 0 | 0 |
-| Partial to complete | 0 (already complete) | 49 |
-| Sentence | "We reviewed the human research and it did not establish a clear benefit for these ingredients." | same |
+| Partial to complete | 0 | 244 |
+| Stay partial for other rows | 2, unchanged | 9 |
+| Reason text changed | 225 | 246 |
 
-That isn't Sean's sentence, and it shouldn't be: this is a purpose lysine was studied for, and the review found no efficacy, so preparation isn't the reason. The same one-field change is available to any ingredient whose reading comes out null. The other four top-5 ingredients read mixed or weak, so it doesn't apply to them.
+### Projection rows
+
+62 of the 970 labels carry `module_scoped_product_projection` (64 rows, all `product_level_evidence`), which blocks #354's sentence: Natto Extract 13, Lactase 11, Nattokinase 7, Alaska Blueberry 5, NSK-SD Nattokinase 4, Cayenne Pepper 3, Kudzu 2, Protein 2 and others. Scored on stored enrichment on #354. a9-finish's fix covers rows with their own rejection.
+
+### What would settle the held ingredients
+
+- **l_tyrosine, free form:** daily doses in PMIDs 25598314, 24433977 and 29980424.
+- **pomegranate:** the extract subgroup of PMID 38410857.
+- **nattokinase:** a stored unit for fibrinolytic units, a schema change. Stopped.
+- **mct_oil:** the 13 trials in PMID 25636220.
+- **l_ornithine:** the results table of PMID 19083482.
+
+### Batch 2 limits
+
+- Abstracts only, unless a receipt says otherwise. Each no-qualifying rationale says so, and says it doesn't state a preparation was tested and failed.
+- Lecithin: 6 labels print sunflower lecithin, and no trial of it was found. The dementia quote doesn't test them; the rationale says no sunflower trial was found.
+- Whole-herb butterbur: titles scanned across 97 and 30 records, not every abstract opened; the record says so.
+- Gotu kola: two labels print a triterpene percentage (306227 at 10%, 219195 at 6% glycosides). Neither prints the total triterpenic fraction tested.
+- These searches aren't systematic reviews.
+
+### For Dr. Pham, batch 2 (no record written)
+
+Each entry is a question from the read, not a finding in a record. Sources are in `clinician_items` in `decisions/<ingredient>.json`.
+
+- **Butterbur and liver:** PMIDs 31083451, 39853578.
+- **Cayenne, gut symptoms and dropouts:** PMIDs 21573941, 33291700.
+- **Lion's mane:** PMIDs 32581767, 40959699.
+- **Feverfew:** PMID 34434419.
+- **Apple cider vinegar:** PMIDs 15983536, 39238884, 23373303. PMID 41010525 pools a trial since retracted (PMID 38966098).
+- **D-ribose:** PMIDs 24272966, 36551203, 8815168.
+- **Siberian ginseng:** PMIDs 15190050, 15207399, 11798012, 24683218.
+- **Lecithin, adverse effects:** PMID 12917896.
+- **Ornithine:** PMIDs 40323503, 20717126, and whether LOLA liver data belongs on a supplement label at all.

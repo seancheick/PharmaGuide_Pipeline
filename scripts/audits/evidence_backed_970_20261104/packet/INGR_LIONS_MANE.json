@@ -1,0 +1,856 @@
+{
+  "record_id": "INGR_LIONS_MANE",
+  "labels": 21,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed: small positive cognition trials of powder at higher amounts, null and task-specific acute results, and no chronic extract trial matching the labels",
+  "decision": "closed_no_credit",
+  "summary": "The stored moderate rating rests on one 30-person trial with tablets at 3 g/day of tablet mass (18844328), and scores fell after stopping. A second trial's fruiting body supplement improved the MMSE alone among three tests (31413233); its amount isn't in the abstract. Healthy young adults showed task-specific acute results and no clear chronic effect (38004235, 40276537, 38140277), and 10 g/day in muffins did nothing in a single-blind study that doesn't state randomization (36582308). A mycelium trial used erinacine A-enriched material in mild Alzheimer's disease (32581767), which no label here prints. The labels print 500-1000 mg of extract or 1 g of powder. No chronic trial read tested an extract at those amounts, and the powder labels sit well below the 3 g/day.",
+  "question_for_clinician": "Are two small MCI-type trials enough for any credit, and can they reach 1 g powder or 500-1000 mg extract when the tablet trial used 3 g/day? Agent recommendation: no credit, and the moderate rating is too strong.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lions_mane_18844328",
+      "components": [
+        "INGR_LIONS_MANE"
+      ],
+      "source_pmids": [
+        "18844328"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hericium erinaceus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_cognitive_impairment",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lions_mane_18844328",
+      "population": {
+        "age_group": "adult",
+        "description": "30 Japanese adults aged 50-80 with mild cognitive impairment, 15 per group."
+      },
+      "study_design": "Double-blind parallel-group placebo-controlled trial, 16 weeks, then 4 weeks off",
+      "outcomes": [
+        {
+          "name": "Cognitive function scale (based on HDS-R) higher than placebo at weeks 8, 12 and 16",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Scores fell significantly 4 weeks after stopping",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Small, one trial; abstract doesn't call the scale primary and gives no effect sizes.",
+        "Tablet powder at 3 g/day of tablet mass, about three times the powder labels' 1 g. Mushroom part not stated.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          3000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 112,
+        "administration_frequency": "three times a day",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Four 250 mg tablets with 96% dry powder, three times a day for 16 weeks",
+        "normalization": {
+          "basis": "Tablet mass, 4 x 250 mg x 3 a day; not converted to powder mass."
+        },
+        "source_provenance": {
+          "pmid": "18844328",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lions_mane_31413233",
+      "components": [
+        "INGR_LIONS_MANE"
+      ],
+      "source_pmids": [
+        "31413233"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hericium erinaceus",
+        "plant_part": "fruiting_body"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognitive_function",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lions_mane_31413233",
+      "population": {
+        "age_group": "adult",
+        "description": "Population and sample size not in the abstract."
+      },
+      "study_design": "Randomized double-blind placebo-controlled parallel-group multicenter study, 12 weeks",
+      "outcomes": [
+        {
+          "name": "MMSE improved",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Benton visual retention and verbal paired-associate tests: abstract says MMSE alone improved",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Amount and sample size not in the abstract, and no primary outcome named.",
+        "Supplements containing fruiting body; other contents not stated.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Supplements containing fruiting body for 12 weeks; amount not in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31413233",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lions_mane_38004235",
+      "components": [
+        "INGR_LIONS_MANE"
+      ],
+      "source_pmids": [
+        "38004235"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hericium erinaceus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_young_adults",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lions_mane_38004235",
+      "population": {
+        "age_group": "adult",
+        "description": "41 healthy adults, 18-45 years."
+      },
+      "study_design": "Randomized double-blind placebo-controlled parallel-groups pilot, acute and 28 days",
+      "outcomes": [
+        {
+          "name": "Stroop task quicker 60 min after a single dose, p=0.005",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Subjective stress after 28 days, trend, p=0.051",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Authors also report null and limited negative findings",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Small pilot; authors urge caution. Preparation and part not in the abstract; no primary outcome named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1.8
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1.8 g Hericium erinaceus, single dose and for 28 days",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "38004235",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lions_mane_40276537",
+      "components": [
+        "INGR_LIONS_MANE"
+      ],
+      "source_pmids": [
+        "40276537"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hericium erinaceus",
+        "plant_part": "fruiting_body"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_young_adults",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lions_mane_40276537",
+      "population": {
+        "age_group": "adult",
+        "description": "18 healthy adults, 18-35 years."
+      },
+      "study_design": "Randomized placebo-controlled double-blind crossover, single dose",
+      "outcomes": [
+        {
+          "name": "No significant effect on composite global cognition and mood",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Pegboard test improved at 90 min",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Acute only; the closest match to the labeled extract, though 3 g of 10:1 extract is three times the one labeled 10:1 at 1000 mg.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          3
+        ],
+        "dose_status": "verified",
+        "dose_basis": "single_challenge",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "3 g of 10:1 fruiting body extract, single dose",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "40276537",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lions_mane_38140277",
+      "components": [
+        "INGR_LIONS_MANE"
+      ],
+      "source_pmids": [
+        "38140277"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hericium erinaceus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognition",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lions_mane_38140277",
+      "population": {
+        "age_group": "adult",
+        "description": "Sample size and population not in the abstract."
+      },
+      "study_design": "Randomized double-blind placebo-controlled crossover, single dose, with a guayusa arm",
+      "outcomes": [
+        {
+          "name": "Serial 7s attempts, N-Back and Go reaction time improved on lion's mane, p<=0.05",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Acute only. Abstract doesn't state plainly whether these lion's mane results are against placebo or from baseline.",
+        "Preparation described only as Nordic-grown; no primary outcome named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1
+        ],
+        "dose_status": "verified",
+        "dose_basis": "single_challenge",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1 g Nordic-grown lion's mane, single dose",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "38140277",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lions_mane_32581767",
+      "components": [
+        "INGR_LIONS_MANE"
+      ],
+      "source_pmids": [
+        "32581767"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hericium erinaceus",
+        "plant_part": "mycelium"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_alzheimers_disease",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lions_mane_32581767",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with mild Alzheimer's disease; sample size not in the abstract."
+      },
+      "study_design": "Pilot double-blind placebo-controlled randomized study, 49 weeks",
+      "outcomes": [
+        {
+          "name": "Instrumental Activities of Daily Living differed between groups",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "MMSE improved on treatment",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "CASI fell on placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Erinacine A-enriched mycelium at 5 mg/g, not any preparation printed on these labels; one label lists fruiting body and mycelium extract with no erinacine content.",
+        "Pilot; no primary outcome named; the abstract's conclusion prints a typo, 350 mg/g.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1050
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 343,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Three 350 mg capsules a day, 5 mg/g erinacine A, for 49 weeks",
+        "normalization": {
+          "basis": "Daily total of 3 x 350 mg capsule mass."
+        },
+        "source_provenance": {
+          "pmid": "32581767",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lions_mane_20834180",
+      "components": [
+        "INGR_LIONS_MANE"
+      ],
+      "source_pmids": [
+        "20834180"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hericium erinaceus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "menopausal_symptoms",
+      "purpose": "mood_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lions_mane_20834180",
+      "population": {
+        "age_group": "adult",
+        "description": "30 females."
+      },
+      "study_design": "Randomized placebo-controlled trial with cookies, 4 weeks",
+      "outcomes": [
+        {
+          "name": "CES-D and ICI lower after intake than before",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Two ICI terms lower than placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Food matrix; amount not in the abstract. Other measures not reported as different from placebo.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "HE cookies for 4 weeks; amount not in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "20834180",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_lions_mane_40959699",
+      "components": [
+        "INGR_LIONS_MANE"
+      ],
+      "source_pmids": [
+        "40959699"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "cognition",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_lions_mane_40959699",
+      "population": {
+        "age_group": "adult",
+        "description": "5 RCTs and 3 pilot trials among mixed human and laboratory sources."
+      },
+      "study_design": "Systematic review",
+      "outcomes": [
+        {
+          "name": "MMSE combined weighted mean increase of 1.17 from one RCT and one pilot trial",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors' broad statement of effectiveness mixes laboratory work with few small trials; it can't be read as a trial result for these labels.",
+        "No control comparison or preparation stated for the MMSE number.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40959699",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "36582308": "10 g/day in muffins for 4 weeks in a college-age group; single-blind and not stated as randomized; no effect on metabolic flexibility or cognition. Food matrix.",
+    "42884628": "Uncontrolled pilot in 10 healthy adults, 2 g/day for 28 days; no significant change."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "18844328",
+      "title_fetched": "Improving effects of the mushroom Yamabushitake (Hericium erinaceus) on mild cognitive impairment: a double-blind placebo-controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18844328/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31413233",
+      "title_fetched": "Improvement of cognitive functions by oral intake of Hericium erinaceus.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31413233/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38004235",
+      "title_fetched": "The Acute and Chronic Effects of Lion's Mane Mushroom Supplementation on Cognitive Function, Stress and Mood in Young Adults: A Double-Blind, Parallel Groups, Pilot Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38004235/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40276537",
+      "title_fetched": "Acute effects of a standardised extract of Hericium erinaceus (Lion's Mane mushroom) on cognition and mood in healthy younger adults: a double-blind randomised placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40276537/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38140277",
+      "title_fetched": "Acute Effects of Naturally Occurring Guayusa Tea and Nordic Lion's Mane Extracts on Cognitive Performance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38140277/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32581767",
+      "title_fetched": "Prevention of Early Alzheimer's Disease by Erinacine A-Enriched Hericium erinaceus Mycelia Pilot Double-Blind Placebo-Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32581767/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20834180",
+      "title_fetched": "Reduction of depression and anxiety by 4 weeks Hericium erinaceus intake.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20834180/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40959699",
+      "title_fetched": "Benefits, side effects, and uses of Hericium erinaceus as a supplement: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40959699/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36582308",
+      "title_fetched": "Four Weeks of Hericium erinaceus Supplementation Does Not Impact Markers of Metabolic Flexibility or Cognition.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36582308/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42884628",
+      "title_fetched": "A Pilot Proof-of-Concept Study to Evaluate the Physiological and Cognitive Impacts of Hericium erinaceus on Healthy Adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42884628/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_LIONS_MANE",
+    "standard_name": "Lion's Mane",
+    "aliases": [
+      "Lion's Mane Fruiting Body, Mycelium Extract",
+      "Lion's Mane Mushroom Extract",
+      "Lion's Mane Mushroom Fruiting Body Extract",
+      "Lion's Mane Mushroom Sporocarp Extract",
+      "Lion's Mane Mushroom, Powder",
+      "Lion's Mane",
+      "organic Lion's Mane",
+      "Lion’s Mane (10:1 Extract) (Hericium erinaceus)"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "18844328",
+      "31413233",
+      "38004235",
+      "40276537",
+      "38140277",
+      "32581767",
+      "20834180",
+      "40959699"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: small positive cognition trials of powder at higher amounts, null and task-specific acute results, and no chronic extract trial matching the labels. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Cognitive function"
+    ],
+    "health_goals_supported": [],
+    "notes": "The stored moderate rating rests on one 30-person trial with tablets at 3 g/day of tablet mass (18844328), and scores fell after stopping. A second trial's fruiting body supplement improved the MMSE alone among three tests (31413233); its amount isn't in the abstract. Healthy young adults showed task-specific acute results and no clear chronic effect (38004235, 40276537, 38140277), and 10 g/day in muffins did nothing in a single-blind study that doesn't state randomization (36582308). A mycelium trial used erinacine A-enriched material in mild Alzheimer's disease (32581767), which no label here prints. The labels print 500-1000 mg of extract or 1 g of powder. No chronic trial read tested an extract at those amounts, and the powder labels sit well below the 3 g/day.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Older adults with mild cognitive impairment, and healthy young adults in acute studies",
+      "supported_outcomes": [
+        "Cognitive function"
+      ],
+      "source_pmids": [
+        "18844328",
+        "31413233",
+        "38004235",
+        "40276537",
+        "38140277",
+        "32581767",
+        "20834180",
+        "40959699"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The stored moderate rating rests on one 30-person trial with tablets at 3 g/day of tablet mass (18844328), and scores fell after stopping. A second trial's fruiting body supplement improved the MMSE alone among three tests (31413233); its amount isn't in the abstract. Healthy young adults showed task-specific acute results and no clear chronic effect (38004235, 40276537, 38140277), and 10 g/day in muffins did nothing in a single-blind study that doesn't state randomization (36582308). A mycelium trial used erinacine A-enriched material in mild Alzheimer's disease (32581767), which no label here prints. The labels print 500-1000 mg of extract or 1 g of powder. No chronic trial read tested an extract at those amounts, and the powder labels sit well below the 3 g/day. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "18844328",
+        "title": "Improving effects of the mushroom Yamabushitake (Hericium erinaceus) on mild cognitive impairment: a double-blind placebo-controlled clinical trial.",
+        "citation": "Phytotherapy research : PTR (2009)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18844328/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1002/ptr.2634"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31413233",
+        "title": "Improvement of cognitive functions by oral intake of Hericium erinaceus.",
+        "citation": "Biomedical research (Tokyo, Japan) (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31413233/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.2220/biomedres.40.125"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38004235",
+        "title": "The Acute and Chronic Effects of Lion's Mane Mushroom Supplementation on Cognitive Function, Stress and Mood in Young Adults: A Double-Blind, Parallel Groups, Pilot Study.",
+        "citation": "Nutrients (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38004235/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.3390/nu15224842"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40276537",
+        "title": "Acute effects of a standardised extract of Hericium erinaceus (Lion's Mane mushroom) on cognition and mood in healthy younger adults: a double-blind randomised placebo-controlled study.",
+        "citation": "Frontiers in nutrition (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40276537/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3389/fnut.2025.1405796"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38140277",
+        "title": "Acute Effects of Naturally Occurring Guayusa Tea and Nordic Lion's Mane Extracts on Cognitive Performance.",
+        "citation": "Nutrients (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38140277/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.3390/nu15245018"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32581767",
+        "title": "Prevention of Early Alzheimer's Disease by Erinacine A-Enriched Hericium erinaceus Mycelia Pilot Double-Blind Placebo-Controlled Study.",
+        "citation": "Frontiers in aging neuroscience (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32581767/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3389/fnagi.2020.00155"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20834180",
+        "title": "Reduction of depression and anxiety by 4 weeks Hericium erinaceus intake.",
+        "citation": "Biomedical research (Tokyo, Japan) (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20834180/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.2220/biomedres.31.231"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40959699",
+        "title": "Benefits, side effects, and uses of Hericium erinaceus as a supplement: a systematic review.",
+        "citation": "Frontiers in nutrition (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40959699/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.3389/fnut.2025.1641246"
+      }
+    ]
+  }
+}
