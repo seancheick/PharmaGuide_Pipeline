@@ -20655,11 +20655,13 @@ class SupplementEnricherV3:
             candidates, read, lambda row, others: source_linked_rows(product, row, others)
         )
         low = high = 0.0
+        strict_lower = False
         unreconciled: List[float] = []
         for row in counted:
             exposure = read(row)
             if id(row) in total_bounds:
                 low += total_bounds[id(row)][0]
+                strict_lower = strict_lower or total_bounds[id(row)][1]
                 high = math.inf
             elif exposure.per_serving_amount is None:
                 continue
@@ -20669,6 +20671,9 @@ class SupplementEnricherV3:
                 unreconciled.append(exposure.per_serving_amount)
             else:
                 low += exposure.minimum or 0.0
+                strict_lower = strict_lower or (
+                    exposure.minimum is not None and exposure.quantity_operator == ">"
+                )
                 high += math.inf if exposure.maximum is None else exposure.maximum
         if unreconciled:
             low += max(unreconciled)
@@ -20678,6 +20683,7 @@ class SupplementEnricherV3:
         return {
             "quantity": low,
             "quantity_upper": None if high == low else high,
+            "quantity_operator": ">" if strict_lower else ">=" if high != low else "=",
             "rows": {
                 id(row) for row in candidates
                 if is_caffeine(row) and read(row).per_serving_amount
@@ -20844,15 +20850,25 @@ class SupplementEnricherV3:
                 if converted_amount is None
                 else None
             )
+            range_comparison = None
             if ul_bounds is not None:
                 # An outcome every possible form agrees on is not uncertain;
                 # only a range straddling the threshold is form_unknown. The
                 # exported amount is the proven minimum: stack totals sum it
                 # across products, so a bound must never stand in for exposure.
                 low, high = ul_bounds
-                if self._compare_threshold(
-                    low, comparator, threshold_value
-                ) == self._compare_threshold(high, comparator, threshold_value):
+                low_comparison = self._compare_threshold(low, comparator, threshold_value)
+                if (
+                    quantity_upper is not None
+                    and ingredient.get("quantity_operator") == ">"
+                    and low == threshold_value
+                    and comparator in {">", ">=", "<", "<=", "=="}
+                ):
+                    # The printed lower endpoint is excluded. Keep its number
+                    # unchanged while comparing the actual open interval.
+                    low_comparison = comparator in {">", ">="}
+                if low_comparison == self._compare_threshold(high, comparator, threshold_value):
+                    range_comparison = low_comparison
                     converted_amount = low
                     conversion_method = "ul_exposure_bound" if low != high else "ul_exposure"
                 else:
@@ -20883,7 +20899,10 @@ class SupplementEnricherV3:
                 })
                 continue
 
-            comparison = self._compare_threshold(converted_amount, comparator, threshold_value)
+            comparison = (
+                range_comparison if range_comparison is not None
+                else self._compare_threshold(converted_amount, comparator, threshold_value)
+            )
             if comparison is None:
                 details["thresholds_checked"].append({
                     "evaluated": False,
@@ -21649,6 +21668,7 @@ class SupplementEnricherV3:
                         **base_dose_row,
                         "quantity": caffeine_dose["quantity"],
                         "quantity_upper": caffeine_dose["quantity_upper"],
+                        "quantity_operator": caffeine_dose["quantity_operator"],
                         "unit": "mg",
                         "unit_normalized": "mg",
                         "dose_source": "distinct_caffeine_total",

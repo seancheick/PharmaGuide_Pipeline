@@ -1018,3 +1018,42 @@ def test_a_printed_alpha_range_does_not_hide_another_unprinted_mixture(enricher)
     assert exposure["high_per_day"] == pytest.approx(exposure["per_day"] + (39 + 1500) * 2)
     [(status, _)] = _vitamin_e_decision(product)
     assert status == "form_unknown"
+
+
+@pytest.mark.parametrize("operator,status", [
+    (">", "above_threshold"),
+    (">=", "form_unknown"),
+    ("=", "below_threshold"),
+])
+def test_a_strict_caffeine_lower_bound_proves_the_authored_threshold(enricher, operator, status):
+    row = _caffeine_row(name="Caffeine", quantity=200.0, quantity_operator=operator,
+                        raw_source_path="ingredientRows[0]")
+    dose = enricher._distinct_caffeine_dose({}, [row])
+    severity, decision = enricher._evaluate_dose_thresholds_for_target(
+        [{"scope": "condition", "target_id": "pregnancy", "basis": "per_day",
+          "comparator": ">", "value": 200, "unit": "mg",
+          "severity_if_met": "avoid", "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review"}],
+        "condition", "pregnancy", {**row, **dose}, 1.0, "monitor",
+    )
+    assert decision["evaluation_status"] == status
+    assert severity == ("avoid" if status == "above_threshold" else "monitor")
+
+
+def test_a_nested_unprinted_mixture_survives_its_siblings_alpha_range(enricher):
+    owner = {"name": "Vitamin E", "canonical_id": "vitamin_e", "quantity": 100,
+             "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+    mixture = {"name": "Mixed Tocopherols", "canonical_id": "vitamin_e", "quantity": 1600,
+               "unit": "mg", "raw_source_path": "ingredientRows[1]"}
+    alpha = {"name": "Alpha-Tocopherol", "canonical_id": "vitamin_e", "quantity": 39,
+             "unit": "mg", "raw_source_path": "ingredientRows[1].nestedRows[0]",
+             "printed_alpha_range_mg": {"low": 27, "high": 39}}
+    unprinted = {"name": "Mixed Tocopherols", "canonical_id": "vitamin_e", "quantity": 1500,
+                 "unit": "mg", "raw_source_path": "ingredientRows[1].nestedRows[1]"}
+    row = {"dose_role": "declared_total", "servings_per_day_max": 1,
+           "safety_exposure": {"per_day": 100, "unit": "mg"}}
+    rows = [owner, mixture, alpha, unprinted]
+    enricher._stamp_vitamin_e_ranges([(row, 100, owner["raw_source_path"])], rows,
+                                    {id(mixture): owner}, rows)
+    assert row["safety_exposure"]["low_per_day"] == 100
+    assert row["safety_exposure"]["high_per_day"] == 1639
