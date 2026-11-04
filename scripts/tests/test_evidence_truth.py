@@ -11,6 +11,11 @@ import pytest
 
 FIXTURES = Path(__file__).parent / "fixtures"
 NOT_ESTABLISHED = "has not established a match"
+DID_NOT_QUALIFY = (
+    "Human research exists for this ingredient, but the reviewed studies do not qualify for Evidence "
+    "credit for the preparation or purpose assessed in this product. This does not mean the "
+    "ingredient has never been studied."
+)
 
 
 @pytest.fixture(scope="module")
@@ -53,8 +58,8 @@ def test_an_open_review_reads_as_open(pipeline, label, module):
     assert NOT_ESTABLISHED not in evidence["reason"]
 
 
-def test_a_finished_mismatch_keeps_its_finding(pipeline):
-    """60601's signed scope excludes "cardiovascular health": finished, and it says so."""
+def test_a_finished_rejection_of_human_studies_says_they_did_not_qualify(pipeline):
+    """Sean's sentence, November 4. 60601's CoQ10 trials cover a purpose this label doesn't claim."""
     from scoring_v4.scored_artifact import build_scored_artifact
 
     scored = build_scored_artifact(_enrich(pipeline, "evidence_truth_60601_raw.json"))
@@ -62,7 +67,47 @@ def test_a_finished_mismatch_keeps_its_finding(pipeline):
     assert scored["quality_assessment_status"] == "complete"
     assert evidence["score"] == 0
     assert evidence["display_state"] == "applicability_unestablished"
+    assert evidence["reason"].startswith(DID_NOT_QUALIFY)
+    assert NOT_ESTABLISHED not in evidence["reason"]
+
+
+@pytest.mark.parametrize("label", [
+    "evidence_truth_76837_raw.json",   # Reviewed research the scorer doesn't read: another cause.
+    "evidence_truth_252353_raw.json",  # A reference-only record: human research isn't established.
+])
+def test_the_did_not_qualify_sentence_stays_off_every_other_cause(pipeline, label):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    evidence = build_scored_artifact(_enrich(pipeline, label))["quality_pillars_v4"]["evidence"]
+    assert evidence["score"] == 0
     assert NOT_ESTABLISHED in evidence["reason"]
+    assert DID_NOT_QUALIFY not in evidence["reason"]
+
+
+def test_an_open_review_never_says_the_studies_did_not_qualify(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    evidence = build_scored_artifact(_enrich(pipeline, "evidence_truth_231852_raw.json"))["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "not_yet_reviewed"
+    assert DID_NOT_QUALIFY not in evidence["reason"]
+
+
+def test_a_rejected_record_without_human_studies_does_not_say_human_research_exists():
+    from assessment_readiness import evidence_studies_did_not_qualify
+
+    def readiness(reason):
+        return {"evidence": {"ingredient_assessments": [
+            {"canonical_id": "glucosamine", "name": "Glucosamine", "reason_code": reason}]}}
+
+    def product(record):
+        return {"evidence_data": {"rejected_clinical_matches": [
+            {"id": record, "ingredient": "Glucosamine", "reason_code": "clinical_form_mismatch"}]}}
+
+    required = {"glucosamine"}
+    assert evidence_studies_did_not_qualify(product("INGR_COQ10"), readiness("clinical_form_mismatch"), required)
+    assert not evidence_studies_did_not_qualify(product("INGR_GLUCOSAMINE_SULFATE"), readiness("clinical_form_mismatch"), required)
+    assert not evidence_studies_did_not_qualify(product("INGR_COQ10"), readiness("reference_only_clinical_record"), required)
+    assert not evidence_studies_did_not_qualify(product("INGR_COQ10"), readiness("clinical_form_mismatch"), set())
 
 
 def test_a_brand_printed_as_an_alternate_name_reaches_its_record(pipeline):

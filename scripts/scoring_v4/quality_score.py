@@ -1116,10 +1116,22 @@ _EVIDENCE_OPEN_REVIEW_REASON = (
     "Some research on this label earned credit, but our review of the rest "
     "is still open, so this assessment is not finished."
 )
+_EVIDENCE_STUDIES_DID_NOT_QUALIFY_REASON = (
+    "Human research exists for this ingredient, but the reviewed studies do not qualify for Evidence "
+    "credit for the preparation or purpose assessed in this product. This does not mean the "
+    "ingredient has never been studied."
+)
 _EVIDENCE_UNREVIEWED_ROWS_NOTE = (
     "Other ingredients on this label weren't individually reviewed, which does not "
     "mean they lack clinical evidence."
 )
+
+
+def mark_evidence_studies_did_not_qualify(pillar: Dict[str, Any]) -> Dict[str, Any]:
+    """Say why a finished zero is a zero when reviewed human studies were rejected."""
+    if pillar.get("score") or pillar.get("reason") != _EVIDENCE_ZERO_REASON["applicability_unestablished"]:
+        return pillar
+    return {**pillar, "reason": _EVIDENCE_STUDIES_DID_NOT_QUALIFY_REASON}
 
 
 def note_unreviewed_rows(pillar: Dict[str, Any]) -> Dict[str, Any]:

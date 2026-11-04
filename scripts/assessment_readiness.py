@@ -1653,6 +1653,38 @@ def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mappin
             or _title_names_an_open_row(product, open_rows))
 
 
+# A finished answer about the label's preparation or purpose, not a gap in the review.
+_STUDIES_DID_NOT_QUALIFY_REASONS = frozenset({
+    "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
+    "clinical_population_mismatch", "clinical_outcome_not_qualified", "label_purpose_evidence_mismatch",
+})
+_HUMAN_STUDY_TYPES = frozenset({
+    "systematic_review_meta", "rct_multiple", "rct_single", "clinical_strain", "observational",
+})
+
+
+def evidence_studies_did_not_qualify(product: Mapping[str, Any], readiness: Mapping[str, Any],
+                                     required: Any) -> bool:
+    """Every required row ended at a human study rejected for this preparation or purpose.
+
+    A reference-only record doesn't establish human research, and research the
+    scorer never reads or a review still open is another cause (Sean, November 4).
+    """
+    from clinical_applicability import reviewed_entries
+    required = {_norm(canonical) for canonical in required}
+    rows = [row for row in _safe_list(_safe_dict(readiness.get("evidence")).get("ingredient_assessments"))
+            if isinstance(row, Mapping) and _norm(row.get("canonical_id")) in required]
+    rejected = _safe_list(_safe_dict(product.get("evidence_data")).get("rejected_clinical_matches"))
+    records = reviewed_entries()
+    return bool(rows) and all(
+        row.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS and any(
+            isinstance(match, Mapping) and match.get("ingredient") == row.get("name")
+            and match.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS
+            and _safe_dict(records.get(match.get("id"))).get("study_type") in _HUMAN_STUDY_TYPES
+            for match in rejected)
+        for row in rows)
+
+
 def _panel_primary_open(product: Mapping[str, Any], readiness: Mapping[str, Any]) -> bool:
     """An add-in the label is about holds a panel product while it goes unread.
 
