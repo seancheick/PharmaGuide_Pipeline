@@ -121,10 +121,11 @@ def test_unknown_amount_is_not_a_warning(enricher):
     assert hits[(RULE_ID, "current_smoker")]["dose_threshold_evaluation"]["consumer_disposition"] == "suppress"
 
 
-@pytest.mark.parametrize("pid,high", [("79660", False), ("184325", True)])
+@pytest.mark.parametrize("pid,high", [("79660", False), ("184325", True), ("184326", True)])
 def test_real_labels(pid, high):
-    """79660: 25,000 IU once daily (15 mg) -> caution; 184325: 7,500 mcg RAE per
-    softgel, up to 2 a day (30 mg) -> stronger caution and the contextual card."""
+    """79660: 25,000 IU once daily (15 mg) -> caution. 184325 and 184326: Sean's ruling
+    (2026-11-04) reads the manufacturer's stated 14.28 mg per capsule, up to 2 a day
+    (28.56 mg) -> stronger caution and the contextual card."""
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
     import build_final_db as B
