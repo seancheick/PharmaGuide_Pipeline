@@ -1,8 +1,8 @@
 """A product title names an active only when it names the active, not its flavor.
 
 The role owner (scoring_input_contract.classify_ingredient_roles) marks a row
-claim_prominent when the product title names it, and Evidence lets title
-owners win (evidence_resolver.evidence_owner_canonicals). Real DSLD labels,
+claim_prominent when the product title names it, and Evidence retains title
+owners beside other material subjects (evidence_resolver.evidence_owner_canonicals). Real DSLD labels,
 audits of PRs #205 and #196 (2026-10-20):
 - 293904 "Best-Rest Gummy Natural Raspberry-Tea Flavor": the flavor word made
   a 5 mg berry blend the Evidence owner; L-theanine 150 mg and lemon balm
@@ -89,9 +89,15 @@ def test_a_hyphenated_vitamin_name_in_the_title_names_the_vitamin(products):
     enriched, scored = products["321388"]
     assert _title_roles(enriched).get("vitamin_b12_cobalamin") == "named_in_product_title"
     evidence = _evidence(scored)
-    assert evidence["evidence_owner_canonicals"] == ["vitamin_b12_cobalamin"]
-    assert not {"garlic", "ginger", "bromelain"} & set(evidence["ingredient_points"])
+    owners = set(evidence["evidence_owner_canonicals"])
+    assert {"vitamin_b12_cobalamin", "ginger", "lactase"} <= owners
+    assert not {"raw_probiotic_enzyme_blend", "raw_organic_fruit_vegetable_blend"} & owners
+    # The two disclosed material blends keep their real subjects. Ginger's
+    # independent reviewed contribution cannot displace B12's authority floor.
+    assert evidence["ingredient_points"] == {"ginger": 3.6}
+    assert evidence["primary_evidence_floor_canonical"] == "vitamin_b12_cobalamin"
     assert evidence["nutrition_authority_canonical"] == "vitamin_b12_cobalamin"
+    assert scored['quality_pillars_v4']['evidence']['score'] == 11.1
 
 
 def test_a_generic_plant_part_word_does_not_name_a_species(products):

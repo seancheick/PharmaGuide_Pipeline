@@ -183,7 +183,8 @@ def test_owners_are_the_same_inside_and_outside_the_scoring_scope(enriched, dsld
 def test_a_title_naming_its_active_makes_that_active_the_owner(enriched):
     """251549's title "DIM-plus" names diindolylmethane by its IQM alias "DIM"
     (standard name "Diindolylmethane (DIM)"), so DIM is title-prominent and
-    owns Evidence; the Protectamins vegetable members are a lower owner tier.
+    owns Evidence alongside the equally sized Protectamins vegetable blend's
+    real members. The title does not erase those material subjects.
     The old any-four-letter-word matcher missed the three-letter alias."""
     from scoring_input_contract import ROLE_CLAIM_PROMINENT, classify_ingredient_roles, get_scoring_ingredients
 
@@ -193,7 +194,9 @@ def test_a_title_naming_its_active_makes_that_active_the_owner(enriched):
     prominent = {row.get("canonical_id") for row, role in zip(rows, roles)
                  if role.get("role") == ROLE_CLAIM_PROMINENT}
     assert prominent == {"diindolylmethane"}
-    assert evidence_owner_canonicals(product, module="generic") == {"diindolylmethane"}
+    assert evidence_owner_canonicals(product, module="generic") == {
+        "diindolylmethane", "broccoli", "cabbage_extract", "spinach",
+    }
 
 
 @pytest.mark.parametrize("dsld_id", ["212273"])
