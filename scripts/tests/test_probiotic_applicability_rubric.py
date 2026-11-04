@@ -434,13 +434,15 @@ def test_evidence_explanation_never_reintroduces_amount_ownership(amount):
 @pytest.mark.parametrize('dose', [None, 1e10])
 @pytest.mark.parametrize('claim', ['Digestive Health Probiotic',
     'Not for irritable bowel syndrome. Digestive Health Probiotic'])
-def test_299v_treatment_context_does_not_transfer_from_broad_or_negated_label_purpose(dose, claim):
+def test_299v_ingredient_research_is_independent_of_broad_or_negated_claim(dose, claim):
     product = strain_product(dose=dose, clinical_id='STRAIN_PLANTARUM_299V',
                              name='Lactobacillus plantarum 299v')
     product['product_name'] = claim
     result = score_evidence(product)
-    assert result['score'] == 0
-    assert result['metadata']['evidence_result_state'] == 'research_present_applicability_unestablished'
+    assert result['score'] == 16.0
+    [used] = result['metadata']['contributing_native_contexts']
+    assert used['context_id'] == 'p299v_ibs_rome3_22912552'
+    assert used['claimed_purpose_assessment']['status'] == 'not_applicable'
     assert result['metadata']['evidence_assessment']['strain_assessments'][0]['source_pmids']
 
 
@@ -521,10 +523,13 @@ def test_299v_with_and_without_an_ibs_claim_earns_identical_evidence():
             claimed['metadata']['indication_relevance_level']) == ('broad', 'direct')
 
 
-def test_an_unrelated_attributable_claim_earns_no_ibs_study_credit():
+def test_unrelated_claim_preserves_scoped_ibs_research_without_substantiating_it():
     result = score_evidence(_p299v('Sleep support probiotic'))
-    assert result['score'] == 0
-    assert result['metadata']['contributing_native_contexts'] == []
+    assert result['score'] == 16.0
+    [used] = result['metadata']['contributing_native_contexts']
+    assert used['context_id'] == 'p299v_ibs_rome3_22912552'
+    assert used['claimed_purpose_assessment']['status'] == 'not_applicable'
+
 
 
 def test_research_certainty_and_replication_ignore_marketing_copy():
