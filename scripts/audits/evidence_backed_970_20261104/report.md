@@ -416,12 +416,7 @@ The reading agent routed gamma_linolenic_acid to a packet. It closes as conflict
 
 ### Ginkgo, turmeric and collagen on #354
 
-These three carry `documented_review_scope`. A row that declares a reviewed preparation, such as "24% flavone glycosides" on 239062 and 213097, resolves to `resolved_by_reviewed_clinical_evidence` with reason `literature_reviewed_human_clinical_evidence` and no points.
-
-- **On main:** that row reads `evaluated_limited_or_negative`, so 239062 is complete with Evidence 0. `test_documented_review_finishes_a_declared_preparation_at_no_credit` pins this.
-- **On #354:** `_resolved_evidence_assessment` maps that reason to `not_yet_evaluated`, so 239062 is partial with blocker `evidence_assessment_incomplete`. #354 renames the pin to `test_documented_positive_review_waits_for_its_scoring_path`.
-
-Ginkgo's stored `effect_direction` is `None`, and its text describes null prevention trials, so "positive" doesn't describe it. This is code on #354, not data, so this PR doesn't change it. No data route closes declared rows and keeps undeclared rows open: the null route would close `Ginkgo Biloba` and `Ginkgo Biloba Leaf Extract`, which `test_undeclared_preparation_stays_open` keeps open. 16 ginkgo labels stay in the pending count until this is decided.
+These three carry `documented_review_scope`. A row that declares a reviewed preparation, such as "24% flavone glycosides" on 239062 and 213097, resolves with reason `literature_reviewed_human_clinical_evidence` and no points. Earlier #354 heads read that as `not_yet_evaluated`. #354 at 3c1233f55 keeps only `positive_*` records pending, so these rows finish at no credit, and this PR changes no data for it. On that head 239062 and 213097 are complete at Evidence 0, ginkgo and collagen hold no pending label of the 1,484, and turmeric holds 3.
 
 ### Amount and a missing primary outcome are not grounds
 
@@ -456,7 +451,7 @@ A scan of label statements for these trials' purposes turned up matches for weig
 
 Labels were re-enriched by name, with no catalog build and no pipeline run. Before and after use the same code tree, so only this PR's data differs. Labels from batches 3 and 4 were measured on main at aa65ec72d. The final group and the reopened labels were measured on main at eba750a54. #354 was measured at 72e2e22ed, except the pending count below, which uses c44fd1816.
 
-**Pending, measured:** 666 of 1,484 stay pending on #354's head with this data, and 818 are finished. Pending means the blocker `evidence_assessment_incomplete` and Evidence shown as not yet reviewed. 664 were measured from raw labels. Colostrum Health Revival and Hydrolyzed Collagen (PG_SUB ids) have no raw file on hand, so they were scored from their stored enrichment. The projection said 668. The two differences are 33233, whose l_glutamine row is `module_scoped_product_projection`, and 67289, a formula where yerba mate isn't the driver. Both are complete.
+**Pending, measured:** 431 of 1,484 stay pending on #354 at 3c1233f55 with this data, and 1,053 are finished. On c44fd1816, before #354 narrowed its pending rule to `positive_*`, it was 666. The narrowing moved no score, tier, Evidence, pillar or safety value on these labels. Records stored as `mixed`, such as l_glutamine, glutathione and green_coffee_bean, now read as finished under that rule even though their settling papers below are unread. Pending means the blocker `evidence_assessment_incomplete` and Evidence shown as not yet reviewed. All 1,484 were measured on c44fd1816, and the 666 pending there were measured again on 3c1233f55. Colostrum Health Revival and Hydrolyzed Collagen (PG_SUB ids) have no raw file on hand, so they were scored from their stored enrichment. The projection on c44fd1816 said 668. The two differences are 33233, whose l_glutamine row is `module_scoped_product_projection`, and 67289, a formula where yerba mate isn't the driver. Both are complete.
 
 | Labels with a row this batch touched | Main | #354 |
 |---|---|---|
