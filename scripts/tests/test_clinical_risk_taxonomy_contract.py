@@ -155,6 +155,8 @@ def test_a_label_statement_to_men_has_a_flag_the_profile_can_derive(blob):
     flags = {entry["id"]: entry for entry in blob["profile_flags"]}
     assert flags["sex_male"]["capture_mode"] == "derived_from_sex"
     assert flags["sex_male"]["source_sex"] == "Male"
+    assert flags["sex_unstated"]["capture_mode"] == "derived_from_sex"
+    assert flags["sex_unstated"]["source_sex"] == "unstated"
 
 
 def test_profile_capture_modes_keep_every_active_rule_reachable(blob):
@@ -184,7 +186,7 @@ def test_profile_capture_modes_keep_every_active_rule_reachable(blob):
                 f"{flag_id}: only derived flags may declare source_condition_id"
             )
         if mode == "derived_from_sex":
-            assert entry.get("source_sex") in {"Male", "Female"}, (
+            assert entry.get("source_sex") in {"Male", "Female", "unstated"}, (
                 f"{flag_id}: sex-derived flag needs the profile's stored value"
             )
         else:
