@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.5.3",
-    "last_updated": "2026-10-26",
+    "last_updated": "2026-11-04",
     "total_entries": 189,
     "data_source_metadata": {
       "sources": [
@@ -20666,7 +20666,8 @@
         "titanium dioxide nanoparticles",
         "titanium dioxide nanoparticle",
         "nano titanium dioxide",
-        "nano-tio2"
+        "nano-tio2",
+        "Titanium Dioxide (For Color)"
       ],
       "reason": "In 2021, EFSA concluded that a concern for genotoxicity of titanium dioxide (E171) particles 'cannot be ruled out' and that E171 'can no longer be considered safe when used as a food additive,' so no ADI could be established (EFSA Journal 2021;19(5):e06585). On this basis, the European Commission adopted Commission Regulation (EU) 2022/63 banning E171 as a food additive; from 7 February 2022 it may no longer be added to foods, food supplements included, in the EU (foods compliant with the rules before7 February 2022 could be placed on the market until7 August 2022 and remain on the market until their date of minimum durability or use-by date). FDA still permits TiO2 at ≤1% of food weight (21 CFR 73.575) and in 2023 received a petition to revoke that listing, with no decision yet. IARC Group 2B (possibly carcinogenic by inhalation). Nanoparticle form (<100nm) shows greater intestinal absorption and genotoxic concern.",
       "status": "watchlist",
