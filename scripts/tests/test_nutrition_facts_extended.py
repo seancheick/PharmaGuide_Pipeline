@@ -273,6 +273,15 @@ class TestNutrientIdentityBinding:
             "ingredientRows[3].nestedRows[0]"
         )
 
+    def test_quantified_added_sugar_is_a_panel_disclosure(self, normalizer) -> None:
+        label = "Includes 1 g Added Sugars"
+        assert normalizer._is_nutrition_fact(label, unit="g")
+        assert not normalizer._is_nutrition_fact("Cane Sugar", unit="g")
+        result = normalizer._extract_nutritional_info([
+            {"name": label, "quantity": 1, "unit": "g"},
+        ])
+        assert result["sugars"]["amount"] == 1.0
+
     def test_total_sugars_owns_summary_over_added_sugars(self, normalizer) -> None:
         result = normalizer._extract_nutritional_info([
             {"name": "Total Sugars", "quantity": 4, "unit": "g"},

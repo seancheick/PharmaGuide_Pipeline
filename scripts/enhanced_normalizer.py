@@ -260,6 +260,13 @@ def _generate_variations_module_cached(text: str) -> tuple:
     return tuple(sorted(set(variations)))
 
 logger = logging.getLogger(__name__)
+
+_QUANTIFIED_ADDED_SUGAR = re.compile(
+    r"includes\s+(?:\d+(?:\.\d+)?|\.\d+)\s*g\s+added\s+sugars?"
+)
+_SUGAR_PANEL_ROW = re.compile(
+    rf"(?:total\s+|added\s+)?sugars?|{_QUANTIFIED_ADDED_SUGAR.pattern}"
+)
 DAILY_VALUES_PATH = Path(__file__).parent / "data" / "daily_values.json"
 
 _CONTEXT_OVERRIDE_REVIEWER_PLACEHOLDERS = frozenset({
@@ -5855,6 +5862,10 @@ class EnhancedDSLDNormalizer:
                         or "label_correction"
                     )
                     row["_label_correction_provenance"] = provenance_tag
+                    if provenance_tag == "official_label_preparation_mass_conversion":
+                        # The analytical row names the constituent. The label
+                        # ledger still shows the named preparation and its mass.
+                        row["_label_display_name"] = name
                     logger.info(
                         "RC-5 source-row correction applied: pid=%s '%s' (tag=%s)",
                         product_id, name, provenance_tag,
@@ -7275,7 +7286,7 @@ class EnhancedDSLDNormalizer:
                 self._record_nutrition_fact(nutritional_info, "calories", quantity, unit, "kcal", operator=operator)
             elif "total carbohydrate" in name or "carbohydrates" in name:
                 self._record_nutrition_fact(nutritional_info, "totalCarbohydrates", quantity, unit, "g", operator=operator)
-            elif re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nutrient_name):
+            elif _SUGAR_PANEL_ROW.fullmatch(nutrient_name):
                 accepted = self._record_nutrition_fact(
                     nutritional_info, "sugars", quantity, unit, "g",
                     source_priority=_sugar_summary_priority(nutrient_name), operator=operator,
@@ -7328,7 +7339,7 @@ class EnhancedDSLDNormalizer:
                 nested_operator = self._selected_quantity_operator(nested_variants)
 
                 # Extract sugar from nested row (only if not already found at top level)
-                if re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nested_name.strip()):
+                if _SUGAR_PANEL_ROW.fullmatch(nested_name.strip()):
                     accepted = self._record_nutrition_fact(
                         nutritional_info, "sugars", nested_qty, nested_unit, "g",
                         source_priority=_sugar_summary_priority(nested_name), operator=nested_operator,
@@ -12702,6 +12713,13 @@ class EnhancedDSLDNormalizer:
                 unit_lower = unit_lower[1:-1].strip()
         else:
             unit_lower = ""
+
+        if (
+            not has_forms
+            and unit_lower in {"g", "gram", "grams", "gram(s)"}
+            and _QUANTIFIED_ADDED_SUGAR.fullmatch(_name_lower)
+        ):
+            return True
 
         # Total/added sugar summaries include DSLD's singular spellings.
         # Named sugar materials and bare standalone sweeteners remain outside
