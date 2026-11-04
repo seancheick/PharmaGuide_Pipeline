@@ -15,6 +15,10 @@ import pytest
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
+from build_final_db import (
+    _safety_warning_policy_projection,
+    _validate_warning_display_mode_consistency,
+)
 from enrich_supplements_v3 import SupplementEnricherV3
 
 REVIEW_DIR = ROOT / "audits" / "clinical_review_20261103"
@@ -193,6 +197,107 @@ def test_tansy_review_is_attributed_to_her():
     rule = RULES["RULE_BANNED_TANSY_PREGNANCY"]
     assert "Dr. Pham" in rule["review_owner"]
     assert rule["last_reviewed"] == "2026-11-03"
+
+
+# Sean's ruling on the ban card, which everyone sees: no pregnancy language.
+# The wording is his, not Dr. Pham's. Her text stays on the gated pregnancy card.
+
+TANSY_BAN_BODY = (
+    "Tansy essential oil can contain thujone, a neurotoxic compound associated with seizures. "
+    "Thujone exposure varies by preparation, and whole-plant products should not be assumed "
+    "free of this risk."
+)
+TANSY_BAN_ONE_LINER = "Tansy may contain thujone, a neurotoxic compound linked to seizures."
+BANNED = {
+    entry["id"]: entry
+    for entry in json.loads(
+        (ROOT / "data" / "banned_recalled_ingredients.json").read_text(encoding="utf-8")
+    )["ingredients"]
+}
+
+
+def _tansy_ban_warning(**overrides):
+    entry = BANNED["BANNED_TANSY"]
+    policy = _safety_warning_policy_projection("BANNED_TANSY", entry["status"], {})
+    return {
+        "type": "high_risk_ingredient",
+        "display_mode_default": policy["display_mode_default"],
+        "safety_warning": entry["safety_warning"],
+        "safety_warning_one_liner": entry["safety_warning_one_liner"],
+        "detail": entry["reason"],
+        "title": f"High-risk ingredient: {entry['standard_name']}",
+        **overrides,
+    }
+
+
+def test_tansy_ban_text_is_seans_text():
+    entry = BANNED["BANNED_TANSY"]
+    assert entry["safety_warning_one_liner"] == TANSY_BAN_ONE_LINER
+    assert entry["safety_warning"] == TANSY_BAN_BODY
+    assert entry["reason"] == TANSY_BAN_BODY
+    assert "clinical_review" not in entry
+    latest = entry["review"]["change_log"][-1]
+    assert latest["date"] == "2026-11-03"
+    assert "Sean" in latest["change"]
+    assert "Pham" not in latest["change"]
+
+
+def test_tansy_review_block_keeps_aprils_facts_and_dates_them():
+    review = BANNED["BANNED_TANSY"]["review"]
+    assert review["reviewed_by"] == "dr_pham_clinical_signoff"
+    assert review["status"] == "validated"
+    assert review["last_reviewed_at"] == "2026-04-26"
+    assert review["notes"] == (
+        "Consumer copy replaced 2026-11-03 per Sean; the 2026-04-26 review predates this text."
+    )
+
+
+@pytest.mark.parametrize(
+    "claim", ["pregnan", "miscarriage", "abortifacient", "fatalit", "maternal death"]
+)
+@pytest.mark.parametrize("field", ["safety_warning_one_liner", "safety_warning", "reason"])
+def test_tansy_ban_text_drops_the_removed_claims(field, claim):
+    assert claim not in BANNED["BANNED_TANSY"][field].lower()
+
+
+def test_tansy_ban_card_stays_critical_and_passes_the_real_guard():
+    warning = _tansy_ban_warning()
+    assert "display_mode_default" not in BANNED["BANNED_TANSY"]
+    assert warning["display_mode_default"] == "critical"
+    _validate_warning_display_mode_consistency([warning], "BANNED_TANSY")
+
+
+def test_the_guard_refuses_her_pregnancy_warning_on_the_ban_card():
+    warning = _tansy_ban_warning(safety_warning_one_liner=TANSY_WARNING)
+    with pytest.raises(ValueError, match="during pregnancy"):
+        _validate_warning_display_mode_consistency([warning], "BANNED_TANSY")
+
+
+def test_tansy_ban_text_reaches_the_warning(enricher):
+    hits = enricher._check_banned_substances([{"name": "Tansy", "standardName": "Tansy"}])["substances"]
+    tansy = next(hit for hit in hits if hit["banned_id"] == "BANNED_TANSY")
+    assert tansy["status"] == "high_risk"
+    assert tansy["safety_warning_one_liner"] == TANSY_BAN_ONE_LINER
+    assert tansy["safety_warning"] == TANSY_BAN_BODY
+    assert tansy["reason"] == TANSY_BAN_BODY
+
+
+def test_ban_ruling_leaves_the_gated_cards_and_shared_sentence(enricher):
+    hits = _hits(enricher, "BANNED_TANSY")
+    assert hits["pregnancy"]["alert_headline"] == TANSY_WARNING
+    assert hits["pregnancy"]["alert_body"] == TANSY_EXPLANATION
+    shared = (
+        "This substance is banned, recalled, or high-risk and should not be used during "
+        "pregnancy or breastfeeding under any circumstances."
+    )
+    assert hits["lactation"]["alert_body"] == shared
+    for rule_id in (
+        "RULE_BANNED_TANSY_PREGNANCY",
+        "RULE_BANNED_PENNYROYAL_PREGNANCY",
+        "RULE_BANNED_RED_YEAST_RICE_STATINS",
+        "RULE_BANNED_ADD_HORDENINE",
+    ):
+        assert RULES[rule_id]["pregnancy_lactation"]["alert_body"] == shared
 
 
 # --- Caffeine in pregnancy (question A) -------------------------------------
