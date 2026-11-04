@@ -106,6 +106,11 @@ def freeze(products_root, frozen_root, manifest):
     return result
 
 
+def is_icloud_placeholder(path):
+    """Reading a dataless file makes macOS download it first (SF_DATALESS)."""
+    return bool(getattr(path.stat(), 'st_flags', 0) & 0x40000000)
+
+
 def freeze_raw(raw_root, ids, frozen_root, manifest):
     """Freeze the raw DSLD label <id>.json of each id found under raw_root."""
     raw_root, frozen_root = Path(raw_root).resolve(), Path(frozen_root).resolve()
@@ -122,6 +127,9 @@ def freeze_raw(raw_root, ids, frozen_root, manifest):
     ambiguous = sorted(i for i, paths in found.items() if len(paths) > 1)
     if missing or ambiguous:
         raise ValueError(f'Raw labels missing {missing[:10]} or found twice {ambiguous[:10]}')
+    placeholders = sorted(str(paths[0]) for paths in found.values() if is_icloud_placeholder(paths[0]))
+    if placeholders:
+        raise ValueError(f'iCloud placeholders, not local files: {placeholders[:3]}')
     records = []
     for pid in sorted(wanted):
         source = found[pid][0]
