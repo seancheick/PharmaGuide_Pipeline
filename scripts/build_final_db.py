@@ -3849,6 +3849,7 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
     dose_state = (
         _norm(w.get("dose_floor_status"))
         + _norm(safe_dict(w.get("dose_decision")).get("consumer_disposition"))
+        + _norm(safe_dict(safe_dict(w.get("dose_decision")).get("decision_rule")).get("threshold"))
         if interaction_subject
         else ()
     )

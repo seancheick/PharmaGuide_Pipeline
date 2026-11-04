@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from build_final_db import _stamp_dose_contract, build_detail_blob
+from build_final_db import _stamp_dose_contract, build_detail_blob, compact_dose_decision
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from enrich_supplements_v3 import SupplementEnricherV3
 from score_supplements_v4 import score_product_v4
@@ -462,6 +462,20 @@ def test_a_held_label_keeps_its_alerts_and_leaves_hypertension_unresolved(enrich
     assert _declared_daily_caffeine(enriched(dsld_id))["unknown_rows"] > 0
 
 
+@pytest.mark.parametrize("dsld_id", ["27808", "28993"])
+def test_an_unresolved_caffeine_check_reaches_the_user(enriched, dsld_id):
+    hits = [
+        hit
+        for alert in enriched(dsld_id)["interaction_profile"]["ingredient_alerts"]
+        if alert["subject_ref"]["canonical_id"] == "caffeine"
+        for hit in alert["condition_hits"]
+        if hit["condition_id"] == "hypertension"
+    ]
+    assert hits
+    assert {hit["dose_decision"]["evaluation_status"] for hit in hits} == {"form_unknown"}
+    assert {hit["dose_decision"]["consumer_disposition"] for hit in hits} == {"review"}
+
+
 def test_guarana_keeps_its_own_rule_and_amount(enriched):
     alerts = [
         alert for alert in enriched("312701")["interaction_profile"]["ingredient_alerts"]
@@ -762,3 +776,110 @@ def test_a_row_the_analyzed_export_keeps_is_not_added():
         ],
     )
     assert ingredients == []
+
+
+# Vitamin E rows beside or inside the declared row. Each label named here was read.
+@pytest.mark.parametrize(
+    "dsld_id,low,high",
+    [("63432", 67.0, 87.0), ("232781", 67.0, 87.0), ("29161", 3.35, 5.5)],
+)
+def test_a_mixture_beside_the_declared_row_raises_only_the_high_figure(enriched, dsld_id, low, high):
+    [row] = _rows(enriched(dsld_id), "Vitamin E")
+    assert row["safety_exposure"]["low_per_day"] == pytest.approx(low)
+    assert row["safety_exposure"]["high_per_day"] == pytest.approx(high)
+
+
+@pytest.mark.parametrize(
+    "dsld_id,low,high",
+    [("284266", 1005.0, 1005.0), ("188715", 335.0, 335.0), ("327306", 80.6, 161.2), ("313913", 80.6, 161.2)],
+)
+def test_forms_printed_inside_the_declared_row_are_part_of_it(enriched, dsld_id, low, high):
+    """284266 prints "as d-Alpha Tocopherol from 1,000 mg Mixed Tocopherols", 335 mg, up to 3 a day.
+    327306 and 313913 print d-alpha 73.9 and 6.7 under 80.6, with no form on the total, so
+    they keep the existing mass bound. The mixture's 98.5 mg adds nothing to either."""
+    [row] = _rows(enriched(dsld_id), "Vitamin E")
+    exposure = row["safety_exposure"]
+    assert exposure.get("low_per_day", exposure["per_day"]) == pytest.approx(low)
+    assert exposure.get("high_per_day", exposure["per_day"]) == pytest.approx(high)
+
+
+@pytest.mark.parametrize("dsld_id,per_day", [("307590", 41.0), ("328834", 13.5)])
+def test_a_single_non_alpha_form_does_not_move_the_vitamin_e_figure(enriched, dsld_id, per_day):
+    """Whether gamma, delta, beta or tocotrienol mass counts is an open clinical question."""
+    [row] = _rows(enriched(dsld_id), "Vitamin E")
+    assert row["safety_exposure"]["per_day"] == pytest.approx(per_day)
+    assert "high_per_day" not in row["safety_exposure"]
+
+
+def test_a_vitamin_d_row_in_iu_beside_its_mcg_total_is_not_summed(enriched):
+    """242553 prints Vitamin D 20 mcg (as D3 800 IU): one amount in two units."""
+    assert _distinct_total(enriched("242553"), {"Vitamin D", "Vitamin D3"}) == pytest.approx(20.0)
+
+
+def test_a_compound_row_keeps_its_elemental_child_as_owner(enriched):
+    """232148 prints CDP-Choline 250 mg and footnotes elemental choline 51.25 mg."""
+    rows = _by_path(enriched("232148"))
+    assert rows["ingredientRows[0]"]["dose_role"] == "form_component"
+    assert _exposure(rows["ingredientRows[0].nestedRows[0]"]) == pytest.approx(51.25)
+    assert rows["ingredientRows[0].nestedRows[0]"]["dose_role"] not in NOT_AN_EXPOSURE
+
+
+# Beta-carotene dose tiers. A stack total can only meet a tier a product's warning carries.
+SMOKER_RULE_TIERS = {7500.0, 10000.0}
+
+
+def _tiers(product, rule_id, condition="current_smoker"):
+    return {
+        hit["dose_decision"]["decision_rule"]["threshold"]: hit
+        for alert in product["interaction_profile"]["ingredient_alerts"]
+        if alert["rule_id"] == rule_id
+        for hit in alert["condition_hits"]
+        if hit["condition_id"] == condition
+    }
+
+
+@pytest.mark.parametrize(
+    "dsld_id,rule_id",
+    [
+        ("294483", "RULE_IQM_BETA_CAROTENE_LUNG_CANCER"),
+        ("178431", "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER"),
+    ],
+)
+def test_each_dose_tier_is_its_own_decision(enriched, dsld_id, rule_id):
+    """Each label is 7,500 mcg RAE a day: it meets the lower tier and not the higher."""
+    tiers = _tiers(enriched(dsld_id), rule_id)
+    assert set(tiers) == SMOKER_RULE_TIERS
+    assert tiers[7500.0]["dose_decision"]["evaluation_status"] == "above_threshold"
+    assert tiers[7500.0]["dose_decision"]["consumer_disposition"] == "review"
+    assert tiers[7500.0]["severity"] == "caution"
+    assert tiers[10000.0]["dose_decision"]["evaluation_status"] == "below_threshold"
+    assert tiers[10000.0]["dose_decision"]["consumer_disposition"] == "suppress"
+    assert tiers[10000.0]["severity"] == "informational"
+    assert tiers[10000.0]["dose_decision"]["decision_rule"]["consumer_disposition_if_met"] == "review"
+
+
+def test_each_dose_tier_reaches_the_export(enriched):
+    product = enriched("294483")
+    decisions = {
+        (w["dose_decision"]["decision_rule"]["threshold"], w["dose_decision"]["evaluated_daily_amount"])
+        for w in build_detail_blob(product, score_product_v4(product))["warnings"]
+        if "current_smoker" in (w.get("condition_ids") or []) and w.get("dose_decision")
+    }
+    assert decisions == {(7500.0, 7500.0), (10000.0, 7500.0)}
+
+
+def test_a_scoped_rule_reads_the_nested_row_of_its_form(enriched):
+    """80495 prints Vitamin A 15000 IU (33% retinyl, 67% beta-carotene), then Beta-Carotene
+    5625 mcg. The nested amount is 2,812.5 mcg RAE; the row's even form split would give 2,250."""
+    tiers = _tiers(enriched("80495"), "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER")
+    assert set(tiers) == SMOKER_RULE_TIERS
+    for hit in tiers.values():
+        decision = compact_dose_decision(hit["dose_decision"])
+        assert decision["evaluation_status"] == "below_threshold"
+        assert decision["evaluated_daily_amount"] == pytest.approx(2812.5)
+
+
+@pytest.mark.parametrize("dsld_id", ["19170", "28483", "16730"])
+def test_a_control_with_no_beta_carotene_row_does_not_gain_a_tier(enriched, dsld_id):
+    assert not _tiers(enriched(dsld_id), "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER")
+    assert not _tiers(enriched(dsld_id), "RULE_IQM_BETA_CAROTENE_LUNG_CANCER")

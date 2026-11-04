@@ -20101,6 +20101,21 @@ class SupplementEnricherV3:
             return bool(row_forms) and row_forms <= scope
         return bool(row_forms & scope)
 
+    def _nested_row_of_rule_form(
+        self, rule: Dict, owner: Dict, rows: List[Dict]
+    ) -> Optional[Dict]:
+        """The one row printed under `owner` whose name is the form this rule is scoped to."""
+        path = str(owner.get("raw_source_path") or "")
+        forms = [str(form).strip().lower() for form in rule.get("form_scope") or []]
+        matches = [
+            row for row in rows
+            if path and forms
+            and str(row.get("raw_source_path") or "").rpartition(".nestedRows[")[0] == path
+            and all(str(row.get("name") or "").strip().lower() in form for form in forms)
+            and (self._to_float_safe(row.get("quantity")) or 0) > 0
+        ]
+        return matches[0] if len(matches) == 1 else None
+
     def _collect_profile_context(self, user_profile: Any) -> Dict[str, List[str]]:
         if not isinstance(user_profile, dict):
             return {"conditions": [], "drug_classes": []}
@@ -21645,9 +21660,12 @@ class SupplementEnricherV3:
                         # this source row still run through their own rules.
                         continue
                     # A source-specific rule may still apply when the parent
-                    # cannot satisfy its form scope. Its elemental allocation
-                    # is unknown; retain the rule's amount-missing protection.
-                    dose_row = {**base_dose_row, "quantity": None}
+                    # cannot satisfy its form scope. A nested row printing that
+                    # form states its amount. Otherwise the allocation is unknown;
+                    # retain the rule's amount-missing protection.
+                    dose_row = self._nested_row_of_rule_form(
+                        rule, declared_owner, ingredients
+                    ) or {**base_dose_row, "quantity": None}
 
                 condition_hits: List[Dict[str, Any]] = []
                 drug_hits: List[Dict[str, Any]] = []
@@ -21664,6 +21682,7 @@ class SupplementEnricherV3:
                         continue
                     if evidence and valid_evidence and evidence not in valid_evidence:
                         continue
+                    rule_severity = severity
                     adjusted_severity, threshold_eval = self._evaluate_dose_thresholds_for_target(
                         thresholds=thresholds,
                         target_type="condition",
@@ -21696,7 +21715,7 @@ class SupplementEnricherV3:
                     for src in sources:
                         source_set.add(src)
                     tier_copy = (threshold_eval or {}).get("matched_copy") or {}
-                    condition_hits.append({
+                    condition_hit = {
                         "condition_id": condition_id,
                         "severity": severity,
                         "evidence_level": evidence or None,
@@ -21714,7 +21733,38 @@ class SupplementEnricherV3:
                         "min_effective_dose": min_effective_dose,
                         "dose_floor_status": dose_floor_status,
                         "profile_gate": cond_rule.get("profile_gate"),
-                    })
+                    }
+                    condition_hits.append(condition_hit)
+                    # A stack total can meet a higher tier than any one product,
+                    # and the readers take one threshold from each decision.
+                    for tier in thresholds:
+                        decision_rule = (threshold_eval or {}).get("decision_rule") or {}
+                        if not (
+                            isinstance(tier, dict)
+                            and str(tier.get("scope") or "").strip().lower() == "condition"
+                            and str(tier.get("target_id") or "").strip().lower() == condition_id
+                            and self._to_float_safe(tier.get("value")) != decision_rule.get("threshold")
+                        ):
+                            continue
+                        tier_severity, tier_eval = self._evaluate_dose_thresholds_for_target(
+                            thresholds=[tier],
+                            target_type="condition",
+                            target_id=condition_id,
+                            ingredient=dose_row,
+                            servings_per_day_max=servings_per_day_max,
+                            base_severity=rule_severity,
+                            materiality=cond_rule.get("materiality"),
+                        )
+                        tier_copy = (tier_eval or {}).get("matched_copy") or {}
+                        condition_hits.append({
+                            **condition_hit,
+                            "severity": tier_severity,
+                            "dose_threshold_evaluation": tier_eval,
+                            "dose_decision": tier_eval,
+                            "action": tier_copy.get("action") or cond_rule.get("action"),
+                            "alert_headline": tier_copy.get("alert_headline") or cond_rule.get("alert_headline"),
+                            "alert_body": tier_copy.get("alert_body") or cond_rule.get("alert_body"),
+                        })
 
                 explicit_condition_ids = {
                     str(hit.get("condition_id") or "").strip().lower()
@@ -22546,10 +22596,11 @@ class SupplementEnricherV3:
         At maximum servings, in UL mass. `per_day` stays for existing readers.
         Lows above a limit establish an excess, highs at or below it rule one out,
         and anything between is unresolved. A row that mixtures are linked to carries
-        the family: its own low, and its own high plus the mixtures' mass, a printed
-        parent counting once against its children. Printed alpha ranges narrow that:
-        at least the declaration or the printed minimums, at most the declaration
-        plus the printed maximums. Non-alpha forms are not alpha exposure.
+        the family: its own low, and its own high plus the mass of the mixtures beside
+        it, a printed parent counting once against its children. A form printed inside
+        the row is part of its figure. Printed alpha ranges narrow that: at least the
+        declaration or the printed minimums, at most the declaration plus the printed
+        maximums. Non-alpha forms are not alpha exposure.
         """
         by_path = {
             str(row.get("raw_source_path")): row
@@ -22569,13 +22620,13 @@ class SupplementEnricherV3:
         ]
         amounts = {path: amount_mg for _, amount_mg, path in family_rows if path}
 
-        def _is_family(row: Dict[str, Any]) -> bool:
+        def _can_hold_alpha(row: Dict[str, Any]) -> bool:
+            # Gamma, delta, beta and tocotrienols on their own stay an open clinical
+            # question; a mixture with no alpha figure may hold any share of alpha.
             name = self._normalize_text(row.get("name") or "")
-            return (
-                str(row.get("canonical_id") or "") == "vitamin_e"
-                or "tocopherol" in name
-                or "tocotrienol" in name
-            )
+            if "tocopherol" not in name:
+                return "tocotrienol" not in name and str(row.get("canonical_id") or "") == "vitamin_e"
+            return "mixed" in name or not re.search(r"\b(?:gamma|delta|beta)\b", name)
 
         def _tree_mg(path: str, family: List[str], servings: float) -> float:
             row = by_path[path]
@@ -22616,7 +22667,7 @@ class SupplementEnricherV3:
             elif path in owners:
                 family = [
                     other for other, row in by_path.items()
-                    if other != path and _is_family(row)
+                    if other != path and not other.startswith(f"{path}.") and _can_hold_alpha(row)
                 ]
                 high += sum(
                     _tree_mg(root, family, servings) for root in family

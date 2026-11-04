@@ -1897,6 +1897,7 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -1932,6 +1933,7 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "caution",
+          "unknown_form_disposition": "review",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {

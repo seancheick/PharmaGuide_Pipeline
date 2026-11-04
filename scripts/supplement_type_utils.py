@@ -209,13 +209,18 @@ def mark_compound_duplicate_rows(
             except (TypeError, ValueError):
                 return 0.0
 
+        def _under_own_total(row: dict[str, Any]) -> bool:
+            # A bare row printed under its nutrient's own total breaks that total
+            # down and can't own it (Vitamin K 2200 > Vitamin K1 1000). Under a
+            # compound it is the elemental amount (CDP-Choline > Choline).
+            parent = _normalize_text(row.get("parentBlend"))
+            return bool(parent) and canonical_name.startswith(parent)
+
         bare_rows = [
             row for row in group
             if _normalize_text(row.get("name")) == canonical_name
             and _row_qty(row) > 0
-            # A bare row printed under another row breaks that row down. It
-            # can't own the row above it (Vitamin K 2200 > Vitamin K1 1000).
-            and not row.get("isNestedIngredient")
+            and not _under_own_total(row)
         ]
         if not bare_rows:
             continue
