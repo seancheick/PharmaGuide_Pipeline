@@ -155,33 +155,38 @@ final figure: after those land, replay only the labels they change and report th
 arm is the same head with the completion change reversed. 0 errors in either arm. The two holds added after it
 (title subject, hidden amount) were replayed at `3143d026e` on the 302 labels they can reach: complete owner-scoped
 labels with an unread row, plus every complete label whose Dose records a hidden amount. Exactly 13 changed, quality
-status alone. The counts below include them.
+status alone. The later rulings were measured in one scoring-only read of the frozen corpus, on the 3,387 labels they can reach:
+every label with a hidden row, an unread panel row or the sentence move. No enrich, no catalog. The other labels keep the census
+result. The counts below include them.
 
 | Partial before | Partial after | Partial to complete | Complete to partial |
 |---|---|---|---|
-| 6,343 | 5,328 | 1,015 | 0 |
+| 6,343 | 5,417 | 973 | 47 |
 
-**What moved: nothing that scores.** Score, tier, score status, pillars, catalog safety status,
-`safety_assessment_status`, verdict and confidence: 0 moves. Evidence wording moved on 930 labels (`display_state`
-`not_yet_reviewed` to `assessed` 902, to `applicability_unestablished` 28) and 39 labels changed
+The 47 were complete before #338 and now hold on a hidden amount (`completion_holds_added.csv`).
+
+**What moved: nothing that scores.** Score, tier, score status, pillars, catalog safety status, verdict: 0 moves.
+`safety_assessment_status` moved on 32 labels, all complete to incomplete, by the hidden-amount safety hold. Evidence wording moved on 858 labels
+(`display_state` `not_yet_reviewed` to `assessed` 857, to `applicability_unestablished` 1) and 39 labels changed
 `evidence_result_state` with no change in points. No complete label has "not finished" wording, and every complete
 scored label with an unread row has the note that those rows weren't individually reviewed. The 41 blocked labels
 with unread rows have no Evidence sentence to carry it.
 
-**Why 1,015 complete** (`completion_moved_labels.csv`):
+**Why 973 complete** (`completion_moved_labels.csv`):
 
 | Reason | Labels | Evidence points |
 |---|---|---|
-| Nutrient panel answered; add-in rows unread and earn nothing | 720 | all earned |
-| Reviewed owner earned credit; every row finished | 54 | earned |
+| Nutrient panel answered; add-in rows unread and earn nothing | 680 | all earned |
+| Reviewed owner earned credit; every row finished | 52 | earned |
 | Reviewed owner earned credit; supporting rows unread | 100 | earned |
 | Finished review, no credit; every row finished | 36 | 0 |
 | Finished review, no credit; supporting rows unread | 105 | 0 |
 
-The 141 no-credit labels read Needs improvement (107) or Poor (34). By module: multi or prenatal 692, generic 176,
-sports 114, B complex 28, fiber or digestive 5.
+The 141 no-credit labels read Needs improvement (107) or Poor (34). By module: multi or prenatal 654, generic 174,
+sports 114, B complex 26, fiber or digestive 5.
 
-**Why 5,328 stay partial** (labels; a label can have several reasons, 249 are not scored):
+**Why 5,417 are partial.** 89 were added by the rulings below: 40 panel labels with an unread primary and 49 with a hidden amount. The
+other 5,328, by reason (a label can have several reasons, 249 are not scored):
 
 | Reason | Labels |
 |---|---|
@@ -256,10 +261,47 @@ points (2219 earns citrulline 3.24 with no amount). The question is Dose, decide
 27809 and 25712 aren't among the 23 because their required row, protein, prints 60 g, but they have the same cause: `bcaa` is `hidden_amount_neutral`, with
 isoleucine and valine unread. Held too, so the hold covers 5 labels. Reading the unread row (phenylalanine, betaine, isoleucine, valine) lifts each one.
 
-The hold is an unread row plus a hidden amount. The other 84 complete labels whose Dose records a hidden amount have every row finished, and 82 of them
-were already complete before this rule. They stay complete under accepted policy (PR decision 2, 339541 at about 81.8). Read literally,
-"a missing necessary amount can't be complete" would hold those 84 too, permanently, since a blend needn't print these amounts (21 CFR 101.36(c)). That is Sean's to
-decide; nothing here reopens it. The reader is `hidden_amount_neutral`, so a botanical or collagen `blend_total_only` band isn't read; no complete label with an unread row has one today.
+That hold is an unread row plus a hidden amount. The other 84 complete labels whose Dose records a hidden amount have every row finished, and 82 of them
+were already complete before this rule.
+
+**The 84 (integrator's ruling, November 3).** A hidden amount holds a finished label when it could change the answer. Non-disclosure itself is a known fact, so a blend needn't print
+these amounts (21 CFR 101.36(c)) and that alone doesn't hold anything. Owner: `assessment_readiness._hidden_amount_blockers`, reached only when Dose reads a hidden amount.
+
+- `hidden_amount_safety_open`: a threshold reads `amount_unknown` and the blend could reach it, or an upper-limit nutrient has no printed amount on the label. Both statuses stay open.
+- `hidden_amount_quality_open`: one blend hides how it divides between different ingredients. Quality status only.
+- A row whose alerts vanish while its amount is hidden is a safety fix, not a hold (200826, separate PR).
+
+| Bucket | Labels | Outcome |
+|---|---|---|
+| A. Threshold reachable inside the blend (251530, 251594, 202690, 259856) | 4 | safety and quality |
+| B. Alert absent while hidden (200826) | 1 | quality; alert fixed separately |
+| C. Upper-limit nutrient with no amount (71650, 73017, 75845, 75856, 239880) | 5 | safety and quality |
+| D. Probiotic rule already shown by a sibling row (204681, 239682, 274457) | 3 | quality |
+| E. Restated nutrient inside a blend (20035-20038, 26631) | 5 | quality |
+| F. 46707 safety and quality; 74586 quality | 2 | as stated |
+| G. Single identity, collagen hold stands (268562, 268575, 326268) | 3 | finish |
+| H. Moves with the size of the amount | 19 | 17 quality; 239447, 321604 finish |
+| I. Moves on disclosure | 17 | 11 quality, 6 finish |
+| J. Small score move (74547) | 1 | quality |
+| K. Nothing moves | 24 | finish |
+
+Totals: 49 held, 10 with safety, 35 finish. 180 labels carry a hidden-amount code once partial labels are counted (179 quality, 42 safety), and all newly partial labels are among the 84.
+0 score, tier, status, pillar, verdict or catalog safety moves. All 49 still pass `_retained_evidence_is_publishable`.
+
+**A rule, not a list, so it doesn't match the ruling exactly.** The rule reads the label's structure: production can't try amounts, and the ruling's sort came from a probe that did. It holds more than "I and J finish" on
+12196, 29207, 39973, 74214, 212574, 272970, 308198, 74547, and it holds D, and it misses two size movers (251557, 251572, two Echinacea species at the top level, Formulation only).
+
+**Known limits.**
+- The gate is the 84's fact pattern. The same facts sit outside it on complete labels where Dose reads no hidden amount: `amount_unknown` hits on 534 (359 multi), upper-limit nutrients with no amount on 264, blends hiding a split on 1,407. Those aren't held.
+- Yerba mate (202690, 259856): only the ginseng hit reads `amount_unknown` at base. The yerba hypertension hits read no evaluation until an amount exists. The label holds, on ginseng.
+- Unknown daily servings count as reachable, so a per-day threshold with no serving basis holds.
+- A source-bound label hold matches its exact blockers, so these codes aren't added to a held label. The first version released four withheld scores (231921, 295107, 80302, 178728) at 22.7 to 25. The measurement caught it, and `test_a_hidden_amount_hold_doesnt_lift_a_withheld_score` pins it.
+
+**239447 and 321604, Evidence 14.0 to 0.** UC-II is the sole child of a named blend (40 mg, 401 mg), so the amount isn't really hidden. At base `BRAND_UCII` is accepted with a collagen floor. Once the child carries the blend's amount, it becomes scorable under its own name, `BRAND_UCII` is rejected `clinical_form_mismatch`, and Evidence reads `clinical_form_excluded`. So the drop is form matching, not amount. Both finish at base; the sensitivity goes to the Evidence work, and the collagen hold stands.
+
+**Panel primaries (40 labels).** `_required_evidence_review_open` skips panel modules, so an unread ingredient a panel label is about didn't hold it. `_panel_primary_open` closes that: 250328 "Elderberry", 49568 Keratin Formula, 204802 Centrum Multi + Omega-3. All 40 of the listed labels hold, 38 multi and 2 B complex, status only.
+
+**Reason codes, no status change here.** Reference-only stays complete because it requires a finished source review. Form mismatch, form excluded and purpose mismatch go to the Evidence work with the same codes on labels already complete. Listed by label and code in the shared notes, not changed here.
 
 **The `applicability_unestablished` wording, for Sean.** The display state keeps one sentence:
 
@@ -267,11 +309,15 @@ decide; nothing here reopens it. The reader is `hidden_amount_neutral`, so a bot
 
 | | Labels | Example | Score |
 |---|---|---|---|
-| Partial: the review is unfinished | 2,461 | 252367 Acai Berry Extract, `literature_applicability_unestablished` | 57.1, Evidence 0 |
-| Complete: the review finished | 3,003 | 252410 Gamma Aminobutyric Acid 600 mg, `reference_only_clinical_record` | 62.4, Evidence 0 |
-| Complete, with unread rows | 233 of the 3,003 | 12078 Natural Cod Liver Oil, same sentence plus "Other ingredients on this label weren't individually reviewed, which does not mean they lack clinical evidence." | |
+| Partial: the review is unfinished | 2,466 | 252367 Acai Berry Extract, `literature_applicability_unestablished` | 57.1, Evidence 0 |
+| Complete: the review finished | 2,971 | 252410 Gamma Aminobutyric Acid 600 mg, `reference_only_clinical_record` | 62.4, Evidence 0 |
+| Complete, with unread rows | 233 of the 2,971 | 12078 Natural Cod Liver Oil, same sentence plus "Other ingredients on this label weren't individually reviewed, which does not mean they lack clinical evidence." | |
 
-Only `quality_assessment_status` tells the first two apart.
+Only `quality_assessment_status` tells the first two apart. Counted by display state; the sentence itself reads on 2,284 of the partial labels (probiotic wording differs) and 2,971 complete.
+
+The rule: #338 must not attach that sentence to a label it left unfinished. 28 labels picked it up from this PR; 27 stay partial and now keep "review pending" through `review_open_outside_scope`, and 76837 completes with it. Sentence counts: 5,254 before this PR, 5,255 after, 0 removed. The 2,284 partial labels already read it before this PR, so that wording goes to the Evidence work with Sean's rule.
+
+**76837 Dairy Digestant, the one that completes.** "Helps the digestion of lactose." Lactase 50 mg is the required subject and its review is finished (`evaluated_limited_or_negative`, `literature_reviewed_human_clinical_evidence`). Rennet 4 mg isn't material against 50 mg, so its unread review doesn't hold the label, and the reason adds the note about rows not individually reviewed. Evidence 0, 61.9, Needs improvement, with `match_count` 0. Complete by the rule. Whether lactase should read 0 is for the Evidence work.
 
 **Vitamin A and beta-carotene, a canonical shared cause.** The resolver keys on the printed name
 (`rda_ul_reference_entry`, `is_essential_dietary_nutrient`), so one `beta_carotene` row resolves by authority when the label
@@ -314,9 +360,7 @@ label has a held ingredient as a required open row.
 - **Hold-listed rows on moved labels (272 labels).** The row isn't the owner: 204 multi add-ins, 68 others. The ingredient stays
   open and recorded unread, and it earns nothing.
 
-**Safety contract.** Quality and personal safety stay separate. `safety_assessment_status` moved on 0 labels. Partial
-quality with safety checks finished: 4,904. Partial with them unfinished: 424 (334 no known catalog concern, 86 caution, 4 not assessed). Complete with them
-unfinished: 62 (34 caution, 19 blocked, 9 no known catalog concern), 12 of them moved here. "No known concerns" needs its own checks completed: Sean's decision, recorded in ADR-015 on app #177.
+**Safety contract.** Quality and personal safety stay separate. `safety_assessment_status` moved on 32 labels, by the hidden-amount safety hold. Partial quality with safety checks finished: 4,959. Partial with them unfinished: 458 (366 no known catalog concern, 88 caution, 4 not assessed). Complete with them unfinished: 60 (32 caution, 19 blocked, 9 no known catalog concern), 12 of them moved here. "No known concerns" needs its own checks completed: Sean's decision, recorded in ADR-015 on app #177.
 
 ## Title word score moves: a separate item, not in #338
 
