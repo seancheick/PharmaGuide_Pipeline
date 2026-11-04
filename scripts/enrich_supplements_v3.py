@@ -504,6 +504,13 @@ def _explicit_mixed_vitamin_a_preformed_fraction(
     return (100.0 - beta_percentage) / 100.0
 
 
+# A printed source beside beta-carotene: its share of the row's amount isn't stated.
+_NON_BETA_CAROTENE_SOURCE = re.compile(
+    r"mixed|carotenoid|alpha[- ]?carotene|cryptoxanthin|lutein|zeaxanthin|lycopene|retin",
+    re.IGNORECASE,
+)
+
+
 def _mixed_vitamin_a_total_mcg_rae(
     amount: float,
     unit: Any,
@@ -20768,6 +20775,94 @@ class SupplementEnricherV3:
             "quantity_upper": high / servings_per_day_max,
         }
 
+    def _distinct_beta_carotene_dose(
+        self, product: Dict[str, Any], rows: List[Dict[str, Any]], rules: List[Dict[str, Any]],
+        servings_per_day_max: float,
+    ) -> Optional[Dict[str, Any]]:
+        """The confirmed and maximum beta-carotene every lung-cancer rule judges.
+
+        Both are mass at the converter's supplemental factor, the row's existing
+        ``safety_exposure.per_day``, because the rule's thresholds are in mcg RAE:
+        15 mg is 7,500 and 20 mg is 10,000. A row from beta-carotene alone is
+        confirmed. A mixture's mass is only a maximum. A mixture's RAE or IU figure
+        is vitamin A activity, so it is neither. One confirmed row keeps its own
+        evaluation. A reviewed manufacturer composition states the mass itself, for
+        these rules only: the row's vitamin A amount is untouched.
+        """
+        composition = product.get("manufacturer_composition")
+        if composition:
+            if not composition.get("bound"):
+                return {"quantity": None, "composition_unbound": True}
+            return {
+                "quantity": composition["beta_carotene_mcg_per_serving"],
+                "unit": "mcg",
+                "unit_normalized": "mcg",
+                "raw_source_text": "Beta-Carotene",
+                "name": "Beta-Carotene",
+                "standard_name": "Beta-Carotene",
+                "matched_form": "Beta-Carotene",
+                "dose_source": "manufacturer_typical_composition",
+            }
+        labelled = {
+            row.get("raw_source_path"): row
+            for row in active_label_rows(product.get("activeIngredients") or [])
+        }
+        analyzed = {
+            row.get("raw_source_path"): row
+            for row in (product.get("rda_ul_data") or {}).get("analyzed_ingredients") or []
+            if isinstance(row, dict)
+            and row.get("dose_role") not in {"form_component", "ul_scoped_component"}
+        }
+        low = high = 0.0
+        confirmed = 0
+        mixture = False
+        activity_only = False
+        for row in rows:
+            if row.get("canonical_id") != "beta_carotene" and not any(
+                (rule.get("subject_ref") or {}).get("canonical_id") == row.get("canonical_id")
+                and self._interaction_rule_applies(rule, row)
+                for rule in rules
+            ):
+                continue
+            source = analyzed.get(row.get("raw_source_path"))
+            exposure = (source or {}).get("safety_exposure") or {}
+            label = labelled.get(row.get("raw_source_path")) or row
+            if _NON_BETA_CAROTENE_SOURCE.search(" ".join([
+                str(label.get("name") or ""),
+                str(label.get("notes") or ""),
+                *(str(form.get("name") or "") for form in label.get("forms") or []
+                  if isinstance(form, dict)),
+            ])):
+                mixture = True
+                if source is None or not exposure:
+                    continue
+                activity = (
+                    not _rda_mass_unit_key(source.get("unit"))
+                    or re.match(r"vitamin\s+a\b", str(label.get("name") or ""), re.IGNORECASE)
+                )
+                maximum = 0.0 if activity else self._to_float_safe(exposure.get("per_day")) or 0.0
+                activity_only = activity_only or bool(activity)
+                high += maximum
+                if row.get("canonical_id") == "beta_carotene":
+                    exposure.update(low_per_day=0.0, high_per_day=maximum)
+                continue
+            per_day = self._to_float_safe(exposure.get("per_day"))
+            if per_day:
+                low += per_day
+                high += per_day
+                confirmed += 1
+        if not servings_per_day_max or not (mixture or confirmed > 1):
+            return None
+        if not high:
+            return {"quantity": None, "activity_only": activity_only}
+        return {
+            "quantity": low / servings_per_day_max,
+            "quantity_upper": high / servings_per_day_max,
+            "unit": "mcg RAE",
+            "unit_normalized": "mcg RAE",
+            "dose_source": "distinct_beta_carotene_range",
+        }
+
     def _evaluate_dose_thresholds_for_target(
         self,
         thresholds: List[Dict[str, Any]],
@@ -20799,6 +20894,26 @@ class SupplementEnricherV3:
             or not unit
         ):
             policy = relevant[0]
+            if ingredient.get("composition_unbound"):
+                # The reviewed mass no longer binds to this label: unresolved, not absent.
+                return base_severity, {
+                    "evaluated": False,
+                    "reason": "dose_form_not_disclosed",
+                    "evaluation_status": "form_unknown",
+                    "clinical_severity": base_severity,
+                    "consumer_disposition": str(
+                        policy.get("unknown_form_disposition") or "suppress"
+                    ).strip().lower(),
+                    "release_blocking": False,
+                    "dose_evaluation": None,
+                    "decision_rule": self._dose_decision_rule(policy, materiality, base_severity),
+                }
+            if ingredient.get("activity_only"):
+                # A vitamin A figure isn't a beta-carotene amount the rule could find
+                # high, so it raises no concern the way a blank amount does.
+                base_severity = (
+                    str(policy.get("severity_if_not_met") or base_severity).strip().lower()
+                )
             result = {
                 "evaluated": False,
                 "reason": "missing_or_invalid_dose",
@@ -20870,7 +20985,9 @@ class SupplementEnricherV3:
             )
             convert_reason = None
             ul_bounds = (
-                (
+                (amount_basis, quantity_upper * serving_multiplier)
+                if quantity_upper is not None and unit == threshold_unit
+                else (
                     self._convert_mass(amount_basis, unit, threshold_unit),
                     self._convert_mass(quantity_upper * serving_multiplier, unit, threshold_unit),
                 )
@@ -20891,8 +21008,11 @@ class SupplementEnricherV3:
                 # only a range straddling the threshold is form_unknown. The
                 # exported amount is the proven minimum: stack totals sum it
                 # across products, so a bound must never stand in for exposure.
+                # A bound with no bridge to the threshold's unit decides nothing.
                 low, high = ul_bounds
-                low_comparison = self._compare_threshold(low, comparator, threshold_value)
+                low_comparison = (
+                    None if low is None else self._compare_threshold(low, comparator, threshold_value)
+                )
                 if (
                     quantity_upper is not None
                     and ingredient.get("quantity_operator") == ">"
@@ -20902,7 +21022,11 @@ class SupplementEnricherV3:
                     # The printed lower endpoint is excluded. Keep its number
                     # unchanged while comparing the actual open interval.
                     low_comparison = comparator in {">", ">="}
-                if low_comparison == self._compare_threshold(high, comparator, threshold_value):
+                if (
+                    low is not None
+                    and high is not None
+                    and low_comparison == self._compare_threshold(high, comparator, threshold_value)
+                ):
                     range_comparison = low_comparison
                     converted_amount = low
                     conversion_method = "ul_exposure_bound" if low != high else "ul_exposure"
@@ -21025,6 +21149,36 @@ class SupplementEnricherV3:
                 details["selected_from"] = "severity_if_not_met"
                 details["selected_severity"] = severity_candidate
                 details["clinical_severity"] = severity_candidate
+
+        straddled = [
+            item for item in details["thresholds_checked"]
+            if item.get("reason") == "form_unknown"
+        ]
+        if ingredient.get("quantity_upper") is not None and straddled and not details["matched_threshold"]:
+            # A range across a lower tier isn't ruled out by clearing a higher one.
+            evaluated_any = False
+            severity_candidate = base_severity
+            details["thresholds_checked"] = straddled
+            details["dose_evaluation"] = None
+            if ingredient.get("dose_source") == "distinct_beta_carotene_range" and quantity > 0:
+                # The confirmed part is still confirmed: a stack adds it across products.
+                daily = quantity * float(servings_per_day_max)
+                details["dose_evaluation"] = {
+                    "observed_amount": quantity,
+                    "observed_unit": unit,
+                    "serving_multiplier": float(servings_per_day_max),
+                    "daily_amount": daily,
+                    "daily_unit": unit,
+                    "converted_amount": daily,
+                    "threshold": straddled[-1]["threshold_value"],
+                    "threshold_unit": straddled[-1]["threshold_unit"],
+                    "comparator": straddled[-1]["comparator"],
+                    "conversion_method": "ul_exposure_bound",
+                    "dose_source": ingredient["dose_source"],
+                    "form_context": None,
+                }
+            for field in ("selected_severity", "selected_from"):
+                details.pop(field, None)
 
         details["evaluated"] = evaluated_any
         if not evaluated_any and "selected_severity" not in details:
@@ -21608,6 +21762,12 @@ class SupplementEnricherV3:
         vitamin_e_dose = self._distinct_vitamin_e_dose(
             enriched if isinstance(enriched, dict) else {}, servings_per_day_max
         )
+        beta_carotene_dose = self._distinct_beta_carotene_dose(
+            enriched if isinstance(enriched, dict) else {},
+            [row for bucket, row in all_ingredient_rows if bucket != "derived_marker"],
+            [rule for rule in raw_rules if rule.get("exposure_canonical_id") == "beta_carotene"],
+            servings_per_day_max,
+        )
 
         for source_bucket, ingredient in all_ingredient_rows:
             safety_refs = (
@@ -21724,6 +21884,14 @@ class SupplementEnricherV3:
                         "unit_normalized": "mg",
                         "dose_source": "distinct_vitamin_e_range",
                     }
+                elif (
+                    beta_carotene_dose
+                    and source_bucket != "derived_marker"
+                    and "beta_carotene" in {
+                        rule_subject.get("canonical_id"), rule.get("exposure_canonical_id")
+                    }
+                ):
+                    dose_row = {**base_dose_row, **beta_carotene_dose}
                 elif (
                     rule_subject.get("canonical_id") == "vitamin_a"
                     and rule.get("form_scope")
