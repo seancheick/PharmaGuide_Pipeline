@@ -19941,6 +19941,28 @@ class SupplementEnricherV3:
             and label_row_establishes_presence(row)
         }
 
+    def _skipped_row_scope_row(self, row: Dict, label_row: Optional[Dict] = None) -> Dict:
+        """A skipped row was never form-matched, but its printed name can still be
+        the form a rule is about: "Glucomannan" inside a blend that hides its amount.
+        A generic name names no form. form_match_status stays as it was, so a
+        fail-open rule still warns."""
+        label_row = label_row or {}
+        match = self._match_quality_map(
+            row.get("raw_source_text") or row.get("name") or "",
+            row.get("standard_name"),
+            self.databases.get("ingredient_quality_map", {}),
+            cleaned_forms=label_row.get("forms") or (row.get("raw_taxonomy") or {}).get("forms") or [],
+            cleaner_canonical_id=row.get("canonical_id"),
+            row_notes=label_row.get("notes"),
+        )
+        if (
+            not isinstance(match, dict)
+            or match.get("canonical_id") != row.get("canonical_id")
+            or "(unspecified)" in str(match.get("form_id"))
+        ):
+            return row
+        return {**row, "form_id": match.get("form_id"), "matched_forms": match.get("matched_forms") or []}
+
     def _blend_header_scope_row(self, header: Dict, label_row: Optional[Dict]) -> Dict:
         """A blend header is never form-matched for scoring, but the forms its
         label row declares still confirm a plant part for part-scoped rules:
@@ -20668,11 +20690,13 @@ class SupplementEnricherV3:
             candidates, read, lambda row, others: source_linked_rows(product, row, others)
         )
         low = high = 0.0
+        strict_lower = False
         unreconciled: List[float] = []
         for row in counted:
             exposure = read(row)
             if id(row) in total_bounds:
                 low += total_bounds[id(row)][0]
+                strict_lower = strict_lower or total_bounds[id(row)][1]
                 high = math.inf
             elif exposure.per_serving_amount is None:
                 continue
@@ -20682,6 +20706,9 @@ class SupplementEnricherV3:
                 unreconciled.append(exposure.per_serving_amount)
             else:
                 low += exposure.minimum or 0.0
+                strict_lower = strict_lower or (
+                    exposure.minimum is not None and exposure.quantity_operator == ">"
+                )
                 high += math.inf if exposure.maximum is None else exposure.maximum
         if unreconciled:
             low += max(unreconciled)
@@ -20691,6 +20718,7 @@ class SupplementEnricherV3:
         return {
             "quantity": low,
             "quantity_upper": None if high == low else high,
+            "quantity_operator": ">" if strict_lower else ">=" if high != low else "=",
             "rows": {
                 id(row) for row in candidates
                 if is_caffeine(row) and read(row).per_serving_amount
@@ -20857,6 +20885,7 @@ class SupplementEnricherV3:
                 if converted_amount is None
                 else None
             )
+            range_comparison = None
             if ul_bounds is not None:
                 # An outcome every possible form agrees on is not uncertain;
                 # only a range straddling the threshold is form_unknown. The
@@ -20864,12 +20893,24 @@ class SupplementEnricherV3:
                 # across products, so a bound must never stand in for exposure.
                 # A bound with no bridge to the threshold's unit decides nothing.
                 low, high = ul_bounds
+                low_comparison = (
+                    None if low is None else self._compare_threshold(low, comparator, threshold_value)
+                )
+                if (
+                    quantity_upper is not None
+                    and ingredient.get("quantity_operator") == ">"
+                    and low == threshold_value
+                    and comparator in {">", ">=", "<", "<=", "=="}
+                ):
+                    # The printed lower endpoint is excluded. Keep its number
+                    # unchanged while comparing the actual open interval.
+                    low_comparison = comparator in {">", ">="}
                 if (
                     low is not None
                     and high is not None
-                    and self._compare_threshold(low, comparator, threshold_value)
-                    == self._compare_threshold(high, comparator, threshold_value)
+                    and low_comparison == self._compare_threshold(high, comparator, threshold_value)
                 ):
+                    range_comparison = low_comparison
                     converted_amount = low
                     conversion_method = "ul_exposure_bound" if low != high else "ul_exposure"
                 else:
@@ -20900,7 +20941,10 @@ class SupplementEnricherV3:
                 })
                 continue
 
-            comparison = self._compare_threshold(converted_amount, comparator, threshold_value)
+            comparison = (
+                range_comparison if range_comparison is not None
+                else self._compare_threshold(converted_amount, comparator, threshold_value)
+            )
             if comparison is None:
                 details["thresholds_checked"].append({
                     "evaluated": False,
@@ -21641,6 +21685,10 @@ class SupplementEnricherV3:
                     ingredient, label_rows_by_path.get(ingredient.get("raw_source_path"))
                 )
                 if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                else self._skipped_row_scope_row(
+                    ingredient, label_rows_by_path.get(ingredient.get("raw_source_path"))
+                )
+                if id(ingredient) in label_rows
                 else ingredient
             )
 
@@ -21666,6 +21714,7 @@ class SupplementEnricherV3:
                         **base_dose_row,
                         "quantity": caffeine_dose["quantity"],
                         "quantity_upper": caffeine_dose["quantity_upper"],
+                        "quantity_operator": caffeine_dose["quantity_operator"],
                         "unit": "mg",
                         "unit_normalized": "mg",
                         "dose_source": "distinct_caffeine_total",
@@ -22646,10 +22695,10 @@ class SupplementEnricherV3:
             and (owner := compound_owners.get(id(row))) is not None
             and str(owner.get("canonical_id") or "") == "vitamin_e"
         }
-        printed = [
-            row["printed_alpha_range_mg"] for row in by_path.values()
+        printed = {
+            path: row["printed_alpha_range_mg"] for path, row in by_path.items()
             if row.get("printed_alpha_range_mg")
-        ]
+        }
         amounts = {path: amount_mg for _, amount_mg, path in family_rows if path}
         for row in label_rows:
             if isinstance(row, dict) and row.get("raw_source_path"):
@@ -22664,6 +22713,8 @@ class SupplementEnricherV3:
             return "mixed" in name or not re.search(r"\b(?:gamma|delta|beta)\b", name)
 
         def _tree_mg(path: str, family: List[str], servings: float) -> float:
+            if path in printed:
+                return printed[path]["high"] * servings
             row = by_path[path]
             mass = amounts.get(path)
             if mass is None:
@@ -22673,6 +22724,11 @@ class SupplementEnricherV3:
                 _tree_mg(child, family, servings) for child in family
                 if child.rpartition(".nestedRows[")[0] == path
             )
+            # A reviewed alpha allocation narrows its direct mixture only,
+            # never an outer blend containing that mixture as one component.
+            # Other roots/child mixtures keep their unallocated mass bound.
+            if any(child.rpartition(".nestedRows[")[0] == path for child in printed):
+                return children
             return max(mass, children)
 
         for rda_row, amount_mg, path in family_rows:
@@ -22696,14 +22752,14 @@ class SupplementEnricherV3:
                 else None
             )
             low, high = bounds if bounds is not None else (amount_mg, amount_mg)
-            if path in owners and printed:
-                low = max(low, sum(item["low"] for item in printed) * servings)
-                high += sum(item["high"] for item in printed) * servings
-            elif path in owners:
+            if path in owners:
                 family = [
                     other for other, row in by_path.items()
                     if other != path and not other.startswith(f"{path}.") and _can_hold_alpha(row)
                 ]
+                low = max(low, sum(
+                    printed[other]["low"] for other in family if other in printed
+                ) * servings)
                 high += sum(
                     _tree_mg(root, family, servings) for root in family
                     if root.rpartition(".nestedRows[")[0] not in family
