@@ -24,6 +24,7 @@ from assessment_readiness import (
     ENFORCED_READINESS_DIMENSIONS,
     has_canonical_enforced_dimensions,
     retained_evidence_result_state,
+    safety_assessment_reason,
     safety_assessment_status,
 )
 
@@ -946,6 +947,11 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 # facts retained beside it.
                 findings.append(Finding("SCORING_SAFETY_ASSESSMENT_STATUS_MISMATCH",
                     f"{pid}: safety_assessment_status {product.get('safety_assessment_status')!r} "
+                    "does not follow from its recorded safety facts", str(file_path)))
+            if product.get("safety_assessment_reason") != safety_assessment_reason(
+                    _safe_dict(product.get("assessment_readiness")).get("release_assessment")):
+                findings.append(Finding("SCORING_SAFETY_ASSESSMENT_REASON_MISMATCH",
+                    f"{pid}: safety_assessment_reason {product.get('safety_assessment_reason')!r} "
                     "does not follow from its recorded safety facts", str(file_path)))
             typed_suppressed_dose_failure = False
             verdict = str(product.get("verdict") or "").upper()

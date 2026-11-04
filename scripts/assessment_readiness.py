@@ -1590,7 +1590,8 @@ def evaluate_release_assessment(
     return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
             "unfinished_source_assessment": unfinished_source,
             "unread_printed_nutrient_amounts": unread_printed_nutrient_amounts(product),
-            "upper_limit_amounts_unknown": upper_limit_amounts_unknown(product)}
+            "upper_limit_amounts_unknown": upper_limit_amounts_unknown(product),
+            "upper_limit_amounts_undisclosed": upper_limit_amounts_undisclosed(product)}
 
 
 #: Every release blocker that belongs to the Evidence review. Any other blocker,
@@ -1764,6 +1765,12 @@ def upper_limit_amounts_unknown(product: Mapping[str, Any]) -> int:
     return len(_hidden_upper_limit_rows(rows, _hidden_amount_rows(rows)))
 
 
+def upper_limit_amounts_undisclosed(product: Mapping[str, Any]) -> int:
+    """Those checks where the label prints nothing for the nutrient, not even a percent."""
+    rows = active_label_rows(product.get("activeIngredients"))
+    return sum(not _positive(row.get("dailyValue")) for row in _hidden_upper_limit_rows(rows, _hidden_amount_rows(rows)))
+
+
 def _hidden_amount_rows(rows: list) -> list:
     """Rows present without an amount. "0 NP" printed as 0% DV is a measured zero, not one."""
     from identity.interaction import label_row_establishes_presence
@@ -1842,6 +1849,9 @@ def evidence_review_open(release: Mapping[str, Any]) -> bool:
     return any(_is_evidence_blocker(blocker) for blocker in _safe_list(release.get("blockers")))
 
 
+UPPER_LIMIT_AMOUNT_UNDISCLOSED = "upper_limit_amount_undisclosed"
+
+
 def safety_assessment_status(
     *, quality_score_status: Any, product_safety_status: Any, safety_gate: Any,
     dose_safety: Any, release: Any, evidence_result_state: Any,
@@ -1873,6 +1883,15 @@ def safety_assessment_status(
                 for blocker in blockers)
     )
     return "complete" if finished else "incomplete"
+
+
+def safety_assessment_reason(release: Any) -> str | None:
+    """The reason the app may name beside ``incomplete``, or None for its generic text.
+
+    Named only where Sean's explanation is true (November 4): a label printing a %DV
+    does disclose something, so it keeps the generic text.
+    """
+    return UPPER_LIMIT_AMOUNT_UNDISCLOSED if _positive(_safe_dict(release).get("upper_limit_amounts_undisclosed")) else None
 
 
 def _current_evidence_dimension_receipt(enriched: Mapping, module: str, evidence: Mapping) -> bool:

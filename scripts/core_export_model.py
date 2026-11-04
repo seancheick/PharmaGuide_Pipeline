@@ -44,6 +44,7 @@ PRODUCTS_CORE_COLUMNS = (
     "product_safety_status",
     "quality_assessment_status",
     "safety_assessment_status",
+    "safety_assessment_reason",
     "quality_tier",
     "quality_score_suppressed_reason",
     "v4_module",

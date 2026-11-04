@@ -56,6 +56,7 @@ from audit_evidence_utils import (
 )
 from audit_identity_integrity import audit_product
 from brand_identity import BrandIdentity, BrandRegistry
+from assessment_readiness import UPPER_LIMIT_AMOUNT_UNDISCLOSED
 from core_export_model import (
     PRODUCTS_CORE_COLUMNS,
     build_projection_manifest,
@@ -2384,6 +2385,7 @@ CREATE TABLE IF NOT EXISTS products_core (
     product_safety_status           TEXT,
     quality_assessment_status       TEXT,
     safety_assessment_status        TEXT,
+    safety_assessment_reason        TEXT,
     quality_tier                    TEXT,
     quality_score_suppressed_reason TEXT,
     v4_module                       TEXT,
@@ -10749,6 +10751,12 @@ def _safety_assessment_status_value(scored: Dict) -> Optional[str]:
     return value if value in {"complete", "incomplete"} else None
 
 
+def _safety_assessment_reason_value(scored: Dict) -> Optional[str]:
+    """Only a declared reason reaches the column; NULL leaves the app's generic text."""
+    value = scored.get("safety_assessment_reason")
+    return value if value == UPPER_LIMIT_AMOUNT_UNDISCLOSED else None
+
+
 def build_core_row(
     enriched: Dict,
     scored: Dict,
@@ -10903,6 +10911,7 @@ def build_core_row(
         safe_str(effective_scored.get("product_safety_status")) or None,
         safe_str(effective_scored.get("quality_assessment_status")) or None,
         _safety_assessment_status_value(effective_scored),
+        _safety_assessment_reason_value(effective_scored),
         safe_str(effective_scored.get("quality_tier")) or None,
         safe_str(effective_scored.get("quality_score_suppressed_reason")) or None,
         safe_str(effective_scored.get("_v4_module")) or None,
