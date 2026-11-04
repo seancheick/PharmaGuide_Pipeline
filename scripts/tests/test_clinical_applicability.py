@@ -2595,3 +2595,34 @@ def test_supported_sleep_and_excluded_shift_work_claims_are_both_retained():
     assert result["status"] == "applicable"
     assert result["claim_alignment"]["state"] == "mixed"
     assert result["claim_alignment"]["excluded_terms"] == ["shift work"]
+
+
+@pytest.mark.parametrize('route', ['iv', 'im', 'vaginal', 'topical', 'enteral_tube', 'intranasal', 'inhaled'])
+def test_oral_product_does_not_inherit_nonoral_study_route(monkeypatch, route):
+    import clinical_applicability as ca
+    from test_evidence_resolver import _approved_test_source
+    source = _approved_test_source({'id': 'TEST_ROUTE', 'matched_canonical_ids': ['synthetic_material'],
+                                    'matched_source_row_refs': ['ingredientRows[0]']}, name='Synthetic Material')
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {source['id']: source})
+    row = {'name': 'Synthetic Material', 'canonical_id': 'synthetic_material',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'form_factor_canonical': 'capsule', 'activeIngredients': [row]}
+    assert ca.assess_clinical_applicability(product, source, assess_amount=False, require_claim_alignment=False)['status'] == 'applicable'
+    source['study_contexts'][0]['route'] = route
+    decision = ca.assess_clinical_applicability(product, source, assess_amount=False, require_claim_alignment=False)
+    assert decision['status'] == 'not_applicable'
+    assert decision['reason_code'] == 'clinical_delivery_mismatch'
+
+
+@pytest.mark.parametrize('description,expected', [
+    ('Nonpregnant and nonlactating adult women', 'explicit_conflict'),
+    ('Adults aged 18-65; breastfeeding women excluded', 'explicit_conflict'),
+    ('General adult population', 'eligible'),
+    ('Adults; breastfeeding women were not excluded', 'eligible'),
+    ('Adults excluded smokers but included breastfeeding mothers', 'eligible'),
+    ('Breastfeeding women', 'eligible'),
+])
+def test_explicit_lactation_exclusion_cannot_qualify_nursing_product(description, expected):
+    from clinical_applicability import assess_context_population
+    assert assess_context_population({'product_name': 'Nursing support'},
+        {'population': {'age_group': 'adult', 'description': description}}) == expected

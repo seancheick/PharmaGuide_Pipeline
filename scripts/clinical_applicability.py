@@ -752,6 +752,55 @@ def _special_population(context: Mapping, description: str) -> str | None:
     return None
 
 
+def context_delivery_matches(product: Mapping, context: Mapping) -> bool:
+    """Keep route conflicts separate from ordinary oral dosage-form variation.
+
+    Read typed study routes when present. Native contexts retain their recorded
+    delivery forms; missing forms do not establish a nonoral route. Benefit
+    claims (including vaginal health) never establish administration route.
+    """
+    from clinical_evidence_schema import ROUTES
+    from form_factor_normalizer import canonicalize_form_factor
+
+    def route(value):
+        text = str(value or "").strip().lower()
+        if text in ROUTES - {"other"}:
+            return text
+        for pattern, named_route in (
+            (r"\b(?:enteral|feeding tube)\b", "enteral_tube"),
+            (r"\bvaginal\b", "vaginal"), (r"\b(?:topical|transdermal)\b", "topical"),
+            (r"\bsublingual\b", "sublingual"), (r"\b(?:intranasal|nasal)\b", "intranasal"),
+            (r"\b(?:inhaled|inhalation)\b", "inhaled"),
+            (r"\bintravenous\b", "iv"), (r"\bintramuscular\b", "im"),
+        ):
+            if re.search(pattern, text):
+                return named_route
+        form = canonicalize_form_factor(text)
+        if form in {"topical", "patch"}:
+            return "topical"
+        if form == "sublingual":
+            return "sublingual"
+        if form in {"capsule", "softgel", "tablet", "chewable", "gummy", "powder", "bar", "tea_bag", "lozenge"}:
+            return "oral"
+        return None
+
+    physical = product.get("physicalState") or {}
+    if isinstance(physical, Mapping):
+        physical = physical.get("name") or physical.get("langualCodeDescription")
+    label_routes = {r for value in (product.get("form_factor_canonical"), product.get("form_factor"), physical)
+                    if (r := route(value))}
+    if len(label_routes) > 1:
+        return False
+    label_route = next(iter(label_routes), None)
+    study_route = context.get("route")
+    studied = ({study_route} if study_route in ROUTES - {"other"} else
+               {r for form in (context.get("dose") or {}).get("dosage_forms") or [] if (r := route(form))})
+    if label_route:
+        return label_route in studied if studied else label_route == "oral"
+    # No declared delivery cannot establish a specialized administration route.
+    return not studied or studied == {"oral"}
+
+
 def assess_context_population(product: Mapping, context: Mapping) -> str:
     """Compare a reviewed context's studied population with the label's targeting.
 
@@ -794,6 +843,13 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
         return "unresolved"
     # Pregnant women are not interchangeable with a studied nonpregnant group.
     if pregnancy and not _studied_subjects(_PREGNANT_SUBJECTS, description):
+        return "explicit_conflict"
+    if lactation and (re.search(r"\bnon[- ]?(?:lactating|breastfeeding|nursing)\b", description, re.I)
+                     or re.search(
+                         r"\b(?:breastfeeding|lactating|nursing)(?: women| mothers| participants)? "
+                         r"(?:(?:were|are|was) )?excluded\b|"
+                         r"\b(?:excluded|excluding) (?:breastfeeding|lactating|nursing)\b",
+                         description, re.I)):
         return "explicit_conflict"
     key = _key(description)
     men = re.compile(r"\b(?:men|male|males)\b", re.I)
@@ -948,7 +1004,9 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
         held = any(qualifying_purpose_outcomes(context)[1] for context in contexts)
         return {"status": "unresolved" if held else "not_applicable",
                 "reason_code": "invalid_applicability_contract" if held else "clinical_outcome_not_qualified"}
-    contexts = qualified_contexts
+    contexts = [context for context in qualified_contexts if context_delivery_matches(product, context)]
+    if not contexts:
+        return {"status": "not_applicable", "reason_code": "clinical_delivery_mismatch"}
     canonicals = {str(row.get("canonical_id")) for row in _linked_rows(product, entry, evidence_only=True)
                   if row.get("canonical_id")}
     formula_level = _positioning_is_formula_level(product, canonicals)

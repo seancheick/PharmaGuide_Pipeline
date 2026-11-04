@@ -285,7 +285,7 @@ def test_evidence_copy_distinguishes_missing_applicability_from_poor_quality():
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
     product = strain_product()
-    product["product_name"] = "Sleep support probiotic"  # Unrelated to every LGG context.
+    product["product_name"] = "Prenatal probiotic"  # No reviewed pregnancy population.
     dim = score_evidence(product)
     result = _pillar_evidence(dim, 20, "probiotic", config())
     assert "preparation, purpose and population" in result["reason"]
@@ -304,13 +304,14 @@ def test_unfavorable_research_is_not_described_as_missing_research(monkeypatch):
     from test_evidence_resolver import _approved_test_source
 
     p = strain_product()
-    p["product_name"] = "Sleep support probiotic"  # Keeps LGG's native contexts out.
+    p["product_name"] = "Prenatal probiotic"  # Population excludes LGG native contexts.
     # Synthetic accepted match (the helper's own id): the real backed STRAIN_LGG
     # record is research-only since Dr. Pham's 2026-10-28 ruling (the strain
     # registry is the one scoring owner), so it cannot carry this direction.
     source = _approved_test_source(_match(effect_direction="negative"),
                                   name="Lactobacillus rhamnosus GG", outcome="Sleep quality")
     source["study_contexts"][0]["outcomes"][0]["direction"] = "negative"
+    source["study_contexts"][0]["population"]["description"] = "Synthetic pregnant adults"
     records = {**ca.reviewed_entries(), source["id"]: source}
     monkeypatch.setattr(ca, "reviewed_entries", lambda: records)
     p["evidence_data"] = {"clinical_matches": [{**source,

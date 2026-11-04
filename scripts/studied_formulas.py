@@ -13,7 +13,8 @@ from copy import deepcopy
 from functools import lru_cache
 from pathlib import Path
 
-from clinical_applicability import reviewed_entries, assess_context_population, assess_native_claimed_purpose
+from clinical_applicability import (reviewed_entries, assess_context_population,
+                                    assess_native_claimed_purpose, context_delivery_matches)
 from clinical_evidence_schema import OUTCOME_HIERARCHIES
 from identity_integrity import has_nonlive_microbial_derivative_evidence
 from normalization import normalize_text
@@ -1192,7 +1193,8 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             comparison = classify_dose_applicability(amount, dose)[1]
         form = _key(product.get("form_factor_canonical") or product.get("form_factor"))
         delivery_comparison = (
-            "delivery_unknown" if not form or not dose["dosage_forms"]
+            "delivery_route_mismatch" if not context_delivery_matches(product, context)
+            else "delivery_unknown" if not form or not dose["dosage_forms"]
             else "same_delivery_form" if form in {_key(f) for f in dose["dosage_forms"]}
             else "different_delivery_form")
         if owned and not (row.get("is_inactivated") or row.get("is_postbiotic")) \
@@ -1202,6 +1204,8 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
             applicability_class, class_reason = "DOSE_UNKNOWN", comparison
         applicability, reason, credit = _accepted_context_applicability(
             context, applicability_class, class_reason)
+        if delivery_comparison == "delivery_route_mismatch":
+            applicability, reason, credit = "not_established", "clinical_delivery_mismatch", 0.0
         result.append({**deepcopy(context), "status": "source_context_recorded",
             "dose_comparison": comparison, "label_daily_cfu": amount,
             "dose_applicability_class": applicability_class,

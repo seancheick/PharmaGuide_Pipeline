@@ -387,7 +387,7 @@ def _qualifying_outcomes(context: dict) -> list[dict]:
 
 
 def _eligible_native_contexts(assessment: dict) -> list[tuple[str, dict]]:
-    """Return valid, exact-strain contexts applicable to this product's purpose."""
+    """Return reviewed exact-strain contexts with compatible population and route."""
     result = []
     for strain in assessment.get("strain_assessments") or []:
         if strain.get("research_accepted") is False or strain.get("status") in {
@@ -414,6 +414,7 @@ def _eligible_native_contexts(assessment: dict) -> list[tuple[str, dict]]:
 def _native_context_applies(context: dict) -> bool:
     from clinical_applicability import _valid_native_claim_scope
     return (context.get("population_applicability") == "eligible"
+            and context.get("delivery_comparison") != "delivery_route_mismatch"
             and ("applicability" not in context or _valid_native_claim_scope(context)))
 
 

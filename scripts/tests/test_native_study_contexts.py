@@ -296,7 +296,7 @@ def test_lpc37_sources_join_without_new_approval_or_interpolated_dose():
     unrelated = deepcopy(product)
     unrelated["product_name"] = "Digestive support probiotic"
     assert score_evidence(unrelated)["score"] == 0
-    assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+    assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "evaluated_null"
 
 
 @pytest.mark.parametrize("stale_field", ["indication_primary", "indication_secondary", "clinical_support_level"])
@@ -393,14 +393,14 @@ def test_unaccepted_strain_review_is_not_reported_as_a_dose_gap(registry):
 
 
 def test_undisclosed_cfu_with_accepted_human_research_is_terminal_contextual_credit():
-    """An amount cannot change the finished but inapplicable research determination."""
+    """Neither an unknown amount nor unrelated advertising erases reviewed research."""
     from scoring_v4.modules.probiotic_evidence import score_evidence
 
     p = strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=None)
-    p["product_name"] = "Sleep support probiotic"  # Unrelated to every LGG context.
+    p["product_name"] = "Sleep support probiotic"  # Separate from LGG's scoped outcomes.
     evidence = score_evidence(p)
-    assert evidence["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
-    assert evidence["score"] == 0
+    assert evidence["metadata"]["evidence_result_state"] == "evaluated_applicable"
+    assert evidence["score"] > 0
     assert "dose_applicability" not in evidence["components"]
     dosed = strain_product(clinical_id="STRAIN_LGG", name="Lactobacillus rhamnosus GG", dose=1e9)
     dosed["product_name"] = p["product_name"]
@@ -417,10 +417,10 @@ def test_undisclosed_cfu_with_accepted_human_research_is_terminal_contextual_cre
     ("STRAIN_SACCHAROMYCES", "Saccharomyces boulardii"),
 ])
 def test_pending_review_is_independent_of_existing_positive_or_null_credit(monkeypatch, cid, name):
-    """Review incompleteness stays visible even when a finished label earns zero.
+    """Removing approvals removes their credit and leaves review visibly pending.
 
-    These labels lack an applicable positive primary family. A review hold must
-    not be disguised as a missing amount or a finished null determination.
+    Existing null contexts remain zero, while LGG loses its positive credit.
+    A review hold must not be disguised as a finished null determination.
     """
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from scoring_v4.confidence import _evidence_confidence
@@ -429,17 +429,16 @@ def test_pending_review_is_independent_of_existing_positive_or_null_credit(monke
     if cid == 'STRAIN_LACTIS_HN019':
         p['product_name'] = 'Probiotic for functional constipation'
     elif cid == 'STRAIN_LGG':
-        # Claim-free LGG now earns its scoped GI/respiratory credit; an
-        # unrelated label keeps the finished-but-zero scenario this tests.
+        # Advertising does not suppress LGG's approved GI/respiratory credit.
         p['product_name'] = 'Sleep support probiotic'
     reviewed = score_evidence(p)
     assert reviewed["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "clinically_reviewed"
-    assert reviewed["score"] == 0  # These adult labels have no eligible positive primary family.
+    assert (reviewed["score"] > 0) is (cid == "STRAIN_LGG")
 
     _with_contexts_pending(monkeypatch, cid)
     pending = score_evidence(p)
     assert pending["metadata"]["evidence_assessment"]["native_context_review"]["status"] == "pending_clinical_review"
-    assert pending["score"] == reviewed["score"]
+    assert pending["score"] == 0  # All contexts were deliberately made pending above.
     assert pending["metadata"]["evidence_result_state"] == "native_research_review_incomplete"
     assert _evidence_confidence(p, {"dimensions": {"evidence": pending}},
         evidence_assessment={"readiness": "complete"}) == ("moderate", ["evidence_review_incomplete"])
@@ -630,7 +629,7 @@ def test_native_completed_zero_needs_every_used_scope_reviewed(monkeypatch, case
     registry[key]['study_contexts'] = contexts
     monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
     product = strain_product(clinical_id=key, name='Lactobacillus plantarum 299v', dose=1e10)
-    product['product_name'] = 'Digestive health probiotic'
+    product['product_name'] = 'Prenatal probiotic'  # Explicit population mismatch, not a claim veto.
     result = score_evidence(product)
     assert result['score'] == 0
     assert (result['metadata']['evidence_result_state'] == 'no_qualifying_human_evidence') is complete

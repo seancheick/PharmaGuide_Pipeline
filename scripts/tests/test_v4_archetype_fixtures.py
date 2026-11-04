@@ -337,7 +337,8 @@ def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
     assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
 
 
-def test_benefit_copy_does_not_change_evidence_in_any_scoring_module():
+@pytest.mark.parametrize("surface", ["title", "statement"])
+def test_benefit_copy_does_not_change_evidence_in_any_scoring_module(surface):
     from evidence_resolver import evidence_required_canonicals
     from scoring_v4.router import VALID_CLASSES
 
@@ -351,9 +352,14 @@ def test_benefit_copy_does_not_change_evidence_in_any_scoring_module():
         evidence = baseline["quality_pillars_v4"]["evidence"]
         for copy in ("Supports cognitive performance.", "Helps maintain hydration within the cells."):
             product = deepcopy(case.product)
-            product.setdefault("statements", []).append({
-                "type": "Formulation re: Other", "notes": copy,
-            })
+            if surface == "title":
+                for key in ("product_name", "fullName"):
+                    if product.get(key):
+                        product[key] += " - " + copy
+            else:
+                product.setdefault("statements", []).append({
+                    "type": "Formulation re: Other", "notes": copy,
+                })
             scored = validation.build_scored_artifact(product)
             actual = scored["quality_pillars_v4"]["evidence"]
             assert scored["_v4_module"] == module, case.archetype
@@ -361,4 +367,5 @@ def test_benefit_copy_does_not_change_evidence_in_any_scoring_module():
             assert evidence_required_canonicals(product, module=module) == required, case.archetype
             assert actual["score"] == evidence["score"], case.archetype
             assert actual["evidence_result_state"] == evidence["evidence_result_state"], case.archetype
+            assert actual["reason"] == evidence["reason"], case.archetype
     assert modules == set(VALID_CLASSES)
