@@ -252,7 +252,10 @@ def test_draft_amount_carries_a_printed_operator_into_the_approval_skeleton() ->
         "ingredient_rows": [row], "other_ingredients": {"text": None, "disclosure_hint": "declared_none"},
         "statements": [],
     })
-    assert skeleton.payload["ingredientRows"][0]["quantity"] == [{"quantity": 1.0, "unit": "g", "operator": "<"}]
+    assert skeleton.payload["ingredientRows"] == []
+    assert skeleton.payload["nutritionalInfo"]["totalCarbohydrates"] == {
+        "amount": 1.0, "unit": "g", "operator": "<",
+    }
     assert skeleton.payload["servingsPerContainer"] == "about 17"
 
 
