@@ -20841,7 +20841,10 @@ class SupplementEnricherV3:
                     or re.match(r"vitamin\s+a\b", str(label.get("name") or ""), re.IGNORECASE)
                 )
                 maximum = 0.0 if activity else self._to_float_safe(exposure.get("per_day")) or 0.0
-                activity_only = activity_only or bool(activity)
+                declared_unit = self._normalize_threshold_unit(label.get("unit") or row.get("unit"))
+                activity_only = activity_only or (
+                    bool(activity) and declared_unit not in {"mg rae", "mcg dfe", "mg dfe", "mg ne"}
+                )
                 high += maximum
                 if row.get("canonical_id") == "beta_carotene":
                     exposure.update(low_per_day=0.0, high_per_day=maximum)
@@ -20888,8 +20891,15 @@ class SupplementEnricherV3:
         unit = self._normalize_threshold_unit(ingredient.get("unit"))
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
+        beta_carotene_mass_required = bool(ingredient.get("beta_carotene_mass_required"))
+        unsupported_beta_carotene_unit = (
+            beta_carotene_mass_required
+            and unit not in self._MASS_FACTORS_MG
+            and unit not in {"iu", "mcg rae"}
+        )
         if (
-            quantity is None
+            unsupported_beta_carotene_unit
+            or quantity is None
             or (quantity <= 0 and ingredient.get("quantity_upper") is None)
             or not unit
         ):
@@ -20908,7 +20918,7 @@ class SupplementEnricherV3:
                     "dose_evaluation": None,
                     "decision_rule": self._dose_decision_rule(policy, materiality, base_severity),
                 }
-            if ingredient.get("beta_carotene_mass_required") and not ingredient.get("activity_only"):
+            if beta_carotene_mass_required and not ingredient.get("activity_only"):
                 severity = str(policy.get("severity_if_not_met") or "informational").strip().lower()
                 return severity, {
                     "evaluated": False,
