@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.3",
-    "last_updated": "2026-11-02",
+    "last_updated": "2026-11-04",
     "total_entries": 739,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -7216,7 +7216,8 @@
         "pumpkin juice concentrate",
         "raspberry juice concentrate",
         "strawberry juice concentrate",
-        "watermelon juice concentrate"
+        "watermelon juice concentrate",
+        "aronia juice concentrate"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -21443,7 +21444,8 @@
         "vegetable and fruit juice color",
         "vegetable and fruit juice colors",
         "vegetable juice color",
-        "vegetable juices"
+        "vegetable juices",
+        "Vegetable & Fruit Juice (color)"
       ],
       "category": "colorant_natural",
       "is_additive": true,
