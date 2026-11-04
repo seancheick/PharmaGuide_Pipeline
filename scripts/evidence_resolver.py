@@ -364,12 +364,6 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         normalized_title,
     ))
 
-    try:
-        owners = evidence_owner_canonicals(prod, module="omega")
-    except (KeyError, TypeError, ValueError):
-        owners = set()
-    mixed_purpose = bool(owners and any(owner not in _OMEGA_EVIDENCE_CANONICALS for owner in owners))
-
     claim_segments = [title] + [
         str(statement.get("notes") or statement.get("text") or "")
         for statement in (prod.get("statements") or [])
@@ -408,8 +402,6 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         applicability_reason = "held_child_or_baby_population"
     elif specialized:
         applicability_reason = "held_specialized_preparation"
-    elif mixed_purpose:
-        applicability_reason = "held_mixed_purpose_ownership"
     elif prenatal and dha_ps > 0:
         selected = standards["prenatal_dha_intake_authority"]
         score = prenatal_score
@@ -1305,6 +1297,20 @@ def resolve_evidence_for_row(
 
         # Check if food matrix / excipient is not efficacy relevant
         if literature_review_result(lit_entry) == "not_efficacy_relevant":
+            # The sports input owner identifies this as the product's declared
+            # protein. A carrier/macronutrient exclusion cannot finish research
+            # on its preparation; neither may an unmatched source borrow whey.
+            if row_dict.get("evidence_type") == "sports_primary_dose":
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                    points_eligible=False,
+                    applicability_status="literature_applicability_unestablished",
+                    reason_code="primary_nutritional_ingredient_requires_source_review",
+                    owner_facts=owner_facts,
+                    blocking_reasons=["literature_applicability_unestablished"],
+                )
             material = _norm(lit_entry.get("material_form"))
             from clinical_applicability import _row_text
             declared = _row_text(row_dict, source_only=True) + _row_text(row_dict)

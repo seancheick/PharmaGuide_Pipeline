@@ -1676,3 +1676,22 @@ def test_resolver_preserves_canonical_noncredit_reason(monkeypatch, reason):
     assert result.points_eligible is False
     assert result.reason_code == reason
     assert result.blocking_reasons == [reason]
+
+
+def test_primary_protein_projection_is_not_completed_by_a_carrier_review():
+    # Existing sports projection is a principal nutritional ingredient, not an
+    # inactive carrier. No whey studies may be transferred to an unknown source.
+    product = {'product_name': 'Protein', 'primary_type': 'protein_powder',
+        'product_scoring_evidence': [{'evidence_type': 'sports_primary_dose',
+            'canonical_id': 'protein', 'clean_identity_id': 'protein',
+            'scoring_parent_id': 'protein', 'scoreable': True,
+            'source': 'active', 'raw_source_path': 'ingredientRows[0]',
+            'dose_value': 25, 'dose_unit': 'g', 'evidence_scope': 'row_level',
+            'reason': 'declared_nutrition_protein_mass'}]}
+    row = {'name': 'Protein', 'canonical_id': 'protein',
+           'evidence_type': 'sports_primary_dose', 'scoring_input_kind': 'product_level_evidence',
+           'quantity': 25, 'unit': 'g', 'raw_source_path': 'ingredientRows[0]'}
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert resolution.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert resolution.points_eligible is False
+    assert resolution.blocking_reasons
