@@ -53,7 +53,6 @@ Run from the `dsld_clean` repository root.
 
 ```bash
 source scripts/python_env.sh                 # sets $PG_PYTHON (Python 3.13)
-set -a; source .env; set +a                  # agent_reader reads the keys from the environment
 export PG_REVIEWER_EMAIL=<reviewer account>  # ask the owner if it is not set
 R="$PG_PYTHON scripts/submission_review/extraction/agent_reader.py"
 ```
@@ -148,6 +147,11 @@ before your first submission. The essentials:
   becomes the crop the reviewer compares against, so draw it tight;
 - one row per printed line; a printed "(as X)" goes into `form_text`; only a
   blend header has children (`parent_index`).
+
+Keep nutrition declarations in the evidence reading for photo verification.
+After `record`, check that recognized amounts populate `label.json.nutritionalInfo`
+and the console's Nutrition amounts fields. Ingredient rows are for the label's
+active ingredients and blends. Other Ingredients stays in its own field.
 
 Then check every box you drew:
 

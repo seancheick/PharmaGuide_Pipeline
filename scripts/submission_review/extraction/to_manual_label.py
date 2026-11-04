@@ -16,6 +16,8 @@ module therefore never calls that validator and never tries to satisfy it.
 
 from __future__ import annotations
 
+import re
+from collections import Counter
 from dataclasses import dataclass, field
 from typing import Any, Mapping, Sequence
 
@@ -98,7 +100,40 @@ def _amount(entry: object) -> dict[str, Any] | None:
     return amount
 
 
-def to_manual_label(draft: Mapping[str, Any]) -> ManualLabelSkeleton:
+# Exact panel names keep named actives such as D-mannose out of this route.
+_NUTRITION_FIELDS = {
+    "calories": ("calories", "kcal"),
+    "total fat": ("totalFat", "g"),
+    "saturated fat": ("saturatedFat", "g"),
+    "trans fat": ("transFat", "g"),
+    "polyunsaturated fat": ("polyunsaturatedFat", "g"),
+    "monounsaturated fat": ("monounsaturatedFat", "g"),
+    "cholesterol": ("cholesterol", "mg"),
+    "sodium": ("sodium", "mg"),
+    "total carbohydrate": ("totalCarbohydrates", "g"),
+    "total carbohydrates": ("totalCarbohydrates", "g"),
+    "dietary fiber": ("dietaryFiber", "g"),
+    "total sugars": ("sugars", "g"),
+    "added sugars": ("addedSugars", "g"),
+    "protein": ("protein", "g"),
+}
+_NUTRITION_UNITS = {
+    "g": {"g", "gram", "grams", "gram(s)"},
+    "mg": {"mg", "milligram", "milligrams", "milligram(s)"},
+    "kcal": {"kcal", "calorie", "calories", "calorie(s)"},
+}
+
+
+def _panel_nutrition(row: Mapping[str, Any]) -> tuple[str, str] | None:
+    if row.get("parent_index") is not None or row.get("is_blend_header") or _text(row.get("form_text")):
+        return None
+    name = " ".join((_text(row.get("display_name")) or "").casefold().split())
+    if re.fullmatch(r"includes \d+(?:\.\d+)?\s*g added sugars", name):
+        name = "added sugars"
+    return _NUTRITION_FIELDS.get(name)
+
+
+def to_manual_label(draft: Mapping[str, Any], *, legacy_rows: bool = False) -> ManualLabelSkeleton:
     """Map a validated draft onto the approval schema, losing nothing silently."""
     if not isinstance(draft, Mapping):
         raise TypeError("a label_draft_v1 mapping is required")
@@ -141,7 +176,12 @@ def to_manual_label(draft: Mapping[str, Any]) -> ManualLabelSkeleton:
     if per_container:
         payload["servingsPerContainer"] = per_container
 
-    payload["ingredientRows"] = _rows(draft.get("ingredient_rows") or [], missing)
+    nutrition: dict[str, Any] = {}
+    payload["ingredientRows"] = _rows(
+        draft.get("ingredient_rows") or [], missing, None if legacy_rows else nutrition,
+    )
+    if nutrition:
+        payload["nutritionalInfo"] = nutrition
 
     other = draft.get("other_ingredients") or {}
     hint = other.get("disclosure_hint")
@@ -172,7 +212,7 @@ def to_manual_label(draft: Mapping[str, Any]) -> ManualLabelSkeleton:
     return ManualLabelSkeleton(payload=payload, unresolved=unresolved)
 
 
-def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
+def _rows(rows: Sequence[Any], missing, nutrition: dict[str, Any] | None) -> list[dict[str, Any]]:
     """Rebuild the printed rows, including blend parentage and unknowns.
 
     A row nobody could read is kept rather than dropped. A panel with a row
@@ -182,11 +222,29 @@ def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
     built: list[dict[str, Any]] = []
     by_index: dict[int, dict[str, Any]] = {}
 
+    panel_fields = {
+        index: field for index, row in enumerate(rows)
+        if nutrition is not None and isinstance(row, Mapping) and (field := _panel_nutrition(row))
+    }
+    counts = Counter(key for key, _ in panel_fields.values())
+
     for index, row in enumerate(rows):
         if not isinstance(row, Mapping):
             continue
         path = f"ingredientRows[{index}]"
         name = _text(row.get("display_name"))
+        amount = _amount(row.get("amount"))
+        if index in panel_fields:
+            key, unit = panel_fields[index]
+            if counts[key] > 1:
+                missing(f"nutritionalInfo.{key}", FREE_TEXT_ONLY, name)
+            elif amount is None or amount["unit"].casefold() not in _NUTRITION_UNITS[unit]:
+                missing(f"nutritionalInfo.{key}", _field_note(row.get("amount")), name)
+            else:
+                nutrition[key] = {"amount": amount["quantity"], "unit": unit}
+                if "operator" in amount:
+                    nutrition[key]["operator"] = amount["operator"]
+            continue
         entry: dict[str, Any] = {
             "name": name or "",
             "order": index + 1,
@@ -200,7 +258,6 @@ def _rows(rows: Sequence[Any], missing) -> list[dict[str, Any]]:
         # never derived here from the printed name.
         missing(f"{path}.ingredientGroup", NO_DRAFT_FIELD, name)
 
-        amount = _amount(row.get("amount"))
         printed_amount = _printed_source(row.get("amount"))
         printed_dv = _field_value(row.get("percent_dv"))
         # The approval schema has no numeric percentage field. Preserve the

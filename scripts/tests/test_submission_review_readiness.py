@@ -752,3 +752,12 @@ def test_reopen_binding_survives_read_only_controls(revision, payload_hash, expe
     assert out['disabled'] is expected_disabled
     assert out['editorDisabled'] is True
     assert '#detail-panel button' in out['selector']
+
+
+def test_label_comparison_includes_typed_nutrition_and_printed_bounds():
+    out = _catalog_hit("""
+      out.rows = labelComparisonRows(
+        {nutritionalInfo:{cholesterol:{amount:5,unit:'mg',operator:'<'}}},
+        {nutritionalInfo:{cholesterol:{amount:5,unit:'mg'}}});
+    """)
+    assert ["Nutrition: cholesterol", "<5 mg", "5 mg", "differs"] in out["rows"]

@@ -276,3 +276,26 @@ def test_printed_percent_dv_survives_alongside_a_printed_amount(amount, unit, dv
     row = skeleton.payload['ingredientRows'][0]
     assert row['quantity'] == [{'quantity': float(amount), 'unit': unit}]
     assert row['notes'] == f'Printed %DV: {dv}'
+
+
+def test_panel_nutrition_projects_to_the_dedicated_fields() -> None:
+    def amount(value, unit, **kwargs):
+        return _f({"value": value, "unit_text": unit, **kwargs})
+
+    rows = [
+        _row("Calories", amount=amount(0, "Calories")),
+        _row("Total Carbohydrate", amount=amount(1, "g", operator="<")),
+        _row("Total Sugars", amount=amount(1, "g")),
+        _row("Includes 1 g Added Sugars", amount=amount(1, "g")),
+        _row("Cholesterol", amount=amount(5, "mg")),
+        _row("D-Mannose", amount=amount(1, "g")),
+    ]
+    payload = to_manual_label(_draft(ingredient_rows=rows)).payload
+    assert payload["nutritionalInfo"] == {
+        "calories": {"amount": 0, "unit": "kcal"},
+        "totalCarbohydrates": {"amount": 1, "unit": "g", "operator": "<"},
+        "sugars": {"amount": 1, "unit": "g"},
+        "addedSugars": {"amount": 1, "unit": "g"},
+        "cholesterol": {"amount": 5, "unit": "mg"},
+    }
+    assert [row["name"] for row in payload["ingredientRows"]] == ["D-Mannose"]
