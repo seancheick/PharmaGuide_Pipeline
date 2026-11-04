@@ -282,12 +282,16 @@ def test_a_jet_lag_mention_beside_a_sleep_claim_keeps_the_sleep_evidence(pipelin
     assert build_scored_artifact(enriched)["quality_pillars_v4"]["evidence"]["score"] > 0
 
 
-def test_one_sentence_combining_sleep_and_jet_lag_keeps_the_sleep_evidence(pipeline):
-    enriched = _with_claims(pipeline, "evidence_truth_17393_raw.json", "For sleep support and help with jet lag")
+@pytest.mark.parametrize("claim", [
+    "For sleep support and help with jet lag",
+    "Helps with jet lag without caffeine, and promotes sleep",
+])
+def test_one_sentence_combining_sleep_and_jet_lag_keeps_the_sleep_evidence(pipeline, claim):
+    enriched = _with_claims(pipeline, "evidence_truth_17393_raw.json", claim)
     assert MELATONIN in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
 
 
-@pytest.mark.parametrize("claim", ["Helps with jet lag", "Jet lag relief", "For travelers with jetlag"])
+@pytest.mark.parametrize("claim", ["Helps with jet lag", "Jet lag relief", "For travelers with jetlag", "Helps with jet lag without promoting sleep"])
 def test_a_jet_lag_claim_alone_earns_nothing_from_the_sleep_evidence(pipeline, claim):
     """The record has no reviewed jet-lag context, so this claim has no evidence to meet."""
     enriched = _with_claims(pipeline, "evidence_truth_17393_raw.json", claim)

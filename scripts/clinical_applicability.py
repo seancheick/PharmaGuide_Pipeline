@@ -519,7 +519,15 @@ def _positioning_claims(product: Mapping, *, purposes_only: bool = False) -> tup
     for text in native_product_positioning_texts(product):
         if not text or text in excluded:
             continue
-        for clause in re.split(r"[.;!?\r\n]+|\b(?:but|however)\b", text, flags=re.I):
+        # A comma followed by a new affirmative predicate ends the previous
+        # qualifier (for example, "without caffeine, and promotes sleep").
+        clauses = re.split(
+            r"[.;!?\r\n]+|\b(?:but|however)\b"
+            r"|,\s*(?:and\s+)?(?=(?:supports?|promotes?|helps?|maintains?)\b)",
+            text,
+            flags=re.I,
+        )
+        for clause in clauses:
             if _PRECAUTION_CLAUSE.search(clause):
                 continue
             negation = _POSITIONING_NEGATION.search(clause)
