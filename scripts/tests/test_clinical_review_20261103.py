@@ -402,3 +402,127 @@ def test_the_merged_rule_ids_survive_the_schema_3_reference():
 
     ref = _warning_rule_ref({**_orange_card(ORANGE_RULES[0], ORANGE_WARNING), "source_rule_ids": sorted(ORANGE_RULES)})
     assert ref["source_rule_ids"] == sorted(ORANGE_RULES)
+
+
+# --- Vitamin A form (sections 5-6) ------------------------------------------
+
+VITAMIN_A = "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE"
+UNSPECIFIED_A = "vitamin a (unspecified)"
+RETINYL = "retinyl palmitate"
+MIXED_CAROTENES = "beta-carotene from mixed carotenoids"
+FORM_REVIEW_HEADLINE = "Vitamin A form needs review"
+FORM_REVIEW_BODY = (
+    "This product lists vitamin A without enough information to determine how much is "
+    "preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. "
+    "Check the form and total intake with your pharmacist or prenatal care professional."
+)
+
+
+def _nutrient_hits(enricher, canonical_id, rule_id, quantity, unit, form, forms=None, **row):
+    standard_name = {"vitamin_a": "Vitamin A", "vitamin_e": "Vitamin E"}[canonical_id]
+    row = {
+        "canonical_id": canonical_id,
+        "canonical_source_db": "ingredient_quality_map",
+        "name": standard_name,
+        "standard_name": standard_name,
+        "quantity": quantity,
+        "unit": unit,
+        "raw_source_path": "ingredientRows[0]",
+        "form_id": form,
+        "matched_form": form,
+        "matched_forms": [{"form_key": key} for key in forms or []],
+        **row,
+    }
+    profile = enricher._collect_interaction_profile(
+        {"activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row]}}
+    )
+    return {
+        hit["condition_id"]: hit
+        for alert in profile["ingredient_alerts"]
+        if alert["rule_id"] == rule_id
+        for hit in alert["condition_hits"]
+    }
+
+
+def _vitamin_a(enricher, quantity, unit, form, forms=None, **row):
+    return _nutrient_hits(enricher, "vitamin_a", VITAMIN_A, quantity, unit, form, forms, **row)
+
+
+def _outcome(hit):
+    decision = hit["dose_threshold_evaluation"]
+    return hit["severity"], decision["evaluation_status"], decision["consumer_disposition"]
+
+
+def test_form_review_note_is_her_text():
+    normalized = " ".join(REVIEW.split())
+    assert FORM_REVIEW_HEADLINE in normalized
+    assert FORM_REVIEW_BODY in normalized
+
+
+@pytest.mark.parametrize("target", ["pregnancy", "ttc"])
+def test_pregnancy_and_trying_to_conceive_exclude_the_same_carotenoids(target):
+    rows = [
+        row for row in RULES[VITAMIN_A]["dose_thresholds"] if row["target_id"] == target
+    ]
+    assert rows
+    for row in rows:
+        assert set(row["profile_gate"]["excludes"]["nutrient_forms_any"]) == {
+            "beta_carotene",
+            "mixed_carotenoids",
+        }
+
+
+@pytest.mark.parametrize(
+    "form",
+    [
+        "beta-carotene synthetic",
+        MIXED_CAROTENES,
+        "alpha-carotene (provitamin A activity)",
+        "beta-cryptoxanthin (provitamin A activity)",
+    ],
+)
+def test_carotenoid_only_rows_never_reach_the_preformed_limit(enricher, form):
+    assert _vitamin_a(enricher, 25000, "IU", form) == {}
+
+
+@pytest.mark.parametrize(
+    "quantity, unit",
+    [(12000, "IU"), (3600, "mcg"), (3600, "mcg RAE"), (10, "%"), (None, "")],
+)
+@pytest.mark.parametrize("target", ["pregnancy", "ttc"])
+def test_undisclosed_form_shows_her_note_and_never_a_confirmed_excess(
+    enricher, quantity, unit, target
+):
+    hit = _vitamin_a(enricher, quantity, unit, UNSPECIFIED_A)[target]
+    severity, status, disposition = _outcome(hit)
+    assert severity == "caution"
+    assert status in {"form_unknown", "amount_unknown"}
+    assert disposition == "review"
+    assert hit["alert_headline"] == FORM_REVIEW_HEADLINE
+    assert hit["alert_body"] == FORM_REVIEW_BODY
+
+
+@pytest.mark.parametrize("target", ["pregnancy", "ttc"])
+def test_undisclosed_form_within_the_limit_even_if_all_preformed_has_no_card(enricher, target):
+    _, status, disposition = _outcome(_vitamin_a(enricher, 5000, "IU", UNSPECIFIED_A)[target])
+    assert (status, disposition) == ("below_threshold", "suppress")
+
+
+@pytest.mark.parametrize("quantity, unit", [(25000, "IU"), (4000, "mcg RAE")])
+@pytest.mark.parametrize("target", ["pregnancy", "ttc"])
+def test_mixed_row_with_no_declared_share_is_a_review_not_a_confirmed_excess(
+    enricher, quantity, unit, target
+):
+    hit = _vitamin_a(
+        enricher, quantity, unit, MIXED_CAROTENES, forms=[MIXED_CAROTENES, "retinyl acetate"]
+    )[target]
+    assert _outcome(hit)[1:] == ("form_unknown", "review")
+    assert hit["severity"] == "caution"
+    assert hit["alert_headline"] == FORM_REVIEW_HEADLINE
+
+
+def test_mixed_row_within_the_limit_even_if_all_preformed_has_no_card(enricher):
+    hit = _vitamin_a(
+        enricher, 1500, "mcg RAE", MIXED_CAROTENES, forms=[MIXED_CAROTENES, "retinyl acetate"]
+    )["pregnancy"]
+    assert _outcome(hit)[1:] == ("below_threshold", "suppress")

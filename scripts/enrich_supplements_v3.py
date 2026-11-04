@@ -20606,18 +20606,21 @@ class SupplementEnricherV3:
         return "suppress"
 
     @staticmethod
-    def _amount_unknown_copy(thresholds: List[Dict[str, Any]]) -> Dict[str, str]:
+    def _amount_unknown_copy(
+        thresholds: List[Dict[str, Any]], state: str = "amount_unknown"
+    ) -> Dict[str, str]:
         """Authored copy for a dose-dependent rule the label's amount cannot evaluate.
 
         Mirrors the ``*_if_met`` tier copy: a threshold may carry
         ``alert_headline_if_amount_unknown`` (and body/action) so an unknown amount
-        reads as "can't assess", never as the above-threshold concern.
+        reads as "can't assess", never as the above-threshold concern. The same
+        applies to ``form_unknown`` and ``age_dependent``.
         """
         for threshold in thresholds:
             copy = {
-                field: threshold[f"{field}_if_amount_unknown"]
+                field: threshold[f"{field}_if_{state}"]
                 for field in ("alert_headline", "alert_body", "action")
-                if isinstance(threshold, dict) and threshold.get(f"{field}_if_amount_unknown")
+                if isinstance(threshold, dict) and threshold.get(f"{field}_if_{state}")
             }
             if copy:
                 return copy
@@ -21065,6 +21068,9 @@ class SupplementEnricherV3:
                     or "suppress"
                 ).strip().lower()
                 details["release_blocking"] = False
+                form_unknown_copy = self._amount_unknown_copy(relevant, "form_unknown")
+                if form_unknown_copy:
+                    details["matched_copy"] = form_unknown_copy
             elif marker_amount_unknown:
                 details["reason"] = "dose_amount_not_disclosed"
                 amount_unknown_copy = self._amount_unknown_copy(relevant)
@@ -21730,10 +21736,15 @@ class SupplementEnricherV3:
                     and not any("carotene" in str(form).lower() for form in rule["form_scope"])
                 ):
                     # A rule on preformed forms judges the share the label declares.
-                    # With no declared share the row's own unknown-form path decides.
-                    dose_row = self._preformed_share_row(
+                    # A mixed row declaring none holds 0 to all of it, which is
+                    # how the unknown-form path reads the amount.
+                    share_row = self._preformed_share_row(
                         base_dose_row, label_rows_by_path.get(ingredient.get("raw_source_path"))
-                    ) or dose_row
+                    )
+                    if share_row is not None:
+                        dose_row = share_row
+                    elif self._row_form_ids(base_dose_row) - set(rule["form_scope"]):
+                        dose_row = {**dose_row, "matched_form": None}
                 if declared_owner is not None and (
                     subject["db"] == "ingredient_quality_map"
                     and

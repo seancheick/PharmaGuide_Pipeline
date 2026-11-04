@@ -7428,7 +7428,10 @@
               "drug_classes_any": [],
               "profile_flags_any": [],
               "product_forms_any": [],
-              "nutrient_forms_any": []
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
             },
             "dose": {
               "basis": "per_day",
@@ -7438,7 +7441,13 @@
               "severity_if_met": "contraindicated",
               "severity_if_not_met": "caution"
             }
-          }
+          },
+          "alert_headline_if_form_unknown": "Vitamin A form needs review",
+          "alert_body_if_form_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_form_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "alert_headline_if_amount_unknown": "Vitamin A form needs review",
+          "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional."
         },
         {
           "scope": "condition",
@@ -7477,7 +7486,13 @@
               "severity_if_met": "avoid",
               "severity_if_not_met": "caution"
             }
-          }
+          },
+          "alert_headline_if_form_unknown": "Vitamin A form needs review",
+          "alert_body_if_form_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_form_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "alert_headline_if_amount_unknown": "Vitamin A form needs review",
+          "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional."
         }
       ],
       "pregnancy_lactation": {
@@ -7515,8 +7530,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, form filter and review note); pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_NIACIN_DIABETES",
