@@ -20799,12 +20799,7 @@ class SupplementEnricherV3:
         clearance nor an adult excess.
         """
         def outcome(severity: str, decision: Dict[str, Any]) -> Dict[str, Any]:
-            return {
-                "evaluation_status": decision.get("evaluation_status"),
-                "clinical_severity": severity,
-                "consumer_disposition": decision.get("consumer_disposition"),
-                "matched_copy": decision.get("matched_copy") or {},
-            }
+            return {**decision, "clinical_severity": severity}
 
         general_severity, general_decision = general
         scoped_severity, scoped_decision = scoped

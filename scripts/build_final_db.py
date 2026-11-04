@@ -333,7 +333,17 @@ def compact_dose_decision(value: Any) -> Optional[Dict[str, Any]]:
         "decision_rule": rule or None,
     }
     if decision.get("age_outcomes"):
-        compact["age_outcomes"] = decision["age_outcomes"]
+        # Each age shows its own card and judges a stack by its own limit.
+        compact["age_outcomes"] = {
+            bracket: {
+                **(compact_dose_decision(outcome) or {}),
+                **{
+                    field: outcome.get(field)
+                    for field in ("alert_headline", "alert_body", "action")
+                },
+            }
+            for bracket, outcome in safe_dict(decision["age_outcomes"]).items()
+        }
     return compact
 
 

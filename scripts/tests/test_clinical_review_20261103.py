@@ -803,6 +803,9 @@ def test_age_outcomes_survive_into_the_shipped_decision(enricher):
     assert shipped["evaluation_status"] == "age_dependent"
     assert shipped["age_outcomes"][TEEN]["clinical_severity"] == "avoid"
     assert shipped["age_outcomes"][ADULT]["consumer_disposition"] == "suppress"
+    assert shipped["age_outcomes"][TEEN]["decision_rule"]["threshold"] == 800
+    assert shipped["age_outcomes"][ADULT]["decision_rule"]["threshold"] == 1000
+    assert shipped["age_outcomes"][TEEN]["alert_headline"] == hit["dose_decision"]["age_outcomes"][TEEN]["alert_headline"]
     assert "age_outcomes" not in compact_dose_decision(
         _vitamin_e(enricher, 100)["pregnancy"]["dose_decision"]
     )
