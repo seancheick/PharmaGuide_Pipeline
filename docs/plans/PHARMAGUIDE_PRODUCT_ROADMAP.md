@@ -1,6 +1,6 @@
 # PharmaGuide product roadmap
 
-November3 delivery follow-up: app197/199 reconciliation and signed-feed concurrency repairs are source-qualified; integration, key setup, actual feed publication and signed-build/device acceptance remain separate. See the master plan’s “verified alert-feed delivery” section and existing LEDGER.
+November3 delivery follow-up: app197/199 and signed-feed concurrency repairs are merged through app202; pipeline347 is merged. The first signed alert feed is published and the actual Dart reader verifies it. Final catalog matching, remaining warning/data integration and signed-build/device acceptance remain separate. See the master plan’s “verified alert-feed delivery” section and existing LEDGER.
 
 **November 3 — required next phase after Claude's active correctness batch:** repair Evidence qualification and publication across all products before numerical calibration. Missing research, unfinished processing or bad matching must never appear as a scientific zero; retain justified primary-ingredient credit, legitimate completed-zero assessments and independent safety warnings. [Master-plan requirements and acceptance checklist](PHARMAGUIDE_MASTER_COMPLETION_PLAN.md#november-3--required-product-wide-evidence-correctness-after-claudes-current-batch); [execution register](../../scripts/audits/pending_items_20260926/LEDGER.md#evidence-correctness-20261103). **Planned, not implemented.** Reconcile Claude's completed work before starting; no takeover of active lanes.
 
