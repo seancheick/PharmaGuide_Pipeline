@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from assessment_readiness import safety_assessment_status
+from assessment_readiness import safety_assessment_status, upper_limit_amounts_unknown
 from core_export_model import APP_CORE_COLUMNS, PRODUCTS_CORE_COLUMNS
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -220,7 +220,6 @@ def test_an_unread_nutrient_on_a_sports_label_is_incomplete_without_holding_its_
 
 @pytest.mark.parametrize("label, unknown, score", [
     ("a9_upper_limit_293959_raw.json", 1, 61.5),  # Vitamin E, nothing printed.
-    ("a9_upper_limit_16725_raw.json", 2, 60.3),   # Calcium and iron, %DV with no amount the check can read.
 ])
 def test_an_upper_limit_nutrient_with_no_amount_withholds_only_the_all_clear(pipeline, label, unknown, score):
     """An unknown amount is never a zero (Sean, November 4). Quality and the outcome stand."""
@@ -234,7 +233,9 @@ def test_an_upper_limit_nutrient_with_no_amount_withholds_only_the_all_clear(pip
 
 @pytest.mark.parametrize("label, status, reason", [
     ("a9_upper_limit_293959_raw.json", "incomplete", "upper_limit_amount_undisclosed"),
-    ("a9_upper_limit_16725_raw.json", "incomplete", None),  # Prints a percent, so the sentence would be false.
+    ("a9_upper_limit_16725_raw.json", "complete", None),  # Its %DV bounds rule out an excess.
+    ("a9_upper_limit_243679_raw.json", "incomplete", None),  # Niacin's bound crosses, and it prints a percent.
+    ("a9_upper_limit_297685_raw.json", "complete", None),  # Gamma-carotene is outside the preformed limit.
     ("a9_upper_limit_12634_raw.json", "complete", None),
     ("a9_upper_limit_294543_raw.json", "complete", None),
 ])
@@ -263,6 +264,71 @@ def test_a_ban_stays_blocked_with_no_score(pipeline):
 
 
 # --- Export -----------------------------------------------------------------
+
+def _dv_row(canonical="iron", percent=100.0, group="adult_4_plus", **extra):
+    return {"canonical_id": canonical, "name": canonical, "quantity": 0.0, "unit": "NP", "dailyValue": percent,
+            "daily_value_target_group": group, "cleaner_row_role": "daily_value_no_amount", **extra}
+
+
+def _unknown(rows, servings=1):
+    return upper_limit_amounts_unknown({"activeIngredients": rows, "serving_basis": {"max_servings_per_day": servings}})
+
+
+@pytest.mark.parametrize("rows, servings, unknown", [
+    ([_dv_row(percent=249.0)], 1, 0),  # Iron: 18 mg x 249% = 44.82, under 45.
+    ([_dv_row(percent=250.0)], 1, 1),  # At the limit stays held.
+    ([_dv_row(percent=125.0)], 2, 1),  # The day counts, not the serving.
+    ([_dv_row(percent=125.0), _dv_row(percent=125.0)], 1, 2),  # Rows of one nutrient add up.
+    ([_dv_row(percent=10.0)], None, 1),  # Servings unknown: no day to bound.
+    ([_dv_row(percent=10.0, group=None)], 1, 1),  # No target group recorded.
+    ([_dv_row(percent=10.0, group="pregnant_lactating")], 1, 1),  # Only the adult DVs are held.
+    ([_dv_row(percent=10.0), _dv_row(percent=None, cleaner_row_role=None)], 1, 2),  # One row prints nothing.
+    ([_dv_row("boron", percent=10.0)], 1, 1),  # No DV exists to bound it.
+    ([_dv_row("vitamin_a", percent=199.0)], 1, 0),  # 1,500 mcg RAE, the pre-2016 DV: 2,985, under 3,000.
+    ([_dv_row("vitamin_a", percent=200.0)], 1, 1),
+    ([_dv_row("calcium", percent=153.0)], 1, 0),  # 1,300 mg x 153% = 1,989: under the lowest adult limit, 2,000.
+    ([_dv_row("calcium", percent=154.0)], 1, 1),  # Over 2,000, though under the highest limit, 3,000.
+    ([_dv_row(percent=20.0, quantityVariants=[
+        {"daily_value": 300.0, "daily_value_target_group": "adult_4_plus"}])], 1, 1),  # The larger serving's percent.
+])
+def test_a_printed_percent_rules_out_an_excess_only_while_the_bound_is_below_the_limit(rows, servings, unknown):
+    assert _unknown(rows, servings) == unknown
+
+
+@pytest.mark.parametrize("name, unknown", [
+    ("Gamma-Carotene", 0),
+    ("Beta Carotene", 0),
+    ("Retinyl Palmitate and Beta-Carotene", 1),  # Some of it is preformed.
+    ("Vitamin A", 1),
+])
+def test_only_a_row_that_is_itself_a_carotene_leaves_the_preformed_limit(name, unknown):
+    assert _unknown([{"canonical_id": "vitamin_a", "name": name, "quantity": 0.0, "unit": "NP", "dailyValue": None}]) == unknown
+
+
+def test_the_percent_bound_reaches_no_amount_score_or_warning(pipeline):
+    """16725 prints Iron 30% DV. The all-clear returns; the row stays dose-less."""
+    scored = _score(pipeline, "a9_upper_limit_16725_raw.json")
+    assert scored["assessment_readiness"]["release_assessment"]["upper_limit_amounts_unknown"] == 0
+    assert scored["product_safety_status"] == "no_known_catalog_concern"
+    assert scored["quality_score_v4_100"] == 60.3
+    enriched = _enrich(pipeline, "a9_upper_limit_16725_raw.json")
+    iron = next(row for row in enriched["activeIngredients"] if row["canonical_id"] == "iron")
+    assert (iron["quantity"], iron["unit"], iron["dailyValue"]) == (0.0, "NP", 30.0)
+    assert iron["daily_value_target_group"] == "adult_4_plus"
+    assert not [item for item in enriched["rda_ul_data"]["adequacy_results"] if item.get("nutrient") == "Iron"]
+
+
+def test_every_bound_is_the_higher_daily_value_in_the_limit_unit():
+    from scoring_reference_resolver import rda_ul_reference_entry, upper_limit_bound_dv
+
+    data = json.loads((Path(__file__).resolve().parents[1] / "data" / "daily_values.json").read_text())
+    bounds = data["upper_limit_bound_dvs"]
+    assert len(bounds) == 18
+    for canonical, record in bounds.items():
+        assert record["bound"] == max(record["current_dv"], record["pre_2016_dv"]), canonical
+        assert record["unit"] == rda_ul_reference_entry(canonical_id=canonical)["unit"], canonical
+        assert upper_limit_bound_dv(canonical) == record
+
 
 def test_the_column_is_declared_for_the_app():
     assert "safety_assessment_status" in PRODUCTS_CORE_COLUMNS
