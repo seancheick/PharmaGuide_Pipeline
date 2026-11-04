@@ -658,3 +658,14 @@ def test_family_target_and_daily_value_population_do_not_imply_child_only(groups
     result = build_scored_artifact(product)
     assert result["quality_pillars_v4"]["dose"]["score"] == 20
     assert result["quality_pillars_v4"]["evidence"]["score"] == 10.4
+
+
+@pytest.mark.parametrize("claim", ["", "Heart Health", "EPA and DHA lower triglycerides."])
+def test_ordinary_omega_evidence_stays_at_the_reviewed_baseline(claim):
+    from evidence_resolver import resolve_omega_evidence_standard
+
+    product = _omega_product(clinical_purpose=False, epa=300, dha=200)
+    product["statements"] = [{"notes": claim}] if claim else []
+    evidence = resolve_omega_evidence_standard(product)
+    assert evidence["record_id"] == "omega_reviewed_weak"
+    assert evidence["score"] == 10.4

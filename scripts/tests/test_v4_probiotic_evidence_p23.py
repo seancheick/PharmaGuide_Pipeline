@@ -269,8 +269,10 @@ def test_research_that_does_not_apply_to_the_product_earns_no_evidence_points():
     assert dim["metadata"]["credit_owner"] == "none"
     pillar = artifact["quality_pillars_v4"]["evidence"]
     assert pillar["score"] == 0.0
-    assert pillar["display_state"] == "applicability_unestablished"
-    assert pillar["reason"].startswith("Research involving these microorganisms is recorded")
+    # The release owner holds this review open, so it reads pending, never as a finding.
+    assert pillar["evidence_result_state"] == "research_present_applicability_unestablished"
+    assert pillar["display_state"] == "not_yet_reviewed"
+    assert "review pending" in pillar["reason"]
     assert "0/10" not in pillar["reason"]
     # Applicable research keeps every component.
     direct = build_scored_artifact(_product())["_v4_module_breakdown"]["dimensions"]["evidence"]

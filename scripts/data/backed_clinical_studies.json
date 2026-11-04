@@ -3,9 +3,10 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-10-29",
+    "last_updated": "2026-11-04",
     "total_entries": 210,
     "changelog": [
+      "2026-11-04: INGR_MELATONIN jet-lag terms exclude only a label with no sleep claim beside them (Sean's decision, excluded_claim_terms_when_alone). BRAND_KANEKA_UBIQUINOL excludes 'energy production', agent-added under its signed 'energy' exclusion.",
       "2026-10-20: INGR_TART_CHERRY standard_name is Tart Cherry (\"tart cherry extract\" kept as an alias), the rename deferred from PR205. Its juice-only applicability (PR213) rejects every non-juice row the name now reaches; measured on all 552 cherry-mentioning labels: 0 score, pillar or blob changes.",
       "2026-10-05: Sean-approved four amount transfers. Descriptive research exposure is owned by Dose, with no new positive adequacy benchmark. Zinc uses discrete clusters, WKB retains preparation/reference uncertainty, D-mannose and DAA retain no affirmative credit; added content-verified PMID 25844073 and distinguished its negative 6 g/day result. Supersedes the four historical applicability amount floors.",
       "2026-10-02: INGR_OMEGA3 removes unsupported plant ALA intervention aliases and excludes stale ALA matches from marine EPA/DHA evidence through the existing clinical-applicability owner. No dose thresholds or numerical magnitudes changed.",
@@ -3013,6 +3014,7 @@
         "reviewed_at": "2026-10-28",
         "excluded_claim_terms": [
           "energy",
+          "energy production",
           "heart failure"
         ]
       }
@@ -14822,8 +14824,6 @@
           "adult_short_term_sleep_promotion"
         ],
         "excluded_claim_terms": [
-          "jet lag",
-          "jetlag",
           "shift work",
           "shiftwork",
           "delayed sleep phase",
@@ -14834,6 +14834,10 @@
           "intranasal",
           "under the tongue"
         ],
+        "excluded_claim_terms_when_alone": [
+          "jet lag",
+          "jetlag"
+        ],
         "excluded_form_terms": [
           "sublingual",
           "transbuccal",
@@ -14841,7 +14845,7 @@
           "intranasal"
         ],
         "studied_population": "Adults over 18: healthy volunteers or primary insomnia; no pediatric, comorbid or circadian-disorder transfer.",
-        "reason": "Oral sleep-promotion subset only; modeled dose-response peaks are not efficacy thresholds."
+        "reason": "Oral sleep-promotion subset only; modeled dose-response peaks are not efficacy thresholds. Jet lag excludes only a label with no sleep claim beside it (Sean's decision, 2026-11-04)."
       }
     },
     {

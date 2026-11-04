@@ -383,6 +383,15 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
     if (disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
             and ("literature_evidence" in resolution.owner_facts
                  or "backed_clinical_studies" in resolution.owner_facts)):
+        if (not resolution.points_eligible
+                and resolution.reason_code == "literature_reviewed_human_clinical_evidence"
+                and str(_safe_dict(resolution.owner_facts.get("literature_evidence")).get("effect_direction"))
+                .startswith("positive_")):
+            # The resolver's shadow literature path has no scoring integration.
+            # For positive research that unfinished processing is not a
+            # limited/negative review; a mixed or undirected review has finished.
+            # Retain its source reason and existing points until it is resolved.
+            return EVIDENCE_NOT_YET_EVALUATED, resolution.reason_code, None
         state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
                  else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
         return state, resolution.reason_code, None
@@ -1653,6 +1662,53 @@ def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mappin
     return (not open_rows or len(open_rows) < len(open_refs)
             or any(_norm(row.get("canonical_id")) in required for row in open_rows)
             or _title_names_an_open_row(product, open_rows))
+
+
+# A finished answer about the label's preparation or purpose, not a gap in the review.
+_STUDIES_DID_NOT_QUALIFY_REASONS = frozenset({
+    "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
+    "clinical_population_mismatch", "clinical_outcome_not_qualified", "label_purpose_evidence_mismatch",
+})
+_HUMAN_STUDY_TYPES = frozenset({
+    "systematic_review_meta", "rct_multiple", "rct_single", "clinical_strain", "observational",
+})
+
+
+def _closed_on_named_human_studies(row: Mapping[str, Any]) -> bool:
+    """A finished literature review with no qualifying study that names the human studies it read.
+
+    This result carries no study rows, so the decision is what names them. Its
+    opening words are pinned against the review's list in test_evidence_truth.py.
+    """
+    from evidence_resolver import _load_literature_evidence
+    record = _safe_dict(_load_literature_evidence().get(_norm(row.get("canonical_id"))))
+    return (row.get("reason_code") in {"reproducible_search_found_no_qualifying_human_studies",
+                                       "module_scoped_product_projection"}
+            and str(record.get("applicability_decision") or "").startswith("Finished review with no qualifying study"))
+
+
+def evidence_studies_did_not_qualify(product: Mapping[str, Any], readiness: Mapping[str, Any],
+                                     required: Any) -> bool:
+    """Every required row ended at human studies rejected for this preparation or purpose.
+
+    A reference-only record doesn't establish human research, and research the
+    scorer never reads or a review still open is another cause (Sean, November 4).
+    """
+    from clinical_applicability import reviewed_entries
+    required = {_norm(canonical) for canonical in required}
+    rows = [row for row in _safe_list(_safe_dict(readiness.get("evidence")).get("ingredient_assessments"))
+            if isinstance(row, Mapping) and _norm(row.get("canonical_id")) in required]
+    rejected = _safe_list(_safe_dict(product.get("evidence_data")).get("rejected_clinical_matches"))
+    records = reviewed_entries()
+    # A projection row carries no reason of its own, so its rejection answers for it.
+    return bool(rows) and all(
+        _closed_on_named_human_studies(row) or
+        row.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS | {"module_scoped_product_projection"} and any(
+            isinstance(match, Mapping) and match.get("ingredient") == row.get("name")
+            and match.get("reason_code") in _STUDIES_DID_NOT_QUALIFY_REASONS
+            and _safe_dict(records.get(match.get("id"))).get("study_type") in _HUMAN_STUDY_TYPES
+            for match in rejected)
+        for row in rows)
 
 
 def _panel_primary_open(product: Mapping[str, Any], readiness: Mapping[str, Any]) -> bool:

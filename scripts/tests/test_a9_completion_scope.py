@@ -314,7 +314,20 @@ def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, lab
     # The hold is status alone: the hidden amount keeps its neutral Dose either way.
     monkeypatch.setattr(assessment_readiness, "_dose_rests_on_a_hidden_amount", lambda *_: False)
     unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
-    assert unheld["quality_assessment_status"] == "complete"
+    # Disabling the amount hold cannot complete a separate unresolved primary
+    # literature path. Leucine is a required Evidence owner on these two labels.
+    if label in {"a9_hidden_amount_2219_raw.json", "a9_hidden_amount_2221_raw.json"}:
+        from evidence_resolver import evidence_required_canonicals
+
+        assert "l_leucine" in evidence_required_canonicals(
+            enriched, module=unheld["_v4_module_breakdown"]["module"])
+        assert any(row["canonical_id"] == "l_leucine"
+                   and row["reason_code"] == "literature_reviewed_human_clinical_evidence"
+                   for row in _unreviewed_rows(unheld))
+        assert unheld["quality_assessment_status"] == "partial"
+        assert "evidence_assessment_incomplete" in unheld["assessment_readiness"]["release_assessment"]["blockers"]
+    else:
+        assert unheld["quality_assessment_status"] == "complete"
     for field in ("quality_score_v4_100", "quality_tier", "quality_score_status", "product_safety_status",
                   "safety_assessment_status", "verdict"):
         assert held[field] == unheld[field]
@@ -453,16 +466,16 @@ def test_an_unfinished_label_keeps_saying_the_review_is_pending(pipeline, label)
     assert evidence["reason"] == _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
 
 
-def test_a_recorded_applicability_finding_stays_on_an_unfinished_label(pipeline):
+def test_an_unfinished_label_says_its_review_is_pending(pipeline):
     from scoring_v4.quality_score import _EVIDENCE_ZERO_REASON
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    # Nothing fell out of scope here. Splitting this sentence belongs to the Evidence work.
     scored = build_scored_artifact(_enrich(pipeline, "a9_review_pending_252468_raw.json"))
     evidence = scored["quality_pillars_v4"]["evidence"]
     assert scored["quality_assessment_status"] == "partial"
-    assert evidence["display_state"] == "applicability_unestablished"
-    assert evidence["reason"] == _EVIDENCE_ZERO_REASON["applicability_unestablished"]
+    assert evidence["evidence_result_state"] == "applicability_unestablished"
+    assert evidence["display_state"] == "not_yet_reviewed"
+    assert evidence["reason"] == _EVIDENCE_ZERO_REASON["clinical_review_not_covered"]
 
 
 @pytest.mark.parametrize("label", ["178728", "231921"])

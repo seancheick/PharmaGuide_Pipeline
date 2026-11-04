@@ -976,6 +976,10 @@ precaution-only mentions do not establish an excluded purpose. A malformed list 
 an unresolved contract, never a completed negative assessment. This internal scope
 constraint creates no public product field, efficacy threshold or independent scorer.
 
+`excluded_claim_terms_when_alone` takes the same list form and matching, but excludes the
+record only when the label makes no claim in the record's `supported_outcomes` beside it.
+Sean's decision of November 4, 2026, for melatonin's jet-lag terms only.
+
 ### literature_evidence_records.json: effect versus review result
 
 Each record and each `qualifying_human_studies[]` entry keeps two different facts apart:

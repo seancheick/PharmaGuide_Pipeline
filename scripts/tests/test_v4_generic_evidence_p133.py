@@ -1584,3 +1584,19 @@ def test_recovered_collagen_receipt_uses_the_canonical_review_owner(monkeypatch)
     assert receipts[0]["source_review"]["is_complete"] is False
     source = clinical_applicability.reviewed_entries()["INGR_COLLAGEN_PEPTIDES"]
     assert receipts[0]["source_references"] == (source.get("references_structured") or source.get("references") or [])
+
+
+@pytest.mark.parametrize("claim", ["", "Immune Support", "Prevents colds"])
+def test_vitamin_c_nutritional_credit_is_independent_of_marketing(claim):
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[_ingredient(name="Vitamin C", standard_name="Vitamin C",
+                                 canonical_id="vitamin_c", quantity=1000, unit="mg")],
+        matches=[],
+    )
+    product["product_name"] = "Vitamin C 1,000 mg"
+    product["statements"] = [{"notes": claim}] if claim else []
+    evidence = score_evidence(product, apply_primary_floor=True)
+    assert evidence["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
+    assert evidence["score"] == 10.0
