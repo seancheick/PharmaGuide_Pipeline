@@ -326,8 +326,12 @@ def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
     artifact = validation.build_scored_artifact(validation.load_fixture_suite().by_id("sports_protein__ideal").product)
     pending = {row["canonical_id"] for row in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
                if row["state"] == "not_yet_evaluated"}
-    # Whey's reviewed human record resolves it; the amino acids' reviews stay open.
-    assert pending == {"l_isoleucine", "l_valine"}
+    # Whey's reviewed human record resolves it; amino-acid gaps stay open,
+    # including leucine's reviewed literature without an implemented credit path.
+    assert pending == {"l_leucine", "l_isoleucine", "l_valine"}
+    leucine = next(row for row in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
+                   if row["canonical_id"] == "l_leucine")
+    assert leucine["reason_code"] == "literature_reviewed_human_clinical_evidence"
     assert artifact["quality_score_confidence"] == "moderate"
     assert artifact["quality_score_v4_100"] == 80.0
     assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
