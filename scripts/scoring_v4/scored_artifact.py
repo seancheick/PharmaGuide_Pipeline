@@ -361,7 +361,8 @@ def assemble_scored_artifact(
     )
     unfinished = unfinished_source_assessment(enriched_product, _safe_dict(module_breakdown))
     from assessment_readiness import (
-        evaluate_release_assessment, evidence_review_open, retained_evidence_result_state,
+        _OWNER_SCOPED_EVIDENCE_MODULES, evaluate_release_assessment, evidence_review_open,
+        evidence_studies_did_not_qualify, retained_evidence_result_state,
         safety_assessment_reason,
         safety_assessment_status,
     )
@@ -387,15 +388,19 @@ def assemble_scored_artifact(
     release_complete = assessment_readiness["release_assessment"]["is_complete"]
     pillars = v4.get("quality_pillars_v4")
     if (status == "scored" and _safe_dict(pillars).get("evidence")
+            and not evidence_review_open(assessment_readiness["release_assessment"])
+            and v4.get("v4_module") in _OWNER_SCOPED_EVIDENCE_MODULES):
+        from evidence_resolver import evidence_required_canonicals
+        from scoring_v4.quality_score import mark_evidence_studies_did_not_qualify
+        if evidence_studies_did_not_qualify(enriched_product, assessment_readiness, evidence_required_canonicals(
+                dict(enriched_product), module=v4.get("v4_module"))):
+            pillars = {**pillars, "evidence": mark_evidence_studies_did_not_qualify(pillars["evidence"])}
+            v4 = {**v4, "quality_pillars_v4": pillars}
+    if (status == "scored" and _safe_dict(pillars).get("evidence")
             and evidence_review_open(assessment_readiness["release_assessment"])):
-        from evidence_resolver import resolve_product_evidence
         from scoring_v4.quality_score import mark_evidence_review_open
         v4 = {**v4, "quality_pillars_v4": {
-            **pillars, "evidence": mark_evidence_review_open(
-                pillars["evidence"],
-                review_open_outside_scope=resolve_product_evidence(
-                    enriched_product, owner_scoped=True, module=_safe_dict(module_breakdown).get("module"),
-                ).review_open_outside_scope)}}
+            **pillars, "evidence": mark_evidence_review_open(pillars["evidence"])}}
     elif (status == "scored" and _safe_dict(pillars).get("evidence")
           and any(row.get("state") == "not_yet_evaluated" for row in
                   _safe_dict(assessment_readiness.get("evidence")).get("ingredient_assessments") or [])):

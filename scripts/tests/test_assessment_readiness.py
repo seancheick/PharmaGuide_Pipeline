@@ -1282,7 +1282,7 @@ def test_readiness_retains_reviewed_reference_conclusion_alongside_incidental_ma
     [
         ("no_qualifying_human_evidence", ["clinical_strains"], "probiotic_strain_reviewed_no_qualifying_human_evidence", "not_yet_evaluated"),
         ("reviewed_null_unfavorable", ["backed_clinical_studies"], "literature_reviewed_null_or_unfavorable", "evaluated_limited_or_negative"),
-        ("resolved_by_reviewed_clinical_evidence", ["backed_clinical_studies"], "literature_reviewed_human_clinical_evidence", "evaluated_limited_or_negative"),
+        ("resolved_by_reviewed_clinical_evidence", ["backed_clinical_studies"], "literature_reviewed_human_clinical_evidence", "not_yet_evaluated"),
         ("research_present_applicability_unestablished", ["backed_clinical_studies"], "literature_applicability_unestablished", "not_yet_evaluated"),
         ("research_present_applicability_unestablished", ["clinical_strains"], "probiotic_species_or_stub_applicability_unestablished", "not_yet_evaluated"),
         ("literature_resolution_required", [], "unverified_generated_record_cannot_complete_evidence", "not_yet_evaluated"),
@@ -1300,12 +1300,28 @@ def test_readiness_consumes_concluded_resolver_reviews_without_completing_pendin
         canonical_id=row["canonical_id"], ingredient_name=row["name"],
         matched_owners=owners, disposition=disposition, points_eligible=False,
         applicability_status="test", reason_code=reason,
-        owner_facts={"literature_evidence": {}} if "backed_clinical_studies" in owners else {},
+        owner_facts={"literature_evidence": {"effect_direction": "positive_weak"}} if "backed_clinical_studies" in owners else {},
     )
     monkeypatch.setattr(evidence_resolver, "resolve_evidence_for_row", lambda *a, **k: result)
     assessment = evaluate_evidence_assessment(_product(row), module="generic")
     assert assessment["ingredient_assessments"][0]["state"] == expected
     assert assessment["not_yet_evaluated_count"] == int(expected == "not_yet_evaluated")
+
+
+def test_reviewed_literature_with_an_eligible_credit_path_stays_supported():
+    from assessment_readiness import _resolved_evidence_assessment
+    from evidence_resolver import EvidenceResolution
+
+    resolution = EvidenceResolution(
+        canonical_id="reviewed_botanical", ingredient_name="Reviewed botanical",
+        matched_owners=["literature_evidence"],
+        disposition="resolved_by_reviewed_clinical_evidence", points_eligible=True,
+        applicability_status="applicable_reviewed_trials",
+        reason_code="literature_reviewed_human_clinical_evidence",
+        owner_facts={"literature_evidence": {}},
+    )
+    assert _resolved_evidence_assessment(resolution) == (
+        "evaluated_supported", "literature_reviewed_human_clinical_evidence", None)
 
 
 def test_evidence_readiness_includes_undosed_active_blend_subject():

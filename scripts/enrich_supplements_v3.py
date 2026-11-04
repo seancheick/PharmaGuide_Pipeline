@@ -16364,7 +16364,11 @@ class SupplementEnricherV3:
                     for value in candidate_names
                     if self._normalize_text(value) != "ala"
                 ]
-            for study in self._candidate_clinical_studies(candidate_names, studies):
+            # The label prints a brand beside the row's name: Ubiquinol (Kaneka Ubiquinol).
+            # Only a brand record reads it. Other alternate names aren't this identity
+            # (DGL beside D-Glucuronolactone), and exclusions still follow.
+            alternate_names = [str(value) for value in ingredient.get("alternateNames") or [] if value]
+            for study in self._candidate_clinical_studies(candidate_names + alternate_names, studies):
                 if (
                     study.get("id") == "INGR_BRANCHED_CHAIN_AMINO_ACIDS"
                     and study.get("aggregate_canonical_ids")
@@ -16375,7 +16379,10 @@ class SupplementEnricherV3:
                     continue
                 study_name = study.get('standard_name', '')
                 study_aliases = self._collect_clinical_aliases(study)
-                matched = self._clinical_study_match(candidate_names, study)
+                matched = self._clinical_study_match(candidate_names, study) or (
+                    self._clinical_study_match(alternate_names, study)
+                    if str(study.get("id") or "").startswith("BRAND_") else None
+                )
 
                 if matched:
 

@@ -227,13 +227,14 @@ def test_a_finished_review_that_earned_nothing_keeps_its_record_count(pipeline):
     assert "matched_evidence_records" in [fact["id"] for fact in facts]
 
 
-def test_an_open_review_keeps_an_applicability_finding_and_reads_partial(pipeline):
+def test_an_open_review_keeps_its_recorded_state_and_reads_pending(pipeline):
     scored = _score(pipeline, _raw("a9_open_review_applicability_182957_raw.json"))
     evidence = scored["quality_pillars_v4"]["evidence"]
     assert scored["assessment_readiness"]["release_assessment"]["blockers"] == [
         "evidence_assessment_incomplete"]
     assert scored["quality_assessment_status"] == "partial"
-    assert evidence["display_state"] == "applicability_unestablished"
+    assert evidence["evidence_result_state"] == "applicability_unestablished"
+    assert evidence["display_state"] == "not_yet_reviewed"
     assert evidence["score"] == 0
 
 

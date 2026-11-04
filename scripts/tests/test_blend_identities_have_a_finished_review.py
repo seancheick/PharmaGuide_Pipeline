@@ -69,11 +69,17 @@ def test_a_finished_blend_review_does_not_close_another_actives_review(enriched)
 
 
 @pytest.mark.parametrize("pid", _FINISHED_PILLAR_PRODUCTS)
-def test_the_evidence_pillar_no_longer_says_not_yet_reviewed(enriched, pid):
+def test_the_blend_review_is_recorded_and_the_label_says_what_is_still_open(enriched, pid):
+    from assessment_readiness import evidence_review_open
+    from scoring_v4.quality_score import evidence_display_state
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    evidence = build_scored_artifact(enriched[pid])["quality_pillars_v4"]["evidence"]
-    assert evidence["display_state"] != "not_yet_reviewed"
+    scored = build_scored_artifact(enriched[pid])
+    evidence = scored["quality_pillars_v4"]["evidence"]
+    # Scoring recorded a finished result; only an open release review keeps it pending.
+    assert evidence_display_state(evidence["evidence_result_state"]) != "not_yet_reviewed"
+    if not evidence_review_open(scored["assessment_readiness"]["release_assessment"]):
+        assert evidence["display_state"] != "not_yet_reviewed"
 
 
 def test_ravage_retains_each_unfinished_individual_review(enriched):
@@ -340,4 +346,5 @@ def test_flaxseed_blend_uses_independent_verified_sources_without_clearing_histo
     assert "retired from qualifying_human_studies" in record["notes"]
     # Verified research remains distinct from applicable positive credit.
     evidence = build_scored_artifact(enriched["299755"])["quality_pillars_v4"]["evidence"]
-    assert evidence["display_state"] == "applicability_unestablished"
+    assert evidence["evidence_result_state"] == "research_present_applicability_unestablished"
+    assert evidence["score"] == 0

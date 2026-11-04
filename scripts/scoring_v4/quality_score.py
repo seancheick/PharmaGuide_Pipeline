@@ -1116,10 +1116,23 @@ _EVIDENCE_OPEN_REVIEW_REASON = (
     "Some research on this label earned credit, but our review of the rest "
     "is still open, so this assessment is not finished."
 )
+_EVIDENCE_STUDIES_DID_NOT_QUALIFY_REASON = (
+    "Human research exists for this ingredient, but the reviewed studies do not qualify for Evidence "
+    "credit for the preparation or purpose assessed in this product. This does not mean the "
+    "ingredient has never been studied."
+)
 _EVIDENCE_UNREVIEWED_ROWS_NOTE = (
     "Other ingredients on this label weren't individually reviewed, which does not "
     "mean they lack clinical evidence."
 )
+
+
+def mark_evidence_studies_did_not_qualify(pillar: Dict[str, Any]) -> Dict[str, Any]:
+    """Say why a finished zero is a zero when reviewed human studies were rejected."""
+    if pillar.get("score") or pillar.get("reason") not in {
+            _EVIDENCE_ZERO_REASON["applicability_unestablished"], _EVIDENCE_ZERO_REASON["no_qualifying_human_evidence"]}:
+        return pillar
+    return {**pillar, "reason": _EVIDENCE_STUDIES_DID_NOT_QUALIFY_REASON}
 
 
 def note_unreviewed_rows(pillar: Dict[str, Any]) -> Dict[str, Any]:
@@ -1129,19 +1142,15 @@ def note_unreviewed_rows(pillar: Dict[str, Any]) -> Dict[str, Any]:
     return {**pillar, "reason": f"{pillar.get('reason') or ''} {_EVIDENCE_UNREVIEWED_ROWS_NOTE}".strip()}
 
 
-def mark_evidence_review_open(pillar: Dict[str, Any], *, review_open_outside_scope: bool = False) -> Dict[str, Any]:
+def mark_evidence_review_open(pillar: Dict[str, Any]) -> Dict[str, Any]:
     """Present an Evidence pillar whose review the release owner found unfinished.
 
     Scoring only sees the winning result state, so one authority-backed row can
-    read as a finished review while another active is still pending. The points
-    and receipt stay; only the claim that the review ended moves, including its
-    record count. A recorded applicability finding stays: it says what the
-    research does not establish, and quality_assessment_status carries the rest.
-    A finding that exists only because the open row fell out of scope isn't
-    recorded yet, so an unfinished label keeps saying the review is pending.
+    read as a finished review, and one finished mismatch as a finding about the
+    label, while another active is still pending. The points and receipt stay;
+    only the claim that the review ended moves, including its record count.
     """
-    state = pillar.get("display_state")
-    if state != "assessed" and not (review_open_outside_scope and state == "applicability_unestablished"):
+    if pillar.get("display_state") not in {"assessed", "applicability_unestablished"}:
         return pillar
     marked = {
         **pillar,
