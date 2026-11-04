@@ -1,6 +1,6 @@
 # PharmaGuide product roadmap
 
-November 4 independent audit: dose-bound follow-up #351 and catalog-retry follow-up #203 are implemented and independently reviewed; reset cleanup follow-up #204 is implemented and independently reviewed. Qualification/integration, Evidence correctness, actual label-warning production, final catalog and iPhone acceptance remain open. See the master plan’s active audit checklist; the signed alert feed’s first publication is complete.
+November 4 independent audit: dose-bound follow-up #351 and catalog-retry follow-up #203 are implemented and independently reviewed; combined app follow-up #204 includes reset cleanup, catalog retry and the strict-dose Stack consumer repair. Pipeline local validation passes; hosted CI and integration remain separate. Qualification/integration, Evidence correctness, actual label-warning production, final catalog and iPhone acceptance remain open. See the master plan’s active audit checklist; the signed alert feed’s first publication is complete.
 
 November3 delivery follow-up: app197/199 and signed-feed concurrency repairs are merged through app202; pipeline347 is merged. The first signed alert feed is published and the actual Dart reader verifies it. Final catalog matching, remaining warning/data integration and signed-build/device acceptance remain separate. See the master plan’s “verified alert-feed delivery” section and existing LEDGER.
 
