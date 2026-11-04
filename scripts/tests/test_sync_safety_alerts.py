@@ -126,6 +126,38 @@ def _stage_all(dist_dir):
     return publisher.stage(records, "2026-11-03", dist_dir)
 
 
+@pytest.mark.parametrize("missing", ["SUPABASE_URL", "SAFETY_ALERT_DISPATCH_SECRET"])
+def test_missing_dispatch_config_stops_before_any_remote_operation(tmp_path, monkeypatch, missing):
+    import env_loader  # noqa: F401 — load before clearing the test environment
+
+    _stage_all(tmp_path)
+    monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("SAFETY_ALERT_DISPATCH_SECRET", "test-secret")
+    monkeypatch.delenv(missing, raising=False)
+    events = []
+
+    def unexpected_client():
+        events.append("client")
+        raise AssertionError("publication reached the remote client without dispatch configuration")
+
+    monkeypatch.setattr(sync_safety_alerts, "get_supabase_client", unexpected_client)
+    with pytest.raises(RuntimeError, match="required to dispatch"):
+        sync_safety_alerts.sync(tmp_path)
+    assert events == []
+
+
+def test_dry_run_needs_no_dispatch_credentials_or_remote_client(tmp_path, monkeypatch):
+    _stage_all(tmp_path)
+    monkeypatch.delenv("SUPABASE_URL", raising=False)
+    monkeypatch.delenv("SAFETY_ALERT_DISPATCH_SECRET", raising=False)
+
+    def unexpected_client():
+        raise AssertionError("dry run contacted the remote client")
+
+    monkeypatch.setattr(sync_safety_alerts, "get_supabase_client", unexpected_client)
+    assert sync_safety_alerts.sync(tmp_path, dry_run=True)["status"] == "dry_run"
+
+
 def test_staged_release_verifies_the_extended_feed(tmp_path):
     staged = _stage_all(tmp_path)
     loaded = load_staged_release(tmp_path)
@@ -159,6 +191,8 @@ def test_staged_release_refuses_a_rule_in_the_feed_old_builds_read(tmp_path):
 
 
 def test_sync_uploads_the_extended_feed_before_promoting(tmp_path, monkeypatch):
+    monkeypatch.setenv("SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setenv("SAFETY_ALERT_DISPATCH_SECRET", "test-secret")
     staged = _stage_all(tmp_path)
     events = []
 
