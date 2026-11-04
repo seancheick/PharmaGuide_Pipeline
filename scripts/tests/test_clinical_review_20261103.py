@@ -589,7 +589,7 @@ def test_within_the_limit_while_breastfeeding_has_no_over_limit_warning(enricher
         lambda enricher: _vitamin_a(enricher, 12000, "IU", UNSPECIFIED_A),
         lambda enricher: _vitamin_a(enricher, None, "", UNSPECIFIED_A),
         lambda enricher: _vitamin_e(enricher, None, ""),
-        lambda enricher: _vitamin_e(enricher, 1200, "IU", form="vitamin e (unspecified)"),
+        lambda enricher: _vitamin_e(enricher, 1150, "IU", form="vitamin e (unspecified)"),
     ],
 )
 def test_unresolved_form_or_amount_while_breastfeeding_reads_review(enricher, hits):
@@ -669,3 +669,173 @@ def test_form_that_moves_the_answer_is_a_review_not_a_confirmed_excess(enricher,
 
 def test_a_routine_amount_has_no_excess_warning(enricher):
     assert _at_age(_vitamin_e(enricher, 100)["pregnancy"]) == ("monitor", "below_threshold", "suppress")
+
+
+# --- Age (section B) --------------------------------------------------------
+
+TEEN = "14-18"
+ADULT = "19+"
+
+
+def _age_outcomes(hit):
+    return hit["dose_threshold_evaluation"].get("age_outcomes")
+
+
+def _both_read(hit, status, disposition):
+    assert _age_outcomes(hit) is None, "age does not change this amount"
+    assert _outcome(hit)[1:] == (status, disposition)
+
+
+def _only_the_teen_limit_is_crossed(hit, teen_severity, adult_severity):
+    decision = hit["dose_threshold_evaluation"]
+    assert decision["evaluation_status"] == "age_dependent"
+    assert decision["consumer_disposition"] == "review"
+    assert decision["matched_threshold"] is False
+    # Unknown age: neither a clearance nor an adult excess.
+    assert hit["severity"] == adult_severity
+    assert _at_age(hit, TEEN) == (teen_severity, "above_threshold", "block")
+    assert _at_age(hit, ADULT) == (adult_severity, "below_threshold", "suppress")
+
+
+VITAMIN_A_TARGETS = [
+    ("pregnancy", "contraindicated", "caution"),
+    ("ttc", "avoid", "caution"),
+    ("lactation", "avoid", "monitor"),
+]
+VITAMIN_E_TARGETS = [("pregnancy", "avoid", "monitor"), ("lactation", "avoid", "monitor")]
+
+
+@pytest.mark.parametrize("target, over, under", VITAMIN_A_TARGETS)
+@pytest.mark.parametrize(
+    "quantity, unit",
+    [(2799, "mcg RAE"), (2800, "mcg RAE"), (9333, "IU"), (2800, "mcg")],
+)
+def test_vitamin_a_at_or_below_the_teen_limit_reads_within_for_everyone(enricher, target, over, under, quantity, unit):
+    _both_read(_vitamin_a(enricher, quantity, unit, RETINYL)[target], "below_threshold", "suppress")
+
+
+@pytest.mark.parametrize("target, over, under", VITAMIN_A_TARGETS)
+@pytest.mark.parametrize(
+    "quantity, unit",
+    [(2801, "mcg RAE"), (9334, "IU"), (2999, "mcg RAE"), (3000, "mcg RAE"), (9999, "IU"), (10000, "IU")],
+)
+def test_vitamin_a_between_the_limits_depends_on_age(enricher, target, over, under, quantity, unit):
+    _only_the_teen_limit_is_crossed(_vitamin_a(enricher, quantity, unit, RETINYL)[target], over, under)
+
+
+@pytest.mark.parametrize("target, over, under", VITAMIN_A_TARGETS)
+@pytest.mark.parametrize("quantity, unit", [(3001, "mcg RAE"), (10001, "IU")])
+def test_vitamin_a_above_the_adult_limit_is_over_for_everyone(enricher, target, over, under, quantity, unit):
+    hit = _vitamin_a(enricher, quantity, unit, RETINYL)[target]
+    _both_read(hit, "above_threshold", "block")
+    assert hit["severity"] == over
+
+
+@pytest.mark.parametrize("target, over, under", VITAMIN_E_TARGETS)
+@pytest.mark.parametrize("quantity", [799, 800])
+def test_vitamin_e_at_or_below_the_teen_limit_reads_within_for_everyone(enricher, target, over, under, quantity):
+    _both_read(_vitamin_e(enricher, quantity)[target], "below_threshold", "suppress")
+
+
+@pytest.mark.parametrize("target, over, under", VITAMIN_E_TARGETS)
+@pytest.mark.parametrize("quantity", [801, 999, 1000])
+def test_vitamin_e_between_the_limits_depends_on_age(enricher, target, over, under, quantity):
+    _only_the_teen_limit_is_crossed(_vitamin_e(enricher, quantity)[target], over, under)
+
+
+@pytest.mark.parametrize("target, over, under", VITAMIN_E_TARGETS)
+def test_vitamin_e_above_the_adult_limit_is_over_for_everyone(enricher, target, over, under):
+    hit = _vitamin_e(enricher, 1001)[target]
+    _both_read(hit, "above_threshold", "block")
+    assert hit["severity"] == over
+
+
+@pytest.mark.parametrize("target", ["pregnancy", "lactation"])
+def test_an_upper_bound_above_only_the_teen_limit_is_a_teen_review(enricher, target):
+    """E2: 670 to 900 mg is no exceedance for an adult and a possible one for a teenager."""
+    hit = _vitamin_e(enricher, 670, quantity_upper=900)[target]
+    assert hit["dose_threshold_evaluation"]["evaluation_status"] == "age_dependent"
+    assert _at_age(hit, ADULT)[1:] == ("below_threshold", "suppress")
+    assert _at_age(hit, TEEN)[1:] == ("form_unknown", "review")
+
+
+@pytest.mark.parametrize(
+    "hits",
+    [
+        lambda enricher: _vitamin_a(enricher, None, "", UNSPECIFIED_A),
+        lambda enricher: _vitamin_e(enricher, None, ""),
+    ],
+)
+def test_an_amount_no_limit_can_read_does_not_depend_on_age(enricher, hits):
+    assert _age_outcomes(hits(enricher)["pregnancy"]) is None
+
+
+def test_undisclosed_form_above_both_limits_keeps_her_note_at_every_age(enricher):
+    hit = _vitamin_a(enricher, 12000, "IU", UNSPECIFIED_A)["pregnancy"]
+    assert _age_outcomes(hit) is None
+    assert hit["alert_headline"] == FORM_REVIEW_HEADLINE
+
+
+def test_undisclosed_form_above_only_the_teen_limit_is_her_note_for_a_teen(enricher):
+    hit = _vitamin_a(enricher, 9500, "IU", UNSPECIFIED_A)["pregnancy"]
+    assert _at_age(hit, ADULT)[1:] == ("below_threshold", "suppress")
+    teen = _age_outcomes(hit)[TEEN]
+    assert teen["evaluation_status"] == "form_unknown"
+    assert teen["consumer_disposition"] == "review"
+    assert teen["alert_headline"] == FORM_REVIEW_HEADLINE
+    assert teen["alert_body"] == FORM_REVIEW_BODY
+
+
+def test_each_age_outcome_carries_the_whole_card_it_shows(enricher):
+    hit = _vitamin_e(enricher, 900)["lactation"]
+    teen, adult = _age_outcomes(hit)[TEEN], _age_outcomes(hit)[ADULT]
+    assert teen["alert_headline"] == OVER_LIMIT_HEADLINE
+    assert teen["action"] == "Avoid use during breastfeeding."
+    assert adult["alert_headline"] == "Breastfeeding: monitoring is advised"
+    assert "matched_copy" not in teen
+
+
+def test_age_outcomes_survive_into_the_shipped_decision(enricher):
+    from build_final_db import compact_dose_decision
+
+    hit = _vitamin_e(enricher, 900)["pregnancy"]
+    shipped = compact_dose_decision(hit["dose_decision"])
+    assert shipped["evaluation_status"] == "age_dependent"
+    assert shipped["age_outcomes"][TEEN]["clinical_severity"] == "avoid"
+    assert shipped["age_outcomes"][ADULT]["consumer_disposition"] == "suppress"
+    assert "age_outcomes" not in compact_dose_decision(
+        _vitamin_e(enricher, 100)["pregnancy"]["dose_decision"]
+    )
+
+
+def test_a_failed_teen_conversion_still_blocks_release(enricher):
+    thresholds = [
+        {"scope": "condition", "target_id": "pregnancy", "comparator": ">", "value": 10, "unit": "iu",
+         "severity_if_met": "avoid", "severity_if_not_met": "monitor"},
+        {"scope": "condition", "target_id": "pregnancy", "comparator": ">", "value": 5, "unit": "mg",
+         "severity_if_met": "avoid", "severity_if_not_met": "monitor", "age_brackets": [TEEN]},
+    ]
+    _, decision = enricher._evaluate_dose_thresholds_for_target(
+        thresholds, "condition", "pregnancy",
+        {"name": "x", "standard_name": "x", "quantity": 1, "unit": "IU"}, 1.0, "monitor",
+    )
+    assert decision["release_blocking"] is True
+
+
+def test_the_age_brackets_are_the_ones_the_app_stores():
+    brackets = {
+        bracket
+        for rule_id in (VITAMIN_A, VITAMIN_E)
+        for row in RULES[rule_id]["dose_thresholds"]
+        for bracket in row.get("age_brackets") or []
+    }
+    assert brackets == {TEEN}
+
+
+def test_a_new_age_row_never_moves_the_gate_key_of_an_older_row():
+    for rule_id in (VITAMIN_A, VITAMIN_E):
+        rows = RULES[rule_id]["dose_thresholds"]
+        seen_age_row = False
+        for row in rows:
+            seen_age_row = seen_age_row or bool(row.get("age_brackets"))
+            assert not seen_age_row or row.get("age_brackets"), "append age rows at the end"

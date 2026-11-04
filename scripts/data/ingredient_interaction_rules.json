@@ -7570,6 +7570,146 @@
               "severity_if_not_met": "monitor"
             }
           }
+        },
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2800,
+          "unit": "mcg RAE",
+          "severity_if_met": "contraindicated",
+          "severity_if_not_met": "caution",
+          "unknown_form_disposition": "review",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 2800,
+              "unit": "mcg RAE",
+              "severity_if_met": "contraindicated",
+              "severity_if_not_met": "caution"
+            }
+          },
+          "alert_headline_if_form_unknown": "Vitamin A form needs review",
+          "alert_body_if_form_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_form_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "alert_headline_if_amount_unknown": "Vitamin A form needs review",
+          "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "age_brackets": [
+            "14-18"
+          ]
+        },
+        {
+          "scope": "condition",
+          "target_id": "ttc",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2800,
+          "unit": "mcg RAE",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "caution",
+          "unknown_form_disposition": "review",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "ttc"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 2800,
+              "unit": "mcg RAE",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "caution"
+            }
+          },
+          "alert_headline_if_form_unknown": "Vitamin A form needs review",
+          "alert_body_if_form_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_form_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "alert_headline_if_amount_unknown": "Vitamin A form needs review",
+          "alert_body_if_amount_unknown": "This product lists vitamin A without enough information to determine how much is preformed vitamin A. High intakes of preformed vitamin A can be harmful during pregnancy. Check the form and total intake with your pharmacist or prenatal care professional.",
+          "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
+          "age_brackets": [
+            "14-18"
+          ]
+        },
+        {
+          "scope": "condition",
+          "target_id": "lactation",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2800,
+          "unit": "mcg RAE",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "alert_headline_if_met": "Breastfeeding: avoid use",
+          "action_if_met": "Avoid use during breastfeeding.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 2800,
+              "unit": "mcg RAE",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          },
+          "age_brackets": [
+            "14-18"
+          ]
         }
       ],
       "pregnancy_lactation": {
@@ -7608,7 +7748,7 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-11-03",
-      "review_owner": "Dr. Pham (clinical review 2026-11-03, form filter, review note and section C breastfeeding); pharmaguide_clinical_team"
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, form filter, review note and section C breastfeeding, section B age limits); pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_NIACIN_DIABETES",
@@ -8278,6 +8418,86 @@
               "severity_if_not_met": "monitor"
             }
           }
+        },
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 800,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "pregnant"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 800,
+              "unit": "mg",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          },
+          "age_brackets": [
+            "14-18"
+          ]
+        },
+        {
+          "scope": "condition",
+          "target_id": "lactation",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 800,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
+          "alert_headline_if_met": "Breastfeeding: avoid use",
+          "action_if_met": "Avoid use during breastfeeding.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [
+                "breastfeeding"
+              ]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 800,
+              "unit": "mg",
+              "severity_if_met": "avoid",
+              "severity_if_not_met": "monitor"
+            }
+          },
+          "age_brackets": [
+            "14-18"
+          ]
         }
       ],
       "pregnancy_lactation": {
@@ -8316,7 +8536,7 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-11-03",
-      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding); pharmaguide_clinical_team"
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding, section B age limits); pharmaguide_clinical_team"
     },
     {
       "id": "RULE_INGREDIENT_VITAMIN_K",

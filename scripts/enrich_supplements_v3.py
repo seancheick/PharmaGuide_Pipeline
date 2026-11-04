@@ -20771,6 +20771,80 @@ class SupplementEnricherV3:
             "quantity_upper": high / servings_per_day_max,
         }
 
+    def _age_dependent_decision(
+        self,
+        base_severity: str,
+        general: Tuple[str, Optional[Dict[str, Any]]],
+        scoped: Tuple[str, Optional[Dict[str, Any]]],
+        age_scoped: List[Dict[str, Any]],
+    ) -> Tuple[str, Optional[Dict[str, Any]]]:
+        """Combine the general (19+) limit with the limit for a younger bracket.
+
+        The label decides the amount, so this is settled here; only the person's
+        age is left for the device. Where both limits read the same, age doesn't
+        matter. Otherwise the top level is the answer for an unknown age, which is
+        also what a build without an age check shows: a review, neither a
+        clearance nor an adult excess.
+        """
+        def outcome(severity: str, decision: Dict[str, Any]) -> Dict[str, Any]:
+            return {
+                "evaluation_status": decision.get("evaluation_status"),
+                "clinical_severity": severity,
+                "consumer_disposition": decision.get("consumer_disposition"),
+                "matched_copy": decision.get("matched_copy") or {},
+            }
+
+        general_severity, general_decision = general
+        scoped_severity, scoped_decision = scoped
+        if not general_decision or not scoped_decision:
+            return general_severity, general_decision
+        for severity, decision in (scoped, general):
+            if decision.get("release_blocking"):
+                return severity, decision
+        settled = ("evaluation_status", "clinical_severity", "consumer_disposition")
+        general_outcome = outcome(general_severity, general_decision)
+        scoped_outcome = outcome(scoped_severity, scoped_decision)
+        if all(general_outcome[key] == scoped_outcome[key] for key in settled):
+            return general_severity, general_decision
+        brackets = sorted({
+            str(bracket)
+            for threshold in age_scoped
+            for bracket in threshold.get("age_brackets") or []
+        })
+        decision = {
+            **general_decision,
+            "matched_threshold": False,
+            "evaluation_status": "age_dependent",
+            "clinical_severity": base_severity,
+            "consumer_disposition": "review",
+            "selected_from": "base_severity",
+            "selected_severity": base_severity,
+            "thresholds_checked": [
+                *(general_decision.get("thresholds_checked") or []),
+                *(scoped_decision.get("thresholds_checked") or []),
+            ],
+            "age_outcomes": {
+                **{bracket: scoped_outcome for bracket in brackets},
+                "19+": general_outcome,
+            },
+        }
+        decision.pop("matched_copy", None)
+        decision.pop("reason", None)
+        age_copy = self._amount_unknown_copy(age_scoped, "age_dependent")
+        if age_copy:
+            decision["matched_copy"] = age_copy
+        return base_severity, decision
+
+    @staticmethod
+    def _stamp_age_outcome_copy(
+        decision: Optional[Dict[str, Any]], copy_fields: Dict[str, Any]
+    ) -> None:
+        """Give each age outcome the whole card it shows, since the top level has its own."""
+        for outcome in ((decision or {}).get("age_outcomes") or {}).values():
+            tier_copy = outcome.pop("matched_copy", None) or {}
+            for field, base in copy_fields.items():
+                outcome[field] = tier_copy.get(field) or base
+
     def _evaluate_dose_thresholds_for_target(
         self,
         thresholds: List[Dict[str, Any]],
@@ -20791,6 +20865,24 @@ class SupplementEnricherV3:
                 relevant.append(threshold)
         if not relevant:
             return base_severity, None
+
+        age_scoped = [threshold for threshold in relevant if threshold.get("age_brackets")]
+        if age_scoped:
+            def decide(rows: List[Dict[str, Any]]) -> Tuple[str, Optional[Dict[str, Any]]]:
+                return self._evaluate_dose_thresholds_for_target(
+                    rows, target_type, target_id, ingredient,
+                    servings_per_day_max, base_severity, materiality,
+                )
+
+            return self._age_dependent_decision(
+                base_severity,
+                decide([threshold for threshold in relevant if not threshold.get("age_brackets")]),
+                decide([
+                    {key: value for key, value in threshold.items() if key != "age_brackets"}
+                    for threshold in age_scoped
+                ]),
+                age_scoped,
+            )
 
         quantity = self._to_float_safe(ingredient.get("quantity"))
         unit = self._normalize_threshold_unit(ingredient.get("unit"))
@@ -21812,6 +21904,10 @@ class SupplementEnricherV3:
                     for src in sources:
                         source_set.add(src)
                     tier_copy = (threshold_eval or {}).get("matched_copy") or {}
+                    self._stamp_age_outcome_copy(threshold_eval, {
+                        field: cond_rule.get(field)
+                        for field in ("alert_headline", "alert_body", "action")
+                    })
                     condition_hits.append({
                         "condition_id": condition_id,
                         "severity": severity,

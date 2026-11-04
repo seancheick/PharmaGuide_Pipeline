@@ -332,6 +332,8 @@ def compact_dose_decision(value: Any) -> Optional[Dict[str, Any]]:
         "form_context": safe_str(dose.get("form_context")) or None,
         "decision_rule": rule or None,
     }
+    if decision.get("age_outcomes"):
+        compact["age_outcomes"] = decision["age_outcomes"]
     return compact
 
 
