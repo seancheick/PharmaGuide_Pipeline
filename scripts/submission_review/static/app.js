@@ -1034,6 +1034,22 @@ function labelComparisonRows(submitted, catalog) {
       ]);
     }
   }
+  const leftNutrition = submitted?.nutritionalInfo ?? {};
+  const rightNutrition = catalog?.nutritionalInfo ?? {};
+  for (const key of new Set([...Object.keys(leftNutrition), ...Object.keys(rightNutrition)])) {
+    const left = leftNutrition[key];
+    const right = rightNutrition[key];
+    const format = (entry) => entry?.amount == null ? '—' :
+      `${entry.operator && entry.operator !== '=' ? entry.operator : ''}${entry.amount} ${entry.unit ?? ''}`.trim();
+    const leftText = format(left);
+    const rightText = format(right);
+    const label = key.replace(/([A-Z])/g, ' $1').toLowerCase();
+    rows.push([
+      `Nutrition: ${label}`, leftText, rightText,
+      leftText === rightText ? 'same' :
+        left && right && unitKind(left.unit) !== unitKind(right.unit) ? 'units' : 'differs',
+    ]);
+  }
   return rows;
 }
 
@@ -1445,7 +1461,7 @@ const CRITICAL_FIELDS = [
   ['brand', 'Brand'],
   ['name', 'Product name'],
   ['serving', 'Serving size and count'],
-  ['rows', 'Every ingredient row'],
+  ['rows', 'Active ingredients and nutrition amounts'],
   ['other', 'Other Ingredients'],
 ];
 
@@ -1490,7 +1506,7 @@ const CONFIRM_TEXT = {
   brand: ['Confirm brand', 'Brand confirmed'],
   name: ['Confirm product name', 'Product name confirmed'],
   serving: ['Confirm serving size and count', 'Serving confirmed'],
-  rows: ['Confirm every ingredient row', 'All rows confirmed'],
+  rows: ['Confirm active ingredients and nutrition amounts', 'Ingredients and nutrition confirmed'],
   other: ['Confirm other ingredients', 'Other ingredients confirmed'],
 };
 
@@ -2810,6 +2826,11 @@ const NUTRITION_FIELDS = {
   'n-total-carb': { key: 'totalCarbohydrates', unit: 'g' },
   'n-fiber': { key: 'dietaryFiber', unit: 'g' },
   'n-sugars': { key: 'sugars', unit: 'g' },
+  'n-saturated-fat': { key: 'saturatedFat', unit: 'g' },
+  'n-trans-fat': { key: 'transFat', unit: 'g' },
+  'n-mono-fat': { key: 'monounsaturatedFat', unit: 'g' },
+  'n-cholesterol': { key: 'cholesterol', unit: 'mg' },
+  'n-added-sugars': { key: 'addedSugars', unit: 'g' },
   'n-protein': { key: 'protein', unit: 'g' },
   'n-sodium': { key: 'sodium', unit: 'mg' },
 };

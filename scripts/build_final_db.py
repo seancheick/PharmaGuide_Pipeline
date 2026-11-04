@@ -8816,6 +8816,12 @@ def build_detail_blob(
         "protein_g": safe_float(ns.get("protein_g")),
         "dietary_fiber_g": safe_float(ns.get("dietary_fiber_g")),
         "total_sugars_g": safe_float(ns.get("total_sugars_g")),
+        "saturated_fat_g": safe_float(ns.get("saturated_fat_g")),
+        "trans_fat_g": safe_float(ns.get("trans_fat_g")),
+        "monounsaturated_fat_g": safe_float(ns.get("monounsaturated_fat_g")),
+        "cholesterol_mg": safe_float(ns.get("cholesterol_mg")),
+        "added_sugars_g": safe_float(ns.get("added_sugars_g")),
+        "sodium_mg": safe_float(ns.get("sodium_mg")),
     }
     # Printed qualifier per field ("<" for "<1 g"); the app prefixes it so a
     # bound never reads as an exact amount. Empty when every value is exact.

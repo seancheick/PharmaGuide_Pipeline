@@ -197,28 +197,30 @@
         <label>Serving unit <input id="p-serving-unit" placeholder="Capsule(s)"></label>
       </div>
 
-      <div class="group-head"><h3>Nutrition Facts <span class="muted">(only if the label has this panel)</span></h3></div>
+      <div class="group-head"><h3>Nutrition amounts <span class="muted">(from Supplement Facts)</span></h3></div>
       <div class="field-grid">
         <label>Calories (kcal) <input id="n-calories" inputmode="decimal" placeholder="10 or <1"></label>
         <label>Total Fat (g) <input id="n-total-fat" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Saturated Fat (g) <input id="n-saturated-fat" inputmode="decimal" placeholder="10 or &lt;1"></label>
+        <label>Trans Fat (g) <input id="n-trans-fat" inputmode="decimal" placeholder="10 or &lt;1"></label>
         <label>Polyunsaturated Fat (g) <input id="n-poly-fat" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Monounsaturated Fat (g) <input id="n-mono-fat" inputmode="decimal" placeholder="10 or &lt;1"></label>
+        <label>Cholesterol (mg) <input id="n-cholesterol" inputmode="decimal" placeholder="10 or &lt;1"></label>
         <label>Total Carbohydrate (g) <input id="n-total-carb" inputmode="decimal" placeholder="10 or <1"></label>
         <label>Dietary Fiber (g) <input id="n-fiber" inputmode="decimal" placeholder="10 or <1"></label>
         <label>Total Sugars (g) <input id="n-sugars" inputmode="decimal" placeholder="10 or <1"></label>
+        <label>Added Sugars (g) <input id="n-added-sugars" inputmode="decimal" placeholder="10 or &lt;1"></label>
         <label>Protein (g) <input id="n-protein" inputmode="decimal" placeholder="10 or <1"></label>
         <label>Sodium (mg) <input id="n-sodium" inputmode="decimal" placeholder="10 or <1"></label>
       </div>
       <p class="muted step-footnote">
-        Most supplements don't print a Nutrition Facts panel — leave every row
-        blank when this label doesn't have one. Fill in only the rows actually
-        printed; this never blocks approval. A Calories, fat, carbohydrate,
-        sugars, protein or sodium line printed inside a Supplement Facts panel
-        may stay as an ingredient row: the pipeline files it under Nutrition
-        Facts, not as an ingredient. Keep it in one place; a printed row wins
-        over a typed value. Type a bound as printed: "&lt;1" for "less than 1 g".
+        Enter the per-serving nutrition amounts printed on the label here.
+        Leave undeclared fields blank. Total sugars includes added sugars.
+        Keep active ingredients and Other Ingredients in their own sections below.
+        Type a bound as printed, such as "&lt;1" for "less than 1 g".
       </p>
 
-      <div class="group-head"><h3>Ingredient rows</h3>
+      <div class="group-head"><h3>Active ingredients</h3>
         <div class="group-confirm"><span id="verify-slot-rows" class="verify-slot"></span></div></div>
       <div class="scroll-x">
         <table id="rows-table" class="data-table rows-table">

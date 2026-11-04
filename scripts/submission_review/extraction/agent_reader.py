@@ -504,7 +504,15 @@ def recorded_label_disagreements(saved: Any, extraction: Mapping[str, Any]) -> l
     draft = extraction.get("draft_payload")
     if not draft:
         return ["no recorded extraction"]
-    return reading_changes(to_manual_label(draft).payload, saved)
+    changes = reading_changes(to_manual_label(draft).payload, saved)
+    if changes:
+        # Reviews saved before nutrition projection used the original row layout.
+        if not reading_changes(to_manual_label(draft, legacy_rows=True).payload, saved):
+            return [
+                path for path in changes
+                if path.startswith("$.nutritionalInfo.") and saved.get("nutritionalInfo")
+            ]
+    return changes
 
 
 def save_refusal(draft: dict, label: dict, submission: dict, review: dict,

@@ -18923,7 +18923,7 @@ class SupplementEnricherV3:
 
     def _collect_nutrition_summary(self, product: Dict) -> Dict:
         """
-        Extract the five macro-nutrient values from nutritionalInfo for
+        Extract declared nutrition amounts from nutritionalInfo for
         transparency surfacing.  Calories are in kcal; carbs/fat/protein/fiber
         are in grams.  Macro values are accepted only when the source unit is
         explicitly grams.  A malformed source unit must be corrected through
@@ -18939,7 +18939,7 @@ class SupplementEnricherV3:
         """
         ni = product.get("nutritionalInfo") or {}
 
-        def _amount(key: str, *, declared_gram_value: bool = False):
+        def _amount(key: str, *, keep_zero: bool = False):
             entry = ni.get(key)
             if not isinstance(entry, dict):
                 return None
@@ -18950,14 +18950,17 @@ class SupplementEnricherV3:
                 fval = float(val)
             except (TypeError, ValueError):
                 return None
-            return fval if math.isfinite(fval) and (fval != 0.0 or declared_gram_value) else None
+            return fval if math.isfinite(fval) and (fval != 0.0 or keep_zero) else None
 
-        def _gram_amount(key: str):
+        def _mass_amount(key: str, unit_name: str = "g"):
             entry = ni.get(key)
             if not isinstance(entry, dict):
                 return None
             unit = str(entry.get("unit") or "").strip().lower()
-            if unit not in {"g", "gram", "grams", "gram(s)"}:
+            units = {"g", "gram", "grams", "gram(s)"} if unit_name == "g" else {
+                "mg", "milligram", "milligrams", "milligram(s)",
+            }
+            if unit not in units:
                 return None
             variants = entry.get("quantityVariants") or []
             selected = next((v for v in variants if isinstance(v, dict)
@@ -18974,7 +18977,7 @@ class SupplementEnricherV3:
                     # Only a printed bound ("<1 g") keeps its stated amount;
                     # quantity_operators below discloses that it is not exact.
                     return None
-            return _amount(key, declared_gram_value=True)
+            return _amount(key, keep_zero=True)
 
         fields = {
             "calories_per_serving": "calories",
@@ -18984,16 +18987,32 @@ class SupplementEnricherV3:
             "protein_g": "protein",
             "dietary_fiber_g": "dietaryFiber",
             "total_sugars_g": "sugars",
+            "saturated_fat_g": "saturatedFat",
+            "trans_fat_g": "transFat",
+            "monounsaturated_fat_g": "monounsaturatedFat",
+            "cholesterol_mg": "cholesterol",
+            "added_sugars_g": "addedSugars",
+            "sodium_mg": "sodium",
         }
+        calories = ni.get("calories")
+        calories_unit = str(calories.get("unit") or "").strip().lower() if isinstance(calories, dict) else ""
         return {
-            "calories_per_serving": _amount("calories"),
-            "total_carbohydrates_g": _gram_amount("totalCarbohydrates"),
-            "total_fat_g": _gram_amount("totalFat"),
-            "polyunsaturated_fat_g": _gram_amount("polyunsaturatedFat"),
-            "protein_g": _gram_amount("protein"),
-            "dietary_fiber_g": _gram_amount("dietaryFiber"),
+            "calories_per_serving": _amount(
+                "calories", keep_zero=calories_unit in {"kcal", "calorie", "calories", "calorie(s)"},
+            ),
+            "total_carbohydrates_g": _mass_amount("totalCarbohydrates"),
+            "total_fat_g": _mass_amount("totalFat"),
+            "polyunsaturated_fat_g": _mass_amount("polyunsaturatedFat"),
+            "protein_g": _mass_amount("protein"),
+            "dietary_fiber_g": _mass_amount("dietaryFiber"),
             "dietary_fiber_source": dict(ni["dietaryFiber"]) if isinstance(ni.get("dietaryFiber"), dict) else None,
-            "total_sugars_g": _gram_amount("sugars"),
+            "total_sugars_g": _mass_amount("sugars"),
+            "saturated_fat_g": _mass_amount("saturatedFat"),
+            "trans_fat_g": _mass_amount("transFat"),
+            "monounsaturated_fat_g": _mass_amount("monounsaturatedFat"),
+            "cholesterol_mg": _mass_amount("cholesterol", "mg"),
+            "added_sugars_g": _mass_amount("addedSugars"),
+            "sodium_mg": _mass_amount("sodium", "mg"),
             # Clean's printed qualifier per field ("<1 g"): the numbers above
             # stay the stated amount; display must not present them as exact.
             "quantity_operators": {

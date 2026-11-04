@@ -1387,6 +1387,24 @@ def _check_export_normalized_dose(rec: ProductRecord, enriched: Mapping[str, Any
                     source=f"{expected[0]} {expected[1]}", exported=f"{exported[0]} {exported[1]}")
 
 
+def _check_export_nutrition(rec: ProductRecord, enriched: Mapping[str, Any], blob: Mapping[str, Any]) -> None:
+    summary = enriched.get("nutrition_summary") or {}
+    detail = blob.get("nutrition_detail") or {}
+    source_operators = summary.get("quantity_operators") or {}
+    exported_operators = detail.get("quantity_operators") or {}
+    fields = (summary.keys() | detail.keys()) - {"quantity_operators", "dietary_fiber_source"}
+    for key in sorted(fields):
+        source = (summary.get(key), source_operators.get(key))
+        exported = (detail.get(key), exported_operators.get(key))
+        if source != exported:
+            rec.add(
+                "AMOUNT_CHANGE_WITHOUT_EVIDENCE",
+                "Nutrition amount or printed qualifier differs from the enriched summary",
+                stage="blob", row_path=f"enriched:nutrition_summary.{key}",
+                field=f"nutrition_detail.{key}", source=source, exported=exported,
+            )
+
+
 def audit_product(
     dsld_id: str,
     archetype: str | None,
@@ -1546,6 +1564,7 @@ def audit_all_products(
                                 raw_record=raw_record)
             blob = _read_blob(blob_dir, dsld_id)
             if blob is not None:
+                _check_export_nutrition(rec, enriched, blob)
                 if from_submission or enriched.get("manual_product_provenance"):
                     rec.notes.append("approved submission: no DSLD raw label; raw-row checks not applicable")
                     _check_export_identity(rec, enriched, blob)
