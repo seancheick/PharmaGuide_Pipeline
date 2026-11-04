@@ -636,3 +636,36 @@ def test_bleeding_and_medication_rules_keep_running_within_the_limit(enricher):
         hit["condition_id"] for hit in alert["condition_hits"]
     }
     assert "anticoagulants" in {hit["drug_class_id"] for hit in alert["drug_class_hits"]}
+
+
+# --- Vitamin E label table (section 7) --------------------------------------
+
+@pytest.mark.parametrize(
+    "quantity, unit, form, expected",
+    [
+        (1500, "mg", ALPHA_TOCOPHEROL, ("avoid", "above_threshold", "block")),
+        (1500, "IU", "d-alpha-tocopherol", ("avoid", "above_threshold", "block")),
+        (1400, "IU", "d-alpha-tocopherol", ("monitor", "below_threshold", "suppress")),
+        (1200, "IU", "dl-alpha-tocopherol", ("avoid", "above_threshold", "block")),
+        (1100, "IU", "dl-alpha-tocopherol", ("monitor", "below_threshold", "suppress")),
+    ],
+)
+def test_a_known_preparation_converts_and_applies_the_adult_limit(enricher, quantity, unit, form, expected):
+    assert _at_age(_vitamin_e(enricher, quantity, unit, form=form)["pregnancy"]) == expected
+
+
+@pytest.mark.parametrize(
+    "name, quantity, unit, form",
+    [
+        ("Vitamin E", 1200, "IU", "vitamin e (unspecified)"),
+        ("Mixed Tocopherols", 1500, "mg", "mixed tocopherols"),
+        ("Tocotrienols", 1500, "mg", "tocotrienols"),
+    ],
+)
+def test_form_that_moves_the_answer_is_a_review_not_a_confirmed_excess(enricher, name, quantity, unit, form):
+    hit = _vitamin_e(enricher, quantity, unit, form=form, name=name)["pregnancy"]
+    assert _at_age(hit) == ("monitor", "form_unknown", "review")
+
+
+def test_a_routine_amount_has_no_excess_warning(enricher):
+    assert _at_age(_vitamin_e(enricher, 100)["pregnancy"]) == ("monitor", "below_threshold", "suppress")
