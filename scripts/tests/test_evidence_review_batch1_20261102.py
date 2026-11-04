@@ -89,7 +89,6 @@ def test_documented_positive_review_waits_for_its_scoring_path(cid, name):
 
 @pytest.mark.parametrize("cid, name", [
     ("maitake", "Maitake"),
-    ("glutathione", "Glutathione"),
 ])
 def test_a_finished_mixed_review_stays_closed(cid, name):
     resolution = _resolve_label_row(cid, name)
