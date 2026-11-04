@@ -68,6 +68,12 @@ def core_db_remote_path(db_version):
     return f"v{db_version}/pharmaguide_core.db"
 
 
+def core_db_compressed_remote_path(db_version):
+    """Storage path of the gzip of that core DB. Beside it, ``.json`` describes it
+    for builds with no release keys (Flutter ``SupabaseContract.compressedCoreDbPath``)."""
+    return f"{core_db_remote_path(db_version)}.gz"
+
+
 def rules_db_remote_path(rules_version):
     """Immutable Storage path of an interaction rules file named by a signed release."""
     return f"rules/{rules_version}/interaction_db.sqlite"

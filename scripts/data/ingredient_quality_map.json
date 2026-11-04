@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 656,
       "total_forms": 1476,
-      "total_form_aliases": 12306,
+      "total_form_aliases": 12307,
       "parents_with_parent_aliases": 151,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -34835,6 +34835,7 @@
         "notes": "Konjac glucomannan is a viscous dietary fiber acting locally. Meta-analysis PMID24533610 found no significant weight difference versus placebo (mean difference−0.22kg;95%CI−0.62 to0.19). That result cannot be described as demonstrated weight-loss efficacy. Preparation, dose and appropriate water intake remain relevant; local fiber function is distinct from systemic absorption.",
         "aliases": [
           "glucomannan",
+          "glucomannan powder",
           "glucomannan root extract",
           "konjac",
           "konjac root",

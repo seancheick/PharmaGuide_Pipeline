@@ -1897,6 +1897,7 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "monitor",
+          "unknown_form_disposition": "review",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -1932,6 +1933,7 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "caution",
+          "unknown_form_disposition": "review",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -23377,6 +23379,7 @@
     },
     {
       "id": "RULE_IQM_VITAMIN_A_BETA_CAROTENE_LUNG_CANCER",
+      "exposure_canonical_id": "beta_carotene",
       "subject_ref": {
         "db": "ingredient_quality_map",
         "canonical_id": "vitamin_a"

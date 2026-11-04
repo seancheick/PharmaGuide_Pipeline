@@ -8,6 +8,7 @@ The build_output_dir should contain:
     - export_manifest.json
     - detail_index.json
     - pharmaguide_core.db
+    - pharmaguide_core.db.gz and its .json descriptor (the same catalog, for the app to fetch)
     - detail_blobs/{dsld_id}.json (local per-product build output)
 
 Environment variables (from .env):
@@ -1470,6 +1471,12 @@ def sync(
     product_count = local["product_count"]
     checksum = local["checksum"]
     build_stats = validate_build_output(build_dir, local)
+    from release_manifest import ensure_compressed_catalog, write_compressed_descriptor
+    compressed = ensure_compressed_catalog(build_stats["db_path"], version)
+    compressed_descriptor_path = write_compressed_descriptor(
+        build_dir, compressed, db_version=version, sha256=checksum.removeprefix("sha256:"),
+    )
+    gz_path = os.path.join(build_dir, os.path.basename(compressed["path"]))
     signed = None
     if not release_manifest:
         from release_manifest import require_signed_when_keys_are_pinned
@@ -1479,7 +1486,7 @@ def sync(
         signed = load_signed_release(
             release_manifest, release_signature,
             local_manifest=local, rules_dir=rules_dir or build_dir,
-            test_project=test_project,
+            compressed=compressed, test_project=test_project,
         )
         gate_status = check_remote_rules_gate(signed["release"], test_project=test_project)
         signed_rules = signed["release"]["rules"]
@@ -1503,6 +1510,8 @@ def sync(
     if dry_run:
         print(f"\n[DRY RUN] Would upload:")
         print(f"  - pharmaguide_core.db ({build_stats['db_size_mb']:.1f} MB)")
+        print(f"  - pharmaguide_core.db.gz ({compressed['size'] / (1024 * 1024):.1f} MB) "
+              "and its descriptor")
         print(f"  - detail_index.json")
         print(f"  - {len(SHARE_INDEX_SHARDS)} canonical share-index shards")
         print(f"  - {build_stats['unique_blob_count']} unique detail blobs ({build_stats['blob_count']} product mappings)")
@@ -1593,8 +1602,11 @@ def sync(
         catalog_upload_needed = remote_db_path not in present
     # Validate every existing versioned artifact before the first Storage write.
     # Listing errors fail closed; existence never establishes byte identity.
+    remote_descriptor_path = f"{compressed['path']}.json"
     versioned_files = {
         remote_db_path: build_stats["db_path"],
+        compressed["path"]: gz_path,
+        remote_descriptor_path: compressed_descriptor_path,
         f"v{version}/detail_index.json": build_stats["detail_index_path"],
         **{f"v{version}/{SHARE_INDEX_DIRNAME}/{shard}.json":
            os.path.join(share_index_dir, f"{shard}.json")
@@ -1604,11 +1616,13 @@ def sync(
     if signed and signed_rules:
         versioned_files[signed_rules["path"]] = signed["rules_local_path"]
         versioned_directories.append(signed_rules["path"].rsplit("/", 1)[0])
+    versioned_present = set()
     for directory in versioned_directories:
         expected = {path for path in versioned_files if path.rsplit("/", 1)[0] == directory}
         present = _discover_existing_remote_paths_for_directory(
             client, bucket, directory, expected, list_storage_paths, 1000,
         )
+        versioned_present |= present
         for path in present:
             if hashlib.sha256(download_file(client, bucket, path)).hexdigest() != _compute_file_sha256(versioned_files[path]):
                 raise ValueError(f"Refusing to mutate immutable catalog object: {path}")
@@ -1616,6 +1630,10 @@ def sync(
         validate_bucket_upload_capacity(
             client, bucket=bucket,
             object_size_bytes=os.path.getsize(build_stats["db_path"]),
+        )
+    if compressed["path"] not in versioned_present:
+        validate_bucket_upload_capacity(
+            client, bucket=bucket, object_size_bytes=compressed["size"],
         )
     if signed and signed_rules:
         validate_bucket_upload_capacity(
@@ -1656,6 +1674,13 @@ def sync(
     db_time = time.time() - start
     db_size_mb = build_stats["db_size_mb"]
     print(f"  Done ({db_size_mb:.1f} MB in {db_time:.1f}s)")
+
+    # The descriptor goes last: a phone that can see it must find the file it names.
+    # application/gzip with no Content-Encoding, so no client unpacks it in transit.
+    print(f"\nUploading {compressed['path']} ({compressed['size'] / (1024 * 1024):.1f} MB)...")
+    sync_versioned(compressed["path"], gz_path, content_type="application/gzip")
+    sync_versioned(remote_descriptor_path, compressed_descriptor_path)
+    print("  Done")
 
     # Upload unique detail blobs with bounded concurrency, retry logic, and remote dedupe.
     uploads = build_stats["unique_blob_uploads"]

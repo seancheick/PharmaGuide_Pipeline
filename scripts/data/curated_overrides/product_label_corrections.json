@@ -6,8 +6,8 @@
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every product entry is keyed by dsld_id and must carry: brand, product_name (for human-readable audit trail), raw_ingredient_text (the source row being corrected), corrected_ingredient_text (the text the cleaner should see, unchanged for unit-only corrections), correction_fields, evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer, and review_date (ISO 8601 YYYY-MM-DD). A verified cross-row defect may add additional_row_corrections, which inherit the product-level evidence, sources, reviewer, review_date, scope, and provenance tag. Quantity changes require exact raw and corrected value/unit pairs and must be supported by the official manufacturer or label image. Restoring a quantity absent from a form row additionally requires raw_quantity_missing=true, a positive corrected value/unit, and exact same-record source text that states the dose; the applier refuses to overwrite any existing quantity representation. A reviewed Daily Value correction requires an exact raw_daily_value and corrected_daily_value from the same official label; it rewrites only matching source percentages, never derives a percentage or changes a different value. A reviewed unresolved_unit scoring_disposition preserves exact raw_quantity_value/raw_quantity_unit, makes no inferred unit correction, and marks dose and upper-limit assessment unresolved until independent exact-label evidence resolves the conflict. It applies only when the raw name, value and unit all match. Reviewed hierarchy corrections may supply corrected_child_row_refs with exact parent raw_source_path/name/value/unit and exact child source paths/names/raw_child_names. The existing applier validates the whole group before moving working rows; it preserves original API source references and quantities and fails closed on mismatch. A source_descriptor disposition with an authored raw value/unit applies only to that exact quantity edition. Exact-source corrected_notes repairs require raw source paths, names, notes and quantity pairs for the entire bundle; a mismatch fails closed before edits. Original working notes retain _pre_correction_notes, and source paths remain unchanged. A reviewed source quantity conflict may set corrected_quantity_operator to ambiguous or unknown only with raw_quantities matching the entire original quantity array exactly. It preserves every number, unit and serving basis, changes only the existing unresolved qualifier, and retains original quantities for audit; it does not invent a replacement amount. Reviewed serving_basis_correction binds the exact ingredientRows, servingSizes and statements content SHA256 before replacing serving metadata or assigning quantity variants to individually reviewed preparation columns. It preserves all alternative amounts and original source snapshots and fails closed on any changed binding. corrected_quantities requires the entire raw_quantities array and preserves column count; it restores only individually image-verified value/unit transcriptions. Existing canonical PG_SUB_ product identities may use this same exact-product correction owner. Reviewed physicalState metadata binds its original object and permits only explicit name/langualCodeDescription strings; it does not rewrite an approval or infer a dosage form. Reviewed nutritionalInfo metadata binds the whole original typed object and may add printed Nutrition Facts entries of amount/unit with an optional printed qualifier operator (<, <=, >, >=, ~); a metadata-only repair keeps the source serving rows unchanged.",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-11-01",
-    "total_entries": 218,
+    "last_updated": "2026-11-03",
+    "total_entries": 252,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -10608,6 +10608,1770 @@
           }
         ]
       }
+    },
+    "27350": {
+      "brand": "GNC Pro Performance AMP",
+      "product_name": "Amplified Heat Extreme 180",
+      "raw_ingredient_text": "Caffeine Anhydrous",
+      "corrected_ingredient_text": "Caffeine Anhydrous",
+      "raw_source_path": "ingredientRows[4].nestedRows[2]",
+      "correction_fields": [
+        "servingSizes"
+      ],
+      "evidence": "Exact label 27350 read: Supplement Facts amounts are per 4 tablets; directions say two tablets before breakfast and two before a workout, or the full four tablet serving before the workout; the label prints 'Total caffeine per 4 capsule serving is 400 mg'. Four tablets is the day. DSLD's 2 daily servings of 4 tablets would double every row. Only the daily servings change; rows, amounts and statements stay as printed.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/27350",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/27350.pdf"
+      ],
+      "reviewer": "Claude Code label read; serving basis accepted in the dose batch review; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "9518117bfd9b5999a1b19aa317aac68d8f70a66df02b5a18410d5eca0511ae09",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 4,
+            "maxQuantity": 4,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Tablet(s)",
+            "inSFB": true
+          }
+        ]
+      }
+    },
+    "64845": {
+      "brand": "Life Extension",
+      "product_name": "Gamma E Mixed Tocopherols & Tocotrienols",
+      "raw_ingredient_text": "Alpha-Tocopherol",
+      "corrected_ingredient_text": "Alpha-Tocopherol",
+      "raw_source_path": "ingredientRows[1].nestedRows[2]",
+      "correction_fields": [
+        "printed_alpha_tocopherol_ranges"
+      ],
+      "evidence": "Exact label 64845 read: its mixed tocopherol and tocotrienol panels print a typical distribution with alpha-tocopherol 27-39 mg; 13-19 mg. DSLD stores each upper end as an exact amount and keeps the range in notes. The range stays a range; it is never an exact exposure, and non-alpha forms are not alpha exposure. No amount or row changes.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/64845",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/64845.pdf"
+      ],
+      "reviewer": "Claude Code label read; range treatment accepted in the dose batch review; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_printed_range",
+      "printed_alpha_tocopherol_ranges": {
+        "ingredientRows[1].nestedRows[2]": {
+          "low": 27,
+          "high": 39
+        },
+        "ingredientRows[2].nestedRows[4]": {
+          "low": 13,
+          "high": 19
+        }
+      }
+    },
+    "64848": {
+      "brand": "Life Extension",
+      "product_name": "Gamma E Mixed Tocopherols",
+      "raw_ingredient_text": "Alpha-Tocopherol",
+      "corrected_ingredient_text": "Alpha-Tocopherol",
+      "raw_source_path": "ingredientRows[1].nestedRows[2]",
+      "correction_fields": [
+        "printed_alpha_tocopherol_ranges"
+      ],
+      "evidence": "Exact label 64848 read: its mixed tocopherol and tocotrienol panels print a typical distribution with alpha-tocopherol 27-39 mg. DSLD stores each upper end as an exact amount and keeps the range in notes. The range stays a range; it is never an exact exposure, and non-alpha forms are not alpha exposure. No amount or row changes.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/64848",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/64848.pdf"
+      ],
+      "reviewer": "Claude Code label read; range treatment accepted in the dose batch review; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_printed_range",
+      "printed_alpha_tocopherol_ranges": {
+        "ingredientRows[1].nestedRows[2]": {
+          "low": 27,
+          "high": 39
+        }
+      }
+    },
+    "62796": {
+      "brand": "Life Extension",
+      "product_name": "Booster Softgels",
+      "raw_ingredient_text": "Alpha-Tocopherol",
+      "corrected_ingredient_text": "Alpha-Tocopherol",
+      "raw_source_path": "ingredientRows[4].nestedRows[2]",
+      "correction_fields": [
+        "printed_alpha_tocopherol_ranges"
+      ],
+      "evidence": "Exact label 62796 read: its mixed tocopherol and tocotrienol panels print a typical distribution with alpha-tocopherol 25.71-36.3 mg; 18.09-25.33 mg. DSLD stores each upper end as an exact amount and keeps the range in notes. The range stays a range; it is never an exact exposure, and non-alpha forms are not alpha exposure. No amount or row changes.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/62796",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/62796.pdf"
+      ],
+      "reviewer": "Claude Code label read; range treatment accepted in the dose batch review; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_printed_range",
+      "printed_alpha_tocopherol_ranges": {
+        "ingredientRows[4].nestedRows[2]": {
+          "low": 25.71,
+          "high": 36.3
+        },
+        "ingredientRows[9].nestedRows[4]": {
+          "low": 18.09,
+          "high": 25.33
+        }
+      }
+    },
+    "63428": {
+      "brand": "Life Extension",
+      "product_name": "Gamma E With Tocopherols & Tocotrienols",
+      "raw_ingredient_text": "Alpha-Tocopherol",
+      "corrected_ingredient_text": "Alpha-Tocopherol",
+      "raw_source_path": "ingredientRows[1].nestedRows[2]",
+      "correction_fields": [
+        "printed_alpha_tocopherol_ranges"
+      ],
+      "evidence": "Exact label 63428 read: its mixed tocopherol and tocotrienol panels print a typical distribution with alpha-tocopherol 27.63-39 mg; 14.5-20.3 mg. DSLD stores each upper end as an exact amount and keeps the range in notes. The range stays a range; it is never an exact exposure, and non-alpha forms are not alpha exposure. No amount or row changes.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/63428",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/63428.pdf"
+      ],
+      "reviewer": "Claude Code label read; range treatment accepted in the dose batch review; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_printed_range",
+      "printed_alpha_tocopherol_ranges": {
+        "ingredientRows[1].nestedRows[2]": {
+          "low": 27.63,
+          "high": 39
+        },
+        "ingredientRows[2].nestedRows[4]": {
+          "low": 14.5,
+          "high": 20.3
+        }
+      }
+    },
+    "49236": {
+      "brand": "Life Extension",
+      "product_name": "Super Booster Softgels With Advanced K2 Complex",
+      "raw_ingredient_text": "Alpha-Tocopherol",
+      "corrected_ingredient_text": "Alpha-Tocopherol",
+      "raw_source_path": "ingredientRows[4].nestedRows[2]",
+      "correction_fields": [
+        "printed_alpha_tocopherol_ranges"
+      ],
+      "evidence": "Exact label 49236 read: its mixed tocopherol and tocotrienol panels print a typical distribution with alpha-tocopherol 30.52-43.08 mg. DSLD stores each upper end as an exact amount and keeps the range in notes. The range stays a range; it is never an exact exposure, and non-alpha forms are not alpha exposure. No amount or row changes.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/49236",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/49236.pdf"
+      ],
+      "reviewer": "Claude Code label read; range treatment accepted in the dose batch review; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_printed_range",
+      "printed_alpha_tocopherol_ranges": {
+        "ingredientRows[4].nestedRows[2]": {
+          "low": 30.52,
+          "high": 43.08
+        }
+      }
+    },
+    "60404": {
+      "brand": "Life Extension",
+      "product_name": "Super Booster Softgels With Advanced K2 Complex",
+      "raw_ingredient_text": "Alpha-Tocopherol",
+      "corrected_ingredient_text": "Alpha-Tocopherol",
+      "raw_source_path": "ingredientRows[5].nestedRows[2]",
+      "correction_fields": [
+        "printed_alpha_tocopherol_ranges"
+      ],
+      "evidence": "Exact label 60404 read: its mixed tocopherol and tocotrienol panels print a typical distribution with alpha-tocopherol 30.52-43.08 mg. DSLD stores each upper end as an exact amount and keeps the range in notes. The range stays a range; it is never an exact exposure, and non-alpha forms are not alpha exposure. No amount or row changes.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/60404",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/60404.pdf"
+      ],
+      "reviewer": "Claude Code label read; range treatment accepted in the dose batch review; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_printed_range",
+      "printed_alpha_tocopherol_ranges": {
+        "ingredientRows[5].nestedRows[2]": {
+          "low": 30.52,
+          "high": 43.08
+        }
+      }
+    },
+    "243163": {
+      "brand": "GNC Mega Men",
+      "product_name": "Mega Men Gummy Multivitamin Mixed Berry",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/243163",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/243163.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Folic Acid",
+      "corrected_ingredient_text": "Folic Acid",
+      "raw_source_path": "ingredientRows[7].nestedRows[0]",
+      "raw_quantity_value": 240,
+      "raw_quantity_unit": "mcg DFE",
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "unit"
+      ],
+      "evidence": "Label prints Folate 400 mcg DFE (240 mcg Folic Acid). DSLD types the folic acid amount as mcg DFE. The amount is unchanged.",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "62815": {
+      "brand": "Life Extension",
+      "product_name": "Super K with Advanced K2 Complex",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/62815",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/62815.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Vitamin K1",
+      "corrected_ingredient_text": "Vitamin K1",
+      "raw_source_path": "ingredientRows[1].nestedRows[0]",
+      "raw_quantity_value": 1500,
+      "raw_quantity_unit": "mcg",
+      "corrected_quantity_value": 1000,
+      "corrected_quantity_unit": "mcg",
+      "correction_fields": [
+        "quantity"
+      ],
+      "evidence": "Label prints Vitamin K activity 2200 mcg from Vitamin K1 (as phytonadione) 1000 mcg, K2 MK-4 1000 mcg, K2 MK-7 200 mcg. DSLD types K1 as 1500 mcg, which does not sum to the printed total.",
+      "provenance_tag": "official_label_quantity_correction"
+    },
+    "328514": {
+      "brand": "Life Extension",
+      "product_name": "Life Extension Mix Capsules",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/328514",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/328514.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Thiamine",
+      "corrected_ingredient_text": "Thiamine",
+      "raw_source_path": "ingredientRows[4]",
+      "raw_quantity_value": 125,
+      "raw_quantity_unit": "mcg",
+      "corrected_quantity_unit": "mg",
+      "correction_fields": [
+        "unit"
+      ],
+      "evidence": "Label prints Vitamin B1 125 mg, 10417% DV, which is 125 mg against the 1.2 mg Daily Value. DSLD types the unit as mcg.",
+      "provenance_tag": "official_label_unit_correction"
+    },
+    "263869": {
+      "brand": "Solgar",
+      "product_name": "Ester-C plus 500 mg Vitamin C",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/263869",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/263869.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Vitamin C",
+      "corrected_ingredient_text": "Calcium",
+      "raw_source_path": "ingredientRows[1]",
+      "raw_quantity_value": 55,
+      "raw_quantity_unit": "mg",
+      "correction_fields": [
+        "name"
+      ],
+      "evidence": "Label prints Calcium 55 mg (as Ester-C Calcium Ascorbate), 4% DV, below Vitamin C 500 mg, 556% DV. DSLD names the 55 mg row Vitamin C, so vitamin C reads 555 mg and calcium is missing.",
+      "provenance_tag": "official_label_identity_correction"
+    },
+    "311734": {
+      "brand": "Nutricost Performance",
+      "product_name": "Intra Peach Mango",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/311734",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/311734.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Caffeine, Natural",
+      "corrected_ingredient_text": "Caffeine, Natural",
+      "raw_source_path": "ingredientRows[15]",
+      "correction_fields": [
+        "serving_basis"
+      ],
+      "evidence": "Label prints Serving Size 1 Scoop (21 g), 21 g per serving, mix 1 scoop daily. DSLD files every panel row against 22 g, which scales each daily amount by 21/22. Amounts are unchanged.",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "36ead703fb624c9fe486be20ec588779dd064f0221e1413196ecb8b4e361f42a",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 21,
+            "maxQuantity": 21,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "1 Scoop",
+            "inSFB": true
+          }
+        ],
+        "quantity_serving_basis": 21
+      }
+    },
+    "2704": {
+      "brand": "GNC Pro Performance",
+      "product_name": "L-Carnitine Cherry",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/2704",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/2704.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "L-Carnitine",
+      "corrected_ingredient_text": "L-Carnitine",
+      "raw_source_path": "ingredientRows[4]",
+      "correction_fields": [
+        "serving_basis"
+      ],
+      "evidence": "Label prints Serving Size 2 Tablespoons (30 mL), take 2 tablespoons daily. DSLD files it as 2 capsules per packet beside a second 30 mL serving with no daily count. Amounts are unchanged.",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "ca8a7653eddf573e871e60a5473ca799132fb6d15afcb80339111b86ff3b0591",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Tablespoon(s)",
+            "notes": "30 mL",
+            "inSFB": true
+          }
+        ],
+        "quantity_column_orders": {
+          "ingredientRows[0]": [
+            1
+          ],
+          "ingredientRows[1]": [
+            1
+          ],
+          "ingredientRows[2]": [
+            1
+          ],
+          "ingredientRows[3]": [
+            1
+          ],
+          "ingredientRows[4]": [
+            1
+          ]
+        }
+      }
+    },
+    "246435": {
+      "brand": "Pure Encapsulations",
+      "product_name": "PurePals (with Iron) Natural Cherry Flavor",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/246435",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/246435.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Vitamin D",
+      "corrected_ingredient_text": "Vitamin D",
+      "raw_source_path": "ingredientRows[4]",
+      "correction_fields": [
+        "serving_basis"
+      ],
+      "evidence": "Label prints two columns: 1 tablet (ages 2 to 3) and 2 tablets (ages 4 and up). DSLD lists vitamin D and iron as two rows each and gives every amount the same column. Each row is assigned to its printed column. Nothing is added or removed.",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "17758ed5bae5b0023395a60ec2f97f9b150a899510e280b197f572903da0778d",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Tablet(s)",
+            "notes": "ages 2 to 3",
+            "inSFB": true
+          },
+          {
+            "order": 2,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Tablet(s)",
+            "notes": "ages 4 and up"
+          }
+        ],
+        "quantity_column_orders": {
+          "ingredientRows[0]": [
+            1,
+            2
+          ],
+          "ingredientRows[1]": [
+            2,
+            1
+          ],
+          "ingredientRows[1].nestedRows[0]": [
+            2,
+            1
+          ],
+          "ingredientRows[2]": [
+            2,
+            1
+          ],
+          "ingredientRows[3]": [
+            2,
+            1
+          ],
+          "ingredientRows[6]": [
+            2,
+            1
+          ],
+          "ingredientRows[7]": [
+            2,
+            1
+          ],
+          "ingredientRows[8]": [
+            2,
+            1
+          ],
+          "ingredientRows[9]": [
+            2,
+            1
+          ],
+          "ingredientRows[10]": [
+            2,
+            1
+          ],
+          "ingredientRows[11]": [
+            2,
+            1
+          ],
+          "ingredientRows[11].nestedRows[0]": [
+            2,
+            1
+          ],
+          "ingredientRows[12]": [
+            2,
+            1
+          ],
+          "ingredientRows[13]": [
+            2,
+            1
+          ],
+          "ingredientRows[14]": [
+            2,
+            1
+          ],
+          "ingredientRows[15]": [
+            2,
+            1
+          ],
+          "ingredientRows[16]": [
+            2,
+            1
+          ],
+          "ingredientRows[19]": [
+            2,
+            1
+          ],
+          "ingredientRows[20]": [
+            2,
+            1
+          ],
+          "ingredientRows[21]": [
+            2,
+            1
+          ],
+          "ingredientRows[22]": [
+            2,
+            1
+          ],
+          "ingredientRows[23]": [
+            2,
+            1
+          ],
+          "ingredientRows[24]": [
+            2,
+            1
+          ],
+          "ingredientRows[25]": [
+            2,
+            1
+          ],
+          "ingredientRows[26]": [
+            2,
+            1
+          ],
+          "ingredientRows[27]": [
+            2,
+            1
+          ],
+          "ingredientRows[28]": [
+            2,
+            1
+          ],
+          "ingredientRows[29]": [
+            2,
+            1
+          ],
+          "ingredientRows[30]": [
+            2,
+            1
+          ],
+          "ingredientRows[4]": [
+            2
+          ],
+          "ingredientRows[5]": [
+            1
+          ],
+          "ingredientRows[17]": [
+            2
+          ],
+          "ingredientRows[18]": [
+            1
+          ]
+        }
+      }
+    },
+    "217227": {
+      "brand": "vitafusion GOODNESS",
+      "product_name": "Organic Kids Best Multi Mixed Berry",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/217227",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/217227.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Vitamin D",
+      "corrected_ingredient_text": "Vitamin D",
+      "raw_source_path": "ingredientRows[4]",
+      "correction_fields": [
+        "serving_basis"
+      ],
+      "evidence": "Label prints two columns: 1 gummy (2-3 yrs) and 2 gummies (4 yrs and older), one or two gummies per day. DSLD lists vitamin D as two rows and gives every amount the same column. Each row is assigned to its printed column.",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "ee8ced3de5cd73d2f0a8fbb6b222e1024886284ad353e2e9212f83bd80588f43",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gummy(ies)",
+            "notes": "2-3 yrs",
+            "inSFB": true
+          },
+          {
+            "order": 2,
+            "minQuantity": 2,
+            "maxQuantity": 2,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gummy(ies)",
+            "notes": "4 yrs and older"
+          }
+        ],
+        "quantity_column_orders": {
+          "ingredientRows[0]": [
+            2,
+            1
+          ],
+          "ingredientRows[1]": [
+            2,
+            1
+          ],
+          "ingredientRows[1].nestedRows[0]": [
+            2,
+            1
+          ],
+          "ingredientRows[1].nestedRows[0].nestedRows[0]": [
+            2,
+            1
+          ],
+          "ingredientRows[2]": [
+            2,
+            1
+          ],
+          "ingredientRows[3]": [
+            2,
+            1
+          ],
+          "ingredientRows[6]": [
+            2,
+            1
+          ],
+          "ingredientRows[7]": [
+            2,
+            1
+          ],
+          "ingredientRows[8]": [
+            2,
+            1
+          ],
+          "ingredientRows[8].nestedRows[0]": [
+            2,
+            1
+          ],
+          "ingredientRows[9]": [
+            2,
+            1
+          ],
+          "ingredientRows[10]": [
+            2,
+            1
+          ],
+          "ingredientRows[11]": [
+            2,
+            1
+          ],
+          "ingredientRows[12]": [
+            2,
+            1
+          ],
+          "ingredientRows[13]": [
+            2,
+            1
+          ],
+          "ingredientRows[4]": [
+            2
+          ],
+          "ingredientRows[5]": [
+            1
+          ]
+        }
+      }
+    },
+    "221132": {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product_name": "Myopower BCAA Tangy Orange",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/221132",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/221132.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Vitamin D",
+      "corrected_ingredient_text": "Vitamin D",
+      "raw_source_path": "ingredientRows[2]",
+      "correction_fields": [
+        "serving_basis"
+      ],
+      "evidence": "Label prints two columns, 1 scoop and 2 scoops, with mix 1-2 scoops and consume 2 scoops daily. DSLD lists the whole panel twice in one column. Rows 0-7 are the 2-scoop column and rows 8-15 the 1-scoop column.",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "9228f44e638906a84e2cc415424704e9b810e86c9f27ad319f8638a68458d2bc",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 22.5,
+            "maxQuantity": 22.5,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "1 Scoop",
+            "inSFB": true
+          },
+          {
+            "order": 2,
+            "minQuantity": 45,
+            "maxQuantity": 45,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "2 Scoops"
+          }
+        ],
+        "quantity_column_orders": {
+          "ingredientRows[0]": [
+            2
+          ],
+          "ingredientRows[1]": [
+            2
+          ],
+          "ingredientRows[1].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[1].nestedRows[0].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[2]": [
+            2
+          ],
+          "ingredientRows[3]": [
+            2
+          ],
+          "ingredientRows[4]": [
+            2
+          ],
+          "ingredientRows[5]": [
+            2
+          ],
+          "ingredientRows[5].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[5].nestedRows[1]": [
+            2
+          ],
+          "ingredientRows[5].nestedRows[2]": [
+            2
+          ],
+          "ingredientRows[6]": [
+            2
+          ],
+          "ingredientRows[6].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[6].nestedRows[1]": [
+            2
+          ],
+          "ingredientRows[6].nestedRows[2]": [
+            2
+          ],
+          "ingredientRows[7]": [
+            2
+          ],
+          "ingredientRows[7].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[7].nestedRows[1]": [
+            2
+          ],
+          "ingredientRows[7].nestedRows[2]": [
+            2
+          ],
+          "ingredientRows[8]": [
+            1
+          ],
+          "ingredientRows[9]": [
+            1
+          ],
+          "ingredientRows[9].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[9].nestedRows[0].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[10]": [
+            1
+          ],
+          "ingredientRows[11]": [
+            1
+          ],
+          "ingredientRows[12]": [
+            1
+          ],
+          "ingredientRows[13]": [
+            1
+          ],
+          "ingredientRows[13].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[13].nestedRows[1]": [
+            1
+          ],
+          "ingredientRows[13].nestedRows[2]": [
+            1
+          ],
+          "ingredientRows[14]": [
+            1
+          ],
+          "ingredientRows[14].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[14].nestedRows[1]": [
+            1
+          ],
+          "ingredientRows[14].nestedRows[2]": [
+            1
+          ],
+          "ingredientRows[15]": [
+            1
+          ],
+          "ingredientRows[15].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[15].nestedRows[1]": [
+            1
+          ],
+          "ingredientRows[15].nestedRows[2]": [
+            1
+          ]
+        }
+      }
+    },
+    "221165": {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product_name": "Myopower BCAA Cherry Limeade",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/221165",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/221165.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Vitamin D",
+      "corrected_ingredient_text": "Vitamin D",
+      "raw_source_path": "ingredientRows[2]",
+      "correction_fields": [
+        "serving_basis"
+      ],
+      "evidence": "Label prints two columns, 1 scoop and 2 scoops, with mix 1-2 scoops and consume 2 scoops daily. DSLD lists the whole panel twice in one column. Rows 0-7 are the 2-scoop column and rows 8-15 the 1-scoop column.",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "49515e9c46444d933b85a3dfdbfdc4d3dfd72c41f957dc1f84d9bc9bd30628bc",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 23.5,
+            "maxQuantity": 23.5,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "1 Scoop",
+            "inSFB": true
+          },
+          {
+            "order": 2,
+            "minQuantity": 47,
+            "maxQuantity": 47,
+            "minDailyServings": 1,
+            "maxDailyServings": 1,
+            "unit": "Gram(s)",
+            "notes": "2 Scoops"
+          }
+        ],
+        "quantity_column_orders": {
+          "ingredientRows[0]": [
+            2
+          ],
+          "ingredientRows[1]": [
+            2
+          ],
+          "ingredientRows[1].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[1].nestedRows[0].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[2]": [
+            2
+          ],
+          "ingredientRows[3]": [
+            2
+          ],
+          "ingredientRows[4]": [
+            2
+          ],
+          "ingredientRows[5]": [
+            2
+          ],
+          "ingredientRows[5].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[5].nestedRows[1]": [
+            2
+          ],
+          "ingredientRows[5].nestedRows[2]": [
+            2
+          ],
+          "ingredientRows[6]": [
+            2
+          ],
+          "ingredientRows[6].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[6].nestedRows[1]": [
+            2
+          ],
+          "ingredientRows[6].nestedRows[2]": [
+            2
+          ],
+          "ingredientRows[7]": [
+            2
+          ],
+          "ingredientRows[7].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[7].nestedRows[1]": [
+            2
+          ],
+          "ingredientRows[7].nestedRows[2]": [
+            2
+          ],
+          "ingredientRows[8]": [
+            1
+          ],
+          "ingredientRows[9]": [
+            1
+          ],
+          "ingredientRows[9].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[9].nestedRows[0].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[10]": [
+            1
+          ],
+          "ingredientRows[11]": [
+            1
+          ],
+          "ingredientRows[12]": [
+            1
+          ],
+          "ingredientRows[13]": [
+            1
+          ],
+          "ingredientRows[13].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[13].nestedRows[1]": [
+            1
+          ],
+          "ingredientRows[13].nestedRows[2]": [
+            1
+          ],
+          "ingredientRows[14]": [
+            1
+          ],
+          "ingredientRows[14].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[14].nestedRows[1]": [
+            1
+          ],
+          "ingredientRows[14].nestedRows[2]": [
+            1
+          ],
+          "ingredientRows[15]": [
+            1
+          ],
+          "ingredientRows[15].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[15].nestedRows[1]": [
+            1
+          ],
+          "ingredientRows[15].nestedRows[2]": [
+            1
+          ]
+        }
+      }
+    },
+    "206322": {
+      "brand": "GNC Milestones",
+      "product_name": "Baby Probiotic Powder with Colostrum Unflavored",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/206322",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/206322.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Saturated Fat",
+      "corrected_ingredient_text": "Saturated Fat",
+      "raw_source_path": "ingredientRows[2]",
+      "correction_fields": [
+        "serving_basis"
+      ],
+      "evidence": "Label prints one set of amounts per packet (2 g) with three Daily Value audiences: 0-12 months, 1-3 years, 4 years and up. DSLD lists the panel three times in one column, reading colostrum 1500 mg as 4500 mg. Row 13 (Calories) sits in the third listing, which has no other Calories row. Each listing is assigned to one audience, with no amount changed.",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "2d4c027302069bafd2e71c54e3e170a93722fdb56cb283595debee9d7474aef4",
+        "serving_sizes": [
+          {
+            "order": 1,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Packet(s)",
+            "notes": "2 g, ages 0-12 months",
+            "inSFB": true
+          },
+          {
+            "order": 2,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Packet(s)",
+            "notes": "2 g, ages 1-3 years",
+            "inSFB": true
+          },
+          {
+            "order": 3,
+            "minQuantity": 1,
+            "maxQuantity": 1,
+            "minDailyServings": null,
+            "maxDailyServings": null,
+            "unit": "Packet(s)",
+            "notes": "2 g, ages 4 years and up",
+            "inSFB": true
+          }
+        ],
+        "quantity_column_orders": {
+          "ingredientRows[0]": [
+            1
+          ],
+          "ingredientRows[1]": [
+            1
+          ],
+          "ingredientRows[2]": [
+            1
+          ],
+          "ingredientRows[3]": [
+            1
+          ],
+          "ingredientRows[4]": [
+            1
+          ],
+          "ingredientRows[5]": [
+            1
+          ],
+          "ingredientRows[6]": [
+            1
+          ],
+          "ingredientRows[6].nestedRows[0]": [
+            1
+          ],
+          "ingredientRows[6].nestedRows[1]": [
+            1
+          ],
+          "ingredientRows[6].nestedRows[2]": [
+            1
+          ],
+          "ingredientRows[6].nestedRows[3]": [
+            1
+          ],
+          "ingredientRows[7]": [
+            1
+          ],
+          "ingredientRows[8]": [
+            1
+          ],
+          "ingredientRows[9]": [
+            2
+          ],
+          "ingredientRows[10]": [
+            2
+          ],
+          "ingredientRows[11]": [
+            2
+          ],
+          "ingredientRows[12]": [
+            2
+          ],
+          "ingredientRows[13]": [
+            3
+          ],
+          "ingredientRows[14]": [
+            2
+          ],
+          "ingredientRows[15]": [
+            2
+          ],
+          "ingredientRows[16]": [
+            2
+          ],
+          "ingredientRows[16].nestedRows[0]": [
+            2
+          ],
+          "ingredientRows[16].nestedRows[1]": [
+            2
+          ],
+          "ingredientRows[16].nestedRows[2]": [
+            2
+          ],
+          "ingredientRows[16].nestedRows[3]": [
+            2
+          ],
+          "ingredientRows[17]": [
+            2
+          ],
+          "ingredientRows[18]": [
+            2
+          ],
+          "ingredientRows[19]": [
+            3
+          ],
+          "ingredientRows[20]": [
+            3
+          ],
+          "ingredientRows[21]": [
+            3
+          ],
+          "ingredientRows[22]": [
+            3
+          ],
+          "ingredientRows[23]": [
+            3
+          ],
+          "ingredientRows[24]": [
+            3
+          ],
+          "ingredientRows[24].nestedRows[0]": [
+            3
+          ],
+          "ingredientRows[24].nestedRows[1]": [
+            3
+          ],
+          "ingredientRows[24].nestedRows[2]": [
+            3
+          ],
+          "ingredientRows[24].nestedRows[3]": [
+            3
+          ],
+          "ingredientRows[25]": [
+            3
+          ],
+          "ingredientRows[26]": [
+            3
+          ]
+        }
+      }
+    },
+    "62825": {
+      "brand": "Life Extension",
+      "product_name": "Once-Daily Health Booster",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/62825",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/62825.pdf"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Trans-Zeaxanthin",
+      "corrected_ingredient_text": "Trans-Zeaxanthin",
+      "raw_source_path": "ingredientRows[5].nestedRows[2]",
+      "raw_quantity_value": 4,
+      "raw_quantity_unit": "mg",
+      "scoring_disposition": "source_descriptor",
+      "correction_fields": [
+        "scoring_disposition"
+      ],
+      "evidence": "Label prints \"providing 10 mg free lutein, 4 mg meso-zeaxanthin & trans-zeaxanthin\": one 4 mg amount for the pair. DSLD gives each its own 4 mg row, which reads as 8 mg. The second row stays on the label and no longer counts as a separate amount.",
+      "provenance_tag": "official_label_text_correction"
+    },
+    "PG_SUB_1D092114B51240BBB72F9650AA562605": {
+      "brand": "Cellucor",
+      "product_name": "C4 Sport Fruit Juicy Red",
+      "sources": [
+        "manual_labels/product_submissions/PG_SUB_1D092114B51240BBB72F9650AA562605.json"
+      ],
+      "reviewer": "Claude exact NIH DSLD API/PDF label reading; no clinical sign-off asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "raw_ingredient_text": "Caffeine Anhydrous",
+      "corrected_ingredient_text": "Caffeine Anhydrous",
+      "raw_source_path": "ingredientRows[14].nestedRows[1]",
+      "correction_fields": [
+        "serving_basis"
+      ],
+      "evidence": "Approved submission prints serving size 12.6 g and \"Take one serving (approx. 1 scoop)\". The directions count of 1 was divided by the 12.6 g basis, so caffeine read as 15.87 mg/day instead of the printed 200 mg. No daily maximum is printed, so one serving is the directed amount. Amounts are unchanged.",
+      "provenance_tag": "official_label_serving_basis_correction",
+      "serving_basis_correction": {
+        "raw_source_sha256": "102634c73b585d3c8d44712eff17c765b6f85e286142603252e68cdfd9a75de1",
+        "serving_sizes": [
+          {
+            "maxQuantity": 12.6,
+            "minQuantity": 12.6,
+            "order": 1,
+            "unit": "g",
+            "minDailyServings": 1,
+            "maxDailyServings": 1
+          }
+        ]
+      }
+    },
+    "228934": {
+      "brand": "GNC Total Lean",
+      "product_name": "CLA Soft Chew Strawberry Banana Smoothie",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[4]",
+      "raw_quantity_value": 500,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 9507,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 9507,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Supplement Facts panel prints CLA with Clarinol. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/228934",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/228934.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "183546": {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product_name": "CLA",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 4000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 9507,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 9507,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Supplement Facts panel prints CLA with Clarinol. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/183546",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/183546.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "213306": {
+      "brand": "GNC Total Lean",
+      "product_name": "CLA Powder Vanilla Wafer",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[4]",
+      "raw_quantity_value": 3.4,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Supplement Facts panel prints CLA with Clarinol. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/213306",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/213306.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "1059": {
+      "brand": "GNC Pro Performance",
+      "product_name": "Maximum CLA",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[3]",
+      "raw_quantity_value": 1300,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA) (Clarinol®) 1300 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/1059",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/1059.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "227855": {
+      "brand": "Nature's Way",
+      "product_name": "CLA-1300 Max Potency",
+      "raw_ingredient_text": "Clarinol CLA Complex",
+      "corrected_ingredient_text": "Clarinol CLA",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 1.3,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 284805,
+          "prefix": "providing",
+          "percent": 78,
+          "name": "Conjugated Linoleic Acid",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": "G199I91G4B"
+        }
+      ],
+      "correction_fields": [
+        "name"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Clarinol® CLA Complex 1.3 g, providing 78% conjugated linoleic acid (1,014 mg)\" and the front panel prints \"Patented Clarinol® CLA\". The structured row name does not match the existing Clarinol form, so the row scored as an unspecified form. Adding Clarinol as a second form would make the cleaner read this one-ingredient row as a blend header, so this product-scoped correction instead sets the working name to the existing form name and keeps the printed amount and the printed 78% form. It adds no alias and does not change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/227855",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/227855.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "176175": {
+      "brand": "GNC Pro Performance AMP",
+      "product_name": "CLA",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 4000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA) (from Safflower Oil)(Clarinol®) 4000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/176175",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/176175.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "4259": {
+      "brand": "GNC Women's Ultra Mega",
+      "product_name": "CLA 1000",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[3]",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints CLA with \"(Clarinol®) 1000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/4259",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/4259.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "220140": {
+      "brand": "GNC Beyond Raw",
+      "product_name": "Re-Built Mass XP Vanilla",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[1].nestedRows[1]",
+      "raw_quantity_value": 1,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Total Fat callout beside the panel prints \"CLA (Conjugated Linoleic Acid as Clarinol®) 1 g\" and Other Ingredients prints the same source. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/220140",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/220140.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "220238": {
+      "brand": "GNC Beyond Raw",
+      "product_name": "Re-Built Mass XP Strawberry",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[1].nestedRows[1]",
+      "raw_quantity_value": 1,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Total Fat callout beside the panel prints \"CLA (Conjugated Linoleic Acid as Clarinol®) 1 g\" and Other Ingredients prints the same source. The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/220238",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/220238.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "220239": {
+      "brand": "GNC Beyond Raw",
+      "product_name": "Re-Built Mass XP Peanut Butter",
+      "raw_ingredient_text": "CLA",
+      "corrected_ingredient_text": "CLA",
+      "raw_source_path": "ingredientRows[1].nestedRows[1]",
+      "raw_quantity_value": 1,
+      "raw_quantity_unit": "Gram(s)",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the Total Fat callout beside the panel prints \"CLA (Conjugated Linoleic Acid as Clarinol®) 1 g\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/220239",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/220239.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "26318": {
+      "brand": "GNC Pro Performance",
+      "product_name": "CLA 1000",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA)(Clarinol®) 1000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/26318",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/26318.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "65945": {
+      "brand": "GNC Women's Ultra Mega",
+      "product_name": "CLA 1000",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA)(Clarinol®) 1000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/65945",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/65945.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "66895": {
+      "brand": "GNC Pro Performance",
+      "product_name": "CLA 1000",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 1000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints \"Conjugated Linoleic Acid (CLA)(Clarinol®) 1000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/66895",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/66895.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
+    },
+    "70326": {
+      "brand": "GNC Pro Performance AMP",
+      "product_name": "CLA",
+      "raw_ingredient_text": "Conjugated Linoleic Acid",
+      "corrected_ingredient_text": "Conjugated Linoleic Acid",
+      "raw_source_path": "ingredientRows[2]",
+      "raw_quantity_value": 4000,
+      "raw_quantity_unit": "mg",
+      "raw_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        }
+      ],
+      "corrected_forms": [
+        {
+          "order": 1,
+          "ingredientId": 4243,
+          "prefix": "from",
+          "percent": null,
+          "name": "Safflower Oil",
+          "category": "fat",
+          "ingredientGroup": "Safflower Oil",
+          "uniiCode": null
+        },
+        {
+          "order": 2,
+          "prefix": "as",
+          "percent": null,
+          "name": "Clarinol",
+          "category": "fatty acid",
+          "ingredientGroup": "Conjugated Linoleic Acid",
+          "uniiCode": null
+        }
+      ],
+      "correction_fields": [
+        "forms"
+      ],
+      "evidence": "On the official NIH-hosted label for this exact product, the panel prints CLA with \"(Clarinol®) 4000 mg\". The structured DSLD row keeps Clarinol only as an alternate name or in its name, so its forms carry no Clarinol and the row scored as an unspecified form. This product-scoped correction adds the printed form and keeps every printed amount and any DSLD source form. It does not read alternate names, add an alias, or change the Clarinol grade or evidence.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/v9/label/70326",
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/70326.pdf"
+      ],
+      "reviewer": "Claude original-label data integrity review, scope confirmed by Sean Cheick (owner of record); no clinical approval asserted",
+      "review_date": "2026-11-03",
+      "scope": "dsld_id_only",
+      "provenance_tag": "official_label_form_correction"
     }
   }
 }

@@ -2,6 +2,9 @@
 # Publish an already human-approved safety-alert release without rebuilding the
 # catalog. Resolution is deliberately absent: it is a draft-authoring step and
 # may never mutate a published record.
+#
+# The publish step refuses until the staged feed is signed, so a first run stops
+# there with the feed ready. docs/RELEASE_SIGNING_RUNBOOK.md has the steps.
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

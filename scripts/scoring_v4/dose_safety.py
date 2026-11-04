@@ -674,22 +674,35 @@ def evaluate_dose_safety(product: Dict[str, Any]) -> DoseSafetyResult:
 
 
 def _declared_caffeine_rows(product: Dict[str, Any]) -> tuple[list, dict, int]:
-    """Caffeine's analyte total, preserving declarations and confirmed bounds.
-
-    Ingredient-count deduplication is not analyte deduplication: a quantified
-    caffeine projection from guarana is the caffeine exposure even though its
-    carrier is already an ingredient. A declared total owns its components.
-    Qualified or missing amounts never become an exact daily total; only their
-    confirmed lower bound can establish a ceiling.
-    """
-    from scoring_input_contract import get_scoring_ingredients, is_lent_blend_mass, source_linked_rows
+    """Caffeine's analyte rows among the scoring input; see distinct_caffeine_rows."""
+    from scoring_input_contract import get_scoring_ingredients, source_linked_rows
     from scoring_v4.exposure import row_exposure
-    from scoring_v4.modules.sports_helpers import CAFFEINE_CANONICALS
 
     try:
         rows = [row for row in get_scoring_ingredients(product, strict=True).rows if isinstance(row, dict)]
     except Exception:
         return [], {}, 0
+    return distinct_caffeine_rows(
+        rows,
+        lambda row: row_exposure(product, row, basis="per_use", unit="mg"),
+        lambda row, candidates: source_linked_rows(product, row, candidates),
+    )
+
+
+def distinct_caffeine_rows(rows: list, read_exposure, linked_rows) -> tuple[list, dict, int]:
+    """Caffeine's analyte total, preserving declarations and confirmed bounds.
+
+    The one owner of which rows are distinct caffeine. Each caller passes its own
+    rows, and how it reads an amount: scoring its input, warnings the rows they
+    judge. Ingredient-count deduplication is not analyte deduplication: a quantified
+    caffeine projection from guarana is the caffeine exposure even though its
+    carrier is already an ingredient. A declared total owns its components.
+    Qualified or missing amounts never become an exact daily total; only their
+    confirmed lower bound can establish a ceiling.
+    """
+    from scoring_input_contract import is_lent_blend_mass
+    from scoring_v4.modules.sports_helpers import CAFFEINE_CANONICALS
+
     caffeine = [row for row in rows if _norm_text(row.get("canonical_id")) in CAFFEINE_CANONICALS]
     if not caffeine:
         return [], {}, 0
@@ -703,7 +716,7 @@ def _declared_caffeine_rows(product: Dict[str, Any]) -> tuple[list, dict, int]:
             and other.get("scoring_input_kind") != "product_level_evidence"
             and _norm_text(other.get("canonical_id")) in CAFFEINE_CANONICALS
             and not other.get("is_compound_duplicate") and not is_lent_blend_mass(other)
-            for other in source_linked_rows(product, row, candidates)
+            for other in linked_rows(row, candidates)
         ):
             continue
         counted.append(row)
@@ -714,7 +727,7 @@ def _declared_caffeine_rows(product: Dict[str, Any]) -> tuple[list, dict, int]:
     for total in totals:
         name = _norm_text(total.get("name") or total.get("standard_name"))
         path = str(total.get("raw_source_path") or "")
-        parent_exposure = row_exposure(product, total, basis="per_use", unit="mg")
+        parent_exposure = read_exposure(total)
         children = [row for row in counted if row is not total and not row.get("is_parent_total") and (
             name and _norm_text(row.get("parent_blend")) == name
             or path and str(row.get("raw_source_path") or "").startswith(path + ".")
@@ -723,7 +736,7 @@ def _declared_caffeine_rows(product: Dict[str, Any]) -> tuple[list, dict, int]:
             # duplicate in that source group, not every independent caffeine.
             or row.get("is_nested_ingredient") and name == _norm_text(row.get("name") or row.get("standard_name"))
             and parent_exposure.exact
-            and (child_exposure := row_exposure(product, row, basis="per_use", unit="mg")).exact
+            and (child_exposure := read_exposure(row)).exact
             and child_exposure.per_serving_amount == parent_exposure.per_serving_amount
         )]
         # Older scoring rows retain the total marker without the child links.
@@ -731,11 +744,24 @@ def _declared_caffeine_rows(product: Dict[str, Any]) -> tuple[list, dict, int]:
         # or unquantified breakdown. Scoped totals leave independent sources in.
         if not children and len(totals) == 1:
             children = [row for row in counted if row is not total]
+        # A complex printing other substances beside its caffeine: the mass is the
+        # complex's, and the caffeine is the amount printed for it.
+        if path and any(
+            str(row.get("raw_source_path") or "").startswith(path + ".")
+            and _norm_text(row.get("canonical_id")) not in CAFFEINE_CANONICALS
+            for row in rows
+        ) and any(
+            str(row.get("raw_source_path") or "").startswith(path + ".")
+            and read_exposure(row).exact
+            for row in children
+        ):
+            excluded.add(id(total))
+            continue
         if not parent_exposure.exact:
             # An upper-qualified or unread total may still disclose a useful
             # component floor. They describe one exposure: take the stronger
             # bound, rather than adding total and components or losing either.
-            child_exposures = [row_exposure(product, row, basis="per_use", unit="mg") for row in children]
+            child_exposures = [read_exposure(row) for row in children]
             parent_floor = parent_exposure.minimum or 0.0
             child_floor = sum(exposure.minimum or 0.0 for exposure in child_exposures)
             floor = max(parent_floor, child_floor)
