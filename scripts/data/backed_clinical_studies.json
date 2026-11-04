@@ -3013,6 +3013,7 @@
         "reviewed_at": "2026-10-28",
         "excluded_claim_terms": [
           "energy",
+          "energy production",
           "heart failure"
         ]
       }

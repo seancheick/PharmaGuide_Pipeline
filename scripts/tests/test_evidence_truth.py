@@ -63,3 +63,35 @@ def test_a_finished_mismatch_keeps_its_finding(pipeline):
     assert evidence["score"] == 0
     assert evidence["display_state"] == "applicability_unestablished"
     assert NOT_ESTABLISHED in evidence["reason"]
+
+
+def test_a_brand_printed_as_an_alternate_name_reaches_its_record(pipeline):
+    """231852 prints Ubiquinol (Kaneka Ubiquinol). The record is read, and the signed
+    scope still decides: the label's only claim is unrelated, so it earns nothing."""
+    enriched = _enrich(pipeline, "evidence_truth_231852_raw.json")
+    rejected = {m["id"]: m["reason_code"] for m in enriched["evidence_data"]["rejected_clinical_matches"]}
+    assert rejected["BRAND_KANEKA_UBIQUINOL"] == "label_purpose_evidence_mismatch"
+    assert "BRAND_KANEKA_UBIQUINOL" not in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
+
+
+def test_an_alternate_name_only_reaches_a_brand_record(pipeline):
+    """"DGL" beside D-Glucuronolactone is a different substance from licorice DGL."""
+    normalizer, enricher = pipeline
+    raw = json.loads((FIXTURES / "evidence_truth_231852_raw.json").read_text())
+    raw["ingredientRows"][0].update(name="D-Glucuronolactone", alternateNames=["DGL"])
+    enriched = enricher.enrich_product(normalizer.normalize_product(raw))[0]
+    evidence = enriched["evidence_data"]
+    assert "PRECLIN_DGL" not in [m["id"] for m in evidence["clinical_matches"] + evidence["rejected_clinical_matches"]]
+
+
+def test_a_brand_reached_by_its_alternate_name_still_meets_its_exclusions(pipeline):
+    """17550 prints Kaneka QH and a "Promotes: Energy Production" bullet. Kaneka's signed
+    scope excludes energy, so reaching the record doesn't earn its credit."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    enriched = _enrich(pipeline, "evidence_truth_17550_raw.json")
+    rejected = {m["id"]: m["reason_code"] for m in enriched["evidence_data"]["rejected_clinical_matches"]}
+    assert rejected["BRAND_KANEKA_UBIQUINOL"] == "label_purpose_evidence_mismatch"
+    scored = build_scored_artifact(enriched)
+    assert scored["quality_pillars_v4"]["evidence"]["score"] == 0
+    assert scored["quality_assessment_status"] == "partial"
