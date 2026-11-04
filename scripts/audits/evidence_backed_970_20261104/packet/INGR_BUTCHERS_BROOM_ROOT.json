@@ -1,0 +1,195 @@
+{
+  "record_id": "INGR_BUTCHERS_BROOM_ROOT",
+  "labels": 4,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive on a named primary outcome in one trial of a ruscus extract in women with chronic venous insufficiency, at a dose the abstract does not print",
+  "decision": "held: dose of the Fagorutin Ruscus extract in PMID 12040966 is not in the abstract and no open full text was shown, so rule 2's verified dose can't be met or ruled out",
+  "summary": "Four labels print butcher's broom root at 720 or 940 mg per serving; label text seen on 251524 says traditional leg vein support, and 327889 prints 720 mg root per 2 capsules. The only trial of ruscus alone found is 12040966: 148 women with chronic venous insufficiency, placebo controlled, positive on the named primary outcome of leg volume change over 12 weeks. Its abstract states no mg dose and no extract ratio. Every other trial and meta-analysis found tested the combination with hesperidin methyl chalcone or hesperidin and vitamin C (28225220, 14612852, 3048951).",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_butchers_broom_root_12040966",
+      "components": [
+        "INGR_BUTCHERS_BROOM_ROOT"
+      ],
+      "source_pmids": [
+        "12040966"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Ruscus aculeatus",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_venous_insufficiency",
+      "purpose": "leg_edema_and_venous_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_butchers_broom_root_12040966",
+      "population": {
+        "age_group": "adult",
+        "description": "166 women with chronic venous insufficiency (Widmer I-II, CEAP 3-4) included; 148 in the intent-to-treat analysis, aged 30-89."
+      },
+      "study_design": "Multicentre, double-blind, randomized, placebo-controlled; 12 weeks",
+      "outcomes": [
+        {
+          "name": "Primary: area under baseline of leg volume change over 12 weeks (AUB0-12), significant difference from placebo, -827 ml x day",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Leg volume change at weeks 8 and 12 (-16.5 ml and -20.5 ml), ankle and leg circumference",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Heavy tired legs and sensation of tension at week 12",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract gives no amount in mg, only 'the recommended daily dosage according to the German monograph'; no dose invented here.",
+        "Study product is a ruscus extract (Fagorutin Ruscus Kapseln); the abstract prints no extract ratio or saponin content. Labels print butcher's broom root in mg, with no extract stated in the rows.",
+        "Women only.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Ruscus extract (Fagorutin Ruscus Kapseln), recommended daily dosage according to the German monograph, 12 weeks; amount not printed in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12040966",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "35893088": "Symposium review of the combination of Ruscus extract, hesperidin methyl chalcone and vitamin C; not ruscus alone.",
+    "28225220": "Meta-analysis of venoactive drugs containing Ruscus (Cyclo 3 fort constituents); abstract does not separate ruscus alone.",
+    "14612852": "Meta-analysis of Cyclo 3 Fort, a combination with hesperidin methyl chalcone and ascorbic acid.",
+    "3048951": "Double-blind crossover of a combination, Ruscus extract 16.5 mg with hesperidin and ascorbic acid."
+  },
+  "stop_or_hold": "Dose of 12040966 is needed from the full text (2002, no PMC id seen). Even with it, fields can't compare an extract at a monograph dose with labels printing root mg and no ratio. Row canonical on all 4 labels is butcher_s_broom, while the record and the74 use butchers_broom_root; labels.py printed empty rows for that reason.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "12040966",
+      "title_fetched": "Efficacy and safety of a Butcher's broom preparation (Ruscus aculeatus L. extract) compared to placebo in patients suffering from chronic venous insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12040966/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35893088",
+      "title_fetched": "Clinical Perspectives and Management of Edema in Chronic Venous Disease-What about Ruscus?",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35893088/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28225220",
+      "title_fetched": "Efficacy of Ruscus extract, HMC and vitamin C, constituents of Cyclo 3 fort®, on improving individual venous symptoms and edema: a systematic review and meta-analysis of randomized double-blind placebo-controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28225220/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "14612852",
+      "title_fetched": "Meta-analysis of clinical trials of Cyclo 3 Fort in the treatment of chronic venous insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14612852/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "3048951",
+      "title_fetched": "Use of extract of Ruscus aculeatus in venous disease in the lower limbs.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3048951/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_BUTCHERS_BROOM_ROOT",
+    "standard_name": "Butcher's Broom (Ruscus aculeatus)",
+    "aliases": [
+      "Butcher's Broom"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "12040966"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive on a named primary outcome in one trial of a ruscus extract in women with chronic venous insufficiency, at a dose the abstract does not print. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "leg volume",
+      "ankle and leg circumference",
+      "heavy tired legs"
+    ],
+    "health_goals_supported": [],
+    "notes": "Four labels print butcher's broom root at 720 or 940 mg per serving; label text seen on 251524 says traditional leg vein support, and 327889 prints 720 mg root per 2 capsules. The only trial of ruscus alone found is 12040966: 148 women with chronic venous insufficiency, placebo controlled, positive on the named primary outcome of leg volume change over 12 weeks. Its abstract states no mg dose and no extract ratio. Every other trial and meta-analysis found tested the combination with hesperidin methyl chalcone or hesperidin and vitamin C (28225220, 14612852, 3048951).",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Women with chronic venous insufficiency",
+      "supported_outcomes": [
+        "leg volume",
+        "ankle and leg circumference",
+        "heavy tired legs"
+      ],
+      "source_pmids": [
+        "12040966"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Four labels print butcher's broom root at 720 or 940 mg per serving; label text seen on 251524 says traditional leg vein support, and 327889 prints 720 mg root per 2 capsules. The only trial of ruscus alone found is 12040966: 148 women with chronic venous insufficiency, placebo controlled, positive on the named primary outcome of leg volume change over 12 weeks. Its abstract states no mg dose and no extract ratio. Every other trial and meta-analysis found tested the combination with hesperidin methyl chalcone or hesperidin and vitamin C (28225220, 14612852, 3048951). Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12040966",
+        "title": "Efficacy and safety of a Butcher's broom preparation (Ruscus aculeatus L. extract) compared to placebo in patients suffering from chronic venous insufficiency.",
+        "citation": "Arzneimittel-Forschung (2002)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12040966/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1055/s-0031-1299887"
+      }
+    ]
+  }
+}

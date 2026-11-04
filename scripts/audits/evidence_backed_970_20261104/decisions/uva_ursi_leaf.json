@@ -1,0 +1,29 @@
+{
+  "canonical": "uva_ursi_leaf",
+  "labels": 11,
+  "stored": "mixed (one stored trial, 34111592)",
+  "as_read": "A placebo-controlled factorial trial found no evidence of an effect on urinary frequency symptoms, and an active-controlled trial failed non-inferiority on symptoms with numerically more pyelonephritis, so no symptom benefit is shown; the one positive is fewer antibiotic courses against fosfomycin.",
+  "route": "null_literature",
+  "quote": {
+    "pmid": "30685500",
+    "text": "We found no evidence of an effect of either intervention on the severity of frequency symptoms."
+  },
+  "positive_named": ["34111592"],
+  "proposed_decision_text": "These 11 labels print bearberry leaf extract at 750 mg with no ratio or standardization (311750, 311751, 311752, 311753, 252759, 254318, 254319, 254321), a 4:1 extract at 750 mg (331034), a 10:1 extract at 450 mg (306397), and uva ursi leaves at 1.11 g (304708). None prints an arbutin amount. In 382 women with acute uncomplicated urinary tract infection given a delayed antibiotic prescription, uva-ursi extract did not differ from placebo on frequency symptoms on days 2 to 4 (-0.06, 95% CI -0.33 to 0.21, p 0.661) and showed no evidence of reducing antibiotic use (30685500). In 398 women, uva ursi 105 mg, two tablets three times daily for 5 days, failed non-inferiority to fosfomycin on symptom burden (136.5%, margin 125%), with 8 versus 2 cases of pyelonephritis (p 0.067). The same trial did find 63.6% fewer antibiotic courses (34111592), the one positive result, which conflicts with 30685500 on antibiotic use. Conflicting evidence with no clear benefit; no Evidence credit.",
+  "preparation_differences": [
+    "304708 prints whole leaves at 1.11 g with a 'traditional urinary support' statement. Both trials read tested an extract, so no trial read tested this preparation.",
+    "306397 prints a 10:1 extract and 331034 a 4:1 extract; the other 8 print no ratio. Neither trial abstract states a ratio or arbutin content. 30685500 states no dose.",
+    "Amount: 34111592 gave 105 mg tablets, two three times daily. Labels print 450 to 750 mg of extract per listed amount, or 1.11 g of leaf; no conversion between them is attempted."
+  ],
+  "studies_to_add": [
+    {"pmid": "30685500", "study_type": "rct", "sample_size": 382, "primary_endpoint": "Mean frequency symptom score on days 2 to 4, intention to treat (the abstract does not use the word primary)", "effect_direction": "null", "quote": "We found no evidence of an effect of either intervention on the severity of frequency symptoms."}
+  ],
+  "clinician_items": [
+    "34111592: pyelonephritis in 8 women on uva ursi versus 2 on fosfomycin (mean difference 2.8, 95% CI 0.2 to 5.9, p 0.067); authors conclude 'more safety concerns than fosfomycin'.",
+    "30685500: no safety concerns and no upper tract infection episodes recorded, which contrasts with 34111592.",
+    "12162475: healthy volunteers excreted 64.8 to 66.7% of the arbutin dose as hydroquinone equivalents in urine. Pharmacokinetic only, no efficacy; relevant to hydroquinone exposure questions held by the safety owner."
+  ],
+  "stored_rating_note": "Stored mixed reflects the one trial; the antibiotic reduction is against an antibiotic comparator by design, so it is partly a consequence of not giving the antibiotic first. As read, null on symptoms with a safety signal. Stored applicability_decision says no placebo-controlled benefit is established, which 30685500 now backs directly but which the record does not cite.",
+  "pmids_read": ["34111592", "30685500", "35750460", "12162475"],
+  "unread_notes": "Abstracts only. Two searches (counts 12 and 11). 31035018 has no abstract (commentary), not used. 29970072 (REGATTA design paper) seen only as an excerpt and not opened; 34111592 is that trial's results as far as the excerpts show, which is my inference and not asserted in the text. 35750460 is the BRUMI protocol (NCT05055544, target 504 women, bearberry versus fosfomycin): no results paper surfaced in the 2022 to 2026 search, so the result is unknown and it could change this read when published. 36052473, 29078739 and 42417299 are combinations or in vitro from their excerpts and were not opened. 40864745 and 40290034 are narrative reviews, not opened."
+}

@@ -1,0 +1,469 @@
+{
+  "record_id": "INGR_MASTIC_GUM",
+  "labels": 3,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive for functional dyspepsia symptoms in two trials, one of them placebo controlled; null on blood pressure in one trial; unresolved in inflammatory bowel disease",
+  "decision": "closed_no_credit",
+  "summary": "Three labels print Mastic Gum 1000 mg, two with a digestive positioning. In functional dyspepsia, a placebo RCT at 350 mg three times daily (19961914, 148 patients) improved symptoms but names no primary outcome, and a crossover at 1.4 g/day (41197785) was positive on named primary outcomes against no intervention, without placebo. In well-controlled hypertension, 42885189 found no blood pressure difference at 1500 or 2800 mg/day. In inflammatory bowel disease, 30450689 reports within-group and marker changes at 2.8 g/day and no primary between-group result in the abstract.",
+  "question_for_clinician": "Recommend no credit from this review. 41197785 meets rule 2 for a capsule of mastic alone on a named primary outcome, without placebo and at 1.4 g/day; 19961914 is placebo controlled at about the label's amount but names no primary outcome. Do these two support a digestive purpose at the printed 1000 mg, or does the lack of a placebo trial with a named primary outcome keep it at no credit?",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_mastic_gum_19961914",
+      "components": [
+        "INGR_MASTIC_GUM"
+      ],
+      "source_pmids": [
+        "19961914"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Pistacia lentiscus var. chia",
+        "plant_part": "resin"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "functional_dyspepsia",
+      "purpose": "dyspepsia_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_mastic_gum_19961914",
+      "population": {
+        "age_group": "adult",
+        "description": "148 patients meeting Rome II criteria for functional dyspepsia."
+      },
+      "study_design": "Prospective, randomized, double-blind, placebo-controlled; 3 weeks",
+      "outcomes": [
+        {
+          "name": "Hong Kong index symptom score after treatment lower than placebo, 14.78 vs 19.96 (p<0.05)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Marked symptom improvement in 77% vs 40% on placebo (p<0.02)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract uses no words for a primary outcome; the change in Hong Kong index is the first efficacy measure described, so hierarchy stays not_reported.",
+        "Three weeks only.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1050
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 21,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Chios mastic gum 350 mg three times daily for 3 weeks.",
+        "normalization": {
+          "basis": "350 mg three times daily as printed; daily total is simple addition."
+        },
+        "source_provenance": {
+          "pmid": "19961914",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_mastic_gum_41197785",
+      "components": [
+        "INGR_MASTIC_GUM"
+      ],
+      "source_pmids": [
+        "41197785"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Pistacia lentiscus var. chia",
+        "plant_part": "resin"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "functional_dyspepsia",
+      "purpose": "dyspepsia_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_mastic_gum_41197785",
+      "population": {
+        "age_group": "adult",
+        "description": "Adult volunteers with functional dyspepsia by Rome IV criteria, Athens, Greece; number not printed in the abstract."
+      },
+      "study_design": "Randomized three-way crossover; each phase 4 weeks with 14-day washout; comparator is a no-intervention period, no placebo",
+      "outcomes": [
+        {
+          "name": "Primary, Leuven Postprandial Distress Scale: FD symptoms improved against the no-intervention period (p < 0.001)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Upper abdominal bloating, epigastric burning and heartburn reduced with capsules",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No placebo, so not blinded by placebo; subjective scale.",
+        "Sample size not printed in the abstract. The p value is stated jointly for capsules and Mastiha-water.",
+        "Mastiha-water arm (20 ml/day) is a different preparation and is not on these labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1.4
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Mastiha capsules 1.4 g/day for 4 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41197785",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_mastic_gum_42885189",
+      "components": [
+        "INGR_MASTIC_GUM"
+      ],
+      "source_pmids": [
+        "42885189"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Pistacia lentiscus var. chia",
+        "plant_part": "resin"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hypertension",
+      "purpose": "blood_pressure",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_mastic_gum_42885189",
+      "population": {
+        "age_group": "adult",
+        "description": "106 adults with stable, well-controlled hypertension and variable cardiovascular risk."
+      },
+      "study_design": "Double-blind, randomized, placebo-controlled, three arms; 3 months",
+      "outcomes": [
+        {
+          "name": "Primary: 24-h ambulatory systolic and diastolic blood pressure, no significant between-group differences",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No label here carries a blood pressure purpose.",
+        "Oxidative stress and proteasome markers also unchanged across groups.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1500,
+          2800
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Chios mastic 1500 mg/day or 2800 mg/day for 3 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42885189",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_mastic_gum_30450689",
+      "components": [
+        "INGR_MASTIC_GUM"
+      ],
+      "source_pmids": [
+        "30450689"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Pistacia lentiscus var. chia",
+        "plant_part": "resin"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "inflammatory_bowel_disease",
+      "purpose": "quality_of_life",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_mastic_gum_30450689",
+      "population": {
+        "age_group": "adult",
+        "description": "60 patients with active inflammatory bowel disease on stable medical treatment."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled; 3 months, adjunct",
+      "outcomes": [
+        {
+          "name": "IBDQ score improved from baseline on mastiha (p = 0.004); primary was defined as a clinically important between-group difference, and the abstract does not report one",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Faecal lysozyme decreased on mastiha, mean change significant (p = 0.021)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Adjunct to stable medical treatment.",
+        "No label here carries an inflammatory bowel purpose, and 2.8 g/day is well above the 1000 mg labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          2.8
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Mastiha 2.8 g/day for 3 months, adjunct.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "30450689",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "41832367": "Adjunct to bismuth quadruple therapy, single-blind pilot; H. pylori eradication not significant (p = 0.19); dose not in the abstract.",
+    "38533281": "Non-inferiority trial against levosulpiride in diabetic gastroparesis, 38 people; abstract states 'stem extract', no dose and no primary outcome.",
+    "37001176": "Systematic review in inflammatory bowel disease that includes animal studies; calls for more high-quality trials."
+  },
+  "stop_or_hold": "Fields can't express a comparator of no intervention against placebo. Labels print 1000 mg with no serving frequency compared to the trials' 1050 and 1400 mg per day.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "19961914",
+      "title_fetched": "Is Chios mastic gum effective in the treatment of functional dyspepsia? A prospective randomised double-blind placebo controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19961914/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41197785",
+      "title_fetched": "A randomized, three-way crossover clinical trial on the efficacy of Mastiha based therapies (Pistacia lentiscus var. Chia) in functional dyspepsia.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41197785/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42885189",
+      "title_fetched": "Chios Mastic in Well-Controlled Hypertension: Findings From the HYPER-MASTIC Randomized Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42885189/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30450689",
+      "title_fetched": "Regulation of faecal biomarkers in inflammatory bowel disease patients treated with oral mastiha (Pistacia lentiscus) supplement: A double-blind and placebo-controlled randomised trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30450689/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41832367",
+      "title_fetched": "Mastic gum as an adjunct therapy to standard bismuth quadruple therapy for Helicobacter pylori eradication: A randomized single-blind pilot study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41832367/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38533281",
+      "title_fetched": "Efficacy of Pistacia lentiscus Plant (Rumi Mastagi) in Comparison to Levosulpiride in Patients with Diabetic Gastroparesis: A Double-Blind Non-Inferior Randomised Control Trial Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38533281/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37001176",
+      "title_fetched": "The Effect of Mastic Chios Supplementation in Inflammatory Bowel Disease: A Systematic Literature Review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37001176/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_MASTIC_GUM",
+    "standard_name": "Mastic Gum (Pistacia lentiscus var. chia resin)",
+    "aliases": [
+      "Mastic Gum"
+    ],
+    "category": "digestive_gut",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "19961914",
+      "41197785",
+      "42885189",
+      "30450689"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive for functional dyspepsia symptoms in two trials, one of them placebo controlled; null on blood pressure in one trial; unresolved in inflammatory bowel disease. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "dyspepsia symptoms"
+    ],
+    "health_goals_supported": [],
+    "notes": "Three labels print Mastic Gum 1000 mg, two with a digestive positioning. In functional dyspepsia, a placebo RCT at 350 mg three times daily (19961914, 148 patients) improved symptoms but names no primary outcome, and a crossover at 1.4 g/day (41197785) was positive on named primary outcomes against no intervention, without placebo. In well-controlled hypertension, 42885189 found no blood pressure difference at 1500 or 2800 mg/day. In inflammatory bowel disease, 30450689 reports within-group and marker changes at 2.8 g/day and no primary between-group result in the abstract.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with functional dyspepsia",
+      "supported_outcomes": [
+        "dyspepsia symptoms"
+      ],
+      "source_pmids": [
+        "19961914",
+        "41197785",
+        "42885189",
+        "30450689"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Three labels print Mastic Gum 1000 mg, two with a digestive positioning. In functional dyspepsia, a placebo RCT at 350 mg three times daily (19961914, 148 patients) improved symptoms but names no primary outcome, and a crossover at 1.4 g/day (41197785) was positive on named primary outcomes against no intervention, without placebo. In well-controlled hypertension, 42885189 found no blood pressure difference at 1500 or 2800 mg/day. In inflammatory bowel disease, 30450689 reports within-group and marker changes at 2.8 g/day and no primary between-group result in the abstract. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19961914",
+        "title": "Is Chios mastic gum effective in the treatment of functional dyspepsia? A prospective randomised double-blind placebo controlled trial.",
+        "citation": "Journal of ethnopharmacology (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19961914/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.jep.2009.11.021"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41197785",
+        "title": "A randomized, three-way crossover clinical trial on the efficacy of Mastiha based therapies (Pistacia lentiscus var. Chia) in functional dyspepsia.",
+        "citation": "Pharmacological research (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41197785/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.phrs.2025.108019"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42885189",
+        "title": "Chios Mastic in Well-Controlled Hypertension: Findings From the HYPER-MASTIC Randomized Controlled Trial.",
+        "citation": "Pharmacology research & perspectives (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42885189/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1002/prp2.70322"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "30450689",
+        "title": "Regulation of faecal biomarkers in inflammatory bowel disease patients treated with oral mastiha (Pistacia lentiscus) supplement: A double-blind and placebo-controlled randomised trial.",
+        "citation": "Phytotherapy research : PTR (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30450689/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1002/ptr.6229"
+      }
+    ]
+  }
+}

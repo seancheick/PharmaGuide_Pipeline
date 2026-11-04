@@ -1,0 +1,481 @@
+{
+  "record_id": "INGR_L_GLUTAMINE",
+  "labels": 81,
+  "stored_direction": "mixed",
+  "direction_as_read": "mixed: one large-effect 15 g/day trial in post-infectious IBS-D is positive on a named primary; a meta-analysis of oral trials found no overall effect on gut permeability; sports evidence is small and has no named primary",
+  "decision": "closed_no_credit",
+  "summary": "The labels print L-glutamine, glutamine or micronized L-glutamine at 500 mg to 10 g a serving (a few rows print no amount), and 12 labels print N-acetyl-L-glutamine at 500 to 750 mg. One trial meets the reading bar for free L-glutamine: 15 g/day for 8 weeks in post-infectious IBS-D, positive on its named primary (30108163). It is a single trial in a narrow group at above the labels' amounts, and its authors ask for validation. A meta-analysis of oral trials found no overall effect on gut permeability, with an abstract that contradicts itself on its subgroup (39397201). Trials in combat athletes (38193521) and older women (33809996) name no primary. No study read tested N-acetyl-L-glutamine. Abstracts only.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_glutamine_30108163",
+      "components": [
+        "INGR_L_GLUTAMINE"
+      ],
+      "source_pmids": [
+        "30108163"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "glutamine, oral"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "post_infectious_ibs_d",
+      "purpose": "ibs_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_glutamine_30108163",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with diarrhoea-predominant IBS and increased intestinal permeability after an enteric infection; 54 glutamine and 52 placebo subjects completed."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "Reduction of at least 50 points on the IBS severity scale: 79.6% with glutamine versus 5.8% with placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Intestinal permeability, 0.11 versus 0.05 (p<0.0001)",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "One trial in one narrow population, with a very large effect and a 5.8% placebo response; its authors call for large trials to validate it.",
+        "Studied 15000 mg/day; L-glutamine rows on these labels print 500 mg to 10 g a serving, and the label positioning read carries no IBS claim.",
+        "The daily amount is 5 g three times daily as printed; funding details beyond the index terms were not read.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          15000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Glutamine 5 g three times daily for 8 weeks.",
+        "normalization": {
+          "basis": "5 g three times daily as printed in the abstract, summed to the daily amount; the stored record gives the same 15 g/day."
+        },
+        "source_provenance": {
+          "pmid": "30108163",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_glutamine_39397201",
+      "components": [
+        "INGR_L_GLUTAMINE"
+      ],
+      "source_pmids": [
+        "39397201"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "mixed_diseases_adults",
+      "purpose": "gut_permeability",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_glutamine_39397201",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with different diseases; 10 trials from 1998 to 2014, all oral glutamine, mean age 46.52 years."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized placebo-controlled trials",
+      "outcomes": [
+        {
+          "name": "Intestinal permeability overall, WMD -0.00, 95% CI -0.04 to 0.03",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Subgroup reduction at doses above 30 g/day",
+          "hierarchy": "post_hoc",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "The abstract contradicts itself: 352 participants against 216 plus 212 by group; the subgroup threshold is 30 g/day in one sentence and 30 mg/day in another; and the subgroup estimate -0.01 sits outside its printed interval (-0.10, -0.08).",
+        "Included trial identities not listed in the abstract, and all end by 2014, so 30108163 is not among them.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral glutamine at several doses; subgroup above 30 g/day as printed.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "39397201",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_glutamine_38193521",
+      "components": [
+        "INGR_L_GLUTAMINE"
+      ],
+      "source_pmids": [
+        "38193521"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-glutamine powder"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "combat_sport_training",
+      "purpose": "mucosal_immunity_and_recovery",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_glutamine_38193521",
+      "population": {
+        "age_group": "adult",
+        "description": "21 combat-sport athletes after intensive training."
+      },
+      "study_design": "Randomized, maltodextrin-controlled, 3 weeks; blinding not stated in the abstract",
+      "outcomes": [
+        {
+          "name": "Salivary IgA and nitric oxide raised",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Incidence of upper respiratory tract infection reduced",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract, and 21 participants.",
+        "The body-weight dose stays in the regimen text; no mg conversion made.",
+        "The abstract's sports performance conclusion rests on saliva markers, not a measured performance outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Powdered L-glutamine 0.3 g/kg body weight in water at the same time every day for 3 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "38193521",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_glutamine_33809996",
+      "components": [
+        "INGR_L_GLUTAMINE"
+      ],
+      "source_pmids": [
+        "33809996"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "L-glutamine, oral"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "older_women_exercise",
+      "purpose": "muscle_strength_and_power",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_glutamine_33809996",
+      "population": {
+        "age_group": "older_adult",
+        "description": "Physically active (n = 21) and sedentary (n = 23) women aged 60 to 80 years."
+      },
+      "study_design": "Randomized, placebo-controlled, 30 days, with and without exercise",
+      "outcomes": [
+        {
+          "name": "Knee torque peak raised against pre-supplementation values in glutamine subgroups",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Plasma glutathione raised and D-fructosamine lowered against pre-supplementation values",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named in the abstract; results are stated against pre-supplementation values, not between groups.",
+        "Dose not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral L-glutamine or placebo for 30 days; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33809996",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "32992440": "Acute GI tolerance crossover in 14 healthy men; measures tolerance, not efficacy.",
+    "34844156": "30 healthy males, 0.3 g/kg/day for 14 days; atherosclerosis markers after exhaustive exercise, no primary outcome named.",
+    "35106632": "Cystine and glutamine together; not the ingredient alone.",
+    "42366260": "Systematic review of six RCTs by oral or parenteral routes; no pooled estimate."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "30108163",
+      "title_fetched": "Randomised placebo-controlled trial of dietary glutamine supplements for postinfectious irritable bowel syndrome.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30108163/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39397201",
+      "title_fetched": "A systematic review and meta-analysis of clinical trials on the effects of glutamine supplementation on gut permeability in adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39397201/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38193521",
+      "title_fetched": "Supplementation of L-glutamine enhanced mucosal immunity and improved hormonal status of combat-sport athletes.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38193521/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33809996",
+      "title_fetched": "L-Glutamine Supplementation Enhances Strength and Power of Knee Muscles and Improves Glycemia Control and Plasma Redox Balance in Exercising Elderly Women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33809996/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32992440",
+      "title_fetched": "Gastrointestinal Tolerance of Low, Medium and High Dose Acute Oral l-Glutamine Supplementation in Healthy Adults: A Pilot Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32992440/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34844156",
+      "title_fetched": "Glutamine supplementation can reduce some atherosclerosis markers after exhaustive exercise in young healthy males.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34844156/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35106632",
+      "title_fetched": "Effects of oral cystine and glutamine on exercise-induced changes in gastrointestinal permeability and damage markers in young men.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35106632/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42366260",
+      "title_fetched": "The effects of glutamine supplementation on inflammatory and oxidative stress indices in chronic diseases: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42366260/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_L_GLUTAMINE",
+    "standard_name": "L-Glutamine",
+    "aliases": [
+      "L-Glutamine",
+      "Glutamine",
+      "L-Glutamine, Micronized",
+      "Glutamine Complex"
+    ],
+    "category": "digestive_gut",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "30108163",
+      "39397201",
+      "38193521",
+      "33809996"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: one large-effect 15 g/day trial in post-infectious IBS-D is positive on a named primary; a meta-analysis of oral trials found no overall effect on gut permeability; sports evidence is small and has no named primary. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "IBS symptom severity"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print L-glutamine, glutamine or micronized L-glutamine at 500 mg to 10 g a serving (a few rows print no amount), and 12 labels print N-acetyl-L-glutamine at 500 to 750 mg. One trial meets the reading bar for free L-glutamine: 15 g/day for 8 weeks in post-infectious IBS-D, positive on its named primary (30108163). It is a single trial in a narrow group at above the labels' amounts, and its authors ask for validation. A meta-analysis of oral trials found no overall effect on gut permeability, with an abstract that contradicts itself on its subgroup (39397201). Trials in combat athletes (38193521) and older women (33809996) name no primary. No study read tested N-acetyl-L-glutamine. Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with post-infectious IBS-D and intestinal hyperpermeability",
+      "supported_outcomes": [
+        "IBS symptom severity"
+      ],
+      "source_pmids": [
+        "30108163",
+        "39397201",
+        "38193521",
+        "33809996"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print L-glutamine, glutamine or micronized L-glutamine at 500 mg to 10 g a serving (a few rows print no amount), and 12 labels print N-acetyl-L-glutamine at 500 to 750 mg. One trial meets the reading bar for free L-glutamine: 15 g/day for 8 weeks in post-infectious IBS-D, positive on its named primary (30108163). It is a single trial in a narrow group at above the labels' amounts, and its authors ask for validation. A meta-analysis of oral trials found no overall effect on gut permeability, with an abstract that contradicts itself on its subgroup (39397201). Trials in combat athletes (38193521) and older women (33809996) name no primary. No study read tested N-acetyl-L-glutamine. Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "N-Acetyl"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "30108163",
+        "title": "Randomised placebo-controlled trial of dietary glutamine supplements for postinfectious irritable bowel syndrome.",
+        "citation": "Gut (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30108163/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, N.I.H., Extramural",
+          "Research Support, U.S. Gov't, Non-P.H.S."
+        ],
+        "doi": "10.1136/gutjnl-2017-315136"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39397201",
+        "title": "A systematic review and meta-analysis of clinical trials on the effects of glutamine supplementation on gut permeability in adults.",
+        "citation": "Amino acids (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39397201/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1007/s00726-024-03420-7"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38193521",
+        "title": "Supplementation of L-glutamine enhanced mucosal immunity and improved hormonal status of combat-sport athletes.",
+        "citation": "Journal of the International Society of Sports Nutrition (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38193521/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.1080/15502783.2023.2300259"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33809996",
+        "title": "L-Glutamine Supplementation Enhances Strength and Power of Knee Muscles and Improves Glycemia Control and Plasma Redox Balance in Exercising Elderly Women.",
+        "citation": "Nutrients (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33809996/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu13031025"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: l_glutamine no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

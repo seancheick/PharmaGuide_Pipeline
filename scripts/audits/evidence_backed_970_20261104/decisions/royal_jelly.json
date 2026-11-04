@@ -1,0 +1,42 @@
+{
+ "canonical": "royal_jelly",
+ "labels": 15,
+ "stored": "positive_weak",
+ "as_read": "Scattered small positive trials across purposes these labels do not print, null pooled results for glycemia, liver enzymes and body weight, and a positive menopause meta-analysis whose abstract gives no dose or primary outcome.",
+ "route": "no_qualifying",
+ "quote": {
+  "pmid": "31470366",
+  "text": "However, further research is necessary to confirm the effects."
+ },
+ "positive_named": [
+  "31470366",
+  "41401249",
+  "32880201",
+  "38260068",
+  "40824557",
+  "40213172",
+  "40678328"
+ ],
+ "proposed_decision_text": "The 15 labels print royal jelly powder at 1000 mg (13 labels), a concentrate at 167 mg, and an extract at 152 mg, with no purpose on any label. This review read abstracts only. The stored trial gave 1000 mg capsules to 200 postmenopausal women for eight weeks and reports the menopausal score fell significantly on royal jelly and not on placebo, but the abstract names no primary outcome and says further research is necessary to confirm the effects (31470366). A meta-analysis reports improved postmenopausal symptoms from two studies with 312 participants, and its abstract gives no dose or primary outcome (41401249). A bone trial used dried royal jelly equivalent to 3000 mg of fresh, where femoral bone density fell on placebo and not on royal jelly, with no primary outcome named (32880201). A stroke trial at 1000 mg reports better cognition, stress and appetite with no primary outcome named (38260068). Two multiple sclerosis trials at 500 mg report lower disability scores with no primary outcome named (40824557, 40213172). A crossover in 18 male athletes at 1000 mg for 2 weeks reports longer time to exhaustion with no primary outcome named (40678328). Pooled trials found no significant effect on liver enzymes or glycemic indices overall, with lower fasting glucose in trials of 8 weeks or longer and in non-healthy populations (37619715), and none on body weight, BMI or fat mass overall, with lower weight and BMI in a subgroup below 3,000 mg/day (37599677). A pooled analysis of oxidative stress markers reported lower MDA and higher total antioxidant capacity, with hs-CRP unchanged (40656618). In hospitalized COVID-19 patients, 1000 mg for 7 days did not significantly improve blood sugar or clinical course (37038340). None of these abstracts names a primary outcome, and these labels print no purpose.",
+ "clinician_items": [
+  "41071287: systematic overview of bee product pharmacovigilance reports severe asthma attacks after royal jelly consumption; allergic responses were most prevalent among atopic individuals.",
+  "38717683: review notes 10-hydroxy-2-decenoic acid can attach to estrogen receptors, calls data on royal jelly in cancer controversial, and says clinical studies are needed to confirm a safe dose in breast cancer; its dose findings are preclinical."
+ ],
+ "stored_rating_note": "The stored outcome says Menopause Rating Scale reduced compared to placebo (P < 0.001). The abstract as read today does not name that scale, gives no P value and reports significance within each group, not between them. The stored record's between-group wording goes beyond the abstract.",
+ "pmids_read": [
+  "31470366",
+  "41401249",
+  "37619715",
+  "37599677",
+  "40656618",
+  "32880201",
+  "38260068",
+  "37038340",
+  "40824557",
+  "40213172",
+  "40678328",
+  "41071287",
+  "38717683"
+ ],
+ "unread_notes": "Abstracts only; no full text opened. Search returned 68, 40 listed, newest first back to 2019; the 28 older hits were not listed and not read, including any trials before 2019. Full text of 31470366 and of the two trials pooled in 41401249 could name a primary outcome and is the closest call in this record; if one does, the purpose is still not printed on these labels. Hits 40864045 (with propolis), 35813842 and 35811968 (with CoQ10) are combinations, not opened. 40390812 is vaginal, not opened."
+}

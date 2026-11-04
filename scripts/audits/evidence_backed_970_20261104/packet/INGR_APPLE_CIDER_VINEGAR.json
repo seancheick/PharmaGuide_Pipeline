@@ -5,7 +5,7 @@
   "direction_as_read": "mixed: pooled liquid vinegar results favor it with high heterogeneity and a retracted trial in the pool; one capsule RCT, adjunct to metformin in PCOS",
   "decision": "closed_no_credit",
   "summary": "The stored rating rests on an acute vinegar-with-a-meal meta-analysis and an abstract-less letter, neither about capsules or gummies. Pooled evidence is liquid at mL doses, with high heterogeneity, and the 2025 weight meta-analysis (41010525) lists a trial since retracted (38966098). The only solid-form trial found is one 12-week capsule RCT at 1500 mg/day in women with PCOS, metabolic syndrome and metformin (42215584), positive on insulin resistance. A short crossover at 30 mL/day was null on energy expenditure (34055150). No gummy trial was found.",
-  "question_for_clinician": "Does one capsule RCT in women with PCOS on metformin (42215584) support any credit for general capsule, gummy and powder labels, most printing 500 mg or less a serving? Agent recommendation: no credit.",
+  "question_for_clinician": null,
   "study_contexts": [
     {
       "context_schema_version": "1.1.0",
@@ -665,5 +665,6 @@
         "doi": "10.70252/GUNG6262"
       }
     ]
-  }
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: apple_cider_vinegar no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
 }

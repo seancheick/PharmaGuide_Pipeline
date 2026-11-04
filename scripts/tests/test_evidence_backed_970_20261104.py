@@ -190,6 +190,12 @@ def test_lysine_rationale_names_the_positive_trial_and_the_review_it_conflicts_w
     ("siberian_ginseng", ["21793317", "15207399"], "Overall efficacy was not demonstrated."),
     ("d_ribose", ["35644694", "14607200", "1354276"],
      "does not affect anaerobic exercise capacity or metabolic markers in trained subjects"),
+    ("cayenne_pepper", ["36938807", "24246368"], "is not effective at inducing thermogenesis"),
+    ("gotu_kola", ["11666126", "18191355"], "there is not strong evidence to support the use of C. asiatica"),
+    ("feverfew", ["16232154", "41422534"], "MIG-99 failed to show a significant migraine prophylactic effect in general."),
+    ("theobromine", ["23595874", "37615657"], "TB was not effective on HDL-CH"),
+    ("hawthorn", ["12798455", "18254076"], "Hawthorn provides no symptomatic or functional benefit"),
+    ("cla", ["37671495", "17490954"], "data from high-quality studies failed to show"),
 ])
 def test_conflicting_rationale_names_both_sides(canonical, positive, null_quote):
     decision = _literature_record(canonical)["applicability_decision"]
@@ -198,11 +204,17 @@ def test_conflicting_rationale_names_both_sides(canonical, positive, null_quote)
 
 
 @pytest.mark.parametrize("canonical,tested_elsewhere", [
-    ("cayenne_pepper", ["24267043", "36938807", "24246368"]),
-    ("gotu_kola", ["11666126", "28878245", "41383475", "41901080"]),
-    ("feverfew", ["16232154", "12230594", "41422534", "25892430"]),
+    ("african_mango", ["19254366", "36364907", "31855111"]),
+    ("zeaxanthin", ["28079755", "23644932"]),
+    ("goldenseal", ["17495878", "32683037"]),
+    ("agmatine", ["20447305"]),
+    ("l_glutamine", ["30108163", "39397201"]),
 ])
 def test_no_qualifying_decision_names_the_human_research_it_read(canonical, tested_elsewhere):
     decision = _literature_record(canonical)["applicability_decision"]
-    assert all(f"PMID {pmid}" in decision or f"PMID {pmid}" in decision.replace("PMIDs ", "PMID ") for pmid in tested_elsewhere)
-    assert "does not say the preparation was tested and failed" in decision
+    assert all(pmid in decision for pmid in tested_elsewhere)
+
+
+@pytest.mark.parametrize("canonical", NO_QUALIFYING)
+def test_no_qualifying_decision_does_not_claim_the_preparation_failed(canonical):
+    assert "does not say the preparation was tested and failed" in _literature_record(canonical)["applicability_decision"]

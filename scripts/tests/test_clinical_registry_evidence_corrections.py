@@ -106,12 +106,11 @@ def test_mct_source_reports_36_participants_and_a_discrete_12_g_regimen():
 
 def test_phosphatidic_acid_source_keeps_parametric_null_and_magnitude_inference_distinct():
     row = literature()['phosphatidic_acid']
-    study, = row['qualifying_human_studies']
-    assert study['pmid'] == '23035701'
-    assert 'no significant between-group differences' in study['outcome']
-    assert 'magnitude-based' in study['outcome']
-    assert 'statistically significant increases' not in study['outcome']
-    assert 'minimum' in row['applicability_decision']
+    # Closed with no qualifying study (review 2026-11-04): the row left the record, the decision keeps the distinction.
+    assert row['qualifying_human_studies'] == []
+    assert '23035701' in row['applicability_decision']
+    assert 'parametric analysis was unable to demonstrate significant differences' in row['applicability_decision']
+    assert 'magnitude based inference' in row['applicability_decision']
     assert 'without investigator supervision' in row['population_context']
     assert 'weekly training-log review and feedback' in row['population_context']
     assert 'supervised progressive training' not in row['population_context']

@@ -1,0 +1,579 @@
+{
+  "record_id": "INGR_TUDCA",
+  "labels": 16,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive_weak: one small pilot in ALS on riluzole at 2 g/day had a positive primary outcome; other trials are surrogate, uncontrolled by placebo, or null on clinical outcomes, and the labels print 250 to 500 mg",
+  "decision": "closed_no_credit",
+  "summary": "The labels print TUDCA or tauroursodeoxycholic acid at 250 or 500 mg with no purpose. The only trial here with a named positive primary outcome is a 34-patient ALS pilot at 2 g/day on top of riluzole (25664595), whose authors call the data preliminary. In progressive MS at 2 g/day, clinical and biomarker outcomes showed no significant differences (39447576). The stored primary biliary cirrhosis study (8674405) has no placebo arm. Obese adults (20522594) and healthy adults (27503949) gave surrogate results only at 1,750 and 1,500 mg.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_tudca_25664595",
+      "components": [
+        "INGR_TUDCA"
+      ],
+      "source_pmids": [
+        "25664595"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "amyotrophic_lateral_sclerosis",
+      "purpose": "als_disease_progression",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_tudca_25664595",
+      "population": {
+        "age_group": "adult",
+        "description": "34 patients with ALS already on riluzole."
+      },
+      "study_design": "Double-blind placebo-controlled proof-of-principle trial with a 3-month lead-in, 54 weeks of treatment",
+      "outcomes": [
+        {
+          "name": "Responders (at least 15% ALSFRS-R slope improvement versus lead-in): 87% on TUDCA versus 43% on placebo (P = 0.021)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Baseline-adjusted ALSFRS-R at study end higher on TUDCA (P = 0.007)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Slower progression on regression slopes (P < 0.01)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors call it a pilot giving preliminary data and say TUDCA may be effective.",
+        "2 g/day is four to eight times the 250 to 500 mg these labels print.",
+        "Add-on to riluzole, so not TUDCA without background therapy.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          2000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1 g twice daily for 54 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "25664595",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_tudca_8674405",
+      "components": [
+        "INGR_TUDCA"
+      ],
+      "source_pmids": [
+        "8674405"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "primary_biliary_cirrhosis",
+      "purpose": "cholestatic_liver_disease",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_tudca_8674405",
+      "population": {
+        "age_group": "adult",
+        "description": "24 patients with primary biliary cirrhosis."
+      },
+      "study_design": "Randomized dose-response study of three doses, 6 months, no placebo arm",
+      "outcomes": [
+        {
+          "name": "Serum liver enzymes decreased significantly after the first month at all three doses",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "No significant difference among the three doses",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No placebo arm, so no comparison with no treatment.",
+        "Abstract names no primary outcome.",
+        "Authors recommend about 10 mg/kg/day for long-term studies rather than claim benefit.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500,
+          1000,
+          1500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "500, 1000 or 1500 mg daily for six months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "8674405",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_tudca_20522594",
+      "components": [
+        "INGR_TUDCA"
+      ],
+      "source_pmids": [
+        "20522594"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "obesity_insulin_resistance",
+      "purpose": "insulin_sensitivity",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_tudca_20522594",
+      "population": {
+        "age_group": "adult",
+        "description": "20 obese adults, aged 48 +/- 11 years, BMI 37 +/- 4 kg/m2."
+      },
+      "study_design": "Randomized placebo-controlled trial, 4 weeks",
+      "outcomes": [
+        {
+          "name": "Hepatic and muscle insulin sensitivity up about 30% on TUDCA (P < 0.05), unchanged on placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Markers of ER stress in muscle or adipose tissue unchanged",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "Small and short; clamp measures only, no patient outcome.",
+        "1,750 mg/day is more than three times the highest label amount.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1750
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1,750 mg/day for 4 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "20522594",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_tudca_39447576",
+      "components": [
+        "INGR_TUDCA"
+      ],
+      "source_pmids": [
+        "39447576"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "progressive_multiple_sclerosis",
+      "purpose": "multiple_sclerosis_progression",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_tudca_39447576",
+      "population": {
+        "age_group": "adult",
+        "description": "47 people with progressive MS analysed, 26 on TUDCA and 21 on placebo."
+      },
+      "study_design": "Double-blind placebo-controlled trial, 16 weeks",
+      "outcomes": [
+        {
+          "name": "Adverse events did not differ between arms (p = 0.77)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No significant differences in clinical or fluid biomarker outcomes",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The primary outcomes were safety and tolerability; clinical outcomes were exploratory.",
+        "16 weeks is short for progression.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          2000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2 g/day for 16 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39447576",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_tudca_27503949",
+      "components": [
+        "INGR_TUDCA"
+      ],
+      "source_pmids": [
+        "27503949"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_young_adults_postprandial_hyperglycaemia",
+      "purpose": "endothelial_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_tudca_27503949",
+      "population": {
+        "age_group": "adult",
+        "description": "12 young healthy subjects, seven men and five women."
+      },
+      "study_design": "Single-blind randomized crossover with an oral glucose challenge",
+      "outcomes": [
+        {
+          "name": "Flow-mediated dilation fell from baseline on placebo (-32% at 60 min, P<0.05) but not on TUDCA (-4%, P>0.05)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Single dose; hours of observation.",
+        "Abstract names no primary outcome and reports changes from baseline in each condition.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "single dose",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Single oral dose of 1500 mg.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "27503949",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "38053196": "Statistical analysis plan for the phase III TUDCA-ALS trial; no results.",
+    "42301686": "Meta-analysis of the sodium phenylbutyrate combination, not TUDCA alone; it describes the n = 34 monotherapy trial only narratively.",
+    "40236400": "Open-label preprint in ulcerative colitis at 1.75 or 2 g/day, 13 completers, no control arm.",
+    "37842553": "Retrospective propensity-matched ALS registry cohort; exploratory and not randomized."
+  },
+  "stop_or_hold": "Fields can't say the one positive primary outcome sits at 2 g/day as an add-on to riluzole in ALS, while labels print 250 to 500 mg with no purpose. Only the 500 mg arm of 8674405 is at a label amount, and that study has no placebo arm.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "25664595",
+      "title_fetched": "Tauroursodeoxycholic acid in the treatment of patients with amyotrophic lateral sclerosis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25664595/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "8674405",
+      "title_fetched": "Tauroursodeoxycholic acid for treatment of primary biliary cirrhosis. A dose-response study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8674405/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20522594",
+      "title_fetched": "Tauroursodeoxycholic Acid may improve liver and muscle but not adipose tissue insulin sensitivity in obese men and women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20522594/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39447576",
+      "title_fetched": "Bile acid metabolites predict multiple sclerosis progression and supplementation is safe in progressive disease.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39447576/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27503949",
+      "title_fetched": "Administration of tauroursodeoxycholic acid prevents endothelial dysfunction caused by an oral glucose load.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27503949/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38053196",
+      "title_fetched": "A randomized double-blind clinical trial on safety and efficacy of tauroursodeoxycholic acid (TUDCA) as add-on treatment in patients affected by amyotrophic lateral sclerosis (ALS): the statistical analysis plan of TUDCA-ALS trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38053196/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42301686",
+      "title_fetched": "Efficacy of Sodium Phenylbutyrate-Taurursodiol in Amyotrophic Lateral Sclerosis: A Systematic Review and Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42301686/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40236400",
+      "title_fetched": "Tauroursodeoxycholic Acid (TUDCA) Reduces ER Stress and Lessens Disease Activity in Ulcerative Colitis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40236400/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37842553",
+      "title_fetched": "Effect of tauroursodeoxycholic acid on survival and safety in amyotrophic lateral sclerosis: a retrospective population-based cohort study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37842553/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_TUDCA",
+    "standard_name": "TUDCA",
+    "aliases": [
+      "TUDCA",
+      "Tudca",
+      "Tauroursodeoxycholic Acid"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "25664595",
+      "8674405",
+      "20522594",
+      "39447576",
+      "27503949"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive_weak: one small pilot in ALS on riluzole at 2 g/day had a positive primary outcome; other trials are surrogate, uncontrolled by placebo, or null on clinical outcomes, and the labels print 250 to 500 mg. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "ALSFRS-R responder proportion"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print TUDCA or tauroursodeoxycholic acid at 250 or 500 mg with no purpose. The only trial here with a named positive primary outcome is a 34-patient ALS pilot at 2 g/day on top of riluzole (25664595), whose authors call the data preliminary. In progressive MS at 2 g/day, clinical and biomarker outcomes showed no significant differences (39447576). The stored primary biliary cirrhosis study (8674405) has no placebo arm. Obese adults (20522594) and healthy adults (27503949) gave surrogate results only at 1,750 and 1,500 mg.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with ALS on riluzole",
+      "supported_outcomes": [
+        "ALSFRS-R responder proportion"
+      ],
+      "source_pmids": [
+        "25664595",
+        "8674405",
+        "20522594",
+        "39447576",
+        "27503949"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print TUDCA or tauroursodeoxycholic acid at 250 or 500 mg with no purpose. The only trial here with a named positive primary outcome is a 34-patient ALS pilot at 2 g/day on top of riluzole (25664595), whose authors call the data preliminary. In progressive MS at 2 g/day, clinical and biomarker outcomes showed no significant differences (39447576). The stored primary biliary cirrhosis study (8674405) has no placebo arm. Obese adults (20522594) and healthy adults (27503949) gave surrogate results only at 1,750 and 1,500 mg. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25664595",
+        "title": "Tauroursodeoxycholic acid in the treatment of patients with amyotrophic lateral sclerosis.",
+        "citation": "European journal of neurology (2016)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25664595/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1111/ene.12664"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "8674405",
+        "title": "Tauroursodeoxycholic acid for treatment of primary biliary cirrhosis. A dose-response study.",
+        "citation": "Digestive diseases and sciences (1996)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/8674405/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/BF02213140"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20522594",
+        "title": "Tauroursodeoxycholic Acid may improve liver and muscle but not adipose tissue insulin sensitivity in obese men and women.",
+        "citation": "Diabetes (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20522594/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, N.I.H., Extramural",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.2337/db10-0308"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39447576",
+        "title": "Bile acid metabolites predict multiple sclerosis progression and supplementation is safe in progressive disease.",
+        "citation": "Med (New York, N.Y.) (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39447576/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't",
+          "Research Support, N.I.H., Intramural"
+        ],
+        "doi": "10.1016/j.medj.2024.09.011"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "27503949",
+        "title": "Administration of tauroursodeoxycholic acid prevents endothelial dysfunction caused by an oral glucose load.",
+        "citation": "Clinical science (London, England : 1979) (2016)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/27503949/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1042/CS20160501"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: tudca no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

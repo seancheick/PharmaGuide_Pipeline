@@ -1,0 +1,568 @@
+{
+  "record_id": "INGR_MILK_BASIC_PROTEIN",
+  "labels": 1,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "Mixed: four small trials at the label's 40 mg report higher BMD against placebo; one larger trial giving 40 mg in milk found no significant effect",
+  "decision": "closed_no_credit",
+  "summary": "One label, Calcium and Vitamin D with MBP, prints MBP 40 mg beside 600 mg calcium and 400 IU vitamin D, and states it supports bone. Four small placebo-controlled trials at 40 mg per day (17048062, 16133638, 12005077, 11388472, each 32 to 35 women) report higher BMD gain at different sites at P values near 0.04. The largest trial, 19296044 (84 women, 40 mg in milk), found no significant effect. No abstract names a primary outcome, and none measures fractures.",
+  "question_for_clinician": "This is the closest case in the batch: 17048062 matches the label's 40 mg and purpose, with lumbar BMD 1.57% vs 0.13% (P = 0.042) and no primary outcome named. Agent recommendation: no credit, because BMD is a surrogate in healthy women, the trials are small, and the larger on-target trial 19296044 was null. Would full-text primary outcomes change your view?",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_milk_basic_protein_17048062",
+      "components": [
+        "INGR_MILK_BASIC_PROTEIN"
+      ],
+      "source_pmids": [
+        "17048062"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_young_women",
+      "purpose": "bone_mineral_density",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_milk_basic_protein_17048062",
+      "population": {
+        "age_group": "adult",
+        "description": "35 healthy young women."
+      },
+      "study_design": "Randomized placebo-controlled trial, 6 months",
+      "outcomes": [
+        {
+          "name": "Lumbar L2-L4 BMD gain 1.57% on MBP versus 0.13% on placebo (P = 0.042)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Urinary NTx decreased and serum osteocalcin increased versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "BMD is a surrogate; no fracture outcome. Delivery form not in the abstract. Sponsor not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          40
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "MBP 40 mg per day for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "17048062",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_milk_basic_protein_16133638",
+      "components": [
+        "INGR_MILK_BASIC_PROTEIN"
+      ],
+      "source_pmids": [
+        "16133638"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_menopausal_women",
+      "purpose": "bone_mineral_density",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_milk_basic_protein_16133638",
+      "population": {
+        "age_group": "adult",
+        "description": "32 healthy menopausal women randomized, 27 analysed."
+      },
+      "study_design": "Randomized placebo-controlled trial, 6 months, per-protocol analysis",
+      "outcomes": [
+        {
+          "name": "Lumbar L2-L4 BMD gain 1.21% on MBP versus -0.66% on placebo (P = 0.046)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Urinary NTx decreased; serum osteocalcin no significant difference",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "Only those completing per protocol analysed. BMD is a surrogate. Abstract read to its cut at 1500 characters, after results.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          40
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "MBP 40 mg per day for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "16133638",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_milk_basic_protein_12005077",
+      "components": [
+        "INGR_MILK_BASIC_PROTEIN"
+      ],
+      "source_pmids": [
+        "12005077"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_adult_women",
+      "purpose": "bone_mineral_density",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_milk_basic_protein_12005077",
+      "population": {
+        "age_group": "adult",
+        "description": "33 healthy women."
+      },
+      "study_design": "Randomized placebo-controlled trial, 6 months",
+      "outcomes": [
+        {
+          "name": "Radial BMD gain significantly higher on MBP than placebo; effect size not in the abstract",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "Effect size and P value not in the abstract. Same sample size as 11388472; whether they share participants is not stated.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          40
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "MBP 40 mg per day for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12005077",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_milk_basic_protein_11388472",
+      "components": [
+        "INGR_MILK_BASIC_PROTEIN"
+      ],
+      "source_pmids": [
+        "11388472"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_adult_women",
+      "purpose": "bone_mineral_density",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_milk_basic_protein_11388472",
+      "population": {
+        "age_group": "adult",
+        "description": "33 normal healthy women."
+      },
+      "study_design": "Randomized placebo-controlled trial, 6 months",
+      "outcomes": [
+        {
+          "name": "Left calcaneus BMD gain 3.42% on MBP versus 2.01% on placebo (P = 0.042)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Urinary NTx and deoxypyridinoline decreased; serum osteocalcin no significant difference",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "Same sample size as 12005077; whether they share participants is not stated. Abstract read to its cut at 1500 characters, after results.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          40
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "MBP 40 mg per day for six months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "11388472",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_milk_basic_protein_19296044",
+      "components": [
+        "INGR_MILK_BASIC_PROTEIN"
+      ],
+      "source_pmids": [
+        "19296044"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_young_women",
+      "purpose": "bone_mineral_density",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_milk_basic_protein_19296044",
+      "population": {
+        "age_group": "adult",
+        "description": "84 healthy young Chinese women randomized, 81 analysed."
+      },
+      "study_design": "Randomized three-group trial, control, whole milk, or milk containing MBP, 8 months",
+      "outcomes": [
+        {
+          "name": "Total BMD gain no significant difference: MBP 2.19%, whole milk 2.63%, control 1.61%",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Authors: no significant effect of MBP on BMD and bone metabolism; milk supplementation suppressed bone resorption",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "MBP was given in milk; the abstract does not give a placebo arm.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          40
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Milk containing 40 mg MBP for 8 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19296044",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "11471735": "300 mg in a beverage for 16 days in 30 men, no placebo described; markers only, not the label amount.",
+    "17012824": "Narrative product review of a FOSHU beverage; no regimen or numbers.",
+    "17012814": "Narrative summary of the authors' own trials; no new data in the abstract.",
+    "28003538": "Whey protein at 20 to 60 g/d, not milk basic protein.",
+    "17482742": "Allergenicity assessment, not efficacy; noted for the clinician."
+  },
+  "stop_or_hold": "Label combines MBP with calcium and vitamin D, while the trials give MBP without them, so fields can't express the added effect on this label. Full texts of the four positive trials would settle whether BMD was declared primary.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "17048062",
+      "title_fetched": "Milk basic protein increases bone mineral density and improves bone metabolism in healthy young women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17048062/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16133638",
+      "title_fetched": "A controlled trial of the effect of milk basic protein (MBP) supplementation on bone metabolism in healthy menopausal women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16133638/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12005077",
+      "title_fetched": "Milk basic protein (MBP) increases radial bone mineral density in healthy adult women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12005077/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11388472",
+      "title_fetched": "Controlled trial of the effects of milk basic protein (MBP) supplementation on bone metabolism in healthy adult women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11388472/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19296044",
+      "title_fetched": "Evaluation of milk basic protein supplementation on bone density and bone metabolism in Chinese young women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19296044/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11471735",
+      "title_fetched": "Milk basic protein promotes bone formation and suppresses bone resorption in healthy adult men.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11471735/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17012824",
+      "title_fetched": "[Prevention of osteoporosis by foods and dietary supplements. \"Mainichi Hone Kea MBP\": A foods for specified health uses (FOSHU) product containing MBP that has an effect to increase bone density].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17012824/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17012814",
+      "title_fetched": "[Prevention of osteoporosis by foods and dietary supplements. Milk basic protein (MBP) increases bone mineral density in young adult women and perimenopausal women].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17012814/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28003538",
+      "title_fetched": "Whey Protein Supplementation and Higher Total Protein Intake Do Not Influence Bone Quantity in Overweight and Obese Adults Following a 36-Week Exercise and Diet Intervention.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28003538/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17482742",
+      "title_fetched": "Assessment of the potential allergenicity of a Milk Basic Protein fraction.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17482742/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_MILK_BASIC_PROTEIN",
+    "standard_name": "Milk Basic Protein",
+    "aliases": [
+      "MBP"
+    ],
+    "category": "joint_bone",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "17048062",
+      "16133638",
+      "12005077",
+      "11388472",
+      "19296044"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Mixed: four small trials at the label's 40 mg report higher BMD against placebo; one larger trial giving 40 mg in milk found no significant effect. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "bone mineral density"
+    ],
+    "health_goals_supported": [],
+    "notes": "One label, Calcium and Vitamin D with MBP, prints MBP 40 mg beside 600 mg calcium and 400 IU vitamin D, and states it supports bone. Four small placebo-controlled trials at 40 mg per day (17048062, 16133638, 12005077, 11388472, each 32 to 35 women) report higher BMD gain at different sites at P values near 0.04. The largest trial, 19296044 (84 women, 40 mg in milk), found no significant effect. No abstract names a primary outcome, and none measures fractures.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy young, adult and menopausal women",
+      "supported_outcomes": [
+        "bone mineral density"
+      ],
+      "source_pmids": [
+        "17048062",
+        "16133638",
+        "12005077",
+        "11388472",
+        "19296044"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "One label, Calcium and Vitamin D with MBP, prints MBP 40 mg beside 600 mg calcium and 400 IU vitamin D, and states it supports bone. Four small placebo-controlled trials at 40 mg per day (17048062, 16133638, 12005077, 11388472, each 32 to 35 women) report higher BMD gain at different sites at P values near 0.04. The largest trial, 19296044 (84 women, 40 mg in milk), found no significant effect. No abstract names a primary outcome, and none measures fractures. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "17048062",
+        "title": "Milk basic protein increases bone mineral density and improves bone metabolism in healthy young women.",
+        "citation": "Osteoporosis international : a journal established as result of cooperation between the European Foundation for Osteoporosis and the National Osteoporosis Foundation of the USA (2007)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17048062/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/s00198-006-0228-5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16133638",
+        "title": "A controlled trial of the effect of milk basic protein (MBP) supplementation on bone metabolism in healthy menopausal women.",
+        "citation": "Osteoporosis international : a journal established as result of cooperation between the European Foundation for Osteoporosis and the National Osteoporosis Foundation of the USA (2005)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16133638/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/s00198-005-2012-3"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12005077",
+        "title": "Milk basic protein (MBP) increases radial bone mineral density in healthy adult women.",
+        "citation": "Bioscience, biotechnology, and biochemistry (2002)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12005077/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1271/bbb.66.702"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11388472",
+        "title": "Controlled trial of the effects of milk basic protein (MBP) supplementation on bone metabolism in healthy adult women.",
+        "citation": "Bioscience, biotechnology, and biochemistry (2001)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11388472/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1271/bbb.65.913"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19296044",
+        "title": "Evaluation of milk basic protein supplementation on bone density and bone metabolism in Chinese young women.",
+        "citation": "European journal of nutrition (2009)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19296044/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1007/s00394-009-0014-1"
+      }
+    ]
+  }
+}

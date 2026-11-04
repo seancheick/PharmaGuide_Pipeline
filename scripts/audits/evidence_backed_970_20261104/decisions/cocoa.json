@@ -1,0 +1,64 @@
+{
+ "canonical": "cocoa",
+ "labels": 9,
+ "stored": "positive_weak",
+ "as_read": "Conflicting with no clear benefit: the large COSMOS trial of cocoa extract was null on its primary cardiovascular outcome and on cognition, type 2 diabetes and incident hypertension, while meta-analyses of mostly short food and extract trials show small surrogate reductions.",
+ "route": "null_literature",
+ "quote": {
+  "pmid": "36102337",
+  "text": "Cocoa extract did not benefit cognition."
+ },
+ "positive_named": [
+  "22895979",
+  "38931273",
+  "41849087"
+ ],
+ "proposed_decision_text": "Eight labels print cocoa bean seed extract 500 mg with no flavanol amount in the rows, and one prints cocoa powder 10 g with a cognitive claim. The evidence conflicts and shows no clear benefit. COSMOS randomized 21,442 older US adults to cocoa extract with 500 mg flavanols/day or placebo; total cardiovascular events, the primary outcome, were not significantly reduced (HR 0.90, 95% CI 0.78 to 1.02), though CVD death, a secondary endpoint, was lower (HR 0.73) and a per-protocol analysis favored cocoa (35294962). A later secondary win ratio analysis of the same trial reports a significant benefit that the Cox model of the same composite did not show (41849087). In the same program, cocoa extract did not benefit global cognition over 3 years in 2,262 participants (36102337) or 2 years in 573 participants (38070683), did not reduce mild cognitive impairment or dementia though power was low (37035889), did not reduce type 2 diabetes (37816167), and did not reduce overall incident hypertension, apart from a subgroup with baseline systolic pressure below 120 mm Hg (40832703). The positive evidence is on surrogate markers in shorter studies that mix food and extract: Cochrane found a small blood pressure reduction in 2 to 18 week trials of cocoa products, significant only against flavanol-free controls (22895979), and a 2024 meta-analysis of cocoa extract or dark chocolate found small reductions in cholesterol, glucose and blood pressure, with no effect on weight, triglycerides, HDL or HbA1c (38931273). Four weeks of a high-flavanol cocoa drink did not improve insulin sensitivity in 32 women (36771271). COSMOS tested extract at a stated flavanol dose; these labels state extract or powder mass, so their flavanol exposure is unknown. No trial of the 10 g powder label was read. Abstracts only.",
+ "studies_to_add": [
+  {
+   "pmid": "35294962",
+   "study_type": "rct",
+   "sample_size": 21442,
+   "primary_endpoint": "composite of confirmed incident total cardiovascular events",
+   "effect_direction": "null",
+   "quote": "Cocoa extract supplementation did not significantly reduce total cardiovascular events among older adults but reduced CVD death by 27%."
+  },
+  {
+   "pmid": "36102337",
+   "study_type": "rct",
+   "sample_size": 2262,
+   "primary_endpoint": "change in a global cognition composite over 3 years",
+   "effect_direction": "null",
+   "quote": "Cocoa extract had no effect on global cognition (mean z-score = 0.03, 95% CI: -0.02 to 0.08; P = .28)."
+  },
+  {
+   "pmid": "38070683",
+   "study_type": "rct",
+   "sample_size": 573,
+   "primary_endpoint": "global cognition averaged across 11 tests over 2 years",
+   "effect_direction": "null",
+   "quote": "The primary outcome was global cognition (averaging z-scores across 11 tests)."
+  }
+ ],
+ "stop_list": [
+  "Fields can't express a flavanol dose (COSMOS 500 mg flavanols/day) against labels that print extract or powder mass; 500 mg of extract is not 500 mg of flavanols.",
+  "COSMOS was a 2-by-2 factorial trial with a multivitamin, so some participants in the cocoa arm also took the multivitamin; 36102337 reports no significant cocoa by multivitamin interaction on cognition."
+ ],
+ "clinician_items": [
+  "22895979: gastrointestinal complaints and distaste of the product were reported by 5% of the active cocoa group and 1% of controls."
+ ],
+ "stored_rating_note": "Stored positive_weak cites only the 2012 Cochrane review of food and drink products at flavanol doses, and predates COSMOS. It doesn't describe what eight of these labels print (extract). The stored statement's blood pressure effect stands as a small, short-term surrogate effect.",
+ "pmids_read": [
+  "22895979",
+  "35294962",
+  "36102337",
+  "37816167",
+  "40832703",
+  "38070683",
+  "37035889",
+  "38931273",
+  "36771271",
+  "41849087"
+ ],
+ "unread_notes": "Abstracts only. One search used (63 hits, 40 listed); 35294962 did not appear in the listed part and was opened directly by PMID. Hits seen and not read: 42149390 (external placebo analysis), 42004609 (physical performance), 41803341 (epigenetic clocks), 41651011 (venous thromboembolism), 40966617 (inflammaging), 40146119 (macular degeneration), 39964350 (fractures), 41143317, 37526943, 36164983, 37128985 (small flavanol trials), 40217225 (microvascular review), 38150009. None is described here. No search was run on cocoa powder and cognition."
+}

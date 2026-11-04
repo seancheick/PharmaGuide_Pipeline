@@ -101,44 +101,65 @@
     "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 14971626"
   },
   "cayenne_pepper": {
-    "effect_direction": null,
-    "result": "no_qualifying_human_evidence",
-    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Labels print cayenne at 450 to 500 mg or an extract, or give no amount, and no row shows a capsaicinoid amount. The one trial read at that form and amount gave 11 men a single 500 mg dose with 1.25 mg capsaicin (PMID 24267043). Pooled capsaicin trials report a weight difference of 0.51 kg without separating whole cayenne or extract (PMID 36938807). A pooled single-meal result suggests at least 2 mg capsaicinoids taken before a meal (PMID 24246368), an exposure these labels do not print. Gut symptom trials used red pepper powder at 2.5 g/day (PMID 12030948) and enteric-coated pills (PMID 21573941). No study read tested these labels' preparation with a named primary outcome. Abstracts read; full texts not opened, so this does not say the preparation was tested and failed. PMID 24267043 states: 'These results suggest that acute ingestion of 500 mg of cayenne (1.25 mg capsaicin) or evodiamine is not effective at inducing thermogenesis and increasing fat oxidation at rest or during exercise in men.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
-    "quotes": [
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Labels print cayenne at 450 to 500 mg or an extract, or give no amount, and no row shows a capsaicinoid amount. Abstracts only. The one trial read at that form and amount gave 11 men a single 500 mg dose with 1.25 mg capsaicin and found no thermogenic or fat oxidation effect (PMID 24267043). On the other side, pooled capsaicin trials report a weight difference of 0.51 kg without separating whole cayenne or extract (PMID 36938807), a pooled single-meal result points to at least 2 mg capsaicinoids taken before a meal (PMID 24246368), an exposure these labels do not print, and gut symptom trials used red pepper powder at 2.5 g/day (PMID 12030948) and enteric-coated pills (PMID 21573941). PMID 24267043 states: 'These results suggest that acute ingestion of 500 mg of cayenne (1.25 mg capsaicin) or evodiamine is not effective at inducing thermogenesis and increasing fat oxidation at rest or during exercise in men.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
       {
         "pmid": "24267043",
+        "study_type": "rct",
+        "sample_size": 11,
+        "primary_endpoint": "none named in the abstract; thermogenesis and fat oxidation at rest and during exercise",
+        "effect_direction": "null",
         "quote": "These results suggest that acute ingestion of 500 mg of cayenne (1.25 mg capsaicin) or evodiamine is not effective at inducing thermogenesis and increasing fat oxidation at rest or during exercise in men."
       }
     ],
-    "receipt": "PubMed abstracts read November 4, 2026; packet/INGR_CAYENNE_PEPPER.json"
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 24267043"
   },
   "gotu_kola": {
-    "effect_direction": null,
-    "result": "no_qualifying_human_evidence",
-    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Labels print herb powder, whole herb extract, or leaf or aerial extract, and none prints the total triterpenic fraction. The stored venous result tested that fraction in a single-blind trial (PMID 11666126), and a review of venous trials says its conclusion needs caution (PMID 23533507). A cognition meta-analysis reports no significant difference from placebo across domains (PMID 28878245). A diabetes trial found no adjusted difference in its primary outcome, HbA1c (PMID 41383475), and an add-on trial found no additional cognitive effect (PMID 36420467). Extract trials reporting working memory (PMID 18191355) and chair stand (PMID 19880441) results name no primary outcome in their abstracts. A macular pigment trial tested a named extract, CA-HE50, that these labels do not print (PMID 41901080). Abstracts read; full texts not opened, so this does not say the preparation was tested and failed. PMID 28878245 states: 'In conclusion, there is not strong evidence to support the use of C. asiatica for cognitive function improvement in each cognitive domain.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
-    "quotes": [
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Labels print herb powder, whole herb extract, or leaf or aerial extract, and none prints the total triterpenic fraction. Abstracts only. A cognition meta-analysis reports no significant difference from placebo across domains (PMID 28878245). A diabetes trial found no adjusted difference in its primary outcome, HbA1c (PMID 41383475), and an add-on trial found no additional cognitive effect (PMID 36420467). On the other side, the stored venous result tested the total triterpenic fraction in a single-blind trial (PMID 11666126), and a review of venous trials says its conclusion needs caution (PMID 23533507). Extract trials reporting working memory (PMID 18191355) and chair stand (PMID 19880441) results name no primary outcome in their abstracts. A macular pigment trial tested a named extract, CA-HE50, that these labels do not print (PMID 41901080). PMID 28878245 states: 'In conclusion, there is not strong evidence to support the use of C. asiatica for cognitive function improvement in each cognitive domain.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
       {
         "pmid": "28878245",
+        "study_type": "systematic_review_meta",
+        "sample_size": null,
+        "primary_endpoint": "none named in the abstract; cognitive function by domain",
+        "effect_direction": "null",
         "quote": "In conclusion, there is not strong evidence to support the use of C. asiatica for cognitive function improvement in each cognitive domain."
-      }
-    ],
-    "receipt": "PubMed abstracts read November 4, 2026; packet/INGR_GOTU_KOLA.json"
-  },
-  "feverfew": {
-    "effect_direction": null,
-    "result": "no_qualifying_human_evidence",
-    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Labels print flower, leaf or unspecified feverfew extract, or herb or powder, and none prints MIG-99. The one positive primary result read tested MIG-99, a CO2 extract: 1.9 against 1.3 fewer attacks per month on placebo (PMID 16232154). The dose study of the same extract states it failed to show a significant effect in general (PMID 12230594). A crossover of a dried alcoholic extract found the same number of attacks in both groups (PMID 23195074). The stored 1988 crossover gave dried leaf with no amount in its abstract (PMID 2899663). A 2025 meta-analysis reports a reduction with limits from bias and does not split results by preparation in its abstract (PMID 41422534). Abstracts read; full texts not opened, so this does not say the preparation was tested and failed. The Cochrane review, PMID 25892430, states: 'However, this constitutes low quality evidence, which needs to be confirmed in larger rigorous trials with stable feverfew extracts and clearly defined migraine populations before firm conclusions can be drawn.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
-    "quotes": [
-      {
-        "pmid": "25892430",
-        "quote": "However, this constitutes low quality evidence, which needs to be confirmed in larger rigorous trials with stable feverfew extracts and clearly defined migraine populations before firm conclusions can be drawn."
       },
       {
-        "pmid": "12230594",
-        "quote": "MIG-99 failed to show a significant migraine prophylactic effect in general."
+        "pmid": "41383475",
+        "study_type": "rct",
+        "sample_size": 70,
+        "primary_endpoint": "HbA1c",
+        "effect_direction": "null",
+        "quote": "CA supplementation was safe but did not produce a significant change in glycemic or lipid outcomes compared to placebo."
       }
     ],
-    "receipt": "PubMed abstracts read November 4, 2026; packet/INGR_FEVERFEW.json"
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 28878245"
+  },
+  "feverfew": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Labels print flower, leaf or unspecified feverfew extract, or herb or powder, and none prints MIG-99. Abstracts only. A crossover of a dried alcoholic extract in 50 patients, 44 completing, found the same number of attacks in both groups (PMID 23195074). The dose study of the CO2 extract MIG-99 states it failed to show a significant effect in general (PMID 12230594). On the other side, the one positive primary result read tested MIG-99: 1.9 against 1.3 fewer attacks per month on placebo (PMID 16232154). The stored 1988 crossover gave dried leaf with no amount in its abstract (PMID 2899663). A 2025 meta-analysis reports a reduction with limits from bias and does not split results by preparation in its abstract (PMID 41422534). The Cochrane review rates the evidence low quality (PMID 25892430). PMID 12230594 states: 'MIG-99 failed to show a significant migraine prophylactic effect in general.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "12230594",
+        "study_type": "rct",
+        "sample_size": 147,
+        "primary_endpoint": "migraine attack frequency",
+        "effect_direction": "null",
+        "quote": "MIG-99 failed to show a significant migraine prophylactic effect in general."
+      },
+      {
+        "pmid": "23195074",
+        "study_type": "rct",
+        "sample_size": 50,
+        "primary_endpoint": "none named in the abstract; number of migraine attacks",
+        "effect_direction": "null",
+        "quote": "A prophylactic effect could not be demonstrated for our feverfew preparation, but the patients seemed to have a tendency to use fever symptomatic drugs during the period they used feverfew."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 12230594"
   },
   "d_ribose": {
     "effect_direction": "null",
@@ -170,5 +191,720 @@
       }
     ],
     "receipt": "PubMed abstracts read November 4, 2026; packet/INGR_D_RIBOSE.json"
+  },
+  "african_mango": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Eight labels print African mango seed extract 1,200 mg and one prints Irvingia gabonensis IGOB 131 at 150 mg, with no weight claim in the rows. No study read meets the review's standard. The stored trial tested IGOB131 150 mg twice daily for 10 weeks in 102 overweight or obese volunteers and reported improved body weight and metabolic markers against placebo, but neither its abstract nor the text passages searched in its open full text names a primary outcome, and part of its funds and the extract came from the manufacturer (19254366). A 12-week trial of 300 mg/day kernel extract found no between-group difference in metabolism, inflammation or aerobic capacity, with benefit limited to plasma vitamin C and adiponectin, and it names no primary outcome (36364907). A 90-day trial of 150 mg twice daily in 24 patients with metabolic syndrome reports within-group changes and remission in 58.3% versus 16.7%, with no primary outcome named (29336718). A one-month trial used 1.05 g of seeds three times a day, a food-like amount of a preparation these labels do not print, with no primary outcome named (15916709). A meta-analysis of five trials reports weight loss but rates four as high risk of bias and says the one low-risk trial had no significantly different outcomes, and it gives no dose in its abstract (31855111). A 2013 systematic review calls the effect unproven (23419021), a 2020 review of herbal medicines finds insufficient evidence to recommend them (31984610), and a network meta-analysis ranks African mango first while asking for higher quality studies, on mostly indirect comparisons (40420357). 1,200 mg is above every extract dose tested in these trials. Abstracts, plus full text passages for 19254366 and 36364907. This does not say the preparation was tested and failed. PMID 31855111 states: 'Overall efficacy of Irvingia gabonensis seed extract supplementation on weight loss seems positive but is limited due to poor methodological quality and the insufficient reporting of the clinical trials.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "31855111",
+        "quote": "Overall efficacy of Irvingia gabonensis seed extract supplementation on weight loss seems positive but is limited due to poor methodological quality and the insufficient reporting of the clinical trials."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 31855111"
+  },
+  "blood_orange_extract": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. These three labels print a Sicilian blood orange fruit and peel extract at 100 mg, in products named AOX, all three positioned for endurance, with recovery, cardiovascular, metabolic or strength categories. No study read tested that preparation for those purposes, and these are abstracts only. A 12-week trial of Moro juice extract at 400 mg/day found weight, BMI, waist and hip differences from placebo in overweight volunteers, but it tested a juice extract at 4 times the label amount and names no primary outcome (25588369). A 6-month placebo trial of a Moro standardized extract was positive on its primary outcome of body mass and composition, but its abstract states no dose or plant part (35276783). A 2026 meta-analysis of three trials, 252 participants, concludes that Moro orange juice extract may reduce weight and fat mass, for a juice extract and a weight purpose (40956687). A red orange extract at 100 mg/day improved skin response to UV and antiaging measures in 110 people, a purpose these labels do not carry, with no primary outcome named (35684041). A red orange extract in 60 elderly people raised the GSH/GSSG ratio, with no dose or primary outcome in the abstract and results reported as changes after intake (36296919). This does not say the preparation was tested and failed. PMID 40956687 states: 'Moro orange juice extract may result in weight and fat mass reduction in overweight and obese adults.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "40956687",
+        "quote": "Moro orange juice extract may result in weight and fat mass reduction in overweight and obese adults."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 40956687"
+  },
+  "coleus_forskohlii_root": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print Coleus forskohlii extract: 100 mg on a product named Forskolin 10 mg, 50 mg of root extract on another single-ingredient product, and 250 mg in two fat burner products with 10 and 11 ingredients. A fifth product is named Coleus Forskohlii 500 mg, and the review table holds no amount row for it. No study read meets the standard of a randomized trial or meta-analysis of the ingredient alone, oral, with a stated dose, population and primary outcome with a direction. The body composition trials all gave about 250 mg of 10% forskolin extract twice daily and name no primary outcome. In 30 overweight men, body fat percentage and fat mass fell versus placebo (16129715, abstract only). In 23 mildly overweight women, body mass tended to differ and fat mass did not differ significantly (18500958, abstract and full text passages). In 30 overweight adults on a hypocaloric diet, insulin and insulin resistance improved versus placebo while waist and hip reductions occurred in both groups (26593941, abstract and full text passages). A 2026 quasi-randomized trial in 60 overweight adults reported lower body weight and waist circumference versus placebo; it is not fully randomized (42678522, abstract and full text passages). A 2026 systematic review of four randomized trials calls the weight and body composition findings inconsistent and asks for high-quality trials (42847203). Oral forskolin 10 mg/day had fewer asthma attacks than inhaled cromoglycate (16749416) and no lung function difference from inhaled beclomethasone (20515580), both single-blind against active drugs, with no primary outcome named. Oral forskolin capsules improved a smell score after COVID-19 (39001919), with no dose in the abstract and a purpose these labels do not carry. The full text of 16129715 wasn't open, so its statement of a primary outcome rests on the abstract. The evidence does not support credit for these labels, and it does not show that the extract fails. This does not say the preparation was tested and failed. PMID 42847203 states: 'Evidence suggests that C. forskohlii extract may reduce fat mass and body fat percentage; however, findings regarding weight loss and overall body composition have been inconsistent.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "42847203",
+        "quote": "Evidence suggests that C. forskohlii extract may reduce fat mass and body fat percentage; however, findings regarding weight loss and overall body composition have been inconsistent."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 42847203"
+  },
+  "fucoidan": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. These two labels print Fucoidan 70% 300 mg in the product name, with one row at 600 mg and no seaweed species in the rows, positioned for immune support. No study read meets the standard for what they print, and these are abstracts only. None of the abstracts names a primary outcome. Two small crossovers tested an Undaria pinnatifida fucoidan at 1 g/day in active adults: in 12 men, differences between supplement groups in immune markers were modest (38247026), and in 16 adults, few differences were seen between conditions, with higher interleukin-6 and interleukin-10 at 30 minutes after exercise and no effect on performance (37331983). In 20 patients with asthma on regular treatment, an oligo-fucoidan raised FEV1/FVC and lowered IL-8, with no dose in the abstract (36307493). In 70 people with prediabetes, 1000 mg daily lowered TNF-alpha, IL-6 and LPS compared with placebo, a marker result at a different purpose (39645105). An oligo-fucoidan improved grip strength in 60 older adults (41124892) and an Undaria fucoidan improved prostate symptom scores in 95 men (42488927), neither with a dose in the abstract nor an immune purpose. A 2026 systematic review calls the evidence limited, heterogeneous and inconsistent and says better trials are required (42806726). This does not say the preparation was tested and failed. PMID 42806726 states: 'Well-designed, adequately powered randomised controlled trials using well-characterised fucoidan and clinically meaningful outcomes are required to establish the clinical efficacy of fucoidan in humans.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "42806726",
+        "quote": "Well-designed, adequately powered randomised controlled trials using well-characterised fucoidan and clinically meaningful outcomes are required to establish the clinical efficacy of fucoidan in humans."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 42806726"
+  },
+  "licorice": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Both labels print the single word Licorice, at 500 mg (306329) and 900 mg (251625), under product names reading Licorice Root, with no extract ratio, brand, glycyrrhizin content or flavonoid standard; 251625 is positioned for digestion and 306329 has no positioning. The stored trial, 21747893, reports a significant fall in dyspepsia symptom scores against placebo, but it tested GutGard 75 mg twice daily, a named extract these labels don't print. 37847472 named primary outcomes and found no difference in moderate COVID-19 at 760 mg three times a day, and 39262414 found a shorter ICU stay as its primary outcome with a 760 mg D-reglis tablet in critically ill COVID-19 patients; neither is a purpose these labels carry. 35785498 (1,000 mg/day powder of root extract in women with NAFLD), 27113136 (0.2 g/day ethanolic extract in hypercholesterolemia), 39080737 and 41952865 (1.5 g/day extract with a low-calorie diet in PCOS) report positive results, but their abstracts name no primary outcome and their purposes aren't on these labels. 29670847 (1.5 g/day extract with a low-calorie diet) found the anti-obesity effects no stronger than diet alone, and also names no primary outcome. 31574343 and 32802108 used a syrup. 29433679 pools 26 clinical trials of licorice consumption without separating preparations in the abstract, finding small falls in body weight and BMI with a rise in diastolic pressure, and 39079711 pools preparations alone or combined with other herbs. Abstracts only. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 37847472 states: 'Licorice had no beneficial effect on the clinical symptoms of COVID-19.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "37847472",
+        "quote": "Licorice had no beneficial effect on the clinical symptoms of COVID-19."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 37847472"
+  },
+  "oat_straw": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. These three labels print oat straw extract at 500 mg, with no purpose text in the positioning read. No study read meets the standard for what they print, and these are abstracts only. The trials tested branded green oat herb extracts, and none of the abstracts names a primary outcome. Single doses of 800 mg Neuravena improved speed on a global measure and some recall and executive tasks in adults aged 40 to 65 (26618715). In 20 healthy people, 800 mg Neuravena reduced EEG measures and sped performance (34658781). In older adults, 1600 mg but not 2400 mg reduced Stroop errors (21711204). A 29-day trial of cognitaven in 132 healthy adults found improved working memory and multitasking at 430 mg and 1290 mg against placebo, and 430 mg is the only arm close to these labels (32485993). Against that, 12 weeks of 1500 mg/day Neuravena did not affect any measure of cognition in older adults (22690320), while a 24-week crossover in 37 older adults at the same 1500 mg/day found better vasodilator responses than placebo, a surrogate at three times the label amount (23221935). A 2023 systematic review of six trials says the conclusions should be interpreted with caution and that long-term supplementation did not improve cognition (36657906). A cognition or vascular purpose is not on these labels. This does not say the preparation was tested and failed. PMID 22690320 states: 'Chronic WGOE supplementation did not affect any measures of cognition.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "22690320",
+        "quote": "Chronic WGOE supplementation did not affect any measures of cognition."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 22690320"
+  },
+  "oregano": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print oregano oil at 50 mg to 150 mg per serving (two rows print no amount), oregano extract at 500 mg and organic oregano leaf extract at 34 mg; one label carries an immune purpose. This is an abstracts-only review, and no study read meets the review's standard. The stored study gave 600 mg emulsified oregano oil daily to 14 adults with enteric parasites and reports clearance, but has no control group (PMID 10815019). An essential oil trial in 106 people with metabolic syndrome reports an antibacterial effect, but the abstract does not describe randomization or a dose (PMID 33429991). A randomized trial in 34 athletes reports higher HDL cholesterol on two oregano essential oils over 14 days, but the abstract states no dose and no primary outcome (PMID 34496170). A randomized trial in 24 soldiers reports lower muscle damage markers after one 500 mg capsule, with no primary outcome named and a purpose these labels do not print (PMID 36615794). A four-week trial of juice enriched with oregano extract in 45 men found no significant change in serum lipids or lipid peroxidation, a food vehicle dosed as phenolics (PMID 16881679). This does not say the preparation was tested and failed. PMID 16881679 states: 'The excretion of phenolic compounds was markedly increased in the higher phenolic group as compared to the placebo group, but no significant changes were observed in the safety parameters, serum lipids, or biomarkers of lipid peroxidation.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "16881679",
+        "quote": "The excretion of phenolic compounds was markedly increased in the higher phenolic group as compared to the placebo group, but no significant changes were observed in the safety parameters, serum lipids, or biomarkers of lipid peroxidation."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 16881679"
+  },
+  "puerarin": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. These labels print kudzu root extract, most at 1200 mg, or kudzu with kudzu extract, and one complex prints Pueraria mirifica root extract at 80 mg; none prints isolated puerarin, and the 13 kudzu labels carry no positioning category. This review read abstracts only. The stored crossover pilot gave isolated puerarin 1200 mg daily to 10 volunteers and saw fewer beers in one drinking session, names no primary outcome, and tested a single isoflavone rather than the extract (PMID 22578529). A kudzu extract crossover trial in heavy drinkers reports fewer beers after 7 days, but its abstract states no dose, sample size or primary outcome (PMID 15897719). An eight-week double-blind placebo-controlled study of kudzu extract with 750 mg isoflavones in 19 treatment-seeking adults found no advantage over placebo, names no primary outcome, and does not state randomization in the abstract (PMID 42779941). A kudzu root extract study in 50 postmenopausal women was open-label with no placebo and reports change from baseline, with capsule doses not stated in the abstract (PMID 34744740). A puerarin tablet study at 150 mg/d was added to Diane-35 and metformin, measured biomarkers and names no primary outcome (PMID 34032731). A hot flash trial tested kudzu flower with mandarin peel, a different plant part in a combination (PMID 33105861). A systematic review of Pueraria mirifica called its efficacy on menopausal symptoms inconclusive, citing methodological shortcomings and no standardization (PMID 29409850). No study read is a human randomized trial of the labeled kudzu root extract alone with a verified dose, a stated population and a named primary outcome with a direction. This does not say the preparation was tested and failed. PMID 42779941 states: 'In contrast to results from prior studies among non-treatment-seeking young adult men, kudzu did not perform better than placebo in reducing drinking among a treatment-seeking sample of men and women with AUD.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "42779941",
+        "quote": "In contrast to results from prior studies among non-treatment-seeking young adult men, kudzu did not perform better than placebo in reducing drinking among a treatment-seeking sample of men and women with AUD."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 42779941"
+  },
+  "red_clover": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. These labels print red clover aerial part or aerial parts extract at 1000 mg, red clover extract at 1500 mg, red clover blossom and herb at 800 mg, and one row with no amount; the red clover row states no isoflavone content, and only the 800 mg blossom and herb labels print a purpose, women's health. The trials read used products defined by isoflavone content. The ICE trial gave Promensil, 82 mg isoflavones a day, or Rimostil, 57 mg a day, to 252 women; hot flash frequency, the primary outcome, fell similarly with both and placebo, and the authors found no clinically important effect (12851275). Cochrane found no significant difference between Promensil and placebo in pooled trials and no conclusive evidence for phytoestrogen supplements (24323914). Other meta-analyses of isoflavone extracts report a modest reduction (33920485, 42269521), a larger one limited to Promensil at 80 mg/day in three studies (28160855), and a reduction at 3 to 4 months that didn't persist at 12 months (25074017). 39254422 gave 40 mg isoflavone twice daily with no primary outcome named. Rimostil 50 mg had no effect on bone density and lowered LDL (25369831). 26265926 was 150 mL of extract with 37.1 mg isoflavones, on bone. 33761143 gave 1.91 g of extract as a test food to 36 people for blood glucose with no primary outcome named. No study read tested an unstandardized aerial-part or blossom extract at the amounts on these labels. The evidence is conflicting and doesn't reach the material these labels print; no credit. Abstracts only. This does not say the preparation was tested and failed. PMID 12851275 states: 'Although the study provides some evidence for a biological effect of Promensil, neither supplement had a clinically important effect on hot flashes or other symptoms of menopause.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "12851275",
+        "quote": "Although the study provides some evidence for a biological effect of Promensil, neither supplement had a clinically important effect on hot flashes or other symptoms of menopause."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 12851275"
+  },
+  "turkey_tail": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. All five labels print Coriolus versicolor sporocarp extract 1000 mg, and the label rows carry no claim. This review read abstracts only, and no study read meets the standard of a randomized trial or meta-analysis of the ingredient alone, oral, with a stated dose, population and primary outcome with a direction. A meta-analysis of 13 trials reported a 9% absolute reduction in 5-year mortality with Yun Zhi added to conventional anticancer treatment, but its abstract states no dose and no preparation (22185453). A Cochrane review of seven trials in colorectal cancer, in which the extract was used alongside conventional treatment, found low-certainty evidence of a small five-year survival effect (RR 1.08, 95% CI 1.01 to 1.15) and very low-certainty evidence on adverse events (36445793); it describes the extract as PSK and states no dose in its abstract. A systematic review of PSK and Coriolus versicolor extracts in lung cancer reported that most randomized trials supported a positive impact, with conflicting results for some symptoms and median survival, and called for larger trials (25784670). In the placebo trial in 15 people with advanced hepatocellular carcinoma, the primary endpoint of time to progression did not differ, while quality of life was generally better on Coriolus versicolor (28375640); that abstract states no dose or preparation, and the full text was not open to this review. A placebo trial of polysaccharide peptide in 68 people with advanced non-small cell lung cancer reported better blood counts and immunoglobulins and fewer withdrawals for disease progression, but names no primary outcome or dose and tested an isolated peptide (12814145). A trial in 24 healthy volunteers reported gut microbiome changes with polysaccharide peptide, with no primary outcome or dose in the abstract (25006989). Trials in healthy adults and in people with oral HPV, or alongside COVID-19 vaccination, combined the mushroom with Danshen, Ganoderma lucidum or Fomitopsis officinalis, so they do not test it alone (14996412, 25271984, 41620671). A 2023 systematic review of mushroom supplements in cancer care concluded the evidence is inconclusive for routine use (36995535). The evidence therefore does not support credit for a sporocarp extract at 1000 mg, and it does not show that such a product fails. This does not say the preparation was tested and failed. PMID 28375640 states: 'There was no difference in TTP with use of CV compared to placebo.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "28375640",
+        "quote": "There was no difference in TTP with use of CV compared to placebo."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 28375640"
+  },
+  "atp": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Both labels print Peak ATP at 150 mg, one as adenosine 5'-triphosphate disodium with alpha lipoic acid in a two-ingredient product (213851) and one alone (213850). The stored trial gave 400 mg of disodium ATP for 2 weeks to 42 healthy men and reports held muscle excitability and higher later-bout peak power against baseline, with no primary outcome named (28080323). A 12-week trial at 400 mg/day reports greater strength, jump power and muscle thickness than placebo in resistance-trained men, and names no primary outcome (24330670). A meta-analysis of five RCTs with 121 men found greater maximal strength, no difference in repetitions or anaerobic power, and credits 400 mg (38535745). Two 14-day crossovers at 400 mg in 20 adults found no difference in 3-minute test performance (37092374), and better reaction time with no difference in mood or cognition measures (37599676). A single 400 mg dose didn't improve strength indicators in 18 men but reduced fatigue as exercise went on (38193939). 25006331 reports higher blood flow in a pilot of 12 with no control group described. The only trial read that went below 400 mg was acute, in 20 men: 200 mg did not differ significantly from placebo on repetitions and 100 mg showed no improvement over placebo on performance (34957398). No study read tested 150 mg, and no abstract read names a primary outcome. Abstracts only. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 34957398 states: 'Conclusions: In this study, the effective minimal dose of acute oral ATP supplementation during resistance exercise to increase performance was determined to be 400 mg, while as little as 100 mg showed improvements in perceived exertion.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "34957398",
+        "quote": "Conclusions: In this study, the effective minimal dose of acute oral ATP supplementation during resistance exercise to increase performance was determined to be 400 mg, while as little as 100 mg showed improvements in perceived exertion."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 34957398"
+  },
+  "algae_oil": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label (219942, Baby Vegetarian DHA) prints life'sDHA algal oil 562 mg with docosahexaenoic acid 225 mg, positioned for infants. The stored study compared 600 mg DHA/day from algal-oil capsules with cooked salmon in 32 adults aged 20 to 65 in an open-label 2-week trial and reports equivalent blood DHA, a blood level rather than a health outcome and not in babies (18589030). Algal DHA given to mothers, not to babies, did not change offspring neurodevelopment at 12 months on the named primary outcome (33023067), and a lactation trial reported some better attention scores and no visual differences at 5 years (20655543). In school-age children, 600 mg/day from algal oil had no effect on reading in the full sample with effects in a subgroup (22970149), and a replication found no consistent differences (29462158). In children with cystic fibrosis, the primary AA:DHA ratio fell with no clinical improvement (23266209). Trials that dosed infants or toddlers directly gave DHA with arachidonic acid: drops in extremely low birth weight infants (27356083), supplements in toddlers born preterm (31187863), and formula (17912568, 15812447); a combination isn't the ingredient alone. Abstracts only. No study read meets the review's standard for what this label prints. This does not say the preparation was tested and failed. PMID 33023067 states: 'Supplementing mothers through pregnancy and lactation with 400 mg/d DHA did not impact offspring neurodevelopment at 12 months of age in this setting.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "33023067",
+        "quote": "Supplementing mothers through pregnancy and lactation with 400 mg/d DHA did not impact offspring neurodevelopment at 12 months of age in this setting."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 33023067"
+  },
+  "phosphatidic_acid": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label (DSLD 82935, Stress Hormone Balancing Blend) prints Phosphatidylserine & Phosphatidic Acid 400 mg as a blend with no separate amount for phosphatidic acid, and carries a stress hormone purpose rather than a muscle purpose. Abstracts only. Two trials tested 750 mg of phosphatidic acid alone during resistance training: PMID 28177725 found no group differences in muscle thickness or 1RM strength, and PMID 23035701, a 16-man pilot, reported that parametric analysis was unable to demonstrate significant differences, with likely benefit only by magnitude based inference. Neither abstract names a primary outcome and neither concerns stress hormones. PMID 25081826 tested a soy phosphatidylserine and phosphatidic acid complex for the endocrine stress response; 400 mg PS plus 400 mg PA normalized ACTH and cortisol responses in chronically high but not low stressed men, the 200 mg plus 200 mg arm showed no significant differences, and the abstract names no primary outcome. PMID 29576358 reports a positive primary outcome (DRSP) for 400 mg PS plus 400 mg PA in premenstrual syndrome, a purpose this label does not carry. Both are two-ingredient complexes, not phosphatidic acid alone. PMID 27274715 tested MaxxTOR, which adds L-leucine, HMB and vitamin D3. No study meets the review's standard for this label, so no credit is proposed. This does not say the preparation was tested and failed. PMID 28177725 states: 'Results of this study suggest that PA supplementation, in combination with a 3 days·week-1 resistance-training program for 8 weeks, did not have a differential effect compared with PL on changes in muscle thickness or 1RM strength.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "28177725",
+        "quote": "Results of this study suggest that PA supplementation, in combination with a 3 days·week-1 resistance-training program for 8 weeks, did not have a differential effect compared with PL on changes in muscle thickness or 1RM strength."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 28177725"
+  },
+  "picrorhiza": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label (DSLD 59242, CarnoSoothe With PicroProtect) prints PicroProtect Picrorhiza kurroa extract 50 mg, standardized to 4% kutkin, among seven actives, and states a purpose of protecting the stomach and intestinal lining. Abstracts only. PMID 9715310 tested root powder at 375 mg three times daily for 2 weeks in acute viral hepatitis, with significant differences in bilirubin, SGOT and SGPT against placebo in 33 patients; it is a different preparation and purpose, and names no primary outcome. PMID 38320447 tested AEV01, a patented kutki extract, at 100 mg three times daily with standard care in 70 older adults with mild COVID-19, with positive results; the abstract does not name PicroProtect, the purpose differs, and it names no primary outcome. PMID 35986358 tested Livogen Plus, a combination that includes picroliv root. PMID 9805236 is a laboratory study of cultured human blood cells exposed to Picroliv. No study meets the review's standard for this label, so no credit is proposed. This does not say the preparation was tested and failed. PMID 9715310 states: 'In a randomised, double-blind placebo controlled trial in patients diagnosed to have acute viral hepatitis (HBsAg negative), Pk root powder 375 mg three times a day was given for 2 weeks (n = 15) or a matching placebo (n = 18) was given.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "9715310",
+        "quote": "In a randomised, double-blind placebo controlled trial in patients diagnosed to have acute viral hepatitis (HBsAg negative), Pk root powder 375 mg three times a day was given for 2 weeks (n = 15) or a matching placebo (n = 18) was given."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 9715310"
+  },
+  "broccoli_sprout": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label (DSLD 313541, NR Longevity) prints Broccoli Sprout, Whole Plant Concentrate 200 mg with Sulforaphane 800 mcg, alongside nicotinamide riboside and trans-resveratrol, in a product positioned for aging and longevity. Abstracts only. PMID 24913818 tested a beverage providing 600 umol glucoraphanin and 40 umol sulforaphane daily, with higher urinary excretion of benzene and acrolein conjugates than placebo; it is a beverage, the outcome is a biomarker, no primary outcome is named, and the dose is in umol. PMID 31268126 tested graded concentrations of a broccoli sprout beverage for benzene detoxication, significant at the full dose (+63.2%) and not at one-half or one-fifth. PMID 39929977 tested a broccoli sprout extract in 74 people with prediabetes and did not meet its prespecified primary outcome; the abstract prints no amount. PMID 26604653 tested capsules in 52 men with fatty liver, reporting falls in ALT and gamma-GTP from baseline with no such fall on placebo, with no primary outcome named and no amount printed. No study meets the review's standard for this label, so no credit is proposed. This does not say the preparation was tested and failed. PMID 39929977 states: 'BSE did not meet the prespecified primary outcome, and the overall effect in individuals with prediabetes was a 0.2 mmol l-1 reduction in fasting blood glucose (95% confidence interval -0.44 to -0.01; P = 0.04).' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "39929977",
+        "quote": "BSE did not meet the prespecified primary outcome, and the overall effect in individuals with prediabetes was a 0.2 mmol l-1 reduction in fasting blood glucose (95% confidence interval -0.44 to -0.01; P = 0.04)."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 39929977"
+  },
+  "nopal": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label (Nopal, Dr Juan Santo Remedio, id PG_SUB_4D246163F6CD468CA82B5E023468B9C1) prints Nopal Cactus Stem Powder (Opuntia ficus-indica) 700 mg, two capsules daily, with no purpose in its label text. Abstracts only. PMID 22805855 tested a cladode and fruit-skin extract, 1,000 mg twice around a glucose load, in six healthy men in a crossover, with lower glucose area under the curve; it is an extract, an acute test and names no primary outcome. PMID 32935904 tested extracted nopal fiber at 10 to 30 g per day for one week in IBS, positive at 20 and 30 g, a gram amount far from this label, with no primary outcome named. PMID 32160071 gave 5 g of nopal powder daily for 24 weeks to women aged 40 to 60, with no significant change in bone density, BMI, body fat or serum calcium; the abstract does not report randomization. PMID 38474715 tested Odilia, 300 mg of an extract, in gut dysbiosis, positive, with no primary outcome named. PMID 33006504 tested an ethanolic stem extract for cognition; overall it did not differ from placebo, with a positive subgroup aged 70 or younger. No study meets the review's standard for this label, so no credit is proposed. This does not say the preparation was tested and failed. PMID 32160071 states: 'These results indicate that advanced maturation NP does not have influence in bone health, BMI, and body composition in adult women.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "32160071",
+        "quote": "These results indicate that advanced maturation NP does not have influence in bone health, BMI, and body composition in adult women."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 32160071"
+  },
+  "diamine_oxidase": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label (DSLD 317962, DAO Enzyme) prints Porcine Kidney Extract 4.2 mg providing 0.55 mU diamine oxidase activity, one capsule 2 to 3 times daily with meals, and says it promotes breakdown of dietary histamine. Abstracts only. PMID 31807350, the stored study, is an open-label pilot in 28 patients with histamine intolerance with no control arm, reporting symptom improvement; it gives no capsule amount. PMID 29475774 randomized 100 patients with episodic migraine and DAO deficiency to DAO or placebo for one month: attack duration fell by 1.4 h within the DAO group, 0.9 h with placebo, with no significant difference between groups, and number of attacks and pain intensity fell similarly in both. It names no primary outcome and gives no amount. PMID 29698966, a crossover in 22 patients with chronic spontaneous urticaria of whom 20 completed, reports a UAS-7 reduction against placebo only in those with low serum DAO, names no primary outcome and gives capsules with no amount. None of these abstracts says the enzyme came from porcine kidney. No study meets the review's standard for this label, so no credit is proposed. This does not say the preparation was tested and failed. PMID 29475774 states: 'The reduction of pain hours observed in placebo group (0.9 h) could explain the lack of significant differences between both study groups.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "29475774",
+        "quote": "The reduction of pain hours observed in placebo group (0.9 h) could explain the lack of significant differences between both study groups."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 29475774"
+  },
+  "caralluma": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. The 14 labels print Caralluma fimbriata extract at 815 or 1000 mg, two of them calling it bark extract and two sold as fat burners. This review read abstracts only. The evidence conflicts, with no clear benefit. A meta-analysis of 7 articles found waist circumference 1.59 cm lower and waist-hip ratio 0.06 lower against placebo, no significant effect on body weight, BMI or hip circumference, no significant change in appetite or biochemical measures, and concludes it is unlikely to recommend C. fimbriata as a weight loss supplement and an appetite suppressant (34758791). A trial of 500 mg twice daily in 89 overweight and obese patients found no result beyond placebo on anthropometry or appetite (25657901). Positive results exist and do not settle it. The stored trial of 1 g/day in 50 adults reports lower waist circumference and hunger against placebo, with weight, BMI and body fat not significantly different (17097761). A pilot of 1 g/day with waist circumference as its primary outcome reports 6.5 cm lost against 2.6 cm, with a printed interval of -7.466 to 0.228 that includes zero, in 33 analysed (23642949). A 16-week trial in 83 overweight adults, published after the meta-analysis search and with no dose in the abstract, reports weight maintained against gain on placebo (33762661). Outside weight, one trial reports lower anxiety and stress scores in 97 adults (30609411), and a crossover in 15 children with Prader-Willi syndrome reports eased hyperphagia (26713299). PMID 34758791 states: 'Appetite parameters showed no significant changes and metabolic parameters did not improve with C.fimbriata supplementation therefore it is unlikely to recommend C. fimbriata as a weight loss supplement and an appetite suppressant.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "34758791",
+        "study_type": "systematic_review_meta",
+        "sample_size": null,
+        "primary_endpoint": "None named in the abstract; waist circumference, weight, BMI, appetite and biochemical measures reported",
+        "effect_direction": "null",
+        "quote": "Appetite parameters showed no significant changes and metabolic parameters did not improve with C.fimbriata supplementation therefore it is unlikely to recommend C. fimbriata as a weight loss supplement and an appetite suppressant."
+      },
+      {
+        "pmid": "25657901",
+        "study_type": "rct",
+        "sample_size": 89,
+        "primary_endpoint": "None named in the abstract; anthropometry and appetite reported",
+        "effect_direction": "null",
+        "quote": "A commercially available extract of CFE in an oral dose of 1 g/day claimed to have anti-obesity effect failed to yield any positive results on anthropometry and appetite in overweight and obese individuals beyond placebo."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 34758791"
+  },
+  "cocoa": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Eight labels print cocoa bean seed extract 500 mg with no flavanol amount in the rows, and one prints cocoa powder 10 g with a cognitive claim. The evidence conflicts and shows no clear benefit. COSMOS randomized 21,442 older US adults to cocoa extract with 500 mg flavanols/day or placebo; total cardiovascular events, the primary outcome, were not significantly reduced (HR 0.90, 95% CI 0.78 to 1.02), though CVD death, a secondary endpoint, was lower (HR 0.73) and a per-protocol analysis favored cocoa (35294962). A later secondary win ratio analysis of the same trial reports a significant benefit that the Cox model of the same composite did not show (41849087). In the same program, cocoa extract did not benefit global cognition over 3 years in 2,262 participants (36102337) or 2 years in 573 participants (38070683), did not reduce mild cognitive impairment or dementia though power was low (37035889), did not reduce type 2 diabetes (37816167), and did not reduce overall incident hypertension, apart from a subgroup with baseline systolic pressure below 120 mm Hg (40832703). The positive evidence is on surrogate markers in shorter studies that mix food and extract: Cochrane found a small blood pressure reduction in 2 to 18 week trials of cocoa products, significant only against flavanol-free controls (22895979), and a 2024 meta-analysis of cocoa extract or dark chocolate found small reductions in cholesterol, glucose and blood pressure, with no effect on weight, triglycerides, HDL or HbA1c (38931273). Four weeks of a high-flavanol cocoa drink did not improve insulin sensitivity in 32 women (36771271). COSMOS tested extract at a stated flavanol dose; these labels state extract or powder mass, so their flavanol exposure is unknown. No trial of the 10 g powder label was read. Abstracts only. PMID 36102337 states: 'Cocoa extract did not benefit cognition.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "35294962",
+        "study_type": "rct",
+        "sample_size": 21442,
+        "primary_endpoint": "composite of confirmed incident total cardiovascular events",
+        "effect_direction": "null",
+        "quote": "Cocoa extract supplementation did not significantly reduce total cardiovascular events among older adults but reduced CVD death by 27%."
+      },
+      {
+        "pmid": "36102337",
+        "study_type": "rct",
+        "sample_size": 2262,
+        "primary_endpoint": "change in a global cognition composite over 3 years",
+        "effect_direction": "null",
+        "quote": "Cocoa extract had no effect on global cognition (mean z-score = 0.03, 95% CI: -0.02 to 0.08; P = .28)."
+      },
+      {
+        "pmid": "38070683",
+        "study_type": "rct",
+        "sample_size": 573,
+        "primary_endpoint": "global cognition averaged across 11 tests over 2 years",
+        "effect_direction": "null",
+        "quote": "The primary outcome was global cognition (averaging z-scores across 11 tests)."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 36102337"
+  },
+  "arjuna": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Both labels print Rejuna arjuna bark extract, 10:1, standardized to 40% polyphenols, 750 mg, alongside hawthorn. In a double-blind placebo-controlled add-on trial, 100 chronic heart failure patients took a standardized water extract of stem bark, 750 mg twice daily, and LVEF, the primary outcome, did not change at 12 weeks; the improvements in walk distance and symptom scores came from a post-hoc analysis (26988798). A review of angina studies found no significant pooled difference and called the evidence insufficient in either direction (24600529). A heart failure meta-analysis of nine studies found a non-significant LVEF change, with lower left ventricular mass and higher HDL (42389976). There are positive trials: the proprietary aqueous extract E-OJ-01 at 400 mg/day raised LVEF in 72 healthy adults (36349244) and in 32 young exercising men (27930383); IPC-53 bark extract at 500 mg every 8 hours lowered angina frequency and lengthened exercise time in a one-week crossover (12086380); 3 g/day lowered blood pressure more than placebo on top of telmisartan in 44 patients (42753288); 500 mg twice daily lowered triglycerides and inflammatory markers in stable coronary disease (25827448); 500 mg/day raised VO2 max in a group of 10 healthy young adults (21170205). The stored study, 9505018, wasn't randomized: LVEF rose and LV mass fell within the treated group; 12 matched controls did not show those changes. This does not establish a statistically significant between-group effect. Angina frequency fell in both groups. None of these trials names Rejuna. Read together, the evidence conflicts and shows no clear benefit for what these labels print. Abstracts only. PMID 26988798 states: 'Arjuna extract did not improve LVEF in CHF patients over 12 weeks, although there was improvement in functional capacity, antioxidant reserves and symptom-related QoL domains in some patients.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "26988798",
+        "study_type": "rct",
+        "sample_size": 100,
+        "primary_endpoint": "change in LVEF at 12 weeks",
+        "effect_direction": "null",
+        "quote": "Arjuna extract was well-tolerated, but did not change LVEF (24.3 ± 7.1 versus 25.5 ± 7.7%; p = 0.4) or secondary outcome measures except preservation of RBC catalase activity [1275(104, 10350) versus 1243.5(104, 10350) U/g haemoglobin; p = 0.01] compared to placebo."
+      },
+      {
+        "pmid": "24600529",
+        "study_type": "systematic_review_meta",
+        "sample_size": null,
+        "primary_endpoint": "not named",
+        "effect_direction": "null",
+        "quote": "We found no significant difference in the Terminalia arjuna group as compared to control arm in the outcomes for which we were able to pool data and undertake meta-analysis."
+      },
+      {
+        "pmid": "36349244",
+        "study_type": "rct",
+        "sample_size": 72,
+        "primary_endpoint": "LVEF",
+        "effect_direction": "positive_weak",
+        "quote": "E-OJ-01 increased the LVEF by 6.28% (percentage change) from the baseline compared with 0.24% (percentage change) in the placebo group (p<0.05)."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 26988798"
+  },
+  "guarana": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. The labels print guarana seed extract or guarana extract at 200 mg to 1000 mg with energy or metabolic purposes where a purpose is printed, and they print no caffeine content. A meta-analysis of eight placebo-controlled acute studies in 328 participants found an overall cognitive effect less than trivial, with a small faster response time and no change in accuracy (PMID 36678305). A double-blind crossover in 20 participants found 500 mg guarana did not influence cognitive performance or provide consistent mood benefit (PMID 38931247). For fatigue in cancer patients, one meta-analysis found guarana no better than placebo (PMID 34146166) while another found a benefit with high heterogeneity (PMID 39536249). A randomized trial of guarana 50 mg twice daily in 60 head and neck cancer patients on chemoradiotherapy concluded it was not beneficial for that population (PMID 27322597). Small acute trials report positive results: memory and alertness ratings at lower doses in 26 adults (PMID 16533867), reaction time and alertness in 25 participants on a weight-based dose (PMID 36146946), trail making and pre-exercise passing in 32 soccer players (PMID 42646867), a trivial to small cycling work gain with 500 mg containing 130 mg caffeine (PMID 37898479) and intermittent running after 3 g of seed powder (PMID 38958672). This reads as conflicting evidence with no clear benefit, and no guarana-alone metabolic trial was found for what these labels print. This is an abstracts-based review, with the open full text of 36678305 searched only for design terms. PMID 36678305 states: 'The ESs for guarana averaged across a variety of cognitive measures and outcome variables were less than trivial (Hedge’s g = 0.076, p = 0.14).' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "36678305",
+        "study_type": "systematic_review_meta",
+        "sample_size": 328,
+        "primary_endpoint": "none named in the abstract; cognitive measures pooled across acute studies",
+        "effect_direction": "null",
+        "quote": "The ESs for guarana averaged across a variety of cognitive measures and outcome variables were less than trivial (Hedge’s g = 0.076, p = 0.14)."
+      },
+      {
+        "pmid": "38931247",
+        "study_type": "rct",
+        "sample_size": 20,
+        "primary_endpoint": "none named in the abstract; cognitive performance and mood",
+        "effect_direction": "null",
+        "quote": "Neither the acute ingestion of GUA nor low dose of CAF influenced cognitive performance or provided consistent benefit on mood or mental workload through vagal modulation."
+      },
+      {
+        "pmid": "27322597",
+        "study_type": "rct",
+        "sample_size": 60,
+        "primary_endpoint": "none named in this abstract's closing text; fatigue during chemoradiotherapy",
+        "effect_direction": "null",
+        "quote": "We propose that guarana is not beneficial for this patient population."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 36678305"
+  },
+  "theobromine": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. The labels print plain theobromine at 250 mg or 400 mg per serving and carry no heart or cholesterol purpose. Abstracts only. The trial nearest these labels gave 500 mg/day to 44 adults with low HDL cholesterol in a crossover and found it was not effective on HDL cholesterol (PMID 28971099). The same size and design of study reported no fasting HDL change, lower LDL cholesterol and unfavorable postprandial glucose and insulin responses (PMID 28645636), no improvement in endothelial function (PMID 29330660) and no change in cholesterol efflux (PMID 29797695). On the other side, the stored trial gave 850 mg in a daily drink to 152 healthy adults for 4 weeks and raised HDL cholesterol by 0.16 mmol/L, more than twice any label amount and with no primary outcome named (PMID 23595874), and 450 mg/day in 80 adults with metabolic syndrome improved waist and lipid ratios alongside a low-calorie diet (PMID 37615657; related report PMID 40672541). The persistent cough trial of BC1036 named a primary outcome that did not reach significance, with no dose in the abstract (PMID 28839984). The blood pressure trial tested theobromine in cocoa rather than alone (PMID 20823377). PMID 28971099 states: 'Conclusion: TB was not effective on HDL-CH in subjects with a LP phenotype characterized by low HDL-CH and high TG in VLDL.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "28971099",
+        "study_type": "rct",
+        "sample_size": 44,
+        "primary_endpoint": "none named in the abstract; HDL cholesterol and lipoprotein profile",
+        "effect_direction": "null",
+        "quote": "Conclusion: TB was not effective on HDL-CH in subjects with a LP phenotype characterized by low HDL-CH and high TG in VLDL."
+      },
+      {
+        "pmid": "29330660",
+        "study_type": "rct",
+        "sample_size": 44,
+        "primary_endpoint": "none named in the abstract; fasting and postprandial endothelial function",
+        "effect_direction": "null",
+        "quote": "These findings do not suggest that theobromine alone contributes to the proposed cardioprotective effects of cocoa."
+      },
+      {
+        "pmid": "37615657",
+        "study_type": "rct",
+        "sample_size": 80,
+        "primary_endpoint": "none named in the abstract; waist circumference and lipid ratios",
+        "effect_direction": "positive_weak",
+        "quote": "The results of the current study revealed that TB supplementation along with a low-calorie diet had favorable effects on WC, LDL-c/HDL-c, TG/HDL-c, TC/HDL-c, and serum level of HDL-c in overweight and obese subjects with MetS."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 28971099"
+  },
+  "zeaxanthin": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. These 32 labels print zeaxanthin in three ways: zeaxanthin as the only row at 5 mg (11 labels), zeaxanthin or zeaxanthin isomers beside lutein at 200 mcg to 5 mg (15 labels), and meso-zeaxanthin in multi-ingredient eye formulas (6 labels). No study read meets the bar of a human RCT of zeaxanthin alone with a named primary outcome and a direction. Abstracts only. The only trial of zeaxanthin alone randomized 8 patients with macular telangiectasia type 2 to 10 mg or 20 mg a day, open label with no placebo and no named primary, and found no visual benefit (PMID 28079755). AREDS2 tested lutein 10 mg plus zeaxanthin 2 mg added to an AREDS formula in 4203 people at risk of advanced AMD, and its primary comparison showed no significant reduction (HR 0.90, P = .12) (PMID 23644932). AREDS2 reports also found no significant effect on cataract surgery or vision loss (PMID 23645227), cognition (PMID 26305649) or cardiovascular disease (PMID 24638908). Meta-analyses of lutein and zeaxanthin report better visual acuity and contrast sensitivity in AMD (PMID 25515572) and higher macular pigment (PMID 34157098, PMID 27420092), and a glaucoma trial of lutein, zeaxanthin and meso-zeaxanthin raised macular pigment (PMID 36247822); all test combinations, and macular pigment is a surrogate. A trial of goji berry tested food with lutein (PMID 35044504), a skin trial tested a mixed formula (PMID 27312122), and a crossover measured bioavailability (PMID 29185931). The evidence read does not show a benefit of zeaxanthin alone at the amounts these labels print. The stored record also carries a dietary subgroup of AREDS2, which is not a second trial or a primary positive outcome. PMID 23644932 states: 'Addition of lutein + zeaxanthin, DHA + EPA, or both to the AREDS formulation in primary analyses did not further reduce risk of progression to advanced AMD.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "28079755",
+        "study_type": "rct",
+        "sample_size": 8,
+        "primary_endpoint": "none named in the abstract; macular pigment and visual function",
+        "effect_direction": "null",
+        "quote": "Based on the current study, zeaxanthin supplementation does not result in any visual benefit in patients with macular telangiectasia Type 2 and does not reestablish a normal peaked distribution of MP in the fovea."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 23644932"
+  },
+  "lycopene": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. The labels print lycopene at 2 mg to 50 mg, and three name Lyc-O-Mato. A meta-analysis of 34 randomized trials found lycopene and tomato consumption did not affect blood pressure, lipids, glucose or inflammatory markers, apart from lower malondialdehyde (PMID 37496241). A review of 43 intervention studies at 1.44 to 75 mg a day found no significant difference for blood pressure or lipids and calls the findings conflicting (PMID 32652029). Two meta-analyses of six trials each found no overall effect on PSA (PMID 33355018, PMID 35031434). Evidence on the other side exists: earlier pooling found lower systolic pressure with lycopene (PMID 28129549, PMID 24051501), a tomato nutrient complex lowered systolic pressure at 15 mg and 30 mg of lycopene while 15 mg of synthetic lycopene and 5 mg of the complex did not (PMID 31035474), 7 mg a day improved endothelial function in cardiovascular patients but not in healthy volunteers (PMID 24911964), and 25 mg raised sperm count in 44 men with oligozoospermia (PMID 31468596). A small meta-analysis found modest sperm concentration gains (PMID 40806357). This is an abstracts-only review. The stored sources, a narrative review and a rat study, give no human estimate (PMID 27840359, PMID 36422550). Taken together the evidence conflicts with no clear benefit, so this review earns no credit. PMID 37496241 states: 'Overall, the findings showed that lycopene and tomato consumption did not affect cardiovascular risk factors.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "37496241",
+        "study_type": "systematic_review_meta",
+        "sample_size": null,
+        "primary_endpoint": "No primary named in the abstract; lipids, glycemic markers, blood pressure, inflammation, oxidative stress, body weight across 34 RCTs",
+        "effect_direction": "null",
+        "quote": "Overall, the findings showed that lycopene and tomato consumption did not affect cardiovascular risk factors.",
+        "scoring_eligible": false
+      },
+      {
+        "pmid": "33355018",
+        "study_type": "systematic_review_meta",
+        "sample_size": null,
+        "primary_endpoint": "Serum PSA across six RCTs in non-metastatic prostate cancer",
+        "effect_direction": "null",
+        "quote": "Although lycopene supplementation did not produce any reduction in PSA levels overall, a significant reducing effect was observed in patients with higher levels of baseline PSA.",
+        "scoring_eligible": false
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 37496241"
+  },
+  "goldenseal": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The 28 labels print goldenseal root powder, plain goldenseal or goldenseal extract, one at 4:1 and four at 5% hydrastine. Abstracts only. Two PubMed searches, 93 records with the newest 30 listed and 21 with all listed, judged by title and opening text, found no oral efficacy trial of goldenseal alone. The human studies read are drug interaction studies, not efficacy trials: supplementation for 14 days inhibited CYP3A activity in 16 healthy volunteers (PMID 17495878), and the others measured drug handling (PMID 17079360, PMID 15900287, PMID 39943692). A review of goldenseal asks for such trials (PMID 32683037). No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 32683037 states: 'Thus, large randomized, double-blind clinical studies need to be conducted on goldenseal supplements and their main alkaloids to provide more evidence on the mechanisms responsible for the pharmaceutical activity, clinical efficacy and safety of these products.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "32683037",
+        "quote": "Thus, large randomized, double-blind clinical studies need to be conducted on goldenseal supplements and their main alkaloids to provide more evidence on the mechanisms responsible for the pharmaceutical activity, clinical efficacy and safety of these products."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 32683037"
+  },
+  "hawthorn": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Stored as positive_strong on one 2003 meta-analysis (12798455). A later Cochrane review (18254076) repeats that benefit for symptoms and maximal workload, but both reviews predate SPICE and HERB CHF. SPICE, 2681 patients on WS 1442 900 mg/day for 24 months, had no significant effect on time to first cardiac event (19019730). HERB CHF, 120 patients on 450 mg twice daily, found no difference in 6 minute walk distance and concluded no symptomatic or functional benefit (19789403). Smaller trials report exercise gains, some on liquid fresh-berry extract in drops (12833999, 11715631), and blood pressure results are inconsistent (16762125, 40732315). The two primary-positive fresh-berry trials are liquid extracts in drops, while berry labels here print dry extract, powder or whole berry. Leaf and flower labels print 150 to 500 mg per serving, against the 900 mg/day WS 1442 arms. Abstracts only. PMID 19789403 states: 'Hawthorn provides no symptomatic or functional benefit when given with standard medical therapy to patients with heart failure.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "19019730",
+        "study_type": "rct",
+        "sample_size": 2681,
+        "primary_endpoint": "time until first cardiac event",
+        "effect_direction": "null",
+        "quote": "In this study, WS 1442 had no significant effect on the primary endpoint."
+      },
+      {
+        "pmid": "19789403",
+        "study_type": "rct",
+        "sample_size": 120,
+        "primary_endpoint": "change in 6 min walk distance at 6 months",
+        "effect_direction": "null",
+        "quote": "Hawthorn provides no symptomatic or functional benefit when given with standard medical therapy to patients with heart failure."
+      },
+      {
+        "pmid": "18254076",
+        "study_type": "systematic_review_meta",
+        "sample_size": 855,
+        "primary_endpoint": "not named; maximal workload and symptoms pooled",
+        "effect_direction": "positive_weak",
+        "quote": "These results suggest that there is a significant benefit in symptom control and physiologic outcomes from hawthorn extract as an adjunctive treatment for chronic heart failure."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 19789403; packet/INGR_HAWTHORN.json"
+  },
+  "hibiscus_extract": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Eleven labels print hibiscus flower extract 800 mg, and two cranberry products print hibiscus extract, one at 100 mg and one with no amount; the label rows show no marker content, and the stored record is a narrative review (23333908). Pooled analyses favor hibiscus on blood pressure (39870328, 34927694, 34694241), but their abstracts do not separate extract from tea and give no doses, and one reports no significant effect with metabolic syndrome. For extract capsules specifically, Cochrane found one trial and called the evidence insufficient at very low certainty (34837382), a 108-person RCT at 1000 mg/day was null against placebo on all assessed metabolic parameters and blood pressure (40334927), and a pooled weight analysis was null (38878905). Abstracts only. PMID 40334927 states: 'Compared with placebo, HS did not significantly affect HOMA-IR, glycemic markers, BMI, WC, lipid profile, or blood pressure.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "40334927",
+        "study_type": "rct",
+        "sample_size": 108,
+        "primary_endpoint": "not named in the abstract; insulin resistance and metabolic syndrome parameters assessed",
+        "effect_direction": "null",
+        "quote": "Compared with placebo, HS did not significantly affect HOMA-IR, glycemic markers, BMI, WC, lipid profile, or blood pressure."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 40334927; packet/INGR_HIBISCUS_EXTRACT.json"
+  },
+  "nicotinamide_riboside": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. The labels print nicotinamide riboside hydrogen malate at 415 mg on five labels, nicotinamide riboside chloride at 300 mg on one and nicotinamide riboside at 150 mg on one, with aging, energy or muscle purposes. Blood NAD+ rises with dose (31278280). At 1 g/day and above, cognition primary outcomes were null (42478598, 41357333, 39817194, 37994989), the Parkinson phase 3 favored placebo (42848371), and one peripheral artery disease trial favored nicotinamide riboside on walking (38871717). No trial tested the hydrogen malate salt or measured a longevity outcome at the label amounts. Abstracts only. PMID 42478598 states: 'There were no improvements in cognitive function (primary outcome), total CBF, or blood pressure (secondary outcomes).' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "42848371",
+        "study_type": "rct",
+        "sample_size": 410,
+        "primary_endpoint": "change in total MDS-UPDRS at week 52",
+        "effect_direction": "negative",
+        "quote": "Among patients with early Parkinson disease, nicotinamide riboside treatment for 52 weeks did not improve clinical outcomes and was associated with worse clinical outcomes than placebo."
+      },
+      {
+        "pmid": "42478598",
+        "study_type": "rct",
+        "sample_size": 42,
+        "primary_endpoint": "cognitive function at 12 weeks",
+        "effect_direction": "null",
+        "quote": "There were no improvements in cognitive function (primary outcome), total CBF, or blood pressure (secondary outcomes)."
+      },
+      {
+        "pmid": "38871717",
+        "study_type": "rct",
+        "sample_size": 90,
+        "primary_endpoint": "6-minute walk at 6 months",
+        "effect_direction": "positive_weak",
+        "quote": "In this work, NR meaningfully improved 6-min walk, and resveratrol did not add benefit to NR alone in PAD."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 42478598; packet/INGR_NICOTINAMIDE_RIBOSIDE.json"
+  },
+  "cla": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. The labels print conjugated linoleic acid or CLA at 500 mg to 4000 mg a serving; 4 print Clarinol and 5 print Tonalin. Pooled trials show small statistically significant changes (37671495, 17490954, 21990002), but the high-quality subgroup shows no fat-mass change (37671495), and the long-term review says the evidence does not convincingly show a clinically relevant effect (21990002). One 8-week crossover of Clarinol G-80 at 3.5 g/day was null (21593349). No abstract read names Tonalin as a tested material. Exercise performance is null in pooled data (36048508) and one trial (26003683). Abstracts only. PMID 37671495 states: 'However, data from high-quality studies failed to show CLA's body fat-lowering properties.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "37671495",
+        "study_type": "systematic_review_meta",
+        "sample_size": 4159,
+        "primary_endpoint": "not named; body mass, BMI, waist, fat mass, body fat percentage, fat-free mass",
+        "effect_direction": "mixed",
+        "quote": "However, data from high-quality studies failed to show CLA's body fat-lowering properties."
+      },
+      {
+        "pmid": "21593349",
+        "study_type": "rct",
+        "sample_size": 27,
+        "primary_endpoint": "not named; body weight, body composition, blood lipids",
+        "effect_direction": "null",
+        "quote": "Compared with the control treatment, the CLA treatments did not affect changes in body weight, body composition, or blood lipids."
+      },
+      {
+        "pmid": "26003683",
+        "study_type": "rct",
+        "sample_size": 80,
+        "primary_endpoint": "not named; VO2 max, time to exhaustion, anthropometrics",
+        "effect_direction": "null",
+        "quote": "CLA had no effect on VO2 max (p = 0.5) also no change was seen in time to exhaustion (p = 0.51), weight (p = 0.7), BMI (p = 0.7) and WC (p = 0.8) vs PLA."
+      },
+      {
+        "pmid": "32560516",
+        "study_type": "rct",
+        "sample_size": 74,
+        "primary_endpoint": "not named; total body fat by DXA",
+        "effect_direction": "positive_weak",
+        "quote": "In conclusion, CLA supplementation was well tolerated and safe for the liver, which shows beneficial effects on fat composition in overweight and obese women."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 37671495; packet/INGR_CLA.json"
+  },
+  "aloe_vera": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. The labels print aloe extract, aerial part or leaf extract, gel, powder or concentrate at up to 470 mg, some with digestive and metabolic purposes. For IBS, a three-trial meta-analysis favours aloe (30153721), yet a pilot missed its primary endpoint (26405698), the largest trial was not superior to inulin (32314514), and the only clear subgroup result is post hoc (34646359). For glycaemia, meta-analyses favour aloe (27009750, 27347994), and their authors cite high heterogeneity, poor quality and a need for standardized preparations. No abstract read links a result to a preparation these labels print at a stated amount. Abstracts only. PMID 32314514 states: 'In a mixed group of IBS patients, Aloe was not superior to control treatment, although it showed potential to reduce IBS symptom severity in subsets of IBS patients which could be predicted by fecal microbiota and metabolite profiles.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "32314514",
+        "study_type": "rct",
+        "sample_size": null,
+        "primary_endpoint": "not named in the abstract; IBS symptom severity",
+        "effect_direction": "null",
+        "quote": "In a mixed group of IBS patients, Aloe was not superior to control treatment, although it showed potential to reduce IBS symptom severity in subsets of IBS patients which could be predicted by fecal microbiota and metabolite profiles."
+      },
+      {
+        "pmid": "26405698",
+        "study_type": "rct",
+        "sample_size": null,
+        "primary_endpoint": "responders on IBS symptom severity; authors state the endpoint was not met",
+        "effect_direction": "null",
+        "quote": "This study may have been underpowered to detect a clinically meaningful difference between the treatment groups, and therefore larger randomized, controlled studies are required to confirm these results and to elucidate potential mechanisms explaining its effect."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 32314514; packet/INGR_ALOE_VERA.json"
+  },
+  "borage_seed_oil": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. The labels print borage oil at 200 to 1,650 mg, some in omega blends, with joint, skin, immune, metabolic and cardiovascular purposes. For eczema, the largest trial's primary endpoint was null (14670885) and Cochrane finds oral borage oil lacks effect (23633319). For rheumatoid arthritis, one 37-patient trial at 1.4 g/d GLA was positive (8214997), with authors noting usual intake is far lower; a Cochrane review pools GLA from three oils (21328257); another review says the evidence does not support current use (21652584). One trial at 1,000 mg in hypertensive postmenopausal women reports lower blood pressure, with no primary outcome named (33534427). Weight results conflict (34606560, 17513402). Abstracts only. PMID 14670885 states: 'Gamma linolenic acid is not beneficial in atopic dermatitis.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [
+      {
+        "pmid": "14670885",
+        "study_type": "rct",
+        "sample_size": 151,
+        "primary_endpoint": "change in SASSAD total sign score",
+        "effect_direction": "null",
+        "quote": "Gamma linolenic acid is not beneficial in atopic dermatitis."
+      },
+      {
+        "pmid": "23633319",
+        "study_type": "systematic_review_meta",
+        "sample_size": 1596,
+        "primary_endpoint": "not named in the abstract; global eczema symptoms",
+        "effect_direction": "null",
+        "quote": "Oral borage oil and evening primrose oil lack effect on eczema; improvement was similar to respective placebos used in trials."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 14670885; packet/INGR_BORAGE_SEED_OIL.json"
+  },
+  "alpha_linolenic_acid": {
+    "effect_direction": "null",
+    "applicability_decision": "Conflicting human evidence with no clear benefit, so this review completes with no Evidence credit. Ten labels print alpha-linolenic acid at 50 mg to 2.5 g, in eight as the fatty acid fraction beside an oil or other omega rows and in two (Brainy Chews, 50 mg) as a bare row. The largest trial (20929341, 1.9 g in margarine) was null on its primary outcome, a flaxseed oil trial (30392473, 4.7 g) was null on blood pressure, and a 2.2 g flaxseed oil trial (36986229) moved one of its cognitive tests. Cochrane (32114706) finds little or no difference for mortality and coronary events with small signals on events and arrhythmia. Abstracts only. PMID 20929341 states: 'Low-dose supplementation with EPA-DHA or ALA did not significantly reduce the rate of major cardiovascular events among patients who had had a myocardial infarction and who were receiving state-of-the-art antihypertensive, antithrombotic, and lipid-modifying therapy.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "studies": [],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 20929341; packet/INGR_ALPHA_LINOLENIC_ACID.json"
+  },
+  "jujube": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. All 12 labels print wild jujube fruit extract at 1000 mg and no claim text. The stored trial (33385511) used Z. spinosa seed granules in 12 people with insomnia, a part the labels don't print. The nearest fit is a Z. jujuba hydroalcoholic extract at 15 g/day in 196 infertile women with PCOS (41618368): pregnancy, the primary outcome, showed no significant difference; lipids and glucose improved as secondary results. Food-amount trials of 30 g/day fruit (42577773, 38648942, 40964206) are not the 1000 mg extract and two of them missed glucose. 19142004 reports constipation benefit with no amount or named primary outcome. Abstracts only. No study read tested a fruit extract near 1000 mg, so no study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 41618368 states: 'No significant differences in pregnancy as primary outcome were found (Ziziphus jujuba: 10, Metformin: 7, Myoinositol: 5, Placebo: 4; p > 0.05).' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "41618368",
+        "quote": "No significant differences in pregnancy as primary outcome were found (Ziziphus jujuba: 10, Metformin: 7, Myoinositol: 5, Placebo: 4; p > 0.05)."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 41618368; packet/INGR_JUJUBE.json"
+  },
+  "l_serine": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The only study meeting the review's standard is an 18-patient RCT in hereditary sensory and autonomic neuropathy type 1 at 400 mg/kg/day, positive on its primary outcome (30626650). These labels print 500 to 2000 mg per serving of plain L-serine; one carries cognitive and sleep purposes. Sleep crossovers report subjective improvement, but the abstract gives no dose, no sample size and no primary outcome (25197619). Other human work is a combination with EPA (32520991), a phase I study with historical controls (28527102), children with GRIN variants (41265180, 38380699), or circadian timing measures (36028887, 29070712). Abstracts only. A weight-based dose in a rare neuropathy is neither the amount nor a purpose these labels print, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 30626650 states: 'High-dose oral l-serine supplementation appears safe in patients with HSAN1 and is potentially effective at slowing disease progression.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "30626650",
+        "quote": "High-dose oral l-serine supplementation appears safe in patients with HSAN1 and is potentially effective at slowing disease progression."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 30626650; packet/INGR_L_SERINE.json"
+  },
+  "agmatine": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print agmatine sulfate or agmatine at 600 to 1000 mg a serving, with no radiculopathy claim. One trial meets the review's standard: 2670 mg/day for 14 days in herniated lumbar disc radiculopathy, with named primary outcomes favoring agmatine sulfate over placebo (20447305). It is a single short trial, analyzed 61 of 99 randomized, and tested well above what these labels print. Other human studies read are an uncontrolled case series in small fiber neuropathy (32102167), a five-person open-label case series in OCD (41717561), and a combination product in spinal cord injury (42713349). Abstracts only. That amount and purpose are not on these labels, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 20447305 states: 'Dietary agmatine sulfate is safe and efficacious treatment for alleviating pain and improving quality of life in lumbar disc-associated radiculopathy.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "20447305",
+        "quote": "Dietary agmatine sulfate is safe and efficacious treatment for alleviating pain and improving quality of life in lumbar disc-associated radiculopathy."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 20447305; packet/INGR_AGMATINE.json"
+  },
+  "chlorophyll": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Eleven labels print chlorophyllin at 100 or 132 mg and one prints chlorophyll at 50 mg; printed purposes are skin, digestive and metabolic, or none. The stored paper (7350215) is an uncontrolled 1980 report of 62 nursing home patients. 11724948 is a real RCT of 100 mg chlorophyllin three times a day in 180 adults, with a named primary endpoint, positive on a urinary aflatoxin biomarker; it doesn't test a purpose these labels print. 16417778 reports leukopenia response with no named primary outcome. No plain chlorophyll efficacy trial was found in the two searches; 19952359 is a three-volunteer unblinded pharmacokinetic study. Topical trials are not used. Abstracts only. An aflatoxin biomarker is not a purpose these labels print, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 11724948 states: 'Thus, prophylactic interventions with chlorophyllin or supplementation of diets with foods rich in chlorophylls may represent practical means to prevent the development of hepatocellular carcinoma or other environmentally induced cancers.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "11724948",
+        "quote": "Thus, prophylactic interventions with chlorophyllin or supplementation of diets with foods rich in chlorophylls may represent practical means to prevent the development of hepatocellular carcinoma or other environmentally induced cancers."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 11724948; packet/INGR_CHLOROPHYLL.json"
+  },
+  "tudca": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print TUDCA or tauroursodeoxycholic acid at 250 or 500 mg with no purpose. The only trial here with a named positive primary outcome is a 34-patient ALS pilot at 2 g/day on top of riluzole (25664595), whose authors call the data preliminary. In progressive MS at 2 g/day, clinical and biomarker outcomes showed no significant differences (39447576). The stored primary biliary cirrhosis study (8674405) has no placebo arm. Obese adults (20522594) and healthy adults (27503949) gave surrogate results only at 1,750 and 1,500 mg. Abstracts only. The ALS pilot was an add-on to riluzole at four to eight times the label amount, for a purpose these labels do not print, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 25664595 states: 'This pilot study provides preliminary clinical data indicating that TUDCA is safe and may be effective in ALS.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "25664595",
+        "quote": "This pilot study provides preliminary clinical data indicating that TUDCA is safe and may be effective in ALS."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 25664595; packet/INGR_TUDCA.json"
+  },
+  "pygeum": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Ten labels print pygeum bark extract at 500 or 5000 mg with no purpose text; one prints 100 mg alongside saw palmetto. A 1990 placebo-controlled RCT in 263 BPH patients on 50 mg twice daily (1702916) reports 66% vs 31% improved. Cochrane and a journal paper reporting the same counts (11869585, 11099686) pool 18 RCTs that include combination products and call them small and short with varied doses. 10475357 has no placebo. No newer placebo RCT turned up in two searches; a 2020 review (31627963) rates its evidence level IV. The tested amount, 100 mg/day, is below 10 of the 11 labels; those labels' extract ratios aren't printed. Abstracts only. The placebo trial names no primary outcome in its abstract and the pooled review mixes combination products, so no study read meets the review's standard for these labels. This does not say the preparation was tested and failed. PMID 31627963 states: 'Although with an evidence level IV (based on expert opinion) the use of P. africanum seems to be an option in the urological therapeutic arsenal.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "31627963",
+        "quote": "Although with an evidence level IV (based on expert opinion) the use of P. africanum seems to be an option in the urological therapeutic arsenal."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 31627963; packet/INGR_PYGEUM.json"
+  },
+  "l_glutamine": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print L-glutamine, glutamine or micronized L-glutamine at 500 mg to 10 g a serving (a few rows print no amount), and 12 labels print N-acetyl-L-glutamine at 500 to 750 mg. One trial meets the review's standard for free L-glutamine: 15 g/day for 8 weeks in post-infectious IBS-D, positive on its named primary (30108163). It is a single trial in a narrow group at above the labels' amounts, and its authors ask for validation. A meta-analysis of oral trials found no overall effect on gut permeability, with an abstract that contradicts itself on its subgroup (39397201). Trials in combat athletes (38193521) and older women (33809996) name no primary. No study read tested N-acetyl-L-glutamine. Abstracts only. The stored tolerance study is not an efficacy trial (32992440). A post-infectious IBS-D purpose is not on these labels, so no study read meets the review's standard for what they print. This does not say the preparation was tested and failed. PMID 30108163 states: 'Large randomised clinical trials (RCTs) should now be done to validate these findings, assess quality of life benefits and explore pharmacological mechanisms.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "30108163",
+        "quote": "Large randomised clinical trials (RCTs) should now be done to validate these findings, assess quality of life benefits and explore pharmacological mechanisms."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 30108163; packet/INGR_L_GLUTAMINE.json"
+  },
+  "apple_cider_vinegar": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The stored rating rests on an acute vinegar-with-a-meal meta-analysis (28292654) and an abstract-less letter (14694010), neither about capsules or gummies. Pooled evidence is liquid at mL doses, with high heterogeneity, and the 2025 weight meta-analysis (41010525) lists a trial since retracted (38966098). The only solid-form trial found is one 12-week capsule RCT at 1500 mg/day in women with PCOS, metabolic syndrome and metformin (42215584), positive on insulin resistance. A short crossover at 30 mL/day was null on energy expenditure (34055150). No gummy trial was found. Abstracts only. That trial is an add-on to metformin in women with PCOS, at three times or more what most of these labels print, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 42215584 states: 'These results demonstrate that ACV supplementation may offer a beneficial adjunctive strategy for improving metabolic and quality-of-life parameters in women with MetS, IR, and PCOS.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "42215584",
+        "quote": "These results demonstrate that ACV supplementation may offer a beneficial adjunctive strategy for improving metabolic and quality-of-life parameters in women with MetS, IR, and PCOS."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 42215584; packet/INGR_APPLE_CIDER_VINEGAR.json"
+  },
+  "lions_mane": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The stored moderate rating rests on one 30-person trial with tablets at 3 g/day of tablet mass (18844328), and scores fell after stopping. A second trial's fruiting body supplement improved the MMSE alone among three tests (31413233); its amount isn't in the abstract. Healthy young adults showed task-specific acute results and no clear chronic effect (38004235, 40276537, 38140277), and 10 g/day in muffins did nothing in a single-blind study that doesn't state randomization (36582308). A mycelium trial used erinacine A-enriched material in mild Alzheimer's disease (32581767), which no label here prints. The labels print 500-1000 mg of extract or 1 g of powder. No chronic trial read tested an extract at those amounts, and the powder labels sit well below the 3 g/day. Abstracts only. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 18844328 states: 'The results obtained in this study suggest that Yamabushitake is effective in improving mild cognitive impairment.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "18844328",
+        "quote": "The results obtained in this study suggest that Yamabushitake is effective in improving mild cognitive impairment."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 18844328; packet/INGR_LIONS_MANE.json"
+  },
+  "rosemary": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Eleven labels print rosemary extract 500 mg and two print rosemary leaf 700 mg, with no positioning category. One study meets the review's standard: a sponsor-funded 4-week crossover in 40 healthy adults with 200 mg/day of an extract standardized to rosmarinic acid and diterpenes, where trait anxiety on the STAI, its stated primary outcome, improved versus placebo while cortisol and VAS scores did not differ (41312013). Other oral trials are small, in different populations, and name no primary outcome in the abstract: COPD (37758539), students (29389474), major depression as an adjunct (36343423), fatty liver disease, null versus placebo at 4 g (35318738). The stored trial is single doses with benefit at 750 mg and impairment at 6,000 mg (21877951). Only 41312013 was read in full text passages; the others are abstracts only. The one crossover tested a standardized extract at 200 mg/day, and these labels show no marker content and no stress claim, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 41312013 states: 'These results suggest that rosemary extract is safe for consumption and may effectively reduce chronic and acute stress in healthy individuals.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "41312013",
+        "quote": "These results suggest that rosemary extract is safe for consumption and may effectively reduce chronic and acute stress in healthy individuals."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 41312013; packet/INGR_ROSEMARY.json"
+  },
+  "rose_hips": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Seven labels print rosehip fruit extract 500 mg and three print rose hips at 7.5 to 20 mg inside vitamin C products that carry an immune claim. The stored evidence is seed and shell powder at 5 g/day in osteoarthritis (16195164), a preparation and amount no label prints. One study of extract meets the review's standard: 32 preobese adults on 100 mg/day for 12 weeks, where abdominal fat area, a stated primary outcome, fell more than placebo while body fat percent only tended to (25834460). Other oral trials name no primary outcome in the abstract (42831964, 29024081), test powder (19818588, 18407528) or a 40 g food amount (22166897). A 120-person powder trial found no between-group difference in WOMAC (41599942). No immune trial was found in the search. Abstracts only. A weight purpose is not on these labels and the extract amount differs, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 25834460 states: 'These results suggest that rosehip extract may be a good candidate food material for preventing obesity.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "25834460",
+        "quote": "These results suggest that rosehip extract may be a good candidate food material for preventing obesity."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 25834460; packet/INGR_ROSE_HIPS.json"
+  },
+  "turkey_rhubarb_root": {
+    "effect_direction": null,
+    "result": "no_qualifying_human_evidence",
+    "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print Turkey rhubarb root extract at 500 mg per serving, with no anthraquinone or rhein content and no printed purpose. One trial meets the review's standard: Rheum palmatum root extract at 12.5 mg or 25 mg per day of rhein-equivalent anthraquinones improved transit versus placebo in 39 analyzed middle-aged adults (36499011). Other rhubarb evidence found was formula, add-on hospital or kidney use. Its dose is stated as rhein-equivalent anthraquinones, which these labels do not print, and no purpose is printed, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 36499011 states: 'This study demonstrates that RE supplementation promotes butyrate-producing bacteria and SCFA, an effect that could contribute to relieving chronic constipation in middle-aged persons.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "quotes": [
+      {
+        "pmid": "36499011",
+        "quote": "This study demonstrates that RE supplementation promotes butyrate-producing bacteria and SCFA, an effect that could contribute to relieving chronic constipation in middle-aged persons."
+      }
+    ],
+    "receipt": "PubMed abstracts read November 4, 2026; decision quote from PMID 36499011; packet/INGR_TURKEY_RHUBARB_ROOT.json"
   }
 }

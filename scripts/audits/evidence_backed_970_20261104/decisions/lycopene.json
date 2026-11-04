@@ -1,0 +1,72 @@
+{
+ "canonical": "lycopene",
+ "labels": 23,
+ "stored": "mixed; the two stored sources are a narrative review and a rat study, with no human intervention estimate",
+ "as_read": "Conflicting with no clear benefit: the two largest cardiovascular syntheses and two PSA meta-analyses are null; older blood pressure pooling and small trials are positive.",
+ "route": "null_literature",
+ "quote": {
+  "pmid": "37496241",
+  "text": "Overall, the findings showed that lycopene and tomato consumption did not affect cardiovascular risk factors."
+ },
+ "positive_named": [
+  "28129549",
+  "24051501",
+  "31035474",
+  "24911964",
+  "31468596",
+  "40806357",
+  "20552330",
+  "16368299"
+ ],
+ "proposed_decision_text": "The labels print lycopene at 2 mg to 50 mg, and three name Lyc-O-Mato. A meta-analysis of 34 randomized trials found lycopene and tomato consumption did not affect blood pressure, lipids, glucose or inflammatory markers, apart from lower malondialdehyde (PMID 37496241). A review of 43 intervention studies at 1.44 to 75 mg a day found no significant difference for blood pressure or lipids and calls the findings conflicting (PMID 32652029). Two meta-analyses of six trials each found no overall effect on PSA (PMID 33355018, PMID 35031434). Evidence on the other side exists: earlier pooling found lower systolic pressure with lycopene (PMID 28129549, PMID 24051501), a tomato nutrient complex lowered systolic pressure at 15 mg and 30 mg of lycopene while 15 mg of synthetic lycopene and 5 mg of the complex did not (PMID 31035474), 7 mg a day improved endothelial function in cardiovascular patients but not in healthy volunteers (PMID 24911964), and 25 mg raised sperm count in 44 men with oligozoospermia (PMID 31468596). A small meta-analysis found modest sperm concentration gains (PMID 40806357). This is an abstracts-only review. The stored sources, a narrative review and a rat study, give no human estimate (PMID 27840359, PMID 36422550). Taken together the evidence conflicts with no clear benefit, so this review earns no credit.",
+ "how_labels_reach_pending": "Census fix2: all 23 labels have a lycopene row with driver literature_reviewed_human_clinical_evidence and state evaluated_limited_or_negative, so pending2.py counts them until the canonical is closed. 21 read applicability_unestablished; two read evaluated_authority.",
+ "preparations": {
+  "powder_standardized_5pct": "331195, 331196, 331197, 331198, 331199, 331200, 331201: 10 mg, Lycopene Powder 200 mg, standardized to 5%.",
+  "differs_lyc_o_mato": "1832, 224633 (30 mg), 63244 (row 20 mg, title 10 mg). 31035474 shows why this may matter: the complex differed from synthetic lycopene, though its abstract does not name Lyc-O-Mato. 16368299 named it at 250 mg of extract: single-blind, before and after, not randomized in the abstract.",
+  "differs_tomato_sourced": "70589 (5 mg, Prostate Support), 307570 (10 mg, CarotenAll, 7 actives), 327594 (2 mg, Men's Multi, 21 actives), 328570 (15 mg, tomato fruit extract).",
+  "plain_lycopene_no_source_9": "2 mg on 330021, 312974; 10 mg on 184602, 29167, 2252; 20 mg on 277767, 277768, 270521; 50 mg on 272743. The seven powders below also print no source."
+ },
+ "studies_to_add": [
+  {
+   "pmid": "37496241",
+   "study_type": "systematic_review_meta",
+   "sample_size": null,
+   "primary_endpoint": "No primary named in the abstract; lipids, glycemic markers, blood pressure, inflammation, oxidative stress, body weight across 34 RCTs",
+   "effect_direction": "null",
+   "quote": "Overall, the findings showed that lycopene and tomato consumption did not affect cardiovascular risk factors."
+  },
+  {
+   "pmid": "33355018",
+   "study_type": "systematic_review_meta",
+   "sample_size": null,
+   "primary_endpoint": "Serum PSA across six RCTs in non-metastatic prostate cancer",
+   "effect_direction": "null",
+   "quote": "Although lycopene supplementation did not produce any reduction in PSA levels overall, a significant reducing effect was observed in patients with higher levels of baseline PSA."
+  }
+ ],
+ "stop_list": [
+  "Fields cannot separate a tomato complex from synthetic lycopene when a row prints only Lycopene, and 16 labels print no source at all. 31035474 is the one trial that draws this line; a clinician may want to weigh it for 1832, 224633 and 63244 before this route is applied to them."
+ ],
+ "stored_rating_note": "Stored mixed rests on a narrative review and a rat study, neither of which carries a direction for human supplement use. Those are the stored scoring_eligible false entries; no fix attempted.",
+ "pmids_read": [
+  "27840359",
+  "36422550",
+  "33355018",
+  "35031434",
+  "24911964",
+  "32652029",
+  "37496241",
+  "31468596",
+  "28129549",
+  "24051501",
+  "40806357",
+  "33639967",
+  "26024575",
+  "36501182",
+  "31035474",
+  "20552330",
+  "16368299",
+  "21430075"
+ ],
+ "unread_notes": "Abstracts only. 27840359 and 36422550 were read at their opening, enough to confirm a narrative review and a rat study. Read at their opening only, not described: 33259908 (IGF-1), 30921005 and 30309839 (ProDiet), 27662341 and 30836363 (tomato nutrient complex and UV; the second adds carnosic acid), 17571945 (Lyc-O-Mato plus multivitamin against multivitamin, unblinded), 30059188. Read in full but not used in the rationale: 33639967 (30 mg lycopene no different from placebo on exercise oxidation, 11 athletes), 26024575 (capsule against paste, no photoprotection, 20 subjects), 36501182 (mixed human and animal review), 20552330 (Lyc-O-Mato capsule, NTx and oxidative markers, 15 per group, no primary named), 21430075 (30 mg oleoresin, no change in oxidation markers)."
+}

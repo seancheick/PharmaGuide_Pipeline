@@ -1,0 +1,559 @@
+{
+  "record_id": "INGR_DGL_DEGLYCYRRHIZINATED_LICORICE",
+  "labels": 7,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "Positive for the GutGard extract on dyspepsia and reflux symptoms in two maker-linked trials, and null for older Caved-S ulcer trials; generic deglycyrrhizinated extract at 300 mg has no trial read",
+  "decision": "closed_no_credit",
+  "summary": "Four labels print Gutgard at 75 mg with a digestive purpose, and three print generic deglycyrrhizinated licorice extract at 300 mg. GutGard at 150 mg/day improved functional dyspepsia symptoms (21747893) and reflux quality of life and symptoms (39929150) versus placebo, with primary outcomes named; both are small to mid-sized and maker-linked. Two 1970s Caved-S trials found no ulcer benefit (4584640, 4933135). No generic 300 mg extract trial was found.",
+  "question_for_clinician": "21747893 and 39929150 meet rule 2 for GutGard at 150 mg/day, both positive on named primaries. Should the 4 Gutgard labels get credit, given they print 75 mg per row and a maker sponsored or built the trials? Agent recommendation: no credit in this review, with the Gutgard labels flagged as the strongest candidate for a human ruling. The 3 generic 300 mg labels shouldn't inherit GutGard's result, because the trials tested that standardized extract.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_dgl_deglycyrrhizinated_licorice_21747893",
+      "components": [
+        "INGR_DGL_DEGLYCYRRHIZINATED_LICORICE"
+      ],
+      "source_pmids": [
+        "21747893"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "GutGard",
+        "manufacturer": "Natural Remedies"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "functional_dyspepsia",
+      "purpose": "digestive_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_dgl_deglycyrrhizinated_licorice_21747893",
+      "population": {
+        "age_group": "adult",
+        "description": "50 patients with functional dyspepsia by Rome III criteria, 25 per group."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled trial, 30 days",
+      "outcomes": [
+        {
+          "name": "Total symptom severity score: significant decrease versus placebo at days 15 and 30, P <= .05",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Global assessment of efficacy: marked improvement versus placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Short-form Nepean Dyspepsia Index: significant decrease versus placebo, P <= .05",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Small trial; the maker developed the extract and generated the randomization sequence.",
+        "Full text gives glycyrrhizin at 0.5% w/w or less; 39929150 gives 3.0% w/w or less for the same brand: on clinician_items.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          150
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 30,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "GutGard 75 mg twice daily or placebo for 30 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21747893",
+          "location": "Abstract and full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_dgl_deglycyrrhizinated_licorice_39929150",
+      "components": [
+        "INGR_DGL_DEGLYCYRRHIZINATED_LICORICE"
+      ],
+      "source_pmids": [
+        "39929150"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "GutGard",
+        "manufacturer": "Natural Remedies"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "gastroesophageal_reflux_symptoms",
+      "purpose": "digestive_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_dgl_deglycyrrhizinated_licorice_39929150",
+      "population": {
+        "age_group": "adult",
+        "description": "200 participants with gastroesophageal reflux symptoms enrolled, 100 per group; 78 and 87 analysed at day 28."
+      },
+      "study_design": "Phase III, single-centre, double-blind, parallel-group, randomized, placebo-controlled trial, 28 days",
+      "outcomes": [
+        {
+          "name": "GERD Health-Related Quality of Life: significantly better on GutGard at the end of intervention, p = 0.014",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "GERD Symptom Assessment Scale: earlier resolution of heartburn (p = 0.005 on day 28) and regurgitation (p = 0.022 on day 28)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Sponsored by the maker, which gave technical input on design and supplied the product; the authors say it had no role in data collection.",
+        "Day 28 analysis has attrition, 78 and 87 of 100 per group.",
+        "Famotidine was allowed as rescue medication.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          150
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "GutGard capsules of 75 mg G. glabra extract taken twice daily after meals for 4 weeks, or placebo capsules.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39929150",
+          "location": "Full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_dgl_deglycyrrhizinated_licorice_23606875",
+      "components": [
+        "INGR_DGL_DEGLYCYRRHIZINATED_LICORICE"
+      ],
+      "source_pmids": [
+        "23606875"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "GutGard",
+        "manufacturer": "Natural Remedies"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "helicobacter_pylori_infection",
+      "purpose": "gastric_h_pylori_load",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_dgl_deglycyrrhizinated_licorice_23606875",
+      "population": {
+        "age_group": "adult",
+        "description": "107 participants with H. pylori infection randomized (55 GutGard, 52 placebo); 50 per group analysed."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled study, 60 days",
+      "outcomes": [
+        {
+          "name": "H. pylori stool antigen negative on day 60: 56% versus 4% on placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Delta over baseline on 13C-urea breath test: significant difference versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Neither the abstract nor a search of the open full text names a primary outcome.",
+        "An infection test result, not a symptom outcome; these labels carry a digestive purpose only.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          150
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 60,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "GutGard 150 mg once daily or placebo for 60 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "23606875",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_dgl_deglycyrrhizinated_licorice_4584640",
+      "components": [
+        "INGR_DGL_DEGLYCYRRHIZINATED_LICORICE"
+      ],
+      "source_pmids": [
+        "4584640"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "gastric_ulcer",
+      "purpose": "ulcer_healing",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_dgl_deglycyrrhizinated_licorice_4584640",
+      "population": {
+        "age_group": "adult",
+        "description": "38 patients with 47 gastric ulcers in the first period and 30 with 36 ulcers in the second; chronic ulcer disease."
+      },
+      "study_design": "Double-blind crossover, two consecutive periods of four weeks",
+      "outcomes": [
+        {
+          "name": "Ulcer area change and complete healing: no tendency to quicker healing in either group",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "1973 study of a named product, Caved-S; the abstract doesn't state its composition.",
+        "The abstract names no primary outcome.",
+        "Dose is about seven times the highest label amount of generic extract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          2280
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Liquorice extract (Caved-S) 760 mg three times daily or placebo, four weeks each period.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "4584640",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_dgl_deglycyrrhizinated_licorice_4933135",
+      "components": [
+        "INGR_DGL_DEGLYCYRRHIZINATED_LICORICE"
+      ],
+      "source_pmids": [
+        "4933135"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "duodenal_ulcer",
+      "purpose": "ulcer_healing",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_dgl_deglycyrrhizinated_licorice_4933135",
+      "population": {
+        "age_group": "adult",
+        "description": "47 patients with active duodenal ulcer, 24 placebo and 23 active."
+      },
+      "study_design": "Double-blind trial, one month",
+      "outcomes": [
+        {
+          "name": "No advantage of deglycyrrhizinated liquorice over placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "1971 study of Caved-S; the abstract doesn't state its composition or a dose and names no primary outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Caved-S or placebo for one month; dose not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "4933135",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "33919894": "Systematic review of botanicals for H. pylori; it names GutGard as effective alone versus placebo, which is 23606875 already read.",
+    "31464895": "Fermented milk with L. paracasei and G. glabra: combination."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "21747893",
+      "title_fetched": "An Extract of Glycyrrhiza glabra (GutGard) Alleviates Symptoms of Functional Dyspepsia: A Randomized, Double-Blind, Placebo-Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21747893/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "39929150",
+      "title_fetched": "Efficacy and Safety of GutGard® in Managing Gastroesophageal Reflux-Related Symptoms: A Phase III, Single-Centre, Double-Blind, Randomized Placebo-Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39929150/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "23606875",
+      "title_fetched": "Effect of GutGard in the Management of Helicobacter pylori: A Randomized Double Blind Placebo Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23606875/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "4584640",
+      "title_fetched": "Double-blind trial of deglycyrrhizinated liquorice in gastric ulcer.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/4584640/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "4933135",
+      "title_fetched": "A trial of deglycyrrhizinated liquorice in the treatment of duodenal ulcer.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/4933135/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33919894",
+      "title_fetched": "Vegetable Extracts and Nutrients Useful in the Recovery from Helicobacter pylori Infection: A Systematic Review on Clinical Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33919894/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31464895",
+      "title_fetched": "Fermented milk containing Lactobacillus paracasei and Glycyrrhiza glabra has a beneficial effect in patients with Helicobacter pylori infection: A randomized, double-blind, placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31464895/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_DGL_DEGLYCYRRHIZINATED_LICORICE",
+    "standard_name": "DGL (Deglycyrrhizinated Licorice)",
+    "aliases": [
+      "Gutgard",
+      "Deglycyrrhizinated Licorice (Glycyrrhiza glabra) extract",
+      "Deglycyrrhizinated Licorice Root Extract"
+    ],
+    "category": "digestive_gut",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "21747893",
+      "39929150",
+      "23606875",
+      "4584640",
+      "4933135"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Positive for the GutGard extract on dyspepsia and reflux symptoms in two maker-linked trials, and null for older Caved-S ulcer trials; generic deglycyrrhizinated extract at 300 mg has no trial read. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "dyspepsia symptom severity",
+      "reflux quality of life",
+      "heartburn and regurgitation",
+      "ulcer healing"
+    ],
+    "health_goals_supported": [],
+    "notes": "Four labels print Gutgard at 75 mg with a digestive purpose, and three print generic deglycyrrhizinated licorice extract at 300 mg. GutGard at 150 mg/day improved functional dyspepsia symptoms (21747893) and reflux quality of life and symptoms (39929150) versus placebo, with primary outcomes named; both are small to mid-sized and maker-linked. Two 1970s Caved-S trials found no ulcer benefit (4584640, 4933135). No generic 300 mg extract trial was found.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with functional dyspepsia or gastroesophageal reflux symptoms taking GutGard; adults with peptic ulcer in older Caved-S trials",
+      "supported_outcomes": [
+        "dyspepsia symptom severity",
+        "reflux quality of life",
+        "heartburn and regurgitation",
+        "ulcer healing"
+      ],
+      "source_pmids": [
+        "21747893",
+        "39929150",
+        "23606875",
+        "4584640",
+        "4933135"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Four labels print Gutgard at 75 mg with a digestive purpose, and three print generic deglycyrrhizinated licorice extract at 300 mg. GutGard at 150 mg/day improved functional dyspepsia symptoms (21747893) and reflux quality of life and symptoms (39929150) versus placebo, with primary outcomes named; both are small to mid-sized and maker-linked. Two 1970s Caved-S trials found no ulcer benefit (4584640, 4933135). No generic 300 mg extract trial was found. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21747893",
+        "title": "An Extract of Glycyrrhiza glabra (GutGard) Alleviates Symptoms of Functional Dyspepsia: A Randomized, Double-Blind, Placebo-Controlled Study.",
+        "citation": "Evidence-based complementary and alternative medicine : eCAM (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21747893/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1155/2012/216970"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39929150",
+        "title": "Efficacy and Safety of GutGard® in Managing Gastroesophageal Reflux-Related Symptoms: A Phase III, Single-Centre, Double-Blind, Randomized Placebo-Controlled Trial.",
+        "citation": "Complementary medicine research (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39929150/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Clinical Trial, Phase III"
+        ],
+        "doi": "10.1159/000543367"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23606875",
+        "title": "Effect of GutGard in the Management of Helicobacter pylori: A Randomized Double Blind Placebo Controlled Study.",
+        "citation": "Evidence-based complementary and alternative medicine : eCAM (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23606875/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1155/2013/263805"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "4584640",
+        "title": "Double-blind trial of deglycyrrhizinated liquorice in gastric ulcer.",
+        "citation": "Gut (1973)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/4584640/",
+        "publication_types": [
+          "Clinical Trial",
+          "Controlled Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1136/gut.14.9.711"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "4933135",
+        "title": "A trial of deglycyrrhizinated liquorice in the treatment of duodenal ulcer.",
+        "citation": "Gut (1971)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/4933135/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1136/gut.12.6.449"
+      }
+    ]
+  }
+}

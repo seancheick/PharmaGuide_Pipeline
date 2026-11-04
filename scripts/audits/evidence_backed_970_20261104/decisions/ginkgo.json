@@ -1,0 +1,40 @@
+{
+  "canonical": "ginkgo",
+  "labels": 16,
+  "stored": "effect_direction null at record level; mixed Cochrane plus null prevention trials; documented_review_scope ingredient, require_source_label_form true, required terms flavone/flavonol glycoside(s), EGb 761, Ginkgold; excluded 4:1 and powder terms; supported_outcomes cognitive",
+  "as_read": "On-target long trials of a 120 mg twice daily extract were null for cognitive decline and Alzheimer's conversion, Cochrane 2026 finds probably little or no effect in mild cognitive impairment and uncertainty in subjective complaints, and the only benefit signal is low-certainty and confined to established dementia.",
+  "route": "null_literature",
+  "quote": {
+    "pmid": "20040554",
+    "text": "Compared with placebo, the use of G. biloba, 120 mg twice daily, did not result in less cognitive decline in older adults with normal cognition or with mild cognitive impairment."
+  },
+  "positive_named": [
+    "41641880",
+    "27147264"
+  ],
+  "proposed_decision_text": "These 16 labels print a Ginkgo biloba extract at 60 mg or 120 mg per listed amount. Six are Ginkgold labels (213097, 230279, 273460, 77680, 327973, 333750), nine print a generic extract standardized to 24% flavone or flavonol glycosides (239062, 29233, 62250, 26136, 46283, 328464, 202811, 259828, 57502), and one prints 28% flavone glycosides with 7% terpene lactones (59204). In older adults with normal cognition or mild cognitive impairment, 120 mg twice daily did not slow cognitive decline over a median 6.1 years (20040554). In adults aged 70 or older with memory complaints, 120 mg EGb761 twice daily did not reduce progression to Alzheimer's disease over 5 years (22959217). Cochrane 2026 finds ginkgo probably has little or no effect at six months in mild cognitive impairment and is unsure about any effect in subjective cognitive complaints (41641880). The evidence conflicts only in established dementia, where the same review finds there may be small to moderate benefits at six months on low-certainty evidence with very high heterogeneity (41641880), a population these labels do not address. A 61-person pilot of 240 mg EGb761 in subjective memory impairment reported better task-switching in tests uncorrected for multiplicity and no effect on delayed response, prospective memory or fMRI (27147264). Reviews in tinnitus and intermittent claudication show little or no clinically significant benefit (36383762, 23744597). Conflicting evidence with no clear benefit for the cognitive use these labels carry; no Evidence credit.",
+  "scope_and_pending": "The stored documented_review_scope stays as it is. All 16 labels satisfy it: each ginkgo row prints a required term (flavone or flavonol glycosides, or Ginkgold) and none prints 4:1 or powder (checked over the full row JSON). In census fix2 all 18 ginkgo rows are evaluated_limited_or_negative, resolved_by_reviewed_clinical_evidence, disposition literature_reviewed_human_clinical_evidence, ev 0.0. They reach pending only because scratchpad pending2.py counts any label with a literature_reviewed_human_clinical_evidence row whose canonical is not on its closed list, and ginkgo was not on that list; there is no scope gap to fix. Product state is applicability_unestablished on 14 labels and evaluated_authority on 2 (259828 with calcium, 57502 with choline).",
+  "preparation_differences": [
+    "59204 Super Ginkgo Extract 28/7 prints 28% flavone glycosides and 7% terpene lactones plus a ginkgolic acid note; the other 15 print 24%, and 10 of those also print 6% terpene lactones (213097, 230279, 273460, 77680, 239062, 62250, 259828, 57502, 328464, 202811). It passes the scope on the term flavone glycosides. No abstract read states the flavonoid percentage of EGb 761, so whether 28/7 is a near match to EGb 761 is not established by these reads. It finishes the same way because no-credit does not depend on that match.",
+    "202811 prints flavonol glycosides rather than flavone glycosides; both are required terms.",
+    "327973 and 333750 print Ginkgold as a row with a separate Ginkgo Flavone Glycosides 28.8 mg row, so two ginkgo rows carry the same exposure.",
+    "259828 (with calcium) and 57502 (with choline, phosphatidylcholine, huperzine A) are packs where ginkgo is not the only active. The trials read tested ginkgo alone."
+  ],
+  "dose_note": "On-target trials used 240 mg daily (120 mg twice daily). Labels print 60 mg or 120 mg per listed amount; 328464 directs one capsule twice daily. Daily servings on the other labels were not checked because the finish is no credit at any amount.",
+  "clinician_items": [
+    "41641880: in subjective cognitive complaints, a three-month study found the risk of adverse events may be higher with ginkgo than placebo.",
+    "36383762: low-certainty evidence of little to no difference in bleeding or seizures (4 studies, 1154 participants).",
+    "22959217: stroke 65 vs 60 and other haemorrhagic or cardiovascular events did not differ between groups over 5 years."
+  ],
+  "stored_rating_note": "41641880 abstract prints the dementia global status estimate as MD -0.06, 95% CI -1.00 to -0.20, a point estimate outside its own interval; likely a typo in the source, so that number should not be copied into a record without the full text. Stored outcome text does not use it. 20040554 abstract says only '120-mg extract' and does not name EGb 761, while the scope groups findings under standardized extracts.",
+  "pmids_read": [
+    "41641880",
+    "20040554",
+    "22959217",
+    "36383762",
+    "23744597",
+    "27147264",
+    "19017911"
+  ],
+  "unread_notes": "Abstracts only. 19017911 abstract read (null for dementia incidence) but not cited in the rationale: the stored note retires it until the erratum, JAMA 2008;300(23):2730, is read, and that notice was not read here. One search (count 53): hits were mostly combinations, GEM/GuidAge secondary analyses, or other uses; only 27147264 opened in full from those titles."
+}

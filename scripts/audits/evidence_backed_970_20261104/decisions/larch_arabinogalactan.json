@@ -1,0 +1,20 @@
+{
+ "canonical": "larch_arabinogalactan",
+ "labels": 5,
+ "stored": "positive_weak",
+ "as_read": "Weakly positive: one sponsor-funded pilot of ResistAid 4.5 g/day raised the vaccine antibody response for 2 of 7 pneumococcal subtypes, with no effect on other immune markers.",
+ "route": "packet_no_credit",
+ "positive_named": ["20796315"],
+ "studies_to_add": [
+  {"pmid": "20796315", "study_type": "rct", "sample_size": 45, "primary_endpoint": "7 pneumococcal IgG antibody subtypes, named primary in the full text", "effect_direction": "positive_weak", "quote": "The arabinogalactan group demonstrated a statistically significant greater IgG antibody response than the placebo group in two antibodies subtypes (18C and 23F) at both Day 51 (p = 0.006 and p = 0.002) and at Day 72 (p = 0.008 and p = 0.041)."}
+ ],
+ "stop_list": [
+  "Fields can't express the gap between ResistAid at 4.5 g/day and generic arabinogalactan rows at 500 mg or 2.4 g with no brand or species printed in the rows read."
+ ],
+ "clinician_items": [
+  "20796315: no serious adverse events reported in 72 days; mild events were listed for the placebo group and the rest of that passage wasn't read."
+ ],
+ "stored_rating_note": "Stored positive_weak matches the trial as read. The stored dose of 4500 mg is the trial's 4.5 g/day.",
+ "pmids_read": ["20796315", "41133092", "39419484"],
+ "unread_notes": "THE REVIEW OF OTHER TRIALS IS NOT COMPLETE. Two searches used, the limit. Search 1 had 70 hits with 30 listed, mostly unrelated to larch. Search 2 had 169 hits with 30 listed, most recent first, and I filtered the display by keyword, so up to 20 of those 30 titles weren't seen and the 139 older hits weren't listed. Any older trial of larch arabinogalactan, including any on respiratory infection or gut outcomes, wasn't seen. I'm not describing any such study. That gap doesn't change the route, because the question stays open for a human ruling, but it should be closed before a final ruling. Full text passages opened for 20796315 (PMC2939641). 39419484 and 41133092 were read to 900 characters. Packet: INGR_LARCH_ARABINOGALACTAN."
+}

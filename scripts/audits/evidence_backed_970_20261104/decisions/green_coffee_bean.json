@@ -1,0 +1,23 @@
+{
+  "canonical": "green_coffee_bean",
+  "labels": 22,
+  "stored": "mixed",
+  "as_read": "Mixed: meta-analyses disagree on body weight, an 800 mg/day RCT was null, and the only verified-dose trial is a 28-person within-group blood pressure study with no label purpose behind it.",
+  "route": "packet_no_credit",
+  "positive_named": ["32507437", "20871849", "16820341"],
+  "preparation_differences": [
+    "Chlorogenic acid declared on 9 labels: 63306 (50%), 29340 (45%), 73326 Svetol (40%), 183545 and 228068 (45%), 231908, 59208, 59504 CoffeeGenic (50%), 176168 (standardized, no percent).",
+    "No chlorogenic acid figure on 13 labels: 330008, 330971, 330972, 330973 (10:1, 800 mg); 312583, 312584, 312585 (Coffea arabica bean extract, 250 mg); 312586, 312901 (same, 800 mg); 252516, 253660, 253665, 253672 (extract, 250 mg).",
+    "Combination products: 176168, 183545, 228068 (Decaf Thermo Igniter, 6 actives), 59208 (5 actives), 73326 (with yerba mate)."
+  ],
+  "packet_note": "Routed to a human because I cannot honestly say every study falls short with positive pooled weight results standing. Strictly, none of the abstracts names a primary outcome; 16820341 has the only verified dose but is within-group and on blood pressure. That gap is stated in the packet limitations.",
+  "studies_to_add": [
+    {"pmid": "32507437", "study_type": "systematic_review_meta", "sample_size": 897, "primary_endpoint": "not named in the abstract; body weight, BMI, body fat percentage, waist circumference, waist-to-hip ratio", "effect_direction": "positive", "quote": "We found that GCE supplementation had a beneficial effect on body weight, BMI and WC."},
+    {"pmid": "31398662", "study_type": "systematic_review_meta", "sample_size": 0, "primary_endpoint": "not named in the abstract; body weight, BMI, waist circumference", "effect_direction": "mixed", "quote": "Results revealed significant reduction in BMI (WMD: -0.403 kg/m2, 95% CI: -0.800, -0.005, p = 0.047) and no significant change in BW (WMD: -0.585 kg, 95% CI: -1.498, 0.329, p = 0.210) and WC (WMD: -0.847 cm, 95% CI: -1.764, 0.071, p = 0.070)."},
+    {"pmid": "36134465", "study_type": "rct", "sample_size": 44, "primary_endpoint": "not named in the abstract; anthropometric indices, blood glucose, leptin, adiponectin, NPY", "effect_direction": "null", "quote": "Supplementation with DGCE in breast cancer survivors with obesity had no significant effect on anthropometric indices and blood glucose, leptin, adiponectin, and NPY levels."}
+  ],
+  "stop_list": ["fields can't express that the 13 labels without a chlorogenic acid figure differ from the 9 that declare one"],
+  "stored_rating_note": "Stored record reads 16820341 as positive_weak on blood pressure; the abstract's comparison is within-group ('In the CGA group, but not the placebo group'), with no between-group result stated. sample_size 0 for 31398662 means the abstract gives no participant total.",
+  "pmids_read": ["20871849", "16820341", "37341701", "39368321", "32507437", "31398662", "36134465", "37432380", "31429515", "24338784", "20302380"],
+  "unread_notes": "Abstracts only. Two searches (counts 51 and 2). 24338784 and 20302380 read only as search result excerpts, enough to see they are in vitro. Other meta-analyses in the first search on lipids, CRP, liver and glucose (31748178, 32951749, 33714861, 32159261, 32665012, 34981487) were not opened: no label purpose behind them, and they are not described here. The abstracts do not list included trials, so whether any pooled trial was later retracted is not visible and should be checked before anyone relies on the pooled weight estimates."
+}

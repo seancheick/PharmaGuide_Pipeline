@@ -141,11 +141,11 @@ def test_resolver_uses_shared_clinical_preparation_scope_without_amount_gate(mon
     assert supported.points_eligible is True  # one mg must not become an Evidence amount gate
 
 
-def test_ala_has_verified_mixed_determination_without_marine_credit():
+def test_ala_has_verified_conflicting_determination_without_marine_credit():
     result = er.resolve_evidence_for_canonical("alpha_linolenic_acid", name="Alpha-Linolenic Acid")
-    assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert result.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert result.points_eligible is False
-    assert result.owner_facts["literature_evidence"]["effect_direction"] == "mixed"
+    assert result.owner_facts["literature_evidence"]["effect_direction"] == "null"
     assert "32114706" in result.owner_facts["literature_evidence"]["pmids"]
 
 
@@ -444,29 +444,29 @@ def test_product_evidence_composition():
 
 def test_carotenoid_policy_zeaxanthin_areds2():
     """Zeaxanthin requires indication-specific clinical evidence (AREDS2), not generic antioxidant credit."""
-    # Zeaxanthin at 2 mg (studied AREDS2 dose) resolves to reviewed clinical evidence
+    # AREDS2 was null on its primary and zeaxanthin alone found no visual benefit: conflicting review, 2026-11-04
     res = er.resolve_evidence_for_canonical("zeaxanthin", dose_value=2.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert "backed_clinical_studies" in res.matched_owners
     assert res.points_eligible is False  # Shadow mode: resolver does not award points directly
 
     # Amount does not change Evidence applicability; Dose owns the 2 mg comparison.
     res_sub = er.resolve_evidence_for_canonical("zeaxanthin", dose_value=0.5, dose_unit="mg")
-    assert res_sub.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_sub.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert "dose_below_clinical_trial_minimum" not in res_sub.blocking_reasons
 
 
 def test_carotenoid_policy_lycopene():
     """Lycopene requires indication-specific human evidence (CVD/prostate), not generic antioxidant authority."""
-    # Lycopene at >= 10 mg matches studied clinical range
+    # Cardiovascular and PSA syntheses are null against older positive pooling: conflicting review, 2026-11-04
     res = er.resolve_evidence_for_canonical("lycopene", dose_value=15.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert "backed_clinical_studies" in res.matched_owners
     assert res.points_eligible is False
 
     # Lycopene at 1 mg keeps the same Evidence disposition.
     res_sub = er.resolve_evidence_for_canonical("lycopene", dose_value=1.0, dose_unit="mg")
-    assert res_sub.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_sub.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
 
 
 def test_bcaa_sports_amino_dose_applicability_not_points():
@@ -585,9 +585,9 @@ def test_evening_primrose_oil_null_unfavorable():
 
 
 def test_pygeum_reviewed_clinical_evidence():
-    """Pygeum africanum extract for BPH is supported by Cochrane review at >= 100 mg."""
+    """Pygeum: the placebo trial names no primary and the Cochrane review pools combinations (review 2026-11-04)."""
     res = er.resolve_evidence_for_canonical("pygeum", dose_value=100.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
     assert "backed_clinical_studies" in res.matched_owners
 
 
@@ -883,10 +883,11 @@ def test_phase4_batch5_standardized_clinical_botanicals():
     # black_garlic (aged garlic extract), olive_fruit_extract (leaf extract) and fucoxanthin
     # (combination) were studied as a different preparation.
     botanicals = [
-        "citrus_bergamot", "coleus_forskohlii_root", "african_mango",
-        "eps_7630", "english_ivy", "turkey_tail", "diosmin",
-        "puerarin", "ashwagandha_root", "green_tea_leaf", "arjuna",
-        "dgl_deglycyrrhizinated_licorice", "mastic_gum", "cocoa",
+        # coleus_forskohlii_root, african_mango, turkey_tail, puerarin, arjuna and cocoa closed
+        # at no credit in the 970-label review (test_evidence_backed_970_20261104.py).
+        "citrus_bergamot", "eps_7630", "english_ivy", "diosmin",
+        "ashwagandha_root", "green_tea_leaf",
+        "dgl_deglycyrrhizinated_licorice", "mastic_gum",
     ]
     for cid in botanicals:
         res = er.resolve_evidence_for_canonical(cid)
@@ -999,8 +1000,9 @@ def test_phase4_final_sweep_culinary_food_matrices():
 def test_phase4_final_sweep_standardized_clinical_botanicals():
     """Final sweep standardized clinical bioactives with live NCBI-verified studies."""
     clinical_cids = [
+        # fucoidan and diamine_oxidase closed at no credit in the 970-label review.
         "siberian_rhubarb", "african_geranium", "lumbrokinase",
-        "fucoidan", "maqui_berry", "diamine_oxidase", "capsaicin"
+        "maqui_berry", "capsaicin"
     ]
     for cid in clinical_cids:
         res = er.resolve_evidence_for_canonical(cid)
@@ -1193,7 +1195,7 @@ def test_subject_census_uses_named_undosed_subjects_and_keeps_identity_debt(monk
     result = census.census_product({'id':123,'name':'Blend'})
     assert result['subject_count'] == 2
     assert result['subjects'][0]['source_row_ref'] == 'ingredientRows[0].children[0]'
-    assert result['subjects'][0]['disposition'] == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert result['subjects'][0]['disposition'] == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert result['is_assessment_complete'] is False
     summary = census.summarize([result])
     assert summary['partial_products'] == 1

@@ -1,0 +1,53 @@
+{
+ "canonical": "blood_orange_extract",
+ "labels": 3,
+ "stored": "positive_moderate",
+ "as_read": "Positive for weight in Moro juice extract at 400 mg/day and for skin measures in a red orange extract at 100 mg/day; no trial read tested a fruit and peel extract for the labels' endurance, recovery or cardiovascular positioning.",
+ "route": "no_qualifying",
+ "quote": {
+  "pmid": "40956687",
+  "text": "Moro orange juice extract may result in weight and fat mass reduction in overweight and obese adults."
+ },
+ "positive_named": [
+  "25588369",
+  "35276783",
+  "40956687",
+  "35684041",
+  "36296919"
+ ],
+ "proposed_decision_text": "These three labels print a Sicilian blood orange fruit and peel extract at 100 mg, in products named AOX, all three positioned for endurance, with recovery, cardiovascular, metabolic or strength categories. No study read tested that preparation for those purposes, and these are abstracts only. A 12-week trial of Moro juice extract at 400 mg/day found weight, BMI, waist and hip differences from placebo in overweight volunteers, but it tested a juice extract at 4 times the label amount and names no primary outcome (25588369). A 6-month placebo trial of a Moro standardized extract was positive on its primary outcome of body mass and composition, but its abstract states no dose or plant part (35276783). A 2026 meta-analysis of three trials, 252 participants, concludes that Moro orange juice extract may reduce weight and fat mass, for a juice extract and a weight purpose (40956687). A red orange extract at 100 mg/day improved skin response to UV and antiaging measures in 110 people, a purpose these labels do not carry, with no primary outcome named (35684041). A red orange extract in 60 elderly people raised the GSH/GSSG ratio, with no dose or primary outcome in the abstract and results reported as changes after intake (36296919).",
+ "studies_to_add": [
+  {
+   "pmid": "35276783",
+   "study_type": "rct",
+   "sample_size": 0,
+   "primary_endpoint": "Change in body mass and body composition at 6 months; sample size and dose not printed in the abstract",
+   "effect_direction": "positive",
+   "quote": "The primary outcome measure was change in body mass and body composition at the end of the study."
+  },
+  {
+   "pmid": "40956687",
+   "study_type": "systematic_review_meta",
+   "sample_size": 252,
+   "primary_endpoint": "Changes in body weight and BMI",
+   "effect_direction": "positive",
+   "quote": "Moro orange juice extract may result in weight and fat mass reduction in overweight and obese adults."
+  }
+ ],
+ "stop_list": [
+  "Fields can't separate juice extract, standardized extract and fruit and peel extract; labels print fruit and peel with no standardization.",
+  "sample_size 0 for 35276783 means not printed in the abstract, not zero."
+ ],
+ "clinician_items": [
+  "35276783: all safety markers of liver toxicity were within the normal range over 6 months in both groups; abstract only."
+ ],
+ "stored_rating_note": "Stored positive_moderate describes Morosil Moro juice extract at 400 mg/day for weight. That isn't the labels' preparation, amount or purpose. 25588369's abstract gives no sample size and no primary outcome.",
+ "pmids_read": [
+  "25588369",
+  "40956687",
+  "35276783",
+  "36296919",
+  "35684041"
+ ],
+ "unread_notes": "Abstracts only; pm.py showed no PMC ids, so no full text opened, and 35276783's dose may be in its full text. 40956687 abstract cut at 1500 characters, after its conclusion sentence. Hits not read: 40218997, 37685975 (combinations), 23554029, 18617377 (Sinetrol, citrus mix), 33976376, 26471075 and 21840468 (juice or flavonoid mix), 37548198 (peel powder evaluation, not a labelled trial type). Two searches used; none returned a fruit and peel extract trial for exercise or recovery."
+}

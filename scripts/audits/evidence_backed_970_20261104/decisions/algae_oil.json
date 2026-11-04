@@ -1,0 +1,55 @@
+{
+ "canonical": "algae_oil",
+ "labels": 1,
+ "stored": "positive_moderate",
+ "as_read": "Stored evidence is an adult blood-level study; for babies, no study read gave algal DHA alone directly to infants, and the maternal and school-age algal DHA trials with clear readouts were largely null.",
+ "route": "no_qualifying",
+ "quote": {
+  "pmid": "33023067",
+  "text": "Supplementing mothers through pregnancy and lactation with 400 mg/d DHA did not impact offspring neurodevelopment at 12 months of age in this setting."
+ },
+ "positive_named": [
+  "18589030",
+  "22970149",
+  "20655543",
+  "15812447"
+ ],
+ "proposed_decision_text": "The one label (219942, Baby Vegetarian DHA) prints life'sDHA algal oil 562 mg with docosahexaenoic acid 225 mg, positioned for infants. The stored study compared 600 mg DHA/day from algal-oil capsules with cooked salmon in 32 adults aged 20 to 65 in an open-label 2-week trial and reports equivalent blood DHA, a blood level rather than a health outcome and not in babies (18589030). Algal DHA given to mothers, not to babies, did not change offspring neurodevelopment at 12 months on the named primary outcome (33023067), and a lactation trial reported some better attention scores and no visual differences at 5 years (20655543). In school-age children, 600 mg/day from algal oil had no effect on reading in the full sample with effects in a subgroup (22970149), and a replication found no consistent differences (29462158). In children with cystic fibrosis, the primary AA:DHA ratio fell with no clinical improvement (23266209). Trials that dosed infants or toddlers directly gave DHA with arachidonic acid: drops in extremely low birth weight infants (27356083), supplements in toddlers born preterm (31187863), and formula (17912568, 15812447); a combination isn't the ingredient alone. Abstracts only. No study read meets the review's standard for what this label prints.",
+ "studies_to_add": [
+  {
+   "pmid": "33023067",
+   "study_type": "rct",
+   "sample_size": 957,
+   "primary_endpoint": "infant neurodevelopment at 12 months (DASII), maternal supplementation",
+   "effect_direction": "null",
+   "quote": "At 12 months, the mean development quotient (DQ) scores in the DHA and placebo groups were not statistically significant (96.6 ± 12.2 vs. 97.1 ± 13.0, p = 0.60)."
+  },
+  {
+   "pmid": "29462158",
+   "study_type": "rct",
+   "sample_size": 376,
+   "primary_endpoint": "not named as primary; reading, working memory and parent-rated behavior",
+   "effect_direction": "null",
+   "quote": "This RCT did not replicate results of the earlier DOLAB 1 study on the effectiveness of nutritional supplementation with DHA for learning and behavior."
+  }
+ ],
+ "stop_list": [
+  "The label is for babies, and the fields can't express that the studied exposure in 33023067 is the mother's, not the infant's.",
+  "The label prints no dose by age and no direct infant algal-DHA-alone trial was read, so no population field fits."
+ ],
+ "stored_rating_note": "positive_moderate rests on a 32-person open-label blood-level comparison in adults, which the stored text itself says didn't study health outcomes. The label is a baby product. Null 33023067 and 29462158 aren't stored.",
+ "pmids_read": [
+  "18589030",
+  "33023067",
+  "29462158",
+  "22970149",
+  "23266209",
+  "30307735",
+  "27356083",
+  "31187863",
+  "17912568",
+  "15812447",
+  "20655543"
+ ],
+ "unread_notes": "Abstracts only. 30307735 was read to 3800 characters and its child outcomes section was not reached, so nothing from it is used. 27356083, 31187863, 17912568, 15812447 and 20655543 were read to the search listing's 900 or 1100 characters, so their conclusions weren't read: only design and the results shown are stated. Maternal trials 34543890, 26262896, 24626819, 20715595, 37877035 and sleep substudy 24605819 seen only in the listing and not used. Searches: 17 and 2 hits."
+}

@@ -1,0 +1,1135 @@
+{
+  "record_id": "INGR_OLIVE_FRUIT",
+  "labels": 4,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "Mixed: olive leaf extract lowered 24-hour systolic pressure in one large trial and improved vital signs in a small COVID-19 trial, while glycemic and anxiety trials found no effect",
+  "decision": "closed_no_credit",
+  "summary": "Three of four products are named Olive Leaf Extract and print olive extract 500 mg with an immune purpose; the fourth is Cardio Health, 500 mg olive extract with a cardiovascular purpose and no plant part in the row read. None prints fruit. In hospitalized COVID-19 patients, olive leaf extract 500 or 1000 mg/day for five days improved primary vital signs versus placebo (36319585). In 621 people treated for hypertension, it lowered 24-hour systolic pressure versus placebo, with no dose in the abstract (40990594). In stage-1 hypertension, EFLA 943 at 1000 mg/day reduced systolic pressure about as much as captopril, with no placebo arm (21036583). In 32 high school athletes, illness incidence did not differ though sick days fell (30744092). A pilot in type 2 diabetes found no significant HbA1c interaction (39818111), and an anxiety pilot that missed its sample size reported no effect (42514151). The stored meta-analysis tested isolated oleuropein, hydroxytyrosol and tyrosol, not an olive extract as printed here.",
+  "question_for_clinician": "36319585 meets rule 2 for olive leaf extract at 500 or 1000 mg/day, positive on primary vital signs in hospitalized COVID-19 patients. 21036583 meets rule 2 for EFLA 943 at 1000 mg/day, with a primary systolic reduction similar to captopril and no placebo arm. Should the 3 immune labels get credit from one short inpatient trial, given 30744092 found no difference in illness incidence? Should Cardio Health get credit from 21036583, and from 40990594 once its dose is read? Agent recommendation: no credit in this review. The labels print no oleuropein amount and no extract name, Cardio Health states no plant part in the row read, 36319585 does not show general immune support, and the dose in 40990594 is not verified. The full text of 40990594 would most help the cardiovascular label.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_36319585",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "36319585"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hospitalized_covid_19",
+      "purpose": "acute_illness_clinical_status",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_36319585",
+      "population": {
+        "age_group": "adult",
+        "description": "150 hospitalized COVID-19 patients randomized to three groups; 141 analysed; patients admitted to intensive care or who died were excluded."
+      },
+      "study_design": "Randomized, triple-blinded clinical trial, 5 days",
+      "outcomes": [
+        {
+          "name": "Vital signs on day 5: temperature, pulse and respiratory rate lower and oxygen saturation higher than placebo at both doses",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "ESR and CRP on day 5: lower than placebo at both doses",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Length of hospitalization: the authors conclude it decreased; no figure in the abstract",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Short treatment in one acute illness, in hospital; it does not show general immune support in healthy people.",
+        "Vital signs as primary outcomes, several named; the passages read don't name a correction for that.",
+        "Capsules contained 30% oleuropein per the full text; these labels print no oleuropein amount in the rows read.",
+        "Exclusion of intensive care patients and deaths is an acknowledged limitation.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500,
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 5,
+        "administration_frequency": "every 12 hours",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Olive leaf extract capsules 250 mg or 500 mg every 12 hours for five days, or placebo.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36319585",
+          "location": "Abstract and full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_40990594",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "40990594"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "treated_hypertension",
+      "purpose": "blood_pressure_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_40990594",
+      "population": {
+        "age_group": "adult",
+        "description": "621 participants treated for hypertension; oral extract n = 307, placebo n = 314."
+      },
+      "study_design": "Multicentre, randomized, double-blind, placebo-controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Change in 24-hour systolic blood pressure: -6.4 mmHg versus -1.5 mmHg on placebo, P < 0.01",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract gives no dose and no result specific to the primary 24-hour diastolic pressure; PubMed shows no PMC id, so full text wasn't opened.",
+        "Participants were already treated for hypertension.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral olive leaf extract or placebo for 12 weeks; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "40990594",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_21036583",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "21036583"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "EFLA 943",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "stage_1_hypertension",
+      "purpose": "blood_pressure_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_21036583",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with stage-1 hypertension; number not in the part of the abstract read."
+      },
+      "study_design": "Double-blind, randomized, parallel, active-controlled trial, 4-week run-in and 8 weeks of treatment; no placebo arm",
+      "outcomes": [
+        {
+          "name": "Reduction in systolic pressure, baseline to week 8: -11.5 mmHg on olive leaf extract, -13.7 mmHg on captopril, not significantly different between groups",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Triglycerides: significant reduction on olive leaf extract, not on captopril",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Active comparator with no placebo arm, so the reduction on extract is within group and the comparison is not a superiority result.",
+        "Tested EFLA 943; these labels do not name it.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "EFLA 943 olive leaf extract 500 mg twice daily for 8 weeks; captopril 12.5 to 25 mg twice daily as comparator.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21036583",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_30744092",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "30744092"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "upper_respiratory_illness_in_athletes",
+      "purpose": "respiratory_illness_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_30744092",
+      "population": {
+        "age_group": "adolescent",
+        "description": "32 high school athletes."
+      },
+      "study_design": "Randomized controlled trial, nine weeks during the competitive season",
+      "outcomes": [
+        {
+          "name": "Illness incidence: no significant difference, OR 1.02",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Sick days: 28% reduction, OR 0.72, p = 0.02",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Small trial in adolescents.",
+        "The dose is stated as leaf equivalent and oleuropein, not extract mass, so it stays in the regimen text.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Daily olive leaf extract, extent equivalent to 20 g of olive leaf, containing 100 mg oleuropein, or placebo, for nine weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "30744092",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_22512698",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "22512698"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "type_2_diabetes",
+      "purpose": "glycemic_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_22512698",
+      "population": {
+        "age_group": "adult",
+        "description": "79 adults with type 2 diabetes."
+      },
+      "study_design": "Controlled clinical trial, randomized to extract or matching placebo, 14 weeks",
+      "outcomes": [
+        {
+          "name": "HbA1c and fasting plasma insulin significantly lower on olive leaf extract; postprandial insulin did not differ",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "A purpose these labels do not carry.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "500 mg olive leaf extract tablet orally once daily or matching placebo for 14 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "22512698",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_26951205",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "26951205"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "prehypertension",
+      "purpose": "blood_pressure_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_26951205",
+      "population": {
+        "age_group": "adult",
+        "description": "60 pre-hypertensive men."
+      },
+      "study_design": "Randomized, double-blind, controlled crossover trial, 6 weeks per arm with a 4-week washout",
+      "outcomes": [
+        {
+          "name": "Daytime and 24-hour systolic and diastolic pressure significantly lower than control",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "The dose is stated as oleuropein and hydroxytyrosol, not extract mass, so it stays in the regimen text.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Olive leaf extract providing 136 mg oleuropein and 6 mg hydroxytyrosol daily, or polyphenol-free control, for 6 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "26951205",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_39818111",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "39818111"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "type_2_diabetes",
+      "purpose": "glycemic_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_39818111",
+      "population": {
+        "age_group": "adult",
+        "description": "31 adults with type 2 diabetes of at least 12 months, not on insulin; 16 extract, 15 placebo."
+      },
+      "study_design": "Pilot, randomized, placebo-controlled trial, 24 weeks",
+      "outcomes": [
+        {
+          "name": "Change in HbA1c: no statistically significant time-group interaction",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Pilot; the authors call it inconclusive on efficacy, which isn't evidence of no effect.",
+        "The abstract gives no dose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Olive leaf extract or placebo capsules for 24 weeks; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39818111",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_42514151",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "42514151"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "anxiety_symptoms_with_excess_weight",
+      "purpose": "anxiety_and_inflammation",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_42514151",
+      "population": {
+        "age_group": "adult",
+        "description": "Women with excess weight and mild to moderate anxiety symptoms; number not in the abstract."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled pilot trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Anxiety scales, inflammatory and metabolic parameters: authors report no effect from the extract",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Expected sample size wasn't achieved, so the authors call the results preliminary.",
+        "The abstract names no primary outcome.",
+        "A purpose these labels don't carry.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          750
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Olive leaf extract 750 mg/day or placebo for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42514151",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_39599665",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "39599665"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "postmenopausal_symptoms",
+      "purpose": "menopause_symptom_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_39599665",
+      "population": {
+        "age_group": "adult",
+        "description": "60 healthy postmenopausal women aged 47 to 70."
+      },
+      "study_design": "Randomized, double-blinded, parallel study, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Overall MENQoL score improved versus placebo, p = 0.027",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "A purpose these labels don't carry; 250 mg/day.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          250
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Olive leaf extract 250 mg/day or placebo for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39599665",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_42303499",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "42303499"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiometabolic_risk_markers",
+      "purpose": "cardiometabolic_markers",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_42303499",
+      "population": {
+        "age_group": "adult",
+        "description": "Participants in 30 randomized trials, n = 1726, of olive leaf or olive pomace."
+      },
+      "study_design": "GRADE-assessed systematic review and meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "Olive leaf improved lipid parameters and reduced TNF-alpha, blood pressure, weight and BMI; no significant effect on glycemic markers",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Certainty of evidence ranged from very low to high; the abstract doesn't assign it per outcome.",
+        "The abstract gives no dose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several olive leaf and pomace regimens; not listed in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "42303499",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_fruit_40325976",
+      "components": [
+        "INGR_OLIVE_FRUIT"
+      ],
+      "source_pmids": [
+        "40325976"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "prehypertension_or_hypertension",
+      "purpose": "blood_pressure_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_fruit_40325976",
+      "population": {
+        "age_group": "adult",
+        "description": "248 participants in 3 studies of adults with prehypertension or hypertension."
+      },
+      "study_design": "Systematic review and meta-analysis; pre versus post intervention analysis",
+      "outcomes": [
+        {
+          "name": "Systolic -6.03 mmHg (p = 0.03), diastolic -2.38 mmHg (p = 0.07), pre versus post; larger at 1000 mg/day",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Pre versus post, not placebo-controlled differences.",
+        "Authors cite variable trial quality and exclusion of non-English studies.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several regimens; the highest-dose subgroup used 1000 mg/day.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40325976",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "39828996": "Stored meta-analysis of oleuropein, hydroxytyrosol and tyrosol supplements; isolated phenolics, sources not stated in the abstract, not the extract on these labels.",
+    "40943119": "Olive leaf extract added to antifungal therapy for oral candidiasis; the part of the abstract read gives no route or dose and the labels carry no such purpose.",
+    "39955806": "Knee osteoarthritis factorial trial with topical and oral arms on routine treatment; the part of the abstract read gives no oral dose or named primary.",
+    "42061085": "Oleuropein-enriched extract added to periodontal therapy; the part of the abstract read gives no dose and the labels carry no such purpose.",
+    "40685267": "Olive leaf extract 250 mg/day with a calorie-restricted diet in women with obesity: oxidative stress markers, no primary outcome named in the part read.",
+    "33868820": "Meta-analysis of five trials with primary outcomes systolic and diastolic pressure and mixed comparisons; its 1000 mg/day comparison is described as versus placebo using figures that 21036583 reports for captopril, so it is not used for direction."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "36319585",
+      "title_fetched": "Efficacy of olive leaves extract on the outcomes of hospitalized covid-19 patients: A randomized, triple-blinded clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36319585/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "40990594",
+      "title_fetched": "Efficacy of olive leaf extracts in controlling blood pressure in hypertensive patients: a double-blind randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40990594/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21036583",
+      "title_fetched": "Olive (Olea europaea) leaf extract effective in patients with stage-1 hypertension: comparison with Captopril.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21036583/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30744092",
+      "title_fetched": "The Effect of Olive Leaf Extract on Upper Respiratory Illness in High School Athletes: A Randomised Control Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30744092/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "22512698",
+      "title_fetched": "Olive leaf extract as a hypoglycemic agent in both human diabetic subjects and in rats.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22512698/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26951205",
+      "title_fetched": "Impact of phenolic-rich olive leaf extract on blood pressure, plasma lipids and inflammatory markers: a randomised controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26951205/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39818111",
+      "title_fetched": "Efficacy and safety of olive leaf extract (Olea europaea L.) for glycaemic control in adults with type 2 diabetes mellitus (ESOLED): A pilot randomised controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39818111/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42514151",
+      "title_fetched": "Effects of Olive Leaf Extract on Anxiety Symptoms and Metainflammation in Women with Excess Weight: A Randomized Double-Blind Placebo-Controlled Pilot Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42514151/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39599665",
+      "title_fetched": "Olive Leaf Extract Supplementation Improves Postmenopausal Symptoms: A Randomized, Double-Blind, Placebo-Controlled Parallel Study on Postmenopausal Women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39599665/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42303499",
+      "title_fetched": "A GRADE-assessed systematic review and meta-analysis of randomized controlled trials evaluating the effects of olive leaf or olive pomace supplementation on cardiometabolic and anthropometric health markers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42303499/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40325976",
+      "title_fetched": "Efficacy of Olive Leaf Extract in Improving Blood Pressure in Pre-Hypertensive and Hypertensive Individuals: A Systematic Review and Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40325976/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39828996",
+      "title_fetched": "The impact of oleuropein, hydroxytyrosol, and tyrosol on cardiometabolic risk factors: a meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39828996/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40943119",
+      "title_fetched": "Beneficial Effect of Olive Leaf Extract as an Adjunct to Standard Antifungal Therapy in Treating Candida-Related Oral Diseases.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40943119/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39955806",
+      "title_fetched": "Impact of olive leaf extract on pain management and functional improvement in elderly patients with knee osteoarthritis: A randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39955806/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42061085",
+      "title_fetched": "Adjuvant treatment with an oleuropein-enriched olive leaf extract improves periodontal outcomes in older adults with periodontitis: Metabolomic insights from a randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42061085/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40685267",
+      "title_fetched": "Phenolic-rich extract of olive leaf with a hypocaloric diet alleviates oxidative stress in obese females: a randomized double-blind placebo controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40685267/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33868820",
+      "title_fetched": "Olive leaf extract effect on cardiometabolic profile among adults with prehypertension and hypertension: a systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33868820/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_OLIVE_FRUIT",
+    "standard_name": "Olive Fruit",
+    "aliases": [
+      "Olive (Olea europaea) extract",
+      "Olive extract"
+    ],
+    "category": "immune",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "36319585",
+      "40990594",
+      "21036583",
+      "30744092",
+      "22512698",
+      "26951205",
+      "39818111",
+      "42514151",
+      "39599665",
+      "42303499",
+      "40325976"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Mixed: olive leaf extract lowered 24-hour systolic pressure in one large trial and improved vital signs in a small COVID-19 trial, while glycemic and anxiety trials found no effect. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "vital signs in acute COVID-19",
+      "24-hour systolic blood pressure"
+    ],
+    "health_goals_supported": [],
+    "notes": "Three of four products are named Olive Leaf Extract and print olive extract 500 mg with an immune purpose; the fourth is Cardio Health, 500 mg olive extract with a cardiovascular purpose and no plant part in the row read. None prints fruit. In hospitalized COVID-19 patients, olive leaf extract 500 or 1000 mg/day for five days improved primary vital signs versus placebo (36319585). In 621 people treated for hypertension, it lowered 24-hour systolic pressure versus placebo, with no dose in the abstract (40990594). In stage-1 hypertension, EFLA 943 at 1000 mg/day reduced systolic pressure about as much as captopril, with no placebo arm (21036583). In 32 high school athletes, illness incidence did not differ though sick days fell (30744092). A pilot in type 2 diabetes found no significant HbA1c interaction (39818111), and an anxiety pilot that missed its sample size reported no effect (42514151). The stored meta-analysis tested isolated oleuropein, hydroxytyrosol and tyrosol, not an olive extract as printed here.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Hospitalized COVID-19 patients and adults with hypertension taking olive leaf extract",
+      "supported_outcomes": [
+        "vital signs in acute COVID-19",
+        "24-hour systolic blood pressure"
+      ],
+      "source_pmids": [
+        "36319585",
+        "40990594",
+        "21036583",
+        "30744092",
+        "22512698",
+        "26951205",
+        "39818111",
+        "42514151",
+        "39599665",
+        "42303499",
+        "40325976"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Three of four products are named Olive Leaf Extract and print olive extract 500 mg with an immune purpose; the fourth is Cardio Health, 500 mg olive extract with a cardiovascular purpose and no plant part in the row read. None prints fruit. In hospitalized COVID-19 patients, olive leaf extract 500 or 1000 mg/day for five days improved primary vital signs versus placebo (36319585). In 621 people treated for hypertension, it lowered 24-hour systolic pressure versus placebo, with no dose in the abstract (40990594). In stage-1 hypertension, EFLA 943 at 1000 mg/day reduced systolic pressure about as much as captopril, with no placebo arm (21036583). In 32 high school athletes, illness incidence did not differ though sick days fell (30744092). A pilot in type 2 diabetes found no significant HbA1c interaction (39818111), and an anxiety pilot that missed its sample size reported no effect (42514151). The stored meta-analysis tested isolated oleuropein, hydroxytyrosol and tyrosol, not an olive extract as printed here. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36319585",
+        "title": "Efficacy of olive leaves extract on the outcomes of hospitalized covid-19 patients: A randomized, triple-blinded clinical trial.",
+        "citation": "Explore (New York, N.Y.) (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36319585/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.1016/j.explore.2022.10.020"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40990594",
+        "title": "Efficacy of olive leaf extracts in controlling blood pressure in hypertensive patients: a double-blind randomized clinical trial.",
+        "citation": "Journal of hypertension (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40990594/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Multicenter Study"
+        ],
+        "doi": "10.1097/HJH.0000000000004141"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21036583",
+        "title": "Olive (Olea europaea) leaf extract effective in patients with stage-1 hypertension: comparison with Captopril.",
+        "citation": "Phytomedicine : international journal of phytotherapy and phytopharmacology (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21036583/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.phymed.2010.08.016"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "30744092",
+        "title": "The Effect of Olive Leaf Extract on Upper Respiratory Illness in High School Athletes: A Randomised Control Trial.",
+        "citation": "Nutrients (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30744092/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu11020358"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "22512698",
+        "title": "Olive leaf extract as a hypoglycemic agent in both human diabetic subjects and in rats.",
+        "citation": "Journal of medicinal food (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/22512698/",
+        "publication_types": [
+          "Controlled Clinical Trial",
+          "Journal Article"
+        ],
+        "doi": "10.1089/jmf.2011.0243"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "26951205",
+        "title": "Impact of phenolic-rich olive leaf extract on blood pressure, plasma lipids and inflammatory markers: a randomised controlled trial.",
+        "citation": "European journal of nutrition (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/26951205/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/s00394-016-1188-y"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39818111",
+        "title": "Efficacy and safety of olive leaf extract (Olea europaea L.) for glycaemic control in adults with type 2 diabetes mellitus (ESOLED): A pilot randomised controlled trial.",
+        "citation": "Complementary therapies in clinical practice (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39818111/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.ctcp.2025.101949"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42514151",
+        "title": "Effects of Olive Leaf Extract on Anxiety Symptoms and Metainflammation in Women with Excess Weight: A Randomized Double-Blind Placebo-Controlled Pilot Trial.",
+        "citation": "Life (Basel, Switzerland) (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42514151/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3390/life16071081"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39599665",
+        "title": "Olive Leaf Extract Supplementation Improves Postmenopausal Symptoms: A Randomized, Double-Blind, Placebo-Controlled Parallel Study on Postmenopausal Women.",
+        "citation": "Nutrients (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39599665/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu16223879"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42303499",
+        "title": "A GRADE-assessed systematic review and meta-analysis of randomized controlled trials evaluating the effects of olive leaf or olive pomace supplementation on cardiometabolic and anthropometric health markers.",
+        "citation": "Nutrition, metabolism, and cardiovascular diseases : NMCD (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42303499/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1016/j.numecd.2026.104821"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40325976",
+        "title": "Efficacy of Olive Leaf Extract in Improving Blood Pressure in Pre-Hypertensive and Hypertensive Individuals: A Systematic Review and Meta-Analysis.",
+        "citation": "Phytotherapy research : PTR (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40325976/",
+        "publication_types": [
+          "Journal Article",
+          "Review"
+        ],
+        "doi": "10.1002/ptr.8509"
+      }
+    ]
+  }
+}

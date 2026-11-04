@@ -20,6 +20,10 @@ def records():
 
 
 def _study(record, pmid):
+    if record.get("applicability_status") == "no_qualifying_human_evidence":
+        # A later review closed this record: its owner keeps no study rows, so the decision names what was read.
+        assert pmid in record["applicability_decision"]
+        pytest.skip(f"{record['canonical_id']} closed with no qualifying study; row {pmid} left the record")
     return next(s for s in record["qualifying_human_studies"] if s["pmid"] == pmid)
 
 
@@ -188,6 +192,9 @@ REPOINTED = {
 @pytest.mark.parametrize("cid, pmids", sorted(REPOINTED.items()))
 def test_a_wrong_paper_citation_is_repointed_to_the_trial(records, cid, pmids):
     old, new = pmids
+    if records[cid].get("applicability_status") == "no_qualifying_human_evidence":
+        assert new in records[cid]["applicability_decision"] and old not in records[cid]["applicability_decision"]
+        return
     study, = records[cid]["qualifying_human_studies"]
     assert study["pmid"] == new != old
     prov = study["verification_provenance"]
@@ -366,7 +373,7 @@ def test_b_part2_nr_identity_own_trials_remain_separate_and_resolved(records, mo
     import evidence_resolver as er
     monkeypatch.setattr(er, '_load_literature_evidence', lambda: records)
     r = er.resolve_evidence_for_canonical('nicotinamide_riboside')
-    assert r.disposition == 'resolved_by_reviewed_clinical_evidence'
+    assert r.disposition == 'reviewed_null_unfavorable'  # conflicting review, 2026-11-04
     assert records['nicotinamide_riboside']['studied_dose_exposure']['values'] == [100, 300, 1000]
 
 
@@ -421,10 +428,10 @@ def test_b0_red_clover_review_population_is_distinct_from_hot_flush_subset(recor
 
 
 def test_b0_vinegar_reports_auc_and_blueberry_is_not_a_meta_analysis(records):
+    assert _study(records["blueberry"], "30999017")["study_type"] == "systematic_review"
     outcome = _study(records["apple_cider_vinegar"], "28292654")["outcome"]
     assert "area under the curve (AUC)" in outcome
     assert "peaks" not in outcome
-    assert _study(records["blueberry"], "30999017")["study_type"] == "systematic_review"
 
 
 def test_b0_capsaicin_source_does_not_assert_capsiate_equivalence(records):

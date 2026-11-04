@@ -1,0 +1,18 @@
+{"canonical": "hawthorn", "labels": 20, "stored": "positive_strong",
+ "as_read": "Mixed: older trials and two pre-2008 meta-analyses favour leaf and flower extract for heart failure symptoms and exercise capacity, but SPICE and HERB CHF were null on their primary outcomes, and no primary-positive mg-dosed trial matches these labels.",
+ "route": "packet_no_credit",
+ "positive_named": ["12798455", "18254076", "12833999", "11715631", "12040357", "16762125"],
+ "studies_to_add": [
+  {"pmid": "19019730", "study_type": "rct", "sample_size": 2681, "primary_endpoint": "time until first cardiac event", "effect_direction": "null", "quote": "In this study, WS 1442 had no significant effect on the primary endpoint."},
+  {"pmid": "19789403", "study_type": "rct", "sample_size": 120, "primary_endpoint": "change in 6 min walk distance at 6 months", "effect_direction": "null", "quote": "Hawthorn provides no symptomatic or functional benefit when given with standard medical therapy to patients with heart failure."},
+  {"pmid": "18254076", "study_type": "systematic_review_meta", "sample_size": 855, "primary_endpoint": "not named; maximal workload and symptoms pooled", "effect_direction": "positive_weak", "quote": "These results suggest that there is a significant benefit in symptom control and physiologic outcomes from hawthorn extract as an adjunctive treatment for chronic heart failure."}],
+ "stop_list": ["Dose fields can't express drops: 12833999 (3 times 30 drops) and 11715631 (3 x 25 drops) stay in regimen text.", "SPICE subgroup claim on sudden cardiac death (LVEF of 25% or more) is left out of outcomes because the abstract doesn't say whether it was prespecified."],
+ "clinician_items": ["18490196: retrospective analysis of HERB CHF reports higher early heart failure progression on WS 1442 (3.9 times, p = 0.035; adjusted 6.4, p = 0.011) and greater risk at LVEF of 35% or less (3.2, p = 0.02); overall progression 46.6% versus 43.3%, p = 0.86.",
+  "19789403: significantly more adverse events on hawthorn (p = 0.02), most non-cardiac.",
+  "18254076: one trial reported deaths, three on active and one on control, without further detail.",
+  "19019730: adverse events comparable; authors call WS 1442 safe with optimal heart failure medication.",
+  "12817526: 8 healthy volunteers, no significant change in digoxin pharmacokinetics with WS 1442 450 mg twice daily.",
+  "16762125: no herb-drug interaction found in type 2 diabetes patients on medication (79 patients)."],
+ "stored_rating_note": "positive_strong rests on one 2003 meta-analysis of pre-SPICE trials; SPICE (19019730) and HERB CHF (19789403) were null on primary outcomes. The stored applicability text mentions no later trial.",
+ "pmids_read": ["12798455","18254076","40732315","42277690","39583031","40573097","32595244","19019730","19789403","18490196","12833999","11715631","16762125","22458601","12040357","11515715","12817526"],
+ "unread_notes": "Abstract-only reads. 40732315 prints a systolic CI crossing zero while calling it significant, full text not opened. Titles seen in search and not opened, so nothing is asserted about them: 11807965, 15700749, 21242072, 29080984, 15353901, 12597258, 31255877, 38398818."}

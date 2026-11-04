@@ -1,0 +1,462 @@
+{
+  "record_id": "INGR_DIOSMIN",
+  "labels": 3,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "positive for venous symptoms in small diosmin trials at 450 and 600 mg, none placebo controlled with a named primary outcome; class-level Cochrane review finds a slight oedema benefit and little or no change in quality of life",
+  "decision": "closed_no_credit",
+  "summary": "One label prints DiosVein Diosmin EP 900 mg; two print Diosmin 450 mg plus Micronized Purified Flavonoid Fraction 500 mg. A placebo RCT of a branded bioavailable diosmin at 450 mg daily (33808784, 72 completers) reports better pain and venous scores but names no primary outcome. Trials with a named primary outcome have no placebo: 600 mg noninferior to micronized diosmin plus hesperidin (32206351), 1.8 g/day after knee replacement (38109425), and 600 mg added to rivaroxaban after DVT (32348101). The stored Cochrane review (33141449) pools phlebotonics as a class and gives no diosmin result in its abstract.",
+  "question_for_clinician": "Recommend no credit from this review. 32206351 meets rule 2 on its face (diosmin alone, 600 mg, chronic venous disease, primary VAS noninferior) but has no placebo arm and labels print 450 and 900 mg. 33808784 matches the 450 mg row and has placebo, but it names no primary outcome and is a branded preparation. Do these support a venous symptom purpose for the rows printed?",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_diosmin_33808784",
+      "components": [
+        "INGR_DIOSMIN"
+      ],
+      "source_pmids": [
+        "33808784"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "μsmin Plus",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_venous_disease",
+      "purpose": "venous_symptoms_and_quality_of_life",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_diosmin_33808784",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with chronic venous disease, CEAP C2-C4; 72 completed."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled, multicentre; 8 weeks",
+      "outcomes": [
+        {
+          "name": "Leg edema decreased in the active group from week 4 (p < 0.001)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "VAS pain improved compared with placebo at end of treatment (p < 0.05)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Global Index Score and Venous Clinical Severity Score improved in the active group at week 8 (p < 0.001)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "A branded bioavailable diosmin; randomized number not printed, only completers. Edema, GIS and VCSS wording does not state a between-group comparison.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          450
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Bioavailable diosmin (as μsmin Plus) 450 mg tablet once daily for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33808784",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_diosmin_38109425",
+      "components": [
+        "INGR_DIOSMIN"
+      ],
+      "source_pmids": [
+        "38109425"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "after_total_knee_arthroplasty",
+      "purpose": "postoperative_swelling",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_diosmin_38109425",
+      "population": {
+        "age_group": "adult",
+        "description": "330 patients undergoing total knee arthroplasty at 13 hospitals."
+      },
+      "study_design": "Randomized, controlled, multicentre; 14 days; control received neither diosmin nor placebo",
+      "outcomes": [
+        {
+          "name": "Primary: lower-extremity swelling at days 1, 2, 3 and 14, significantly less with diosmin at all time points",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Pain during motion lower with diosmin",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Pain at rest, HSS score, range of motion, inflammatory biomarkers: no significant differences",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No placebo. Postoperative use, a purpose no label here carries.",
+        "Dose is well above the label amounts.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1.8
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 14,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Diosmin 0.9 g twice per day for 14 consecutive days from the day after surgery.",
+        "normalization": {
+          "basis": "0.9 g twice daily as printed; daily total is simple addition."
+        },
+        "source_provenance": {
+          "pmid": "38109425",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_diosmin_32206351",
+      "components": [
+        "INGR_DIOSMIN"
+      ],
+      "source_pmids": [
+        "32206351"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_venous_disease",
+      "purpose": "venous_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_diosmin_32206351",
+      "population": {
+        "age_group": "adult",
+        "description": "114 adults in the per-protocol analysis, mean age 44.4, 90.4% women, symptomatic CVD C0-C3."
+      },
+      "study_design": "Single-blind, randomized, parallel-group noninferiority; 6 months; comparator micronized diosmin 900 mg plus hesperidin 100 mg; no placebo",
+      "outcomes": [
+        {
+          "name": "Primary: change in lower-limb symptom intensity on VAS, nonmicronized diosmin noninferior to the comparator",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No placebo; noninferiority to MPFF-type product only.",
+        "The abstract text on PubMed has garbled results sentences, so numbers aren't taken from it.",
+        "Per-protocol numbers.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Nonmicronized diosmin 600 mg once daily for 6 months.",
+        "normalization": {
+          "basis": "600 mg once daily as printed."
+        },
+        "source_provenance": {
+          "pmid": "32206351",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_diosmin_32348101",
+      "components": [
+        "INGR_DIOSMIN"
+      ],
+      "source_pmids": [
+        "32348101"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "femoropopliteal_deep_vein_thrombosis",
+      "purpose": "post_thrombotic_syndrome_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_diosmin_32348101",
+      "population": {
+        "age_group": "adult",
+        "description": "90 patients with first femoropopliteal DVT, 45 per group."
+      },
+      "study_design": "Single-centre, open-label RCT; 12 months; add-on to rivaroxaban and compression stockings",
+      "outcomes": [
+        {
+          "name": "Primary: post-thrombotic syndrome at 12 months, 8.9% vs 48.9% (RR 0.14)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Open-label, single centre, add-on to standard care; a purpose no label here carries.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [
+          "rivaroxaban",
+          "elastic compression stockings"
+        ],
+        "reported_regimen": "Diosmin 600 mg once daily for 12 months, added to rivaroxaban and elastic compression stockings.",
+        "normalization": {
+          "basis": "600 mg once daily as printed."
+        },
+        "source_provenance": {
+          "pmid": "32348101",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "33141449": "Cochrane review of phlebotonics as a class, 56 RCTs, 11 on hidrosmine and diosmine; abstract gives no diosmin-specific result and says findings for specific groups are limited.",
+    "34556990": "State-of-the-art review of three trials of diosmin 600 mg vs MPFF 1000 mg; not a meta-analysis and argues for the 600 mg dose."
+  },
+  "stop_or_hold": "MPFF is a diosmin and hesperidin mixture, and on the Youthful Legs labels both rows carry canonical diosmin; MPFF placebo trials were not read, so this packet says nothing about MPFF alone. Fields can't compare 'EP' diosmin 900 mg with a branded bioavailable 450 mg or nonmicronized 600 mg.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "33808784",
+      "title_fetched": "Efficacy of a Low-Dose Diosmin Therapy on Improving Symptoms and Quality of Life in Patients with Chronic Venous Disease: Randomized, Double-Blind, Placebo-Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33808784/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38109425",
+      "title_fetched": "Efficacy of Diosmin in Reducing Lower-Extremity Swelling and Pain After Total Knee Arthroplasty: A Randomized, Controlled Multicenter Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38109425/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32206351",
+      "title_fetched": "Is Nonmicronized Diosmin 600 mg as Effective as Micronized Diosmin 900 mg plus Hesperidin 100 mg on Chronic Venous Disease Symptoms? Results of a Noninferiority Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32206351/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32348101",
+      "title_fetched": "Diosmin 600 in adjunction to rivaroxaban reduces the risk of post-thrombotic syndrome after femoropopliteal deep vein thrombosis: results of the RIDILOTT DVT study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32348101/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33141449",
+      "title_fetched": "Phlebotonics for venous insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33141449/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34556990",
+      "title_fetched": "Is There a Difference in the Clinical Efficacy of Diosmin and Micronized Purified Flavonoid Fraction for the Treatment of Chronic Venous Disorders? Review of Available Evidence.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34556990/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_DIOSMIN",
+    "standard_name": "Diosmin",
+    "aliases": [
+      "DiosVein Diosmin EP",
+      "Diosmin",
+      "Micronized Purified Flavonoid Fraction"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "33808784",
+      "38109425",
+      "32206351",
+      "32348101"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive for venous symptoms in small diosmin trials at 450 and 600 mg, none placebo controlled with a named primary outcome; class-level Cochrane review finds a slight oedema benefit and little or no change in quality of life. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "venous symptoms",
+      "leg edema"
+    ],
+    "health_goals_supported": [],
+    "notes": "One label prints DiosVein Diosmin EP 900 mg; two print Diosmin 450 mg plus Micronized Purified Flavonoid Fraction 500 mg. A placebo RCT of a branded bioavailable diosmin at 450 mg daily (33808784, 72 completers) reports better pain and venous scores but names no primary outcome. Trials with a named primary outcome have no placebo: 600 mg noninferior to micronized diosmin plus hesperidin (32206351), 1.8 g/day after knee replacement (38109425), and 600 mg added to rivaroxaban after DVT (32348101). The stored Cochrane review (33141449) pools phlebotonics as a class and gives no diosmin result in its abstract.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with chronic venous disease",
+      "supported_outcomes": [
+        "venous symptoms",
+        "leg edema"
+      ],
+      "source_pmids": [
+        "33808784",
+        "38109425",
+        "32206351",
+        "32348101"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "One label prints DiosVein Diosmin EP 900 mg; two print Diosmin 450 mg plus Micronized Purified Flavonoid Fraction 500 mg. A placebo RCT of a branded bioavailable diosmin at 450 mg daily (33808784, 72 completers) reports better pain and venous scores but names no primary outcome. Trials with a named primary outcome have no placebo: 600 mg noninferior to micronized diosmin plus hesperidin (32206351), 1.8 g/day after knee replacement (38109425), and 600 mg added to rivaroxaban after DVT (32348101). The stored Cochrane review (33141449) pools phlebotonics as a class and gives no diosmin result in its abstract. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33808784",
+        "title": "Efficacy of a Low-Dose Diosmin Therapy on Improving Symptoms and Quality of Life in Patients with Chronic Venous Disease: Randomized, Double-Blind, Placebo-Controlled Trial.",
+        "citation": "Nutrients (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33808784/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu13030999"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38109425",
+        "title": "Efficacy of Diosmin in Reducing Lower-Extremity Swelling and Pain After Total Knee Arthroplasty: A Randomized, Controlled Multicenter Trial.",
+        "citation": "The Journal of bone and joint surgery. American volume (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38109425/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Multicenter Study",
+          "Journal Article"
+        ],
+        "doi": "10.2106/JBJS.23.00854"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32206351",
+        "title": "Is Nonmicronized Diosmin 600 mg as Effective as Micronized Diosmin 900 mg plus Hesperidin 100 mg on Chronic Venous Disease Symptoms? Results of a Noninferiority Study.",
+        "citation": "International journal of vascular medicine (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32206351/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1155/2020/4237204"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32348101",
+        "title": "Diosmin 600 in adjunction to rivaroxaban reduces the risk of post-thrombotic syndrome after femoropopliteal deep vein thrombosis: results of the RIDILOTT DVT study.",
+        "citation": "International angiology : a journal of the International Union of Angiology (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32348101/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.23736/S0392-9590.20.04356-4"
+      }
+    ]
+  }
+}

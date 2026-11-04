@@ -1,0 +1,865 @@
+{
+  "record_id": "INGR_GLOBE_ARTICHOKE",
+  "labels": 13,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive_weak: one 6-week RCT in functional dyspepsia met its primary outcome at 1920 mg/day; pooled lipid and liver results favor extract on surrogates; one pilot reports transaminases rising",
+  "decision": "closed_no_credit",
+  "summary": "Labels print artichoke leaf or leaf and stem extract at 500 to 750 mg (600 mg on two), one whole herb extract, and 100 mg in a combination; four carry a digestive category. One study meets the reading bar: 244 patients with functional dyspepsia, 1920 mg/day for 6 weeks, primary symptom score favoring extract over placebo (14653829). A Cochrane review rates the artichoke result low certainty on 1 study of 244 participants (37323050). Lipid and fatty liver analyses favor extract on surrogates (28609140, 34569671, 41270328, 35763310); the trials read name no primary outcome in the abstract (29520889, 29193419) or no dose (41274796), and 41274796 reports AST rising. This is the strongest finding in the batch. No credit is recommended because the studied amount is about 2.5 to 4 times what a single serving prints; a clinician could read the digestive labels differently. Abstracts only.",
+  "question_for_clinician": "One 244-person RCT in functional dyspepsia at 1920 mg/day met its primary outcome (14653829). Does it support credit for leaf extract labels printing 500 to 750 mg a serving, four with a digestive category, given the dose gap and that servings per day were not checked? Agent recommendation: no credit, and this one deserves a real look.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_globe_artichoke_14653829",
+      "components": [
+        "INGR_GLOBE_ARTICHOKE"
+      ],
+      "source_pmids": [
+        "14653829"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "functional_dyspepsia",
+      "purpose": "digestive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_globe_artichoke_14653829",
+      "population": {
+        "age_group": "adult",
+        "description": "247 patients with functional dyspepsia; 244 in the intention-to-treat analysis (129 active, 115 placebo)."
+      },
+      "study_design": "Randomized double-blind placebo-controlled multicentre trial, 6 weeks",
+      "outcomes": [
+        {
+          "name": "Weekly overall symptom change sum score improved more than placebo (8.3 vs 6.7, P < 0.01)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Nepean Dyspepsia Index quality of life improved more than placebo (-41.1 vs -24.8, P < 0.01)",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "One trial; the commercial preparation is not named in the abstract and funding is not stated beyond non-US government support in PubMed's type field.",
+        "Studied 1920 mg/day; single labels here print 500 to 750 mg a serving and 100 mg in the combination.",
+        "Plant species not printed in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1920
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 42,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Artichoke leaf extract 2 x 320 mg three times daily for 6 weeks.",
+        "normalization": {
+          "basis": "2 x 320 mg three times daily, multiplied in mg; no unit conversion."
+        },
+        "source_provenance": {
+          "pmid": "14653829",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_globe_artichoke_29520889",
+      "components": [
+        "INGR_GLOBE_ARTICHOKE"
+      ],
+      "source_pmids": [
+        "29520889"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "nonalcoholic_fatty_liver_disease",
+      "purpose": "liver_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_globe_artichoke_29520889",
+      "population": {
+        "age_group": "adult",
+        "description": "100 adults with ultrasound-diagnosed NAFLD; 90 completed (49 extract, 41 placebo)."
+      },
+      "study_design": "Pilot randomized double-blind placebo-controlled parallel trial, 2 months",
+      "outcomes": [
+        {
+          "name": "ALT and AST reduced versus placebo (p < .001)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Liver size reduced and hepatic vein flow increased on ultrasound versus placebo (p < .001)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Artichoke leaf extract 600 mg daily for 2 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29520889",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_globe_artichoke_41274796",
+      "components": [
+        "INGR_GLOBE_ARTICHOKE"
+      ],
+      "source_pmids": [
+        "41274796"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "obesity_with_masld_before_bariatric_surgery",
+      "purpose": "liver_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_globe_artichoke_41274796",
+      "population": {
+        "age_group": "adult",
+        "description": "40 bariatric surgery candidates with obesity and steatotic liver disease."
+      },
+      "study_design": "Randomized placebo-controlled pilot trial, 6 weeks",
+      "outcomes": [
+        {
+          "name": "Controlled attenuation parameter and liver lobe diameters reduced versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Transaminases, particularly AST, increased in the extract group",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "negative",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Dose not stated in the abstract.",
+        "The abstract lists secondary outcomes and does not label steatosis as primary.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 42,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Artichoke leaf extract or placebo for 6 weeks; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41274796",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_globe_artichoke_29193419",
+      "components": [
+        "INGR_GLOBE_ARTICHOKE"
+      ],
+      "source_pmids": [
+        "29193419"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "metabolic_syndrome_in_women",
+      "purpose": "metabolic_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_globe_artichoke_29193419",
+      "population": {
+        "age_group": "adult",
+        "description": "50 women aged 20 to 50 with metabolic syndrome."
+      },
+      "study_design": "Double-blind randomized clinical trial with genotype analysis, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Triglycerides lowered versus placebo in FTO-rs9939609 A allele carriers only",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        },
+        {
+          "name": "No other significant differences between groups in that genotype analysis",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "The abstract reports results by genotype and no overall between-group result.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1800
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "four tablets per day",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Hydroalcoholic artichoke extract 1,800 mg as four tablets per day for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29193419",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_globe_artichoke_28609140",
+      "components": [
+        "INGR_GLOBE_ARTICHOKE"
+      ],
+      "source_pmids": [
+        "28609140"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "plasma_lipids",
+      "purpose": "lipid_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_globe_artichoke_28609140",
+      "population": {
+        "age_group": "adult",
+        "description": "702 subjects in 9 RCTs of artichoke extract; health status not stated in the abstract."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Total cholesterol WMD -17.6 mg/dL (95% CI -22.0 to -13.3)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "LDL-C WMD -14.9 mg/dL (95% CI -20.4 to -9.5)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "HDL-C: no significant change",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Abstract gives no doses and does not rate quality.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Artichoke extracts; doses not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "28609140",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_globe_artichoke_34569671",
+      "components": [
+        "INGR_GLOBE_ARTICHOKE"
+      ],
+      "source_pmids": [
+        "34569671"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "plasma_lipids",
+      "purpose": "lipid_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_globe_artichoke_34569671",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 14 studies with 15 effect sizes; total participants not in the abstract."
+      },
+      "study_design": "Systematic review and dose-response meta-analysis",
+      "outcomes": [
+        {
+          "name": "Total cholesterol and LDL-C reduced with leaf extract",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "HDL-C: no significant effect with leaf extract",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract gives identical estimate and interval for triglycerides and total cholesterol (-17.01, -23.88 to -10.13), which looks like a reporting error.",
+        "GRADE ratings and doses are not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Leaf extract or juice; doses not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "34569671",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_globe_artichoke_41270328",
+      "components": [
+        "INGR_GLOBE_ARTICHOKE"
+      ],
+      "source_pmids": [
+        "41270328"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiometabolic_health",
+      "purpose": "metabolic_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_globe_artichoke_41270328",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults; number of trials and participants not in the abstract."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Total cholesterol WMD -12.29 mg/dL, LDL-C -10.31 mg/dL, triglycerides -12.85 mg/dL",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Systolic WMD -2.49 and diastolic WMD -1.53 mmHg",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Fasting glucose, HbA1c and body weight: not significant",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Preparation and doses are not in the abstract; it says artichoke supplementation.",
+        "The abstract's confidence intervals are printed with lower bounds missing a minus sign.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Artichoke supplementation; doses not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "41270328",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_globe_artichoke_35763310",
+      "components": [
+        "INGR_GLOBE_ARTICHOKE"
+      ],
+      "source_pmids": [
+        "35763310"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "nonalcoholic_fatty_liver_disease",
+      "purpose": "liver_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_globe_artichoke_35763310",
+      "population": {
+        "age_group": "adult",
+        "description": "333 patients with NAFLD in five RCTs."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "ALT SMD 1.1 and AST SMD 1.01, in favor of extract versus control",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Doses not in the abstract.",
+        "Liver enzymes are surrogates; no patient-important outcome is reported in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Artichoke leaf extract; doses not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "35763310",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "37323050": "Cochrane review of non-Chinese herbal medicines for functional dyspepsia: artichoke SMD -0.34 (95% CI -0.59 to -0.09), 1 study, 244 participants, low certainty. The trial is not named in the abstract; the count matches 14653829. Also lists ginger and artichoke as a combination."
+  },
+  "stop_or_hold": "Whole herb extract (DSLD 269954) is not the leaf extract tested. LVR Formula (294008, 295528) prints 100 mg in a combination. Label directions for servings per day were not read. Six label rows (18368, 30958, 288774, 307554, 294008, 295528) carry canonical_id artichoke rather than globe_artichoke.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "14653829",
+      "title_fetched": "Efficacy of artichoke leaf extract in the treatment of patients with functional dyspepsia: a six-week placebo-controlled, double-blind, multicentre trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14653829/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29520889",
+      "title_fetched": "Efficacy of artichoke leaf extract in non-alcoholic fatty liver disease: A pilot double-blind randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29520889/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41274796",
+      "title_fetched": "Artichoke leaf extract reduces steatosis and decreases liver size in prebariatric patients: A randomized placebo-controlled pilot trial-The \"SteatoChoke-Study\".",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41274796/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29193419",
+      "title_fetched": "Effects of artichoke leaf extract supplementation on metabolic parameters in women with metabolic syndrome: Influence of TCF7L2-rs7903146 and FTO-rs9939609 polymorphisms.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29193419/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28609140",
+      "title_fetched": "Lipid-lowering activity of artichoke extracts: A systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28609140/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34569671",
+      "title_fetched": "Effects of artichoke leaf extract supplementation or artichoke juice consumption on lipid profile: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34569671/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41270328",
+      "title_fetched": "Artichoke and cardiometabolic health: A systematic and meta-analytic synthesis of current evidence.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41270328/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35763310",
+      "title_fetched": "Therapeutic Potential of Artichoke in the Treatment of Fatty Liver: A Systematic Review and Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35763310/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37323050",
+      "title_fetched": "Non-Chinese herbal medicines for functional dyspepsia.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37323050/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_GLOBE_ARTICHOKE",
+    "standard_name": "Globe Artichoke",
+    "aliases": [
+      "Artichoke Leaf, Stem Extract",
+      "Artichoke Leaf Extract",
+      "Artichoke whole herb extract"
+    ],
+    "category": "digestive_gut",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "14653829",
+      "29520889",
+      "41274796",
+      "29193419",
+      "28609140",
+      "34569671",
+      "41270328",
+      "35763310"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive_weak: one 6-week RCT in functional dyspepsia met its primary outcome at 1920 mg/day; pooled lipid and liver results favor extract on surrogates; one pilot reports transaminases rising. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "dyspeptic symptom score",
+      "dyspepsia quality of life"
+    ],
+    "health_goals_supported": [],
+    "notes": "Labels print artichoke leaf or leaf and stem extract at 500 to 750 mg (600 mg on two), one whole herb extract, and 100 mg in a combination; four carry a digestive category. One study meets the reading bar: 244 patients with functional dyspepsia, 1920 mg/day for 6 weeks, primary symptom score favoring extract over placebo (14653829). A Cochrane review rates the artichoke result low certainty on 1 study of 244 participants (37323050). Lipid and fatty liver analyses favor extract on surrogates (28609140, 34569671, 41270328, 35763310); the trials read name no primary outcome in the abstract (29520889, 29193419) or no dose (41274796), and 41274796 reports AST rising. This is the strongest finding in the batch. No credit is recommended because the studied amount is about 2.5 to 4 times what a single serving prints; a clinician could read the digestive labels differently. Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with functional dyspepsia; adults with raised lipids or fatty liver on surrogate markers",
+      "supported_outcomes": [
+        "dyspeptic symptom score",
+        "dyspepsia quality of life"
+      ],
+      "source_pmids": [
+        "14653829",
+        "29520889",
+        "41274796",
+        "29193419",
+        "28609140",
+        "34569671",
+        "41270328",
+        "35763310"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Labels print artichoke leaf or leaf and stem extract at 500 to 750 mg (600 mg on two), one whole herb extract, and 100 mg in a combination; four carry a digestive category. One study meets the reading bar: 244 patients with functional dyspepsia, 1920 mg/day for 6 weeks, primary symptom score favoring extract over placebo (14653829). A Cochrane review rates the artichoke result low certainty on 1 study of 244 participants (37323050). Lipid and fatty liver analyses favor extract on surrogates (28609140, 34569671, 41270328, 35763310); the trials read name no primary outcome in the abstract (29520889, 29193419) or no dose (41274796), and 41274796 reports AST rising. This is the strongest finding in the batch. No credit is recommended because the studied amount is about 2.5 to 4 times what a single serving prints; a clinician could read the digestive labels differently. Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "whole herb"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "14653829",
+        "title": "Efficacy of artichoke leaf extract in the treatment of patients with functional dyspepsia: a six-week placebo-controlled, double-blind, multicentre trial.",
+        "citation": "Alimentary pharmacology & therapeutics (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14653829/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1046/j.1365-2036.2003.01767.x"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29520889",
+        "title": "Efficacy of artichoke leaf extract in non-alcoholic fatty liver disease: A pilot double-blind randomized controlled trial.",
+        "citation": "Phytotherapy research : PTR (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29520889/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1002/ptr.6073"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41274796",
+        "title": "Artichoke leaf extract reduces steatosis and decreases liver size in prebariatric patients: A randomized placebo-controlled pilot trial-The \"SteatoChoke-Study\".",
+        "citation": "Journal of clinical lipidology (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41274796/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.jacl.2025.10.063"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29193419",
+        "title": "Effects of artichoke leaf extract supplementation on metabolic parameters in women with metabolic syndrome: Influence of TCF7L2-rs7903146 and FTO-rs9939609 polymorphisms.",
+        "citation": "Phytotherapy research : PTR (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29193419/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1002/ptr.5951"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "28609140",
+        "title": "Lipid-lowering activity of artichoke extracts: A systematic review and meta-analysis.",
+        "citation": "Critical reviews in food science and nutrition (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28609140/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1080/10408398.2017.1332572"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34569671",
+        "title": "Effects of artichoke leaf extract supplementation or artichoke juice consumption on lipid profile: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+        "citation": "Phytotherapy research : PTR (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34569671/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/ptr.7247"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41270328",
+        "title": "Artichoke and cardiometabolic health: A systematic and meta-analytic synthesis of current evidence.",
+        "citation": "Diabetes & metabolic syndrome (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41270328/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.dsx.2025.103328"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "35763310",
+        "title": "Therapeutic Potential of Artichoke in the Treatment of Fatty Liver: A Systematic Review and Meta-Analysis.",
+        "citation": "Journal of medicinal food (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35763310/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Systematic Review",
+          "Journal Article"
+        ],
+        "doi": "10.1089/jmf.2022.0025"
+      }
+    ]
+  }
+}

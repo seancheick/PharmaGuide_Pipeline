@@ -1,0 +1,73 @@
+{
+ "canonical": "turmeric",
+ "labels": 39,
+ "stored": "effect_direction unset; applicability_unestablished; documented_review_scope for extract, curcumin and curcuminoid forms (joint, digestive), reviewed 2026-11-03",
+ "as_read": "Mixed: knee pain syntheses favor extracts with low certainty and high heterogeneity, imaging and biomarker results lean null, and the two trials meeting the rule use preparations no label prints.",
+ "route": "packet_no_credit",
+ "positive_named": [
+  "23242572",
+  "29316908",
+  "32926799",
+  "31351488",
+  "34652861",
+  "33511486",
+  "40731001",
+  "38576215"
+ ],
+ "how_labels_reach_pending": "Census fix2: all 39 labels have a turmeric row with driver literature_reviewed_human_clinical_evidence and state evaluated_limited_or_negative, so pending2.py counts them until the canonical is closed. 243134 has one extra row, Curcuma longa rhizome extract with no amount, reading not_applicable. 34 labels read applicability_unestablished; 243134, 229934, 264119 read evaluated_applicable and 248670, 303969 evaluated_authority, driven by other ingredients. I did not run the current scoring code on these labels.",
+ "preparations": {
+  "curcuminoid_93_to_95_or_standardized_20": "60306, 184189, 184197, 182824, 184133, 306396, 317000, 331029, 331030, 331032, 331033, 294008, 295528, 695, 26256, 243134, 229934, 35922, 241200, 69503. 69503 gives no percent. 331029, 331030, 331032, 331033 also print 10:1, and 306396, 317000 print 25:1. 182824, 184133 have Bioperine in the title.",
+  "extract_no_stated_standard_13": "294352, 294353, 312958, 330090, 330089, 307577, 307578, 328068, 332949, 221158, 243683, 31998, 303969. 307577, 307578 say Curcumin 95 in the title only.",
+  "differs_ratio_alone": "10:1 alone on 330088, 330091; 4:1 on 264119 (50 mg, excluded by the scope).",
+  "differs_named": "Meriva on 248670 (500 mg); Curcumin C3 Complex on 326287 (500 mg); CurcuWIN 20% curcuminoids on 243618 (600 mg) and on 243134 (125 mg, beside a 95% row).",
+  "differs_whole_powder": "306396, 317000: Turmeric, Powder 2150 mg beside a 150 mg extract row. The scope excludes the powder term; the extract row matches."
+ },
+ "studies_to_add": [
+  {
+   "pmid": "23242572",
+   "study_type": "rct",
+   "sample_size": 120,
+   "primary_endpoint": "VAS pain and WOMAC function, 42 days",
+   "effect_direction": "positive",
+   "quote": "The analysis of post-treatment scores following administration of NR-INF-02 using VAS, WOMAC, and CGIC at each clinical visit showed significant decrease (p < 0.05) compared to placebo."
+  },
+  {
+   "pmid": "29316908",
+   "study_type": "rct",
+   "sample_size": 201,
+   "primary_endpoint": "Physical performance tests, WOMAC index and global assessment, 12 weeks",
+   "effect_direction": "mixed",
+   "quote": "A significant effect of Curamin® compared to placebo was observed both in physical performance tests and the WOMAC joint pain index, while superior efficacy of CuraMed vs placebo was observed only in physical performance tests."
+  }
+ ],
+ "question_for_clinician": "23242572 and 29316908 meet the rule for a Curcuma longa extract, but neither names a preparation these labels print. Does any credit reach an unbranded 95% curcuminoid extract? Agent recommendation: no credit.",
+ "stop_list": [
+  "The stored applicability text says ratio extracts finish as outside these studies, but excluded_form_terms lists only 4:1, so 10:1 and 25:1 rows match the extract term. Not changed here; a human should settle it.",
+  "Curcuminoid content cannot limit credit: 11 labels print an extract row of 150 mg or less, and 243618's 600 mg holds 120 mg curcuminoids by its own note.",
+  "Packet id INGR_TURMERIC already exists as a reference record, so the draft cannot be a new record as written; a human decides where it belongs.",
+  "The scope lists a digestive outcome, while the positioning read shows joint on 15 labels and digestive on none; 17 show no category."
+ ],
+ "clinician_items": [
+  "32656820: acute hepatitis in 7 Tuscan cases linked to high-bioavailability, high-dose curcumin or curcuminoid formulations, with 23 published cases, most with another medication. Reaches Meriva 248670, CurcuWIN 243618 and 243134, and piperine-paired 182824 and 184133 if those formulations count as high bioavailability; that mapping is mine and not in the abstract.",
+  "31351488: more product-linked adverse events at the high dose of bio-optimized extract than placebo (p = 0.012).",
+  "41053771: one withdrawal for gastrointestinal side effects at 170 mg/day curcumin."
+ ],
+ "stored_rating_note": "28443702 stays a powder study, with no primary outcome named in the abstract. The stored scope is respected and unchanged.",
+ "pmids_read": [
+  "33511486",
+  "40731001",
+  "32926799",
+  "34652861",
+  "28443702",
+  "32656820",
+  "38576215",
+  "38945354",
+  "40615851",
+  "31351488",
+  "41053771",
+  "29316908",
+  "23242572",
+  "25688638"
+ ],
+ "unread_notes": "Abstracts only. 32656820, 38945354, 38576215 and 40615851 were read to about 1600 characters, so 40615851's results past CRP and 38945354's closing are unread and they are not used for efficacy. Search 1 returned 0 and search 2 returned 10. Read only at their opening: 42825904, 38280052 (nanoemulsion), 26937646 (combination), 23964444 (adjuvant). Dose in mg for 32926799, 34652861 and 31351488 is not in the abstracts and full text was not opened; any of them could add a rule 2 study, which would not change this route."
+}

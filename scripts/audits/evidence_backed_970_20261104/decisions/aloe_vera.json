@@ -1,0 +1,8 @@
+{"canonical":"aloe_vera","labels":15,"stored":"positive_moderate","as_read":"Mixed: positive IBS meta-analysis against a null larger trial and a missed-endpoint pilot, and positive glycaemic meta-analyses whose authors flag poor quality, heterogeneity and unstandardized preparations; no result ties to a labelled preparation and amount.",
+"route":"packet_no_credit",
+"positive_named":["30153721","27009750","27347994","34646359","25883909","38952774"],
+"stop_list":["No abstract read gives both a preparation and an amount matching a label","25883909 doesn't settle per-capsule versus per-day dose","Results split by digestive and metabolic purpose"],
+"clinician_items":["27347994: authors state limited evidence exists about the safety of aloe vera."],
+"stored_rating_note":"positive_moderate rests on 27009750, whose authors cite high heterogeneity and limitations and call for trials of standardized preparations. Outcome figures in the record match the abstract.",
+"pmids_read":["27009750","34563809","30153721","27347994","27152917","25883909","23735317","26405698","32314514","34646359","38952774","34385093"],
+"unread_notes":"Abstracts only. Two searches, 71 and 44 hits; 30 listed from each, newest first. The first was dominated by topical and oral-cavity gels. Older hits weren't listed, so earlier trials (for example any IBS trial before 2015) weren't opened by PMID. Titles only and not opened: 34918714 (Aloe ferox, another species), 28088806 and 32515040 (aloe sterol at microgram amounts), 32331307 (herbal medicine title truncated), 26151005 and 36481618 (reviews). 34385093 and 27152917 were cut before their last lines; 32331307 could be another oral IBS trial and is unread. No liver or anthraquinone safety source was read, so none is reported."}
