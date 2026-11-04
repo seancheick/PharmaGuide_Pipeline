@@ -971,8 +971,7 @@ def validate_product_image_bindings(db_path, index):
         if "image_thumbnail_url" not in columns:
             return
         rows = connection.execute(
-            "SELECT dsld_id, image_thumbnail_url FROM products_core "
-            "WHERE image_thumbnail_url IS NOT NULL"
+            "SELECT dsld_id, image_thumbnail_url FROM products_core"
         ).fetchall()
     finally:
         connection.close()
@@ -980,11 +979,11 @@ def validate_product_image_bindings(db_path, index):
     mismatched = []
     for dsld_id, url in rows:
         entry = (index or {}).get(str(dsld_id))
-        declared = entry.get("remote_path") if isinstance(entry, dict) else None
+        declared = (entry.get("remote_path") or entry.get("filename")) if isinstance(entry, dict) else None
         if declared is not None:
             if url != f"{prefix}{declared}":
                 mismatched.append(str(dsld_id))
-        elif url.startswith(prefix) and is_hash_named_product_image(url.removeprefix(prefix)):
+        elif url and url.startswith(prefix) and is_hash_named_product_image(url.removeprefix(prefix)):
             mismatched.append(str(dsld_id))
     if mismatched:
         source = "the product image index" if index else "no product image index"

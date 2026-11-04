@@ -1402,12 +1402,13 @@ def test_every_row_may_name_its_own_image(tmp_path):
     validate_product_image_bindings(db_path, {'1': first, '2': second})
 
 
-def test_a_row_naming_another_products_image_stops_the_release(tmp_path):
+@pytest.mark.parametrize("wrong_thumbnail", [None, "other_product"])
+def test_an_indexed_row_must_name_its_own_image(tmp_path, wrong_thumbnail):
     from sync_to_supabase import validate_product_image_bindings
     first = _hash_image(tmp_path, '1.webp', b'one')
     second = _hash_image(tmp_path, '2.webp', b'two')
     db_path = _catalog_with_images(tmp_path, [
-        ('1', f"product-images/{second['remote_path']}"),
+        ('1', wrong_thumbnail and f"product-images/{second['remote_path']}"),
         ('2', f"product-images/{second['remote_path']}"),
     ])
     with pytest.raises(ValueError, match='1'):

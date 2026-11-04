@@ -27,6 +27,25 @@ def test_dsld_pdf_extraction_excludes_submission_and_non_dsld_ids(tmp_path):
     ]
 
 
+def test_safety_suppressed_row_needs_no_image(tmp_path):
+    db_path = tmp_path / "catalog.db"
+    with sqlite3.connect(db_path) as conn:
+        conn.execute(
+            "CREATE TABLE products_core (dsld_id TEXT, image_url TEXT, "
+            "image_thumbnail_url TEXT, quality_score_status TEXT)"
+        )
+        conn.execute(
+            "INSERT INTO products_core VALUES ('12345', 'label.pdf', "
+            "'product-images/12345.webp', 'suppressed_safety')"
+        )
+    assert load_products_from_db(str(db_path)) == []
+    (tmp_path / "12345.webp").write_bytes(b"optional")
+    index = {"12345": {"filename": "12345.webp"}}
+    assert backfill_image_thumbnail_urls(str(db_path), str(tmp_path), index)["updated"] == 0
+    with sqlite3.connect(db_path) as conn:
+        assert conn.execute("SELECT image_thumbnail_url FROM products_core").fetchone() == (None,)
+
+
 def test_cleaner_does_not_invent_dsld_pdf_for_submission():
     from enhanced_normalizer import EnhancedDSLDNormalizer
 

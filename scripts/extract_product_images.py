@@ -26,6 +26,7 @@ import sys
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+from core_export_model import safety_suppressed_product_ids
 from supabase_client import product_image_remote_path
 
 logging.basicConfig(
@@ -386,6 +387,7 @@ def load_products_from_db(db_path: str) -> list[tuple[str, str]]:
     """Return DSLD records with PDFs; submissions use reviewer-approved photos."""
     conn = sqlite3.connect(db_path)
     try:
+        suppressed_ids = safety_suppressed_product_ids(conn)
         rows = conn.execute(
             "SELECT dsld_id, image_url FROM products_core "
             "WHERE image_url IS NOT NULL AND image_url != '' "
@@ -394,7 +396,7 @@ def load_products_from_db(db_path: str) -> list[tuple[str, str]]:
     finally:
         conn.close()
     return [(product_id, url) for product_id, url in rows
-            if re.fullmatch(r"[0-9]+", str(product_id))]
+            if str(product_id) not in suppressed_ids and re.fullmatch(r"[0-9]+", str(product_id))]
 
 
 def needs_image_extraction(db_path: str, image_dir: str) -> bool:
@@ -405,9 +407,12 @@ def needs_image_extraction(db_path: str, image_dir: str) -> bool:
     """
     targets = load_products_from_db(db_path)
     with sqlite3.connect(db_path) as conn:
+        suppressed_ids = safety_suppressed_product_ids(conn)
         thumbnails = dict(conn.execute(
             "SELECT dsld_id, image_thumbnail_url FROM products_core"
         ))
+    if any(thumbnails.get(product_id) is not None for product_id in suppressed_ids):
+        return True
     for product_id, _ in targets:
         filename = f"{product_id}.webp"
         path = os.path.join(image_dir, filename)
@@ -587,7 +592,14 @@ def backfill_image_thumbnail_urls(db_path: str, image_dir: str, index: dict) -> 
     updated = 0
     conn = sqlite3.connect(db_path)
     try:
+        suppressed_ids = safety_suppressed_product_ids(conn)
+        conn.executemany(
+            "UPDATE products_core SET image_thumbnail_url = NULL WHERE dsld_id = ?",
+            [(product_id,) for product_id in suppressed_ids],
+        )
         for dsld_id, entry in index.items():
+            if str(dsld_id) in suppressed_ids:
+                continue
             filename = entry.get("filename") or f"{dsld_id}.webp"
             webp_path = os.path.join(image_dir, filename)
             if not os.path.exists(webp_path) or os.path.getsize(webp_path) <= 0:

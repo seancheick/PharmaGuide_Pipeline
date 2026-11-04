@@ -1314,6 +1314,14 @@ def test_approved_product_picture_is_webp_indexed_and_bound_to_catalog(
         connection.execute("update products_core set image_thumbnail_url = null")
     assert import_again() == {"copied": 1, "failed": 0, "skipped": 0}
 
+    with sqlite3.connect(catalog) as connection:
+        connection.execute("ALTER TABLE products_core ADD COLUMN quality_score_status TEXT")
+        connection.execute("UPDATE products_core SET quality_score_status = 'suppressed_safety'")
+    assert import_again() == {"copied": 0, "failed": 0, "skipped": 1}
+    assert product_id not in json.loads(index_path.read_text())
+    with sqlite3.connect(catalog) as connection:
+        assert connection.execute("SELECT image_thumbnail_url FROM products_core").fetchone() == (None,)
+
 
 def test_label_mismatch_preserves_existing_dsld_identity():
     from product_submission_import import build_manual_label
