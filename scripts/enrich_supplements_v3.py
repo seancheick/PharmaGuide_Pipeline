@@ -19941,6 +19941,28 @@ class SupplementEnricherV3:
             and label_row_establishes_presence(row)
         }
 
+    def _skipped_row_scope_row(self, row: Dict, label_row: Optional[Dict] = None) -> Dict:
+        """A skipped row was never form-matched, but its printed name can still be
+        the form a rule is about: "Glucomannan" inside a blend that hides its amount.
+        A generic name names no form. form_match_status stays as it was, so a
+        fail-open rule still warns."""
+        label_row = label_row or {}
+        match = self._match_quality_map(
+            row.get("raw_source_text") or row.get("name") or "",
+            row.get("standard_name"),
+            self.databases.get("ingredient_quality_map", {}),
+            cleaned_forms=label_row.get("forms") or (row.get("raw_taxonomy") or {}).get("forms") or [],
+            cleaner_canonical_id=row.get("canonical_id"),
+            row_notes=label_row.get("notes"),
+        )
+        if (
+            not isinstance(match, dict)
+            or match.get("canonical_id") != row.get("canonical_id")
+            or "(unspecified)" in str(match.get("form_id"))
+        ):
+            return row
+        return {**row, "form_id": match.get("form_id"), "matched_forms": match.get("matched_forms") or []}
+
     def _blend_header_scope_row(self, header: Dict, label_row: Optional[Dict]) -> Dict:
         """A blend header is never form-matched for scoring, but the forms its
         label row declares still confirm a plant part for part-scoped rules:
@@ -21656,6 +21678,10 @@ class SupplementEnricherV3:
                     ingredient, label_rows_by_path.get(ingredient.get("raw_source_path"))
                 )
                 if ingredient.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+                else self._skipped_row_scope_row(
+                    ingredient, label_rows_by_path.get(ingredient.get("raw_source_path"))
+                )
+                if id(ingredient) in label_rows
                 else ingredient
             )
 
