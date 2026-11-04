@@ -40,7 +40,7 @@ from supabase_client import CACHE_CONTROL_IMMUTABLE, STORAGE_BUCKET, get_supabas
 
 # One operator account, shared by every worktree and staged release directory.
 # This is local serialization, not a distributed database compare-and-swap.
-_PUBLICATION_LOCK = Path.home() / ".cache" / "pharmaguide" / "safety-alert-publish.lock"
+_PUBLICATION_LOCK = Path.home() / ".cache" / "pharmaguide-safety-alert-publish.lock"
 
 FEED_FILENAME = "safety_alerts.json"
 EXTENDED_FEED_FILENAME = "safety_alerts_extended.json"
