@@ -43,6 +43,13 @@
       "date": "2026-11-04"
     },
     {
+      "rule_key": "RULE_INGREDIENT_CAFFEINE#dose:1",
+      "rule_fingerprint": "sha256:3ba29ce63210e6154e33f2f0f6120d3bc9f357fbd45e2b2a260c9ec29c7fb334",
+      "reason": "For hypertension, keep an uncertain caffeine amount under review. The existing greater-than-400 mg daily threshold and severity are unchanged.",
+      "reviewer": "Dr. Pham approved this exact change, as confirmed by Sean on 2026-11-04. The original clinical review date was not provided.",
+      "date": "2026-11-04"
+    },
+    {
       "rule_key": "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE#dose:0",
       "rule_fingerprint": "sha256:583ce5c2ade1cf875b1b48d0e21cb46152d25632f9f70a851e988c0a2037200a",
       "reason": "Vitamin A pregnancy (review items 5-6): adult limit on preformed vitamin A at contraindicated; unknown form reads review, never a declared excess.",
