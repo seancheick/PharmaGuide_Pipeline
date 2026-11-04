@@ -20908,6 +20908,18 @@ class SupplementEnricherV3:
                     "dose_evaluation": None,
                     "decision_rule": self._dose_decision_rule(policy, materiality, base_severity),
                 }
+            if ingredient.get("beta_carotene_mass_required") and not ingredient.get("activity_only"):
+                severity = str(policy.get("severity_if_not_met") or "informational").strip().lower()
+                return severity, {
+                    "evaluated": False,
+                    "reason": "dose_form_not_disclosed",
+                    "evaluation_status": "form_unknown",
+                    "clinical_severity": severity,
+                    "consumer_disposition": "suppress",
+                    "release_blocking": False,
+                    "dose_evaluation": None,
+                    "decision_rule": self._dose_decision_rule(policy, materiality, severity),
+                }
             if ingredient.get("activity_only"):
                 # A vitamin A figure isn't a beta-carotene amount the rule could find
                 # high, so it raises no concern the way a blank amount does.
@@ -21921,6 +21933,11 @@ class SupplementEnricherV3:
                     dose_row = self._nested_row_of_rule_form(
                         rule, declared_owner, ingredients
                     ) or {**base_dose_row, "quantity": None}
+
+                if "beta_carotene" in {
+                    rule_subject.get("canonical_id"), rule.get("exposure_canonical_id")
+                }:
+                    dose_row = {**dose_row, "beta_carotene_mass_required": True}
 
                 condition_hits: List[Dict[str, Any]] = []
                 drug_hits: List[Dict[str, Any]] = []
