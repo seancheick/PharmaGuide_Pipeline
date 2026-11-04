@@ -100,7 +100,6 @@ def test_a_row_held_for_its_identity_stays_a_conflict(pid, name, why):
     ("287389", "Virtiva", "this label's correction: do not infer pure ginkgo or phosphatidylserine"),
     ("328649", "Shell-broken Reishi mushroom spore", "the map has no spore form and extract standards do not apply"),
     ("220021", "Calcium", "the printed term reads as two different calcium forms"),
-    ("295001", "Conjugated Linoleic Acid", "the label prints safflower as the source; it does not print 80%, so cla 80% is unsupported"),
     ("294296", "Wild Cherry Fruit Extract, Powder", "Sean 2026-11-03: species identification is settled; preparation assessment is not"),
     ("241290", "Diosmin", "Sean 2026-11-03: the current mapping does not justify its score"),
 ])

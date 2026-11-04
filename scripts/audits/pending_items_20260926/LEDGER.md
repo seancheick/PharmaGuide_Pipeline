@@ -4435,6 +4435,16 @@ Of the 2026.11.02 build's 249 `not_scored` labels, this sorts the 74 identity-bl
 These dispositions cover only these labels. They are not clinical approval and do not approve publication.
 
 
+## November 3 — 295001 CLA safflower source, second stage
+
+**Class:** producer correction under Sean's decision relayed by the coordinating session; no new form, alias, score value or clinical policy. **Owner:** `enrich_supplements_v3.py::_is_cross_class_source_form` for the source decision, `scoring_reference_resolver.py::unknown_form_quality` for the floor.
+
+The first stage is the temporary hold in PR #339, which removes the unsupported `safflower` alias on `cla 80%`. This second stage is separate. The panel prints conjugated linoleic acid with safflower as the source and prints no 80% preparation, brand or standardization, so the row now earns what a CLA row with no form earns: bio 10 from the existing nondisclosure owner, `form_id` none, `matched_form` unspecified. No absorption, brand, preparation or clinical credit attaches. The rule accepts only a botanical token equal to its own DSLD ingredient group with no other printed percentage, under a `fatty_acids` parent. A branded token, "Safflower 80%", an extract, a printed percent, a non-botanical category or an unknown preparation stays unmapped for curation. Clarinol, Tonalin and "CLA Safflower Oil" still reach their own forms.
+
+Replay against main 0c897b8ec over all 87 labels with a botanical token under a fatty-acid parent: 1 changed, 295001. Before: `not_scored`, assessment `partial`, no score, safety `no_known_catalog_concern`, 5 warnings. After: `scored` at 52.8, tier Poor, assessment `complete`, safety `no_known_catalog_concern`, 5 warnings. The label now scores at the floor by this route. This is separate from the estimate for PR #339 and is not counted in it.
+
+This covers this label only. It is not clinical approval and does not approve publication.
+
 ## November 2 — why products sit below the coverage floor (branch `claude/low-coverage-identity-20261102`)
 
 **Class:** behavioral identity repair plus an export exclusion. **Owner:** `enhanced_normalizer.py::_is_dosed_omega_aggregate_owner`; `scoring_input_contract.py::_child_disclosed_epa_dha_owner`; `other_ingredients.json::PII_OYSTER_EXTRACT`, `PII_OYSTER_SHELL_EXTRACT`; `build_final_db.py::validate_export_contract`. No gate changed.
