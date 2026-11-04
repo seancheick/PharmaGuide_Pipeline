@@ -110,6 +110,185 @@ The current RPC refuses a `db_version` it has already seen. Unless the deployed 
 allows that for a signed release, the first signed release needs a fresh catalog build, and a
 rules-only release can't be published.
 
+## The safety-alert feed
+
+The alert feed uses the same signing: the same text form, the same signature format, the same
+`sign` key file rules and the same app check. What differs is what gets signed and where its key
+is pinned.
+
+**What is signed.** A short statement that names the base feed, the extended feed if there is one,
+and a sequence. It is detached, and it travels inside the release row's `manifest` as `signed_feed`.
+The feed bytes, `feed_path` and `checksum` don't change, so builds already on phones read exactly
+what they read before.
+
+**Why it has its own key.** A key in `production_keys` makes every catalog publish signed-only, and a
+key in the app's release list starts keyed catalog behaviour, which is held until A9 finishes. The
+feed can't wait for that and must not cause it. So its keys go in `alert_feed_keys` and
+`_kProductionAlertFeedKeys`. It also keeps recalls moving if the catalog key is ever lost.
+
+Sean alone holds this key, under the same custody rules as above.
+
+### What happens with no key
+
+| Situation | Result |
+|---|---|
+| Publisher, nothing in `alert_feed_keys` | Refuses every feed, before any remote step |
+| Publisher, unsigned feed, or signed by any key not pinned there | Refuses, before any remote step |
+| New build, no key in `_kProductionAlertFeedKeys` | Verifies nothing: no alert from the feed and no all-clear, even for a correct feed |
+| New build, missing or bad signature, with a good saved copy | Keeps the copy, not a complete check |
+| New build, missing or bad signature, never verified a feed | No alerts and no all-clear |
+| New build, a saved copy nothing vouches for (from an older build, or its key was removed) | Keeps its alerts, gives no all-clear, and the first verified fetch replaces it |
+| Builds already on phones | Unchanged. They don't read the signature, so they also get no protection from it |
+
+**This differs from the catalog on purpose.** A catalog publish may stay unsigned until the first
+key is pinned, because phones were already taking unsigned catalogs and need them to keep working.
+No alert release has ever been published, so there is nothing to keep working, and Sean decided the
+feed is signed from its first publish. A keyless new build also fails closed where a keyless catalog
+build ignores signed fields, because trusting an unverified feed would let it give an all-clear.
+
+`make build-ios` and `make build-android` refuse a store build with no key, because that build could
+never verify a feed and could only be fixed by an app update. `PHARMAGUIDE_IOS_DISTRIBUTION=testflight`
+is allowed, for testing before the key exists.
+
+### Generate the keys
+
+Run this on the custody machine. It makes the working key and a standby, and asks for a passphrase for
+each. Only the public hex it prints may leave the machine. Keep one offline backup of both private keys.
+
+```bash
+source scripts/python_env.sh   # run from the repo
+mkdir -p ~/alert-feed-custody && cd ~/alert-feed-custody
+umask 077
+for KEY_NAME in alert-feed-2026-11 alert-feed-standby; do
+KEY_NAME="$KEY_NAME" "$PG_PYTHON" - <<'PY'
+import getpass, os
+from pathlib import Path
+from cryptography.hazmat.primitives import serialization as s
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+name = os.environ["KEY_NAME"]
+key = Ed25519PrivateKey.generate()
+passphrase = getpass.getpass(f"New passphrase for {name}: ").encode()
+Path(f"{name}.pem").write_bytes(key.private_bytes(
+    s.Encoding.PEM, s.PrivateFormat.PKCS8, s.BestAvailableEncryption(passphrase)))
+public = key.public_key().public_bytes(s.Encoding.Raw, s.PublicFormat.Raw).hex()
+print(f"{name} public key (hex): {public}")
+PY
+done
+```
+
+The custody directory must stay outside every repo. `sign-alert-feed` refuses a key inside this one, and
+a key file anyone but its owner can read.
+
+### Pin the public keys
+
+1. **Pipeline.** In `scripts/config/release_trust.json`, set the working key only, and merge it:
+
+   ```json
+   "alert_feed_keys": {"alert-feed-2026-11": "<public hex>"}
+   ```
+
+   This changes nothing for the catalog.
+2. **App.** In `lib/services/release_manifest.dart`, set both keys, and merge it:
+
+   ```dart
+   const Map<String, String> _kProductionAlertFeedKeys = {
+     'alert-feed-2026-11': '<public hex>',
+     'alert-feed-standby': '<public hex>',
+   };
+   ```
+
+3. Ship that app build. The first signed publish can come before or after it: older builds read the
+   feed either way, and a keyed build with no release yet behaves as it does today.
+
+### Sign and publish a feed
+
+1. Stage it. This stops at the signature, with the feed ready in `scripts/dist`:
+
+   ```bash
+   bash scripts/run_safety_alert_publish.sh   # stops: "this feed must be signed"
+   ```
+
+2. Pick the next sequence. The first is 1, and it never goes back:
+
+   ```sql
+   select manifest->'signed_feed'->>'statement' from safety_alert_releases where is_current;
+   ```
+
+3. Write the text to sign. This needs no key and no Supabase credential:
+
+   ```bash
+   "$PG_PYTHON" scripts/sync_safety_alerts.py --build-statement --sequence 1 --key-id alert-feed-2026-11
+   ```
+
+4. Move `scripts/dist/safety_alerts_release.json` to the custody machine and sign it. Don't edit it:
+
+   ```bash
+   "$PG_PYTHON" scripts/release_manifest.py sign-alert-feed \
+     --statement safety_alerts_release.json \
+     --key-file ~/alert-feed-custody/alert-feed-2026-11.pem \
+     --output safety_alerts_release.sig
+   ```
+
+5. Move `safety_alerts_release.sig` back to `scripts/dist` and dry-run. This checks the signature against
+   the pinned key, and that it names these exact bytes:
+
+   ```bash
+   "$PG_PYTHON" scripts/sync_safety_alerts.py --dry-run
+   ```
+
+6. Publish:
+
+   ```bash
+   bash scripts/run_safety_alert_publish.sh
+   ```
+
+The feed carries the date it was staged, so the runner makes different bytes on a later day, and the
+publisher refuses the old signature ("does not name this feed"). Go back to step 3 with a new sequence.
+
+To publish a feed already staged elsewhere, such as a reviewed candidate, skip the runner, which would
+stage again, and pass `--dist-dir DIR` to each `sync_safety_alerts.py` command.
+
+Re-running the same signed feed is safe. Publishing earlier bytes again, to undo a release, also works:
+it takes a new sequence and a new signature, and the publisher writes them onto the earlier row. Publishing
+takes the same dispatch secret as before.
+
+To rehearse on a test project, add `--test-project` to the publish command. It takes a key under `test_keys`
+and a host under `test_hosts`, and can't reach production. A debug build trusts that key through
+`PHARMAGUIDE_RELEASE_TEST_KEY_ID` and `PHARMAGUIDE_RELEASE_TEST_KEY`; release mode ignores both.
+
+### Rotate the alert key
+
+1. Generate the next key, or use the standby.
+2. Ship its public key in an app release, alongside the current one.
+3. Wait until every supported build carries it. A build without it treats the new signature as bad: it
+   keeps its saved copy and gives no all-clear.
+4. Add it to `alert_feed_keys`, and sign with it. Keep sequences rising across the switch.
+5. Remove the old key from `alert_feed_keys`, then from the app in a later release. A saved copy signed
+   only by a removed key keeps its alerts, and gives no all-clear until the next verified fetch.
+
+Pin the next key in the app before you need it. There's no remote way to add or revoke a key.
+
+### If the alert key is lost or exposed
+
+**Lost.** Switch to the standby: add its public key to `alert_feed_keys` and sign with it. It works at
+once on every build that shipped with it. Without a standby, generate a new key and ship it in an app
+release. **Until phones have it, keyed builds get no new alert**: they keep their saved copy and give no
+all-clear. Older builds keep receiving the feed. This is the real cost of signing a recall channel, and
+it's why the standby is in the first step.
+
+**Exposed.** Treat this as an incident, as for the release key. An attack also needs write access to
+Supabase, so rotate the service role key first. Switch to the standby if it is still safe and remove the
+exposed key in an expedited app release. If a forged release went out, publish a correct one with a
+sequence above it. A forged sequence too high to beat can only be recovered with an app release.
+
+### What this does not prove
+
+- A signature says Sean approved this feed. It doesn't say the content is clinically correct.
+- It can't prove a release is the latest. Someone who can write to Supabase can hold phones on the last
+  genuine release, or remove it. Phones then see an older copy, not a false one.
+- A phone remembers the highest sequence only in its saved copy, so reinstalling resets it.
+- Builds from before this change don't check. They are protected only by Supabase access control.
+
 ## Remote rules gate
 
 `scripts/config/remote_rules_gate.json` holds rules off production. `sync` refuses a manifest
@@ -140,7 +319,7 @@ reaches phones.
 2. If not, generate a new key and ship it in an app release. If the app's bundled next key has
    a private copy, switch to that one instead.
 3. Builds holding only the lost key stay on their last release until they update the app.
-   The alert feed still reaches them, because it doesn't use this key.
+   The alert feed still reaches them, because it has its own key.
 
 ## If the key is exposed
 
