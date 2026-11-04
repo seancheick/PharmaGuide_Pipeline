@@ -5,7 +5,7 @@
   "direction_as_read": "positive but limited: one 1990 placebo RCT at 100 mg/day and a pooled review with combinations, small and short trials; label amounts are 500 and 5000 mg",
   "decision": "closed_no_credit",
   "summary": "Ten labels print pygeum bark extract at 500 or 5000 mg with no purpose text; one prints 100 mg alongside saw palmetto. A 1990 placebo-controlled RCT in 263 BPH patients on 50 mg twice daily (1702916) reports 66% vs 31% improved. Cochrane and a journal paper reporting the same counts (11869585, 11099686) pool 18 RCTs that include combination products and call them small and short with varied doses. 10475357 has no placebo. No newer placebo RCT turned up in two searches; a 2020 review (31627963) rates its evidence level IV. The tested amount, 100 mg/day, is below 10 of the 11 labels; those labels' extract ratios aren't printed.",
-  "question_for_clinician": null,
+  "question_for_clinician": "1702916 gave pygeum extract 50 mg twice daily against placebo to 263 men with BPH and reports 66% vs 31% improved; its abstract names no primary outcome. Cochrane (11869585) pools 18 small trials that include combinations. Ten labels print pygeum bark extract with no purpose text. An abstract's silence on a primary outcome is a limit of the read, not a finding. Does this support credit for these labels? 1702916's full text settles the primary outcome.",
   "study_contexts": [
     {
       "context_schema_version": "1.1.0",
@@ -492,6 +492,5 @@
         "doi": "10.1016/s0090-4295(99)00147-8"
       }
     ]
-  },
-  "closed_through": "scripts/data/literature_evidence_records.json: pygeum no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+  }
 }

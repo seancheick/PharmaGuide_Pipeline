@@ -5,7 +5,7 @@
   "direction_as_read": "positive_weak: one small RCT in a rare genetic neuropathy at 400 mg/kg/day, plus small sleep and circadian studies with no named primary outcome; nothing tests plain L-serine at 500 to 2000 mg for a general purpose",
   "decision": "closed_no_credit",
   "summary": "The only study meeting the rule is an 18-patient RCT in hereditary sensory and autonomic neuropathy type 1 at 400 mg/kg/day, positive on its primary outcome (30626650). These labels print 500 to 2000 mg per serving of plain L-serine; one carries cognitive and sleep purposes. Sleep crossovers report subjective improvement, but the abstract gives no dose, no sample size and no primary outcome (25197619). Other human work is a combination with EPA (32520991), a phase I study with historical controls (28527102), children with GRIN variants (41265180, 38380699), or circadian timing measures (36028887, 29070712).",
-  "question_for_clinician": null,
+  "question_for_clinician": "25197619 reports better subjective sleep quality on waking after L-serine, and one label carries a sleep purpose; the abstract gives no dose, sample size or primary outcome. 30626650 is positive on its primary in a rare neuropathy, a purpose no label prints. An abstract's silence is a limit of the read, not a finding. Does 25197619 support credit for the sleep label? Its full text settles dose, sample size and primary outcome.",
   "study_contexts": [
     {
       "context_schema_version": "1.1.0",
@@ -311,6 +311,5 @@
         "doi": "10.1186/2193-1801-3-456"
       }
     ]
-  },
-  "closed_through": "scripts/data/literature_evidence_records.json: l_serine no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+  }
 }

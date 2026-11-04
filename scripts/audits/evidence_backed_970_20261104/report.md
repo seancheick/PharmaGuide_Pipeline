@@ -202,7 +202,7 @@ african_mango, agmatine, algae_oil, apple_cider_vinegar, atp, blood_orange_extra
 The reading agents parked these because a study met the design test. Each is reversible by deleting one entry from `literature_corrections.json`.
 
 - **Null trial on target or close, so conflicting:** hawthorn (SPICE, HERB CHF), hibiscus_extract (40334927 at 1000 mg/day), nicotinamide_riboside (42478598, 42848371), cla (37671495 high quality subgroup, 21593349), aloe_vera (32314514), borage_seed_oil (14670885), alpha_linolenic_acid (20929341).
-- **The only qualifying trial is a purpose or population the labels don't print, so no qualifying:** jujube, l_serine, agmatine, chlorophyll, tudca, pygeum, l_glutamine, apple_cider_vinegar, rosemary, rose_hips. lions_mane and turkey_rhubarb_root were here and went back to pending: see "Amount is not a ground" in Batch 4.
+- **The only qualifying trial is a purpose or population the labels don't print, so no qualifying:** jujube, agmatine, chlorophyll, tudca, apple_cider_vinegar, rosemary, rose_hips. lions_mane, turkey_rhubarb_root, l_serine, pygeum and l_glutamine were here and went back to pending: see "Amount and a missing primary outcome are not grounds" in Batch 4.
 
 ### Older pins this moved
 
@@ -400,7 +400,7 @@ Agent review, abstracts only, November 4, 2026. No credit, no clinician approval
 ### Closed
 
 - **Conflicting or null:** d_beta_hydroxybutyrate_bhb (19 labels, 29451991), gamma_linolenic_acid (11, 23633319), uva_ursi_leaf (11, 30685500), linoleic_acid (6, 23386268), omega_6_fatty_acids (4, 30488422), coffeeberry (1, 37299382).
-- **No qualifying study:** lignans (9, 19352068 is a methods sentence, quoted for the sesamin dose), yerba_mate_leaf (3, 41244043), coffee_fruit (1, 23312069).
+- **No qualifying study:** lignans (9, 19352068 is a methods sentence, quoted for the sesamin dose), coffee_fruit (1, 23312069). yerba_mate_leaf closed here and went back to pending below.
 
 The no-qualifying list across all batches is the `NO_QUALIFYING` set in `test_evidence_backed_970_20261104.py`, read from `literature_corrections.json`.
 
@@ -423,21 +423,34 @@ These three carry `documented_review_scope`. A row that declares a reviewed prep
 
 Ginkgo's stored `effect_direction` is `None`, and its text describes null prevention trials, so "positive" doesn't describe it. This is code on #354, not data, so this PR doesn't change it. No data route closes declared rows and keeps undeclared rows open: the null route would close `Ginkgo Biloba` and `Ginkgo Biloba Leaf Extract`, which `test_undeclared_preparation_stays_open` keeps open. 16 ginkgo labels stay in the pending count until this is decided.
 
-### Amount is not a ground
+### Amount and a missing primary outcome are not grounds
 
-Dose owns adequacy, and Evidence isn't withheld for a lower amount. A purpose or population the label doesn't print is a valid ground. I sorted all 33 no-qualifying closures by what each would rest on with the amount taken out.
+Dose owns adequacy, so Evidence isn't withheld for a lower amount. Where preparation and purpose match, an abstract that names no primary outcome is a limit of what was read, not a finding about the trial, and an unread detail stays unread. A purpose, population or preparation the label doesn't print is a valid ground. The 33 no-qualifying closures were sorted on what each would rest on with those two taken out, and 25 remain. Each is at no credit either way.
 
-- **Back to pending, trial in the packet for the credit ruling:**
-  - lions_mane (21 labels). 18844328 met the standard for a printed preparation, and the closure rested mainly on 500-1000 mg against 3 g/day.
-  - turkey_rhubarb_root (7 labels). 36499011 tested the root extract these labels print, and the closure rested mainly on its dose being stated in anthraquinones.
-- **Stand, with the amount removed from the stated ground:**
-  - On purpose or population: l_serine, agmatine, tudca, l_glutamine, apple_cider_vinegar, rose_hips, jujube, chlorophyll.
-  - On a missing primary outcome or a mixed pool: pygeum.
-  - Text trimmed of amount comparisons, grounds unchanged: african_mango, blood_orange_extract, oat_straw, red_clover, nopal, yerba_mate_leaf.
-- **Closest calls, for you to overrule:**
-  - atp. These labels print the tested Peak ATP at 150 mg against 400 mg in the trials. It stands only because no abstract read names a primary outcome.
-  - yerba_mate_leaf. Its labels carry the tested endurance and metabolic purposes. It stands for the same reason.
-  - rosemary. 41312013 names a primary outcome in healthy adults. It stands because these labels show no marker content and no stress claim.
+**Back to pending, with the paper that would settle each:**
+
+| Ingredient | Labels | Why | Settling paper |
+|---|---|---|---|
+| lions_mane | 21 | Rested mainly on amount | Credit ruling on 18844328 |
+| turkey_rhubarb_root | 7 | Rested on the dose being stated in anthraquinones | Credit ruling on 36499011 |
+| atp | 2 | The tested Peak ATP at a lower amount, with no primary named | 24330670 full text; its abstract also gives no sample size |
+| yerba_mate_leaf | 3 | The tested purposes are on the labels, with no primary named | 29117073 and 26408319 full text |
+| pygeum | 11 | Its pool is mixed in composition, not in result, so it wouldn't close with a primary named | 1702916 full text |
+| phosphatidic_acid | 1 | The label prints the complex and a stress purpose that 25081826 tested | 25081826 full text |
+| l_serine | 16 | One label carries the sleep purpose of 25197619, whose abstract gives no dose, sample size or primary | 25197619 full text |
+| l_glutamine | 81 | Many labels print muscle, sport or immune text, and 38193521 and 33809996 test free L-glutamine with no primary named. The earlier IBS-D ground is true but didn't cover these trials | 38193521 and 33809996 full text |
+
+**Stand, and why:**
+
+- **Purpose or population:** tudca, apple_cider_vinegar, rose_hips, jujube, chlorophyll, agmatine, algae_oil, turkey_tail, oregano, broccoli_sprout, picrorhiza, oat_straw.
+- **Preparation:** rosemary, licorice, red_clover, coffee_fruit, lignans, nopal, puerarin, blood_orange_extract.
+- **No efficacy trial, or no control arm:** goldenseal, diamine_oxidase.
+- **A mixed result would close it even with a primary named:**
+  - african_mango. The meta-analysis says the one low-risk trial had no significantly different outcomes, and the primary of 19254366 was checked in its full text.
+  - fucoidan. The review calls the evidence limited, heterogeneous and inconsistent.
+  - coleus_forskohlii_root. Its review calls the findings inconsistent, and 18500958 found no significant difference in fat mass.
+
+A scan of label statements for these trials' purposes turned up matches for weight on african_mango, rose_hips and blood_orange_extract labels. They were false positives ("sold by weight", "trans fat").
 
 ### For Dr. Pham, batch 4 (no record written)
 

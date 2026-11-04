@@ -20,7 +20,7 @@ rank,canonical_id,labels,stored_direction,batch,recommended_decision
 19,theobromine,19,positive_weak,batch3,closed_no_credit: literature null
 20,activated_charcoal,19,positive_moderate,not read yet,
 21,oregano,18,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
-22,l_serine,16,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
+22,l_serine,16,positive_moderate,batch3,"pending: full text of 25197619 settles the primary outcome"
 23,tudca,16,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
 24,borage_seed_oil,16,positive_moderate,batch3,closed_no_credit: literature null
 25,royal_jelly,15,positive_weak,not read yet,
@@ -33,7 +33,7 @@ rank,canonical_id,labels,stored_direction,batch,recommended_decision
 32,globe_artichoke,13,positive_moderate,batch3,"pending: packet, no credit recommended"
 33,jujube,12,positive_weak,batch3,closed_no_credit: no_qualifying_human_evidence
 34,chlorophyll,12,positive_weak,batch3,closed_no_credit: no_qualifying_human_evidence
-35,pygeum,11,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
+35,pygeum,11,positive_moderate,batch3,"pending: full text of 1702916 settles the primary outcome"
 36,red_clover,11,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
 37,lactase,11,positive_moderate,batch3,"pending: packet, no credit recommended"
 38,rose_hips,10,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
@@ -62,9 +62,9 @@ rank,canonical_id,labels,stored_direction,batch,recommended_decision
 61,lumbrokinase,2,positive_moderate,not read yet,"held: 24229674: the full text gives the capsule amount and frequency, which decides whether it meets the review's standard against labels printing 40 mg (63"
 62,ashwagandha_root,2,positive_strong,batch3,"pending: packet, no credit recommended"
 63,arjuna,2,positive_weak,batch3,closed_no_credit: literature null
-64,atp,2,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
+64,atp,2,positive_moderate,batch3,"pending: full text of 24330670 settles the primary outcome"
 65,algae_oil,1,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
-66,phosphatidic_acid,1,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
+66,phosphatidic_acid,1,positive_moderate,batch3,"pending: full text of 25081826 settles the primary outcome"
 67,maqui_berry,1,positive_moderate,not read yet,held: 31193920: full text would state whether a primary outcome was named and which one. The abstract gives MaquiBright 60 mg daily for 4 weeks and a betwee
 68,siberian_rhubarb,1,positive_moderate,batch3,"pending: packet, no credit recommended"
 69,picrorhiza,1,positive_weak,batch3,closed_no_credit: no_qualifying_human_evidence

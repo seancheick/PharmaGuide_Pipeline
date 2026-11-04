@@ -728,8 +728,49 @@
         "PubMed"
       ],
       "records_screened": 158,
-      "qualifying_human_studies": [],
-      "effect_direction": null,
+      "qualifying_human_studies": [
+        {
+          "pmid": "30108163",
+          "title": "Randomised placebo-controlled trial of dietary glutamine supplements for postinfectious irritable bowel syndrome.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 106,
+          "dose": "15 g/day (5 g 3 times daily)",
+          "duration": "8 weeks",
+          "outcome": "significantly reduced IBS symptom severity scores and normalized intestinal permeability",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Randomised placebo-controlled trial of dietary glutamine supplements for postinfectious irritable bowel syndrome.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30108163/",
+            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "abstract_evidence_quote": "Accordingly, we conducted a randomised, double-blind, placebo-controlled, 8-week-long trial to assess the efficacy and safety of oral glutamine therapy in patients who developed IBS-D with increased intestinal permeability following an enteric infection."
+          }
+        },
+        {
+          "pmid": "32992440",
+          "title": "Gastrointestinal Tolerance of Low, Medium and High Dose Acute Oral l-Glutamine Supplementation in Healthy Adults: A Pilot Study.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 14,
+          "dose": "single beverages of 0.3, 0.6 or 0.9 g/kg fat-free mass (crossover)",
+          "duration": "acute",
+          "outcome": "gastrointestinal tolerance established in healthy adults",
+          "effect_direction": "neutral",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Gastrointestinal Tolerance of Low, Medium and High Dose Acute Oral l-Glutamine Supplementation in Healthy Adults: A Pilot Study.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/32992440/",
+            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "abstract_evidence_quote": "24-h accumulated upper- and lower- and total-GI symptoms wer"
+          }
+        }
+      ],
+      "effect_direction": "mixed",
       "population_context": "Adults with post-infectious IBS-D and intestinal hyperpermeability (efficacy trial); healthy men (acute GI tolerance study)",
       "studied_dose_exposure": {
         "values": [
@@ -738,15 +779,14 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print L-glutamine, glutamine or micronized L-glutamine at 500 mg to 10 g a serving (a few rows print no amount), and 12 labels print N-acetyl-L-glutamine at 500 to 750 mg. One trial meets the review's standard for free L-glutamine: 15 g/day for 8 weeks in post-infectious IBS-D, positive on its named primary (30108163). It is a single trial in a narrow group, and its authors ask for validation. A meta-analysis of oral trials found no overall effect on gut permeability, with an abstract that contradicts itself on its subgroup (39397201). Trials in combat athletes (38193521) and older women (33809996) name no primary. No study read tested N-acetyl-L-glutamine. Abstracts only. The stored tolerance study is not an efficacy trial (32992440). A post-infectious IBS-D purpose is not on these labels, so no study read meets the review's standard for what they print. This does not say the preparation was tested and failed. PMID 30108163 states: 'Large randomised clinical trials (RCTs) should now be done to validate these findings, assess quality of life benefits and explore pharmacological mechanisms.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "applicability_decision": "The IBS trial gave 5 g L-glutamine three times daily (15 g/day) for 8 weeks to adults with post-infectious IBS-D and intestinal hyperpermeability. The second study measured acute GI tolerance of single 0.3-0.9 g/kg fat-free-mass doses in healthy men and is not an efficacy trial. Sports performance or muscle recovery is not established by these sources.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 30108163; packet/INGR_L_GLUTAMINE.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
-        "verified_at": "2026-11-04T00:00:00+00:00",
+        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      },
-      "applicability_status": "no_qualifying_human_evidence"
+      }
     },
     {
       "canonical_id": "l_tyrosine",
@@ -1657,7 +1697,7 @@
         "unit": "mg",
         "basis": "sdg_extract_daily"
       },
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Six labels print Sesame Seed Lignan Extract at 10 to 20 mg, beside GLA, CLA blend or vitamin E rows, and three print HMRlignan Norway spruce lignan extract at 16.7 mg inside a chrysin, maca and nettle formula. No label prints flaxseed lignan or a sesamin amount. The stored trials tested flaxseed lignan, 360 mg/day in 17987126 with a modest HbA1c improvement and 50 mg/day SDG in 32575611 with no effect on bile acids, so they do not apply to these labels. For HMRlignan the one human study read, 24606716, is a single-blind dose comparison in 22 women at 36 and 72 mg/d with pharmacokinetic primary outcomes and no placebo; hot flashes fell within the high-dose group only. For sesame lignans, the trials read gave isolated sesamin at 60 mg/day (19352068, blood pressure fell, no primary outcome named) or 200 mg/day (31309643, inflammatory markers and tender joints improved in rheumatoid arthritis, no primary outcome named; 26151734, between-group differences in pressure and most lipids not significant). The meta-analysis 35311241 reports lower total cholesterol, LDL and systolic pressure across seven sesamin trials and 212 participants, but its abstract gives no dose and names no primary outcome. 26153159 tested sesame lignans at 10 mg combined with 55 mg alpha-tocopherol, near the sesame-plus-vitamin E labels, with no significant between-group difference in fatigue, sleep or appearance overall, a subgroup gain from age 40 and a rise in anti-oxidative capacity; a combination is not the ingredient alone. These reads are of abstracts only, and an abstract that names no primary outcome counts against qualifying for no credit. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 19352068 states: 'Twelve subjects were allocated to 4-wk intake of capsules with 60 mg sesamin per day and 13 subjects to 4-wk intake of a placebo (period 1).' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Six labels print Sesame Seed Lignan Extract at 10 to 20 mg, beside GLA, CLA blend or vitamin E rows, and three print HMRlignan Norway spruce lignan extract at 16.7 mg inside a chrysin, maca and nettle formula. No label prints flaxseed lignan or a sesamin amount. The stored trials tested flaxseed lignan, 360 mg/day in 17987126 with a modest HbA1c improvement and 50 mg/day SDG in 32575611 with no effect on bile acids, so they do not apply to these labels. For HMRlignan the one human study read, 24606716, is a single-blind dose comparison in 22 women at 36 and 72 mg/d with pharmacokinetic primary outcomes and no placebo; hot flashes fell within the high-dose group only. For sesame lignans, the trials read gave isolated sesamin at 60 mg/day (19352068, blood pressure fell, no primary outcome named) or 200 mg/day (31309643, inflammatory markers and tender joints improved in rheumatoid arthritis, no primary outcome named; 26151734, between-group differences in pressure and most lipids not significant). The meta-analysis 35311241 reports lower total cholesterol, LDL and systolic pressure across seven sesamin trials and 212 participants, but its abstract gives no dose and names no primary outcome. 26153159 tested sesame lignans at 10 mg combined with 55 mg alpha-tocopherol, near the sesame-plus-vitamin E labels, with no significant between-group difference in fatigue, sleep or appearance overall, a subgroup gain from age 40 and a rise in anti-oxidative capacity; a combination is not the ingredient alone. These reads are of abstracts only. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 19352068 states: 'Twelve subjects were allocated to 4-wk intake of capsules with 60 mg sesamin per day and 13 subjects to 4-wk intake of a placebo (period 1).' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 19352068; decisions/lignans.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
@@ -4920,15 +4960,35 @@
         "Cochrane Library"
       ],
       "records_screened": 25,
-      "qualifying_human_studies": [],
-      "effect_direction": null,
+      "qualifying_human_studies": [
+        {
+          "pmid": "11869585",
+          "title": "Pygeum africanum for benign prostatic hyperplasia.",
+          "study_type": "systematic_review_cochrane",
+          "sample_size": 1562,
+          "duration": "30-122 days (mean 64)",
+          "outcome": "moderately large improvement in combined urologic symptoms and flow; nocturia -19%, residual urine -24%, peak flow +23% versus placebo",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Pygeum africanum for benign prostatic hyperplasia.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/11869585/",
+            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "abstract_evidence_quote": "To investigate the evidence whether extracts of Pygeum africanum (1) are more effective than placebo in the treatment of Benign Prostatic Hyperplasia (BPH), (2) are as effective as standard pharmacologic BPH treatments, and (3) have less side effects compared to standard BPH drugs."
+          }
+        }
+      ],
+      "effect_direction": "positive_moderate",
       "population_context": "men with symptomatic BPH",
       "studied_dose_exposure": {},
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Ten labels print pygeum bark extract at 500 or 5000 mg with no purpose text; one prints 100 mg alongside saw palmetto. A 1990 placebo-controlled RCT in 263 BPH patients on 50 mg twice daily (1702916) reports 66% vs 31% improved. Cochrane and a journal paper reporting the same counts (11869585, 11099686) pool 18 RCTs that include combination products and call them small and short with varied doses. 10475357 has no placebo. No newer placebo RCT turned up in two searches; a 2020 review (31627963) rates its evidence level IV. These labels' extract ratios aren't printed. Abstracts only. The placebo trial names no primary outcome in its abstract and the pooled review mixes combination products, so no study read meets the review's standard for these labels. This does not say the preparation was tested and failed. PMID 31627963 states: 'Although with an evidence level IV (based on expert opinion) the use of P. africanum seems to be an option in the urological therapeutic arsenal.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "applicability_decision": "A Cochrane review of 18 RCTs (1,562 men; mean 64 days) found Pygeum africanum preparations, alone or in combination, moderately improved urologic symptoms and flow measures versus placebo; the studies were small and short and used varied doses and preparations, so no dose is established.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 31627963; packet/INGR_PYGEUM.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
-        "verified_at": "2026-11-04T00:00:00+00:00",
+        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -4967,8 +5027,7 @@
         "owner": "scripts/data/literature_evidence_records.json::pygeum",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      },
-      "applicability_status": "no_qualifying_human_evidence"
+      }
     },
     {
       "canonical_id": "rosemary",
@@ -6925,19 +6984,39 @@
         "PubMed"
       ],
       "records_screened": 15,
-      "qualifying_human_studies": [],
-      "effect_direction": null,
+      "qualifying_human_studies": [
+        {
+          "pmid": "30626650",
+          "title": "Randomized trial of l-serine in patients with hereditary sensory and autonomic neuropathy type 1.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 18,
+          "dose": "400 mg/kg/day",
+          "duration": "1 year",
+          "outcome": "CMTNS neuropathy score improved versus placebo after 1 year; deoxysphinganine fell 59%",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Randomized trial of l-serine in patients with hereditary sensory and autonomic neuropathy type 1.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/30626650/",
+            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "abstract_evidence_quote": "After 1 year, the l-serine group experienced im"
+          }
+        }
+      ],
+      "effect_direction": "positive_moderate",
       "population_context": "Adults with hereditary sensory and autonomic neuropathy type 1 (HSAN1)",
       "studied_dose_exposure": {},
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The only study meeting the review's standard is an 18-patient RCT in hereditary sensory and autonomic neuropathy type 1 at 400 mg/kg/day, positive on its primary outcome (30626650). These labels print 500 to 2000 mg per serving of plain L-serine; one carries cognitive and sleep purposes. Sleep crossovers report subjective improvement, but the abstract gives no dose, no sample size and no primary outcome (25197619). Other human work is a combination with EPA (32520991), a phase I study with historical controls (28527102), children with GRIN variants (41265180, 38380699), or circadian timing measures (36028887, 29070712). Abstracts only. A rare hereditary neuropathy is not a purpose these labels print, so no study read meets the review's standard for them. This does not say the preparation was tested and failed. PMID 30626650 states: 'High-dose oral l-serine supplementation appears safe in patients with HSAN1 and is potentially effective at slowing disease progression.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "applicability_decision": "One RCT in 18 patients with HSAN1, a rare genetic neuropathy, found 400 mg/kg/day L-serine slowed progression and lowered deoxysphingolipids. This disease-specific, very-high-dose evidence does not establish general neurological benefit or a supplement dose.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 30626650; packet/INGR_L_SERINE.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
-        "verified_at": "2026-11-04T00:00:00+00:00",
+        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      },
-      "applicability_status": "no_qualifying_human_evidence"
+      }
     },
     {
       "canonical_id": "beta_glucan",
@@ -7589,8 +7668,29 @@
         "PubMed"
       ],
       "records_screened": 18,
-      "qualifying_human_studies": [],
-      "effect_direction": null,
+      "qualifying_human_studies": [
+        {
+          "pmid": "28080323",
+          "title": "Oral Adenosine-5'-triphosphate (ATP) Administration Increases Postexercise ATP Levels, Muscle Excitability, and Athletic Performance Following a Repeated Sprint Bout.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 42,
+          "dose": "400 mg/day Peak ATP",
+          "duration": "2 weeks",
+          "outcome": "prevented post-exercise falls in ATP and muscle excitability and increased later-bout Wingate peak power versus baseline",
+          "effect_direction": "positive_moderate",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Oral Adenosine-5'-triphosphate (ATP) Administration Increases Postexercise ATP Levels, Muscle Excitability, and Athletic Performance Following a Repeated Sprint Bout.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/28080323/",
+            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "abstract_evidence_quote": "The purpose of this study was to investigate the effects of ATP supplementation on postexercise ATP levels and on muscle activation and excitability and power following a repeated sprint bout."
+          }
+        }
+      ],
+      "effect_direction": "positive_moderate",
       "population_context": "Healthy men",
       "studied_dose_exposure": {
         "values": [
@@ -7599,15 +7699,14 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. Both labels print Peak ATP at 150 mg, one as adenosine 5'-triphosphate disodium with alpha lipoic acid in a two-ingredient product (213851) and one alone (213850). The stored trial gave 400 mg of disodium ATP for 2 weeks to 42 healthy men and reports held muscle excitability and higher later-bout peak power against baseline, with no primary outcome named (28080323). A 12-week trial at 400 mg/day reports greater strength, jump power and muscle thickness than placebo in resistance-trained men, and names no primary outcome (24330670). A meta-analysis of five RCTs with 121 men found greater maximal strength, no difference in repetitions or anaerobic power, and credits 400 mg (38535745). Two 14-day crossovers at 400 mg in 20 adults found no difference in 3-minute test performance (37092374), and better reaction time with no difference in mood or cognition measures (37599676). A single 400 mg dose didn't improve strength indicators in 18 men but reduced fatigue as exercise went on (38193939). 25006331 reports higher blood flow in a pilot of 12 with no control group described. The only trial read that went below 400 mg was acute, in 20 men: 200 mg did not differ significantly from placebo on repetitions and 100 mg showed no improvement over placebo on performance (34957398). No abstract read names a primary outcome, which is the ground here; any gap in amount is for Dose. Abstracts only. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 34957398 states: 'Conclusions: In this study, the effective minimal dose of acute oral ATP supplementation during resistance exercise to increase performance was determined to be 400 mg, while as little as 100 mg showed improvements in perceived exertion.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "applicability_decision": "400 mg/day disodium ATP for 2 weeks prevented post-exercise falls in ATP and muscle excitability and raised later-bout Wingate peak power in 42 healthy men.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 34957398; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
-        "verified_at": "2026-11-04T00:00:00+00:00",
+        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
-      },
-      "applicability_status": "no_qualifying_human_evidence"
+      }
     },
     {
       "canonical_id": "neurofactor",
@@ -11341,8 +11440,29 @@
         "Cochrane Library"
       ],
       "records_screened": 28,
-      "qualifying_human_studies": [],
-      "effect_direction": null,
+      "qualifying_human_studies": [
+        {
+          "pmid": "26408319",
+          "title": "Anti-obesity effects of Yerba Mate (Ilex Paraguariensis): a randomized, double-blind, placebo-controlled clinical trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 30,
+          "dose": "3 g/day Yerba Mate (three capsules with each meal)",
+          "duration": "12 weeks",
+          "outcome": "statistically significant decrease in body fat mass, percent body fat, and waist-hip ratio compared to placebo",
+          "effect_direction": "positive_weak",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Anti-obesity effects of Yerba Mate (Ilex Paraguariensis): a randomized, double-blind, placebo-controlled clinical trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/26408319/",
+            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "abstract_evidence_quote": "Measured outcomes were efficacy (abdominal fat distribution, anthropometr"
+          }
+        }
+      ],
+      "effect_direction": "positive_weak",
       "population_context": "overweight and obese adults",
       "studied_dose_exposure": {
         "values": [
@@ -11351,11 +11471,11 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. All three labels are Explosive Energy Metabolizer formulas printing Yerba Mate leaf extract at 500 mg among 12 to 17 active rows, with endurance, energy, metabolic or cardiovascular purposes. The stored trial 26408319 gave capsules at 3 g/day to 30 adults with obesity and reported lower body fat mass, percent body fat and waist-hip ratio against placebo, but its abstract names no primary outcome. 29117073 gave 5 g daily to 11 trained cyclists and improved time trial performance, and 28809814 gave 2 g to 12 active women and raised fat oxidation; neither names a primary outcome. 25562195 gave yerba mate tea at 5 g/day for blood viscosity, a purpose these labels do not carry. 33374524 gave an encapsulated dry extract providing 580 mg of caffeoyl quinic acid derivatives daily and found no significant effects of treatment, but its abstract gives no extract mass and names no primary outcome. 35807800, a pilot in ten men, found no change in muscle strength with no dose in the abstract. The meta-analysis 41244043 reports glycemic signals from two trials in pre-diabetes and no significant effect on lipids, fasting glucose, waist or BMI, with no single dose. The review 36647770 rates risk of bias high in 22 of 32 studies. These reads are of abstracts only, and an abstract that names no primary outcome counts against qualifying for no credit. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 41244043 states: 'Yerba Maté consumption may demonstrate favorable effects on glycemic control, though its impact on lipid profiles and weight management appears to be limited.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "applicability_decision": "3 g/day Yerba Mate (three capsules with each meal) for 12 weeks reduced body fat mass, percent body fat and waist-hip ratio versus placebo in 30 obese Korean adults.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 41244043; decisions/yerba_mate_leaf.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
-        "verified_at": "2026-11-04T00:00:00+00:00",
+        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -11394,8 +11514,7 @@
         "owner": "scripts/data/literature_evidence_records.json::yerba_mate_leaf",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      },
-      "applicability_status": "no_qualifying_human_evidence"
+      }
     },
     {
       "canonical_id": "coffeeberry",
@@ -11558,7 +11677,7 @@
         ],
         "unit": "mg"
       },
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label, CaffPhenol, prints CoffeeBerry Coffee, Coffea arabica whole fruit extract, at 143 mg, with Caffeine 100 mg under the words standardized to contain, and Suntheanine L-theanine 200 mg. It says the dose holds 100 mg of caffeine. The stored 23312069 gave a single 100 mg dose and reported plasma BDNF up 143% from baseline in 10 people, with no cognition or alertness measured and no primary outcome named. The closest caffeine-carrying trial, 42234539, gave a whole Coffea arabica cherry extract with 200 mg caffeine and 15 mg polyphenols to 12 cyclists and improved time trial work; it names no primary outcome, gives no extract mass, gives twice the caffeine, and tests exercise, a purpose this label does not carry. Trials of polyphenol-rich or decaffeinated extract fall short as a different preparation: 39064791 at 200 mg and 31829793 reported cognitive gains on selected measures and name no primary outcome. 37299382 gave coffeeberry extract standardized to 40% chlorogenic acid at 100 and 300 mg and its authors report no beneficial effect on mood, energy or cognition, but it is not plainly this caffeine-standardized extract, and it names no primary outcome. No trial read tests the extract with theanine. These reads are of abstracts only, and an abstract that names no primary outcome counts against qualifying for no credit. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 23312069 states: 'However, larger clinical studies are needed to support this possibility.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label, CaffPhenol, prints CoffeeBerry Coffee, Coffea arabica whole fruit extract, at 143 mg, with Caffeine 100 mg under the words standardized to contain, and Suntheanine L-theanine 200 mg. It says the dose holds 100 mg of caffeine. The stored 23312069 gave a single 100 mg dose and reported plasma BDNF up 143% from baseline in 10 people, with no cognition or alertness measured and no primary outcome named. The closest caffeine-carrying trial, 42234539, gave a whole Coffea arabica cherry extract with 200 mg caffeine and 15 mg polyphenols to 12 cyclists and improved time trial work; it names no primary outcome, gives no extract mass, gives twice the caffeine, and tests exercise, a purpose this label does not carry. Trials of polyphenol-rich or decaffeinated extract fall short as a different preparation: 39064791 at 200 mg and 31829793 reported cognitive gains on selected measures and name no primary outcome. 37299382 gave coffeeberry extract standardized to 40% chlorogenic acid at 100 and 300 mg and its authors report no beneficial effect on mood, energy or cognition, but it is not plainly this caffeine-standardized extract, and it names no primary outcome. No trial read tests the extract with theanine. These reads are of abstracts only. No study read meets the review's standard for what these labels print. This does not say the preparation was tested and failed. PMID 23312069 states: 'However, larger clinical studies are needed to support this possibility.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 23312069; decisions/coffee_fruit.json; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
@@ -14670,7 +14789,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print Coleus forskohlii extract: 100 mg on a product named Forskolin 10 mg, 50 mg of root extract on another single-ingredient product, and 250 mg in two fat burner products with 10 and 11 ingredients. A fifth product is named Coleus Forskohlii 500 mg, and the review table holds no amount row for it. No study read meets the standard of a randomized trial or meta-analysis of the ingredient alone, oral, with a stated dose, population and primary outcome with a direction. The body composition trials all gave about 250 mg of 10% forskolin extract twice daily and name no primary outcome. In 30 overweight men, body fat percentage and fat mass fell versus placebo (16129715, abstract only). In 23 mildly overweight women, body mass tended to differ and fat mass did not differ significantly (18500958, abstract and full text passages). In 30 overweight adults on a hypocaloric diet, insulin and insulin resistance improved versus placebo while waist and hip reductions occurred in both groups (26593941, abstract and full text passages). A 2026 quasi-randomized trial in 60 overweight adults reported lower body weight and waist circumference versus placebo; it is not fully randomized (42678522, abstract and full text passages). A 2026 systematic review of four randomized trials calls the weight and body composition findings inconsistent and asks for high-quality trials (42847203). Oral forskolin 10 mg/day had fewer asthma attacks than inhaled cromoglycate (16749416) and no lung function difference from inhaled beclomethasone (20515580), both single-blind against active drugs, with no primary outcome named. Oral forskolin capsules improved a smell score after COVID-19 (39001919), with no dose in the abstract and a purpose these labels do not carry. The full text of 16129715 wasn't open, so its statement of a primary outcome rests on the abstract. The evidence does not support credit for these labels, and it does not show that the extract fails. This does not say the preparation was tested and failed. PMID 42847203 states: 'Evidence suggests that C. forskohlii extract may reduce fat mass and body fat percentage; however, findings regarding weight loss and overall body composition have been inconsistent.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The labels print Coleus forskohlii extract: 100 mg on a product named Forskolin 10 mg, 50 mg of root extract on another single-ingredient product, and 250 mg in two fat burner products with 10 and 11 ingredients. A fifth product is named Coleus Forskohlii 500 mg, and the review table holds no amount row for it. No study read meets the standard of a randomized trial or meta-analysis of the ingredient alone, oral, with a stated dose, population and primary outcome with a direction. The body composition trials all gave about 250 mg of 10% forskolin extract twice daily and name no primary outcome. In 30 overweight men, body fat percentage and fat mass fell versus placebo (16129715, abstract only). In 23 mildly overweight women, body mass tended to differ and fat mass did not differ significantly (18500958, abstract and full text passages). In 30 overweight adults on a hypocaloric diet, insulin and insulin resistance improved versus placebo while waist and hip reductions occurred in both groups (26593941, abstract and full text passages). A 2026 quasi-randomized trial in 60 overweight adults reported lower body weight and waist circumference versus placebo; it is not fully randomized (42678522, abstract and full text passages). A 2026 systematic review of four randomized trials calls the weight and body composition findings inconsistent and asks for high-quality trials (42847203). Oral forskolin 10 mg/day had fewer asthma attacks than inhaled cromoglycate (16749416) and no lung function difference from inhaled beclomethasone (20515580), both single-blind against active drugs, with no primary outcome named. Oral forskolin capsules improved a smell score after COVID-19 (39001919), with no dose in the abstract and a purpose these labels do not carry. The full text of 16129715 wasn't open, so its statement of a primary outcome rests on the abstract. These results are inconsistent, so no clear benefit would follow even if a primary outcome were named. The evidence does not support credit for these labels, and it does not show that the extract fails. This does not say the preparation was tested and failed. PMID 42847203 states: 'Evidence suggests that C. forskohlii extract may reduce fat mass and body fat percentage; however, findings regarding weight loss and overall body composition have been inconsistent.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
       "applicability_status": "no_qualifying_human_evidence",
       "verification_provenance": {
         "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 42847203; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
@@ -34062,8 +34181,30 @@
         "Cochrane Library"
       ],
       "records_screened": 18,
-      "qualifying_human_studies": [],
-      "effect_direction": null,
+      "qualifying_human_studies": [
+        {
+          "pmid": "23035701",
+          "title": "Efficacy of phosphatidic acid ingestion on lean body mass, muscle thickness and strength gains in resistance-trained men.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 16,
+          "primary_endpoint": "lean body mass, 1RM squat and bench press strength",
+          "effect_direction": "positive_moderate",
+          "dose": "750 mg/day",
+          "duration": "8 weeks",
+          "outcome": "Parametric analyses found no significant between-group differences. Exploratory magnitude-based inferences suggested likely benefit for squat strength and very likely benefit for lean body mass; these are not statistically significant between-group findings.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy of phosphatidic acid ingestion on lean body mass, muscle thickness and strength gains in resistance-trained men.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/23035701/",
+            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "abstract_evidence_quote": "Phosphatidic acid (PA) has been reported to activate the mammalian target of rapamycin (mTOR) signaling pathway and is thought to enhance the anabolic effects of resistance training."
+          }
+        }
+      ],
+      "effect_direction": "positive_moderate",
       "population_context": "Resistance-trained adult men following an 8-week, 4-day/week training program at local gyms without investigator supervision, with weekly training-log review and feedback",
       "studied_dose_exposure": {
         "values": [
@@ -34072,11 +34213,11 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Finished review with no qualifying study for these labels, so this review completes with no Evidence credit. The one label (DSLD 82935, Stress Hormone Balancing Blend) prints Phosphatidylserine & Phosphatidic Acid 400 mg as a blend with no separate amount for phosphatidic acid, and carries a stress hormone purpose rather than a muscle purpose. Abstracts only. Two trials tested 750 mg of phosphatidic acid alone during resistance training: PMID 28177725 found no group differences in muscle thickness or 1RM strength, and PMID 23035701, a 16-man pilot, reported that parametric analysis was unable to demonstrate significant differences, with likely benefit only by magnitude based inference. Neither abstract names a primary outcome and neither concerns stress hormones. PMID 25081826 tested a soy phosphatidylserine and phosphatidic acid complex for the endocrine stress response; 400 mg PS plus 400 mg PA normalized ACTH and cortisol responses in chronically high but not low stressed men, the 200 mg plus 200 mg arm showed no significant differences, and the abstract names no primary outcome. PMID 29576358 reports a positive primary outcome (DRSP) for 400 mg PS plus 400 mg PA in premenstrual syndrome, a purpose this label does not carry. Both are two-ingredient complexes, not phosphatidic acid alone. PMID 27274715 tested MaxxTOR, which adds L-leucine, HMB and vitamin D3. No study meets the review's standard for this label, so no credit is proposed. This does not say the preparation was tested and failed. PMID 28177725 states: 'Results of this study suggest that PA supplementation, in combination with a 3 days·week-1 resistance-training program for 8 weeks, did not have a differential effect compared with PL on changes in muscle thickness or 1RM strength.' Agent review (Claude), 2026-11-04; not clinician reviewed.",
-      "applicability_status": "no_qualifying_human_evidence",
+      "applicability_decision": "The source tested 750 mg/day of Mediator phosphatidic acid capsules during eight weeks of resistance training with post-workout protein provided to both groups. Its exploratory magnitude-based inference is not a proven minimum effective dose or a proportional adequacy curve.",
+      "applicability_status": "applicable_reviewed_trials",
       "verification_provenance": {
-        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-04: PubMed abstracts read November 4, 2026; decision quote from PMID 28177725; no clinician approval and no scoring credit; receipts scripts/audits/evidence_backed_970_20261104",
-        "verified_at": "2026-11-04T00:00:00+00:00",
+        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {

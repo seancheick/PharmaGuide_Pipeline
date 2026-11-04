@@ -5,7 +5,7 @@
   "direction_as_read": "mixed: one large-effect 15 g/day trial in post-infectious IBS-D is positive on a named primary; a meta-analysis of oral trials found no overall effect on gut permeability; sports evidence is small and has no named primary",
   "decision": "closed_no_credit",
   "summary": "The labels print L-glutamine, glutamine or micronized L-glutamine at 500 mg to 10 g a serving (a few rows print no amount), and 12 labels print N-acetyl-L-glutamine at 500 to 750 mg. One trial meets the reading bar for free L-glutamine: 15 g/day for 8 weeks in post-infectious IBS-D, positive on its named primary (30108163). It is a single trial in a narrow group at above the labels' amounts, and its authors ask for validation. A meta-analysis of oral trials found no overall effect on gut permeability, with an abstract that contradicts itself on its subgroup (39397201). Trials in combat athletes (38193521) and older women (33809996) name no primary. No study read tested N-acetyl-L-glutamine. Abstracts only.",
-  "question_for_clinician": null,
+  "question_for_clinician": "38193521 (combat athletes: mucosal immunity, URTI, recovery) and 33809996 (older women: strength and power) test free L-glutamine, and many labels print muscle, sport or immune text. Neither abstract names a primary outcome, which is a limit of the read, not a finding. Do these support credit for those labels? Their full texts settle the primary outcomes. N-acetyl-L-glutamine (12 labels) has no trial read.",
   "study_contexts": [
     {
       "context_schema_version": "1.1.0",
@@ -476,6 +476,5 @@
         "doi": "10.3390/nu13031025"
       }
     ]
-  },
-  "closed_through": "scripts/data/literature_evidence_records.json: l_glutamine no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+  }
 }

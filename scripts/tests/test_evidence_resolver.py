@@ -585,9 +585,9 @@ def test_evening_primrose_oil_null_unfavorable():
 
 
 def test_pygeum_reviewed_clinical_evidence():
-    """Pygeum: the placebo trial names no primary and the Cochrane review pools combinations (review 2026-11-04)."""
+    """Pygeum africanum extract for BPH is supported by Cochrane review at >= 100 mg."""
     res = er.resolve_evidence_for_canonical("pygeum", dose_value=100.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert res.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
     assert "backed_clinical_studies" in res.matched_owners
 
 

@@ -212,9 +212,7 @@ def test_conflicting_rationale_names_both_sides(canonical, positive, null_quote)
     ("zeaxanthin", ["28079755", "23644932"]),
     ("goldenseal", ["17495878", "32683037"]),
     ("agmatine", ["20447305"]),
-    ("l_glutamine", ["30108163", "39397201"]),
     ("lignans", ["17987126", "24606716", "19352068"]),
-    ("yerba_mate_leaf", ["26408319", "33374524"]),
     ("coffee_fruit", ["23312069", "37299382"]),
 ])
 def test_no_qualifying_decision_names_the_human_research_it_read(canonical, tested_elsewhere):

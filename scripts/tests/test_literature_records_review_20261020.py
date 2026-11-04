@@ -26,10 +26,10 @@ def _study(record, pmid):
 # A review closed these with no qualifying study. The owner keeps no rows for them,
 # so each decision names the study that used to be the row.
 @pytest.mark.parametrize("cid, pmid", [
-    ("l_glutamine", "32992440"), ("lignans", "32575611"), ("rose_hips", "16195164"), ("atp", "28080323"),
+    ("lignans", "32575611"), ("rose_hips", "16195164"),
     ("algae_oil", "18589030"), ("tudca", "8674405"), ("nopal", "22805855"), ("jujube", "33385511"),
     ("fucoidan", "36307493"), ("diamine_oxidase", "31807350"), ("red_clover", "33920485"),
-    ("chlorophyll", "7350215"), ("pygeum", "11869585"), ("apple_cider_vinegar", "28292654"),
+    ("chlorophyll", "7350215"), ("apple_cider_vinegar", "28292654"),
     ("african_mango", "19254366"),
 ])
 def test_closed_record_names_the_study_that_left_it(records, cid, pmid):
@@ -221,6 +221,7 @@ def test_ipriflavone_keeps_its_safety_finding_on_the_real_trial(records):
 
 
 FIGURES_B = [
+    ("l_glutamine", "32992440", "sample_size", 14, 8),
     ("cryptoxanthin", "37242207", "sample_size", 90, 32),
     ("green_coffee_bean", "16820341", "sample_size", 28, 117),
     ("pumpkin", "25196580", "sample_size", 1431, 47),
@@ -229,6 +230,7 @@ FIGURES_B = [
     ("nicotinamide_riboside", "27721479", "dose", "single doses", "1000 mg/day"),
     ("beta_glucan", "23378458", "sample_size", 77, 162),
     ("borage_seed_oil", "8214997", "sample_size", 37, 56),
+    ("atp", "28080323", "sample_size", 42, 16),
     ("milk_basic_protein", "17048062", "sample_size", 35, 30),
     ("lychee_polyphenol", "40887285", "dose", "200 mg/day", "100 mg/day"),
     ("cranberry_fruit", "37068952", "sample_size", 8857, 8611),
@@ -248,7 +250,7 @@ def test_batch_b_study_figures_match_the_article(records, cid, pmid, field, repo
 
 # Figures no cited source reports are removed rather than kept.
 REMOVED = [
-    ("hawthorn", "12798455", "dose"),
+    ("pygeum", "11869585", "dose"), ("hawthorn", "12798455", "dose"),
     ("aloe_vera", "27009750", "dose"), ("horse_chestnut_seed", "15106197", "dose"),
     ("butchers_broom_root", "12040966", "dose"), ("evening_primrose_oil", "23633319", "dose"),
     ("activated_charcoal", "3521259", "dose"), ("colostrum", "21148400", "dose"),

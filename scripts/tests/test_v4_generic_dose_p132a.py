@@ -996,11 +996,7 @@ def test_retiring_literature_dose_targets_preserves_descriptive_source_exposure(
     }
     assert record["verification_result"] == "authoritative_pubmed_verified"
     assert record["verification_provenance"]["all_pmids_verified"] is True
-    if record.get("applicability_status") == "no_qualifying_human_evidence":
-        # A finished no-qualifying review holds no rows; it names its sources in the decision.
-        assert "23035701" in record["applicability_decision"]
-    else:
-        assert record["qualifying_human_studies"]
+    assert record["qualifying_human_studies"]
     semantics = record["reference_semantics"]
     assert semantics["reference_type"] == "no_benchmark"
     assert semantics["curve"] == "completed_no_benchmark_neutral"
