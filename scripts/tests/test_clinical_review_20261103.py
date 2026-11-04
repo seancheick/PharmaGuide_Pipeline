@@ -17,9 +17,8 @@ sys.path.insert(0, str(ROOT))
 
 from enrich_supplements_v3 import SupplementEnricherV3
 
-REVIEW = (
-    ROOT / "audits" / "clinical_review_20261103" / "DR_PHAM_REVIEW_20261103.md"
-).read_text(encoding="utf-8")
+REVIEW_DIR = ROOT / "audits" / "clinical_review_20261103"
+REVIEW = (REVIEW_DIR / "DR_PHAM_REVIEW_20261103.md").read_text(encoding="utf-8")
 RULES = {
     rule["id"]: rule
     for rule in json.loads(
@@ -192,5 +191,68 @@ def test_tansy_breastfeeding_tier_did_not_move(enricher):
 
 def test_tansy_review_is_attributed_to_her():
     rule = RULES["RULE_BANNED_TANSY_PREGNANCY"]
+    assert "Dr. Pham" in rule["review_owner"]
+    assert rule["last_reviewed"] == "2026-11-03"
+
+
+# --- Caffeine in pregnancy (question A) -------------------------------------
+
+CAFFEINE_HEADLINE = "High caffeine intake during pregnancy"
+CAFFEINE_REVIEWED_FIRST = "This supplement provides 200 mg or more of caffeine per serving."
+CAFFEINE_FIRST = "This supplement provides 200 mg or more of caffeine a day."
+CAFFEINE_REST = (
+    "ACOG recommends keeping total daily caffeine intake below 200 mg during pregnancy, "
+    "including caffeine from drinks, foods and supplements. Avoid this high-caffeine supplement "
+    "during pregnancy unless your prenatal care professional advises otherwise."
+)
+
+
+def _caffeine(enricher, amount):
+    return _hits(enricher, "caffeine", db="ingredient_quality_map", quantity=amount)
+
+
+def test_expected_caffeine_copy_is_her_copy_with_the_recorded_change():
+    assert CAFFEINE_HEADLINE in REVIEW
+    assert f"{CAFFEINE_REVIEWED_FIRST} {CAFFEINE_REST}" in REVIEW
+    note = (REVIEW_DIR / "CAFFEINE_WORDING_CHANGE.md").read_text(encoding="utf-8")
+    assert CAFFEINE_REVIEWED_FIRST in note and CAFFEINE_FIRST in note
+
+
+@pytest.mark.parametrize("amount", [200, 200.1, 400])
+def test_caffeine_at_or_above_200_mg_is_avoid_with_her_copy(enricher, amount):
+    hit = _caffeine(enricher, amount)["pregnancy"]
+    assert hit["severity"] == "avoid"
+    assert hit["alert_headline"] == CAFFEINE_HEADLINE
+    assert hit["alert_body"] == f"{CAFFEINE_FIRST} {CAFFEINE_REST}"
+    assert hit["dose_decision"]["consumer_disposition"] == "block"
+
+
+@pytest.mark.parametrize("amount", [100, 199.9])
+def test_caffeine_below_200_mg_keeps_the_monitor_tier_and_never_her_copy(enricher, amount):
+    hit = _caffeine(enricher, amount)["pregnancy"]
+    assert hit["severity"] == "monitor"
+    assert hit["alert_headline"] != CAFFEINE_HEADLINE
+    assert CAFFEINE_FIRST not in hit["alert_body"]
+
+
+@pytest.mark.parametrize("amount", [199.9, 200, 200.1])
+def test_the_pregnancy_threshold_leaves_breastfeeding_alone(enricher, amount):
+    hit = _caffeine(enricher, amount)["lactation"]
+    assert hit["severity"] == "caution"
+    assert CAFFEINE_HEADLINE != hit["alert_headline"]
+
+
+def test_caffeine_threshold_is_on_the_daily_amount():
+    threshold = next(
+        t for t in RULES["RULE_INGREDIENT_CAFFEINE"]["dose_thresholds"] if t["target_id"] == "pregnancy"
+    )
+    assert (threshold["basis"], threshold["comparator"], threshold["value"], threshold["unit"]) == (
+        "per_day", ">=", 200, "mg",
+    )
+    assert threshold["severity_if_met"] == "avoid"
+
+
+def test_caffeine_review_is_attributed_to_her():
+    rule = RULES["RULE_INGREDIENT_CAFFEINE"]
     assert "Dr. Pham" in rule["review_owner"]
     assert rule["last_reviewed"] == "2026-11-03"

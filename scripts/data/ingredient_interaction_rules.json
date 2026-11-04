@@ -1922,7 +1922,10 @@
               "severity_if_met": "avoid",
               "severity_if_not_met": "monitor"
             }
-          }
+          },
+          "alert_headline_if_met": "High caffeine intake during pregnancy",
+          "alert_body_if_met": "This supplement provides 200 mg or more of caffeine a day. ACOG recommends keeping total daily caffeine intake below 200 mg during pregnancy, including caffeine from drinks, foods and supplements. Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise.",
+          "action_if_met": "Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise."
         },
         {
           "scope": "condition",
@@ -1996,8 +1999,8 @@
         "direction": "harmful",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
+      "last_reviewed": "2026-11-03",
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, pregnancy threshold and copy); pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_CHROMIUM_GLUCOSE",
