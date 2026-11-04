@@ -126,6 +126,8 @@ def test_no_safflower_alias_reaches_a_named_cla_form(iqm):
     [
         pytest.param(_form("SafflowerMax CLA", group="Safflower"), id="branded-token"),
         pytest.param(_form("Safflower 80%", group="Safflower"), id="percent-in-name"),
+        pytest.param(_form("Safflower 80%"), id="percent-in-name-and-group"),
+        pytest.param(_form("Safflower 80"), id="digit-in-name-and-group"),
         pytest.param(_form("Safflower Extract", group="Safflower"), id="extract"),
         pytest.param(_form("Safflower", percent=80), id="printed-percent"),
         pytest.param(_form("Safflower", category="non-nutrient/non-botanical"), id="not-botanical"),

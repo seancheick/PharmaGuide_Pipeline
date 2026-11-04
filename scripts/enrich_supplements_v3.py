@@ -9389,9 +9389,10 @@ class SupplementEnricherV3:
         match a real form of that parent, so a listed IQM form still wins.
 
         A fatty-acid parent accepts only a bare botanical source (295001 CLA
-        from safflower): the token is exactly its own DSLD ingredient group and
-        no other percentage is printed. A branded or standardized token stays
-        unmapped for curation rather than reaching the nondisclosure floor."""
+        from safflower): the token is exactly its own DSLD ingredient group, holds
+        no digit or percent, and no other percentage is printed. A branded or
+        standardized token stays unmapped for curation rather than reaching the
+        nondisclosure floor."""
         category = (form_data.get('dsld_category') or '').lower().strip()
         parent = (parent_category or '').lower()
         if category in _SOURCE_CLASS_FORM_CATEGORIES and parent in _DEFINED_NUTRIENT_PARENT_CATEGORIES:
@@ -9399,6 +9400,7 @@ class SupplementEnricherV3:
         return (category == 'botanical'
                 and parent == 'fatty_acids'
                 and form_data.get('percent_share') in (None, 1.0)
+                and not re.search(r"[\d%]", str(form_data.get('raw_form_text') or ""))
                 and cls._norm_form_name(form_data.get('raw_form_text'))
                 == cls._norm_form_name(form_data.get('dsld_ingredient_group')))
 
