@@ -19,9 +19,11 @@ Cross-source consistency (different shapes, same underlying truth):
   - core.has_banned_substance == 1  ⇔  blob.warnings contains a
     type='banned_substance' entry
 
+The six blob pillar scores reconcile to the whole-number catalog score.
+
 Fields the blob does NOT duplicate (queryable scalars; core-only):
   quality_score_v4_100, score_display_100_equivalent, image_url,
-  has_recalled_ingredient. Nothing to drift, nothing to assert.
+  has_recalled_ingredient.
 """
 
 import sys
@@ -35,6 +37,8 @@ from build_final_db import (  # noqa: E402
     build_core_row,
     build_detail_blob,
 )
+
+from scoring_v4.quality_score import shipped_whole_score  # noqa: E402
 
 from test_build_final_db import (  # noqa: E402
     PRODUCTS_CORE_COLUMNS,
@@ -175,3 +179,33 @@ def test_parity_columns_exist_in_products_core_schema():
             f"Parity test relies on core column {col!r} which is no "
             f"longer in PRODUCTS_CORE_COLUMNS — update this test."
         )
+
+
+@pytest.mark.parametrize("total, shipped", [(75.4, 75), (75.5, 76), (75.6, 76)])
+def test_blob_pillars_reconcile_to_the_shipped_whole_score(total, shipped):
+    enriched = make_enriched()
+    scored = make_scored()
+    scored["quality_pillars_v4"]["formulation"]["score"] = round(15 + (total - 75), 1)
+    scored["quality_score_v4_100"] = total
+
+    blob = build_detail_blob(enriched, scored)
+    core = row_as_dict(build_core_row(enriched, scored, EXPORTED_AT, detail_blob=blob))
+    pillars = blob["quality_pillars_v4"]
+    assert set(pillars) == {
+        "formulation", "dose", "evidence", "transparency", "verification", "safety_hygiene",
+    }
+    assert shipped_whole_score(sum(p["score"] for p in pillars.values())) == shipped
+    assert core["quality_score_v4_100"] == shipped
+
+
+@pytest.mark.parametrize("verdict", ["BLOCKED", "UNSAFE"])
+def test_suppressed_score_has_no_numeric_breakdown(verdict):
+    enriched = make_enriched()
+    scored = make_scored(verdict)
+    scored["quality_pillars_v4"] = None
+
+    blob = build_detail_blob(enriched, scored)
+    core = row_as_dict(build_core_row(enriched, scored, EXPORTED_AT, detail_blob=blob))
+    assert core["quality_score_status"] == "suppressed_safety"
+    assert core["quality_score_v4_100"] is None
+    assert blob["quality_pillars_v4"] is None
