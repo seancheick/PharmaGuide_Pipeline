@@ -1,8 +1,8 @@
 # Per-product sort, 2026.11.02 not_scored labels
 
-Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were replayed on main and all reproduced: these 135, plus 17 outside this sort and unchanged (15 Cascara and 2 others, listed in `research.md`). Sort: **a** our gap, **b** real label limit, **c** Sean's decision (codes C1 to C13 in the PR and `research.md`). Replay is the clean → enrich → score path on frozen raw labels. Nothing is published.
+Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were replayed on main and all reproduced: these 135, plus 17 outside this sort and unchanged (15 Cascara and 2 others, listed in `research.md`). Sort: **a** our gap, **b** real label limit, **c** Sean's decision (codes C1 to C13 in the PR and `research.md`). That replay is the clean → enrich → score path on frozen raw labels. The 18 labels this sort moved or held after it, the 9 scored here, the 3 held and the 6 #335 fixed, were measured again from raw labels through `build_scored_artifact` on main `82c9a1479` with this branch merged. Nothing is published.
 
-## Moved to scored (12)
+## Moved to scored (9)
 
 | ID | Product | Before | After score | After verdict | Safety status (unchanged) |
 |---|---|---|---|---|---|
@@ -13,9 +13,6 @@ Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were repla
 | 312832 | BulkSupplements.com Omega 3-6-9 Softgels 2400 mg | no score, NOT_SCORED | 58.1 | SAFE | no_known_catalog_concern |
 | 294583 | BulkSupplements.com Omega 3-6-9 Softgels (1200 mg) | no score, NOT_SCORED | 58.1 | SAFE | no_known_catalog_concern |
 | 285637 | Garden of Life MyKind Organics Sleep Well R&R Spray | no score, NOT_SCORED | 56.9 | SAFE | no_known_catalog_concern |
-| 294296 | BulkSupplements.com Wild Cherry Extract | no score, NOT_SCORED | 54.4 | SAFE | no_known_catalog_concern |
-| 295001 | BulkSupplements.com Conjugated Linoleic Acid (CLA) | no score, NOT_SCORED | 54.3 | SAFE | no_known_catalog_concern |
-| 241290 | Garden of Life Extraordinary Beauty Lovely Legs | no score, NOT_SCORED | 53.2 | SAFE | no_known_catalog_concern |
 | 28963 | Garden of Life Primal Defense Kids Probiotic Formula Natural Banana Flavor | no score, NOT_SCORED | 50.9 | SAFE | no_known_catalog_concern |
 | 328465 | Life Extension Ginseng Energy Boost | no score, NOT_SCORED | 48.2 | SAFE | no_known_catalog_concern |
 
@@ -23,17 +20,17 @@ Before, every product here is `not_scored` / `NOT_SCORED`; 152 labels were repla
 
 | ID | Product | Sort | Blocking label row | Disposition | After (score, verdict / safety) | Still blocking |
 |---|---|---|---|---|---|---|
-| 260262 | GNC Fish Oil Lemon | a | no_score_eligible_active_rows | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
-| 294580 | BulkSupplements.com Oyster Extract | a | ingredientRows[0] Oyster Shell Extract 500 mg | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, dose_assessment_incomplete |
-| 294581 | BulkSupplements.com Oyster Extract | a | ingredientRows[0] Oyster Shell Extract 500 mg | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, dose_assessment_incomplete |
-| 294582 | BulkSupplements.com Oyster Extract | a | ingredientRows[0] Oyster Shell Extract 500 mg | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, dose_assessment_incomplete |
-| 330192 | BulkSupplements.com Oyster Extract Powder 500 mg | a | ingredientRows[0] Oyster Whole Extract 500 mg | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, dose_assessment_incomplete |
-| 330215 | BulkSupplements.com Oyster Extract Powder 500 mg | a | ingredientRows[0] Oyster Whole Extract 500 mg | fixed by #335, not redone | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, dose_assessment_incomplete |
-| 241290 | Garden of Life Extraordinary Beauty Lovely Legs | a | ingredientRows[0] Diosmin 600 mg (form: Citrus Bioflavonoid Complex) | fixed: form read | scored 53.2, SAFE / no_known_catalog_concern | — |
+| 260262 | GNC Fish Oil Lemon | a | no_score_eligible_active_rows | fixed by #335, merged | scored 53.8, SAFE / no_known_catalog_concern | omega_evidence_assessment_incomplete |
+| 294580 | BulkSupplements.com Oyster Extract | a | ingredientRows[0] Oyster Shell Extract 500 mg | fixed by #335, merged | scored 54.4, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
+| 294581 | BulkSupplements.com Oyster Extract | a | ingredientRows[0] Oyster Shell Extract 500 mg | fixed by #335, merged | scored 54.4, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
+| 294582 | BulkSupplements.com Oyster Extract | a | ingredientRows[0] Oyster Shell Extract 500 mg | fixed by #335, merged | scored 54.4, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
+| 330192 | BulkSupplements.com Oyster Extract Powder 500 mg | a | ingredientRows[0] Oyster Whole Extract 500 mg | fixed by #335, merged | scored 53.9, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
+| 330215 | BulkSupplements.com Oyster Extract Powder 500 mg | a | ingredientRows[0] Oyster Whole Extract 500 mg | fixed by #335, merged | scored 53.9, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
+| 241290 | Garden of Life Extraordinary Beauty Lovely Legs | c | ingredientRows[0] Diosmin 600 mg (form: Citrus Bioflavonoid Complex) | held: Sean's ruling, alias removed | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
 | 293269 | Nature's Way CoQ10 100 mg | a | ingredientRows[1] Vitamin A 700 mcg (form: Mixed Carotenoids) | fixed: form read | scored 76.9, SAFE / no_known_catalog_concern | — |
-| 294296 | BulkSupplements.com Wild Cherry Extract | a | ingredientRows[0] Wild Cherry Fruit Extract, Powder 500 mg (form: Prunus avium Fruit Extract, Powder) | fixed: form read | scored 54.4, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
+| 294296 | BulkSupplements.com Wild Cherry Extract | c | ingredientRows[0] Wild Cherry Fruit Extract, Powder 500 mg (form: Prunus avium Fruit Extract, Powder) | held: Sean's ruling, alias removed | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete, evidence_assessment_incomplete |
 | 294583 | BulkSupplements.com Omega 3-6-9 Softgels (1200 mg) | a | ingredientRows[2] Flaxseed Oil 800 mg (form: Omega-9) | fixed: form read | scored 58.1, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
-| 295001 | BulkSupplements.com Conjugated Linoleic Acid (CLA) | a | ingredientRows[0] Conjugated Linoleic Acid 1000 mg (form: Safflower) | fixed: form read | scored 54.3, SAFE / no_known_catalog_concern | — |
+| 295001 | BulkSupplements.com Conjugated Linoleic Acid (CLA) | c | ingredientRows[0] Conjugated Linoleic Acid 1000 mg (form: Safflower) | held: label prints safflower as a source; qualified correction on #343, measured there | not_scored, NOT_SCORED / no_known_catalog_concern | identity_assessment_incomplete |
 | 312832 | BulkSupplements.com Omega 3-6-9 Softgels 2400 mg | a | ingredientRows[2] Flaxseed Oil 800 mg (form: Omega-9) | fixed: form read | scored 58.1, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 328127 | Nature's Way Blood Sugar Manager | a | ingredientRows[1] Vitamin A 450 mcg (form: Mixed Carotenoids) | fixed: form read | scored 72.8, SAFE / no_known_catalog_concern | evidence_assessment_incomplete |
 | 328465 | Life Extension Ginseng Energy Boost | a | ingredientRows[0] GS15-4 200 mg (form: Asian Ginseng Root Extract, Fermented) | fixed: form read | scored 48.2, SAFE / no_known_catalog_concern | dose_benchmark_identity_unresolved |
