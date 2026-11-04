@@ -3,8 +3,6 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 780,multi_or_prenatal,75.5,Good,20.0,evaluated_authority,1,Heart
 781,multi_or_prenatal,73.9,Good,20.0,evaluated_authority,1,Energy & Metabolism
 1851,multi_or_prenatal,78.2,Good,13.3,evaluated_authority,2,Liver Formula
-2219,sports,45.4,Poor,8.5,evaluated_applicable,1,Ravage Grape
-2221,sports,46.8,Poor,11.4,evaluated_applicable,1,Re-Built Mass Vanilla Cake Batter
 2223,multi_or_prenatal,48.7,Poor,6.7,evaluated_authority,11,Refine
 2694,generic,57.6,Needs improvement,0.0,applicability_unestablished,1,Nattokinase Heart Health Formula
 2713,multi_or_prenatal,73.3,Good,10.0,evaluated_authority,1,Zinc Magnesium Aspartate
@@ -41,9 +39,7 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 25491,generic,80.0,Very good,11.8,evaluated_authority,3,Daily Immune Defense
 25592,multi_or_prenatal,70.6,Good,20.0,evaluated_authority,2,Mega Men Sport
 25606,sports,74.7,Good,15.6,evaluated_applicable,4,Hybrid Creatine Complex Fruit Punch
-25712,sports,64.1,Needs improvement,15.6,evaluated_applicable,2,Amplified Wheybolic Extreme 60 Power Chocolate Fudge
 25839,generic,72.3,Good,15.6,evaluated_applicable,1,One Daily Bone Health + UC-II For Joints
-25921,generic,56.1,Needs improvement,0.0,applicability_unestablished,1,Reparagen + Glucosamine
 26420,generic,62.4,Needs improvement,0.0,applicability_unestablished,1,Natural Lecithin Concentrate (From Soy) 400 mg
 26583,multi_or_prenatal,75.5,Good,16.7,evaluated_authority,1,Women's Daily Multivitamin Formula
 26905,multi_or_prenatal,58.8,Needs improvement,10.0,evaluated_authority,3,Airborne
@@ -54,14 +50,12 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 27312,multi_or_prenatal,68.6,Needs improvement,10.0,evaluated_authority,1,Enhanced Sleep Formula
 27358,sports,77.7,Good,15.6,evaluated_applicable,4,Hybrid Creatine Complex Unflavored
 27447,multi_or_prenatal,73.8,Good,20.0,evaluated_authority,6,Mega Men
-27809,sports,60.1,Needs improvement,15.6,evaluated_applicable,2,Amplified Wheybolic Extreme 60 Power French Vanilla
 27810,sports,53.9,Poor,15.6,evaluated_applicable,0,Amplified Wheybolic Extreme 60 Ripped French Vanilla
 28968,multi_or_prenatal,64.7,Needs improvement,16.7,evaluated_authority,18,Living Multi Optimal Formula
 28969,multi_or_prenatal,69.0,Needs improvement,20.0,evaluated_authority,20,Living Multi Optimal Men's Formula
 28970,multi_or_prenatal,64.7,Needs improvement,16.7,evaluated_authority,18,Living Multi Optimal Formula
 28976,multi_or_prenatal,69.5,Good,20.0,evaluated_authority,8,Living Multi Optimal Women's Formula
 28980,multi_or_prenatal,69.5,Good,20.0,evaluated_authority,13,Living Multi Optimal Women's Formula
-28981,sports,41.4,Poor,8.5,evaluated_applicable,1,Ravage Fruit Punch
 28984,multi_or_prenatal,45.4,Poor,6.7,evaluated_authority,4,Perfect Food Raw
 28986,multi_or_prenatal,48.7,Poor,6.7,evaluated_authority,12,Refine
 29101,multi_or_prenatal,80.8,Very good,20.0,evaluated_authority,1,Diabetes Support Packs
@@ -243,7 +237,6 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 178355,multi_or_prenatal,60.2,Needs improvement,10.0,evaluated_authority,1,Beta-Immune Booster Very Berry
 178383,multi_or_prenatal,63.5,Needs improvement,20.0,evaluated_authority,1,Men's Multivitamin
 178643,multi_or_prenatal,69.9,Good,20.0,evaluated_authority,1,Diabetes Daily Pack
-178674,generic,47.6,Poor,0.0,applicability_unestablished,3,"Fish, Flax & Borage Oil"
 179514,multi_or_prenatal,82.0,Very good,20.0,evaluated_authority,2,Diabetes Health Pack
 179598,multi_or_prenatal,83.2,Very good,20.0,evaluated_authority,1,Multivitamin with Omega-3
 179629,multi_or_prenatal,83.2,Very good,20.0,evaluated_authority,1,Multivitamin with Omega-3
@@ -385,12 +378,10 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 221458,sports,64.5,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Strawberry
 221460,sports,64.5,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate Chocolate Lava Cake
 221471,sports,64.5,Needs improvement,15.6,evaluated_applicable,0,Pure Isolate S'mores
-221657,generic,60.1,Needs improvement,0.0,applicability_unestablished,2,Omega Curcumin
 222791,generic,55.6,Needs improvement,0.0,applicability_unestablished,1,Full Spectrum Curcumin Sleep Ease
 222792,generic,53.4,Poor,0.0,applicability_unestablished,1,Full Spectrum Curcumin Brain Works
 222846,generic,71.3,Good,12.2,evaluated_applicable,0,Bilberry 500 mg Unflavored
 222860,generic,68.1,Needs improvement,12.2,evaluated_applicable,0,Bilberry 1200 mg
-223436,generic,61.4,Needs improvement,0.0,applicability_unestablished,2,Omega Memory with Curcumin
 227960,fiber_digestive,67.9,Needs improvement,7.3,evaluated_applicable,1,Fortify Daily Prebiotic Fiber Raspberry Lemonade Flavored
 227969,b_complex,78.4,Good,20.0,evaluated_authority,1,B-Complex 50
 228007,b_complex,78.4,Good,20.0,evaluated_authority,1,B-Complex 50
@@ -514,7 +505,6 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 243091,sports,69.1,Needs improvement,15.6,evaluated_applicable,1,LIT AF Grape
 243094,sports,76.6,Good,15.6,evaluated_applicable,1,LIT AF Iced Tea Lemonade
 243102,sports,57.3,Needs improvement,10.4,evaluated_applicable,2,Iso-Peptide Protein Vanilla
-243141,generic,79.7,Very good,11.8,evaluated_authority,3,Mushroom Blend + Immune Support
 243255,multi_or_prenatal,81.0,Very good,20.0,evaluated_authority,10,Women's Multi
 243303,generic,60.0,Needs improvement,15.6,evaluated_applicable,0,Apple Cider Vinegar Energy Gummies
 243499,multi_or_prenatal,65.4,Needs improvement,10.0,evaluated_authority,2,Staminol Ultra
@@ -571,7 +561,6 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 251484,multi_or_prenatal,82.0,Very good,20.0,evaluated_authority,5,Alive! Women's 50+ Complete Multi-Vitamin
 251485,multi_or_prenatal,82.1,Very good,20.0,evaluated_authority,5,Alive! Women's Energy Complete Multivitamin
 251553,multi_or_prenatal,84.3,Very good,20.0,evaluated_authority,1,Doctor's Choice Multivitamin 50+ Men
-251695,generic,68.2,Needs improvement,11.1,evaluated_authority,1,"Sambucus Vitamin C Fizzy 1,000 mg"
 251847,generic,66.4,Needs improvement,0.0,applicability_unestablished,1,Milk Thistle
 251946,multi_or_prenatal,54.8,Needs improvement,6.7,evaluated_authority,2,Metabolic Advantage
 252349,generic,57.1,Needs improvement,0.0,evaluated_authority,0,Bamboo Extract
@@ -729,7 +718,6 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 293250,multi_or_prenatal,80.9,Very good,20.0,evaluated_authority,7,Alive! Teen Complete Multi for Her Citrus Burst Flavored
 293252,multi_or_prenatal,84.3,Very good,20.0,evaluated_authority,8,Alive! Women's Energy Complete Multivitamin
 293270,generic,62.4,Needs improvement,0.0,applicability_unestablished,1,DGL Ultra 75 mg Chocolate Flavored
-293389,generic,49.0,Poor,0.0,applicability_unestablished,1,Sambucus Nighttime Syrup with Melatonin
 293395,generic,60.6,Needs improvement,0.0,applicability_unestablished,1,Pomegranate
 293406,generic,64.3,Needs improvement,0.0,applicability_unestablished,1,Organic Flax Oil
 293418,generic,54.1,Poor,0.0,applicability_unestablished,2,Resveratrol-Forte
@@ -891,7 +879,6 @@ dsld_id,module,score,tier,evidence_points,evidence_state,unread_rows,product
 326290,generic,57.8,Needs improvement,0.0,applicability_unestablished,1,Vegan CLA 1250
 326296,generic,59.8,Needs improvement,0.0,applicability_unestablished,1,CLA 1250
 326297,generic,57.8,Needs improvement,0.0,applicability_unestablished,1,CLA 1250
-326688,generic,59.1,Needs improvement,0.0,applicability_unestablished,1,Sambucus Nighttime Syrup with Melatonin for Kids
 327306,multi_or_prenatal,80.2,Very good,20.0,evaluated_authority,1,MediClear-SGS Chocolate Flavored
 327402,multi_or_prenatal,72.8,Good,16.7,evaluated_authority,7,Kids Multivitamin Powder
 327416,multi_or_prenatal,57.6,Needs improvement,10.0,evaluated_authority,4,Multivitamin Liquid
