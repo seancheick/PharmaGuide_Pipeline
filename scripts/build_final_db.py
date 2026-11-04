@@ -1030,6 +1030,19 @@ def _safety_flag_rule_id(flag: Dict[str, Any]) -> str:
     return safe_str(flag.get("entry_id") or flag.get("rule_id"))
 
 
+def _safety_reference_urls(refs: Any) -> List[Dict]:
+    return [
+        {
+            "url": ref["url"],
+            "title": ref.get("title", ""),
+            "type": ref.get("type", ""),
+            "evidence_grade": ref.get("evidence_grade", ""),
+        }
+        for ref in safe_list(refs)
+        if isinstance(ref, dict) and ref.get("url")
+    ]
+
+
 def _banned_warning_type_for_status(status: str) -> str:
     return {
         "banned": "banned_substance",
@@ -7799,18 +7812,9 @@ def build_detail_blob(
             "watchlist": "watchlist_substance",
         }.get(status, "safety")
         title_prefix = _banned_warning_title_prefix_for_status(status, reference)
-        # Build references list from references_structured (FDA URLs, etc.)
-        refs = reference.get("references_structured") or sub.get("references_structured")
-        source_urls = []
-        if isinstance(refs, list):
-            for ref in refs:
-                if isinstance(ref, dict) and ref.get("url"):
-                    source_urls.append({
-                        "url": ref["url"],
-                        "title": ref.get("title", ""),
-                        "type": ref.get("type", ""),
-                        "evidence_grade": ref.get("evidence_grade", ""),
-                    })
+        source_urls = _safety_reference_urls(
+            reference.get("references_structured") or sub.get("references_structured")
+        )
         ban_ctx = safe_str(reference.get("ban_context") or sub.get("ban_context"))
         dm_default = safe_str(policy.get("display_mode_default"))
         jurisdiction_scope = safe_str(policy.get("jurisdiction_scope"))
@@ -7863,6 +7867,9 @@ def build_detail_blob(
             # Same ban entry as the substance-match card above, so the same
             # context: one hazard, one card after dedup.
             "ban_context": safe_str(reference.get("ban_context") or flag.get("ban_context")) or None,
+            **({"source_urls": _safety_reference_urls(
+                reference.get("references_structured") or flag.get("references_structured")
+            )} if status == "watchlist" else {}),
             "matched_rule_id": rule_id or None,
             "ingredient_name": name,
             "safety_warning": reference.get("safety_warning") or flag.get("safety_warning"),
