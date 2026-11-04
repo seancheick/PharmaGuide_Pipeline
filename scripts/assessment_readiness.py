@@ -1575,16 +1575,17 @@ def evaluate_release_assessment(
                         blockers.append("contributing_source_review_incomplete:" + str(receipt.get("id") or "unknown"))
             elif float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0:
                 blockers.append("contributing_evidence_receipts_missing")
+    from scoring_v4.scored_artifact import _held_assessment_label
     # A source-bound hold on an unfinished Evidence review stands while that review
     # is open, so the narrower completion rule doesn't lift it. Finishing it does.
     if "evidence_assessment_incomplete" not in blockers and any(
             row.get("state") == EVIDENCE_NOT_YET_EVALUATED
             for row in _safe_list(_safe_dict(readiness.get("evidence")).get("ingredient_assessments"))
             if isinstance(row, Mapping)):
-        from scoring_v4.scored_artifact import _held_assessment_label
         if "evidence_assessment_incomplete" in (_held_assessment_label(dict(product)).get("blockers") or []):
             blockers.append("evidence_assessment_incomplete")
-    if not intentional:
+    # A source-bound hold matches its exact blockers, so a new one would release its score.
+    if not intentional and not _held_assessment_label(dict(product)):
         blockers.extend(_hidden_amount_blockers(product, module_breakdown))
     return {"is_complete": not blockers, "blockers": list(dict.fromkeys(blockers)),
             "unfinished_source_assessment": unfinished_source,

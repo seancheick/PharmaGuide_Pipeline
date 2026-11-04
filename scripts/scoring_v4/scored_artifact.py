@@ -261,9 +261,7 @@ def _held_assessment_label(product: Dict[str, Any], release: Optional[Dict[str, 
     if not entry or not all(entry.get(key) for key in (
             "reviewer", "review_date", "review_scope", "source_url", "source_rows")):
         return {}
-    # A hidden-amount hold can't lift a hold it didn't set: the score stays withheld.
-    if release is not None and (set(release.get("blockers") or []) - {
-            "hidden_amount_safety_open", "hidden_amount_quality_open"}) != set(entry.get("blockers") or []):
+    if release is not None and set(release.get("blockers") or []) != set(entry.get("blockers") or []):
         return {}
     if (release is not None and "unfinished_source_assessment" in entry
             and release.get("unfinished_source_assessment") != entry["unfinished_source_assessment"]):
