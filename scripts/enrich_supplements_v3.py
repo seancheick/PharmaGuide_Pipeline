@@ -20970,7 +20970,10 @@ class SupplementEnricherV3:
                     or re.match(r"vitamin\s+a\b", str(label.get("name") or ""), re.IGNORECASE)
                 )
                 maximum = 0.0 if activity else self._to_float_safe(exposure.get("per_day")) or 0.0
-                activity_only = activity_only or bool(activity)
+                declared_unit = self._normalize_threshold_unit(label.get("unit") or row.get("unit"))
+                activity_only = activity_only or (
+                    bool(activity) and declared_unit not in {"mg rae", "mcg dfe", "mg dfe", "mg ne"}
+                )
                 high += maximum
                 if row.get("canonical_id") == "beta_carotene":
                     exposure.update(low_per_day=0.0, high_per_day=maximum)
@@ -21035,8 +21038,15 @@ class SupplementEnricherV3:
         unit = self._normalize_threshold_unit(ingredient.get("unit"))
         ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
         standard_name = str(ingredient.get("standard_name") or "")
+        beta_carotene_mass_required = bool(ingredient.get("beta_carotene_mass_required"))
+        unsupported_beta_carotene_unit = (
+            beta_carotene_mass_required
+            and unit not in self._MASS_FACTORS_MG
+            and unit not in {"iu", "mcg rae"}
+        )
         if (
-            quantity is None
+            unsupported_beta_carotene_unit
+            or quantity is None
             or (quantity <= 0 and ingredient.get("quantity_upper") is None)
             or not unit
         ):
@@ -21054,6 +21064,18 @@ class SupplementEnricherV3:
                     "release_blocking": False,
                     "dose_evaluation": None,
                     "decision_rule": self._dose_decision_rule(policy, materiality, base_severity),
+                }
+            if beta_carotene_mass_required and not ingredient.get("activity_only"):
+                severity = str(policy.get("severity_if_not_met") or "informational").strip().lower()
+                return severity, {
+                    "evaluated": False,
+                    "reason": "dose_form_not_disclosed",
+                    "evaluation_status": "form_unknown",
+                    "clinical_severity": severity,
+                    "consumer_disposition": "suppress",
+                    "release_blocking": False,
+                    "dose_evaluation": None,
+                    "decision_rule": self._dose_decision_rule(policy, materiality, severity),
                 }
             if ingredient.get("activity_only"):
                 # A vitamin A figure isn't a beta-carotene amount the rule could find
@@ -22104,6 +22126,11 @@ class SupplementEnricherV3:
                     dose_row = self._nested_row_of_rule_form(
                         rule, declared_owner, ingredients
                     ) or {**base_dose_row, "quantity": None}
+
+                if "beta_carotene" in {
+                    rule_subject.get("canonical_id"), rule.get("exposure_canonical_id")
+                }:
+                    dose_row = {**dose_row, "beta_carotene_mass_required": True}
 
                 condition_hits: List[Dict[str, Any]] = []
                 drug_hits: List[Dict[str, Any]] = []
