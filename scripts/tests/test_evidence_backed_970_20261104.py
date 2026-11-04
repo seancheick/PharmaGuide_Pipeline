@@ -225,3 +225,8 @@ def test_no_qualifying_decision_names_the_human_research_it_read(canonical, test
 @pytest.mark.parametrize("canonical", NO_QUALIFYING)
 def test_no_qualifying_decision_does_not_claim_the_preparation_failed(canonical):
     assert "does not say the preparation was tested and failed" in _literature_record(canonical)["applicability_decision"]
+
+
+@pytest.mark.parametrize("canonical", NO_QUALIFYING)
+def test_no_qualifying_decision_keeps_the_opening_words_the_sentence_keys_on(canonical):
+    assert _literature_record(canonical)["applicability_decision"].startswith("Finished review with no qualifying study")

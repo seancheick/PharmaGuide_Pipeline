@@ -431,7 +431,7 @@ Dose owns adequacy, and Evidence isn't withheld for a lower amount. A purpose or
   - lions_mane (21 labels). 18844328 met the standard for a printed preparation, and the closure rested mainly on 500-1000 mg against 3 g/day.
   - turkey_rhubarb_root (7 labels). 36499011 tested the root extract these labels print, and the closure rested mainly on its dose being stated in anthraquinones.
 - **Stand, with the amount removed from the stated ground:**
-  - On purpose or population: l_serine, agmatine, tudca, l_glutamine, apple_cider_vinegar, rose_hips, jujube.
+  - On purpose or population: l_serine, agmatine, tudca, l_glutamine, apple_cider_vinegar, rose_hips, jujube, chlorophyll.
   - On a missing primary outcome or a mixed pool: pygeum.
   - Text trimmed of amount comparisons, grounds unchanged: african_mango, blood_orange_extract, oat_straw, red_clover, nopal, yerba_mate_leaf.
 - **Closest calls, for you to overrule:**
