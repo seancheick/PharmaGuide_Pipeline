@@ -2548,3 +2548,36 @@ def test_ucii_signed_knee_scope_cannot_become_bone_only_credit(claim, expected):
     assert decision["status"] == expected
     if expected == "not_applicable":
         assert decision["reason_code"] == "label_purpose_evidence_mismatch"
+
+
+@pytest.mark.parametrize("lean_claim, other_active, expected", [
+    ("Lean body mass", False, "applicable"),
+    ("Cognitive performance", False, "unresolved"),
+    ("Lean body mass", True, "unresolved"),
+])
+def test_supported_single_subject_positioning_survives_unclassified_claim(
+    lean_claim, other_active, expected,
+):
+    row = _row("creatine_monohydrate", "Creatine Monohydrate", quantity=5000,
+               ref="ingredientRows[0]")
+    rows = [row]
+    if other_active:
+        rows.append(_row("caffeine", "Caffeine", quantity=200, ref="ingredientRows[1]"))
+    product = {
+        "product_name": "Creatine",
+        "activeIngredients": rows,
+        "ingredient_quality_data": {"ingredients": rows, "ingredients_scorable": rows},
+        "statements": [
+            {"type": "Formulation re: Other", "notes": lean_claim},
+            {"type": "Formula re: Contains",
+             "notes": "Creatine monohydrate helps maintain hydration within the cells."},
+        ],
+    }
+    result = assess_clinical_applicability(product, {
+        "id": "INGR_CREATINE_MONOHYDRATE",
+        "ingredient": "Creatine Monohydrate",
+        "matched_source_row_refs": ["ingredientRows[0]"],
+    }, assess_amount=False)
+    assert result["status"] == expected
+    if expected == "applicable":
+        assert result["claim_alignment"]["state"] == "mixed"

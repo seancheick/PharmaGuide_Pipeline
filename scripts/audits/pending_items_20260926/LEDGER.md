@@ -1,5 +1,12 @@
 ## November 4 — active Claude audit and repairs
 
+## November 4 — shared claim alignment
+
+Owner: the canonical Evidence indication vocabulary and clinical claim alignment. The Thorne 336362 label mapped to creatine monohydrate, but the shared matcher lost its lean-body-mass positioning beside an unclassified ingredient sentence. The fix recognizes that phrase and retains relevant positioning on single-subject labels. Formula attribution, approval and dose rules remain in their current owners.
+
+A fail-first regression and two controls passed after the fix. Focused suites passed 671 tests. Five frozen real labels replayed through Clean, Enrich, Score and export. Thorne moved from 0 to 15.6 Evidence and partial to complete. Four controls were identical. Receipt: `/Users/seancheick/pg_quality/claim-alignment.6lSJRc`. Saved enrichment contained 264 unclassified claim rejections on 248 products. These are candidates for analysis, not measured recoveries. Whole-fast CI, local qualification and catalog-wide impact measurement are open.
+
+
 Owner: existing pipeline vitamin E/caffeine bound helpers and assessment readiness; app reset lifecycle, compressed download staging and shared Stack dose providers. Evidence: fail-first tests, exact-source CI, frozen-label export receipts and production-provider probes below. Will NOT create new clinical thresholds, research credit, public status or a parallel warning engine.
 
 Pipeline #351 final candidate `5564c78dfb15431c45368d09b9b2efd180cc38a5` includes #344, #349 and #348 plus current main. It repairs independent vitamin E mixture bounds/direct-parent allocation, strict caffeine lower bounds and skipped-form exposure; compressed catalog delivery remains additive. Five frozen full raw controls preserve Clean/Enrich/Score/blob hashes. Independent source review accepted; 466 named owner/consumer tests pass. Combined local:564 passed/24 declared optional skips, skip guard green. The missing Garden of Life cleaned test artifact was recreated for raw label222758 only in an isolated mirror; no shared artifact/manifest or corpus rebuild. Hosted CI 41784684927 passed all 4 shards and merge readiness (27,769 passed/192 declared skips). #351 merged at 316d8ad69d10bf94fc3527ebab6bd21647aa8b7b; fetched main contains the exact candidate.

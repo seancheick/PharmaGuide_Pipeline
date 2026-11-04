@@ -613,7 +613,7 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
     the relationship; a signed scope may narrow it, never promote a null one.
     """
     from evidence_resolver import evidence_indication_categories
-    from scoring_input_contract import ingredient_function_claims
+    from scoring_input_contract import get_evidence_subject_rows, ingredient_function_claims
     condition = _key(context.get("condition"))
     qualifying, held = qualifying_purpose_outcomes(context)
     named_outcomes = qualifying or evaluated_purpose_outcomes(context)
@@ -665,6 +665,12 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
         # (Sean, October 28, PR #280): it is no unrelated claim of this one.
         positioning = positioning if positioning & outcome else set()
         unclassified = False
+    if claims and not formula_level and positioning & outcome:
+        # On a single-subject label the product's supported positioning belongs
+        # to that same subject, even alongside a separate explicit claim.
+        subjects = {row.get("canonical_id") for row in get_evidence_subject_rows(product)}
+        if len(subjects) == 1 and subjects <= set(canonicals):
+            claims.append(("product_positioning", positioning))
     if not claims:
         if positioning:
             claims.append(("product_positioning", positioning))

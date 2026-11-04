@@ -133,7 +133,7 @@ _INDICATION_PHRASES = (
     ("lipid", r"\b(?:blood lipids|lipid (?:profile|levels?))\b"),
     ("endurance", r"\bexercise capacity\b"),
     ("muscle_recovery", r"\bmuscle (?:damage|soreness|recovery)\b"),
-    ("muscle_strength_mass", r"\b(?:lean|muscle) mass\b|\blean muscle\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
+    ("muscle_strength_mass", r"\b(?:lean(?: body)?|muscle) mass\b|\blean muscle\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
                              r"|\bbuild(?:s|ing)? muscle\b|\bmuscularity\b"),
     # A bare "muscle" claim names neither family; it is related to both.
     ("muscle_strength_mass", r"\bmuscles?\b"),
