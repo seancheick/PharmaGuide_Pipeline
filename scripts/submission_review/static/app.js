@@ -1034,6 +1034,22 @@ function labelComparisonRows(submitted, catalog) {
       ]);
     }
   }
+  const leftNutrition = submitted?.nutritionalInfo ?? {};
+  const rightNutrition = catalog?.nutritionalInfo ?? {};
+  for (const key of new Set([...Object.keys(leftNutrition), ...Object.keys(rightNutrition)])) {
+    const left = leftNutrition[key];
+    const right = rightNutrition[key];
+    const format = (entry) => entry?.amount == null ? '—' :
+      `${entry.operator && entry.operator !== '=' ? entry.operator : ''}${entry.amount} ${entry.unit ?? ''}`.trim();
+    const leftText = format(left);
+    const rightText = format(right);
+    const label = key.replace(/([A-Z])/g, ' $1').toLowerCase();
+    rows.push([
+      `Nutrition: ${label}`, leftText, rightText,
+      leftText === rightText ? 'same' :
+        left && right && unitKind(left.unit) !== unitKind(right.unit) ? 'units' : 'differs',
+    ]);
+  }
   return rows;
 }
 

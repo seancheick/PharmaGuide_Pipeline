@@ -84,7 +84,8 @@ sources + region), not bare objects/strings: `record` refuses a bare one. Only
   - `percent_dv`: the printed %DV number (`1111`), or null. `*`/`†` "Daily
     Value not established" means null.
   - `is_blend_header` / `parent_index`: only a blend or complex header has
-    children; children point at the header's index. Copy the blend total
+    children. Set `is_blend_header: true` on either kind of header and point
+    each child at that header's index. Copy the blend total
     and the ingredients indented beneath that blend from the photo. Leave a
     child's amount blank when the label gives only the blend total. A form
     printed in parentheses stays on its own ingredient row.

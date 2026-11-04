@@ -508,7 +508,10 @@ def recorded_label_disagreements(saved: Any, extraction: Mapping[str, Any]) -> l
     if changes:
         # Reviews saved before nutrition projection used the original row layout.
         if not reading_changes(to_manual_label(draft, legacy_rows=True).payload, saved):
-            return []
+            return [
+                path for path in changes
+                if path.startswith("$.nutritionalInfo.") and saved.get("nutritionalInfo")
+            ]
     return changes
 
 

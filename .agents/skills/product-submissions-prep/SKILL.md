@@ -53,13 +53,12 @@ Run from the `dsld_clean` repository root.
 
 ```bash
 source scripts/python_env.sh                 # sets $PG_PYTHON (Python 3.13)
-set -a; source .env; set +a                  # agent_reader reads the keys from the environment
 # PG_REVIEWER_EMAIL must name the authorized reviewer.
 reviewer() { "$PG_PYTHON" scripts/submission_review/extraction/agent_reader.py "$@"; }
 ```
 
 Use the configured reviewer account. If the account is missing, ask the owner.
-Load credentials without echoing them. Run from the checkout that holds the
+The reader loads local credentials through `scripts/env_loader.py`. Run from the checkout that holds the
 configuration, or use the main checkout's ignored environment file from a
 worktree. Keep photos, crops and JSON in the reader's private work directory
 (`~/pg_submissions`, or `PG_SUBMISSION_WORKDIR` when configured). The first run

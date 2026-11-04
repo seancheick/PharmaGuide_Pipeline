@@ -53,7 +53,6 @@ Run from the `dsld_clean` repository root.
 
 ```bash
 source scripts/python_env.sh                 # sets $PG_PYTHON (Python 3.13)
-set -a; source .env; set +a                  # agent_reader reads the keys from the environment
 export PG_REVIEWER_EMAIL=<reviewer account>  # ask the owner if it is not set
 R="$PG_PYTHON scripts/submission_review/extraction/agent_reader.py"
 ```

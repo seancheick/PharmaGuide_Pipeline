@@ -208,3 +208,18 @@ def test_adopting_the_legacy_workdir_moves_work_and_never_overwrites(tmp_path) -
     assert (new.stat().st_mode & 0o777) == 0o700
     # Nothing left to adopt is not an error.
     assert adopt_legacy_workdir(new, tmp_path / "absent") == ([], [])
+
+
+def test_legacy_rows_do_not_hide_conflicting_typed_nutrition():
+    from submission_review.extraction.agent_reader import recorded_label_disagreements
+    from submission_review.extraction.to_manual_label import to_manual_label
+
+    draft = {"ingredient_rows": [{
+        "display_name": {"value": "Total Sugars", "status": "read"},
+        "amount": {"value": {"value": 1, "unit_text": "g"}, "status": "read"},
+    }]}
+    saved = to_manual_label(draft, legacy_rows=True).payload
+    recorded = {"draft_payload": draft}
+    assert recorded_label_disagreements(saved, recorded) == []
+    saved["nutritionalInfo"] = {"sugars": {"amount": 2, "unit": "g"}}
+    assert recorded_label_disagreements(saved, recorded) == ["$.nutritionalInfo.sugars.amount"]
