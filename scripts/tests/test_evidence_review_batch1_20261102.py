@@ -44,6 +44,7 @@ def test_reviewed_null_closes_the_question_without_credit():
     assert resolution.reason_code == "literature_reviewed_null_or_unfavorable"
     assert resolution.points_eligible is False
     assert not resolution.blocking_reasons
+    assert _review_state(resolution) == "evaluated_limited_or_negative"
 
 
 def _review_state(resolution):
@@ -59,11 +60,15 @@ def _review_state(resolution):
     ("ginkgo", "EGb 761 Ginkgo extract powder"),
     ("collagen", "Collagen, Hydrolyzed"),
 ])
-def test_documented_review_finishes_a_declared_preparation_at_no_credit(cid, name):
+def test_documented_positive_review_waits_for_its_scoring_path(cid, name):
     resolution = _resolve_label_row(cid, name)
+    # The source review remains positive and applicable; its unimplemented
+    # credit path cannot become a completed limited/negative assessment.
+    assert resolution.disposition == "resolved_by_reviewed_clinical_evidence"
+    assert resolution.applicability_status == "applicable_reviewed_trials"
     assert resolution.points_eligible is False
     assert resolution.reason_code == "literature_reviewed_human_clinical_evidence"
-    assert _review_state(resolution) == "evaluated_limited_or_negative"
+    assert _review_state(resolution) == "not_yet_evaluated"
 
 
 @pytest.mark.parametrize("cid, name", [

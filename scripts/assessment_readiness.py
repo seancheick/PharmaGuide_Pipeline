@@ -383,6 +383,13 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
     if (disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
             and ("literature_evidence" in resolution.owner_facts
                  or "backed_clinical_studies" in resolution.owner_facts)):
+        if (not resolution.points_eligible
+                and resolution.reason_code == "literature_reviewed_human_clinical_evidence"
+                and "literature_evidence" in resolution.owner_facts):
+            # The resolver's shadow literature path has no scoring integration.
+            # That unfinished processing is not a limited/negative review.
+            # Retain its source reason and existing points until it is resolved.
+            return EVIDENCE_NOT_YET_EVALUATED, resolution.reason_code, None
         state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
                  else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
         return state, resolution.reason_code, None

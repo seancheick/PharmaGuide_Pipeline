@@ -314,7 +314,20 @@ def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, lab
     # The hold is status alone: the hidden amount keeps its neutral Dose either way.
     monkeypatch.setattr(assessment_readiness, "_dose_rests_on_a_hidden_amount", lambda *_: False)
     unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
-    assert unheld["quality_assessment_status"] == "complete"
+    # Disabling the amount hold cannot complete a separate unresolved primary
+    # literature path. Leucine is a required Evidence owner on these two labels.
+    if label in {"a9_hidden_amount_2219_raw.json", "a9_hidden_amount_2221_raw.json"}:
+        from evidence_resolver import evidence_required_canonicals
+
+        assert "l_leucine" in evidence_required_canonicals(
+            enriched, module=unheld["_v4_module_breakdown"]["module"])
+        assert any(row["canonical_id"] == "l_leucine"
+                   and row["reason_code"] == "literature_reviewed_human_clinical_evidence"
+                   for row in _unreviewed_rows(unheld))
+        assert unheld["quality_assessment_status"] == "partial"
+        assert "evidence_assessment_incomplete" in unheld["assessment_readiness"]["release_assessment"]["blockers"]
+    else:
+        assert unheld["quality_assessment_status"] == "complete"
     for field in ("quality_score_v4_100", "quality_tier", "quality_score_status", "product_safety_status",
                   "safety_assessment_status", "verdict"):
         assert held[field] == unheld[field]
