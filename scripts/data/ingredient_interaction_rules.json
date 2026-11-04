@@ -1925,7 +1925,12 @@
           },
           "alert_headline_if_met": "High caffeine intake during pregnancy",
           "alert_body_if_met": "This supplement provides 200 mg or more of caffeine a day. ACOG recommends keeping total daily caffeine intake below 200 mg during pregnancy, including caffeine from drinks, foods and supplements. Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise.",
-          "action_if_met": "Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise."
+          "action_if_met": "Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise.",
+          "severity_if_compound_estimate": "avoid",
+          "consumer_disposition_if_compound_estimate": "block",
+          "alert_headline_if_compound_estimate": "High caffeine intake during pregnancy",
+          "alert_body_if_compound_estimate": "This supplement may provide 200 mg or more of caffeine a day. ACOG recommends keeping total daily caffeine intake below 200 mg during pregnancy, including caffeine from drinks, foods and supplements. Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise.",
+          "action_if_compound_estimate": "Avoid this high-caffeine supplement during pregnancy unless your prenatal care professional advises otherwise."
         },
         {
           "scope": "condition",
@@ -2000,7 +2005,7 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-11-03",
-      "review_owner": "Dr. Pham (clinical review 2026-11-03, pregnancy threshold and copy); pharmaguide_clinical_team"
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, pregnancy threshold and copy); estimate-range wording approved by Sean 2026-11-04; pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_CHROMIUM_GLUCOSE",
@@ -7617,7 +7622,11 @@
           "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
           "age_brackets": [
             "14-18"
-          ]
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
         },
         {
           "scope": "condition",
@@ -7665,7 +7674,11 @@
           "action_if_amount_unknown": "Check the form and total intake with your pharmacist or prenatal care professional.",
           "age_brackets": [
             "14-18"
-          ]
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
         },
         {
           "scope": "condition",
@@ -7709,7 +7722,11 @@
           },
           "age_brackets": [
             "14-18"
-          ]
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
         }
       ],
       "pregnancy_lactation": {
@@ -7748,7 +7765,7 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-11-03",
-      "review_owner": "Dr. Pham (clinical review 2026-11-03, form filter, review note and section C breastfeeding, section B age limits); pharmaguide_clinical_team"
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, form filter, review note and section C breastfeeding, section B age limits); age card wording approved by Sean 2026-11-04; pharmaguide_clinical_team"
     },
     {
       "id": "RULE_IQM_NIACIN_DIABETES",
@@ -8456,7 +8473,11 @@
           },
           "age_brackets": [
             "14-18"
-          ]
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
         },
         {
           "scope": "condition",
@@ -8497,7 +8518,11 @@
           },
           "age_brackets": [
             "14-18"
-          ]
+          ],
+          "alert_headline_if_age_dependent": "Limit depends on age",
+          "alert_body_if_age_dependent": "This amount is above the upper limit for ages 14–18 but not for adults. Add your age range to your profile for an answer that fits you.",
+          "alert_headline_if_age_dependent_bound": "Limit depends on age",
+          "alert_body_if_age_dependent_bound": "This amount could be above the upper limit for ages 14–18 but is below the limit for adults. Add your age range to your profile for an answer that fits you."
         }
       ],
       "pregnancy_lactation": {
@@ -8536,7 +8561,7 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-11-03",
-      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding, section B age limits); pharmaguide_clinical_team"
+      "review_owner": "Dr. Pham (clinical review 2026-11-03, section C breastfeeding, section B age limits); age card wording approved by Sean 2026-11-04; pharmaguide_clinical_team"
     },
     {
       "id": "RULE_INGREDIENT_VITAMIN_K",

@@ -20620,7 +20620,8 @@ class SupplementEnricherV3:
         Mirrors the ``*_if_met`` tier copy: a threshold may carry
         ``alert_headline_if_amount_unknown`` (and body/action) so an unknown amount
         reads as "can't assess", never as the above-threshold concern. The same
-        applies to ``form_unknown`` and ``age_dependent``.
+        applies to ``form_unknown``, ``compound_estimate``, ``age_dependent`` and
+        ``age_dependent_bound``.
         """
         for threshold in thresholds:
             copy = {
@@ -20631,6 +20632,32 @@ class SupplementEnricherV3:
             if copy:
                 return copy
         return {}
+
+    def _estimate_carries_crossing(
+        self,
+        thresholds: List[Dict[str, Any]],
+        ingredient: Dict[str, Any],
+        servings_per_day_max: float,
+    ) -> Optional[Dict[str, Any]]:
+        """The row whose limit this open range reaches only through a compound's estimated share."""
+        upper = ingredient.get("quantity_upper_without_estimate")
+        unit = self._normalize_threshold_unit(ingredient.get("unit"))
+        if upper is None or not unit:
+            return None
+        for threshold in thresholds:
+            if not threshold.get("severity_if_compound_estimate"):
+                continue
+            basis = str(threshold.get("basis") or "per_day").strip().lower()
+            converted = self._convert_mass(
+                upper * (float(servings_per_day_max) if basis == "per_day" else 1.0),
+                unit,
+                self._normalize_threshold_unit(threshold.get("unit")),
+            )
+            if converted is not None and not self._compare_threshold(
+                converted, str(threshold.get("comparator") or "").strip(), self._to_float_safe(threshold.get("value"))
+            ):
+                return threshold
+        return None
 
     def _dose_decision_rule(
         self,
@@ -20700,7 +20727,7 @@ class SupplementEnricherV3:
         )
         low = high = 0.0
         strict_lower = False
-        compound_share_estimated = False
+        estimated_share = 0.0
         unreconciled: List[float] = []
         for row in counted:
             exposure = read(row)
@@ -20712,8 +20739,7 @@ class SupplementEnricherV3:
                 continue
             elif row.get("skip_reason") == SKIP_REASON_BLEND_HEADER_WITH_WEIGHT:
                 if _DICAFFEINE_MALATE_NAME.search(str(row.get("name") or "")):
-                    high += exposure.per_serving_amount * DICAFFEINE_MALATE_CAFFEINE_FRACTION
-                    compound_share_estimated = True
+                    estimated_share += exposure.per_serving_amount * DICAFFEINE_MALATE_CAFFEINE_FRACTION
                 else:
                     high += exposure.per_serving_amount
             elif quantity_is_unresolved(row):
@@ -20727,6 +20753,8 @@ class SupplementEnricherV3:
         if unreconciled:
             low += max(unreconciled)
             high += sum(unreconciled)
+        upper_without_estimate = high
+        high += estimated_share
         if high <= 0:
             return None
         return {
@@ -20737,7 +20765,11 @@ class SupplementEnricherV3:
                 id(row) for row in candidates
                 if is_caffeine(row) and read(row).per_serving_amount
             },
-            **({"compound_share_estimated": True} if compound_share_estimated else {}),
+            **(
+                {"compound_share_estimated": True, "quantity_upper_without_estimate": upper_without_estimate}
+                if estimated_share
+                else {}
+            ),
         }
 
     def _distinct_vitamin_e_dose(
@@ -20837,7 +20869,13 @@ class SupplementEnricherV3:
         }
         decision.pop("matched_copy", None)
         decision.pop("reason", None)
-        age_copy = self._amount_unknown_copy(age_scoped, "age_dependent")
+        # The wording says what is known about each limit. An adult who could also
+        # be over has no age card, so the rule's own card stays.
+        age_state = {
+            ("above_threshold", "below_threshold"): "age_dependent",
+            ("form_unknown", "below_threshold"): "age_dependent_bound",
+        }.get((scoped_outcome["evaluation_status"], general_outcome["evaluation_status"]))
+        age_copy = self._amount_unknown_copy(age_scoped, age_state) if age_state else {}
         if age_copy:
             decision["matched_copy"] = age_copy
         return base_severity, decision
@@ -21170,6 +21208,23 @@ class SupplementEnricherV3:
                 form_unknown_copy = self._amount_unknown_copy(relevant, "form_unknown")
                 if form_unknown_copy:
                     details["matched_copy"] = form_unknown_copy
+                estimate_row = self._estimate_carries_crossing(
+                    relevant, ingredient, servings_per_day_max
+                )
+                if estimate_row:
+                    # Still no proven crossing and the exported amount stays the proven
+                    # minimum; only what the viewer is told changes.
+                    severity_candidate = str(estimate_row["severity_if_compound_estimate"]).strip().lower()
+                    disposition = str(estimate_row["consumer_disposition_if_compound_estimate"]).strip().lower()
+                    details["clinical_severity"] = severity_candidate
+                    details["selected_severity"] = severity_candidate
+                    details["selected_from"] = "severity_if_compound_estimate"
+                    details["consumer_disposition"] = disposition
+                    details["decision_rule"] = {
+                        **self._dose_decision_rule(estimate_row, materiality, base_severity),
+                        "unknown_form_disposition": disposition,
+                    }
+                    details["matched_copy"] = self._amount_unknown_copy([estimate_row], "compound_estimate")
             elif marker_amount_unknown:
                 details["reason"] = "dose_amount_not_disclosed"
                 amount_unknown_copy = self._amount_unknown_copy(relevant)
@@ -21823,6 +21878,7 @@ class SupplementEnricherV3:
                         "quantity": caffeine_dose["quantity"],
                         "quantity_upper": caffeine_dose["quantity_upper"],
                         "quantity_operator": caffeine_dose["quantity_operator"],
+                        "quantity_upper_without_estimate": caffeine_dose.get("quantity_upper_without_estimate"),
                         "unit": "mg",
                         "unit_normalized": "mg",
                         "dose_source": "distinct_caffeine_total",

@@ -532,6 +532,7 @@ def test_mixed_row_within_the_limit_even_if_all_preformed_has_no_card(enricher):
 
 VITAMIN_E = "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS"
 ALPHA_TOCOPHEROL = "d-alpha-tocopherol"
+UNSPECIFIED_E = "vitamin e (unspecified)"
 OVER_LIMIT_HEADLINE = "Breastfeeding: avoid use"
 
 
@@ -844,6 +845,73 @@ def test_a_new_age_row_never_moves_the_gate_key_of_an_older_row():
             assert not seen_age_row or row.get("age_brackets"), "append age rows at the end"
 
 
+# --- Age card, wording Sean approved 2026-11-04 ---------------------------------
+
+AGE_HEADLINE = "Limit depends on age"
+AGE_SECOND = "Add your age range to your profile for an answer that fits you."
+AGE_IS_ABOVE = f"This amount is above the upper limit for ages 14\u201318 but not for adults. {AGE_SECOND}"
+AGE_COULD_BE = f"This amount could be above the upper limit for ages 14\u201318 but is below the limit for adults. {AGE_SECOND}"
+
+
+@pytest.mark.parametrize("target", ["pregnancy", "ttc", "lactation"])
+def test_a_measured_amount_over_only_the_teen_vitamin_a_limit_says_is_above(enricher, target):
+    hit = _vitamin_a(enricher, 10000, "IU", RETINYL)[target]
+    assert _at_age(hit, "14-18")[1] == "above_threshold"
+    assert _at_age(hit)[1] == "below_threshold"
+    assert (hit["alert_headline"], hit["alert_body"]) == (AGE_HEADLINE, AGE_IS_ABOVE)
+
+
+@pytest.mark.parametrize("target", ["pregnancy", "ttc", "lactation"])
+def test_a_bound_over_only_the_teen_vitamin_a_limit_says_could_be(enricher, target):
+    hit = _vitamin_a(enricher, 9500, "IU", UNSPECIFIED_A)[target]
+    assert _at_age(hit, "14-18")[1] == "form_unknown"
+    assert _at_age(hit)[1] == "below_threshold"
+    assert (hit["alert_headline"], hit["alert_body"]) == (AGE_HEADLINE, AGE_COULD_BE)
+
+
+@pytest.mark.parametrize("target", ["pregnancy", "lactation"])
+def test_a_measured_amount_over_only_the_teen_vitamin_e_limit_says_is_above(enricher, target):
+    hit = _vitamin_e(enricher, 900, form=ALPHA_TOCOPHEROL, name="Alpha-Tocopherol")[target]
+    assert _at_age(hit, "14-18")[1] == "above_threshold"
+    assert _at_age(hit)[1] == "below_threshold"
+    assert (hit["alert_headline"], hit["alert_body"]) == (AGE_HEADLINE, AGE_IS_ABOVE)
+
+
+@pytest.mark.parametrize("target", ["pregnancy", "lactation"])
+def test_a_bound_over_only_the_teen_vitamin_e_limit_says_could_be(enricher, target):
+    hit = _vitamin_e(enricher, 1000, "IU", UNSPECIFIED_E)[target]
+    assert _at_age(hit, "14-18")[1] == "form_unknown"
+    assert _at_age(hit)[1] == "below_threshold"
+    assert (hit["alert_headline"], hit["alert_body"]) == (AGE_HEADLINE, AGE_COULD_BE)
+
+
+@pytest.mark.parametrize("amount,unit", [(1200, "IU"), (900, "mg")])
+def test_an_adult_who_could_also_be_over_gets_no_age_card(enricher, amount, unit):
+    hit = _vitamin_e(enricher, amount, unit, UNSPECIFIED_E)["pregnancy"]
+    assert hit["dose_threshold_evaluation"]["evaluation_status"] == "age_dependent"
+    assert _at_age(hit, "14-18")[1] == "above_threshold"
+    assert _at_age(hit)[1] == "form_unknown"
+    rule = next(row for row in RULES[VITAMIN_E]["condition_rules"] if row["condition_id"] == "pregnancy")
+    assert (hit["alert_headline"], hit["alert_body"]) == (rule["alert_headline"], rule["alert_body"])
+
+
+@pytest.mark.parametrize("bracket", ["14-18", "19+"])
+def test_a_stated_age_never_reads_the_age_card(enricher, bracket):
+    hit = _vitamin_a(enricher, 10000, "IU", RETINYL)["pregnancy"]
+    outcome = hit["dose_threshold_evaluation"]["age_outcomes"][bracket]
+    assert outcome["alert_headline"] != AGE_HEADLINE
+    assert AGE_SECOND not in outcome["alert_body"]
+
+
+def test_an_amount_every_age_reads_the_same_gets_no_age_card(enricher):
+    for hit in (
+        _vitamin_a(enricher, 5000, "IU", RETINYL)["pregnancy"],
+        _vitamin_a(enricher, 12000, "IU", RETINYL)["pregnancy"],
+    ):
+        assert hit["dose_threshold_evaluation"]["evaluation_status"] != "age_dependent"
+        assert hit["alert_headline"] != AGE_HEADLINE
+
+
 # --- E1: 249741 caffeine ----------------------------------------------------
 
 @pytest.fixture(scope="module")
@@ -878,17 +946,116 @@ def test_the_estimate_is_within_her_stated_composition():
     assert 22.2 <= 30 * fraction <= 22.5
 
 
-def test_180_confirmed_with_an_estimate_above_200_is_never_a_proven_crossing(caffeine_label_249741):
+ESTIMATE_BODY = (
+    "This supplement may provide 200 mg or more of caffeine a day. ACOG recommends keeping total "
+    "daily caffeine intake below 200 mg during pregnancy, including caffeine from drinks, foods and "
+    "supplements. Avoid this high-caffeine supplement during pregnancy unless your prenatal care "
+    "professional advises otherwise."
+)
+
+
+def _caffeine_pregnancy_hits(product):
     hits = [
         hit
-        for alert in caffeine_label_249741["interaction_profile"]["ingredient_alerts"]
+        for alert in product["interaction_profile"]["ingredient_alerts"]
         if alert["rule_id"] == "RULE_INGREDIENT_CAFFEINE"
         for hit in alert["condition_hits"]
         if hit["condition_id"] == "pregnancy"
     ]
     assert hits
-    for hit in hits:
-        assert hit["dose_threshold_evaluation"]["evaluation_status"] == "form_unknown"
+    return hits
+
+
+def test_an_upper_figure_resting_on_the_estimate_reads_avoid_in_its_own_words(caffeine_label_249741):
+    for hit in _caffeine_pregnancy_hits(caffeine_label_249741):
+        decision = hit["dose_threshold_evaluation"]
+        assert (hit["severity"], decision["consumer_disposition"]) == ("avoid", "block")
+        assert decision["clinical_severity"] == "avoid"
+        assert hit["alert_body"] == ESTIMATE_BODY
+        assert hit["alert_headline"] == "High caffeine intake during pregnancy"
+        assert "provides 200 mg" not in hit["alert_body"]
+
+
+def test_180_confirmed_with_an_estimate_above_200_is_never_a_proven_crossing(caffeine_label_249741):
+    for hit in _caffeine_pregnancy_hits(caffeine_label_249741):
+        decision = hit["dose_threshold_evaluation"]
+        assert decision["evaluation_status"] == "form_unknown"
+        assert not decision.get("matched_threshold")
+    assert _caffeine_row(caffeine_label_249741)["safety_exposure"]["per_day"] == 180.0
+
+
+def _caffeine_hit(enricher, *rows):
+    rows = [
+        {"canonical_id": "caffeine", "canonical_source_db": "ingredient_quality_map", "unit": "mg",
+         "raw_source_path": f"ingredientRows[{index}]", **row}
+        for index, row in enumerate(rows)
+    ]
+    profile = enricher._collect_interaction_profile(
+        {"activeIngredients": rows, "ingredient_quality_data": {"ingredients": rows}}
+    )
+    hits = _caffeine_pregnancy_hits({"interaction_profile": profile})
+    assert len({(_outcome(hit), hit["alert_body"]) for hit in hits}) == 1
+    return hits[0]
+
+
+ANHYDROUS = {"name": "Caffeine Anhydrous", "standard_name": "Caffeine"}
+INFINERGY = {"name": "Infinergy (di-caffeine malate)", "skip_reason": "blend_header_total_weight_only"}
+
+
+def test_the_estimate_card_needs_the_compound_to_carry_the_crossing(enricher):
+    hit = _caffeine_hit(enricher, {**ANHYDROUS, "quantity": 180.0}, {**INFINERGY, "quantity": 30.0})
+    assert _outcome(hit) == ("avoid", "form_unknown", "block")
+    assert hit["alert_body"] == ESTIMATE_BODY
+
+
+def test_an_estimate_that_stays_below_200_is_no_concern_at_this_limit(enricher):
+    hit = _caffeine_hit(enricher, {**ANHYDROUS, "quantity": 170.0}, {**INFINERGY, "quantity": 30.0})
+    assert _outcome(hit) == ("monitor", "below_threshold", "suppress")
+
+
+def test_a_confirmed_200_keeps_the_confirmed_wording(enricher):
+    hit = _caffeine_hit(enricher, {**ANHYDROUS, "quantity": 200.0}, {**INFINERGY, "quantity": 30.0})
+    assert _outcome(hit) == ("avoid", "above_threshold", "block")
+    assert hit["alert_body"].startswith("This supplement provides 200 mg or more")
+
+
+def test_another_open_amount_that_crosses_alone_stays_the_review(enricher):
+    hit = _caffeine_hit(
+        enricher,
+        {**ANHYDROUS, "quantity": 180.0},
+        {"name": "Energy Blend", "skip_reason": "blend_header_total_weight_only", "quantity": 30.0},
+    )
+    assert _outcome(hit) == ("monitor", "form_unknown", "review")
+    assert hit["alert_body"] != ESTIMATE_BODY
+
+
+def test_a_crossing_that_needs_the_compound_and_another_open_amount_reads_the_estimate_card(enricher):
+    hit = _caffeine_hit(
+        enricher,
+        {**ANHYDROUS, "quantity": 180.0},
+        {"name": "Energy Blend", "skip_reason": "blend_header_total_weight_only", "quantity": 10.0},
+        {**INFINERGY, "quantity": 30.0},
+    )
+    assert _outcome(hit) == ("avoid", "form_unknown", "block")
+    assert hit["alert_body"] == ESTIMATE_BODY
+
+
+def test_the_estimate_policy_is_stated_on_the_decision_so_the_audit_contract_holds(caffeine_label_249741):
+    for hit in _caffeine_pregnancy_hits(caffeine_label_249741):
+        decision = hit["dose_threshold_evaluation"]
+        assert decision["decision_rule"]["unknown_form_disposition"] == decision["consumer_disposition"]
+        assert decision["release_blocking"] is False
+
+
+def test_a_compound_beside_another_open_amount_that_crosses_alone_stays_the_review(enricher):
+    hit = _caffeine_hit(
+        enricher,
+        {**ANHYDROUS, "quantity": 180.0},
+        {"name": "Energy Blend", "skip_reason": "blend_header_total_weight_only", "quantity": 30.0},
+        {**INFINERGY, "quantity": 30.0},
+    )
+    assert _outcome(hit) == ("monitor", "form_unknown", "review")
+    assert hit["alert_body"] != ESTIMATE_BODY
 
 
 def test_another_caffeine_blend_header_keeps_its_whole_mass_as_the_upper_bound(enricher):
