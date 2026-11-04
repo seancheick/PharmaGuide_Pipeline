@@ -7133,8 +7133,7 @@
         "Cranberry juice solids",
         "veg. juice",
         "vegetable and fruit juice",
-        "vegetable juice",
-        "Vegetable & Fruit Juice (color)"
+        "vegetable juice"
       ],
       "category": "sweetener_natural",
       "is_additive": false,
@@ -21445,7 +21444,8 @@
         "vegetable and fruit juice color",
         "vegetable and fruit juice colors",
         "vegetable juice color",
-        "vegetable juices"
+        "vegetable juices",
+        "Vegetable & Fruit Juice (color)"
       ],
       "category": "colorant_natural",
       "is_additive": true,
