@@ -471,15 +471,15 @@ def test_carotenoid_policy_lycopene():
 
 def test_bcaa_sports_amino_dose_applicability_not_points():
     """BCAAs/sports amino acids: threshold is applicability fact, NOT points creation."""
-    # L-Leucine at 3000 mg (>= 2500 mg MPS threshold) matches clinical dose applicability
+    # L-Leucine's review closed as conflicting evidence with no clear benefit (2026-11-04).
+    # A dose above or below 2500 mg changes neither that result nor points.
     res_high = er.resolve_evidence_for_canonical("l_leucine", dose_value=3000.0, dose_unit="mg")
-    assert res_high.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    assert res_high.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
     assert res_high.points_eligible is False  # Does NOT award points; existing scorer decides
 
-    # L-Leucine below 2500 mg keeps Evidence; sports Dose owns adequacy.
     res_low = er.resolve_evidence_for_canonical("l_leucine", dose_value=500.0, dose_unit="mg")
-    assert res_low.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
-    assert res_low.applicability_status == "applicable_reviewed_trials"
+    assert res_low.disposition == EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value
+    assert res_low.applicability_status == "reviewed_null_evidence"
 
 
 def test_silica_provenance_context_handling():

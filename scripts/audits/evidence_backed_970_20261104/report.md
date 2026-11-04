@@ -124,6 +124,14 @@ Raw label through clean, enrich and the scored artifact, by name, base against c
 | Stay partial for other rows | 2, unchanged | 9 |
 | Reason text changed | 225 | 246 |
 
+A literature record reaches every label carrying that ingredient, not only the 970. All 991 labels carrying one of the eight corrected ingredients, measured on main: 0 score, tier, Evidence, Dose, status or safety moves, and 258 display reasons changed. On those labels, `qa` and `sa` didn't move.
+
+Older tests pinned the stored text, so the changes are deliberate:
+
+- `test_clinical_registry_evidence_corrections.py` and `test_literature_records_review_20261020.py`: the rationales keep the true sentences they pin, on leucine's and lysine's thresholds and cayenne's 2 mg.
+- `test_evidence_resolver.py::test_bcaa_sports_amino_dose_applicability_not_points`: leucine now closes as `reviewed_null_unfavorable` at both doses, with no points.
+- `test_evidence_result_state.py::test_product_level_owner_is_not_nothing_to_assess`: soya lecithin now reads `evaluated_null`, still not "nothing to assess".
+
 ### Projection rows
 
 62 of the 970 labels carry `module_scoped_product_projection` (64 rows, all `product_level_evidence`), which blocks #354's sentence: Natto Extract 13, Lactase 11, Nattokinase 7, Alaska Blueberry 5, NSK-SD Nattokinase 4, Cayenne Pepper 3, Kudzu 2, Protein 2 and others. Scored on stored enrichment on #354. a9-finish's fix covers rows with their own rejection.

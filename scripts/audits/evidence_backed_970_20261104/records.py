@@ -150,7 +150,8 @@ LITERATURE_CORRECTIONS = {
             "6 months in 52 completers (PMID 3115841). A crossover trial in 41 patients reported fewer recurrences "
             "at 1,248 mg/day but not at 624 mg/day (PMID 6435961), and a trial in 21 patients found no substantial "
             "benefit at 1,200 mg/day (PMID 6419679). The 2015 Cochrane prevention review states: 'We failed to find "
-            "any evidence of efficacy for lysine' (PMID 26252373). " + AGENT_NOTE
+            "any evidence of efficacy for lysine' (PMID 26252373). These sources support no established 1 g/day "
+            "threshold or universal continuous efficacy range. " + AGENT_NOTE
         ),
         "studies": [
             {"pmid": "6435961", "study_type": "rct", "sample_size": 41,
