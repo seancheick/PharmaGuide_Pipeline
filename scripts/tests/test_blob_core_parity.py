@@ -199,13 +199,15 @@ def test_blob_pillars_reconcile_to_the_shipped_whole_score(total, shipped):
 
 
 @pytest.mark.parametrize("verdict", ["BLOCKED", "UNSAFE"])
-def test_suppressed_score_has_no_numeric_breakdown(verdict):
+@pytest.mark.parametrize("has_audit_pillars", [False, True])
+def test_suppressed_core_score_preserves_optional_audit_pillars(verdict, has_audit_pillars):
     enriched = make_enriched()
     scored = make_scored(verdict)
-    scored["quality_pillars_v4"] = None
+    if not has_audit_pillars:
+        scored["quality_pillars_v4"] = None
 
     blob = build_detail_blob(enriched, scored)
     core = row_as_dict(build_core_row(enriched, scored, EXPORTED_AT, detail_blob=blob))
     assert core["quality_score_status"] == "suppressed_safety"
     assert core["quality_score_v4_100"] is None
-    assert blob["quality_pillars_v4"] is None
+    assert blob["quality_pillars_v4"] == scored["quality_pillars_v4"]

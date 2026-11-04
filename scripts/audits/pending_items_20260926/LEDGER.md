@@ -4576,3 +4576,12 @@ Confirmed audience limitation: the existing Dart profile gate has no sex input, 
 Counted read-only on `~/pg_quality/a9_corpus_20261103`, 15,447 labels: 11 labels reach a rule. Replayed raw label to score on main and on the fix: 10 gain hits (glucomannan 200826, 213312, 74394, 28518, 28553; vitamin K2 210687; vitamin A palmitate 213941, 63926; beta-carotene 15919, 15923), 214952 changes nothing. 0 lost hits, 0 score, tier, status or safety status moves. "Glucomannan powder" gains its alias on `konjac glucomannan`; 0 rows with an amount carry that name. A generic match is not read as a form, so "Dietary Fiber" stays silent and fail-open rules keep warning.
 
 Open: 16 labels print vitamin A or gamma-carotene with no named form on a skipped row, and `RULE_IQM_VITAMIN_A_PREGNANCY_DOSE` scopes `vitamin a (unspecified)`. Left silent here for the vitamin A batch; gamma-carotene isn't preformed vitamin A. Checks: 712 owner tests passed, fail-first on the new file. Local rung not run: it needs Sean's build.
+
+
+## November 4 — App score and pillar parity
+
+**Class:** pipeline tests and docs, Flutter presentation and detail retrieval. Owner: `quality_score.py::assemble_quality_score/shipped_whole_score`, the existing core/blob export, and Flutter's hash-bound detail provider and shared v4 pillar reader. No new score field, scoring rule, or cache format.
+
+The November 2 local export had 15,447 matching blob hashes. All 15,129 scored rows reconciled at the catalog's whole-number precision. No blob carried the retired category cap. The schema 2 physical score mirrors are outside the generated Flutter read set. Suppressed core scores remain null while existing optional audit pillars stay in the blob.
+
+Pipeline parity and projection tests passed 27 cases against main base `9f73fad7a`. Flutter reproduced a mismatched breakdown and a late old-hash write, then verified that the headline remains authoritative, the current cached blob survives, and a partial assessment withholds its total. Connected iPhone simulator checks on product 175321 and Compare used the verified November 2 values and a controlled mismatch. Exact qualification and integration are recorded in [pipeline PR 369](https://github.com/seancheick/PharmaGuide_Pipeline/pull/369) and [app PR 209](https://github.com/seancheick/Pharmaguide.ai/pull/209). This batch uses existing catalog artifacts.
