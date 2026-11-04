@@ -53,6 +53,10 @@ INTENTIONAL_EXCEPTIONS: dict[str, str] = {
         "total_entries tracks canonical brand-family records; wave_1 is an "
         "execution manifest, not another brand catalog. Pinned by "
         "test_brand_identity.py.",
+    "daily_values.json":
+        "total_entries tracks nutrients only, the unit-plausibility table; "
+        "upper_limit_bound_dvs is a separate section the normalizer never reads. "
+        "Pinned by test_a9_safety_assessment_status.py.",
     "unit_conversions.json":
         "total_entries tracks vitamin_conversions only; mass_conversions "
         "and form_detection_patterns are static rule config, not vitamin "

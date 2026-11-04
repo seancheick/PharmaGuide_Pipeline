@@ -56,6 +56,7 @@ from audit_evidence_utils import (
 )
 from audit_identity_integrity import audit_product
 from brand_identity import BrandIdentity, BrandRegistry
+from assessment_readiness import UPPER_LIMIT_AMOUNT_UNDISCLOSED
 from core_export_model import (
     PRODUCTS_CORE_COLUMNS,
     build_projection_manifest,
@@ -2395,6 +2396,8 @@ CREATE TABLE IF NOT EXISTS products_core (
     quality_score_status            TEXT,
     product_safety_status           TEXT,
     quality_assessment_status       TEXT,
+    safety_assessment_status        TEXT,
+    safety_assessment_reason        TEXT,
     quality_tier                    TEXT,
     quality_score_suppressed_reason TEXT,
     v4_module                       TEXT,
@@ -3013,6 +3016,9 @@ def build_decision_highlights(enriched: Dict, scored: Dict) -> Dict[str, Any]:
         positive = "Quality score unavailable; review the label information and recorded safety warnings."
     elif safe_bool(enriched.get("is_trusted_manufacturer")) and safe_bool(enriched.get("has_full_disclosure")):
         positive = "Trusted manufacturer with full label disclosure."
+    elif assessment_status in {"partial", "failed"}:
+        # Evidence and score bands praise a result that is not finished yet.
+        positive = "Some quality signals are present, but this assessment isn't finished."
     elif v4_evidence >= 12:
         positive = "Backed by meaningful clinical evidence."
     elif score_100 >= 75:
@@ -3846,7 +3852,7 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
     )
     # Context events have no ingredient/risk-rule identity. Preserve distinct
     # event scope and claim categories rather than losing their authored copy.
-    if w.get("type") in {"manufacturer_violation", "marketing_claim"}:
+    if w.get("type") in {"manufacturer_violation", "marketing_claim", "label_statement"}:
         return (_norm(w.get("type")), _norm(w.get("source")), _norm(w.get("detail")), _norm(w.get("source_urls")))
 
     # A card with no rule, subject or ingredient (harmful additive, dietary) is
@@ -6923,6 +6929,110 @@ def _classify_product_role(
     }
 
 
+_LABEL_STATEMENT_NEGATIVE = re.compile(
+    r"\b(do not|don['’]t|should not|must not|not to be|no to be|not for|not intended"
+    r"|not recommended|not suitable|never|avoid)\b"
+)
+_LABEL_STATEMENT_UNLESS = re.compile(r"\b(unless|except)\b|under the (direct )?supervision|on the advice")
+_LABEL_STATEMENT_DOSE_LIMIT = re.compile(r"not exceed|not take more than|more than \d")
+_LABEL_STATEMENT_CONSULT = re.compile(
+    r"consult|ask |doctor|physician|health.?care|practitioner|professional|talk to|check with"
+    r"|seek|advice|advise|pharmacist|provider|clinician|midwife|obstetric"
+)
+_LABEL_STATEMENT_TTC = re.compile(
+    r"conceiv|(attempting|trying|planning|considering|likely|may|might)( on)?( to)?"
+    r"( become| becoming| get)? ?pregnan|planning on pregnancy|child.?bearing"
+)
+_LABEL_STATEMENT_NURSING = re.compile(r"nursing|nurisng|lactat|breast.?feed")
+_LABEL_STATEMENT_TO_MEN = re.compile(r"\bmen if attempting")
+_LABEL_STATEMENT_FLAGS = {
+    "pregnancy": "pregnant", "lactation": "breastfeeding", "ttc": "trying_to_conceive",
+}
+
+
+def _label_statement_gate(gate_type: str, conditions: List[str], flags: List[str]) -> Dict:
+    return {
+        "gate_type": gate_type,
+        "requires": {"conditions_any": conditions, "drug_classes_any": [], "profile_flags_any": flags},
+        "excludes": {
+            "conditions_any": [], "drug_classes_any": [], "profile_flags_any": [],
+            "product_forms_any": [], "nutrient_forms_any": [],
+        },
+        "dose": None,
+    }
+
+
+def _label_statement_audience(sentence: str) -> List[str]:
+    rest = _LABEL_STATEMENT_TTC.sub(" ", sentence)
+    return [
+        condition for condition, named in (
+            ("pregnancy", "pregnan" in rest),
+            ("lactation", bool(_LABEL_STATEMENT_NURSING.search(rest))),
+            ("ttc", rest != sentence),
+        ) if named
+    ]
+
+
+def _classify_label_statement(sentence: str) -> Optional[Tuple[str, List[str]]]:
+    """Severity and audience of one label sentence, or None when it isn't a firm one.
+
+    The groups Sean approved on 2026-11-03: a plain "do not use" or "not intended"
+    is avoid, one that allows a clinician's say-so is caution. Being told to consult
+    someone, a dose limit and contraception advice stay out. Without an "unless", the
+    words after a consult instruction can't make it firm ("If pregnant, ask your
+    doctor, and never ...").
+    """
+    text = re.sub(r"\s+", " ", sentence).strip().casefold()
+    if "{chart}" in text:
+        return None
+    if _LABEL_STATEMENT_DOSE_LIMIT.search(text):
+        return None
+    allows_clinician = bool(_LABEL_STATEMENT_UNLESS.search(text))
+    if not allows_clinician:
+        consult = _LABEL_STATEMENT_CONSULT.search(text)
+        text = text[:consult.start()] if consult else text
+    audience = ["ttc"] if _LABEL_STATEMENT_TO_MEN.search(text) else _label_statement_audience(text)
+    if not audience or not _LABEL_STATEMENT_NEGATIVE.search(text):
+        return None
+    return ("caution" if allows_clinician else "avoid"), audience
+
+
+def _label_statement_warnings(enriched: Dict) -> List[Dict]:
+    """A label's own firm pregnancy statement, shown word for word to those it names.
+
+    `condition_ids` keeps it hidden from everyone else: the app never hides an
+    untagged hard warning. "Label warning" is the only text not from the label.
+    """
+    result = []
+    seen = set()
+    for statement in safe_list(enriched.get("statements")):
+        notes = statement.get("notes") if isinstance(statement, dict) else None
+        if not isinstance(notes, str):
+            continue
+        for sentence in re.split(r"(?<=[.!?;])\s+", notes):
+            sentence = sentence.strip()
+            classified = _classify_label_statement(sentence)
+            identity = re.sub(r"\s+", " ", sentence).casefold()
+            if classified is None or identity in seen:
+                continue
+            seen.add(identity)
+            severity, audience = classified
+            gate = (
+                _label_statement_gate("combination", ["ttc"], ["sex_male", "sex_unstated"])
+                if audience == ["ttc"] and _LABEL_STATEMENT_TO_MEN.search(identity)
+                else _label_statement_gate("profile_flag", [], [_LABEL_STATEMENT_FLAGS[c] for c in audience])
+            )
+            result.append({
+                "type": "label_statement", "source": "label_statements",
+                "severity": severity, "display_mode_default": "suppress",
+                "evidence_level": "ungraded", "title": "Label warning",
+                "detail": sentence, "alert_body": sentence,
+                "condition_ids": audience, "drug_class_ids": [],
+                "profile_gate": gate, "source_urls": [],
+            })
+    return result
+
+
 def _product_context_warnings(enriched: Dict) -> List[Dict]:
     """Project existing assessments as context, never as product-specific bans.
 
@@ -6972,6 +7082,7 @@ def _product_context_warnings(enriched: Dict) -> List[Dict]:
             "detail": f"The label contains wording flagged as a {safe_str(row.get('type'))}. Label wording does not establish that this supplement is FDA-approved or proven to treat disease. This flag is a claim check, not a finding about its ingredients.",
             "source_urls": [ods_url],
         })
+    result.extend(_label_statement_warnings(enriched))
     return result
 
 
@@ -9095,6 +9206,14 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     # V4 cutover: evidence copy reads the v4 evidence pillar (/20), not v3 section C.
     v4_evidence = safe_float(safe_dict(safe_dict(scored.get("quality_pillars_v4")).get("evidence")).get("score"), 0)
 
+    quality_status = safe_str(scored.get("quality_score_status"))
+    assessment_open = safe_str(scored.get("quality_assessment_status")).lower() in {"partial", "failed"}
+    # An unfinished assessment publishes no number or tier: same rule as the
+    # public share index (sync_to_supabase._share_disposition).
+    if assessment_open:
+        score_100 = None
+    assessment_unavailable = assessment_open or quality_status in {"not_scored", "suppressed_safety"}
+
     # Title with score emoji
     score_emoji = ""
     if score_100:
@@ -9110,9 +9229,6 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     # Limit title length for social platforms
     if len(share_title) > 200:
         share_title = share_title[:197] + "..."
-
-    quality_status = safe_str(scored.get("quality_score_status"))
-    assessment_unavailable = quality_status in {"not_scored", "suppressed_safety"}
 
     # Description
     positive_signals = []
@@ -9134,7 +9250,7 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     share_description = f"A {grade.lower()} quality supplement"
     if positive_signals:
         share_description += f" with {', '.join(positive_signals[:2])}"
-    share_description += ". Analyzed by PharmaGuide for safety, purity, and evidence."
+    share_description += ". Quality analyzed by PharmaGuide; this is not a safety rating."
     if quality_status == "not_scored":
         share_description = (
             "Quality score unavailable. The quality assessment is incomplete. "
@@ -9143,6 +9259,11 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     elif quality_status == "suppressed_safety":
         share_description = (
             "Quality score withheld. Review this product’s recorded safety warnings."
+        )
+    elif assessment_open:
+        share_description = (
+            "Quality assessment is incomplete. Review the label information "
+            "and recorded safety warnings."
         )
 
     if len(share_description) > 300:
@@ -10870,6 +10991,18 @@ def compute_v4_category_percentiles(
     return updates
 
 
+def _safety_assessment_status_value(scored: Dict) -> Optional[str]:
+    """Only a declared value reaches the column; anything else is NULL, meaning not known."""
+    value = scored.get("safety_assessment_status")
+    return value if value in {"complete", "incomplete"} else None
+
+
+def _safety_assessment_reason_value(scored: Dict) -> Optional[str]:
+    """Only a declared reason reaches the column; NULL leaves the app's generic text."""
+    value = scored.get("safety_assessment_reason")
+    return value if value == UPPER_LIMIT_AMOUNT_UNDISCLOSED else None
+
+
 def build_core_row(
     enriched: Dict,
     scored: Dict,
@@ -11023,6 +11156,8 @@ def build_core_row(
         safe_str(effective_scored.get("quality_score_status")) or None,
         safe_str(effective_scored.get("product_safety_status")) or None,
         safe_str(effective_scored.get("quality_assessment_status")) or None,
+        _safety_assessment_status_value(effective_scored),
+        _safety_assessment_reason_value(effective_scored),
         safe_str(effective_scored.get("quality_tier")) or None,
         safe_str(effective_scored.get("quality_score_suppressed_reason")) or None,
         safe_str(effective_scored.get("_v4_module")) or None,
@@ -11714,16 +11849,31 @@ def build_final_db(
             ),
         )
 
+    # NULL says the safety checks are not known, so a release candidate never
+    # contains one. The build stops as a whole, so no product is dropped over it.
+    if strict:
+        missing_safety_status = c.execute(
+            "SELECT COUNT(*) FROM products_core WHERE safety_assessment_status IS NULL"
+        ).fetchone()[0]
+        if missing_safety_status:
+            raise ValueError(
+                f"Strict mode: {missing_safety_status} products have no "
+                "safety_assessment_status. Re-score them from the current code."
+            )
+
     # ── V4 category percentiles (backfill, ranked over the shipped cohort) ──
     # Runs LAST — after UPC dedup and the NOT_SCORED sweep — so each cohort
     # counts only rows that actually ship. Ranks quality_score_v4_100 within
     # percentile_category, mirroring score_supplements._attach_category_percentiles.
     # Reading products_core means banned-/safety-suppressed products (status !=
-    # 'scored') self-exclude; cohorts smaller than 5 stay NULL (unranked).
+    # 'scored') self-exclude; cohorts smaller than 5 stay NULL (unranked). A rank
+    # reads as a finished result, so unfinished assessments neither get one nor
+    # shift the ranks of finished ones.
     pct_rows = c.execute(
         "SELECT dsld_id, percentile_category, quality_score_v4_100 "
         "FROM products_core "
         "WHERE quality_score_status = 'scored' "
+        "AND quality_assessment_status = 'complete' "
         "AND quality_score_v4_100 IS NOT NULL "
         "AND percentile_category IS NOT NULL AND percentile_category != ''"
     ).fetchall()

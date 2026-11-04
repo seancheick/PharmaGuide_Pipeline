@@ -99,8 +99,9 @@ def _product_safety_status(
         return "unsafe"
     if verdict == "CAUTION":
         return "caution"
-    if safety_resolvers_failed(safety_gate.get("ingredient_assessment_errors")):
-        # No hard verdict, and a safety resolver never checked the rows.
+    if safety_gate.get("ingredient_assessment_errors"):
+        # No finding, but the screen did not read everything: a resolver failed
+        # or a panel was never captured. Neither is "no known concern".
         return "not_assessed"
     if verdict in {"", "SAFE"}:
         return "no_known_catalog_concern"
@@ -129,10 +130,6 @@ _GENERIC_NUTRIENT_DOSE_METHODS = frozenset({
 #: Adequacy statuses recorded when a printed nutrient amount could not be read.
 #: An unstated vitamin form is the label's limitation (its upper-limit risk is
 #: dose-safety's unresolved state), so it is not listed here.
-_UNREAD_NUTRIENT_AMOUNT_STATUSES = frozenset({
-    "skipped_unit_unrecognized",
-    "skipped_amount_not_declared",
-})
 
 
 def unfinished_source_assessment(enriched_product: Dict[str, Any],
@@ -174,13 +171,9 @@ def unfinished_source_assessment(enriched_product: Dict[str, Any],
     if module in _NUTRIENT_DOSE_ROUTES and (
         module != "generic" or dose_meta.get("method") in _GENERIC_NUTRIENT_DOSE_METHODS
     ):
-        for row in _safe_dict(enriched_product.get("rda_ul_data")).get("adequacy_results") or []:
-            if not isinstance(row, dict) or row.get("ul_status") not in _UNREAD_NUTRIENT_AMOUNT_STATUSES:
-                continue
-            printed = row.get("original_quantity")
-            if (row.get("data_by_group") and isinstance(printed, (int, float))
-                    and not isinstance(printed, bool) and printed > 0):
-                return "nutrient_amount_unread"
+        from assessment_readiness import unread_printed_nutrient_amounts
+        if unread_printed_nutrient_amounts(enriched_product):
+            return "nutrient_amount_unread"
     # The enricher owns the sugar reading: a printed sugars line it classified
     # but could not read as an exact mass keeps its level with no amount.
     sugar = _safe_dict(_safe_dict(enriched_product.get("dietary_sensitivity_data")).get("sugar"))
@@ -367,7 +360,11 @@ def assemble_scored_artifact(
         was_assessed=safety_was_assessed,
     )
     unfinished = unfinished_source_assessment(enriched_product, _safe_dict(module_breakdown))
-    from assessment_readiness import evaluate_release_assessment
+    from assessment_readiness import (
+        evaluate_release_assessment, evidence_review_open, retained_evidence_result_state,
+        safety_assessment_reason,
+        safety_assessment_status,
+    )
     assessment_readiness = {**assessment_readiness, "release_assessment": evaluate_release_assessment(
         enriched_product, assessment_readiness, _safe_dict(module_breakdown),
         unfinished_source=unfinished,
@@ -388,9 +385,29 @@ def assemble_scored_artifact(
     # unresolved source review. A provisional calculation must render the
     # same completeness conclusion without recomputing that policy here.
     release_complete = assessment_readiness["release_assessment"]["is_complete"]
+    pillars = v4.get("quality_pillars_v4")
+    if (status == "scored" and _safe_dict(pillars).get("evidence")
+            and evidence_review_open(assessment_readiness["release_assessment"])):
+        from evidence_resolver import resolve_product_evidence
+        from scoring_v4.quality_score import mark_evidence_review_open
+        v4 = {**v4, "quality_pillars_v4": {
+            **pillars, "evidence": mark_evidence_review_open(
+                pillars["evidence"],
+                review_open_outside_scope=resolve_product_evidence(
+                    enriched_product, owner_scoped=True, module=_safe_dict(module_breakdown).get("module"),
+                ).review_open_outside_scope)}}
+    elif (status == "scored" and _safe_dict(pillars).get("evidence")
+          and any(row.get("state") == "not_yet_evaluated" for row in
+                  _safe_dict(assessment_readiness.get("evidence")).get("ingredient_assessments") or [])):
+        from scoring_v4.quality_score import note_unreviewed_rows
+        v4 = {**v4, "quality_pillars_v4": {
+            **pillars, "evidence": note_unreviewed_rows(pillars["evidence"])}}
+    # A panel the safety screen never read keeps the score (a capture gap is a
+    # recorded fact) but cannot make the assessment finished.
+    capture_gap = "safety_capture_incomplete" if safety_gate.get("ingredient_assessment_errors") else None
     quality_assessment_status = _quality_assessment_status(
         status, dose_safety, v4.get("quality_pillars_v4"),
-        unfinished or (None if release_complete else "release_assessment_incomplete"),
+        unfinished or (None if release_complete else "release_assessment_incomplete") or capture_gap,
     )
     quality_score = v4.get("quality_score_v4_100")
     verdict = _public_verdict(v4)
@@ -470,6 +487,13 @@ def assemble_scored_artifact(
         "route_confidence": route_confidence,
         "product_safety_status": product_safety_status,
         "quality_assessment_status": quality_assessment_status,
+        "safety_assessment_status": safety_assessment_status(
+            quality_score_status=status, product_safety_status=product_safety_status,
+            safety_gate=safety_gate, dose_safety=dose_safety,
+            release=assessment_readiness["release_assessment"],
+            evidence_result_state=retained_evidence_result_state(module_breakdown),
+        ),
+        "safety_assessment_reason": safety_assessment_reason(assessment_readiness["release_assessment"]),
         "assessment_readiness": assessment_readiness,
         "dose_safety_evaluation": dose_safety,
         "quality_tier": v4.get("quality_tier"),

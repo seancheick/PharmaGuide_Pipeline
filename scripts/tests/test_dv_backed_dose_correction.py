@@ -612,3 +612,71 @@ def test_dv_plausibility_audit_reports_corrected_and_uncorrected_mismatches(tmp_
     csv_text = output.read_text(encoding="utf-8")
     assert "corrected" in csv_text
     assert "uncorrected_dv_mismatch" in csv_text
+
+
+@pytest.mark.parametrize("label, group", [
+    ("Adults and children 4 or more years of age", "adult_4_plus"),
+    ("Children less than 4 years of age", "children_1_3"),
+    ("Pregnant and Lactating", "pregnant_lactating"),
+    ("Infants", "infants"),
+])
+def test_each_dsld_target_group_reads_as_its_own_daily_value(label, group):
+    assert EnhancedDSLDNormalizer()._normalize_daily_value_target_group(label) == group
+
+
+def _iodine_row(quantity):
+    return {"name": "Iodine", "category": "mineral", "ingredientGroup": "Iodine", "quantity": quantity}
+
+
+def _dv_entry(order, serving, amount, unit, *groups):
+    return {
+        "servingSizeOrder": order, "servingSizeQuantity": serving, "operator": "=",
+        "quantity": amount, "unit": unit, "servingSizeUnit": "Gummy(ies)",
+        "dailyValueTargetGroup": [{"name": name, "operator": "=", "percent": percent} for name, percent in groups],
+    }
+
+
+CHILD = "Children less than 4 years of age"
+ADULT = "Adults and children 4 or more years of age"
+
+
+def test_unit_repair_reads_the_dv_of_the_column_it_takes_the_percent_from():
+    # 82582: the first column is a child placeholder, the 30 "mg" and its 20% are the adult column.
+    row = _cleaned_active(_raw_product([_iodine_row([
+        _dv_entry(1, 1, 0, "NP", (CHILD, 21)),
+        _dv_entry(2, 2, 30, "mg", (ADULT, 20)),
+    ])]))
+    assert (row["quantity"], row["unit"], row["dailyValue"]) == (30.0, "mcg", 20.0)
+    assert row["daily_value_target_group"] == "adult_4_plus"
+
+
+def test_a_child_only_column_stays_on_the_child_dv():
+    # 18 "mg" at 20% proves 18 mcg only on the child DV of 90 mcg; the adult DV would read 30.
+    row = _cleaned_active(_raw_product([_iodine_row([_dv_entry(1, 1, 18, "mg", (CHILD, 20))])]))
+    assert (row["quantity"], row["unit"]) == (18.0, "mcg")
+    assert row["daily_value_target_group"] == "children_1_3"
+
+
+@pytest.mark.parametrize("groups, shown, group", [
+    (((CHILD, 33), (ADULT, 20)), 33.0, "children_1_3"),  # 179590 keeps the 53% it prints for a child.
+    (((ADULT, 20), (CHILD, 33)), 20.0, "adult_4_plus"),
+    (((CHILD, 60), (ADULT, 0)), 60.0, "children_1_3"),  # 82319's child column.
+    (((CHILD, 0), (ADULT, 60)), 60.0, "adult_4_plus"),  # 82319's adult column.
+])
+def test_a_column_shows_the_percent_it_reports_and_keeps_the_adult_one_for_the_bound(groups, shown, group):
+    row = _cleaned_active(_raw_product([_iodine_row([_dv_entry(1, 1, 30, "mcg", *groups)])]))
+    assert (row["dailyValue"], row["daily_value_target_group"]) == (shown, group)
+    variant = row["raw_taxonomy"]["quantityVariants"][0]
+    adult = dict(groups)[ADULT]
+    assert variant.get("adult_daily_value") == (float(adult) if adult else None)
+
+
+def test_the_adult_percent_kept_for_the_bound_is_never_exported():
+    raw = json.loads((ROOT / "scripts/tests/fixtures/a9_upper_limit_277314_raw.json").read_text())
+    enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    vitamin_d = next(row for row in enriched["activeIngredients"] if row["name"] == "Vitamin D")
+    assert vitamin_d["raw_taxonomy"]["quantityVariants"][0]["adult_daily_value"] == 2.0
+    blob = build_detail_blob(enriched, _minimal_scored())
+    assert "adult_daily_value" not in json.dumps(blob, default=str)
+    vitamin_a = next(row for row in blob["ingredients"] if row["name"] == "Vitamin A")
+    assert vitamin_a["dailyValue"] == 7.0  # What the label prints for a child, adults 2%.
