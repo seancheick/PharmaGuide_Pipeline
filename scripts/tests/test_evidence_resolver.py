@@ -1724,3 +1724,56 @@ def test_primary_protein_source_does_not_delegate_to_itself(canonical):
     result = er.resolve_evidence_for_row(row, product)
     assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert not result.points_eligible
+
+
+def test_held_primary_source_cannot_be_completed_by_a_supported_nutrient(monkeypatch):
+    source = _approved_test_source({'id': 'TEST_HELD_PRIMARY', 'study_type': 'rct_single',
+                                   'effect_direction': 'positive_strong'})
+    source['study_contexts'][0]['scoring_eligible'] = False
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'synthetic_material': [source]})
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {})
+    row = {'name': 'Synthetic Material', 'canonical_id': 'synthetic_material'}
+    result = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
+    assert result.reason_code == 'clinical_sources_ineligible'
+    assert not er.compose_product_resolution_state([
+        EvidenceDisposition.RESOLVED_BY_AUTHORITY.value, result.disposition])[1]
+
+
+def test_held_clinical_record_does_not_hide_completed_preparation_literature():
+    row = {'name': 'Collagen Peptides', 'canonical_id': 'collagen',
+           'raw_source_text': 'Collagen Peptides', 'raw_source_path': 'ingredientRows[0]',
+           'quantity': 15, 'unit': 'g'}
+    result = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
+    assert result.reason_code == 'literature_reviewed_human_clinical_evidence'
+    assert not result.points_eligible
+    assert 'literature_evidence' in result.owner_facts
+
+
+def test_missing_source_context_cannot_be_completed_by_nutrient_authority(monkeypatch):
+    source = _approved_test_source({'id': 'TEST_MISSING_CONTEXT', 'study_type': 'rct_single',
+                                   'effect_direction': 'positive_strong'})
+    source.pop('study_contexts')
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'synthetic_material': [source]})
+    row = {'name': 'Synthetic Material', 'canonical_id': 'synthetic_material'}
+    result = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
+    assert result.reason_code == 'clinical_source_contexts_missing'
+    assert not er.compose_product_resolution_state([
+        EvidenceDisposition.RESOLVED_BY_AUTHORITY.value, result.disposition])[1]
+
+
+@pytest.mark.parametrize('source_hold', ['retracted', 'expression_of_concern', 'scoring_eligible'])
+def test_literature_fallback_cannot_hide_a_hold_on_the_same_source(monkeypatch, source_hold):
+    source = _approved_test_source({'id': 'TEST_SOURCE_HOLD', 'study_type': 'rct_single',
+                                   'effect_direction': 'positive_strong'})
+    source['references_structured'][0][source_hold] = False if source_hold == 'scoring_eligible' else True
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'synthetic_material': [source]})
+    monkeypatch.setattr(er, '_load_literature_evidence', lambda: {'synthetic_material': {
+        'verification_result': 'authoritative_pubmed_verified',
+        'verification_provenance': {'all_pmids_verified': True, 'retractions_found': False},
+        'effect_direction': 'mixed', 'applicability_status': 'applicable',
+        'qualifying_human_studies': [{'pmid': '28661438'}]}})
+    row = {'name': 'Synthetic Material', 'canonical_id': 'synthetic_material'}
+    result = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert not result.points_eligible
+    assert result.blocking_reasons

@@ -1531,8 +1531,7 @@ def evaluate_release_assessment(
                         if (receipt.get("status") not in {"applicable", "assessed_studied_formula"}
                                 or receipt.get("scope_qualification_complete") is not True):
                             blockers.append("clinical_applicability_unreviewed:" + str(receipt.get("id") or "unknown"))
-        elif ((_panel_primary_open(product, readiness) if module in _AUTHORITY_PANEL_MODULES
-               else _required_evidence_review_open(product, readiness, module))
+        elif (_required_evidence_review_open(product, readiness, module)
               or _evidence_presents_as_unreviewed(module_breakdown)
               or (not _is_ready(str(_safe_dict(readiness.get("evidence")).get("readiness") or ""))
                   and _dose_rests_on_a_hidden_amount(module_breakdown))):
@@ -1652,7 +1651,7 @@ def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mappin
     evidence = _safe_dict(readiness.get("evidence"))
     if _is_ready(str(evidence.get("readiness") or "")):
         return False
-    if module not in _OWNER_SCOPED_EVIDENCE_MODULES:
+    if module not in _OWNER_SCOPED_EVIDENCE_MODULES | _AUTHORITY_PANEL_MODULES:
         return True
     from evidence_resolver import evidence_required_canonicals
     required = {_norm(canonical) for canonical in evidence_required_canonicals(dict(product), module=module)}
@@ -1709,20 +1708,6 @@ def evidence_studies_did_not_qualify(product: Mapping[str, Any], readiness: Mapp
             and _safe_dict(records.get(match.get("id"))).get("study_type") in _HUMAN_STUDY_TYPES
             for match in rejected)
         for row in rows)
-
-
-def _panel_primary_open(product: Mapping[str, Any], readiness: Mapping[str, Any]) -> bool:
-    """An add-in the label is about holds a panel product while it goes unread.
-
-    The essential-nutrient panel owns this question and other add-ins earn nothing
-    here, so their rows stay audit metadata as omega's do.
-    """
-    evidence = _safe_dict(readiness.get("evidence"))
-    open_refs = set(_safe_list(evidence.get("not_yet_evaluated_row_refs")))
-    open_rows = [row for row in _safe_list(evidence.get("ingredient_assessments"))
-                 if isinstance(row, Mapping) and row.get("source_row_ref") in open_refs]
-    return (any(row.get("role") == ROLE_CLAIM_PROMINENT for row in open_rows)
-            or _title_names_an_open_row(product, open_rows))
 
 
 def _title_names_an_open_row(product: Mapping[str, Any], open_rows: list) -> bool:

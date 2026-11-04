@@ -50,7 +50,7 @@ def test_an_open_review_reads_as_open(pipeline, label, module):
     assert evidence_review_open(scored["assessment_readiness"]["release_assessment"])
     assert evidence["score"] == 0
     assert evidence["evidence_result_state"] in {
-        "applicability_unestablished", "research_present_applicability_unestablished"}
+        "clinical_review_not_covered", "applicability_unestablished", "research_present_applicability_unestablished"}
     assert evidence["display_state"] == "not_yet_reviewed"
     assert "review pending" in evidence["reason"]
     assert NOT_ESTABLISHED not in evidence["reason"]
