@@ -48,6 +48,7 @@ python scripts/sync_to_supabase.py <output_dir> --dry-run
 | Local File | Supabase Location |
 |-----------|-------------------|
 | `pharmaguide_core.db` | Storage: `pharmaguide/v{version}/pharmaguide_core.db` |
+| `pharmaguide_core.db.gz`, `pharmaguide_core.db.gz.json` | Storage: the same folder. The gzip of that catalog and its descriptor; see **Compressed catalog** below |
 | `detail_index.json` | Storage: `pharmaguide/v{version}/detail_index.json` (compatibility/audit map; app can now prefer `products_core.detail_blob_sha256`) |
 | `detail_blobs/*.json` | Storage: `pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json` |
 | `export_manifest.json` | PostgreSQL: `export_manifest` table (is_current=true) |
@@ -134,6 +135,16 @@ An unsigned sync is refused once `release_trust.json` pins a production key. Bef
 A signed release on the current catalog still rotates, because its sequence is new. Re-running
 the same signed release does not. The RPC currently refuses any repeated `db_version`, so this
 path needs a migration that allows it.
+
+### Compressed catalog
+
+Every sync publishes the catalog twice in `v{version}/`: the plain file and its gzip, about one eighth the size. There is no second update path. The manifest row, the version and the checksum all stay as they were, and what activates on a phone must hash to that checksum either way.
+
+- **Keep publishing the plain file.** Every build before compression fetches only `pharmaguide_core.db`, and it has no other route to a catalog. Removing it strands those builds, so it stays until no supported build lacks the gzip reader.
+- **`pharmaguide_core.db.gz`** is `application/gzip` with no `Content-Encoding`, so no client unpacks it in transit and Range requests count compressed bytes. Its bytes don't depend on the time or the folder it was built in.
+- **`pharmaguide_core.db.gz.json`** is for builds with no release keys, which can't read signed fields. It holds `format`, `version`, `path`, `sha256`, `size`, `decompressed_sha256` and `decompressed_size`. It vouches for nothing: the app uses it only if `version` and `decompressed_sha256` match its manifest row. It is uploaded after the gzip, so a phone that can see it finds the file it names.
+- **Signed releases** carry the same facts as `catalog.compressed`, with `path`, `sha256`, `size` and `decompressed_size`. `format` stays 1, and older keyed builds ignore the key. A release signed before compression stays valid.
+- **On the phone:** if the gzip can't deliver (its hash is wrong, it won't unpack to the catalog, or it's missing), the app falls back to the plain file. A network or disk failure does neither: the partial is kept and the next check resumes it.
 
 ### Version checking
 

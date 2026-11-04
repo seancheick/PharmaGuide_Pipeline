@@ -4,6 +4,7 @@ Keys are generated at runtime. No private key is ever committed.
 """
 
 import base64
+import gzip
 import hashlib
 import json
 import os
@@ -196,6 +197,12 @@ def test_manifest_has_exactly_the_contract_shape(tmp_path):
             "sha256": _sha(catalog / "pharmaguide_core.db"),
             "schema_version": "2.5.0",
             "min_app_version": "1.0.0",
+            "compressed": {
+                "path": f"v{CATALOG_VERSION}/pharmaguide_core.db.gz",
+                "sha256": _sha(catalog / "pharmaguide_core.db.gz"),
+                "size": (catalog / "pharmaguide_core.db.gz").stat().st_size,
+                "decompressed_size": (catalog / "pharmaguide_core.db").stat().st_size,
+            },
         },
         "rules": {
             "version": RULES_VERSION,
@@ -1444,8 +1451,288 @@ _APP_PINNED_RELEASES = [
 ]
 
 
+# A later key, because the entry above predates the compressed catalog. Its private
+# half was thrown away after this one signature.
+_APP_PINNED_COMPRESSED_PUBLIC_KEY = "aeeb50a50a11763cc12ed7049c00bc5afe4573b8f5ba2cec6d9edcfdc0ce9340"
+_APP_PINNED_COMPRESSED_RELEASE = (
+    "{\"blocked_versions\":{\"catalog\":[],\"rules\":[]},\"catalog\":{\"compressed\":{\"decompressed_size\":66658304,\"path\":\"v2026.11.03.120000/pharmaguide_core.db.gz\",\"sha256\":\"a32e75af651a77187dc563e4741158563b79f4409743e5fdd2d47c7aa753331b\",\"size\":8402758},\"min_app_version\":\"1.0.0\",\"path\":\"v2026.11.03.120000/pharmaguide_core.db\",\"schema_version\":\"5.3.0\",\"sha256\":\"652f55016243bf1b9f1bbea46d5749ef892dbe394e46de9d66ab1aacf0b4af57\",\"version\":\"2026.11.03.120000\"},\"format\":1,\"key_id\":\"vector-key-2\",\"min_rules_version\":\"1.0.15\",\"release_sequence\":43,\"rules\":null}",
+    "vector-key-2:NtIBkDQIAhKTozmGnkU2ZYRr1FQW0Znbuy4JY8al1cyUZLFgtYXNn7TN9oVbyZJOknKpf+FTGnEh6KRbWpHSDQ==",
+)
+
+
+def test_a_compressed_entry_matches_what_the_app_pins():
+    text, signature = _APP_PINNED_COMPRESSED_RELEASE
+    public_key = Ed25519PublicKey.from_public_bytes(
+        bytes.fromhex(_APP_PINNED_COMPRESSED_PUBLIC_KEY)
+    )
+    assert rm.canonical_text(json.loads(text)) == text
+    assert rm.verify_release(text, signature, public_key)["catalog"]["compressed"]
+
+
 @pytest.mark.parametrize("text,signature", _APP_PINNED_RELEASES)
 def test_output_matches_what_the_app_pins(text, signature):
     public_key = Ed25519PublicKey.from_public_bytes(bytes.fromhex(_APP_PINNED_PUBLIC_KEY))
     assert rm.canonical_text(json.loads(text)) == text
     rm.verify_release(text, signature, public_key)
+
+
+# --- compressed catalog ------------------------------------------------------------
+
+
+def _gunzip(path):
+    return gzip.decompress(Path(path).read_bytes())
+
+
+def test_compressed_catalog_decompresses_to_the_exact_catalog(tmp_path):
+    catalog = _make_catalog(tmp_path / "catalog")
+    entry = rm.ensure_compressed_catalog(catalog / "pharmaguide_core.db", CATALOG_VERSION)
+    gz = catalog / "pharmaguide_core.db.gz"
+    assert _gunzip(gz) == (catalog / "pharmaguide_core.db").read_bytes()
+    assert entry == {
+        "path": f"v{CATALOG_VERSION}/pharmaguide_core.db.gz",
+        "sha256": _sha(gz),
+        "size": gz.stat().st_size,
+        "decompressed_size": (catalog / "pharmaguide_core.db").stat().st_size,
+    }
+
+
+def test_compressed_catalog_bytes_do_not_depend_on_when_or_where_they_were_made(
+    tmp_path, monkeypatch,
+):
+    first = _make_catalog(tmp_path / "first")
+    second = tmp_path / "somewhere_else"
+    second.mkdir()
+    (second / "pharmaguide_core.db").write_bytes((first / "pharmaguide_core.db").read_bytes())
+    entry = rm.ensure_compressed_catalog(first / "pharmaguide_core.db", CATALOG_VERSION)
+    monkeypatch.setattr("time.time", lambda: 1_000_000_000.0)
+    assert rm.ensure_compressed_catalog(second / "pharmaguide_core.db", CATALOG_VERSION) == entry
+    assert (first / "pharmaguide_core.db.gz").read_bytes() == (
+        second / "pharmaguide_core.db.gz"
+    ).read_bytes()
+
+
+@pytest.mark.parametrize("stale", [b"not gzip at all", gzip.compress(b"another catalog")])
+def test_a_gz_left_from_another_build_is_replaced(tmp_path, stale):
+    catalog = _make_catalog(tmp_path / "catalog")
+    (catalog / "pharmaguide_core.db.gz").write_bytes(stale)
+    rm.ensure_compressed_catalog(catalog / "pharmaguide_core.db", CATALOG_VERSION)
+    assert _gunzip(catalog / "pharmaguide_core.db.gz") == (
+        catalog / "pharmaguide_core.db"
+    ).read_bytes()
+
+
+def test_a_failed_compression_leaves_no_file_that_looks_finished(tmp_path, monkeypatch):
+    catalog = _make_catalog(tmp_path / "catalog")
+
+    def die(*_args, **_kwargs):
+        raise OSError("No space left on device")
+
+    monkeypatch.setattr(rm.shutil, "copyfileobj", die)
+    with pytest.raises(OSError):
+        rm.ensure_compressed_catalog(catalog / "pharmaguide_core.db", CATALOG_VERSION)
+    assert not (catalog / "pharmaguide_core.db.gz").exists()
+    assert not (catalog / "pharmaguide_core.db.gz.tmp").exists()
+
+
+def test_a_gz_that_does_not_come_back_as_the_catalog_never_takes_the_name(
+    tmp_path, monkeypatch,
+):
+    catalog = _make_catalog(tmp_path / "catalog")
+    monkeypatch.setattr(rm, "_gzip_contents", lambda _path: ("0" * 64, 1))
+    with pytest.raises(rm.ReleaseManifestError, match="does not decompress"):
+        rm.ensure_compressed_catalog(catalog / "pharmaguide_core.db", CATALOG_VERSION)
+    assert not (catalog / "pharmaguide_core.db.gz").exists()
+    assert not (catalog / "pharmaguide_core.db.gz.tmp").exists()
+
+
+def test_format_stays_one_so_older_keyed_builds_keep_reading_the_raw_entry(tmp_path):
+    catalog = _make_catalog(tmp_path / "catalog")
+    release = json.loads(_build(catalog))
+    assert release["format"] == 1
+    assert release["catalog"]["path"] == f"v{CATALOG_VERSION}/pharmaguide_core.db"
+    assert release["catalog"]["sha256"] == _sha(catalog / "pharmaguide_core.db")
+
+
+def test_a_signed_release_from_before_compression_stays_valid(tmp_path):
+    release = json.loads(_build(_make_catalog(tmp_path / "catalog")))
+    del release["catalog"]["compressed"]
+    assert rm.parse_release(rm.canonical_text(release))["catalog"].get("compressed") is None
+
+
+@pytest.mark.parametrize("change, match", [
+    ({"path": "v2026.10.01.120000/other.gz"}, "compressed.path"),
+    ({"path": "../evil.gz"}, "compressed.path"),
+    ({"sha256": "F" * 64}, "compressed.sha256"),
+    ({"sha256": "abc"}, "compressed.sha256"),
+    ({"size": 0}, "compressed.size"),
+    ({"size": "12"}, "compressed.size"),
+    ({"size": True}, "compressed.size"),
+    ({"decompressed_size": -1}, "compressed.decompressed_size"),
+    ({"extra": 1}, "compressed must have exactly"),
+])
+def test_a_malformed_compressed_entry_is_refused(tmp_path, change, match):
+    release = json.loads(_build(_make_catalog(tmp_path / "catalog")))
+    release["catalog"]["compressed"].update(change)
+    with pytest.raises(rm.ReleaseManifestError, match=match):
+        rm.validate_release(release)
+
+
+def test_a_catalog_entry_with_any_other_extra_field_is_still_refused(tmp_path):
+    release = json.loads(_build(_make_catalog(tmp_path / "catalog")))
+    release["catalog"]["surprise"] = 1
+    with pytest.raises(rm.ReleaseManifestError, match="catalog must have exactly"):
+        rm.validate_release(release)
+
+
+def test_unsigned_sync_publishes_raw_gz_and_descriptor_before_the_flip(tmp_path, harness):
+    catalog = _make_catalog(tmp_path / "catalog")
+    db = catalog / "pharmaguide_core.db"
+    result = sync.sync(str(catalog), max_workers=1)
+    assert result["status"] == "synced"
+
+    raw_path = f"v{CATALOG_VERSION}/pharmaguide_core.db"
+    gz_path = f"{raw_path}.gz"
+    descriptor_path = f"{gz_path}.json"
+    objects = harness.remote.objects
+    # Every build on a phone today reads this exact object.
+    assert objects[raw_path] == db.read_bytes()
+    assert gzip.decompress(objects[gz_path]) == db.read_bytes()
+    assert json.loads(objects[descriptor_path]) == {
+        "format": 1,
+        "version": CATALOG_VERSION,
+        "path": gz_path,
+        "sha256": hashlib.sha256(objects[gz_path]).hexdigest(),
+        "size": len(objects[gz_path]),
+        "decompressed_sha256": _sha(db),
+        "decompressed_size": db.stat().st_size,
+    }
+
+    names = [event[1] if event[0] == "upload" else event[0] for event in harness.events]
+    # A phone that sees the descriptor must find the file it names.
+    assert names.index(raw_path) < names.index(gz_path) < names.index(descriptor_path)
+    assert names.index(descriptor_path) < names.index("insert")
+    assert ("upload", gz_path, False) in harness.events
+    assert ("upload", descriptor_path, False) in harness.events
+
+
+def test_the_gz_is_stored_so_no_client_unpacks_it_in_transit(tmp_path, monkeypatch, harness):
+    options = {}
+    real_upload = supabase_client.upload_file
+
+    def recording(client, bucket, path, local_path, **kwargs):
+        options[path] = kwargs
+        return real_upload(client, bucket, path, local_path, **kwargs)
+
+    monkeypatch.setattr(supabase_client, "upload_file", recording)
+    sync.sync(str(_make_catalog(tmp_path / "catalog")), max_workers=1)
+    gz_path = f"v{CATALOG_VERSION}/pharmaguide_core.db.gz"
+    assert options[gz_path]["content_type"] == "application/gzip"
+    assert "content_encoding" not in options[gz_path]
+    assert options[f"{gz_path}.json"]["content_type"] == "application/json"
+
+
+def test_signed_sync_names_the_gz_it_uploads(tmp_path, harness, key):
+    catalog = _make_catalog(tmp_path / "catalog")
+    text = _build(catalog)
+    manifest, signature = _write_signed(tmp_path, text, key)
+    sync.sync(
+        str(catalog), max_workers=1, release_manifest=manifest, release_signature=signature,
+    )
+    compressed = json.loads(text)["catalog"]["compressed"]
+    assert hashlib.sha256(harness.remote.objects[compressed["path"]]).hexdigest() == (
+        compressed["sha256"]
+    )
+
+
+def test_signed_sync_refuses_a_gz_changed_after_signing_before_any_write(tmp_path, harness, key):
+    catalog = _make_catalog(tmp_path / "catalog")
+    manifest, signature = _write_signed(tmp_path, _build(catalog), key)
+    # Decompresses to the right catalog, but these are not the signed bytes.
+    (catalog / "pharmaguide_core.db.gz").write_bytes(
+        gzip.compress((catalog / "pharmaguide_core.db").read_bytes(), compresslevel=1)
+    )
+    with pytest.raises(rm.ReleaseManifestError, match="compressed"):
+        sync.sync(
+            str(catalog), max_workers=1, release_manifest=manifest, release_signature=signature,
+        )
+    assert not _uploads(harness)
+
+
+def test_a_signed_release_from_before_compression_still_syncs_with_a_gz(tmp_path, harness, key):
+    catalog = _make_catalog(tmp_path / "catalog")
+    release = json.loads(_build(catalog))
+    del release["catalog"]["compressed"]
+    manifest, signature = _write_signed(tmp_path, rm.canonical_text(release), key)
+    result = sync.sync(
+        str(catalog), max_workers=1, release_manifest=manifest, release_signature=signature,
+    )
+    assert result["status"] == "synced"
+    assert f"v{CATALOG_VERSION}/pharmaguide_core.db.gz" in harness.remote.objects
+
+
+@pytest.mark.parametrize("name", ["pharmaguide_core.db.gz", "pharmaguide_core.db.gz.json"])
+def test_sync_refuses_to_replace_different_gz_bytes_already_published(tmp_path, harness, name):
+    catalog = _make_catalog(tmp_path / "catalog")
+    harness.remote.objects[f"v{CATALOG_VERSION}/{name}"] = b"different"
+    with pytest.raises(ValueError, match="immutable"):
+        sync.sync(str(catalog), max_workers=1)
+    assert not _uploads(harness)
+
+
+def test_rerunning_a_sync_after_a_failure_reuses_identical_objects(tmp_path, harness):
+    catalog = _make_catalog(tmp_path / "catalog")
+    sync.sync(str(catalog), max_workers=1)
+    harness.events.clear()
+    sync.sync(str(catalog), max_workers=1)
+    gz_path = f"v{CATALOG_VERSION}/pharmaguide_core.db.gz"
+    assert ("upload", gz_path, False) not in harness.events
+    assert ("upload", f"{gz_path}.json", False) not in harness.events
+
+
+def test_a_catalog_already_current_gains_its_gz_without_replacing_the_catalog(
+    tmp_path, harness,
+):
+    catalog = _make_catalog(tmp_path / "catalog")
+    db = catalog / "pharmaguide_core.db"
+    raw_path = f"v{CATALOG_VERSION}/pharmaguide_core.db"
+    harness.remote.objects[raw_path] = db.read_bytes()
+    harness.remote.current = {
+        "db_version": CATALOG_VERSION, "checksum": f"sha256:{_sha(db)}",
+    }
+    result = sync.sync(str(catalog), max_workers=1)
+    assert result["status"] == "up_to_date"
+    assert ("upload", raw_path, False) not in harness.events
+    assert ("upload", f"{raw_path}.gz", False) in harness.events
+    assert ("upload", f"{raw_path}.gz.json", False) in harness.events
+
+
+def test_sync_checks_the_bucket_can_hold_the_gz(tmp_path, harness, monkeypatch):
+    catalog = _make_catalog(tmp_path / "catalog")
+    sizes = []
+    monkeypatch.setattr(
+        sync, "validate_bucket_upload_capacity",
+        lambda _client, *, bucket, object_size_bytes: sizes.append(object_size_bytes),
+    )
+    sync.sync(str(catalog), max_workers=1)
+    assert (catalog / "pharmaguide_core.db.gz").stat().st_size in sizes
+
+
+def test_dry_run_names_the_compressed_catalog_and_uploads_nothing(tmp_path, harness, capsys):
+    sync.sync(str(_make_catalog(tmp_path / "catalog")), dry_run=True, max_workers=1)
+    out = capsys.readouterr().out
+    assert "pharmaguide_core.db.gz" in out
+    assert not _uploads(harness)
+
+
+def test_a_rollback_build_gets_a_gz_of_its_own_catalog(tmp_path):
+    source = _make_catalog(tmp_path / "known_good")
+    rm.ensure_compressed_catalog(source / "pharmaguide_core.db", CATALOG_VERSION)
+    output = tmp_path / "rollback"
+    result = rm.prepare_rollback(source, output, db_version="2026.10.02.120000")
+    release = json.loads(_build(output, sequence=6))
+    assert release["catalog"]["compressed"]["path"] == (
+        f"v{result['db_version']}/pharmaguide_core.db.gz"
+    )
+    assert _gunzip(output / "pharmaguide_core.db.gz") == (
+        output / "pharmaguide_core.db"
+    ).read_bytes()
