@@ -20,11 +20,23 @@ def records():
 
 
 def _study(record, pmid):
-    if record.get("applicability_status") == "no_qualifying_human_evidence":
-        # A later review closed this record: its owner keeps no study rows, so the decision names what was read.
-        assert pmid in record["applicability_decision"]
-        pytest.skip(f"{record['canonical_id']} closed with no qualifying study; row {pmid} left the record")
     return next(s for s in record["qualifying_human_studies"] if s["pmid"] == pmid)
+
+
+# A review closed these with no qualifying study. The owner keeps no rows for them,
+# so each decision names the study that used to be the row.
+@pytest.mark.parametrize("cid, pmid", [
+    ("l_glutamine", "32992440"), ("lignans", "32575611"), ("rose_hips", "16195164"), ("atp", "28080323"),
+    ("algae_oil", "18589030"), ("tudca", "8674405"), ("nopal", "22805855"), ("jujube", "33385511"),
+    ("fucoidan", "36307493"), ("diamine_oxidase", "31807350"), ("red_clover", "33920485"),
+    ("chlorophyll", "7350215"), ("pygeum", "11869585"), ("apple_cider_vinegar", "28292654"),
+    ("african_mango", "19254366"),
+])
+def test_closed_record_names_the_study_that_left_it(records, cid, pmid):
+    record = records[cid]
+    assert record["applicability_status"] == "no_qualifying_human_evidence"
+    assert record["qualifying_human_studies"] == []
+    assert pmid in record["applicability_decision"]
 
 
 def test_qualifying_studies_use_one_name_per_fact(records):
@@ -209,34 +221,23 @@ def test_ipriflavone_keeps_its_safety_finding_on_the_real_trial(records):
 
 
 FIGURES_B = [
-    ("l_glutamine", "32992440", "sample_size", 14, 8),
-    ("lignans", "32575611", "dose", "50 mg/day SDG", "600 mg/day"),
     ("cryptoxanthin", "37242207", "sample_size", 90, 32),
     ("green_coffee_bean", "16820341", "sample_size", 28, 117),
     ("pumpkin", "25196580", "sample_size", 1431, 47),
-    ("rose_hips", "16195164", "sample_size", 94, 112),
     ("globe_artichoke", "14653829", "dose", "three times daily", "640 mg/day"),
     ("uva_ursi_leaf", "34111592", "sample_size", 398, 57),
     ("nicotinamide_riboside", "27721479", "dose", "single doses", "1000 mg/day"),
     ("beta_glucan", "23378458", "sample_size", 77, 162),
     ("borage_seed_oil", "8214997", "sample_size", 37, 56),
-    ("atp", "28080323", "sample_size", 42, 16),
     ("milk_basic_protein", "17048062", "sample_size", 35, 30),
-    ("algae_oil", "18589030", "sample_size", 32, 11),
-    ("tudca", "8674405", "sample_size", 24, 80),
-    ("nopal", "22805855", "sample_size", 6, 10),
     ("lychee_polyphenol", "40887285", "dose", "200 mg/day", "100 mg/day"),
-    ("jujube", "33385511", "sample_size", 12, 40),
     ("cranberry_fruit", "37068952", "sample_size", 8857, 8611),
     ("ginkgo_biloba_leaf", "25114079", "sample_size", 2561, 2372),
     ("green_tea_leaf", "21715508", "sample_size", 1136, 1415),
-    ("fucoidan", "36307493", "sample_size", 20, 75),
-    ("diamine_oxidase", "31807350", "sample_size", 28, 39),
     ("lactase", "20391953", "sample_size", 60, 40),
     ("african_geranium", "17184981", "sample_size", 2099, 468),
     ("l_cysteine", "33105552", "dose", "N-acetylcysteine", "1000 mg/day L-cysteine"),
     ("guggul", "12915429", "dose", "three times daily", "1000 - 2000 mg/day"),
-    ("red_clover", "33920485", "sample_size", 1179, 894),
 ]
 
 
@@ -247,7 +248,7 @@ def test_batch_b_study_figures_match_the_article(records, cid, pmid, field, repo
 
 # Figures no cited source reports are removed rather than kept.
 REMOVED = [
-    ("chlorophyll", "7350215", "dose"), ("pygeum", "11869585", "dose"), ("hawthorn", "12798455", "dose"),
+    ("hawthorn", "12798455", "dose"),
     ("aloe_vera", "27009750", "dose"), ("horse_chestnut_seed", "15106197", "dose"),
     ("butchers_broom_root", "12040966", "dose"), ("evening_primrose_oil", "23633319", "dose"),
     ("activated_charcoal", "3521259", "dose"), ("colostrum", "21148400", "dose"),
@@ -418,20 +419,8 @@ def test_b0_rhubarb_randomized_is_not_completed_or_isolated_rhein(records):
     assert record["studied_dose_exposure"] == {}
 
 
-def test_b0_red_clover_review_population_is_distinct_from_hot_flush_subset(records):
-    record = records["red_clover"]
-    assert _study(record, "33920485")["sample_size"] == 1179
-    assert "12 trials with 1,179 women overall" in record["applicability_decision"]
-    assert "1,043 in the final analysis" in record["applicability_decision"]
-    assert "8 trials (10 comparisons)" in record["applicability_decision"]
-    assert ">= 80 mg/day subgroup was not significant" in record["applicability_decision"]
-
-
 def test_b0_vinegar_reports_auc_and_blueberry_is_not_a_meta_analysis(records):
     assert _study(records["blueberry"], "30999017")["study_type"] == "systematic_review"
-    outcome = _study(records["apple_cider_vinegar"], "28292654")["outcome"]
-    assert "area under the curve (AUC)" in outcome
-    assert "peaks" not in outcome
 
 
 def test_b0_capsaicin_source_does_not_assert_capsiate_equivalence(records):
@@ -459,10 +448,7 @@ def test_b0_schisandra_preparation_stays_unknown_and_review_pending(records):
 
 def test_african_mango_daily_exposure_is_not_a_threshold_or_single_dose(records):
     record = records['african_mango']
-    study = _study(record, '19254366')
     assert record['studied_dose_exposure'] == {'values': [300], 'unit': 'mg'}
-    assert '120' in study['notes'] and '102' in study['notes']
-    assert 'minimum' in record['applicability_decision']
     assert '>=' not in record['applicability_decision']
     assert '150 mg twice daily' in record['applicability_decision']
     assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'

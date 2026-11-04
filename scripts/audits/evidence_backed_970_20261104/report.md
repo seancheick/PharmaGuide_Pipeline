@@ -202,7 +202,7 @@ african_mango, agmatine, algae_oil, apple_cider_vinegar, atp, blood_orange_extra
 The reading agents parked these because a study met the design test. Each is reversible by deleting one entry from `literature_corrections.json`.
 
 - **Null trial on target or close, so conflicting:** hawthorn (SPICE, HERB CHF), hibiscus_extract (40334927 at 1000 mg/day), nicotinamide_riboside (42478598, 42848371), cla (37671495 high quality subgroup, 21593349), aloe_vera (32314514), borage_seed_oil (14670885), alpha_linolenic_acid (20929341).
-- **The only qualifying trial is a purpose or amount the labels don't print, so no qualifying:** jujube, l_serine, agmatine, chlorophyll, tudca, pygeum, l_glutamine, apple_cider_vinegar, lions_mane, rosemary, rose_hips, turkey_rhubarb_root.
+- **The only qualifying trial is a purpose or population the labels don't print, so no qualifying:** jujube, l_serine, agmatine, chlorophyll, tudca, pygeum, l_glutamine, apple_cider_vinegar, rosemary, rose_hips. lions_mane and turkey_rhubarb_root were here and went back to pending: see "Amount is not a ground" in Batch 4.
 
 ### Older pins this moved
 
@@ -422,6 +422,22 @@ These three carry `documented_review_scope`. A row that declares a reviewed prep
 - **On #354:** `_resolved_evidence_assessment` maps that reason to `not_yet_evaluated`, so 239062 is partial with blocker `evidence_assessment_incomplete`. #354 renames the pin to `test_documented_positive_review_waits_for_its_scoring_path`.
 
 Ginkgo's stored `effect_direction` is `None`, and its text describes null prevention trials, so "positive" doesn't describe it. This is code on #354, not data, so this PR doesn't change it. No data route closes declared rows and keeps undeclared rows open: the null route would close `Ginkgo Biloba` and `Ginkgo Biloba Leaf Extract`, which `test_undeclared_preparation_stays_open` keeps open. 16 ginkgo labels stay in the pending count until this is decided.
+
+### Amount is not a ground
+
+Dose owns adequacy, and Evidence isn't withheld for a lower amount. A purpose or population the label doesn't print is a valid ground. I sorted all 33 no-qualifying closures by what each would rest on with the amount taken out.
+
+- **Back to pending, trial in the packet for the credit ruling:**
+  - lions_mane (21 labels). 18844328 met the standard for a printed preparation, and the closure rested mainly on 500-1000 mg against 3 g/day.
+  - turkey_rhubarb_root (7 labels). 36499011 tested the root extract these labels print, and the closure rested mainly on its dose being stated in anthraquinones.
+- **Stand, with the amount removed from the stated ground:**
+  - On purpose or population: l_serine, agmatine, tudca, l_glutamine, apple_cider_vinegar, rose_hips, jujube.
+  - On a missing primary outcome or a mixed pool: pygeum.
+  - Text trimmed of amount comparisons, grounds unchanged: african_mango, blood_orange_extract, oat_straw, red_clover, nopal, yerba_mate_leaf.
+- **Closest calls, for you to overrule:**
+  - atp. These labels print the tested Peak ATP at 150 mg against 400 mg in the trials. It stands only because no abstract read names a primary outcome.
+  - yerba_mate_leaf. Its labels carry the tested endurance and metabolic purposes. It stands for the same reason.
+  - rosemary. 41312013 names a primary outcome in healthy adults. It stands because these labels show no marker content and no stress claim.
 
 ### For Dr. Pham, batch 4 (no record written)
 

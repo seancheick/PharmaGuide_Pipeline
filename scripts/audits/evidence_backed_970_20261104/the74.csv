@@ -13,7 +13,7 @@ rank,canonical_id,labels,stored_direction,batch,recommended_decision
 12,butterbur,25,positive_strong,batch2,pending: 19 labels; 6 whole herb labels closed by INGR_BUTTERBUR_WHOLE_HERB
 13,blueberry,24,positive_weak,batch2,pending: extract trial 29882843
 14,gotu_kola,22,positive_moderate,batch3,closed_no_credit: literature null
-15,lions_mane,21,positive_moderate,batch3,closed_no_credit: no_qualifying_human_evidence
+15,lions_mane,21,positive_moderate,batch3,"pending: 18844328 goes to the credit ruling; amount alone is not a ground"
 16,feverfew,20,positive_moderate,batch3,closed_no_credit: literature null
 17,l_ornithine,20,positive_moderate,batch2,pending: 12 labels; 8 aspartate labels closed by INGR_L_ORNITHINE_L_ASPARTATE
 18,hawthorn,20,positive_strong,batch3,closed_no_credit: literature null
@@ -42,7 +42,7 @@ rank,canonical_id,labels,stored_direction,batch,recommended_decision
 41,cocoa,9,positive_weak,batch3,closed_no_credit: literature null
 42,horse_chestnut_seed,9,positive_moderate,batch3,"pending: packet, no credit recommended"
 43,colostrum,8,positive_weak,batch3,"pending: packet, no credit recommended"
-44,turkey_rhubarb_root,7,positive_weak,batch3,closed_no_credit: no_qualifying_human_evidence
+44,turkey_rhubarb_root,7,positive_weak,batch3,"pending: 36499011 goes to the credit ruling; amount alone is not a ground"
 45,nicotinamide_riboside,7,positive_moderate,batch3,closed_no_credit: literature null
 46,dgl_deglycyrrhizinated_licorice,7,positive_moderate,batch3,"pending: packet, no credit recommended"
 47,guarana,6,positive_moderate,batch3,closed_no_credit: literature null

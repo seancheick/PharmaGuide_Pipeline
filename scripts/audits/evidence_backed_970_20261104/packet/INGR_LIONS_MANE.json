@@ -5,7 +5,7 @@
   "direction_as_read": "mixed: small positive cognition trials of powder at higher amounts, null and task-specific acute results, and no chronic extract trial matching the labels",
   "decision": "closed_no_credit",
   "summary": "The stored moderate rating rests on one 30-person trial with tablets at 3 g/day of tablet mass (18844328), and scores fell after stopping. A second trial's fruiting body supplement improved the MMSE alone among three tests (31413233); its amount isn't in the abstract. Healthy young adults showed task-specific acute results and no clear chronic effect (38004235, 40276537, 38140277), and 10 g/day in muffins did nothing in a single-blind study that doesn't state randomization (36582308). A mycelium trial used erinacine A-enriched material in mild Alzheimer's disease (32581767), which no label here prints. The labels print 500-1000 mg of extract or 1 g of powder. No chronic trial read tested an extract at those amounts, and the powder labels sit well below the 3 g/day.",
-  "question_for_clinician": null,
+  "question_for_clinician": "18844328 gave tablets of 96% Yamabushitake powder at 3 g/day of tablet mass to 30 people with mild cognitive impairment, and reports better scores than placebo that fell after stopping. These labels print 500-1000 mg of extract or 1 g of powder. Dose owns adequacy, so amount alone doesn't withhold Evidence. Does this trial support credit for these labels, given the other trials read?",
   "study_contexts": [
     {
       "context_schema_version": "1.1.0",
@@ -852,6 +852,5 @@
         "doi": "10.3389/fnut.2025.1641246"
       }
     ]
-  },
-  "closed_through": "scripts/data/literature_evidence_records.json: lions_mane no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+  }
 }

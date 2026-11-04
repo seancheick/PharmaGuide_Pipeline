@@ -5,7 +5,7 @@
   "direction_as_read": "One small positive 30 day trial of Rheum palmatum root extract on intestinal transit, dosed by rhein-equivalent content the labels do not print",
   "decision": "closed_no_credit",
   "summary": "The labels print Turkey rhubarb root extract at 500 mg per serving, with no anthraquinone or rhein content and no printed purpose. One trial meets the rule: Rheum palmatum root extract at 12.5 mg or 25 mg per day of rhein-equivalent anthraquinones improved transit versus placebo in 39 analyzed middle-aged adults (36499011). Other rhubarb evidence found was formula, add-on hospital or kidney use.",
-  "question_for_clinician": null,
+  "question_for_clinician": "36499011 gave Rheum palmatum root extract at 12.5 or 25 mg/day of rhein-equivalent anthraquinones and improved transit against placebo in 39 analyzed middle-aged adults. These labels print root extract at 500 mg with no anthraquinone content and no purpose. Dose owns adequacy, so amount alone doesn't withhold Evidence. Does this trial support credit for labels that print no purpose?",
   "study_contexts": [
     {
       "context_schema_version": "1.1.0",
@@ -193,6 +193,5 @@
         "doi": "10.3390/ijms232314685"
       }
     ]
-  },
-  "closed_through": "scripts/data/literature_evidence_records.json: turkey_rhubarb_root no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+  }
 }
