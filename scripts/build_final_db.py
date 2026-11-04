@@ -3969,6 +3969,18 @@ def _dedup_warnings(warnings_list: Optional[List[Dict[str, Any]]]) -> List[Dict[
             )
             if producer
         })
+        # The merged card keeps one rule's copy; every rule behind it stays named.
+        rule_ids = {
+            rule_id
+            for candidate in (best, w)
+            for rule_id in (
+                *safe_list(candidate.get("source_rule_ids")),
+                safe_str(candidate.get("source_rule_id")),
+            )
+            if rule_id
+        }
+        if len(rule_ids) > 1:
+            selected["source_rule_ids"] = sorted(rule_ids)
         by_key[key] = selected
         # keep the earliest first_index — don't promote position on replacement
 

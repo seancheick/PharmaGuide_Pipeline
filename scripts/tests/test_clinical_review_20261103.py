@@ -256,3 +256,44 @@ def test_caffeine_review_is_attributed_to_her():
     rule = RULES["RULE_INGREDIENT_CAFFEINE"]
     assert "Dr. Pham" in rule["review_owner"]
     assert rule["last_reviewed"] == "2026-11-03"
+
+
+# --- Overlapping rules show one concern (implementation condition 5) --------
+
+
+def _orange_card(rule_id: str, headline: str) -> dict:
+    return {
+        "type": "interaction",
+        "severity": "avoid",
+        "display_mode_default": "suppress",
+        "source": "interaction_rules",
+        "source_rule_id": rule_id,
+        "ingredient_canonical_id": "BANNED_BITTER_ORANGE",
+        "condition_id": "pregnancy",
+        "alert_headline": headline,
+        "alert_body": ORANGE_EXPLANATION,
+        "sources": [NCCIH],
+    }
+
+
+def test_two_rules_on_one_product_show_one_concern_and_keep_both_rule_ids():
+    from build_final_db import _dedup_warnings
+
+    cards = _dedup_warnings([_orange_card(rule_id, ORANGE_WARNING) for rule_id in ORANGE_RULES])
+    assert len(cards) == 1
+    assert cards[0]["source_rule_ids"] == sorted(ORANGE_RULES)
+    assert cards[0]["source_rule_id"] in ORANGE_RULES
+
+
+def test_a_warning_from_one_rule_gains_no_extra_field():
+    from build_final_db import _dedup_warnings
+
+    cards = _dedup_warnings([_orange_card(ORANGE_RULES[0], ORANGE_WARNING)])
+    assert "source_rule_ids" not in cards[0]
+
+
+def test_the_merged_rule_ids_survive_the_schema_3_reference():
+    from export_schema import _warning_rule_ref
+
+    ref = _warning_rule_ref({**_orange_card(ORANGE_RULES[0], ORANGE_WARNING), "source_rule_ids": sorted(ORANGE_RULES)})
+    assert ref["source_rule_ids"] == sorted(ORANGE_RULES)
