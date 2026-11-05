@@ -817,25 +817,27 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
     description = population["description"]
     title = _route_product_label_text(dict(product))
     groups = product.get("targetGroups") or []
-    if isinstance(groups, str):
+    if isinstance(groups, (str, Mapping)):
         groups = [groups]
     children = label_is_for_children(dict(product))
     group_texts = [_target_group_text(group) for group in groups]
     # Affirmative targeting only: "Not for use during pregnancy", "Women (not
     # pregnant or lactating)" and post-pregnancy titles are not pregnancy labels.
-    prenatal_title = re.compile(r"(?<!post-)(?<!post )" + _ROUTE_PRENATAL_KEYWORDS.pattern, re.I)
-    pregnancy = (any(find_affirmative_label_match(_PREGNANT_TARGET, text) for text in group_texts)
-                 or bool(find_affirmative_label_match(prenatal_title, title)))
+    pregnancy_target = re.compile(
+        r"(?<!post-)(?<!post )(?:" + _PREGNANT_TARGET.pattern + "|"
+        + _ROUTE_PRENATAL_KEYWORDS.pattern + ")", re.I)
+    pregnancy = any(find_affirmative_label_match(pregnancy_target, text)
+                    for text in [title, *group_texts])
     lactation = any(find_affirmative_label_match(_LACTATING_TARGET, text) for text in [*group_texts, title])
     special = _special_population(context, description)
     if special == "infant":
         # Prenatal titles can name the baby without targeting infant administration.
-        infant = children and not pregnancy and any(
+        infant = children and not pregnancy and not lactation and any(
             find_affirmative_label_match(_INFANT_TARGET, text) for text in [title, *group_texts]
         )
         return "eligible" if infant else "special_targeting_absent"
     if special == "pediatric":
-        return "eligible" if children else "special_targeting_absent"
+        return "eligible" if children and not pregnancy and not lactation else "special_targeting_absent"
     if special == "pregnancy":
         return "eligible" if pregnancy else "special_targeting_absent"
     if special == "lactation":

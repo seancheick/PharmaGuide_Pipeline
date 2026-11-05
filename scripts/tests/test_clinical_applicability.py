@@ -1777,6 +1777,10 @@ def test_precaution_naming_children_is_not_infant_targeting():
 @pytest.mark.parametrize('product_name,targets,credited', [
     ('Daily Probiotic', [], False),
     ('Baby Probiotic Drops', ['Infants (0-12 months)'], True),
+    ('Baby Probiotic Drops', 'Pregnancy', False),
+    ('Baby Probiotic Drops', ['Expecting'], False),
+    ('Baby Probiotic Drops', {'text': 'Prenatal'}, False),
+    ('Baby Probiotic Drops', ['Lactating Women'], False),
 ])
 def test_bb12_infant_colic_research_reaches_only_infant_products(product_name, targets, credited):
     from scoring_v4.modules.probiotic_evidence import score_evidence
@@ -2634,3 +2638,57 @@ def test_explicit_lactation_exclusion_cannot_qualify_nursing_product(description
     from clinical_applicability import assess_context_population
     assert assess_context_population({'product_name': 'Nursing support'},
         {'population': {'age_group': 'adult', 'description': description}}) == expected
+
+
+@pytest.mark.parametrize('target', [
+    'Pregnancy', ['Pregnancy'], {'text': 'Pregnancy'}, [{'text': 'Pregnancy'}],
+    'Expecting', ['Expecting'], {'name': 'Expecting'}, [{'name': 'Expecting'}],
+    'Prenatal', ['Prenatal'], 'Pregnant Women', 'Lactating Women', ['Breastfeeding'],
+])
+@pytest.mark.parametrize('age', ['infant', 'child'])
+def test_maternal_targets_do_not_inherit_child_administration_from_baby_title(target, age):
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': age, 'description': 'Infants receiving oral supplementation.'
+                             if age == 'infant' else 'Children receiving oral supplementation.'}}
+    product = {'product_name': 'Baby Probiotic Drops', 'targetGroups': target}
+    assert assess_context_population(product, context) == 'special_targeting_absent'
+
+
+@pytest.mark.parametrize('target', [
+    'Pregnancy', ['Pregnancy'], {'text': 'Pregnancy'}, [{'text': 'Pregnancy'}],
+    'Expecting', ['Expecting'], {'name': 'Expecting'}, [{'name': 'Expecting'}],
+])
+def test_pregnancy_target_synonyms_use_the_same_affirmative_scope_as_titles(target):
+    from clinical_applicability import assess_context_population
+    assert assess_context_population({'product_name': 'Ginger', 'targetGroups': target}, _nvp_context()) == 'eligible'
+
+
+@pytest.mark.parametrize('target', [
+    'Not for use during pregnancy', ['Not expecting'], {'text': 'Not pregnant'},
+    'Post-Pregnancy', ['Post Pregnancy'], ['Postpartum'],
+])
+def test_nonpregnant_target_groups_preserve_affirmative_infant_title(target):
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': 'infant', 'description': 'Infants receiving oral supplementation.'}}
+    product = {'product_name': 'Baby Probiotic Drops', 'targetGroups': target}
+    assert assess_context_population(product, context) == 'eligible'
+    assert assess_context_population(product, _nvp_context()) == 'special_targeting_absent'
+
+
+@pytest.mark.parametrize('age,title,target', [
+    ('infant', 'Baby Probiotic Drops', [{'text': 'Infants'}]),
+    ('child', 'Kids Probiotic', {'name': 'Children (4-8 Years)'}),
+])
+def test_actual_child_administration_keeps_population_eligibility(age, title, target):
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': age, 'description': 'Infants receiving oral supplementation.'
+                             if age == 'infant' else 'Children receiving oral supplementation.'}}
+    assert assess_context_population({'product_name': title, 'targetGroups': target}, context) == 'eligible'
+
+
+def test_maternal_supplementation_with_offspring_outcomes_remains_pregnancy_context():
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': 'infant',
+                             'description': 'Infant outcomes after maternal supplementation during pregnancy.'}}
+    assert assess_context_population({'product_name': 'Baby and Me Prenatal',
+                                      'targetGroups': {'text': 'Expecting'}}, context) == 'eligible'
