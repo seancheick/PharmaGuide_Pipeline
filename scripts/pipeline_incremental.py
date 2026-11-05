@@ -64,6 +64,90 @@ def stage_products(directory, stage):
     return rows
 
 
+def reference_identifiers(value, *, keys=None, visit=None):
+    """IDs in emitted or curated records, including rejected/list/context refs."""
+    result = set()
+    if isinstance(value, dict):
+        if visit is not None:
+            visit(value)
+        for key, item in value.items():
+            if (keys is None or key in keys) and (key in {"id", "ids"} or key.endswith("_id") or key.endswith("_ids")):
+                if isinstance(item, str):
+                    result.add(item)
+                elif isinstance(item, list):
+                    result.update(part for part in item if isinstance(part, str))
+            result.update(reference_identifiers(item, keys=keys, visit=visit))
+    elif isinstance(value, list):
+        for item in value:
+            result.update(reference_identifiers(item, keys=keys, visit=visit))
+    return result
+
+
+def clinical_reference_snapshot(payload):
+    """Bound assessment edits only; unfamiliar lookup structure remains broad."""
+    from data_batch import entries
+    enumerated = entries(payload)
+    records, auxiliary = {}, {}
+    for key, value in enumerated.items():
+        name = key.split("/", 1)[0]
+        if isinstance(payload.get(name), list):
+            if (not isinstance(value, dict) or not isinstance(value.get("id"), str)
+                    or key != name + "/" + value["id"]):
+                return {"kind": "global", "hash": digest(payload)}
+            records[key] = value
+        else:
+            # In particular, prebiotics.ingredients has its own matcher/schema.
+            # Keep it opaque and broad rather than inventing entry identities.
+            auxiliary[key] = value
+    # These record facts are downstream assessments, not identity lookup inputs.
+    # Everything else (including an unrecognized future field) stays in the
+    # conservative vocabulary binding. Context applicability is re-evaluated on
+    # every known/rejected user of the containing record.
+    assessment_fields = {
+        "study_contexts", "evidence_review", "literature_review", "notable_studies",
+        "evidence_level", "cfu_thresholds", "key_benefits", "notes", "last_updated",
+        "references_structured", "published_studies", "published_studies_count",
+        "published_rct_count", "published_meta_review_count", "registry_completed_trials_count",
+        "total_enrollment", "effect_direction", "effect_direction_confidence",
+        "effect_direction_rationale", "key_endpoints", "endpoint_relevance_tags",
+        "health_goals_supported", "score_contribution", "study_type", "primary_outcome",
+        "min_clinical_dose", "max_studied_clinical_dose", "dose_range", "dose_unit",
+        "studied_regimens", "purpose_evidence", "scoring_eligible", "verification_provenance",
+    }
+    return {"kind": "clinical", "payload_hash": digest(payload),
+            "entries": {key: digest(value) for key, value in records.items()},
+            "record_ids": {key: sorted(reference_identifiers(value, keys={"id", "context_id", "context_ids"}))
+                           for key, value in records.items()},
+            "vocabulary": digest({
+                "records": {key: {field: item for field, item in value.items()
+                                   if field not in assessment_fields} for key, value in records.items()},
+                "auxiliary": auxiliary,
+                "order": {key: [value.get("id") for value in rows] for key, rows in payload.items()
+                          if isinstance(rows, list)},
+            }),
+            "metadata": digest({key: value for key, value in payload.get("_metadata", {}).items()
+                                if key not in {"last_updated", "total_entries"}})}
+
+
+def planning_snapshot(old, current, *, baseline_repo=None):
+    """Upgrade only a planning copy after the caller verifies original ownership."""
+    planned = copy.deepcopy(old)
+    historical = None
+    for path, after in current["references"].items():
+        before = old["references"].get(path, {})
+        if after.get("kind") != "clinical" or before.get("kind") != "global":
+            continue
+        if before.get("hash") == after["payload_hash"]:
+            planned["references"][path] = copy.deepcopy(after)
+        elif baseline_repo is not None:
+            if historical is None:
+                historical = reference_snapshot(Path(baseline_repo))
+            proof = historical.get(path, {})
+            if proof.get("kind") == "clinical" and before.get("hash") == proof.get("payload_hash"):
+                planned["references"][path] = proof
+    return planned
+
+
 def reference_snapshot(repo, *, contents=None):
     """Record changed-entry hashes and lookup vocabularies for bounded invalidation."""
     repo = Path(repo).resolve()
@@ -82,6 +166,8 @@ def reference_snapshot(repo, *, contents=None):
         elif relative.endswith("curated_overrides/product_label_corrections.json"):
             result[relative] = {"kind": "label", "entries": {
                 k: digest(v) for k, v in payload["corrections"].items()}}
+        elif path.name in {"clinically_relevant_strains.json", "backed_clinical_studies.json"}:
+            result[relative] = clinical_reference_snapshot(payload)
         elif path.name == "literature_evidence_records.json":
             entries = payload["literature_evidence_records"]
             keys = [str(v["canonical_id"]) for v in entries]
@@ -116,7 +202,6 @@ def lookup_vocabulary(value):
 def dependencies(product):
     """Use all emitted identities and reference IDs, including excluded source rows."""
     from dose_assessment import _identity_text
-    identifiers = set()
     names = set()
     unresolved = False
     clock_refresh_required = False
@@ -142,20 +227,26 @@ def dependencies(product):
                         != _count_class_i_in_3_years([value], today=date.today())):
                     clock_refresh_required = True
             for key, item in value.items():
-                if key in {"canonical_id", "clinical_id", "source_id", "record_id"} and isinstance(item, str):
-                    identifiers.add(item)
                 if key == "raw_source_text" and isinstance(item, str):
                     names.add(_identity_text(item))
                 if key == "mapped" and item is False:
                     unresolved = True
-                visit(item)
-        elif isinstance(value, list):
-            for item in value:
-                visit(item)
 
-    visit(product)
+    identifiers = reference_identifiers(product, visit=visit)
+    from scoring_input_contract import (get_evidence_subject_rows, get_source_score_eligible_active_rows,
+                                        scoring_input_scope)
+    quality = product.get("ingredient_quality_data")
+    clinical_unresolved = (not isinstance(quality, dict)
+                           or not isinstance(quality.get("ingredients_scorable"), list)
+                           or not isinstance(product.get("evidence_data"), dict))
+    if not clinical_unresolved:
+        with scoring_input_scope(product):
+            clinical_unresolved = any(
+                not row.get("canonical_id") or row.get("identity_disposition") in {"ambiguous", "identity_conflict"}
+                for row in [*get_evidence_subject_rows(product),
+                            *get_source_score_eligible_active_rows(product)])
     return {"identifiers": sorted(identifiers), "names": sorted(names), "unresolved": unresolved,
-            "clock_refresh_required": clock_refresh_required}
+            "clinical_unresolved": clinical_unresolved, "clock_refresh_required": clock_refresh_required}
 
 
 def plan_changes(old, current, raw, dependency_rows):
@@ -202,7 +293,18 @@ def plan_changes(old, current, raw, dependency_rows):
             continue
         changed = {key for key in set(before["entries"]) | set(after["entries"])
                    if before["entries"].get(key) != after["entries"].get(key)}
-        if kind == "label":
+        if kind == "clinical":
+            if before.get("metadata") != after.get("metadata") or before.get("vocabulary") != after.get("vocabulary"):
+                widen(0, ids, f"clinical lookup or schema changed: {path}")
+            elif changed:
+                reference_ids = {identifier for snapshot in (before, after) for key in changed
+                                 for identifier in snapshot.get("record_ids", {}).get(key, [])}
+                affected = {key for key in ids if key not in dependency_rows
+                            or dependency_rows[key].get("clinical_unresolved", True)
+                            or not isinstance(dependency_rows[key].get("identifiers"), list)
+                            or reference_ids.intersection(dependency_rows[key].get("identifiers", []))}
+                widen(1, affected, f"clinical assessment records changed: {path}")
+        elif kind == "label":
             widen(0, ids & changed, f"exact label corrections changed: {path}")
         else:
             if kind == "research":
@@ -512,7 +614,8 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
             for stage, directory in zip(STAGES, directories)
         }
     dependency_rows = {key: dependencies(value) for key, value in products["enrich"].items()}
-    plan = plan_changes(old, current, raw, dependency_rows)
+    planned_old = planning_snapshot(old, current, baseline_repo=baseline_repo)
+    plan = plan_changes(planned_old, current, raw, dependency_rows)
     if state_path.exists() and raw_binding != old["inputs"]["clean"]:
         # Parsed equality cannot establish byte/path lineage. Re-run Clean
         # for changed source files, then let actual Clean changes select
