@@ -515,3 +515,63 @@ def test_partial_ordinary_run_invalidates_state_before_writing(tmp_path, monkeyp
     assert not runner.run_pipeline(stages=["score"], raw_dir=str(tmp_path),
                                    output_prefix=str(prefix), skip_coverage_gate=True)["success"]
     assert not state.exists()
+
+
+@pytest.mark.parametrize("change", ["format", "rename"])
+def test_raw_bytes_or_inventory_change_cannot_reuse_stale_provenance(tmp_path, monkeypatch, change):
+    from pipeline_freshness import DATA_FINGERPRINT_KEY, stage_data_files, stage_data_fingerprint
+    from stage_manifest import MANIFEST_NAME
+
+    mod, runner, raw, prefix, calls, _ = _synthetic_dataset(tmp_path, monkeypatch)
+    before = {stage: mod.stage_products(directory, stage)["2"]
+              for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix))}
+    original = raw / "1.json"
+    if change == "format":
+        original.write_text(json.dumps(json.loads(original.read_text()), indent=4) + "\n")
+    else:
+        original.rename(raw / "renamed.json")
+    selected_source = raw / ("1.json" if change == "format" else "renamed.json")
+    expected_bytes = selected_source.read_bytes()
+    original_clean = runner.run_clean
+
+    def verify_exact_source_bytes(source, output):
+        from pathlib import Path
+        files = list(Path(source).glob("*.json"))
+        assert [path.name for path in files] == [selected_source.name]
+        assert files[0].read_bytes() == expected_bytes
+        return original_clean(source, output)
+
+    runner.run_clean = verify_exact_source_bytes
+    planned = mod.run_incremental(runner, raw, prefix, plan_only=True)
+    assert planned["stages"]["clean"] == ["1"]
+    assert not calls
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result["stages"] == {"clean": ["1"], "enrich": [], "score": []}
+    assert calls == ["clean"]
+    manifest = json.loads((mod.stage_directories(prefix)[0] / MANIFEST_NAME).read_text())
+    assert manifest["input_fingerprints"][DATA_FINGERPRINT_KEY] == stage_data_fingerprint(stage_data_files(raw))
+    for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix)):
+        assert mod.stage_products(directory, stage)["2"] == before[stage]
+    calls.clear()
+    assert not any(mod.run_incremental(runner, raw, prefix)["stages"].values())
+    assert not calls
+
+
+def test_older_reuse_state_without_per_file_proof_rechecks_clean_on_raw_byte_change(tmp_path, monkeypatch):
+    from stage_manifest import MANIFEST_NAME, write_stage_manifest_from_directory
+
+    mod, runner, raw, prefix, calls, _ = _synthetic_dataset(tmp_path, monkeypatch)
+    state_path = prefix / ".incremental_state.json"
+    old = json.loads(state_path.read_text())
+    old.pop("raw_files")
+    state_path.write_text(json.dumps(old))
+    for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix)):
+        fingerprints = json.loads((directory / MANIFEST_NAME).read_text())["input_fingerprints"]
+        fingerprints["incremental_state_sha256"] = mod.digest(old)
+        write_stage_manifest_from_directory(directory, stage, input_fingerprints=fingerprints)
+    original = raw / "1.json"
+    original.write_text(json.dumps(json.loads(original.read_text()), indent=4))
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result["stages"] == {"clean": ["1", "2"], "enrich": [], "score": []}
+    assert calls == ["clean"]
+    assert set(json.loads(state_path.read_text())["raw_files"]) == {"1", "2"}
