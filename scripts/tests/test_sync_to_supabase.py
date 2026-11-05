@@ -13,6 +13,14 @@ if _scripts_dir not in sys.path:
     sys.path.insert(0, os.path.abspath(_scripts_dir))
 
 
+@pytest.fixture
+def _qualified_publication(monkeypatch):
+    # These remote-lifecycle unit tests use tiny synthetic catalogs and assume
+    # the independently tested publication boundary has already qualified them.
+    import sync_to_supabase
+    monkeypatch.setattr(sync_to_supabase, "validate_catalog_publication", lambda *_: {"passed": True})
+
+
 @pytest.fixture(autouse=True)
 def simulated_historical_manifest(monkeypatch):
     # Individual sync tests opt into explicit historical rows as needed.
@@ -266,6 +274,7 @@ def test_validate_bucket_upload_capacity_accepts_unlimited_or_larger_bucket():
 
 
 def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
+    _qualified_publication,
     tmp_path,
     monkeypatch,
 ):
@@ -352,6 +361,7 @@ def test_sync_skips_bucket_capacity_check_when_catalog_is_already_current(
 
 
 def test_sync_bounds_release_cache_but_keeps_hashed_blobs_immutable(
+    _qualified_publication,
     tmp_path, monkeypatch,
 ):
     """A fresh immutable version stages its objects before activation."""
@@ -402,7 +412,7 @@ def test_sync_bounds_release_cache_but_keeps_hashed_blobs_immutable(
     assert all(opts["cache_control"] == supabase_client.CACHE_CONTROL_IMMUTABLE for opts in hashed.values())
 
 
-def test_sync_refuses_changed_bytes_under_the_active_version(tmp_path, monkeypatch):
+def test_sync_refuses_changed_bytes_under_the_active_version(_qualified_publication, tmp_path, monkeypatch):
     import supabase_client
     import sync_to_supabase as sync
 
@@ -1133,7 +1143,7 @@ def test_product_images_reuse_all_remote_pages_and_upload_changes(tmp_path, exis
 
 
 @pytest.mark.parametrize("blob_failed", [False, True])
-def test_sync_elapsed_time_includes_images_and_publication(tmp_path, monkeypatch, capsys, blob_failed):
+def test_sync_elapsed_time_includes_images_and_publication(_qualified_publication, tmp_path, monkeypatch, capsys, blob_failed):
     import supabase_client
     import sync_to_supabase as syncer
 
@@ -1475,7 +1485,7 @@ def test_sync_stops_before_any_write_when_a_row_names_another_products_image(tmp
 
 @pytest.mark.parametrize('same_catalog,image_failed,core_missing', [
     (False, True, False), (True, True, False), (True, False, False), (True, False, True)])
-def test_sync_repairs_independent_phases_before_activation(tmp_path, monkeypatch, same_catalog, image_failed, core_missing):
+def test_sync_repairs_independent_phases_before_activation(_qualified_publication, tmp_path, monkeypatch, same_catalog, image_failed, core_missing):
     import supabase_client
     import sync_to_supabase as syncer
     _make_build_output(str(tmp_path), product_count=2)
@@ -1544,7 +1554,7 @@ def test_detail_upload_queue_is_bounded(monkeypatch):
 
 
 @pytest.mark.parametrize('force_retry', [False, True])
-def test_complete_sync_uses_real_discovery_and_create_only_versioned_paths(tmp_path, monkeypatch, force_retry):
+def test_complete_sync_uses_real_discovery_and_create_only_versioned_paths(_qualified_publication, tmp_path, monkeypatch, force_retry):
     from types import SimpleNamespace
     import sync_to_supabase as syncer
     import supabase_client
@@ -1588,7 +1598,7 @@ def test_complete_sync_uses_real_discovery_and_create_only_versioned_paths(tmp_p
 
 
 @pytest.mark.parametrize('collision', ['manifest', 'database', 'detail_index', 'share_index'])
-def test_historical_version_collision_refused_before_any_storage_write(tmp_path, monkeypatch, collision):
+def test_historical_version_collision_refused_before_any_storage_write(_qualified_publication, tmp_path, monkeypatch, collision):
     import supabase_client
     import sync_to_supabase as syncer
     _make_build_output(str(tmp_path), product_count=1)
@@ -1644,3 +1654,204 @@ def test_discovery_uses_verified_inventory_without_storage_search(monkeypatch):
         raise AssertionError('slow storage search must not run')
     assert syncer.discover_existing_remote_blob_paths(
         object(), 'pharmaguide', [{'remote_path': path}], refused) == {path}
+
+
+@pytest.mark.parametrize("force", [False, True])
+@pytest.mark.parametrize("test_project", [False, True])
+def test_publication_cohort_blocks_before_client_even_with_override_flags(tmp_path, monkeypatch, force, test_project):
+    import sync_to_supabase as syncer
+    import supabase_client
+
+    _make_build_output(tmp_path)
+    monkeypatch.setattr(supabase_client, "get_supabase_client", lambda: pytest.fail("unqualified catalog reached remote client"))
+    with pytest.raises(ValueError, match="publication|cohort|qualification"):
+        syncer.sync(str(tmp_path), force=force, test_project=test_project)
+
+
+@pytest.fixture
+def publication_case(tmp_path, monkeypatch):
+    import sync_to_supabase as syncer
+    import release_catalog_artifact
+
+    def make(count=4, complete=3, minimum=3):
+        db = tmp_path / "publication.db"
+        if db.exists():
+            db.unlink()
+        with sqlite3.connect(db) as conn:
+            conn.execute("CREATE TABLE products_core (dsld_id TEXT, quality_assessment_status TEXT, quality_score_status TEXT, product_safety_status TEXT, quality_score_v4_100 REAL)")
+            conn.executemany("INSERT INTO products_core VALUES (?, ?, 'scored', 'no_known_catalog_concern', 80)",
+                             [(str(i), "complete" if i < complete else "partial") for i in range(count)])
+        receipts = {str(i): {"quality_assessment_status": "complete" if i < complete else "partial",
+                             "product_safety_status": "no_known_catalog_concern",
+                             "quality_score_status": "scored", "quality_score_v4_100": 80,
+                             "release_assessment": {"is_complete": i < complete,
+                                 "blockers": [] if i < complete else ["pending"],
+                                 "unfinished_source_assessment": None}}
+                    for i in range(count)}
+        manifest = {"strict_gate_summary": {"strict_mode": True,
+                    "gates": ["scoring_contract", "export_contract", "artifact_freshness"]},
+                    "artifact_freshness_status": "checked_by_release_strict_gate"}
+        monkeypatch.setattr(syncer, "_publication_cohort", lambda: (set(map(str, range(count))), minimum))
+        monkeypatch.setattr(release_catalog_artifact, "validate_release_candidate", lambda **kw: {"db_path": str(db), "manifest": manifest})
+        monkeypatch.setattr(syncer, "_publication_source_receipts", lambda ids: receipts)
+        return db, receipts, manifest
+    return make
+
+
+def test_publication_contract_pins_original_cohort_and_99_percent_target():
+    import sync_to_supabase as syncer
+    ids, minimum = syncer._publication_cohort()
+    assert len(ids) == 15447
+    assert minimum == 15293
+    contract = json.loads(syncer.PUBLICATION_COHORT_PATH.read_text())
+    assert len(contract["source_sha256"]) == 64
+
+
+@pytest.mark.parametrize("complete, passes", [(15292, False), (15293, True)])
+def test_publication_exact_original_cohort_completion_boundary(tmp_path, publication_case, complete, passes):
+    import sync_to_supabase as syncer
+    publication_case(count=15447, complete=complete, minimum=15293)
+    if passes:
+        assert syncer.validate_catalog_publication(tmp_path)["complete"] == 15293
+    else:
+        with pytest.raises(ValueError, match="15292/15447.*15293"):
+            syncer.validate_catalog_publication(tmp_path)
+
+
+@pytest.mark.parametrize("mutation", ["missing", "duplicate", "extra_replaces_original"])
+def test_publication_preserves_every_original_id(tmp_path, publication_case, mutation):
+    import sync_to_supabase as syncer
+    db, _, _ = publication_case()
+    with sqlite3.connect(db) as conn:
+        if mutation == "duplicate":
+            conn.execute("INSERT INTO products_core SELECT * FROM products_core WHERE dsld_id='0'")
+        else:
+            conn.execute("DELETE FROM products_core WHERE dsld_id='3'")
+            if mutation == "extra_replaces_original":
+                conn.execute("INSERT INTO products_core VALUES ('extra', 'complete', 'scored', 'no_known_catalog_concern', 99)")
+    with pytest.raises(ValueError, match="cohort missing|duplicate"):
+        syncer.validate_catalog_publication(tmp_path)
+
+
+def test_publication_extra_products_do_not_inflate_completion(tmp_path, publication_case):
+    import sync_to_supabase as syncer
+    db, receipts, _ = publication_case(complete=2)
+    with sqlite3.connect(db) as conn:
+        conn.execute("INSERT INTO products_core SELECT 'extra', quality_assessment_status, quality_score_status, product_safety_status, quality_score_v4_100 FROM products_core WHERE dsld_id='0'")
+    receipts['extra'] = receipts['0']
+    with pytest.raises(ValueError, match="2/4.*3"):
+        syncer.validate_catalog_publication(tmp_path)
+
+
+@pytest.mark.parametrize("field,value", [
+    ("quality_assessment_status", None), ("quality_assessment_status", "future"),
+    ("quality_score_status", None), ("quality_score_status", "future"),
+    ("product_safety_status", "future"), ("quality_score_v4_100", None),
+    ("quality_score_v4_100", -1), ("quality_score_v4_100", 101),
+    ("quality_score_v4_100", float('inf')), ("quality_score_v4_100", float('nan')),
+])
+def test_publication_rejects_malformed_or_dishonest_disposition(tmp_path, publication_case, field, value):
+    import sync_to_supabase as syncer
+    db, _, _ = publication_case()
+    with sqlite3.connect(db) as conn:
+        conn.execute(f"UPDATE products_core SET {field}=? WHERE dsld_id='0'", [value])
+    with pytest.raises(ValueError, match="malformed|invalid scored"):
+        syncer.validate_catalog_publication(tmp_path)
+
+
+@pytest.mark.parametrize("defect", ["missing", "false_complete", "blockers", "unfinished", "invalid_bool", "misaligned"])
+def test_publication_complete_requires_aligned_existing_source_receipt(tmp_path, publication_case, defect):
+    import sync_to_supabase as syncer
+    _, receipts, _ = publication_case()
+    if defect == "missing":
+        del receipts['0']
+    elif defect == "misaligned":
+        receipts['0']['quality_assessment_status'] = 'partial'
+    else:
+        receipt = receipts['0']['release_assessment']
+        key, value = {'false_complete': ('is_complete', False), 'blockers': ('blockers', ['pending']),
+                      'unfinished': ('unfinished_source_assessment', {'pending': True}),
+                      'invalid_bool': ('is_complete', 'true')}[defect]
+        receipt[key] = value
+    with pytest.raises(ValueError, match="receipt|false-complete|mismatch"):
+        syncer.validate_catalog_publication(tmp_path)
+
+
+def test_publication_complete_is_independent_of_score_availability_and_safety(tmp_path, publication_case):
+    import sync_to_supabase as syncer
+    db, receipts, _ = publication_case()
+    with sqlite3.connect(db) as conn:
+        conn.execute("UPDATE products_core SET quality_score_v4_100=0 WHERE dsld_id='0'")
+        conn.execute("UPDATE products_core SET quality_score_status='not_scored', quality_score_v4_100=NULL WHERE dsld_id='1'")
+        conn.execute("UPDATE products_core SET quality_score_status='suppressed_safety', product_safety_status='blocked', quality_score_v4_100=NULL WHERE dsld_id='2'")
+    receipts['0']['quality_score_v4_100'] = 0
+    receipts['1'].update(quality_score_status='not_scored', quality_score_v4_100=None)
+    receipts['2'].update(product_safety_status='blocked', quality_score_status='suppressed_safety', quality_score_v4_100=None)
+    result = syncer.validate_catalog_publication(tmp_path)
+    assert result['complete'] == 3
+    assert result['passed'] is True
+
+
+def test_publication_checks_existing_strict_receipts(tmp_path, publication_case):
+    import sync_to_supabase as syncer
+    _, _, manifest = publication_case()
+    manifest['strict_gate_summary']['strict_mode'] = False
+    with pytest.raises(ValueError, match="strict release receipts"):
+        syncer.validate_catalog_publication(tmp_path)
+
+
+def test_dry_run_reports_publication_failure_without_remote_work(tmp_path, monkeypatch, capsys):
+    import sync_to_supabase as syncer
+    import supabase_client
+    _make_build_output(tmp_path)
+    monkeypatch.setattr(syncer, 'catalog_search_rows', lambda *_: [])
+    monkeypatch.setattr(supabase_client, 'get_supabase_client', lambda: pytest.fail('dry run reached remote'))
+    result = syncer.sync(str(tmp_path), dry_run=True)
+    assert result['status'] == 'dry_run'
+    assert result['publication_qualification']['passed'] is False
+    assert 'Publication BLOCKED' in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("field,value", [("quality_score_status", "not_scored"),
+    ("quality_score_v4_100", 79), ("quality_score_v4_100", None),
+    ("quality_score_v4_100", True)])
+def test_publication_source_score_and_availability_must_align(tmp_path, publication_case, field, value):
+    import sync_to_supabase as syncer
+    _, receipts, _ = publication_case()
+    receipts['0'][field] = value
+    with pytest.raises(ValueError, match="source/export disposition mismatch"):
+        syncer.validate_catalog_publication(tmp_path)
+
+
+
+def test_publication_false_source_number_cannot_masquerade_as_valid_zero(tmp_path, publication_case):
+    import sync_to_supabase as syncer
+    db, receipts, _ = publication_case()
+    with sqlite3.connect(db) as conn:
+        conn.execute("UPDATE products_core SET quality_score_v4_100=0 WHERE dsld_id='0'")
+    receipts['0']['quality_score_v4_100'] = False
+    with pytest.raises(ValueError, match="source/export disposition mismatch"):
+        syncer.validate_catalog_publication(tmp_path)
+
+
+def test_publication_source_loader_requires_current_manifest_provenance(tmp_path, monkeypatch):
+    import sync_to_supabase as syncer
+    import audit_source_of_truth_contract as audit
+    source = tmp_path / 'scored.json'
+    source.write_text(json.dumps([{'id': '0', 'quality_assessment_status': 'complete'}]))
+    monkeypatch.setattr(audit, 'scored_files_from_products_dir', lambda _: [source])
+    monkeypatch.setattr(audit, '_scoring_enriched_source', lambda *args: None)
+    with pytest.raises(ValueError, match="provenance is stale or unverified"):
+        syncer._publication_source_receipts({'0'})
+
+
+
+def test_publication_stage_manifest_failure_reports_qualification_failure(tmp_path, publication_case, monkeypatch):
+    import sync_to_supabase as syncer
+    from stage_manifest import StageManifestError
+    publication_case()
+    def stale(_):
+        raise StageManifestError('source manifest stale')
+    monkeypatch.setattr(syncer, '_publication_source_receipts', stale)
+    with pytest.raises(ValueError, match='qualification failed: source manifest stale'):
+        syncer.validate_catalog_publication(tmp_path)
