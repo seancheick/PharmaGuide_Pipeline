@@ -1043,7 +1043,19 @@ def main():
             reviewed = deepcopy(expected)
             for field_path, new_value in full_text_patches.get(row["context_id"], []):
                 _write_path_appending(reviewed, field_path, new_value)
-            assert current in (row, expected, reviewed), (
+            # November 5 source verification resolved this endpoint
+            # hierarchy. Preserve the earlier materialized state as well;
+            # every other field still has to match the declared source facts.
+            qualified = deepcopy(reviewed)
+            hierarchy_corrections = {
+                "is2_adult_ibs_multicenter_31434935": ("serum_cytokines", "secondary"),
+            }
+            correction = hierarchy_corrections.get(row["context_id"])
+            if correction:
+                for outcome in qualified.get("outcomes", []):
+                    if outcome["name"] == correction[0]:
+                        outcome["hierarchy"] = correction[1]
+            assert current in (row, expected, reviewed, qualified), (
                 f"Wave 2 is marked applied but {row['context_id']} differs or is missing")
             assert owner in entries and row["context_id"] in {
                 c.get("context_id") for c in entries[owner].get("study_contexts", [])
