@@ -11,6 +11,7 @@ import json
 import os
 import shutil
 import tempfile
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 from pipeline_freshness import (
@@ -118,10 +119,25 @@ def dependencies(product):
     identifiers = set()
     names = set()
     unresolved = False
+    clock_refresh_required = False
+    enriched_at = str(product.get("enriched_date") or "")
+    try:
+        enriched_local_date = datetime.fromisoformat(enriched_at.replace("Z", "+00:00")).astimezone().date()
+    except ValueError:
+        enriched_local_date = None
 
     def visit(value):
-        nonlocal unresolved
+        nonlocal unresolved, clock_refresh_required
         if isinstance(value, dict):
+            if value.get("snapshot_date") and "snapshot_age_days" in value:
+                from cert_resolver import _recency_status
+                status, age = _recency_status(value["snapshot_date"])
+                if (age != value["snapshot_age_days"]
+                        or ("recency_status" in value and status != value["recency_status"])):
+                    clock_refresh_required = True
+            if (value.get("severity_level") == "critical" and value.get("date")
+                    and enriched_local_date != date.today()):
+                clock_refresh_required = True
             for key, item in value.items():
                 if key in {"canonical_id", "clinical_id", "source_id", "record_id"} and isinstance(item, str):
                     identifiers.add(item)
@@ -135,7 +151,8 @@ def dependencies(product):
                 visit(item)
 
     visit(product)
-    return {"identifiers": sorted(identifiers), "names": sorted(names), "unresolved": unresolved}
+    return {"identifiers": sorted(identifiers), "names": sorted(names), "unresolved": unresolved,
+            "clock_refresh_required": clock_refresh_required}
 
 
 def plan_changes(old, current, raw, dependency_rows):
@@ -150,6 +167,9 @@ def plan_changes(old, current, raw, dependency_rows):
             selected[downstream].update(affected)
         reasons.append(reason)
 
+    clock_affected = {key for key in ids if dependency_rows.get(key, {}).get("clock_refresh_required")}
+    if clock_affected:
+        widen(1, clock_affected, "date-sensitive certification or manufacturer assessment needs refresh")
     changed_raw = {key for key in ids if old["raw"].get(key) != digest(raw[key])}
     widen(0, changed_raw, "new or changed raw labels")
     removed = previous - ids
@@ -252,7 +272,9 @@ def current_snapshot(repo):
         contents, root=repo, file_digest=lambda path: hashlib.sha256(contents[path]).digest())
     if any(fields[REFERENCE_FINGERPRINT_KEY] != binding for fields in stages.values()):
         raise StageManifestError("Reference data changed while capturing dependencies")
-    return {"stages": stages, "references": reference_snapshot(repo, contents=contents)}
+    return {"stages": stages, "references": reference_snapshot(repo, contents=contents),
+            "evaluation_date": datetime.now(timezone.utc).date().isoformat(),
+            "evaluation_local_date": date.today().isoformat()}
 
 
 def run_incremental(runner, raw_dir, prefix, *, plan_only=False, baseline_repo=None):

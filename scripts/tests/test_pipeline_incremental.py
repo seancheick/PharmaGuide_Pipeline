@@ -143,8 +143,8 @@ def test_real_incremental_raw_edit_matches_full_rebuild(tmp_path):
         (raw_dir / (key + ".json")).write_text(json.dumps(value))
     runner = PipelineRunner()
     prefix = tmp_path / "incremental"
-    assert runner.run_pipeline(raw_dir=str(raw_dir), output_prefix=str(prefix),
-                               strict_release_gates=True)["success"]
+    created = run_incremental(runner, raw_dir, prefix)
+    assert created["stages"] == {stage: ["231852", "336362"] for stage in ("clean", "enrich", "score")}
     seeded = run_incremental(runner, raw_dir, prefix)
     assert all(not ids for ids in seeded["stages"].values())
     before = {stage: stage_products(directory, stage)
@@ -408,3 +408,31 @@ def test_identity_recheck_promotes_a_newly_changed_clean_match_downstream(tmp_pa
         rows = mod.stage_products(directory, stage)
         assert rows["1"] == before[stage]
         assert rows["2"]["newly_mapped"] is True
+
+
+def test_date_sensitive_verification_is_refreshed_without_recleaning_other_labels():
+    old = baseline()
+    new = deepcopy(old)
+    new["evaluation_date"] = "2026-11-05"
+    deps = {
+        "1": {"identifiers": ["ginseng"], "unresolved": False,
+              "clock_refresh_required": True},
+        "2": {"identifiers": ["creatine"], "unresolved": False,
+              "clock_refresh_required": False},
+    }
+    assert plan(old, new, deps=deps)["stages"] == {"clean": [], "enrich": ["1"], "score": ["1"]}
+
+
+
+def test_certification_clock_uses_existing_recency_owner_at_exact_time(monkeypatch):
+    from pipeline_incremental import dependencies
+
+    monkeypatch.setattr("cert_resolver._recency_status", lambda _: ("warn", 91))
+    product = {"certification_data": {"verified_cert_programs": [{
+        "snapshot_date": "2026-08-01T13:00:00Z",
+        "snapshot_age_days": 90, "recency_status": "fresh",
+    }]}}
+    assert dependencies(product)["clock_refresh_required"] is True
+    product["certification_data"]["verified_cert_programs"][0].update(
+        snapshot_age_days=91, recency_status="warn")
+    assert dependencies(product)["clock_refresh_required"] is False
