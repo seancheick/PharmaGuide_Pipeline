@@ -1,3 +1,11 @@
+## November 5 — integrated EAA and population engineering qualification
+
+Owners: `evidence_resolver.py::nutrition_authority_for_row`, existing reference/generic Evidence/readiness seams, and `clinical_applicability.py::assess_context_population`. Will NOT create another scientific registry, scorer, Dose benchmark, approval or public state. Sean's November 5 role-policy authorization is recorded separately from clinician efficacy approval.
+
+Implementation5140853e0 and population775b62810 integrated with #387's c9ed38397 source (including final claim-conjunction fix and FDA test-isolation correction). Independent source review approves; all445 measured source hashes were verified before integration. Bounded792-case proof and current integration dependency requalification remain in the existing completion-truth receipt and private measurement folder.767 EAA products:348 Evidence-only numeric increases,162 Evidence-only closures,377 stay partial,228 stay complete; no other-pillar/safety/warning changes.25 controls have no numeric changes; only251169/333190 population metadata changes. No new global numerator is claimed.
+
+Root's combined six named owner files pass1,182 tests. Configured `PG_RELEASE_CANDIDATE_ROOT=/Users/seancheick/Downloads/dsld_clean/scripts scripts/test.sh local` passes564 tests/24 declared opt-in skips in158.41s, skip guard green; this uses existing Nov2 assembled baseline plus reviewed canaries, not fresh catalog acceptance. Exact candidate hostedCI/merge still pending; source qualification does not authorize activation.
+
 ## November 5 — active 99% completion and zero provisional ratings
 
 Sean adopted the new target: at least 15,293 genuinely complete assessments out of the fixed 15,447, with verified publication dispositions for all and no provisional customer ratings. Publication is stopped until the stated criteria pass. Frozen baseline remains8,400 marked complete /7,047 partial, not a verified scientific-completion numerator or an additive sum of old causes. Completing an assessment never automatically awards a number or clears a safety warning.
