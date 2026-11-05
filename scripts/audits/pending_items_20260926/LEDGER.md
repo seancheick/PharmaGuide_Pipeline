@@ -10,7 +10,7 @@ Sean approved both sharing deployments. Website25 merged9a269f5; initial cached 
 
 Actual plan at40ca:38datasets;15449rawIDs perstage;0deletions/identity rechecks;152unchanged state/manifest hashes,0producer/state/index/restamp/cloud actions. PlanSHA b29bee5024983992f35482e9ec45f19678841b79a40d0e7bc0904d47b83547df. Holds250356/312659 remain raw-only/outsidefixed15447. Requiredscope broad dueaccumulatedsharedcode/refs;335.54s/3.51GBplan, lastproducerbatch84m40. Follow-up tests/docs preserveallthreeproducer code/ref/runtimefingerprints. Sean explicitly willrun `--incremental --pipeline-only`; no producerjobstartedbyCodex. Freshcurrentnumerator/census/export remain unavailable untilthatrun. Keep99%+honestdispositions/signing/nativepublication gates closed.
 
-Next bounded review packet20GNCPrecisionBCAA sole betaine dependency is realunfinishedscope, not an aliasbug: existinganhydrouscontexts non-scoring, positive shadow literature notfinishedreview, signed39514262lower-body-strengthscope needs full extraction. Private23case/3control sourcepacket preserves holds and allproducerbytes; no promised20closures/blanketapproval. Existingmainplan owns nextactions.
+Next bounded review packet20GNCPrecisionBCAA sole betaine dependency is realunfinishedscope, not an aliasbug: existinganhydrouscontexts non-scoring, positive shadow literature notfinishedreview, signed39514262lower-body-strengthscope needs full extraction. Private23-case source packet (20 cases plus3 controls) preserves holds and allproducerbytes; no promised20closures/blanketapproval. Existingmainplan owns nextactions.
 
 ## November 5 — integrated EAA and population engineering qualification
 
