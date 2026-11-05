@@ -6,7 +6,7 @@ Owners: `clinical_applicability.py::assess_context_population` for prenatal/infa
 
 Sean supplied Dr. Pham’s signed GS15-4 decision on November 4. The exact 200 mg source row now resolves to its own preparation, with an ungraded Formulation value and a separate completed no-general-benchmark Dose decision. Generic Panax exclusions remain in force. The real label passes the preflight containment rule as Not Scored while Formulation remains unverified. Comparison with the rebuilt artifact found identical safety status, safety gate and interaction profile. No Evidence credit added. Final catalog visibility and app rendering require the post-integration rebuild and validation.
 
-The prenatal probiotic no longer inherits infant-only evidence. Combined qualification remains on #382. Do not claim a catalog or app release from targeted tests.
+The prenatal probiotic no longer inherits infant-only evidence. Combined qualification passed CI41970133633 (28726 passed, 193 declared skips), local564 passed/24 optional skips, and the strict skip guard. Six frozen raw labels were replayed before/after; all four affected labels pass the existing completion preflight and preserve the complete safety gate and product safety status. #382 merged at dc4ac6f77. Full catalog assembly and app acceptance remain pending the operator rebuild. Artifacts: /Users/seancheick/pg_quality/evidence-audit-376/release-blocker-replay and release-blocker-receipt.json.
 
 ## November 4 — CI duration correction
 
