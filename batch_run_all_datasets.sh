@@ -438,17 +438,21 @@ if [ "${#RESUME_ARGS[@]}" -gt 0 ]; then
         echo "ERROR: --resume requires the default clean,enrich,score stages."
         exit 1
     fi
-    echo "Verified resume plan (no computation yet):" | tee -a "$SUMMARY_FILE"
-    for folder in "${sorted_folders[@]}"; do
-        "$PYTHON" run_pipeline.py --raw-dir "$folder" \
-            --output-prefix "products/output_$(basename "$folder")" \
-            "$RESUME_PLAN_FLAG" "${BASELINE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
-    done
-    if [ "$PROCESS_SUBMISSIONS" = "1" ] && [ -d "$SUBMISSION_OUTPUT_DIR" ] && find "$SUBMISSION_OUTPUT_DIR" \
-        -maxdepth 1 -type f -name '*.json' -print -quit | grep -q .; then
-        "$PYTHON" run_pipeline.py --raw-dir "$SUBMISSION_OUTPUT_DIR" \
-            --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
-            "$RESUME_PLAN_FLAG" "${BASELINE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
+    # Incremental execution plans and recovers under its own dataset lock.
+    # Only explicit plan-only mode must refuse an interrupted generation here.
+    if [ "$INCREMENTAL_MODE" != "1" ] || [ "$INCREMENTAL_PLAN_ONLY" = "1" ]; then
+        echo "Verified resume plan (no computation yet):" | tee -a "$SUMMARY_FILE"
+        for folder in "${sorted_folders[@]}"; do
+            "$PYTHON" run_pipeline.py --raw-dir "$folder" \
+                --output-prefix "products/output_$(basename "$folder")" \
+                "$RESUME_PLAN_FLAG" "${BASELINE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
+        done
+        if [ "$PROCESS_SUBMISSIONS" = "1" ] && [ -d "$SUBMISSION_OUTPUT_DIR" ] && find "$SUBMISSION_OUTPUT_DIR" \
+            -maxdepth 1 -type f -name '*.json' -print -quit | grep -q .; then
+            "$PYTHON" run_pipeline.py --raw-dir "$SUBMISSION_OUTPUT_DIR" \
+                --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
+                "$RESUME_PLAN_FLAG" "${BASELINE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
+        fi
     fi
 fi
 if [ "$INCREMENTAL_PLAN_ONLY" = "1" ]; then

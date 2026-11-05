@@ -455,3 +455,63 @@ def test_manufacturer_lookback_reuses_existing_case_normalization_and_threshold(
     assert dependencies(product)["clock_refresh_required"] is True
     product["manufacturer_violations"][0]["date"] = today.isoformat()
     assert dependencies(product)["clock_refresh_required"] is False
+
+
+@pytest.mark.parametrize("mode", ["--incremental", "--incremental-plan"])
+def test_incremental_cli_requires_an_explicit_output_prefix(tmp_path, monkeypatch, mode):
+    import sys
+    import run_pipeline
+
+    def must_not_run(*args, **kwargs):
+        raise AssertionError("missing output prefix reached execution")
+
+    monkeypatch.setattr("pipeline_incremental.run_incremental", must_not_run)
+    monkeypatch.setattr(sys, "argv", ["run_pipeline.py", mode, "--raw-dir", str(tmp_path)])
+    with pytest.raises(SystemExit) as error:
+        run_pipeline.main()
+    assert error.value.code == 2
+
+
+def test_generated_sidecars_survive_in_an_explicit_historical_scope(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, _ = _synthetic_dataset(tmp_path, monkeypatch)
+    sidecar = prefix / "needs_review" / "unique_review.json"
+    sidecar.parent.mkdir()
+    sidecar.write_text('{"id":"2","reason":"original reviewed source"}')
+    prior = sidecar.read_bytes()
+    (raw / "1.json").write_text('{"id":"1","dose":30}')
+    mod.run_incremental(runner, raw, prefix)
+    retained = list(prefix.rglob("unique_review.json"))
+    assert len(retained) == 1
+    assert retained[0].read_bytes() == prior
+    assert ".incremental_artifacts" in retained[0].parts
+    assert "prior" in retained[0].parts
+    (raw / "1.json").write_text('{"id":"1","dose":40}')
+    mod.run_incremental(runner, raw, prefix)
+    retained = list(prefix.rglob("unique_review.json"))
+    assert len(retained) == 1
+    assert retained[0].read_bytes() == prior
+
+
+def test_partial_ordinary_run_invalidates_state_before_writing(tmp_path, monkeypatch):
+    from run_pipeline import PipelineRunner
+
+    prefix = tmp_path / "ordinary"
+    prefix.mkdir()
+    state = prefix / ".incremental_state.json"
+    state.write_text("{}")
+    runner = PipelineRunner()
+    monkeypatch.setattr(runner, "_validate_data_dir", lambda: True)
+    monkeypatch.setattr(runner, "_validate_input_dir", lambda *a: True)
+    monkeypatch.setattr(runner, "_load_products_for_gates", lambda *a, **kw: ([{"id": "1"}], None))
+    monkeypatch.setattr(runner, "run_enrichment_contract_gate", lambda *a, **kw: (True, {}))
+    monkeypatch.setattr(runner, "_stage_inputs", lambda *a: {})
+    monkeypatch.setattr("run_pipeline.quarantine_stage_outputs", lambda *a: [])
+
+    def failed_score(*args, **kwargs):
+        assert not state.exists()
+        return False
+
+    monkeypatch.setattr(runner, "run_score", failed_score)
+    assert not runner.run_pipeline(stages=["score"], raw_dir=str(tmp_path),
+                                   output_prefix=str(prefix), skip_coverage_gate=True)["success"]
+    assert not state.exists()

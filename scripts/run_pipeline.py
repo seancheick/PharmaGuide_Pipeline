@@ -729,6 +729,11 @@ class PipelineRunner:
                 results["stages_failed"].append("raw_labels")
                 return results
 
+        if stages and not dry_run:
+            # Any ordinary producer run supersedes the prior reuse state.
+            # Failed/partial runs then recover through normal verified resume.
+            (Path(output_prefix) / ".incremental_state.json").unlink(missing_ok=True)
+
         # Stage 1: Clean
         if "clean" in stages:
             success = self.run_clean(raw_dir, f"{output_prefix}", dry_run)
@@ -873,10 +878,6 @@ class PipelineRunner:
         results["duration_seconds"] = round(duration, 2)
         results["timestamp"] = end_time.isoformat().replace("+00:00", "Z")
         results["success"] = len(results["stages_failed"]) == 0
-        if results["success"] and set(stages) == set(STAGES) and not dry_run:
-            # A complete ordinary build supersedes the prior incremental state.
-            # The next incremental run seeds only after verifying these outputs.
-            (Path(output_prefix) / ".incremental_state.json").unlink(missing_ok=True)
 
         logger.info("")
         logger.info("=" * 60)
@@ -950,7 +951,7 @@ Pipeline Flow:
     )
     parser.add_argument(
         '--output-prefix',
-        default='output_Lozenges',
+        default=None,
         help='Prefix for output directories (default: output_Lozenges)'
     )
     parser.add_argument(
@@ -1075,6 +1076,9 @@ Pipeline Flow:
                     ','.join(stages) if stages else 'reuse all stages', reason)
         if args.resume_plan:
             sys.exit(0)
+
+    if args.output_prefix is None:
+        args.output_prefix = 'output_Lozenges'
 
     # Run pipeline
     results = runner.run_pipeline(

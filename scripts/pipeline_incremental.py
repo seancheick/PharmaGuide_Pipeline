@@ -331,8 +331,50 @@ def recover_promotion(recovery, prefix):
 
 
 
+
+def copy_artifact(source, destination):
+    """Retain generated evidence, including symlinks, without overwriting it."""
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    if destination.exists() or destination.is_symlink():
+        raise StageManifestError(f"Generated artifact archive collision: {destination}")
+    if source.is_dir() and not source.is_symlink():
+        shutil.copytree(source, destination, symlinks=True)
+    else:
+        shutil.copy2(source, destination, follow_symlinks=False)
+
+
+def preserve_generation_artifacts(prefix, candidate_prefix):
+    """Keep prior non-stage evidence explicitly historical, never as current."""
+    for stage, live, candidate in zip(
+            STAGES, (prefix, Path(str(prefix) + "_enriched"), Path(str(prefix) + "_scored")),
+            (candidate_prefix, Path(str(candidate_prefix) + "_enriched"), Path(str(candidate_prefix) + "_scored"))):
+        if not live.exists():
+            continue
+        current_history = candidate / ".incremental_artifacts"
+        old_history = live / ".incremental_artifacts"
+        if (old_history / "prior").exists():
+            copy_artifact(old_history / "prior", current_history / "prior")
+        stage_name = {"clean": "cleaned", "enrich": "enriched", "score": "scored"}[stage]
+        manifest = json.loads((live / stage_name / MANIFEST_NAME).read_text())
+        extras = [entry for entry in live.iterdir()
+                  if entry.name not in {stage_name, ".incremental_artifacts"}]
+        scoped = [entry for entry in old_history.iterdir() if entry.name != "prior"] if old_history.exists() else []
+        if not extras and not scoped:
+            continue
+        generation = current_history / "prior" / digest(manifest)
+        generation.mkdir(parents=True)
+        (generation / "generation.json").write_text(json.dumps({
+            "scope": "historical_generation", "original_root": str(live), "stage_manifest": manifest,
+        }, indent=2))
+        for entry in extras:
+            copy_artifact(entry, generation / "artifacts" / entry.name)
+        for entry in scoped:
+            copy_artifact(entry, generation / "scoped_artifacts" / entry.name)
+
+
 def promote_generation(prefix, candidate_prefix, transaction, recovery):
     """Promote all three owned roots, retaining the old generation on failure."""
+    preserve_generation_artifacts(prefix, candidate_prefix)
     live_roots = [prefix, Path(str(prefix) + "_enriched"), Path(str(prefix) + "_scored")]
     candidate_roots = [candidate_prefix, Path(str(candidate_prefix) + "_enriched"),
                        Path(str(candidate_prefix) + "_scored")]
@@ -518,6 +560,18 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
                         plan["stages"][downstream] = sorted(
                             set(plan["stages"][downstream]) | changed_clean)
                 merged.update(replacement)
+                candidate_root = (candidate_prefix if stage == "clean" else
+                                  Path(str(candidate_prefix) + ("_enriched" if stage == "enrich" else "_scored")))
+                artifact_root = candidate_root / ".incremental_artifacts" / "current" / stage
+                # The worker's reports describe only selected products. Keep
+                # that scope explicit beside the complete merged gate reports.
+                artifact_root.mkdir(parents=True)
+                (artifact_root / "scope.json").write_text(json.dumps({
+                    "scope": "selected_products", "product_ids": sorted(selected),
+                }, indent=2))
+                for entry in output.iterdir():
+                    if entry != result_dir:
+                        copy_artifact(entry, artifact_root / entry.name)
             products[stage] = merged
             candidate_dir.mkdir(parents=True)
             materialize_merged(directories[index], candidate_dir, stage, merged)
