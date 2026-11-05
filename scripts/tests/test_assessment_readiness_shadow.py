@@ -289,3 +289,122 @@ def test_exact_register_rejects_duplicate_scored_ids(tmp_path: Path) -> None:
     write_stage_manifest(stage, "score", [path], run_id="duplicate-test")
     with pytest.raises(AssessmentReadinessShadowError, match="duplicate scored product ID"):
         build_shadow_report(tmp_path, scored_products_dir=tmp_path)
+
+
+@pytest.mark.parametrize("swapped", ["payload", "manifest"])
+def test_report_receipts_describe_the_same_captured_bytes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, swapped: str,
+) -> None:
+    import hashlib
+
+    product = _product("captured", _row("Magnesium", "magnesium"))
+    _write_stage(tmp_path, [product])
+    stage = tmp_path / "output_Test_enriched" / "enriched"
+    payload_path = stage / "enriched_batch_1.json"
+    manifest_path = stage / ".stage_manifest.json"
+    original_payload = payload_path.read_bytes()
+    original_manifest = manifest_path.read_bytes()
+    original_read_text = Path.read_text
+
+    def changed_text(path: Path, *args, **kwargs):
+        # Simulate ABA: a separate text read sees a temporary replacement,
+        # while the bytes whose hashes were verified remain the original.
+        if swapped == "payload" and path == payload_path:
+            return json.dumps([_product("replacement", _row("Unknown", "unknown"))])
+        if swapped == "manifest" and path == manifest_path:
+            value = json.loads(original_manifest)
+            value["run_id"] = "unbound-replacement"
+            return json.dumps(value)
+        return original_read_text(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", changed_text)
+    report = build_shadow_report(tmp_path)
+    assert report["product_register"][0]["dsld_id"] == "captured"
+    assert report["product_register"][0]["source"]["artifact_sha256"] == hashlib.sha256(original_payload).hexdigest()
+    assert report["stages"][0]["manifest_sha256"] == hashlib.sha256(original_manifest).hexdigest()
+    assert report["stages"][0]["run_id"] == "readiness-shadow-test"
+
+
+def test_frozen_capture_validates_auxiliary_and_unowned_files(tmp_path: Path) -> None:
+    from stage_manifest import StageManifestError
+
+    _write_stage(tmp_path, [_product("one", _row("Magnesium", "magnesium"))])
+    stage = tmp_path / "output_Test_enriched" / "enriched"
+    payload = stage / "enriched_batch_1.json"
+    auxiliary = stage / "counts.txt"
+    auxiliary.write_text("owned auxiliary")
+    write_stage_manifest(stage, "enrich", [payload, auxiliary], run_id="auxiliary-test")
+    report = build_shadow_report(tmp_path)
+    assert {row["name"] for row in report["stages"][0]["owned_files"]} == {payload.name, auxiliary.name}
+    auxiliary.write_text("changed auxiliary")
+    with pytest.raises(StageManifestError, match="checksum mismatch: counts.txt"):
+        build_shadow_report(tmp_path)
+    write_stage_manifest(stage, "enrich", [payload, auxiliary], run_id="auxiliary-test")
+    (stage / "unowned.json").write_text("[]")
+    with pytest.raises(StageManifestError, match="unowned files: unowned.json"):
+        build_shadow_report(tmp_path)
+
+
+def test_frozen_capture_rejects_unsafe_path_before_reading(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from stage_manifest import StageManifestError
+
+    _write_stage(tmp_path, [_product("one", _row("Magnesium", "magnesium"))])
+    stage = tmp_path / "output_Test_enriched" / "enriched"
+    manifest = stage / ".stage_manifest.json"
+    value = json.loads(manifest.read_bytes())
+    value["owned_files"] = ["../outside.json"]
+    manifest.write_text(json.dumps(value))
+    original_read = Path.read_bytes
+    opened = []
+
+    def record_read(path: Path):
+        opened.append(path)
+        return original_read(path)
+
+    monkeypatch.setattr(Path, "read_bytes", record_read)
+    with pytest.raises(StageManifestError, match="Invalid owned filename"):
+        build_shadow_report(tmp_path)
+    assert opened == [manifest]
+
+
+def test_frozen_capture_binds_bytes_even_when_original_changes_after_capture(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    import hashlib
+
+    _write_stage(tmp_path, [_product("captured", _row("Magnesium", "magnesium"))])
+    path = tmp_path / "output_Test_enriched" / "enriched" / "enriched_batch_1.json"
+    original = path.read_bytes()
+    original_read = Path.read_bytes
+
+    def swap_after_read(source: Path):
+        content = original_read(source)
+        if source == path:
+            source.write_text(json.dumps([_product("replacement", _row("Unknown", "unknown"))]))
+        return content
+
+    monkeypatch.setattr(Path, "read_bytes", swap_after_read)
+    report = build_shadow_report(tmp_path)
+    assert report["product_register"][0]["dsld_id"] == "captured"
+    assert report["product_register"][0]["source"]["artifact_sha256"] == hashlib.sha256(original).hexdigest()
+
+
+def test_frozen_capture_rejects_external_symlink_before_reading(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from stage_manifest import StageManifestError
+
+    _write_stage(tmp_path, [_product("one", _row("Magnesium", "magnesium"))])
+    stage = tmp_path / "output_Test_enriched" / "enriched"
+    path = stage / "enriched_batch_1.json"
+    outside = tmp_path / "outside.json"
+    outside.write_bytes(path.read_bytes())
+    path.unlink()
+    path.symlink_to(outside)
+    original_read = Path.read_bytes
+    opened = []
+
+    def record_read(source: Path):
+        opened.append(source)
+        return original_read(source)
+
+    monkeypatch.setattr(Path, "read_bytes", record_read)
+    with pytest.raises(StageManifestError, match="outside stage directory"):
+        build_shadow_report(tmp_path)
+    assert opened == [stage / ".stage_manifest.json"]

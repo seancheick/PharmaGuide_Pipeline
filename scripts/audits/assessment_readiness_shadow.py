@@ -8,6 +8,7 @@ import copy
 import hashlib
 import json
 import sys
+import tempfile
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -21,7 +22,7 @@ if str(SCRIPTS_DIR) not in sys.path:
 from assessment_readiness import evaluate_assessment_readiness  # noqa: E402
 from scoring_input_contract import get_evidence_subject_rows  # noqa: E402
 from scoring_v4.router import class_for_product  # noqa: E402
-from stage_manifest import MANIFEST_NAME, select_stage_files  # noqa: E402
+from stage_manifest import MANIFEST_NAME, StageManifestError, select_stage_files  # noqa: E402
 
 
 REPORT_SCHEMA_VERSION = "1.2.0"
@@ -31,12 +32,45 @@ class AssessmentReadinessShadowError(RuntimeError):
     """A measure-only report could not establish its exact input corpus."""
 
 
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def _capture_stage(stage_dir: Path, expected_stage: str) -> tuple[
+    dict[str, Any], str, list[tuple[Path, bytes]], list[dict[str, Any]]
+]:
+    """Validate and consume one immutable byte capture through the stage owner.
+
+    The temporary mirror is audit-local: the producer files and manifest never
+    change. The owner checks its usual schema, completeness, all owned checksums
+    (including non-product auxiliaries), and unowned JSON inventory there.
+    """
+    manifest_bytes = (stage_dir / MANIFEST_NAME).read_bytes()
+    manifest = json.loads(manifest_bytes)
+    names = manifest.get("owned_files", []) if isinstance(manifest, dict) else []
+    # This is a read boundary, not a second manifest validator. Reject unsafe
+    # filenames before opening anything; the shared owner validates all policy.
+    if not isinstance(names, list):
+        names = []
+    for name in names:
+        if not isinstance(name, str) or Path(name).name != name:
+            raise StageManifestError(f"Invalid owned filename: {name!r}")
+    discovered = {path.name for path in stage_dir.glob("*.json")
+                  if path.is_file() and not path.name.startswith(".")}
+    capture_names = set(names) | discovered
+    for name in capture_names:
+        if (stage_dir / name).resolve().parent != stage_dir.resolve():
+            raise StageManifestError(f"Owned file is outside stage directory: {name}")
+        if not (stage_dir / name).is_file():
+            raise StageManifestError(f"Owned file is missing: {name}")
+    captured = {name: (stage_dir / name).read_bytes() for name in capture_names}
+    with tempfile.TemporaryDirectory(prefix="pg-readiness-shadow-") as temporary:
+        frozen = Path(temporary)
+        (frozen / MANIFEST_NAME).write_bytes(manifest_bytes)
+        for name, data in captured.items():
+            (frozen / name).write_bytes(data)
+        selected = select_stage_files([frozen], expected_stage, require_manifest=True)
+        selected_names = [path.name for path in selected]
+    receipts = [{"name": name, "sha256": hashlib.sha256(captured[name]).hexdigest(),
+                 "bytes": len(captured[name])} for name in sorted(names)]
+    return (manifest, hashlib.sha256(manifest_bytes).hexdigest(),
+            [(stage_dir / name, captured[name]) for name in selected_names], receipts)
 
 
 def _canonical_bytes(value: Any) -> bytes:
@@ -242,32 +276,18 @@ def build_shadow_report(
     cause_backlog: dict[tuple[str, str, str], dict[str, Any]] = {}
 
     for stage_dir in _stage_dirs(products_dir):
-        manifest_path = stage_dir / MANIFEST_NAME
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        owned_files = select_stage_files(
-            [stage_dir],
-            "enrich",
-            require_manifest=True,
-        )
+        manifest, manifest_digest, owned_files, file_receipts = _capture_stage(stage_dir, "enrich")
         stage_owner = stage_dir.parent.name
         stages.append({
             "stage_owner": stage_owner,
             "run_id": manifest.get("run_id"),
-            "manifest_sha256": _sha256(manifest_path),
-            "owned_files": [
-                {
-                    "name": path.name,
-                    "sha256": _sha256(path),
-                    "bytes": path.stat().st_size,
-                }
-                for path in owned_files
-            ],
+            "manifest_sha256": manifest_digest,
+            "owned_files": file_receipts,
         })
 
-        for source_file in owned_files:
-            artifact_sha256 = next(item["sha256"] for item in stages[-1]["owned_files"]
-                                   if item["name"] == source_file.name)
-            payload = json.loads(source_file.read_text(encoding="utf-8"))
+        for source_file, source_bytes in owned_files:
+            artifact_sha256 = hashlib.sha256(source_bytes).hexdigest()
+            payload = json.loads(source_bytes)
             for row_index, product in enumerate(_iter_products(payload, source_file)):
                 product_count += 1
                 dsld_id = str(
@@ -423,18 +443,14 @@ def build_shadow_report(
         scored_ids: set[str] = set()
         for manifest_path in scored_stages:
             stage = manifest_path.parent
-            manifest_digest = _sha256(manifest_path)
-            owned_files = select_stage_files([stage], "score", require_manifest=True)
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest, manifest_digest, owned_files, file_receipts = _capture_stage(stage, "score")
             scored_stage_receipts.append({
                 "stage_owner": stage.parent.name, "run_id": manifest.get("run_id"),
-                "manifest_sha256": manifest_digest,
-                "owned_files": [{"name": path.name, "sha256": _sha256(path),
-                                 "bytes": path.stat().st_size} for path in owned_files],
+                "manifest_sha256": manifest_digest, "owned_files": file_receipts,
             })
-            for path in owned_files:
-                digest = _sha256(path)
-                for row_index, product in enumerate(_iter_products(json.loads(path.read_text()), path)):
+            for path, source_bytes in owned_files:
+                digest = hashlib.sha256(source_bytes).hexdigest()
+                for row_index, product in enumerate(_iter_products(json.loads(source_bytes), path)):
                     pid = str(product.get("dsld_id") or product.get("dsldId") or product.get("id") or "").strip()
                     if not pid or pid in scored_ids:
                         raise AssessmentReadinessShadowError("Missing or duplicate scored product ID")
