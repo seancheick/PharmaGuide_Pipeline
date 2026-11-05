@@ -228,3 +228,14 @@ def test_strict_enrichment_rejects_jsonl_only_and_mixed_inputs_before_processing
     assert 'JSONL' in caplog.text
     assert all(path.read_bytes() == content for path, content in before.items())
     caplog.clear()
+
+
+def test_clean_worker_scope_is_explicit_and_default_full_scope_is_unchanged(tmp_path, monkeypatch):
+    runner = PipelineRunner()
+    captured = []
+    monkeypatch.setattr(runner, '_run_script', lambda script, args, dry_run=False:
+                        captured.append(list(args)) or True)
+    assert runner.run_clean(str(tmp_path / 'raw'), str(tmp_path / 'full'))
+    assert '--incremental-worker' not in captured[-1]
+    assert runner.run_clean(str(tmp_path / 'raw'), str(tmp_path / 'selected'), incremental_worker=True)
+    assert captured[-1].count('--incremental-worker') == 1

@@ -279,7 +279,7 @@ class PipelineRunner:
             logger.info('STAGE TIMING: %s | elapsed %.3fs', script_name,
                         time.monotonic() - started)
 
-    def run_clean(self, raw_dir: str, output_dir: str, dry_run: bool = False) -> bool:
+    def run_clean(self, raw_dir: str, output_dir: str, dry_run: bool = False, *, incremental_worker: bool = False) -> bool:
         """
         Stage 1: Clean raw DSLD data
 
@@ -297,6 +297,9 @@ class PipelineRunner:
             "--input-dir", raw_dir,
             "--output-dir", output_dir
         ]
+
+        if incremental_worker:
+            args.append("--incremental-worker")
 
         # Add config if exists
         config_path = self.script_dir / config_file

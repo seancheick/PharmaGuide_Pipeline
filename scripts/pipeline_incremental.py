@@ -782,7 +782,7 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
                         # Execute the same parsed label snapshot that was planned.
                         (input_dir / raw_names[key]).write_bytes(raw_bytes[key])
                     output = stage_workspace / "result"
-                    success = runner.run_clean(str(input_dir), str(output))
+                    success = runner.run_clean(str(input_dir), str(output), incremental_worker=True)
                     result_dir = output / "cleaned"
                 else:
                     (input_dir / "batch.json").write_text(json.dumps(list(selected_rows.values()), ensure_ascii=False))
@@ -847,6 +847,24 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
                     if entry != result_dir:
                         copy_artifact(entry, artifact_root / entry.name)
             products[stage] = merged
+            if stage == "clean":
+                held_ids = [pid for rows in clean_holds.values() for pid in rows]
+                if (len(held_ids) != len(set(held_ids)) or set(merged) & set(held_ids)
+                        or set(merged) | set(held_ids) != set(raw)):
+                    raise StageManifestError("Merged Clean successful/held input inventory is inconsistent")
+                from batch_processor import clean_processing_failure, clean_processing_success_rate
+                results = {"cleaned": len(merged), **{name: len(rows) for name, rows in clean_holds.items()}}
+                summary = {"processing_complete": True, "total_files": len(raw), "results": results,
+                           "success_rate": clean_processing_success_rate(results, len(raw))}
+                minimum = None
+                config_file = getattr(runner, "config", {}).get("configs", {}).get("clean")
+                if config_file:
+                    config_path = runner.script_dir / config_file
+                    if config_path.exists():
+                        minimum = json.loads(config_path.read_text(encoding="utf-8")).get("validation", {}).get("min_success_rate")
+                failure = clean_processing_failure(summary, minimum)
+                if failure:
+                    raise StageManifestError("Merged Clean failed: " + failure)
             candidate_dir.mkdir(parents=True)
             materialize_merged(directories[index], candidate_dir, stage, merged)
         # The complete merged enrichment, not merely the changed slice, must pass.

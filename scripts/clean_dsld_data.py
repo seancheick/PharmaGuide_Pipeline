@@ -36,7 +36,7 @@ from datetime import datetime
 # Add scripts directory to path
 sys.path.append(str(Path(__file__).parent))
 
-from batch_processor import BatchProcessor
+from batch_processor import BatchProcessor, clean_processing_failure
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from constants import LOG_FORMAT, LOG_DATE_FORMAT
 
@@ -349,7 +349,7 @@ class DSLDCleaningPipeline:
             self.logger.error(f"Dry run failed: {str(e)}")
             return False
     
-    def run(self, resume: bool = False) -> bool:
+    def run(self, resume: bool = False, *, incremental_worker: bool = False) -> bool:
         """Run the main processing pipeline"""
         self.logger.info("=" * 60)
         self.logger.info("DSLD Data Cleaning Pipeline Starting")
@@ -407,39 +407,17 @@ class DSLDCleaningPipeline:
             self.logger.info(f"  - Unmapped ingredients: {output_dir / 'unmapped'}")
             self.logger.info(f"  - Processing report: {output_dir / 'reports'}")
 
-            # Fail if error rate exceeds safety threshold.
-            # A medical-grade pipeline must not silently report success
-            # when significant data loss has occurred.
-            error_count = summary['results']['errors']
-            total_files = summary['total_files']
-            success_rate = summary['success_rate']
-            min_success_rate = self.config.get("validation", {}).get("min_success_rate", 95.0)
-
-            if not summary.get("processing_complete", True):
-                output_write_failures = summary.get("output_write_failures", 0)
-                report_write_failures = summary.get("report_write_failures", 0)
-                self.logger.error(
-                    "PIPELINE FAILED: processing summary is incomplete"
-                    + (
-                        f" ({output_write_failures} file(s) had output write failures)"
-                        if output_write_failures
-                        else ""
-                    )
-                    + (
-                        f" ({report_write_failures} quarantine, unmapped, resume-state or report write(s) failed)"
-                        if report_write_failures
-                        else ""
-                    )
-                )
+            # Selected workers prove complete output, then the executor applies
+            # this same gate to the verified full dataset before promotion.
+            failure = clean_processing_failure(
+                summary, self.config.get("validation", {}).get("min_success_rate"),
+                check_rate=not incremental_worker,
+            )
+            if failure is not None:
+                self.logger.error("PIPELINE FAILED: %s", failure)
                 return False
-
-            if total_files > 0 and success_rate < min_success_rate:
-                self.logger.error(
-                    f"PIPELINE FAILED: success rate {success_rate:.1f}% is below "
-                    f"minimum threshold {min_success_rate}% "
-                    f"({error_count}/{total_files} files had errors)"
-                )
-                return False
+            if incremental_worker:
+                self.logger.info("Selected-input processing complete; dataset success-rate gate deferred to incremental executor")
 
             return True
             
@@ -521,6 +499,8 @@ CLI vs Config:
         help="Enable verbose logging"
     )
     
+    parser.add_argument("--incremental-worker", action="store_true", help=argparse.SUPPRESS)
+
     args = parser.parse_args()
 
     # GUARD: Verify working directory before doing anything else
@@ -551,7 +531,7 @@ CLI vs Config:
         if args.dry_run:
             success = pipeline.dry_run()
         else:
-            success = pipeline.run(resume=args.resume)
+            success = pipeline.run(resume=args.resume, incremental_worker=args.incremental_worker)
 
         # Exit with appropriate code
         sys.exit(0 if success else 1)

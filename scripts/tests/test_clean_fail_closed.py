@@ -292,3 +292,45 @@ def test_failure_in_the_final_reports_marks_the_stage_incomplete(tmp_path, monke
 
     assert summary["processing_complete"] is False
     assert manifests[0]["processing_complete"] is False
+
+
+@pytest.mark.parametrize('selected_worker,complete,write_failures,expected', [
+    (False, True, 0, False), (True, True, 0, True),
+    (True, False, 0, False), (True, True, 1, False),
+])
+def test_selected_worker_defers_only_dataset_rate_gate(monkeypatch, tmp_path, selected_worker, complete, write_failures, expected):
+    import logging
+    import clean_dsld_data as clean
+    summary = {'total_files': 1, 'success_rate': 0.0, 'unmapped_ingredients': 0,
+        'results': {'cleaned': 0, 'needs_review': 0, 'incomplete': 0, 'errors': 1},
+        'processing_complete': complete, 'output_write_failures': write_failures}
+    class Processor:
+        def __init__(self, config):
+            pass
+        def get_input_files(self, source):
+            return [tmp_path / 'failed.json']
+        def process_all_files(self, files, resume=False):
+            return summary
+    monkeypatch.setattr(clean, 'BatchProcessor', Processor)
+    pipeline = clean.DSLDCleaningPipeline.__new__(clean.DSLDCleaningPipeline)
+    pipeline.config = {'paths': {'input_directory': str(tmp_path), 'output_directory': str(tmp_path)},
+                       'validation': {'min_success_rate': 95.0}}
+    pipeline.logger = logging.getLogger('selected-worker-test')
+    monkeypatch.setattr(pipeline, 'validate_config', lambda: True)
+    if selected_worker:
+        actual = pipeline.run(incremental_worker=True)
+    else:
+        actual = pipeline.run()
+    assert actual is expected
+
+
+def test_shared_processing_gate_uses_complete_outcome_inventory():
+    from batch_processor import clean_processing_success_rate, clean_processing_failure
+    results = {'cleaned': 101, 'needs_review': 0, 'incomplete': 0, 'errors': 3}
+    summary = {'total_files': 104, 'results': results, 'processing_complete': True,
+               'success_rate': clean_processing_success_rate(results, 104)}
+    assert summary['success_rate'] == pytest.approx(101 / 104 * 100)
+    assert clean_processing_failure(summary) is None
+    assert clean_processing_failure(summary, min_success_rate=99) is not None
+    summary['processing_complete'] = False
+    assert clean_processing_failure(summary) is not None

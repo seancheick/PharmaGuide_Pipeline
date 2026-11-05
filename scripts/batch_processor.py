@@ -40,6 +40,32 @@ logger = logging.getLogger(__name__)
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
+def clean_processing_success_rate(results: Dict[str, int], total_files: int) -> float:
+    """Processing completion includes recorded holds, never item errors."""
+    accepted = sum(results.get(name, 0) for name in ("cleaned", "needs_review", "incomplete"))
+    return accepted / total_files * 100 if total_files else 0.0
+
+
+def clean_processing_failure(summary: Dict[str, Any], min_success_rate=None, *, check_rate: bool = True) -> Optional[str]:
+    """Shared completion and configured dataset-rate gate.
+
+    Selected workers defer only the rate check; their verified aggregate is
+    checked by the incremental executor before any generation is promoted.
+    """
+    write_failures = summary.get("output_write_failures", 0)
+    report_failures = summary.get("report_write_failures", 0)
+    if not summary.get("processing_complete", True) or write_failures or report_failures:
+        return ("processing summary is incomplete"
+                + (f" ({write_failures} file(s) had output write failures)" if write_failures else "")
+                + (f" ({report_failures} quarantine, unmapped, resume-state or report write(s) failed)"
+                   if report_failures else ""))
+    threshold = 95.0 if min_success_rate is None else min_success_rate
+    if check_rate and summary["total_files"] > 0 and summary["success_rate"] < threshold:
+        return (f"success rate {summary['success_rate']:.1f}% is below minimum threshold {threshold}% "
+                f"({summary['results']['errors']}/{summary['total_files']} files had errors)")
+    return None
+
+
 class PerformanceTracker:
     """Track performance metrics during batch processing"""
 
@@ -1456,17 +1482,14 @@ class BatchProcessor:
         # Get performance stats
         perf_stats = self.performance_tracker.get_stats()
 
+        outcomes = {"cleaned": total_cleaned, "needs_review": total_needs_review,
+                    "incomplete": total_incomplete, "errors": total_errors}
         summary = {
             "processing_complete": total_output_write_failures == 0,
             "total_files": total_attempted,
             "input_validation_failures": total_validation_failures,
             "output_write_failures": total_output_write_failures,
-            "results": {
-                "cleaned": total_cleaned,
-                "needs_review": total_needs_review,
-                "incomplete": total_incomplete,
-                "errors": total_errors
-            },
+            "results": outcomes,
             "processing_time": {
                 "total_seconds": total_time,
                 "total_minutes": total_time / 60,
@@ -1474,7 +1497,7 @@ class BatchProcessor:
             },
             "unmapped_ingredients": len(self._true_unmapped_counter()),
             "mapped_ingredients": len(self.global_mapped),
-            "success_rate": ((total_cleaned + total_needs_review + total_incomplete) / total_attempted * 100) if total_attempted else 0
+            "success_rate": clean_processing_success_rate(outcomes, total_attempted)
         }
 
         # Add performance metrics if tracking is enabled
