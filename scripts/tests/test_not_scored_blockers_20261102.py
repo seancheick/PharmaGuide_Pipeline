@@ -39,7 +39,7 @@ def _quality_rows(enriched, name):
 
 @pytest.mark.parametrize("pid, name, canonical, form", [
     ("312832", "Flaxseed Oil", "flaxseed", "flaxseed oil"),
-    ("328465", "GS15-4", "ginseng", "fermented red ginseng"),
+    ("328465", "GS15-4", "ginseng", "gs15-4 enzyme-fermented asian ginseng root extract"),
     ("328649", "Reishi Mushroom Fruiting Body Extract", "reishi", "reishi fruiting body"),
     ("293269", "Vitamin A", "vitamin_a", "beta-carotene from mixed carotenoids"),
     ("328639", "Vitamin A", "vitamin_a", "beta-carotene from mixed carotenoids"),
@@ -116,3 +116,43 @@ def test_a_label_with_only_zero_percent_rows_stays_held():
     [row] = [r for r in enriched["activeIngredients"] if r["name"] == "Vitamin C"]
     assert row["cleaner_row_role"] != "daily_value_no_amount"
     assert build_scored_artifact(enriched)["quality_score_status"] == "not_scored"
+
+
+def test_gs15_4_uses_exact_preparation_and_completed_neutral_dose():
+    from scoring_v4.modules.botanical_profile import score_botanical_purpose_dose
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    product = _enrich("328465")
+    row, = _rows(product, "GS15-4")
+    assert row["canonical_id"] == "ginseng"
+    assert row["form_id"] == "gs15-4 enzyme-fermented asian ginseng root extract"
+    assert row["quantity"] == 200
+    assert row["unit"] == "mg"
+    assert row.get("bio_score") is None
+    dose = score_botanical_purpose_dose(product, row)
+    assert dose["metadata"]["benchmark"] == "absent"
+    scored = build_scored_artifact(product)
+    release = scored["assessment_readiness"]["release_assessment"]
+    assert release["blockers"] == ["identity_assessment_incomplete"]
+    assert release["unfinished_source_assessment"] is None
+    assert scored["quality_score_status"] == "not_scored"
+    assert scored["product_safety_status"] == "no_known_catalog_concern"
+    from audit_source_of_truth_contract import _release_assessment_export_contained
+    assert _release_assessment_export_contained(
+        scored, product, completion_only=True, warning_only=set(),
+        blocked_warning_only=set(), quarantines={},
+    )
+
+
+@pytest.mark.parametrize("other", ["Panax ginseng", "steamed red ginseng", "HYFRG", "GINST15"])
+def test_gs15_4_dose_review_does_not_transfer_to_other_preparations(other, monkeypatch):
+    from dose_assessment import _dose_source_preparation_matches, _source_dose_row
+    from evidence_resolver import _load_literature_evidence
+
+    product = _enrich("328465")
+    row, = _rows(product, "GS15-4")
+    record = _load_literature_evidence()["gs15_4_fermented_panax_ginseng_root_extract"]
+    assert _dose_source_preparation_matches(product, row, record)
+    source = {**_source_dose_row(product, row), "raw_source_text": other}
+    monkeypatch.setattr("dose_assessment._source_dose_row", lambda *_: source)
+    assert not _dose_source_preparation_matches(product, row, record)

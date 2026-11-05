@@ -4,7 +4,7 @@
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
     "last_updated": "2026-11-04",
-    "total_entries": 844,
+    "total_entries": 845,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
     "verified_records_count": 809
@@ -39096,6 +39096,73 @@
         "approval_status": "approved_existing_neutral_2026_10_29"
       },
       "notes": "Exact Dose scope authority: Sean direct user/team ruling, 2026-10-29. Original source-reviewed labels: 205266. Matching uses source physical facts; IDs document the inspected cohort, not a runtime allowlist. Existing Evidence and safety remain independent."
+    },
+    {
+      "canonical_id": "gs15_4_fermented_panax_ginseng_root_extract",
+      "standard_name": "gs15-4 enzyme-fermented asian ginseng root extract",
+      "aliases": [
+        "GS15-4"
+      ],
+      "material_form": "GS15-4 enzyme-fermented Panax ginseng root extract",
+      "search_date": "2026-11-04",
+      "qualifying_human_studies": [],
+      "effect_direction": null,
+      "applicability_status": "applicability_unestablished",
+      "population_context": "Dose disposition only.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "No Evidence award or change to independent safety rules.",
+      "applicability": {
+        "scope": "ingredient",
+        "required_form_terms": [
+          "gs15-4 enzyme-fermented asian ginseng root extract"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "HYFRG",
+          "GINST15",
+          "red ginseng",
+          "steamed"
+        ]
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "exact_preparation",
+        "preparation": "GS15-4 enzyme-fermented Panax ginseng root extract",
+        "purpose": "General catalog Dose only",
+        "population": "No clinical population transfer",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "Printed whole-preparation mass only",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "https://www.ilhwa-usa.com/about-us"
+        ],
+        "rationale": "Sean supplied Dr. Pham’s signed exact-preparation disposition on 2026-11-04. No general benchmark, efficacy threshold, or preparation equivalence was established. Apply the existing neutral Dose policy only.",
+        "owner": "scripts/data/literature_evidence_records.json::gs15_4_fermented_panax_ginseng_root_extract",
+        "review_date": "2026-11-04",
+        "approval_status": "approved_existing_neutral_2026_11_04"
+      },
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "d4d7de9c716fb143d44d179c1a6cc25ce68096ec29b0863cfcc7f8cda03b21c9",
+          "source_ids": [
+            "https://www.ilhwa-usa.com/about-us"
+          ],
+          "verified_at": "2026-11-05T04:23:01.225654+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "https://www.ilhwa-usa.com/about-us",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Ilhwa Enzyme Fermented Ginseng — About Us",
+              "content_sha256": "2a352d7c1ae0cd6ed7a46cd1a813d42f4efc56bd3f12a56d881cc8bc0f91ec49",
+              "notes": "Manufacturer processing and ingredient identity only. Article alert flags do not apply to this source."
+            }
+          ]
+        }
+      }
     },
     {
       "canonical_id": "red_panax_ginseng_root",

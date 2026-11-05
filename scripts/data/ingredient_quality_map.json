@@ -31,7 +31,7 @@
     },
     "statistics": {
       "total_parents": 656,
-      "total_forms": 1476,
+      "total_forms": 1477,
       "total_form_aliases": 12308,
       "parents_with_parent_aliases": 151,
       "parents_with_contains_aliases": 0,
@@ -26783,6 +26783,21 @@
     "cui": "C1119918",
     "rxcui": "325526",
     "forms": {
+      "gs15-4 enzyme-fermented asian ginseng root extract": {
+        "bio_score": null,
+        "absorption": "unknown for this exact preparation",
+        "absorption_structured": {
+          "quality": "unknown",
+          "value": null
+        },
+        "aliases": [
+          "GS15-4",
+          "gs15-4 fermented korean ginseng extract",
+          "gs15-4 fermented asian ginseng extract"
+        ],
+        "notes": "Ilhwa describes enzyme fermentation of unpeeled white ginseng root. HYFRG and GINST15 do not establish a numerical grade for GS15-4. Source: https://www.ilhwa-usa.com/about-us",
+        "dosage_importance": 1.0
+      },
       "fermented red ginseng": {
         "bio_score": 12,
         "absorption": "moderate (~10-25%; Compound K pre-formed, bypasses microbiota step)",
@@ -26793,8 +26808,6 @@
         },
         "notes": "Fermented red ginseng pre-converts protopanaxadiol ginsenosides (Rb1) to Compound K. Human PK (PMID:27516803, Choi 2016, n=24): CK Cmax 254 ng/mL, AUC 115x higher than standard RG. Confirmed by Lee 2021 (PMID:33884767): CK-30 showed 135x AUC, 118x Cmax, Tmax 3h (vs 10h for RG). Best PK data of any ginseng form. Absorption string revised 2026-04-24 to avoid \"115-135×\" fold-change phrasing (relative to unfermented red ginseng) that parsers/readers could misread as absolute absorption. Fold-change data retained in notes. struct.value=0.5 flagged for clinical review — agent research (PMID:27516803, Choi 2016; PMID:38476921) suggests absolute F more in line with ~0.10-0.25 range.",
         "aliases": [
-          "gs15-4 fermented korean ginseng extract",
-          "gs15-4 fermented asian ginseng extract",
           "FRG",
           "bio-enhanced ginseng",
           "ginsenoside-rich ginseng",
@@ -26802,8 +26815,7 @@
           "microbial ginseng",
           "fermented panax ginseng",
           "high-potency red ginseng",
-          "bioactive red ginseng",
-          "GS15-4"
+          "bioactive red ginseng"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26888,10 +26900,7 @@
             }
           ]
         },
-        "form_evidence_axis": "systemic_bioavailability",
-        "source_form_aliases": [
-          "asian ginseng root extract, fermented"
-        ]
+        "form_evidence_axis": "systemic_bioavailability"
       },
       "black ginseng": {
         "bio_score": 11,

@@ -329,8 +329,14 @@ def test_exact_approved_held_label_is_unscored_and_exportable(pairs, pid):
     assert scored['score_unavailable_reason']
     release = scored['assessment_readiness']['release_assessment']
     assert release['is_complete'] is False
-    assert 'dose_benchmark_identity_unresolved' in release['blockers']
-    assert release['unfinished_source_assessment'] == 'dose_benchmark_identity_unresolved'
+    if pid == '232035':
+        # The ungraded GS15-4 form stops scoring before Dose. Its separate
+        # Cordyceps assessment remains held and no Dose decision transfers.
+        assert release['blockers'] == ['identity_assessment_incomplete', 'evidence_assessment_incomplete']
+        assert release['unfinished_source_assessment'] is None
+    else:
+        assert 'dose_benchmark_identity_unresolved' in release['blockers']
+        assert release['unfinished_source_assessment'] == 'dose_benchmark_identity_unresolved'
     assert scored['_v4_safety_gate'] == v4['v4_breakdown']['safety_gate']
     assert enriched == before
     assert validate_export_contract(enriched, scored) == []

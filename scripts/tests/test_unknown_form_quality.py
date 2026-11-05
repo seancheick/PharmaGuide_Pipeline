@@ -1388,18 +1388,18 @@ def test_generic_korean_extract_does_not_claim_fermentation(enricher, label):
     assert 'Compound K pre-formed' not in match.get('notes', '')
 
 
-@pytest.mark.parametrize('label', [
-    'fermented red ginseng',
-    'GS15-4 fermented Asian Ginseng extract',
-    'GS15-4 fermented Korean Ginseng extract',
+@pytest.mark.parametrize('label,form', [
+    ('fermented red ginseng', 'fermented red ginseng'),
+    ('GS15-4 fermented Asian Ginseng extract', 'gs15-4 enzyme-fermented asian ginseng root extract'),
+    ('GS15-4 fermented Korean Ginseng extract', 'gs15-4 enzyme-fermented asian ginseng root extract'),
 ])
-def test_explicit_fermented_ginseng_keeps_its_named_form(enricher, label):
+def test_explicit_fermented_ginseng_keeps_its_named_form(enricher, label, form):
     match = enricher._match_quality_map(
         label, 'Ginseng', enricher.databases['ingredient_quality_map'],
         cleaner_canonical_id='ginseng',
     )
-    assert match['form_id'] == 'fermented red ginseng'
-    assert match['bio_score'] == IQM['ginseng']['forms']['fermented red ginseng']['bio_score']
+    assert match['form_id'] == form
+    assert match['bio_score'] == IQM['ginseng']['forms'][form]['bio_score']
 
 
 @pytest.mark.parametrize('label,percent', [
