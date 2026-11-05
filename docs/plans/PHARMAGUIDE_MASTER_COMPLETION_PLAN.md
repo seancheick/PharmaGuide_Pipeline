@@ -2,7 +2,7 @@
 
 ## November 5 — preserve per-label progress during incremental rebuilds
 
-Owner: `pipeline_incremental.py::run_incremental` and `batch_processor.py::_generate_final_summary`. Will NOT create another scorer, assessment status or retry registry.
+Owner: `pipeline_incremental.py::run_incremental`, `batch_processor.py` summary/categorization/resume, and `stage_manifest.py::select_stage_input_files`. Will NOT create another scorer, assessment status or retry registry.
 
 - [x] Fix exact input accounting across successful Clean outputs, explicit incomplete/review holds and source-bound item errors. Retain successful labels and reports; never interpret an unexplained missing output as a hold.
 - [x] Verify success-to-hold and hold-to-success transitions, unchanged holds, retry of failed inputs only, failed-retry rollback, write failures and full-versus-incremental parity. Valid held outcomes count as completed processing, not completed scientific assessments; genuine errors remain subject to the existing error threshold.
@@ -11,6 +11,8 @@ Owner: `pipeline_incremental.py::run_incremental` and `batch_processor.py::_gene
 Implementation is in `c0305ca99`, `daa7188f0` and `228893b9f`. Independent review found no remaining concrete blocker. The combined owner slice passed 134 tests; the final resume/denominator/write-failure slice passed 46 tests. Real-label full/incremental hold-and-recovery parity also passed. Initial error retention, JSONL promotion, historical reports, missing provenance and unchanged hold reporting have explicit regressions. CI and the applicable local checkpoint remain required before integration. The corrected Clean fingerprint requires one fresh baseline; later affected-label retries reuse successful outputs.
 
 User-supplied follow-up audit reproduced two additional resume defects: file-count numbering could overwrite gapped/JSONL output, and rejected categorization could enter completed paths. The same canonical owner now uses the highest sequence across output categories, rejects conflicts, and records only explicitly accepted dispositions. Rejections remain attributable and retryable. The strict full-pipeline format boundary rejects JSONL, including mixed input, rather than silently skipping it; the operations guide documents the supported JSON mode. Final updated-source checks and CI supersede the earlier candidate checkpoint.
+
+The requested interrupted-write probe found partial batch output could be adopted twice by legacy resume. Resume now requires valid canonical output ownership before invoking a worker, including when a state file survives but every output is missing. Invalid ownership requires a fresh repair without altering retained files. Explicit empty-generation validation is opt-in at this caller; strict consumers keep their existing defaults. Eighty owner tests pass, including actual failed-write/resume probes and valid empty controls. Final combined checks and final-source CI remain the integration gate.
 
 The interrupted operator run exposed the same executor defect on BulkSupplements (4,049 successful, one incomplete, no errors) and Emergen_C (133 successful, one incomplete, no errors). Sean stopped the run to integrate this repair. These observations do not change catalog completeness or publication qualification.
 
