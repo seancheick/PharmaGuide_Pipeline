@@ -10,6 +10,8 @@ paths:
 
 **Invariants**
 
+- Evidence qualifies principal-ingredient research independently of marketing claims. Reuse `clinical_applicability` and `evidence_resolver`; retain preparation, population, source-integrity and review constraints. Claim alignment is separate. Unfinished research processing or unresolved ingredient matching must remain pending, never a completed scientific zero.
+
 - There is one public scorer: `score_supplements_v4.py::score_product_v4` →
   `scoring_v4/scored_artifact.py`.
 - Every magnitude lives in `scoring_v4/config/quality_score.json`. Recalibrate there, never with

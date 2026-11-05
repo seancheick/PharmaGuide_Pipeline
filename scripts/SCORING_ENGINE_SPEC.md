@@ -290,8 +290,13 @@ stage3_quality_score_v4_100 = clamp(0, 100, round(sum(pillar.score), 1))
 exported_quality_score_v4_100 = floor(stage3_quality_score_v4_100 + 0.5)
 ```
 
-Category adapters map module evidence to an achievable, purpose-fit pillar
-scale. The public score is the literal six-pillar sum: no post-sum cap, clamp
+Category adapters map module evidence to the existing pillar scales for each
+module. Evidence qualifies research for principal active ingredients independently
+of marketing claims; claim alignment is a separate result. Preparation, studied
+population, source integrity and completed review remain required. Missing research
+processing stays pending rather than becoming a completed scientific zero.
+
+The public score is the literal six-pillar sum: no post-sum cap, clamp
 or category adjustment may change it (locked 2026-09-21; the former sports
 caps and `quality_score_cap_v4` were removed). A category concern is expressed
 by the pillar or safety gate that owns it. Stage 3 retains one decimal for auditability and tier derivation; final export
@@ -449,6 +454,7 @@ Artifact schema 4.4.0 adds the canonical eligible-delivery projection (October 1
   owner decisions (null earns no affirmative credit), primary-mass-floor
   calibration for Evidence norms, and the vitamin-D bone-goal ownership change
   (bone goal is synergy-owned, not Evidence-owned).
+- **4.8.1 → 4.9.0** (2026-11-04): shared ingredient-first Evidence qualification, with marketing alignment separate; native/generic population and delivery checks, principal co-owners, and source-integrity holds. Config 1.31.7 records provenance without changing numerical weights. Frozen-catalog and consumer qualification receipts are in the existing LEDGER.
 - **4.8.0 → 4.8.1** (2026-10-18): combine the approved Dose V4.1 reference policy with PR164's shared omega population, marketing-Evidence and molecular-form safeguards. Minimum directed daily use and native omega_rubric reference ownership remain canonical; no duplicate250/200mg table or serving-only rule is restored. Config1.29.1 records this integration.
 - **4.7.3 → 4.8.0** (2026-10-18): implement Sean's 43 revised Dose reference decisions, including the sixth prenatal critical nutrient choline within the fixed 5-point budget. Config1.29.0 records the approved calibrations; exhaustive native-reference semantics replace the pending-family list. Earlier activation-blocker notes below describe their historical versions, not an outstanding policy decision.
 - **4.7.2 → 4.7.3** (2026-10-18, `claude/dose-v41`): stop projecting discrete literature regimens into clinical minima; complete reviewed no-benchmark literature assessments with existing neutral credit and honest receipts; require source-qualified actual protein grams; restore the established soluble-nickel-salt UL with elemental/form guards. Config1.28.2 clarifies RDA/AI versus FDA Daily Value policy without changing numerical config parameters. At this historical version, proposed calibrations remained unapplied pending the decision table; 4.8.0 implements the subsequently approved table.
