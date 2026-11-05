@@ -306,3 +306,19 @@ def test_fast_workflow_pins_runner_compatible_with_project_python():
     assert set(re.findall(r'^\s+runs-on:\s*(\S+)\s*$', workflow, re.M)) == {'ubuntu-24.04'}
     assert 'python-version-file: .python-version' in workflow
     assert (root / '.python-version').read_text().strip()
+
+
+def test_hosted_matrix_matches_eight_disjoint_canonical_shards():
+    """More runners shorten feedback without reducing the canonical fast suite."""
+    import re
+    from test_profiles import iter_profile_paths
+    workflow = (Path(__file__).resolve().parents[2] / '.github/workflows/pipeline-tests.yml').read_text()
+    indices = [int(value.strip()) for value in re.search(r'shard: \[(.*?)\]', workflow).group(1).split(',')]
+    count = int(re.search(r'export PG_TEST_SHARD_COUNT=(\d+)', workflow).group(1))
+    assert count == 8
+    assert indices == list(range(count))
+    selected = [path for index in indices for path in iter_profile_paths('fast', shard_index=index, shard_count=count)]
+    assert len(selected) == len(set(selected))
+    assert set(selected) == set(iter_profile_paths('fast'))
+    assert 'export PG_TEST_WORKERS=1' in workflow
+    assert 'python scripts/ci_skip_guard.py ci-junit.xml' in workflow

@@ -1,5 +1,15 @@
 ## November 4 — active Claude audit and repairs
 
+## November 4 — CI duration correction
+
+Owner: `test_profiles.py::shard_assignment` and `test_shard_plan.py::build_plan`; `.github/workflows/pipeline-tests.yml` schedules the existing partition. Evidence: all four JUnit artifacts from green run `41939501193`. Will NOT create another test selector or remove tests/assertions/skip guards.
+
+Infrastructure-only batch; no runtime or catalog change. The old plan omitted expensive new files (duplicate dose lineage alone took 246 seconds). Measured group execution totals were 1,192 / 963 / 1,189 / 715 seconds. Refreshing the existing plan balances four groups to 1,015 seconds; eight isolated one-worker jobs predict 507 seconds each, before runner/setup overhead. This is a projection, not a hosted timing claim. No shared mutable fixture cache was introduced. The full fast suite remains required for executable changes; documentation already has a lightweight path.
+
+The new matrix/partition regression failed before the change (4 versus 8), then all 65 CI harness/scope cases passed. Existing partition tests retain exact-once membership, deterministic ordering, invalid-selector failures and skip enforcement. Hosted qualification pending. No local broad suite or corpus job was started alongside Sean's pipeline.
+
+Research: GitHub's dependency-cache and concurrency documentation and pytest's fixture-scope documentation support measuring execution separately from setup, isolated parallel jobs and careful fixture reuse. Existing pip caching/cancellation already work; setup costs about one minute, so test execution is the priority. Wider fixture caching is deferred until mutation isolation is demonstrated, rather than weakening the real-label integration tests.
+
 ## November 4 — combined Evidence qualification (#372 + #376)
 
 Owner: `clinical_applicability.py::assess_clinical_applicability`, `evidence_resolver.py::resolve_evidence_for_row` / `resolve_omega_evidence_standard`, `scoring_input_contract.py`, `assessment_readiness.py`, and the existing native probiotic assessment. Evidence: caller traces, fail-first owner tests and frozen output comparisons. Will NOT create a second scorer, clinical approval, product Evidence override or arbitrary floor.
