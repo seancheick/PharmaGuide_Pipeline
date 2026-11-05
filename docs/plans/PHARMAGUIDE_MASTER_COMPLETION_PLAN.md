@@ -17,6 +17,17 @@ Owner: `scripts/audits/assessment_readiness_shadow.py::build_shadow_report` for 
 
 **November 5 policy clarification — essential amino acids:** Sean approved extending the existing strong nutritional-evidence policy to verified essential amino-acid preparations. This authorizes established nutritional-role credit independently of performance marketing and Dose; it is not Dr. Pham approval of a new therapeutic effect, dose curve, derivative, unknown preparation or safety conclusion. Implementation and measured acceptance remain open. Extend the current nutrition-authority owner/reference seam, preserve outcome-specific null/mixed reviews, and do not create individual supplement minima from body-weight dietary requirements.
 
+**November 5 consolidated audit follow-up (before release):**
+
+- [ ] Qualify pipeline#387 after all first-checkpoint failures are repaired. Existing owners: publication/release tests; strict historical probiotic curation verification. Preserve genuine pending/approval/source-drift assertions. Correction-specific source/reviewer/date trace for IS2/299v is documented in the existing public case receipt and the two existing authoring-method fields; original clinical approvals stay unchanged.
+- [ ] Qualify FDA list extraction at `api_audit/fda_weekly_sync.py::extract_substances`. Reprocess complete names in RX7/Ort-Flx/10DayForecast and field boundaries; keep clinical-review and FDA-curation checks separate. Fresh source/report changes never activate an alert or constitute a new curated clinical decision.
+- [ ] Qualify suffix claim negation through `clinical_applicability`'s existing claim interpretation, with both word orders and true positive controls. Negative research outcomes still retain their research topic. Measure actual label/scorer impact before claiming score movement.
+- [ ] Qualify population synonyms/input shapes through `clinical_applicability::assess_context_population`; reuse the existing pregnancy vocabulary across title/target groups and distinguish maternal from child administration. Population775b62810 has focused proof; actual source audit finds zero Pregnancy/Expecting target-group synonyms and two metadata-only pediatric exclusions, with no numeric/safety movement. Integration/combined CI remain open.
+- [ ] Qualify app catalog-descriptor transient failures and plain-partial resume via the existing `SyncService`. Test5xx/timeouts separately from definite absence, preserve version/checksum binding, and do not lose a valid plain partial when compressed delivery is unavailable.
+- [ ] Strengthen real FTS-versus-fallback ordering coverage and Home carousel nonblocked/null-assessment coverage. These begin as test gaps, not claimed production failures.
+
+App214 is merged at39e1c003 after exact7748e553 CI passed; this is code integration, not a signed app build or device acceptance. EAA policy and the above source batches remain separate from the99% publication and actual catalog/native acceptance criteria.
+
 Execution register: [LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Current receipts: `/Users/seancheick/pg_quality/catalog-release-20261105/`. Publication is stopped; source qualification and research may continue without rebuilding unchanged products.
 
 ### November 4 — nutrition amounts from submissions

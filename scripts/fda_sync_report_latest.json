@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-11-05T09:34:08.936235",
+  "generated_at": "2026-11-05T14:34:50.909475",
   "generated_by": "fda_weekly_sync.py",
   "scan_period": {
     "start": "20260906",
     "end": "20261105",
     "days_back": 60
   },
-  "data_file": "/Users/seancheick/.codex/worktrees/claude-audit-followup/dsld_clean/scripts/data/banned_recalled_ingredients.json",
+  "data_file": "/Users/seancheick/Downloads/dsld_clean_wt/label-warning/scripts/data/banned_recalled_ingredients.json",
   "data_sources": {
     "openfda_food_enforcement": 197,
     "openfda_drug_enforcement": 0,
@@ -22,14 +22,14 @@
   },
   "summary": {
     "total_fetched": 247,
-    "skipped_not_relevant": 228,
-    "requiring_review": 12,
-    "requiring_claude_review": 12,
+    "skipped_not_relevant": 227,
+    "requiring_review": 13,
+    "requiring_claude_review": 13,
     "already_tracked": 7,
     "stale_recalled_entries_to_verify": 7,
     "by_category": {
       "stimulant_designer": 1,
-      "supplement_general": 3,
+      "supplement_general": 4,
       "supplement_adulterant": 2,
       "pharmaceutical_contaminant": 1,
       "manufacturing_violation": 1,
@@ -206,13 +206,38 @@
         "supplement_adulterant"
       ],
       "extracted_substances": [
+        "peanuts",
         "nuts"
       ],
       "substances_already_tracked": [],
       "substances_new": [
+        "peanuts",
         "nuts"
       ],
       "fda_source_url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-1343-2026"
+    },
+    {
+      "source_type": "fda_rss",
+      "recall_number": "",
+      "event_id": null,
+      "fda_endpoint": null,
+      "product_type": "",
+      "classification": "",
+      "recall_status": "Ongoing",
+      "product_description": "Over-The-Counter Monograph Drug User Fee Program (OMUFA)",
+      "recalling_firm": "",
+      "reason_for_recall": "A user fee program for nonprescription (over-the-counter or OTC) monograph drugs would be a potential funding mechanism to supplement congressional non user-fee appropriations.",
+      "distribution_pattern": "",
+      "recall_initiation_date": "",
+      "report_date": "Thu, 05 Nov 2026 11:40:22 EST",
+      "termination_date": null,
+      "primary_category": "supplement_general",
+      "signal_categories": [],
+      "extracted_substances": [],
+      "substances_already_tracked": [],
+      "substances_new": [],
+      "fda_source_url": "http://www.fda.gov/industry/fda-user-fee-programs/over-counter-monograph-drug-user-fee-program-omufa",
+      "rss_source": "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/drugs/rss.xml"
     },
     {
       "source_type": "fda_health_fraud",
@@ -234,12 +259,15 @@
         "pharmaceutical_adulterants"
       ],
       "extracted_substances": [
-        "sildenafil"
+        "sildenafil",
+        "acetaminophen"
       ],
       "substances_already_tracked": [
         "sildenafil"
       ],
-      "substances_new": [],
+      "substances_new": [
+        "acetaminophen"
+      ],
       "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/10-day-forecast-may-be-harmful-due-hidden-ingredients",
       "health_fraud_category": "sexual_enhancement",
       "product_name": "10 Day Forecast",
@@ -296,10 +324,12 @@
         "pharmaceutical_adulterants"
       ],
       "extracted_substances": [
-        "diclofenac"
+        "diclofenac",
+        "dexamethasone"
       ],
       "substances_already_tracked": [
-        "diclofenac"
+        "diclofenac",
+        "dexamethasone"
       ],
       "substances_new": [],
       "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/rx7-articulaciones-may-be-harmful-due-hidden-ingredients",
@@ -328,11 +358,13 @@
       ],
       "extracted_substances": [
         "diclofenac",
-        "methocarbamol"
+        "methocarbamol",
+        "dexamethasone"
       ],
       "substances_already_tracked": [
         "diclofenac",
-        "methocarbamol"
+        "methocarbamol",
+        "dexamethasone"
       ],
       "substances_new": [],
       "fda_source_url": "https://www.fda.gov/drugs/medication-health-fraud-notifications/ort-flx-may-be-harmful-due-hidden-ingredients",

@@ -25,6 +25,12 @@ def test_wave2_contexts_rerun_verifies_patched_rows_without_writing():
 
 
 @pytest.mark.parametrize('context_id,field,bad_value', [
+    ('is2_adult_ibs_multicenter_31434935', 'authoring_method', 'Unattributed hierarchy correction'),
+    ('is2_adult_ibs_multicenter_31434935', 'outcomes', [
+        {'name': 'abdominal_pain_and_discomfort', 'hierarchy': 'primary', 'kind': 'patient_important', 'direction': 'positive'},
+        {'name': 'complete_spontaneous_bowel_movements', 'hierarchy': 'primary', 'kind': 'patient_important', 'direction': 'positive'},
+        {'name': 'serum_cytokines', 'hierarchy': 'primary', 'kind': 'surrogate', 'direction': 'null'},
+    ]),
     ('bc30_functional_gi_complaints_40707016', 'population', {'age_group': 'child', 'description': 'Children'}),
     ('bc30_functional_gi_complaints_40707016', 'dose', {'unit': 'mg', 'values': [2000]}),
     ('bc30_functional_gi_complaints_40707016', 'clinical_review', {
@@ -121,3 +127,42 @@ def test_wave2_rerun_retains_prior_bc30_regimen_disposition(tmp_path, monkeypatc
     monkeypatch.setattr(Path, 'write_text', reject_write)
     module.main()
     assert scratch.read_bytes() == before
+
+
+@pytest.mark.parametrize('hierarchy', ['unresolved', 'secondary'])
+def test_wave2_rerun_preserves_original_and_source_qualified_is2_hierarchy(tmp_path, monkeypatch, hierarchy):
+    import importlib.util
+    import json
+    spec = importlib.util.spec_from_file_location('wave2_is2_hierarchy_guard', SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    data = json.loads(REGISTRY.read_text())
+    context = next(c for e in data['clinically_relevant_strains'] for c in e.get('study_contexts', [])
+                   if c['context_id'] == 'is2_adult_ibs_multicenter_31434935')
+    next(o for o in context['outcomes'] if o['name'] == 'serum_cytokines')['hierarchy'] = hierarchy
+    if hierarchy == 'unresolved':
+        context['authoring_method'] = next(row['authoring_method'] for _, row in module.CONTEXTS
+                                           if row['context_id'] == context['context_id'])
+    scratch = tmp_path / 'registry.json'
+    scratch.write_text(json.dumps(data))
+    before = scratch.read_bytes()
+    monkeypatch.setattr(module, 'REG', scratch)
+    module.main()
+    assert scratch.read_bytes() == before
+
+
+@pytest.mark.parametrize('context_id,source_url,locator', [
+    ('is2_adult_ibs_multicenter_31434935', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC6704184/',
+     'Efficacy and safety measurement criteria'),
+    ('p299v_ibs_rome3_22912552', 'https://www.wjgnet.com/1007-9327/full/v18/i30/4012.htm',
+     'Assessments and study endpoints'),
+])
+def test_hierarchy_corrections_retain_specific_factual_review_trail(context_id, source_url, locator):
+    import json
+    data = json.loads(REGISTRY.read_text())
+    context = next(c for e in data['clinically_relevant_strains'] for c in e.get('study_contexts', [])
+                   if c['context_id'] == context_id)
+    trail = context['authoring_method']
+    for fact in ('2026-11-05', 'Codex agent', source_url, locator,
+                 'COMPLETION_TRUTH_RECEIPTS_20261105.md', 'original clinical approval unchanged'):
+        assert fact in trail

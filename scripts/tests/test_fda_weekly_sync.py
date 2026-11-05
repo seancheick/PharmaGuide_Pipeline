@@ -4,18 +4,11 @@
 import os
 import subprocess
 import sys
-import types
 from pathlib import Path
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import pytest
 
-requests_stub = types.SimpleNamespace(
-    Response=object,
-    Timeout=type("Timeout", (Exception,), {}),
-    ConnectionError=type("ConnectionError", (Exception,), {}),
-    RequestException=type("RequestException", (Exception,), {}),
-)
-sys.modules.setdefault("requests", requests_stub)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from fda_weekly_sync import classify_record, extract_substances
 
@@ -313,3 +306,63 @@ def test_known_product_with_known_adulterant_stays_informational():
     assert not new_records
     assert len(tracked_records) == 1
     assert tracked_records[0]["product_already_tracked"] is True
+
+
+@pytest.mark.parametrize("product,substances,slug", [
+    ("RX7 Articulaciones", ["diclofenac", "dexamethasone"], "rx7-articulaciones"),
+    ("Ort-Flx", ["diclofenac", "dexamethasone", "methocarbamol"], "ort-flx"),
+    ("10 Day Forecast", ["sildenafil", "acetaminophen"], "10-day-forecast"),
+])
+def test_fda_confirmed_hidden_ingredient_lists_retain_every_name_and_source(product, substances, slug):
+    """FDA notifications dated 2026-10-28 / 2026-10-15, verified 2026-11-05."""
+    from api_audit.fda_weekly_sync import _classify_and_crossref
+
+    names = ", ".join(substances[:-1]) + " and " + substances[-1]
+    url = f"https://www.fda.gov/drugs/medication-health-fraud-notifications/{slug}-may-be-harmful-due-hidden-ingredients"
+    record = {
+        "title": f"{product} may be harmful due to hidden ingredients",
+        "reason_for_recall": f"FDA laboratory analysis confirmed that {product} contains {names} not listed on the product label.",
+        "_source_type": "fda_health_fraud", "link": url,
+    }
+    assert set(extract_substances(record)) == set(substances)
+    # Only the original known-name path's substances are in this fixture index.
+    index = {name: {"id": name} for name in substances if name not in {"dexamethasone", "acetaminophen"}}
+    new, tracked, skipped, _ = _classify_and_crossref([record], index)
+    assert len(new) == 1 and not tracked and skipped == 0
+    assert set(new[0]["extracted_substances"]) == set(substances)
+    assert new[0]["substances_new"] == [name for name in substances if name not in index]
+    assert new[0]["fda_source_url"] == url
+    assert new[0]["reason_for_recall"] == record["reason_for_recall"]
+
+
+@pytest.mark.parametrize("phrase", [
+    "contains novadrug, secondamine and thirdazole not listed on the label.",
+    "contains novadrug, secondamine, and thirdazole not declared on the label.",
+    "presence of novadrug, secondamine and thirdazole in the product.",
+    "spiked with novadrug, secondamine and thirdazole in the product.",
+    "found to contain novadrug, secondamine and thirdazole.",
+    "adulterated with novadrug, secondamine and thirdazole.",
+    "tested positive for novadrug, secondamine and thirdazole in the product.",
+])
+def test_fallback_substance_lists_discover_unknown_names(phrase):
+    assert set(extract_substances({"reason_for_recall": phrase})) == {"novadrug", "secondamine", "thirdazole"}
+
+
+@pytest.mark.parametrize("phrase,expected", [
+    ("contains novadrug and may lower blood pressure.", ["novadrug"]),
+    ("contains novadrug, which is not listed on the label.", ["novadrug"]),
+    ("contains novadrug and is sold online.", ["novadrug"]),
+    ("contains novadrug and can cause harm.", ["novadrug"]),
+    ("contains the product, supplement and capsule.", []),
+    ("contains novadrug not listed on the product label", ["novadrug"]),
+])
+def test_fallback_substance_lists_stop_before_clauses_and_filter_each_name(phrase, expected):
+    assert extract_substances({"reason_for_recall": phrase}) == expected
+
+
+def test_fallback_list_does_not_merge_unpunctuated_source_fields():
+    assert extract_substances({
+        "reason_for_recall": "contains novadrug and secondamine",
+        "product_description": "Joint support capsules",
+        "title": "Important recall notification",
+    }) == ["novadrug", "secondamine"]

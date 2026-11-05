@@ -4201,9 +4201,15 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         assert blocked["quality_score_v4_100"] is None
         assert blocked["quality_score_status"] == "suppressed_safety"
         assert blocked["product_safety_status"] == "blocked"
-        assert blocked["quality_assessment_status"] == "complete"
+        # A confirmed safety block still ships, but does not finish the
+        # unrelated source review retained by this canned artifact.
+        assert blocked["quality_assessment_status"] == "partial"
+        assert s2["assessment_readiness"]["release_assessment"]["is_complete"] is False
         assert blocked["verdict"] == "BLOCKED"
         assert blocked["score_100_equivalent"] is None
+        blocked_blob = json.loads((out / "detail_blobs" / "888.json").read_text(encoding="utf-8"))
+        assert blocked_blob["product_safety_status"] == "blocked"
+        assert blocked_blob["quality_assessment_status"] == "partial"
 
         # The scored product's detail blob carries the six pillars + provenance + explanation.
         blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))

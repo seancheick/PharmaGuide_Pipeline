@@ -605,8 +605,18 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
     product['assessment_readiness']['release_assessment'] = {
         'is_complete': False, 'blockers': ['evidence_assessment_incomplete'], 'unfinished_source_assessment': None}
     if pid in {'19067', '307621', '180290'}:
+        from copy import deepcopy
+        import studied_formulas
         from test_probiotic_applicability_rubric import _p299v
         from scoring_v4.modules.probiotic_evidence import score_evidence
+        # This fixture exercises a genuinely unread endpoint, independently of
+        # the live registry's now completed, source-verified IBS context.
+        registry = deepcopy(studied_formulas._clinical_strain_registry())
+        context = next(c for c in registry['STRAIN_PLANTARUM_299V']['study_contexts']
+                       if c['context_id'] == 'p299v_ibs_rome3_22912552')
+        outcome = next(o for o in context['outcomes'] if o['name'] == 'global_symptom_rating')
+        outcome['hierarchy'] = 'unresolved'
+        monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
         source = {**_p299v('Digestive Health Probiotic' if pid == '19067' else 'IBS Probiotic'), 'id': pid}
         evidence.clear(); evidence.update(score_evidence(source))
         product['_v4_module_breakdown']['module'] = 'probiotic'
