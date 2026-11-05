@@ -22,6 +22,23 @@ The audit retains its current dataset index but no longer serializes complete
 joined source products into the proof cache. Content, manifest and expiry checks
 remain in force. No stat-only cross-run checksum cache is used.
 
+### Product-level incremental rebuild
+
+Use the existing batch runner after integrating a completed source batch:
+
+```bash
+source scripts/python_env.sh
+PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh --incremental-plan --pipeline-only
+PYTHON="$PG_PYTHON" bash batch_run_all_datasets.sh --incremental --pipeline-only
+```
+
+The plan lists selected IDs and the reason for each scope. For lookup changes, `pending_identity_recheck` names labels whose Clean result may add further Enrich/Score work. Execution reports the final rebuilt counts after that recheck. A new dataset gets its initial full build. Existing current manifests can seed incremental state without recomputation. For existing outputs made by an older source revision, supply `--baseline-revision <exact-commit>` on the first invocation. The runner reconstructs that tracked source and verifies its fingerprints, upstream bytes and owned outputs before seeding reuse. A revision name alone is insufficient proof. Raw labels changed before the first seed require a verified baseline or an initial full dataset build.
+
+Exact label corrections select their IDs. Ingredient grade changes select users of the changed parent and unresolved rows. Lookup vocabulary changes recheck all Clean identities, then send actual Clean changes and known affected users through Enrich and Score. Exact-preparation Dose records select their declared source names and unresolved rows. Broad research, unknown reference dependencies and shared code changes widen the affected scope. Score-only code changes retain verified Clean and Enrich. Date-sensitive certification recency and manufacturer lookback assessments use their existing owners to refresh affected Enrich/Score rows when required.
+
+The complete merged enrichment passes the existing contract and coverage gates. Source and raw inputs must remain stable. All three generations promote together with rollback on an ordinary failure and a recovery journal for an interrupted process. Retry `--incremental` to recover an interrupted promotion. Plan-only refuses a pending recovery and changes no stage outputs. Checksums, reference snapshots and the reuse state are verified before reuse. The final catalog retains every ordinary release gate. Previous non-stage reports, quarantine files and review artifacts are retained under `.incremental_artifacts/prior/<generation>/`, with their historical scope recorded. Reports from selected-product workers are under `.incremental_artifacts/current/<stage>/` beside the selected IDs; they are not whole-dataset reports. Complete merged gate reports remain at the normal output root.
+
+
 ## 1. Which command should I run?
 
 For a retry that reuses verified computation, add `--resume` to the normal full

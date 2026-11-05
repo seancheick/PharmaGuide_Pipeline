@@ -577,3 +577,32 @@ def test_batch_stops_after_source_drift_before_next_brand(tmp_path):
     assert 'source changed' in result.stdout.lower()
     summary = next((tmp_path / 'scripts/products/reports').glob('batch_run_summary_*.txt'))
     assert 'source changed' in summary.read_text().lower()
+
+
+@pytest.mark.parametrize('plan_only', [False, True])
+def test_incremental_batch_execution_reaches_recovery_without_a_blocking_preplan(tmp_path, plan_only):
+    raw = tmp_path / 'raw'
+    for brand in ('A', 'B'):
+        (raw / brand).mkdir(parents=True)
+        (raw / brand / 'one.json').write_text('{}')
+    _install_batch_dependencies(tmp_path)
+    (tmp_path / 'scripts/run_pipeline.py').write_text(
+        "import sys\n"
+        "if '--incremental-plan' in sys.argv:\n"
+        "    print('Interrupted promotion: execute incremental recovery'); sys.exit(1)\n"
+        "assert '--incremental' in sys.argv\n"
+        "print('RECOVER ' + sys.argv[sys.argv.index('--raw-dir')+1])\n")
+    submissions = tmp_path / 'manual_labels/product_submissions'
+    submissions.mkdir(parents=True)
+    (submissions / 'one.json').write_text('{}')
+    runner = tmp_path / 'batch_run_all_datasets.sh'
+    runner.write_text(SCRIPT_PATH.read_text())
+    mode = '--incremental-plan' if plan_only else '--incremental'
+    result = subprocess.run(['bash', str(runner), '--root', str(raw), mode],
+                            text=True, capture_output=True, env={**os.environ})
+    if plan_only:
+        assert result.returncode == 1, result.stdout + result.stderr
+        assert 'RECOVER ' not in result.stdout
+    else:
+        assert result.returncode == 0, result.stdout + result.stderr
+        assert len([line for line in result.stdout.splitlines() if line.startswith('RECOVER ')]) == 3
