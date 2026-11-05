@@ -596,3 +596,175 @@ def test_raw_capture_rejects_a_transient_edit_restored_before_live_recheck(tmp_p
     with pytest.raises(mod.StageManifestError, match="Captured raw"):
         mod.run_incremental(runner, raw, prefix)
     assert not calls
+
+
+def test_unchanged_plan_does_not_claim_raw_labels_changed():
+    result = plan(baseline(), baseline())
+    assert result["stages"] == {"clean": [], "enrich": [], "score": []}
+    assert result["reasons"] == []
+
+
+def _clinical_reference(tmp_path, monkeypatch, filename="clinically_relevant_strains"):
+    import pipeline_incremental as incremental
+    path = tmp_path / "scripts" / "data" / (filename + ".json")
+    path.parent.mkdir(parents=True)
+    payload = {"_metadata": {"schema_version": "1", "last_updated": "old", "total_entries": 1},
+               filename: [{"id": "RECORD_A", "standard_name": "Test strain", "aliases": ["A"],
+                           "study_contexts": [{"context_id": "CONTEXT_A", "review_status": "pending"}]}]}
+    if filename == "clinically_relevant_strains":
+        payload["prebiotics"] = {"description": "Opaque existing prebiotic catalog", "ingredients": [
+            {"standard_name": "Inulin", "aliases": ["chicory inulin"]}]}
+    path.write_text(json.dumps(payload))
+    monkeypatch.setattr(incremental, "_reference_data_files", lambda repo: [repo / path.relative_to(tmp_path)])
+    return incremental, path, payload
+
+
+@pytest.mark.parametrize("filename", ["clinically_relevant_strains", "backed_clinical_studies"])
+def test_clinical_context_change_selects_emitted_rejected_and_unresolved_active_users(tmp_path, monkeypatch, filename):
+    mod, path, payload = _clinical_reference(tmp_path, monkeypatch, filename)
+    old = baseline()
+    old["references"] = mod.reference_snapshot(tmp_path)
+    payload[filename][0]["study_contexts"].append({"context_id": "NEW_CONTEXT", "review_status": "approved"})
+    path.write_text(json.dumps(payload))
+    new = deepcopy(old)
+    new["references"] = mod.reference_snapshot(tmp_path)
+    raw = {key: {"id": key} for key in ("1", "2", "3")}
+    old["raw"] = {key: digest(value) for key, value in raw.items()}
+    deps = {"1": {"identifiers": ["CONTEXT_A"], "unresolved": True, "clinical_unresolved": False},
+            "2": {"identifiers": ["unrelated"], "unresolved": True, "clinical_unresolved": False},
+            "3": {"identifiers": [], "unresolved": False, "clinical_unresolved": True}}
+    selected = plan_changes(old, new, raw, deps)["stages"]
+    assert selected == {"clean": [], "enrich": ["1", "3"], "score": ["1", "3"]}
+    deps["2"].pop("clinical_unresolved")
+    assert plan_changes(old, new, raw, deps)["stages"]["enrich"] == ["1", "2", "3"]
+    deps["2"]["clinical_unresolved"] = False
+    deps["2"].pop("identifiers")
+    assert plan_changes(old, new, raw, deps)["stages"]["enrich"] == ["1", "2", "3"]
+
+
+@pytest.mark.parametrize("change", ["alias", "added", "removed", "schema", "unknown_field"])
+def test_clinical_lookup_or_unknown_structure_change_widens_conservatively(tmp_path, monkeypatch, change):
+    mod, path, payload = _clinical_reference(tmp_path, monkeypatch)
+    old = baseline(); old["references"] = mod.reference_snapshot(tmp_path)
+    if change == "alias": payload["clinically_relevant_strains"][0]["aliases"].append("new")
+    elif change == "added": payload["clinically_relevant_strains"].append({"id": "NEW", "standard_name": "new"})
+    elif change == "removed": payload["clinically_relevant_strains"] = []
+    elif change == "schema": payload["_metadata"]["schema_version"] = "2"
+    else: payload["clinically_relevant_strains"][0]["new_identity_rule"] = {"x": True}
+    path.write_text(json.dumps(payload))
+    new = deepcopy(old); new["references"] = mod.reference_snapshot(tmp_path)
+    assert plan(old, new)["stages"] == {stage: ["1", "2"] for stage in old["stages"]}
+
+
+def test_runtime_dependencies_include_rejected_ids_and_isolate_active_unknowns():
+    from pipeline_incremental import dependencies
+    row = {"name": "Magnesium", "canonical_id": "magnesium", "mapped": True,
+           "mapped_identity": True, "scoreable_identity": True, "identity_disposition": "clean",
+           "source_section": "active", "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
+           "quantity": 100, "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+    product = {"dsld_id": "1", "ingredient_quality_data": {"ingredients_scorable": [row], "ingredients": [row]},
+               "evidence_data": {"rejected_matches": [{"id": "RECORD_A", "context_id": "CONTEXT_A"}],
+                                 "rejected_record_ids": ["RECORD_B"]},
+               "inactiveIngredients": [{"name": "Unmatched inactive", "mapped": False}]}
+    result = dependencies(product)
+    assert {"RECORD_A", "CONTEXT_A", "RECORD_B"} <= set(result["identifiers"])
+    assert result["unresolved"] is True  # Existing IQM conservative guard remains.
+    assert result["clinical_unresolved"] is False
+    # Dose/scoring exclusion is not an unresolved clinical source identity.
+    row.update(mapped=False, mapped_identity=False, scoreable_identity=False)
+    assert dependencies(product)["clinical_unresolved"] is False
+    row["canonical_id"] = None
+    assert dependencies(product)["clinical_unresolved"] is True
+    product.pop("ingredient_quality_data")
+    assert dependencies(product)["clinical_unresolved"] is True
+
+
+def test_legacy_clinical_map_requires_exact_historical_payload_proof(tmp_path, monkeypatch):
+    mod, path, payload = _clinical_reference(tmp_path, monkeypatch)
+    current = baseline(); current["references"] = mod.reference_snapshot(tmp_path)
+    relative = next(iter(current["references"]))
+    old = deepcopy(current); old["references"][relative] = {"kind": "global", "hash": digest(payload)}
+    untouched = deepcopy(old)
+    derived = mod.planning_snapshot(old, current)
+    assert derived["references"] == current["references"]
+    assert all(not rows for rows in plan(derived, current)["stages"].values())
+    assert old == untouched
+    payload["clinically_relevant_strains"][0]["study_contexts"][0]["review_status"] = "approved"
+    path.write_text(json.dumps(payload))
+    changed = deepcopy(current); changed["references"] = mod.reference_snapshot(tmp_path)
+    assert mod.planning_snapshot(old, changed)["references"] == old["references"]
+    assert plan(mod.planning_snapshot(old, changed), changed)["stages"]["clean"] == ["1", "2"]
+    historical = tmp_path / "history"
+    historical_file = historical / path.relative_to(tmp_path); historical_file.parent.mkdir(parents=True)
+    original_payload = deepcopy(payload); original_payload["clinically_relevant_strains"][0]["study_contexts"][0]["review_status"] = "pending"
+    historical_file.write_text(json.dumps(original_payload))
+    verified = mod.planning_snapshot(old, changed, baseline_repo=historical)
+    assert verified["references"] == current["references"]
+    historical_file.write_text(json.dumps(payload))
+    assert mod.planning_snapshot(old, changed, baseline_repo=historical)["references"] == old["references"]
+    assert old == untouched
+
+
+def test_original_owned_state_is_validated_before_legacy_planning(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, _ = _synthetic_dataset(tmp_path, monkeypatch)
+    state_path = prefix / ".incremental_state.json"
+    state = json.loads(state_path.read_text())
+    state["raw"]["1"] = "unproven"
+    state_path.write_text(json.dumps(state))
+    monkeypatch.setattr(mod, "planning_snapshot", lambda *a, **kw: pytest.fail("unvalidated state reached migration"))
+    with pytest.raises(mod.StageManifestError, match="state does not match"):
+        mod.run_incremental(runner, raw, prefix)
+    assert not calls
+
+
+def test_clinical_bookkeeping_only_does_not_reselect_unresolved_products(tmp_path, monkeypatch):
+    mod, path, payload = _clinical_reference(tmp_path, monkeypatch)
+    old = baseline(); old["references"] = mod.reference_snapshot(tmp_path)
+    payload["_metadata"]["last_updated"] = "new"
+    path.write_text(json.dumps(payload))
+    current = deepcopy(old); current["references"] = mod.reference_snapshot(tmp_path)
+    assert all(not rows for rows in plan(old, current)["stages"].values())
+
+
+@pytest.mark.parametrize("change", ["prebiotic_alias", "record_order"])
+def test_clinical_auxiliary_catalog_and_order_changes_remain_broad(tmp_path, monkeypatch, change):
+    mod, path, payload = _clinical_reference(tmp_path, monkeypatch)
+    payload["clinically_relevant_strains"].append({"id": "RECORD_B", "standard_name": "Other strain"})
+    path.write_text(json.dumps(payload))
+    old = baseline(); old["references"] = mod.reference_snapshot(tmp_path)
+    if change == "prebiotic_alias": payload["prebiotics"]["ingredients"][0]["aliases"].append("new")
+    else: payload["clinically_relevant_strains"].reverse()
+    path.write_text(json.dumps(payload))
+    current = deepcopy(old); current["references"] = mod.reference_snapshot(tmp_path)
+    assert plan(old, current)["stages"] == {stage: ["1", "2"] for stage in old["stages"]}
+
+
+def test_clinical_selection_uses_runtime_reference_only_rejected_record_ids(tmp_path, monkeypatch):
+    mod, path, payload = _clinical_reference(tmp_path, monkeypatch, "backed_clinical_studies")
+    old = baseline(); old["references"] = mod.reference_snapshot(tmp_path)
+    payload["backed_clinical_studies"][0]["study_contexts"][0]["review_status"] = "approved"
+    path.write_text(json.dumps(payload))
+    current = deepcopy(old); current["references"] = mod.reference_snapshot(tmp_path)
+    products = {}
+    for identifier in ("1", "2"):
+        row = {"name": "Magnesium", "canonical_id": "magnesium", "mapped_identity": True,
+               "scoreable_identity": True, "identity_disposition": "clean", "source_section": "active",
+               "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
+               "quantity": 100, "unit": "mg", "raw_source_path": "ingredientRows[0]"}
+        products[identifier] = {"id": identifier,
+            "ingredient_quality_data": {"ingredients_scorable": [row], "ingredients": [row]},
+            "evidence_data": {"rejected_clinical_matches": [{"id": "RECORD_A"}] if identifier == "1" else []},
+            "inactiveIngredients": [{"name": "Unmapped excipient", "mapped": False}]}
+    deps = {key: mod.dependencies(product) for key, product in products.items()}
+    assert deps["1"]["clinical_unresolved"] is False
+    assert deps["2"]["unresolved"] is True  # General IQM policy still sees the inactive.
+    assert plan(old, current, deps=deps)["stages"] == {"clean": [], "enrich": ["1"], "score": ["1"]}
+
+
+@pytest.mark.parametrize('canonical', ['l_histidine', 'l_isoleucine', 'l_leucine', 'l_lysine', 'methionine', 'l_phenylalanine', 'l_threonine', 'l_tryptophan', 'l_valine'])
+@pytest.mark.parametrize('status', ['mapped', 'unspecified'])
+def test_all_eaa_users_depend_on_group_reference_even_when_form_rejected(canonical, status):
+    from pipeline_incremental import dependencies
+    row = {'canonical_id': canonical, 'form_match_status': status, 'mapped': False}
+    product = {'ingredient_quality_data': {'ingredients_scorable': [row]}, 'evidence_data': {}}
+    assert 'essential_amino_acids' in dependencies(product)['identifiers']

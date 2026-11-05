@@ -1590,20 +1590,27 @@ def test_empty_generic_dependencies_pass_only_for_actual_selected_nutrition_auth
 
 
 def test_unrelated_claim_does_not_reopen_reviewed_native_ingredient_evidence():
+    from copy import deepcopy
     from test_probiotic_applicability_rubric import strain_product
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from assessment_readiness import evaluate_release_assessment
     product = strain_product(clinical_id='STRAIN_PLANTARUM_299V',
                              name='Lactobacillus plantarum 299v', dose=1e10)
-    baseline = score_evidence(product)
+    baseline = deepcopy(score_evidence(product))
     product['product_name'] = 'Sleep support probiotic'  # Unrelated claim remains separate.
-    evidence = score_evidence(product)
+    evidence = deepcopy(score_evidence(product))
     assert evidence['score'] == baseline['score'] == 16
     for current, previous in zip(evidence['metadata']['contributing_native_contexts'],
                                  baseline['metadata']['contributing_native_contexts'], strict=True):
         for key in ('context_id', 'source_pmids', 'population', 'dose', 'outcomes'):
             assert current.get(key) == previous.get(key)
     assert evidence['metadata']['evidence_result_state'] == 'evaluated_applicable'
+    # Deliberately reopen a copied source outcome: a label claim must not
+    # repair this independent review failure, even when the real registry is complete.
+    for payload in (baseline, evidence):
+        context = next(c for c in payload['metadata']['contributing_native_contexts']
+                       if c['context_id'] == 'p299v_ibs_rome3_22912552')
+        next(o for o in context['outcomes'] if o['name'] == 'global_symptom_rating')['hierarchy'] = 'unresolved'
     readiness = {name: {'readiness': 'complete'} for name in
                  ('identity', 'dose', 'evidence', 'verification', 'route')}
     result = evaluate_release_assessment(product, readiness,
@@ -1611,7 +1618,7 @@ def test_unrelated_claim_does_not_reopen_reviewed_native_ingredient_evidence():
     original = evaluate_release_assessment(product, readiness,
         {'module': 'probiotic', 'dimensions': {'evidence': baseline}}, unfinished_source=None)
     assert result == original
-    # The existing source's unfinished outcome review stays visible; a label
+    # The deliberately unfinished copied source stays visible; a label
     # claim neither creates nor removes that independent source limitation.
     assert result['blockers'] == ['probiotic_contributing_context_incomplete:p299v_ibs_rome3_22912552']
 
@@ -1883,3 +1890,162 @@ def test_principal_unreviewed_ingredient_holds_nutrient_supported_formula(module
         'dimensions': {'evidence': {'score': 3.3, 'metadata': {'evidence_result_state': 'evaluated_authority'}}}},
         unfinished_source=None)
     assert 'evidence_assessment_incomplete' in result['blockers']
+
+
+@pytest.mark.parametrize("module", ["omega", "probiotic"])
+@pytest.mark.parametrize("reviewed", [False, True])
+def test_native_route_required_nonnative_review_stays_open(module, reviewed):
+    from copy import deepcopy
+    from assessment_readiness import evaluate_release_assessment
+    from evidence_resolver import evidence_required_canonicals
+
+    row = _row("Blueberry", "blueberry", quantity=100)
+    product = _product(row, title="Blueberry")
+    assert "blueberry" in evidence_required_canonicals(product, module=module)
+    readiness = {name: {"readiness": "complete"} for name in
+                 ("identity", "dose", "verification", "route")}
+    readiness["evidence"] = {
+        "readiness": "complete" if reviewed else "incomplete",
+        "not_yet_evaluated_row_refs": [] if reviewed else ["ingredientRows[0]"],
+        "ingredient_assessments": [{"source_row_ref": "ingredientRows[0]", "canonical_id": "blueberry",
+            "role": "claim_prominent", "evidence_applicability": "individual_ingredient",
+            "state": "evaluated_limited_or_negative" if reviewed else "not_yet_evaluated"}]}
+    evidence = {"score": 0, "metadata": {"evidence_result_state": "evaluated_applicable",
+        "evidence_assessment": {"strain_assessments": [{"status": "assessed"}]}}}
+    original = deepcopy((product, readiness, evidence))
+    result = evaluate_release_assessment(product, readiness, {"module": module,
+        "dimensions": {"evidence": evidence}}, unfinished_source=None)
+    assert ("evidence_assessment_incomplete" in result["blockers"]) is (not reviewed)
+    assert result["is_complete"] is reviewed
+    assert (product, readiness, evidence) == original
+
+
+@pytest.mark.parametrize("module,name,canonical", [
+    ("omega", "EPA", "epa"),
+    ("omega", "DHA", "dha"),
+    ("probiotic", "Lactobacillus rhamnosus GG", "lactobacillus_rhamnosus"),
+])
+def test_native_route_does_not_reopen_unused_individual_native_review(module, name, canonical):
+    from assessment_readiness import evaluate_release_assessment
+
+    product = _product(_row(name, canonical))
+    readiness = {dimension: {"readiness": "complete"} for dimension in
+                 ("identity", "dose", "verification", "route")}
+    readiness["evidence"] = {"readiness": "incomplete",
+        "not_yet_evaluated_row_refs": ["ingredientRows[0]"],
+        "ingredient_assessments": [{"source_row_ref": "ingredientRows[0]", "canonical_id": canonical,
+            "name": name, "evidence_applicability": "individual_ingredient", "state": "not_yet_evaluated",
+            "reason_code": "clinical_sources_ineligible"}]}
+    evidence = {"score": 0 if module == "probiotic" else 14, "metadata": {
+        "evidence_result_state": "evaluated_applicable",
+        "evidence_assessment": {"strain_assessments": [{"status": "assessed"}]},
+        "generic_evidence_metadata": {"contributing_record_assessments": [{"id": "unused", "status": "not_curated"}]}}}
+    result = evaluate_release_assessment(product, readiness, {"module": module,
+        "dimensions": {"evidence": evidence}}, unfinished_source=None)
+    assert result["is_complete"] is True
+    assert result["blockers"] == []
+
+
+@pytest.mark.parametrize("module", ["omega", "probiotic"])
+@pytest.mark.parametrize("native_source_present", [False, True])
+def test_native_route_unknown_required_identity_cannot_disappear_from_review(module, native_source_present):
+    from assessment_readiness import evaluate_release_assessment
+
+    readiness = {dimension: {"readiness": "complete"} for dimension in
+                 ("identity", "dose", "verification", "route")}
+    readiness["evidence"] = {"readiness": "incomplete",
+        "not_yet_evaluated_row_refs": ["ingredientRows[1]"],
+        "ingredient_assessments": [{"source_row_ref": "ingredientRows[1]", "canonical_id": None,
+            "name": "Unresolved extract", "role": "major", "evidence_applicability": "individual_ingredient",
+            "state": "not_yet_evaluated"}]}
+    evidence = {"score": 0, "metadata": {"evidence_result_state": "evaluated_applicable",
+        "evidence_assessment": {"strain_assessments": [{"status": "assessed"}]}}}
+    source = _row("EPA" if module == "omega" else "Lactobacillus rhamnosus GG",
+                  "epa" if module == "omega" else "lactobacillus_rhamnosus")
+    source.update(raw_source_path="ingredientRows[1]", source_row_ref="ingredientRows[1]")
+    product = _product(source) if native_source_present else {}
+    result = evaluate_release_assessment(product, readiness, {"module": module,
+        "dimensions": {"evidence": evidence}}, unfinished_source=None)
+    assert "evidence_assessment_incomplete" in result["blockers"]
+
+
+@pytest.mark.parametrize("module,native_name,native_id", [
+    ("omega", "Fish Oil", "fish_oil"),
+    ("probiotic", "Lactobacillus rhamnosus GG", "lactobacillus_rhamnosus"),
+])
+def test_native_route_minor_unnamed_nonnative_row_is_not_required(module, native_name, native_id):
+    from assessment_readiness import evaluate_release_assessment
+    from evidence_resolver import evidence_required_canonicals
+
+    native = _row(native_name, native_id, quantity=1000)
+    minor = _row("Blueberry", "blueberry", quantity=1)
+    minor.update(raw_source_path="ingredientRows[1]", source_row_ref="ingredientRows[1]")
+    product = _product(native, title=native_name)
+    product["ingredient_quality_data"].update(ingredients=[native, minor], ingredients_scorable=[native, minor])
+    product["activeIngredients"] = [native, minor]
+    assert "blueberry" not in evidence_required_canonicals(product, module=module)
+    readiness = {dimension: {"readiness": "complete"} for dimension in
+                 ("identity", "dose", "verification", "route")}
+    readiness["evidence"] = {"readiness": "incomplete",
+        "not_yet_evaluated_row_refs": ["ingredientRows[1]"],
+        "ingredient_assessments": [{"source_row_ref": "ingredientRows[1]", "canonical_id": "blueberry",
+            "name": "Blueberry", "evidence_applicability": "individual_ingredient", "state": "not_yet_evaluated"}]}
+    evidence = {"score": 0 if module == "probiotic" else 14, "metadata": {
+        "evidence_result_state": "evaluated_applicable",
+        "evidence_assessment": {"strain_assessments": [{"status": "assessed"}]}}}
+    result = evaluate_release_assessment(product, readiness, {"module": module,
+        "dimensions": {"evidence": evidence}}, unfinished_source=None)
+    assert result["is_complete"] is True
+
+
+@pytest.mark.parametrize("module", ["generic", "sports", "fiber_digestive", "multi_or_prenatal", "b_complex"])
+@pytest.mark.parametrize("material", [True, False])
+def test_unknown_individual_evidence_identity_cannot_disappear_from_required_review(module, material):
+    from assessment_readiness import evaluate_assessment_readiness, evaluate_release_assessment
+    from evidence_resolver import evidence_required_canonicals
+
+    known = _row("Vitamin C", "vitamin_c", quantity=100)
+    unknown = _row("Unresolved botanical", None, quantity=100 if material else 0.001)
+    unknown.update(raw_source_path="ingredientRows[1]", source_row_ref="ingredientRows[1]")
+    product = _product(known, title="Nutrient Complex")
+    product["activeIngredients"] = [known, unknown]
+    product["ingredient_quality_data"].update(ingredients=[known, unknown],
+        ingredients_scorable=[known, unknown], total_active=2)
+    assert evidence_required_canonicals(product, module=module) == {"vitamin_c"}
+    fresh = evaluate_assessment_readiness(product, module=module)
+    if module != "sports":  # Sports independently requires a route-driving identity.
+        assert fresh["identity"]["readiness"] == "complete"
+    evidence = fresh["evidence"]
+    row = next(row for row in evidence["ingredient_assessments"] if row["source_row_ref"] == "ingredientRows[1]")
+    assert row["canonical_id"] is None
+    assert row["state"] == ("not_yet_evaluated" if material else "not_applicable")
+    readiness = {dimension: {"readiness": "complete"} for dimension in
+                 ("identity", "dose", "verification", "route")}
+    readiness["evidence"] = evidence
+    result = evaluate_release_assessment(product, readiness, {"module": module,
+        "dimensions": {"evidence": {"score": 0, "metadata": {
+            "evidence_result_state": "evaluated_authority"}}}}, unfinished_source=None)
+    assert ("evidence_assessment_incomplete" in result["blockers"]) is material
+
+
+@pytest.mark.parametrize('change', ['none', 'source_form', 'source_identity', 'reference', 'score', 'cached_only'])
+def test_eaa_selected_authority_receipt_revalidates_current_source(change):
+    from copy import deepcopy
+    from test_evidence_resolver import _eaa_product
+    from assessment_readiness import _current_nutrition_authority_receipt
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _eaa_product()
+    receipt = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert _current_nutrition_authority_receipt(product, receipt) is True
+    if change == 'source_form':
+        for row in product['ingredient_quality_data']['ingredients_scorable']:
+            row['form_match_status'] = 'unspecified'
+    elif change == 'source_identity':
+        product['activeIngredients'][0]['raw_source_text'] = 'DL-Leucine'
+    elif change == 'reference':
+        receipt['metadata']['source_references'] = [{'doi': 'unrelated'}]
+    elif change == 'score':
+        receipt['score'] += 1
+    elif change == 'cached_only':
+        product = {'evidence_data': deepcopy(receipt['metadata'])}
+    assert _current_nutrition_authority_receipt(product, receipt) is (change == 'none')

@@ -1777,6 +1777,10 @@ def test_precaution_naming_children_is_not_infant_targeting():
 @pytest.mark.parametrize('product_name,targets,credited', [
     ('Daily Probiotic', [], False),
     ('Baby Probiotic Drops', ['Infants (0-12 months)'], True),
+    ('Baby Probiotic Drops', 'Pregnancy', False),
+    ('Baby Probiotic Drops', ['Expecting'], False),
+    ('Baby Probiotic Drops', {'text': 'Prenatal'}, False),
+    ('Baby Probiotic Drops', ['Lactating Women'], False),
 ])
 def test_bb12_infant_colic_research_reaches_only_infant_products(product_name, targets, credited):
     from scoring_v4.modules.probiotic_evidence import score_evidence
@@ -2634,3 +2638,154 @@ def test_explicit_lactation_exclusion_cannot_qualify_nursing_product(description
     from clinical_applicability import assess_context_population
     assert assess_context_population({'product_name': 'Nursing support'},
         {'population': {'age_group': 'adult', 'description': description}}) == expected
+
+
+@pytest.mark.parametrize('target', [
+    'Pregnancy', ['Pregnancy'], {'text': 'Pregnancy'}, [{'text': 'Pregnancy'}],
+    'Expecting', ['Expecting'], {'name': 'Expecting'}, [{'name': 'Expecting'}],
+    'Prenatal', ['Prenatal'], 'Pregnant Women', 'Lactating Women', ['Breastfeeding'],
+])
+@pytest.mark.parametrize('age', ['infant', 'child'])
+def test_maternal_targets_do_not_inherit_child_administration_from_baby_title(target, age):
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': age, 'description': 'Infants receiving oral supplementation.'
+                             if age == 'infant' else 'Children receiving oral supplementation.'}}
+    product = {'product_name': 'Baby Probiotic Drops', 'targetGroups': target}
+    assert assess_context_population(product, context) == 'special_targeting_absent'
+
+
+@pytest.mark.parametrize('target', [
+    'Pregnancy', ['Pregnancy'], {'text': 'Pregnancy'}, [{'text': 'Pregnancy'}],
+    'Expecting', ['Expecting'], {'name': 'Expecting'}, [{'name': 'Expecting'}],
+])
+def test_pregnancy_target_synonyms_use_the_same_affirmative_scope_as_titles(target):
+    from clinical_applicability import assess_context_population
+    assert assess_context_population({'product_name': 'Ginger', 'targetGroups': target}, _nvp_context()) == 'eligible'
+
+
+@pytest.mark.parametrize('target', [
+    'Not for use during pregnancy', ['Not expecting'], {'text': 'Not pregnant'},
+    'Post-Pregnancy', ['Post Pregnancy'], ['Postpartum'],
+])
+def test_nonpregnant_target_groups_preserve_affirmative_infant_title(target):
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': 'infant', 'description': 'Infants receiving oral supplementation.'}}
+    product = {'product_name': 'Baby Probiotic Drops', 'targetGroups': target}
+    assert assess_context_population(product, context) == 'eligible'
+    assert assess_context_population(product, _nvp_context()) == 'special_targeting_absent'
+
+
+@pytest.mark.parametrize('age,title,target', [
+    ('infant', 'Baby Probiotic Drops', [{'text': 'Infants'}]),
+    ('child', 'Kids Probiotic', {'name': 'Children (4-8 Years)'}),
+])
+def test_actual_child_administration_keeps_population_eligibility(age, title, target):
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': age, 'description': 'Infants receiving oral supplementation.'
+                             if age == 'infant' else 'Children receiving oral supplementation.'}}
+    assert assess_context_population({'product_name': title, 'targetGroups': target}, context) == 'eligible'
+
+
+def test_maternal_supplementation_with_offspring_outcomes_remains_pregnancy_context():
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': 'infant',
+                             'description': 'Infant outcomes after maternal supplementation during pregnancy.'}}
+    assert assess_context_population({'product_name': 'Baby and Me Prenatal',
+                                      'targetGroups': {'text': 'Expecting'}}, context) == 'eligible'
+
+
+@pytest.mark.parametrize('text,affirmative', [
+    ('Does not improve sleep', False),
+    ('Sleep is not improved', False),
+    ('Sleep does not improve', False),
+    ("Sleep isn't improved", False),
+    ('Sleep is never improved', False),
+    ('Sleep is not supported', False),
+    ('Sleep cannot improve', False),
+    ("Sleep won't improve", False),
+    ('Sleep is not significantly improved', False),
+    ('Sleep improvement is not demonstrated', False),
+    ('Improves sleep', True),
+    ('Sleep is improved', True),
+    ('Sleep support without drowsiness', True),
+    ('Sleep support is not habit-forming', True),
+])
+def test_label_claim_negation_preserves_both_predicate_orders(text, affirmative):
+    from clinical_applicability import _claimed_purposes, native_product_positioning_categories, assess_claim_alignment
+    context = _native_context(('sleep', 'primary', 'patient_important', 'positive', {}), condition='sleep')
+    assert ('sleep' in _claimed_purposes(text)) is affirmative
+    assert ('sleep' in native_product_positioning_categories(_claim(text), purposes_only=True)) is affirmative
+    assert (assess_claim_alignment(_claim(text), context)['state'] == 'aligned') is affirmative
+
+
+def test_negated_label_claim_does_not_remove_another_affirmative_clause():
+    from clinical_applicability import native_product_positioning_categories
+    assert native_product_positioning_categories(
+        _claim('Sleep is not improved; supports stress relief.'), purposes_only=True) == {'mood'}
+
+
+def test_negative_clinical_sleep_result_remains_a_sleep_research_topic():
+    from evidence_resolver import evidence_indication_categories
+    from clinical_applicability import evaluated_purpose_outcomes
+    context = _native_context(('Sleep is not improved', 'primary', 'patient_important', 'null', {}))
+    assert 'sleep' in evidence_indication_categories('Sleep is not improved')
+    assert evaluated_purpose_outcomes(context)[0]['direction'] == 'null'
+
+
+@pytest.mark.parametrize('text', [
+    'Supports sleep and does not improve digestion',
+    'Sleep support and digestion is not improved',
+])
+def test_suffix_negation_keeps_an_independent_prior_affirmative_claim(text):
+    from clinical_applicability import native_product_positioning_categories
+    assert native_product_positioning_categories(_claim(text), purposes_only=True) == {'sleep'}
+
+
+def test_joint_subjects_with_one_negated_predicate_are_not_affirmative():
+    from clinical_applicability import native_product_positioning_categories
+    assert native_product_positioning_categories(
+        _claim('Sleep and digestion are not improved'), purposes_only=True) == set()
+
+
+def test_negated_exact_condition_shortcut_cannot_override_absent_claims(monkeypatch):
+    import clinical_applicability as ca
+    context = _native_context(('sleep', 'primary', 'patient_important', 'positive', {}), condition='sleep')
+    monkeypatch.setattr(ca, '_positioning_claims', lambda *args, **kwargs: (set(), False))
+    result = ca.assess_claim_alignment(_claim('Sleep is not improved'), context)
+    assert result['state'] == 'absent'
+
+
+@pytest.mark.parametrize('title,expected', [
+    ('Sleep is not improved', []),
+    ('Does not improve sleep', []),
+    ('Sleep is improved', ['sleep']),
+    ('Sleep support without drowsiness', ['sleep']),
+])
+def test_signed_claim_exclusion_uses_the_same_affirmative_clause_owner(title, expected):
+    from clinical_applicability import _matched_excluded_claim_terms
+    assert _matched_excluded_claim_terms({'product_name': title}, ['sleep']) == expected
+
+
+@pytest.mark.parametrize('text', [
+    'Sleep is not improved and supports digestion',
+    'Does not improve sleep and supports digestion',
+    'Sleep is not improved or supports digestion',
+    'Does not improve sleep or improves digestion',
+])
+def test_negated_claim_keeps_a_following_independent_affirmative_predicate(text):
+    from clinical_applicability import _claimed_purposes, native_product_positioning_categories, assess_claim_alignment
+    context = _native_context(('digestion', 'primary', 'patient_important', 'positive', {}), condition='digestion')
+    assert _claimed_purposes(text) == {'digestive'}
+    assert native_product_positioning_categories(_claim(text), purposes_only=True) == {'digestive'}
+    assert assess_claim_alignment(_claim(text), context)['state'] == 'aligned'
+
+
+@pytest.mark.parametrize('text', [
+    'Sleep and digestion are not improved',
+    'Sleep or digestion is not improved',
+    'Does not improve sleep and digestion',
+])
+def test_claim_conjunction_without_new_predicate_keeps_its_negation(text):
+    from clinical_applicability import _claimed_purposes, native_product_positioning_categories
+    assert _claimed_purposes(text) == set()
+    assert native_product_positioning_categories(_claim(text), purposes_only=True) == set()

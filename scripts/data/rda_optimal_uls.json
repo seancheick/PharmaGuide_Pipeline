@@ -3,7 +3,7 @@
     "description": "RDA (Recommended Dietary Allowance), optimal dosing, and UL (Upper Limit) reference values for nutrient dosing validation",
     "purpose": "dosing_validation",
     "schema_version": "5.1.2",
-    "last_updated": "2026-10-28",
+    "last_updated": "2026-11-05",
     "reference_data_contract": {
       "contract_version": "1",
       "reference_version": "5.1.6-2026-10-19-folate-ul-label-units",
@@ -14785,7 +14785,21 @@
         "owner": "scripts/data/rda_optimal_uls.json::essential_amino_acids",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_neutral_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "Institute of Medicine, National Academies",
+          "doi": "10.17226/10490",
+          "title": "Dietary Reference Intakes for Energy, Carbohydrate, Fiber, Fat, Fatty Acids, Cholesterol, Protein, and Amino Acids",
+          "url": "https://www.nationalacademies.org/read/10490/chapter/12",
+          "published_date": "2005",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Chapter 10, Table 10-1 (page 593) identifies histidine, isoleucine, leucine, lysine, methionine, phenylalanine, threonine, tryptophan and valine as indispensable amino acids. The table classifies histidine as indispensable while noting that dietary withdrawal does not promptly meet the protein-deposition and nitrogen-balance criteria used for the other eight. This citation supports nutritional role only, not supplemental clinical efficacy, a mixture or individual Dose benchmark, or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Pantethine",

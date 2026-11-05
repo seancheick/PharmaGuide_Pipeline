@@ -136,7 +136,7 @@ def test_finished_share_copy_does_not_claim_a_safety_analysis():
     meta = generate_share_metadata(
         {"product_name": "Test Multi", "brand_name": "Brand"},
         {"quality_score_status": "scored", "quality_assessment_status": "complete",
-         "score_100_equivalent": 96.0, "grade": "Exceptional", "verdict": "SAFE"},
+         "quality_score_v4_100": 96.0, "score_100_equivalent": 96.0, "grade": "Exceptional", "verdict": "SAFE"},
     )
     assert "96/100" in meta["share_title"]
     assert "safety" not in meta["share_description"].lower().replace("not a safety rating", "")
@@ -265,3 +265,91 @@ def test_a_probiotic_missing_a_strain_count_keeps_the_hidden_amount(disclosed):
         },
     }, 15.0, "module")
     assert transparency["reason"].startswith("Most amounts are disclosed")
+
+
+@pytest.mark.parametrize("assessment", ["missing", None, "", "partial", "failed", "future"])
+def test_share_metadata_requires_explicit_completed_assessment(assessment):
+    scored = {"quality_score_v4_100": 80, "score_100_equivalent": 80,
+              "quality_score_status": "scored", "quality_assessment_status": assessment,
+              "grade": "Good", "quality_pillars_v4": {"evidence": {"score": 20}}}
+    if assessment == "missing":
+        scored.pop("quality_assessment_status")
+    share = generate_share_metadata({"product_name": "Label", "brand_name": "Brand",
+                                    "compliance_data": {"vegan": True}}, scored)
+    assert "/100" not in share["share_title"]
+    assert "good quality" not in share["share_description"].lower()
+    assert "recorded safety warnings" in share["share_description"]
+    assert "Vegan" in share["share_highlights"]
+    assert "Clinically-backed ingredients" not in share["share_highlights"]
+    assert "No harmful additives" not in share["share_highlights"]
+
+
+@pytest.mark.parametrize("score_status", ["missing", None, "", "unknown", "not_scored", "suppressed_safety"])
+def test_share_metadata_requires_scored_status(score_status):
+    scored = {"quality_score_v4_100": 80, "score_100_equivalent": 80,
+              "quality_score_status": score_status, "quality_assessment_status": "complete", "grade": "Good"}
+    if score_status == "missing":
+        scored.pop("quality_score_status")
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    assert "/100" not in share["share_title"]
+    assert "good quality" not in share["share_description"].lower()
+    assert "recorded safety warnings" in share["share_description"]
+
+
+@pytest.mark.parametrize("score", [None, float("nan"), float("inf"), -float("inf"), -1, 101])
+def test_share_metadata_rejects_invalid_canonical_numbers_even_with_valid_mirror(score):
+    scored = {"quality_score_v4_100": score, "score_100_equivalent": 80,
+              "quality_score_status": "scored", "quality_assessment_status": "complete", "grade": "Good"}
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    assert "/100" not in share["share_title"]
+    assert "good quality" not in share["share_description"].lower()
+    assert "recorded safety warnings" in share["share_description"]
+
+
+@pytest.mark.parametrize("score, mirror", [(0, 99), (100, 1), (74.6, 99)])
+def test_share_metadata_uses_canonical_score_including_valid_zero(score, mirror):
+    scored = {"quality_score_v4_100": score, "score_100_equivalent": mirror,
+              "quality_score_status": "scored", "quality_assessment_status": "complete", "grade": "Good"}
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    expected = 75 if score == 74.6 else score
+    assert f" - {expected}/100" in share["share_title"]
+    assert "good quality" in share["share_description"].lower()
+
+
+@pytest.mark.parametrize("safety", ["blocked", "unsafe"])
+def test_share_metadata_preserves_independent_block_with_stale_scored_number(safety):
+    scored = {"quality_score_v4_100": 80, "score_100_equivalent": 80,
+              "quality_score_status": "scored", "quality_assessment_status": "complete",
+              "product_safety_status": safety, "grade": "Good"}
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    assert "/100" not in share["share_title"]
+    assert "good quality" not in share["share_description"].lower()
+    assert "Quality score withheld" in share["share_description"]
+    assert "recorded safety warnings" in share["share_description"]
+
+
+def test_share_metadata_never_repairs_missing_canonical_score_from_mirror():
+    scored = {"score_100_equivalent": 80, "quality_score_status": "scored",
+              "quality_assessment_status": "complete", "grade": "Good"}
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    assert "/100" not in share["share_title"]
+    assert "good quality" not in share["share_description"].lower()
+    assert "Quality score unavailable" in share["share_description"]
+
+
+@pytest.mark.parametrize("score", [True, False])
+def test_share_metadata_rejects_boolean_canonical_numbers(score):
+    scored = {"quality_score_v4_100": score, "score_100_equivalent": 80,
+              "quality_score_status": "scored", "quality_assessment_status": "complete", "grade": "Good"}
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    assert "/100" not in share["share_title"]
+    assert "good quality" not in share["share_description"].lower()
+    assert "Quality score unavailable" in share["share_description"]
+
+
+@pytest.mark.parametrize("score", ["0", "100"])
+def test_share_metadata_preserves_existing_numeric_string_contract(score):
+    scored = {"quality_score_v4_100": score, "quality_score_status": "scored",
+              "quality_assessment_status": "complete", "grade": "Good"}
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    assert f" - {score}/100" in share["share_title"]

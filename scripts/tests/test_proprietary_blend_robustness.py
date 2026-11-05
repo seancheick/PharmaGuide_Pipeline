@@ -107,8 +107,15 @@ def test_fully_disclosed_flattened_bcaa_members_reach_the_disclosure_owner():
     scored = build_scored_artifact(enriched)
     assert scored["quality_pillars_v4"]["transparency"]["score"] == 15
     assert scored["quality_pillars_v4"]["dose"]["score"] == 11.4
-    assert scored["assessment_readiness"]["release_assessment"]["blockers"] == [
-        "evidence_assessment_incomplete"]
+    assert scored["quality_assessment_status"] == "complete"
+    assert scored["assessment_readiness"]["release_assessment"]["blockers"] == []
+    # Explicit L-forms now finish their nutritional-role review; disclosure
+    # and Dose remain the independently asserted source-owned conclusions.
+    members = [row for row in scored["assessment_readiness"]["evidence"]["ingredient_assessments"]
+               if row["canonical_id"] in {"l_leucine", "l_isoleucine", "l_valine"}]
+    assert len(members) == 3
+    assert all(row["evidence_applicability"] == "nutrition_authority"
+               and row["reason_code"] == "nutritional_role_authority_established" for row in members)
 
 
 def test_flattened_disclosure_restoration_rejects_incomplete_or_foreign_source_members():

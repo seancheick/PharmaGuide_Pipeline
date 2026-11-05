@@ -26,7 +26,7 @@ EVIDENCE = ["evidence_assessment_incomplete"]
 # Label, and the rows left open on it where the review was never performed.
 COMPLETES = [
     pytest.param("a9_partial_full_evidence_328830_raw.json", True, id="multi_panel_read_addin_open"),
-    pytest.param("a9_completion_2715_raw.json", True, id="sports_adjunct_by_materiality"),
+    pytest.param("a9_completion_2715_raw.json", False, id="sports_adjunct_by_materiality"),
     pytest.param("a9_completion_252445_raw.json", False, id="finished_review_outside_scope"),
     pytest.param("raw_bamboo_252349.json", False, id="finished_authority_no_credit"),
     pytest.param("a9_finished_authority_no_credit_216405_raw.json", False, id="finished_authority_silica"),
@@ -80,6 +80,22 @@ def test_a_review_that_cant_change_the_answer_doesnt_hold_the_product(pipeline, 
     # Completing the product says nothing about rows nobody read, and neither does its copy.
     assert bool(_unreviewed_rows(scored)) is open_rows
     assert ("weren't individually reviewed" in scored["quality_pillars_v4"]["evidence"]["reason"]) is open_rows
+
+
+def test_sports_nutrition_review_does_not_relabel_nonmaterial_adjuncts(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    scored = build_scored_artifact(_enrich(pipeline, "a9_completion_2715_raw.json"))
+    rows = {row["canonical_id"]: row for row in
+            scored["assessment_readiness"]["evidence"]["ingredient_assessments"]}
+    for canonical in ("l_isoleucine", "l_valine"):
+        assert rows[canonical]["state"] == "evaluated_supported"
+        assert rows[canonical]["evidence_applicability"] == "nutrition_authority"
+        assert rows[canonical]["reason_code"] == "nutritional_role_authority_established"
+    for canonical in ("caffeine", "protein"):
+        assert rows[canonical]["role"] == "adjunct"
+        assert rows[canonical]["state"] == "not_applicable"
+        assert rows[canonical]["reason_code"] == "non_material_active"
 
 
 @pytest.mark.parametrize("label, blockers", HELD)

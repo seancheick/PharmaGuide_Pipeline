@@ -114,7 +114,7 @@ class BuildContext:
     interaction_db_version: str
     profile_warning_rules_path: Path | None = None
     pipeline_version: str = "0.0.0"
-    min_app_version: str = "1.0.0"
+    min_app_version: str = "1.0.1"
     dry_run: bool = False
 
 
@@ -1038,7 +1038,10 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Human-readable release version string.",
     )
     parser.add_argument("--pipeline-version", type=str, default="0.0.0")
-    parser.add_argument("--min-app-version", type=str, default="1.0.0")
+    parser.add_argument(
+        "--min-app-version", type=str,
+        default=BuildContext.__dataclass_fields__["min_app_version"].default,
+    )
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args(argv)
 

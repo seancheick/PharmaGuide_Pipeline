@@ -241,8 +241,41 @@ def test_complete_material_evidence_never_belongs_to_one_constituent(dsld_id):
             assert points == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48}
             assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
         else:
-            assert artifact['quality_pillars_v4']['evidence']['score'] == 10.4
+            # The separate, source-qualified nutritional-role floor may beat
+            # the clinical path; it never assigns the blend's trial to leucine.
+            from scoring_v4.modules.generic_evidence import NUTRITION_AUTHORITY_FLOOR
+            meta = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata']
+            assert artifact['quality_pillars_v4']['evidence']['score'] == 11.1
             assert points == {'branched_chain_amino_acids': 4.59}
+            assert meta['primary_evidence_floor'] == NUTRITION_AUTHORITY_FLOOR == 10
+            assert meta['selected_nutrition_authority'] == 'l_isoleucine'
+            assert meta['source_references'][0]['doi'] == '10.17226/10490'
+            assert meta['source_references'][0]['supports_claims'] == ['established_nutritional_role']
+
+
+@pytest.mark.parametrize('preparation', ['qualified_l', 'dl_source', 'unmapped_form'])
+def test_bcaa_constituent_nutrition_authority_requires_its_own_source_form(preparation):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from evidence_resolver import nutrition_authority_for_row
+
+    raw = json.loads((FIXTURES / 'brand_generic_295064_raw.json').read_text())
+    product, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    rows = product['ingredient_quality_data']['ingredients_scorable']
+    assert {row['canonical_id'] for row in rows} == {'l_leucine', 'l_isoleucine', 'l_valine'}
+    for source in rows:
+        row = dict(source)
+        if preparation == 'dl_source':
+            # A cached L parent/form cannot upgrade contradictory source stereo.
+            row['raw_source_text'] = row['raw_source_text'].replace('L-', 'DL-', 1)
+        elif preparation == 'unmapped_form':
+            row['form_match_status'] = 'unspecified'
+        authority = nutrition_authority_for_row(row)
+        if preparation == 'qualified_l':
+            assert authority['scope'] == 'established_nutritional_role'
+            assert authority['source_references'][0]['doi'] == '10.17226/10490'
+        else:
+            assert authority is None
 
 
 @pytest.mark.parametrize('shape, aggregate, dose_known', [

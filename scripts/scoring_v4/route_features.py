@@ -12,6 +12,9 @@ from __future__ import annotations
 import re
 from typing import Any, Iterable, Mapping, Sequence
 
+# Re-export the shared identity family; importing it performs no file I/O.
+from scoring_reference_resolver import EAA_CANONICALS
+
 
 ROUTE_FEATURE_SCHEMA_VERSION = "1.3.0"
 
@@ -27,19 +30,6 @@ B_VITAMIN_CANONICALS = frozenset({
 })
 
 BCAA_CANONICALS = frozenset({"l_leucine", "l_isoleucine", "l_valine"})
-
-# The nine essential amino acids, by the canonical id the enricher emits.
-EAA_CANONICALS = frozenset({
-    "l_histidine",
-    "l_isoleucine",
-    "l_leucine",
-    "l_lysine",
-    "methionine",
-    "l_phenylalanine",
-    "l_threonine",
-    "l_tryptophan",
-    "l_valine",
-})
 
 # Stimulant / weight-loss actives that disqualify a B-complex route: their
 # presence means the product is a formula built around them, not a B-complex.

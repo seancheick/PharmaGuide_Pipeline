@@ -222,7 +222,7 @@ def _quality_assessment_status(
     evidence = _safe_dict(_safe_dict(pillars).get("evidence"))
     if evidence.get("display_state") in UNASSESSED_EVIDENCE_DISPLAY_STATES:
         return "partial"
-    if unfinished and quality_score_status == "scored":
+    if unfinished and quality_score_status in {"scored", "suppressed_safety"}:
         return "partial"
     if quality_score_status in {"scored", "suppressed_safety"}:
         return "complete"

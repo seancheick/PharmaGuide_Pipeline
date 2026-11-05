@@ -53,6 +53,20 @@ _DAILY_VALUES_PATH = _DATA_DIR / "daily_values.json"
 _BOTANICAL_IDENTITY_PATH = _DATA_DIR / "botanical_ingredients.json"
 _IQM_PATH = _DATA_DIR / "ingredient_quality_map.json"
 
+# The nine essential amino acids, by the canonical id the enricher emits.
+EAA_CANONICALS = frozenset({
+    "l_histidine",
+    "l_isoleucine",
+    "l_leucine",
+    "l_lysine",
+    "methionine",
+    "l_phenylalanine",
+    "l_threonine",
+    "l_tryptophan",
+    "l_valine",
+})
+
+
 # Domain (as stamped by the contract's _ingredient_domain) -> reference family.
 _DOMAIN_FAMILY: Dict[str, str] = {
     "vitamin": "rda_ul",
@@ -384,6 +398,30 @@ def rda_ul_reference_entry(
     """Return the exact RDA/UL nutrition authority entry for an ingredient via canonical keys/aliases."""
     entry, _ = _lookup(_rda_ul_index(), _identity_keys(canonical_id, name, aliases))
     return entry
+
+
+def nutrition_reference_dependencies(canonical_id: Any) -> Tuple[str, ...]:
+    """Group reference reads are dependencies even for unqualified forms."""
+    return ("essential_amino_acids",) if _norm(canonical_id) in EAA_CANONICALS else ()
+
+
+def nutritional_role_reference(canonical_id: Any) -> Optional[Dict[str, Any]]:
+    """Evidence-only group reference; never exports the mixture's Dose values.
+
+    All nine identities depend on this existing reference, including forms
+    that cannot claim the role. Row qualification remains the Evidence owner's
+    job; family membership alone is not nutritional authority.
+    """
+    if _norm(canonical_id) not in EAA_CANONICALS:
+        return None
+    entry = rda_ul_reference_entry(canonical_id=nutrition_reference_dependencies(canonical_id)[0]) or {}
+    references = [dict(ref) for ref in entry.get("references_structured") or []
+                  if isinstance(ref, dict) and ref.get("type") == "authority"
+                  and ref.get("authority") and (ref.get("doi") or ref.get("url"))
+                  and "established_nutritional_role" in (ref.get("supports_claims") or [])]
+    if not references:
+        return None
+    return {"id": entry.get("id"), "source_references": references}
 
 
 @lru_cache(maxsize=1)

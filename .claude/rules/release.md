@@ -26,9 +26,13 @@ paths:
 - **Publishing runs refuse stale manufacturer penalties.** `release_full.sh` runs
   `fda_manufacturer_violations_sync.py --check` against today and stops only when a stored deduction
   would change (same-day reruns pass). Fix: `--recalculate-only` in its own commit, then rebuild.
-- **Banned/recalled products always ship.** Any export or release hold must be unable to fire on a
-  BLOCKED/UNSAFE `suppressed_safety` product. A check that protects a score protects nothing on a
-  product that ships no score.
+- **Banned/recalled products stay in every candidate with their reason.** Product-level score
+  readiness never filters out a BLOCKED/UNSAFE `suppressed_safety` record. This does not exempt a
+  catalog from Sean's November 5 publication requirement: at least 15,293 genuinely complete
+  assessments in the fixed 15,447-product cohort. An unfinished suppressed assessment stays
+  incomplete and in the denominator; it does not lower the minimum or earn completion credit.
+  The aggregate publication hold stops activation of the whole candidate, not inclusion of its
+  blocked records. Completion, score availability and safety are independent facts.
 - **Orphan blob cleanup goes only through the gated `scripts/sweep_quarantine.py`.** An ungated
   purge once deleted blobs the bundled catalog still referenced.
 - **A gate only protects you if something runs it.** When you add or rename a gate, wire it into

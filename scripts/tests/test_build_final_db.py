@@ -711,7 +711,10 @@ def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
     }
     base_scored = {
         "grade": "Very good",
+        "quality_score_v4_100": 82,
         "score_100_equivalent": 82,
+        "quality_score_status": "scored",
+        "quality_assessment_status": "complete",
         "verdict": "SAFE",
     }
 
@@ -4198,9 +4201,15 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         assert blocked["quality_score_v4_100"] is None
         assert blocked["quality_score_status"] == "suppressed_safety"
         assert blocked["product_safety_status"] == "blocked"
-        assert blocked["quality_assessment_status"] == "complete"
+        # A confirmed safety block still ships, but does not finish the
+        # unrelated source review retained by this canned artifact.
+        assert blocked["quality_assessment_status"] == "partial"
+        assert s2["assessment_readiness"]["release_assessment"]["is_complete"] is False
         assert blocked["verdict"] == "BLOCKED"
         assert blocked["score_100_equivalent"] is None
+        blocked_blob = json.loads((out / "detail_blobs" / "888.json").read_text(encoding="utf-8"))
+        assert blocked_blob["product_safety_status"] == "blocked"
+        assert blocked_blob["quality_assessment_status"] == "partial"
 
         # The scored product's detail blob carries the six pillars + provenance + explanation.
         blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
@@ -7065,7 +7074,8 @@ def test_share_title_shows_the_shipped_whole_score_not_a_truncation():
 
     meta = generate_share_metadata(
         {"product_name": "Test Multi", "brand_name": "Brand"},
-        {"score_100_equivalent": 74.6, "verdict": "SAFE"},
+        {"quality_score_v4_100": 74.6, "score_100_equivalent": 74.6,
+         "quality_score_status": "scored", "quality_assessment_status": "complete", "verdict": "SAFE"},
     )
     assert " - 75/100 " in meta["share_title"]
     assert "✓" in meta["share_title"]  # the >=75 band is judged on the shipped 75
@@ -7221,3 +7231,17 @@ def test_catalog_exclusions_hold_exactly_the_approved_list():
     # Sold to be taken as supplements, so they stay listed in the catalog, unscored.
     for sold_as_a_supplement in ("252842", "252847", "252849", "270737", "329726", "330001", "16765"):
         assert sold_as_a_supplement not in exclusions
+
+
+def test_current_catalog_requires_typed_safety_reader(tmp_path):
+    result, out = _run_build(
+        tmp_path, [make_enriched()], [_artifact_from_canned("999", _canned_v4())],
+    )
+    assert result["error_count"] == 0
+    manifest = json.loads((out / "export_manifest.json").read_text())
+    with sqlite3.connect(out / "pharmaguide_core.db") as con:
+        minimum = con.execute(
+            "SELECT value FROM export_manifest WHERE key = 'min_app_version'"
+        ).fetchone()[0]
+    assert minimum == "1.0.1"
+    assert manifest["min_app_version"] == minimum

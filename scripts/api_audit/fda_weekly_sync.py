@@ -168,7 +168,7 @@ SIGNAL_CATEGORIES = {
         "ephedra", "ephedrine", "pseudoephedrine",
         "methylsynephrine", "oxilofrine",
         "amphetamine", "methamphetamine",
-        "phenylethylamine", "pea",
+        "phenylethylamine",
     ],
     # Heavy metals and environmental contamination
     "heavy_metal_contamination": [
@@ -914,7 +914,9 @@ def extract_substances(record: dict) -> list:
     in our list (e.g., a novel adulterant FDA just found). Don't refactor the
     regex to be the primary path — the known-list match is more reliable.
     """
-    text = " ".join([
+    # Treat independent source fields as separate sentences, even when their
+    # text lacks punctuation; an unknown list must not absorb a product title.
+    text = ". ".join([
         record.get("reason_for_recall") or "",
         record.get("product_description") or "",
         record.get("title") or "",
@@ -928,42 +930,49 @@ def extract_substances(record: dict) -> list:
         if re.search(r"\b" + re.escape(substance) + r"\b", text):
             found.append(substance)
 
-    # Pattern: "contains/found [undeclared] <substance>"
+    # Capture the whole ingredient list before splitting it. Commas and "and"
+    # delimit names, not the span: stopping there silently dropped novel drugs.
+    # End the span before explanatory clauses so those never become substances.
+    # Existing explanatory clauses may start inside parentheses. Other
+    # parentheses can belong to a chemical name or an ingredient list; do not
+    # turn those unparsed names into fabricated prefixes.
+    list_span = (
+        r"([a-z][a-z0-9\s\-,]+?)"
+        r"(?=\s*[\.;]|\s+\(?(?:in|which|a)\s|"
+        r"\s+and\s+(?:is|are|was|were|may|can|could|should|will|has|have|"
+        r"causes?|increases?|reduces?|lowers?)\b|$)"
+    )
     patterns = [
-        r"undeclared\s+([a-z][a-z0-9\s\-,]+?)(?:\s*[,\.;]|\s+and\s|\s+in\s|\s+which)",
-        r"contains?\s+(?:undeclared\s+)?([a-z][a-z0-9\s\-,]+?)(?:\s*[,\.;]|\s+and\s|\s+which\s|\s+a\s)",
-        r"presence\s+of\s+([a-z][a-z0-9\s\-]+?)(?:\s*[,\.;]|\s+and\s|\s+in\s)",
-        r"spiked\s+with\s+([a-z][a-z0-9\s\-]+?)(?:\s*[,\.;]|\s+and\s|\s+in\s)",
-        r"found\s+to\s+contain\s+([a-z][a-z0-9\s\-]+?)(?:\s*[,\.;]|\s+and\s)",
-        r"adulterated\s+with\s+([a-z][a-z0-9\s\-]+?)(?:\s*[,\.;]|\s+and\s)",
-        r"positive\s+(?:test\s+)?for\s+([a-z][a-z0-9\s\-]+?)(?:\s*[,\.;]|\s+and\s|\s+in\s)",
+        r"undeclared\s+" + list_span,
+        r"contains?\s+(?:undeclared\s+)?" + list_span,
+        r"presence\s+of\s+" + list_span,
+        r"spiked\s+with\s+" + list_span,
+        r"found\s+to\s+contain\s+" + list_span,
+        r"adulterated\s+with\s+" + list_span,
+        r"positive\s+(?:test\s+)?for\s+" + list_span,
     ]
     for pat in patterns:
         for match in re.finditer(pat, text):
-            candidate = match.group(1).strip().rstrip(",")
-            # Strip common prefixes that aren't part of the substance name
-            for prefix in ("undeclared ", "undisclosed ", "hidden "):
-                if candidate.startswith(prefix):
-                    candidate = candidate[len(prefix):]
-            # FDA notifications end the sentence in fixed boilerplate with no
-            # delimiter before it, so the fallback pattern swallows it:
-            # "contains sildenafil not listed on the product label" yielded the
-            # phantom substance "sildenafil not listed on the product label".
-            # A phantom never resolves in the registry, so it reads as a NOVEL
-            # adulterant and makes every health-fraud record look new.
-            for tail in (" not listed on", " not declared on", " that is not listed",
-                         " which is not listed"):
-                cut = candidate.find(tail)
-                if cut > 0:
-                    candidate = candidate[:cut]
-                    break
-            candidate = candidate.strip()
-            # Filter: reasonable name length, not a stop phrase
-            if 3 <= len(candidate) <= 60 and candidate not in found:
-                stop_phrases = {"the product", "product", "this product",
-                                "supplement", "tablet", "capsule", "ingredient"}
-                if candidate not in stop_phrases:
-                    found.append(candidate)
+            for candidate in re.split(r"(?:(?<!\d),|,(?!\d))\s*(?:and\s+)?|\s+and\s+", match.group(1)):
+                candidate = candidate.strip().rstrip(",")
+                # Strip common prefixes that aren't part of the substance name.
+                for prefix in ("undeclared ", "undisclosed ", "hidden "):
+                    if candidate.startswith(prefix):
+                        candidate = candidate[len(prefix):]
+                # FDA's trailing label boilerplate is not a novel substance.
+                for tail in (" not listed on", " not declared on", " that is not listed",
+                             " which is not listed"):
+                    cut = candidate.find(tail)
+                    if cut > 0:
+                        candidate = candidate[:cut]
+                        break
+                candidate = candidate.strip()
+                # Apply the existing name filters to every member of the list.
+                if 3 <= len(candidate) <= 60 and candidate not in found:
+                    stop_phrases = {"the product", "product", "this product",
+                                    "supplement", "tablet", "capsule", "ingredient"}
+                    if candidate not in stop_phrases:
+                        found.append(candidate)
 
     return list(dict.fromkeys(found))  # dedup, preserve order
 

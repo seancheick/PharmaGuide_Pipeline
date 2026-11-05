@@ -681,6 +681,11 @@ def harness(monkeypatch, gate_file):
     monkeypatch.setattr(sync, "_ensure_registry_validating", lambda *_a, **_k: None)
     monkeypatch.setattr(sync, "_promote_registry_release", lambda *_a, **_k: None)
     monkeypatch.setattr(sync, "_enforce_signed_rule_gate", lambda *_a, **_k: None)
+    # These tiny catalogs exercise ADR-012 signing, immutable uploads, rules,
+    # compression and rollback, not scientific cohort/source qualification.
+    # Keep that independent gate local to this fake-sync harness; its real
+    # override, lineage and completeness guards run in test_sync_to_supabase.py.
+    monkeypatch.setattr(sync, "validate_catalog_publication", lambda _build: {"passed": True})
     return SimpleNamespace(events=events, remote=remote, client=client)
 
 

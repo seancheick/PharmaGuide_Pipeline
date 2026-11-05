@@ -1476,6 +1476,167 @@ def _enforce_signed_rule_gate(client, bucket, signed, rule_pin):
         raise ValueError("Rule-change gate: " + "; ".join(result.errors))
 
 
+
+PUBLICATION_COHORT_PATH = Path(__file__).resolve().parent / "contracts" / "catalog_release_cohort.json"
+
+
+def _publication_cohort():
+    """The user-approved fixed denominator, never inferred from a candidate."""
+    cohort = json.loads(PUBLICATION_COHORT_PATH.read_text())
+    ids = cohort.get("dsld_ids")
+    minimum = cohort.get("minimum_complete")
+    if (not isinstance(ids, list) or not ids
+            or any(not isinstance(pid, str) or not pid or pid != pid.strip() for pid in ids)
+            or len(set(ids)) != len(ids)
+            or cohort.get("baseline_product_count") != len(ids)
+            or type(minimum) is not int or not 0 < minimum <= len(ids)):
+        raise ValueError("publication cohort contract is malformed")
+    return set(ids), minimum
+
+
+def _publication_source_receipts(product_ids):
+    """Consume one captured lineage per dataset through the existing strict owner.
+
+    Receipt JSON and manifest validation use the same frozen bytes. Temporary
+    mirrors are dataset-local and never change producer files or scientific facts.
+    """
+    from audit_source_of_truth_contract import (
+        as_products, product_identity, scored_files_from_products_dir,
+        _scoring_enriched_source,
+    )
+    from audits.assessment_readiness_shadow import _capture_stage
+    from stage_manifest import MANIFEST_NAME
+
+    receipts = {}
+    source_cache = {}
+    scored_dirs = sorted({path.parent for path in scored_files_from_products_dir(
+        Path(__file__).resolve().parent / "products")})
+    for scored_dir in scored_dirs:
+        dataset = scored_dir.parent.name.removesuffix("_scored")
+        products_dir = scored_dir.parent.parent
+        with tempfile.TemporaryDirectory(prefix="pg-publication-source-") as temporary:
+            frozen_root = Path(temporary)
+            scored_buffers = []
+            for stage, source_dir in (
+                ("clean", products_dir / dataset / "cleaned"),
+                ("enrich", products_dir / (dataset + "_enriched") / "enriched"),
+                ("score", scored_dir),
+            ):
+                manifest, _, buffers, _ = _capture_stage(
+                    source_dir, stage, patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",),
+                    include_auxiliary=True,
+                )
+                frozen_dir = frozen_root / source_dir.parent.name / source_dir.name
+                frozen_dir.mkdir(parents=True)
+                # The capture owner already validated this manifest against
+                # these exact buffers. Preserve every field for the strict join.
+                (frozen_dir / MANIFEST_NAME).write_text(json.dumps(manifest))
+                for path, data in buffers:
+                    frozen_path = frozen_dir / path.name
+                    frozen_path.write_bytes(data)
+                    if stage == "score" and path.match("*.json"):
+                        scored_buffers.append((frozen_path, data))
+            for path, data in scored_buffers:
+                for product in as_products(json.loads(data)):
+                    pid = product_identity(product)
+                    if pid not in product_ids:
+                        continue
+                    if pid in receipts:
+                        raise ValueError(f"publication source has duplicate product {pid}")
+                    if _scoring_enriched_source(path, pid, source_cache) is None:
+                        raise ValueError(f"publication source provenance is stale or unverified: {pid}")
+                    readiness = product.get("assessment_readiness")
+                    release = readiness.get("release_assessment") if isinstance(readiness, dict) else None
+                    receipts[pid] = {key: product[key] for key in (
+                        "quality_assessment_status", "product_safety_status",
+                        "quality_score_status", "quality_score_v4_100",
+                    ) if key in product}
+                    receipts[pid]["release_assessment"] = {key: release[key] for key in (
+                        "is_complete", "blockers", "unfinished_source_assessment",
+                    ) if key in release} if isinstance(release, dict) else {}
+            # Release the strict owner's per-dataset enriched index before
+            # capturing another dataset; its runtime fingerprints remain reusable.
+            source_cache.pop(source_cache.pop("dataset", None), None)
+    return receipts
+
+
+def validate_catalog_publication(build_dir):
+    """Require the fixed cohort and genuine completion before any remote work."""
+    from release_catalog_artifact import validate_release_candidate, ReleaseValidationError
+    from stage_manifest import StageManifestError
+    try:
+        cohort, minimum = _publication_cohort()
+        candidate = validate_release_candidate(input_dir=Path(build_dir), min_products=1)
+        manifest = candidate["manifest"]
+        strict = manifest.get("strict_gate_summary")
+        required_gates = {"scoring_contract", "export_contract", "artifact_freshness"}
+        if (not isinstance(strict, dict) or strict.get("strict_mode") is not True
+                or not isinstance(strict.get("gates"), list)
+                or not required_gates <= set(strict["gates"])
+                or manifest.get("artifact_freshness_status") != "checked_by_release_strict_gate"):
+            raise ValueError("publication requires current strict release receipts")
+        with sqlite3.connect(f"file:{candidate['db_path']}?mode=ro", uri=True) as conn:
+            conn.row_factory = sqlite3.Row
+            rows = conn.execute("SELECT dsld_id, quality_assessment_status, quality_score_status, "
+                                "product_safety_status, quality_score_v4_100 FROM products_core").fetchall()
+        by_id = {}
+        for row in rows:
+            pid = row["dsld_id"]
+            if not isinstance(pid, str) or not pid or pid in by_id:
+                raise ValueError(f"publication has missing or duplicate catalog identity: {pid!r}")
+            by_id[pid] = row
+        missing = cohort - by_id.keys()
+        if missing:
+            raise ValueError(f"publication cohort missing {len(missing)} original IDs: {sorted(missing)[:10]}")
+        receipts = _publication_source_receipts(set(by_id))
+        complete = 0
+        for pid, row in by_id.items():
+            assessment = row["quality_assessment_status"]
+            score_status = row["quality_score_status"]
+            safety = row["product_safety_status"]
+            score = row["quality_score_v4_100"]
+            if (assessment not in {"complete", "partial", "failed"}
+                    or score_status not in {"scored", "not_scored", "suppressed_safety"}
+                    or safety not in {"blocked", "unsafe", "caution", "no_known_catalog_concern", "not_assessed"}):
+                raise ValueError(f"publication has malformed assessment/disposition: {pid}")
+            if score_status == "scored":
+                if not isinstance(score, (int, float)) or not math.isfinite(score) or not 0 <= score <= 100:
+                    raise ValueError(f"publication has invalid scored number: {pid}")
+            elif score is not None:
+                raise ValueError(f"publication has a number on an unavailable score: {pid}")
+            if safety in {"blocked", "unsafe"} and score_status != "suppressed_safety":
+                raise ValueError(f"publication lost a blocked/suppressed disposition: {pid}")
+            receipt = receipts.get(pid, {})
+            source_score = receipt.get("quality_score_v4_100")
+            invalid_source_score = score_status == "scored" and (
+                type(source_score) not in (int, float) or not math.isfinite(source_score)
+                or not 0 <= source_score <= 100
+            )
+            if (receipt.get("quality_assessment_status") != assessment
+                    or receipt.get("product_safety_status") != safety
+                    or receipt.get("quality_score_status") != score_status
+                    or "quality_score_v4_100" not in receipt
+                    or receipt["quality_score_v4_100"] != score
+                    or invalid_source_score):
+                raise ValueError(f"publication source/export disposition mismatch or receipt missing: {pid}")
+            release = receipt.get("release_assessment", {})
+            if (not isinstance(release.get("is_complete"), bool)
+                    or not isinstance(release.get("blockers"), list)
+                    or "unfinished_source_assessment" not in release):
+                raise ValueError(f"publication release-assessment receipt is malformed: {pid}")
+            if assessment == "complete":
+                if (release["is_complete"] is not True or release["blockers"]
+                        or release["unfinished_source_assessment"] is not None):
+                    raise ValueError(f"publication false-complete assessment: {pid}")
+                if pid in cohort:
+                    complete += 1
+        if complete < minimum:
+            raise ValueError(f"publication cohort genuinely complete {complete}/{len(cohort)}; requires {minimum}")
+        return {"passed": True, "cohort_products": len(cohort), "complete": complete,
+                "minimum_complete": minimum, "catalog_products": len(rows)}
+    except (OSError, ValueError, TypeError, sqlite3.Error, ReleaseValidationError, StageManifestError) as exc:
+        raise ValueError(f"Catalog publication qualification failed: {exc}") from exc
+
 def sync(
     build_dir,
     dry_run=False,
@@ -1562,8 +1723,16 @@ def sync(
     print(f"  Products: {product_count}")
     print(f"  Checksum: {checksum[:20]}...")
 
+    try:
+        publication_qualification = validate_catalog_publication(build_dir)
+    except ValueError as exc:
+        if not dry_run:
+            raise
+        publication_qualification = {"passed": False, "error": str(exc)}
+        print(f"[DRY RUN] Publication BLOCKED: {exc}")
+
     if dry_run:
-        print(f"\n[DRY RUN] Would upload:")
+        print(f"\n[DRY RUN] Would upload (only after publication qualification passes):")
         print(f"  - pharmaguide_core.db ({build_stats['db_size_mb']:.1f} MB)")
         print(f"  - pharmaguide_core.db.gz ({compressed['size'] / (1024 * 1024):.1f} MB) "
               "and its descriptor")
@@ -1579,7 +1748,8 @@ def sync(
             f"keep the last {CATALOG_SEARCH_KEEP_VERSIONS} versions"
         )
         print(f"  - New manifest row (version {version})")
-        result = {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"]}
+        result = {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"],
+                  "publication_qualification": publication_qualification}
         if signed:
             sequence = signed["release"]["release_sequence"]
             print(f"  - Signed release: sequence {sequence}, key {signed['release']['key_id']}; "

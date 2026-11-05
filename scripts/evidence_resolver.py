@@ -205,7 +205,7 @@ OWNER_CAPABILITY_MAP: Dict[str, OwnerCapability] = {
         owner_id="nutrition_authority",
         data_source="data/rda_optimal_uls.json",
         facts_owned=("is_essential_nutrient", "dri_type", "rda_value", "ul_value", "unit", "authority"),
-        capability_description="Established nutritional authority for essential dietary vitamins and minerals",
+        capability_description="Established nutritional authority for essential dietary nutrients; verified L-amino-acid role is separate from clinical outcomes and Dose",
     ),
     "backed_clinical_studies": OwnerCapability(
         owner_id="backed_clinical_studies",
@@ -300,6 +300,12 @@ _OMEGA_EVIDENCE_CANONICALS = {
     "krill_oil", "algal_oil", "algae_oil", "omega3", "omega_3",
     "omega_3_fatty_acids", "omega_fatty_acid_blend",
 }
+
+
+_CLINICAL_PREPARATION_REJECTIONS = frozenset({
+    "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
+    "clinical_preparation_mismatch", "clinical_identity_excluded",
+})
 
 
 def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any]:
@@ -542,6 +548,53 @@ def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Opt
     return any(_norm(key) in DRI_ESSENTIAL_NUTRIENTS for key in reference_keys)
 
 
+def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
+    """Source-qualified nutritional role, independent of clinical outcomes/Dose."""
+    from normalization import make_normalized_key, strip_label_identity_qualifiers
+    from scoring_reference_resolver import (EAA_CANONICALS, iqm_reference_entry,
+                                          nutritional_role_reference, parent_relationship)
+    from scoring_input_contract import is_lent_blend_mass
+
+    canonical = _norm(row.get("canonical_id"))
+    if (row.get("is_excipient") or _norm(row.get("source_section")) == "inactive"
+            or _norm(row.get("cleaner_row_role")) in CLEANER_NON_EFFICACY_ROLES
+            or is_lent_blend_mass(dict(row))):
+        return None
+    if canonical not in EAA_CANONICALS:
+        from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
+
+        if canonical in DRI_ESSENTIAL_NUTRIENTS:
+            return {"nutrient": canonical, "is_essential": True}
+        return None
+    reference = nutritional_role_reference(canonical)
+    if (not reference or _norm(row.get("form_match_status")) != "mapped"
+            or any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
+            or _norm(row.get("identity_disposition")) in {"ambiguous", "identity_conflict"}):
+        return None
+    # The original label identity outranks an inferred standard name/form.
+    source = str(row.get("raw_source_text") or row.get("name") or "").strip()
+    source_key = make_normalized_key(source)
+    tokens = source_key.split("_")
+    if not source_key or any(token in {"d", "dl", "racemic"} for token in tokens):
+        return None
+    forms = (iqm_reference_entry(canonical) or {}).get("forms") or {}
+    form_name = _norm(row.get("matched_form"))
+    form = forms.get(form_name)
+    if not isinstance(form, dict) or parent_relationship(form):
+        return None
+    form_key = make_normalized_key(form_name)
+    if not form_key.startswith("l_"):
+        return None
+    aliases = [form_name, *(form.get("aliases") or [])]
+    qualified_keys = {make_normalized_key(value) for value in aliases if isinstance(value, str)}
+    qualified_source = make_normalized_key(strip_label_identity_qualifiers(source))
+    if not qualified_source.startswith("l_") or qualified_source not in qualified_keys:
+        return None
+    return {"nutrient": canonical, "is_essential": True,
+            "authority": reference["id"], "scope": "established_nutritional_role",
+            "source_references": reference["source_references"]}
+
+
 @lru_cache(maxsize=1)
 def _load_backed_studies() -> Tuple[Dict[str, Any], ...]:
     """Load human clinical studies from backed_clinical_studies.json."""
@@ -743,6 +796,34 @@ def resolve_evidence_for_canonical(
 
 
 def resolve_evidence_for_row(
+    row: Mapping[str, Any], product: Optional[Mapping[str, Any]] = None,
+) -> EvidenceResolution:
+    """Resolve clinical facts and the independently established nutritional role."""
+    resolution = _resolve_evidence_for_row(row, product)
+    from scoring_reference_resolver import EAA_CANONICALS
+
+    if _norm(row.get("canonical_id")) not in EAA_CANONICALS:
+        return resolution
+    authority = nutrition_authority_for_row(row)
+    if not authority or resolution.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
+        return resolution
+    # Keep null/mixed/performance reviews intact; this finishes only the
+    # nutritional-role question and creates no positive clinical points.
+    resolution.owner_facts["nutrition_authority"] = authority
+    resolution.matched_owners = list(dict.fromkeys([*resolution.matched_owners, "nutrition_authority"]))
+    if not resolution.points_eligible:
+        resolution.provenance["clinical_outcome_review"] = {
+            "disposition": resolution.disposition, "reason_code": resolution.reason_code,
+            "blocking_reasons": resolution.blocking_reasons,
+        }
+        resolution.disposition = EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+        resolution.applicability_status = "established_nutritional_role"
+        resolution.reason_code = "nutritional_role_authority_established"
+        resolution.blocking_reasons = []
+    return resolution
+
+
+def _resolve_evidence_for_row(
     row: Mapping[str, Any],
     product: Optional[Mapping[str, Any]] = None,
 ) -> EvidenceResolution:
@@ -1095,7 +1176,31 @@ def resolve_evidence_for_row(
         # Check study types, effect directions, and applicability
         valid_studies = [s for s in deduped_studies if clinical_record_sources_eligible(s)]
         if not valid_studies:
-            from clinical_applicability import assess_clinical_source_review
+            from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review
+            # The shared scope owner checks known preparation exclusions before
+            # a source hold. A finished material mismatch grants no credit and
+            # must not be reopened merely because the source is non-contributing.
+            # Every matched record must reach that conclusion: an unrelated open
+            # source still keeps the ingredient's research unresolved.
+            scope_decisions = []
+            for study in deduped_studies:
+                scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
+                if source_ref:
+                    scoped["matched_source_row_refs"] = [source_ref]
+                scope_decisions.append(assess_clinical_applicability(
+                    product or {"activeIngredients": [row_dict]}, scoped,
+                    assess_amount=False, require_claim_alignment=False))
+            if all(decision.get("status") == "not_applicable"
+                   and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
+                   for decision in scope_decisions):
+                owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="form_mismatch",
+                    reason_code="clinical_form_mismatch", owner_facts=owner_facts,
+                    blocking_reasons=["form_mismatch_with_clinical_trials"],
+                )
             reviewed_references = all(
                 is_reference_only(study)
                 and study.get("scoring_eligible") is not False
@@ -1142,10 +1247,7 @@ def resolve_evidence_for_row(
                     record_states.append("reviewed_nonpositive")
                     continue
                 if decision["status"] != "applicable":
-                    if decision["reason_code"] in {
-                        "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
-                        "clinical_preparation_mismatch", "clinical_identity_excluded",
-                    }:
+                    if decision["reason_code"] in _CLINICAL_PREPARATION_REJECTIONS:
                         record_states.append("form_mismatch")
                     else:
                         record_states.append("not_applicable")

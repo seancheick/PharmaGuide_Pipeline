@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import sys
+import tempfile
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -18,23 +20,60 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 from assessment_readiness import evaluate_assessment_readiness  # noqa: E402
+from scoring_input_contract import get_evidence_subject_rows, scoring_input_scope  # noqa: E402
 from scoring_v4.router import class_for_product  # noqa: E402
-from stage_manifest import MANIFEST_NAME, select_stage_files  # noqa: E402
+from stage_manifest import MANIFEST_NAME, StageManifestError, select_stage_files  # noqa: E402
 
 
-REPORT_SCHEMA_VERSION = "1.1.0"
+REPORT_SCHEMA_VERSION = "1.2.0"
 
 
 class AssessmentReadinessShadowError(RuntimeError):
     """A measure-only report could not establish its exact input corpus."""
 
 
-def _sha256(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as handle:
-        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+def _capture_stage(stage_dir: Path, expected_stage: str, *,
+                   patterns: tuple[str, ...] = ("*.json",),
+                   include_auxiliary: bool = False) -> tuple[
+    dict[str, Any], str, list[tuple[Path, bytes]], list[dict[str, Any]]
+]:
+    """Validate and consume one immutable byte capture through the stage owner.
+
+    The temporary mirror is audit-local: the producer files and manifest never
+    change. The owner checks its usual schema, completeness, all owned checksums
+    (including non-product auxiliaries), and unowned JSON inventory there.
+    """
+    manifest_bytes = (stage_dir / MANIFEST_NAME).read_bytes()
+    manifest = json.loads(manifest_bytes)
+    names = manifest.get("owned_files", []) if isinstance(manifest, dict) else []
+    # This is a read boundary, not a second manifest validator. Reject unsafe
+    # filenames before opening anything; the shared owner validates all policy.
+    if not isinstance(names, list):
+        names = []
+    for name in names:
+        if not isinstance(name, str) or Path(name).name != name:
+            raise StageManifestError(f"Invalid owned filename: {name!r}")
+    discovered = {path.name for pattern in patterns for path in stage_dir.glob(pattern)
+                  if path.is_file() and not path.name.startswith(".")}
+    capture_names = set(names) | discovered
+    for name in capture_names:
+        if (stage_dir / name).resolve().parent != stage_dir.resolve():
+            raise StageManifestError(f"Owned file is outside stage directory: {name}")
+        if not (stage_dir / name).is_file():
+            raise StageManifestError(f"Owned file is missing: {name}")
+    captured = {name: (stage_dir / name).read_bytes() for name in capture_names}
+    with tempfile.TemporaryDirectory(prefix="pg-readiness-shadow-") as temporary:
+        frozen = Path(temporary)
+        (frozen / MANIFEST_NAME).write_bytes(manifest_bytes)
+        for name, data in captured.items():
+            (frozen / name).write_bytes(data)
+        selected = select_stage_files([frozen], expected_stage, require_manifest=True, patterns=patterns)
+        selected_names = [path.name for path in selected]
+    receipts = [{"name": name, "sha256": hashlib.sha256(captured[name]).hexdigest(),
+                 "bytes": len(captured[name])} for name in sorted(names)]
+    return (manifest, hashlib.sha256(manifest_bytes).hexdigest(),
+            [(stage_dir / name, captured[name])
+             for name in sorted(names) if include_auxiliary or name in selected_names], receipts)
 
 
 def _canonical_bytes(value: Any) -> bytes:
@@ -112,6 +151,107 @@ def _material_backlog(readiness: dict[str, Any]) -> list[dict[str, Any]]:
     )
 
 
+def _source_receipt(stage_owner: str, path: Path, artifact_sha256: str,
+                    manifest_sha256: str, row_index: int) -> dict[str, Any]:
+    return {"stage_owner": stage_owner, "source_file": path.name,
+            "artifact_sha256": artifact_sha256, "manifest_sha256": manifest_sha256,
+            "row_index": row_index}
+
+
+# These are audit projections of emitted fields, never inferred identity or scope.
+_ROW_FACTS = {
+    "name", "standard_name", "canonical_id", "source_row_ref", "raw_source_path",
+    "raw_source_text", "source_section", "quantity", "unit", "dose_value", "dose_unit",
+    "plant_part", "part", "preparation", "extract_ratio", "standardization", "forms",
+    "material", "population", "purpose", "role_classification", "cleaner_row_role",
+    "score_eligible_by_cleaner", "identity_disposition", "mapped", "mapped_identity",
+    "scoreable_identity", "dose_class", "scoring_input_kind", "linked_rows",
+    "activity_quantity", "activity_unit", "identity_resolution", "form_match_status",
+}
+
+
+def _reference_facts(value: Any) -> Any:
+    """Retain explicit scope/reference facts; source receipt locates expanded data."""
+    if isinstance(value, list):
+        return [_reference_facts(item) for item in value]
+    if not isinstance(value, dict):
+        return value
+    result = {}
+    for key, item in value.items():
+        relevant = (key in _ROW_FACTS or key in {
+            "id", "pmids", "nct_id", "trial_id", "state", "status", "reason_code", "readiness", "evidence_type",
+            "evidence_result_state", "display_state", "is_complete", "blockers",
+        } or any(term in key.lower() for term in (
+            "source", "reference", "pmid", "doi", "study_id", "evidence_id",
+            "approval", "review", "scope", "applicab", "population", "preparation",
+            "material", "purpose")))
+        if relevant:
+            result[key] = _reference_facts(item)
+        elif isinstance(item, dict) or (isinstance(item, list) and any(
+                isinstance(child, dict) for child in item)):
+            nested = _reference_facts(item)
+            if nested:
+                result[key] = nested
+    return result
+
+
+def _source_assessments(product: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "evidence_subject_rows": [
+            {key: copy.deepcopy(value) for key, value in row.items() if key in _ROW_FACTS}
+            for row in get_evidence_subject_rows(product)
+        ],
+        "evidence_references": _reference_facts(product.get("evidence_data") or {}),
+        "label_source_rows": [
+            {key: copy.deepcopy(value) for key, value in row.items() if key in _ROW_FACTS}
+            for row in product.get("label_source_rows") or [] if isinstance(row, dict)
+        ],
+        "label_context": {key: copy.deepcopy(product[key]) for key in (
+            "targetGroups", "userGroups", "servingSizes", "serving_basis", "form_factor",
+            "product_scoring_classification") if key in product},
+    }
+
+
+def _scored_snapshot(product: dict[str, Any], source: dict[str, Any],
+                     blockers: list[Any]) -> dict[str, Any]:
+    keys = ("quality_assessment_status", "quality_score_status", "score_unavailable_reason",
+            "product_safety_status", "safety_assessment_status", "safety_assessment_reason",
+            "quality_score_v4_100", "quality_tier", "assessment_readiness", "_v4_module",
+            "blocking_reason", "quality_score_suppressed_reason")
+    pillars = product.get("quality_pillars_v4") or {}
+    return {**{key: copy.deepcopy(product[key]) for key in keys if key in product},
+            "quality_pillars_v4": {
+                name: {key: copy.deepcopy(value) for key, value in pillar.items()
+                       if key in {"score", "max", "max_score", "points", "status",
+                                  "evidence_result_state", "display_state"}}
+                for name, pillar in pillars.items() if isinstance(pillar, dict)
+            },
+            "module_evidence_facts": _reference_facts(
+                product.get("_v4_module_breakdown") or product.get("module_breakdown") or {}),
+            "source_product_sha256": hashlib.sha256(_canonical_bytes(product)).hexdigest(),
+            "source": source, "release_blockers": copy.deepcopy(blockers)}
+
+
+def _scored_summary(register: list[dict[str, Any]]) -> dict[str, Any]:
+    fields = ("quality_assessment_status", "quality_score_status", "product_safety_status")
+    counts = {field: Counter() for field in fields}
+    cross_tab: Counter[tuple[str, ...]] = Counter()
+    blockers: Counter[str] = Counter()
+    for row in register:
+        scored = row["scored"]
+        states = tuple(str(scored.get(field) or "missing") for field in fields)
+        for field, state in zip(fields, states):
+            counts[field][state] += 1
+        cross_tab[states] += 1
+        blockers.update(str(value) for value in set(scored["release_blockers"]))
+    return {**{field + "_counts": dict(sorted(count.items()))
+               for field, count in counts.items()},
+            "product_count": len(register),
+            "status_cross_tab": [{**dict(zip(fields, states)), "product_count": count}
+                                 for states, count in sorted(cross_tab.items())],
+            "release_blocker_counts": dict(sorted(blockers.items()))}
+
+
 def build_shadow_report(
     products_dir: Path,
     *,
@@ -126,7 +266,9 @@ def build_shadow_report(
     unavailable_reason_counts: Counter[str] = Counter()
     product_id_counts: Counter[str] = Counter()
     remediation_queue: list[dict[str, Any]] = []
+    product_register: dict[str, dict[str, Any]] = {}
     stages: list[dict[str, Any]] = []
+    scored_stage_receipts: list[dict[str, Any]] = []
     product_count = 0
     live_ready_count = 0
     incomplete_count = 0
@@ -137,33 +279,19 @@ def build_shadow_report(
     cause_backlog: dict[tuple[str, str, str], dict[str, Any]] = {}
 
     for stage_dir in _stage_dirs(products_dir):
-        manifest_path = stage_dir / MANIFEST_NAME
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        owned_files = select_stage_files(
-            [stage_dir],
-            "enrich",
-            require_manifest=True,
-        )
+        manifest, manifest_digest, owned_files, file_receipts = _capture_stage(stage_dir, "enrich")
         stage_owner = stage_dir.parent.name
         stages.append({
             "stage_owner": stage_owner,
             "run_id": manifest.get("run_id"),
-            "manifest_sha256": _sha256(manifest_path),
-            "owned_files": [
-                {
-                    "name": path.name,
-                    "sha256": _sha256(path),
-                    "bytes": path.stat().st_size,
-                }
-                for path in owned_files
-            ],
+            "manifest_sha256": manifest_digest,
+            "owned_files": file_receipts,
         })
 
-        for source_file in owned_files:
-            artifact_sha256 = next(item["sha256"] for item in stages[-1]["owned_files"]
-                                   if item["name"] == source_file.name)
-            payload = json.loads(source_file.read_text(encoding="utf-8"))
-            for product in _iter_products(payload, source_file):
+        for source_file, source_bytes in owned_files:
+            artifact_sha256 = hashlib.sha256(source_bytes).hexdigest()
+            payload = json.loads(source_bytes)
+            for row_index, product in enumerate(_iter_products(payload, source_file)):
                 product_count += 1
                 dsld_id = str(
                     product.get("dsld_id") or product.get("dsldId") or ""
@@ -172,12 +300,29 @@ def build_shadow_report(
                     raise AssessmentReadinessShadowError(
                         f"Enriched product has no dsld_id: {source_file}"
                     )
+                if dsld_id in product_register:
+                    raise AssessmentReadinessShadowError(
+                        f"Missing or duplicate enriched product ID: {dsld_id} in {source_file}"
+                    )
                 product_id_counts[dsld_id] += 1
-                module = class_for_product(product)
-                readiness = evaluate_assessment_readiness(
-                    product,
-                    module=module,
-                )
+                with scoring_input_scope(product):
+                    module = class_for_product(product)
+                    readiness = evaluate_assessment_readiness(
+                        product,
+                        module=module,
+                    )
+                    source_assessments = _source_assessments(product)
+                product_register[dsld_id] = {
+                    "dsld_id": dsld_id,
+                    "product_name": product.get("product_name") or product.get("fullName") or "",
+                    "brand": copy.deepcopy(product.get("brand", product.get("brand_name"))),
+                    "module": module,
+                    "source": _source_receipt(stage_owner, source_file, artifact_sha256,
+                                              stages[-1]["manifest_sha256"], row_index),
+                    "source_product_sha256": hashlib.sha256(_canonical_bytes(product)).hexdigest(),
+                    "owner_readiness": copy.deepcopy(readiness),
+                    "source_assessments": source_assessments,
+                }
                 # This is a report of the existing owner's decisions, never a
                 # second readiness classifier. Regeneration cannot close work:
                 # closure also needs reviewed resolution and rebuilt evidence.
@@ -303,11 +448,15 @@ def build_shadow_report(
         scored_ids: set[str] = set()
         for manifest_path in scored_stages:
             stage = manifest_path.parent
-            manifest_digest = _sha256(manifest_path)
-            for path in select_stage_files([stage], "score", require_manifest=True):
-                digest = _sha256(path)
-                for product in _iter_products(json.loads(path.read_text()), path):
-                    pid = str(product.get("dsld_id") or product.get("dsldId") or product.get("id") or "")
+            manifest, manifest_digest, owned_files, file_receipts = _capture_stage(stage, "score")
+            scored_stage_receipts.append({
+                "stage_owner": stage.parent.name, "run_id": manifest.get("run_id"),
+                "manifest_sha256": manifest_digest, "owned_files": file_receipts,
+            })
+            for path, source_bytes in owned_files:
+                digest = hashlib.sha256(source_bytes).hexdigest()
+                for row_index, product in enumerate(_iter_products(json.loads(source_bytes), path)):
+                    pid = str(product.get("dsld_id") or product.get("dsldId") or product.get("id") or "").strip()
                     if not pid or pid in scored_ids:
                         raise AssessmentReadinessShadowError("Missing or duplicate scored product ID")
                     scored_ids.add(pid)
@@ -317,6 +466,10 @@ def build_shadow_report(
                     if (not isinstance(blockers, list) or
                             (receipt.get("is_complete") is not True and not blockers)):
                         blockers = ["release_assessment_receipt_missing"]
+                    if pid in product_register:
+                        product_register[pid]["scored"] = _scored_snapshot(
+                            product, _source_receipt(stage.parent.name, path, digest,
+                                                     manifest_digest, row_index), blockers)
                     for blocker in blockers:
                         cause, _, subject = str(blocker).partition(":")
                         group = cause_backlog.setdefault(("release", cause, subject), {
@@ -370,12 +523,16 @@ def build_shadow_report(
         "unavailable_reason_counts": dict(
             sorted(unavailable_reason_counts.items())
         ),
+        "product_register": [product_register[pid] for pid in sorted(product_register)],
+        "scored_summary": (_scored_summary(list(product_register.values()))
+                           if scored_products_dir is not None else None),
         "remediation_queue": remediation_queue,
         "cause_backlog": [
             {**group, "affected_product_ids": sorted(group["affected_product_ids"])}
             for _, group in sorted(cause_backlog.items())
         ],
         "stages": stages,
+        "scored_stages": scored_stage_receipts,
     }
     report["report_sha256"] = hashlib.sha256(_canonical_bytes(report)).hexdigest()
     return report

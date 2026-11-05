@@ -1450,6 +1450,29 @@ def _current_omega_authority_receipt(product: Mapping, evidence: Mapping) -> boo
         and meta.get("source_references") == resolved["source_references"])
 
 
+def _current_nutrition_authority_receipt(product: Mapping, evidence: Mapping) -> bool:
+    """Revalidate the selected row and current configured nutrition floor."""
+    from scoring_v4.modules.generic_evidence import (
+        NUTRITION_AUTHORITY_FLOOR, _purpose_essential_canonical, nutrition_authority_references)
+
+    meta = _safe_dict(evidence.get("metadata"))
+    canonical = _purpose_essential_canonical(dict(product))
+    # Preserve the established vitamin/mineral receipt contract. The new EAA
+    # role additionally requires its current source/form-bound reference.
+    if canonical in DRI_ESSENTIAL_NUTRIENTS:
+        return bool(meta.get("selected_nutrition_authority") == canonical
+            and meta.get("nutrition_authority_canonical") == canonical
+            and meta.get("nutrition_authority_floor_applied") is True
+            and meta.get("primary_evidence_floor_decisive") is True)
+    return bool(canonical and meta.get("selected_nutrition_authority") == canonical
+        and meta.get("nutrition_authority_canonical") == canonical
+        and meta.get("nutrition_authority_floor_applied") is True
+        and meta.get("primary_evidence_floor_decisive") is True
+        and evidence.get("score") == meta.get("primary_evidence_floor") == NUTRITION_AUTHORITY_FLOOR
+        and _safe_dict(evidence.get("components")).get("primary_evidence_floor") == NUTRITION_AUTHORITY_FLOOR
+        and meta.get("source_references") == nutrition_authority_references(dict(product), canonical))
+
+
 def evaluate_release_assessment(
     product: Mapping[str, Any], readiness: Mapping[str, Any],
     module_breakdown: Mapping[str, Any], *, unfinished_source: str | None,
@@ -1535,6 +1558,8 @@ def evaluate_release_assessment(
               or (not _is_ready(str(_safe_dict(readiness.get("evidence")).get("readiness") or ""))
                   and _dose_rests_on_a_hidden_amount(module_breakdown))):
             blockers.append("evidence_assessment_incomplete")
+        if module in {"omega", "probiotic"} and _required_evidence_review_open(product, readiness, module):
+            blockers.append("evidence_assessment_incomplete")
         # The scoring owner records only records used by the winning generic
         # path. Missing applicability cannot publish provisional legacy credit.
         if module in {"generic", "sports", "fiber_digestive"}:
@@ -1561,13 +1586,8 @@ def evaluate_release_assessment(
                 # Category modules may embed the generic owner's receipt.
                 receipts = _safe_dict(evidence_meta.get("generic_evidence_metadata")).get("contributing_record_assessments")
             if isinstance(receipts, list):
-                authority = evidence_meta.get("selected_nutrition_authority")
-                selected_authority = (
-                    authority in DRI_ESSENTIAL_NUTRIENTS
-                    and evidence_meta.get("nutrition_authority_floor_applied") is True
-                    and evidence_meta.get("primary_evidence_floor_decisive") is True
-                    and evidence_meta.get("nutrition_authority_canonical") == authority
-                )
+                selected_authority = _current_nutrition_authority_receipt(
+                    product, _safe_dict(dimensions.get("evidence")))
                 selected_authority = selected_authority or _current_omega_authority_receipt(
                     product, _safe_dict(dimensions.get("evidence")))
                 if (not receipts and float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0
@@ -1650,13 +1670,48 @@ def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mappin
     evidence = _safe_dict(readiness.get("evidence"))
     if _is_ready(str(evidence.get("readiness") or "")):
         return False
-    if module not in _OWNER_SCOPED_EVIDENCE_MODULES | _AUTHORITY_PANEL_MODULES:
+    native_module = module in {"omega", "probiotic"}
+    if not native_module and module not in _OWNER_SCOPED_EVIDENCE_MODULES | _AUTHORITY_PANEL_MODULES:
         return True
     from evidence_resolver import evidence_required_canonicals
     required = {_norm(canonical) for canonical in evidence_required_canonicals(dict(product), module=module)}
     open_refs = set(_safe_list(evidence.get("not_yet_evaluated_row_refs")))
     open_rows = [row for row in _safe_list(evidence.get("ingredient_assessments"))
                  if isinstance(row, Mapping) and row.get("source_row_ref") in open_refs]
+    # Required-owner sets contain known identities only. A pending individual
+    # subject with no canonical identity cannot disappear from that question.
+    if any(not _norm(row.get("canonical_id"))
+           and row.get("state") == EVIDENCE_NOT_YET_EVALUATED
+           and row.get("evidence_applicability") in (None, EVIDENCE_APPLICABILITY_INDIVIDUAL)
+           for row in open_rows):
+        return True
+    if native_module:
+        # The native branch owns its own ingredient review. Its unused generic
+        # ledger cannot reopen that conclusion, but another required ingredient
+        # still needs its own review. Bind native identity to the full source row.
+        from evidence_resolver import _OMEGA_EVIDENCE_CANONICALS
+        from scoring_input_contract import get_evidence_subject_rows
+        source_rows = {_row_ref(row, index): row for index, row in
+                       enumerate(get_evidence_subject_rows(dict(product)))}
+        excluded_refs = set()
+        for row in open_rows:
+            ref = row.get("source_row_ref")
+            if row.get("evidence_applicability") not in (None, EVIDENCE_APPLICABILITY_INDIVIDUAL):
+                excluded_refs.add(ref)
+                continue
+            source = source_rows.get(ref)
+            if source is None or not row.get("canonical_id"):
+                continue
+            if ((module == "omega" and _norm(source.get("canonical_id")) in _OMEGA_EVIDENCE_CANONICALS)
+                    or (module == "probiotic" and is_probiotic_source_identity(source))):
+                excluded_refs.add(ref)
+        open_refs -= excluded_refs
+        open_rows = [row for row in open_rows if row.get("source_row_ref") in open_refs]
+        if not open_refs:
+            return False
+        if any(not row.get("canonical_id") for row in open_rows) or any(
+                ref not in source_rows for ref in open_refs):
+            return True
     return (not open_rows or len(open_rows) < len(open_refs)
             or any(_norm(row.get("canonical_id")) in required for row in open_rows)
             or _title_names_an_open_row(product, open_rows))
