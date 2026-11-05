@@ -768,3 +768,100 @@ def test_all_eaa_users_depend_on_group_reference_even_when_form_rejected(canonic
     row = {'canonical_id': canonical, 'form_match_status': status, 'mapped': False}
     product = {'ingredient_quality_data': {'ingredients_scorable': [row]}, 'evidence_data': {}}
     assert 'essential_amino_acids' in dependencies(product)['identifiers']
+
+
+@pytest.mark.parametrize('context_edit', ['population', 'additional_context'])
+def test_newly_applicable_context_matches_full_rebuild_and_reuses_unrelated_mapped_product(
+    tmp_path, monkeypatch, context_edit,
+):
+    """Identity discovery retains rejected record IDs before context eligibility.
+
+    Exercise the actual collector, applicability and Evidence scorer in both the
+    selective and full arms. An unrelated mapped/no-reference control must stay
+    reusable; inventing missing references on the related row would hide the
+    production collector's retention contract instead of testing it.
+    """
+    import clinical_applicability as clinical
+    import evidence_resolver as evidence
+    import pipeline_incremental as incremental
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.modules.generic_evidence import score_evidence
+    from test_evidence_resolver import _approved_test_source
+
+    source = _approved_test_source({
+        'id': 'TEST_CONTEXT_PROMOTION', 'study_type': 'rct_single',
+        'effect_direction': 'positive_strong', 'evidence_level': 'ingredient-human',
+        'score_contribution': 'tier_3',
+    }, name='Ginger')
+    source['study_contexts'][0]['population'] = {
+        'age_group': 'child', 'description': 'Synthetic child mechanics population'}
+    payload = {'_metadata': {'schema_version': 'synthetic'}, 'backed_clinical_studies': [source]}
+    path = tmp_path / 'scripts/data/backed_clinical_studies.json'
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps(payload))
+    monkeypatch.setattr(incremental, '_reference_data_files', lambda repo: [path])
+    monkeypatch.setattr(clinical, 'reviewed_entries', lambda: {source['id']: source})
+    monkeypatch.setattr(evidence, '_backed_studies_index', lambda: {'ginger': [source]})
+    monkeypatch.setattr(evidence, '_load_literature_evidence', lambda: {})
+    enricher = SupplementEnricherV3()
+    enricher.databases['backed_clinical_studies'] = payload
+
+    products = {}
+    for pid, canonical, name in [('1', 'ginger', 'Ginger'), ('2', 'magnesium', 'Magnesium')]:
+        row = {'name': name, 'standard_name': name, 'canonical_id': canonical,
+               'mapped': True, 'mapped_identity': True, 'scoreable_identity': True,
+               'identity_disposition': 'clean', 'source_section': 'active',
+               'cleaner_row_role': 'active_scorable', 'score_eligible_by_cleaner': True,
+               'role_classification': 'active_scorable', 'dose_class': 'therapeutic_mass',
+               'quantity': 500, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+        products[pid] = {'dsld_id': pid, 'product_name': name, 'form_factor': 'capsule',
+                         'activeIngredients': [row], 'evidence_data': {},
+                         'ingredient_quality_data': {'ingredients': [row],
+                             'ingredients_scorable': [row], 'total_active': 1}}
+    untouched = deepcopy(products)
+
+    def rebuild(pid):
+        product = deepcopy(products[pid])
+        product['evidence_data'] = enricher._collect_evidence_data(
+            product, product['ingredient_quality_data'])
+        # Persisted artifacts cannot borrow mutable context objects from a loader.
+        product = json.loads(json.dumps(product))
+        return deepcopy({'enriched': product, 'evidence': score_evidence(
+            product, apply_primary_floor=True, owner_scoped=True)})
+
+    prior_outputs = {pid: rebuild(pid) for pid in products}
+    prior_evidence = prior_outputs['1']['enriched']['evidence_data']
+    assert prior_evidence['clinical_matches'] == []
+    assert [row['id'] for row in prior_evidence['rejected_clinical_matches']] == [source['id']]
+    assert prior_outputs['2']['enriched']['evidence_data']['clinical_matches'] == []
+    assert prior_outputs['2']['enriched']['evidence_data']['rejected_clinical_matches'] == []
+    deps = {pid: incremental.dependencies(value['enriched']) for pid, value in prior_outputs.items()}
+    assert all(row['clinical_unresolved'] is False and row['unresolved'] is False for row in deps.values())
+    assert source['id'] in deps['1']['identifiers']
+    assert not set(deps['2']['identifiers']) & set(incremental.reference_identifiers(source))
+    old = baseline()
+    old['raw'] = {pid: digest(product) for pid, product in products.items()}
+    old['references'] = incremental.reference_snapshot(tmp_path)
+
+    if context_edit == 'additional_context':
+        source['study_contexts'].append(deepcopy(source['study_contexts'][0]))
+        source['study_contexts'][-1]['context_id'] += '_new'
+    source['study_contexts'][-1]['population'] = {
+        'age_group': 'adult', 'description': 'Synthetic adult mechanics population'}
+    path.write_text(json.dumps(payload))
+    current = deepcopy(old)
+    current['references'] = incremental.reference_snapshot(tmp_path)
+    reference_path = next(iter(old['references']))
+    assert old['references'][reference_path]['vocabulary'] == current['references'][reference_path]['vocabulary']
+    selected = incremental.plan_changes(old, current, products, deps)['stages']
+    assert selected == {'clean': [], 'enrich': ['1'], 'score': ['1']}
+
+    full_outputs = {pid: rebuild(pid) for pid in products}
+    selective_outputs = deepcopy(prior_outputs)
+    for pid in selected['enrich']:
+        selective_outputs[pid] = rebuild(pid)
+    assert selective_outputs == full_outputs
+    assert full_outputs['1']['evidence']['score'] > prior_outputs['1']['evidence']['score']
+    assert [row['id'] for row in full_outputs['1']['enriched']['evidence_data']['clinical_matches']] == [source['id']]
+    assert full_outputs['2'] == prior_outputs['2']
+    assert products == untouched

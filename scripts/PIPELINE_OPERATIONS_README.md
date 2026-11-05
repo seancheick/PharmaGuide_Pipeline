@@ -453,6 +453,20 @@ bash scripts/release_full.sh --force
 `--force` requests catalog assembly even when it would otherwise be reused. It
 does not bypass gates or turn stale prepared submission manifests into current ones.
 
+`--supabase-dry-run` is a diagnostic preview, not publication qualification. Its
+structured result can report `publication_qualification.passed = false` while the
+preview itself finishes successfully. Do not use that exit code as release approval.
+For a strict, read-only publication check, call the existing publication owner:
+
+```bash
+source scripts/python_env.sh
+PYTHONPATH=scripts "$PG_PYTHON" -c 'import sys; from sync_to_supabase import validate_catalog_publication; print(validate_catalog_publication(sys.argv[1]))' scripts/dist
+```
+
+This raises and exits nonzero on missing/stale receipts, a source/export mismatch
+or an unmet fixed-cohort completion target. It uploads nothing and does not create
+a Supabase client. A passing result still does not replace signing or device checks.
+
 ### Diagnostic high-resolution DSLD images
 
 The shipped catalog keeps the 900px WebP thumbnails. For OCR experiments,
