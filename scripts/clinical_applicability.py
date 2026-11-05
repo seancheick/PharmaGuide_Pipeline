@@ -423,7 +423,7 @@ def _matched_excluded_claim_terms(product: Mapping, terms: list[str]) -> list[st
     titles = {str(product.get(field) or "") for field in ("product_name", "fullName")} - {""}
     clauses = [(text in titles, clause) for text in native_product_positioning_texts(product)
                if text and text not in excluded
-               for clause in re.split(r"[.;!?\r\n]+", text) if not _PRECAUTION_CLAUSE.search(clause)]
+               for clause in _affirmative_claim_clauses(text) if not _PRECAUTION_CLAUSE.search(clause)]
     matched = []
     for term in terms:
         words = _key(term).split()
@@ -478,6 +478,40 @@ _POSITIONING_NEGATION = re.compile(
     r"\b(?:no|not|without|avoid|never|won'?t|don'?t|doesn'?t|free\s+(?:of|from))\b", re.I)
 
 
+# A claim's subject can precede its negated predicate ("Sleep is not improved").
+# This is label-claim grammar only: a negative clinical outcome still names its
+# research topic, and ingredient absence/identity matching keeps its own rules.
+_CLAIM_NEGATED_PREDICATE = re.compile(
+    r"\b(?:not|never|cannot|(?:is|are|was|were|do|does|did|ca|could|wo|would|should|has|have)n['’]t)\s+"
+    r"(?:(?:be|been|being|significantly|clinically|meaningfully|consistently|actually|ever)\s+){0,3}"
+    r"(?:improv\w*|support\w*|promot\w*|enhanc\w*|boost\w*|help\w*|maintain\w*|"
+    r"increas\w*|reduc\w*|reliev\w*|treat\w*|prevent\w*|effective|beneficial|"
+    r"shown|demonstrated|proven|established|achieved)\b", re.I)
+
+
+def _affirmative_claim_clauses(text: str) -> list[str]:
+    """Claim-only affirmative clauses, preserving harmless trailing qualifiers."""
+    clauses = re.split(
+        r"[.;!?\r\n]+|\b(?:but|however)\b"
+        r"|,\s*(?:and\s+)?(?=(?:supports?|promotes?|helps?|maintains?)\b)",
+        text, flags=re.I,
+    )
+    result = []
+    for clause in clauses:
+        suffix = _CLAIM_NEGATED_PREDICATE.search(clause)
+        if suffix:
+            # A separate affirmative predicate/noun before a conjunction keeps
+            # its own claim; bare coordinated subjects share the negation.
+            boundaries = list(re.finditer(r",|\b(?:and|or)\b", clause[:suffix.start()], re.I))
+            prior = clause[:boundaries[-1].start()] if boundaries else ""
+            if not re.search(r"\b(?:" + _CLAIM_VERB + r"\w*|" + _CLAIM_NOUN + r")\b", prior, re.I):
+                continue
+            clause = prior
+        negation = _POSITIONING_NEGATION.search(clause)
+        result.append(clause[:negation.start()] if negation else clause)
+    return result
+
+
 # Who a product is for is population targeting, judged against the studied
 # population; it is never a claimed outcome ("Baby Probiotic", "Women's Multi").
 _POPULATION_WORDS = re.compile(
@@ -498,7 +532,8 @@ _GENERAL_WELLNESS = re.compile(
 
 def _claimed_purposes(text: str) -> set[str]:
     from evidence_resolver import evidence_indication_categories
-    return evidence_indication_categories(_POPULATION_WORDS.sub(" ", text))
+    return set().union(*(evidence_indication_categories(_POPULATION_WORDS.sub(" ", clause))
+                         for clause in _affirmative_claim_clauses(text)))
 
 
 def native_product_positioning_categories(product: Mapping, *, purposes_only: bool = False) -> set[str]:
@@ -524,19 +559,9 @@ def _positioning_claims(product: Mapping, *, purposes_only: bool = False) -> tup
     for text in native_product_positioning_texts(product):
         if not text or text in excluded:
             continue
-        # A comma followed by a new affirmative predicate ends the previous
-        # qualifier (for example, "without caffeine, and promotes sleep").
-        clauses = re.split(
-            r"[.;!?\r\n]+|\b(?:but|however)\b"
-            r"|,\s*(?:and\s+)?(?=(?:supports?|promotes?|helps?|maintains?)\b)",
-            text,
-            flags=re.I,
-        )
-        for clause in clauses:
-            if _PRECAUTION_CLAUSE.search(clause):
+        for affirmative in _affirmative_claim_clauses(text):
+            if _PRECAUTION_CLAUSE.search(affirmative):
                 continue
-            negation = _POSITIONING_NEGATION.search(clause)
-            affirmative = clause[:negation.start()] if negation else clause
             found = categorize(affirmative)
             categories |= found
             unclassified |= (not found and bool(_POSITIONING_FUNCTION.search(affirmative))
@@ -656,8 +681,9 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
         pattern = re.compile(r"(?<!\w)" + r"[\s_-]+".join(re.escape(word) for word in condition.split()) + r"(?!\w)", re.I)
         # Names and warnings about a condition are not a claimed product purpose.
         excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
-        if any(text and text not in excluded and find_affirmative_label_match(pattern, text)
-               for text in native_product_positioning_texts(product)):
+        if any(text and text not in excluded and find_affirmative_label_match(pattern, clause)
+               for text in native_product_positioning_texts(product)
+               for clause in _affirmative_claim_clauses(text)):
             return {"state": "aligned", "sources": ["affirmative_exact_source_condition_claim"]}
     # A purpose the label attributes to this ingredient governs; unattributed
     # product positioning stands in only when the ingredient has no claim.
