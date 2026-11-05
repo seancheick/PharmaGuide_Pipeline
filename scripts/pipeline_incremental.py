@@ -445,6 +445,15 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
     directories = stage_directories(prefix)
     raw_binding = stage_data_fingerprint(stage_data_files(raw_dir))
     raw, raw_names = raw_products(raw_dir, include_paths=True)
+    raw_bytes = {key: (raw_dir / name).read_bytes() for key, name in raw_names.items()}
+    if any(json.loads(raw_bytes[key]) != value for key, value in raw.items()):
+        raise StageManifestError("Raw objects differ from their captured source bytes")
+    captured_hashes = {raw_dir / raw_names[key]: hashlib.sha256(content).digest()
+                       for key, content in raw_bytes.items()}
+    if stage_data_fingerprint(captured_hashes, content_hashes=captured_hashes) != raw_binding:
+        raise StageManifestError("Captured raw bytes differ from the planning source inventory")
+    raw_files = {key: stage_data_fingerprint([raw_dir / name], content_hashes=captured_hashes)
+                 for key, name in raw_names.items()}
     current = current_snapshot(repo)
     if stage_data_fingerprint(stage_data_files(raw_dir)) != raw_binding:
         raise StageManifestError("Raw inputs changed while reading the planning snapshot")
@@ -502,12 +511,25 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
         }
     dependency_rows = {key: dependencies(value) for key, value in products["enrich"].items()}
     plan = plan_changes(old, current, raw, dependency_rows)
+    if state_path.exists() and raw_binding != old["inputs"]["clean"]:
+        # Parsed equality cannot establish byte/path lineage. Re-run Clean
+        # for changed source files, then let actual Clean changes select
+        # downstream work. Older generations lack per-file proof: recheck
+        # their dataset conservatively rather than inventing provenance.
+        affected = {key for key in raw
+                    if old.get("raw_files", {}).get(key) != raw_files[key]}
+        if not affected and not plan["deleted"]:
+            raise StageManifestError("Raw inventory changed without a matching per-file proof")
+        plan["stages"]["clean"] = sorted(set(plan["stages"]["clean"]) | affected)
+        plan["pending_identity_recheck"] = sorted(set(plan["pending_identity_recheck"]) | affected)
+        plan["reasons"].append("raw file bytes or filenames changed: recheck Clean lineage")
     if plan_only:
         return plan
     if (state_path.exists() and not plan["deleted"]
             and not any(plan["stages"].values())
             and old["stages"] == current["stages"]
-            and old["references"] == current["references"]):
+            and old["references"] == current["references"]
+            and raw_binding == old["inputs"]["clean"]):
         return plan
 
     source_binding = digest(current)
@@ -533,7 +555,7 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
                 if stage == "clean":
                     for key, value in selected_rows.items():
                         # Execute the same parsed label snapshot that was planned.
-                        (input_dir / raw_names[key]).write_text(json.dumps(value, ensure_ascii=False))
+                        (input_dir / raw_names[key]).write_bytes(raw_bytes[key])
                     output = stage_workspace / "result"
                     success = runner.run_clean(str(input_dir), str(output))
                     result_dir = output / "cleaned"
@@ -594,6 +616,7 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
             if {key: digest(value) for key, value in verified.items()} != owned_binding[stage]:
                 raise StageManifestError("Prior stage outputs changed during incremental execution")
         state = {**current, "raw": {key: digest(value) for key, value in raw.items()},
+                 "raw_files": raw_files,
                  "outputs": {stage: {key: digest(value) for key, value in rows.items()}
                              for stage, rows in products.items()},
                  "inputs": {

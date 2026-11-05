@@ -1,5 +1,11 @@
 ## November 4 — active Claude audit and repairs
 
+## November 5 — raw provenance audit follow-up
+
+Owner: `pipeline_freshness.py::stage_data_fingerprint` remains the byte/inventory authority; `pipeline_incremental.py::_run_locked` extends its existing internal reuse proof. Will NOT create another freshness system or restamp changed raw inputs without Clean execution. Infrastructure class, producer/scoring policy unchanged.
+
+External audit424ab5e3 identified formatting-only and filename-only raw changes escaping the no-work shortcut. Both regressions failed before the fix. Captured original bytes now drive the isolated Clean input, and per-label source fingerprints identify exactly which files need rechecking. Actual Clean changes determine downstream work; older generations without per-file proof recheck dataset Clean conservatively. Adversarial replay also reproduced a transient raw edit restored before the live recheck. The captured byte/inventory aggregate must now equal the original planning binding, preventing that race. Current focused owner/CLI/manifest/batch slice:103 passed; Ruff and Python correctness0new/10existing. Independent review and exact-candidate CI/integration pending. Operator pipeline has exited, outputs/logs are preserved, normal main synchronized; no new corpus run or publication started.
+
 ## November 5 — incremental pipeline implementation
 
 Owner: existing `PipelineRunner` dispatch, delegated internal execution helper `pipeline_incremental.py`, existing `pipeline_freshness.py` fingerprints and `stage_manifest.py` output authority. Evidence: normal CLI/entrypoint tests and isolated full-versus-incremental comparisons. Will NOT create another scorer, clinical registry or manual freshness exception.
