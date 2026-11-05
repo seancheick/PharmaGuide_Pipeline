@@ -817,6 +817,8 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
     description = population["description"]
     title = _route_product_label_text(dict(product))
     groups = product.get("targetGroups") or []
+    if isinstance(groups, str):
+        groups = [groups]
     children = label_is_for_children(dict(product))
     group_texts = [_target_group_text(group) for group in groups]
     # Affirmative targeting only: "Not for use during pregnancy", "Women (not
