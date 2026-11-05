@@ -217,3 +217,75 @@ def test_release_dependencies_are_queued_even_when_readiness_is_complete(tmp_pat
     write_stage_manifest(stage, 'score', [path], run_id='mismatched-score-test')
     with pytest.raises(AssessmentReadinessShadowError, match='cohorts differ'):
         build_shadow_report(tmp_path, scored_products_dir=tmp_path)
+
+
+def test_product_register_retains_complete_partial_and_scored_states(tmp_path: Path) -> None:
+    products = [_product(pid, _row("Magnesium", "magnesium"))
+                for pid in ("complete", "partial", "unscored", "suppressed")]
+    products[1]["ingredient_quality_data"]["ingredients"][0].update({
+        "plant_part": None, "preparation": "aqueous extract", "population": None})
+    products[1]["brand"] = {"name": "Source brand"}
+    products[1]["evidence_data"]["trial_payload"] = {"abstract": "x" * 1_000_000}
+    products[1]["evidence_data"]["sources"] = [{"id": "study-a", "pmid": "123",
+        "approval_status": "pending", "scope": {"population": None, "purpose": "sleep"}}]
+    _write_stage(tmp_path, products)
+    scored = []
+    for product in products:
+        pid = product["dsld_id"]
+        scored.append({"dsld_id": pid,
+            "quality_assessment_status": "complete" if pid == "complete" else "partial",
+            "quality_score_status": {"unscored": "not_scored", "suppressed": "suppressed_safety"}.get(pid, "scored"),
+            "score_unavailable_reason": "identity_unknown" if pid == "unscored" else None,
+            "product_safety_status": "blocked" if pid == "suppressed" else "no_known_concerns",
+            "quality_pillars_v4": {"evidence": {"evidence_result_state": "no_qualifying_evidence", "display_state": "reviewed"}},
+            "assessment_readiness": {"release_assessment": {
+                "is_complete": pid == "complete", "blockers": [] if pid == "complete" else ["first:material", "second:study"]}},
+            "_v4_module_breakdown": {"evidence": {"source_assessments": [{"source_id": "study", "population": None}]}}})
+    stage = tmp_path / "output_Test_scored" / "scored"
+    stage.mkdir(parents=True)
+    path = stage / "scored_batch_1.json"
+    path.write_text(json.dumps(scored))
+    write_stage_manifest(stage, "score", [path], run_id="register-test")
+    before = {p: p.read_bytes() for p in tmp_path.rglob("*.json")}
+    report = build_shadow_report(tmp_path, scored_products_dir=tmp_path)
+    register = {row["dsld_id"]: row for row in report["product_register"]}
+    assert set(register) == {"complete", "partial", "unscored", "suppressed"}
+    assert register["partial"]["source_assessments"]["evidence_subject_rows"][0]["preparation"] == "aqueous extract"
+    assert register["partial"]["source_assessments"]["evidence_subject_rows"][0]["population"] is None
+    assert "ingredient_quality_data" not in register["partial"]["source_assessments"]
+    assert register["partial"]["source_assessments"]["evidence_references"]["sources"] == products[1]["evidence_data"]["sources"]
+    assert "trial_payload" not in register["partial"]["source_assessments"]["evidence_references"]
+    assert len(json.dumps(report)) < 100_000
+    assert register["partial"]["brand"] == {"name": "Source brand"}
+    assert register["partial"]["owner_readiness"]["is_live_ready"] is True
+    assert register["partial"]["scored"]["assessment_readiness"]["release_assessment"]["blockers"] == ["first:material", "second:study"]
+    assert register["complete"]["scored"]["quality_pillars_v4"] == scored[0]["quality_pillars_v4"]
+    assert register["unscored"]["scored"]["score_unavailable_reason"] == "identity_unknown"
+    assert register["suppressed"]["scored"]["product_safety_status"] == "blocked"
+    assert register["partial"]["scored"]["module_evidence_facts"] == scored[1]["_v4_module_breakdown"]
+    for row in register.values():
+        assert row["source"]["artifact_sha256"] == report["stages"][0]["owned_files"][0]["sha256"]
+        assert row["source"]["manifest_sha256"] == report["stages"][0]["manifest_sha256"]
+        assert row["scored"]["source"]["artifact_sha256"]
+    assert report["scored_summary"]["quality_assessment_status_counts"] == {"complete": 1, "partial": 3}
+    assert sum(row["product_count"] for row in report["scored_summary"]["status_cross_tab"]) == 4
+    assert report["scored_summary"]["release_blocker_counts"] == {"first:material": 3, "second:study": 3}
+    assert all(p.read_bytes() == content for p, content in before.items())
+
+
+def test_exact_register_rejects_duplicate_enriched_ids(tmp_path: Path) -> None:
+    product = _product("duplicate", _row("Magnesium", "magnesium"))
+    _write_stage(tmp_path, [product, product])
+    with pytest.raises(AssessmentReadinessShadowError, match="duplicate enriched product ID"):
+        build_shadow_report(tmp_path)
+
+
+def test_exact_register_rejects_duplicate_scored_ids(tmp_path: Path) -> None:
+    _write_stage(tmp_path, [_product("one", _row("Magnesium", "magnesium"))])
+    stage = tmp_path / "output_Test_scored" / "scored"
+    stage.mkdir(parents=True)
+    path = stage / "scored_batch_1.json"
+    path.write_text(json.dumps([{"dsld_id": "one"}, {"dsld_id": "one"}]))
+    write_stage_manifest(stage, "score", [path], run_id="duplicate-test")
+    with pytest.raises(AssessmentReadinessShadowError, match="duplicate scored product ID"):
+        build_shadow_report(tmp_path, scored_products_dir=tmp_path)
