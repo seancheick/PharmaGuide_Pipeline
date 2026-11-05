@@ -131,7 +131,8 @@ logger = logging.getLogger(__name__)
 EXPORT_SCHEMA_VERSION = "2.5.0"  # additive claimed/verified certification contract (2.4.0 still importable)
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
-MIN_APP_VERSION = "1.0.0"
+# Typed safety assessment and shared dose/warning readers first ship in 1.0.1.
+MIN_APP_VERSION = "1.0.1"
 EXPORT_COMMIT_EVERY = 2000
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 CATALOG_BRAND_REGISTRY_PATH = Path(__file__).resolve().parent / "data" / "catalog_brand_registry.json"

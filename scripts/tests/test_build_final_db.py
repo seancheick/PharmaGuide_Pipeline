@@ -7221,3 +7221,17 @@ def test_catalog_exclusions_hold_exactly_the_approved_list():
     # Sold to be taken as supplements, so they stay listed in the catalog, unscored.
     for sold_as_a_supplement in ("252842", "252847", "252849", "270737", "329726", "330001", "16765"):
         assert sold_as_a_supplement not in exclusions
+
+
+def test_current_catalog_requires_typed_safety_reader(tmp_path):
+    result, out = _run_build(
+        tmp_path, [make_enriched()], [_artifact_from_canned("999", _canned_v4())],
+    )
+    assert result["error_count"] == 0
+    manifest = json.loads((out / "export_manifest.json").read_text())
+    with sqlite3.connect(out / "pharmaguide_core.db") as con:
+        minimum = con.execute(
+            "SELECT value FROM export_manifest WHERE key = 'min_app_version'"
+        ).fetchone()[0]
+    assert minimum == "1.0.1"
+    assert manifest["min_app_version"] == minimum

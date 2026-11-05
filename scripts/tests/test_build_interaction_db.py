@@ -1044,3 +1044,31 @@ def test_source_identity_rules_export_only_their_evaluated_blob_result(build_ctx
         con.close()
     assert [r['rule_id'] for r in rows] == ['RULE_TEST_MAGNESIUM_DIABETES']
     assert '_identity_conflict_only' not in rows[0]['rule_json']
+
+
+@pytest.mark.parametrize("entrypoint", ["context", "cli"])
+def test_current_rules_require_shared_warning_reader(build_ctx, entrypoint):
+    if entrypoint == "context":
+        values = vars(build_ctx).copy()
+        del values["min_app_version"]
+        ctx = bid.BuildContext(**values)
+        bid.run_build(ctx)
+    else:
+        bid.main([
+            "--normalized-drafts", str(build_ctx.normalized_drafts_path),
+            "--research-pairs", str(build_ctx.research_pairs_path),
+            "--drug-classes", str(build_ctx.drug_classes_path),
+            "--overrides", str(build_ctx.overrides_path),
+            "--profile-warning-rules", str(build_ctx.profile_warning_rules_path),
+            "--output", str(build_ctx.output_db),
+            "--manifest", str(build_ctx.manifest_path),
+            "--report", str(build_ctx.report_path),
+            "--interaction-db-version", build_ctx.interaction_db_version,
+        ])
+    with sqlite3.connect(build_ctx.output_db) as con:
+        minimum = con.execute(
+            "SELECT value FROM interaction_db_metadata WHERE key = 'min_app_version'"
+        ).fetchone()[0]
+    assert minimum == "1.0.1"
+    manifest = json.loads(build_ctx.manifest_path.read_text())
+    assert manifest["min_app_version"] == minimum
