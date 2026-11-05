@@ -1055,7 +1055,16 @@ def main():
                 for outcome in qualified.get("outcomes", []):
                     if outcome["name"] == correction[0]:
                         outcome["hierarchy"] = correction[1]
-            assert current in (row, expected, reviewed, qualified), (
+            annotated = deepcopy(qualified)
+            if correction:
+                annotated["authoring_method"] += (
+                    "; 2026-11-05 Codex agent factual transcription: serum_cytokines hierarchy unresolved -> secondary; "
+                    "full text https://pmc.ncbi.nlm.nih.gov/articles/PMC6704184/, Methods / Efficacy and safety "
+                    "measurement criteria explicitly lists serum biomarkers as secondary; null direction retained. "
+                    "Root Codex agent independent factual source review completed 2026-11-05; original clinical "
+                    "approval unchanged; no new clinician sign-off. Review trail: scripts/audits/pending_items_20260926/"
+                    "COMPLETION_TRUTH_RECEIPTS_20261105.md#correction-specific-probiotic-source-review")
+            assert current in (row, expected, reviewed, qualified, annotated), (
                 f"Wave 2 is marked applied but {row['context_id']} differs or is missing")
             assert owner in entries and row["context_id"] in {
                 c.get("context_id") for c in entries[owner].get("study_contexts", [])

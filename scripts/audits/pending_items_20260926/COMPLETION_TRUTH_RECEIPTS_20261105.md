@@ -28,3 +28,29 @@ Original census: 15,447 labels, 7,047 partial and 61 false-complete labels, a di
 The projection of 71 native labels projection did not recompute numeric scores or full scored artifacts. It is explicitly distinct from the 61 full owner rescores. Neither 8,339 nor any other derived remainder is presented as globally verified genuinely complete. The 29 and 5 bounded closures are not automatically subtracted from the frozen partition or treated as release permission.
 
 Receipt digest: `88443e755b4c53c15ad96f1a9de4b2672d4c1c9d68fe783e54297b6c81f2118e`.
+
+## Correction-specific probiotic source review
+
+Factual transcription: Codex agent, 2026-11-05. Independent primary-source factual review: root Codex agent, completed 2026-11-05. These source-reporting corrections preserve the original clinical approval and its attribution; neither agent supplies a new clinician sign-off. The existing `authoring_method` fields retain earlier history and link to this section.
+
+| Context / outcome | Recorded correction | Full-text location and rationale |
+|---|---|---|
+| `is2_adult_ibs_multicenter_31434935` / `serum_cytokines` | `unresolved` → `secondary`; surrogate kind and null direction retained | [PMID 31434935 full text](https://pmc.ncbi.nlm.nih.gov/articles/PMC6704184/), Methods → Efficacy and safety measurement criteria. Serum biomarkers are explicitly listed among secondary efficacy outcomes. |
+| `p299v_ibs_rome3_22912552` / `global_symptom_rating` | `unresolved` → `not_reported`; clinical kind and positive direction retained | [PMID 22912552 publisher full text](https://www.wjgnet.com/1007-9327/full/v18/i30/4012.htm), Materials and Methods → Assessments and study endpoints; Results → Overall assessment. Global opinions are recorded without an explicit primary/secondary designation. `not_reported` records that reporting limit, without inventing a hierarchy. |
+
+Original approval remains unchanged: IS2 retains Sean B's recorded approval of the September 14 research review, dated 2026-09-14T22:23:43Z; P299v retains Dr. Pham's recorded 2026-10-26 approval with limits. No efficacy direction, population, preparation, dose, applicability exclusion, scoring eligibility or safety fact changes in this annotation batch. Earlier replay/source receipts above remain bound to their original snapshots.
+
+Annotation-candidate requalification: all 39 captured candidate Enrich records passed the current `build_scored_artifact` scorer/assembler; no raw, Clean or Enrich stage rerun. The 29 closures, two remaining blockers (`240117`, `242572`) and eight controls match their captured candidate. All numeric pillars/totals, tiers, safety and warnings are unchanged. Control IDs: `1650`, `173776`, `178450`, `178453`, `178595`, `187630`, `298074`, `59635`; only `1650` and `59635` remain partial. The private detailed receipt retains all 39 exact input and before/after values, with SHA-256 `e27588586e607f6f14dafd4f0de5ce5788d60bec2bde2c47a607c57ba05f9cc2`. This additional metadata-bound check does not restamp earlier producer receipts.
+
+Current annotation-candidate source hashes (SHA-256):
+
+| Owner/reference | SHA-256 |
+|---|---|
+| `scripts/assessment_readiness.py` | `5cd68fee77a958e740a05697309127390f5b7fe8e21ff998064cc8551dacb0d4` |
+| `scripts/clinical_evidence_schema.py` | `4ab251ccc7a58017a2fa86ab088f63981decd0a26958c88259aa0d6332fff40f` |
+| `scripts/data/clinically_relevant_strains.json` | `af7b44ad9d1fc499680a28ce8a4eb93ee77fd5d64a0fd0cd32994f13a5e1a3b7` |
+| `scripts/evidence_resolver.py` | `1685e1b172ec32ec737dfef2ce6542d48fe78b0aaca6ecbdc9db5136caa32a17` |
+| `scripts/probiotic_measurements.py` | `ae646adddc20fbc04999cef1c973e5b9f5a9d428b362b439bdfec5d146f66857` |
+| `scripts/scoring_input_contract.py` | `0cd086229d5d1ff97c520454d7a149a4eb928673e42e5270577cfcf1bf371593` |
+| `scripts/scoring_v4/scored_artifact.py` | `a4f0e1915a0d784d0cc0e1ea80d4ec040a7a34bf1203971cd8ee4bfbcb868458` |
+| `scripts/studied_formulas.py` | `5229f80519b76a670b6f226bc51699ea0f3fd9922be944904b4a7e278f798f62` |
