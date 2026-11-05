@@ -465,7 +465,7 @@ def test_missing_safety_gate_is_not_reported_as_no_known_concern() -> None:
     ("quality_status", "expected"),
     [
         ("scored", "partial"),
-        ("suppressed_safety", "complete"),
+        ("suppressed_safety", "partial"),
         ("not_scored", "partial"),
         ("unexpected", "failed"),
     ],
@@ -628,3 +628,23 @@ def test_scored_completeness_consumes_existing_release_owner(monkeypatch, is_com
     assert artifact["quality_assessment_status"] == expected
     assert artifact["quality_score_v4_100"] == 82.0
     assert artifact["product_safety_status"] == "no_known_catalog_concern"
+
+
+@pytest.mark.parametrize("verification_complete", [True, False])
+def test_safety_suppression_does_not_complete_unfinished_release(verification_complete):
+    result = _canned_v4(status="suppressed_safety", verdict="BLOCKED", safety_verdict="BLOCKED")
+    result["v4_breakdown"]["assessment_readiness"] = {
+        name: {"readiness": "complete"} for name in
+        ("identity", "dose", "evidence", "verification", "route")}
+    result["v4_breakdown"]["assessment_readiness"]["verification"]["readiness"] = (
+        "complete" if verification_complete else "incomplete")
+    result["v4_breakdown"]["module"] = {"module": "omega", "dimensions": {
+        "evidence": {"score": 14, "metadata": {"evidence_result_state": "evaluated_applicable"}}}}
+    artifact = scored_artifact.assemble_scored_artifact(_product(), result)
+    assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is verification_complete
+    assert artifact["quality_assessment_status"] == ("complete" if verification_complete else "partial")
+    assert artifact["quality_score_status"] == "suppressed_safety"
+    assert artifact["quality_score_v4_100"] is None
+    assert artifact["quality_pillars_v4"] is None
+    assert artifact["product_safety_status"] == "blocked"
+    assert artifact["safety_verdict"] == "BLOCKED"
