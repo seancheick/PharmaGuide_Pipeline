@@ -335,3 +335,21 @@ def test_share_metadata_never_repairs_missing_canonical_score_from_mirror():
     assert "/100" not in share["share_title"]
     assert "good quality" not in share["share_description"].lower()
     assert "Quality score unavailable" in share["share_description"]
+
+
+@pytest.mark.parametrize("score", [True, False])
+def test_share_metadata_rejects_boolean_canonical_numbers(score):
+    scored = {"quality_score_v4_100": score, "score_100_equivalent": 80,
+              "quality_score_status": "scored", "quality_assessment_status": "complete", "grade": "Good"}
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    assert "/100" not in share["share_title"]
+    assert "good quality" not in share["share_description"].lower()
+    assert "Quality score unavailable" in share["share_description"]
+
+
+@pytest.mark.parametrize("score", ["0", "100"])
+def test_share_metadata_preserves_existing_numeric_string_contract(score):
+    scored = {"quality_score_v4_100": score, "quality_score_status": "scored",
+              "quality_assessment_status": "complete", "grade": "Good"}
+    share = generate_share_metadata({"product_name": "Label"}, scored)
+    assert f" - {score}/100" in share["share_title"]

@@ -9211,7 +9211,8 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     """
     product_name = safe_str(enriched.get("product_name"))
     brand_name = resolve_catalog_brand(enriched).display_brand
-    score_100 = safe_float(scored.get("quality_score_v4_100"))
+    score_value = scored.get("quality_score_v4_100")
+    score_100 = None if isinstance(score_value, bool) else safe_float(score_value)
     quality_status = safe_str(scored.get("quality_score_status")).lower()
     assessment_open = safe_str(scored.get("quality_assessment_status")).lower() != "complete"
     safety_blocked = safe_str(scored.get("product_safety_status")).lower() in {"blocked", "unsafe"}
