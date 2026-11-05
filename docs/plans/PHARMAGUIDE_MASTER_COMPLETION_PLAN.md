@@ -14,6 +14,8 @@ User-supplied follow-up audit reproduced two additional resume defects: file-cou
 
 The requested interrupted-write probe found partial batch output could be adopted twice by legacy resume. Resume now requires valid canonical output ownership before invoking a worker, including when a state file survives but every output is missing. Invalid ownership requires a fresh repair without altering retained files. Explicit empty-generation validation is opt-in at this caller; strict consumers keep their existing defaults. Eighty owner tests pass, including actual failed-write/resume probes and valid empty controls. Final combined checks and final-source CI remain the integration gate.
 
+Final automated review also reproduced Unicode JSONL separators, removed IDs appearing in held reports, and the success-rate gate incorrectly using only a selected retry slice. JSONL now splits only on physical newlines, deleted holds are omitted, and the single existing configured processing gate applies to the full verified merged dataset. Selected workers defer only rate evaluation; write/report/completion failures still return failure and stop promotion. Tests use genuinely qualifying inventories, retain configured-threshold rejection and verify persistent errors do not block unrelated valid changes. No threshold is lowered.
+
 The interrupted operator run exposed the same executor defect on BulkSupplements (4,049 successful, one incomplete, no errors) and Emergen_C (133 successful, one incomplete, no errors). Sean stopped the run to integrate this repair. These observations do not change catalog completeness or publication qualification.
 
 ## Active target — 99% scientific completion and honest public ratings (November 5)
