@@ -1535,6 +1535,8 @@ def evaluate_release_assessment(
               or (not _is_ready(str(_safe_dict(readiness.get("evidence")).get("readiness") or ""))
                   and _dose_rests_on_a_hidden_amount(module_breakdown))):
             blockers.append("evidence_assessment_incomplete")
+        if module in {"omega", "probiotic"} and _required_evidence_review_open(product, readiness, module):
+            blockers.append("evidence_assessment_incomplete")
         # The scoring owner records only records used by the winning generic
         # path. Missing applicability cannot publish provisional legacy credit.
         if module in {"generic", "sports", "fiber_digestive"}:
@@ -1650,13 +1652,41 @@ def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mappin
     evidence = _safe_dict(readiness.get("evidence"))
     if _is_ready(str(evidence.get("readiness") or "")):
         return False
-    if module not in _OWNER_SCOPED_EVIDENCE_MODULES | _AUTHORITY_PANEL_MODULES:
+    native_module = module in {"omega", "probiotic"}
+    if not native_module and module not in _OWNER_SCOPED_EVIDENCE_MODULES | _AUTHORITY_PANEL_MODULES:
         return True
     from evidence_resolver import evidence_required_canonicals
     required = {_norm(canonical) for canonical in evidence_required_canonicals(dict(product), module=module)}
     open_refs = set(_safe_list(evidence.get("not_yet_evaluated_row_refs")))
     open_rows = [row for row in _safe_list(evidence.get("ingredient_assessments"))
                  if isinstance(row, Mapping) and row.get("source_row_ref") in open_refs]
+    if native_module:
+        # The native branch owns its own ingredient review. Its unused generic
+        # ledger cannot reopen that conclusion, but another required ingredient
+        # still needs its own review. Bind native identity to the full source row.
+        from evidence_resolver import _OMEGA_EVIDENCE_CANONICALS
+        from scoring_input_contract import get_evidence_subject_rows
+        source_rows = {_row_ref(row, index): row for index, row in
+                       enumerate(get_evidence_subject_rows(dict(product)))}
+        excluded_refs = set()
+        for row in open_rows:
+            ref = row.get("source_row_ref")
+            if row.get("evidence_applicability") not in (None, EVIDENCE_APPLICABILITY_INDIVIDUAL):
+                excluded_refs.add(ref)
+                continue
+            source = source_rows.get(ref)
+            if source is None or not row.get("canonical_id"):
+                continue
+            if ((module == "omega" and _norm(source.get("canonical_id")) in _OMEGA_EVIDENCE_CANONICALS)
+                    or (module == "probiotic" and is_probiotic_source_identity(source))):
+                excluded_refs.add(ref)
+        open_refs -= excluded_refs
+        open_rows = [row for row in open_rows if row.get("source_row_ref") in open_refs]
+        if not open_refs:
+            return False
+        if any(not row.get("canonical_id") for row in open_rows) or any(
+                ref not in source_rows for ref in open_refs):
+            return True
     return (not open_rows or len(open_rows) < len(open_refs)
             or any(_norm(row.get("canonical_id")) in required for row in open_rows)
             or _title_names_an_open_row(product, open_rows))
