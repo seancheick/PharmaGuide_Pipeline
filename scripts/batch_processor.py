@@ -780,7 +780,7 @@ class BatchProcessor:
         # FIX 1+2: Skip already-processed files on resume
         processed_set = set(state.processed_file_paths or [])
         using_per_file_resume = False
-        if resume and processed_set:
+        if resume:
             original_count = len(files)
             files = [f for f in files if str(f) not in processed_set]
             skipped_count = original_count - len(files)
@@ -972,7 +972,8 @@ class BatchProcessor:
                         batch_unmapped,
                         batch_mapped
                     )
-                    processed_files.append(str(file_path))  # Track AFTER successful categorization
+                    if result.success:
+                        processed_files.append(str(file_path))
                 except Exception as e:
                     error_msg = f"Failed to categorize result for {file_path}: {str(e)}"
                     errors.append(error_msg)
@@ -1080,7 +1081,8 @@ class BatchProcessor:
                             batch_unmapped,
                             batch_mapped
                         )
-                        processed_files.append(str(file_path))  # Track AFTER successful categorization
+                        if result.success:
+                            processed_files.append(str(file_path))
                     except Exception as e:
                         error_msg = f"Failed to categorize result for {file_path}: {str(e)}"
                         errors.append(error_msg)

@@ -538,4 +538,78 @@ def test_actual_batch_attempt_inventory_counts_worker_and_categorization_failure
     assert summary['total_files'] == 2
     assert summary['results']['errors'] == 1
     assert summary['success_rate'] == 50.0
-    assert result['summary']['processed'] == (2 if failure == 'ordinary_error' else 1)
+    assert result['summary']['processed'] == 1
+    assert result['processed_files'] == [str(paths[0])]
+
+
+@pytest.mark.parametrize('workers', [1, 2])
+def test_item_error_is_not_marked_complete_for_legacy_resume(tmp_path, monkeypatch, workers):
+    import batch_processor as batch
+    processor = BatchProcessor(_make_config(tmp_path))
+    path = tmp_path / 'failed.json'
+    path.write_text(json.dumps({'id': 'failed'}))
+    monkeypatch.setattr(processor, '_effective_workers', lambda _: workers)
+    monkeypatch.setattr(processor, 'validate_input_file', lambda _: (True, ''))
+    monkeypatch.setattr(processor, '_write_batch_outputs', lambda *_: True)
+    monkeypatch.setattr(batch, 'init_worker', lambda *_: None)
+    failed = ProcessingResult(success=False, status='error', data=None,
+        file_path=str(path), raw_id='failed', error='Retryable processing error')
+    monkeypatch.setattr(batch, 'process_single_file_with_timeout', lambda *_: failed)
+    if workers == 2:
+        from concurrent.futures import Future
+        class CompletedPool:
+            def __init__(self, **kwargs):
+                pass
+            def __enter__(self):
+                return self
+            def __exit__(self, *args):
+                pass
+            def submit(self, *args):
+                future = Future()
+                future.set_result(failed)
+                return future
+        monkeypatch.setattr(batch, 'ProcessPoolExecutor', CompletedPool)
+    result = processor.process_batch(0, [path])
+    assert result['processed_files'] == []
+    assert result['summary']['processed'] == 0
+    summary = processor._generate_final_summary([result], 1.0)
+    assert summary['total_files'] == 1
+    assert summary['results']['errors'] == 1
+    assert summary['success_rate'] == 0
+    assert (processor.output_dir / 'errors' / 'failed_error.json').is_file()
+
+
+@pytest.mark.parametrize('include_success', [False, True], ids=['all_failed', 'mixed'])
+def test_actual_legacy_resume_retries_errors_and_preserves_successful_files(tmp_path, monkeypatch, include_success):
+    import batch_processor as batch
+    processor = BatchProcessor(_make_config(tmp_path))
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    files = [raw / 'bad.json']
+    if include_success:
+        files.insert(0, raw / 'good.json')
+    for path in files:
+        path.write_text(json.dumps({'id': path.stem}))
+    monkeypatch.setattr(processor, '_effective_workers', lambda _: 1)
+    monkeypatch.setattr(batch, 'init_worker', lambda *_: None)
+    seen = []
+    recovered = False
+    def process(filename, *_):
+        seen.append(Path(filename).stem)
+        success = recovered or Path(filename).stem != 'bad'
+        return ProcessingResult(success=success, status='success' if success else 'error',
+            data={'id': Path(filename).stem, 'activeIngredients': [], 'inactiveIngredients': []} if success else None,
+            file_path=filename, raw_id=Path(filename).stem,
+            error=None if success else 'Retryable item error')
+    monkeypatch.setattr(batch, 'process_single_file_with_timeout', process)
+    first = processor.process_all_files(files, resume=False)
+    assert first['results']['errors'] == 1
+    successful_files = {path: path.read_bytes() for path in (processor.output_dir / 'cleaned').glob('cleaned_batch_*.json')}
+    seen.clear()
+    recovered = True
+    second = processor.process_all_files(files, resume=True)
+    assert seen == ['bad']
+    assert second['results']['errors'] == 0
+    assert all(path.read_bytes() == content for path, content in successful_files.items())
+    state = processor.load_state()
+    assert set(state.processed_file_paths) == {str(path) for path in files}
