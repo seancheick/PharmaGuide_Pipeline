@@ -20,7 +20,7 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 from assessment_readiness import evaluate_assessment_readiness  # noqa: E402
-from scoring_input_contract import get_evidence_subject_rows  # noqa: E402
+from scoring_input_contract import get_evidence_subject_rows, scoring_input_scope  # noqa: E402
 from scoring_v4.router import class_for_product  # noqa: E402
 from stage_manifest import MANIFEST_NAME, StageManifestError, select_stage_files  # noqa: E402
 
@@ -302,11 +302,13 @@ def build_shadow_report(
                         f"Missing or duplicate enriched product ID: {dsld_id} in {source_file}"
                     )
                 product_id_counts[dsld_id] += 1
-                module = class_for_product(product)
-                readiness = evaluate_assessment_readiness(
-                    product,
-                    module=module,
-                )
+                with scoring_input_scope(product):
+                    module = class_for_product(product)
+                    readiness = evaluate_assessment_readiness(
+                        product,
+                        module=module,
+                    )
+                    source_assessments = _source_assessments(product)
                 product_register[dsld_id] = {
                     "dsld_id": dsld_id,
                     "product_name": product.get("product_name") or product.get("fullName") or "",
@@ -316,7 +318,7 @@ def build_shadow_report(
                                               stages[-1]["manifest_sha256"], row_index),
                     "source_product_sha256": hashlib.sha256(_canonical_bytes(product)).hexdigest(),
                     "owner_readiness": copy.deepcopy(readiness),
-                    "source_assessments": _source_assessments(product),
+                    "source_assessments": source_assessments,
                 }
                 # This is a report of the existing owner's decisions, never a
                 # second readiness classifier. Regeneration cannot close work:

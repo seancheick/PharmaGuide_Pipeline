@@ -408,3 +408,43 @@ def test_frozen_capture_rejects_external_symlink_before_reading(tmp_path: Path, 
     with pytest.raises(StageManifestError, match="outside stage directory"):
         build_shadow_report(tmp_path)
     assert opened == [stage / ".stage_manifest.json"]
+
+
+def test_shadow_reuses_owner_derivation_per_product_without_changing_report(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from collections import Counter
+    from contextlib import nullcontext
+    import scoring_input_contract
+    from audits import assessment_readiness_shadow
+
+    products = [_product("ready", _row("Magnesium", "magnesium")),
+                _product("pending", _row("Unreviewed Botanical", "unreviewed_botanical"))]
+    original_products = copy.deepcopy(products)
+    _write_stage(tmp_path, products)
+    before = {path: path.read_bytes() for path in tmp_path.rglob("*.json")}
+    builds = Counter()
+    build = scoring_input_contract._build_scoring_ingredients
+
+    def measured_build(product, *, strict=True, allow_legacy_fallback=False):
+        builds[(product.get("dsld_id"), strict, allow_legacy_fallback)] += 1
+        return build(product, strict=strict, allow_legacy_fallback=allow_legacy_fallback)
+
+    monkeypatch.setattr(scoring_input_contract, "_build_scoring_ingredients", measured_build)
+    report = build_shadow_report(tmp_path, generated_at="2026-11-05T00:00:00Z")
+    scoped_builds = builds.copy()
+    assert set(key[0] for key in scoped_builds) == {"ready", "pending"}
+    assert all(count == 1 for count in scoped_builds.values()), scoped_builds
+    assert report["product_register"][0]["owner_readiness"]["evidence"]["readiness"] == "incomplete"
+    assert report["product_register"][1]["owner_readiness"]["evidence"]["readiness"] == "complete"
+    import hashlib
+    rows = {row["dsld_id"]: row for row in report["product_register"]}
+    for product in products:
+        original_bytes = json.dumps(product, ensure_ascii=False, separators=(",", ":"), sort_keys=True).encode()
+        assert rows[product["dsld_id"]]["source_product_sha256"] == hashlib.sha256(original_bytes).hexdigest()
+
+    builds.clear()
+    monkeypatch.setattr(assessment_readiness_shadow, "scoring_input_scope", lambda product: nullcontext(), raising=False)
+    uncached = build_shadow_report(tmp_path, generated_at="2026-11-05T00:00:00Z")
+    assert uncached == report
+    assert sum(builds.values()) > sum(scoped_builds.values())
+    assert products == original_products
+    assert all(path.read_bytes() == content for path, content in before.items())
