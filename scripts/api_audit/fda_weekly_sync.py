@@ -168,7 +168,7 @@ SIGNAL_CATEGORIES = {
         "ephedra", "ephedrine", "pseudoephedrine",
         "methylsynephrine", "oxilofrine",
         "amphetamine", "methamphetamine",
-        "phenylethylamine", "pea",
+        "phenylethylamine",
     ],
     # Heavy metals and environmental contamination
     "heavy_metal_contamination": [
@@ -933,9 +933,12 @@ def extract_substances(record: dict) -> list:
     # Capture the whole ingredient list before splitting it. Commas and "and"
     # delimit names, not the span: stopping there silently dropped novel drugs.
     # End the span before explanatory clauses so those never become substances.
+    # Existing explanatory clauses may start inside parentheses. Other
+    # parentheses can belong to a chemical name or an ingredient list; do not
+    # turn those unparsed names into fabricated prefixes.
     list_span = (
         r"([a-z][a-z0-9\s\-,]+?)"
-        r"(?=\s*[\.;]|\s+(?:in|which|a)\s|"
+        r"(?=\s*[\.;]|\s+\(?(?:in|which|a)\s|"
         r"\s+and\s+(?:is|are|was|were|may|can|could|should|will|has|have|"
         r"causes?|increases?|reduces?|lowers?)\b|$)"
     )
@@ -950,7 +953,7 @@ def extract_substances(record: dict) -> list:
     ]
     for pat in patterns:
         for match in re.finditer(pat, text):
-            for candidate in re.split(r",\s*(?:and\s+)?|\s+and\s+", match.group(1)):
+            for candidate in re.split(r"(?:(?<!\d),|,(?!\d))\s*(?:and\s+)?|\s+and\s+", match.group(1)):
                 candidate = candidate.strip().rstrip(",")
                 # Strip common prefixes that aren't part of the substance name.
                 for prefix in ("undeclared ", "undisclosed ", "hidden "):

@@ -1792,6 +1792,31 @@ def test_publication_complete_is_independent_of_score_availability_and_safety(tm
     assert result['passed'] is True
 
 
+
+@pytest.mark.parametrize('complete,passes', [(2, False), (3, True)])
+def test_unfinished_blocked_record_is_retained_without_exempting_publication_target(
+    tmp_path, publication_case, complete, passes,
+):
+    import sync_to_supabase as syncer
+    db, receipts, _ = publication_case(count=4, complete=complete, minimum=3)
+    with sqlite3.connect(db) as conn:
+        conn.execute("UPDATE products_core SET quality_score_status='suppressed_safety', "
+                     "product_safety_status='blocked', quality_score_v4_100=NULL WHERE dsld_id='3'")
+    receipts['3'].update(product_safety_status='blocked', quality_score_status='suppressed_safety',
+                         quality_score_v4_100=None)
+    if passes:
+        result = syncer.validate_catalog_publication(tmp_path)
+        assert result['complete'] == result['minimum_complete'] == 3
+        assert result['cohort_products'] == result['catalog_products'] == 4
+    else:
+        with pytest.raises(ValueError, match='genuinely complete 2/4; requires 3'):
+            syncer.validate_catalog_publication(tmp_path)
+    with sqlite3.connect(db) as conn:
+        assert conn.execute("SELECT quality_assessment_status, product_safety_status "
+                            "FROM products_core WHERE dsld_id='3'").fetchone() == ('partial', 'blocked')
+    assert receipts['3']['release_assessment']['is_complete'] is False
+
+
 def test_publication_checks_existing_strict_receipts(tmp_path, publication_case):
     import sync_to_supabase as syncer
     _, _, manifest = publication_case()

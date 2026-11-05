@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T14:34:50.909475",
+  "generated_at": "2026-11-05T16:10:21.516997",
   "generated_by": "fda_weekly_sync.py",
   "scan_period": {
     "start": "20260906",
@@ -28,12 +28,11 @@
     "already_tracked": 7,
     "stale_recalled_entries_to_verify": 7,
     "by_category": {
-      "stimulant_designer": 1,
+      "microbial_contamination": 2,
       "supplement_general": 4,
       "supplement_adulterant": 2,
       "pharmaceutical_contaminant": 1,
       "manufacturing_violation": 1,
-      "microbial_contamination": 1,
       "illegal_spiking_agents": 10
     }
   },
@@ -53,9 +52,8 @@
       "recall_initiation_date": "20260822",
       "report_date": "20260923",
       "termination_date": null,
-      "primary_category": "stimulant_designer",
+      "primary_category": "microbial_contamination",
       "signal_categories": [
-        "stimulant_designer",
         "microbial_contamination"
       ],
       "extracted_substances": [
