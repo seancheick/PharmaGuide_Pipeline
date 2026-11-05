@@ -9211,33 +9211,35 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     """
     product_name = safe_str(enriched.get("product_name"))
     brand_name = resolve_catalog_brand(enriched).display_brand
-    score_100 = safe_float(scored.get("score_100_equivalent"))
-    # Share copy shows the same whole number the app shows (round half up), so a
-    # 74.6 reads 75/100 everywhere instead of a truncated 74/100 here.
-    if score_100 is not None:
+    score_100 = safe_float(scored.get("quality_score_v4_100"))
+    quality_status = safe_str(scored.get("quality_score_status")).lower()
+    assessment_open = safe_str(scored.get("quality_assessment_status")).lower() != "complete"
+    safety_blocked = safe_str(scored.get("product_safety_status")).lower() in {"blocked", "unsafe"}
+    # Render the canonical public score only after its assessment explicitly
+    # completed. Compatibility mirrors never repair missing or invalid proof.
+    assessment_unavailable = (
+        assessment_open or safety_blocked or quality_status != "scored" or score_100 is None
+        or not 0 <= score_100 <= 100
+    )
+    if assessment_unavailable:
+        score_100 = None
+    elif score_100 is not None:
+        # Same whole-number display as the app (round half up).
         score_100 = shipped_whole_score(score_100)
     grade = safe_str(scored.get("grade"))
     # V4 cutover: evidence copy reads the v4 evidence pillar (/20), not v3 section C.
     v4_evidence = safe_float(safe_dict(safe_dict(scored.get("quality_pillars_v4")).get("evidence")).get("score"), 0)
 
-    quality_status = safe_str(scored.get("quality_score_status"))
-    assessment_open = safe_str(scored.get("quality_assessment_status")).lower() in {"partial", "failed"}
-    # An unfinished assessment publishes no number or tier: same rule as the
-    # public share index (sync_to_supabase._share_disposition).
-    if assessment_open:
-        score_100 = None
-    assessment_unavailable = assessment_open or quality_status in {"not_scored", "suppressed_safety"}
-
     # Title with score emoji
     score_emoji = ""
-    if score_100:
+    if score_100 is not None:
         if score_100 >= 90:
             score_emoji = "⭐"
         elif score_100 >= 75:
             score_emoji = "✓"
 
     share_title = f"{brand_name} {product_name}"
-    if score_100:
+    if score_100 is not None:
         share_title += f" - {score_100}/100 {score_emoji}"
 
     # Limit title length for social platforms
@@ -9270,13 +9272,18 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
             "Quality score unavailable. The quality assessment is incomplete. "
             "Review the label information and recorded safety warnings."
         )
-    elif quality_status == "suppressed_safety":
+    elif quality_status == "suppressed_safety" or safety_blocked:
         share_description = (
             "Quality score withheld. Review this product’s recorded safety warnings."
         )
     elif assessment_open:
         share_description = (
             "Quality assessment is incomplete. Review the label information "
+            "and recorded safety warnings."
+        )
+    elif assessment_unavailable:
+        share_description = (
+            "Quality score unavailable. Review the label information "
             "and recorded safety warnings."
         )
 

@@ -711,7 +711,10 @@ def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
     }
     base_scored = {
         "grade": "Very good",
+        "quality_score_v4_100": 82,
         "score_100_equivalent": 82,
+        "quality_score_status": "scored",
+        "quality_assessment_status": "complete",
         "verdict": "SAFE",
     }
 
@@ -7065,7 +7068,8 @@ def test_share_title_shows_the_shipped_whole_score_not_a_truncation():
 
     meta = generate_share_metadata(
         {"product_name": "Test Multi", "brand_name": "Brand"},
-        {"score_100_equivalent": 74.6, "verdict": "SAFE"},
+        {"quality_score_v4_100": 74.6, "score_100_equivalent": 74.6,
+         "quality_score_status": "scored", "quality_assessment_status": "complete", "verdict": "SAFE"},
     )
     assert " - 75/100 " in meta["share_title"]
     assert "✓" in meta["share_title"]  # the >=75 band is judged on the shipped 75
