@@ -447,3 +447,24 @@ def test_missing_runtime_provenance_cannot_be_reused(tmp_path):
     path.write_text(json.dumps({'input_fingerprints': {k: v for k, v in expected.items()
                                                      if k != freshness.RUNTIME_FINGERPRINT_KEY}}))
     assert 'runtime fingerprint missing' in freshness._manifest_issue(path, expected)
+
+
+def test_complete_empty_manifest_requires_explicit_allowance(tmp_path):
+    write_stage_manifest(tmp_path, 'clean', [])
+    with pytest.raises(StageManifestError, match='owns no files'):
+        select_stage_input_files(tmp_path, 'clean', require_manifest=True)
+    assert select_stage_input_files(tmp_path, 'clean', require_manifest=True, allow_empty=True) == []
+
+
+@pytest.mark.parametrize('defect', ['incomplete', 'checksums', 'unowned', 'stage', 'schema'])
+def test_empty_manifest_allowance_preserves_ownership_guards(tmp_path, defect):
+    manifest_path = write_stage_manifest(tmp_path, 'clean', [])
+    value = json.loads(manifest_path.read_text())
+    if defect == 'incomplete': value['processing_complete'] = False
+    if defect == 'checksums': value['content_sha256'] = {'ghost.json': '0' * 64}
+    if defect == 'stage': value['stage'] = 'score'
+    if defect == 'schema': value['schema_version'] = -1
+    if defect == 'unowned': (tmp_path / 'partial.json').write_text('[]')
+    manifest_path.write_text(json.dumps(value))
+    with pytest.raises(StageManifestError):
+        select_stage_input_files(tmp_path, 'clean', require_manifest=True, allow_empty=True)

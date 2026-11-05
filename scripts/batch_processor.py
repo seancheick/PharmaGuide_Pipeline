@@ -28,7 +28,7 @@ from constants import (
     VALIDATION_THRESHOLDS
 )
 from pipeline_freshness import DATA_FINGERPRINT_KEY, stage_data_fingerprint, stage_input_fingerprints
-from stage_manifest import StageManifestError, write_stage_manifest
+from stage_manifest import MANIFEST_NAME, StageManifestError, select_stage_input_files, write_stage_manifest
 import traceback
 import os
 import hashlib
@@ -726,6 +726,21 @@ class BatchProcessor:
             self._source_inventory = tuple(self.get_input_files(str(self._source_directory)))
         self._stage_inputs = None
         self._clean_stage_inputs()
+
+        if resume:
+            cleaned = self.output_dir / "cleaned"
+            has_outputs = any(path.is_file() and not path.name.startswith(".")
+                for category in ("cleaned", "needs_review", "incomplete", "errors")
+                for pattern in ("*.json", "*.jsonl")
+                for path in (self.output_dir / category).glob(pattern))
+            if has_outputs or (cleaned / MANIFEST_NAME).exists() or self.state_file.exists():
+                try:
+                    select_stage_input_files(cleaned, "clean", require_manifest=True,
+                        patterns=("*.json", "*.jsonl"), allow_empty=True)
+                except StageManifestError as exc:
+                    raise StageManifestError(
+                        f"Resume output ownership is invalid; run a fresh full repair: {exc}"
+                    ) from exc
 
         # Load or create state
         state = None

@@ -113,6 +113,11 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch, source_chan
         processed_file_paths=processed,
     )
     processor.save_state(state)
+    from stage_manifest import write_stage_manifest
+    owned = processor.output_dir / 'cleaned' / 'cleaned_batch_1.json'
+    owned.write_text(json.dumps([{'id': index} for index in range(20)]))
+    write_stage_manifest(owned.parent, 'clean', [owned])
+
 
     if source_changed:
         original = files[0].stat()
@@ -685,11 +690,14 @@ def test_resume_appends_after_highest_disposition_sequence(tmp_path, monkeypatch
         path = processor.output_dir / category / f'{category}_batch_{number}.{extension}'
         path.write_text('[{"id":"old"}]' if extension == 'json' else '{"id":"old"}\n')
         preserved[path] = path.read_bytes()
+    from stage_manifest import write_stage_manifest
+    clean_directory = processor.output_dir / 'cleaned'
+    write_stage_manifest(clean_directory, 'clean', sorted(clean_directory.glob('cleaned_batch_*.*')))
     observed = []
     def execute(batch_num, batch_files, output_batch_num=None):
         observed.append(output_batch_num)
         processor._write_batch_outputs(output_batch_num, [{'id': 'new'}], [], [])
-        return {'summary': {'batch_num': batch_num + 1, 'processed': 1, 'cleaned': 1, 'needs_review': 0, 'incomplete': 0, 'errors': 0},
+        return {'summary': {'batch_num': batch_num + 1, 'processing_time': 0.0, 'processed': 1, 'cleaned': 1, 'needs_review': 0, 'incomplete': 0, 'errors': 0},
                 'processed_files': [str(path) for path in batch_files], 'errors': [], 'unmapped_count': 0}
     monkeypatch.setattr(processor, 'process_batch', execute)
     processor.process_all_files(files, resume=True)
@@ -711,8 +719,97 @@ def test_resume_rejects_conflicting_json_and_jsonl_batch_ownership(tmp_path, mon
         output = processor.output_dir / 'cleaned' / ('cleaned_batch_3.' + extension)
         output.write_text('[{"id":"old"}]' if extension == 'json' else '{"id":"old"}\n')
         existing.append((output, output.read_bytes()))
+    from stage_manifest import write_stage_manifest
+    write_stage_manifest(processor.output_dir / 'cleaned', 'clean', [path for path, _ in existing])
     monkeypatch.setattr(processor, 'process_batch', lambda *a, **k: pytest.fail('must reject before execution'))
     from stage_manifest import StageManifestError
     with pytest.raises(StageManifestError, match='Conflicting batch output ownership'):
         processor.process_all_files([path], resume=True)
     assert all(output.read_bytes() == content for output, content in existing)
+
+
+@pytest.mark.parametrize('ownership', ['incomplete', 'missing', 'corrupt', 'unowned'])
+def test_partial_batch_write_resume_refuses_unverified_outputs(tmp_path, monkeypatch, ownership):
+    import batch_processor as batch
+    from stage_manifest import MANIFEST_NAME, StageManifestError, write_stage_manifest_from_directory
+    config = _make_config(tmp_path)
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    files = [raw / 'good.json', raw / 'held.json']
+    for path in files:
+        path.write_text(json.dumps({'id': path.stem}))
+    observed = []
+    def process(filename, *_):
+        observed.append(Path(filename).stem)
+        return ProcessingResult(success=True,
+            status='incomplete' if Path(filename).stem == 'held' else 'success',
+            data={'id': Path(filename).stem}, file_path=str(filename), raw_id=Path(filename).stem)
+    monkeypatch.setattr(batch, 'init_worker', lambda *_: None)
+    monkeypatch.setattr(batch, 'process_single_file_with_timeout', process)
+    first = BatchProcessor(config)
+    write = first._write_json_output
+    monkeypatch.setattr(first, '_write_json_output', lambda path, data, use_jsonl=False:
+        False if path.parent.name == 'incomplete' else write(path, data, use_jsonl))
+    summary = first.process_all_files(files, resume=False)
+    assert summary['processing_complete'] is False
+    assert first.load_state().processed_file_paths == []
+    cleaned = first.output_dir / 'cleaned'
+    assert json.loads((cleaned / 'cleaned_batch_1.json').read_text()) == [{'id': 'good'}]
+    manifest = cleaned / MANIFEST_NAME
+    if ownership == 'missing':
+        manifest.unlink()
+    elif ownership == 'corrupt':
+        manifest.write_text('{')
+    elif ownership == 'unowned':
+        write_stage_manifest_from_directory(cleaned, 'clean')
+        (cleaned / 'cleaned_batch_9.json').write_text('[{"id":"uncommitted"}]')
+    preserved = {path: path.read_bytes() for path in first.output_dir.rglob('*') if path.is_file()}
+    observed.clear()
+    second = BatchProcessor(config)
+    with pytest.raises(StageManifestError, match='repair|manifest|unowned'):
+        second.process_all_files(files, resume=True)
+    assert observed == []
+    assert all(path.read_bytes() == contents for path, contents in preserved.items())
+
+
+@pytest.mark.parametrize('status', ['incomplete', 'needs_review'])
+def test_complete_all_held_empty_clean_generation_resumes_without_work(tmp_path, monkeypatch, status):
+    import batch_processor as batch
+    config = _make_config(tmp_path)
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    path = raw / 'held.json'
+    path.write_text(json.dumps({'id': 'held'}))
+    observed = []
+    def process(filename, *_):
+        observed.append(filename)
+        return ProcessingResult(success=True, status=status, data={'id': 'held'},
+            file_path=filename, raw_id='held')
+    monkeypatch.setattr(batch, 'init_worker', lambda *_: None)
+    monkeypatch.setattr(batch, 'process_single_file_with_timeout', process)
+    first = BatchProcessor(config)
+    summary = first.process_all_files([path])
+    assert summary['processing_complete'] is True
+    assert summary['success_rate'] == 100
+    preserved = {file: file.read_bytes() for directory in ('incomplete', 'needs_review')
+                 for file in (first.output_dir / directory).glob('*') if file.is_file()}
+    observed.clear()
+    second = BatchProcessor(config)
+    assert second.process_all_files([path], resume=True)['processing_complete'] is True
+    assert observed == []
+    assert all(file.read_bytes() == data for file, data in preserved.items())
+
+
+def test_resume_state_without_any_output_ownership_is_fatal(tmp_path, monkeypatch):
+    from stage_manifest import StageManifestError
+    processor = BatchProcessor(_make_config(tmp_path))
+    path = tmp_path / 'completed.json'
+    path.write_text(json.dumps({'id': 'completed'}))
+    processor._source_files = (path,)
+    state = processor.create_initial_state([path])
+    state.processed_file_paths = [str(path)]
+    state.processed_files = 1
+    processor.save_state(state)
+    monkeypatch.setattr(processor, 'process_batch', lambda *a, **k: pytest.fail('missing ownership must fail first'))
+    with pytest.raises(StageManifestError, match='repair.*manifest|manifest.*missing'):
+        processor.process_all_files([path], resume=True)
