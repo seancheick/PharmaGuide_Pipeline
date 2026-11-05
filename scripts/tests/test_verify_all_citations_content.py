@@ -527,3 +527,15 @@ def test_short_alphabetic_marker_requires_an_identifier_boundary(article_text, e
     entry = {'standard_name': 'EnXtra', 'aliases': ['EnXtra'], 'markers': ['ACA']}
     assert vac.content_matches({'title': article_text, 'abstract': ''},
                                vac.extract_topic_words(entry, config))[0] == expected
+
+
+def test_structured_nutrition_authority_citations_reach_existing_content_verifier():
+    config = next(c for c in vac.FILE_CONFIGS if c['file'] == 'rda_optimal_uls.json')
+    refs = vac.extract_pmids_from_entry({
+        'references': ['18208600'],
+        'references_structured': [{'type': 'authority', 'doi': '10.17226/10490',
+                                  'url': 'https://doi.org/10.17226/10490'},
+                                 {'type': 'clinical', 'pmid': '21847611'}],
+    }, config)
+    assert {ref['pmid'] for ref in refs} == {'18208600', '21847611', 'doi:10.17226/10490'}
+    assert len(refs) == 3
