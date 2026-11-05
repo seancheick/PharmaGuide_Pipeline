@@ -1789,3 +1789,69 @@ def test_literature_fallback_cannot_hide_a_hold_on_the_same_source(monkeypatch, 
         # but is not erased by the unrelated source's hold.
         assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
         assert not result.blocking_reasons
+
+
+def _excluded_preparation_product(name, canonical, form, *, pid="preparation-fixture", ref="ingredientRows[0]"):
+    row = {"name": name, "standard_name": name, "canonical_id": canonical,
+           "matched_form": form, "raw_source_text": name, "raw_source_path": ref,
+           "mapped_identity": True, "scoreable_identity": True, "identity_disposition": "clean",
+           "source_section": "active", "cleaner_row_role": "active_scorable",
+           "score_eligible_by_cleaner": True, "role_classification": "active_scorable",
+           "quantity": 500, "unit": "mg", "dose_class": "therapeutic_mass"}
+    return row, {"dsld_id": pid, "product_name": name, "activeIngredients": [row],
+                 "ingredient_quality_data": {"ingredients_scorable": [row], "ingredients": [row], "total_active": 1},
+                 "evidence_data": {"clinical_matches": []}}
+
+
+@pytest.mark.parametrize("pid,ref", [
+    ("31147", "ingredientRows[5].nestedRows[1]"), ("4258", "ingredientRows[0]"),
+    ("65944", "ingredientRows[0]"), ("66890", "ingredientRows[0]"), ("69393", "ingredientRows[0]"),
+])
+def test_carnitine_fumarate_exclusion_remains_finished_despite_noncredit_source(pid, ref):
+    import clinical_applicability as ca
+    from assessment_readiness import _resolved_evidence_assessment
+    row, product = _excluded_preparation_product("L-Carnitine", "l_carnitine", "l-carnitine fumarate", pid=pid, ref=ref)
+    source = {"id": "INGR_L_CARNITINE", "matched_canonical_ids": ["l_carnitine"], "matched_source_row_refs": [ref]}
+    scope = ca.assess_clinical_applicability(product, source, assess_amount=False, require_claim_alignment=False)
+    assert scope == {"status": "not_applicable", "reason_code": "clinical_preparation_mismatch"}
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert result.reason_code in {"clinical_preparation_mismatch", "clinical_form_mismatch"}
+    assert _resolved_evidence_assessment(result)[0] == "evaluated_limited_or_negative"
+
+
+@pytest.mark.parametrize("form", ["l-carnitine base (free form)", "l-carnitine tartrate (lclt)"])
+def test_carnitine_unreviewed_positive_source_scope_stays_pending(form):
+    from assessment_readiness import _resolved_evidence_assessment
+    row, product = _excluded_preparation_product("L-Carnitine", "l_carnitine", form)
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.reason_code == "clinical_sources_ineligible"
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == "not_yet_evaluated"
+
+
+@pytest.mark.parametrize("case", ["excluded", "unrelated_source", "malformed_policy", "stale_enriched_exclusion"])
+def test_noncredit_source_consumes_only_current_preparation_exclusions(monkeypatch, case):
+    from copy import deepcopy
+    import clinical_applicability as ca
+    from assessment_readiness import _resolved_evidence_assessment
+    source = _approved_test_source({"id": "TEST_NONCREDIT_PREPARATION", "study_type": "rct_single",
+                                   "effect_direction": "mixed"}, name="Synthetic Material")
+    source["study_contexts"][0]["scoring_eligible"] = False
+    source["exclude_aliases"] = ["synthetic excluded form"]
+    if case == "malformed_policy": source["applicability"] = {"scope": "ingredient", "excluded_form_terms": "bad shape"}
+    if case == "stale_enriched_exclusion": source.pop("exclude_aliases")
+    sources = [source]
+    if case == "unrelated_source":
+        other = deepcopy(source); other["id"] = "TEST_OTHER_UNFINISHED_SOURCE"; other.pop("exclude_aliases")
+        sources.append(other)
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {s["id"]: s for s in sources})
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"synthetic_material": sources})
+    monkeypatch.setattr(er, "_load_literature_evidence", lambda: {})
+    row, product = _excluded_preparation_product("Synthetic Material", "synthetic_material", "synthetic excluded form")
+    if case == "stale_enriched_exclusion":
+        product["evidence_data"]["clinical_matches"] = [{"id": source["id"],
+            "matched_source_row_refs": ["ingredientRows[0]"], "exclude_aliases": ["synthetic excluded form"]}]
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == ("evaluated_limited_or_negative" if case == "excluded" else "not_yet_evaluated")

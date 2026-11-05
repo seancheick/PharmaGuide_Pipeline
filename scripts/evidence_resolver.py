@@ -302,6 +302,12 @@ _OMEGA_EVIDENCE_CANONICALS = {
 }
 
 
+_CLINICAL_PREPARATION_REJECTIONS = frozenset({
+    "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
+    "clinical_preparation_mismatch", "clinical_identity_excluded",
+})
+
+
 def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any]:
     """Resolve the reviewed omega purpose record without judging its amount.
 
@@ -1095,7 +1101,31 @@ def resolve_evidence_for_row(
         # Check study types, effect directions, and applicability
         valid_studies = [s for s in deduped_studies if clinical_record_sources_eligible(s)]
         if not valid_studies:
-            from clinical_applicability import assess_clinical_source_review
+            from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review
+            # The shared scope owner checks known preparation exclusions before
+            # a source hold. A finished material mismatch grants no credit and
+            # must not be reopened merely because the source is non-contributing.
+            # Every matched record must reach that conclusion: an unrelated open
+            # source still keeps the ingredient's research unresolved.
+            scope_decisions = []
+            for study in deduped_studies:
+                scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
+                if source_ref:
+                    scoped["matched_source_row_refs"] = [source_ref]
+                scope_decisions.append(assess_clinical_applicability(
+                    product or {"activeIngredients": [row_dict]}, scoped,
+                    assess_amount=False, require_claim_alignment=False))
+            if all(decision.get("status") == "not_applicable"
+                   and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
+                   for decision in scope_decisions):
+                owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="form_mismatch",
+                    reason_code="clinical_form_mismatch", owner_facts=owner_facts,
+                    blocking_reasons=["form_mismatch_with_clinical_trials"],
+                )
             reviewed_references = all(
                 is_reference_only(study)
                 and study.get("scoring_eligible") is not False
@@ -1142,10 +1172,7 @@ def resolve_evidence_for_row(
                     record_states.append("reviewed_nonpositive")
                     continue
                 if decision["status"] != "applicable":
-                    if decision["reason_code"] in {
-                        "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
-                        "clinical_preparation_mismatch", "clinical_identity_excluded",
-                    }:
+                    if decision["reason_code"] in _CLINICAL_PREPARATION_REJECTIONS:
                         record_states.append("form_mismatch")
                     else:
                         record_states.append("not_applicable")
