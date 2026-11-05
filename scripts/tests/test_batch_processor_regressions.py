@@ -613,3 +613,106 @@ def test_actual_legacy_resume_retries_errors_and_preserves_successful_files(tmp_
     assert all(path.read_bytes() == content for path, content in successful_files.items())
     state = processor.load_state()
     assert set(state.processed_file_paths) == {str(path) for path in files}
+
+
+@pytest.mark.parametrize('workers', [1, 2])
+@pytest.mark.parametrize('rejection', ['duplicate', 'missing', 'unknown'])
+def test_rejected_success_is_quarantined_and_not_processed(tmp_path, monkeypatch, workers, rejection):
+    import batch_processor as batch
+    processor = BatchProcessor(_make_config(tmp_path))
+    files = [tmp_path / 'accepted.json', tmp_path / 'rejected.json']
+    for path in files:
+        path.write_text(json.dumps({'id': path.stem}))
+    monkeypatch.setattr(processor, '_effective_workers', lambda _: workers)
+    monkeypatch.setattr(processor, 'validate_input_file', lambda _: (True, ''))
+    monkeypatch.setattr(processor, 'verify_output', lambda *a: (True, {}))
+    monkeypatch.setattr(batch, 'init_worker', lambda *_: None)
+    recovered = False
+    observed = []
+    def process(filename, *_):
+        observed.append(Path(filename).stem)
+        bad = not recovered and Path(filename).stem == 'rejected'
+        identifier = None if bad and rejection == 'missing' else ('accepted' if bad and rejection == 'duplicate' else Path(filename).stem)
+        return ProcessingResult(success=True, status='alien' if bad and rejection == 'unknown' else 'success',
+            data={'id': identifier}, file_path=str(filename), raw_id=Path(filename).stem)
+    monkeypatch.setattr(batch, 'process_single_file_with_timeout', process)
+    if workers == 2:
+        from concurrent.futures import Future
+        class Pool:
+            def __init__(self, **kwargs): pass
+            def __enter__(self): return self
+            def __exit__(self, *args): pass
+            def submit(self, function, *args):
+                future = Future()
+                future.set_result(process(*args))
+                return future
+        monkeypatch.setattr(batch, 'ProcessPoolExecutor', Pool)
+    result = processor.process_batch(0, files)
+    assert result['processed_files'] == [str(files[0])]
+    assert len(result['errors']) == 1
+    receipt = json.loads((processor.output_dir / 'errors' / 'rejected_error.json').read_text())
+    assert receipt['original_file'] == str(files[1])
+    assert receipt['processing_stage'] == 'categorize'
+
+
+    processor.seen_dsld_ids.clear()  # Discard the standalone process_batch probe's cache.
+    processor.process_all_files(files, resume=False)
+    assert processor.load_state().processed_file_paths == [str(files[0])]
+    preserved = {path: path.read_bytes() for path in (processor.output_dir / 'cleaned').glob('*') if path.is_file()}
+    observed.clear()
+    recovered = True
+    processor.process_all_files(files, resume=True)
+    assert observed == ['rejected']
+    assert set(processor.load_state().processed_file_paths) == {str(path) for path in files}
+    assert all(path.read_bytes() == content for path, content in preserved.items() if not path.name.startswith('.'))
+
+
+@pytest.mark.parametrize('existing', [
+    [('cleaned', 1, 'json'), ('incomplete', 2, 'json'), ('cleaned', 3, 'json')],
+    [('incomplete', 2, 'json')], [('cleaned', 3, 'jsonl')]])
+def test_resume_appends_after_highest_disposition_sequence(tmp_path, monkeypatch, existing):
+    processor = BatchProcessor(_make_config(tmp_path))
+    files = [tmp_path / 'old.json', tmp_path / 'new.json']
+    for path in files: path.write_text(json.dumps({'id': path.stem}))
+    processor._source_files = tuple(files)
+    state = processor.create_initial_state(files)
+    state.processed_file_paths = [str(files[0])]
+    state.processed_files = 1
+    state.last_completed_batch = 0
+    processor.save_state(state)
+    preserved = {}
+    for category, number, extension in existing:
+        path = processor.output_dir / category / f'{category}_batch_{number}.{extension}'
+        path.write_text('[{"id":"old"}]' if extension == 'json' else '{"id":"old"}\n')
+        preserved[path] = path.read_bytes()
+    observed = []
+    def execute(batch_num, batch_files, output_batch_num=None):
+        observed.append(output_batch_num)
+        processor._write_batch_outputs(output_batch_num, [{'id': 'new'}], [], [])
+        return {'summary': {'batch_num': batch_num + 1, 'processed': 1, 'cleaned': 1, 'needs_review': 0, 'incomplete': 0, 'errors': 0},
+                'processed_files': [str(path) for path in batch_files], 'errors': [], 'unmapped_count': 0}
+    monkeypatch.setattr(processor, 'process_batch', execute)
+    processor.process_all_files(files, resume=True)
+    assert observed == [max(item[1] for item in existing)]
+    assert all(path.read_bytes() == content for path, content in preserved.items())
+    observed.clear()
+    processor.process_all_files(files, resume=True)
+    assert observed == []
+
+
+def test_resume_rejects_conflicting_json_and_jsonl_batch_ownership(tmp_path, monkeypatch):
+    processor = BatchProcessor(_make_config(tmp_path))
+    path = tmp_path / 'pending.json'
+    path.write_text(json.dumps({'id': 'pending'}))
+    processor._source_files = (path,)
+    processor.save_state(processor.create_initial_state([path]))
+    existing = []
+    for extension in ('json', 'jsonl'):
+        output = processor.output_dir / 'cleaned' / ('cleaned_batch_3.' + extension)
+        output.write_text('[{"id":"old"}]' if extension == 'json' else '{"id":"old"}\n')
+        existing.append((output, output.read_bytes()))
+    monkeypatch.setattr(processor, 'process_batch', lambda *a, **k: pytest.fail('must reject before execution'))
+    from stage_manifest import StageManifestError
+    with pytest.raises(StageManifestError, match='Conflicting batch output ownership'):
+        processor.process_all_files([path], resume=True)
+    assert all(output.read_bytes() == content for output, content in existing)
