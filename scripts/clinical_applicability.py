@@ -491,11 +491,13 @@ _CLAIM_NEGATED_PREDICATE = re.compile(
 
 def _affirmative_claim_clauses(text: str) -> list[str]:
     """Claim-only affirmative clauses, preserving harmless trailing qualifiers."""
-    clauses = re.split(
-        r"[.;!?\r\n]+|\b(?:but|however)\b"
-        r"|,\s*(?:and\s+)?(?=(?:supports?|promotes?|helps?|maintains?)\b)",
-        text, flags=re.I,
-    )
+    boundary = (r"[.;!?\r\n]+|\b(?:but|however)\b"
+                r"|,\s*(?:and\s+)?(?=(?:supports?|promotes?|helps?|maintains?)\b)")
+    if _CLAIM_NEGATED_PREDICATE.search(text):
+        # A new affirmative predicate ends the negated claim. Bare coordinated
+        # subjects ("sleep and digestion are not improved") stay together.
+        boundary += r"|\b(?:and|or)\s+(?=(?!for\b)" + _CLAIM_VERB + r"\b)"
+    clauses = re.split(boundary, text, flags=re.I)
     result = []
     for clause in clauses:
         suffix = _CLAIM_NEGATED_PREDICATE.search(clause)

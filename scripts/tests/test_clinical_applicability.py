@@ -2706,3 +2706,28 @@ def test_negated_exact_condition_shortcut_cannot_override_absent_claims(monkeypa
 def test_signed_claim_exclusion_uses_the_same_affirmative_clause_owner(title, expected):
     from clinical_applicability import _matched_excluded_claim_terms
     assert _matched_excluded_claim_terms({'product_name': title}, ['sleep']) == expected
+
+
+@pytest.mark.parametrize('text', [
+    'Sleep is not improved and supports digestion',
+    'Does not improve sleep and supports digestion',
+    'Sleep is not improved or supports digestion',
+    'Does not improve sleep or improves digestion',
+])
+def test_negated_claim_keeps_a_following_independent_affirmative_predicate(text):
+    from clinical_applicability import _claimed_purposes, native_product_positioning_categories, assess_claim_alignment
+    context = _native_context(('digestion', 'primary', 'patient_important', 'positive', {}), condition='digestion')
+    assert _claimed_purposes(text) == {'digestive'}
+    assert native_product_positioning_categories(_claim(text), purposes_only=True) == {'digestive'}
+    assert assess_claim_alignment(_claim(text), context)['state'] == 'aligned'
+
+
+@pytest.mark.parametrize('text', [
+    'Sleep and digestion are not improved',
+    'Sleep or digestion is not improved',
+    'Does not improve sleep and digestion',
+])
+def test_claim_conjunction_without_new_predicate_keeps_its_negation(text):
+    from clinical_applicability import _claimed_purposes, native_product_positioning_categories
+    assert _claimed_purposes(text) == set()
+    assert native_product_positioning_categories(_claim(text), purposes_only=True) == set()
