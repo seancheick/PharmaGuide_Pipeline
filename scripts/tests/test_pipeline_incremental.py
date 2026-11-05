@@ -575,3 +575,24 @@ def test_older_reuse_state_without_per_file_proof_rechecks_clean_on_raw_byte_cha
     assert result["stages"] == {"clean": ["1", "2"], "enrich": [], "score": []}
     assert calls == ["clean"]
     assert set(json.loads(state_path.read_text())["raw_files"]) == {"1", "2"}
+
+
+def test_raw_capture_rejects_a_transient_edit_restored_before_live_recheck(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    original_read = mod.raw_products
+    path = raw / "1.json"
+    planned_bytes = path.read_bytes()
+
+    def transient_read(directory, **kwargs):
+        path.write_text('{"id":"1","dose":99}')
+        return original_read(directory, **kwargs)
+
+    def restore_before_live_check(*args):
+        path.write_bytes(planned_bytes)
+        return deepcopy(snapshot)
+
+    monkeypatch.setattr(mod, "raw_products", transient_read)
+    monkeypatch.setattr(mod, "current_snapshot", restore_before_live_check)
+    with pytest.raises(mod.StageManifestError, match="Captured raw"):
+        mod.run_incremental(runner, raw, prefix)
+    assert not calls

@@ -448,11 +448,12 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
     raw_bytes = {key: (raw_dir / name).read_bytes() for key, name in raw_names.items()}
     if any(json.loads(raw_bytes[key]) != value for key, value in raw.items()):
         raise StageManifestError("Raw objects differ from their captured source bytes")
-    raw_files = {
-        key: stage_data_fingerprint([raw_dir / raw_names[key]], content_hashes={
-            raw_dir / raw_names[key]: hashlib.sha256(content).digest(),
-        }) for key, content in raw_bytes.items()
-    }
+    captured_hashes = {raw_dir / raw_names[key]: hashlib.sha256(content).digest()
+                       for key, content in raw_bytes.items()}
+    if stage_data_fingerprint(captured_hashes, content_hashes=captured_hashes) != raw_binding:
+        raise StageManifestError("Captured raw bytes differ from the planning source inventory")
+    raw_files = {key: stage_data_fingerprint([raw_dir / name], content_hashes=captured_hashes)
+                 for key, name in raw_names.items()}
     current = current_snapshot(repo)
     if stage_data_fingerprint(stage_data_files(raw_dir)) != raw_binding:
         raise StageManifestError("Raw inputs changed while reading the planning snapshot")
