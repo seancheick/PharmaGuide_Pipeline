@@ -757,12 +757,17 @@ class PipelineRunner:
                     return results
             if strict_release_gates and not dry_run:
                 try:
-                    select_stage_input_files(
+                    clean_inputs = select_stage_input_files(
                         Path(enrich_input),
                         "clean",
                         require_manifest=True,
-                        patterns=("*.json",),
+                        patterns=("*.json", "*.jsonl"),
                     )
+                    if any(path.suffix == ".jsonl" for path in clean_inputs):
+                        raise StageManifestError(
+                            "JSONL Clean inputs are not supported by strict full enrichment; "
+                            "rebuild Clean with the default JSON output configuration"
+                        )
                 except StageManifestError as exc:
                     results["stages_failed"].append("clean_stage_ownership")
                     logger.error("Cleaning ownership manifest failed: %s", exc)

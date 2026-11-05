@@ -6,6 +6,8 @@ import json
 import sys
 from types import SimpleNamespace
 
+import pytest
+
 from run_pipeline import PipelineRunner
 
 
@@ -199,3 +201,30 @@ def test_pipeline_propagates_one_run_id_to_every_stage(tmp_path, monkeypatch):
 
     assert result["run_id"] == "review-run-1"
     assert captured == ["review-run-1", "review-run-1"]
+
+
+@pytest.mark.parametrize('mixed', [False, True], ids=['jsonl_only', 'mixed'])
+def test_strict_enrichment_rejects_jsonl_only_and_mixed_inputs_before_processing(tmp_path, monkeypatch, caplog, mixed):
+    from stage_manifest import write_stage_manifest
+    prefix = tmp_path / ('mixed' if mixed else 'jsonl_only')
+    cleaned = prefix / 'cleaned'
+    cleaned.mkdir(parents=True)
+    jsonl = cleaned / 'cleaned_batch_1.jsonl'
+    jsonl.write_text('{"id":"1"}\n')
+    owned = [jsonl]
+    if mixed:
+        json_file = cleaned / 'cleaned_batch_2.json'
+        json_file.write_text('[{"id":"2"}]')
+        owned.append(json_file)
+    write_stage_manifest(cleaned, 'clean', owned)
+    before = {path: path.read_bytes() for path in cleaned.iterdir()}
+    runner = PipelineRunner()
+    called = []
+    monkeypatch.setattr(runner, 'run_enrich', lambda *_args, **_kwargs: called.append(True) or False)
+    result = runner.run_pipeline(stages=['enrich'], output_prefix=str(prefix), strict_release_gates=True)
+    assert result['success'] is False
+    assert result['stages_failed'] == ['clean_stage_ownership']
+    assert not called
+    assert 'JSONL' in caplog.text
+    assert all(path.read_bytes() == content for path, content in before.items())
+    caplog.clear()
