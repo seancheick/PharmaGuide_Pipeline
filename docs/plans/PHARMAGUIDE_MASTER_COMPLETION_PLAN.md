@@ -1,5 +1,22 @@
 # PharmaGuide master completion plan
 
+## Active target — 99% scientific completion and honest public ratings (November 5)
+
+Sean’s November 5 direction replaces the earlier release-ready threshold: do not activate a new catalog until at least **15,293 of the frozen 15,447 products** have genuinely completed assessments and all mandatory release criteria below pass. The measured source baseline is **8,400 complete / 7,047 partial**; 6,893 additional completions are needed. Do not change the denominator, invent credit, clear real holds or relabel unfinished research to meet the percentage. Review completion, score availability and safety are separate facts.
+
+Owner: `scripts/audits/assessment_readiness_shadow.py::build_shadow_report` for the existing measure-only census; `assessment_readiness.py` and `scoring_v4/scored_artifact.py` for decisions; the existing Evidence resolver and seven adapters for qualification; export and `catalog_product_semantics.dart` for public consumers. Evidence: current manifest-owned source counts and Sean’s supplied 99% plan. Will NOT create another completeness engine, clinical registry, provisional public rating, fabricated review or scoring override.
+
+- [ ] Produce a checksum-bound ID register for all 15,447 products, including every blocker and remaining dependency, exact ingredient/preparation and source references. Reconcile complete/partial independently of scored/Not Scored/safety-suppressed/intentional exclusions. Account for every partial product; retain explicit unknowns.
+- [ ] Audit false-partial and false-complete cases across resolver, row ledger, raw/scoring views, module projections, probiotic/non-strain rows, blend members and incidental nutrients. Reproduce actual defects before fixing shared owners.
+- [ ] Build the dependency work order from the fresh register: affected products, single-decision conditional unlocks, other blockers and measured results after each batch. Historical November 2 counts are context only.
+- [ ] Finish shared ingredient/preparation reviews in impact order, recording applicable qualifying evidence, completed no-qualifying review, verified scope exclusion or an explicit unresolved dependency. Retain studies, preparation, exposure, population, endpoints, limitations, date and reviewer provenance. Agent factual research never impersonates clinical approval; genuinely new clinical determinations require the authorized reviewer.
+- [ ] Resolve hard identity, Dose, safety and genuine label limits. A defensible completed-but-unrated decision may retain no numeric score; terminal publication disposition must not erase unresolved assessment facts.
+- [ ] Enforce zero provisional totals, tiers, score-derived ordering and recommendations across app, website, sharing, Compare, exports and MCP/API. Keep label facts and independently verified warnings visible. Internal diagnostic totals remain available for audit.
+- [ ] For each output-changing batch use the qualified incremental pipeline, frozen baseline and shared owner/consumer checks; report completion transitions, all six pillars/totals, safety/warning/interaction changes and remaining approval dependencies. Independent review and exact-candidate CI precede merge.
+- [ ] Release only when the 99% target, 100% truthful publication dispositions, no false-reviewed Evidence, no provisional public ratings, no fabricated benchmarks/equivalences and no critical safety/provenance/export defects are proven on the actual catalog and compatible app. Installed-device delivery remains separate evidence.
+
+Execution register: [LEDGER](../../scripts/audits/pending_items_20260926/LEDGER.md). Current receipts: `/Users/seancheick/pg_quality/catalog-release-20261105/`. Publication is stopped; source qualification and research may continue without rebuilding unchanged products.
+
 ### November 4 — nutrition amounts from submissions
 
 Owner: `submission_review/extraction/to_manual_label.py::to_manual_label` for the existing `nutritionalInfo` payload, `enhanced_normalizer.py::normalize_product` and `enrich_supplements_v3.py::_collect_nutrition_summary` for nutrition values, and Flutter `buildNutritionSection` for display. Evidence: fail-first mapper check, real-label Clean → Enrich → Score → blob replay, and live manifest/blob audit. Will NOT create: a second nutrition payload, scorer, or review attestation.
