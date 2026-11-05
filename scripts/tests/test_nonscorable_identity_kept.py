@@ -309,9 +309,9 @@ def _scoring_inputs(artifact):
              "evidence_owners": ["bilberry", "blackberry", "blueberry", "carrot", "cranberry", "grape", "plum",
                                  "pomegranate", "spinach", "strawberry", "tart_cherry", "tomato", "vitamin_c"],
              "dose_credits": [12.83, 15.12, 17.46]}),
-    (327402, {"score": 72.8, "status": "complete", "evidence_owners": None, "dose_credits": [1.28, 6.19]}),
+    (327402, {"score": 72.8, "status": "partial", "evidence_owners": None, "dose_credits": [1.28, 6.19]}),
     # 83.8 on main; 83.9 since PR214 (multi panel form quality reads material rows only).
-    (328104, {"score": 83.9, "status": "complete", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),
+    (328104, {"score": 83.9, "status": "partial", "evidence_owners": None, "dose_credits": [4.65, 13.17]}),
 ])
 def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id, expected):
     """Source-bound values: retain main controls; reviewed Coptis Dose adds neutral only."""
@@ -328,8 +328,8 @@ def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id,
         assert not any(row.get("canonical_id") == "maca"
                        for row in get_scoring_ingredients(product, strict=True).rows)
     if dsld_id in {327402, 328104}:
-        # The vitamin panel owns Evidence; the unreviewed add-in rows stay recorded as unreviewed.
-        assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is True
+        # Nutrient credit cannot complete the required food/botanical owners.
+        assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
         assert any(row["state"] == "not_yet_evaluated"
                    for row in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"])
     if dsld_id == 40089:

@@ -1,0 +1,8 @@
+{"canonical":"tudca","labels":16,"stored":"positive_moderate","as_read":"One small ALS pilot at 2 g/day on riluzole has a positive primary outcome; the stored PBC study has no placebo arm, MS clinical outcomes were null, and labels print 250 to 500 mg with no purpose.",
+"route":"packet_no_credit",
+"positive_named":["25664595","20522594","27503949"],
+"stop_list":["Fields can't say the positive primary outcome sits at 2 g/day as add-on to riluzole in ALS while labels print 250 to 500 mg with no purpose"],
+"clinician_items":["8674405: diarrhea was the only side effect in 24 PBC patients at 500 to 1500 mg/day.","37842553: 7 of 86 ALS patients (8.1%) stopped TUDCA for side effects, mainly mild gastrointestinal; 2 adverse events required hospital access and resolved.","40236400: transient dyspepsia was the most common side effect in an open-label UC study."],
+"stored_rating_note":"positive_moderate rests on 8674405, which has no placebo arm, names no primary outcome and compares only doses. Its outcome text is accurate, but topic_match_verified is false.",
+"pmids_read":["8674405","25664595","38053196","39447576","40236400","42301686","27503949","37842553","20522594"],
+"unread_notes":"Abstracts only. Second search returned 88, printed newest 25 of them, 2023 onward; none is a results paper for phase III TUDCA-ALS (NCT03800524) and I did not look further, so its outcome is unread and is not described here. The older 63 hits were not listed; 25664595 and 20522594 were fetched by PMID from memory of the citation and their titles confirmed live. PMID 20484134 was a wrong guess, unrelated (military diabetes cohort), not used."}

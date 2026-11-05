@@ -4300,12 +4300,8 @@ _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
     re.IGNORECASE,
 )
 _ROUTE_SPORTS_NAME_EXCLUSION_RE = re.compile(
-    r"\b(nac|n-acetyl|theanine|tryptophan|5-htp|sam-e|sleep|calm|mood|stress|"
-    r"digestive|enzyme|enzymes|keratin|lactoferrin|collagen)\b",
-    re.IGNORECASE,
-)
-_ROUTE_B_COMPLEX_EXCLUSION_RE = re.compile(
-    r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|recovery|mass\s*gainer)\b",
+    r"\b(nac|n-acetyl|theanine|tryptophan|5-htp|sam-e|"
+    r"enzyme|enzymes|keratin|lactoferrin|collagen)\b",
     re.IGNORECASE,
 )
 _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS = set(B_COMPLEX_DISQUALIFY_CANONICALS)
@@ -4950,8 +4946,6 @@ def _route_b_complex_decision(
         return False, "b_complex_disqualifying_active", sorted(
             canonicals & _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS
         )
-    if _ROUTE_B_COMPLEX_EXCLUSION_RE.search(name_text or ""):
-        return False, "b_complex_conflicting_product_intent", ["conflicting_product_intent"]
     if facts.get("title_multivitamin_intent"):
         return False, "explicit_multivitamin_intent", ["explicit_multivitamin_intent"]
 
@@ -5139,7 +5133,7 @@ def _route_is_sports_class(
     # unambiguous sports-hero name (creatine / beta-alanine / citrulline / HMB / BCAA /
     # EAA / pre-workout), is a sports product even when the ergogenic actives are
     # undisclosed in a proprietary blend or listed only as an aggregate. The existing
-    # NAC/theanine/sleep/collagen exclusion still applies, and the name-only path must
+    # NAC/theanine/collagen identity exclusion still applies, and the name-only path must
     # not hijack a genuine multivitamin. Parts 2-3 (gate fail-open + dose credit for
     # disclosed non-classic actives) make this net-positive, which is why the earlier
     # routing-only version was reverted.
@@ -5305,10 +5299,11 @@ def _route_fiber_digestive_decision(
     *,
     features: Optional[Dict[str, Any]] = None,
 ) -> tuple[bool, str, List[str]]:
-    del name_text  # Product-title intent is measured centrally by route_features.
     facts = features or _route_feature_vector(product)
     if (
         facts.get("title_systemic_enzyme_intent")
+        and (int(facts.get("observed_systemic_enzyme_row_count") or 0)
+             or int(facts.get("observed_dual_use_enzyme_row_count") or 0))
         and not facts.get("title_explicit_digestive_context")
     ):
         return False, "systemic_enzyme_intent", ["systemic_enzyme_intent"]
@@ -5322,7 +5317,11 @@ def _route_fiber_digestive_decision(
         if has_fiber_evidence:
             evidence.append("fiber_label_evidence")
         return True, "fiber_title_intent", evidence
-    if facts.get("title_digestive_intent"):
+    if facts.get("title_digestive_intent") and (
+        re.search(r"\b(?:enzymes?|betaine\s+hcl|pancrea\w*)\b", name_text or "", re.I)
+        or int(facts.get("observed_digestive_enzyme_row_count") or 0)
+        or int(facts.get("observed_dual_use_enzyme_row_count") or 0)
+    ):
         evidence = ["digestive_title_intent"]
         if int(facts.get("observed_digestive_enzyme_row_count") or 0):
             evidence.append("dedicated_digestive_enzyme")
@@ -7442,6 +7441,7 @@ def classify_ingredient_roles(
     module: Optional[str] = None,
     rows: Optional[List[Dict[str, Any]]] = None,
     materiality_only: bool = False,
+    evidence: bool = False,
 ) -> List[Dict[str, Any]]:
     """Classify every scoring row's role (compatibility mode, Phase 2).
 
@@ -7463,11 +7463,11 @@ def classify_ingredient_roles(
         # product's own scoring rows are reused within a pass.
         return scoped_product_view(
             product,
-            ("ingredient_roles", module, materiality_only),
-            lambda: _classify_rows(product, module, None, materiality_only),
+            ("ingredient_roles", module, materiality_only, evidence),
+            lambda: _classify_rows(product, module, None, materiality_only, evidence),
             lambda roles: [dict(role) for role in roles],
         )
-    return _classify_rows(product, module, rows, materiality_only)
+    return _classify_rows(product, module, rows, materiality_only, evidence)
 
 
 def _classify_rows(
@@ -7475,11 +7475,14 @@ def _classify_rows(
     module: Optional[str],
     rows: Optional[List[Dict[str, Any]]],
     materiality_only: bool,
+    evidence: bool,
 ) -> List[Dict[str, Any]]:
     product = product or {}
     if rows is None:
         rows = get_scoring_ingredients(product, strict=True).rows
     ctx = _role_context(product, module, rows)
+    if evidence:
+        ctx["statements"] = []
     if materiality_only:
         ctx = {**ctx, "driver_canonicals": set(), "module": None}
     return [_classify_one(row, ctx) for row in rows]

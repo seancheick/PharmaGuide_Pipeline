@@ -1,0 +1,26 @@
+{
+"canonical": "capsaicin",
+"labels": 1,
+"stored": "positive_moderate",
+"as_read": "The label's own Capsifen at the label's daily total has one positive 24-person placebo-controlled trial whose abstract names no primary outcome; the stored study is chili pepper as food.",
+"route": "held",
+"positive_named": [
+"32578488",
+"36938807",
+"33063385",
+"30123516"
+],
+"settling_paper": "32578488: full text would state whether a primary outcome was named and which one. It tests Capsifen 200 mg daily, which matches the daily total on label 328728, and 24 subjects remains a thin base even if a primary is named.",
+"stop_list": [
+"Label splits 200 mg into two doses; trial gives it once daily"
+],
+"stored_rating_note": "positive_moderate rests on a food amount of red chili pepper in a respiration chamber (PMID 23844093), reported as acute metabolic markers; the stored record does not hold PMID 32578488.",
+"pmids_read": [
+"23844093",
+"32578488",
+"36938807",
+"33063385",
+"30123516"
+],
+"unread_notes": "Abstracts only. Searches: (Capsifen OR capsaicinoids OR capsinoids OR capsaicin OR \"Capsicum extract\" OR \"chili extract\") oral (weight OR obesity OR \"body fat\" OR \"energy expenditure\" OR \"fat oxidation\") (randomized OR meta-analysis) capsule NOT topical, count 4; (capsaicin OR capsaicinoids OR capsimax OR Capsifen OR \"capsicum extract\") (body weight OR obesity OR overweight OR body fat OR metabolic rate OR thermogenesis) (double-blind OR placebo OR meta-analysis) (supplement OR supplementation OR capsule OR ingestion), count 60, first 25 listed. Hits on capsinoids, capsiate, phenylcapsaicin and exercise performance were not opened, and no statement about them is made."
+}

@@ -1,0 +1,84 @@
+{
+ "canonical": "olive_fruit",
+ "labels": 4,
+ "stored": "positive_weak",
+ "as_read": "Mixed for olive leaf extract: lower blood pressure in several trials and better vital signs in a small COVID-19 trial, with no effect on illness incidence, glycemia in a pilot or anxiety, and no fruit evidence reaches these labels.",
+ "route": "packet_no_credit",
+ "positive_named": [
+  "36319585",
+  "40990594",
+  "21036583",
+  "30744092",
+  "26951205",
+  "22512698",
+  "39599665",
+  "42303499",
+  "40325976"
+ ],
+ "studies_to_add": [
+  {
+   "pmid": "36319585",
+   "study_type": "rct",
+   "sample_size": 150,
+   "primary_endpoint": "vital signs, named primary in the full text",
+   "effect_direction": "positive_weak",
+   "quote": "Olive leaf extract can improve the clinical status of the patients and decrease the length of hospitalization."
+  },
+  {
+   "pmid": "21036583",
+   "study_type": "rct",
+   "sample_size": 0,
+   "primary_endpoint": "reduction in systolic blood pressure from baseline to week 8, against captopril",
+   "effect_direction": "positive_weak",
+   "quote": "After 8 weeks of treatment, both groups experienced a significant reduction of SBP as well as DBP from baseline; while such reductions were not significantly different between groups."
+  },
+  {
+   "pmid": "40990594",
+   "study_type": "rct",
+   "sample_size": 621,
+   "primary_endpoint": "change in 24-h SBP and DBP from baseline to week 12",
+   "effect_direction": "positive_weak",
+   "quote": "The primary outcome was the change in 24-h SBP and DBP from baseline to week-12."
+  },
+  {
+   "pmid": "39818111",
+   "study_type": "rct",
+   "sample_size": 31,
+   "primary_endpoint": "change in HbA1c at 24 weeks",
+   "effect_direction": "null",
+   "quote": "Analyses found no statistically significant time-group interactions for HbA1c, diabetes-related distress or health-related quality of life."
+  }
+ ],
+ "stop_list": [
+  "Fields can't express an oleuropein-standardized dose: 36319585 used 30% oleuropein capsules, and these rows print extract mass only.",
+  "40990594 and 39818111 stay extraction_pending: their abstracts give no dose and PubMed shows no PMC id. 40990594's dose would decide the cardiovascular label.",
+  "21036583 sample_size is 0 here because the part of the abstract read gives no number; fill it from the full text or leave it out."
+ ],
+ "clinician_items": [
+  "40990594: extract was added in people already treated for hypertension and lowered 24-hour systolic pressure; the abstract reports no significant adverse events. Additive effect with blood pressure medicine is worth a clinician's look; the abstract doesn't address it.",
+  "39818111: well tolerated, no severe or serious adverse events over 24 weeks in a pilot of 31.",
+  "Canonical mapping: three products named Olive Leaf Extract sit under olive_fruit, and no label row read prints fruit. A leaf identity may belong elsewhere; I changed nothing.",
+  "33868820: reports its 1000 mg/day comparison as versus placebo with -11.5 and -13.7 mmHg, the same figures 21036583 reports for olive leaf extract and captopril. The comparator in that review looks mislabeled, so read it with that in mind."
+ ],
+ "stored_rating_note": "Stored positive_weak cites 39828996, a meta-analysis of isolated oleuropein, hydroxytyrosol and tyrosol. It doesn't describe the olive extract on these labels, and the record's material_form says the sources aren't specified. The stored question and search are about fruit and LDL oxidation, while the labels are leaf products with immune or cardiovascular purposes. No fruit extract trial was opened in this review.",
+ "pmids_read": [
+  "39828996",
+  "42303499",
+  "40325976",
+  "40990594",
+  "36319585",
+  "39818111",
+  "40943119",
+  "39955806",
+  "39599665",
+  "42514151",
+  "42061085",
+  "40685267",
+  "30744092",
+  "21036583",
+  "26951205",
+  "22512698",
+  "33868820"
+ ],
+ "unread_notes": "Full text passages opened for 36319585 (PMC9617633). PubMed shows no PMC id for 40990594, 39818111 or 42303499. All others abstracts only. 40943119, 39955806, 42514151, 42061085 and 40685267 were read to 1500 characters, and 21036583, 22512698 and 33868820 to 2000, so some conclusions are cut; I describe only what appeared. Two searches: 66 hits with 30 listed by recency, and 22 hits restricted to 1990 to 2022. Seen by title and not opened: 41848522, 38287654, 36271405, 39334699 (reviews), 39585054 (Alzheimer's), 39993475 (oleuropein, skeletal muscle), 41935461, 37375586, 25379688, 31448348 (combinations), 36766057 (tea), 34796136, 33034707, 31930845, 27918443, 23516412, 8786521. No study of a fruit extract was opened. Topical trials 39623211, 38131948, 37514112 and 33541815 weren't used."
+}

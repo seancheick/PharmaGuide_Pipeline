@@ -1052,7 +1052,11 @@ def test_primavie_native_trial_cannot_substitute_unrelated_declared_purpose(enri
          'statements':[{'type':'Formula re: Contains','notes':f'Shilajit supports {purpose}.'}], 'otherIngredients':{'ingredients':[]}}
     product,_=enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     artifact=build_scored_artifact(product)
-    assert (artifact['quality_pillars_v4']['evidence']['score'] > 0) is accepted
+    assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+    matches, _ = resolved_clinical_matches(product)
+    match = next(m for m in matches if "PRIMAVIE" in m["id"])
+    alignment = match["applicability_assessment"]["claim_alignment"]["state"]
+    assert (alignment in {"aligned", "mixed"}) is accepted
 
 
 @pytest.mark.parametrize('context', [
@@ -2104,7 +2108,6 @@ def test_claim_absence_does_not_turn_unqualified_outcomes_into_affirmative_credi
     current = owner.reviewed_entries()
     record = deepcopy(current['INGR_CREATINE_MONOHYDRATE'])
     context = next(c for c in record['study_contexts'] if c.get('scoring_eligible') is True)
-    context['outcomes'] = outcomes
     record['study_contexts'] = [context]
     monkeypatch.setattr(owner, 'reviewed_entries', lambda: {**current, record['id']: record})
     row = _row('creatine_monohydrate', 'Creatine Monohydrate', quantity=3000)
@@ -2112,6 +2115,8 @@ def test_claim_absence_does_not_turn_unqualified_outcomes_into_affirmative_credi
                'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]},
                'activeIngredients': [row], 'evidence_data': {'clinical_matches': [{**record,
                    'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    assert score_evidence(product, apply_primary_floor=True)['score'] > 0
+    context['outcomes'] = outcomes
     assert score_evidence(product, apply_primary_floor=True)['score'] == 0
     artifact = build_scored_artifact(product)
     assert artifact['_v4_module_breakdown']['dimensions']['evidence']['score'] == 0
@@ -2275,9 +2280,12 @@ def test_condition_and_signed_scope_cannot_promote_a_null_sleep_outcome(monkeypa
         'ingredient_quality_data': {'ingredients_scorable': [row]},
         'evidence_data': {'clinical_matches': [{**source, 'matched_canonical_ids': ['synthetic_material'],
             'matched_source_row_refs': ['ingredientRows[0]']}]}}
-    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+    entry = product["evidence_data"]["clinical_matches"][0]
+    assert assess_clinical_applicability(product, entry, assess_amount=False)["status"] == "not_applicable"
+    score = build_scored_artifact(product)['quality_pillars_v4']['evidence']['score']
+    assert score > 0
     product['product_name'] = 'Supports stress relief'
-    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] > 0
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == score
 
 
 def test_exact_unknown_category_condition_still_matches_its_positive_patient_outcome():
@@ -2548,3 +2556,74 @@ def test_ucii_signed_knee_scope_cannot_become_bone_only_credit(claim, expected):
     assert decision["status"] == expected
     if expected == "not_applicable":
         assert decision["reason_code"] == "label_purpose_evidence_mismatch"
+
+
+def test_ingredient_evidence_is_invariant_to_manufacturer_benefit_claims():
+    row = _row("creatine_monohydrate", "Creatine Monohydrate", quantity=5000,
+               ref="ingredientRows[0]")
+    product = {"product_name": "Creatine", "activeIngredients": [row],
+               "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
+    baseline = score_evidence(product, owner_scoped=True)
+    assert baseline["score"] > 0
+    for claim, expected_claim_state in (
+        ("Supports lean body mass.", "aligned"),
+        ("Supports cognitive performance.", "unrelated"),
+        ("Creatine monohydrate helps maintain hydration within the cells.", "ambiguous"),
+    ):
+        variant = {**product, "statements": [{"type": "Formulation re: Other", "notes": claim}]}
+        result = score_evidence(variant, owner_scoped=True)
+        assert result["score"] == baseline["score"], claim
+        matches, _ = resolved_clinical_matches(variant, assess_amount=False, owner_scoped=True)
+        record = next(m for m in matches if m["id"] == "INGR_CREATINE_MONOHYDRATE")
+        decision = record["applicability_assessment"]
+        assert decision["claim_alignment"]["state"] == expected_claim_state
+        assert decision["population_applicability"]["context_ids"] == [
+            "creatine_monohydrate_resistance_training_body_composition_39074168"]
+
+
+def test_supported_sleep_and_excluded_shift_work_claims_are_both_retained():
+    row = _row("melatonin", "Melatonin", quantity=3)
+    product = {
+        "product_name": "Melatonin", "physicalState": {"name": "Capsule"},
+        "activeIngredients": [row], "ingredient_quality_data": {"ingredients_scorable": [row]},
+        "statements": [{"type": "Formulation re: Other",
+                        "notes": "Supports sleep. Helps with shift work."}],
+    }
+    result = assess_clinical_applicability(
+        product, {"id": "INGR_MELATONIN", "matched_source_row_refs": ["ingredientRows[0]"]},
+        assess_amount=False, require_claim_alignment=False,
+    )
+    assert result["status"] == "applicable"
+    assert result["claim_alignment"]["state"] == "mixed"
+    assert result["claim_alignment"]["excluded_terms"] == ["shift work"]
+
+
+@pytest.mark.parametrize('route', ['iv', 'im', 'vaginal', 'topical', 'enteral_tube', 'intranasal', 'inhaled'])
+def test_oral_product_does_not_inherit_nonoral_study_route(monkeypatch, route):
+    import clinical_applicability as ca
+    from test_evidence_resolver import _approved_test_source
+    source = _approved_test_source({'id': 'TEST_ROUTE', 'matched_canonical_ids': ['synthetic_material'],
+                                    'matched_source_row_refs': ['ingredientRows[0]']}, name='Synthetic Material')
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {source['id']: source})
+    row = {'name': 'Synthetic Material', 'canonical_id': 'synthetic_material',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'form_factor_canonical': 'capsule', 'activeIngredients': [row]}
+    assert ca.assess_clinical_applicability(product, source, assess_amount=False, require_claim_alignment=False)['status'] == 'applicable'
+    source['study_contexts'][0]['route'] = route
+    decision = ca.assess_clinical_applicability(product, source, assess_amount=False, require_claim_alignment=False)
+    assert decision['status'] == 'not_applicable'
+    assert decision['reason_code'] == 'clinical_delivery_mismatch'
+
+
+@pytest.mark.parametrize('description,expected', [
+    ('Nonpregnant and nonlactating adult women', 'explicit_conflict'),
+    ('Adults aged 18-65; breastfeeding women excluded', 'explicit_conflict'),
+    ('General adult population', 'eligible'),
+    ('Adults; breastfeeding women were not excluded', 'eligible'),
+    ('Adults excluded smokers but included breastfeeding mothers', 'eligible'),
+    ('Breastfeeding women', 'eligible'),
+])
+def test_explicit_lactation_exclusion_cannot_qualify_nursing_product(description, expected):
+    from clinical_applicability import assess_context_population
+    assert assess_context_population({'product_name': 'Nursing support'},
+        {'population': {'age_group': 'adult', 'description': description}}) == expected

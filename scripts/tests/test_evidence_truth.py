@@ -35,10 +35,8 @@ def _enrich(pipeline, label):
 
 # Open review, Evidence 0: read "not established" before this, across the routes that had it.
 @pytest.mark.parametrize("label, module", [
-    pytest.param("evidence_truth_231852_raw.json", "generic", id="generic_ubiquinol_contexts_missing"),
     pytest.param("evidence_truth_252423_raw.json", "generic", id="generic"),
     pytest.param("evidence_truth_253729_raw.json", "fiber_digestive", id="fiber"),
-    pytest.param("evidence_truth_295065_raw.json", "sports", id="sports"),
     pytest.param("evidence_truth_18174_raw.json", "probiotic", id="probiotic"),
 ])
 def test_an_open_review_reads_as_open(pipeline, label, module):
@@ -52,23 +50,19 @@ def test_an_open_review_reads_as_open(pipeline, label, module):
     assert evidence_review_open(scored["assessment_readiness"]["release_assessment"])
     assert evidence["score"] == 0
     assert evidence["evidence_result_state"] in {
-        "applicability_unestablished", "research_present_applicability_unestablished"}
+        "clinical_review_not_covered", "applicability_unestablished", "research_present_applicability_unestablished"}
     assert evidence["display_state"] == "not_yet_reviewed"
     assert "review pending" in evidence["reason"]
     assert NOT_ESTABLISHED not in evidence["reason"]
 
 
-def test_a_finished_rejection_of_human_studies_says_they_did_not_qualify(pipeline):
-    """Sean's sentence, November 4. 60601's CoQ10 trials cover a purpose this label doesn't claim."""
+def test_coq10_credit_is_independent_of_the_advertised_purpose(pipeline):
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    scored = build_scored_artifact(_enrich(pipeline, "evidence_truth_60601_raw.json"))
-    evidence = scored["quality_pillars_v4"]["evidence"]
-    assert scored["quality_assessment_status"] == "complete"
-    assert evidence["score"] == 0
-    assert evidence["display_state"] == "applicability_unestablished"
-    assert evidence["reason"].startswith(DID_NOT_QUALIFY)
-    assert NOT_ESTABLISHED not in evidence["reason"]
+    label = "evidence_truth_60601_raw.json"
+    scores = [build_scored_artifact(product)["quality_pillars_v4"]["evidence"]["score"]
+              for product in (_enrich(pipeline, label), _with_claims(pipeline, label))]
+    assert scores[0] == scores[1] > 0
 
 
 def _closed_record(monkeypatch, canonical, decision):
@@ -201,14 +195,6 @@ def test_a_finished_review_with_no_stated_direction_stays_complete(pipeline):
     assert scored["quality_pillars_v4"]["evidence"]["score"] == 0
 
 
-def test_an_open_review_never_says_the_studies_did_not_qualify(pipeline):
-    from scoring_v4.scored_artifact import build_scored_artifact
-
-    evidence = build_scored_artifact(_enrich(pipeline, "evidence_truth_231852_raw.json"))["quality_pillars_v4"]["evidence"]
-    assert evidence["display_state"] == "not_yet_reviewed"
-    assert DID_NOT_QUALIFY not in evidence["reason"]
-
-
 def test_a_rejected_record_without_human_studies_does_not_say_human_research_exists():
     from assessment_readiness import evidence_studies_did_not_qualify
 
@@ -228,12 +214,14 @@ def test_a_rejected_record_without_human_studies_does_not_say_human_research_exi
 
 
 def test_a_brand_printed_as_an_alternate_name_reaches_its_record(pipeline):
-    """231852 prints Ubiquinol (Kaneka Ubiquinol). The record is read, and the signed
-    scope still decides: the label's only claim is unrelated, so it earns nothing."""
-    enriched = _enrich(pipeline, "evidence_truth_231852_raw.json")
-    rejected = {m["id"]: m["reason_code"] for m in enriched["evidence_data"]["rejected_clinical_matches"]}
-    assert rejected["BRAND_KANEKA_UBIQUINOL"] == "label_purpose_evidence_mismatch"
-    assert "BRAND_KANEKA_UBIQUINOL" not in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    label = "evidence_truth_231852_raw.json"
+    enriched = _enrich(pipeline, label)
+    assert "BRAND_KANEKA_UBIQUINOL" in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
+    score = build_scored_artifact(enriched)["quality_pillars_v4"]["evidence"]["score"]
+    plain = build_scored_artifact(_with_claims(pipeline, label))["quality_pillars_v4"]["evidence"]["score"]
+    assert score == plain > 0
 
 
 def test_an_alternate_name_only_reaches_a_brand_record(pipeline):
@@ -246,17 +234,15 @@ def test_an_alternate_name_only_reaches_a_brand_record(pipeline):
     assert "PRECLIN_DGL" not in [m["id"] for m in evidence["clinical_matches"] + evidence["rejected_clinical_matches"]]
 
 
-def test_a_brand_reached_by_its_alternate_name_still_meets_its_exclusions(pipeline):
-    """17550 prints Kaneka QH and a "Promotes: Energy Production" bullet. Kaneka's signed
-    scope excludes energy, so reaching the record doesn't earn its credit."""
+def test_a_brand_claim_exclusion_is_separate_from_ingredient_credit(pipeline):
     from scoring_v4.scored_artifact import build_scored_artifact
 
     enriched = _enrich(pipeline, "evidence_truth_17550_raw.json")
-    rejected = {m["id"]: m["reason_code"] for m in enriched["evidence_data"]["rejected_clinical_matches"]}
-    assert rejected["BRAND_KANEKA_UBIQUINOL"] == "label_purpose_evidence_mismatch"
-    scored = build_scored_artifact(enriched)
-    assert scored["quality_pillars_v4"]["evidence"]["score"] == 0
-    assert scored["quality_assessment_status"] == "partial"
+    match = next(m for m in enriched["evidence_data"]["clinical_matches"] if m["id"] == "BRAND_KANEKA_UBIQUINOL")
+    alignment = match["applicability_assessment"]["claim_alignment"]
+    assert alignment["state"] == "mixed"
+    assert "energy production" in alignment["excluded_terms"]
+    assert build_scored_artifact(enriched)["quality_pillars_v4"]["evidence"]["score"] > 0
 
 
 MELATONIN = "INGR_MELATONIN"
@@ -292,18 +278,21 @@ def test_one_sentence_combining_sleep_and_jet_lag_keeps_the_sleep_evidence(pipel
 
 
 @pytest.mark.parametrize("claim", ["Helps with jet lag", "Jet lag relief", "For travelers with jetlag", "Helps with jet lag without promoting sleep"])
-def test_a_jet_lag_claim_alone_earns_nothing_from_the_sleep_evidence(pipeline, claim):
-    """The record has no reviewed jet-lag context, so this claim has no evidence to meet."""
-    enriched = _with_claims(pipeline, "evidence_truth_17393_raw.json", claim)
-    assert MELATONIN not in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
-    assert _melatonin_rejection(enriched) == "label_purpose_evidence_mismatch"
+def test_jet_lag_claim_does_not_change_sleep_evidence(pipeline, claim):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    label = "evidence_truth_17393_raw.json"
+    enriched = _with_claims(pipeline, label, claim)
+    match = next(m for m in enriched["evidence_data"]["clinical_matches"] if m["id"] == MELATONIN)
+    assert match["applicability_assessment"]["claim_alignment"]["state"] == "unrelated"
+    score = build_scored_artifact(enriched)["quality_pillars_v4"]["evidence"]["score"]
+    plain = build_scored_artifact(_with_claims(pipeline, label))["quality_pillars_v4"]["evidence"]["score"]
+    assert score == plain > 0
 
 
-def test_the_decision_covers_jet_lag_and_no_other_signed_melatonin_term(pipeline):
-    """178273 claims sleep and names jet lag or shift work; shift work still excludes."""
+def test_shift_work_copy_cannot_lift_melatonin_delivery_exclusion(pipeline):
     enriched = _enrich(pipeline, "evidence_truth_178273_raw.json")
-    assert MELATONIN not in [m["id"] for m in enriched["evidence_data"]["clinical_matches"]]
-    assert _melatonin_rejection(enriched) == "label_purpose_evidence_mismatch"
+    assert _melatonin_rejection(enriched) == "clinical_delivery_mismatch"
 
 
 def test_a_jet_lag_mention_does_not_lift_a_preparation_the_review_excludes(pipeline):
@@ -344,9 +333,10 @@ def test_a_rejection_counts_whichever_row_holds_it(rows, rejected, required, exp
     assert evidence_studies_did_not_qualify(product, _projection_case(*rows), required) is expected
 
 
-def test_a_label_whose_only_row_is_the_projection_reads_the_rejection(pipeline):
-    """328840: its one required row is the projection, and INGR_QUERCETIN was rejected for its purpose."""
+def test_product_level_quercetin_credit_is_independent_of_claims(pipeline):
     from scoring_v4.scored_artifact import build_scored_artifact
 
-    evidence = build_scored_artifact(_enrich(pipeline, "evidence_truth_328840_raw.json"))["quality_pillars_v4"]["evidence"]
-    assert evidence["reason"].startswith(DID_NOT_QUALIFY)
+    label = "evidence_truth_328840_raw.json"
+    scores = [build_scored_artifact(product)["quality_pillars_v4"]["evidence"]["score"]
+              for product in (_enrich(pipeline, label), _with_claims(pipeline, label))]
+    assert scores[0] == scores[1] > 0

@@ -41,7 +41,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 # Keep historical snapshots unchanged; this dated baseline records the reviewed
-# native canary contract after the reviewed October 19-28 source batches.
+# canary contract after the merged November 4 dose, warning and wording batches.
 from scripts.release_artifact_paths import canary_baseline_dir
 
 BASELINE_DIR = canary_baseline_dir(ROOT)

@@ -1,0 +1,67 @@
+{
+ "canonical": "ashwagandha_root",
+ "labels": 2,
+ "stored": "positive_strong",
+ "as_read": "Positive at 600 mg/day of root extract in small trials and pooled analyses with heterogeneity; named primary outcomes at that amount cover sleep and menopause, not the labels' mood and energy positioning.",
+ "route": "packet_no_credit",
+ "positive_named": [
+  "42742071",
+  "39498904",
+  "42029558",
+  "23439798",
+  "41140145",
+  "41644067",
+  "41635453",
+  "41561822",
+  "41725116"
+ ],
+ "studies_to_add": [
+  {
+   "pmid": "42742071",
+   "study_type": "rct",
+   "sample_size": 66,
+   "primary_endpoint": "Pittsburgh Sleep Quality Index, body composition by DXA, Menopause Rating Scale",
+   "effect_direction": "positive",
+   "quote": "Twelve weeks of ashwagandha supplementation significantly improved sleep quality, menopausal symptoms, and body composition in postmenopausal women, with an excellent safety profile."
+  },
+  {
+   "pmid": "39498904",
+   "study_type": "rct",
+   "sample_size": 120,
+   "primary_endpoint": "not named; COMPASS cognition assessed, others named as secondary",
+   "effect_direction": "positive",
+   "quote": "This study suggests that a dose of 600 mg a day can improve cognition, energy, and mood in adults with self-reported cognitive and energy problems."
+  },
+  {
+   "pmid": "41140145",
+   "study_type": "systematic_review_meta",
+   "sample_size": 713,
+   "primary_endpoint": "not named; anxiety, depression, stress and sleep quality",
+   "effect_direction": "positive_weak",
+   "quote": "We found evidence supporting the effectiveness of Withania somnifera in treating anxiety symptoms."
+  }
+ ],
+ "stop_list": [
+  "Both labels (204585, 274392) add fermented ginger 50 mg and a probiotic blend to the extract; the trials read are of the extract alone.",
+  "Neither label prints a brand. The 42742071 and 39498904 abstracts print no brand or withanolide content, so the labels' withanolides 30 mg can't be matched to them."
+ ],
+ "clinician_items": [
+  "41368179: this safety analysis reviewed case studies reporting liver toxicity and notes many involved supplements with both leaves and roots; read to the first 900 characters only.",
+  "41943502: no significant changes in liver function tests in 1002 adults on 600 mg/day root extract for 8 weeks."
+ ],
+ "stored_rating_note": "positive_strong rests on one 64-person trial whose abstract names no primary outcome. The stored KSM-66 identity isn't in that abstract or on these labels. Stored record cites PMC3573577; not opened, since PMC ids here must come from the PubMed record.",
+ "pmids_read": [
+  "23439798",
+  "41644067",
+  "41140145",
+  "42742071",
+  "39498904",
+  "42029558",
+  "41815853",
+  "41635453",
+  "41943502",
+  "41725116",
+  "41561822"
+ ],
+ "unread_notes": "Abstracts only. 41368179 read in part. Trials in athletes, children or at other amounts (41940566, 41599843, 39954269, 42602386, 41889719, 41846233) seen only in the listing and not used. Searches: 48 and 24 hits; 15 of each viewed."
+}

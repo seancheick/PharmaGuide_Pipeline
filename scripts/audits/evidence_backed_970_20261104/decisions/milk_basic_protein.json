@@ -1,0 +1,8 @@
+{"canonical":"milk_basic_protein","labels":1,"stored":"positive_weak","as_read":"Mixed: four small placebo-controlled trials at the label's 40 mg report higher BMD gain, and one larger trial of 40 mg in milk found no significant effect; no abstract names a primary outcome.",
+"route":"packet_no_credit",
+"positive_named":["17048062","16133638","12005077","11388472"],
+"stop_list":["Label combines MBP 40 mg with 600 mg calcium and 400 IU vitamin D; trials give MBP without them.","No abstract names a primary outcome, so full texts would settle whether BMD was declared primary. PMIDs 17048062 and 16133638 first.","12005077 and 11388472 report the same sample size (33) and duration; the abstracts don't say whether they share participants."],
+"clinician_items":["17482742: products containing MBP are labelled as containing milk because MBP has not been shown free of milk allergens."],
+"stored_rating_note":"Stored positive_weak cites only 17048062. It leaves out the null 19296044 and three further positive trials.",
+"pmids_read":["17048062","19296044","16133638","12005077","11388472","11471735","17012824","17012814","28003538","17482742"],
+"unread_notes":"Abstracts only. First search was noisy (31 hits, mostly MBP as other acronyms); second returned 19. Left unread: rodent and horse papers, narrative reviews 17012813, 17012811, 26598829, 20972896, 18506385, and 19889822 (dietary protein). The label is canonical id milk_basic_protein, printed as MBP, matching."}

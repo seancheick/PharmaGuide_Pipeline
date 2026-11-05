@@ -1,0 +1,44 @@
+{
+ "canonical": "lumbrokinase",
+ "labels": 2,
+ "stored": "positive_moderate",
+ "as_read": "One add-on oral trial reports its named primary vascular outcomes positive, but its abstract gives no dose, states no placebo or blinding, and no placebo trial was read.",
+ "route": "held",
+ "positive_named": [
+  "24229674",
+  "19416019",
+  "40933244"
+ ],
+ "settling_paper": "24229674: the full text gives the capsule amount and frequency, which decides whether it meets the review's standard against labels printing 40 mg (63230) and 150 mg (315659). Not tried: pm.py prints no PMC id, and the brief limits PMC ids to the PubMed record.",
+ "studies_to_add": [
+  {
+   "pmid": "40933244",
+   "study_type": "systematic_review_meta",
+   "sample_size": 0,
+   "primary_endpoint": "Barthel Index and NIHSS scores",
+   "effect_direction": "positive",
+   "quote": "Lumbrokinase may safely improve stroke outcomes; however, limited evidence warrants cautious use and further high-quality trials."
+  }
+ ],
+ "stop_list": [
+  "40933244 gives 35 RCTs but no participant total, route or dose in the abstract, so sample_size is 0 and it is not entered as an oral context.",
+  "Label 63230 is named Lumbrokinase 20 mg and its row prints 40 mg; the two aren't reconciled here.",
+  "If the full text of 24229674 gives the dose in units rather than mg, it stays in the regimen text."
+ ],
+ "clinician_items": [
+  "40933244: no significant increase in GI bleeding as pooled, OR 1.42, 95% CI 0.55 to 3.67.",
+  "27011386: no significant difference in hemostasis parameters and no hemorrhagic symptoms in 20 healthy adults on DLBS1033 490 mg three times daily for 14 days.",
+  "29093246: lumbrokinase was given together with low molecular heparin and warfarin in pulmonary embolism patients; the abstract calls this safe with no bleeding numbers in it."
+ ],
+ "stored_rating_note": "positive_moderate rests on one add-on trial whose abstract states no blinding and no dose; the stored record already notes the missing dose.",
+ "pmids_read": [
+  "24229674",
+  "29093246",
+  "11321442",
+  "19416019",
+  "27011386",
+  "40933244",
+  "35410433"
+ ],
+ "unread_notes": "Abstracts only. Search hits seen only as listing lines, nothing claimed: 30333270, 38004056, 39018150. Searches: 14 and 143 hits, the second capped at the 40 newest and filtered by keyword, so older hits weren't all seen."
+}

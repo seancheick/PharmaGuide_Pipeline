@@ -1,0 +1,662 @@
+{
+  "record_id": "INGR_L_TYROSINE",
+  "labels": 34,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "mixed: acute task effects in small healthy samples; null for endurance and heat",
+  "decision": "held: daily dose missing from the abstracts of 25598314, 24433977 and 29980424, and their full texts are not open",
+  "summary": "Free L-tyrosine only; the 11 N-acetyl labels are rejected separately. Single-session effects in small healthy samples. The one trial with an open dose gave 2 g once, against 350 to 1,000 mg on these labels. Endurance evidence is null, and the 2015 narrative review limits cognition to short-term demand.",
+  "question_for_clinician": "Can single-session task results in about 25 healthy adults carry credit at all? Agent recommendation: no, at most for acute cognition under demand.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_tyrosine_36548401",
+      "components": [
+        "INGR_L_TYROSINE"
+      ],
+      "source_pmids": [
+        "36548401"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_cognition",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_tyrosine_36548401",
+      "population": {
+        "age_group": "adult",
+        "description": "28 healthy men per the abstract; the paper describes two exclusions from analysis."
+      },
+      "study_design": "Double-blind placebo-controlled within-subject single-dose trial",
+      "outcomes": [
+        {
+          "name": "Reaction times reduced without loss of task performance",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Model-based control increased; temporal discounting 'if anything' attenuated",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No primary outcome designated in the passages read; computational task measures, not a health outcome.",
+        "Single 2 g dose against 350 to 1,000 mg on the labels.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          2000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "single_challenge",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Single dose of 2 g tyrosine",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36548401",
+          "location": "Abstract",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9822114/"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_tyrosine_25598314",
+      "components": [
+        "INGR_L_TYROSINE"
+      ],
+      "source_pmids": [
+        "25598314"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_cognition",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_tyrosine_25598314",
+      "population": {
+        "age_group": "adult",
+        "description": "22 healthy adults."
+      },
+      "study_design": "Double-blind randomized placebo-controlled task-switching trial",
+      "outcomes": [
+        {
+          "name": "Reduced switching costs versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Laboratory task; dose not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dose not stated in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "25598314",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_tyrosine_24433977",
+      "components": [
+        "INGR_L_TYROSINE"
+      ],
+      "source_pmids": [
+        "24433977"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_cognition",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_tyrosine_24433977",
+      "population": {
+        "age_group": "adult",
+        "description": "Healthy adults; number not in the abstract."
+      },
+      "study_design": "Double-blind placebo-controlled within-subject trial",
+      "outcomes": [
+        {
+          "name": "Better response inhibition on the stop-signal task",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Reaction to go signals unchanged",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Laboratory task; dose and sample size not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dose not stated in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "24433977",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_tyrosine_29980424",
+      "components": [
+        "INGR_L_TYROSINE"
+      ],
+      "source_pmids": [
+        "29980424"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_cognition",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_tyrosine_29980424",
+      "population": {
+        "age_group": "adult",
+        "description": "26 young healthy adults."
+      },
+      "study_design": "Randomized double-blind placebo-controlled within-subject trial",
+      "outcomes": [
+        {
+          "name": "Smaller conflict on the Simon task",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No change on the Flanker task",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Subliminal conflict larger when a conscious conflict was present",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Laboratory task; dose not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dose not stated in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29980424",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_tyrosine_39820592",
+      "components": [
+        "INGR_L_TYROSINE"
+      ],
+      "source_pmids": [
+        "39820592"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "exercise_in_heat",
+      "purpose": "performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_tyrosine_39820592",
+      "population": {
+        "age_group": "adult",
+        "description": "8 trained male soccer players."
+      },
+      "study_design": "Counterbalanced placebo-controlled crossover trial at 32°C",
+      "outcomes": [
+        {
+          "name": "No difference in peak power, decision-making, appraisal or affect",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Very small sample; dose scaled to body weight.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "150 mg per kg, counterbalanced with placebo",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39820592",
+          "location": "Abstract",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737745/"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_tyrosine_38290812",
+      "components": [
+        "INGR_L_TYROSINE"
+      ],
+      "source_pmids": [
+        "38290812"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "endurance_performance",
+      "purpose": "performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_tyrosine_38290812",
+      "population": {
+        "age_group": "adult",
+        "description": "Physically active people; 10 interventions from 8 studies."
+      },
+      "study_design": "Systematic review and meta-analysis with GRADE",
+      "outcomes": [
+        {
+          "name": "Time to exhaustion SMD 0.02, p=0.94",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Time trial SMD -0.04, p=0.85",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Included-trial PMIDs not extracted; full text not open.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several regimens; not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "38290812",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "10230711": "21 cadets: 2 g five times a day in a protein-rich drink against a carbohydrate drink, so not tyrosine alone against placebo; memory and tracking better, mood unchanged, systolic pressure lower.",
+    "26424423": "Narrative review: 'only when neurotransmitter function is intact' and short-term demand; no pooled result.",
+    "27403851": "Benefit depended on DRD2 genotype; a label cannot say which buyer it reaches.",
+    "8523192": "Phenylketonuria, not this population.",
+    "28477375": "Cooling study, not relevant to these labels."
+  },
+  "stop_or_hold": "Purpose: 'absent' claim state is creditable, so no existing field limits credit to acute demand on a label with no claim.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "36548401",
+      "title_fetched": "The catecholamine precursor Tyrosine reduces autonomic arousal and decreases decision thresholds in reinforcement learning and temporal discounting.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36548401/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "25598314",
+      "title_fetched": "Tyrosine promotes cognitive flexibility: evidence from proactive vs. reactive control during task switching performance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25598314/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24433977",
+      "title_fetched": "Eating to stop: tyrosine supplementation enhances inhibitory control but not response execution.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24433977/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29980424",
+      "title_fetched": "On the effects of tyrosine supplementation on interference control in a randomized, double-blind placebo-control trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29980424/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39820592",
+      "title_fetched": "Tyrosine supplementation is ineffective in facilitating soccer players' physical and cognitive performance during high-intensity intermittent exercise in hot conditions.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39820592/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38290812",
+      "title_fetched": "The effect of tyrosine supplementation on whole-body endurance performance in physically active population: A systematic review and meta-analysis including GRADE qualification.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38290812/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "10230711",
+      "title_fetched": "Tyrosine improves cognitive performance and reduces blood pressure in cadets after one week of a combat training course.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10230711/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26424423",
+      "title_fetched": "Effect of tyrosine supplementation on clinical and healthy populations under stress or cognitive demands--A review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26424423/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27403851",
+      "title_fetched": "Effects of l-Tyrosine on working memory and inhibitory control are determined by DRD2 genotypes: A randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27403851/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "8523192",
+      "title_fetched": "Effect of high-dose tyrosine supplementation on brain function in adults with phenylketonuria.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8523192/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28477375",
+      "title_fetched": "Oral l-tyrosine supplementation augments the vasoconstriction response to whole-body cooling in older adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28477375/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_L_TYROSINE",
+    "standard_name": "L-Tyrosine",
+    "aliases": [
+      "Tyrosine"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "36548401",
+      "25598314",
+      "24433977",
+      "29980424",
+      "39820592",
+      "38290812"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: acute task effects in small healthy samples; null for endurance and heat. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Focus & Mental Clarity"
+    ],
+    "health_goals_supported": [],
+    "notes": "Free L-tyrosine only; the 11 N-acetyl labels are rejected separately. Single-session effects in small healthy samples. The one trial with an open dose gave 2 g once, against 350 to 1,000 mg on these labels. Endurance evidence is null, and the 2015 narrative review limits cognition to short-term demand.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Small samples of healthy adults in single-session laboratory cognitive tasks",
+      "supported_outcomes": [
+        "Focus & Mental Clarity"
+      ],
+      "source_pmids": [
+        "36548401",
+        "25598314",
+        "24433977",
+        "29980424",
+        "39820592",
+        "38290812"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Free L-tyrosine only; the 11 N-acetyl labels are rejected separately. Single-session effects in small healthy samples. The one trial with an open dose gave 2 g once, against 350 to 1,000 mg on these labels. Endurance evidence is null, and the 2015 narrative review limits cognition to short-term demand. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "n-acetyl",
+        "n acetyl",
+        "acetyl-l-tyrosine",
+        "acetyltyrosine",
+        "nalt"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36548401",
+        "title": "The catecholamine precursor Tyrosine reduces autonomic arousal and decreases decision thresholds in reinforcement learning and temporal discounting.",
+        "citation": "PLoS computational biology (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36548401/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1371/journal.pcbi.1010785"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25598314",
+        "title": "Tyrosine promotes cognitive flexibility: evidence from proactive vs. reactive control during task switching performance.",
+        "citation": "Neuropsychologia (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25598314/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.neuropsychologia.2015.01.022"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "24433977",
+        "title": "Eating to stop: tyrosine supplementation enhances inhibitory control but not response execution.",
+        "citation": "Neuropsychologia (2014)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/24433977/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.neuropsychologia.2013.12.027"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29980424",
+        "title": "On the effects of tyrosine supplementation on interference control in a randomized, double-blind placebo-control trial.",
+        "citation": "European neuropsychopharmacology : the journal of the European College of Neuropsychopharmacology (2018)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29980424/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.euroneuro.2018.05.010"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39820592",
+        "title": "Tyrosine supplementation is ineffective in facilitating soccer players' physical and cognitive performance during high-intensity intermittent exercise in hot conditions.",
+        "citation": "PloS one (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39820592/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1371/journal.pone.0317486"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38290812",
+        "title": "The effect of tyrosine supplementation on whole-body endurance performance in physically active population: A systematic review and meta-analysis including GRADE qualification.",
+        "citation": "Journal of sports sciences (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38290812/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Systematic Review",
+          "Journal Article"
+        ],
+        "doi": "10.1080/02640414.2024.2309434"
+      }
+    ]
+  }
+}

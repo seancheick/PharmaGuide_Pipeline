@@ -1,0 +1,697 @@
+{
+  "record_id": "INGR_ASHWAGANDHA_ROOT",
+  "labels": 2,
+  "stored_direction": "positive_strong",
+  "direction_as_read": "positive at 600 mg/day of root extract in small trials and pooled analyses, with heterogeneity and a named primary outcome only for sleep, menopause and related purposes among the 600 mg trials read",
+  "decision": "closed_no_credit",
+  "summary": "Both labels print organic ashwagandha root extract 600 mg with withanolides 30 mg, fermented ginger and a probiotic blend, positioned for mood and energy. One trial at the same daily amount names primary outcomes and reports them positive, in postmenopausal women (42742071). The nearest purpose, cognition, energy and mood in 39498904, names no primary outcome. The stored trial (23439798) reports lower stress scores and cortisol but its abstract names no primary outcome and no brand. Pooled analyses favor Withania for anxiety and stress with substantial heterogeneity (41140145, 41644067). In a three-arm trial all groups, placebo included, had lower cortisol, the primary endpoint (41815853).",
+  "question_for_clinician": "Does 42742071 (root extract 600 mg/day, 66 postmenopausal women, primary sleep and menopause outcomes positive) carry to two combination labels positioned for mood and energy, or does 39498904, which has the matching purpose but names no primary outcome? Agent recommendation: no credit from this review, and positive_strong is too strong for one 64-person trial.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_ashwagandha_root_42742071",
+      "components": [
+        "INGR_ASHWAGANDHA_ROOT"
+      ],
+      "source_pmids": [
+        "42742071"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Withania somnifera",
+        "plant_part": "root"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "postmenopausal_symptoms",
+      "purpose": "sleep_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_ashwagandha_root_42742071",
+      "population": {
+        "age_group": "adult",
+        "description": "66 postmenopausal women aged 45-65, 34 on extract and 32 on placebo, single center in India."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Pittsburgh Sleep Quality Index improved more than placebo, -5.2 vs -0.8, P<0.001",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Menopause Rating Scale improved more than placebo, -8.1 vs -1.2, P<0.001",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Body fat percentage, -0.6% vs +0.03%, P<0.01",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Bone mineral density, no between-group difference",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Small, one center. Abstract states no brand or withanolide content. Three primary outcomes with no stated order.",
+        "Population and purpose differ from the labels, which are positioned for mood and energy.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Ashwagandha root extract 600 mg/day for 12 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42742071",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_ashwagandha_root_39498904",
+      "components": [
+        "INGR_ASHWAGANDHA_ROOT"
+      ],
+      "source_pmids": [
+        "39498904"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Withania somnifera",
+        "plant_part": "root"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "self_reported_cognitive_and_energy_problems",
+      "purpose": "cognition_energy_mood_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_ashwagandha_root_39498904",
+      "population": {
+        "age_group": "adult",
+        "description": "120 adults aged 30-75 with self-reported cognitive and energy problems, 60 per group."
+      },
+      "study_design": "Prospective randomized placebo-controlled trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "COMPASS episodic memory, working memory and accuracy of attention improved more than placebo, p<.05",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "POMS-A, Mental Fatigue Scale and BRIEF-A scores improved",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Abstract names secondary outcomes but doesn't call COMPASS primary. Abstract states no brand or withanolide content.",
+        "Closest purpose to the labels, but no primary outcome is named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Ashwagandha root extract 600 mg/day orally for 8 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39498904",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_ashwagandha_root_42029558",
+      "components": [
+        "INGR_ASHWAGANDHA_ROOT"
+      ],
+      "source_pmids": [
+        "42029558"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Withania somnifera",
+        "plant_part": "root"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "sleep_quality",
+      "purpose": "sleep_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_ashwagandha_root_42029558",
+      "population": {
+        "age_group": "adult",
+        "description": "200 adults aged 18-50, 50 per arm: extract, melatonin, both, or placebo."
+      },
+      "study_design": "Prospective randomized double-blind placebo-controlled four-arm trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "Sleep onset latency by actigraphy reduced across treatment groups; extract alone described as moderate",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "Abstract gives no separate number for the extract arm against placebo; the headline p-values are for the combination with melatonin.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Ashwagandha root extract 300 mg twice daily for 8 weeks",
+        "normalization": {
+          "basis": "Daily total of 300 mg x 2."
+        },
+        "source_provenance": {
+          "pmid": "42029558",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_ashwagandha_root_23439798",
+      "components": [
+        "INGR_ASHWAGANDHA_ROOT"
+      ],
+      "source_pmids": [
+        "23439798"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Withania somnifera",
+        "plant_part": "root"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_stress",
+      "purpose": "stress_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_ashwagandha_root_23439798",
+      "population": {
+        "age_group": "adult",
+        "description": "64 adults with a history of chronic stress."
+      },
+      "study_design": "Single-center prospective double-blind randomized placebo-controlled trial, 60 days",
+      "outcomes": [
+        {
+          "name": "Scores on all stress-assessment scales lower than placebo on day 60, P<0.0001",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Serum cortisol lower than placebo, P=0.0006",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and no brand; it calls the material a high-concentration full-spectrum root extract. The stored record calls it KSM-66, which these labels don't print.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          600
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 60,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One capsule twice daily, 300 mg high-concentration full-spectrum root extract each, for 60 days",
+        "normalization": {
+          "basis": "Daily total of 300 mg x 2."
+        },
+        "source_provenance": {
+          "pmid": "23439798",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_ashwagandha_root_41140145",
+      "components": [
+        "INGR_ASHWAGANDHA_ROOT"
+      ],
+      "source_pmids": [
+        "41140145"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "mental_disorders",
+      "purpose": "mood_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_ashwagandha_root_41140145",
+      "population": {
+        "age_group": "adult",
+        "description": "Fourteen randomized trials of people with mental disorders, mainly anxiety disorders; 360 treated and 353 controls."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized trials, median follow-up 8 weeks",
+      "outcomes": [
+        {
+          "name": "Anxiety, outlier-corrected SMD -1.13",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Depression, SMD -1.28, not confirmed by the Bayesian model",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Stress, SMD -0.95, and sleep quality, SMD -1.35",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors cite few studies, substantial heterogeneity and outliers. Abstract doesn't limit the preparation to root extract; one trial used Shirodhara therapy. No primary outcome named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Thirteen trials oral, median dose 600 mg/day.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "41140145",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_ashwagandha_root_41644067",
+      "components": [
+        "INGR_ASHWAGANDHA_ROOT"
+      ],
+      "source_pmids": [
+        "41644067"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "mental_health",
+      "purpose": "mood_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_ashwagandha_root_41644067",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in twenty-two randomized trials."
+      },
+      "study_design": "Systematic review and dose-response meta-analysis of randomized trials",
+      "outcomes": [
+        {
+          "name": "Stress, SMD -5.88",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Depression, SMD -5.68",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Anxiety, SMD -6.87",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors cite heterogeneity and call for high-quality trials. These standardized effects are far larger than in 41140145 and shouldn't be read at face value. Preparation not limited to root extract in the abstract. No primary outcome named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "41644067",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "41815853": "Compares a proprietary extract (APB, 300 mg twice daily) with a root extract arm whose dose the abstract doesn't state and placebo; primary cortisol fell in all groups.",
+    "41635453": "300 mg twice daily for 24 weeks in 100 adults; primary body weight and BMI fell more than placebo. A purpose these labels don't carry.",
+    "41561822": "Primary Menopause Rating Scale fell more than placebo in 60 women; the abstract states no dose.",
+    "41725116": "300 mg twice daily for 8 weeks in 50 elderly adults; primary quality of life scores improved more than placebo. A purpose these labels don't carry.",
+    "41943502": "Safety trial, 600 mg/day for 8 weeks in 1002 adults; the primary outcome is safety, not efficacy."
+  },
+  "stop_or_hold": "Both labels add fermented ginger and a probiotic blend; the trials read are of the extract alone. The fields can't express that gap.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "42742071",
+      "title_fetched": "Effects of Withania somnifera root extract on sleep quality, body composition, and menopausal symptoms in postmenopausal women: a randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42742071/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39498904",
+      "title_fetched": "Safety and Efficacy of Ashwagandha Root Extract on Cognition, Energy and Mood Problems in Adults: Prospective, Randomized, Placebo-Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39498904/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42029558",
+      "title_fetched": "Comparative Evaluation of Ashwagandha (Withania somnifera) Root Extract and Melatonin for Improving Sleep Quality in Adults: A Prospective, Randomized, Double-Blind, Placebo-Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42029558/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23439798",
+      "title_fetched": "A prospective, randomized double-blind, placebo-controlled study of safety and efficacy of a high-concentration full-spectrum extract of ashwagandha root in reducing stress and anxiety in adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23439798/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41140145",
+      "title_fetched": "The effect of Withania somnifera (Ashwagandha) on mental health symptoms in individuals with mental disorders: systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41140145/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41644067",
+      "title_fetched": "Effects of ashwagandha (Withania somnifera) on mental health in adults: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41644067/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41815853",
+      "title_fetched": "A proprietary herbal extract of ashwagandha root for stress and anxiety in healthy adults: a randomized, double-blind, three-arm, placebo-controlled efficacy and safety study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41815853/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41635453",
+      "title_fetched": "Efficacy and safety of Ashwagandha (Withania somnifera) root extract on stress and weight management in adults: a prospective, randomized, double-blind, placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41635453/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41561822",
+      "title_fetched": "A prospective, randomized, double-blind, placebo-controlled study on efficacy and safety of Ashwagandha root extract (Withania somnifera) for managing menopausal symptoms in women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41561822/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41725116",
+      "title_fetched": "Ashwagandha ( Withania somnifera ) Root Extract Improves General Health in Elderly Men and Women: A Prospective, Randomized, Double-Blind, Placebo-Controlled, Efficacy and Safety Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41725116/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41943502",
+      "title_fetched": "Safety of 8-Week Administration With Ashwagandha (Withania somnifera) Root Extract in Adults With Stress and Anxiety: Findings From a Prospective, Randomized, Multi-Center, Double-Blinded, Placebo-Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41943502/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_ASHWAGANDHA_ROOT",
+    "standard_name": "Ashwagandha Root Extract",
+    "aliases": [
+      "organic Ashwagandha root extract"
+    ],
+    "category": "adaptogen_stress",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "42742071",
+      "39498904",
+      "42029558",
+      "23439798",
+      "41140145",
+      "41644067"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive at 600 mg/day of root extract in small trials and pooled analyses, with heterogeneity and a named primary outcome only for sleep, menopause and related purposes among the 600 mg trials read. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Sleep quality",
+      "Menopausal symptoms",
+      "Stress scales"
+    ],
+    "health_goals_supported": [],
+    "notes": "Both labels print organic ashwagandha root extract 600 mg with withanolides 30 mg, fermented ginger and a probiotic blend, positioned for mood and energy. One trial at the same daily amount names primary outcomes and reports them positive, in postmenopausal women (42742071). The nearest purpose, cognition, energy and mood in 39498904, names no primary outcome. The stored trial (23439798) reports lower stress scores and cortisol but its abstract names no primary outcome and no brand. Pooled analyses favor Withania for anxiety and stress with substantial heterogeneity (41140145, 41644067). In a three-arm trial all groups, placebo included, had lower cortisol, the primary endpoint (41815853).",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with stress, self-reported cognitive or energy problems, or postmenopausal symptoms",
+      "supported_outcomes": [
+        "Sleep quality",
+        "Menopausal symptoms",
+        "Stress scales"
+      ],
+      "source_pmids": [
+        "42742071",
+        "39498904",
+        "42029558",
+        "23439798",
+        "41140145",
+        "41644067"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Both labels print organic ashwagandha root extract 600 mg with withanolides 30 mg, fermented ginger and a probiotic blend, positioned for mood and energy. One trial at the same daily amount names primary outcomes and reports them positive, in postmenopausal women (42742071). The nearest purpose, cognition, energy and mood in 39498904, names no primary outcome. The stored trial (23439798) reports lower stress scores and cortisol but its abstract names no primary outcome and no brand. Pooled analyses favor Withania for anxiety and stress with substantial heterogeneity (41140145, 41644067). In a three-arm trial all groups, placebo included, had lower cortisol, the primary endpoint (41815853). Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42742071",
+        "title": "Effects of Withania somnifera root extract on sleep quality, body composition, and menopausal symptoms in postmenopausal women: a randomized, double-blind, placebo-controlled trial.",
+        "citation": "Menopause (New York, N.Y.) (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42742071/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1097/GME.0000000000002894"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39498904",
+        "title": "Safety and Efficacy of Ashwagandha Root Extract on Cognition, Energy and Mood Problems in Adults: Prospective, Randomized, Placebo-Controlled Study.",
+        "citation": "Journal of psychoactive drugs (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39498904/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/02791072.2024.2424279"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42029558",
+        "title": "Comparative Evaluation of Ashwagandha (Withania somnifera) Root Extract and Melatonin for Improving Sleep Quality in Adults: A Prospective, Randomized, Double-Blind, Placebo-Controlled Study.",
+        "citation": "Clocks & sleep (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42029558/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3390/clockssleep8020015"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23439798",
+        "title": "A prospective, randomized double-blind, placebo-controlled study of safety and efficacy of a high-concentration full-spectrum extract of ashwagandha root in reducing stress and anxiety in adults.",
+        "citation": "Indian journal of psychological medicine (2012)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23439798/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.4103/0253-7176.106022"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41140145",
+        "title": "The effect of Withania somnifera (Ashwagandha) on mental health symptoms in individuals with mental disorders: systematic review and meta-analysis.",
+        "citation": "BJPsych open (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41140145/",
+        "publication_types": [
+          "Journal Article",
+          "Review"
+        ],
+        "doi": "10.1192/bjo.2025.10885"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41644067",
+        "title": "Effects of ashwagandha (Withania somnifera) on mental health in adults: A systematic review and dose-response meta-analysis of randomized controlled trials.",
+        "citation": "Complementary therapies in medicine (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41644067/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1016/j.ctim.2026.103325"
+      }
+    ]
+  }
+}

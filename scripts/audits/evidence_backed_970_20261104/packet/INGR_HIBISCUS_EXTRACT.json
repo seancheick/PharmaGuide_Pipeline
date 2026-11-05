@@ -1,0 +1,686 @@
+{
+  "record_id": "INGR_HIBISCUS_EXTRACT",
+  "labels": 13,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed: pooled trials of tea and extract together favor hibiscus on blood pressure with high heterogeneity; Cochrane found extract capsule evidence insufficient, and a 12-week 1000 mg extract RCT was null",
+  "decision": "closed_no_credit",
+  "summary": "Eleven labels print hibiscus flower extract 800 mg, and two cranberry products print hibiscus extract, one at 100 mg and one with no amount; the label rows show no marker content, and the stored record is a narrative review (23333908). Pooled analyses favor hibiscus on blood pressure (39870328, 34927694, 34694241), but their abstracts do not separate extract from tea and give no doses, and one reports no significant effect with metabolic syndrome. For extract capsules specifically, Cochrane found one trial and called the evidence insufficient at very low certainty (34837382), a 108-person RCT at 1000 mg/day was null against placebo on all assessed metabolic parameters and blood pressure (40334927), and a pooled weight analysis was null (38878905). Abstracts only.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hibiscus_extract_34837382",
+      "components": [
+        "INGR_HIBISCUS_EXTRACT"
+      ],
+      "source_pmids": [
+        "34837382"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hibiscus sabdariffa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "primary_hypertension",
+      "purpose": "blood_pressure_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hibiscus_extract_34837382",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with hypertension in the one included RCT: 60 participants with type 2 diabetes, 52 in the analysis."
+      },
+      "study_design": "Cochrane systematic review, placebo or no treatment comparators; one RCT included",
+      "outcomes": [
+        {
+          "name": "Change in SBP versus placebo MD 1.65 mmHg (95% CI -7.89 to 11.19), very low certainty",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "unresolved",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Change in DBP versus placebo MD 4.60 mmHg (95% CI -1.38 to 10.58), very low certainty",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "unresolved",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "One extract capsule trial with high risk of attrition and reporting bias and baseline imbalance.",
+        "The abstract's 'total dose of 5600 mg' is not stated per day, so no dose value is recorded.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Roselle extract capsules (total dose of 5600 mg) versus lactose placebo at eight weeks.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "34837382",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hibiscus_extract_40334927",
+      "components": [
+        "INGR_HIBISCUS_EXTRACT"
+      ],
+      "source_pmids": [
+        "40334927"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hibiscus sabdariffa",
+        "plant_part": "calyx"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "abdominal_obesity_with_mild_metabolic_syndrome",
+      "purpose": "metabolic_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hibiscus_extract_40334927",
+      "population": {
+        "age_group": "adult",
+        "description": "108 participants with abdominal obesity and mild metabolic syndrome in Bangkok, Thailand."
+      },
+      "study_design": "Double-blind randomized placebo-controlled trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "HOMA-IR, glycemic markers, BMI, waist, lipid profile and blood pressure: no significant difference from placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "LDL fell from baseline by 7.98 mg/dL at 12 weeks",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Aqueous calyx extract with 45.04 mg/day total polyphenols; labels print no marker content.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Aqueous calyx extract 1000 mg daily for 12 weeks (45.04 mg/day total polyphenols).",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "40334927",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hibiscus_extract_39870328",
+      "components": [
+        "INGR_HIBISCUS_EXTRACT"
+      ],
+      "source_pmids": [
+        "39870328"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hibiscus sabdariffa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiometabolic_health",
+      "purpose": "blood_pressure_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hibiscus_extract_39870328",
+      "population": {
+        "age_group": "adult",
+        "description": "Participants in 26 RCTs, 1797 in total."
+      },
+      "study_design": "Overview of reviews and updated dose-response meta-analysis",
+      "outcomes": [
+        {
+          "name": "Systolic and diastolic blood pressure reduced dose-dependently versus placebo and other teas",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Total cholesterol, LDL-C and fasting glucose reduced, HDL-C raised",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Abstract does not separate extract from tea.",
+        "Abstract gives no dose range.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Doses not given in the abstract; comparators include placebo, other teas and antihypertensive drugs.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "39870328",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hibiscus_extract_34927694",
+      "components": [
+        "INGR_HIBISCUS_EXTRACT"
+      ],
+      "source_pmids": [
+        "34927694"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hibiscus sabdariffa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiovascular_risk_markers",
+      "purpose": "blood_pressure_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hibiscus_extract_34927694",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 17 chronic RCTs; total participants not in the abstract."
+      },
+      "study_design": "Systematic review and meta-analysis with trial sequential analysis",
+      "outcomes": [
+        {
+          "name": "SBP -7.10 mmHg versus placebo (95% CI -13.00 to -1.20; I2 95%)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "LDL -6.76 mg/dL versus other teas and placebo (95% CI -13.45 to -0.07; I2 64%)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Heterogeneity is very high for blood pressure.",
+        "Abstract does not separate extract from tea and calls for more studies on dose and duration.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Doses not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "34927694",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hibiscus_extract_34694241",
+      "components": [
+        "INGR_HIBISCUS_EXTRACT"
+      ],
+      "source_pmids": [
+        "34694241"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hibiscus sabdariffa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_to_moderate_hypertension",
+      "purpose": "blood_pressure_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hibiscus_extract_34694241",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with mild-to-moderate hypertension or hypertension with metabolic syndrome, 13 RCTs, 1205 participants."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "SBP -6.67 mmHg and DBP -4.35 mmHg versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Not significant in the subgroup with metabolic syndrome",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "Abstract does not separate extract from tea.",
+        "Abstract gives no dose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Doses not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "34694241",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_hibiscus_extract_38878905",
+      "components": [
+        "INGR_HIBISCUS_EXTRACT"
+      ],
+      "source_pmids": [
+        "38878905"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Hibiscus sabdariffa",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "obesity",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_hibiscus_extract_38878905",
+      "population": {
+        "age_group": "adult",
+        "description": "Six RCTs with 339 participants."
+      },
+      "study_design": "Systematic review and meta-analysis; four trials of extract capsules versus placebo, two of tea versus black or green tea",
+      "outcomes": [
+        {
+          "name": "Weight MD -0.27 kg (95% CI -1.98 to 1.42)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "BMI MD -0.06 and waist MD -0.20 cm, confidence intervals crossing zero",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract read to the waist circumference result; cut before the conclusion.",
+        "Abstract gives no dose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Extract capsules or tea; doses not given in the part of the abstract read.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "38878905",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "23333908": "Stored study. Narrative review of animal and human studies with no pooled data, doses or sample sizes; it calls hibiscus promising and asks for more high quality studies.",
+    "38952776": "350 mg extract twice daily added to valsartan, against valsartan with hydrochlorothiazide in chronic kidney disease; add-on with an active comparator.",
+    "42011348": "500 mg extract added to valsartan, against valsartan with hydrochlorothiazide in diabetic nephropathy; add-on with an active comparator.",
+    "40009760": "Acute crossover in 20 overweight adults with a hibiscus drink at breakfast; beverage amount not stated, no change in blood pressure."
+  },
+  "stop_or_hold": "The 5600 mg in 34837382 is stated as a total dose, not per day. Tea and extract shares of the pooled trials can't be read from these abstracts; full text of 39870328, 34927694 and 34694241 was not open through PMC links checked for 39870328 and 34694241 and not checked for 34927694.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "34837382",
+      "title_fetched": "Roselle for hypertension in adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34837382/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40334927",
+      "title_fetched": "Efficacy of Hibiscus sabdariffa L. extract on metabolic parameters in participants with abdominal obesity and mild metabolic syndrome in Bangkok, Thailand: A double-blind, randomized, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40334927/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39870328",
+      "title_fetched": "Efficacy and safety of Hibiscus sabdariffa in cardiometabolic health: An overview of reviews and updated dose-response meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39870328/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34927694",
+      "title_fetched": "A systematic review and meta-analysis of the effects of Hibiscus sabdariffa on blood pressure and cardiometabolic markers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34927694/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34694241",
+      "title_fetched": "Efficacy of Hibiscus sabdariffa on Reducing Blood Pressure in Patients With Mild-to-Moderate Hypertension: A Systematic Review and Meta-Analysis of Published Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34694241/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38878905",
+      "title_fetched": "Clinical effects of Hibiscus sabdariffa Linn. on obesity treatment: A systematic review and meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38878905/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23333908",
+      "title_fetched": "Hibiscus sabdariffa L. in the treatment of hypertension and hyperlipidemia: a comprehensive review of animal and human studies.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23333908/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38952776",
+      "title_fetched": "Roselle (Hibiscus sabdariffa L.) extract as an adjunct to valsartan in patients with mild chronic kidney disease: A double-blind randomized controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38952776/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42011348",
+      "title_fetched": "Comparison of Hibiscus sabdariffa L. extract and hydrochlorothiazide as adjuncts to Valsartan in managing hypertension in type 2 diabetic nephropathy: A randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42011348/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40009760",
+      "title_fetched": "Acute effects of Hibiscus sabdariffa on blood pressure and cognitive function.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40009760/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_HIBISCUS_EXTRACT",
+    "standard_name": "Hibiscus Extract",
+    "aliases": [
+      "Hibiscus Flower Extract",
+      "Hibiscus flower extract",
+      "Hibiscus extract"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "34837382",
+      "40334927",
+      "39870328",
+      "34927694",
+      "34694241",
+      "38878905"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: pooled trials of tea and extract together favor hibiscus on blood pressure with high heterogeneity; Cochrane found extract capsule evidence insufficient, and a 12-week 1000 mg extract RCT was null. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "systolic and diastolic blood pressure",
+      "insulin resistance",
+      "LDL cholesterol"
+    ],
+    "health_goals_supported": [],
+    "notes": "Eleven labels print hibiscus flower extract 800 mg, and two cranberry products print hibiscus extract, one at 100 mg and one with no amount; the label rows show no marker content, and the stored record is a narrative review (23333908). Pooled analyses favor hibiscus on blood pressure (39870328, 34927694, 34694241), but their abstracts do not separate extract from tea and give no doses, and one reports no significant effect with metabolic syndrome. For extract capsules specifically, Cochrane found one trial and called the evidence insufficient at very low certainty (34837382), a 108-person RCT at 1000 mg/day was null against placebo on all assessed metabolic parameters and blood pressure (40334927), and a pooled weight analysis was null (38878905). Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with hypertension or metabolic syndrome; pooled tea and extract trials",
+      "supported_outcomes": [
+        "systolic and diastolic blood pressure",
+        "insulin resistance",
+        "LDL cholesterol"
+      ],
+      "source_pmids": [
+        "34837382",
+        "40334927",
+        "39870328",
+        "34927694",
+        "34694241",
+        "38878905"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Eleven labels print hibiscus flower extract 800 mg, and two cranberry products print hibiscus extract, one at 100 mg and one with no amount; the label rows show no marker content, and the stored record is a narrative review (23333908). Pooled analyses favor hibiscus on blood pressure (39870328, 34927694, 34694241), but their abstracts do not separate extract from tea and give no doses, and one reports no significant effect with metabolic syndrome. For extract capsules specifically, Cochrane found one trial and called the evidence insufficient at very low certainty (34837382), a 108-person RCT at 1000 mg/day was null against placebo on all assessed metabolic parameters and blood pressure (40334927), and a pooled weight analysis was null (38878905). Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34837382",
+        "title": "Roselle for hypertension in adults.",
+        "citation": "The Cochrane database of systematic reviews (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34837382/",
+        "publication_types": [
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD007894.pub3"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40334927",
+        "title": "Efficacy of Hibiscus sabdariffa L. extract on metabolic parameters in participants with abdominal obesity and mild metabolic syndrome in Bangkok, Thailand: A double-blind, randomized, placebo-controlled trial.",
+        "citation": "Complementary therapies in medicine (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40334927/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.ctim.2025.103185"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39870328",
+        "title": "Efficacy and safety of Hibiscus sabdariffa in cardiometabolic health: An overview of reviews and updated dose-response meta-analysis.",
+        "citation": "Complementary therapies in medicine (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39870328/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.ctim.2025.103135"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34927694",
+        "title": "A systematic review and meta-analysis of the effects of Hibiscus sabdariffa on blood pressure and cardiometabolic markers.",
+        "citation": "Nutrition reviews (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34927694/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1093/nutrit/nuab104"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34694241",
+        "title": "Efficacy of Hibiscus sabdariffa on Reducing Blood Pressure in Patients With Mild-to-Moderate Hypertension: A Systematic Review and Meta-Analysis of Published Randomized Controlled Trials.",
+        "citation": "Journal of cardiovascular pharmacology (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34694241/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1097/FJC.0000000000001161"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38878905",
+        "title": "Clinical effects of Hibiscus sabdariffa Linn. on obesity treatment: A systematic review and meta-analysis of randomized controlled trials.",
+        "citation": "Complementary therapies in medicine (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38878905/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1016/j.ctim.2024.103063"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: hibiscus_extract effect_direction null, agent review; the contexts below are the reading behind it."
+}

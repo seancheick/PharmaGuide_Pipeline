@@ -1,0 +1,65 @@
+{
+ "canonical": "collagen",
+ "labels": 48,
+ "stored": "effect_direction unset; applicability_unestablished; documented_review_scope for hydrolyzed collagen and peptides (skin, joint), reviewed 2026-11-03",
+ "as_read": "Mixed: named-primary placebo trials and pooled skin results favor hydrolyzed collagen, but high-quality and non-pharmaceutical-funded studies show no skin effect (40324552).",
+ "route": "packet_no_credit",
+ "positive_named": [
+  "33562729",
+  "32009486",
+  "18416885",
+  "29337906",
+  "24401291",
+  "22500661"
+ ],
+ "how_labels_reach_pending": "Census fix2: all 48 labels have a collagen row with driver literature_reviewed_human_clinical_evidence and state evaluated_limited_or_negative, resolved_by_reviewed_clinical_evidence. pending2.py counts any row with that driver as open until its canonical is given as closed, so the scope already on the record does not take them out of the count. 44 labels read applicability_unestablished; 286148, 210902, 60681 read evaluated_authority and 29262 evaluated_applicable, driven by other ingredients. The census does not show the three-way split the scope describes: BioCell and plain Collagen rows read the same as hydrolyzed rows. I did not run the current scoring code on these labels.",
+ "preparations": {
+  "hydrolyzed_or_peptides_44": "Verisol 2.5 g on 9 labels (232810, 210902, 232456, 315978, 246117, 60681, 246412, 239842, 317815); Peptan 3 g on 269491, 269620; bovine 11 to 12 g on 13 (309608, 326245, 326247, 326298, 326299, 329935, 329937, 329936, 329938, 268448, 299906, 241737, PG_SUB_F4BDF40C828A43EAAA54980F44AD372E; 329936 and 329938 print the source only in the title or not at all); marine or fish 2.5 to 10 g on 10 (268402, 268407, 299951, 326266, 326244, 329893, 329892, 331293, 331294, 312932); porcine 2.5 g on 331021, 331022; chicken by title 2.5 g on 331018, 331020; types 1 and 3 on 302649 (2 g), 239811 (3 g), 269490 (6 to 6.6 g), 269677 (6.6 g); type 1 on 229093 (6 g); 286148 at 200 mg in a biotin gummy.",
+  "differs_biocell": "293939, 295509 (Collagen JS): BioCell Collagen hydrolyzed Collagen Complex 1000 mg. The scope excludes biocell, so outside these studies; not read for its own trials.",
+  "differs_plain_collagen": "81931 (Collagen 6 g) and 29262 (Flex-A-Min, unquantified Collagen in a nested row, 13 actives): no form printed. The scope leaves these open, and this review does not close them."
+ },
+ "studies_to_add": [
+  {
+   "pmid": "33562729",
+   "study_type": "rct",
+   "sample_size": 180,
+   "primary_endpoint": "Change in pain during or after exercise on VAS, 12 weeks",
+   "effect_direction": "positive",
+   "quote": "The supplementation of specific collagen peptides derived from type I collagen with a mean molecular weight of 3 kDa led to a significantly (p = 0.024) higher reduction of exercise-induced knee pain (-21.9 ± 18.3 mm) compared with the placebo group (-15.6 ± 18.5 mm)."
+  },
+  {
+   "pmid": "32009486",
+   "study_type": "rct",
+   "sample_size": 36,
+   "primary_endpoint": "Skin elasticity at 4 weeks",
+   "effect_direction": "positive",
+   "quote": "Skin elasticity measured from left and right cheeks in participants receiving CH increased compared to placebo (p=.006, .03, respectively)."
+  }
+ ],
+ "question_for_clinician": "33562729 (5 g, alone, 180 adults, named primary, positive) meets the rule, as do 32009486 and 18416885. Does this change the signed A059/A148 hold on INGR_COLLAGEN_PEPTIDES for any hydrolyzed row, given 40324552? Agent recommendation: no credit, keep the hold.",
+ "stop_list": [
+  "Packet id INGR_COLLAGEN would sit beside signed INGR_COLLAGEN_PEPTIDES, which holds the same meaning; a human decides where this belongs. I did not edit or restate that hold.",
+  "Outcome scope cannot limit credit by amount: 13 labels print 11 to 12 g and 286148 prints 200 mg, against 1.2 g to 10 g in the trials read.",
+  "Bone positioning on some labels is outside the scope's supported outcomes; 29337906 is a bone trial with a surrogate primary."
+ ],
+ "stored_rating_note": "The stored scope is respected and unchanged. 31919527 stays retired: its corrigendum 33301004 has a title and no abstract in PubMed, so the notice is still unread.",
+ "pmids_read": [
+  "33742704",
+  "37432180",
+  "40324552",
+  "42342959",
+  "39212129",
+  "33301004",
+  "31919527",
+  "32009486",
+  "33774639",
+  "33562729",
+  "29337906",
+  "24401291",
+  "26561784",
+  "22500661",
+  "18416885",
+  "21251991"
+ ],
+ "unread_notes": "Abstracts only. Search 1 returned 30, of which 25 were listed; I read only the opening of the others, and do not describe them. Search 2 for Verisol, Peptan and collagen hydrolysate trials returned 6, and none names Peptan. 31086034 is an absorption study, not opened beyond its opening."
+}

@@ -1,0 +1,670 @@
+{
+  "record_id": "INGR_APPLE_CIDER_VINEGAR",
+  "labels": 39,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "mixed: pooled liquid vinegar results favor it with high heterogeneity and a retracted trial in the pool; one capsule RCT, adjunct to metformin in PCOS",
+  "decision": "closed_no_credit",
+  "summary": "The stored rating rests on an acute vinegar-with-a-meal meta-analysis and an abstract-less letter, neither about capsules or gummies. Pooled evidence is liquid at mL doses, with high heterogeneity, and the 2025 weight meta-analysis (41010525) lists a trial since retracted (38966098). The only solid-form trial found is one 12-week capsule RCT at 1500 mg/day in women with PCOS, metabolic syndrome and metformin (42215584), positive on insulin resistance. A short crossover at 30 mL/day was null on energy expenditure (34055150). No gummy trial was found.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_apple_cider_vinegar_42215584",
+      "components": [
+        "INGR_APPLE_CIDER_VINEGAR"
+      ],
+      "source_pmids": [
+        "42215584"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "polycystic_ovary_syndrome_with_metabolic_syndrome",
+      "purpose": "metabolic_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_apple_cider_vinegar_42215584",
+      "population": {
+        "age_group": "adult",
+        "description": "94 women with PCOS, metabolic syndrome and HOMA-IR above 2.5, all on metformin."
+      },
+      "study_design": "12-week randomized placebo-controlled trial of ACV capsules added to metformin",
+      "outcomes": [
+        {
+          "name": "Insulin resistance reduced versus placebo (p = 0.01)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Metabolic syndrome resolution 74.5% versus 40.4% (p = 0.001)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Hirsutism, sexual function and quality of life improved versus placebo",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "LDL and total cholesterol: no significant difference between groups (full text discussion)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "One trial, one population, adjunct to newly started metformin; not a general-population result.",
+        "Primary outcomes are named as changes in IR and MetS components; resolution of MetS is not itself named as primary.",
+        "Capsule content is given by the manufacturer's specifications; acetic acid content was not reported as measured in the passages read.",
+        "The only capsule, gummy or powder trial in PubMed found in this review.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [
+          "metformin 1500 mg/day"
+        ],
+        "reported_regimen": "ACV capsules 1500 mg/day (500 mg ACV powder per capsule, 350 mg stated active component per capsule) for 12 weeks, with metformin 1500 mg/day started at the same visit.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42215584",
+          "location": "Abstract and Methods",
+          "source_url": "https://europepmc.org/article/PMC/PMC13454303"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_apple_cider_vinegar_41010525",
+      "components": [
+        "INGR_APPLE_CIDER_VINEGAR"
+      ],
+      "source_pmids": [
+        "41010525"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_or_type_2_diabetes",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_apple_cider_vinegar_41010525",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with excess weight or type 2 diabetes in 10 RCTs, 789 participants, ACV for at least 4 weeks."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Body weight SMD -0.39 (95% CI -0.63 to -0.15; I2 62%)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "BMI SMD -0.65 (95% CI -1.05 to -0.26; I2 83%)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Waist circumference SMD -0.34 (95% CI -0.67 to -0.02; I2 61%)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Other body composition parameters: no significant effect",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Its included trials list names Abou-Khalil 2024 (38966098), since retracted (41789013). The review does not mention a retraction.",
+        "The passage naming high risk-of-bias trials doesn't list that trial, so the sensitivity analysis appears to keep it; Table 2 not read.",
+        "Interventions are liquid, 5 to 30 mL/day, plus one report on effervescent tablets, cited outside PubMed and titled as observational. The significant subgroup is 30 mL/day.",
+        "Labels here are capsules, gummies and powders.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Liquid 5 to 30 mL/day or effervescent tablets, 4 to 12 weeks (full text).",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "41010525",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_apple_cider_vinegar_34187442",
+      "components": [
+        "INGR_APPLE_CIDER_VINEGAR"
+      ],
+      "source_pmids": [
+        "34187442"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "lipids_and_glycemia",
+      "purpose": "metabolic_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_apple_cider_vinegar_34187442",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 9 clinical trials (10 arms) of ACV alone for at least 2 weeks; total participants not in the abstract."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Total cholesterol -6.06 mg/dL (95% CI -10.95 to -1.17; I2 39%)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Fasting plasma glucose -7.97 mg/dL (95% CI -13.74 to -2.21; I2 75%)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "HbA1c -0.50 (95% CI -0.90 to -0.09; I2 91%)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "LDL-C, HDL-C, fasting insulin and HOMA-IR: no significant effect",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Abstract also reports raised FPG and HDL-C in apparently healthy participants.",
+        "Heterogeneity is high for FPG and HbA1c.",
+        "Doses are stated in mL/day; solid forms aren't described in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Subgroups cut at 15 mL/day and 8 weeks; individual regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "34187442",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_apple_cider_vinegar_28292654",
+      "components": [
+        "INGR_APPLE_CIDER_VINEGAR"
+      ],
+      "source_pmids": [
+        "28292654"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "postprandial_glycemia",
+      "purpose": "metabolic_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_apple_cider_vinegar_28292654",
+      "population": {
+        "age_group": "adult",
+        "description": "Participants in controlled trials of vinegar with a meal; number of trials and participants not in the abstract."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Postprandial glucose AUC SMD -0.60 (95% CI -1.08 to -0.11)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Postprandial insulin AUC SMD -1.30 (95% CI -1.98 to -0.62)",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Vinegar, type not stated in the abstract; not specific to apple cider vinegar.",
+        "Acute meal response with vinegar taken at the meal. Doesn't address a daily solid supplement.",
+        "Abstract says earlier trials conflict.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Vinegar with a meal; amounts not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "28292654",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_apple_cider_vinegar_34055150",
+      "components": [
+        "INGR_APPLE_CIDER_VINEGAR"
+      ],
+      "source_pmids": [
+        "34055150"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "energy_metabolism",
+      "purpose": "metabolic_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_apple_cider_vinegar_34055150",
+      "population": {
+        "age_group": "adult",
+        "description": "16 healthy subjects."
+      },
+      "study_design": "Randomized double-blind crossover trial, 4 days",
+      "outcomes": [
+        {
+          "name": "Resting energy expenditure and substrate use: no significant difference",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Exercise energy expenditure at 40 W and 80 W: no significant difference",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Semi-acute, 4 days, liquid. Primary outcome isn't named.",
+        "Doesn't speak to longer use.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "liquid"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "ACV 30 mL/day in 1 L of a lemon-flavored drink for 4 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "34055150",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "14694010": "Stored study. Letter with no abstract on PubMed, title only; vinegar type and design not readable here.",
+    "38966098": "Retracted (notice 41789013). Liquid 5, 10 or 15 mL/day. Not evidence.",
+    "41789013": "Retraction notice for 38966098.",
+    "40771528": "Letter, no abstract; title questions the data of a weight-loss trial. Not used for any finding.",
+    "39882285": "No abstract; title only. Not used for any finding.",
+    "41351751": "Crossover in 20 non-stone formers, 6 on ACV; urine outcomes null. Not a label purpose.",
+    "19963157": "Five subjects, 20 mL with an octreotide insulin suppression test; mechanistic.",
+    "15983536": "Evaluation of eight tablet products after an adverse event; on clinician_items.",
+    "39238884": "Case report; on clinician_items.",
+    "23373303": "Case report of tooth erosion from a daily glass of liquid vinegar; on clinician_items."
+  },
+  "stop_or_hold": "Liquid doses in mL stay in regimen text. One label row prints 500 mcg (DSLD 286318) and two print no amount (243356, 273799); they were not checked against the label image.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "42215584",
+      "title_fetched": "Adjunctive effects of apple cider vinegar on metabolic syndrome and insulin resistance in polycystic ovary syndrome patients receiving metformin: a randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42215584/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "41010525",
+      "title_fetched": "Effect of Apple Cider Vinegar Intake on Body Composition in Humans with Type 2 Diabetes and/or Overweight: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41010525/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "34187442",
+      "title_fetched": "The effect of apple cider vinegar on lipid profiles and glycemic parameters: a systematic review and meta-analysis of randomized clinical trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34187442/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28292654",
+      "title_fetched": "Vinegar consumption can attenuate postprandial glucose and insulin responses; a systematic review and meta-analysis of clinical trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28292654/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34055150",
+      "title_fetched": "Acetic Acid Supplementation: Effect on Resting and Exercise Energy Expenditure and Substrate Utilization.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34055150/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "14694010",
+      "title_fetched": "Vinegar improves insulin sensitivity to a high-carbohydrate meal in subjects with insulin resistance or type 2 diabetes.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14694010/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38966098",
+      "title_fetched": "Apple cider vinegar for weight management in Lebanese adolescents and young adults with overweight and obesity: a randomised, double-blind, placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38966098/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41789013",
+      "title_fetched": "Retraction: Apple cider vinegar for weight management in lebanese adolescents and young adults with overweight and obesity: a randomised, double-blind, placebo-controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41789013/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40771528",
+      "title_fetched": "Improbable data characteristics and extreme effects of apple cider vinegar on weight loss.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40771528/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39882285",
+      "title_fetched": "Comprehensive clarification of statistical and data concerns on the effects of apple cider vinegar on weight loss.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39882285/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41351751",
+      "title_fetched": "Apple cider vinegar for prevention of urinary lithiasis (APUL): a randomized crossover trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41351751/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19963157",
+      "title_fetched": "Vinegar lacks antiglycemic action on enteral carbohydrate absorption in human subjects.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19963157/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "15983536",
+      "title_fetched": "Esophageal injury by apple cider vinegar tablets and subsequent evaluation of products.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15983536/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39238884",
+      "title_fetched": "Unveiling a Sour Truth: Acute Pancreatitis Linked to Apple Cider Vinegar Supplement.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39238884/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23373303",
+      "title_fetched": "[Unhealthy weight loss. Erosion by apple cider vinegar].",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23373303/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_APPLE_CIDER_VINEGAR",
+    "standard_name": "Apple Cider Vinegar",
+    "aliases": [
+      "Apple Cider Vinegar",
+      "Apple Cider Vinegar powder",
+      "Apple Cider Vinegar, Powder",
+      "organic Apple Cider Vinegar"
+    ],
+    "category": "metabolic_blood_sugar",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "42215584",
+      "41010525",
+      "34187442",
+      "28292654",
+      "34055150"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: pooled liquid vinegar results favor it with high heterogeneity and a retracted trial in the pool; one capsule RCT, adjunct to metformin in PCOS. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "insulin resistance",
+      "body weight",
+      "fasting glucose",
+      "postprandial glucose"
+    ],
+    "health_goals_supported": [],
+    "notes": "The stored rating rests on an acute vinegar-with-a-meal meta-analysis and an abstract-less letter, neither about capsules or gummies. Pooled evidence is liquid at mL doses, with high heterogeneity, and the 2025 weight meta-analysis (41010525) lists a trial since retracted (38966098). The only solid-form trial found is one 12-week capsule RCT at 1500 mg/day in women with PCOS, metabolic syndrome and metformin (42215584), positive on insulin resistance. A short crossover at 30 mL/day was null on energy expenditure (34055150). No gummy trial was found.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Women with PCOS, metabolic syndrome and metformin (capsule); adults with excess weight or type 2 diabetes (liquid)",
+      "supported_outcomes": [
+        "insulin resistance",
+        "body weight",
+        "fasting glucose",
+        "postprandial glucose"
+      ],
+      "source_pmids": [
+        "42215584",
+        "41010525",
+        "34187442",
+        "28292654",
+        "34055150"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The stored rating rests on an acute vinegar-with-a-meal meta-analysis and an abstract-less letter, neither about capsules or gummies. Pooled evidence is liquid at mL doses, with high heterogeneity, and the 2025 weight meta-analysis (41010525) lists a trial since retracted (38966098). The only solid-form trial found is one 12-week capsule RCT at 1500 mg/day in women with PCOS, metabolic syndrome and metformin (42215584), positive on insulin resistance. A short crossover at 30 mL/day was null on energy expenditure (34055150). No gummy trial was found. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42215584",
+        "title": "Adjunctive effects of apple cider vinegar on metabolic syndrome and insulin resistance in polycystic ovary syndrome patients receiving metformin: a randomized clinical trial.",
+        "citation": "Scientific reports (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42215584/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1038/s41598-026-55087-7"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41010525",
+        "title": "Effect of Apple Cider Vinegar Intake on Body Composition in Humans with Type 2 Diabetes and/or Overweight: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+        "citation": "Nutrients (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41010525/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review",
+          "Meta-Analysis"
+        ],
+        "doi": "10.3390/nu17183000"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34187442",
+        "title": "The effect of apple cider vinegar on lipid profiles and glycemic parameters: a systematic review and meta-analysis of randomized clinical trials.",
+        "citation": "BMC complementary medicine and therapies (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34187442/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1186/s12906-021-03351-w"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "28292654",
+        "title": "Vinegar consumption can attenuate postprandial glucose and insulin responses; a systematic review and meta-analysis of clinical trials.",
+        "citation": "Diabetes research and clinical practice (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28292654/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.diabres.2017.01.021"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34055150",
+        "title": "Acetic Acid Supplementation: Effect on Resting and Exercise Energy Expenditure and Substrate Utilization.",
+        "citation": "International journal of exercise science (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34055150/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.70252/GUNG6262"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: apple_cider_vinegar no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

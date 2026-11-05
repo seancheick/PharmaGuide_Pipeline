@@ -326,12 +326,48 @@ def test_protein_fixture_confidence_retains_unresolved_amino_acid_assessments():
     artifact = validation.build_scored_artifact(validation.load_fixture_suite().by_id("sports_protein__ideal").product)
     pending = {row["canonical_id"] for row in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
                if row["state"] == "not_yet_evaluated"}
-    # Whey's reviewed human record resolves it; amino-acid gaps stay open,
-    # including leucine's reviewed literature without an implemented credit path.
-    assert pending == {"l_leucine", "l_isoleucine", "l_valine"}
+    # The leucine review reached a no-credit conclusion. The other two
+    # amino-acid reviews remain open.
+    assert pending == {"l_isoleucine", "l_valine"}
     leucine = next(row for row in artifact["assessment_readiness"]["evidence"]["ingredient_assessments"]
                    if row["canonical_id"] == "l_leucine")
-    assert leucine["reason_code"] == "literature_reviewed_human_clinical_evidence"
+    assert leucine["state"] == "evaluated_limited_or_negative"
+    assert leucine["reason_code"] == "literature_reviewed_null_or_unfavorable"
     assert artifact["quality_score_confidence"] == "moderate"
     assert artifact["quality_score_v4_100"] == 80.0
     assert artifact["assessment_readiness"]["release_assessment"]["is_complete"] is False
+
+
+@pytest.mark.parametrize("surface", ["title", "statement"])
+def test_benefit_copy_does_not_change_evidence_in_any_scoring_module(surface):
+    from evidence_resolver import evidence_required_canonicals
+    from scoring_v4.router import VALID_CLASSES
+
+    validation = _validation_module()
+    modules = set()
+    for case in validation.load_fixture_suite().cases:
+        baseline = validation.build_scored_artifact(deepcopy(case.product))
+        module = baseline["_v4_module"]
+        modules.add(module)
+        required = evidence_required_canonicals(case.product, module=module)
+        evidence = baseline["quality_pillars_v4"]["evidence"]
+        for copy in ("Supports cognitive performance.", "Helps maintain hydration within the cells.",
+                     "Supports sleep.", "Immune support.", "Joint health.", "Heart health.", "Weight loss.", "Supports digestive health."):
+            product = deepcopy(case.product)
+            if surface == "title":
+                for key in ("product_name", "fullName"):
+                    if product.get(key):
+                        product[key] += " - " + copy
+            else:
+                product.setdefault("statements", []).append({
+                    "type": "Formulation re: Other", "notes": copy,
+                })
+            scored = validation.build_scored_artifact(product)
+            actual = scored["quality_pillars_v4"]["evidence"]
+            assert scored["_v4_module"] == module, (case.archetype, copy)
+            assert scored["quality_assessment_status"] == baseline["quality_assessment_status"], case.archetype
+            assert evidence_required_canonicals(product, module=module) == required, case.archetype
+            assert actual["score"] == evidence["score"], case.archetype
+            assert actual["evidence_result_state"] == evidence["evidence_result_state"], case.archetype
+            assert actual["reason"] == evidence["reason"], case.archetype
+    assert modules == set(VALID_CLASSES)

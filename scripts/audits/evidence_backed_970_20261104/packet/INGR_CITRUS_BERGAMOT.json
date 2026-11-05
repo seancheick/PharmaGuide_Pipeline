@@ -1,0 +1,771 @@
+{
+  "record_id": "INGR_CITRUS_BERGAMOT",
+  "labels": 5,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "Positive on LDL-C and total cholesterol in small, sponsor-funded trials of specific branded extracts at 375 to 400 mg, with no clinical outcomes; a 2026 meta-analysis grades the evidence low to very low certainty",
+  "decision": "closed_no_credit",
+  "summary": "All five labels print a generic bergamot fruit extract at 500 or 1000 mg with cardiovascular, lipid or metabolic purposes, and none prints a flavonoid amount. Two Bionap-funded placebo trials of Bergavit 375 mg/day, about 150 mg/day flavonoids, named LDL-C and total cholesterol as primary endpoints and found between-group reductions (39682955, 42592560); HDL-C didn't differ. Brumex 400 mg and Endoberg also lowered lipids, but those abstracts name no primary outcome (37312672, 37732063). A 2026 meta-analysis found low to very low certainty and says its results should not be read as establishing clinical efficacy (42746152). A 25% bergamot juice drink showed no between-arm difference in healthy adults (38767145).",
+  "question_for_clinician": "39682955 and 42592560 meet rule 2 for Bergavit at 375 mg/day, both positive on named primary lipid endpoints. Should these labels get credit, given they print a generic extract with no flavonoid amount, the trials tested one juice-derived extract standardized to 150 mg/day flavonoids, Bionap funded both trials, and the outcomes are surrogates? Agent recommendation: no credit in this review, because the labels can't be shown to contain the tested extract.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_citrus_bergamot_39682955",
+      "components": [
+        "INGR_CITRUS_BERGAMOT"
+      ],
+      "source_pmids": [
+        "39682955"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Bergavit",
+        "manufacturer": "Bionap S.r.l."
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hypercholesterolemia",
+      "purpose": "lipid_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_citrus_bergamot_39682955",
+      "population": {
+        "age_group": "adult",
+        "description": "64 adults aged 40 to 70 with untreated dyslipidemia and LDL-C 160 to 190 mg/dL, 32 per group; 60 in the per-protocol analysis."
+      },
+      "study_design": "Single-centre, randomized, placebo-controlled, parallel-group trial, 4 months; the title says double-blind",
+      "outcomes": [
+        {
+          "name": "LDL-C: 11.5% decrease at 4 months on active, 2.2% increase on placebo; between-group difference significant at months 3 and 4",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Total cholesterol: 8.8% decrease at 4 months; between-group difference significant at months 3 and 4",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "HDL-C: no significant between-group difference",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Oxidized LDL and PON1 activity: between-group difference at month 4 only; oxidized LDL had no significant within-group trend",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Five endpoints are named primary; the full text passages read don't name a correction for that.",
+        "The full text defines a per-protocol population of 60; the passages read do not say which population the results use.",
+        "A Bionap employee is an author and the data are not publicly available; the authors say the funder had no role in design, analysis or writing.",
+        "Diet wasn't monitored and there was no post-intervention follow-up, per the authors.",
+        "Surrogate lipid markers only, no clinical events.",
+        "Labels print no flavonoid amount; this extract is standardized to 150 mg/day flavonoids and comes from bergamot juice.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          375
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One capsule daily of 375 mg bergamot extract (Bergavit), giving 150 mg/day flavonoids, or maltodextrin placebo, for 4 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "39682955",
+          "location": "Full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_citrus_bergamot_42592560",
+      "components": [
+        "INGR_CITRUS_BERGAMOT"
+      ],
+      "source_pmids": [
+        "42592560"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Bergavit",
+        "manufacturer": "Bionap S.r.l."
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "elevated_ldl_cholesterol",
+      "purpose": "lipid_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_citrus_bergamot_42592560",
+      "population": {
+        "age_group": "adult",
+        "description": "108 East Asian adults with LDL-C 100 to 159 mg/dL randomized; 102 completed, 51 per group."
+      },
+      "study_design": "Monocentric, double-blind, randomized, placebo-controlled trial in Beijing, 4 months",
+      "outcomes": [
+        {
+          "name": "LDL-C: 7.0% decrease at 4 months; between-group difference significant at each timepoint, p < 0.05",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Total cholesterol: 7.3% decrease at 4 months; between-group difference significant at each timepoint, p < 0.05",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "HDL-C: no significant between-group difference",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Funded by Bionap, which owns the data; the authors say the funder had no role in the design or analysis.",
+        "Baseline LDL-C was 134.2 mg/dL on active and 125.6 mg/dL on placebo, reported as not significant.",
+        "The authors name lack of dietary control as the major limitation.",
+        "Surrogate lipid markers only, no clinical events.",
+        "Labels print no flavonoid amount; this extract is standardized to about 150 mg/day flavonoids and comes from bergamot juice.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          375
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral capsules of 375 mg Bergavit once daily at breakfast, about 150 mg/day flavonoids, or 375 mg maltodextrin, for 4 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42592560",
+          "location": "Abstract and full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_citrus_bergamot_37312672",
+      "components": [
+        "INGR_CITRUS_BERGAMOT"
+      ],
+      "source_pmids": [
+        "37312672"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Brumex",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "moderate_hypercholesterolemia",
+      "purpose": "lipid_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_citrus_bergamot_37312672",
+      "population": {
+        "age_group": "adult",
+        "description": "50 healthy moderately hypercholesterolemic subjects."
+      },
+      "study_design": "Double-blind, placebo-controlled, randomized clinical trial, 12 weeks, reported with in vitro work",
+      "outcomes": [
+        {
+          "name": "Total cholesterol, triglycerides, LDL-C, non-HDL-C, ApoB and fasting glucose: significant reduction versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Tested Brumex, from the whole fruit, a different extract from Bergavit.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          400
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Brumex 400 mg or placebo for 12 weeks; frequency not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "37312672",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_citrus_bergamot_37732063",
+      "components": [
+        "INGR_CITRUS_BERGAMOT"
+      ],
+      "source_pmids": [
+        "37732063"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Endoberg",
+        "manufacturer": "AKHYNEX"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "metabolic_syndrome_features",
+      "purpose": "metabolic_lipid_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_citrus_bergamot_37732063",
+      "population": {
+        "age_group": "adult",
+        "description": "90 healthy adult volunteers with features of metabolic syndrome, 30 per group."
+      },
+      "study_design": "Double-blind, randomized, placebo-controlled, three-arm, parallel-group trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Atherogenic dyslipidemia and insulin sensitivity: significant improvement versus placebo at both doses, p < 0.05",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and doesn't state either dose.",
+        "Tested Endoberg, also sold as Kalita.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Two dosages of Endoberg (Kalita) or placebo for 12 weeks; amounts not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "37732063",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_citrus_bergamot_30501605",
+      "components": [
+        "INGR_CITRUS_BERGAMOT"
+      ],
+      "source_pmids": [
+        "30501605"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "BPF",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "type_2_diabetes_with_mixed_hyperlipemia",
+      "purpose": "lipid_and_glucose_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_citrus_bergamot_30501605",
+      "population": {
+        "age_group": "adult",
+        "description": "60 patients with type 2 diabetes and mixed hyperlipemia in three groups."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled study",
+      "outcomes": [
+        {
+          "name": "Fasting glucose, LDL-C and triglycerides reduced and HDL-C raised with BPF and BPF Phyto",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome and gives no dose or duration.",
+        "Tested a polyphenolic fraction and a lecithin formulation, neither printed on these labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "BPF or BPF Phyto or placebo; amounts and duration not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "30501605",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_citrus_bergamot_42746152",
+      "components": [
+        "INGR_CITRUS_BERGAMOT"
+      ],
+      "source_pmids": [
+        "42746152"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "dyslipidemia_or_metabolic_syndrome",
+      "purpose": "cardiometabolic_risk_factors",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_citrus_bergamot_42746152",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in nine randomized trials, 615 participants."
+      },
+      "study_design": "Systematic review and dose-response meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "LDL-C WMD -39.53 mg/dL, total cholesterol -44.69 mg/dL, triglycerides -52.47 mg/dL, glucose -12.12 mg/dL; authors say this should not be read as establishing clinical efficacy",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "GRADE certainty low to very low for all outcomes; six of nine trials rated poor on risk of bias.",
+        "The abstract doesn't list included preparations.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several bergamot regimens; not listed in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "42746152",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_citrus_bergamot_36251526",
+      "components": [
+        "INGR_CITRUS_BERGAMOT"
+      ],
+      "source_pmids": [
+        "36251526"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "adults_lipid_profiles",
+      "purpose": "lipid_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_citrus_bergamot_36251526",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults in 14 trials of oral bergamot supplementation."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized controlled trials",
+      "outcomes": [
+        {
+          "name": "Total cholesterol, triglycerides and LDL-C decreased and HDL-C increased; results for combination products inconsistent",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Authors say clinical efficacy needs higher-quality studies to establish.",
+        "Pools bergamot and nutraceutical compounds containing it.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several bergamot regimens and combinations; not listed in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "36251526",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "41572527": "Meta-analysis of nutraceuticals containing C. bergamia on body composition; it pools products containing bergamot, and these labels don't carry a weight purpose.",
+    "37732027": "Bergamot with Opuntia, plant sterols and thiamine: combination.",
+    "34794202": "CitruSlim blends C. bergamia with Eurycoma longifolia: combination.",
+    "38767145": "Beverage of 25% or less bergamot juice at 400 mL/day in 45 healthy adults: a food amount, no significant between-arm difference, no primary outcome named in the part read.",
+    "42670966": "150 mg bergamot flavonoids with 800 mg plant sterols: combination; read by search snippet only."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "39682955",
+      "title_fetched": "Citrus bergamia Extract, a Natural Approach for Cholesterol and Lipid Metabolism Management: A Randomized, Double-Blind Placebo-Controlled Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39682955/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "42592560",
+      "title_fetched": "Lipid Metabolism Modulation by a Flavonoid-Standardized Citrus Bergamia Extract in an Asian Population: Findings From a Double-Blind, Placebo-Controlled Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42592560/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "37312672",
+      "title_fetched": "Effect of Citrus bergamia extract on lipid profile: A combined in vitro and human study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37312672/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37732063",
+      "title_fetched": "Metabolic and vascular effect of a new standardized bergamot phytocomplex: a three-arm, placebocontrolled, double-blind clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37732063/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30501605",
+      "title_fetched": "Hypoglycemic and Hypolipemic Effects of a New Lecithin Formulation of Bergamot Polyphenolic Fraction: A Double Blind, Randomized, Placebo- Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30501605/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42746152",
+      "title_fetched": "Bergamot (Citrus bergamia) Supplementation and Cardiovascular Disease Risk Factors: A Systematic Review and Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42746152/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36251526",
+      "title_fetched": "The effect of bergamot (KoksalGarry) supplementation on lipid profiles: A systematic review and meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36251526/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41572527",
+      "title_fetched": "Effect of Citrus bergamia Supplementation on Body Composition in Humans: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41572527/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37732027",
+      "title_fetched": "Comparative effect of a nutraceutical compound based on a flavonoid complex from bergamot on plasma lipids, glucose metabolism, and liver enzymes: a 3-arm, double-blind, placebo-controlled, randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37732027/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34794202",
+      "title_fetched": "An exploratory double-blind, randomized, placebo-controlled study to assess the efficacy of CitruSlim on body composition and lipid parameters in obese individuals.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34794202/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38767145",
+      "title_fetched": "Chronic consumption of a bergamot-based beverage does not affect glucose, lipid and inflammatory biomarkers of cardiometabolic risk in healthy subjects: a randomised controlled intervention study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38767145/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42670966",
+      "title_fetched": "The Effect of a Supplement Containing Bergamot and Plant Sterols with or Without a Diet on Dyslipidemia: A Randomized Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42670966/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_CITRUS_BERGAMOT",
+    "standard_name": "Citrus Bergamot",
+    "aliases": [
+      "Bergamot Orange Fruit Extract",
+      "Citrus Bergamot Extract",
+      "Citrus Bergamot extract",
+      "Citrus bergamia Risso fruit extract"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "39682955",
+      "42592560",
+      "37312672",
+      "37732063",
+      "30501605",
+      "42746152",
+      "36251526"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Positive on LDL-C and total cholesterol in small, sponsor-funded trials of specific branded extracts at 375 to 400 mg, with no clinical outcomes; a 2026 meta-analysis grades the evidence low to very low certainty. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "LDL cholesterol",
+      "total cholesterol"
+    ],
+    "health_goals_supported": [],
+    "notes": "All five labels print a generic bergamot fruit extract at 500 or 1000 mg with cardiovascular, lipid or metabolic purposes, and none prints a flavonoid amount. Two Bionap-funded placebo trials of Bergavit 375 mg/day, about 150 mg/day flavonoids, named LDL-C and total cholesterol as primary endpoints and found between-group reductions (39682955, 42592560); HDL-C didn't differ. Brumex 400 mg and Endoberg also lowered lipids, but those abstracts name no primary outcome (37312672, 37732063). A 2026 meta-analysis found low to very low certainty and says its results should not be read as establishing clinical efficacy (42746152). A 25% bergamot juice drink showed no between-arm difference in healthy adults (38767145).",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with raised LDL-C or dyslipidemia taking standardized bergamot extracts",
+      "supported_outcomes": [
+        "LDL cholesterol",
+        "total cholesterol"
+      ],
+      "source_pmids": [
+        "39682955",
+        "42592560",
+        "37312672",
+        "37732063",
+        "30501605",
+        "42746152",
+        "36251526"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "All five labels print a generic bergamot fruit extract at 500 or 1000 mg with cardiovascular, lipid or metabolic purposes, and none prints a flavonoid amount. Two Bionap-funded placebo trials of Bergavit 375 mg/day, about 150 mg/day flavonoids, named LDL-C and total cholesterol as primary endpoints and found between-group reductions (39682955, 42592560); HDL-C didn't differ. Brumex 400 mg and Endoberg also lowered lipids, but those abstracts name no primary outcome (37312672, 37732063). A 2026 meta-analysis found low to very low certainty and says its results should not be read as establishing clinical efficacy (42746152). A 25% bergamot juice drink showed no between-arm difference in healthy adults (38767145). Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39682955",
+        "title": "Citrus bergamia Extract, a Natural Approach for Cholesterol and Lipid Metabolism Management: A Randomized, Double-Blind Placebo-Controlled Clinical Trial.",
+        "citation": "Foods (Basel, Switzerland) (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39682955/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.3390/foods13233883"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42592560",
+        "title": "Lipid Metabolism Modulation by a Flavonoid-Standardized Citrus Bergamia Extract in an Asian Population: Findings From a Double-Blind, Placebo-Controlled Clinical Trial.",
+        "citation": "Journal of experimental pharmacology (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42592560/",
+        "publication_types": [
+          "Case Reports",
+          "Clinical Trial",
+          "Journal Article"
+        ],
+        "doi": "10.2147/JEP.S614937"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37312672",
+        "title": "Effect of Citrus bergamia extract on lipid profile: A combined in vitro and human study.",
+        "citation": "Phytotherapy research : PTR (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37312672/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.1002/ptr.7897"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37732063",
+        "title": "Metabolic and vascular effect of a new standardized bergamot phytocomplex: a three-arm, placebocontrolled, double-blind clinical trial.",
+        "citation": "Archives of medical science : AMS (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37732063/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.5114/aoms/163368"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "30501605",
+        "title": "Hypoglycemic and Hypolipemic Effects of a New Lecithin Formulation of Bergamot Polyphenolic Fraction: A Double Blind, Randomized, Placebo- Controlled Study.",
+        "citation": "Endocrine, metabolic & immune disorders drug targets (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30501605/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.2174/1871530319666181203151513"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42746152",
+        "title": "Bergamot (Citrus bergamia) Supplementation and Cardiovascular Disease Risk Factors: A Systematic Review and Meta-Analysis.",
+        "citation": "Food science & nutrition (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42746152/",
+        "publication_types": [
+          "Journal Article",
+          "Review"
+        ],
+        "doi": "10.1002/fsn3.72357"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36251526",
+        "title": "The effect of bergamot (KoksalGarry) supplementation on lipid profiles: A systematic review and meta-analysis of randomized controlled trials.",
+        "citation": "Phytotherapy research : PTR (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36251526/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Systematic Review",
+          "Journal Article"
+        ],
+        "doi": "10.1002/ptr.7647"
+      }
+    ]
+  }
+}

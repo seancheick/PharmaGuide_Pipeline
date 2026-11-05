@@ -36,8 +36,9 @@ def test_unknown_scope_preserves_research_facts_without_inventing_specificity(mo
     evidence["type"] = "clinical_guideline"
     monkeypatch.setattr(studied_formulas, "_clinical_strain_registry", lambda: registry)
     product = strain_product(dose=1e10)
-    # An unrelated label keeps LGG's exact-strain native contexts out, so only
-    # the unresolved-scope summary remains to be tested.
+    # Isolate the unresolved summary itself. A marketing claim cannot disable
+    # separately reviewed exact-strain contexts.
+    registry["STRAIN_LGG"]["study_contexts"] = []
     product["product_name"] = "Sleep support probiotic"
     product["probiotic_data"]["clinical_strains"][0].update(
         _probiotic_research_presentation(registry["STRAIN_LGG"]))

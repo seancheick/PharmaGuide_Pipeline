@@ -1,0 +1,10 @@
+{"canonical": "agmatine", "labels": 14, "stored": "positive_weak",
+ "as_read": "One 14-day RCT at 2670 mg/day in lumbar radiculopathy meets rule 2, with 61 of 99 randomized analyzed; labels print 600 to 1000 mg with no such claim, so the recommendation is no credit, for a human ruling.",
+ "route": "packet_no_credit",
+ "positive_named": ["20447305"],
+ "studies_to_add": [{"pmid": "20447305", "study_type": "rct", "sample_size": 99, "primary_endpoint": "pain (VAS, McGill, Oswestry), sensorimotor deficits and SF-36 quality of life", "effect_direction": "positive_weak", "quote": "Primary outcome measures were pain using the visual analog scale, the McGill pain questionnaire and the Oswestry disability index, sensorimotor deficits, and health-related quality of life using the 36-item short form (SF-36) questionnaire."}],
+ "stop_list": ["DSLD 306053, 308288 and 77079 print the serving as 1 Gram(s); not converted here."],
+ "clinician_items": ["20447305: at 3.560 g/day in the open-label phase, three participants had mild-to-moderate diarrhea and mild nausea that stopped when treatment stopped. No treatment-related adverse events were noted in the randomized phase. Longest human exposure in these abstracts is 2 months (32102167)."],
+ "stored_rating_note": "Stored positive_weak matches the read. Stored sample size 61 is the analyzed count; 99 were randomized.",
+ "pmids_read": ["20447305", "32102167", "41717561", "42713349", "24140462"],
+ "unread_notes": "Abstracts only. 32102167, 41717561 and 42713349 were read cut at 1300 characters, so their results sections were not fully read; each is excluded on design stated before the cut. 25247837 (single case report, 5 years) and 31481723 were seen as hits and not read. Two searches used."}

@@ -278,8 +278,8 @@ def _load_canaries(ids):
 # old snapshot; the old ranges were pre-batch and are superseded by the locked policy.
 # Re-pinned 2026-10-03 after the approved Evidence-to-Dose transfer. Ordinary adult
 # labels receive the purpose-specific 10.4 Evidence result independent of amount;
-# the mixed-purpose Nordic label is held at zero instead of borrowing omega-only
-# credit. Dose continues to own EPA+DHA exposure. These are expectation updates for
+# mixed products retain only the reviewed EPA/DHA contribution.
+# Dose continues to own EPA+DHA exposure. These are expectation updates for
 # the already-measured policy; no production magnitude changed here.
 # Dose V4.1 (2026-10-17): ordinary-adult EPA+DHA is proportional to 250 mg/day
 # then plateaus, so each canary moves by exactly its Dose change (+4.0, +4.0,
@@ -287,7 +287,7 @@ def _load_canaries(ids):
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
     ("327776", "Sports Research", 67.3, 68.3),
     ("326270", "Sports Research", 67.3, 68.3),
-    ("288740", "Nordic Naturals", 45.3, 46.3),
+    ("288740", "Nordic Naturals", 55.7, 56.7),
     # Sep-08 canonical-form ordering restores the verified exact-SKU NSF match;
     # the approved audit already carries its verification15 (not brand-only2).
     ("273630", "Garden of Life", 66.3, 67.3),

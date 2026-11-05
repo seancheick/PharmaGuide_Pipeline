@@ -24,7 +24,7 @@ PRODUCTS = ["1179", "14168", "315089", "243271", "282638", "299755", "54775", "2
 # again and the blend owners do not complete it.
 # Whole turmeric cannot inherit Curcumin trials from an INGR_ key suffix, and the
 # 2026-11-03 turmeric review leaves applicability unestablished.
-_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid not in {"1179", "243271", "282638", "299755"}]
+_REVIEW_PRODUCTS = [pid for pid in PRODUCTS if pid not in {"1179", "243271", "282638", "299755", "14168", "54775"}]
 
 
 @pytest.fixture(scope="module")
@@ -91,7 +91,9 @@ def test_ravage_retains_each_unfinished_individual_review(enriched):
         (r.canonical_id, r.blocking_reasons) for r in resolution.resolutions
         if r.disposition == "literature_resolution_required"
     ]
-    assert open_owners == [("l_phenylalanine", ["literature_verification_pending"])]
+    assert dict(open_owners)["l_phenylalanine"] == ["literature_verification_pending"]
+    assert dict(open_owners)["cinnamon"] == ["clinical_sources_ineligible"]
+    assert not resolution.is_assessment_complete
     methionine = next(r for r in resolution.resolutions if r.canonical_id == "methionine")
     assert methionine.disposition == "reviewed_null_unfavorable"
     evidence = build_scored_artifact(enriched["1179"])["quality_pillars_v4"]["evidence"]
@@ -288,7 +290,9 @@ def test_golden_milk_whole_turmeric_does_not_inherit_curcumin_identity(enriched)
     resolution = resolve_product_evidence(product, owner_scoped=True)
     unresolved = [r.canonical_id for r in resolution.resolutions
                   if r.disposition == "literature_resolution_required"]
-    assert unresolved == ["cardamom"]
+    assert unresolved == ["cinnamon", "cardamom"]
+    cinnamon = next(r for r in resolution.resolutions if r.canonical_id == "cinnamon")
+    assert cinnamon.reason_code == "clinical_sources_ineligible"
     _assert_empty_automated_source_is_unfinished("cardamom")
     turmeric = next(r for r in resolution.resolutions if r.canonical_id == "turmeric")
     # Reviewed literature exists, but it does not establish applicability to this row.
@@ -348,3 +352,16 @@ def test_flaxseed_blend_uses_independent_verified_sources_without_clearing_histo
     evidence = build_scored_artifact(enriched["299755"])["quality_pillars_v4"]["evidence"]
     assert evidence["evidence_result_state"] == "research_present_applicability_unestablished"
     assert evidence["score"] == 0
+
+
+@pytest.mark.parametrize("pid,canonical", [("14168", "cinnamon"), ("54775", "sytrinol")])
+def test_blend_identity_cannot_complete_held_source(enriched, pid, canonical):
+    from evidence_resolver import resolve_product_evidence
+    from scoring_v4.scored_artifact import build_scored_artifact
+    resolution = resolve_product_evidence(enriched[pid], owner_scoped=True)
+    owner = next(row for row in resolution.resolutions if row.canonical_id == canonical)
+    assert owner.disposition == "literature_resolution_required"
+    assert owner.reason_code == "clinical_sources_ineligible"
+    assert not owner.points_eligible
+    evidence = build_scored_artifact(enriched[pid])["quality_pillars_v4"]["evidence"]
+    assert evidence["display_state"] == "not_yet_reviewed"

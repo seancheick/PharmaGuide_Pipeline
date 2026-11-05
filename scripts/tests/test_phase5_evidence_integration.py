@@ -210,8 +210,8 @@ def test_no_qualifying_human_evidence_semantics():
     assert display == "assessed"
 
 
-def test_applicability_unestablished_semantics():
-    """Research present but applicability unestablished -> 0 points, applicability_unestablished display."""
+def test_unreviewed_source_cannot_look_like_a_finished_applicability_conclusion():
+    """A stale enriched positive stamp cannot finish a held source review."""
     prod = _wrap_product([
         {"canonical_id": "cinnamon", "name": "Cinnamon Bark Powder", "matched_form": "bark powder", "amount": 500, "unit": "mg", "cleaner_row_role": "active_scorable"},
     ])
@@ -228,9 +228,9 @@ def test_applicability_unestablished_semantics():
     }
     ev = score_evidence(prod)
     assert ev["score"] == 0.0
-    assert ev["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert ev["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
     display = evidence_display_state(ev["metadata"]["evidence_result_state"])
-    assert display == "applicability_unestablished"
+    assert display == "not_yet_reviewed"
 
 
 # ============================================================================
@@ -243,12 +243,11 @@ def test_fixture_a_blend_header_named_children_no_doses(monkeypatch):
     -> children retained
     -> applicable research identified
     -> Evidence applicability is amount-independent
-    -> terminal Evidence assessment
+    -> incomplete without a reviewed clinical or literature conclusion
     -> Dose remains unassessable from undisclosed child amounts
     """
     import evidence_resolver as er
-    # This semantic fixture tests completed reference assessments, independently
-    # of the real ashwagandha preparation's qualification hold.
+    # A reference-only entry is not a completed efficacy assessment.
     references = {canonical: [{"id": "TEST_REFERENCE_" + canonical,
                               "study_type": "reference", "evidence_level": "reference"}]
                   for canonical in ("ashwagandha", "rhodiola")}
@@ -290,17 +289,17 @@ def test_fixture_a_blend_header_named_children_no_doses(monkeypatch):
     assert "ashwagandha" in assessable_cids
     assert "rhodiola" in assessable_cids
 
-    # 2. Terminal evidence assessment (is_assessment_complete is True)
+    # 2. Reference identity alone cannot finish either ingredient review
     res = resolve_product_evidence(prod)
-    assert res.is_assessment_complete is True
-    assert res.overall_disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res.is_assessment_complete is False
+    assert res.overall_disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
 
-    # 3. Scorer output: zero credit, applicability_unestablished state, terminal display
+    # 3. Missing review stays explicit, with no invented credit
     ev = score_evidence(prod)
     assert ev["score"] == 0.0
-    assert ev["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert ev["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
     display = evidence_display_state(ev["metadata"]["evidence_result_state"])
-    assert display == "applicability_unestablished"
+    assert display == "not_yet_reviewed"
     from scoring_v4.modules.generic_dose import score_dose
     dose = score_dose(prod)
     assert dose["score"] is None
@@ -365,7 +364,14 @@ def test_fixture_c_exact_finished_formula_with_formula_evidence(monkeypatch):
         "total_enrollment": 150,
         "scope": "formula",
     }
+    import clinical_applicability
+    from test_evidence_resolver import _approved_test_source
+    mock_formula = _approved_test_source(mock_formula, name="Clinically Studied Formula X")
+    current = clinical_applicability.reviewed_entries()
+    monkeypatch.setattr(clinical_applicability, "reviewed_entries",
+                        lambda: {**current, mock_formula["id"]: mock_formula})
     monkeypatch.setattr("studied_formulas.formula_clinical_match", lambda p: mock_formula)
+    monkeypatch.setattr("studied_formulas.formula_identity_clinical_match", lambda p: mock_formula)
 
     ev = score_evidence(prod)
     assert ev["score"] > 0.0
@@ -455,7 +461,7 @@ def test_fixture_d_named_child_with_disclosed_adequate_dose(monkeypatch):
 
 def test_fixture_e_named_child_with_disclosed_subclinical_dose(monkeypatch):
     """Fixture E: named child with disclosed subclinical dose.
-    -> normal below-dose applicability result
+    -> Dose retains its below-dose result; ingredient Evidence remains eligible
     """
     blend_header = {
         "name": "Performance Blend",
@@ -504,10 +510,10 @@ def test_fixture_e_named_child_with_disclosed_subclinical_dose(monkeypatch):
 
     ev = score_evidence(prod)
     assert applicability["reason_code"] == "below_applicable_clinical_dose"
-    assert ev["score"] == 0.0
-    assert ev["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert ev["score"] > 0.0
+    assert ev["metadata"]["evidence_result_state"] == "evaluated_applicable"
     display = evidence_display_state(ev["metadata"]["evidence_result_state"])
-    assert display == "applicability_unestablished"
+    assert display == "assessed"
 
 
 def test_points_never_prove_the_assessment_finished():

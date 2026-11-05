@@ -1,0 +1,273 @@
+{
+  "record_id": "INGR_CAPSAICIN",
+  "labels": 1,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "positive but thin: one 24-person trial of the label's Capsifen with no primary outcome named, and a meta-analysis of other capsaicin materials showing rather modest effects",
+  "decision": "held: PMID 32578488 tests the label's Capsifen at the label's daily total, and its abstract names no primary outcome, so rule 2 can't be met or ruled out without the full text",
+  "summary": "One label (DSLD 328728, Thermo Weight Control) prints Capsifen 100 mg standardized to at least 2% capsaicinoids, one capsule after breakfast and one after the next heaviest meal. PMID 32578488 randomized 24 healthy overweight subjects to Capsifen 200 mg daily or placebo for 28 days, with a significant decrease in body weight, waist to hip ratio and BMI against placebo, and no primary outcome named in the abstract. PMID 36938807 pools 15 trials of capsaicin in 762 people, with rather modest effects. The stored trial, PMID 23844093, tested red chili pepper with meals in a respiration chamber, not this preparation. Abstracts only.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_capsaicin_32578488",
+      "components": [
+        "INGR_CAPSAICIN"
+      ],
+      "source_pmids": [
+        "32578488"
+      ],
+      "identity_scope": "branded_material",
+      "identity": {
+        "branded_material": "Capsifen",
+        "manufacturer": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight",
+      "purpose": "body_weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_capsaicin_32578488",
+      "population": {
+        "age_group": "adult",
+        "description": "24 healthy overweight subjects (placebo n = 12, Capsifen n = 12)."
+      },
+      "study_design": "Randomized, double-blinded, placebo-controlled, per the title; 28 days",
+      "outcomes": [
+        {
+          "name": "Body weight (2.1%), waist to hip ratio (4%) and BMI (2.2%), significant decrease compared with placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Uncontrolled eating and appetite, significant improvement",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome, so hierarchy stays not_reported.",
+        "24 subjects for 28 days.",
+        "Trial gave 200 mg once daily; the label's directions give 100 mg twice daily.",
+        "Capsifen is described as red chili extract formulated with fenugreek dietary fiber.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Capsifen 200 mg once daily, 4 mg capsaicinoids per day, for 28 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32578488",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_capsaicin_36938807",
+      "components": [
+        "INGR_CAPSAICIN"
+      ],
+      "source_pmids": [
+        "36938807"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_or_obesity",
+      "purpose": "weight_loss",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_capsaicin_36938807",
+      "population": {
+        "age_group": "adult",
+        "description": "Fifteen randomized controlled trials with 762 overweight or obese adults."
+      },
+      "study_design": "Systematic review and random-effects meta-analysis",
+      "outcomes": [
+        {
+          "name": "BMI -0.25 kg/m2, body weight -0.51 kg and waist circumference -1.12 cm compared with control; described by the authors as rather modest",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract does not itemise the capsaicin materials or say whether Capsifen is included.",
+        "No certainty rating appears in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several capsaicin regimens; not itemised in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "36938807",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "23844093": "Stored trial. 2.56 mg capsaicin per meal as 1.03 g red chili pepper, acute energy expenditure in a respiration chamber; a food amount, not the label's extract.",
+    "33063385": "Meta-analysis of capsaicinoids or capsinoids on thermogenesis in healthy adults; pools capsinoids with capsaicinoids and reports metabolic markers, not body weight.",
+    "30123516": "Post hoc covariate-adjusted analysis of a 75-person exploratory trial of 2 mg or 4 mg capsaicinoids, with lower body fat at 4 mg (p = 0.0402); material not named and analysis post hoc."
+  },
+  "stop_or_hold": "PMID 32578488 full text is needed for its primary outcome. No PMC id was shown by the listed helper.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "32578488",
+      "title_fetched": "Influence of a Novel Food-Grade Formulation of Red Chili Extract (Capsicum annum) on Overweight Subjects: Randomized, Double-Blinded, Placebo-Controlled Study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32578488/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36938807",
+      "title_fetched": "The effects of capsaicin intake on weight loss among overweight and obese subjects: a systematic review and meta-analysis of randomised controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36938807/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23844093",
+      "title_fetched": "Acute effects of capsaicin on energy expenditure and fat oxidation in negative energy balance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23844093/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33063385",
+      "title_fetched": "The effect of Capsaicinoids or Capsinoids in red pepper on thermogenesis in healthy adults: A systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33063385/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30123516",
+      "title_fetched": "Capsaicinoids supplementation decreases percent body fat and fat mass: adjustment using covariates in a post hoc analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30123516/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_CAPSAICIN",
+    "standard_name": "Capsaicin (Capsifen red chili extract)",
+    "aliases": [
+      "Capsifen"
+    ],
+    "category": "metabolic_blood_sugar",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "32578488",
+      "36938807"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive but thin: one 24-person trial of the label's Capsifen with no primary outcome named, and a meta-analysis of other capsaicin materials showing rather modest effects. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "body weight",
+      "BMI",
+      "waist to hip ratio",
+      "appetite"
+    ],
+    "health_goals_supported": [],
+    "notes": "One label (DSLD 328728, Thermo Weight Control) prints Capsifen 100 mg standardized to at least 2% capsaicinoids, one capsule after breakfast and one after the next heaviest meal. PMID 32578488 randomized 24 healthy overweight subjects to Capsifen 200 mg daily or placebo for 28 days, with a significant decrease in body weight, waist to hip ratio and BMI against placebo, and no primary outcome named in the abstract. PMID 36938807 pools 15 trials of capsaicin in 762 people, with rather modest effects. The stored trial, PMID 23844093, tested red chili pepper with meals in a respiration chamber, not this preparation. Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy overweight adults",
+      "supported_outcomes": [
+        "body weight",
+        "BMI",
+        "waist to hip ratio",
+        "appetite"
+      ],
+      "source_pmids": [
+        "32578488",
+        "36938807"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "One label (DSLD 328728, Thermo Weight Control) prints Capsifen 100 mg standardized to at least 2% capsaicinoids, one capsule after breakfast and one after the next heaviest meal. PMID 32578488 randomized 24 healthy overweight subjects to Capsifen 200 mg daily or placebo for 28 days, with a significant decrease in body weight, waist to hip ratio and BMI against placebo, and no primary outcome named in the abstract. PMID 36938807 pools 15 trials of capsaicin in 762 people, with rather modest effects. The stored trial, PMID 23844093, tested red chili pepper with meals in a respiration chamber, not this preparation. Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32578488",
+        "title": "Influence of a Novel Food-Grade Formulation of Red Chili Extract (Capsicum annum) on Overweight Subjects: Randomized, Double-Blinded, Placebo-Controlled Study.",
+        "citation": "Journal of dietary supplements (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32578488/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/19390211.2020.1780363"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36938807",
+        "title": "The effects of capsaicin intake on weight loss among overweight and obese subjects: a systematic review and meta-analysis of randomised controlled trials.",
+        "citation": "The British journal of nutrition (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36938807/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Systematic Review",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1017/S0007114523000697"
+      }
+    ]
+  }
+}

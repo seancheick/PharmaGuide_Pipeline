@@ -98,7 +98,7 @@ def test_eligible_marker_study_cannot_override_relationship_hold(monkeypatch):
     e.databases['backed_clinical_studies'] = {'backed_clinical_studies': [study]}
     # Inspect the production payload before applicability filtering; the study's
     # own eligibility must not overwrite the separately held relationship.
-    monkeypatch.setattr(clinical_applicability, 'filter_clinical_matches', lambda p, m: (m, []))
+    monkeypatch.setattr(clinical_applicability, 'filter_clinical_matches', lambda p, m, **kwargs: (m, []))
     row = {'name': 'Japanese Knotweed', 'standard_name': 'Japanese Knotweed',
            'canonical_id': 'japanese_knotweed', 'quantity': 200, 'unit': 'mg',
            'unit_normalized': 'mg', 'raw_source_text': 'Japanese Knotweed 50% resveratrol',
@@ -130,7 +130,7 @@ def test_held_marker_cannot_consume_independent_eligible_source(monkeypatch, hel
              'references_structured': [{'pmid': '28661438'}]}
     study = _approved_marker_source(monkeypatch, study)
     e.databases['backed_clinical_studies'] = {'backed_clinical_studies': [study]}
-    monkeypatch.setattr(clinical_applicability, 'filter_clinical_matches', lambda p, m: (m, []))
+    monkeypatch.setattr(clinical_applicability, 'filter_clinical_matches', lambda p, m, **kwargs: (m, []))
     rows = []
     for canonical, name in [('japanese_knotweed', 'Japanese Knotweed'), ('grape', 'Grape')]:
         row = {'canonical_id': canonical, 'name': name, 'standard_name': name,

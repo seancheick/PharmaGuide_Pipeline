@@ -53,11 +53,10 @@ def test_approved_context_with_matching_dose_and_positive_primary_outcome_is_app
     registry["STRAIN_LGG"]["cfu_thresholds"]["evidence"]["evidence_strength"] = "high"
     registry["STRAIN_LGG"]["study_contexts"] = [approved(study_design="rct")]
     product = strain_product(dose=1e9)
-    # The approved synthetic source treats constipation. A claim-free label
-    # earns the same scoped credit as a claimed one (no claim bonus, PR #280);
-    # an unrelated one earns none.
+    # The approved synthetic source treats constipation. Its Evidence points
+    # remain independent of the advertised benefit.
     assert score_evidence(product)["score"] == 16.0
-    assert score_evidence({**product, "product_name": "Sleep support probiotic"})["score"] == 0
+    assert score_evidence({**product, "product_name": "Sleep support probiotic"})["score"] == 16.0
     product["statements"] = [{"type": "Formulation re: Other", "notes": "Support for constipation"}]
     row = assessment(product)
     assert row["status"] == "strain_dose_applicable"
@@ -219,3 +218,51 @@ def test_review_status_vocabulary_is_closed():
         context(review_status="clinician_approved"), "STRAIN_LGG")
     for status in ("approved", "clinician_verified", "search_in_progress", ""):
         assert not studied_formulas.valid_native_study_context(context(review_status=status), "STRAIN_LGG")
+
+
+@pytest.mark.parametrize('form', ['vaginal', 'intravaginal capsule', 'topical', 'sublingual'])
+def test_native_oral_context_cannot_credit_another_administration_route(registry, form):
+    registry['STRAIN_LGG']['study_contexts'] = [approved(study_design='rct')]
+    product = strain_product(dose=1e9)
+    assert score_evidence(product)['score'] > 0
+    product['form_factor_canonical'] = form
+    assert score_evidence(product)['score'] == 0
+    assert assessment(product)['dose_applicable'] is False
+
+
+@pytest.mark.parametrize('form', ['capsule', 'powder', 'tablet'])
+def test_native_oral_form_variation_does_not_invent_a_route_restriction(registry, form):
+    registry['STRAIN_LGG']['study_contexts'] = [approved(study_design='rct')]
+    product = strain_product(dose=1e9)
+    baseline = score_evidence(product)
+    product['form_factor_canonical'] = form
+    assert score_evidence(product)['score'] == baseline['score'] > 0
+
+
+@pytest.mark.parametrize('change', [
+    {'form_factor_canonical': 'unknown', 'physicalState': {'name': 'Topical'}},
+    {'physicalState': {'langualCodeDescription': 'Topical'}},
+    {'form_factor_canonical': 'unknown', 'form_factor': 'vaginal capsule'},
+])
+def test_native_route_rechecks_physical_source_even_with_stale_canonical(registry, change):
+    registry['STRAIN_LGG']['study_contexts'] = [approved(study_design='rct')]
+    product = {**strain_product(dose=1e9), **change}
+    assert score_evidence(product)['score'] == 0
+
+
+@pytest.mark.parametrize('delivery', ['enteral', 'vaginal capsule', 'powder via feeding tube'])
+def test_native_nonoral_delivery_cannot_credit_oral_label(registry, delivery):
+    source = approved(study_design='rct')
+    source['dose']['dosage_forms'] = [delivery]
+    registry['STRAIN_LGG']['study_contexts'] = [source]
+    assert score_evidence(strain_product(dose=1e9))['score'] == 0
+
+
+@pytest.mark.parametrize('title', ['Prenatal probiotic', 'Children probiotic'])
+def test_population_conflict_cannot_establish_dose_applicability(registry, title):
+    registry['STRAIN_LGG']['study_contexts'] = [approved(study_design='rct')]
+    product = {**strain_product(dose=1e9), 'product_name': title}
+    assert score_evidence(product)['score'] == 0
+    row = assessment(product)
+    assert row['dose_applicable'] is False
+    assert all(c['clinical_applicability'] == 'not_established' for c in row['study_contexts'])

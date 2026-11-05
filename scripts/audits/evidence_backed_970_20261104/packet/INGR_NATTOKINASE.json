@@ -1,0 +1,569 @@
+{
+  "record_id": "INGR_NATTOKINASE",
+  "labels": 41,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed, blood pressure only; the stored moderate rating rests on 12 healthy men's blood markers",
+  "decision": "held: doses are in fibrinolytic units, and the schema has no such unit",
+  "summary": "Stored positive_moderate is not supported: its only cited trial reports coagulation markers in 12 healthy young men after one dose, within the normal range. Blood pressure conflicts: one 8-week trial is positive, a 3-year trial in 265 people is null, and a meta-analysis of 6 RCTs is positive while reporting higher cholesterol and glucose. Nattokinase alone had no lipid effect against placebo.",
+  "question_for_clinician": "Does a short positive trial outweigh the 3-year null? Agent recommendation: mixed direction, blood pressure only, adults with pre- or stage 1 hypertension.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nattokinase_18971533",
+      "components": [
+        "INGR_NATTOKINASE"
+      ],
+      "source_pmids": [
+        "18971533"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "blood_pressure",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nattokinase_18971533",
+      "population": {
+        "age_group": "adult",
+        "description": "86 randomized, 73 completed; age 20 to 80, untreated SBP 130 to 159 mmHg."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 8 weeks",
+      "outcomes": [
+        {
+          "name": "SBP net -5.55 mmHg (95% CI -10.5 to -0.57)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "DBP net -2.84 mmHg (95% CI -5.33 to -0.33)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Schema has no fibrinolytic-unit dose, so this dose stays out of the structured fields: see the stop list.",
+        "Abstract doesn't name the material, so NSK-SD can't be assumed.",
+        "Capsules per day not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2,000 FU/capsule for 8 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "18971533",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nattokinase_33843667",
+      "components": [
+        "INGR_NATTOKINASE"
+      ],
+      "source_pmids": [
+        "33843667"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "subclinical_atherosclerosis",
+      "purpose": "prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nattokinase_33843667",
+      "population": {
+        "age_group": "adult",
+        "description": "265 people, median age 65.3, no clinical cardiovascular disease."
+      },
+      "study_design": "Double-blind placebo-controlled trial, median 3 years",
+      "outcomes": [
+        {
+          "name": "Annualized carotid intima-media thickness and stiffness change not different",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No effect on blood pressure or any laboratory measure",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Schema has no fibrinolytic-unit dose, so this dose stays out of the structured fields: see the stop list.",
+        "Low cardiovascular risk population.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2,000 fibrinolytic units; frequency not in the abstract; median 3 years",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33843667",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nattokinase_39076715",
+      "components": [
+        "INGR_NATTOKINASE"
+      ],
+      "source_pmids": [
+        "39076715"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "blood_pressure",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nattokinase_39076715",
+      "population": {
+        "age_group": "adult",
+        "description": "546 participants in 6 RCTs."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "SBP MD -3.45, DBP MD -2.32",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Total cholesterol higher at both dose levels",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Blood glucose MD +0.40",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Included-trial PMIDs not yet extracted from the open full text.",
+        "1,200 to 8,000 FU across trials.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1,200 to 8,000 FU across trials.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "39076715",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nattokinase_19786378",
+      "components": [
+        "INGR_NATTOKINASE"
+      ],
+      "source_pmids": [
+        "19786378"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "hyperlipidemia",
+      "purpose": "treatment",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nattokinase_19786378",
+      "population": {
+        "age_group": "adult",
+        "description": "47 patients with hyperlipidemia across three arms."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, six months",
+      "outcomes": [
+        {
+          "name": "Nattokinase alone: no significant lipid difference against placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Only the combination with red yeast rice differed, and that is not this ingredient alone.",
+        "Printed in mg, not FU; the two units can't be compared.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 180,
+        "administration_frequency": "two capsules twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Two 50 mg capsules twice daily for six months",
+        "normalization": {
+          "basis": "50 mg times 2 capsules times 2 doses; 6 months counted as 180 days."
+        },
+        "source_provenance": {
+          "pmid": "19786378",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_nattokinase_41325794",
+      "components": [
+        "INGR_NATTOKINASE"
+      ],
+      "source_pmids": [
+        "41325794"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognition_in_carotid_stenosis",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_nattokinase_41325794",
+      "population": {
+        "age_group": "adult",
+        "description": "120 randomized, 88 per-protocol; average age 58.3, asymptomatic intracranial or carotid stenosis."
+      },
+      "study_design": "Single-center double-blind placebo-controlled trial, 6 months",
+      "outcomes": [
+        {
+          "name": "MoCA change not different, P=0.948",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Exploratory visuospatial difference, P=0.024",
+          "hierarchy": "post_hoc",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "Schema has no fibrinolytic-unit dose, so this dose stays out of the structured fields: see the stop list.",
+        "Per-protocol analysis; about a quarter lost.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 180,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "8,000 FU per day for 6 months",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41325794",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "26109079": "Stored citation. 12 healthy young men, single 2,000 FU of NSK-SD, coagulation markers within the normal range; no clinical outcome.",
+    "37836525": "Combination.",
+    "14565628": "Combination.",
+    "31934821": "Combination.",
+    "41256929": "Observational, natto foods."
+  },
+  "stop_or_hold": "Fibrinolytic-unit dose can't be stored. 4 of 41 labels print NSK-SD; the blood pressure trial's abstract doesn't name it. Most rows read Natto Extract; whether each declares nattokinase activity isn't checked yet.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "18971533",
+      "title_fetched": "Effects of nattokinase on blood pressure: a randomized, controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18971533/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33843667",
+      "title_fetched": "Nattokinase atherothrombotic prevention study: A randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33843667/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39076715",
+      "title_fetched": "Nattokinase Supplementation and Cardiovascular Risk Factors: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39076715/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "19786378",
+      "title_fetched": "Combined nattokinase with red yeast rice but not nattokinase alone has potent effects on blood lipids in human subjects with hyperlipidemia.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19786378/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41325794",
+      "title_fetched": "Nattokinase supplementation for cognitive enhancement in asymptomatic intracranial/carotid stenosis: A randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41325794/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "26109079",
+      "title_fetched": "A single-dose of oral nattokinase potentiates thrombolysis and anti-coagulation profiles.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26109079/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37836525",
+      "title_fetched": "The Effect of Nattokinase-Monascus Supplements on Dyslipidemia: A Four-Month Randomized, Double-Blind, Placebo-Controlled Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37836525/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "14565628",
+      "title_fetched": "Prevention of venous thrombosis in long-haul flights with Flite Tabs: the LONFLIT-FLITE randomized, controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14565628/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31934821",
+      "title_fetched": "Nattospes as Effective and Safe Functional Supplements in Management of Stroke.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31934821/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41256929",
+      "title_fetched": "A systematic review of prospective evidence linking non-alcoholic fermented food consumption with lower mortality risk.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41256929/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_NATTOKINASE",
+    "standard_name": "Nattokinase",
+    "aliases": [
+      "NSK-SD Nattokinase",
+      "Natto Extract",
+      "Soy Natto extract"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "18971533",
+      "33843667",
+      "39076715",
+      "19786378",
+      "41325794"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed, blood pressure only; the stored moderate rating rests on 12 healthy men's blood markers. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Blood pressure"
+    ],
+    "health_goals_supported": [],
+    "notes": "Stored positive_moderate is not supported: its only cited trial reports coagulation markers in 12 healthy young men after one dose, within the normal range. Blood pressure conflicts: one 8-week trial is positive, a 3-year trial in 265 people is null, and a meta-analysis of 6 RCTs is positive while reporting higher cholesterol and glucose. Nattokinase alone had no lipid effect against placebo.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with untreated systolic pressure of 130 to 159 mmHg",
+      "supported_outcomes": [
+        "Blood pressure"
+      ],
+      "source_pmids": [
+        "18971533",
+        "33843667",
+        "39076715",
+        "19786378",
+        "41325794"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Stored positive_moderate is not supported: its only cited trial reports coagulation markers in 12 healthy young men after one dose, within the normal range. Blood pressure conflicts: one 8-week trial is positive, a 3-year trial in 265 people is null, and a meta-analysis of 6 RCTs is positive while reporting higher cholesterol and glucose. Nattokinase alone had no lipid effect against placebo. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "18971533",
+        "title": "Effects of nattokinase on blood pressure: a randomized, controlled trial.",
+        "citation": "Hypertension research : official journal of the Japanese Society of Hypertension (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18971533/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1291/hypres.31.1583"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33843667",
+        "title": "Nattokinase atherothrombotic prevention study: A randomized controlled trial.",
+        "citation": "Clinical hemorheology and microcirculation (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33843667/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3233/CH-211147"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "39076715",
+        "title": "Nattokinase Supplementation and Cardiovascular Risk Factors: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+        "citation": "Reviews in cardiovascular medicine (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/39076715/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review"
+        ],
+        "doi": "10.31083/j.rcm2408234"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19786378",
+        "title": "Combined nattokinase with red yeast rice but not nattokinase alone has potent effects on blood lipids in human subjects with hyperlipidemia.",
+        "citation": "Asia Pacific journal of clinical nutrition (2009)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19786378/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41325794",
+        "title": "Nattokinase supplementation for cognitive enhancement in asymptomatic intracranial/carotid stenosis: A randomized controlled trial.",
+        "citation": "Journal of stroke and cerebrovascular diseases : the official journal of National Stroke Association (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41325794/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.jstrokecerebrovasdis.2025.108511"
+      }
+    ]
+  }
+}

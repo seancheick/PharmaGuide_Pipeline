@@ -133,7 +133,7 @@ _INDICATION_PHRASES = (
     ("lipid", r"\b(?:blood lipids|lipid (?:profile|levels?))\b"),
     ("endurance", r"\bexercise capacity\b"),
     ("muscle_recovery", r"\bmuscle (?:damage|soreness|recovery)\b"),
-    ("muscle_strength_mass", r"\b(?:lean|muscle) mass\b|\blean muscle\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
+    ("muscle_strength_mass", r"\b(?:lean(?: body)?|muscle) mass\b|\blean muscle\b|\bmuscle (?:growth|gains?|strength|performance|power|building)\b"
                              r"|\bbuild(?:s|ing)? muscle\b|\bmuscularity\b"),
     # A bare "muscle" claim names neither family; it is related to both.
     ("muscle_strength_mass", r"\bmuscles?\b"),
@@ -312,8 +312,8 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     carrier-oil mass.
     """
     from scoring_input_contract import (
-        PRENATAL_TITLE_RE,
         epa_dha_amounts_per_serving,
+        _route_product_label_text,
     )
     from serving_frequency import resolve_daily_serving_range
     from scoring_v4.quality_score_config import block
@@ -344,11 +344,14 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
     minimum = total_ps * servings_min if total_ps > 0 else 0.0
     maximum = total_ps * servings_max if total_ps > 0 else 0.0
     dha_minimum = dha_ps * servings_min if dha_ps > 0 else 0.0
-    title = " ".join(
-        str(prod.get(key) or "")
-        for key in ("product_name", "fullName", "brand_name", "brandName")
-    )
-    prenatal = bool(PRENATAL_TITLE_RE.search(title))
+    title = _route_product_label_text(prod)
+    from clinical_applicability import assess_context_population
+    # Select the existing pregnancy intake authority using the same affirmative
+    # targeting decision as clinical contexts, never a brand or negated title.
+    # This is the authority's population, not a new efficacy study or approval.
+    prenatal = assess_context_population(prod, {
+        "population": {"age_group": "adult", "description": "Pregnant women"},
+    }) == "eligible"
 
     # Read magnitudes only from the shared config, never from clinical data.
     weak_score = float(policy["omega_reviewed_weak"]["pillar_score"])
@@ -363,12 +366,6 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         r"\b(?:spm|specialized pro resolving|pro resolving|resolvin|protectin|maresin|pro resolve)\b",
         normalized_title,
     ))
-
-    try:
-        owners = evidence_owner_canonicals(prod, module="omega")
-    except (KeyError, TypeError, ValueError):
-        owners = set()
-    mixed_purpose = bool(owners and any(owner not in _OMEGA_EVIDENCE_CANONICALS for owner in owners))
 
     claim_segments = [title] + [
         str(statement.get("notes") or statement.get("text") or "")
@@ -408,8 +405,6 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         applicability_reason = "held_child_or_baby_population"
     elif specialized:
         applicability_reason = "held_specialized_preparation"
-    elif mixed_purpose:
-        applicability_reason = "held_mixed_purpose_ownership"
     elif prenatal and dha_ps > 0:
         selected = standards["prenatal_dha_intake_authority"]
         score = prenatal_score
@@ -454,6 +449,29 @@ def _norm(val: Any) -> str:
     return str(val or "").strip().lower()
 
 
+def _held_clinical_source_pmids(entry: Mapping[str, Any]) -> Set[str]:
+    """Source-integrity exclusions, wherever the canonical record stores them.
+
+    A record-level credit hold is not itself a retraction. An explicit source
+    integrity hold, including one recorded on a context, follows that PMID.
+    """
+    held = {
+        str(ref["pmid"])
+        for ref in entry.get("references_structured") or []
+        if isinstance(ref, Mapping) and ref.get("pmid")
+        and (ref.get("retracted") or ref.get("expression_of_concern")
+             or ref.get("scoring_eligible") is False)
+    }
+    held.update(
+        str(pmid)
+        for context in entry.get("study_contexts") or []
+        if isinstance(context, Mapping)
+        and context.get("source_integrity") in {"retracted", "expression_of_concern"}
+        for pmid in context.get("source_pmids") or []
+    )
+    return held
+
+
 def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, source_pmids=None) -> bool:
     """Honor source holds, joined to the context and optional signed source scope."""
     if entry.get("scoring_eligible") is False or is_reference_only(entry):
@@ -467,9 +485,7 @@ def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, 
                     if re.fullmatch(r"[1-9][0-9]*", str(pmid))}
         declared.update(str(ref["pmid"]) for ref in references
                         if isinstance(ref, Mapping) and ref.get("pmid"))
-        excluded = {str(ref["pmid"]) for ref in references
-                    if isinstance(ref, Mapping) and ref.get("pmid")
-                    and not clinical_record_sources_eligible({"references_structured": [ref]})}
+        excluded = _held_clinical_source_pmids(entry)
         eligible = declared - excluded
         if source_pmids is not None:
             eligible &= {str(pmid) for pmid in source_pmids}
@@ -1053,6 +1069,17 @@ def resolve_evidence_for_row(
                     if (isinstance(scope, Mapping) and scope.get("require_source_label_form") is True
                             and scope.get("required_form_terms")):
                         matching_studies.append(study)
+    # Typed nutrient totals can acquire a reviewed source through the scorer's
+    # existing strict source join (for example whey named in the ingredient
+    # list). Completion consumes that same verified join, not a second matcher.
+    if product and source_ref and row_dict.get("scoring_input_kind") == "product_level_evidence":
+        from scoring_v4.modules.generic_evidence import resolved_clinical_matches, _clinical_source_id
+        from clinical_applicability import reviewed_entries
+        for match in resolved_clinical_matches(dict(product), owner_scoped=True, assess_amount=False)[0]:
+            if source_ref in (match.get("matched_source_row_refs") or []):
+                reference = reviewed_entries().get(_clinical_source_id(match))
+                if reference:
+                    matching_studies.append(reference)
     # Deduplicate studies by ID
     seen_ids = set()
     deduped_studies = []
@@ -1062,6 +1089,7 @@ def resolve_evidence_for_row(
             seen_ids.add(sid)
             deduped_studies.append(s)
 
+    unresolved_clinical_source = False
     if deduped_studies:
         matched_owners.append("backed_clinical_studies")
         # Check study types, effect directions, and applicability
@@ -1083,121 +1111,115 @@ def resolve_evidence_for_row(
                     points_eligible=False, applicability_status="not_applicable",
                     reason_code="reference_only_clinical_record", owner_facts=owner_facts,
                 )
-            return EvidenceResolution(
-                canonical_id=canonical, ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False, applicability_status="applicability_unestablished",
-                reason_code="clinical_sources_ineligible", owner_facts=owner_facts,
-                blocking_reasons=["clinical_sources_ineligible"],
-            )
-        owner_facts["backed_clinical_studies"] = _clinical_owner_facts(valid_studies)
+            unresolved_clinical_source = True
+        if valid_studies:
+            owner_facts["backed_clinical_studies"] = _clinical_owner_facts(valid_studies)
 
-        # Check applicability: preparation/form only. Amount adequacy is owned
-        # by Dose; assessment readiness separately withholds a required missing
-        # amount, so Evidence must not turn an amount into efficacy eligibility.
-        from clinical_applicability import assess_clinical_applicability
-        scope_product = product or {"activeIngredients": [row_dict]}
-        source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
-        record_states = []
-        unresolved_reasons = []
-        inapplicable_reasons = []
-        for study in valid_studies:
-            scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
-            if source_ref:
-                scoped["matched_source_row_refs"] = [source_ref]
-            decision = assess_clinical_applicability(scope_product, scoped, assess_amount=False)
-            if decision["status"] == "unresolved":
-                record_states.append("unresolved")
-                unresolved_reasons.append(decision["reason_code"])
-                continue
-            if decision["reason_code"] == "label_purpose_evidence_mismatch":
-                record_states.append("purpose_mismatch")
-                continue
-            if (decision["reason_code"] == "clinical_outcome_not_qualified"
-                    and decision.get("population_applicability", {}).get("state") == "eligible"
-                    and decision.get("population_applicability", {}).get("context_ids")):
-                record_states.append("reviewed_nonpositive")
-                continue
-            if decision["status"] != "applicable":
-                if decision["reason_code"] in {
-                    "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
-                    "clinical_preparation_mismatch", "clinical_identity_excluded",
-                }:
-                    record_states.append("form_mismatch")
-                else:
-                    record_states.append("not_applicable")
-                    inapplicable_reasons.append(decision["reason_code"])
-                continue
-            record_states.append("applicable")
-        # A second record's higher dose or different form cannot veto an
-        # applicable record. The scorer assesses each clinical record too.
-        has_applicable = "applicable" in record_states
-        is_form_excluded = bool(record_states) and all(
-            state in {"form_mismatch", "purpose_mismatch"} for state in record_states)
+            # Check applicability: preparation/form only. Amount adequacy is owned
+            # by Dose; assessment readiness separately withholds a required missing
+            # amount, so Evidence must not turn an amount into efficacy eligibility.
+            from clinical_applicability import assess_clinical_applicability
+            scope_product = product or {"activeIngredients": [row_dict]}
+            source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
+            record_states = []
+            unresolved_reasons = []
+            inapplicable_reasons = []
+            for study in valid_studies:
+                scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
+                if source_ref:
+                    scoped["matched_source_row_refs"] = [source_ref]
+                decision = assess_clinical_applicability(scope_product, scoped, assess_amount=False, require_claim_alignment=False)
+                if decision["status"] == "unresolved":
+                    record_states.append("unresolved")
+                    unresolved_reasons.append(decision["reason_code"])
+                    continue
+                if decision["reason_code"] == "label_purpose_evidence_mismatch":
+                    record_states.append("purpose_mismatch")
+                    continue
+                if (decision["reason_code"] == "clinical_outcome_not_qualified"
+                        and decision.get("population_applicability", {}).get("state") == "eligible"
+                        and decision.get("population_applicability", {}).get("context_ids")):
+                    record_states.append("reviewed_nonpositive")
+                    continue
+                if decision["status"] != "applicable":
+                    if decision["reason_code"] in {
+                        "clinical_form_mismatch", "clinical_form_excluded", "clinical_delivery_mismatch",
+                        "clinical_preparation_mismatch", "clinical_identity_excluded",
+                    }:
+                        record_states.append("form_mismatch")
+                    else:
+                        record_states.append("not_applicable")
+                        inapplicable_reasons.append(decision["reason_code"])
+                    continue
+                record_states.append("applicable")
+            # A second record's higher dose or different form cannot veto an
+            # applicable record. The scorer assesses each clinical record too.
+            has_applicable = "applicable" in record_states
+            is_form_excluded = bool(record_states) and all(
+                state in {"form_mismatch", "purpose_mismatch"} for state in record_states)
 
-        if not has_applicable and "reviewed_nonpositive" in record_states and not unresolved_reasons:
-            return EvidenceResolution(
-                canonical_id=canonical, ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
-                points_eligible=False, applicability_status="reviewed_null_evidence",
-                reason_code="clinical_outcome_not_qualified", owner_facts=owner_facts,
-            )
+            if not has_applicable and "reviewed_nonpositive" in record_states and not unresolved_reasons:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.REVIEWED_NULL_UNFAVORABLE.value,
+                    points_eligible=False, applicability_status="reviewed_null_evidence",
+                    reason_code="clinical_outcome_not_qualified", owner_facts=owner_facts,
+                )
 
-        if record_states and set(record_states) == {"purpose_mismatch"}:
-            return EvidenceResolution(
-                canonical_id=canonical, ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False, applicability_status="applicability_unestablished",
-                reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
-                blocking_reasons=["label_purpose_evidence_mismatch"],
-            )
-        if not has_applicable and unresolved_reasons:
-            return EvidenceResolution(
-                canonical_id=canonical, ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False, applicability_status="applicability_unestablished",
-                reason_code=unresolved_reasons[0], owner_facts=owner_facts,
-                blocking_reasons=list(dict.fromkeys(unresolved_reasons)),
-            )
-        if not has_applicable and inapplicable_reasons:
-            return EvidenceResolution(
-                canonical_id=canonical, ingredient_name=name,
-                matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False, applicability_status="applicability_unestablished",
-                reason_code=inapplicable_reasons[0], owner_facts=owner_facts,
-                blocking_reasons=list(dict.fromkeys(inapplicable_reasons)),
-            )
+            if record_states and set(record_states) == {"purpose_mismatch"}:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
+                    blocking_reasons=["label_purpose_evidence_mismatch"],
+                )
+            if not has_applicable and unresolved_reasons:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code=unresolved_reasons[0], owner_facts=owner_facts,
+                    blocking_reasons=list(dict.fromkeys(unresolved_reasons)),
+                )
+            if not has_applicable and inapplicable_reasons:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code=inapplicable_reasons[0], owner_facts=owner_facts,
+                    blocking_reasons=list(dict.fromkeys(inapplicable_reasons)),
+                )
 
-        if is_form_excluded:
-            blocking_reasons.append("form_mismatch_with_clinical_trials")
+            if is_form_excluded:
+                blocking_reasons.append("form_mismatch_with_clinical_trials")
+                return EvidenceResolution(
+                    canonical_id=canonical,
+                    ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False,
+                    applicability_status="form_mismatch",
+                    reason_code="clinical_form_mismatch",
+                    owner_facts=owner_facts,
+                    blocking_reasons=blocking_reasons,
+                )
+
+            # Has applicable human trials
             return EvidenceResolution(
                 canonical_id=canonical,
                 ingredient_name=name,
                 matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False,
-                applicability_status="form_mismatch",
-                reason_code="clinical_form_mismatch",
+                disposition=EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
+                points_eligible=True,
+                applicability_status="applicable_reviewed_trials",
+                reason_code="reviewed_human_clinical_evidence_matched",
                 owner_facts=owner_facts,
-                blocking_reasons=blocking_reasons,
             )
-
-        # Has applicable human trials
-        return EvidenceResolution(
-            canonical_id=canonical,
-            ingredient_name=name,
-            matched_owners=matched_owners,
-            disposition=EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value,
-            points_eligible=True,
-            applicability_status="applicable_reviewed_trials",
-            reason_code="reviewed_human_clinical_evidence_matched",
-            owner_facts=owner_facts,
-        )
 
     # 7b. Check Verified Clinical Evidence Registry (Phase 4 Provenance Fact Registry)
     # The canonical clinical-evidence capability remains ONE owner: backed_clinical_studies.
@@ -1206,6 +1228,16 @@ def resolve_evidence_for_row(
     lit_idx = _load_literature_evidence()
     lit_entry = lit_idx.get(canonical) or lit_idx.get(norm_name)
     if lit_entry:
+        held_pmids = set().union(*(_held_clinical_source_pmids(study) for study in deduped_studies))
+        if held_pmids & {str(study.get("pmid")) for study in lit_entry.get("qualifying_human_studies") or []}:
+            return EvidenceResolution(
+                canonical_id=canonical, ingredient_name=name,
+                matched_owners=matched_owners,
+                disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                points_eligible=False, applicability_status="applicability_unestablished",
+                reason_code="clinical_sources_ineligible", owner_facts=owner_facts,
+                blocking_reasons=["clinical_sources_ineligible"],
+            )
         prov = lit_entry.get("verification_provenance", {})
         is_verified = (
             lit_entry.get("verification_result") == "authoritative_pubmed_verified"
@@ -1305,6 +1337,28 @@ def resolve_evidence_for_row(
 
         # Check if food matrix / excipient is not efficacy relevant
         if literature_review_result(lit_entry) == "not_efficacy_relevant":
+            # The sports input owner identifies this as the product's declared
+            # protein. A carrier/macronutrient exclusion cannot finish research
+            # on its preparation; neither may an unmatched source borrow whey.
+            from scoring_input_contract import get_evidence_subject_rows, ROUTE_FEATURE_PROTEIN_CANONICALS
+            protein_sources = ([source for source in get_evidence_subject_rows(product or {})
+                                if source.get("canonical_id") in ROUTE_FEATURE_PROTEIN_CANONICALS - {"protein"}]
+                               if canonical == "protein" and row_dict.get("evidence_type") == "sports_primary_dose" else [])
+            source_results = ([resolve_evidence_for_row(source, product) for source in protein_sources]
+                              if row_dict.get("evidence_type") == "sports_primary_dose" else [])
+            sources_complete = bool(source_results) and compose_product_resolution_state(
+                [result.disposition for result in source_results])[1]
+            if row_dict.get("evidence_type") == "sports_primary_dose" and not sources_complete:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                    points_eligible=False,
+                    applicability_status="literature_applicability_unestablished",
+                    reason_code="primary_nutritional_ingredient_requires_source_review",
+                    owner_facts=owner_facts,
+                    blocking_reasons=["literature_applicability_unestablished"],
+                )
             material = _norm(lit_entry.get("material_form"))
             from clinical_applicability import _row_text
             declared = _row_text(row_dict, source_only=True) + _row_text(row_dict)
@@ -1414,7 +1468,7 @@ def resolve_evidence_for_row(
             source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
             if source_ref:
                 scoped["matched_source_row_refs"] = [source_ref]
-            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False)
+            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False, require_claim_alignment=False)
             if decision["status"] not in {"applicable", "not_curated"}:
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
@@ -1436,7 +1490,7 @@ def resolve_evidence_for_row(
             source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
             if source_ref:
                 scoped["matched_source_row_refs"] = [source_ref]
-            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False)
+            decision = assess_clinical_applicability(product or {"activeIngredients": [row_dict]}, scoped, assess_amount=False, require_claim_alignment=False)
             if decision["status"] == "applicable":
                 material_form_matched = True
             elif decision["reason_code"] in _DOCUMENTED_REVIEW_CONCLUSIONS:
@@ -1470,16 +1524,6 @@ def resolve_evidence_for_row(
                     blocking_reasons=blocking_reasons,
                 )
 
-        claimed_purposes = _evidence_claim_purposes(product).get(canonical) if product else None
-        if claimed_purposes and not (claimed_purposes & _evidence_entry_purposes(lit_entry)):
-            return EvidenceResolution(
-                canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
-                disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                points_eligible=False, applicability_status="applicability_unestablished",
-                reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
-                blocking_reasons=["label_purpose_evidence_mismatch"],
-            )
-
         return EvidenceResolution(
             canonical_id=canonical,
             ingredient_name=name,
@@ -1489,6 +1533,16 @@ def resolve_evidence_for_row(
             applicability_status="applicable_reviewed_trials",
             reason_code="literature_reviewed_human_clinical_evidence",
             owner_facts=owner_facts,
+        )
+
+    if unresolved_clinical_source:
+        return EvidenceResolution(
+            canonical_id=canonical, ingredient_name=name,
+            matched_owners=matched_owners,
+            disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+            points_eligible=False, applicability_status="applicability_unestablished",
+            reason_code="clinical_sources_ineligible", owner_facts=owner_facts,
+            blocking_reasons=["clinical_sources_ineligible"],
         )
 
     # 8. Check Standardized Botanicals / Therapeutic Dosing
@@ -1549,7 +1603,7 @@ def _evidence_subject_roles(product: Mapping[str, Any], module: Optional[str]):
         for row in get_scoring_ingredients(prod_dict, strict=True).rows
         if evidence_row_key(row) not in subject_keys
     ]
-    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others)
+    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others, evidence=True)
     return rows, roles[: len(rows)], others, roles[len(rows):]
 
 
@@ -1570,11 +1624,11 @@ def evidence_owner_canonicals(
     *,
     module: Optional[str] = None,
 ) -> Set[str]:
-    """Return the purpose-owning ingredient identities for Evidence.
+    """Return the principal ingredient identities for Evidence.
 
     Ingredient roles remain owned by ``scoring_input_contract``.  Evidence
-    consumes that classification with one precedence rule: explicit route or
-    title owners win; otherwise material-major rows own the assessment.  When
+    consumes that classification: explicit route/title owners and objectively
+    material-major rows jointly own the assessment.  When
     neither signal exists, retain every assessable identity so an opaque blend
     cannot silently discard its ingredients.  Roles are read against the whole
     label (a blend total still weighs in the product, so 5 mg of boron beside a
@@ -1595,9 +1649,9 @@ def evidence_prominent_row_keys(
     """The label rows the product is about, as ``evidence_row_key`` values.
 
     The same owner decision as ``evidence_owner_canonicals``, read per row
-    instead of per identity: the subject rows that set the winning tier (route
-    driver, title or label claim; otherwise material-major), including the
-    disclosed members of a blend in that tier.  The retain-everything fallback
+    instead of per identity: the subject rows with a principal role (route
+    driver, title identity or material-major), including the
+    disclosed members of a named or material blend. The retain-everything fallback
     has no prominent row.  Primary-evidence selection consumes this instead of
     choosing by mass, so another ingredient's amount never changes which
     ingredient the label declares.  Prominence grants no amount: a member whose
@@ -1648,13 +1702,14 @@ def _evidence_owner_selection(
             )
         ]
 
-    for accepted in ({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT}, {ROLE_MAJOR}):
-        owners = tier_rows(accepted)
-        if owners:
-            return (
-                {str(row.get("canonical_id") or "").strip().lower() for row in owners},
-                {evidence_row_key(row) for row in owners},
-            )
+    # A route driver does not demote another objectively major active. Roles
+    # come from the shared classifier; inherit only eligible real subjects.
+    owners = tier_rows({ROLE_PRIMARY, ROLE_CLAIM_PROMINENT, ROLE_MAJOR})
+    if owners:
+        return (
+            {str(row.get("canonical_id") or "").strip().lower() for row in owners},
+            {evidence_row_key(row) for row in owners},
+        )
     # A sole known active is what a single-ingredient label is about even
     # when its amount uses volume/CFU rather than a mass or its title is a brand.
     # Structural totals and lent masses cannot establish this fallback.
@@ -1682,7 +1737,7 @@ def evidence_required_canonicals(
     """The owners whose open review can hold a product's Evidence conclusion.
 
     Credit still belongs to every owner.  Completion asks only about an owner the
-    label is about, read on materiality alone: named in the title or a claim, or
+    label is about, read on materiality alone: named in the title or
     heavy against the rest of the label.  A route's list of recognized actives
     does not make a minor row the subject.  A member of a named or heavy blend
     still counts: it inherits the blend's tier, so its review can move the
@@ -1694,7 +1749,7 @@ def evidence_required_canonicals(
     prod_dict = product if isinstance(product, dict) else dict(product or {})
     owners = evidence_owner_canonicals(prod_dict, module=module)
     rows, _, others, _ = _evidence_subject_roles(prod_dict, module)
-    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others, materiality_only=True)
+    roles = classify_ingredient_roles(prod_dict, module=module, rows=rows + others, materiality_only=True, evidence=True)
     material_blends = {
         str(row.get("raw_source_path") or "")
         for row, role in zip(others, roles[len(rows):])
@@ -1713,64 +1768,15 @@ def evidence_required_canonicals(
     return required or owners
 
 
-def _evidence_claim_purposes(product: Mapping[str, Any], module: Optional[str] = None) -> Dict[str, Set[str]]:
-    """Read explicit-purpose provenance from the existing role result."""
-    from scoring_input_contract import classify_ingredient_roles
-    purposes: Dict[str, Set[str]] = {}
-    for role in classify_ingredient_roles(dict(product), module=module):
-        reason = str(role.get("role_reason") or "")
-        if reason.startswith("named_in_label_function_claim:"):
-            purposes.setdefault(str(role["canonical_id"]), set()).update(reason.split(":", 1)[1].split(","))
-    return purposes
-
-
-def _evidence_entry_purposes(entry: Mapping[str, Any]) -> Set[str]:
-    """Purposes a clinical record supports, from reviewed sources only.
-
-    Approved, scoring-eligible contexts supply qualifying outcome names; a
-    signed applicability scope may narrow those names within its sources.
-    Consumer goals, relevance tags, endpoint prose and
-    primary_outcome describe a record; they never establish a supported
-    purpose on their own (Sean, 2026-10-28). An enriched clinical match is
-    judged by its curated record, which owns the contexts.
-    """
-    from clinical_applicability import reviewed_entries, qualifying_purpose_outcomes
-    from probiotic_measurements import context_accepted_for_scoring
-    from scoring_v4.modules.generic_evidence import _clinical_source_id
-    registry_backed = bool(entry.get("id") or entry.get("study_id") or entry.get("source_data"))
-    # A registry-backed match (recovered matches included) is judged only by its
-    # curated record; a missing record is an unresolved source. A literature
-    # record is its own owner.
-    record = reviewed_entries().get(_clinical_source_id(dict(entry))) if registry_backed else entry
-    if record is None:
-        return set()
-    scope = record.get("applicability") or {}
-    sources = set(map(str, scope.get("source_pmids") or [])) if isinstance(scope, Mapping) else set()
-    reviewed = []
-    for context in record.get("study_contexts") or []:
-        if not context_accepted_for_scoring(context):
-            continue
-        if sources and not sources.intersection(map(str, context.get("source_pmids") or [])):
-            continue
-        outcomes, _ = qualifying_purpose_outcomes(context)
-        reviewed.extend(str(outcome.get("name") or "") for outcome in outcomes)
-    purposes = evidence_indication_categories(" ".join(reviewed))
-    signed = scope.get("supported_outcomes") if isinstance(scope, Mapping) else None
-    if signed:
-        purposes &= evidence_indication_categories(" ".join(map(str, signed)))
-    return purposes
-
-
 def evidence_record_matches_declared_purpose(
     product: Mapping[str, Any], row: Mapping[str, Any], entry: Mapping[str, Any],
+    *, require_claim_alignment: bool = True,
 ) -> bool:
     """Return whether a clinical record supports this row's declared purpose.
 
-    The shared role result is the single source of label-purpose provenance.
-    An ingredient without an ingredient-scoped purpose claim keeps the normal
-    identity/preparation applicability path. When the label does declare a
-    purpose, the record must support at least one of those same indication
-    categories before Evidence or Dose may use it.
+    Bind the record to the same ingredient row for both uses. Dose may
+    require a declared purpose for its benchmark; Evidence qualification
+    uses the reviewed research independently of label advertising.
     """
     from clinical_applicability import assess_clinical_applicability
     # The applicability owner evaluates preparation, population and qualifying
@@ -1782,7 +1788,8 @@ def evidence_record_matches_declared_purpose(
     if source:
         scoped.setdefault("matched_source_row_refs", [source])
     scoped.setdefault("ingredient", row.get("name") or row.get("standard_name"))
-    decision = assess_clinical_applicability(product, scoped, assess_amount=False)
+    decision = assess_clinical_applicability(product, scoped, assess_amount=False,
+                                             require_claim_alignment=require_claim_alignment)
     # A fresh reference projection retains what the source evaluated, never
     # affirmative eligibility. Its source, population and claim were still
     # checked by the same canonical owner above.

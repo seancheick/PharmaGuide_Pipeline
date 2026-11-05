@@ -188,22 +188,22 @@ def test_specialized_omega_delivery_does_not_borrow_ordinary_fish_oil_evidence(n
     assert payload["metadata"]["evidence_result_state"] == "applicability_unestablished"
 
 
-def test_mixed_purpose_product_does_not_borrow_omega_only_evidence() -> None:
+@pytest.mark.parametrize("name,canonical", [("Vitamin D3", "vitamin_d"), ("Lutein", "lutein")])
+def test_added_ingredient_does_not_erase_or_borrow_epa_dha_evidence(name, canonical) -> None:
     from scoring_v4.modules.omega_evidence import score_evidence
 
-    product = _product(epa=300, dha=200, name="Omega-3 + Lutein Eye Formula")
+    product = _product(epa=300, dha=200)
+    before = score_evidence(product)
     product["ingredient_quality_data"]["ingredients_scorable"].append({
-        "name": "Lutein",
-        "canonical_id": "lutein",
-        "quantity": 10,
-        "unit": "mg",
+        "name": name, "canonical_id": canonical, "quantity": 10, "unit": "mg",
     })
+    product["product_name"] += " + " + name + " Eye Formula"
     payload = score_evidence(product)
-
-    assert payload["score"] == 0.0
-    assert payload["metadata"]["applicability_qualified"] is False
-    assert payload["metadata"]["applicability_reason"] == "held_mixed_purpose_ownership"
-    assert payload["metadata"]["evidence_result_state"] == "applicability_unestablished"
+    assert before["score"] > 0
+    assert payload["score"] == before["score"]
+    assert payload["metadata"]["evidence_standard"] == before["metadata"]["evidence_standard"]
+    assert payload["metadata"]["evidence_source_pmids"] == before["metadata"]["evidence_source_pmids"]
+    assert payload["metadata"]["source_references"] == before["metadata"]["source_references"]
 
 
 def test_held_omega_evidence_public_copy_does_not_claim_applicable_research() -> None:

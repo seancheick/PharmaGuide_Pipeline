@@ -1,0 +1,456 @@
+{
+  "record_id": "INGR_MCT_OIL",
+  "labels": 40,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "positive_weak for body weight when replacing other fat; small cognition trial",
+  "decision": "held: the 13 trials in 25636220 aren't extracted (no open full text), and the benefit is shown for replacing other fat, not for adding MCT",
+  "summary": "A 2015 meta-analysis of 13 RCTs finds -0.51 kg against long-chain fat, with commercial bias detected and no dose established. A label can't show the replacement condition. One 36-person trial reports better task results in young adults after one dose and after 4 weeks. Coconut oil isn't equivalent to MCT oil for satiety, which matters for the coconut labels on the stop list.",
+  "question_for_clinician": "Can a dietary-replacement result credit a label added on top of the diet? Agent recommendation: only with that limit printed, and only for weight.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_mct_oil_25636220",
+      "components": [
+        "INGR_MCT_OIL"
+      ],
+      "source_pmids": [
+        "25636220"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "dietary_substitution",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "body_weight",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_mct_oil_25636220",
+      "population": {
+        "age_group": "adult",
+        "description": "Healthy adults in 13 RCTs longer than 3 weeks, 749 participants."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "Body weight -0.51 kg against long-chain fat (95% CI -0.80 to -0.23)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Waist -1.46 cm, hip -0.79 cm",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Blood lipids not different",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Commercial bias detected; many trials lacked quality information.",
+        "Authors' finding is about replacing long-chain fat; dose left undetermined.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Dose left undetermined by the authors.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "25636220",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_mct_oil_12634436",
+      "components": [
+        "INGR_MCT_OIL"
+      ],
+      "source_pmids": [
+        "12634436"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "dietary_substitution",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "body_composition",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_mct_oil_12634436",
+      "population": {
+        "age_group": "adult",
+        "description": "24 healthy overweight men, BMI 25 to 31."
+      },
+      "study_design": "Crossover randomized trial, 28 days each",
+      "outcomes": [
+        {
+          "name": "Upper body fat -0.67 kg vs -0.02 kg on olive oil, p<0.05",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Whole-body subcutaneous fat trend, p=0.087",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Diets rich in MCT or LCT; the abstract calls the test oil 'functional oil', and the amount isn't in it.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Diet rich in MCT for 28 days; amount not in the abstract",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12634436",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_mct_oil_41443401",
+      "components": [
+        "INGR_MCT_OIL"
+      ],
+      "source_pmids": [
+        "41443401"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_cognition",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_mct_oil_41443401",
+      "population": {
+        "age_group": "adult",
+        "description": "36 young adults, 21 ± 1 years, 20 men and 16 women."
+      },
+      "study_design": "Randomized controlled trial against olive oil",
+      "outcomes": [
+        {
+          "name": "Inhibitory control better after a single dose, P<0.05",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Working memory better after 4 weeks, P=0.04",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Young healthy adults, small sample, laboratory tasks.",
+        "Abstract reports 4-week daily regimen; daily frequency taken from it.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          12000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "daily for 4 weeks",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "12 g MCT, single dose and 4-week daily regimen",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41443401",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_mct_oil_28689741",
+      "components": [
+        "INGR_MCT_OIL"
+      ],
+      "source_pmids": [
+        "28689741"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "satiety",
+      "purpose": "weight_management",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_mct_oil_28689741",
+      "population": {
+        "age_group": "adult",
+        "description": "Participants not numbered in the abstract."
+      },
+      "study_design": "Randomized test-breakfast comparison of three oils",
+      "outcomes": [
+        {
+          "name": "MCT oil reduced ad libitum intake against coconut and vegetable oil",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Authors: coconut oil can't be promoted as similar to MCT oil for intake and satiety",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Acute single meal.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "205 kcal of each oil in a breakfast smoothie; no mass stated",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "28689741",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "8806933": "6 cyclists, MCT in a glucose drink; not a supplement outcome."
+  },
+  "stop_or_hold": "Coconut oil products print an MCT row: see the stop list.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "25636220",
+      "title_fetched": "Effects of medium-chain triglycerides on weight loss and body composition: a meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25636220/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12634436",
+      "title_fetched": "Medium-chain triglycerides increase energy expenditure and decrease adiposity in overweight men.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12634436/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41443401",
+      "title_fetched": "Both a single dose and a 4-week daily regimen of medium-chain triglycerides boost certain aspects of cognitive function in young adults: A randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41443401/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28689741",
+      "title_fetched": "Coconut oil has less satiating properties than medium chain triglyceride oil.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28689741/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "8806933",
+      "title_fetched": "Effects of medium-chain triglyceride ingestion on fuel metabolism and cycling performance.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8806933/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_MCT_OIL",
+    "standard_name": "Medium Chain Triglycerides",
+    "aliases": [
+      "Medium Chain Triglyceride",
+      "Medium Chain Triglyceride Oil",
+      "MCT Oil",
+      "C8 MCT Oil, Powder",
+      "Medium Chain Triglyceride Oil, Powder"
+    ],
+    "category": "metabolic_blood_sugar",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "25636220",
+      "12634436",
+      "41443401",
+      "28689741"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "positive_weak for body weight when replacing other fat; small cognition trial. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Body weight and body composition"
+    ],
+    "health_goals_supported": [],
+    "notes": "A 2015 meta-analysis of 13 RCTs finds -0.51 kg against long-chain fat, with commercial bias detected and no dose established. A label can't show the replacement condition. One 36-person trial reports better task results in young adults after one dose and after 4 weeks. Coconut oil isn't equivalent to MCT oil for satiety, which matters for the coconut labels on the stop list.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy adults replacing long-chain fat with MCT in trials longer than 3 weeks",
+      "supported_outcomes": [
+        "Body weight and body composition"
+      ],
+      "source_pmids": [
+        "25636220",
+        "12634436",
+        "41443401",
+        "28689741"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "A 2015 meta-analysis of 13 RCTs finds -0.51 kg against long-chain fat, with commercial bias detected and no dose established. A label can't show the replacement condition. One 36-person trial reports better task results in young adults after one dose and after 4 weeks. Coconut oil isn't equivalent to MCT oil for satiety, which matters for the coconut labels on the stop list. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "coconut"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "25636220",
+        "title": "Effects of medium-chain triglycerides on weight loss and body composition: a meta-analysis of randomized controlled trials.",
+        "citation": "Journal of the Academy of Nutrition and Dietetics (2015)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/25636220/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1016/j.jand.2014.10.022"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12634436",
+        "title": "Medium-chain triglycerides increase energy expenditure and decrease adiposity in overweight men.",
+        "citation": "Obesity research (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12634436/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1038/oby.2003.53"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41443401",
+        "title": "Both a single dose and a 4-week daily regimen of medium-chain triglycerides boost certain aspects of cognitive function in young adults: A randomized controlled trial.",
+        "citation": "Physiology & behavior (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41443401/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.physbeh.2025.115212"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "28689741",
+        "title": "Coconut oil has less satiating properties than medium chain triglyceride oil.",
+        "citation": "Physiology & behavior (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28689741/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.physbeh.2017.07.007"
+      }
+    ]
+  }
+}

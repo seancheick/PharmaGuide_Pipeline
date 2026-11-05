@@ -1,0 +1,1203 @@
+{
+  "record_id": "INGR_GOTU_KOLA",
+  "labels": 22,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed: venous microcirculation positive for a total triterpenic fraction, not printed on any label; cognition meta-analysis null; diabetes trial null; small positive extract trials",
+  "decision": "closed_no_credit",
+  "summary": "The stored positive is a single-blind trial of the total triterpenic fraction (TTFCA, 60 and 120 mg) in venous disease. No label here prints TTFCA. Labels print herb powder, whole herb extract (some 10:1), leaf or aerial extract, and two print a triterpene percentage (306227 10%, 219195 6% glycosides). The cognition meta-analysis found no differences across domains (28878245), and the labeled cognitive use isn't supported. Extract trials are small or on other purposes.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_11666126",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "11666126"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "venous_hypertension",
+      "purpose": "venous_circulation",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_11666126",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with venous hypertensive microangiopathy; number not stated in the abstract."
+      },
+      "study_design": "Single-blind, placebo-controlled, randomized, dose comparison",
+      "outcomes": [
+        {
+          "name": "Laser Doppler and transcutaneous PO2/PCO2 differed from placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Subjective symptom scores improved, especially at 120 mg; no effect on placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Total triterpenic fraction, a purified fraction. No label prints TTFCA; 60 mg on these labels is whole herb extract, not 60 mg of the fraction.",
+        "Single-blind; sample size and duration not in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          60,
+          120
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "TTFCA 60 mg or 120 mg daily; duration not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "11666126",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_23533507",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "23533507"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_venous_insufficiency",
+      "purpose": "venous_circulation",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_23533507",
+      "population": {
+        "age_group": "adult",
+        "description": "8 RCTs in chronic venous insufficiency."
+      },
+      "study_design": "Systematic review with pooling of similar studies",
+      "outcomes": [
+        {
+          "name": "Pooled microcirculatory parameters and ankle swelling improved",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Leg heaviness, pain and edema improved in 3 studies without quantitative data",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors: conclusion needs caution; inadequate reporting and unclear risk of bias.",
+        "Abstract doesn't separate preparations; no venous purpose appears on these labels.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "23533507",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_28878245",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "28878245"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cognitive_function",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_28878245",
+      "population": {
+        "age_group": "adult",
+        "description": "5 RCTs of C. asiatica alone and 6 of products containing it."
+      },
+      "study_design": "Systematic review and meta-analysis",
+      "outcomes": [
+        {
+          "name": "All cognitive domains: no significant difference from placebo",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Alert score SMD 0.71 (95% CI 0.01 to 1.41)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Anger score at 1 hour SMD -0.81 (95% CI -1.51 to -0.09)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors cite limits of dose regimen, plant preparation, standardization and product variation.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "28878245",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_42906579",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "42906579"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiovascular_neurological",
+      "purpose": "cardiovascular_neurological_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_42906579",
+      "population": {
+        "age_group": "adult",
+        "description": "8 clinical trials among 62 studies, the rest preclinical."
+      },
+      "study_design": "Systematic review, PRISMA 2020",
+      "outcomes": [
+        {
+          "name": "Clinical evidence described as mixed, limited and inconsistent",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors say larger, standardized trials are needed before therapeutic claims are warranted.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "42906579",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_18191355",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "18191355"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "cognitive_function_older_adults",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_18191355",
+      "population": {
+        "age_group": "older_adult",
+        "description": "28 healthy elderly participants."
+      },
+      "study_design": "Randomized, placebo-controlled, double-blind, three doses",
+      "outcomes": [
+        {
+          "name": "High dose enhanced working memory and N100 amplitude",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Self-rated mood improved",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "About 7 people per arm if evenly split; arm sizes not stated.",
+        "Extract type not stated.",
+        "No primary outcome named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          250,
+          500,
+          750
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Plant extract 250, 500 or 750 mg once daily for 2 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "18191355",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_19880441",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "19880441"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "physical_function_older_adults",
+      "purpose": "physical_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_19880441",
+      "population": {
+        "age_group": "older_adult",
+        "description": "80 healthy elderly."
+      },
+      "study_design": "Double-blind, placebo-controlled, randomized, three doses",
+      "outcomes": [
+        {
+          "name": "30-s chair stand improved at 500 and 750 mg after 2 months",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Life satisfaction within physical function improved at higher doses",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Standardization of the extract not stated in the abstract.",
+        "No primary outcome named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          250,
+          500,
+          750
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 90,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Standardized extract 250, 500 or 750 mg once daily for 90 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19880441",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_41383475",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "41383475"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "type_2_diabetes",
+      "purpose": "glycemic_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_41383475",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with type 2 diabetes; 70 completed."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "HbA1c, prespecified adjusted analysis: no between-group difference",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Fasting glucose and LDL-C: no adjusted between-group difference",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Unadjusted HbA1c difference (p = 0.006) did not hold in the prespecified adjusted model.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Extract 1,200 mg/day for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41383475",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_36420467",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "36420467"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "mild_cognitive_impairment",
+      "purpose": "cognitive_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_36420467",
+      "population": {
+        "age_group": "older_adult",
+        "description": "60 older adults with mild cognitive impairment."
+      },
+      "study_design": "Randomized, three groups: exercise, exercise plus gotu kola, control",
+      "outcomes": [
+        {
+          "name": "Cognitive scores: authors report no additional effect of gotu kola over exercise",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No gotu kola alone arm, so it tests add-on value only.",
+        "Authors' TNF-alpha suggestion rests on a correlation.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Gotu kola extract 500 mg twice a day for 12 weeks with exercise.",
+        "normalization": {
+          "basis": "500 mg twice a day as printed; daily total is simple addition."
+        },
+        "source_provenance": {
+          "pmid": "36420467",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_11106141",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "11106141"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "acoustic_startle",
+      "purpose": "anxiety",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_11106141",
+      "population": {
+        "age_group": "adult",
+        "description": "40 healthy subjects."
+      },
+      "study_design": "Double-blind, placebo-controlled, single dose",
+      "outcomes": [
+        {
+          "name": "Peak acoustic startle amplitude lower at 30 and 60 minutes",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Self-rated mood: no significant effect",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "A single 12 g dose, far above any label here, and not a treatment trial.",
+        "Authors call the findings preliminary.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          12
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 1,
+        "administration_frequency": "single dose",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Single 12 g oral dose.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "11106141",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_42196964",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "42196964"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "skin_aging",
+      "purpose": "skin_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_42196964",
+      "population": {
+        "age_group": "adult",
+        "description": "112 middle-aged Korean women."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "Wrinkle parameters down 10.4% to 14.4% from baseline",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Elasticity and brightness differed from placebo; authors call changes modest",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Per-protocol analysis.",
+        "Wrinkle changes are reported against baseline; no primary outcome named.",
+        "Extract type not stated; no label makes a skin claim.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          200
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Extract 200 mg/day for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42196964",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gotu_kola_41901080",
+      "components": [
+        "INGR_GOTU_KOLA"
+      ],
+      "source_pmids": [
+        "41901080"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Centella asiatica",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "macular_pigment",
+      "purpose": "eye_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gotu_kola_41901080",
+      "population": {
+        "age_group": "adult",
+        "description": "80 adults aged 45 to 65."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled",
+      "outcomes": [
+        {
+          "name": "MPOD change to Day 180 favored CA-HE50 (p < 0.001)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Named standardized extract, CA-HE50; biomarker endpoint; no label prints this material or an eye claim.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          300
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "CA-HE50 300 mg/day for 6 months.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41901080",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "40253389": "ECa233 in 23 adults with TMD pain; no differences among groups at day 14; pilot and not a label purpose.",
+    "31080345": "CAST standardized triterpene extract in diabetic neuropathy, 43 patients; favorable changes reported from baseline; not these labels.",
+    "27340413": "Quasi-experimental, compared with folic acid and no placebo.",
+    "20677602": "33 participants, no control arm named in the abstract.",
+    "42529868": "Network meta-analysis in chronic venous disease; heaviness RR 0.30 for Centella asiatica; preparation not stated.",
+    "42391143": "Scoping review of mood; three human gotu kola studies, n = 91; hypothesis-generating.",
+    "41575193": "Review of cognition in healthy people: no Centella asiatica trial among the seven it included.",
+    "37885445": "Multi-ingredient herbal product."
+  },
+  "stop_or_hold": "No herb powder efficacy trial turned up in 3 searches apart from the single 12 g dose in 11106141, whose abstract doesn't name a form. 8 labels print powder or plain herb rows (18388, 216378, 63950, 63961, 251608, 251610, 327976, 333920), so no trial read covers them at label amounts. If a clinician ever credits an extract, these need excluding.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "11666126",
+      "title_fetched": "Total triterpenic fraction of Centella asiatica in the treatment of venous hypertension: a clinical, prospective, randomized trial using a combined microcirculatory model.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11666126/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23533507",
+      "title_fetched": "A Systematic Review of the Efficacy of Centella asiatica for Improvement of the Signs and Symptoms of Chronic Venous Insufficiency.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23533507/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28878245",
+      "title_fetched": "Effects of Centella asiatica (L.) Urb. on cognitive function and mood related outcomes: A Systematic Review and Meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28878245/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42906579",
+      "title_fetched": "Pharmacological Activities of Centella asiatica: A Systematic Review of Preclinical and Clinical Evidence on Cardiovascular, Neurological, Antioxidant, and Anti-inflammatory Effects.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42906579/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18191355",
+      "title_fetched": "Positive modulation of cognition and mood in the healthy elderly volunteer following the administration of Centella asiatica.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18191355/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19880441",
+      "title_fetched": "Centella asiatica Improves Physical Performance and Health-Related Quality of Life in Healthy Elderly Volunteer.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19880441/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41383475",
+      "title_fetched": "Efficacy and safety of Centella asiatica (L.) Urb. [Apiaceae] as a dietary supplement for glycemic control and lipid regulation in patients with type 2 diabetes: a randomized controlled trial in Thailand.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41383475/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36420467",
+      "title_fetched": "Does Gotu kola supplementation improve cognitive function, inflammation, and oxidative stress more than multicomponent exercise alone? - a randomized controlled study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36420467/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "11106141",
+      "title_fetched": "A double-blind, placebo-controlled study on the effects of Gotu Kola (Centella asiatica) on acoustic startle response in healthy subjects.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11106141/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42196964",
+      "title_fetched": "A Randomized, Double-Blind, Placebo-Controlled Trial Assessing the Effects of Oral Centella asiatica Extract on Skin Aging-Related Parameters in Middle-Aged Korean Women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42196964/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41901080",
+      "title_fetched": "Effects of Long-Term Supplementation with Centella asiatica (L.) Urb. Extract (CA-HE50) on Macular Pigment Optical Density: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41901080/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40253389",
+      "title_fetched": "Efficacy of Centella asiatica on mitigating temporomandibular pain and improving functionality: a randomized, double blind, pilot clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40253389/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31080345",
+      "title_fetched": "Centella asiatica triterpenes for diabetic neuropathy: a randomized, double-blind, placebo-controlled, pilot clinical study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31080345/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "27340413",
+      "title_fetched": "Effectiveness of Gotu Kola Extract 750 mg and 1000 mg Compared with Folic Acid 3 mg in Improving Vascular Cognitive Impairment after Stroke.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27340413/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20677602",
+      "title_fetched": "A clinical study on the management of generalized anxiety disorder with Centella asiatica.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20677602/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42529868",
+      "title_fetched": "Pharmacological interventions to treat chronic venous disease: A network meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42529868/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42391143",
+      "title_fetched": "Therapeutic Potential of Gotu Kola (Centella asiatica), Phosphatidylcholine, and Taurine in Mood Disorders: A Systematic Scoping Review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42391143/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41575193",
+      "title_fetched": "The efficacy of nutritional phytochemical compounds in improving cognition.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41575193/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37885445",
+      "title_fetched": "Chronic supplementation of a multi-ingredient herbal supplement increases speed of cognitive task performance alongside changes in the urinary metabolism of dopamine and the gut microbiome in cognitively intact older adults experiencing subjective memory decline: a randomized, placebo controlled, parallel groups investigation.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37885445/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_GOTU_KOLA",
+    "standard_name": "Gotu kola (Centella asiatica)",
+    "aliases": [
+      "Gotu Kola Aerial Extract",
+      "Gotu Kola Herb Powder",
+      "Gotu Kola Whole Herb Extract",
+      "Gotu Kola extract",
+      "raw Gotu Kola powder",
+      "Gotu Kola herb powder",
+      "Gotu Kola leaf extract",
+      "Gotu Kola",
+      "standardized Gotu Kola extract"
+    ],
+    "category": "cognitive_neurological",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "11666126",
+      "23533507",
+      "28878245",
+      "42906579",
+      "18191355",
+      "19880441",
+      "41383475",
+      "36420467",
+      "11106141",
+      "42196964",
+      "41901080"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: venous microcirculation positive for a total triterpenic fraction, not printed on any label; cognition meta-analysis null; diabetes trial null; small positive extract trials. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "cognitive function",
+      "venous symptoms"
+    ],
+    "health_goals_supported": [],
+    "notes": "The stored positive is a single-blind trial of the total triterpenic fraction (TTFCA, 60 and 120 mg) in venous disease. No label here prints TTFCA. Labels print herb powder, whole herb extract (some 10:1), leaf or aerial extract, and two print a triterpene percentage (306227 10%, 219195 6% glycosides). The cognition meta-analysis found no differences across domains (28878245), and the labeled cognitive use isn't supported. Extract trials are small or on other purposes.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Older adults, adults with type 2 diabetes, and patients with venous disease",
+      "supported_outcomes": [
+        "cognitive function",
+        "venous symptoms"
+      ],
+      "source_pmids": [
+        "11666126",
+        "23533507",
+        "28878245",
+        "42906579",
+        "18191355",
+        "19880441",
+        "41383475",
+        "36420467",
+        "11106141",
+        "42196964",
+        "41901080"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The stored positive is a single-blind trial of the total triterpenic fraction (TTFCA, 60 and 120 mg) in venous disease. No label here prints TTFCA. Labels print herb powder, whole herb extract (some 10:1), leaf or aerial extract, and two print a triterpene percentage (306227 10%, 219195 6% glycosides). The cognition meta-analysis found no differences across domains (28878245), and the labeled cognitive use isn't supported. Extract trials are small or on other purposes. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11666126",
+        "title": "Total triterpenic fraction of Centella asiatica in the treatment of venous hypertension: a clinical, prospective, randomized trial using a combined microcirculatory model.",
+        "citation": "Angiology (2001)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11666126/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ]
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23533507",
+        "title": "A Systematic Review of the Efficacy of Centella asiatica for Improvement of the Signs and Symptoms of Chronic Venous Insufficiency.",
+        "citation": "Evidence-based complementary and alternative medicine : eCAM (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23533507/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1155/2013/627182"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "28878245",
+        "title": "Effects of Centella asiatica (L.) Urb. on cognitive function and mood related outcomes: A Systematic Review and Meta-analysis.",
+        "citation": "Scientific reports (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/28878245/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1038/s41598-017-09823-9"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42906579",
+        "title": "Pharmacological Activities of Centella asiatica: A Systematic Review of Preclinical and Clinical Evidence on Cardiovascular, Neurological, Antioxidant, and Anti-inflammatory Effects.",
+        "citation": "Planta medica (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42906579/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1055/a-2969-6239"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "18191355",
+        "title": "Positive modulation of cognition and mood in the healthy elderly volunteer following the administration of Centella asiatica.",
+        "citation": "Journal of ethnopharmacology (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/18191355/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.jep.2007.11.038"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19880441",
+        "title": "Centella asiatica Improves Physical Performance and Health-Related Quality of Life in Healthy Elderly Volunteer.",
+        "citation": "Evidence-based complementary and alternative medicine : eCAM (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19880441/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1093/ecam/nep177"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41383475",
+        "title": "Efficacy and safety of Centella asiatica (L.) Urb. [Apiaceae] as a dietary supplement for glycemic control and lipid regulation in patients with type 2 diabetes: a randomized controlled trial in Thailand.",
+        "citation": "Frontiers in pharmacology (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41383475/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article"
+        ],
+        "doi": "10.3389/fphar.2025.1680647"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36420467",
+        "title": "Does Gotu kola supplementation improve cognitive function, inflammation, and oxidative stress more than multicomponent exercise alone? - a randomized controlled study.",
+        "citation": "Journal of exercise rehabilitation (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36420467/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.12965/jer.2244388.194"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11106141",
+        "title": "A double-blind, placebo-controlled study on the effects of Gotu Kola (Centella asiatica) on acoustic startle response in healthy subjects.",
+        "citation": "Journal of clinical psychopharmacology (2000)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11106141/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1097/00004714-200012000-00015"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42196964",
+        "title": "A Randomized, Double-Blind, Placebo-Controlled Trial Assessing the Effects of Oral Centella asiatica Extract on Skin Aging-Related Parameters in Middle-Aged Korean Women.",
+        "citation": "Nutrients (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42196964/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu18101505"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41901080",
+        "title": "Effects of Long-Term Supplementation with Centella asiatica (L.) Urb. Extract (CA-HE50) on Macular Pigment Optical Density: A Randomized, Double-Blind, Placebo-Controlled Trial.",
+        "citation": "Nutrients (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41901080/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu18060905"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: gotu_kola applicability_status no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

@@ -19,3 +19,12 @@ def test_candidate_paths_resolve_to_preserved_pair(tmp_path, monkeypatch) -> Non
 
     assert catalog_dist_dir() == candidate / "dist"
     assert final_build_dir() == candidate / "final_db_output"
+
+
+def test_constituent_corpus_checks_read_the_selected_candidate(monkeypatch, tmp_path):
+    import runpy
+    from pathlib import Path
+
+    monkeypatch.setenv('PG_RELEASE_CANDIDATE_ROOT', str(tmp_path))
+    module = runpy.run_path(str(Path(__file__).with_name('test_reviewer_doc_constituent_forms.py')))
+    assert module['BLOBS'] == tmp_path / 'dist' / 'detail_blobs'

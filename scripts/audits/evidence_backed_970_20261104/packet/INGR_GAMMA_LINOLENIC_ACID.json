@@ -1,0 +1,588 @@
+{
+  "record_id": "INGR_GAMMA_LINOLENIC_ACID",
+  "labels": 11,
+  "stored_direction": "mixed",
+  "direction_as_read": "mixed: benefit in rheumatoid arthritis pooled across oils at doses not stated, null in eczema, noninferior to alpha-lipoic acid on one of two primary outcomes in neuropathy, surrogate blood pressure results in one trial",
+  "decision": "closed_no_credit",
+  "summary": "The 11 labels print GLA at 165 to 480 mg. Six name borage oil as the source (181851, 232718, 328569 as the row form; 223170, 218723, 77205 as a separate borage row), three carry it in a mixed omega blend that includes borage oil (304676, 327995, 332936), one prints safflower oil (65773) and one prints no source in an omega product (222789). For rheumatoid arthritis, Cochrane finds moderate evidence of some benefit from GLA oils (21328257), though the abstract states no doses. For eczema, oral borage and evening primrose oils lack effect (23633319). The one trial here with a named primary outcome and a label-range dose found 320 mg/day noninferior to alpha-lipoic acid on pain but not on total symptoms, with no placebo, in painful diabetic neuropathy (31701699), a purpose no label carries. Borage oil 1,000 mg lowered blood pressure against vitamin E (33534427). Borage oil at 880 mg GLA/day showed no effect on metabolic rate or BMI (34606560). Abstracts only. Reference only, no Evidence credit.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gamma_linolenic_acid_31701699",
+      "components": [
+        "INGR_GAMMA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "31701699"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "gamma-linolenic acid"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "painful_diabetic_peripheral_neuropathy",
+      "purpose": "neuropathic_pain_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gamma_linolenic_acid_31701699",
+      "population": {
+        "age_group": "adult",
+        "description": "100 adults aged 20 to 75 with type 2 diabetes and painful diabetic peripheral neuropathy; 73 completed."
+      },
+      "study_design": "Multicenter double-blind double-dummy randomized noninferiority trial against alpha-lipoic acid 600 mg/day, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Pain intensity on VAS: noninferior to alpha-lipoic acid (difference -0.65, 95% CI -1.526 to 0.213, margin 0.51)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Total symptom score: upper bound crossed the noninferiority margin (difference -0.05, 95% CI -1.211 to 1.101, margin 0.054)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "unresolved",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No placebo arm; both groups improved from baseline, with no significant difference between them.",
+        "Per-protocol analysis; 27 of 100 did not complete.",
+        "The GLA source is not stated in the abstract.",
+        "No label reached by this packet carries a neuropathy purpose.",
+        "Funding is not stated in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          320
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "GLA 320 mg/day and placebo for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31701699",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gamma_linolenic_acid_21328257",
+      "components": [
+        "INGR_GAMMA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "21328257"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "rheumatoid_arthritis",
+      "purpose": "rheumatoid_arthritis_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gamma_linolenic_acid_21328257",
+      "population": {
+        "age_group": "adult",
+        "description": "Adults with rheumatoid arthritis in seven trials of GLA from evening primrose, borage or blackcurrant seed oil."
+      },
+      "study_design": "Cochrane systematic review with meta-analysis of randomized controlled trials of herbal therapies",
+      "outcomes": [
+        {
+          "name": "Pain intensity MD -32.83 on a 100-point scale (95% CI -56.25 to -9.42)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Disability MD -15.75% (95% CI -27.06 to -4.44)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "GLA doses are not in the abstract.",
+        "Pools three source oils; two of them are not printed on these labels.",
+        "The review says many trials are hampered by design flaws and inadequate reporting.",
+        "The abstract names no primary outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "21328257",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gamma_linolenic_acid_23633319",
+      "components": [
+        "INGR_GAMMA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "23633319"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "atopic_eczema",
+      "purpose": "eczema_symptoms",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gamma_linolenic_acid_23633319",
+      "population": {
+        "age_group": "adult",
+        "description": "27 studies, 1596 participants with atopic eczema; 19 studies of evening primrose oil and 8 of borage oil."
+      },
+      "study_design": "Cochrane systematic review and meta-analysis of randomized controlled, parallel or cross-over trials",
+      "outcomes": [
+        {
+          "name": "Evening primrose oil: global eczema symptoms did not improve significantly versus placebo (participant MD -2.22, 95% CI -10.48 to 6.04)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Borage oil: failed to significantly improve global eczema symptoms versus placebo; not pooled",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Borage oil results could not be pooled because studies reported results in different ways.",
+        "The abstract names no GLA dose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral evening primrose oil or borage oil; the abstract states no dose.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "23633319",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gamma_linolenic_acid_33534427",
+      "components": [
+        "INGR_GAMMA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "33534427"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "postmenopausal_hypertension",
+      "purpose": "blood_pressure",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gamma_linolenic_acid_33534427",
+      "population": {
+        "age_group": "adult",
+        "description": "96 postmenopausal hypertensive women."
+      },
+      "study_design": "Prospective double-blind placebo-controlled randomized trial, 6 months; the placebo was vitamin E alone",
+      "outcomes": [
+        {
+          "name": "Systolic and diastolic pressure fell significantly versus the vitamin E group",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Waist-hip ratio changed significantly versus the vitamin E group",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome; power was calculated on systolic pressure.",
+        "Dose is borage oil plus vitamin E; the GLA amount is not stated.",
+        "Effect size is not stated in the abstract.",
+        "Only the three MEGA 3/6/9 labels carry a cardiovascular purpose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          1000
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "1,000 mg of borage oil rich in gamma-linolenic acid plus vitamin E, versus vitamin E alone, for 6 months.",
+        "normalization": {
+          "basis": "Borage oil amount as printed; the GLA amount is not stated and was not converted."
+        },
+        "source_provenance": {
+          "pmid": "33534427",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_gamma_linolenic_acid_34606560",
+      "components": [
+        "INGR_GAMMA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "34606560"
+      ],
+      "identity_scope": "exact_form",
+      "identity": {
+        "chemical_form": "gamma-linolenic acid"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_family_history_of_obesity",
+      "purpose": "weight_control",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_gamma_linolenic_acid_34606560",
+      "population": {
+        "age_group": "adult",
+        "description": "Overweight young adults with a family history of obesity."
+      },
+      "study_design": "Randomized trial, 6 weeks; the abstract does not state blinding or the control",
+      "outcomes": [
+        {
+          "name": "Resting metabolic rate: no effect",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Body mass index: no effect",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Borage oil lowered plasma triglycerides and raised HDL cholesterol",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract gives no sample size and no primary outcome.",
+        "880 mg GLA/day from borage oil, above every label amount here.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          880
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 42,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Borage oil giving 880 mg GLA per day, or evening primrose oil giving 540 mg GLA per day, for 6 weeks.",
+        "normalization": {
+          "basis": "GLA amount as printed for the borage oil arm."
+        },
+        "source_provenance": {
+          "pmid": "34606560",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "38295879": "Network meta-analysis of neuropathy pooling alpha-lipoic acid and GLA; GLA arm SMD -2.39 against placebo, no label carries a neuropathy purpose, and the abstract gives no GLA dose.",
+    "21816071": "60 patients with inflammatory arthritis, 3.2 g GLA/day or combination arms for 12 weeks; the abstract reports fatty acid incorporation and no disease activity result.",
+    "21652584": "Systematic review of complementary medicines in RA: no consistent evidence for any substance, borage trials positive; the abstract does not separate GLA doses. Same literature as 21328257."
+  },
+  "stop_or_hold": "Fields cannot express that 65773 prints a safflower source that no study read tested, or that a GLA row and a separate borage oil row on 223170, 218723 and 77205 are one exposure.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "31701699",
+      "title_fetched": "γ-Linolenic Acid versus α-Lipoic Acid for Treating Painful Diabetic Neuropathy in Adults: A 12-Week, Double-Placebo, Randomized, Noninferiority Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31701699/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21328257",
+      "title_fetched": "Herbal therapy for treating rheumatoid arthritis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21328257/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "23633319",
+      "title_fetched": "Oral evening primrose oil and borage oil for eczema.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23633319/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33534427",
+      "title_fetched": "Is there a beneficial effect of gamma-linolenic acid supplementation on body fat in postmenopausal hypertensive women? A prospective randomized double-blind placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33534427/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34606560",
+      "title_fetched": "Borage oil intake by overweight young adults: no effect on metabolic rate; beneficial effects on plasma triglyceride and HDL cholesterol readings.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34606560/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38295879",
+      "title_fetched": "Ranking Alpha Lipoic Acid and Gamma Linolenic Acid in Terms of Efficacy and Safety in the Management of Adults With Diabetic Peripheral Neuropathy: A Systematic Review and Network Meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38295879/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21816071",
+      "title_fetched": "Incorporation of n-3 PUFA and γ-linolenic acid in blood lipids and red blood cell lipids together with their influence on disease activity in patients with chronic inflammatory arthritis--a randomized controlled human intervention trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21816071/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "21652584",
+      "title_fetched": "Evidence for the efficacy of complementary and alternative medicines in the management of rheumatoid arthritis: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21652584/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_GAMMA_LINOLENIC_ACID",
+    "standard_name": "Gamma-Linolenic Acid",
+    "aliases": [
+      "Gamma-Linolenic Acid"
+    ],
+    "category": "anti_inflammatory",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "31701699",
+      "21328257",
+      "23633319",
+      "33534427",
+      "34606560"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: benefit in rheumatoid arthritis pooled across oils at doses not stated, null in eczema, noninferior to alpha-lipoic acid on one of two primary outcomes in neuropathy, surrogate blood pressure results in one trial. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "rheumatoid arthritis pain and disability",
+      "eczema symptoms",
+      "neuropathic pain",
+      "blood pressure"
+    ],
+    "health_goals_supported": [],
+    "notes": "The 11 labels print GLA at 165 to 480 mg. Six name borage oil as the source (181851, 232718, 328569 as the row form; 223170, 218723, 77205 as a separate borage row), three carry it in a mixed omega blend that includes borage oil (304676, 327995, 332936), one prints safflower oil (65773) and one prints no source in an omega product (222789). For rheumatoid arthritis, Cochrane finds moderate evidence of some benefit from GLA oils (21328257), though the abstract states no doses. For eczema, oral borage and evening primrose oils lack effect (23633319). The one trial here with a named primary outcome and a label-range dose found 320 mg/day noninferior to alpha-lipoic acid on pain but not on total symptoms, with no placebo, in painful diabetic neuropathy (31701699), a purpose no label carries. Borage oil 1,000 mg lowered blood pressure against vitamin E (33534427). Borage oil at 880 mg GLA/day showed no effect on metabolic rate or BMI (34606560). Abstracts only. Reference only, no Evidence credit.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with rheumatoid arthritis, atopic eczema or painful diabetic neuropathy; postmenopausal hypertensive women; overweight young adults",
+      "supported_outcomes": [
+        "rheumatoid arthritis pain and disability",
+        "eczema symptoms",
+        "neuropathic pain",
+        "blood pressure"
+      ],
+      "source_pmids": [
+        "31701699",
+        "21328257",
+        "23633319",
+        "33534427",
+        "34606560"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The 11 labels print GLA at 165 to 480 mg. Six name borage oil as the source (181851, 232718, 328569 as the row form; 223170, 218723, 77205 as a separate borage row), three carry it in a mixed omega blend that includes borage oil (304676, 327995, 332936), one prints safflower oil (65773) and one prints no source in an omega product (222789). For rheumatoid arthritis, Cochrane finds moderate evidence of some benefit from GLA oils (21328257), though the abstract states no doses. For eczema, oral borage and evening primrose oils lack effect (23633319). The one trial here with a named primary outcome and a label-range dose found 320 mg/day noninferior to alpha-lipoic acid on pain but not on total symptoms, with no placebo, in painful diabetic neuropathy (31701699), a purpose no label carries. Borage oil 1,000 mg lowered blood pressure against vitamin E (33534427). Borage oil at 880 mg GLA/day showed no effect on metabolic rate or BMI (34606560). Abstracts only. Reference only, no Evidence credit. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31701699",
+        "title": "γ-Linolenic Acid versus α-Lipoic Acid for Treating Painful Diabetic Neuropathy in Adults: A 12-Week, Double-Placebo, Randomized, Noninferiority Trial.",
+        "citation": "Diabetes & metabolism journal (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31701699/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't",
+          "Equivalence Trial"
+        ],
+        "doi": "10.4093/dmj.2019.0099"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21328257",
+        "title": "Herbal therapy for treating rheumatoid arthritis.",
+        "citation": "The Cochrane database of systematic reviews (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21328257/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD002948.pub2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "23633319",
+        "title": "Oral evening primrose oil and borage oil for eczema.",
+        "citation": "The Cochrane database of systematic reviews (2013)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/23633319/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD004416.pub2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33534427",
+        "title": "Is there a beneficial effect of gamma-linolenic acid supplementation on body fat in postmenopausal hypertensive women? A prospective randomized double-blind placebo-controlled trial.",
+        "citation": "Menopause (New York, N.Y.) (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33534427/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1097/GME.0000000000001740"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "34606560",
+        "title": "Borage oil intake by overweight young adults: no effect on metabolic rate; beneficial effects on plasma triglyceride and HDL cholesterol readings.",
+        "citation": "Food & function (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34606560/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1039/d1fo01887f"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: gamma_linolenic_acid effect_direction null, agent review; the contexts below are the reading behind it."
+}

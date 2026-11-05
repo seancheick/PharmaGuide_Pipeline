@@ -1,0 +1,8 @@
+{"canonical":"lactase","labels":11,"stored":"positive_moderate","as_read":"Positive on breath hydrogen and symptoms in single-dose challenges, with one of two primary comparisons not reaching significance; trials dose by activity units that the labels don't print.",
+"route":"packet_no_credit",
+"positive_named":["36149331","33490624","20391953","30504935"],
+"studies_to_add":[{"pmid":"36149331","study_type":"rct","sample_size":0,"primary_endpoint":"breath hydrogen iAUC","effect_direction":"mixed","quote":"Lactase was superior to placebo in Booster Alpha (0.190; 95% CI: 0.102, 0.365; P < 0.001) but not Booster Omega (0.493; 95% CI: 0.210, 1.156; P = 0.102)."}],
+"stop_list":["fields can't express FCC, ALU, UI or U doses; 36149331's 4662 FCC stays in the regimen text","sample_size 0 above means not stated in the abstract, not zero; don't write it as a value","labels print mg or no amount and no activity on the lactase row"],
+"stored_rating_note":"Stored study 20391953 gives no amount and names no primary; positive_moderate rests on it alone, though other trials read point the same way.",
+"pmids_read":["20391953","33490624","36149331","38426798","30504935","15674309","27706451","19021701","25042846","42668931"],
+"unread_notes":"Abstracts only; 15674309, 27706451, 19021701, 25042846, 42668931 read to 1500 characters, so their conclusions may be cut. Open full text of 36149331 not checked; it would give sample sizes. Not opened: 42964849, 34266522, 12712706, 11906576, 23543535, 15846722, 30796855."}

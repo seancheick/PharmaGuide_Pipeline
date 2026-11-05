@@ -1,0 +1,24 @@
+{
+ "canonical": "citrus_bergamot",
+ "labels": 5,
+ "stored": "positive_moderate",
+ "as_read": "Positive on LDL-C and total cholesterol in small sponsor-funded trials of specific branded extracts, with no clinical outcomes, and a 2026 meta-analysis grades the evidence low to very low certainty.",
+ "route": "packet_no_credit",
+ "positive_named": ["39682955", "42592560", "37312672", "37732063", "30501605", "42746152", "36251526"],
+ "studies_to_add": [
+  {"pmid": "39682955", "study_type": "rct", "sample_size": 64, "primary_endpoint": "LDL-C, HDL-C, total cholesterol, oxidized LDL and PON1 activity over 4 months", "effect_direction": "positive_weak", "quote": "After 4 months, both TC and LDL-C significantly decreased by 8.8% and 11.5%, respectively, along with a 5.5% increase in HDL-C which was trending towards significance."},
+  {"pmid": "42592560", "study_type": "rct", "sample_size": 108, "primary_endpoint": "LDL-C, HDL-C and total cholesterol over 4 months, primary endpoints named in the full text", "effect_direction": "positive_weak", "quote": "After 4 months, total Cholesterol and LDL-C decreased (-7.3% and -7.0%) with no clinically relevant safety changes regarding hepatic/renal biochemistry, weight, and blood pressure."},
+  {"pmid": "42746152", "study_type": "systematic_review_meta", "sample_size": 615, "primary_endpoint": "not named in the abstract; pooled cardiometabolic risk factors", "effect_direction": "positive_weak", "quote": "However, these observed effects are mainly based on very-low-certainty evidence, largely from studies at high risk of bias, and should not be interpreted as establishing the clinical efficacy of bergamot."}
+ ],
+ "stop_list": [
+  "Fields can't express a flavonoid-standardized dose: Bergavit 375 mg gives about 150 mg/day flavonoids, and these labels print 500 or 1000 mg extract with no flavonoid amount, so 500 mg of label extract can't be equated with the tested exposure.",
+  "One label row prints Neoeriocitrin with no amount (NP); neoeriocitrin is named among the Bergavit flavonoids in 39682955, which doesn't establish that the label is that extract."
+ ],
+ "clinician_items": [
+  "39682955: full text reports liver and kidney markers unchanged and the product well tolerated over 4 months.",
+  "37732063 and 37312672 report lower GGT or liver enzymes on bergamot extract; these are efficacy readouts in their abstracts, not safety findings, and are noted here only so they aren't read as harm."
+ ],
+ "stored_rating_note": "Stored positive_moderate rests on 30501605 alone, whose abstract gives no dose, duration or primary outcome and which tested BPF and BPF Phyto, neither printed on these labels. positive_weak fits better: 42746152 grades certainty low to very low and says the results should not be read as establishing clinical efficacy.",
+ "pmids_read": ["30501605", "42746152", "42592560", "39682955", "41572527", "37312672", "37732063", "37732027", "36251526", "38767145", "34794202"],
+ "unread_notes": "Full text passages opened for 39682955 (PMC11641072) and 42592560 (PMC13464414). All others abstracts only. 38767145 abstract read to 1500 characters, its conclusion cut, and the between-arm result seen. 42670966 was seen only as a search snippet (bergamot flavonoids with plant sterols, a combination) and is listed in the packet's read_not_used on that basis. Two searches: 92 and 57 hits. Hits seen by title and not opened: 35010984, 38892519, 36556930, 38042043, 35986358, 35631240, 35889769, 40147213, 42654212, 40218864 (by title, combinations or multi-ingredient products), 35988871 (network meta-analysis), 42597704. Inhaled and topical essential oil trials weren't used. Packet: INGR_CITRUS_BERGAMOT, check_packet prints ok. Duration left unrecorded in days because sources state 4 months."
+}

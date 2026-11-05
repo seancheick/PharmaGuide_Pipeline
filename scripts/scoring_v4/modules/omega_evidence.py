@@ -1,4 +1,4 @@
-"""Omega Evidence: purpose-specific, amount-independent support.
+"""Omega Evidence: reviewed ingredient support, independent of label claims and amount.
 
 The existing evidence resolver joins clinical source records to the scoring
 policy in quality_score.json. Generic Evidence is retained as audit metadata

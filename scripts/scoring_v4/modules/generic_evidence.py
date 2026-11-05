@@ -108,14 +108,13 @@ DEPTH_BONUS_BANDS = tuple(tuple(b) for b in _EM["depth_bonus_bands"])
 # pipeline rewards ingredient COUNT: a focused single clinically-validated
 # ingredient (KSM-66) scores ~4.5/20 while two generic minerals score ~11.5/20.
 # When the product's PROMINENT active is a strongly-evidenced, positively-
-# effective, clinically-dosed ingredient, the dimension earns a floor so quality
+# effective ingredient, the dimension earns the existing floor so quality
 # is rewarded independent of count. Keyed on a PROMINENT active (the evidence match
-# must link to a dosed label row the shared role owner names as the product's
-# purpose), NOT merely the top evidence-points contributor — otherwise a well-studied
+# must link to a verified formula row the shared role owner names as principal), NOT merely the top evidence-points contributor — otherwise a well-studied
 # TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
 # Amount adequacy is owned independently by Dose.
-PRIMARY_FLOOR_STRONG = _EM["primary_floor_strong"]     # systematic review / multi-RCT, positive, clinical dose
-PRIMARY_FLOOR_MODERATE = _EM["primary_floor_moderate"]   # single RCT / clinical strain, positive, clinical dose
+PRIMARY_FLOOR_STRONG = _EM["primary_floor_strong"]     # systematic review / multi-RCT, positive, applicable preparation
+PRIMARY_FLOOR_MODERATE = _EM["primary_floor_moderate"]   # single RCT / clinical strain, positive, applicable preparation
 # No automatic exceptional tier (Dr Pham framework, October 28, 2026). The
 # near-perfect floor (18 raw = 20/20 on the 18-point references) once followed a
 # brand marker (branded-rct level or a BRAND_ id) or an ingredient allowlist
@@ -205,6 +204,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     matches, recovered_matches = resolved_clinical_matches(
         product,
         owner_scoped=owner_scoped,
+        assess_amount=False,
     )
     if accepted_matches is not None:
         # A category may narrow the shared applicability result, never add a
@@ -226,11 +226,6 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     scoped_matches: List[Dict[str, Any]] = []
     scoped_recovered_matches: List[Dict[str, Any]] = []
     flags: List[str] = []
-    if owner_scoped:
-        from scoring_input_contract import classify_ingredient_roles
-        for role in classify_ingredient_roles(product):
-            if str(role.get("role_reason", "")).startswith("named_in_label_function_claim:"):
-                _append_once(flags, "EXPLICIT_LABEL_PURPOSE_OWNER:" + str(role["canonical_id"]) + ":" + role["role_reason"].split(":", 1)[1])
     sub_clinical_canonicals: set[str] = set()  # compatibility metadata; Dose owns this assessment
 
     for entry in matches:
@@ -245,8 +240,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         if owner_canonicals and matched_owner not in owner_canonicals:
             continue
         if owner_scoped and not evidence_record_matches_declared_purpose(
-                product, {"canonical_id": matched_owner}, entry):
-            _append_once(flags, "LABEL_PURPOSE_EVIDENCE_MISMATCH:" + str(matched_owner))
+                product, {"canonical_id": matched_owner}, entry, require_claim_alignment=False):
+            _append_once(flags, "CLINICAL_SCOPE_EVIDENCE_MISMATCH:" + str(matched_owner))
             continue
 
         entry_id = _entry_id(entry)
@@ -394,7 +389,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         source_id = _clinical_source_id(entry)
         if source_id in reviewed_entries():
             entry = {**entry, "id": source_id}
-        decision = assess_clinical_applicability(product, entry, assess_amount=False)
+        decision = assess_clinical_applicability(product, entry, assess_amount=False, require_claim_alignment=False)
         if (entry.get("evidence_origin") == "verified_formula_contract"
                 and entry.get("applicability_assessment", {}).get("status") == "assessed_studied_formula"):
             decision = {"status": "applicable", "reason_code": "reviewed_formula_contract"}
@@ -677,7 +672,8 @@ def resolved_clinical_matches(
             if _entry_id(entry) not in recovered_ids
         ]
         matches.extend(recovered_matches)
-    matches, _ = filter_clinical_matches(product, matches, assess_amount=assess_amount)
+    matches, _ = filter_clinical_matches(product, matches, assess_amount=assess_amount,
+                                        require_claim_alignment=False)
     from studied_formulas import formula_clinical_match, formula_identity_clinical_match
     formula = (formula_clinical_match(product) if assess_amount
                else formula_identity_clinical_match(product))
@@ -846,10 +842,10 @@ def _recover_verified_primary_ingredient_matches(
     allow_with_existing_matches: bool = False,
     prominent: Optional[set] = None,
 ) -> List[Dict[str, Any]]:
-    """Recover exact ingredient-human evidence for a prominent dosed active.
+    """Recover exact ingredient-human evidence for a principal formula active.
 
     This closes the NAC-style contract gap: the cleaner/scoring contract has a
-    dose-bearing, exact canonical active row, backed_clinical_studies has a
+    verified, exact canonical active row, backed_clinical_studies has a
     PubMed-verified ingredient-human entry, but enrichment omitted
     evidence_data.clinical_matches. Keep the recovery intentionally stricter
     than label text matching:
@@ -858,15 +854,15 @@ def _recover_verified_primary_ingredient_matches(
     - only structured identity equality (canonical_id/standard_name/alias), no
       fuzzy substring matching;
     - owner-scoped callers (generic, sports, fiber Evidence): only a row the
-      shared role owner names as the product's purpose
-      (``evidence_resolver.evidence_prominent_row_keys``) and that carries its
-      own disclosed mass, never a blend total lent to it;
+      shared Evidence role owner identifies as principal
+      (``evidence_resolver.evidence_prominent_row_keys``), never an identity
+      inferred solely from a blend total lent to it;
     - other callers (the approved probiotic model, omega, multi, readiness,
       confidence) keep the previous rule unchanged: the only scorable active or
       one named in the title (``_is_clear_primary_recovery_row``). Moving them
       to the role owner changes the approved probiotic model's inputs, which
       needs its own measured decision;
-    Amount adequacy is owned by Dose. Evidence retains identity, purpose,
+    Amount adequacy is owned by Dose. Evidence retains identity, studied context,
     preparation, source-lineage and applicability guards only.
     """
     if matches and not allow_with_existing_matches:

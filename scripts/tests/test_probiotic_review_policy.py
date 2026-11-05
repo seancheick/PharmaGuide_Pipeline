@@ -214,17 +214,21 @@ def test_scoring_eligible_requires_explicit_boolean_true(value):
     assert pm.context_accepted_for_scoring(row) is False
 
 
-def test_amount_cannot_make_unmatched_purpose_evidence_applicable(registry):
+def test_unrelated_claim_preserves_ingredient_credit_but_delivery_still_matters(registry):
     registry[STUB]["study_contexts"] = [positive_rct(approved=True)]
-    states = []
+    scores = []
     for amount in (None, 1e9):
         product = la14_product(dose=amount)
         product["product_name"] = "Women vaginal probiotic"
         product["probiotic_data"]["is_probiotic_product"] = True
         evidence = score_evidence(product)
-        assert evidence["score"] == 0
-        states.append(evidence["metadata"]["evidence_result_state"])
-    assert states == ["research_present_applicability_unestablished"] * 2
+        assert evidence["score"] > 0
+        assert evidence["metadata"]["claim_alignment"]["level"] == "none"
+        scores.append(evidence["score"])
+        # Marketing vaginal health is distinct from actual vaginal delivery.
+        product["form_factor_canonical"] = "vaginal"
+        assert score_evidence(product)["score"] == 0
+    assert scores[0] == scores[1]
 
 
 def test_pediatric_context_cannot_supply_adult_summary_applicability(registry):

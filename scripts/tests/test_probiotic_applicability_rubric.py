@@ -285,7 +285,7 @@ def test_evidence_copy_distinguishes_missing_applicability_from_poor_quality():
     from scoring_v4.quality_score import _pillar_evidence
     from scoring_v4.quality_score_config import config
     product = strain_product()
-    product["product_name"] = "Sleep support probiotic"  # Unrelated to every LGG context.
+    product["product_name"] = "Prenatal probiotic"  # No reviewed pregnancy population.
     dim = score_evidence(product)
     result = _pillar_evidence(dim, 20, "probiotic", config())
     assert "preparation, purpose and population" in result["reason"]
@@ -304,13 +304,14 @@ def test_unfavorable_research_is_not_described_as_missing_research(monkeypatch):
     from test_evidence_resolver import _approved_test_source
 
     p = strain_product()
-    p["product_name"] = "Sleep support probiotic"  # Keeps LGG's native contexts out.
+    p["product_name"] = "Prenatal probiotic"  # Population excludes LGG native contexts.
     # Synthetic accepted match (the helper's own id): the real backed STRAIN_LGG
     # record is research-only since Dr. Pham's 2026-10-28 ruling (the strain
     # registry is the one scoring owner), so it cannot carry this direction.
     source = _approved_test_source(_match(effect_direction="negative"),
                                   name="Lactobacillus rhamnosus GG", outcome="Sleep quality")
     source["study_contexts"][0]["outcomes"][0]["direction"] = "negative"
+    source["study_contexts"][0]["population"]["description"] = "Synthetic pregnant adults"
     records = {**ca.reviewed_entries(), source["id"]: source}
     monkeypatch.setattr(ca, "reviewed_entries", lambda: records)
     p["evidence_data"] = {"clinical_matches": [{**source,
@@ -434,13 +435,15 @@ def test_evidence_explanation_never_reintroduces_amount_ownership(amount):
 @pytest.mark.parametrize('dose', [None, 1e10])
 @pytest.mark.parametrize('claim', ['Digestive Health Probiotic',
     'Not for irritable bowel syndrome. Digestive Health Probiotic'])
-def test_299v_treatment_context_does_not_transfer_from_broad_or_negated_label_purpose(dose, claim):
+def test_299v_ingredient_research_is_independent_of_broad_or_negated_claim(dose, claim):
     product = strain_product(dose=dose, clinical_id='STRAIN_PLANTARUM_299V',
                              name='Lactobacillus plantarum 299v')
     product['product_name'] = claim
     result = score_evidence(product)
-    assert result['score'] == 0
-    assert result['metadata']['evidence_result_state'] == 'research_present_applicability_unestablished'
+    assert result['score'] == 16.0
+    [used] = result['metadata']['contributing_native_contexts']
+    assert used['context_id'] == 'p299v_ibs_rome3_22912552'
+    assert used['claimed_purpose_assessment']['status'] == 'not_applicable'
     assert result['metadata']['evidence_assessment']['strain_assessments'][0]['source_pmids']
 
 
@@ -521,10 +524,13 @@ def test_299v_with_and_without_an_ibs_claim_earns_identical_evidence():
             claimed['metadata']['indication_relevance_level']) == ('broad', 'direct')
 
 
-def test_an_unrelated_attributable_claim_earns_no_ibs_study_credit():
+def test_unrelated_claim_preserves_scoped_ibs_research_without_substantiating_it():
     result = score_evidence(_p299v('Sleep support probiotic'))
-    assert result['score'] == 0
-    assert result['metadata']['contributing_native_contexts'] == []
+    assert result['score'] == 16.0
+    [used] = result['metadata']['contributing_native_contexts']
+    assert used['context_id'] == 'p299v_ibs_rome3_22912552'
+    assert used['claimed_purpose_assessment']['status'] == 'not_applicable'
+
 
 
 def test_research_certainty_and_replication_ignore_marketing_copy():

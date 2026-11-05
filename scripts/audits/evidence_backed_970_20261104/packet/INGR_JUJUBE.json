@@ -1,0 +1,654 @@
+{
+  "record_id": "INGR_JUJUBE",
+  "labels": 12,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "null on the primary outcome in the one fitting extract trial, with secondary metabolic gains; the stored sleep result is a seed trial, not the fruit extract on these labels",
+  "decision": "closed_no_credit",
+  "summary": "All 12 labels print wild jujube fruit extract at 1000 mg and no claim text. The stored trial (33385511) used Z. spinosa seed granules in 12 people with insomnia, a part the labels don't print. The nearest fit is a Z. jujuba hydroalcoholic extract at 15 g/day in 196 infertile women with PCOS (41618368): pregnancy, the primary outcome, showed no significant difference; lipids and glucose improved as secondary results. Food-amount trials of 30 g/day fruit (42577773, 38648942, 40964206) are not the 1000 mg extract and two of them missed glucose. 19142004 reports constipation benefit with no amount or named primary outcome.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_jujube_41618368",
+      "components": [
+        "INGR_JUJUBE"
+      ],
+      "source_pmids": [
+        "41618368"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Ziziphus jujuba",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "polycystic_ovary_syndrome_infertility",
+      "purpose": "fertility_in_pcos",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_jujube_41618368",
+      "population": {
+        "age_group": "adult",
+        "description": "196 infertile women with PCOS, ages 18-45, 49 per arm."
+      },
+      "study_design": "Double-blind, randomized, four arms: extract, metformin, myoinositol, placebo; all had letrozole ovulation induction",
+      "outcomes": [
+        {
+          "name": "Pregnancy occurrence: extract 10, metformin 7, myoinositol 5, placebo 4; no significant difference (p > 0.05)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Cholesterol, TG, HDL cholesterol and fasting glucose improved compared with the other groups (p < 0.05)",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Full text: 'dry jujube' milled, 50% hydroalcoholic extract, then combined with Avicel at 50%; 15 g is that powder. Methods don't use the word fruit or name a variety.",
+        "Full text: no phytochemical standardization. No label here is shown to match this material; 15 g/day compares with 1000 mg on the labels.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          15
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "once daily",
+        "dosage_forms": [
+          "powder"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One 15 g sachet of extract powder daily, dissolved in water, for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41618368",
+          "location": "Abstract and full text methods"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_jujube_19142004",
+      "components": [
+        "INGR_JUJUBE"
+      ],
+      "source_pmids": [
+        "19142004"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Ziziphus jujuba",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "chronic_constipation",
+      "purpose": "constipation",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_jujube_19142004",
+      "population": {
+        "age_group": "adult",
+        "description": "37 patients with prolonged transit time, 18 on extract and 19 on placebo."
+      },
+      "study_design": "Controlled trial described as randomized by publication type; 12 weeks",
+      "outcomes": [
+        {
+          "name": "Transit time, symptom severity and quality of life improved in the extract group; 16 of 19 controls dropped out",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "No primary outcome named and no between-group test printed in the abstract.",
+        "Liquid extract; plant part and amount not stated.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "liquid"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Liquid Z. jujuba extract for 12 weeks; amount not stated in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "19142004",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_jujube_42577773",
+      "components": [
+        "INGR_JUJUBE"
+      ],
+      "source_pmids": [
+        "42577773"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Ziziphus jujuba",
+        "plant_part": "fruit"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "nafld",
+      "purpose": "liver_and_metabolic_markers",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_jujube_42577773",
+      "population": {
+        "age_group": "adult",
+        "description": "88 patients with NAFLD on a low-calorie diet."
+      },
+      "study_design": "Single-blind RCT; control had diet alone; 12 weeks",
+      "outcomes": [
+        {
+          "name": "Fasting blood glucose: no between-group difference (p = 0.12)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "ALT, AST, LDL-C, TC and steatosis severity fell more than control",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Food amount of whole fruit powder, not an extract, with no placebo.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          30
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "powder"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "30 g fruit powder daily for 12 weeks with a low-calorie diet.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "42577773",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_jujube_38648942",
+      "components": [
+        "INGR_JUJUBE"
+      ],
+      "source_pmids": [
+        "38648942"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Ziziphus jujuba",
+        "plant_part": "fruit"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "metabolic_syndrome",
+      "purpose": "metabolic_markers",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_jujube_38648942",
+      "population": {
+        "age_group": "adult",
+        "description": "60 subjects with metabolic syndrome, 30 per arm."
+      },
+      "study_design": "Parallel-group RCT, placebo, 8 weeks",
+      "outcomes": [
+        {
+          "name": "Fasting glucose, total cholesterol, LDL-C and blood pressure: no benefit (P > 0.05)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Waist circumference, TG and HDL-C improved between groups",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Authors note weaknesses in blinding and herb purity and potency testing.",
+        "Food amount of dried powder.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          30
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "powder"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "30 g dried jujube powder daily in two portions for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "38648942",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_jujube_40399274",
+      "components": [
+        "INGR_JUJUBE"
+      ],
+      "source_pmids": [
+        "40399274"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Ziziphus jujuba",
+        "plant_part": "fruit"
+      },
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "metabolic_markers",
+      "purpose": "metabolic_markers",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_jujube_40399274",
+      "population": {
+        "age_group": "adult",
+        "description": "7 studies, 483 participants."
+      },
+      "study_design": "Systematic review and meta-analysis of clinical studies",
+      "outcomes": [
+        {
+          "name": "BMI, TG and, in type 2 diabetes, fasting glucose fell; HDL, AST and ALT didn't change",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "mixed",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Authors: 'the overall quality of the evidence is limited'. Abstract doesn't separate extract from dried fruit or name a primary outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not given in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40399274",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_jujube_33385511",
+      "components": [
+        "INGR_JUJUBE"
+      ],
+      "source_pmids": [
+        "33385511"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Ziziphus spinosa",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "insomnia",
+      "purpose": "sleep_quality",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_jujube_33385511",
+      "population": {
+        "age_group": "adult",
+        "description": "12 adults with insomnia, six in each sequence."
+      },
+      "study_design": "Randomized, double-blind, placebo-controlled crossover feasibility trial",
+      "outcomes": [
+        {
+          "name": "PSQI improved against placebo (p = 0.046); period effects present; other outcomes no difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Seed granules; the labels print fruit extract. Feasibility was the objective and no efficacy primary outcome is named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          2
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 28,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2 g encapsulated granules daily for four weeks per period.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "33385511",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "40964206": "30 g/day dried fruit in type 2 diabetes with excess weight; food amount; no primary outcome named in the abstract.",
+    "37014010": "Meta-analysis of Suanzaoren, the seed, for sleep; seed is not on these labels.",
+    "34939363": "Jujube syrup 10 cc/day, pilot, 8 and 9 completers, tuberculosis drug hepatotoxicity; volume dose and not on labels.",
+    "41592108": "Review of phytochemistry and pharmacology; says nonseed tissues remain understudied; no efficacy data."
+  },
+  "stop_or_hold": "The fields can't express that 15 g in 41618368 is extract powder blended 50% with Avicel; left as printed, no conversion. 19142004 has no amount in the abstract, and no open full text was checked.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "41618368",
+      "title_fetched": "Effects of Ziziphus jujuba, metformin, and myoinositol on pregnancy rates and metabolic parameters in infertile women with PCOS: a randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41618368/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "19142004",
+      "title_fetched": "Ziziphus jujuba extract for the treatment of chronic idiopathic constipation: a controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19142004/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42577773",
+      "title_fetched": "Ziziphus jujube Fruit Supplementation Improves Liver Enzymes, Lipid Profile, and Hepatic Steatosis but Not Fasting Blood Glucose in Patients With NAFLD: A Randomized Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42577773/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38648942",
+      "title_fetched": "The effects of jujube (Ziziphus jujube) on metabolic and mental health outcomes in patients with metabolic syndrome: A randomized controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38648942/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40399274",
+      "title_fetched": "Impact of jujube fruit on serum lipid profile, glycemic index, and liver function: a systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40399274/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "33385511",
+      "title_fetched": "Medicinal seeds Ziziphus spinosa for insomnia: A randomized, placebo-controlled, cross-over, feasibility clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33385511/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40964206",
+      "title_fetched": "Effect of dried Ziziphus Jujube Consumption on Plasma Insulin, Blood Pressure, Oxidative Stress, and Advanced Glycation End Products in Diabetic Patients with Excess Weight: A Randomized Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40964206/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37014010",
+      "title_fetched": "The Herbal Medicine Suanzaoren (Ziziphi Spinosae Semen) for Sleep Quality Improvements: A Systematic Review and Meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37014010/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "34939363",
+      "title_fetched": "The efficacy of Jujube syrup on the prevention of drug-induced hepatotoxicity in pulmonary tuberculosis patients: A pilot randomized double-blind placebo-controlled clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34939363/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41592108",
+      "title_fetched": "Ziziphus jujuba var. spinosa: a systematic review of phytochemistry, pharmacology, and sustainable resource utilization of its multiple plant parts.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41592108/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_JUJUBE",
+    "standard_name": "Jujube (Ziziphus jujuba)",
+    "aliases": [
+      "Jujube Fruit Extract, Wild",
+      "Wild Jujube Fruit Extract"
+    ],
+    "category": "metabolic_blood_sugar",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "41618368",
+      "19142004",
+      "42577773",
+      "38648942",
+      "40399274",
+      "33385511"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "null",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "null on the primary outcome in the one fitting extract trial, with secondary metabolic gains; the stored sleep result is a seed trial, not the fruit extract on these labels. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "pregnancy occurrence"
+    ],
+    "health_goals_supported": [],
+    "notes": "All 12 labels print wild jujube fruit extract at 1000 mg and no claim text. The stored trial (33385511) used Z. spinosa seed granules in 12 people with insomnia, a part the labels don't print. The nearest fit is a Z. jujuba hydroalcoholic extract at 15 g/day in 196 infertile women with PCOS (41618368): pregnancy, the primary outcome, showed no significant difference; lipids and glucose improved as secondary results. Food-amount trials of 30 g/day fruit (42577773, 38648942, 40964206) are not the 1000 mg extract and two of them missed glucose. 19142004 reports constipation benefit with no amount or named primary outcome.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Infertile women with PCOS in the one extract trial with a named primary outcome",
+      "supported_outcomes": [
+        "pregnancy occurrence"
+      ],
+      "source_pmids": [
+        "41618368",
+        "19142004",
+        "42577773",
+        "38648942",
+        "40399274",
+        "33385511"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "All 12 labels print wild jujube fruit extract at 1000 mg and no claim text. The stored trial (33385511) used Z. spinosa seed granules in 12 people with insomnia, a part the labels don't print. The nearest fit is a Z. jujuba hydroalcoholic extract at 15 g/day in 196 infertile women with PCOS (41618368): pregnancy, the primary outcome, showed no significant difference; lipids and glucose improved as secondary results. Food-amount trials of 30 g/day fruit (42577773, 38648942, 40964206) are not the 1000 mg extract and two of them missed glucose. 19142004 reports constipation benefit with no amount or named primary outcome. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41618368",
+        "title": "Effects of Ziziphus jujuba, metformin, and myoinositol on pregnancy rates and metabolic parameters in infertile women with PCOS: a randomized controlled trial.",
+        "citation": "Journal of ovarian research (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41618368/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1186/s13048-025-01867-0"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "19142004",
+        "title": "Ziziphus jujuba extract for the treatment of chronic idiopathic constipation: a controlled clinical trial.",
+        "citation": "Digestion (2008)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/19142004/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1159/000190975"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42577773",
+        "title": "Ziziphus jujube Fruit Supplementation Improves Liver Enzymes, Lipid Profile, and Hepatic Steatosis but Not Fasting Blood Glucose in Patients With NAFLD: A Randomized Controlled Trial.",
+        "citation": "Food science & nutrition (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42577773/",
+        "publication_types": [
+          "Journal Article"
+        ],
+        "doi": "10.1002/fsn3.72228"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "38648942",
+        "title": "The effects of jujube (Ziziphus jujube) on metabolic and mental health outcomes in patients with metabolic syndrome: A randomized controlled trial.",
+        "citation": "Complementary therapies in medicine (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/38648942/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.ctim.2024.103041"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40399274",
+        "title": "Impact of jujube fruit on serum lipid profile, glycemic index, and liver function: a systematic review and meta-analysis.",
+        "citation": "Nutrition & diabetes (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40399274/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1038/s41387-025-00378-7"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "33385511",
+        "title": "Medicinal seeds Ziziphus spinosa for insomnia: A randomized, placebo-controlled, cross-over, feasibility clinical trial.",
+        "citation": "Complementary therapies in medicine (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/33385511/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/j.ctim.2020.102657"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: jujube no_qualifying_human_evidence, agent review; the contexts below are the reading behind it."
+}

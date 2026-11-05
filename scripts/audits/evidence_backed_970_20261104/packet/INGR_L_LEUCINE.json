@@ -1,0 +1,927 @@
+{
+  "record_id": "INGR_L_LEUCINE",
+  "labels": 36,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "null for leucine alone on muscle mass and strength, with conflicting small positive trials and no clear benefit",
+  "decision": "closed_no_credit",
+  "summary": "The stored positive rating rests on an essential amino acid mixture and a whey drink, neither of which is leucine alone, and on muscle protein synthesis over hours. A 2022 meta-analysis of 17 RCTs (35845777) found that leucine alone did not improve muscle mass or strength in older people; benefit came with combinations including vitamin D. Trials of free leucine with training (32079916, 40926079, 31577520) added nothing. Two small trials were positive (32230954, 37923932), and two reviews read leucine more favorably (32483625, 40805998), the second calling its evidence low quality and limited when leucine is used alone. Evidence conflicts, with no clear benefit for the labels' free leucine.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_leucine_35845777",
+      "components": [
+        "INGR_L_LEUCINE"
+      ],
+      "source_pmids": [
+        "35845777"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "sarcopenia_related_measures",
+      "purpose": "muscle_mass_strength",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_leucine_35845777",
+      "population": {
+        "age_group": "adult",
+        "description": "Older adults; 17 RCTs, 1418 subjects."
+      },
+      "study_design": "Systematic review and meta-analysis of RCTs",
+      "outcomes": [
+        {
+          "name": "Leucine alone, total lean mass WMD 0.03 kg (95% CI -0.51 to 0.57), P=0.917",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Leucine alone, handgrip WMD 1.23 kg (95% CI -0.58 to 3.03), P=0.183",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Leucine alone, leg press WMD -1.35 kg (95% CI -7.46 to 4.77), P=0.666",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Benefit reported only for leucine combined with other nutrients including vitamin D; that isn't the ingredient alone.",
+        "Number of trials in the leucine-alone subgroup isn't in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "35845777",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_leucine_40805998",
+      "components": [
+        "INGR_L_LEUCINE"
+      ],
+      "source_pmids": [
+        "40805998"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "sarcopenia",
+      "purpose": "muscle_mass_strength",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_leucine_40805998",
+      "population": {
+        "age_group": "adult",
+        "description": "Sarcopenic adults over 65; ten RCTs and one prospective study, 566 leucine and 567 placebo."
+      },
+      "study_design": "Meta-analysis",
+      "outcomes": [
+        {
+          "name": "Handgrip differed between groups, p=0.03",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Gait speed differed between groups, p=0.008",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Appendicular muscle mass index differed; abstract prints p=0.0.2 (typo)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors call the evidence low quality and say the benefit is restricted when leucine is used alone.",
+        "Pool mixes leucine alone and with other therapy; vitamin D subgroup reported.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "High-dose subgroup named; amounts not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "40805998",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_leucine_32483625",
+      "components": [
+        "INGR_L_LEUCINE"
+      ],
+      "source_pmids": [
+        "32483625"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "systematic_review",
+      "component_registration_status": "fully_registered",
+      "condition": "sarcopenia",
+      "purpose": "muscle_mass_strength",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_leucine_32483625",
+      "population": {
+        "age_group": "adult",
+        "description": "People aged 65 or over; umbrella review of 15 systematic reviews."
+      },
+      "study_design": "Umbrella review",
+      "outcomes": [
+        {
+          "name": "Best evidence to recommend leucine: significant effect on muscle mass in elderly with sarcopenia",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract doesn't say whether the leucine reviews were free leucine or leucine-enriched products.",
+        "Authors rate the evidence behind most recommendations low to moderate.",
+        "Stored note that healthy older adults, strength and performance showed no benefit isn't in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Regimens not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "32483625",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_leucine_32079916",
+      "components": [
+        "INGR_L_LEUCINE"
+      ],
+      "source_pmids": [
+        "32079916"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "resistance_training",
+      "purpose": "muscle_mass_strength",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_leucine_32079916",
+      "population": {
+        "age_group": "adult",
+        "description": "25 resistance-trained men, 27 years, adequate protein intake."
+      },
+      "study_design": "Randomized trial, free leucine vs alanine, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Leg-press 1RM +19.0% vs +21.0%, P=0.31",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Vastus lateralis cross-sectional area +8.0% vs +8.4%, P=0.77",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Small; abstract names no primary outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          10
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "twice a day",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "2 x 5 g/day free leucine for 12 weeks",
+        "normalization": {
+          "basis": "Daily total as printed (10 g of leucine); no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32079916",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_leucine_40926079",
+      "components": [
+        "INGR_L_LEUCINE"
+      ],
+      "source_pmids": [
+        "40926079"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "frailty",
+      "purpose": "muscle_mass_strength",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_leucine_40926079",
+      "population": {
+        "age_group": "adult",
+        "description": "19 pre/frail women, 77.5 years, resistance training with protein-optimized diet."
+      },
+      "study_design": "Double-blind placebo-controlled trial, leucine vs alanine, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Myofibrillar fractional synthesis rate: no added benefit of leucine",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Very small; everyone also trained.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          7.5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "7.5 g/d leucine for 12 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "40926079",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_leucine_31577520",
+      "components": [
+        "INGR_L_LEUCINE"
+      ],
+      "source_pmids": [
+        "31577520"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "resistance_training",
+      "purpose": "muscle_mass_strength",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_leucine_31577520",
+      "population": {
+        "age_group": "adult",
+        "description": "36 untrained peri- and postmenopausal women."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 10 weeks with resistance training",
+      "outcomes": [
+        {
+          "name": "No group difference in fat free mass",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Strength rose with training, no added effect from leucine",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome; frequency of the 5 g dose not stated.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          5
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 70,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "5 g of leucine or placebo with 10 weeks of training",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31577520",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_leucine_32230954",
+      "components": [
+        "INGR_L_LEUCINE"
+      ],
+      "source_pmids": [
+        "32230954"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "sarcopenia",
+      "purpose": "muscle_mass_strength",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_leucine_32230954",
+      "population": {
+        "age_group": "adult",
+        "description": "50 institutionalized adults aged 65 and over."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, 13 weeks",
+      "outcomes": [
+        {
+          "name": "Walking time improved vs placebo, p=0.011",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Maximum static expiratory force improved vs placebo, p=0.026",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Lean mass index improved; no p value in the abstract",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No effect on functional impairment, cognition, nutrition or IL-6/TNF-alpha",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Primary outcome stated only as the effect on sarcopenia and respiratory muscle function, so the hierarchy of these results isn't clear.",
+        "Small trial; placebo was lactose.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          6
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 91,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Leucine 6 g/day for 13 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32230954",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_l_leucine_37923932",
+      "components": [
+        "INGR_L_LEUCINE"
+      ],
+      "source_pmids": [
+        "37923932"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "energy_restriction",
+      "purpose": "body_composition",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_l_leucine_37923932",
+      "population": {
+        "age_group": "adult",
+        "description": "37 adults, 20-65 years, large waist and at least one other metabolic syndrome component."
+      },
+      "study_design": "Double-blind parallel RCT during energy restriction, 8 weeks",
+      "outcomes": [
+        {
+          "name": "Fat-free mass higher with leucine, p=0.045",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Lean tissue mass, p=0.050",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "No difference in insulin sensitivity, glucose tolerance or metabolic syndrome components",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome; effect greater in men by a treatment x sex interaction.",
+        "Small; borderline p values.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          3
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Leucine 3 g/d for 8 weeks",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "37923932",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "16507602": "Stored. 6.7 g essential amino acid mixture at 26% or 41% leucine, not leucine alone; acute protein synthesis; not stated randomized in the abstract.",
+    "24284442": "Stored. Leucine added to a 6.25 g whey mixed drink; acute protein synthesis in young men; combination.",
+    "36396594": "Systematic review agrees: leucine alone without exercise did not improve sarcopenia markers; carried by 35845777.",
+    "25234223": "2015 meta-analysis: synthesis rate rose, no difference in lean body mass or leg lean mass; older than 35845777, and the abstract doesn't separate free leucine from other forms.",
+    "36771225": "Whey, leucine and vitamin D together; combination.",
+    "31627427": "Systematic review pools leucine and leucine-enriched protein, mostly with vitamin D.",
+    "32910813": "Immobilization model in 16 young males; 15 g/d; no difference. Not a label use.",
+    "41580240": "3-day immobilization model; no difference. Not a label use.",
+    "41786247": "4-week proof-of-concept with head and neck cancer patients; not linked with benefit there.",
+    "39739679": "Dileucine trial with a 2 g leucine arm; the headline finding is for a different compound, and the abstract gives no leucine-versus-placebo result."
+  },
+  "stop_or_hold": null,
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "35845777",
+      "title_fetched": "The Effect of Leucine Supplementation on Sarcopenia-Related Measures in Older Adults: A Systematic Review and Meta-Analysis of 17 Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35845777/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40805998",
+      "title_fetched": "Effects of Leucine Supplementation in Older Adults with Sarcopenia: A Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40805998/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32483625",
+      "title_fetched": "Nutritional interventions to improve muscle mass, muscle strength, and physical performance in older people: an umbrella review of systematic reviews and meta-analyses.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32483625/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32079916",
+      "title_fetched": "Leucine Supplementation Has No Further Effect on Training-induced Muscle Adaptations.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32079916/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40926079",
+      "title_fetched": "Resistance training, but not leucine, increased basal muscle protein synthesis and reversed frailty in older women consuming optimized protein intake.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40926079/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31577520",
+      "title_fetched": "Efficacy of L-leucine Supplementation Coupled With Resistance Training in Untrained Midlife Women.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31577520/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32230954",
+      "title_fetched": "Effects of Leucine Administration in Sarcopenia: A Randomized and Placebo-controlled Clinical Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32230954/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37923932",
+      "title_fetched": "The impact of leucine supplementation on body composition and glucose tolerance following energy restriction: an 8-week RCT in adults at risk of the metabolic syndrome.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37923932/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16507602",
+      "title_fetched": "A high proportion of leucine is required for optimal stimulation of the rate of muscle protein synthesis by essential amino acids in the elderly.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16507602/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24284442",
+      "title_fetched": "Leucine supplementation of a low-protein mixed macronutrient beverage enhances myofibrillar protein synthesis in young men: a double-blind, randomized trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24284442/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36396594",
+      "title_fetched": "Effect of supplementation with leucine alone, with other nutrients or with physical exercise in older people with sarcopenia: a systematic review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36396594/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "25234223",
+      "title_fetched": "The effectiveness of leucine on muscle protein synthesis, lean body mass and leg lean mass accretion in older people: a systematic review and meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25234223/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36771225",
+      "title_fetched": "Effects of Whey Protein, Leucine, and Vitamin D Supplementation in Patients with Sarcopenia: A Systematic Review and Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36771225/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31627427",
+      "title_fetched": "Beneficial Effects of Leucine Supplementation on Criteria for Sarcopenia: A Systematic Review.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31627427/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32910813",
+      "title_fetched": "High-dose leucine supplementation does not prevent muscle atrophy or strength loss over 7 days of immobilization in healthy young males.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32910813/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41580240",
+      "title_fetched": "Leucine supplementation does not attenuate the decline in daily muscle protein synthesis rates or preserve leg muscle mass during leg immobilization in young or older adults: a double-blind randomized trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41580240/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41786247",
+      "title_fetched": "Short-term isolated leucine supplementation was not associated with improvements in muscle mass or function in patients with head and neck cancer: A randomized, double-blind, proof-of-concept trial with an elderly non-cancer comparator cohort.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41786247/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39739679",
+      "title_fetched": "Dileucine ingestion, but not leucine, increases lower body strength and performance following resistance training: A double-blind, randomized, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39739679/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_L_LEUCINE",
+    "standard_name": "L-Leucine",
+    "aliases": [
+      "L-Leucine",
+      "L-Leucine, Instantized",
+      "L-Leucine, Powder",
+      "Leucine"
+    ],
+    "category": "sports_performance",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "35845777",
+      "40805998",
+      "32483625",
+      "32079916",
+      "40926079",
+      "31577520",
+      "32230954",
+      "37923932"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "null",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "null for leucine alone on muscle mass and strength, with conflicting small positive trials and no clear benefit. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "Muscle mass",
+      "Muscle strength",
+      "Physical performance"
+    ],
+    "health_goals_supported": [],
+    "notes": "The stored positive rating rests on an essential amino acid mixture and a whey drink, neither of which is leucine alone, and on muscle protein synthesis over hours. A 2022 meta-analysis of 17 RCTs (35845777) found that leucine alone did not improve muscle mass or strength in older people; benefit came with combinations including vitamin D. Trials of free leucine with training (32079916, 40926079, 31577520) added nothing. Two small trials were positive (32230954, 37923932), and two reviews read leucine more favorably (32483625, 40805998), the second calling its evidence low quality and limited when leucine is used alone. Evidence conflicts, with no clear benefit for the labels' free leucine.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Older adults with or without sarcopenia, and adults doing resistance training",
+      "supported_outcomes": [
+        "Muscle mass",
+        "Muscle strength",
+        "Physical performance"
+      ],
+      "source_pmids": [
+        "35845777",
+        "40805998",
+        "32483625",
+        "32079916",
+        "40926079",
+        "31577520",
+        "32230954",
+        "37923932"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The stored positive rating rests on an essential amino acid mixture and a whey drink, neither of which is leucine alone, and on muscle protein synthesis over hours. A 2022 meta-analysis of 17 RCTs (35845777) found that leucine alone did not improve muscle mass or strength in older people; benefit came with combinations including vitamin D. Trials of free leucine with training (32079916, 40926079, 31577520) added nothing. Two small trials were positive (32230954, 37923932), and two reviews read leucine more favorably (32483625, 40805998), the second calling its evidence low quality and limited when leucine is used alone. Evidence conflicts, with no clear benefit for the labels' free leucine. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "35845777",
+        "title": "The Effect of Leucine Supplementation on Sarcopenia-Related Measures in Older Adults: A Systematic Review and Meta-Analysis of 17 Randomized Controlled Trials.",
+        "citation": "Frontiers in nutrition (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35845777/",
+        "publication_types": [
+          "Systematic Review",
+          "Journal Article"
+        ],
+        "doi": "10.3389/fnut.2022.929891"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40805998",
+        "title": "Effects of Leucine Supplementation in Older Adults with Sarcopenia: A Meta-Analysis.",
+        "citation": "Nutrients (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40805998/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Review"
+        ],
+        "doi": "10.3390/nu17152413"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32483625",
+        "title": "Nutritional interventions to improve muscle mass, muscle strength, and physical performance in older people: an umbrella review of systematic reviews and meta-analyses.",
+        "citation": "Nutrition reviews (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32483625/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1093/nutrit/nuaa011"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32079916",
+        "title": "Leucine Supplementation Has No Further Effect on Training-induced Muscle Adaptations.",
+        "citation": "Medicine and science in sports and exercise (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32079916/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1249/MSS.0000000000002307"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40926079",
+        "title": "Resistance training, but not leucine, increased basal muscle protein synthesis and reversed frailty in older women consuming optimized protein intake.",
+        "citation": "GeroScience (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40926079/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1007/s11357-025-01877-2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31577520",
+        "title": "Efficacy of L-leucine Supplementation Coupled With Resistance Training in Untrained Midlife Women.",
+        "citation": "Journal of the American College of Nutrition (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31577520/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1080/07315724.2019.1650675"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32230954",
+        "title": "Effects of Leucine Administration in Sarcopenia: A Randomized and Placebo-controlled Clinical Trial.",
+        "citation": "Nutrients (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32230954/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.3390/nu12040932"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37923932",
+        "title": "The impact of leucine supplementation on body composition and glucose tolerance following energy restriction: an 8-week RCT in adults at risk of the metabolic syndrome.",
+        "citation": "European journal of clinical nutrition (2024)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37923932/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.1038/s41430-023-01360-1"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: l_leucine effect_direction null, agent review; the contexts below are the reading behind it."
+}

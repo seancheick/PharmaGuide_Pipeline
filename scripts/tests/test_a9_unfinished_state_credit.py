@@ -80,7 +80,7 @@ def test_marking_evidence_open_leaves_the_retained_credit_receipt(partial_full_e
     evidence = scored["quality_pillars_v4"]["evidence"]
     entries = evidence["receipt"]["entries"]
     assert abs(sum(entry["points"] for entry in entries) - evidence["score"]) < 0.001
-    assert evidence["evidence_result_state"] == "evaluated_applicable"
+    assert evidence["evidence_result_state"] == "clinical_review_not_covered"
 
 
 # --- Safety screen: an unread panel is not "no known concern" ---------------
@@ -233,7 +233,7 @@ def test_an_open_review_keeps_its_recorded_state_and_reads_pending(pipeline):
     assert scored["assessment_readiness"]["release_assessment"]["blockers"] == [
         "evidence_assessment_incomplete"]
     assert scored["quality_assessment_status"] == "partial"
-    assert evidence["evidence_result_state"] == "applicability_unestablished"
+    assert evidence["evidence_result_state"] == "clinical_review_not_covered"
     assert evidence["display_state"] == "not_yet_reviewed"
     assert evidence["score"] == 0
 

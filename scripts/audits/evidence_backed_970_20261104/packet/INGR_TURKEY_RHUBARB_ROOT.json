@@ -1,0 +1,197 @@
+{
+  "record_id": "INGR_TURKEY_RHUBARB_ROOT",
+  "labels": 7,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "One small positive 30 day trial of Rheum palmatum root extract on intestinal transit, dosed by rhein-equivalent content the labels do not print",
+  "decision": "closed_no_credit",
+  "summary": "The labels print Turkey rhubarb root extract at 500 mg per serving, with no anthraquinone or rhein content and no printed purpose. One trial meets the rule: Rheum palmatum root extract at 12.5 mg or 25 mg per day of rhein-equivalent anthraquinones improved transit versus placebo in 39 analyzed middle-aged adults (36499011). Other rhubarb evidence found was formula, add-on hospital or kidney use.",
+  "question_for_clinician": "36499011 gave Rheum palmatum root extract at 12.5 or 25 mg/day of rhein-equivalent anthraquinones and improved transit against placebo in 39 analyzed middle-aged adults. These labels print root extract at 500 mg with no anthraquinone content and no purpose. Dose owns adequacy, so amount alone doesn't withhold Evidence. Does this trial support credit for labels that print no purpose?",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_turkey_rhubarb_root_36499011",
+      "components": [
+        "INGR_TURKEY_RHUBARB_ROOT"
+      ],
+      "source_pmids": [
+        "36499011"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Rheum palmatum",
+        "plant_part": "root"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "infrequent_bowel_movements",
+      "purpose": "constipation_relief",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_turkey_rhubarb_root_36499011",
+      "population": {
+        "age_group": "adult",
+        "description": "42 middle-aged adults randomized, 95% women, average 58 years, with infrequent bowel movements; 39 analyzed, 13 per group."
+      },
+      "study_design": "Double-blind, randomized, placebo-controlled three-arm trial, 30 days",
+      "outcomes": [
+        {
+          "name": "Intestinal transit (primary endpoint per full text), reported through stool frequency, consistency and perceived transit: improved in both rhubarb groups versus placebo",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Perceived transit speed much or significantly improved: 92% at the higher dose, 62% at the lower dose, 23% on placebo",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Butyrate-producing bacteria and short-chain fatty acids changed favourably",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Dose is mg of anthraquinone derivatives expressed as rhein, not mg of extract; the extract amount isn't carried here. These labels print 500 mg of extract and no anthraquinone or rhein content, so the amount can't be matched.",
+        "Very small: 13 analyzed per group and mostly women.",
+        "Loose stools or diarrhea increased at the higher dose: on clinician_items.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          12.5,
+          25
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 30,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "tablet"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Tablets of Rheum palmatum dry root extract supplying 12.5 mg or 25 mg per day of anthraquinone derivatives expressed as rhein, or maltodextrin placebo, for 30 days.",
+        "normalization": {
+          "basis": "Daily anthraquinone derivatives expressed as rhein, as printed in the source; not total extract and no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36499011",
+          "location": "Abstract and full text methods"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "37153797": "Meta-analysis of rhubarb in chronic renal failure; a purpose these labels do not carry.",
+    "29208203": "Rheum officinale added to ACE inhibitors or ARBs in kidney patients; add-on kidney use, a purpose these labels do not carry.",
+    "39997764": "Green tea with rhubarb root on plasma lipids: combination.",
+    "28844213": "Rheum ribes syrup for dysenteric diarrhea in children: a different species and form."
+  },
+  "stop_or_hold": "Dose values hold rhein-equivalent mg, not extract mg; the fields can't show that these labels print extract mass only, so the regimen text carries it.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "36499011",
+      "title_fetched": "Constipation Mitigation by Rhubarb Extract in Middle-Aged Adults Is Linked to Gut Microbiome Modulation: A Double-Blind Randomized Placebo-Controlled Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36499011/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "37153797",
+      "title_fetched": "Clinical effect of rhubarb on the treatment of chronic renal failure: A meta-analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37153797/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29208203",
+      "title_fetched": "Effects of adding Rheum officinale to angiotensin-converting enzyme inhibitors or angiotensin receptor blockers on renal function in patients with chronic renal failure: A meta-analysis of randomized controlled trials .",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29208203/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39997764",
+      "title_fetched": "Green Tea with Rhubarb Root Reduces Plasma Lipids While Preserving Gut Microbial Stability in a Healthy Human Cohort.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39997764/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "28844213",
+      "title_fetched": "Effects of rhubarb (Rheum ribes L.) syrup on dysenteric diarrhea in children: a randomized, double-blind, placebo-controlled trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28844213/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_TURKEY_RHUBARB_ROOT",
+    "standard_name": "Turkey Rhubarb Root",
+    "aliases": [
+      "Turkey Rhubarb Root Extract",
+      "Turkey Rhubarb extract"
+    ],
+    "category": "digestive_gut",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "36499011"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "positive_weak",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "One small positive 30 day trial of Rheum palmatum root extract on intestinal transit, dosed by rhein-equivalent content the labels do not print. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "intestinal transit",
+      "stool frequency",
+      "stool consistency"
+    ],
+    "health_goals_supported": [],
+    "notes": "The labels print Turkey rhubarb root extract at 500 mg per serving, with no anthraquinone or rhein content and no printed purpose. One trial meets the rule: Rheum palmatum root extract at 12.5 mg or 25 mg per day of rhein-equivalent anthraquinones improved transit versus placebo in 39 analyzed middle-aged adults (36499011). Other rhubarb evidence found was formula, add-on hospital or kidney use.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Middle-aged adults, mostly women, with infrequent bowel movements",
+      "supported_outcomes": [
+        "intestinal transit",
+        "stool frequency",
+        "stool consistency"
+      ],
+      "source_pmids": [
+        "36499011"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The labels print Turkey rhubarb root extract at 500 mg per serving, with no anthraquinone or rhein content and no printed purpose. One trial meets the rule: Rheum palmatum root extract at 12.5 mg or 25 mg per day of rhein-equivalent anthraquinones improved transit versus placebo in 39 analyzed middle-aged adults (36499011). Other rhubarb evidence found was formula, add-on hospital or kidney use. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36499011",
+        "title": "Constipation Mitigation by Rhubarb Extract in Middle-Aged Adults Is Linked to Gut Microbiome Modulation: A Double-Blind Randomized Placebo-Controlled Trial.",
+        "citation": "International journal of molecular sciences (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36499011/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.3390/ijms232314685"
+      }
+    ]
+  }
+}

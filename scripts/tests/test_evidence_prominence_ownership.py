@@ -76,7 +76,7 @@ def _row(name, canonical_id, quantity, unit="mg", path=None, **extra):
 # --- the owner decision, read per row ---------------------------------------
 
 @pytest.mark.parametrize("leucine_mg", [1, 100, 10000])
-def test_an_unrelated_ingredients_mass_never_changes_the_declared_purpose(leucine_mg):
+def test_named_low_mass_active_survives_beside_other_material_actives(leucine_mg):
     from evidence_resolver import evidence_owner_canonicals, evidence_prominent_row_keys
 
     product = _product(
@@ -88,8 +88,12 @@ def test_an_unrelated_ingredients_mass_never_changes_the_declared_purpose(leucin
         matches=[],
     )
 
-    assert evidence_owner_canonicals(product) == {"melatonin"}
-    assert evidence_prominent_row_keys(product) == {("ingredientRows[0]", "melatonin")}
+    expected = {"melatonin"} | ({"l_leucine"} if leucine_mg >= 100 else set())
+    assert evidence_owner_canonicals(product) == expected
+    keys = {("ingredientRows[0]", "melatonin")}
+    if leucine_mg >= 100:
+        keys.add(("ingredientRows[1]", "l_leucine"))
+    assert evidence_prominent_row_keys(product) == keys
 
 
 def test_when_the_owner_names_no_purpose_evidence_does_not_choose_by_mass():
@@ -115,7 +119,7 @@ def test_when_the_owner_names_no_purpose_evidence_does_not_choose_by_mass():
 
 # --- the primary floor --------------------------------------------------------
 
-def test_a_heavier_undeclared_adjunct_never_changes_the_declared_floor():
+def test_heavier_material_active_keeps_its_own_reviewed_evidence():
     product = _product(
         product_name="Melatonin 3 mg",
         ingredients=[_row("Melatonin", "melatonin", 3, path="ingredientRows[0]"),
@@ -127,9 +131,9 @@ def test_a_heavier_undeclared_adjunct_never_changes_the_declared_floor():
 
     payload = _scored(product)
 
-    assert payload["metadata"]["evidence_owner_canonicals"] == ["melatonin"]
+    assert payload["metadata"]["evidence_owner_canonicals"] == ["l_theanine", "melatonin"]
     assert payload["metadata"]["primary_evidence_floor"] == 14.0
-    assert payload["metadata"]["primary_evidence_floor_canonical"] == "melatonin"
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "l theanine"
 
 
 def test_evidence_strength_not_relative_mass_selects_between_declared_purposes():
@@ -343,10 +347,13 @@ def test_real_210555_disclosed_members_of_the_title_named_blend_anchor_the_floor
     assert ("ingredientRows[2].nestedRows[1]", "ashwagandha") in keys
     assert not {key for key in keys if key[1] in {"magnesium", "zinc"}}
     evidence = _evidence(product)
-    # Neither held Testofen context authorizes testosterone benefit; KSM-66's
-    # unrelated stress research cannot supply that product purpose either.
-    assert evidence["metadata"]["primary_evidence_floor_canonical"] is None
-    assert evidence['metadata']['matched_entries'] == 0
+    # Held Testofen earns nothing; KSM-66 retains ingredient evidence even
+    # though its studied outcome does not substantiate the testosterone claim.
+    assert evidence["metadata"]["primary_evidence_floor_canonical"] == "ksm 66"
+    from scoring_v4.modules.generic_evidence import resolved_clinical_matches
+    matches, _ = resolved_clinical_matches(product, owner_scoped=True, assess_amount=False)
+    assert any(m["id"] == "BRAND_KSM66" for m in matches)
+    assert all(m["id"] != "BRAND_TESTOFEN" for m in matches)
 
 
 @pytest.mark.parametrize("fixture,member", [
@@ -846,7 +853,7 @@ def test_real_lent_spirulina_projection_retains_its_hold_without_borrowing_a_dos
 ])
 def test_parent_tier_requires_canonical_lineage_or_a_linked_lent_member(monkeypatch, path, parent_path, lent, links, expected):
     import evidence_resolver
-    from scoring_input_contract import ROLE_CLAIM_PROMINENT, ROLE_MAJOR
+    from scoring_input_contract import ROLE_CLAIM_PROMINENT, ROLE_ADJUNCT
 
     member = {"canonical_id": "member", "raw_source_path": path,
               "parent_source_path": parent_path, "linked_rows": links}
@@ -855,7 +862,7 @@ def test_parent_tier_requires_canonical_lineage_or_a_linked_lent_member(monkeypa
                       reason="identity_bearing_blend_header_mass_from_nested_child")
     other = {"canonical_id": "other", "raw_source_path": "ingredientRows[8]"}
     monkeypatch.setattr(evidence_resolver, "_evidence_subject_roles", lambda *args: (
-        [member, other], [{"role": ROLE_MAJOR}, {"role": ROLE_CLAIM_PROMINENT}],
+        [member, other], [{"role": ROLE_ADJUNCT}, {"role": ROLE_CLAIM_PROMINENT}],
         [{"raw_source_path": "ingredientRows[0]"}], [{"role": ROLE_CLAIM_PROMINENT}],
     ))
     owners = evidence_resolver.evidence_owner_canonicals({})
@@ -875,9 +882,13 @@ def test_collagen_recovery_retains_canonical_endpoint_scope(purpose, accepted, e
     ], matches=[])
     product['statements'] = [{'type': 'Formula re: Contains', 'notes': f'Collagen supports {purpose}.'}]
     artifact = _evidence(product)
-    assert (artifact['score'] > 0) is accepted
+    assert artifact['score'] > 0
+    from clinical_applicability import assess_claim_alignment
+    alignment = assess_claim_alignment(product, eligible_collagen_source["study_contexts"][0],
+        ["collagen"], supported_outcomes=["skin hydration"])
+    assert (alignment["state"] == "aligned") is accepted
     matches, _ = resolved_clinical_matches(product, owner_scoped=True)
-    if accepted:
+    if artifact["score"] > 0:
         from clinical_applicability import reviewed_entries
         source = reviewed_entries()['INGR_COLLAGEN_PEPTIDES']
         recovered = next(e for e in matches if e['id'] == 'RECOVERED_COLLAGEN_PEPTIDES_V1')
@@ -941,3 +952,18 @@ def test_formula_level_marketing_is_not_attributed_to_each_branded_ingredient():
     accepted = {m.get("id"): m for m in product["evidence_data"]["clinical_matches"]}
     for record in ("BRAND_SENSORIL", "BRAND_RELORA"):
         assert accepted[record]["applicability_assessment"]["claim_alignment"]["state"] == "absent"
+
+
+def test_route_driver_does_not_discard_other_objectively_major_actives():
+    from evidence_resolver import evidence_owner_canonicals, evidence_required_canonicals
+    from scoring_input_contract import classify_ingredient_roles
+    products = json.loads((FIXTURES / "stress_gut_evidence_enriched.json").read_text())
+    for product in products:
+        product["statements"] = []
+        roles = classify_ingredient_roles(product, module="fiber_digestive", evidence=True)
+        for canonical in ("ashwagandha", "l_theanine"):
+            assert next(r for r in roles if r["canonical_id"] == canonical)["role"] == "major"
+        expected = {"ashwagandha", "l_theanine", "digestive_enzymes", "protease"}
+        assert expected <= evidence_owner_canonicals(product, module="fiber_digestive")
+        assert {"ashwagandha", "l_theanine"} <= evidence_required_canonicals(product, module="fiber_digestive")
+        assert _evidence(product)["score"] > 0

@@ -417,14 +417,15 @@ _PRECAUTION_CLAUSE = re.compile(
     r"\b(?:consult|ask (?:your|a)|talk (?:to|with)|if you (?:are|have)|warning|caution|keep out of reach)\b", re.I)
 
 
-def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
+def _matched_excluded_claim_terms(product: Mapping, terms: list[str]) -> list[str]:
     """Match only affirmative label claims, never warnings, precautions or metadata."""
     excluded = {str(product.get("brand_name") or ""), str(product.get("serving_description") or "")}
     titles = {str(product.get(field) or "") for field in ("product_name", "fullName")} - {""}
     clauses = [(text in titles, clause) for text in native_product_positioning_texts(product)
                if text and text not in excluded
                for clause in re.split(r"[.;!?\r\n]+", text) if not _PRECAUTION_CLAUSE.search(clause)]
-    for term in policy.get("excluded_claim_terms", []):
+    matched = []
+    for term in terms:
         words = _key(term).split()
         exact = r"[\s_-]+".join(re.escape(word) for word in words)
         claimed = (rf"(?:{_CLAIM_VERB}\b.*?(?<!\w){exact}|{exact}[\s_-]+{_CLAIM_NOUN})"
@@ -432,8 +433,12 @@ def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
         patterns = {True: re.compile(r"(?<!\w)" + exact + r"(?!\w)", re.I),
                     False: re.compile(r"(?<!\w)" + claimed + r"(?!\w)", re.I)}
         if any(find_affirmative_label_match(patterns[title], clause) for title, clause in clauses):
-            return True
-    return False
+            matched.append(term)
+    return matched
+
+
+def _excluded_claim_matches(product: Mapping, policy: Mapping) -> bool:
+    return bool(_matched_excluded_claim_terms(product, policy.get("excluded_claim_terms", [])))
 
 
 def _claim_excluded_when_alone(product: Mapping, policy: Mapping) -> bool:
@@ -608,8 +613,8 @@ def assess_claim_alignment(product: Mapping, context: Mapping, canonicals=(), *,
     ``absent``: no recognized claim. ``aligned``/``mixed``: at least one claim
     shares the outcome's indication. ``unrelated``: every claim is elsewhere.
     ``ambiguous``: a recognized claim no category places. Alignment never
-    earns more than absence; it only decides whether an unrelated claim
-    stops this context from crediting the product. Qualifying findings bound
+    earns more than absence. This describes claim support; ingredient Evidence
+    callers do not use unrelated claims to veto credit. Qualifying findings bound
     the relationship; a signed scope may narrow it, never promote a null one.
     """
     from evidence_resolver import evidence_indication_categories
@@ -747,6 +752,55 @@ def _special_population(context: Mapping, description: str) -> str | None:
     return None
 
 
+def context_delivery_matches(product: Mapping, context: Mapping) -> bool:
+    """Keep route conflicts separate from ordinary oral dosage-form variation.
+
+    Read typed study routes when present. Native contexts retain their recorded
+    delivery forms; missing forms do not establish a nonoral route. Benefit
+    claims (including vaginal health) never establish administration route.
+    """
+    from clinical_evidence_schema import ROUTES
+    from form_factor_normalizer import canonicalize_form_factor
+
+    def route(value):
+        text = str(value or "").strip().lower()
+        if text in ROUTES - {"other"}:
+            return text
+        for pattern, named_route in (
+            (r"\b(?:enteral|feeding tube)\b", "enteral_tube"),
+            (r"\b(?:intra)?vaginal\b", "vaginal"), (r"\b(?:topical|transdermal)\b", "topical"),
+            (r"\bsublingual\b", "sublingual"), (r"\b(?:intranasal|nasal)\b", "intranasal"),
+            (r"\b(?:inhaled|inhalation)\b", "inhaled"),
+            (r"\bintravenous\b", "iv"), (r"\bintramuscular\b", "im"),
+        ):
+            if re.search(pattern, text):
+                return named_route
+        form = canonicalize_form_factor(text)
+        if form in {"topical", "patch"}:
+            return "topical"
+        if form == "sublingual":
+            return "sublingual"
+        if form in {"capsule", "softgel", "tablet", "chewable", "gummy", "powder", "bar", "tea_bag", "lozenge"}:
+            return "oral"
+        return None
+
+    physical = product.get("physicalState") or {}
+    if isinstance(physical, Mapping):
+        physical = physical.get("name") or physical.get("langualCodeDescription")
+    label_routes = {r for value in (product.get("form_factor_canonical"), product.get("form_factor"), physical)
+                    if (r := route(value))}
+    if len(label_routes) > 1:
+        return False
+    label_route = next(iter(label_routes), None)
+    study_route = context.get("route")
+    studied = ({study_route} if study_route in ROUTES - {"other"} else
+               {r for form in (context.get("dose") or {}).get("dosage_forms") or [] if (r := route(form))})
+    if label_route:
+        return label_route in studied if studied else label_route == "oral"
+    # No declared delivery cannot establish a specialized administration route.
+    return not studied or studied == {"oral"}
+
+
 def assess_context_population(product: Mapping, context: Mapping) -> str:
     """Compare a reviewed context's studied population with the label's targeting.
 
@@ -789,6 +843,13 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
         return "unresolved"
     # Pregnant women are not interchangeable with a studied nonpregnant group.
     if pregnancy and not _studied_subjects(_PREGNANT_SUBJECTS, description):
+        return "explicit_conflict"
+    if lactation and (re.search(r"\bnon[- ]?(?:lactating|breastfeeding|nursing)\b", description, re.I)
+                     or re.search(
+                         r"\b(?:breastfeeding|lactating|nursing)(?: women| mothers| participants)? "
+                         r"(?:(?:were|are|was) )?excluded\b|"
+                         r"\b(?:excluded|excluding) (?:breastfeeding|lactating|nursing)\b",
+                         description, re.I)):
         return "explicit_conflict"
     key = _key(description)
     men = re.compile(r"\b(?:men|male|males)\b", re.I)
@@ -923,7 +984,7 @@ def _positioning_is_formula_level(product: Mapping, canonicals: set) -> bool:
                    if str(row.get("canonical_id")) in canonicals)
 
 
-def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, contexts: list) -> dict:
+def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, contexts: list, *, require_claim_alignment: bool) -> dict:
     """Return a blocking decision, or the components a qualifying scope adds.
 
     Population and claim are judged per context, so one applicable context
@@ -943,7 +1004,9 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
         held = any(qualifying_purpose_outcomes(context)[1] for context in contexts)
         return {"status": "unresolved" if held else "not_applicable",
                 "reason_code": "invalid_applicability_contract" if held else "clinical_outcome_not_qualified"}
-    contexts = qualified_contexts
+    contexts = [context for context in qualified_contexts if context_delivery_matches(product, context)]
+    if not contexts:
+        return {"status": "not_applicable", "reason_code": "clinical_delivery_mismatch"}
     canonicals = {str(row.get("canonical_id")) for row in _linked_rows(product, entry, evidence_only=True)
                   if row.get("canonical_id")}
     formula_level = _positioning_is_formula_level(product, canonicals)
@@ -952,7 +1015,8 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
                                        supported_outcomes=policy.get("supported_outcomes", [])))
                for context in contexts]
     qualifying = [(context, claim) for context, population, claim in results
-                  if population == "eligible" and claim["state"] in _CREDITABLE_CLAIM_STATES]
+                  if population == "eligible"
+                  and (not require_claim_alignment or claim["state"] in _CREDITABLE_CLAIM_STATES)]
     if not qualifying:
         eligible = [claim for _, population, claim in results if population == "eligible"]
         populations = {population for _, population, _ in results}
@@ -982,7 +1046,7 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
                 "population_applicability": {"state": "eligible", "context_ids": [
                     context["context_id"] for context, _ in qualifying]}}
     qualifying = affirmative
-    rank = {"aligned": 0, "mixed": 1, "absent": 2}
+    rank = {"aligned": 0, "mixed": 1, "absent": 2, "unrelated": 3, "ambiguous": 4}
     components = {
         "claim_alignment": min((claim for _, claim in qualifying), key=lambda claim: rank[claim["state"]]),
         "population_applicability": {"state": "eligible",
@@ -1027,7 +1091,8 @@ def _study_read_and_verified(study: Mapping) -> bool:
             and bool(provenance.get("abstract_evidence_quote")))
 
 
-def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Mapping, policy: Mapping) -> dict:
+def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Mapping, policy: Mapping, *,
+                                require_claim_alignment: bool) -> dict:
     # Preserve existing signed legacy scopes without inventing a migrated
     # context. The scope, its population and its sources remain one unit;
     # descriptive top-level goals confer no approval.
@@ -1059,14 +1124,18 @@ def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Map
         return {"status": "unresolved" if population == "unresolved" else "not_applicable",
                 "reason_code": "invalid_applicability_contract" if population == "unresolved" else "clinical_population_mismatch",
                 "population_applicability": {"state": population}}
-    if claim["state"] not in _CREDITABLE_CLAIM_STATES:
+    if require_claim_alignment and claim["state"] not in _CREDITABLE_CLAIM_STATES:
         return {"status": "unresolved" if claim["state"] == "ambiguous" else "not_applicable",
                 "reason_code": "label_claim_unclassified" if claim["state"] == "ambiguous" else "label_purpose_evidence_mismatch",
                 "claim_alignment": claim, "population_applicability": {"state": population}}
     return {"claim_alignment": claim, "population_applicability": {"state": population}}
 
 
-def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_amount: bool = True) -> dict:
+def assess_clinical_applicability(
+    product: Mapping, entry: Mapping, *, assess_amount: bool = True,
+    require_claim_alignment: bool = True,
+) -> dict:
+    """Qualify reviewed research; claim substantiation may separately require alignment."""
     from scoring_v4.modules.generic_evidence import _clinical_source_id
     registry_backed = bool(entry.get("id") or entry.get("study_id") or entry.get("source_data"))
     reference = reviewed_entries().get(_clinical_source_id(dict(entry))) if registry_backed else entry
@@ -1110,11 +1179,11 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
     if policy.get("scope") != "ingredient":
         return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
-    if _excluded_claim_matches(product, policy) or _claim_excluded_when_alone(product, policy):
+    excluded_terms = _matched_excluded_claim_terms(product, policy.get("excluded_claim_terms", []))
+    if require_claim_alignment and (excluded_terms or _claim_excluded_when_alone(product, policy)):
         return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
-    # Every approved, source-bound context is a condition scope: no claim is
-    # required, but its population and the label's claims decide whether it
-    # may credit this product (October 28, 2026 rulings).
+    # Review scope and population qualify the research. Advertising is
+    # evaluated separately, including exclusions on claim substantiation.
     accepted_scopes = _accepted_condition_scopes(reference, policy)
     if ((reference.get("study_contexts") and not accepted_scopes)
             or (not reference.get("study_contexts")
@@ -1125,11 +1194,20 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
         # decision retain their existing preparation-only behavior.
         scope = {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
     else:
-        scope = _assess_condition_scopes(product, entry, policy, accepted_scopes) if accepted_scopes else {}
+        scope = (_assess_condition_scopes(product, entry, policy, accepted_scopes,
+                                          require_claim_alignment=require_claim_alignment)
+                 if accepted_scopes else {})
     # A source, claim or population block is decided after preparation, so a
     # known material mismatch is preserved and passing rows retain provenance.
     if not reference.get("study_contexts") and not scope:
-        scope = _assess_legacy_signed_scope(product, entry, reference, policy)
+        scope = _assess_legacy_signed_scope(product, entry, reference, policy,
+                                            require_claim_alignment=require_claim_alignment)
+    if not require_claim_alignment and "claim_alignment" in scope:
+        excluded_terms += _matched_excluded_claim_terms(product, policy.get("excluded_claim_terms_when_alone", []))
+        if excluded_terms:
+            alignment = scope["claim_alignment"]
+            alignment["state"] = "mixed" if alignment["state"] in {"aligned", "mixed"} else "unrelated"
+            alignment["excluded_terms"] = list(dict.fromkeys(excluded_terms))
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
         physical = physical.get("name")
@@ -1292,10 +1370,14 @@ def assess_clinical_applicability(product: Mapping, entry: Mapping, *, assess_am
     return {"status": status, "reason_code": reason}
 
 
-def filter_clinical_matches(product: Mapping, matches: list[dict], *, assess_amount: bool = True) -> tuple[list[dict], list[dict]]:
+def filter_clinical_matches(
+    product: Mapping, matches: list[dict], *, assess_amount: bool = True,
+    require_claim_alignment: bool = True,
+) -> tuple[list[dict], list[dict]]:
     accepted, rejected = [], []
     for entry in matches:
-        decision = assess_clinical_applicability(product, entry, assess_amount=assess_amount)
+        decision = assess_clinical_applicability(product, entry, assess_amount=assess_amount,
+                                                 require_claim_alignment=require_claim_alignment)
         # Discovery may have coalesced aliases across unrelated ingredients.
         # The actual passing source rows own both clinical identity and its UI
         # attribution, including when a provider heading retains its reference.

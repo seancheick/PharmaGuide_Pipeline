@@ -594,13 +594,16 @@ def test_is2_scoring_provenance_uses_the_actual_digestive_family(quantity):
         strain='Bacillus coagulans Unique IS-2', dr_pham_signoff=True,
         research_match_status='exact_strain', review_status='clinician_verified',
     )
-    # A digestive label reaches the IBS trial's scoped credit (no exact claim
-    # is required, October 28 rulings); an unrelated label earns nothing from it.
+    # The reviewed IBS trial contributes regardless of the advertised benefit.
+    # Claim substantiation must still describe the IBS scope.
     digestive = score_evidence(product)
     assert digestive['score'] == 16
     assert 'unique_is2_adult_ibs_31434935' in digestive['metadata']['notes']
     unrelated = {**product, 'product_name': 'Sleep support probiotic'}
-    assert score_evidence(unrelated)['score'] == 0
+    unrelated_result = score_evidence(unrelated)
+    assert unrelated_result['score'] == digestive['score']
+    [context] = unrelated_result['metadata']['contributing_native_contexts']
+    assert context['claimed_purpose_assessment']['status'] == 'not_applicable'
     product['statements'] = [{'type': 'Formulation re: Other', 'notes': 'Support for irritable bowel syndrome'}]
     result = score_evidence(product)
     assert result['score'] == 16

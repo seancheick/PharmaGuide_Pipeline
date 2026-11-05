@@ -1,0 +1,1349 @@
+{
+  "record_id": "INGR_D_RIBOSE",
+  "labels": 26,
+  "stored_direction": "positive_weak",
+  "direction_as_read": "mixed: exercise trials mostly null; small cardiac trials and one HFpEF phase 2 trial positive at 15 g/day or more in patients",
+  "decision": "closed_no_credit",
+  "summary": "The stored rating cites only an open-label uncontrolled pilot (17109576). Controlled exercise trials are mostly null (11641371, 12660407, 12580655, 16521849, 16937963, 14660478), with dextrose ahead of ribose in rowers (16377979) and a benefit only in the less fit half of one crossover (29296106). A trial on soreness reports lower damage markers but a within-group soreness result (32778175). Cardiac results are positive in patients: a phase 2 HFpEF trial at 15 g/day (35644694), a CHF feasibility crossover of 15 (14607200), and 60 g/day for 3 days in coronary disease (1354276). Labels print 1.4 to 5.1 g a serving.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_11641371",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "11641371"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "exercise_performance",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_11641371",
+      "population": {
+        "age_group": "adult",
+        "description": "19 subjects, ribose n = 10, placebo n = 9; biopsy subgroup n = 8."
+      },
+      "study_design": "Double-blind randomized trial with a 6-day training period",
+      "outcomes": [
+        {
+          "name": "Knee-extension power output similar between groups",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Muscle ATP recovery not improved",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Small and short.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          16
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 6,
+        "administration_frequency": "four times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "4 g, 4 doses a day during 6 days of training.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "11641371",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_12660407",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "12660407"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "anaerobic_capacity",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_12660407",
+      "population": {
+        "age_group": "adult",
+        "description": "19 trained males."
+      },
+      "study_design": "Randomized double-blind trial, 5 days, dextrose placebo",
+      "outcomes": [
+        {
+          "name": "Peak power, average power, torque and fatigue index: no significant interaction",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Total work output: interaction p = .04, from a decline in the placebo group in one sprint",
+          "hierarchy": "post_hoc",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "Authors conclude no effect on anaerobic capacity.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          10
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 5,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Capsules, 5 g twice daily for 5 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12660407",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_12580655",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "12580655"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "repeated_sprints",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_12580655",
+      "population": {
+        "age_group": "adult",
+        "description": "Men; number not in the abstract."
+      },
+      "study_design": "Randomized placebo-controlled crossover",
+      "outcomes": [
+        {
+          "name": "Mean and peak power higher in sprint 2 only; not reproducible across 6 sprints",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors conclude no consistent or substantial effect.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "32 g over 36 hours, 4 doses of 8 g.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "12580655",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_14660478",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "14660478"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "recovery_after_training",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_14660478",
+      "population": {
+        "age_group": "adult",
+        "description": "Eight subjects."
+      },
+      "study_design": "Randomized double-blind crossover after 7 days of sprint training",
+      "outcomes": [
+        {
+          "name": "Muscle ATP at 72 h higher with ribose than placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Mean and peak power at 72 h similar",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "ATP rose, performance did not. Very small. Dose by body weight stays in the regimen text.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "200 mg/kg body weight three times a day for 3 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "14660478",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_16377979",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "16377979"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "rowing_performance",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_16377979",
+      "population": {
+        "age_group": "adult",
+        "description": "31 women collegiate rowers."
+      },
+      "study_design": "Double-blind randomized trial, 8 weeks, dextrose comparator",
+      "outcomes": [
+        {
+          "name": "2000-m time improved more on dextrose than ribose (15.2 vs 5.2 s; P = 0.031)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors doubt ribose impaired performance and hypothesize dextrose enhanced it. Active comparator.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "liquid"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "10 g in 8 oz water before and after practice and time trials, 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "16377979",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_16521849",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "16521849"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "anaerobic_capacity",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_16521849",
+      "population": {
+        "age_group": "adult",
+        "description": "12 moderately trained male cyclists."
+      },
+      "study_design": "Double-blind crossover, single dose",
+      "outcomes": [
+        {
+          "name": "No significant interactions for any performance or blood variable",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Drink also contained 150 microg folate, so not ribose alone.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "liquid"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "3 g ribose plus 150 microg folate in 150 mL before exercise.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "16521849",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_16937963",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "16937963"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "anaerobic_performance",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_16937963",
+      "population": {
+        "age_group": "adult",
+        "description": "11 male subjects."
+      },
+      "study_design": "Two counterbalanced trials one week apart with placebo",
+      "outcomes": [
+        {
+          "name": "Peak power, mean power and percent power decrease: no significant difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Single dose, small. It's described as the distributor's suggested dose, and it's below the lowest label amount here (1.4 g).",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          625
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "625 mg ribose.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "16937963",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_29296106",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "29296106"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "exercise_recovery",
+      "purpose": "exercise_performance",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_29296106",
+      "population": {
+        "age_group": "adult",
+        "description": "26 healthy subjects split by peak VO2."
+      },
+      "study_design": "Double-blind crossover, 5 days, dextrose control",
+      "outcomes": [
+        {
+          "name": "Lower VO2 group: mean and peak power rose on ribose versus dextrose; RPE and CK lower",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Higher VO2 group: no differences",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Effect only within a fitness split. Randomization isn't stated in the abstract; primary outcome isn't named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          10
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 5,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "10 g/day: 2 days of loading and 3 days during exercise.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "29296106",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_32778175",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "32778175"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "delayed_onset_muscle_soreness",
+      "purpose": "exercise_recovery",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_32778175",
+      "population": {
+        "age_group": "adult",
+        "description": "21 untrained male college students."
+      },
+      "study_design": "Randomized placebo-controlled trial; both groups repeated the exercise after 14 days",
+      "outcomes": [
+        {
+          "name": "Soreness at 24 h and 48 h lower than in the first session within the ribose group",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "CK, LDH, myoglobin and MDA lower than placebo at 24 h",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Isokinetic strength: no difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Repeated-bout design: the first session itself can reduce soreness at the second.",
+        "Soreness is reported within group in the abstract.",
+        "Primary outcome isn't named.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "liquid"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "200 mL solution with 15 g, 1 h before and 1, 12, 24 and 36 h after exercise.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "32778175",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_35644694",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "35644694"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "heart_failure_preserved_ejection_fraction",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_35644694",
+      "population": {
+        "age_group": "adult",
+        "description": "216 patients with HFpEF, 50 or older, on four arms."
+      },
+      "study_design": "Phase 2 randomized double-blind placebo-controlled 2x2 factorial trial, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Ribose alone: KCCQ clinical summary change +25.82 points (11.64 to 40.00)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Ribose alone: vigor change +7.84 points (3.49 to 12.19)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Ribose alone: EF change +8.03% versus placebo",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Septal E/e' and 6-minute walk: no significant increase",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Seven outcome measures; no primary named in the passages read.",
+        "Full text reports an antagonistic interaction with ubiquinol on EF.",
+        "Patients with HFpEF on 15 g/day, not general users at label servings. Not replicated in the sources read.",
+        "Abstract read; open full text read only in the passages on design, dose, funding and primary outcome.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          15
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "powder"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "D-ribose powder 15 g/day (3 scoops) for 12 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "35644694",
+          "location": "Abstract and Methods",
+          "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9576187/"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_14607200",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "14607200"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "congestive_heart_failure",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_14607200",
+      "population": {
+        "age_group": "adult",
+        "description": "15 patients with coronary artery disease and CHF."
+      },
+      "study_design": "Prospective double-blind randomized crossover feasibility study, 3-week periods",
+      "outcomes": [
+        {
+          "name": "Atrial contribution, left atrial dimension and E-wave deceleration improved",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "SF-36 quality of life improved",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Feasibility study of 15. Dose not in the abstract. Before-versus-after comparisons within periods in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 21,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral D-ribose for 3 weeks; amount not in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "14607200",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_1354276",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "1354276"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "coronary_artery_disease",
+      "purpose": "cardiovascular_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_1354276",
+      "population": {
+        "age_group": "adult",
+        "description": "20 men with severe coronary artery disease."
+      },
+      "study_design": "Randomized placebo-controlled trial, 3 days",
+      "outcomes": [
+        {
+          "name": "Treadmill time to 1 mm ST depression 276 vs 223 s (p = 0.002)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        },
+        {
+          "name": "Time to moderate angina: no significant group difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "60 g/day for 3 days is far above label amounts. Small.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          60
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 3,
+        "administration_frequency": "four times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "60 g daily in four doses by mouth for 3 days.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "1354276",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_d_ribose_17109576",
+      "components": [
+        "INGR_D_RIBOSE"
+      ],
+      "source_pmids": [
+        "17109576"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "uncontrolled_intervention",
+      "component_registration_status": "fully_registered",
+      "condition": "fibromyalgia_chronic_fatigue",
+      "purpose": "fatigue_support",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_d_ribose_17109576",
+      "population": {
+        "age_group": "adult",
+        "description": "41 patients with fibromyalgia and/or chronic fatigue syndrome."
+      },
+      "study_design": "Open-label uncontrolled pilot",
+      "outcomes": [
+        {
+          "name": "Energy, sleep, mental clarity, pain and well-being scales improved from baseline",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        }
+      ],
+      "limitations": [
+        "No control group. Stored evidence for this record.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          15
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "three times daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "5 g three times daily, 280 g in total.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "17109576",
+          "location": "Abstract"
+        }
+      }
+    }
+  ],
+  "read_not_used": {
+    "18178380": "2000 mg/day had no effect on mental fatigue, but authors say dose was too low and no conclusions can be made on efficacy.",
+    "8815168": "Five McArdle's patients on 60 g/day; no benefit, and patients disliked it. Not a label purpose.",
+    "19627222": "Seven volunteers, hypoxic exercise, oxidative markers; 7 g before and after.",
+    "19200398": "Intravenous infusion. Not oral.",
+    "24272966": "Pharmacokinetics in 12 healthy subjects; glucose finding on clinician_items.",
+    "36551203": "Narrative review of risks with no trial data in the abstract; on clinician_items.",
+    "20804365": "Letter with no abstract on PubMed, title only."
+  },
+  "stop_or_hold": "Four labels print Bioenergy Ribose; no abstract read names that brand. The 14660478 and 32778175 doses aren't mass-per-day values and stay in regimen text.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "11641371",
+      "title_fetched": "No effects of oral ribose supplementation on repeated maximal exercise and de novo ATP resynthesis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11641371/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12660407",
+      "title_fetched": "Effects of oral D-ribose supplementation on anaerobic capacity and selected metabolic markers in healthy males.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12660407/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "12580655",
+      "title_fetched": "Effects of ribose supplementation on repeated sprint performance in men.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12580655/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "14660478",
+      "title_fetched": "Effect of ribose supplementation on resynthesis of adenine nucleotides after intense intermittent training in humans.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14660478/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16377979",
+      "title_fetched": "Ribose versus dextrose supplementation, association with rowing performance: a double-blind study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16377979/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16521849",
+      "title_fetched": "Effects of ribose supplementation prior to and during intense exercise on anaerobic capacity and metabolic markers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16521849/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "16937963",
+      "title_fetched": "Effects of ribose as an ergogenic aid.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16937963/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "29296106",
+      "title_fetched": "The influence of D-ribose ingestion and fitness level on performance and recovery.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29296106/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32778175",
+      "title_fetched": "Effect of D-ribose supplementation on delayed onset muscle soreness induced by plyometric exercise in college students.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32778175/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "35644694",
+      "title_fetched": "Effects of Ubiquinol and/or D-ribose in Patients With Heart Failure With Preserved Ejection Fraction.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35644694/",
+      "full_text": true,
+      "sections_used": "Abstract and named full text passages"
+    },
+    {
+      "pmid": "14607200",
+      "title_fetched": "D-Ribose improves diastolic function and quality of life in congestive heart failure patients: a prospective feasibility study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14607200/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "1354276",
+      "title_fetched": "Effects of ribose on exercise-induced ischaemia in stable coronary artery disease.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1354276/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "17109576",
+      "title_fetched": "The use of D-ribose in chronic fatigue syndrome and fibromyalgia: a pilot study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17109576/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "18178380",
+      "title_fetched": "Effects of oral administration of caffeine and D-ribose on mental fatigue.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18178380/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "8815168",
+      "title_fetched": "A double blind, placebo controlled, crossover trial of D-ribose in McArdle's disease.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8815168/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19627222",
+      "title_fetched": "The role of ribose on oxidative stress during hypoxic exercise: a pilot study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19627222/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "19200398",
+      "title_fetched": "Evaluation of the anti-ischemic effects of D-ribose during dobutamine stress echocardiography: a pilot study.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19200398/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "24272966",
+      "title_fetched": "Evaluation of D-ribose pharmacokinetics, dose proportionality, food effect, and pharmacodynamics after oral solution administration in healthy male and female subjects.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24272966/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "36551203",
+      "title_fetched": "Ribose Intake as Food Integrator: Is It a Really Convenient Practice?",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36551203/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20804365",
+      "title_fetched": "D-ribose aids fatigue in aging adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20804365/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_D_RIBOSE",
+    "standard_name": "D-Ribose",
+    "aliases": [
+      "D-Ribose",
+      "Bioenergy Ribose"
+    ],
+    "category": "sports_performance",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "11641371",
+      "12660407",
+      "12580655",
+      "14660478",
+      "16377979",
+      "16521849",
+      "16937963",
+      "29296106",
+      "32778175",
+      "35644694",
+      "14607200",
+      "1354276",
+      "17109576"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed: exercise trials mostly null; small cardiac trials and one HFpEF phase 2 trial positive at 15 g/day or more in patients. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "exercise performance",
+      "muscle recovery",
+      "heart failure symptoms"
+    ],
+    "health_goals_supported": [],
+    "notes": "The stored rating cites only an open-label uncontrolled pilot (17109576). Controlled exercise trials are mostly null (11641371, 12660407, 12580655, 16521849, 16937963, 14660478), with dextrose ahead of ribose in rowers (16377979) and a benefit only in the less fit half of one crossover (29296106). A trial on soreness reports lower damage markers but a within-group soreness result (32778175). Cardiac results are positive in patients: a phase 2 HFpEF trial at 15 g/day (35644694), a CHF feasibility crossover of 15 (14607200), and 60 g/day for 3 days in coronary disease (1354276). Labels print 1.4 to 5.1 g a serving.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Healthy exercisers; patients with HFpEF, CHF or coronary disease",
+      "supported_outcomes": [
+        "exercise performance",
+        "muscle recovery",
+        "heart failure symptoms"
+      ],
+      "source_pmids": [
+        "11641371",
+        "12660407",
+        "12580655",
+        "14660478",
+        "16377979",
+        "16521849",
+        "16937963",
+        "29296106",
+        "32778175",
+        "35644694",
+        "14607200",
+        "1354276",
+        "17109576"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "The stored rating cites only an open-label uncontrolled pilot (17109576). Controlled exercise trials are mostly null (11641371, 12660407, 12580655, 16521849, 16937963, 14660478), with dextrose ahead of ribose in rowers (16377979) and a benefit only in the less fit half of one crossover (29296106). A trial on soreness reports lower damage markers but a within-group soreness result (32778175). Cardiac results are positive in patients: a phase 2 HFpEF trial at 15 g/day (35644694), a CHF feasibility crossover of 15 (14607200), and 60 g/day for 3 days in coronary disease (1354276). Labels print 1.4 to 5.1 g a serving. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+      "excluded_form_terms": [
+        "ribose-cysteine",
+        "nicotinamide riboside"
+      ]
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "11641371",
+        "title": "No effects of oral ribose supplementation on repeated maximal exercise and de novo ATP resynthesis.",
+        "citation": "Journal of applied physiology (Bethesda, Md. : 1985) (2001)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/11641371/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1152/jappl.2001.91.5.2275"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12660407",
+        "title": "Effects of oral D-ribose supplementation on anaerobic capacity and selected metabolic markers in healthy males.",
+        "citation": "International journal of sport nutrition and exercise metabolism (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12660407/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1123/ijsnem.13.1.76"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "12580655",
+        "title": "Effects of ribose supplementation on repeated sprint performance in men.",
+        "citation": "Journal of strength and conditioning research (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/12580655/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1519/1533-4287(2003)017<0047:eorsor>2.0.co;2"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "14660478",
+        "title": "Effect of ribose supplementation on resynthesis of adenine nucleotides after intense intermittent training in humans.",
+        "citation": "American journal of physiology. Regulatory, integrative and comparative physiology (2004)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14660478/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1152/ajpregu.00286.2003"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16377979",
+        "title": "Ribose versus dextrose supplementation, association with rowing performance: a double-blind study.",
+        "citation": "Clinical journal of sport medicine : official journal of the Canadian Academy of Sport Medicine (2006)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16377979/",
+        "publication_types": [
+          "Comparative Study",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1097/01.jsm.0000180022.44889.94"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16521849",
+        "title": "Effects of ribose supplementation prior to and during intense exercise on anaerobic capacity and metabolic markers.",
+        "citation": "International journal of sport nutrition and exercise metabolism (2005)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16521849/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1123/ijsnem.15.6.653"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "16937963",
+        "title": "Effects of ribose as an ergogenic aid.",
+        "citation": "Journal of strength and conditioning research (2006)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/16937963/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1519/17355.1"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "29296106",
+        "title": "The influence of D-ribose ingestion and fitness level on performance and recovery.",
+        "citation": "Journal of the International Society of Sports Nutrition (2017)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/29296106/",
+        "publication_types": [
+          "Clinical Trial",
+          "Comparative Study",
+          "Journal Article"
+        ],
+        "doi": "10.1186/s12970-017-0205-8"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32778175",
+        "title": "Effect of D-ribose supplementation on delayed onset muscle soreness induced by plyometric exercise in college students.",
+        "citation": "Journal of the International Society of Sports Nutrition (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32778175/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1186/s12970-020-00371-8"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "35644694",
+        "title": "Effects of Ubiquinol and/or D-ribose in Patients With Heart Failure With Preserved Ejection Fraction.",
+        "citation": "The American journal of cardiology (2022)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/35644694/",
+        "publication_types": [
+          "Clinical Trial, Phase II",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, N.I.H., Extramural",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.amjcard.2022.04.031"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "14607200",
+        "title": "D-Ribose improves diastolic function and quality of life in congestive heart failure patients: a prospective feasibility study.",
+        "citation": "European journal of heart failure (2003)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/14607200/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1016/s1388-9842(03)00060-6"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "1354276",
+        "title": "Effects of ribose on exercise-induced ischaemia in stable coronary artery disease.",
+        "citation": "Lancet (London, England) (1992)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/1354276/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/0140-6736(92)91709-h"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "17109576",
+        "title": "The use of D-ribose in chronic fatigue syndrome and fibromyalgia: a pilot study.",
+        "citation": "Journal of alternative and complementary medicine (New York, N.Y.) (2006)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/17109576/",
+        "publication_types": [
+          "Clinical Trial",
+          "Journal Article"
+        ],
+        "doi": "10.1089/acm.2006.12.857"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: d_ribose effect_direction null, agent review; the contexts below are the reading behind it."
+}

@@ -1,0 +1,26 @@
+{
+"canonical": "maqui_berry",
+"labels": 1,
+"stored": "positive_moderate",
+"as_read": "The label's own preparation and dose has one positive 74-person placebo-controlled trial for tear production, whose abstract names no primary outcome; the stored Delphinol trial is a different amount and purpose.",
+"route": "held",
+"positive_named": [
+"31193920",
+"37026311",
+"25208615",
+"26400431"
+],
+"settling_paper": "31193920: full text would state whether a primary outcome was named and which one. The abstract gives MaquiBright 60 mg daily for 4 weeks and a between-group Schirmer's test result, which matches label 232478 exactly.",
+"stop_list": [
+"37026311 prints no extract amount, so its dose stays extraction_pending"
+],
+"stored_rating_note": "positive_moderate is attached to Delphinol oxidative stress markers (PMID 26400431), reported against baseline, and not to the tear purpose or 60 mg amount this label prints.",
+"pmids_read": [
+"26400431",
+"31193920",
+"37026311",
+"42351960",
+"25208615"
+],
+"unread_notes": "Abstracts only. Searches: (maqui OR \"Aristotelia chilensis\" OR Delphinol OR MaquiBright) randomized trial, count 13; MaquiBright OR (maqui AND (\"dry eye\" OR tear OR \"eye fatigue\")), count 5. Other hits were food or beverage studies or postprandial studies off the label's purpose and were not opened: 24861886, 36420523, 34323244, 33546941, 33499139, 42941909. No statement about them is made. Off-brief step: an NCBI id converter, not a listed helper, was queried with PMIDs only and returned PMC6544612 for 31193920 and PMC10276697 for 37026311. These ids did not come from pm.py's output, so neither full text was opened and nothing here relies on them."
+}

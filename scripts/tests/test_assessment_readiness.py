@@ -1589,22 +1589,31 @@ def test_empty_generic_dependencies_pass_only_for_actual_selected_nutrition_auth
     assert evaluate_release_assessment(product, readiness, module, unfinished_source=None)['is_complete'] is False
 
 
-def test_zero_native_credit_does_not_close_unreviewed_purpose_transfer():
+def test_unrelated_claim_does_not_reopen_reviewed_native_ingredient_evidence():
     from test_probiotic_applicability_rubric import strain_product
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from assessment_readiness import evaluate_release_assessment
     product = strain_product(clinical_id='STRAIN_PLANTARUM_299V',
                              name='Lactobacillus plantarum 299v', dose=1e10)
-    product['product_name'] = 'Sleep support probiotic'  # Unrelated to the IBS context.
+    baseline = score_evidence(product)
+    product['product_name'] = 'Sleep support probiotic'  # Unrelated claim remains separate.
     evidence = score_evidence(product)
-    assert evidence['score'] == 0
-    assert evidence['metadata']['evidence_result_state'] == 'research_present_applicability_unestablished'
+    assert evidence['score'] == baseline['score'] == 16
+    for current, previous in zip(evidence['metadata']['contributing_native_contexts'],
+                                 baseline['metadata']['contributing_native_contexts'], strict=True):
+        for key in ('context_id', 'source_pmids', 'population', 'dose', 'outcomes'):
+            assert current.get(key) == previous.get(key)
+    assert evidence['metadata']['evidence_result_state'] == 'evaluated_applicable'
     readiness = {name: {'readiness': 'complete'} for name in
                  ('identity', 'dose', 'evidence', 'verification', 'route')}
     result = evaluate_release_assessment(product, readiness,
         {'module': 'probiotic', 'dimensions': {'evidence': evidence}}, unfinished_source=None)
-    assert result['is_complete'] is False
-    assert 'probiotic_evidence_assessment_incomplete' in result['blockers']
+    original = evaluate_release_assessment(product, readiness,
+        {'module': 'probiotic', 'dimensions': {'evidence': baseline}}, unfinished_source=None)
+    assert result == original
+    # The existing source's unfinished outcome review stays visible; a label
+    # claim neither creates nor removes that independent source limitation.
+    assert result['blockers'] == ['probiotic_contributing_context_incomplete:p299v_ibs_rome3_22912552']
 
 
 @pytest.mark.parametrize("module", ["generic", "fiber_digestive", "sports", "multi_or_prenatal"])
@@ -1853,3 +1862,24 @@ def test_literature_gap_cannot_be_completed_by_an_earlier_backed_owner_name():
         'literature_applicability_unestablished', owner_facts={'literature_evidence': {}},
         blocking_reasons=['literature_applicability_unestablished'])
     assert _resolved_evidence_assessment(resolution)[0] == 'not_yet_evaluated'
+
+
+@pytest.mark.parametrize('module', ['generic', 'sports', 'multi_or_prenatal', 'b_complex'])
+def test_principal_unreviewed_ingredient_holds_nutrient_supported_formula(module):
+    from assessment_readiness import evaluate_release_assessment
+    from evidence_resolver import evidence_required_canonicals
+    rows = [{'name': 'Vitamin C', 'canonical_id': 'vitamin_c', 'quantity': 100, 'unit': 'mg',
+             'bio_score': 15, 'mapped': True, 'raw_source_path': 'ingredientRows[0]'},
+            {'name': 'Acetyl-L-Carnitine', 'canonical_id': 'l_carnitine', 'quantity': 250, 'unit': 'mg',
+             'bio_score': 15, 'mapped': True, 'raw_source_path': 'ingredientRows[1]'}]
+    product = {'product_name': 'Nutrient Complex', 'activeIngredients': rows,
+               'ingredient_quality_data': {'ingredients_scorable': rows}}
+    assert 'l_carnitine' in evidence_required_canonicals(product, module=module)
+    readiness = {name: {'readiness': 'complete'} for name in ('identity','dose','verification','route')}
+    readiness['evidence'] = {'readiness': 'incomplete', 'not_yet_evaluated_row_refs': ['ingredientRows[1]'],
+        'ingredient_assessments': [{'source_row_ref': 'ingredientRows[1]', 'canonical_id': 'l_carnitine',
+                                   'role': 'major', 'state': 'not_yet_evaluated'}]}
+    result = evaluate_release_assessment(product, readiness, {'module': module,
+        'dimensions': {'evidence': {'score': 3.3, 'metadata': {'evidence_result_state': 'evaluated_authority'}}}},
+        unfinished_source=None)
+    assert 'evidence_assessment_incomplete' in result['blockers']

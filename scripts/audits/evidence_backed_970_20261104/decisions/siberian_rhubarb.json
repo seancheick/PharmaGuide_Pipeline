@@ -1,0 +1,49 @@
+{
+"canonical": "siberian_rhubarb",
+"labels": 1,
+"stored": "positive_moderate",
+"as_read": "Two placebo-controlled trials of about 110 perimenopausal women each report a significant primary outcome for the exact extract the label prints; the mg amount appears only in a later abstract.",
+"route": "packet_no_credit",
+"positive_named": [
+"16894335",
+"19161045",
+"17213754",
+"42416823",
+"18978638"
+],
+"studies_to_add": [
+{
+"pmid": "16894335",
+"study_type": "rct",
+"sample_size": 109,
+"primary_endpoint": "Change in Menopause Rating Scale II total score after 12 weeks",
+"effect_direction": "positive",
+"quote": "Primary outcome criterion for efficacy was the change in Menopause Rating Scale II (MRS II) total score after 12 weeks."
+},
+{
+"pmid": "19161045",
+"study_type": "rct",
+"sample_size": 112,
+"primary_endpoint": "Change in Menopause Rating Scale total score from day 0 to day 84",
+"effect_direction": "positive",
+"quote": "Primary outcome criterion for efficacy of ERr 731 compared to placebo was the change of the Menopause Rating Scale (MRS) total score from day 0 to day 84."
+}
+],
+"stop_list": [
+"16894335 and 19161045 print one enteric-coated tablet and no mg; 4 mg comes only from 42416823, and linking it to 19161045 by the shared 112 sample is an inference"
+],
+"clinician_items": [
+"19161045: fourteen adverse events in total, 11 by 5 women on ERr 731 and 3 by 3 women on placebo; the abstract does not name them.",
+"16894335: no differences in gynecological findings including endometrial biopsies, bleeding, weight, blood pressure, pulse and laboratory safety parameters."
+],
+"stored_rating_note": "Stored on PMID 17213754, an anxiety report with the same size and arms as PMID 16894335, which reports the named primary outcome. PMID 16894335 and the second trial, PMID 19161045, are not stored.",
+"pmids_read": [
+"17213754",
+"16894335",
+"19161045",
+"18978638",
+"42416823",
+"42973544"
+],
+"unread_notes": "Abstracts only. One search, count 11: (\"ERr 731\" OR \"Rheum rhaponticum\" OR \"Siberian rhubarb\" OR rhapontic) randomized trial. Not opened: 34346265, 24605800, 41377590, and letters 17679150, 17290163. 19161045 and 16894335 full text would confirm the tablet's mg amount."
+}

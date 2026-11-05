@@ -696,7 +696,12 @@ def _held_scoring_pair(tmp_path, pid='321405', *, monkeypatch):
                               evidence_data={'clinical_matches': matches})
             payload = score_evidence(source, apply_primary_floor=True, owner_scoped=True)
         evidence.clear(); evidence.update(payload)
-    from assessment_readiness import evaluate_release_assessment
+    from assessment_readiness import evaluate_evidence_assessment, evaluate_release_assessment
+    if pid in READ_PANEL_LABELS:
+        # The final panel's source rows replace the original Bromelain fixture;
+        # its Evidence readiness must be derived from that same final source.
+        product['assessment_readiness']['evidence'] = evaluate_evidence_assessment(
+            source, module=product['_v4_module_breakdown']['module'])
     product['assessment_readiness']['release_assessment'] = evaluate_release_assessment(
         source, product['assessment_readiness'], product['_v4_module_breakdown'], unfinished_source=None)
     read_panel = pid in READ_PANEL_LABELS
@@ -825,7 +830,7 @@ def test_current_lineage_allows_only_truthful_held_evidence_without_clearing_com
 
 
 @pytest.mark.parametrize('pid', sorted(READ_PANEL_LABELS))
-def test_a_read_panel_completes_without_reading_as_a_review_of_every_row(tmp_path, pid, monkeypatch):
+def test_read_panel_completion_uses_its_own_source_readiness(tmp_path, pid, monkeypatch):
     from scoring_v4.quality_score import evidence_display_state
     _, product, _, scored = _held_scoring_pair(tmp_path, pid, monkeypatch=monkeypatch)
     args = _args(scored)
@@ -836,7 +841,7 @@ def test_a_read_panel_completes_without_reading_as_a_review_of_every_row(tmp_pat
     assert evidence_display_state(evidence['metadata']['evidence_result_state']) != 'not_yet_reviewed'
     release = product['assessment_readiness']['release_assessment']
     assert release['is_complete'] is True and release['blockers'] == []
-    assert product['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+    assert product['assessment_readiness']['evidence']['readiness'] == 'complete'
 
 
 @pytest.mark.parametrize('change', ['missing_metadata', 'positive_credit', 'identity', 'dose', 'safety',
@@ -971,7 +976,7 @@ def test_native_partial_requires_approved_applicable_positive_primary(tmp_path, 
 
 
 @pytest.mark.parametrize('change', ['under_clinical_scope', 'missing_directions'])
-def test_held_evidence_floor_never_bypasses_its_existing_signed_exposure_scope(tmp_path, monkeypatch, change):
+def test_retained_ingredient_evidence_is_independent_of_daily_exposure(tmp_path, monkeypatch, change):
     from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
     from stage_manifest import write_stage_manifest
     source, _, enriched, scored = _held_scoring_pair(tmp_path, '306381', monkeypatch=monkeypatch)
@@ -987,7 +992,11 @@ def test_held_evidence_floor_never_bypasses_its_existing_signed_exposure_scope(t
         **stage_input_fingerprints(REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([enriched])})
     args = _args(scored)
     args.completion_only = True
-    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' in {f.code for f in audit_scoring(args)}
+    assert 'SCORING_RELEASE_ASSESSMENT_INCOMPLETE' not in {f.code for f in audit_scoring(args)}
+    from clinical_applicability import assess_clinical_applicability
+    decision = assess_clinical_applicability(source, source['evidence_data']['clinical_matches'][0],
+                                             assess_amount=True)
+    assert decision['status'] != 'applicable'
 
 
 @pytest.mark.parametrize('pid', ['306381', '307621'])

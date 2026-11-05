@@ -1,0 +1,877 @@
+{
+  "record_id": "INGR_ALPHA_LINOLENIC_ACID",
+  "labels": 10,
+  "stored_direction": "mixed",
+  "direction_as_read": "Mixed: null on events and blood pressure in on-target trials, small pooled lipid and arrhythmia signals, and one positive test of six primary cognitive functions",
+  "decision": "closed_no_credit",
+  "summary": "Ten labels print alpha-linolenic acid at 50 mg to 2.5 g, in eight as the fatty acid fraction beside an oil or other omega rows and in two (Brainy Chews, 50 mg) as a bare row. The largest trial (20929341, 1.9 g in margarine) was null on its primary outcome, a flaxseed oil trial (30392473, 4.7 g) was null on blood pressure, and a 2.2 g flaxseed oil trial (36986229) moved one of its cognitive tests. Cochrane (32114706) finds little or no difference for mortality and coronary events with small signals on events and arrhythmia.",
+  "question_for_clinician": null,
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_alpha_linolenic_acid_36986229",
+      "components": [
+        "INGR_ALPHA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "36986229"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Linum usitatissimum",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "healthy_older_adults",
+      "purpose": "cognitive_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_alpha_linolenic_acid_36986229",
+      "population": {
+        "age_group": "older_adult",
+        "description": "60 healthy adults aged 65 to 80 without cognitive impairment or depression."
+      },
+      "study_design": "Randomized double-blind placebo-controlled trial, isocaloric corn oil control, 12 weeks; exploratory by the authors' description",
+      "outcomes": [
+        {
+          "name": "Six primary cognitive functions: verbal fluency change greater than control (0.30 vs 0.03, p < 0.05); all other cognitive test scores not significantly different",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Authors call the evaluation exploratory and ask for further validation.",
+        "One of many tests differed.",
+        "The cognitive-purpose labels print 50 mg alpha-linolenic acid, far below this trial.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          2.2
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "3.7 g/day flaxseed oil containing 2.2 g alpha-linolenic acid for 12 weeks.",
+        "normalization": {
+          "basis": "Amount printed as alpha-linolenic acid delivered by the oil; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "36986229",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_alpha_linolenic_acid_20929341",
+      "components": [
+        "INGR_ALPHA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "20929341"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "post_myocardial_infarction",
+      "purpose": "cardiovascular_event_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_alpha_linolenic_acid_20929341",
+      "population": {
+        "age_group": "older_adult",
+        "description": "4837 patients aged 60 to 80, 78% men, with prior myocardial infarction on state-of-the-art therapy."
+      },
+      "study_design": "Multicenter double-blind placebo-controlled factorial trial of trial margarines, 40 months, intention to treat",
+      "outcomes": [
+        {
+          "name": "Major cardiovascular events with ALA: hazard ratio 0.91 (95% CI 0.78 to 1.05, P = 0.20)",
+          "hierarchy": "primary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Prespecified subgroup of women: hazard ratio 0.73 (95% CI 0.51 to 1.03, P = 0.07)",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "post_hoc_subgroup"
+        }
+      ],
+      "limitations": [
+        "ALA given in margarine, not a capsule or oil supplement.",
+        "Factorial design with an EPA-DHA arm; hazard ratio as printed for ALA.",
+        "Post-infarction patients on full therapy.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          1.9
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Margarine supplemented with ALA, 18.8 g margarine per day on average, additional intake 1.9 g ALA, for 40 months.",
+        "normalization": {
+          "basis": "Amount printed as alpha-linolenic acid delivered by the oil; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "20929341",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_alpha_linolenic_acid_40754213",
+      "components": [
+        "INGR_ALPHA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "40754213"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "food_matrix",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "middle_aged_women",
+      "purpose": "skin_barrier",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_alpha_linolenic_acid_40754213",
+      "population": {
+        "age_group": "adult",
+        "description": "120 Japanese women aged 45 to 65."
+      },
+      "study_design": "Randomized double-blind placebo-controlled parallel-group trial of edible oil blends, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Transepidermal water loss: no significant diet effect (P = 0.428 and P = 0.329)",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Skin hydration: significant diet effect in an exploratory outcome (P = 0.020)",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Subjective fatigue: no significant differences between groups",
+          "hierarchy": "secondary",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Edible oil blends; oil identity is not in the abstract.",
+        "Abstract read to its cut at 1900 characters, past the results.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          0.97,
+          1.36,
+          2.13
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "One of three edible oil blends giving 0.97, 1.36 or 2.13 g/d ALA, or placebo, for 12 weeks.",
+        "normalization": {
+          "basis": "Amount printed as alpha-linolenic acid delivered by the oil; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "40754213",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_alpha_linolenic_acid_30392473",
+      "components": [
+        "INGR_ALPHA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "30392473"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Linum usitatissimum",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "prehypertension_overweight",
+      "purpose": "blood_pressure",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_alpha_linolenic_acid_30392473",
+      "population": {
+        "age_group": "adult",
+        "description": "59 overweight and obese adults with (pre-)hypertension, mean age 60."
+      },
+      "study_design": "Double-blind randomised placebo-controlled parallel study, high-oleic sunflower oil control, 12 weeks",
+      "outcomes": [
+        {
+          "name": "24 h mean arterial pressure change -1.4 mmHg (95% CI -4.8 to 2.0, P = 0.40), not significant",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract does not use the words primary outcome.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          4.7
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "10 g refined cold-pressed flaxseed oil daily, providing 4.7 g ALA, for 12 weeks.",
+        "normalization": {
+          "basis": "Amount printed as alpha-linolenic acid delivered by the oil; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "30392473",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_alpha_linolenic_acid_31818531",
+      "components": [
+        "INGR_ALPHA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "31818531"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Linum usitatissimum",
+        "plant_part": "seed"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "prehypertension_overweight",
+      "purpose": "vascular_function",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_alpha_linolenic_acid_31818531",
+      "population": {
+        "age_group": "adult",
+        "description": "59 overweight and obese adults, high-normal pressure or stage I hypertension, aged 60 on average."
+      },
+      "study_design": "Double-blind randomized placebo-controlled parallel study, high-oleic sunflower oil control, 12 weeks",
+      "outcomes": [
+        {
+          "name": "Flow-mediated vasodilation, pulse wave velocity and retinal calibers unchanged",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Fasting free fatty acids and TNF-alpha decreased",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract names no primary outcome.",
+        "Appears to share participants with 30392473; the abstract does not say so.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "g",
+        "values": [
+          4.7
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 84,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "10 g refined cold-pressed flaxseed oil daily, providing 4.7 g ALA, for 12 weeks.",
+        "normalization": {
+          "basis": "Amount printed as alpha-linolenic acid delivered by the oil; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "31818531",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_alpha_linolenic_acid_32114706",
+      "components": [
+        "INGR_ALPHA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "32114706"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "cardiovascular_risk",
+      "purpose": "cardiovascular_event_prevention",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_alpha_linolenic_acid_32114706",
+      "population": {
+        "age_group": "adult",
+        "description": "ALA arm: 5 RCTs, 19,327 participants; adults at varying cardiovascular risk."
+      },
+      "study_design": "Cochrane systematic review and meta-analysis of RCTs lasting at least 12 months, search to February 2019",
+      "outcomes": [
+        {
+          "name": "All-cause mortality RR 1.01 (95% CI 0.84 to 1.20), moderate certainty, little or no difference",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Coronary heart disease events RR 1.00 (95% CI 0.82 to 1.22), low certainty",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Cardiovascular disease events RR 0.95 (95% CI 0.83 to 1.07), low certainty; authors say may slightly reduce",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "mixed",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "Arrhythmia RR 0.73 (95% CI 0.55 to 0.97), moderate certainty, 2 RCTs",
+          "hierarchy": "not_reported",
+          "kind": "patient_important",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract says some trials used ALA-rich or enriched foods or dietary advice.",
+        "ALA doses are not in the abstract; the doses printed are for long-chain omega-3.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "ALA doses not in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "32114706",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_alpha_linolenic_acid_32643951",
+      "components": [
+        "INGR_ALPHA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "32643951"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "mixed_adults",
+      "purpose": "blood_lipids",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_alpha_linolenic_acid_32643951",
+      "population": {
+        "age_group": "adult",
+        "description": "47 studies, 1305 in the ALA arm and 1325 controls."
+      },
+      "study_design": "Systematic review and meta-analysis of randomized controlled trials, search to March 2018",
+      "outcomes": [
+        {
+          "name": "TG -0.101, TC -0.140, LDL-C -0.131 mmol/L, each significant",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "HDL-C no effect (P = 0.541)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Abstract describes dietary ALA intake; supplement forms are not separated.",
+        "Lipids are surrogates.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Per-gram dose response only; no regimen in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "32643951",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_alpha_linolenic_acid_37778442",
+      "components": [
+        "INGR_ALPHA_LINOLENIC_ACID"
+      ],
+      "source_pmids": [
+        "37778442"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "overweight_obesity",
+      "purpose": "cardiovascular_risk_markers",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_alpha_linolenic_acid_37778442",
+      "population": {
+        "age_group": "adult",
+        "description": "19 RCTs, 1183 adults with overweight or obesity."
+      },
+      "study_design": "Systematic review and meta-analysis, search to April 2023",
+      "outcomes": [
+        {
+          "name": "CRP, TNF-alpha, triglycerides and systolic pressure reduced",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "LDL cholesterol increased (SMD 1.32 mg/dL)",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "negative",
+          "outcome_role": "direct_between_group_effect"
+        },
+        {
+          "name": "IL-6, diastolic pressure, total and HDL cholesterol no significant effect",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "direct_between_group_effect"
+        }
+      ],
+      "limitations": [
+        "Oral supplementation, food or combined interventions containing vegetable ALA sources are pooled.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Subgroup at 3 g/d or more; no single regimen.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "37778442",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "32175534": "Compares EPA/DHA with ALA; no ALA-versus-control estimate.",
+    "39558500": "Pools 14 olive oil and 3 flaxseed oil trials; no flaxseed-only estimate in the abstract."
+  },
+  "stop_or_hold": "Labels print a fatty acid amount inside an oil or blend, and most trials give that amount through an oil or margarine, so the fields can't separate the fatty acid from its carrier.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "36986229",
+      "title_fetched": "Supplementation with Flaxseed Oil Rich in Alpha-Linolenic Acid Improves Verbal Fluency in Healthy Older Adults.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36986229/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "20929341",
+      "title_fetched": "n-3 fatty acids and cardiovascular events after myocardial infarction.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20929341/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40754213",
+      "title_fetched": "The Effects of α-Linolenic Acid Intake on Skin and Blood Vessel Health and Subjective Fatigue in Middle-Aged Japanese Females: A Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Comparative Trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40754213/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "30392473",
+      "title_fetched": "Effect of α-linolenic acid on 24-h ambulatory blood pressure in untreated high-normal and stage I hypertensive subjects.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30392473/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "31818531",
+      "title_fetched": "Effect of α-linolenic acid on vascular function and metabolic risk markers during the fasting and postprandial phase: A randomized placebo-controlled trial in untreated (pre-)hypertensive individuals.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31818531/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32114706",
+      "title_fetched": "Omega-3 fatty acids for the primary and secondary prevention of cardiovascular disease.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32114706/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32643951",
+      "title_fetched": "Effects of α-linolenic acid intake on blood lipid profiles：a systematic review and meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32643951/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "37778442",
+      "title_fetched": "Effect of Alpha-Linolenic Acid Supplementation on Cardiovascular Disease Risk Profile in Individuals with Obesity or Overweight: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37778442/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "32175534",
+      "title_fetched": "Effects of eicosapentaenoic acid and docosahexaenoic acid versus α-linolenic acid supplementation on cardiometabolic risk factors: a meta-analysis of randomized controlled trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32175534/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "39558500",
+      "title_fetched": "Supplementation of Olive Oil and Flaxseed Oil on Blood Pressure and Inflammation in Healthy and At-Risk Adults: A Systematic Literature Review and Meta-Analysis.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39558500/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_ALPHA_LINOLENIC_ACID",
+    "standard_name": "Alpha-Linolenic Acid",
+    "aliases": [
+      "Alpha-Linolenic Acid"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "36986229",
+      "20929341",
+      "40754213",
+      "30392473",
+      "31818531",
+      "32114706",
+      "32643951",
+      "37778442"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "Mixed: null on events and blood pressure in on-target trials, small pooled lipid and arrhythmia signals, and one positive test of six primary cognitive functions. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "major cardiovascular events",
+      "blood pressure",
+      "blood lipids",
+      "cognitive function"
+    ],
+    "health_goals_supported": [],
+    "notes": "Ten labels print alpha-linolenic acid at 50 mg to 2.5 g, in eight as the fatty acid fraction beside an oil or other omega rows and in two (Brainy Chews, 50 mg) as a bare row. The largest trial (20929341, 1.9 g in margarine) was null on its primary outcome, a flaxseed oil trial (30392473, 4.7 g) was null on blood pressure, and a 2.2 g flaxseed oil trial (36986229) moved one of its cognitive tests. Cochrane (32114706) finds little or no difference for mortality and coronary events with small signals on events and arrhythmia.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults at varying cardiovascular risk, adults with raised blood pressure, and healthy older adults; no single population.",
+      "supported_outcomes": [
+        "major cardiovascular events",
+        "blood pressure",
+        "blood lipids",
+        "cognitive function"
+      ],
+      "source_pmids": [
+        "36986229",
+        "20929341",
+        "40754213",
+        "30392473",
+        "31818531",
+        "32114706",
+        "32643951",
+        "37778442"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "Ten labels print alpha-linolenic acid at 50 mg to 2.5 g, in eight as the fatty acid fraction beside an oil or other omega rows and in two (Brainy Chews, 50 mg) as a bare row. The largest trial (20929341, 1.9 g in margarine) was null on its primary outcome, a flaxseed oil trial (30392473, 4.7 g) was null on blood pressure, and a 2.2 g flaxseed oil trial (36986229) moved one of its cognitive tests. Cochrane (32114706) finds little or no difference for mortality and coronary events with small signals on events and arrhythmia. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "36986229",
+        "title": "Supplementation with Flaxseed Oil Rich in Alpha-Linolenic Acid Improves Verbal Fluency in Healthy Older Adults.",
+        "citation": "Nutrients (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/36986229/",
+        "publication_types": [
+          "Randomized Controlled Trial",
+          "Journal Article"
+        ],
+        "doi": "10.3390/nu15061499"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "20929341",
+        "title": "n-3 fatty acids and cardiovascular events after myocardial infarction.",
+        "citation": "The New England journal of medicine (2010)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/20929341/",
+        "publication_types": [
+          "Journal Article",
+          "Multicenter Study",
+          "Randomized Controlled Trial",
+          "Research Support, N.I.H., Extramural",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1056/NEJMoa1003603"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40754213",
+        "title": "The Effects of α-Linolenic Acid Intake on Skin and Blood Vessel Health and Subjective Fatigue in Middle-Aged Japanese Females: A Randomized, Double-Blind, Placebo-Controlled, Parallel-Group Comparative Trial.",
+        "citation": "The Journal of nutrition (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40754213/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Comparative Study",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.tjnut.2025.07.023"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "30392473",
+        "title": "Effect of α-linolenic acid on 24-h ambulatory blood pressure in untreated high-normal and stage I hypertensive subjects.",
+        "citation": "The British journal of nutrition (2019)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/30392473/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1017/S0007114518003094"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "31818531",
+        "title": "Effect of α-linolenic acid on vascular function and metabolic risk markers during the fasting and postprandial phase: A randomized placebo-controlled trial in untreated (pre-)hypertensive individuals.",
+        "citation": "Clinical nutrition (Edinburgh, Scotland) (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/31818531/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.clnu.2019.11.032"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32114706",
+        "title": "Omega-3 fatty acids for the primary and secondary prevention of cardiovascular disease.",
+        "citation": "The Cochrane database of systematic reviews (2020)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32114706/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Research Support, Non-U.S. Gov't",
+          "Systematic Review"
+        ],
+        "doi": "10.1002/14651858.CD003177.pub5"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "32643951",
+        "title": "Effects of α-linolenic acid intake on blood lipid profiles：a systematic review and meta-analysis of randomized controlled trials.",
+        "citation": "Critical reviews in food science and nutrition (2021)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/32643951/",
+        "publication_types": [
+          "Journal Article",
+          "Meta-Analysis",
+          "Systematic Review"
+        ],
+        "doi": "10.1080/10408398.2020.1790496"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "37778442",
+        "title": "Effect of Alpha-Linolenic Acid Supplementation on Cardiovascular Disease Risk Profile in Individuals with Obesity or Overweight: A Systematic Review and Meta-Analysis of Randomized Controlled Trials.",
+        "citation": "Advances in nutrition (Bethesda, Md.) (2023)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/37778442/",
+        "publication_types": [
+          "Meta-Analysis",
+          "Systematic Review",
+          "Journal Article",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.advnut.2023.09.010"
+      }
+    ]
+  },
+  "closed_through": "scripts/data/literature_evidence_records.json: alpha_linolenic_acid effect_direction null, agent review; the contexts below are the reading behind it."
+}

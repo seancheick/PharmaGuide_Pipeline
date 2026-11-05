@@ -24,10 +24,11 @@ def test_nonhuman_native_reference_does_not_earn_human_clinical_credit(clinical_
     product = strain_product(clinical_id=clinical_id, name=name)
     if clinical_id == "STRAIN_ACIDOPHILUS_NCFM":
         # No claim is required, so the null IBS trial is the scoped finding for
-        # a claim-free label; an unrelated label keeps it out entirely.
+        # a claim-free label and an unrelated marketing claim alike.
         assert score_evidence(product)["metadata"]["evidence_result_state"] == "evaluated_null"
         unrelated = {**product, "product_name": "Sleep support probiotic"}
-        assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+        assert score_evidence(unrelated)["metadata"]["evidence_result_state"] == "evaluated_null"
+        assert score_evidence(unrelated)["score"] == 0
         product["statements"] = [{"type": "Formulation re: Other",
                                   "notes": "Support for irritable bowel syndrome"}]
     result = score_evidence(product)

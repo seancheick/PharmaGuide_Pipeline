@@ -26,14 +26,14 @@ EVIDENCE = ["evidence_assessment_incomplete"]
 # Label, and the rows left open on it where the review was never performed.
 COMPLETES = [
     pytest.param("a9_partial_full_evidence_328830_raw.json", True, id="multi_panel_read_addin_open"),
-    pytest.param("a9_completion_180213_raw.json", True, id="multi_panel_read_addins_open"),
     pytest.param("a9_completion_2715_raw.json", True, id="sports_adjunct_by_materiality"),
     pytest.param("a9_completion_252445_raw.json", False, id="finished_review_outside_scope"),
     pytest.param("raw_bamboo_252349.json", False, id="finished_authority_no_credit"),
     pytest.param("a9_finished_authority_no_credit_216405_raw.json", False, id="finished_authority_silica"),
-    pytest.param("a9_completion_256991_raw.json", True, id="multi_panel_finished_beetroot"),
 ]
 HELD = [
+    pytest.param("a9_completion_180213_raw.json", EVIDENCE, id="multi_required_botanical_reviews"),
+    pytest.param("a9_completion_256991_raw.json", EVIDENCE, id="multi_required_food_reviews"),
     pytest.param("a9_completion_12147_raw.json", EVIDENCE, id="title_owner_lcarnitine"),
     pytest.param("a9_completion_12853_raw.json", EVIDENCE, id="title_owner_valerian"),
     pytest.param("a9_completion_1055_raw.json", EVIDENCE, id="retained_credit_owner_open"),
@@ -125,7 +125,6 @@ def test_a_blend_member_completes_only_on_its_own_reviewed_decision(pipeline):
     pytest.param("a9_title_subject_293389_raw.json", "elderberry", id="genus_sambucus"),
     pytest.param("a9_title_subject_251695_raw.json", "elderberry", id="genus_sambucus_with_vitamin_c_credit"),
     pytest.param("a9_title_subject_178674_raw.json", "fish_oil", id="source_fish"),
-    pytest.param("a9_title_subject_221657_raw.json", "epa", id="class_omega"),
     pytest.param("a9_title_subject_243141_raw.json", "reishi", id="class_mushroom"),
     pytest.param("a9_title_subject_25921_raw.json", "maca", id="brand_reparagen"),
 ])
@@ -139,9 +138,10 @@ def test_an_unread_ingredient_the_title_names_holds_the_product(pipeline, label,
     assert "evidence_assessment_incomplete" in held["assessment_readiness"]["release_assessment"]["blockers"]
     assert open_row in {row["canonical_id"] for row in _unreviewed_rows(held)}
 
-    # The title word decides completion alone: its role and points stay where they were.
+    # These identities are now required by the shared formulation owner too.
+    # Disabling the separate title check must not complete their open reviews.
     from evidence_resolver import evidence_required_canonicals
-    assert open_row not in evidence_required_canonicals(
+    assert open_row in evidence_required_canonicals(
         enriched, module=held["_v4_module_breakdown"]["module"])
     original = assessment_readiness._title_names_an_open_row
     monkeypatch.setattr(assessment_readiness, "_title_names_an_open_row", lambda *_: False)
@@ -150,7 +150,7 @@ def test_an_unread_ingredient_the_title_names_holds_the_product(pipeline, label,
     monkeypatch.setattr(assessment_readiness, "_hidden_amount_blockers", lambda *_: [])
     unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
     monkeypatch.setattr(assessment_readiness, "_title_names_an_open_row", original)
-    assert unheld["quality_assessment_status"] == "complete"
+    assert unheld["quality_assessment_status"] == "partial"
     for field in ("quality_score_v4_100", "quality_tier", "quality_score_status", "product_safety_status",
                   "safety_assessment_status", "verdict"):
         assert held[field] == unheld[field]
@@ -314,18 +314,18 @@ def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, lab
     # The hold is status alone: the hidden amount keeps its neutral Dose either way.
     monkeypatch.setattr(assessment_readiness, "_dose_rests_on_a_hidden_amount", lambda *_: False)
     unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
-    # Disabling the amount hold cannot complete a separate unresolved primary
-    # literature path. Leucine is a required Evidence owner on these two labels.
+    # Leucine's reviewed no-credit conclusion is independent of the amount
+    # hold. The neutral dose and the existing numeric outputs stay unchanged.
     if label in {"a9_hidden_amount_2219_raw.json", "a9_hidden_amount_2221_raw.json"}:
-        from evidence_resolver import evidence_required_canonicals
-
-        assert "l_leucine" in evidence_required_canonicals(
-            enriched, module=unheld["_v4_module_breakdown"]["module"])
+        assessments = unheld["assessment_readiness"]["evidence"]["ingredient_assessments"]
         assert any(row["canonical_id"] == "l_leucine"
-                   and row["reason_code"] == "literature_reviewed_human_clinical_evidence"
-                   for row in _unreviewed_rows(unheld))
+                   and row["reason_code"] == "literature_reviewed_null_or_unfavorable"
+                   and row["state"] == "evaluated_limited_or_negative"
+                   for row in assessments)
+    if label in {"a9_hidden_amount_2219_raw.json", "a9_hidden_amount_2221_raw.json"}:
+        # Removing an amount blocker cannot close the other principal reviews.
         assert unheld["quality_assessment_status"] == "partial"
-        assert "evidence_assessment_incomplete" in unheld["assessment_readiness"]["release_assessment"]["blockers"]
+        assert "evidence_assessment_incomplete" in _release_blockers(unheld)
     else:
         assert unheld["quality_assessment_status"] == "complete"
     for field in ("quality_score_v4_100", "quality_tier", "quality_score_status", "product_safety_status",
@@ -357,7 +357,13 @@ def test_a_hidden_amount_a_safety_check_needs_holds_both_statuses(pipeline, labe
     assert scored["quality_assessment_status"] == "partial"
     assert scored["safety_assessment_status"] == "incomplete"
     assert SAFETY_OPEN in _release_blockers(scored)
-    assert not any(blocker.startswith("evidence_") for blocker in _release_blockers(scored))
+    if subject == "boron":
+        # The undisclosed member retains its separate clinical source hold.
+        assert "evidence_assessment_incomplete" in _release_blockers(scored)
+        assert any(row["canonical_id"] == "boron" and row["reason_code"] == "clinical_sources_ineligible"
+                   for row in scored["assessment_readiness"]["evidence"]["ingredient_assessments"])
+    else:
+        assert not any(blocker.startswith("evidence_") for blocker in _release_blockers(scored))
 
 
 def test_a_threshold_the_blend_cant_reach_leaves_the_safety_checks_finished(pipeline):
@@ -506,3 +512,15 @@ def test_a_measured_zero_isnt_a_hidden_amount(pipeline):
     print_zero(raw["ingredientRows"])
     scored = build_scored_artifact(enricher.enrich_product(normalizer.normalize_product(raw))[0])
     assert SAFETY_OPEN not in _release_blockers(scored)
+
+
+def test_mixed_formula_keeps_its_reviewed_omega_ingredient_complete(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+    scored = build_scored_artifact(_enrich(pipeline, "a9_title_subject_221657_raw.json"))
+    assert scored["quality_assessment_status"] == "partial"
+    rows = scored["assessment_readiness"]["evidence"]["ingredient_assessments"]
+    assert any(row["canonical_id"] == "glutathione" and row["state"] == "not_yet_evaluated" for row in rows)
+    for canonical in ("epa", "dha"):
+        row = next(row for row in rows if row["canonical_id"] == canonical)
+        assert row["state"] == "evaluated_supported"
+        assert row["reason_code"] == "dietary_reference_intake_authority_established"

@@ -1,0 +1,8 @@
+{"canonical":"feverfew","labels":20,"stored":"positive_moderate","as_read":"Mixed: a modest migraine result on MIG-99 CO2 extract and a pooled result with bias limits, with null trials and low-quality rating from Cochrane; labels print other preparations.",
+"route":"packet_no_credit",
+"positive_named":["16232154","41422534","2899663"],
+"stop_list":["Labels and trial material aren't comparable by mg or parthenolide","2899663 and 23195074 give no extract mass in the abstract","12230594 three-dose MIG-99 left as regimen text"],
+"clinician_items":["34434419: case report of a 36-year-old on 800 mg feverfew three times daily with vaginal bleeding and altered coagulation tests, Naranjo 'probable'; the report advises caution with surgery, coagulant disorders or antithrombotics.","22435410: review raises possible concern with long-term dosing from COX-2 inhibition in coronary disease patients.","25892430: gastrointestinal complaints and mouth ulcers were the most common adverse events."],
+"stored_rating_note":"positive_moderate rests on one 1988 crossover of dried leaf with no amount stated; Cochrane rates the migraine evidence low quality.",
+"pmids_read":["2899663","25892430","41422534","16232154","12230594","22435410","32310327","14973986","22961605","22096324","2673080","23195074","9950629","10719691","10908545","34434419"],
+"unread_notes":"Abstracts only. 10908545 and 34434419 read in part, the latter past its case findings. 25892430 has PMC7133498 but Europe PMC marks it not open; 41422534's split by form is unread and would be the paper to read if a clinician considers credit."}

@@ -1,0 +1,57 @@
+{
+ "canonical": "mastic_gum",
+ "labels": 3,
+ "stored": "positive_moderate",
+ "as_read": "Positive for functional dyspepsia symptoms in one placebo RCT with no named primary outcome and one no-treatment crossover with named primary outcomes; null on blood pressure in one RCT.",
+ "route": "packet_no_credit",
+ "positive_named": [
+  "19961914",
+  "41197785"
+ ],
+ "studies_to_add": [
+  {
+   "pmid": "19961914",
+   "study_type": "rct",
+   "sample_size": 148,
+   "primary_endpoint": "not named as primary; change in Hong Kong index of dyspepsia",
+   "effect_direction": "positive",
+   "quote": "Chios mastic gum significantly improves symptoms in patients with functional dyspepsia compared to placebo."
+  },
+  {
+   "pmid": "41197785",
+   "study_type": "rct",
+   "sample_size": 0,
+   "primary_endpoint": "Leuven Postprandial Distress Scale; sample size not printed in the abstract",
+   "effect_direction": "positive",
+   "quote": "Both Mastiha and Mastiha-water significantly improved FD symptoms compared to the no-intervention period (p < 0.001)."
+  },
+  {
+   "pmid": "42885189",
+   "study_type": "rct",
+   "sample_size": 106,
+   "primary_endpoint": "24-h ambulatory systolic and diastolic blood pressure",
+   "effect_direction": "null",
+   "quote": "No significant between-group differences were observed in 24-h systolic or diastolic blood pressure after the intervention."
+  }
+ ],
+ "stop_list": [
+  "Fields can't express no-intervention against placebo comparators. 41197785 is the study that meets rule 2, and it has no placebo; 19961914 has placebo and no named primary outcome.",
+  "sample_size 0 for 41197785 means not printed in the abstract, not zero.",
+  "Labels print 1000 mg per serving; the trials' daily amounts are 1050 mg and 1.4 g. Serving frequency wasn't compared."
+ ],
+ "clinician_items": [
+  "42885189: Chios mastic at 1500 and 2800 mg/day well tolerated over 3 months in well-controlled hypertension.",
+  "30450689: fibrinogen fell and iron rose in the mastiha arm at 2.8 g/day; no bleeding or interaction data in the abstract."
+ ],
+ "stored_rating_note": "Stored positive_moderate rests on 19961914 alone; the stored text calls it marked improvement versus placebo, which matches the abstract, but no primary outcome is named. Packet body direction is positive_weak.",
+ "pmids_read": [
+  "19961914",
+  "41197785",
+  "42885189",
+  "41832367",
+  "38533281",
+  "37001176",
+  "30450689"
+ ],
+ "unread_notes": "Abstracts only. 41197785, 42885189, 37001176 conclusions read up to a 1600 character cut (methods and main results fully shown); 38533281 and 41832367 read to 3000 only for dose and primary terms. Hits not read: 37329633 (essential oil), 30668352, 30453494 (same IBD program, markers), 41607420 (multi-herbal), 30263803, 38921830, 38454582, 31250992 and 29288761 (RPh201), topical, mouthwash and toothpaste trials. One search used."
+}

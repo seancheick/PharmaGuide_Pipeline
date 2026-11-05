@@ -1,0 +1,435 @@
+{
+  "record_id": "INGR_OLIVE_LEAF_POWDER",
+  "labels": 1,
+  "stored_direction": "positive_moderate",
+  "direction_as_read": "mixed for blood pressure: a large placebo-controlled trial with an unprinted dose and a meta-analysis are positive, one 56-person trial of an olive extract is null, and the stored trial has no placebo arm",
+  "decision": "closed_no_credit",
+  "summary": "One label (DSLD 59537, Olive Leaf Vascular Support 500 mg) prints Benolea Olive (Olea europaea) leaf extract 500 mg standardized to 16% oleuropein, one capsule twice daily. The row's canonical id is olive_leaf, not olive_leaf_powder. PMID 21036583 gives 500 mg twice daily of EFLA 943 in stage-1 hypertension, with a primary outcome reported against baseline and captopril as the comparator. PMID 40990594 reports a positive primary outcome against placebo in 621 people, with no dose in the abstract. PMID 41805711 found no significant difference from placebo with a 440 mg olive extract. PMID 42303499 pools 30 trials of leaf or pomace, positive for leaf on blood pressure. No trial read names Benolea. Abstracts only.",
+  "question_for_clinician": "PMID 21036583 meets the rule on its face at the label's amount, but its primary outcome is change from baseline with an active comparator and no placebo, on EFLA 943 rather than Benolea. PMID 40990594 has the placebo control but no printed dose. Do these justify credit for blood pressure to a 500 mg twice daily Benolea label? Agent recommendation: no credit on abstracts; PMID 40990594 full text should be read first, for its extract and dose.",
+  "study_contexts": [
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_leaf_powder_21036583",
+      "components": [
+        "INGR_OLIVE_LEAF_POWDER"
+      ],
+      "source_pmids": [
+        "21036583"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "Olea europaea",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "stage_1_hypertension",
+      "purpose": "blood_pressure_lowering",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_leaf_powder_21036583",
+      "population": {
+        "age_group": "adult",
+        "description": "Patients with stage-1 hypertension; the abstract prints no sample size."
+      },
+      "study_design": "Double-blind, randomized, parallel, active-controlled against captopril; 4-week run-in, 8-week treatment; no placebo arm",
+      "outcomes": [
+        {
+          "name": "Primary: reduction in systolic blood pressure from baseline to week 8, -11.5 mmHg with olive leaf extract, significant from baseline and not significantly different from captopril at -13.7 mmHg",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "within_group_change"
+        },
+        {
+          "name": "Triglycerides fell with olive leaf extract and not with captopril",
+          "hierarchy": "secondary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "No placebo arm; the abstract reports no formal non-inferiority result, only that reductions were not significantly different.",
+        "Study material is EFLA 943; the abstract does not link it to Benolea, the label's material.",
+        "Sample size is not printed in the abstract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          500
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "twice daily",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "EFLA 943 olive leaf extract 500 mg twice daily for 8 weeks.",
+        "normalization": {
+          "basis": "Per-dose amount printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "21036583",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_leaf_powder_40990594",
+      "components": [
+        "INGR_OLIVE_LEAF_POWDER"
+      ],
+      "source_pmids": [
+        "40990594"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "leaf"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "treated_hypertension",
+      "purpose": "blood_pressure_lowering",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_leaf_powder_40990594",
+      "population": {
+        "age_group": "adult",
+        "description": "621 participants treated for hypertension (olive leaf extract n = 307, placebo n = 314)."
+      },
+      "study_design": "Multicenter, randomized, double-blind, placebo-controlled; 12 weeks",
+      "outcomes": [
+        {
+          "name": "Primary: change in 24-hour systolic and diastolic blood pressure at week 12; 24-hour systolic -6.4 mmHg against -1.5 mmHg with placebo, P < 0.01",
+          "hierarchy": "primary",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract prints no extract name, amount or oleuropein content; no dose invented here.",
+        "The abstract reports the between-group result for systolic pressure only.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "extraction_pending",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not stated in the abstract",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Oral olive leaf extract or placebo for 12 weeks; amount not printed in the abstract.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "40990594",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_leaf_powder_41805711",
+      "components": [
+        "INGR_OLIVE_LEAF_POWDER"
+      ],
+      "source_pmids": [
+        "41805711"
+      ],
+      "identity_scope": "botanical_preparation",
+      "identity": {
+        "botanical_species": "not_reported",
+        "plant_part": "not_reported"
+      },
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "direct_rct",
+      "component_registration_status": "fully_registered",
+      "condition": "elevated_systolic_blood_pressure",
+      "purpose": "blood_pressure_lowering",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_leaf_powder_41805711",
+      "population": {
+        "age_group": "adult",
+        "description": "56 participants with systolic blood pressure of at least 130 mmHg."
+      },
+      "study_design": "Double-blind, placebo-controlled, randomized; 8 weeks",
+      "outcomes": [
+        {
+          "name": "Systolic blood pressure, -8.3 mmHg against -7.3 mmHg with placebo, not significantly different",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "null",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "The abstract names no primary outcome.",
+        "Study material is an olive dry extract with 123.5 mg oleuropein and 25.0 mg hydroxytyrosol; the abstract does not say it is a leaf extract.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [
+          440
+        ],
+        "dose_status": "verified",
+        "dose_basis": "nominal_assigned_arm",
+        "duration_basis": "fixed_protocol",
+        "duration_days": 56,
+        "administration_frequency": "daily",
+        "dosage_forms": [
+          "capsule"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Capsules of 440 mg olive dry extract or placebo daily for 8 weeks.",
+        "normalization": {
+          "basis": "Assigned daily amount as printed in the source; no conversion."
+        },
+        "source_provenance": {
+          "pmid": "41805711",
+          "location": "Abstract"
+        }
+      }
+    },
+    {
+      "context_schema_version": "1.1.0",
+      "context_id": "ingr_olive_leaf_powder_42303499",
+      "components": [
+        "INGR_OLIVE_LEAF_POWDER"
+      ],
+      "source_pmids": [
+        "42303499"
+      ],
+      "identity_scope": "ingredient_general",
+      "identity": {},
+      "exposure_basis": "supplement_dose",
+      "route": "oral",
+      "evidence_role": "meta_analysis",
+      "component_registration_status": "fully_registered",
+      "condition": "mixed_adult_populations",
+      "purpose": "cardiometabolic_markers",
+      "review_status": "source_verified_pending_clinical_review",
+      "scoring_eligible": false,
+      "human_status": "confirmed",
+      "source_integrity": "none",
+      "trial_family": "ingr_olive_leaf_powder_42303499",
+      "population": {
+        "age_group": "adult",
+        "description": "Thirty randomized controlled trials (n = 1726) of olive leaf or olive pomace supplementation."
+      },
+      "study_design": "GRADE-assessed systematic review and random-effects meta-analysis",
+      "outcomes": [
+        {
+          "name": "Olive leaf supplementation reduced systolic and diastolic blood pressure and improved lipid parameters",
+          "hierarchy": "not_reported",
+          "kind": "surrogate",
+          "direction": "positive",
+          "outcome_role": "surrogate"
+        }
+      ],
+      "limitations": [
+        "Certainty ranged from very low to high across outcomes, and the abstract does not give the certainty for blood pressure.",
+        "The abstract gives no effect size for blood pressure and does not separate extract types.",
+        "Abstract as read on PubMed; full text not read.",
+        "Drafted from the source by agent review (Claude) on 2026-11-04; not clinician reviewed."
+      ],
+      "dose": {
+        "measurement_type": "mass",
+        "unit": "mg",
+        "values": [],
+        "dose_status": "source_not_reported",
+        "dose_basis": "not_applicable",
+        "duration_basis": "not_recorded",
+        "duration_days": null,
+        "administration_frequency": "not_applicable",
+        "dosage_forms": [
+          "not_reported"
+        ],
+        "co_therapies": [],
+        "reported_regimen": "Several regimens; not itemised in the abstract.",
+        "normalization": {
+          "basis": "Review of several regimens; no single assigned dose."
+        },
+        "source_provenance": {
+          "pmid": "42303499",
+          "location": "Abstract"
+        }
+      },
+      "included_study_pmids": "extraction_pending"
+    }
+  ],
+  "read_not_used": {
+    "38287654": "Systematic review of 12 pure olive leaf extract trials to August 2021; the abstract gives vote counts, including 2 for blood pressure, a fasting glycemia result favouring control at low dose, and no pooled blood pressure estimate."
+  },
+  "stop_or_hold": "Fields can't express that the primary outcome of PMID 21036583 is within-group against an active comparator, beyond the outcome role. Dose of PMID 40990594 needs its full text. Benolea's identity with any tested extract is not stated in any abstract read.",
+  "reviewed_by": "Agent review (Claude), 2026-11-04; not clinician reviewed",
+  "source_receipts": [
+    {
+      "pmid": "21036583",
+      "title_fetched": "Olive (Olea europaea) leaf extract effective in patients with stage-1 hypertension: comparison with Captopril.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21036583/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "40990594",
+      "title_fetched": "Efficacy of olive leaf extracts in controlling blood pressure in hypertensive patients: a double-blind randomized clinical trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40990594/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "41805711",
+      "title_fetched": "Evaluation of the effect of olive extracts on blood pressure and cardiovascular health markers in adults: Findings from a double-blind, placebo-controlled, randomised trial.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41805711/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "42303499",
+      "title_fetched": "A GRADE-assessed systematic review and meta-analysis of randomized controlled trials evaluating the effects of olive leaf or olive pomace supplementation on cardiometabolic and anthropometric health markers.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/42303499/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    },
+    {
+      "pmid": "38287654",
+      "title_fetched": "Olive leaf extract effect on cardiometabolic risk factors: a systematic review and meta-analysis of randomized clinical trials.",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38287654/",
+      "full_text": false,
+      "sections_used": "Abstract"
+    }
+  ],
+  "record_updates": {
+    "id": "INGR_OLIVE_LEAF_POWDER",
+    "standard_name": "Olive Leaf Extract (Olea europaea)",
+    "aliases": [
+      "Benolea Olive (Olea europaea) extract"
+    ],
+    "category": "cardiovascular",
+    "evidence_level": "reference",
+    "study_type": "reference",
+    "published_studies": [
+      "21036583",
+      "40990594",
+      "41805711",
+      "42303499"
+    ],
+    "score_contribution": "tier_3",
+    "effect_direction": "mixed",
+    "effect_direction_confidence": "low",
+    "effect_direction_rationale": "mixed for blood pressure: a large placebo-controlled trial with an unprinted dose and a meta-analysis are positive, one 56-person trial of an olive extract is null, and the stored trial has no placebo arm. Agent review (Claude), 2026-11-04; not clinician reviewed.",
+    "key_endpoints": [
+      "systolic blood pressure",
+      "24-hour blood pressure"
+    ],
+    "health_goals_supported": [],
+    "notes": "One label (DSLD 59537, Olive Leaf Vascular Support 500 mg) prints Benolea Olive (Olea europaea) leaf extract 500 mg standardized to 16% oleuropein, one capsule twice daily. The row's canonical id is olive_leaf, not olive_leaf_powder. PMID 21036583 gives 500 mg twice daily of EFLA 943 in stage-1 hypertension, with a primary outcome reported against baseline and captopril as the comparator. PMID 40990594 reports a positive primary outcome against placebo in 621 people, with no dose in the abstract. PMID 41805711 found no significant difference from placebo with a 440 mg olive extract. PMID 42303499 pools 30 trials of leaf or pomace, positive for leaf on blood pressure. No trial read names Benolea. Abstracts only.",
+    "last_updated": "2026-11-04",
+    "applicability": {
+      "scope": "ingredient",
+      "studied_population": "Adults with stage-1 or treated hypertension",
+      "supported_outcomes": [
+        "systolic blood pressure",
+        "24-hour blood pressure"
+      ],
+      "source_pmids": [
+        "21036583",
+        "40990594",
+        "41805711",
+        "42303499"
+      ],
+      "reviewed_at": "2026-11-04",
+      "reason": "One label (DSLD 59537, Olive Leaf Vascular Support 500 mg) prints Benolea Olive (Olea europaea) leaf extract 500 mg standardized to 16% oleuropein, one capsule twice daily. The row's canonical id is olive_leaf, not olive_leaf_powder. PMID 21036583 gives 500 mg twice daily of EFLA 943 in stage-1 hypertension, with a primary outcome reported against baseline and captopril as the comparator. PMID 40990594 reports a positive primary outcome against placebo in 621 people, with no dose in the abstract. PMID 41805711 found no significant difference from placebo with a 440 mg olive extract. PMID 42303499 pools 30 trials of leaf or pomace, positive for leaf on blood pressure. No trial read names Benolea. Abstracts only. Agent review (Claude), 2026-11-04; not clinician reviewed."
+    },
+    "references_structured": [
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "21036583",
+        "title": "Olive (Olea europaea) leaf extract effective in patients with stage-1 hypertension: comparison with Captopril.",
+        "citation": "Phytomedicine : international journal of phytotherapy and phytopharmacology (2011)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/21036583/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Research Support, Non-U.S. Gov't"
+        ],
+        "doi": "10.1016/j.phymed.2010.08.016"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "40990594",
+        "title": "Efficacy of olive leaf extracts in controlling blood pressure in hypertensive patients: a double-blind randomized clinical trial.",
+        "citation": "Journal of hypertension (2025)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/40990594/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial",
+          "Multicenter Study"
+        ],
+        "doi": "10.1097/HJH.0000000000004141"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "41805711",
+        "title": "Evaluation of the effect of olive extracts on blood pressure and cardiovascular health markers in adults: Findings from a double-blind, placebo-controlled, randomised trial.",
+        "citation": "PloS one (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/41805711/",
+        "publication_types": [
+          "Journal Article",
+          "Randomized Controlled Trial"
+        ],
+        "doi": "10.1371/journal.pone.0344278"
+      },
+      {
+        "type": "pubmed",
+        "authority": "NCBI PubMed",
+        "pmid": "42303499",
+        "title": "A GRADE-assessed systematic review and meta-analysis of randomized controlled trials evaluating the effects of olive leaf or olive pomace supplementation on cardiometabolic and anthropometric health markers.",
+        "citation": "Nutrition, metabolism, and cardiovascular diseases : NMCD (2026)",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/42303499/",
+        "publication_types": [
+          "Journal Article",
+          "Systematic Review",
+          "Meta-Analysis"
+        ],
+        "doi": "10.1016/j.numecd.2026.104821"
+      }
+    ]
+  }
+}

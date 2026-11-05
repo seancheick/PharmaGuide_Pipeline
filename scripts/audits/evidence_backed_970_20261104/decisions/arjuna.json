@@ -1,0 +1,66 @@
+{
+ "canonical": "arjuna",
+ "labels": 2,
+ "stored": "positive_weak",
+ "as_read": "Conflicting with no clear benefit: a placebo trial of a bark extract at 750 mg per dose in 100 heart failure patients was null on its primary outcome, a review of angina studies found no pooled difference, and positive results come from smaller trials, some of a different proprietary extract.",
+ "route": "null_literature",
+ "quote": {
+  "pmid": "26988798",
+  "text": "Arjuna extract did not improve LVEF in CHF patients over 12 weeks, although there was improvement in functional capacity, antioxidant reserves and symptom-related QoL domains in some patients."
+ },
+ "positive_named": [
+  "36349244",
+  "27930383",
+  "12086380",
+  "42753288",
+  "25827448",
+  "21170205",
+  "9505018"
+ ],
+ "proposed_decision_text": "Both labels print Rejuna arjuna bark extract, 10:1, standardized to 40% polyphenols, 750 mg, alongside hawthorn. In a double-blind placebo-controlled add-on trial, 100 chronic heart failure patients took a standardized water extract of stem bark, 750 mg twice daily, and LVEF, the primary outcome, did not change at 12 weeks; the improvements in walk distance and symptom scores came from a post-hoc analysis (26988798). A review of angina studies found no significant pooled difference and called the evidence insufficient in either direction (24600529). A heart failure meta-analysis of nine studies found a non-significant LVEF change, with lower left ventricular mass and higher HDL (42389976). There are positive trials: the proprietary aqueous extract E-OJ-01 at 400 mg/day raised LVEF in 72 healthy adults (36349244) and in 32 young exercising men (27930383); IPC-53 bark extract at 500 mg every 8 hours lowered angina frequency and lengthened exercise time in a one-week crossover (12086380); 3 g/day lowered blood pressure more than placebo on top of telmisartan in 44 patients (42753288); 500 mg twice daily lowered triglycerides and inflammatory markers in stable coronary disease (25827448); 500 mg/day raised VO2 max in a group of 10 healthy young adults (21170205). The stored study, 9505018, wasn't randomized. None of these trials names Rejuna. Read together, the evidence conflicts and shows no clear benefit for what these labels print. Abstracts only.",
+ "studies_to_add": [
+  {
+   "pmid": "26988798",
+   "study_type": "rct",
+   "sample_size": 100,
+   "primary_endpoint": "change in LVEF at 12 weeks",
+   "effect_direction": "null",
+   "quote": "Arjuna extract was well-tolerated, but did not change LVEF (24.3 ± 7.1 versus 25.5 ± 7.7%; p = 0.4) or secondary outcome measures except preservation of RBC catalase activity [1275(104, 10350) versus 1243.5(104, 10350) U/g haemoglobin; p = 0.01] compared to placebo."
+  },
+  {
+   "pmid": "24600529",
+   "study_type": "systematic_review_meta",
+   "sample_size": 0,
+   "primary_endpoint": "not named",
+   "effect_direction": "null",
+   "quote": "We found no significant difference in the Terminalia arjuna group as compared to control arm in the outcomes for which we were able to pool data and undertake meta-analysis."
+  },
+  {
+   "pmid": "36349244",
+   "study_type": "rct",
+   "sample_size": 72,
+   "primary_endpoint": "LVEF",
+   "effect_direction": "positive",
+   "quote": "E-OJ-01 increased the LVEF by 6.28% (percentage change) from the baseline compared with 0.24% (percentage change) in the placebo group (p<0.05)."
+  }
+ ],
+ "stop_list": [
+  "Both labels are two-ingredient products with hawthorn; the trials read are of arjuna without hawthorn.",
+  "The labels' code positioning is muscle recovery and strength while the products are named Cardio Peak; the review's route doesn't turn on this.",
+  "No search on the word rejuna alone was run within the search limit: it was an OR term in the first search, so no count can be given for Rejuna by itself."
+ ],
+ "stored_rating_note": "positive_weak rests on 9505018, a non-randomized study of 12 treated patients taking bark powder, not an extract; the stored text already says it doesn't establish a between-group effect. Null 26988798 isn't stored.",
+ "pmids_read": [
+  "9505018",
+  "26988798",
+  "27930383",
+  "36349244",
+  "24600529",
+  "42389976",
+  "42753288",
+  "25827448",
+  "21170205",
+  "12086380"
+ ],
+ "unread_notes": "Abstracts only. 33977687 (5 g powder twice daily against amlodipine and atorvastatin), 42277690 and 41268442 (network meta-analyses) seen only in the listing and not used. Searches: 42 and 8 hits; the first listing was filtered by keyword."
+}

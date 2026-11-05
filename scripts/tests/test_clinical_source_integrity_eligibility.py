@@ -92,7 +92,8 @@ def test_undecylenic_reference_cannot_resolve_oral_human_efficacy():
     assert not _is_verified_ingredient_human_entry(entry)
     resolution = er.resolve_evidence_for_canonical("undecylenic_acid", name="Undecylenic Acid")
     assert resolution.points_eligible is False
-    assert resolution.blocking_reasons == ["clinical_sources_ineligible"]
+    assert resolution.blocking_reasons == ["literature_applicability_unestablished"]
+    assert resolution.disposition == "research_present_applicability_unestablished"
     row = {"name": "Undecylenic Acid", "canonical_id": "undecylenic_acid", "quantity": 250, "unit": "mg", "raw_source_path": "ingredientRows[0]"}
     product = {"form_factor_canonical": "capsule", "activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
     stale = {**entry, "evidence_level": "ingredient-human", "total_enrollment": 20, "registry_completed_trials_count": 7}
@@ -223,7 +224,17 @@ def test_retained_clinical_endpoint_scope_is_traceable_to_actual_source(completi
  ('PRECLIN_ASTAXANTHIN_GENERIC','cognitive_neurological'),
 ])
 def test_source_exclusion_caveats_cannot_create_purpose_matches(completion_source_records,rid,forbidden):
-    assert forbidden not in er._evidence_entry_purposes(completion_source_records[rid])
+    from clinical_applicability import qualifying_purpose_outcomes, assess_clinical_source_review
+    record = completion_source_records[rid]
+    if not record.get("study_contexts"):
+        assert assess_clinical_source_review(record)["is_complete"] is False
+        return
+    # Descriptive caveats are not structured positive outcomes. Null outcomes
+    # may still describe what was studied, but cannot earn benefit credit.
+    for context in record.get("study_contexts") or []:
+        before = qualifying_purpose_outcomes(context)
+        caveat = {**context, "key_endpoints": [f"No evidence supports {forbidden}"]}
+        assert qualifying_purpose_outcomes(caveat) == before
 
 
 def test_source_reconciliations_rewrite_rationale_and_design(completion_source_records):

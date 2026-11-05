@@ -67,7 +67,7 @@ def test_source_declared_plant_part_reaches_its_reviewed_family_evidence(
         assert study_id not in {item["id"] for item in matches}
         evidence = score_evidence(product)
         assert evidence["score"] == 0
-        assert evidence["metadata"]["evidence_result_state"] == "applicability_unestablished"
+        assert evidence["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
         from assessment_readiness import evaluate_assessment_readiness
         assert evaluate_assessment_readiness(product, module="generic")["evidence"]["readiness"] == "incomplete"
         return
