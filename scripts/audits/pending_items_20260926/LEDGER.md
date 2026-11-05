@@ -1,5 +1,16 @@
 ## November 4 — active Claude audit and repairs
 
+## November 5 — incremental pipeline implementation
+
+Owner: existing `PipelineRunner` dispatch, delegated internal execution helper `pipeline_incremental.py`, existing `pipeline_freshness.py` fingerprints and `stage_manifest.py` output authority. Evidence: normal CLI/entrypoint tests and isolated full-versus-incremental comparisons. Will NOT create another scorer, clinical registry or manual freshness exception.
+
+Product raw hashes and reference scopes are bound into a single dataset state, whose hash is included in every stage manifest. Exact label corrections select their IDs; IQM changes select affected parents; new aliases recheck Clean identities before refining downstream work; exact preparation Dose-only source changes use the existing exact source-name matcher. Unproven global dependencies broaden scope. Changed current code never grants reuse merely by revision name. Existing output bytes, upstream bindings and historical-source fingerprints must prove the bootstrap.
+
+Execution stages selected labels through the ordinary cleaner/enricher/scorer, validates the complete merged enrichment, and publishes all three stage roots with rollback/recovery. Unchanged products and batches retain their bytes. Normal full builds supersede stale incremental state. New datasets require their first build in isolation. Plan-only changes no stage products.
+
+Qualification receipts: `/Users/seancheick/pg_quality/incremental-rebuild`. Real Thorne336362 raw amount edit plus CoQ10231852 control matches full records at all three stages. Isolated exact-source correction, IQM grade and new-alias cases match the full result too. The grade case rebuilds1/2 labels across all stages; the alias case rechecks2 Clean labels and runs only1 through Enrich/Score. Fresh review found and reproduced raw-snapshot capture, mixed-provenance reuse and successive-insert defects; regressions fail first and fixes pass. Final CI/integration remain pending. No operator corpus run or publication was started.
+
+
 ## November 4 — post-pipeline release blockers
 
 Owners: `clinical_applicability.py::assess_context_population` for prenatal/infant routing, the existing IQM and label corrections for GS15-4 preparation identity, and `botanical_profile.py::_botanical_benchmark` with the literature Dose registry for the exact Dose disposition. Evidence: strict preflight, raw fixture and original label comparison. No parallel scorer or release exception.

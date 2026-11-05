@@ -269,6 +269,18 @@ Details: [title qualification](../../scripts/audits/integration_audit_20261020/T
 
 All 18 historical checkouts from the 22-checkout inventory have no hidden unfinished source fixes; 2,245 unique files are checksum-preserved outside the public repository. Six historical Claude checkouts were removed. Six old Codex checkouts are archived; six owning-chat archive requests remain queued. Active follow-ups are preserved. PR219's epilepsy rule is held by Sean. PR220 is integrated at 1a1bc81ed after exact-head CI39450146123 passed all four groups; 10 named tests and 18 unchanged replay controls are verified. Local has 544 passes, one existing stale-catalog folate failure and 25 declared skips; artifact/release readiness remains open. Evidence title, literature and new comma-subblend lanes are still active. No pipeline, release, app import or artifact gate closed. Details and limits: [worktree closeout](../../scripts/audits/integration_audit_20261020/WORKTREE_CLOSEOUT.md); the execution register remains LEDGER.
 
+## November 5 — incremental pipeline rebuild
+
+Owner: `pipeline_freshness.py` determines invalidation, `stage_manifest.py` proves materialized ownership, `run_pipeline.py` executes stages, and the existing batch runner dispatches datasets. Evidence: current `--resume` uses global reference and stage fingerprints. Will NOT create another scorer, reference registry or manual product-specific freshness exception.
+
+- [x] Add deduplicated reference snapshots and product reuse proof to the existing manifest contract. Bootstrap only from verified current artifacts or a fully verified historical source baseline.
+- [x] Calculate affected product sets and earliest required stage. Include changed raw labels, deleted/new labels, new aliases and previously unresolved matches. Unknown or broad dependencies explicitly broaden the rebuild.
+- [x] Execute selected products through the existing stage entrypoints and gates. Publish complete owned stage inventories transactionally, preserving unaffected records and rejecting concurrent source changes, corrupt outputs and interrupted writes.
+- [x] Expose plan-only and incremental execution in existing runner commands. Explain selection and reuse counts.
+- [ ] Prove incremental/full equivalence with mixed freshness, insert/delete, alias, source changes, corruption, failure/retry and unchanged controls, then real-label comparisons. Qualify CI/local and merge before operator handoff.
+
+Qualification: existing stage entrypoints and manifest format are reused through `pipeline_incremental.py`, an internal execution helper of `PipelineRunner`. Real raw-label, exact correction, ingredient-grade and new-alias comparisons match full Clean/Enrich/Score records, excluding only the existing replay owner’s clock fields. Fresh review reproduced two provenance/race defects and a repeated-insert defect; each has a fail-first regression and fix. Required CI and integration are pending. The historical-source bootstrap was exercised read-only against the operator’s Thorne artifacts. Unknown shared code/research dependencies deliberately widen the plan.
+
 ## Post-run catalog qualification — October 19 (Codex)
 
 Sean's completed 37-brand plus submission run is preserved: 15,426 products, including 14 manual inputs; all 114 manifests and 174 payload hashes verified. No Clean, Enrich or Score rerun. Dashboard index refreshed with ingredients (38 partitions, 219,925 label rows); 53 golden products / 520 checks pass, with zero receipt or pillar-total mismatches.

@@ -90,11 +90,32 @@ PIPELINE_ONLY=0
 RELEASE_EXPLICIT=0
 PRE_CHECK=0                 # Aggregate preparation is explicit opt-in
 RESUME_ARGS=()
+BASELINE_ARGS=()
+RESUME_PLAN_FLAG=--resume-plan
+INCREMENTAL_PLAN_ONLY=0
+INCREMENTAL_MODE=0
 BATCH_ARGS=("$REPO_ROOT/batch_run_all_datasets.sh" "$@")
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
     case $1 in
+        --incremental)
+            INCREMENTAL_MODE=1
+            RESUME_ARGS=(--incremental)
+            RESUME_PLAN_FLAG=--incremental-plan
+            shift
+            ;;
+        --incremental-plan)
+            INCREMENTAL_MODE=1
+            RESUME_ARGS=(--incremental)
+            RESUME_PLAN_FLAG=--incremental-plan
+            INCREMENTAL_PLAN_ONLY=1
+            shift
+            ;;
+        --baseline-revision)
+            BASELINE_ARGS=(--baseline-revision "$2")
+            shift 2
+            ;;
         --resume)
             RESUME_ARGS=(--resume)
             shift
@@ -157,6 +178,18 @@ done
 if [ "$PIPELINE_ONLY" = "1" ] && [ "$RELEASE_EXPLICIT" = "1" ]; then
     echo "ERROR: --pipeline-only and --release cannot be used together." >&2
     exit 2
+fi
+
+if [ "${#BASELINE_ARGS[@]}" -gt 0 ] && [ "$INCREMENTAL_MODE" != "1" ]; then
+    echo "ERROR: --baseline-revision requires --incremental or --incremental-plan." >&2
+    exit 2
+fi
+if [ "$INCREMENTAL_PLAN_ONLY" = "1" ] && [ "$RELEASE_EXPLICIT" = "1" ]; then
+    echo "ERROR: --incremental-plan cannot publish or release." >&2
+    exit 2
+fi
+if [ "$INCREMENTAL_MODE" = "1" ] && [ "$RELEASE_EXPLICIT" != "1" ]; then
+    PIPELINE_ONLY=1
 fi
 
 # An empty --targets entry is a substring of every folder name and would
@@ -409,14 +442,17 @@ if [ "${#RESUME_ARGS[@]}" -gt 0 ]; then
     for folder in "${sorted_folders[@]}"; do
         "$PYTHON" run_pipeline.py --raw-dir "$folder" \
             --output-prefix "products/output_$(basename "$folder")" \
-            --resume-plan 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
+            "$RESUME_PLAN_FLAG" "${BASELINE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
     done
     if [ "$PROCESS_SUBMISSIONS" = "1" ] && [ -d "$SUBMISSION_OUTPUT_DIR" ] && find "$SUBMISSION_OUTPUT_DIR" \
         -maxdepth 1 -type f -name '*.json' -print -quit | grep -q .; then
         "$PYTHON" run_pipeline.py --raw-dir "$SUBMISSION_OUTPUT_DIR" \
             --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
-            --resume-plan 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
+            "$RESUME_PLAN_FLAG" "${BASELINE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE" || exit 1
     fi
+fi
+if [ "$INCREMENTAL_PLAN_ONLY" = "1" ]; then
+    exit 0
 fi
 PASSED=()
 FAILED=()
@@ -443,7 +479,7 @@ for folder in "${sorted_folders[@]}"; do
 
     # Run pipeline
     check_batch_source
-    if $PYTHON run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" "${RESUME_ARGS[@]}" --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
+    if $PYTHON run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" "${RESUME_ARGS[@]}" "${BASELINE_ARGS[@]}" --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
         echo -e "${GREEN}${PROGRESS} ✓ SUCCESS: ${folder_name}${NC}"
         PASSED+=("$folder_name")
     else
@@ -534,7 +570,7 @@ if [ "$PROCESS_SUBMISSIONS" = "1" ] \
         if "$PYTHON" run_pipeline.py \
             --raw-dir "$SUBMISSION_OUTPUT_DIR" \
             --output-prefix "$SUBMISSION_PIPELINE_PREFIX" \
-            --stages clean,enrich,score "${RESUME_ARGS[@]}" \
+            --stages clean,enrich,score "${RESUME_ARGS[@]}" "${BASELINE_ARGS[@]}" \
             --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
             echo -e "${GREEN}✓ Product Submissions cleaning, enrichment and scoring refreshed${NC}"
         else

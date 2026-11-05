@@ -873,6 +873,10 @@ class PipelineRunner:
         results["duration_seconds"] = round(duration, 2)
         results["timestamp"] = end_time.isoformat().replace("+00:00", "Z")
         results["success"] = len(results["stages_failed"]) == 0
+        if results["success"] and set(stages) == set(STAGES) and not dry_run:
+            # A complete ordinary build supersedes the prior incremental state.
+            # The next incremental run seeds only after verifying these outputs.
+            (Path(output_prefix) / ".incremental_state.json").unlink(missing_ok=True)
 
         logger.info("")
         logger.info("=" * 60)
@@ -978,6 +982,13 @@ Pipeline Flow:
         help='Path-safe run ID shared by enrichment, gates, scoring, and reports',
     )
 
+    parser.add_argument('--incremental', action='store_true',
+                        help='Rebuild affected products using verified stage provenance')
+    parser.add_argument('--incremental-plan', action='store_true',
+                        help='Print affected product IDs and reuse counts without execution')
+    parser.add_argument('--baseline-revision',
+                        help='Exact Git revision proving existing outputs on first incremental use')
+
     parser.add_argument('--resume', action='store_true',
                         help='Reuse verified stages; rebuild from the first invalid stage')
     parser.add_argument('--resume-plan', action='store_true',
@@ -1008,6 +1019,47 @@ Pipeline Flow:
         sys.exit(1)
 
     runner = PipelineRunner(config)
+    if args.incremental or args.incremental_plan:
+        if (args.config or args.resume or args.resume_plan or args.dry_run
+                or args.skip_coverage_gate or args.coverage_gate_warn_only
+                or stages != ['clean', 'enrich', 'score']
+                or not args.raw_dir or not args.output_prefix):
+            parser.error('incremental mode requires default stages, explicit raw/output paths and enforced gates')
+        from pipeline_incremental import run_incremental
+        import tempfile
+        import tarfile
+        with tempfile.TemporaryDirectory(prefix='pg-incremental-baseline-') as baseline:
+            baseline_repo = None
+            if args.baseline_revision:
+                revision = subprocess.check_output(
+                    ['git', '-C', str(runner.script_dir.parent), 'rev-parse',
+                     '--verify', args.baseline_revision + '^{commit}'], text=True).strip()
+                archive = Path(baseline) / 'source.tar'
+                with archive.open('wb') as handle:
+                    subprocess.run(['git', '-C', str(runner.script_dir.parent), 'archive',
+                                    revision, 'scripts', '.python-version', 'requirements-dev.txt'],
+                                   stdout=handle, check=True)
+                baseline_repo = Path(baseline) / 'source'
+                baseline_repo.mkdir()
+                with tarfile.open(archive) as source:
+                    source.extractall(baseline_repo, filter='data')
+            try:
+                result = run_incremental(
+                    runner, runner._resolve_path(args.raw_dir),
+                    runner._resolve_path(args.output_prefix),
+                    plan_only=args.incremental_plan, baseline_repo=baseline_repo)
+            except (OSError, ValueError, KeyError) as exc:
+                logger.error('Incremental rebuild refused: %s', exc)
+                sys.exit(1)
+            if args.incremental_plan:
+                print(json.dumps(result, indent=2))
+            else:
+                print(json.dumps({
+                    "rebuilt": {stage: len(ids) for stage, ids in result["stages"].items()},
+                    "deleted": len(result["deleted"]), "reasons": result["reasons"],
+                }, indent=2))
+        sys.exit(0)
+
     if args.resume or args.resume_plan:
         from pipeline_freshness import dataset_resume_plan
         if args.config or not args.raw_dir or not args.output_prefix:
