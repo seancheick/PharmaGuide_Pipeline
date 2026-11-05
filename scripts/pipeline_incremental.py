@@ -166,6 +166,8 @@ def plan_changes(old, current, raw, dependency_rows):
     identity_recheck = set()
 
     def widen(index, affected, reason):
+        if not affected:
+            return
         for downstream in range(index, 3):
             selected[downstream].update(affected)
         reasons.append(reason)

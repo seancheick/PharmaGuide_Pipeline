@@ -596,3 +596,9 @@ def test_raw_capture_rejects_a_transient_edit_restored_before_live_recheck(tmp_p
     with pytest.raises(mod.StageManifestError, match="Captured raw"):
         mod.run_incremental(runner, raw, prefix)
     assert not calls
+
+
+def test_unchanged_plan_does_not_claim_raw_labels_changed():
+    result = plan(baseline(), baseline())
+    assert result["stages"] == {"clean": [], "enrich": [], "score": []}
+    assert result["reasons"] == []
