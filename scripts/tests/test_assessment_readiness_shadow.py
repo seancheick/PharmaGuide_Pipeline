@@ -448,3 +448,27 @@ def test_shadow_reuses_owner_derivation_per_product_without_changing_report(tmp_
     assert sum(builds.values()) > sum(scoped_builds.values())
     assert products == original_products
     assert all(path.read_bytes() == content for path, content in before.items())
+
+
+
+def test_capture_stage_supports_jsonl_and_owned_auxiliary_bytes(tmp_path):
+    from audits.assessment_readiness_shadow import _capture_stage
+    payload = tmp_path / 'clean.jsonl'
+    payload.write_bytes(b'{"id":"one"}\n')
+    auxiliary = tmp_path / 'audit.bin'
+    auxiliary.write_bytes(b'\x00receipt\xff')
+    write_stage_manifest(tmp_path, 'clean', [payload, auxiliary])
+    _, _, buffers, _ = _capture_stage(tmp_path, 'clean', patterns=('*.json', '*.jsonl'), include_auxiliary=True)
+    assert {path.name: data for path, data in buffers} == {
+        'clean.jsonl': payload.read_bytes(), 'audit.bin': auxiliary.read_bytes()}
+
+
+def test_capture_stage_rejects_unowned_jsonl_in_extended_patterns(tmp_path):
+    from audits.assessment_readiness_shadow import _capture_stage
+    from stage_manifest import StageManifestError
+    owned = tmp_path / 'owned.jsonl'
+    owned.write_text('{"id":"one"}\n')
+    write_stage_manifest(tmp_path, 'clean', [owned])
+    (tmp_path / 'unowned.jsonl').write_text('{"id":"two"}\n')
+    with pytest.raises(StageManifestError, match='unowned'):
+        _capture_stage(tmp_path, 'clean', patterns=('*.json', '*.jsonl'), include_auxiliary=True)

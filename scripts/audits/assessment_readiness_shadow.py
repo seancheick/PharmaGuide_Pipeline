@@ -32,7 +32,9 @@ class AssessmentReadinessShadowError(RuntimeError):
     """A measure-only report could not establish its exact input corpus."""
 
 
-def _capture_stage(stage_dir: Path, expected_stage: str) -> tuple[
+def _capture_stage(stage_dir: Path, expected_stage: str, *,
+                   patterns: tuple[str, ...] = ("*.json",),
+                   include_auxiliary: bool = False) -> tuple[
     dict[str, Any], str, list[tuple[Path, bytes]], list[dict[str, Any]]
 ]:
     """Validate and consume one immutable byte capture through the stage owner.
@@ -51,7 +53,7 @@ def _capture_stage(stage_dir: Path, expected_stage: str) -> tuple[
     for name in names:
         if not isinstance(name, str) or Path(name).name != name:
             raise StageManifestError(f"Invalid owned filename: {name!r}")
-    discovered = {path.name for path in stage_dir.glob("*.json")
+    discovered = {path.name for pattern in patterns for path in stage_dir.glob(pattern)
                   if path.is_file() and not path.name.startswith(".")}
     capture_names = set(names) | discovered
     for name in capture_names:
@@ -65,12 +67,13 @@ def _capture_stage(stage_dir: Path, expected_stage: str) -> tuple[
         (frozen / MANIFEST_NAME).write_bytes(manifest_bytes)
         for name, data in captured.items():
             (frozen / name).write_bytes(data)
-        selected = select_stage_files([frozen], expected_stage, require_manifest=True)
+        selected = select_stage_files([frozen], expected_stage, require_manifest=True, patterns=patterns)
         selected_names = [path.name for path in selected]
     receipts = [{"name": name, "sha256": hashlib.sha256(captured[name]).hexdigest(),
                  "bytes": len(captured[name])} for name in sorted(names)]
     return (manifest, hashlib.sha256(manifest_bytes).hexdigest(),
-            [(stage_dir / name, captured[name]) for name in selected_names], receipts)
+            [(stage_dir / name, captured[name])
+             for name in sorted(names) if include_auxiliary or name in selected_names], receipts)
 
 
 def _canonical_bytes(value: Any) -> bytes:

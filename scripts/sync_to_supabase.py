@@ -1495,35 +1495,68 @@ def _publication_cohort():
 
 
 def _publication_source_receipts(product_ids):
-    """Reuse manifest ownership and the strict audit's current source joins.
+    """Consume one captured lineage per dataset through the existing strict owner.
 
-    Retain only existing completion facts, not whole enriched/scored products.
-    No scientific assessment is computed here.
+    Receipt JSON and manifest validation use the same frozen bytes. Temporary
+    mirrors are dataset-local and never change producer files or scientific facts.
     """
     from audit_source_of_truth_contract import (
-        as_products, load_json, product_identity, scored_files_from_products_dir,
+        as_products, product_identity, scored_files_from_products_dir,
         _scoring_enriched_source,
     )
+    from audits.assessment_readiness_shadow import _capture_stage
+    from stage_manifest import MANIFEST_NAME
+
     receipts = {}
     source_cache = {}
-    for path in scored_files_from_products_dir(Path(__file__).resolve().parent / "products"):
-        for product in as_products(load_json(path)):
-            pid = product_identity(product)
-            if pid not in product_ids:
-                continue
-            if pid in receipts:
-                raise ValueError(f"publication source has duplicate product {pid}")
-            if _scoring_enriched_source(path, pid, source_cache) is None:
-                raise ValueError(f"publication source provenance is stale or unverified: {pid}")
-            readiness = product.get("assessment_readiness")
-            release = readiness.get("release_assessment") if isinstance(readiness, dict) else None
-            receipts[pid] = {key: product[key] for key in (
-                "quality_assessment_status", "product_safety_status",
-                "quality_score_status", "quality_score_v4_100",
-            ) if key in product}
-            receipts[pid]["release_assessment"] = {key: release[key] for key in (
-                "is_complete", "blockers", "unfinished_source_assessment",
-            ) if key in release} if isinstance(release, dict) else {}
+    scored_dirs = sorted({path.parent for path in scored_files_from_products_dir(
+        Path(__file__).resolve().parent / "products")})
+    for scored_dir in scored_dirs:
+        dataset = scored_dir.parent.name.removesuffix("_scored")
+        products_dir = scored_dir.parent.parent
+        with tempfile.TemporaryDirectory(prefix="pg-publication-source-") as temporary:
+            frozen_root = Path(temporary)
+            scored_buffers = []
+            for stage, source_dir in (
+                ("clean", products_dir / dataset / "cleaned"),
+                ("enrich", products_dir / (dataset + "_enriched") / "enriched"),
+                ("score", scored_dir),
+            ):
+                manifest, _, buffers, _ = _capture_stage(
+                    source_dir, stage, patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",),
+                    include_auxiliary=True,
+                )
+                frozen_dir = frozen_root / source_dir.parent.name / source_dir.name
+                frozen_dir.mkdir(parents=True)
+                # The capture owner already validated this manifest against
+                # these exact buffers. Preserve every field for the strict join.
+                (frozen_dir / MANIFEST_NAME).write_text(json.dumps(manifest))
+                for path, data in buffers:
+                    frozen_path = frozen_dir / path.name
+                    frozen_path.write_bytes(data)
+                    if stage == "score" and path.match("*.json"):
+                        scored_buffers.append((frozen_path, data))
+            for path, data in scored_buffers:
+                for product in as_products(json.loads(data)):
+                    pid = product_identity(product)
+                    if pid not in product_ids:
+                        continue
+                    if pid in receipts:
+                        raise ValueError(f"publication source has duplicate product {pid}")
+                    if _scoring_enriched_source(path, pid, source_cache) is None:
+                        raise ValueError(f"publication source provenance is stale or unverified: {pid}")
+                    readiness = product.get("assessment_readiness")
+                    release = readiness.get("release_assessment") if isinstance(readiness, dict) else None
+                    receipts[pid] = {key: product[key] for key in (
+                        "quality_assessment_status", "product_safety_status",
+                        "quality_score_status", "quality_score_v4_100",
+                    ) if key in product}
+                    receipts[pid]["release_assessment"] = {key: release[key] for key in (
+                        "is_complete", "blockers", "unfinished_source_assessment",
+                    ) if key in release} if isinstance(release, dict) else {}
+            # Release the strict owner's per-dataset enriched index before
+            # capturing another dataset; its runtime fingerprints remain reusable.
+            source_cache.pop(source_cache.pop("dataset", None), None)
     return receipts
 
 

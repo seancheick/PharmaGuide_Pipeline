@@ -1834,16 +1834,12 @@ def test_publication_false_source_number_cannot_masquerade_as_valid_zero(tmp_pat
         syncer.validate_catalog_publication(tmp_path)
 
 
-def test_publication_source_loader_requires_current_manifest_provenance(tmp_path, monkeypatch):
+def test_publication_source_loader_requires_current_manifest_provenance(publication_source_tree, monkeypatch):
     import sync_to_supabase as syncer
     import audit_source_of_truth_contract as audit
-    source = tmp_path / 'scored.json'
-    source.write_text(json.dumps([{'id': '0', 'quality_assessment_status': 'complete'}]))
-    monkeypatch.setattr(audit, 'scored_files_from_products_dir', lambda _: [source])
     monkeypatch.setattr(audit, '_scoring_enriched_source', lambda *args: None)
     with pytest.raises(ValueError, match="provenance is stale or unverified"):
-        syncer._publication_source_receipts({'0'})
-
+        syncer._publication_source_receipts({'one'})
 
 
 def test_publication_stage_manifest_failure_reports_qualification_failure(tmp_path, publication_case, monkeypatch):
@@ -1855,3 +1851,120 @@ def test_publication_stage_manifest_failure_reports_qualification_failure(tmp_pa
     monkeypatch.setattr(syncer, '_publication_source_receipts', stale)
     with pytest.raises(ValueError, match='qualification failed: source manifest stale'):
         syncer.validate_catalog_publication(tmp_path)
+
+
+@pytest.fixture
+def publication_source_tree(tmp_path, monkeypatch):
+    import audit_source_of_truth_contract as audit
+    import dataset_paths
+    from stage_manifest import write_stage_manifest
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+
+    products = tmp_path / 'products'
+    raw_root = tmp_path / 'raw'
+    raw = raw_root / 'Test' / 'raw.json'
+    raw.parent.mkdir(parents=True)
+    raw.write_text(json.dumps([{'id': 'one'}]))
+    monkeypatch.setattr(dataset_paths, 'brand_dataset_root', lambda: raw_root)
+    previous = [raw]
+    paths = {}
+    record = {'id': 'one', 'quality_assessment_status': 'partial',
+              'quality_score_status': 'scored', 'quality_score_v4_100': 80,
+              'product_safety_status': 'no_known_catalog_concern',
+              'assessment_readiness': {'release_assessment': {'is_complete': False,
+                  'blockers': ['pending'], 'unfinished_source_assessment': None}}}
+    for stage, dataset, leaf in [('clean', 'output_Test', 'cleaned'),
+                                 ('enrich', 'output_Test_enriched', 'enriched'),
+                                 ('score', 'output_Test_scored', 'scored')]:
+        directory = products / dataset / leaf
+        directory.mkdir(parents=True)
+        path = directory / 'batch.json'
+        path.write_text(json.dumps([record if stage == 'score' else {'id': 'one'}]))
+        write_stage_manifest(directory, stage, [path], input_fingerprints={
+            **stage_input_fingerprints(audit.REPO_ROOT, stage),
+            DATA_FINGERPRINT_KEY: stage_data_fingerprint(previous)})
+        paths[stage] = path
+        previous = [path]
+    # Use the real manifest selector and strict lineage join; only redirect
+    # collection from the production corpus to this complete three-stage tree.
+    original_collection = audit.scored_files_from_products_dir
+    monkeypatch.setattr(audit, 'scored_files_from_products_dir', lambda _: original_collection(products))
+    return paths, raw, record
+
+
+def test_publication_receipts_parse_the_bytes_that_real_lineage_verifies(publication_source_tree, monkeypatch):
+    import io
+    from copy import deepcopy
+    from pathlib import Path
+    import sync_to_supabase as syncer
+    import audit_source_of_truth_contract as audit
+    paths, _, record = publication_source_tree
+    scored = paths['score']
+    original = scored.read_bytes()
+    assert audit._scoring_enriched_source(scored, 'one', {}) == {'id': 'one'}
+    forged = deepcopy(record)
+    forged['quality_assessment_status'] = 'complete'
+    forged['assessment_readiness']['release_assessment'].update(is_complete=True, blockers=[])
+    real_open = Path.open
+    def unbound_text_read(path, mode='r', *args, **kwargs):
+        if path == scored and mode == 'r':
+            return io.StringIO(json.dumps([forged]))
+        return real_open(path, mode, *args, **kwargs)
+    monkeypatch.setattr(Path, 'open', unbound_text_read)
+    receipts = syncer._publication_source_receipts({'one'})
+    assert receipts['one']['quality_assessment_status'] == 'partial'
+    assert receipts['one']['release_assessment']['is_complete'] is False
+    assert scored.read_bytes() == original
+
+
+@pytest.mark.parametrize("complete", [False, True])
+def test_publication_receipts_accept_current_real_three_stage_lineage(publication_source_tree, complete):
+    import sync_to_supabase as syncer
+    import audit_source_of_truth_contract as audit
+    from stage_manifest import write_stage_manifest
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+    paths, _, record = publication_source_tree
+    if complete:
+        record['quality_assessment_status'] = 'complete'
+        record['assessment_readiness']['release_assessment'].update(is_complete=True, blockers=[])
+        paths['score'].write_text(json.dumps([record]))
+        write_stage_manifest(paths['score'].parent, 'score', [paths['score']], input_fingerprints={
+            **stage_input_fingerprints(audit.REPO_ROOT, 'score'),
+            DATA_FINGERPRINT_KEY: stage_data_fingerprint([paths['enrich']])})
+    receipts = syncer._publication_source_receipts({'one'})
+    assert receipts['one']['quality_assessment_status'] == record['quality_assessment_status']
+    assert receipts['one']['release_assessment'] == record['assessment_readiness']['release_assessment']
+
+
+
+def test_publication_frozen_lineage_keeps_clean_jsonl_and_score_auxiliaries(publication_source_tree):
+    import sync_to_supabase as syncer
+    import audit_source_of_truth_contract as audit
+    from stage_manifest import write_stage_manifest
+    from pipeline_freshness import stage_input_fingerprints, stage_data_fingerprint, DATA_FINGERPRINT_KEY
+    paths, raw, record = publication_source_tree
+    clean = paths['clean'].with_suffix('.jsonl')
+    paths['clean'].rename(clean)
+    write_stage_manifest(clean.parent, 'clean', [clean], input_fingerprints={
+        **stage_input_fingerprints(audit.REPO_ROOT, 'clean'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([raw])})
+    write_stage_manifest(paths['enrich'].parent, 'enrich', [paths['enrich']], input_fingerprints={
+        **stage_input_fingerprints(audit.REPO_ROOT, 'enrich'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([clean])})
+    auxiliary = paths['score'].parent / 'receipt.bin'
+    auxiliary.write_bytes(b'\x00verified auxiliary\xff')
+    write_stage_manifest(paths['score'].parent, 'score', [paths['score'], auxiliary], input_fingerprints={
+        **stage_input_fingerprints(audit.REPO_ROOT, 'score'), DATA_FINGERPRINT_KEY: stage_data_fingerprint([paths['enrich']])})
+    receipts = syncer._publication_source_receipts({'one'})
+    assert receipts['one']['release_assessment'] == record['assessment_readiness']['release_assessment']
+
+
+def test_publication_frozen_lineage_rejects_mismatched_upstream_manifest(publication_source_tree):
+    import sync_to_supabase as syncer
+    from stage_manifest import MANIFEST_NAME
+    from pipeline_freshness import DATA_FINGERPRINT_KEY
+    paths, _, _ = publication_source_tree
+    manifest = paths['enrich'].parent / MANIFEST_NAME
+    payload = json.loads(manifest.read_text())
+    payload['input_fingerprints'][DATA_FINGERPRINT_KEY] = '0' * 64
+    manifest.write_text(json.dumps(payload))
+    with pytest.raises(ValueError, match='provenance is stale or unverified'):
+        syncer._publication_source_receipts({'one'})
