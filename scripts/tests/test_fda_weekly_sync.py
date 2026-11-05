@@ -4,20 +4,11 @@
 import os
 import subprocess
 import sys
-import types
 from pathlib import Path
 
 import pytest
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-
-requests_stub = types.SimpleNamespace(
-    Response=object,
-    Timeout=type("Timeout", (Exception,), {}),
-    ConnectionError=type("ConnectionError", (Exception,), {}),
-    RequestException=type("RequestException", (Exception,), {}),
-)
-sys.modules.setdefault("requests", requests_stub)
 
 from fda_weekly_sync import classify_record, extract_substances
 
