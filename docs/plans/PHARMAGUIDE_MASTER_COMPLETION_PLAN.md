@@ -1,5 +1,17 @@
 # PharmaGuide master completion plan
 
+## November 5 — preserve per-label progress during incremental rebuilds
+
+Owner: `pipeline_incremental.py::run_incremental` and `batch_processor.py::_generate_final_summary`. Will NOT create another scorer, assessment status or retry registry.
+
+- [x] Fix exact input accounting across successful Clean outputs, explicit incomplete/review holds and source-bound item errors. Retain successful labels and reports; never interpret an unexplained missing output as a hold.
+- [x] Verify success-to-hold and hold-to-success transitions, unchanged holds, retry of failed inputs only, failed-retry rollback, write failures and full-versus-incremental parity. Valid held outcomes count as completed processing, not completed scientific assessments; genuine errors remain subject to the existing error threshold.
+- [ ] Qualify the completed candidate in CI, merge and update the operator checkout after confirming the interrupted run has stopped. Inspect actual fingerprint/reuse consequences before giving the retry command; do not restamp old outputs.
+
+Implementation is in `c0305ca99`, `daa7188f0` and `228893b9f`. Independent review found no remaining concrete blocker. The combined owner slice passed 134 tests; the final resume/denominator/write-failure slice passed 46 tests. Real-label full/incremental hold-and-recovery parity also passed. Initial error retention, JSONL promotion, historical reports, missing provenance and unchanged hold reporting have explicit regressions. CI and the applicable local checkpoint remain required before integration. The corrected Clean fingerprint requires one fresh baseline; later affected-label retries reuse successful outputs.
+
+The interrupted operator run exposed the same executor defect on BulkSupplements (4,049 successful, one incomplete, no errors) and Emergen_C (133 successful, one incomplete, no errors). Sean stopped the run to integrate this repair. These observations do not change catalog completeness or publication qualification.
+
 ## Active target — 99% scientific completion and honest public ratings (November 5)
 
 Sean’s November 5 direction replaces the earlier release-ready threshold: do not activate a new catalog until at least **15,293 of the frozen 15,447 products** have genuinely completed assessments and all mandatory release criteria below pass. The measured source baseline is **8,400 marked complete / 7,047 partial**, not a verified genuine-complete numerator. Subsequent checks identify61 contradictory release receipts and66 additional current native-owner holds (127 unique), so the baseline-plus-owner backlog is at least7,174 before bounded closures. A new genuine-complete numerator requires qualified output reconciliation. Do not change the denominator, invent credit, clear real holds or relabel unfinished research to meet the percentage. Review completion, score availability and safety are separate facts.

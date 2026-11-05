@@ -1,3 +1,13 @@
+## November 5 — active incremental Clean outcome repair
+
+Owner: existing incremental executor/state and BatchProcessor summary. Will NOT create a second scorer, public status, registry or scientific determination. Baseline main `298eb4934`; active branch `codex/incremental-clean-holds`.
+
+The operator run rejected BulkSupplements after 4,049 successful Clean outputs and one explicit incomplete label (`312659`), with zero errors. Emergen_C has the same defect: 133 successful, one incomplete, zero errors. The executor incorrectly requires every selected raw ID in the successful Clean inventory. Clean also incorrectly excludes valid held outcomes from its processing-success numerator, breaking isolated held-label runs. Sean stopped the run; no source was changed in the running checkout.
+
+Implemented in `c0305ca99`, `daa7188f0` and `228893b9f`: exact per-ID success/hold/error accounting and persisted reports, downstream eviction/recovery, unchanged hold reuse, error-only retry and per-ID command output. Initial partial-error builds retain successes without immediately retrying the same error. JSONL promotion and historical sidecars retain correct ownership. Clean counts completed holds as processed outcomes; actual attempted-file counts include worker and categorization exceptions. Both single-worker and parallel failed results remain absent from completed resume paths; actual mixed/all-error resume tests preserve successful bytes and retry failures.
+
+Fail-first controls cover each defect class. The combined owner slice passed 134 tests in 66.98 seconds; the final batch/resume/denominator/write-failure slice passed 46 in 9.55 seconds. Real producer hold/recovery matches full rebuilding, with an unchanged valid control and zero-work resume. Independent review approves this bounded engineering batch. Applicable local checks and exact-candidate CI remain pending; no merge or catalog release is claimed yet. Clean source fingerprints change, so existing policy requires one current baseline rebuild; Enrich and Score source fingerprints themselves remain unchanged. Never restamp prior outputs.
+
 ## November 5 — current catalog qualification follow-up
 
 Owner: the existing incremental collector and planner; readiness, scored-artifact and census owners; app download and database-lifetime owners; publication validator; and shared website snapshot and SQL migration. Will NOT create a second scorer, census engine, scientific registry, public state or approval.
