@@ -88,6 +88,9 @@ def clean_hold_outputs(root, *, expected=None, input_paths=None):
         files = sorted(directory.glob("*.json")) + sorted(directory.glob("*.jsonl"))
         if not files and not (directory / MANIFEST_NAME).exists():
             continue
+        if (input_paths is None and not (expected or {}).get(name)
+                and not (directory / MANIFEST_NAME).exists()):
+            continue  # Unowned historical sidecars are archived, never adopted as holds.
         if input_paths is not None:
             write_stage_manifest_from_directory(directory, "clean", patterns=("*.json", "*.jsonl"))
         if name != "errors":
@@ -614,7 +617,7 @@ def verified_bootstrap_source(repo, baseline_repo, directories, raw_dir):
         "Supply the exact --baseline-revision or complete one full build.")
 
 
-def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
+def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fresh_clean_inputs=None):
     state_path = prefix / ".incremental_state.json"
     recovery = prefix.parent / ("." + prefix.name + ".incremental-recovery.json")
     if recovery.exists():
@@ -653,7 +656,15 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
                                          strict_release_gates=True)
             if not result["success"]:
                 raise StageManifestError("Initial dataset build failed")
-            _run_locked(runner, repo, raw_dir, candidate_prefix, False, None)
+            verified = _run_locked(runner, repo, raw_dir, candidate_prefix, False, None,
+                fresh_clean_inputs={pid: raw_dir / raw_names[pid] for pid in raw})
+            plan["held_clean_inputs"] = verified.get("held_clean_inputs", {})
+            plan["reasons"].extend(verified["reasons"])
+            if any(plan["held_clean_inputs"].values()):
+                plan["reasons"].append("Clean held inputs: " + json.dumps(plan["held_clean_inputs"], sort_keys=True))
+            for stage, directory in zip(STAGES, stage_directories(candidate_prefix)):
+                if stage != "clean":
+                    plan["stages"][stage] = sorted(stage_products(directory, stage))
             if (digest(current_snapshot(repo)) != digest(current)
                     or stage_data_fingerprint(stage_data_files(raw_dir)) != raw_binding):
                 raise StageManifestError("Inputs changed during initial incremental build")
@@ -701,6 +712,13 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
         held = {pid for rows in clean_holds.values() for pid in rows}
         if held & set(products["clean"]) or held | set(products["clean"]) != set(old["raw"]):
             raise StageManifestError("Clean successful/held input inventory is inconsistent")
+    if fresh_clean_inputs is not None:
+        if state_path.exists():
+            raise StageManifestError("Fresh Clean proof cannot replace an existing generation")
+        clean_holds = clean_hold_outputs(prefix, input_paths=fresh_clean_inputs)
+        held = {pid for rows in clean_holds.values() for pid in rows}
+        if held & set(products["clean"]) or held | set(products["clean"]) != set(raw):
+            raise StageManifestError("Fresh Clean successful/held input inventory is inconsistent")
     dependency_rows = {key: dependencies(value) for key, value in products["enrich"].items()}
     planned_old = planning_snapshot(old, current, baseline_repo=baseline_repo)
     plan = plan_changes(planned_old, current, raw, dependency_rows)
@@ -718,7 +736,7 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
         plan["reasons"].append("raw file bytes or filenames changed: recheck Clean lineage")
     held = {pid for rows in clean_holds.values() for pid in rows}
     unproven = set(old["raw"]) - set(products["clean"]) - held
-    retry = (unproven | set(clean_holds["errors"])) & set(raw)
+    retry = (unproven | (set(clean_holds["errors"]) if fresh_clean_inputs is None else set())) & set(raw)
     if retry:
         plan["stages"]["clean"] = sorted(set(plan["stages"]["clean"]) | retry)
         plan["reasons"].append("recheck unproven Clean dispositions or retry explicit per-item errors")
@@ -866,7 +884,8 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
             fingerprints = {**current["stages"][stage],
                             DATA_FINGERPRINT_KEY: state["inputs"][stage],
                             "incremental_state_sha256": state_hash}
-            write_stage_manifest_from_directory(directory, stage, input_fingerprints=fingerprints)
+            write_stage_manifest_from_directory(directory, stage, input_fingerprints=fingerprints,
+                patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",))
         write_clean_holds(candidate_prefix, clean_holds, {
             **current["stages"]["clean"], DATA_FINGERPRINT_KEY: state["inputs"]["clean"],
             "incremental_state_sha256": state_hash})

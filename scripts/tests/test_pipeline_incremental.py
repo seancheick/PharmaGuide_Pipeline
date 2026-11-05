@@ -1121,3 +1121,103 @@ def test_real_null_ingredients_hold_transitions_match_full_rebuild(tmp_path):
                 for pid, row in expected.items()}
         resumed = run_incremental(runner, raw, prefix)
         assert all(not ids for ids in resumed['stages'].values())
+
+
+def test_clean_jsonl_executor_promotes_and_reuses_owned_generation(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, _ = _synthetic_dataset(tmp_path, monkeypatch)
+    from stage_manifest import MANIFEST_NAME, write_stage_manifest_from_directory
+    clean = mod.stage_directories(prefix)[0]
+    fingerprints = json.loads((clean / MANIFEST_NAME).read_text())['input_fingerprints']
+    original = clean / 'batch.json'
+    rows = json.loads(original.read_text())
+    original.unlink()
+    lines = clean / 'batch.jsonl'
+    lines.write_text(''.join(json.dumps(row) + '\n' for row in rows))
+    write_stage_manifest_from_directory(clean, 'clean', patterns=('*.json', '*.jsonl'),
+                                        input_fingerprints=fingerprints)
+    mod.run_incremental(runner, raw, prefix)
+    assert set(mod.stage_products(clean, 'clean')) == {'1', '2'}
+    assert 'batch.jsonl' in (clean / MANIFEST_NAME).read_text()
+    (raw / '1.json').write_text(json.dumps({'id': '1', 'dose': 30}))
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result['stages'] == {stage: ['1'] for stage in mod.STAGES}
+    assert mod.stage_products(clean, 'clean') == {'1': {'id': '1', 'dose': 30}, '2': rows[1]}
+    calls.clear()
+    resumed = mod.run_incremental(runner, raw, prefix)
+    assert not calls
+    assert all(not ids for ids in resumed['stages'].values())
+
+
+def test_expected_clean_hold_without_manifest_is_fatal(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    from stage_manifest import MANIFEST_NAME
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, prefix)
+    (prefix / 'incomplete' / MANIFEST_NAME).unlink()
+    with pytest.raises(mod.StageManifestError, match='manifest'):
+        mod.run_incremental(runner, raw, prefix)
+
+
+def test_initial_incremental_result_reports_clean_holds(tmp_path, monkeypatch):
+    from pathlib import Path
+    import shutil
+    mod, runner, raw, seeded, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, seeded)
+    def full_build(**kwargs):
+        for source, target in zip(mod.stage_directories(seeded), mod.stage_directories(Path(kwargs['output_prefix']))):
+            shutil.copytree(source, target)
+        for name in ('incomplete', 'needs_review', 'errors'):
+            if (seeded / name).exists():
+                shutil.copytree(seeded / name, Path(kwargs['output_prefix']) / name)
+        return {'success': True}
+    runner.run_pipeline = full_build
+    fresh = tmp_path / 'fresh'
+    result = mod.run_incremental(runner, raw, fresh)
+    assert result['held_clean_inputs']['incomplete'] == ['1']
+    assert result['stages'] == {'clean': ['1', '2'], 'enrich': ['2'], 'score': ['2']}
+    assert any('incomplete' in reason for reason in result['reasons'])
+    resumed = mod.run_incremental(runner, raw, fresh)
+    assert resumed['held_clean_inputs']['incomplete'] == ['1']
+    assert all(not ids for ids in resumed['stages'].values())
+
+
+def test_initial_partial_clean_error_is_committed_before_next_retry(tmp_path, monkeypatch):
+    from pathlib import Path
+    mod, runner, raw, _, calls, clean_inputs = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'errors'
+    (raw / '1.json').write_text(json.dumps(value))
+    def full_build(**kwargs):
+        root = Path(kwargs['output_prefix'])
+        runner.run_clean(kwargs['raw_dir'], root)
+        successful = json.loads((root / 'cleaned' / 'batch.json').read_text())
+        for directory in mod.stage_directories(root)[1:]:
+            directory.mkdir(parents=True)
+            (directory / 'batch.json').write_text(json.dumps(successful))
+        from stage_manifest import write_stage_manifest_from_directory
+        for stage, directory in zip(mod.STAGES, mod.stage_directories(root)):
+            write_stage_manifest_from_directory(directory, stage, input_fingerprints={
+                **mod.current_snapshot(tmp_path)['stages'][stage], 'stage_data_sha256_v1': '1' * 64})
+        return {'success': True}
+    runner.run_pipeline = full_build
+    initial_clean = runner.run_clean
+    def clean_once(source, output):
+        if len(list(Path(source).glob('*.json'))) == 1:
+            return False  # Retrying the only failed item must retain the prior generation.
+        return initial_clean(source, output)
+    runner.run_clean = clean_once
+    fresh = tmp_path / 'fresh_error'
+    result = mod.run_incremental(runner, raw, fresh)
+    assert result['held_clean_inputs']['errors'] == ['1']
+    assert result['stages']['score'] == ['2']
+    assert clean_inputs == [['1', '2']]
+    before = {path: path.read_bytes() for root in (fresh, Path(str(fresh) + '_enriched'), Path(str(fresh) + '_scored'))
+              for path in root.rglob('*') if path.is_file()}
+    with pytest.raises(mod.StageManifestError, match='prior outputs retained'):
+        mod.run_incremental(runner, raw, fresh)
+    assert all(path.read_bytes() == contents for path, contents in before.items())
