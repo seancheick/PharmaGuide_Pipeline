@@ -1221,3 +1221,19 @@ def test_initial_partial_clean_error_is_committed_before_next_retry(tmp_path, mo
     with pytest.raises(mod.StageManifestError, match='prior outputs retained'):
         mod.run_incremental(runner, raw, fresh)
     assert all(path.read_bytes() == contents for path, contents in before.items())
+
+
+@pytest.mark.parametrize('separator', ['\u0085', '\u2028', '\u2029'])
+def test_clean_jsonl_keeps_unicode_line_separators_inside_strings(tmp_path, separator):
+    from stage_manifest import write_stage_manifest
+    from pipeline_incremental import stage_products, materialize_merged
+    old, new = tmp_path / 'old', tmp_path / 'new'
+    old.mkdir()
+    new.mkdir()
+    path = old / 'cleaned_batch_1.jsonl'
+    row = {'id': '1', 'name': 'before' + separator + 'after'}
+    path.write_text(json.dumps(row, ensure_ascii=False) + '\n', encoding='utf-8')
+    write_stage_manifest(old, 'clean', [path])
+    assert stage_products(old, 'clean') == {'1': row}
+    materialize_merged(old, new, 'clean', {'1': row})
+    assert (new / path.name).read_bytes() == path.read_bytes()

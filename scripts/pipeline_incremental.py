@@ -53,7 +53,7 @@ def stage_products(directory, stage):
     rows = {}
     for path in select_stage_input_files(directory, stage, require_manifest=True,
                                         patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",)):
-        payload = ([json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+        payload = ([json.loads(line) for line in path.read_text(encoding="utf-8").split("\n") if line.strip()]
                    if path.suffix == ".jsonl" else json.loads(path.read_text()))
         if not isinstance(payload, list):
             raise StageManifestError(f"Expected product array: {path}")
@@ -427,7 +427,7 @@ def materialize_merged(original, candidate, stage, merged):
     remaining = dict(merged)
     for path in select_stage_input_files(original, stage, require_manifest=True,
             patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",)):
-        prior = ([json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+        prior = ([json.loads(line) for line in path.read_text(encoding="utf-8").split("\n") if line.strip()]
                  if path.suffix == ".jsonl" else json.loads(path.read_text()))
         kept = [remaining.pop(product_id(row)) for row in prior if product_id(row) in remaining]
         destination = candidate / path.name
