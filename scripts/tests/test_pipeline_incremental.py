@@ -436,3 +436,22 @@ def test_certification_clock_uses_existing_recency_owner_at_exact_time(monkeypat
     product["certification_data"]["verified_cert_programs"][0].update(
         snapshot_age_days=91, recency_status="warn")
     assert dependencies(product)["clock_refresh_required"] is False
+
+
+def test_manufacturer_lookback_reuses_existing_case_normalization_and_threshold():
+    from datetime import date, datetime, time, timedelta, timezone
+    from pipeline_incremental import dependencies
+    from scoring_v4.modules.generic_manufacturer import CLASS_I_LOOKBACK_DAYS
+
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    product = {
+        "enriched_date": datetime.combine(yesterday, time(12), tzinfo=timezone.utc).isoformat(),
+        "manufacturer_violations": [{
+            "severity_level": " CRITICAL ",
+            "date": (today - timedelta(days=CLASS_I_LOOKBACK_DAYS + 1)).isoformat(),
+        }],
+    }
+    assert dependencies(product)["clock_refresh_required"] is True
+    product["manufacturer_violations"][0]["date"] = today.isoformat()
+    assert dependencies(product)["clock_refresh_required"] is False

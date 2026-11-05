@@ -135,9 +135,12 @@ def dependencies(product):
                 if (age != value["snapshot_age_days"]
                         or ("recency_status" in value and status != value["recency_status"])):
                     clock_refresh_required = True
-            if (value.get("severity_level") == "critical" and value.get("date")
-                    and enriched_local_date != date.today()):
-                clock_refresh_required = True
+            if value.get("date") and value.get("severity_level"):
+                from scoring_v4.modules.generic_manufacturer import _count_class_i_in_3_years
+                if (enriched_local_date is None
+                        or _count_class_i_in_3_years([value], today=enriched_local_date)
+                        != _count_class_i_in_3_years([value], today=date.today())):
+                    clock_refresh_required = True
             for key, item in value.items():
                 if key in {"canonical_id", "clinical_id", "source_id", "record_id"} and isinstance(item, str):
                     identifiers.add(item)
