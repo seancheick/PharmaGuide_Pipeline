@@ -1855,3 +1855,86 @@ def test_noncredit_source_consumes_only_current_preparation_exclusions(monkeypat
     result = er.resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
     assert _resolved_evidence_assessment(result)[0] == ("evaluated_limited_or_negative" if case == "excluded" else "not_yet_evaluated")
+
+
+_EAA_FORMS = [
+    ('l_histidine', 'L-Histidine', 'l-histidine standard'),
+    ('l_isoleucine', 'L-Isoleucine', 'l-isoleucine powder'),
+    ('l_leucine', 'L-Leucine', 'l-leucine powder'),
+    ('l_lysine', 'L-Lysine HCl', 'l-lysine hcl'),
+    ('methionine', 'L-Methionine', 'l-methionine'),
+    ('l_phenylalanine', 'L-Phenylalanine', 'l-phenylalanine base'),
+    ('l_threonine', 'L-Threonine', 'l-threonine powder'),
+    ('l_tryptophan', 'L-Tryptophan', 'l-tryptophan powder'),
+    ('l_valine', 'L-Valine', 'l-valine powder'),
+]
+
+
+def _eaa_product(canonical='l_leucine', name='L-Leucine', form='l-leucine powder', **changes):
+    row = {'canonical_id': canonical, 'name': name, 'raw_source_text': name,
+           'matched_form': form, 'form_match_status': 'mapped', 'mapped': True,
+           'quantity': 500, 'unit': 'mg', 'source_section': 'active',
+           'raw_source_path': 'ingredientRows[0]', 'cleaner_ingredient_role': 'active_scorable',
+           'ingredient_role': 'active_scorable', **changes}
+    return {'dsld_id': 'eaa_mechanics', 'product_name': name, 'activeIngredients': [row],
+            'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]},
+            'evidence_data': {'clinical_matches': []}}
+
+
+@pytest.mark.parametrize('canonical,name,form', _EAA_FORMS)
+def test_eaa_nutritional_role_is_authority_without_invented_clinical_outcomes(canonical, name, form):
+    product = _eaa_product(canonical, name, form)
+    resolution = er.resolve_evidence_for_row(product['activeIngredients'][0], product)
+    assert resolution.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+    assert resolution.points_eligible is False
+    facts = resolution.owner_facts['nutrition_authority']
+    assert facts['is_essential'] is True
+    assert facts['scope'] == 'established_nutritional_role'
+    assert facts['source_references'][0]['doi'] == '10.17226/10490'
+    assert not {'highest_ul', 'unit', 'min_clinical_dose', 'total_enrollment'} & facts.keys()
+    assert product['evidence_data']['clinical_matches'] == []
+
+
+@pytest.mark.parametrize('canonical,name,form,changes', [
+    ('methionine', 'DL-Methionine', 'l-methionine', {}),
+    ('methionine', 'D,L-Methionine', 'l-methionine', {}),
+    ('methionine', 'Racemic methionine', 'l-methionine', {}),
+    ('methionine', 'D-Methionine', 'l-methionine', {}),
+    ('l_phenylalanine', 'DL-Phenylalanine', 'dl-phenylalanine', {}),
+    ('l_lysine', 'D-Lysine', 'l-lysine base', {}),
+    ('l_leucine', 'N-Acetyl-L-Leucine', 'l-leucine powder', {}),
+    ('l_leucine', 'L-Leucine', 'unspecified', {'form_match_status': 'unspecified'}),
+    ('l_leucine', 'Unidentified amino acid', 'l-leucine powder', {}),
+    ('l_leucine', 'Leucine', 'l-leucine powder', {}),
+    ('l_leucine', 'L-Leucine', 'l-leucine powder', {'mapped': False}),
+    ('l_leucine', 'L-Leucine', 'l-leucine powder', {'mapped_identity': False}),
+    ('l_leucine', 'L-Leucine', 'l-leucine powder', {'scoreable_identity': False}),
+    ('l_leucine', 'L-Leucine', 'l-leucine powder', {'identity_disposition': 'identity_conflict'}),
+    ('l_leucine', 'L-Leucine', 'l-leucine powder', {'source_section': 'inactive'}),
+])
+def test_eaa_authority_requires_actual_qualified_source_form(canonical, name, form, changes):
+    product = _eaa_product(canonical, name, form, **changes)
+    assert er.nutrition_authority_for_row(product['activeIngredients'][0]) is None
+
+
+def test_eaa_authority_cannot_be_rescued_by_cached_metadata_or_unqualified_reference(monkeypatch):
+    import scoring_reference_resolver as refs
+    product = _eaa_product()
+    product['nutrition_authority'] = {'is_essential': True, 'source_references': [{'doi': '10.17226/10490'}]}
+    monkeypatch.setattr(refs, 'rda_ul_reference_entry', lambda **kwargs: {'id': 'essential_amino_acids'})
+    assert er.nutrition_authority_for_row(product['activeIngredients'][0]) is None
+
+
+@pytest.mark.parametrize('canonical,name,form', [case for case in _EAA_FORMS if case[0] in {'l_leucine', 'l_isoleucine', 'l_valine', 'l_lysine', 'methionine'}])
+def test_eaa_authority_keeps_underlying_null_and_mixed_review_facts(canonical, name, form):
+    product = _eaa_product(canonical, name, form)
+    row = product['activeIngredients'][0]
+    clinical = er._resolve_evidence_for_row(row, product)
+    nutritional = er.resolve_evidence_for_row(row, product)
+    assert nutritional.owner_facts['literature_evidence'] == clinical.owner_facts['literature_evidence']
+    assert nutritional.provenance['clinical_outcome_review'] == {
+        'disposition': clinical.disposition, 'reason_code': clinical.reason_code,
+        'blocking_reasons': clinical.blocking_reasons,
+    }
+    assert nutritional.points_eligible is False
+    assert nutritional.owner_facts['nutrition_authority']['scope'] == 'established_nutritional_role'

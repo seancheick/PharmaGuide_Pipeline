@@ -298,9 +298,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         primary_floor, floor_canonical = _primary_mass_floor(
             product, scoped_matches, prominent=prominent, receipt=floor_receipt
         )
-        # P5: DRI-essential nutrient authority floor. An essential vitamin/mineral
-        # with established RDA/AI has evidence of necessity even without a strong
-        # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
+        # P5: Established nutrient authority floor, including source-qualified
+        # L-amino-acid nutritional roles. Necessity is separate from supplemental
+        # clinical outcomes. Floor (never cap) — it only lifts, never lowers the clinical
         # floor above it (e.g. a strong clinical 14 stays 14).
         auth_canon = _purpose_essential_canonical(product)
         if (auth_canon and (not owner_scoped or auth_canon in owner_canonicals)
@@ -409,7 +409,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     metadata = {
         "contributing_record_assessments": receipts,
         "source_references": (list(omega_authority.get("source_references") or [])
-            if omega_authority and primary_floor_decisive else []),
+            if omega_authority and primary_floor_decisive else
+            nutrition_authority_references(product, nutrition_authority_canonical)
+            if primary_floor_decisive else []),
         "selected_nutrition_authority": (nutrition_authority_canonical
             if total > 0 and primary_floor_decisive else None),
         "phase": PHASE_MARKER,
@@ -1576,7 +1578,7 @@ def _matched_active_canonical(
 def _purpose_essential_canonical(
     product: Dict[str, Any], *, owner_canonicals: Optional[set] = None,
 ) -> Optional[str]:
-    """Stable purpose-owned DRI essential for the authority floor.
+    """Stable purpose-owned qualified nutrient for the authority floor.
 
     The shared role owner supplies ``owner_canonicals``. Amount adequacy and
     excess are independent Dose/Safety judgments and do not decide Evidence.
@@ -1592,6 +1594,8 @@ def _purpose_essential_canonical(
                         and str(row.get("canonical_id") or "").strip() and not is_lent_blend_mass(row)}
             if len(subjects) == 1:
                 owner_canonicals = subjects
+    from evidence_resolver import nutrition_authority_for_row
+
     candidates = set()
     for row in _competing_active_rows(product):
         if not isinstance(row, dict):
@@ -1599,9 +1603,23 @@ def _purpose_essential_canonical(
         canonical = str(row.get("canonical_id") or "").strip().lower()
         if owner_canonicals is not None and canonical not in owner_canonicals:
             continue
-        if canonical in DRI_ESSENTIAL_NUTRIENTS and not is_lent_blend_mass(row):
+        if nutrition_authority_for_row(row):
             candidates.add(canonical)
     return sorted(candidates)[0] if candidates else None
+
+
+def nutrition_authority_references(product: Dict[str, Any], canonical: Optional[str]) -> list:
+    """Current source-qualified row receipt; cached scorer metadata is not proof."""
+    from evidence_resolver import nutrition_authority_for_row
+
+    if canonical != _purpose_essential_canonical(product):
+        return []
+    for row in _competing_active_rows(product):
+        if row.get("canonical_id") == canonical:
+            facts = nutrition_authority_for_row(row)
+            if facts:
+                return list(facts.get("source_references") or [])
+    return []
 
 
 def _is_prominent_anchor(

@@ -759,3 +759,12 @@ def test_clinical_selection_uses_runtime_reference_only_rejected_record_ids(tmp_
     assert deps["1"]["clinical_unresolved"] is False
     assert deps["2"]["unresolved"] is True  # General IQM policy still sees the inactive.
     assert plan(old, current, deps=deps)["stages"] == {"clean": [], "enrich": ["1"], "score": ["1"]}
+
+
+@pytest.mark.parametrize('canonical', ['l_histidine', 'l_isoleucine', 'l_leucine', 'l_lysine', 'methionine', 'l_phenylalanine', 'l_threonine', 'l_tryptophan', 'l_valine'])
+@pytest.mark.parametrize('status', ['mapped', 'unspecified'])
+def test_all_eaa_users_depend_on_group_reference_even_when_form_rejected(canonical, status):
+    from pipeline_incremental import dependencies
+    row = {'canonical_id': canonical, 'form_match_status': status, 'mapped': False}
+    product = {'ingredient_quality_data': {'ingredients_scorable': [row]}, 'evidence_data': {}}
+    assert 'essential_amino_acids' in dependencies(product)['identifiers']

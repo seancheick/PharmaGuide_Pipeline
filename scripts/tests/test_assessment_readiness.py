@@ -2026,3 +2026,26 @@ def test_unknown_individual_evidence_identity_cannot_disappear_from_required_rev
         "dimensions": {"evidence": {"score": 0, "metadata": {
             "evidence_result_state": "evaluated_authority"}}}}, unfinished_source=None)
     assert ("evidence_assessment_incomplete" in result["blockers"]) is material
+
+
+@pytest.mark.parametrize('change', ['none', 'source_form', 'source_identity', 'reference', 'score', 'cached_only'])
+def test_eaa_selected_authority_receipt_revalidates_current_source(change):
+    from copy import deepcopy
+    from test_evidence_resolver import _eaa_product
+    from assessment_readiness import _current_nutrition_authority_receipt
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _eaa_product()
+    receipt = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert _current_nutrition_authority_receipt(product, receipt) is True
+    if change == 'source_form':
+        for row in product['ingredient_quality_data']['ingredients_scorable']:
+            row['form_match_status'] = 'unspecified'
+    elif change == 'source_identity':
+        product['activeIngredients'][0]['raw_source_text'] = 'DL-Leucine'
+    elif change == 'reference':
+        receipt['metadata']['source_references'] = [{'doi': 'unrelated'}]
+    elif change == 'score':
+        receipt['score'] += 1
+    elif change == 'cached_only':
+        product = {'evidence_data': deepcopy(receipt['metadata'])}
+    assert _current_nutrition_authority_receipt(product, receipt) is (change == 'none')

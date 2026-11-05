@@ -205,7 +205,7 @@ OWNER_CAPABILITY_MAP: Dict[str, OwnerCapability] = {
         owner_id="nutrition_authority",
         data_source="data/rda_optimal_uls.json",
         facts_owned=("is_essential_nutrient", "dri_type", "rda_value", "ul_value", "unit", "authority"),
-        capability_description="Established nutritional authority for essential dietary vitamins and minerals",
+        capability_description="Established nutritional authority for essential dietary nutrients; verified L-amino-acid role is separate from clinical outcomes and Dose",
     ),
     "backed_clinical_studies": OwnerCapability(
         owner_id="backed_clinical_studies",
@@ -548,6 +548,53 @@ def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Opt
     return any(_norm(key) in DRI_ESSENTIAL_NUTRIENTS for key in reference_keys)
 
 
+def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
+    """Source-qualified nutritional role, independent of clinical outcomes/Dose."""
+    from normalization import make_normalized_key, strip_label_identity_qualifiers
+    from scoring_reference_resolver import (EAA_CANONICALS, iqm_reference_entry,
+                                          nutritional_role_reference, parent_relationship)
+    from scoring_input_contract import is_lent_blend_mass
+
+    canonical = _norm(row.get("canonical_id"))
+    if (row.get("is_excipient") or _norm(row.get("source_section")) == "inactive"
+            or _norm(row.get("cleaner_row_role")) in CLEANER_NON_EFFICACY_ROLES
+            or is_lent_blend_mass(dict(row))):
+        return None
+    if canonical not in EAA_CANONICALS:
+        from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
+
+        if canonical in DRI_ESSENTIAL_NUTRIENTS:
+            return {"nutrient": canonical, "is_essential": True}
+        return None
+    reference = nutritional_role_reference(canonical)
+    if (not reference or _norm(row.get("form_match_status")) != "mapped"
+            or any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
+            or _norm(row.get("identity_disposition")) in {"ambiguous", "identity_conflict"}):
+        return None
+    # The original label identity outranks an inferred standard name/form.
+    source = str(row.get("raw_source_text") or row.get("name") or "").strip()
+    source_key = make_normalized_key(source)
+    tokens = source_key.split("_")
+    if not source_key or any(token in {"d", "dl", "racemic"} for token in tokens):
+        return None
+    forms = (iqm_reference_entry(canonical) or {}).get("forms") or {}
+    form_name = _norm(row.get("matched_form"))
+    form = forms.get(form_name)
+    if not isinstance(form, dict) or parent_relationship(form):
+        return None
+    form_key = make_normalized_key(form_name)
+    if not form_key.startswith("l_"):
+        return None
+    aliases = [form_name, *(form.get("aliases") or [])]
+    qualified_keys = {make_normalized_key(value) for value in aliases if isinstance(value, str)}
+    qualified_source = make_normalized_key(strip_label_identity_qualifiers(source))
+    if not qualified_source.startswith("l_") or qualified_source not in qualified_keys:
+        return None
+    return {"nutrient": canonical, "is_essential": True,
+            "authority": reference["id"], "scope": "established_nutritional_role",
+            "source_references": reference["source_references"]}
+
+
 @lru_cache(maxsize=1)
 def _load_backed_studies() -> Tuple[Dict[str, Any], ...]:
     """Load human clinical studies from backed_clinical_studies.json."""
@@ -749,6 +796,34 @@ def resolve_evidence_for_canonical(
 
 
 def resolve_evidence_for_row(
+    row: Mapping[str, Any], product: Optional[Mapping[str, Any]] = None,
+) -> EvidenceResolution:
+    """Resolve clinical facts and the independently established nutritional role."""
+    resolution = _resolve_evidence_for_row(row, product)
+    from scoring_reference_resolver import EAA_CANONICALS
+
+    if _norm(row.get("canonical_id")) not in EAA_CANONICALS:
+        return resolution
+    authority = nutrition_authority_for_row(row)
+    if not authority or resolution.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value:
+        return resolution
+    # Keep null/mixed/performance reviews intact; this finishes only the
+    # nutritional-role question and creates no positive clinical points.
+    resolution.owner_facts["nutrition_authority"] = authority
+    resolution.matched_owners = list(dict.fromkeys([*resolution.matched_owners, "nutrition_authority"]))
+    if not resolution.points_eligible:
+        resolution.provenance["clinical_outcome_review"] = {
+            "disposition": resolution.disposition, "reason_code": resolution.reason_code,
+            "blocking_reasons": resolution.blocking_reasons,
+        }
+        resolution.disposition = EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+        resolution.applicability_status = "established_nutritional_role"
+        resolution.reason_code = "nutritional_role_authority_established"
+        resolution.blocking_reasons = []
+    return resolution
+
+
+def _resolve_evidence_for_row(
     row: Mapping[str, Any],
     product: Optional[Mapping[str, Any]] = None,
 ) -> EvidenceResolution:

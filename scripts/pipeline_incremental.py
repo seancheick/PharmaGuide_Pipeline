@@ -233,6 +233,9 @@ def dependencies(product):
                     unresolved = True
 
     identifiers = reference_identifiers(product, visit=visit)
+    from scoring_reference_resolver import nutrition_reference_dependencies
+    for identifier in tuple(identifiers):
+        identifiers.update(nutrition_reference_dependencies(identifier))
     from scoring_input_contract import (get_evidence_subject_rows, get_source_score_eligible_active_rows,
                                         scoring_input_scope)
     quality = product.get("ingredient_quality_data")

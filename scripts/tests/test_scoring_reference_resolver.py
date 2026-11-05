@@ -153,3 +153,29 @@ def test_every_parent_form_reference_is_pinned():
         if pinned.get(cid, "unpinned") != current.get(cid, "removed")
     }
     assert moved == {}, f"parent form references moved (pinned, now): {moved}"
+
+
+def test_eaa_evidence_reference_never_borrows_mixture_dose_values():
+    from scoring_reference_resolver import nutritional_role_reference, rda_ul_reference_entry
+    reference = nutritional_role_reference('l_leucine')
+    assert set(reference) == {'id', 'source_references'}
+    assert reference['id'] == 'essential_amino_acids'
+    assert reference['source_references'][0]['supports_claims'] == ['established_nutritional_role']
+    mixture = rda_ul_reference_entry(canonical_id='essential_amino_acids')
+    assert mixture['reference_semantics']['reference_type'] == 'no_benchmark'
+    assert mixture['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+
+
+def test_eaa_identity_family_import_and_route_reexport_perform_no_data_reads(monkeypatch):
+    import importlib
+    import scoring_reference_resolver as resolver
+    import scoring_v4.route_features as routes
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Identity family import must not read pipeline files')
+    with monkeypatch.context() as patch:
+        patch.setattr(Path, 'read_text', forbidden)
+        patch.setattr(Path, 'open', forbidden)
+        importlib.reload(resolver)
+        importlib.reload(routes)
+        assert routes.EAA_CANONICALS is resolver.EAA_CANONICALS
+        assert len(routes.EAA_CANONICALS) == 9

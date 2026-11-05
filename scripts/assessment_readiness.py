@@ -1450,6 +1450,29 @@ def _current_omega_authority_receipt(product: Mapping, evidence: Mapping) -> boo
         and meta.get("source_references") == resolved["source_references"])
 
 
+def _current_nutrition_authority_receipt(product: Mapping, evidence: Mapping) -> bool:
+    """Revalidate the selected row and current configured nutrition floor."""
+    from scoring_v4.modules.generic_evidence import (
+        NUTRITION_AUTHORITY_FLOOR, _purpose_essential_canonical, nutrition_authority_references)
+
+    meta = _safe_dict(evidence.get("metadata"))
+    canonical = _purpose_essential_canonical(dict(product))
+    # Preserve the established vitamin/mineral receipt contract. The new EAA
+    # role additionally requires its current source/form-bound reference.
+    if canonical in DRI_ESSENTIAL_NUTRIENTS:
+        return bool(meta.get("selected_nutrition_authority") == canonical
+            and meta.get("nutrition_authority_canonical") == canonical
+            and meta.get("nutrition_authority_floor_applied") is True
+            and meta.get("primary_evidence_floor_decisive") is True)
+    return bool(canonical and meta.get("selected_nutrition_authority") == canonical
+        and meta.get("nutrition_authority_canonical") == canonical
+        and meta.get("nutrition_authority_floor_applied") is True
+        and meta.get("primary_evidence_floor_decisive") is True
+        and evidence.get("score") == meta.get("primary_evidence_floor") == NUTRITION_AUTHORITY_FLOOR
+        and _safe_dict(evidence.get("components")).get("primary_evidence_floor") == NUTRITION_AUTHORITY_FLOOR
+        and meta.get("source_references") == nutrition_authority_references(dict(product), canonical))
+
+
 def evaluate_release_assessment(
     product: Mapping[str, Any], readiness: Mapping[str, Any],
     module_breakdown: Mapping[str, Any], *, unfinished_source: str | None,
@@ -1563,13 +1586,8 @@ def evaluate_release_assessment(
                 # Category modules may embed the generic owner's receipt.
                 receipts = _safe_dict(evidence_meta.get("generic_evidence_metadata")).get("contributing_record_assessments")
             if isinstance(receipts, list):
-                authority = evidence_meta.get("selected_nutrition_authority")
-                selected_authority = (
-                    authority in DRI_ESSENTIAL_NUTRIENTS
-                    and evidence_meta.get("nutrition_authority_floor_applied") is True
-                    and evidence_meta.get("primary_evidence_floor_decisive") is True
-                    and evidence_meta.get("nutrition_authority_canonical") == authority
-                )
+                selected_authority = _current_nutrition_authority_receipt(
+                    product, _safe_dict(dimensions.get("evidence")))
                 selected_authority = selected_authority or _current_omega_authority_receipt(
                     product, _safe_dict(dimensions.get("evidence")))
                 if (not receipts and float(_safe_dict(dimensions.get("evidence")).get("score") or 0) > 0

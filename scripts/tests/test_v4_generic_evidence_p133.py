@@ -1596,3 +1596,82 @@ def test_vitamin_c_nutritional_credit_is_independent_of_marketing(claim):
     evidence = score_evidence(product, apply_primary_floor=True)
     assert evidence["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
     assert evidence["score"] == 10.0
+
+
+@pytest.mark.parametrize('module', ['generic', 'sports', 'fiber_digestive', 'multi_or_prenatal', 'b_complex', 'omega', 'probiotic'])
+def test_eaa_role_qualification_is_shared_by_all_module_readiness(module):
+    from test_evidence_resolver import _eaa_product
+    from assessment_readiness import evaluate_evidence_assessment
+    product = _eaa_product()
+    assessment = evaluate_evidence_assessment(product, module=module)
+    rows = [row for row in assessment['ingredient_assessments'] if row['canonical_id'] == 'l_leucine']
+    assert len(rows) == 1
+    assert rows[0]['state'] == 'evaluated_supported'
+    assert rows[0]['evidence_applicability'] == 'nutrition_authority'
+
+
+def test_eaa_floor_uses_existing_magnitude_and_actual_role_reference():
+    from test_evidence_resolver import _eaa_product
+    from scoring_v4.modules.generic_evidence import score_evidence, NUTRITION_AUTHORITY_FLOOR
+    result = score_evidence(_eaa_product(), apply_primary_floor=True, owner_scoped=True)
+    assert result['score'] == NUTRITION_AUTHORITY_FLOOR
+    assert result['metadata']['selected_nutrition_authority'] == 'l_leucine'
+    assert result['metadata']['source_references'][0]['doi'] == '10.17226/10490'
+    assert result['metadata']['contributing_record_assessments'] == []
+
+
+@pytest.mark.parametrize('changes', [
+    {'name': 'DL-Leucine', 'raw_source_text': 'DL-Leucine'},
+    {'form_match_status': 'unspecified'},
+    {'evidence_type': 'blend_anchor_mass', 'reason': 'identity_bearing_blend_header_mass_from_nested_child'},
+])
+def test_eaa_unqualified_form_or_lent_mass_cannot_receive_nutrition_floor(changes):
+    from test_evidence_resolver import _eaa_product
+    from scoring_v4.modules.generic_evidence import score_evidence
+    result = score_evidence(_eaa_product(**changes), apply_primary_floor=True, owner_scoped=True)
+    assert result['score'] == 0
+    assert result['metadata']['selected_nutrition_authority'] is None
+
+
+def test_trace_eaa_does_not_anchor_unrelated_formula_nutrition_floor():
+    from test_evidence_resolver import _eaa_product
+    from scoring_v4.modules.generic_evidence import score_evidence
+    product = _eaa_product(quantity=1)
+    owner = {'name': 'Unreviewed botanical', 'canonical_id': 'unreviewed_botanical',
+             'mapped': True, 'quantity': 1000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[1]'}
+    product['product_name'] = 'Unreviewed botanical 1000 mg'
+    product['activeIngredients'].append(owner)
+    product['ingredient_quality_data']['ingredients'].append(owner)
+    product['ingredient_quality_data']['ingredients_scorable'].append(owner)
+    result = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert result['score'] == 0
+    assert result['metadata']['selected_nutrition_authority'] is None
+
+
+@pytest.mark.parametrize('module', ['generic', 'sports', 'fiber_digestive', 'multi_or_prenatal', 'b_complex', 'omega', 'probiotic'])
+@pytest.mark.parametrize('source,form,status', [
+    ('DL-Leucine', 'l-leucine powder', 'mapped'),
+    ('N-Acetyl-L-Leucine', 'l-leucine powder', 'mapped'),
+    ('L-Leucine', 'unspecified', 'unspecified'),
+])
+def test_eaa_unqualified_preparation_never_becomes_nutrition_authority_on_any_route(module, source, form, status):
+    from test_evidence_resolver import _eaa_product
+    from assessment_readiness import evaluate_evidence_assessment
+    product = _eaa_product(name=source, form=form, form_match_status=status)
+    assessment = evaluate_evidence_assessment(product, module=module)
+    rows = [row for row in assessment['ingredient_assessments'] if row['canonical_id'] == 'l_leucine']
+    assert len(rows) == 1
+    assert rows[0]['evidence_applicability'] != 'nutrition_authority'
+    assert rows[0]['reason_code'] != 'nutritional_role_authority_established'
+
+
+def test_eaa_nutritional_credit_does_not_create_performance_trial_receipts():
+    from test_evidence_resolver import _eaa_product
+    from scoring_v4.modules.generic_evidence import score_evidence, NUTRITION_AUTHORITY_FLOOR
+    product = _eaa_product()
+    product['product_name'] = 'L-Leucine Muscle Strength and Growth'
+    result = score_evidence(product, apply_primary_floor=True, owner_scoped=True)
+    assert result['score'] == NUTRITION_AUTHORITY_FLOOR
+    assert result['metadata']['contributing_record_assessments'] == []
+    assert result['metadata']['evidence_result_state'] == 'evaluated_authority'
+    assert result['metadata']['source_references'][0]['supports_claims'] == ['established_nutritional_role']
