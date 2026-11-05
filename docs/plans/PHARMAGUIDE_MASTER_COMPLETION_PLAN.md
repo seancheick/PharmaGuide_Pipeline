@@ -10,6 +10,8 @@ Owner: `pipeline_incremental.py::run_incremental` and `batch_processor.py::_gene
 
 Implementation is in `c0305ca99`, `daa7188f0` and `228893b9f`. Independent review found no remaining concrete blocker. The combined owner slice passed 134 tests; the final resume/denominator/write-failure slice passed 46 tests. Real-label full/incremental hold-and-recovery parity also passed. Initial error retention, JSONL promotion, historical reports, missing provenance and unchanged hold reporting have explicit regressions. CI and the applicable local checkpoint remain required before integration. The corrected Clean fingerprint requires one fresh baseline; later affected-label retries reuse successful outputs.
 
+User-supplied follow-up audit reproduced two additional resume defects: file-count numbering could overwrite gapped/JSONL output, and rejected categorization could enter completed paths. The same canonical owner now uses the highest sequence across output categories, rejects conflicts, and records only explicitly accepted dispositions. Rejections remain attributable and retryable. The strict full-pipeline format boundary rejects JSONL, including mixed input, rather than silently skipping it; the operations guide documents the supported JSON mode. Final updated-source checks and CI supersede the earlier candidate checkpoint.
+
 The interrupted operator run exposed the same executor defect on BulkSupplements (4,049 successful, one incomplete, no errors) and Emergen_C (133 successful, one incomplete, no errors). Sean stopped the run to integrate this repair. These observations do not change catalog completeness or publication qualification.
 
 ## Active target — 99% scientific completion and honest public ratings (November 5)
