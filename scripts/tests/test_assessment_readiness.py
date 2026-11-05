@@ -1590,20 +1590,27 @@ def test_empty_generic_dependencies_pass_only_for_actual_selected_nutrition_auth
 
 
 def test_unrelated_claim_does_not_reopen_reviewed_native_ingredient_evidence():
+    from copy import deepcopy
     from test_probiotic_applicability_rubric import strain_product
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from assessment_readiness import evaluate_release_assessment
     product = strain_product(clinical_id='STRAIN_PLANTARUM_299V',
                              name='Lactobacillus plantarum 299v', dose=1e10)
-    baseline = score_evidence(product)
+    baseline = deepcopy(score_evidence(product))
     product['product_name'] = 'Sleep support probiotic'  # Unrelated claim remains separate.
-    evidence = score_evidence(product)
+    evidence = deepcopy(score_evidence(product))
     assert evidence['score'] == baseline['score'] == 16
     for current, previous in zip(evidence['metadata']['contributing_native_contexts'],
                                  baseline['metadata']['contributing_native_contexts'], strict=True):
         for key in ('context_id', 'source_pmids', 'population', 'dose', 'outcomes'):
             assert current.get(key) == previous.get(key)
     assert evidence['metadata']['evidence_result_state'] == 'evaluated_applicable'
+    # Deliberately reopen a copied source outcome: a label claim must not
+    # repair this independent review failure, even when the real registry is complete.
+    for payload in (baseline, evidence):
+        context = next(c for c in payload['metadata']['contributing_native_contexts']
+                       if c['context_id'] == 'p299v_ibs_rome3_22912552')
+        next(o for o in context['outcomes'] if o['name'] == 'global_symptom_rating')['hierarchy'] = 'unresolved'
     readiness = {name: {'readiness': 'complete'} for name in
                  ('identity', 'dose', 'evidence', 'verification', 'route')}
     result = evaluate_release_assessment(product, readiness,
@@ -1611,7 +1618,7 @@ def test_unrelated_claim_does_not_reopen_reviewed_native_ingredient_evidence():
     original = evaluate_release_assessment(product, readiness,
         {'module': 'probiotic', 'dimensions': {'evidence': baseline}}, unfinished_source=None)
     assert result == original
-    # The existing source's unfinished outcome review stays visible; a label
+    # The deliberately unfinished copied source stays visible; a label
     # claim neither creates nor removes that independent source limitation.
     assert result['blockers'] == ['probiotic_contributing_context_incomplete:p299v_ibs_rome3_22912552']
 

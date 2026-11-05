@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.1",
-    "last_updated": "2026-10-29",
+    "last_updated": "2026-11-05",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.1",
@@ -2353,7 +2353,7 @@
             },
             {
               "name": "serum_cytokines",
-              "hierarchy": "unresolved",
+              "hierarchy": "secondary",
               "kind": "surrogate",
               "direction": "null"
             }
@@ -4714,7 +4714,7 @@
             },
             {
               "name": "global_symptom_rating",
-              "hierarchy": "unresolved",
+              "hierarchy": "not_reported",
               "kind": "patient_important",
               "direction": "positive"
             }

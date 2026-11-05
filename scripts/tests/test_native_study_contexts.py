@@ -675,3 +675,34 @@ def test_pending_bibliography_sentinel_is_not_expanded_into_invented_pmids():
         for context in record.get('study_contexts', []):
             for limitation in context.get('limitations', []):
                 assert 'e, x, t, r, a, c, t, i, o, n' not in limitation
+
+
+@pytest.mark.parametrize("strain_id,context_id,outcome_name,hierarchy,kind,direction,reviewer,reviewed_at", [
+    ("STRAIN_COAGULANS_IS2", "is2_adult_ibs_multicenter_31434935", "serum_cytokines",
+     "secondary", "surrogate", "null",
+     "Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review", "2026-09-14T22:23:43Z"),
+    ("STRAIN_PLANTARUM_299V", "p299v_ibs_rome3_22912552", "global_symptom_rating",
+     "not_reported", "patient_important", "positive", "Dr. Pham", "2026-10-26"),
+])
+def test_reviewed_ibs_endpoint_hierarchies_complete_without_changing_claims(
+    strain_id, context_id, outcome_name, hierarchy, kind, direction, reviewer, reviewed_at,
+):
+    from clinical_evidence_schema import validate_frozen_context
+
+    entry = studied_formulas._clinical_strain_registry()[strain_id]
+    ctx = next(c for c in entry["study_contexts"] if c["context_id"] == context_id)
+    assert validate_frozen_context(ctx, require_complete_review=True) == []
+    outcome = next(o for o in ctx["outcomes"] if o["name"] == outcome_name)
+    assert (outcome["hierarchy"], outcome["kind"], outcome["direction"]) == (hierarchy, kind, direction)
+    assert pm.context_accepted_for_scoring(ctx) is True
+    assert ctx["clinical_review"]["reviewer"] == reviewer
+    assert ctx["clinical_review"]["reviewed_at"] == reviewed_at
+    if strain_id == "STRAIN_PLANTARUM_299V":
+        assert "Global efficacy rating hierarchy not explicitly designated." in ctx["limitations"]
+        assert ctx["applicability"]["excluded_claim_terms"] == [
+            "digestive balance", "healthy digestive system", "digestive health"]
+        negative = next(c for c in entry["study_contexts"] if c["context_id"] == "p299v_ibs_rome2_25194614")
+        assert {o["direction"] for o in negative["outcomes"]} == {"null"}
+    else:
+        unresolved = next(c for c in entry["study_contexts"] if c["context_id"] == "is2_pediatric_ibs_chewable_29695183")
+        assert "outcomes.review_incomplete" in validate_frozen_context(unresolved, require_complete_review=True)
