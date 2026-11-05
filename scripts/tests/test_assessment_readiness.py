@@ -1989,3 +1989,33 @@ def test_native_route_minor_unnamed_nonnative_row_is_not_required(module, native
     result = evaluate_release_assessment(product, readiness, {"module": module,
         "dimensions": {"evidence": evidence}}, unfinished_source=None)
     assert result["is_complete"] is True
+
+
+@pytest.mark.parametrize("module", ["generic", "sports", "fiber_digestive", "multi_or_prenatal", "b_complex"])
+@pytest.mark.parametrize("material", [True, False])
+def test_unknown_individual_evidence_identity_cannot_disappear_from_required_review(module, material):
+    from assessment_readiness import evaluate_assessment_readiness, evaluate_release_assessment
+    from evidence_resolver import evidence_required_canonicals
+
+    known = _row("Vitamin C", "vitamin_c", quantity=100)
+    unknown = _row("Unresolved botanical", None, quantity=100 if material else 0.001)
+    unknown.update(raw_source_path="ingredientRows[1]", source_row_ref="ingredientRows[1]")
+    product = _product(known, title="Nutrient Complex")
+    product["activeIngredients"] = [known, unknown]
+    product["ingredient_quality_data"].update(ingredients=[known, unknown],
+        ingredients_scorable=[known, unknown], total_active=2)
+    assert evidence_required_canonicals(product, module=module) == {"vitamin_c"}
+    fresh = evaluate_assessment_readiness(product, module=module)
+    if module != "sports":  # Sports independently requires a route-driving identity.
+        assert fresh["identity"]["readiness"] == "complete"
+    evidence = fresh["evidence"]
+    row = next(row for row in evidence["ingredient_assessments"] if row["source_row_ref"] == "ingredientRows[1]")
+    assert row["canonical_id"] is None
+    assert row["state"] == ("not_yet_evaluated" if material else "not_applicable")
+    readiness = {dimension: {"readiness": "complete"} for dimension in
+                 ("identity", "dose", "verification", "route")}
+    readiness["evidence"] = evidence
+    result = evaluate_release_assessment(product, readiness, {"module": module,
+        "dimensions": {"evidence": {"score": 0, "metadata": {
+            "evidence_result_state": "evaluated_authority"}}}}, unfinished_source=None)
+    assert ("evidence_assessment_incomplete" in result["blockers"]) is material

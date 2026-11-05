@@ -1660,6 +1660,13 @@ def _required_evidence_review_open(product: Mapping[str, Any], readiness: Mappin
     open_refs = set(_safe_list(evidence.get("not_yet_evaluated_row_refs")))
     open_rows = [row for row in _safe_list(evidence.get("ingredient_assessments"))
                  if isinstance(row, Mapping) and row.get("source_row_ref") in open_refs]
+    # Required-owner sets contain known identities only. A pending individual
+    # subject with no canonical identity cannot disappear from that question.
+    if any(not _norm(row.get("canonical_id"))
+           and row.get("state") == EVIDENCE_NOT_YET_EVALUATED
+           and row.get("evidence_applicability") in (None, EVIDENCE_APPLICABILITY_INDIVIDUAL)
+           for row in open_rows):
+        return True
     if native_module:
         # The native branch owns its own ingredient review. Its unused generic
         # ledger cannot reopen that conclusion, but another required ingredient
