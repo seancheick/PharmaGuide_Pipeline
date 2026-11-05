@@ -827,7 +827,10 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
     lactation = any(find_affirmative_label_match(_LACTATING_TARGET, text) for text in [*group_texts, title])
     special = _special_population(context, description)
     if special == "infant":
-        infant = children and bool(_INFANT_TARGET.search(" ".join([title, *map(_target_group_text, groups)])))
+        # Prenatal titles can name the baby without targeting infant administration.
+        infant = children and not pregnancy and any(
+            find_affirmative_label_match(_INFANT_TARGET, text) for text in [title, *group_texts]
+        )
         return "eligible" if infant else "special_targeting_absent"
     if special == "pediatric":
         return "eligible" if children else "special_targeting_absent"

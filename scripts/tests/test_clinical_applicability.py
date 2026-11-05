@@ -1745,6 +1745,7 @@ def test_pregnancy_targeted_label_cannot_inherit_nonpregnant_pcos_result():
 @pytest.mark.parametrize('product_name,targets,state', [
     ('Daily Probiotic', [], 'special_targeting_absent'),
     ('Baby Probiotic Drops', ['Infants (0-12 months)'], 'eligible'),
+    ('Baby & Me 2 Prenatal Probiotic + Prebiotic', ['Pregnant Women'], 'special_targeting_absent'),
     # A children's product is not an infant product: colic was studied in infants.
     ('Kids Probiotic', ['Children (4-8 Years)'], 'special_targeting_absent'),
 ])
