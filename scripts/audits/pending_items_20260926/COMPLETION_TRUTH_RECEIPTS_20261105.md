@@ -39,7 +39,7 @@ Bounded comparison: 767 actual EAA products plus the original 24 comparison prod
 - Original 24 controls: zero numeric changes; 333190 changes only population metadata. Additional 251169 likewise changes only population metadata.
 - Population `775b62810`: the existing shared maternal vocabulary covers string/list/mapping target groups and prevents baby-title inference from treating maternal administration as pediatric. The actual 15,447-product source scan finds no Pregnancy/Expecting target-group occurrences. Two actual products, 251169/333190, lose five pediatric-context eligibility records; their totals, pillars, completion and safety remain unchanged. No deployed numeric impact is claimed.
 
-Verification: 662 EAA owner tests, independent 28 final adversarial tests, and root's additional 786 resolver/reference/population cases pass. Independent review verifies all 445 measured runtime/data/config hashes and the retained primary-source page, including the corrected histidine footnote. Hosted candidate CI and integration remain required. No catalog/app activation or global completion numerator follows from these bounded results.
+Verification: 662 EAA owner tests, independent 28 final adversarial tests, and root's additional 786 resolver/reference/population cases pass. Independent review verifies all 445 measured runtime/data/config hashes and the retained primary-source page, including the corrected histidine footnote. Exact candidate CI42111010398 and #387 CI42110416323 pass all eight shards and Merge readiness; integration is main2e6f2b396. No catalog/app activation or global completion numerator follows from these bounded results.
 
 Retained private measurement directory: `/Users/seancheick/pg_quality/catalog-release-20261105/essential-amino-acid-replay/`. SHA256 `ALL_SCORE_RESULT.json`: `ed523d1da18a49b0738ff0269956fe7a1b7f738d5d68139d807574611f745183`; `REPRESENTATIVE_RAW_VS_CAPTURED_SCORE.json`: `9200d8da6f05dbb7b714b37959c7e8146cb01965704cdbad3919aab45606ab7d`. Exact original inputs/manifests and compact reports remain recoverable; only the verified duplicate capture was removed after lossless archival.
 
@@ -69,3 +69,11 @@ Current annotation-candidate source hashes (SHA-256):
 | `scripts/scoring_input_contract.py` | `0cd086229d5d1ff97c520454d7a149a4eb928673e42e5270577cfcf1bf371593` |
 | `scripts/scoring_v4/scored_artifact.py` | `a4f0e1915a0d784d0cc0e1ea80d4ec040a7a34bf1203971cd8ee4bfbcb868458` |
 | `scripts/studied_formulas.py` | `5229f80519b76a670b6f226bc51699ea0f3fd9922be944904b4a7e278f798f62` |
+
+## Engineering integration qualification
+
+Pipeline #387 and combined #388 are merged through `2e6f2b396`; app #215 is merged at `487c2821`. Required exact-head CI passed on `4c132c1c9`, `dec8271c0` and `9e79c515`, respectively; app main also passed. Five obsolete EAA expectations were replaced with explicit unchanged clinical-attribution, disclosure, Dose and materiality checks plus rejected-form controls (158 cases pass). Structured references now reach the existing content verifier (32 tests; all three actual EAA references MATCH, zero unresolved).
+
+Integration requalification intersects the measured792 with actual changed dependencies: zero of31 strain-context product IDs, and only293955 of22 negated-predicate products. A fresh canonical score of293955 is entirely unchanged after clock normalization. The other791 retain their original execution receipts with dependency proof. Subsequent FDA updater, audit-verifier, tests and instruction changes do not alter scored owners or inputs. This does not claim792 fresh executions under the final merge.
+
+The bounded162 EAA closures and earlier case receipts are not added into an invented global numerator. No catalog rebuild, activation, backend deployment, signed app installation or native-device qualification occurred. Existing99% and actual-artifact acceptance gates remain open.
