@@ -206,6 +206,8 @@ bug-fix notes are history, not specifications.
 - Private helpers, local names, test utilities and internal files need no approval once the
   Owner Check passes.
 
+Source identity, transcription, applicability wiring and removal of unsupported score transfer are engineering work. Verify the source, preserve existing clinical decisions and safety rules, and continue those fixes and independent checks while a genuinely new clinical determination is pending. Request sign-off only for the specific new clinical conclusion or policy that needs it. Record a supplied sign-off once and apply its exact scope through the existing owner.
+
 ## Bugs you find
 
 - Fix them: failing test first, the fix in its own atomic commit, logged in the handoff, then back

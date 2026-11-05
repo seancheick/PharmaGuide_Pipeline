@@ -1,5 +1,13 @@
 ## November 4 — active Claude audit and repairs
 
+## November 4 — post-pipeline release blockers
+
+Owners: `clinical_applicability.py::assess_context_population` for prenatal/infant routing, the existing IQM and label corrections for GS15-4 preparation identity, and `botanical_profile.py::_botanical_benchmark` with the literature Dose registry for the exact Dose disposition. Evidence: strict preflight, raw fixture and original label comparison. No parallel scorer or release exception.
+
+Sean supplied Dr. Pham’s signed GS15-4 decision on November 4. The exact 200 mg source row now resolves to its own preparation, with an ungraded Formulation value and a separate completed no-general-benchmark Dose decision. Generic Panax exclusions remain in force. The real label passes the preflight containment rule as Not Scored while Formulation remains unverified. Comparison with the rebuilt artifact found identical safety status, safety gate and interaction profile. No Evidence credit added. Final catalog visibility and app rendering require the post-integration rebuild and validation.
+
+The prenatal probiotic no longer inherits infant-only evidence. Combined qualification remains on #382. Do not claim a catalog or app release from targeted tests.
+
 ## November 4 — CI duration correction
 
 Owner: `test_profiles.py::shard_assignment` and `test_shard_plan.py::build_plan`; `.github/workflows/pipeline-tests.yml` schedules the existing partition. Evidence: all four JUnit artifacts from green run `41939501193`. Will NOT create another test selector or remove tests/assertions/skip guards.
