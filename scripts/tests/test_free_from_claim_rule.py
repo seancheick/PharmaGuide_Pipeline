@@ -39,7 +39,16 @@ def run():
             statements = [dict(s, notes=(s.get("notes") or "").replace(old, new)) for s in statements]
         raw["statements"] = statements + [{"type": "Precautions", "notes": t} for t in extra_statements]
         enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
-        transparency = build_scored_artifact(enriched)["_v4_module_breakdown"]["dimensions"]["transparency"]
+        scored = build_scored_artifact(enriched)
+        if pid == "328751":
+            # The ungraded GS15-4 preparation now keeps this label unscored.
+            # Exercise the same B2 owner without requiring a public score.
+            from scoring_v4.modules.generic_transparency import score_transparency
+
+            assert scored["quality_score_status"] == "not_scored"
+            transparency = score_transparency(enriched)
+        else:
+            transparency = scored["_v4_module_breakdown"]["dimensions"]["transparency"]
         return enriched, transparency
 
     return _run

@@ -31,7 +31,7 @@
     },
     "statistics": {
       "total_parents": 656,
-      "total_forms": 1476,
+      "total_forms": 1477,
       "total_form_aliases": 12308,
       "parents_with_parent_aliases": 151,
       "parents_with_contains_aliases": 0,
@@ -26786,6 +26786,10 @@
       "gs15-4 enzyme-fermented asian ginseng root extract": {
         "bio_score": null,
         "absorption": "unknown for this exact preparation",
+        "absorption_structured": {
+          "quality": "unknown",
+          "value": null
+        },
         "aliases": [
           "GS15-4",
           "gs15-4 fermented korean ginseng extract",
