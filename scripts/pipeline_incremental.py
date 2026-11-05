@@ -743,7 +743,7 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
     for stage in ("enrich", "score"):
         plan["stages"][stage] = sorted(set(plan["stages"][stage]) - (held - set(plan["stages"]["clean"])))
     if held:
-        plan["held_clean_inputs"] = {name: sorted(rows) for name, rows in clean_holds.items()}
+        plan["held_clean_inputs"] = {name: sorted(set(rows) & set(raw)) for name, rows in clean_holds.items()}
     if plan_only:
         return plan
     if (state_path.exists() and not plan["deleted"]
@@ -832,7 +832,7 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
                             reason = (row.get("error_message") if name == "errors" else
                                       (row.get("metadata") or {}).get("completeness", {}).get("missingFields", []))
                             plan["reasons"].append(f"Clean {name}: {pid}: {reason}")
-                    plan["held_clean_inputs"] = {name: sorted(rows) for name, rows in clean_holds.items()}
+                    plan["held_clean_inputs"] = {name: sorted(set(rows) & set(raw)) for name, rows in clean_holds.items()}
                 merged.update(replacement)
                 candidate_root = (candidate_prefix if stage == "clean" else
                                   Path(str(candidate_prefix) + ("_enriched" if stage == "enrich" else "_scored")))

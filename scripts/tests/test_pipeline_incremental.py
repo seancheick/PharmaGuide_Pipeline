@@ -1237,3 +1237,16 @@ def test_clean_jsonl_keeps_unicode_line_separators_inside_strings(tmp_path, sepa
     assert stage_products(old, 'clean') == {'1': row}
     materialize_merged(old, new, 'clean', {'1': row})
     assert (new / path.name).read_bytes() == path.read_bytes()
+
+
+def test_deleted_clean_hold_is_absent_from_plan_and_execution(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, prefix)
+    (raw / '1.json').unlink()
+    for plan_only in (True, False):
+        result = mod.run_incremental(runner, raw, prefix, plan_only=plan_only)
+        assert result['deleted'] == ['1']
+        assert all('1' not in ids for ids in result['held_clean_inputs'].values())
