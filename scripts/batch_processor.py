@@ -1117,6 +1117,7 @@ class BatchProcessor:
 
         summary = {
             "batch_num": batch_num + 1,
+            "total_files": len(files),
             "processed": len(processed_files),
             "cleaned": len(cleaned_products),
             "needs_review": len(needs_review_products),
@@ -1417,7 +1418,9 @@ class BatchProcessor:
         total_validation_failures = sum(
             r["summary"].get("input_validation_failures", 0) for r in batch_results
         )
-        total_attempted = total_processed + total_validation_failures
+        total_attempted = sum(result["summary"].get("total_files",
+            result["summary"]["processed"] + result["summary"].get("input_validation_failures", 0))
+            for result in batch_results)
 
         # Get performance stats
         perf_stats = self.performance_tracker.get_stats()
@@ -1440,7 +1443,7 @@ class BatchProcessor:
             },
             "unmapped_ingredients": len(self._true_unmapped_counter()),
             "mapped_ingredients": len(self.global_mapped),
-            "success_rate": (total_cleaned / total_attempted * 100) if total_attempted else 0
+            "success_rate": ((total_cleaned + total_needs_review + total_incomplete) / total_attempted * 100) if total_attempted else 0
         }
 
         # Add performance metrics if tracking is enabled

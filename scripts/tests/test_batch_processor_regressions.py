@@ -477,3 +477,65 @@ def test_final_summary_excludes_recognized_and_non_scoreable_rows_from_unmapped(
     )
 
     assert summary["unmapped_ingredients"] == 1
+
+
+@pytest.mark.parametrize('cleaned,review,incomplete,errors,expected', [
+    (4000, 0, 1, 0, 100.0), (0, 1, 0, 0, 100.0), (0, 0, 1, 0, 100.0),
+    (4000, 0, 0, 1, 4000 / 4001 * 100), (0, 0, 0, 1, 0.0),
+])
+def test_processing_success_rate_counts_completed_holds_but_not_errors(
+    tmp_path, cleaned, review, incomplete, errors, expected,
+):
+    processor = BatchProcessor(_make_config(tmp_path))
+    summary = processor._generate_final_summary([{'summary': {
+        'processed': cleaned + review + incomplete + errors, 'cleaned': cleaned,
+        'needs_review': review, 'incomplete': incomplete, 'errors': errors,
+        'input_validation_failures': 0, 'output_write_failures': 0,
+    }}], 1.0)
+    assert summary['success_rate'] == pytest.approx(expected)
+    assert summary['results'] == {'cleaned': cleaned, 'needs_review': review,
+                                  'incomplete': incomplete, 'errors': errors}
+
+
+@pytest.mark.parametrize('failure', ['future', 'categorize', 'ordinary_error'])
+def test_actual_batch_attempt_inventory_counts_worker_and_categorization_failures(tmp_path, monkeypatch, failure):
+    from concurrent.futures import Future
+    import batch_processor as batch
+    processor = BatchProcessor(_make_config(tmp_path))
+    paths = [tmp_path / 'good.json', tmp_path / 'bad.json']
+    for index, path in enumerate(paths):
+        path.write_text(json.dumps({'id': str(index)}))
+    monkeypatch.setattr(processor, '_effective_workers', lambda _: 2)
+    monkeypatch.setattr(processor, 'validate_input_file', lambda _: (True, ''))
+    monkeypatch.setattr(processor, '_write_batch_outputs', lambda *_: True)
+    class CompletedPool:
+        def __init__(self, **kwargs):
+            pass
+        def __enter__(self):
+            return self
+        def __exit__(self, *args):
+            pass
+        def submit(self, function, filename, *args):
+            future = Future()
+            if filename.endswith('bad.json') and failure == 'future':
+                future.set_exception(RuntimeError('Synthetic worker failure'))
+            else:
+                failed = filename.endswith('bad.json') and failure == 'ordinary_error'
+                future.set_result(ProcessingResult(success=not failed, status='success',
+                    data={'id': Path(filename).stem, 'activeIngredients': [], 'inactiveIngredients': []},
+                    file_path=filename, raw_id=Path(filename).stem,
+                    error='Synthetic item error' if failed else None))
+            return future
+    monkeypatch.setattr(batch, 'ProcessPoolExecutor', CompletedPool)
+    categorize = processor._categorize_result
+    def categorize_or_fail(result, *args):
+        if result.file_path.endswith('bad.json') and failure == 'categorize':
+            raise RuntimeError('Synthetic categorization failure')
+        return categorize(result, *args)
+    monkeypatch.setattr(processor, '_categorize_result', categorize_or_fail)
+    result = processor.process_batch(0, paths)
+    summary = processor._generate_final_summary([result], 1.0)
+    assert summary['total_files'] == 2
+    assert summary['results']['errors'] == 1
+    assert summary['success_rate'] == 50.0
+    assert result['summary']['processed'] == (2 if failure == 'ordinary_error' else 1)

@@ -1058,6 +1058,8 @@ Pipeline Flow:
                 print(json.dumps({
                     "rebuilt": {stage: len(ids) for stage, ids in result["stages"].items()},
                     "deleted": len(result["deleted"]), "reasons": result["reasons"],
+                    "held_clean_inputs": result.get("held_clean_inputs", {}),
+                    "held_clean_counts": {name: len(ids) for name, ids in result.get("held_clean_inputs", {}).items()},
                 }, indent=2))
         sys.exit(0)
 

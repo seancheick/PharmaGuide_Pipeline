@@ -865,3 +865,259 @@ def test_newly_applicable_context_matches_full_rebuild_and_reuses_unrelated_mapp
     assert [row['id'] for row in full_outputs['1']['enriched']['evidence_data']['clinical_matches']] == [source['id']]
     assert full_outputs['2'] == prior_outputs['2']
     assert products == untouched
+
+
+def _partitioned_clean_dataset(tmp_path, monkeypatch):
+    """Canonical output shapes; only execution is deterministic for failure tests."""
+    from pathlib import Path
+    from stage_manifest import write_stage_manifest
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    clean_inputs = []
+
+    def clean(source, output):
+        calls.append('clean')
+        paths = sorted(Path(source).glob('*.json'))
+        values = [json.loads(path.read_text()) for path in paths]
+        clean_inputs.append([value['id'] for value in values])
+        output = Path(output)
+        cleaned = output / 'cleaned'
+        cleaned.mkdir(parents=True)
+        successes = []
+        holds = {'incomplete': [], 'needs_review': []}
+        for path, value in zip(paths, values):
+            disposition = value.get('test_clean_outcome')
+            if disposition in holds:
+                value['metadata'] = {'completeness': {'missingFields': ['fullName'],
+                                                       'criticalFieldsComplete': False}}
+                holds[disposition].append(value)
+            elif disposition == 'errors' and not getattr(runner, 'test_recover_errors', False):
+                target = output / 'errors'
+                target.mkdir(exist_ok=True)
+                (target / (path.stem + '_error.json')).write_text(json.dumps({
+                    'original_file': str(path), 'error_type': 'SyntheticItemError',
+                    'error_message': 'Synthetic item failure', 'processing_stage': 'normalize',
+                    'timestamp': '2026-11-05T00:00:00Z', 'traceback': None}))
+            elif disposition == 'overlap':
+                holds['incomplete'].append(value)
+                successes.append(value)
+            elif disposition == 'hold_extra':
+                holds['incomplete'].append({**value, 'id': 'unexpected'})
+            elif disposition == 'extra':
+                successes.extend([value, {**value, 'id': 'unexpected'}])
+            elif disposition == 'duplicate':
+                successes.extend([value, value])
+            elif disposition != 'missing':
+                successes.append(value)
+        owned = []
+        if successes:
+            batch = cleaned / 'batch.json'
+            batch.write_text(json.dumps(successes))
+            owned.append(batch)
+        for name, rows in holds.items():
+            if rows:
+                target = output / name
+                target.mkdir()
+                (target / (name + '_batch_1.json')).write_text(json.dumps(rows))
+        write_stage_manifest(cleaned, 'clean', owned)
+        reports = output / 'reports'
+        reports.mkdir()
+        (reports / 'processing_summary.txt').write_text('Synthetic complete per-item disposition report')
+        return True
+
+    runner.run_clean = clean
+    return mod, runner, raw, prefix, calls, clean_inputs
+
+
+@pytest.mark.parametrize('disposition', ['incomplete', 'needs_review'])
+def test_clean_hold_eviction_recovery_and_unchanged_resume(tmp_path, monkeypatch, disposition):
+    mod, runner, raw, prefix, calls, clean_inputs = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = disposition
+    (raw / '1.json').write_text(json.dumps(value))
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result['stages'] == {'clean': ['1'], 'enrich': [], 'score': []}
+    assert clean_inputs == [['1']]
+    for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix)):
+        assert set(mod.stage_products(directory, stage)) == {'2'}
+    held = mod.stage_products(prefix / disposition, 'clean')
+    assert set(held) == {'1'}
+    assert held['1']['metadata']['completeness']['missingFields'] == ['fullName']
+    calls.clear()
+    stable = {path: path.read_bytes() for path in prefix.rglob('*.json')}
+    assert all(not ids for ids in mod.run_incremental(runner, raw, prefix)['stages'].values())
+    assert not calls
+    assert all(path.read_bytes() == data for path, data in stable.items())
+    value.pop('test_clean_outcome')
+    (raw / '1.json').write_text(json.dumps(value))
+    restored = mod.run_incremental(runner, raw, prefix)
+    assert restored['stages'] == {stage: ['1'] for stage in mod.STAGES}
+    for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix)):
+        assert set(mod.stage_products(directory, stage)) == {'1', '2'}
+    calls.clear()
+    assert all(not ids for ids in mod.run_incremental(runner, raw, prefix)['stages'].values())
+    assert not calls
+
+
+def test_clean_error_partial_commit_and_retry_only_failed_item(tmp_path, monkeypatch):
+    from pathlib import Path
+    mod, runner, raw, prefix, calls, clean_inputs = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'errors'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, prefix)
+    assert set(mod.stage_products(mod.stage_directories(prefix)[2], 'score')) == {'2'}
+    assert list((prefix / 'errors').glob('*_error.json'))
+    before = {path: path.read_bytes() for root in (prefix, Path(str(prefix) + '_enriched'), Path(str(prefix) + '_scored'))
+              for path in root.rglob('*') if path.is_file()}
+    def failed_retry(source, output):
+        selected = [json.loads(path.read_text())['id'] for path in Path(source).glob('*.json')]
+        assert selected == ['1']
+        return False
+    with monkeypatch.context() as failed:
+        failed.setattr(runner, 'run_clean', failed_retry)
+        with pytest.raises(mod.StageManifestError, match='Incremental clean failed'):
+            mod.run_incremental(runner, raw, prefix)
+    assert all(path.read_bytes() == data for path, data in before.items())
+    runner.test_recover_errors = True
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result['stages'] == {stage: ['1'] for stage in mod.STAGES}
+    assert clean_inputs == [['1'], ['1']]
+    assert set(mod.stage_products(mod.stage_directories(prefix)[2], 'score')) == {'1', '2'}
+    calls.clear()
+    assert all(not ids for ids in mod.run_incremental(runner, raw, prefix)['stages'].values())
+    assert not calls
+
+
+def test_clean_unexplained_missing_output_stays_fatal(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'missing'
+    (raw / '1.json').write_text(json.dumps(value))
+    with pytest.raises(mod.StageManifestError, match='output ID inventory'):
+        mod.run_incremental(runner, raw, prefix)
+
+
+@pytest.mark.parametrize('defect', ['extra', 'duplicate', 'overlap', 'hold_extra'])
+def test_clean_disposition_partition_rejects_unknown_extra_or_duplicate_ids(tmp_path, monkeypatch, defect):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = defect
+    (raw / '1.json').write_text(json.dumps(value))
+    before = (prefix / '.incremental_state.json').read_bytes()
+    with pytest.raises(mod.StageManifestError, match='inventory|[Dd]uplicate'):
+        mod.run_incremental(runner, raw, prefix)
+    assert (prefix / '.incremental_state.json').read_bytes() == before
+
+
+@pytest.mark.parametrize('manifest_defect', ['missing', 'incomplete'])
+def test_clean_holds_cannot_override_missing_or_failed_producer_proof(tmp_path, monkeypatch, manifest_defect):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    clean = runner.run_clean
+    def broken(source, output):
+        from pathlib import Path
+        from stage_manifest import MANIFEST_NAME
+        clean(source, output)
+        manifest = Path(output) / 'cleaned' / MANIFEST_NAME
+        if manifest_defect == 'missing':
+            manifest.unlink()
+        else:
+            payload = json.loads(manifest.read_text())
+            payload['processing_complete'] = False
+            manifest.write_text(json.dumps(payload))
+        return True
+    monkeypatch.setattr(runner, 'run_clean', broken)
+    with pytest.raises(mod.StageManifestError, match='producer manifest|incomplete'):
+        mod.run_incremental(runner, raw, prefix)
+
+
+def test_owned_clean_hold_tampering_is_fatal_before_reuse(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, prefix)
+    held_file = next(path for path in (prefix / 'incomplete').glob('*.json') if not path.name.startswith('.'))
+    held_file.write_text('[]')
+    with pytest.raises(mod.StageManifestError, match='checksum mismatch'):
+        mod.run_incremental(runner, raw, prefix)
+
+
+def test_clean_jsonl_materialization_preserves_controls_and_removes_only_held_id(tmp_path):
+    from stage_manifest import write_stage_manifest
+    from pipeline_incremental import stage_products, materialize_merged
+    old, new = tmp_path / 'old', tmp_path / 'new'
+    old.mkdir()
+    new.mkdir()
+    path = old / 'cleaned_batch_1.jsonl'
+    path.write_text('{"id":"1"}\n{"id":"2"}\n')
+    write_stage_manifest(old, 'clean', [path])
+    assert set(stage_products(old, 'clean')) == {'1', '2'}
+    materialize_merged(old, new, 'clean', {'2': {'id': '2'}})
+    write_stage_manifest(new, 'clean', list(new.glob('*.jsonl')))
+    assert stage_products(new, 'clean') == {'2': {'id': '2'}}
+
+
+def test_incremental_cli_reports_unchanged_held_inputs(monkeypatch, capsys, tmp_path):
+    import sys
+    from types import SimpleNamespace
+    from pathlib import Path
+    import run_pipeline
+    import pipeline_incremental
+    result = {'stages': {stage: [] for stage in ('clean', 'enrich', 'score')},
+              'deleted': [], 'reasons': [],
+              'held_clean_inputs': {'incomplete': ['312659'], 'needs_review': [], 'errors': ['failed-id']}}
+    monkeypatch.setattr(pipeline_incremental, 'run_incremental', lambda *args, **kwargs: result)
+    monkeypatch.setattr(run_pipeline, 'PipelineRunner', lambda *_: SimpleNamespace(
+        script_dir=tmp_path / 'scripts', _resolve_path=lambda path: Path(path)))
+    monkeypatch.setattr(sys, 'argv', ['run_pipeline.py', '--incremental', '--raw-dir', str(tmp_path),
+                                    '--output-prefix', str(tmp_path / 'output')])
+    with pytest.raises(SystemExit) as stopped:
+        run_pipeline.main()
+    assert stopped.value.code == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output['held_clean_counts'] == {'incomplete': 1, 'needs_review': 0, 'errors': 1}
+    assert output['held_clean_inputs']['incomplete'] == ['312659']
+
+
+def test_real_null_ingredients_hold_transitions_match_full_rebuild(tmp_path):
+    from pathlib import Path
+    from run_pipeline import PipelineRunner
+    from pipeline_incremental import run_incremental, stage_directories, stage_products
+    from audits.quality_redesign.replay import without_volatile
+    repo = Path(__file__).resolve().parents[2]
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    fixtures = repo / 'scripts/tests/fixtures'
+    labels = {}
+    for name in ('incremental_creatine_336362_raw.json', 'evidence_truth_231852_raw.json'):
+        value = json.loads((fixtures / name).read_text())
+        labels[str(value['id'])] = value
+        (raw / (str(value['id']) + '.json')).write_text(json.dumps(value))
+    runner = PipelineRunner()
+    prefix = tmp_path / 'incremental'
+    run_incremental(runner, raw, prefix)
+    original_control = {stage: stage_products(directory, stage)['231852']
+        for stage, directory in zip(('clean', 'enrich', 'score'), stage_directories(prefix))}
+    for held in (True, False):
+        changed = deepcopy(labels['336362'])
+        if held:
+            changed['ingredientRows'] = None  # Actual Bulk312659/Emergen_C250356 defect shape.
+        (raw / '336362.json').write_text(json.dumps(changed))
+        result = run_incremental(runner, raw, prefix)
+        assert result['stages']['clean'] == ['336362']
+        assert result['stages']['enrich'] == ([] if held else ['336362'])
+        assert result['stages']['score'] == ([] if held else ['336362'])
+        full = tmp_path / ('full_held' if held else 'full_valid')
+        assert runner.run_pipeline(raw_dir=str(raw), output_prefix=str(full), strict_release_gates=True)['success']
+        for stage, left, right in zip(('clean', 'enrich', 'score'), stage_directories(prefix), stage_directories(full)):
+            got, expected = stage_products(left, stage), stage_products(right, stage)
+            assert got['231852'] == original_control[stage]
+            assert {pid: without_volatile(row, {'clean': 'cleaned', 'enrich': 'enriched', 'score': 'scored'}[stage])
+                    for pid, row in got.items()} == {
+                pid: without_volatile(row, {'clean': 'cleaned', 'enrich': 'enriched', 'score': 'scored'}[stage])
+                for pid, row in expected.items()}
+        resumed = run_incremental(runner, raw, prefix)
+        assert all(not ids for ids in resumed['stages'].values())
