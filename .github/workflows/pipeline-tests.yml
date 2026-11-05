@@ -51,7 +51,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        shard: [0, 1, 2, 3]
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
     env:
       FLUTTER_REPO: ${{ github.workspace }}/app
     steps:
@@ -87,7 +87,7 @@ jobs:
           # balanced by measured duration (scripts/tests/shard_plan.json).
           export PG_TEST_WORKERS=1
           export PG_TEST_SHARD_INDEX=${{ matrix.shard }}
-          export PG_TEST_SHARD_COUNT=4
+          export PG_TEST_SHARD_COUNT=8
           (while true; do free -m | awk 'NR==2 {print "ci-memory used=" $3 "MB free=" $4 "MB"}'; sleep 30; done) &
           monitor_pid=$!
           trap 'kill "$monitor_pid" 2>/dev/null || true' EXIT
