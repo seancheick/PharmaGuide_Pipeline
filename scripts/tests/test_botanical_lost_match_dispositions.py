@@ -110,6 +110,8 @@ def test_ceylon_denial_is_recorded_on_the_real_label_path(enricher, product_id, 
     rejected = product["evidence_data"].get("rejected_clinical_matches") or []
     reasons = {item.get("id"): item.get("reason_code") for item in rejected}
     assert reasons.get("INGR_CINNAMON_EXTRACT") == "clinical_identity_excluded"
+    assert product["activeIngredients"][0]["raw_source_text"] == label
+    assert score_evidence(product)["score"] == 0  # No Cassia credit for either Ceylon representation.
 
 
 def test_cassia_cinnamon_preparation_cannot_bypass_missing_source_approval():
@@ -212,7 +214,10 @@ def test_scorer_recovery_carries_its_row_reference_through_a_source_required_sco
     source = _product(product_id, label, "Cranberry", "cranberry", "Cranberry Concentrate", quantity, "ingredientRows[0]")
     product, issues = enricher.enrich_product(deepcopy(source))
     assert product.get("enrichment_status") != "validation_failed", issues
-    assert [m["id"] for m in product["evidence_data"]["clinical_matches"]] == []
+    assert {m["id"] for m in product["evidence_data"]["clinical_matches"]} <= {"INGR_CRANBERRY"}
+    # The source-aware preflight may now establish this valid join directly.
+    # Remove only this fixture's direct cache to exercise the recovery seam.
+    product["evidence_data"]["clinical_matches"] = []
     matches, recovered = resolved_clinical_matches(product)
     match = next((item for item in matches if item["id"] == "INGR_CRANBERRY"), None)
     assert match is not None

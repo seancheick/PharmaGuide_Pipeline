@@ -436,3 +436,38 @@ def test_whole_willow_bark_mass_cannot_suppress_a_salicylate_precaution(enricher
     assert all((h.get("dose_decision") or {}).get("consumer_disposition") != "suppress" for h in hits), (
         "20 mg bark is not a measured salicin dose or a demonstrated safe cutoff"
     )
+
+
+@pytest.mark.parametrize('alternate_cleaner', [False, True])
+def test_unverified_preparation_cannot_replace_verified_parent_with_recognition(enricher, alternate_cleaner):
+    ingredient = {
+        'name': 'PACRAN Cranberry (Vaccinium macrocarpon) powder',
+        'raw_source_text': 'PACRAN Cranberry (Vaccinium macrocarpon) powder',
+        'standardName': 'Cranberry Concentrate', 'ingredientGroup': 'cranberry',
+        'canonical_id': 'cranberry', 'canonical_source_db': 'ingredient_quality_map',
+        'raw_source_path': 'ingredientRows[1]', 'quantity': 300, 'unit': 'mg',
+    }
+    from enrich_supplements_v3 import SKIP_REASON_RECOGNIZED_NON_SCORABLE
+    quality = enricher.databases['ingredient_quality_map']
+    primary = None
+    if alternate_cleaner:
+        ingredient.update(canonical_id='NHA_CRANBERRY_EXTRACT', canonical_source_db='other_ingredients')
+        primary = enricher._match_quality_map('cranberry', 'cranberry', quality)
+    row = {**ingredient, 'skip_reason': SKIP_REASON_RECOGNIZED_NON_SCORABLE}
+    enricher._restamp_recognized_non_scorable_identity(
+        row, ingredient, primary, quality,
+        recognition={'recognition_source': 'other_ingredients',
+                     'recognition_reason': 'flavor_natural',
+                     'matched_entry_id': 'NHA_CRANBERRY_EXTRACT',
+                     'matched_entry_name': 'Cranberry Extract'},
+    )
+    assert row['canonical_id'] == 'cranberry'
+    assert row['canonical_source_db'] == 'ingredient_quality_map'
+    assert row['scoreable_identity'] is False
+    profile = enricher._collect_interaction_profile({
+        'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': []},
+    })
+    alert = next(a for a in profile['ingredient_alerts'] if a['rule_id'] == 'RULE_INGREDIENT_CRANBERRY')
+    assert {h['drug_class_id'] for h in alert['drug_class_hits']} >= {
+        'anticoagulants', 'antiplatelets', 'nsaids',
+    }

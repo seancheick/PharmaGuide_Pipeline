@@ -1377,6 +1377,8 @@ def _resolve_evidence_for_row(
                 applicability_status="applicable_reviewed_trials",
                 reason_code="reviewed_human_clinical_evidence_matched",
                 owner_facts=owner_facts,
+                # Earned credit and completed source review are independent.
+                blocking_reasons=list(dict.fromkeys(unresolved_reasons)),
             )
 
     # 7b. Check Verified Clinical Evidence Registry (Phase 4 Provenance Fact Registry)
@@ -1505,7 +1507,7 @@ def _resolve_evidence_for_row(
             source_results = ([resolve_evidence_for_row(source, product) for source in protein_sources]
                               if row_dict.get("evidence_type") == "sports_primary_dose" else [])
             sources_complete = bool(source_results) and compose_product_resolution_state(
-                [result.disposition for result in source_results])[1]
+                source_results)[1]
             if row_dict.get("evidence_type") == "sports_primary_dose" and not sources_complete:
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name,
@@ -2021,15 +2023,15 @@ def resolve_product_evidence(
     # only where it could answer for the product.
     required = evidence_required_canonicals(prod_dict, module=module) if owner_scoped else None
     scoped = [
-        r.disposition for r, row in zip(resolutions, assessable_rows)
+        r for r, row in zip(resolutions, assessable_rows)
         if required is None
         or r.disposition == EvidenceDisposition.IDENTITY_INSUFFICIENT.value
         or str(row.get("canonical_id") or "").strip().lower() in required
     ]
     # A required row that isn't an efficacy subject answers nothing, so the other
     # owners still do.
-    dispositions = ([r.disposition for r in resolutions]
-                    if all(d == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value for d in scoped) else scoped)
+    dispositions = (resolutions if all(
+        r.disposition == EvidenceDisposition.NOT_EFFICACY_RELEVANT.value for r in scoped) else scoped)
     all_blockers = [b for r in resolutions for b in r.blocking_reasons]
 
     overall, complete = compose_product_resolution_state(dispositions)
@@ -2046,13 +2048,24 @@ def resolve_product_evidence(
     )
 
 
-def compose_product_resolution_state(dispositions: Sequence[str]) -> Tuple[str, bool]:
+def compose_product_resolution_state(dispositions: Sequence[str | EvidenceResolution]) -> Tuple[str, bool]:
     """Compose row dispositions into (overall disposition, assessment complete).
 
     The one precedence for every product-level Evidence composition: the whole
     label (resolve_product_evidence) and an essential-nutrient panel
     (resolve_authority_panel_evidence).
     """
+    # Runtime callers pass the complete result: an eligible positive source
+    # cannot erase known unfinished sibling review. Strings remain supported
+    # for callers that have terminal dispositions only.
+    dispositions = [
+        EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+        if (isinstance(item, EvidenceResolution)
+            and item.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+            and item.blocking_reasons)
+        else item.disposition if isinstance(item, EvidenceResolution) else item
+        for item in dispositions
+    ]
     # Phase 5 Strict Completeness Contract:
     # A product is marked complete ONLY if ALL assessable evidence-bearing actives
     # have reached terminal evaluated dispositions. Having "some" or "most" ingredients
@@ -2167,7 +2180,7 @@ def _compose_panel_resolution(
     """The panel's rows composed exactly like a whole product's."""
     product = product if isinstance(product, Mapping) else {}
     overall, complete = compose_product_resolution_state(
-        [resolution.disposition for resolution in resolutions])
+        resolutions)
     return ProductEvidenceResolution(
         dsld_id=str(product.get("dsld_id") or ""),
         product_name=str(product.get("product_name") or product.get("name") or ""),

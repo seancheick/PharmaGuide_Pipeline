@@ -32,8 +32,10 @@ def census_product(product):
         raise ValueError(f"Product {product.get('id')}: enrichment {product['enrichment_status']}")
     rows = get_evidence_subject_rows(product)
     subjects = []
+    resolutions = []
     for row in rows:
         result = er.resolve_evidence_for_row(row, product)
+        resolutions.append(result)
         subjects.append({
             'canonical_id': result.canonical_id, 'name': result.ingredient_name,
             'source_row_ref': row.get('raw_source_path') or row.get('source_row_ref'),
@@ -41,7 +43,7 @@ def census_product(product):
             'disposition': result.disposition, 'reason_code': result.reason_code,
             'points_eligible': result.points_eligible, 'blocking_reasons': result.blocking_reasons,
         })
-    overall, complete = er.compose_product_resolution_state([s['disposition'] for s in subjects])
+    overall, complete = er.compose_product_resolution_state(resolutions)
     return {'id': str(product.get('id') or product.get('dsld_id') or ''),
             'name': product.get('product_name') or product.get('name'),
             'subject_count': len(subjects), 'subjects': subjects,

@@ -1,3 +1,4 @@
+November 6 current audit: #402 implements preserved positive-credit/pending-review completeness and source-backed form qualification. A real five-product warning-loss regression was caught before merge; verified primary identity and source-aware preflight repairs are implemented. Final affected comparisons, stable-source local checks and exact CI remain pending in the existing LEDGER. No fresh global count or release approval is asserted.
 # PharmaGuide master completion plan
 
 ## November 5 — current run audited; scientific qualification open

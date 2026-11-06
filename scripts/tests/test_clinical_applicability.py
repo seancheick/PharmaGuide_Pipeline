@@ -2437,6 +2437,12 @@ def _repeated_preparation_product(monkeypatch, *, policy=None):
         "applicability": policy or {"scope": "ingredient"}}, name=name)
     current = owner.reviewed_entries()
     monkeypatch.setattr(owner, "reviewed_entries", lambda: {**current, source["id"]: source})
+    # This fixture tests declaration deduplication, not unfinished real collagen
+    # research. Known-open siblings are covered by the resolver's source matrix.
+    import evidence_resolver
+    index = evidence_resolver._backed_studies_index()
+    monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {
+        **index, "collagen": [source]})
     refs = ["ingredientRows[1].forms[0]", "ingredientRows[2]"]
     rows = [{"name": name, "canonical_id": "collagen", "mapped": True,
              "quantity": amount, "unit": "g", "raw_source_path": ref,

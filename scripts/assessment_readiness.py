@@ -364,6 +364,10 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
     from evidence_resolver import EvidenceDisposition
 
     disposition = resolution.disposition
+    if disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value:
+        from evidence_resolver import compose_product_resolution_state
+        if not compose_product_resolution_state([resolution])[1]:
+            return EVIDENCE_NOT_YET_EVALUATED, resolution.blocking_reasons[0], None
     if (disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
             and "nutrition_authority" in resolution.owner_facts
             and (resolution.owner_facts["nutrition_authority"].get("is_essential") is True
@@ -501,6 +505,19 @@ def evaluate_evidence_assessment(
             state, reason, resolved_applicability = _resolved_evidence_assessment(resolution)
             if resolved_applicability is not None:
                 applicability = resolved_applicability
+
+        if (linked and applicability == EVIDENCE_APPLICABILITY_INDIVIDUAL
+                and state in {EVIDENCE_EVALUATED_SUPPORTED, EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE}):
+            # Credit-bearing matches are not proof that all required matching
+            # sources finished review. Reuse the canonical resolution, without
+            # reopening independently complete nutrition/formula/native owners.
+            from evidence_resolver import resolve_evidence_for_row
+            resolution = resolve_evidence_for_row(row, product=product)
+            resolved_state, resolved_reason, _ = _resolved_evidence_assessment(resolution)
+            if ("backed_clinical_studies" in resolution.matched_owners
+                    and resolution.blocking_reasons
+                    and resolved_state == EVIDENCE_NOT_YET_EVALUATED):
+                state, reason = resolved_state, resolved_reason
 
         if (
             applicability == EVIDENCE_APPLICABILITY_INDIVIDUAL

@@ -2339,13 +2339,9 @@ class SupplementEnricherV3:
             == resolved_id
         ):
             return False
-        if self._identity_parent_predicate(
-            self.databases.get("ingredient_quality_map", {})
-        )(source_id, resolved_id):
-            # Reviewed broad-source → specific-preparation relationships (for
-            # example green_tea → green_tea_extract) remain valid.  The guard
-            # targets source→marker substitution, not reviewed specificity.
-            return False
+        # A broader-than relationship permits a source-proven refinement; it
+        # does not itself prove a plant part/preparation. The literal-source
+        # check below must establish that refinement independently.
 
         if (ingredient.get("cleaner_match_method") == "single_declared_nutrient_form"
                 and ingredient.get("canonical_source_db") in BOTANICAL_CANONICAL_SOURCE_DBS):
@@ -6229,8 +6225,9 @@ class SupplementEnricherV3:
     ) -> None:
         """Reconcile identity after a candidate becomes intentionally non-scorable.
 
-        Recognition is the authoritative primary-identity lane when an IQM
-        candidate did not qualify for scoring.  Safety-table matches remain
+        Recognition may own a separately scoped preparation. A functional
+        flavor/filler role cannot replace a verified primary substance.
+        Safety-table matches remain
         orthogonal: they suppress scoring but do not replace a valid cleaner
         identity with a regulatory-record identifier.
         """
@@ -6358,7 +6355,13 @@ class SupplementEnricherV3:
                         "the source ingredient remains unresolved."
                     ),
                 })
-        elif matched_entry_id and recognition_source:
+        elif (matched_entry_id and recognition_source
+              and not (decision.disposition == "clean" and decision.canonical_id_after
+                       and recognition_source == "other_ingredients"
+                       and recognition_reason in ADDITIVE_TYPES_SKIP_SCORING)):
+            # A flavor/filler role cannot replace a verified primary substance
+            # and remove its safety subjects. Prepared botanical and pending
+            # active records retain their existing, independently scoped owner.
             row.update({
                 "canonical_id": matched_entry_id,
                 "canonical_id_after": matched_entry_id,
@@ -6400,7 +6403,7 @@ class SupplementEnricherV3:
             and self._is_known_therapeutic(
                 ing_name_raw, std_name,
                 self.databases.get('ingredient_quality_map', {}),
-                self.databases.get('botanical_ingredients', {}),
+                self.databases.get('botanical_ingredients', {}), source_context=ingredient,
             )
         )
 
@@ -6739,7 +6742,8 @@ class SupplementEnricherV3:
         # high_risk/watchlist entries.  IQM scoring (Section A) and safety
         # penalties (Section B) are independent concerns.
         # =================================================================
-        if self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db):
+        if self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db,
+                                      source_context=ingredient):
             return None
 
         recognized = self._is_recognized_non_scorable(ing_name, std_name, source_context=ingredient)
@@ -6953,7 +6957,7 @@ class SupplementEnricherV3:
         # ingredients are never prevented from promotion by harmful_additives
         # or banned_recalled high_risk/watchlist entries.
         is_known = self._is_known_therapeutic(
-            ing_name, std_name, quality_map, botanicals_db
+            ing_name, std_name, quality_map, botanicals_db, source_context=ingredient
         )
         if is_known:
             return {
@@ -7057,15 +7061,28 @@ class SupplementEnricherV3:
         return False
 
     def _is_known_therapeutic(self, ing_name: str, std_name: str,
-                               quality_map: Dict, botanicals_db: Dict) -> bool:
+                               quality_map: Dict, botanicals_db: Dict,
+                               *, source_context: Optional[Dict] = None) -> bool:
         """Check if ingredient exists in therapeutic databases."""
         # Check quality map. This is an exploratory predicate — we only want
         # a yes/no answer, not a final match. Pass _form_extraction_attempt=True
         # so this call does NOT emit parent_fallback telemetry (which would
         # otherwise leak transient rows into parent_fallback_report.json when
         # the real ingredient enrichment later upgrades the match).
+        source = source_context or {}
+        canonical = (source.get("canonical_id")
+                     if source.get("canonical_source_db") == "ingredient_quality_map" else None)
+        if canonical:
+            decision, _, _ = self._resolve_iqd_identity(
+                source, None, quality_map, allow_unscoreable_taxonomy_only=True,
+            )
+            if decision.canonical_id_after != canonical or decision.disposition != "clean":
+                canonical = None
         quality_match = self._match_quality_map(
-            ing_name, std_name, quality_map, _form_extraction_attempt=True
+            ing_name, std_name, quality_map, _form_extraction_attempt=True,
+            cleaner_canonical_id=canonical,
+            cleaned_forms=source.get("forms"), row_notes=source.get("notes"),
+            raw_source_text=source.get("raw_source_text") or source.get("name"),
         )
         if quality_match and quality_match.get("match_status") != "FORM_UNMAPPED":
             return True
@@ -9307,7 +9324,7 @@ class SupplementEnricherV3:
                 ing_name, std_name, quality_map, cleaned_forms=cleaned_forms,
                 preferred_parent=preferred_parent, branded_token=branded_token,
                 cleaner_canonical_id=cleaner_canonical_id,
-                source_context=source_context,
+                source_context=source_context, raw_source_text=raw_source_text,
             )
             parent = (match or {}).get("canonical_id")
             if negative_match_terms_veto(
@@ -10336,6 +10353,12 @@ class SupplementEnricherV3:
         source_candidates = (_build_normalized_candidates(raw_source_text)
                              if raw_source_text is not None and raw_source_text != ing_name
                              else normalized_candidates)
+        for disclosed_form in cleaned_forms or []:
+            if isinstance(disclosed_form, dict) and disclosed_form.get("name"):
+                source_candidates.extend(
+                    (value, source) for value, source in
+                    _build_normalized_candidates(disclosed_form["name"]) if source == 0
+                )
 
         def alias_length(match_type: str, alias: str) -> int:
             if match_type == "exact":
@@ -10505,23 +10528,17 @@ class SupplementEnricherV3:
         def add_candidate(candidate: Dict):
             if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
                 return
-            # A normalized parent name is identity, not disclosure of a child
-            # form. Keep the existing parent unknown when only standardName
-            # supplied that generic alias; explicit source forms still compete.
+            # A standardized name is inferred identity, not disclosure of a
+            # specific preparation. Only the retained source/form facts can
+            # support a child grade; the parent still supplies its unknown form.
             parent_key = candidate.get("parent_key")
             parent_data = quality_map.get(parent_key) or {}
-            generic_names = {
-                self._normalize_text(str(value).replace("_", " "))
-                for value in (parent_key, parent_data.get("standard_name"))
-                if value
-            }
-            standard_parent_form = (
+            standard_inferred_form = (
                 candidate.get("form_key")
                 and self._is_specific_form_match(candidate.get("match_data"), quality_map)
                 and candidate.get("match_source") == 1
-                and self._normalize_text(candidate.get("matched_alias") or "") in generic_names
             )
-            if standard_parent_form:
+            if standard_inferred_form:
                 form = (parent_data.get("forms") or {}).get(candidate["form_key"]) or {}
                 source_aliases = {
                     self._norm_form_name(alias)
@@ -10532,7 +10549,22 @@ class SupplementEnricherV3:
                 # standardized/base candidates) and form punctuation owner.
                 # A source-owned alias or explicit preparation still proves
                 # this form even when a generic standardName won the tier.
-                if not any(
+                # The shared strain owner already knows exact registered aliases
+                # and punctuation variants. Require the same reference on both
+                # sides; a standardized species/name alone proves no strain.
+                strain_source_proof = False
+                if (parent_data.get("category") == "probiotics"
+                        and parent_key == cleaner_iqm_canonical):
+                    from studied_formulas import (
+                        _clinical_strain_registry, clinical_strain_identity_matches,
+                    )
+                    labels = [value for value, source in source_candidates if source == 0]
+                    strain_source_proof = any(
+                        clinical_strain_identity_matches(candidate["form_key"], reference)
+                        and any(clinical_strain_identity_matches(label, reference) for label in labels)
+                        for reference in _clinical_strain_registry().values()
+                    )
+                if not strain_source_proof and not any(
                     norm_module.find_affirmative_label_match(
                         re.compile(r"(?<!\w)" + re.escape(alias) + r"(?!\w)", re.I),
                         self._norm_form_name(value), spaced_free=True,
@@ -10556,7 +10588,7 @@ class SupplementEnricherV3:
             # A bare parent alias cannot turn a printed powder/dried material
             # into an extract. Retain the parent and its shared unknown
             # form treatment; row-owned explicit extract forms remain valid.
-            guard_label = (raw_source_text or ing_name) if standard_parent_form else ing_name
+            guard_label = (raw_source_text or ing_name) if standard_inferred_form else ing_name
             if (
                 re.search(r"\b(?:powder|dried|extract)\b", guard_label, re.I)
                 and not norm_module.find_affirmative_label_match(
@@ -15261,7 +15293,7 @@ class SupplementEnricherV3:
                     continue
                 if self._is_known_therapeutic(
                     row.get("name") or "", row.get("standardName") or row.get("name") or "",
-                    quality_map, botanicals_db,
+                    quality_map, botanicals_db, source_context=row,
                 ):
                     non_opaque_source_fields.add(f"{section}[{index}]")
 
