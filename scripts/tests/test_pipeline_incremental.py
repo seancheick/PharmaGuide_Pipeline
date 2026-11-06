@@ -1448,3 +1448,69 @@ def test_changed_clean_stops_at_unchanged_enrich(tmp_path, monkeypatch):
     monkeypatch.setattr(runner, 'run_enrich', enrich)
     assert mod.run_incremental(runner, raw, prefix)['stages'] == {
         'clean': ['1', '2'], 'enrich': ['1'], 'score': []}
+
+
+def test_current_snapshot_shares_reference_capture_and_rechecks_bytes(tmp_path, monkeypatch):
+    import pipeline_incremental as mod
+    import pipeline_freshness as freshness
+    from pathlib import Path
+
+    data = tmp_path / 'scripts' / 'data'
+    data.mkdir(parents=True)
+    reference = data / 'sample.json'
+    reference.write_text('{"value": 1}')
+    for stage in freshness.STAGES.values():
+        entry = tmp_path / 'scripts' / stage['entry']
+        entry.parent.mkdir(parents=True, exist_ok=True)
+        entry.write_text('pass\n')
+    counts = {'reads': 0}
+    original_read = Path.read_bytes
+    original_open = Path.open
+
+    def read_bytes(path):
+        if path == reference:
+            counts['reads'] += 1
+        return original_read(path)
+
+    def open_file(path, *args, **kwargs):
+        if path == reference and args and args[0] == 'rb':
+            counts['reads'] += 1
+        return original_open(path, *args, **kwargs)
+
+    # read_bytes uses io.open directly; count its call and the independent
+    # streaming verification, not implementation details of code hashing.
+    monkeypatch.setattr(Path, 'read_bytes', read_bytes)
+    monkeypatch.setattr(Path, 'open', open_file)
+    result = mod.current_snapshot(tmp_path)
+    assert counts['reads'] == 2
+    assert len({v[freshness.REFERENCE_FINGERPRINT_KEY] for v in result['stages'].values()}) == 1
+    assert result['references'] == mod.reference_snapshot(tmp_path)
+
+
+@pytest.mark.parametrize('mutation', ['edit', 'add', 'delete'])
+def test_current_snapshot_refuses_reference_changes_during_capture(tmp_path, monkeypatch, mutation):
+    import pipeline_incremental as mod
+    import pipeline_freshness as freshness
+    data = tmp_path / 'scripts' / 'data'
+    data.mkdir(parents=True)
+    reference = data / 'sample.json'
+    reference.write_text('{"value": 1}')
+    for stage in freshness.STAGES.values():
+        entry = tmp_path / 'scripts' / stage['entry']
+        entry.parent.mkdir(parents=True, exist_ok=True)
+        entry.write_text('pass\n')
+    original = mod.reference_snapshot
+
+    def snapshot(*args, **kwargs):
+        value = original(*args, **kwargs)
+        if mutation == 'edit':
+            reference.write_text('{"value": 2}')
+        elif mutation == 'add':
+            (data / 'added.json').write_text('{}')
+        else:
+            reference.unlink()
+        return value
+
+    monkeypatch.setattr(mod, 'reference_snapshot', snapshot)
+    with pytest.raises(mod.StageManifestError, match='Reference data changed'):
+        mod.current_snapshot(tmp_path)
