@@ -1113,8 +1113,10 @@ def _resolve_evidence_for_row(
                 reason_code="dietary_reference_intake_authority_established",
                 owner_facts=owner_facts,
             )
-    nutr_entry = rda_ul_reference_entry(canonical_id=canonical, name=name)
-    if nutr_entry and is_essential_dietary_nutrient(canonical, name, iqm_entry):
+    nutritional_authority = nutrition_authority_for_row(row_dict)
+    nutr_entry = (rda_ul_reference_entry(canonical_id=nutritional_authority["nutrient"])
+                  if nutritional_authority else None)
+    if nutr_entry:
         matched_owners.append("nutrition_authority")
         owner_facts["nutrition_authority"] = {
             "nutrient": nutr_entry.get("id") or nutr_entry.get("standard_name"),
@@ -1129,7 +1131,7 @@ def _resolve_evidence_for_row(
             ingredient_name=name,
             matched_owners=matched_owners,
             disposition=EvidenceDisposition.RESOLVED_BY_AUTHORITY.value,
-            points_eligible=False,  # Essential nutrient authority establishes identity/necessity; points earned via dose/generic evidence
+            points_eligible=False,  # Nutritional role is established; existing Evidence adapters own its credit.
             applicability_status="established_essential_nutrient",
             reason_code="dietary_reference_intake_authority_established",
             owner_facts=owner_facts,

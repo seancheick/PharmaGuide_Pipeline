@@ -2031,6 +2031,12 @@ def test_existing_dri_alias_and_source_nutrient_share_row_authority(canonical, n
     facts = er.nutrition_authority_for_row(row)
     assert facts and facts['nutrient'] == nutrient
     assert facts['is_essential'] is True
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert resolution.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+    assert resolution.owner_facts['nutrition_authority']['nutrient'] == nutrient
+    assert resolution.points_eligible is False
+    from assessment_readiness import _resolved_evidence_assessment
+    assert _resolved_evidence_assessment(resolution)[0] == 'evaluated_supported'
     assert _purpose_essential_canonical(product) == canonical
     assert row['quantity'] == 7500 and row['unit'] == 'mcg'
     assert product['evidence_data']['clinical_matches'] == []
@@ -2051,7 +2057,10 @@ def test_dri_row_authority_never_comes_from_marketing_nutrient_name(canonical):
 def test_source_nutrient_authority_preserves_identity_and_preparation_vetoes(changes):
     product = _eaa_product('beta_carotene', 'Vitamin A',
                            'natural beta-carotene (from dunaliella salina)', **changes)
-    assert er.nutrition_authority_for_row(product['activeIngredients'][0]) is None
+    row = product['activeIngredients'][0]
+    assert er.nutrition_authority_for_row(row) is None
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert 'nutrition_authority' not in resolution.matched_owners
 
 
 @pytest.mark.parametrize('relationship', ['wrong_stereoisomer', 'different_compound', 'not_a_nutrient_source'])
@@ -2064,5 +2073,7 @@ def test_source_nutrient_authority_never_overrides_a_typed_form_exclusion(monkey
     original = references.iqm_reference_entry
     monkeypatch.setattr(references, 'iqm_reference_entry',
                         lambda canonical: parent if canonical == 'beta_carotene' else original(canonical))
-    row = _eaa_product('beta_carotene', 'Vitamin A', form_name)['activeIngredients'][0]
+    product = _eaa_product('beta_carotene', 'Vitamin A', form_name)
+    row = product['activeIngredients'][0]
     assert er.nutrition_authority_for_row(row) is None
+    assert 'nutrition_authority' not in er.resolve_evidence_for_row(row, product).matched_owners
