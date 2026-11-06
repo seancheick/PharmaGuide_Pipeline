@@ -117,6 +117,7 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch, source_chan
     owned = processor.output_dir / 'cleaned' / 'cleaned_batch_1.json'
     owned.write_text(json.dumps([{'id': index} for index in range(20)]))
     write_stage_manifest(owned.parent, 'clean', [owned])
+    processor._save_unmapped_ingredients(processed_count_override=20)
 
 
     if source_changed:
@@ -145,7 +146,6 @@ def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch, source_chan
         }
 
     monkeypatch.setattr(processor, "process_batch", fake_process_batch)
-    monkeypatch.setattr(processor, "_generate_final_summary", lambda batch_results, total_time: {"ok": True})
     monkeypatch.setattr(processor, "_save_unmapped_ingredients", lambda *a, **kw: None)
     monkeypatch.setattr(processor, "_generate_processing_report", lambda summary, batch_results: None)
     monkeypatch.setattr(processor, "_generate_detailed_review_report", lambda: None)
@@ -677,18 +677,20 @@ def test_rejected_success_is_quarantined_and_not_processed(tmp_path, monkeypatch
     [('incomplete', 2, 'json')], [('cleaned', 3, 'jsonl')]])
 def test_resume_appends_after_highest_disposition_sequence(tmp_path, monkeypatch, existing):
     processor = BatchProcessor(_make_config(tmp_path))
-    files = [tmp_path / 'old.json', tmp_path / 'new.json']
+    files = [tmp_path / f'old_{index}.json' for index in range(len(existing))] + [tmp_path / 'new.json']
     for path in files: path.write_text(json.dumps({'id': path.stem}))
     processor._source_files = tuple(files)
     state = processor.create_initial_state(files)
-    state.processed_file_paths = [str(files[0])]
-    state.processed_files = 1
+    state.processed_file_paths = [str(path) for path in files[:-1]]
+    state.processed_files = len(existing)
     state.last_completed_batch = 0
     processor.save_state(state)
+    processor._save_unmapped_ingredients(processed_count_override=len(existing))
     preserved = {}
-    for category, number, extension in existing:
+    for index, (category, number, extension) in enumerate(existing):
         path = processor.output_dir / category / f'{category}_batch_{number}.{extension}'
-        path.write_text('[{"id":"old"}]' if extension == 'json' else '{"id":"old"}\n')
+        product = {'id': f'old_{index}'}
+        path.write_text(json.dumps([product]) if extension == 'json' else json.dumps(product) + '\n')
         preserved[path] = path.read_bytes()
     from stage_manifest import write_stage_manifest
     clean_directory = processor.output_dir / 'cleaned'
@@ -813,3 +815,151 @@ def test_resume_state_without_any_output_ownership_is_fatal(tmp_path, monkeypatc
     monkeypatch.setattr(processor, 'process_batch', lambda *a, **k: pytest.fail('missing ownership must fail first'))
     with pytest.raises(StageManifestError, match='repair.*manifest|manifest.*missing'):
         processor.process_all_files([path], resume=True)
+
+
+@pytest.mark.parametrize('partial', [False, True], ids=['all_reused', 'retry_remaining'])
+@pytest.mark.parametrize('new_processor', [False, True], ids=['same_instance', 'new_instance'])
+def test_resume_preserves_full_reports_and_summary(tmp_path, monkeypatch, partial, new_processor):
+    import batch_processor as batch
+    config = _make_config(tmp_path)
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    files = [raw / f'{name}.json' for name in ('first', 'second')]
+    for path in files:
+        path.write_text(json.dumps({'id': path.stem}))
+    retry = False
+    seen = []
+    details = {
+        'Unknown active': {'is_active': True},
+        'Unknown inactive': {'is_active': False},
+        'Recognized': {'is_active': True, 'recognized_non_identity': True,
+                       'recognition_standard_name': 'Recognized standard', 'recognition_type': 'allergen'},
+        'Display only': {'is_active': True, 'non_scoreable_cleaner_row': True,
+                         'cleaner_row_role': 'blend_header', 'score_exclusion_reason': 'no individual dose'},
+        'Verify active': {'is_active': True, 'needs_verification': True, 'verification_reason': 'ambiguous',
+                          'conflicting_candidates': ['A', 'B'], 'next_verification_step': 'check label'},
+        'Verify inactive': {'is_active': False, 'needs_verification': True, 'verification_reason': 'ambiguous'},
+    }
+    def process(filename, *_):
+        name = Path(filename).stem
+        seen.append(name)
+        if partial and not retry and name == 'second':
+            return ProcessingResult(False, 'error', file_path=filename, error='retryable')
+        return ProcessingResult(True, 'needs_review' if name == 'first' else 'success',
+            data={'id': name, 'activeIngredients': [{'name': 'Mapped', 'mapped': True}]},
+            file_path=filename, raw_id=name, unmapped_ingredients=list(details),
+            unmapped_active={key for key, value in details.items() if value['is_active']},
+            unmapped_details=details)
+    monkeypatch.setattr(batch, 'init_worker', lambda *_: None)
+    monkeypatch.setattr(batch, 'process_single_file_with_timeout', process)
+    processor = BatchProcessor(config)
+    processor.process_all_files(files)
+    prior_bytes = {path: path.read_bytes() for path in (processor.output_dir / 'unmapped').glob('*.json')}
+    prior_outputs = {path: path.read_bytes() for category in ('cleaned', 'needs_review', 'incomplete')
+                     for path in (processor.output_dir / category).glob('*') if not path.name.startswith('.')}
+    retry = True
+    seen.clear()
+    resumed = BatchProcessor(config) if new_processor else processor
+    summary = resumed.process_all_files(files, resume=True)
+    assert seen == (['second'] if partial else [])
+    assert summary['total_files'] == 2
+    assert summary['results'] == {'cleaned': 1, 'needs_review': 1, 'incomplete': 0, 'errors': 0}
+    assert summary['success_rate'] == 100
+    assert summary['unmapped_ingredients'] == 4
+    assert summary['mapped_ingredients'] == 1
+    assert resumed.global_mapped == {'Mapped': 2}
+    assert all(path.read_bytes() == content for path, content in prior_outputs.items())
+    if not partial:
+        assert all(path.read_bytes() == content for path, content in prior_bytes.items())
+    # An uninterrupted run must produce the same six reports, except timestamps.
+    control_config = _make_config(tmp_path / 'control')
+    control = BatchProcessor(control_config)
+    control.process_all_files(files)
+    for path in prior_bytes:
+        actual = json.loads(path.read_text())
+        expected = json.loads((control.output_dir / 'unmapped' / path.name).read_text())
+        actual['metadata'].pop('generated_at')
+        expected['metadata'].pop('generated_at')
+        assert actual == expected
+    assert resumed.load_state().processed_files == 2
+    assert resumed.process_all_files(files, resume=True)['results'] == summary['results']
+    # Starting over on the same coordinator must not retain counts or seen IDs.
+    assert control.process_all_files(files)['results'] == summary['results']
+    assert control.global_unmapped['Unknown active'] == 2
+    assert control.global_mapped == {'Mapped': 2}
+
+
+@pytest.mark.parametrize('damage', ['missing', 'count', 'malformed', 'occurrences', 'shape', 'metadata_bool'])
+def test_resume_refuses_incomplete_report_snapshot_before_mutation(tmp_path, monkeypatch, damage):
+    import batch_processor as batch
+    from stage_manifest import StageManifestError
+    config = _make_config(tmp_path)
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    path = raw / 'product.json'
+    path.write_text('{"id":"product"}')
+    monkeypatch.setattr(batch, 'init_worker', lambda *_: None)
+    monkeypatch.setattr(batch, 'process_single_file_with_timeout', lambda filename, *_:
+        ProcessingResult(True, 'success', data={'id': 'product'}, file_path=filename,
+                         unmapped_ingredients=['Unknown'], unmapped_active={'Unknown'}))
+    processor = BatchProcessor(config)
+    processor.process_all_files([path])
+    report = processor.output_dir / 'unmapped' / 'unmapped_active_ingredients.json'
+    if damage == 'missing':
+        report.unlink()
+    elif damage == 'count':
+        data = json.loads(report.read_text())
+        data['metadata']['products_processed'] = 0
+        report.write_text(json.dumps(data))
+    elif damage == 'shape':
+        data = json.loads(report.read_text())
+        data['unmapped_ingredients']['Unknown'] = {'occurrences': 1}
+        report.write_text(json.dumps(data))
+    elif damage == 'metadata_bool':
+        data = json.loads(report.read_text())
+        data['metadata']['products_processed'] = True
+        report.write_text(json.dumps(data))
+    elif damage == 'occurrences':
+        data = json.loads(report.read_text())
+        data['unmapped_ingredients']['Unknown'] = 2
+        report.write_text(json.dumps(data))
+    else:
+        report.write_text('{broken')
+    preserved = {file: file.read_bytes() for file in processor.output_dir.rglob('*') if file.is_file()}
+    state_bytes = processor.state_file.read_bytes()
+    with pytest.raises(StageManifestError, match='report.*repair'):
+        BatchProcessor(config).process_all_files([path], resume=True)
+    assert processor.state_file.read_bytes() == state_bytes
+    assert all(file.read_bytes() == content for file, content in preserved.items())
+
+
+@pytest.mark.parametrize('prior_id', [None, '', '  '])
+def test_resume_restores_fallback_id_and_rejects_duplicate_without_report_credit(tmp_path, monkeypatch, prior_id):
+    import batch_processor as batch
+    config = _make_config(tmp_path)
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    files = [raw / f'{name}.json' for name in ('first', 'duplicate')]
+    for path in files:
+        path.write_text(json.dumps({'id': path.stem}))
+    retry = False
+    def process(filename, *_):
+        if not retry and Path(filename).stem == 'duplicate':
+            return ProcessingResult(False, 'error', file_path=filename, error='retryable')
+        return ProcessingResult(True, 'success', file_path=filename,
+            data={'id': prior_id if Path(filename).stem == 'first' else 'X', 'dsld_id': 'X'},
+            unmapped_ingredients=['Unknown'], unmapped_active={'Unknown'})
+    monkeypatch.setattr(batch, 'init_worker', lambda *_: None)
+    monkeypatch.setattr(batch, 'process_single_file_with_timeout', process)
+    processor = BatchProcessor(config)
+    processor.process_all_files(files)
+    retry = True
+    resumed = BatchProcessor(config)
+    summary = resumed.process_all_files(files, resume=True)
+    assert summary['total_files'] == 2
+    assert summary['results'] == {'cleaned': 1, 'needs_review': 0, 'incomplete': 0, 'errors': 1}
+    assert resumed.load_state().processed_file_paths == [str(files[0])]
+    report = json.loads((resumed.output_dir / 'unmapped' / 'unmapped_active_ingredients.json').read_text())
+    assert report['unmapped_ingredients'] == {'Unknown': 1}
+    assert resumed.process_all_files(files, resume=True)['results'] == summary['results']
+    assert resumed.global_unmapped == {'Unknown': 1}

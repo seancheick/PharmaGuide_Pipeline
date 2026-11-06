@@ -62,30 +62,14 @@ from identity.safety import (
 from identity.omega_labels import states_only_epa_and_dha as _states_only_epa_and_dha
 from identity_integrity import build_canonical_identity_registry, validated_canonical_parent_relationships
 
-# Import the UnmappedIngredientTracker
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from unmapped_ingredient_tracker import UnmappedIngredientTracker
 from functional_grouping_handler import FunctionalGroupingHandler
 import normalization as norm_module  # Single-source normalization
 from normalization import QUANTITY_OPERATORS, parse_servings_per_container
 from unit_converter import get_converter
 from serving_frequency import select_canonical_serving
 from proprietary_blend_detector import disclosure_tier, sole_component_is_single_source
-
-
-# ---------------------------------------------------------------------------
-# PERFORMANCE: Module-level caches shared across ALL normalizer instances.
-# Using lru_cache on instance methods (with self as key) is wasteful:
-#   - one cache per instance, not shared
-#   - self reference prevents GC of the instance
-# Pure text functions (preprocess, variations) are deterministic on input
-# alone, so a module-level unbounded cache gives O(1) hits after warm-up.
-# ---------------------------------------------------------------------------
-@functools.lru_cache(maxsize=None)
-def _preprocess_text_module_cached(text: str) -> str:
-    """Shared module-level cache for text preprocessing (all instances)."""
-    return norm_module.preprocess_text(text)
 
 
 _LABEL_CORRECTION_SCORING_DISPOSITIONS = frozenset({"source_descriptor", "unresolved_unit"})
@@ -235,7 +219,7 @@ _VARIATION_ABBREVIATIONS = {
 }
 
 
-@functools.lru_cache(maxsize=None)
+@functools.lru_cache(maxsize=10000)
 def _generate_variations_module_cached(text: str) -> tuple:
     """Shared module-level cache for ingredient name variation generation.
     Returns a sorted tuple (hashable) of variation strings — same logic as
@@ -437,7 +421,7 @@ def is_label_header(name: str) -> bool:
     if not name:
         return False
 
-    processed_name = _preprocess_text_module_cached(name)
+    processed_name = norm_module.preprocess_text(name)
     if processed_name in STRUCTURAL_OTHER_HEADER_NAMES:
         return True
 
@@ -704,18 +688,14 @@ class EnhancedIngredientMatcher:
         """
         Comprehensive text preprocessing with enhanced validation.
 
-        Delegates to module-level cached function for cross-instance sharing.
-        The lru_cache is on the module-level _preprocess_text_module_cached so
-        the cache is unbounded, shared across all instances, and never prevents
-        garbage-collection of this instance (no self reference in the cache key).
+        Uses the canonical normalizer's bounded cache shared across instances.
         """
         # SAFETY: Comprehensive input validation
         text = self.validate_input(text, "ingredient_name")
         if not text:
             return ""
 
-        # Module-level cache — shared, unbounded, no GC leak
-        return _preprocess_text_module_cached(text)
+        return norm_module.preprocess_text(text)
     
     def generate_variations(self, text: str) -> List[str]:
         """Generate common variations of ingredient names."""
@@ -1020,9 +1000,6 @@ class EnhancedDSLDNormalizer:
         self.unmapped_ingredients = Counter()
         self.unmapped_details = {}  # Store more context about unmapped ingredients
 
-        # Initialize the enhanced unmapped ingredient tracker for separate active/inactive files
-        self.unmapped_tracker = None  # Will be initialized when output_dir is set
-
         # THREAD-SAFE OPTIMIZATION: Using @lru_cache decorators for thread safety
         # No more manual cache management - Python's lru_cache handles thread safety
 
@@ -1128,9 +1105,6 @@ class EnhancedDSLDNormalizer:
                 "Additional IQM<->BANNED collisions suppressed after 10; fix the underlying DB overlaps."
             )
 
-    def set_output_directory(self, output_dir: Path):
-        """Set the output directory and initialize the unmapped tracker"""
-        self.unmapped_tracker = UnmappedIngredientTracker(output_dir / "unmapped")
         
     def _build_fast_lookups_impl(self):
         """Build optimized fast lookup indices"""
@@ -12439,50 +12413,6 @@ class EnhancedDSLDNormalizer:
         self.unmapped_ingredients.pop(name, None)
         self.unmapped_details.pop(name, None)
 
-    def process_and_save_unmapped_tracking(self, processed_count_override: Optional[int] = None):
-        """Process unmapped ingredients and save separate active/inactive tracking files"""
-        if not self.unmapped_tracker:
-            logger.warning("Unmapped tracker not initialized. Call set_output_directory() first.")
-            return
-        
-        # Separate active and inactive ingredients
-        active_ingredients = set()
-        unmapped_data = {}
-        
-        for name, count in self.unmapped_ingredients.items():
-            details = self.unmapped_details.get(name, {})
-            is_active = details.get("is_active", False)
-            
-            if is_active:
-                active_ingredients.add(name)
-            
-            unmapped_data[name] = count
-        
-        # Process with the tracker
-        self.unmapped_tracker.process_unmapped_ingredients(
-            unmapped_data,
-            active_ingredients,
-            self.unmapped_details,
-            processed_count_override=processed_count_override,
-        )
-        
-        # Save the tracking files
-        self.unmapped_tracker.save_tracking_files()
-        
-        return {
-            "active_count": len(self.unmapped_tracker.unmapped_active),
-            "inactive_count": len(self.unmapped_tracker.unmapped_inactive),
-            "total_count": (
-                len(self.unmapped_tracker.unmapped_active)
-                + len(self.unmapped_tracker.unmapped_inactive)
-            ),
-            "recognized_count": len(
-                self.unmapped_tracker.recognized_non_identity
-            ),
-            "non_scoreable_count": len(
-                self.unmapped_tracker.non_scoreable_unmapped
-            ),
-        }
     
     def _is_label_rollup(self, name: str) -> bool:
         """A label total or aggregate (constants.LABEL_ROLLUP_NAMES), e.g. "Total Omega-3 Fatty Acids"."""

@@ -43,25 +43,24 @@ in older catalogs and never newly emitted. Flutter and release comparison consum
 the independent owners. A quality improvement cannot be called a safer product.
 This extends existing owners and fields; it creates no second scorer or registry.
 
-## Declared-serving Dose quality — Sean, October 17, 2026
+## Directed daily Dose quality — current policy clarification, November 6, 2026
 
-Product Dose quality assesses one declared Facts-panel serving across every
-category. Higher labeled daily use remains a separate safety assessment. A
-manufacturer's maximum does not establish what a person actually takes.
+Dose adequacy uses the **minimum directed daily use**; safety uses the maximum.
+When directions are absent, the default is one Facts-panel serving per day.
+Neither manufacturer directions nor the catalog assessment establishes a
+person's actual intake. This is the existing Dose V4.1 policy, including the
+October 22 ceiling clarification, not a new scoring decision.
 
-The existing scoring input contract projects reference percentages using their
-recorded frequency and units. Every route calls the shared Dose wrapper and
-opens a declared-serving scope at the existing frequency owner. The one typed
-UL evaluator handles both contexts: serving quality for Dose, original maximum
-labeled daily exposure for the safety gate. Source directions, quantities,
-identity and applicability guards remain intact; intermittent directions cannot
-erase a high-serving quality deduction. The other five pillars, clinical limits
-and Verification policy are unchanged.
+The earlier declared-serving policy was superseded by Dose V4.1 and no longer
+describes current behavior. The historical engine 4.6.0 decision remains valid
+as history; engine 4.7.0 records its replacement. The current description is
+[scripts/SCORING_ENGINE_SPEC.md](../../scripts/SCORING_ENGINE_SPEC.md), with
+ownership and invariants in the `quality_pillars_v4_contract` matrix entry.
+All routes call `generic_helpers.score_directed_daily_dose`; Dose and the safety
+gate consume the same typed `DoseSafetyResult`. Source quantities, frequency,
+identity, applicability and warning facts remain source-owned. Flutter renders
+the resulting assessments without recomputing exposure or deductions.
 
-This keeps the product score tied to a visible reference amount while retaining
-higher-use concerns. The app renders those concerns with their assessment basis,
-groups explanations for one nutrient without losing severity, and never
-recalculates a pipeline UL decision. This is not a personal dose recommendation.
-Config 1.27.0 and engine 4.6.0 identify the change. The existing LEDGER records the
-cause-grouped measurement and validation; publication still requires fresh
-pipeline artifacts and the normal release checks.
+The original config 1.27.0 / engine 4.6.0 identifiers are historical provenance;
+read current versions from the executable owners. Publication still requires
+fresh pipeline artifacts and the normal release checks.

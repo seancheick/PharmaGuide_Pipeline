@@ -156,8 +156,8 @@ def test_pool_run_with_unusable_unit_database_stops_without_cleaned_output(
     tmp_path, monkeypatch, missing_path, default_unit_db,
 ):
     """Worker pool path: a failed initializer breaks the pool, each file is
-    quarantined as BrokenProcessPool, and the main process's own normalizer
-    (built for the unmapped report) raises, so no stage manifest is written and
+    quarantined as BrokenProcessPool, and the parent's failure-path reference
+    recheck raises, so no stage manifest is written and
     clean_dsld_data exits 1. Spawned workers cannot see a monkeypatch, so the
     pool is replaced by one whose futures fail the way a broken pool does."""
     import concurrent.futures

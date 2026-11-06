@@ -36,3 +36,21 @@ def test_the_cache_still_answers_from_memory():
 
     assert second is first
     assert normalizer._enhanced_harmful_check_cached.cache_info().hits >= 1
+
+
+def test_variation_cache_is_bounded_and_eviction_preserves_results():
+    from enhanced_normalizer import EnhancedIngredientMatcher, _generate_variations_module_cached
+
+    matcher = EnhancedIngredientMatcher()
+    cache = _generate_variations_module_cached
+    cache.cache_clear()
+    capacity = cache.cache_info().maxsize
+    assert capacity is not None and 0 < capacity <= 10000
+    expected = matcher.generate_variations("alpha lipoic acid")
+    changed = matcher.generate_variations("alpha lipoic acid")
+    changed.append("caller mutation")
+    for index in range(capacity + 1):
+        matcher.generate_variations(f"unique variation {index}")
+
+    assert cache.cache_info().currsize <= capacity
+    assert matcher.generate_variations("alpha lipoic acid") == expected

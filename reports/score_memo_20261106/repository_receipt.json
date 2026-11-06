@@ -1,0 +1,245 @@
+{
+  "baseline_compared": "992f3d4ca62f662b06eacb3c178a15cda0ce6700",
+  "candidate_runtime_commit": "67f5ffc6d",
+  "source_sha256": {
+    "scripts/batch_processor.py": "9501b366df81ba090f18c18463203de2cca29b23755bce29ef7c7f4680f3cfe0",
+    "scripts/build_final_db.py": "c50dd7e59a622dd0d363f368d396b931e422b4e90da53a2c6e608ea2ef2f21de",
+    "scripts/enhanced_normalizer.py": "1220372c7d1154d0d78c797fea36ea3d7056e73994f115f0af179f37d3cf30b4",
+    "scripts/enrich_supplements_v3.py": "c2dcf6405c91b5addda8b20def363f28e5b6b31f2c90fe8a14bf5bae84807848",
+    "scripts/evidence_resolver.py": "6a16cc5f62443462154d69d04ee64f1e950583e819a7d2c9bc2b1b411998ef31",
+    "scripts/pipeline_incremental.py": "e081a78d32a6ec48eefd9c68e6002ecc66001e94b41e2bdf6d20825b675eef1f",
+    "scripts/scoring_reference_resolver.py": "b15fe475657e3e05ca1d75fa2e00a421037a5e546735023b354b5706eec6d84d",
+    "scripts/scoring_v4/modules/botanical_profile.py": "4204342557f8ae0ae0f276a2138a39f347e19e68ffa8b0761788b73ef4a158a0",
+    "scripts/scoring_v4/modules/generic_evidence.py": "ca58d88e5ddbbad6a8f788655313593fbf80fd74a104308677b9d9e8f39906a9",
+    "scripts/scoring_v4/modules/generic_formulation.py": "7a37b2facc3eff48a0d331e4459b97d6a3ad292be2dfb42eaa0e926ba40e0cf2",
+    "scripts/scoring_v4/quality_score.py": "7f10e5aa16b7c8b09dd1fd42cb557508dd5369e2758fc8c829899cc2beff7931",
+    "scripts/scoring_v4/quality_score_config.py": "96eca7c9d974515de2d52b79e0b208188370262c1c08638429a5384bd05f48a8",
+    "scripts/unmapped_ingredient_tracker.py": "d71251049d23b86882eece391ca1c42f5b8cd280a8b36d99f6c0a9217b70b51f"
+  },
+  "correctness_pr": {
+    "number": 405,
+    "qualified_head": "9fba22212efe02e60a8e2c1c9000f25ef6fb062b",
+    "merge": "299dd8b9ac5b8e59c9f33ff3cc3c0088d6d358f2",
+    "ci_run": 42296077046,
+    "focused_checks": 375
+  },
+  "raw_parity": {
+    "full_clean_enrich_score_blob": 40,
+    "separate_full_clean_enrich_score": 1,
+    "all_paths_changed": 0,
+    "all7routes": true,
+    "original_inputs_unchanged": true
+  },
+  "export_parity": {
+    "identical_frozen_inputs": 41,
+    "whole_blob_core_equal": true,
+    "ignored_fields": [],
+    "null_quality_not_assessed_control_preserved": true
+  },
+  "controlled_benchmark": {
+    "products": 41,
+    "all7routes": true,
+    "whole_scored_blob_core_parity": true,
+    "inputs_unchanged": true,
+    "metrics": {
+      "score": {
+        "sum_warm_medians_baseline": 11.075449582072906,
+        "sum_warm_medians_candidate": 11.02634391724132,
+        "speed_ratio": 1.0044534856884704,
+        "regressions_over_20percent_and_20ms": [
+          {
+            "id": "70018",
+            "baseline": 0.6295052909990773,
+            "candidate": 0.781471542082727
+          }
+        ]
+      },
+      "export": {
+        "sum_warm_medians_baseline": 9.697987731720787,
+        "sum_warm_medians_candidate": 4.141836794326082,
+        "speed_ratio": 2.341470273528425,
+        "regressions_over_20percent_and_20ms": []
+      }
+    },
+    "peak_rss_bytes": {
+      "baseline": 325222400,
+      "candidate": 306528256
+    },
+    "limits": "Controlled frozen scoring/export microbenchmark only; no raw-stage, corpus or release throughput claim; existing scored_date clock exclusion only, explicit same export-time parameter."
+  },
+  "timing_followup": {
+    "initial_flag": [
+      {
+        "id": "70018",
+        "baseline": 0.6295052909990773,
+        "candidate": 0.781471542082727
+      }
+    ],
+    "isolated_repetition": {
+      "id": "70018",
+      "timed_repetitions": 10,
+      "baseline_median": 0.5996036459691823,
+      "candidate_median": 0.5977763965493068,
+      "outputs_equal": true,
+      "inputs_unchanged": true,
+      "baseline_counts": {
+        "_classify_rows": {
+          "calls": 7,
+          "cumulative": 0.19762425
+        },
+        "resolved_clinical_matches": {
+          "calls": 2,
+          "cumulative": 1.942773958
+        },
+        "filter_clinical_matches": {
+          "calls": 2,
+          "cumulative": 1.9145840420000002
+        },
+        "deepcopy": {
+          "calls": 1660056,
+          "cumulative": 1.7505038750000002
+        },
+        "_evidence_subject_roles": {
+          "calls": 2,
+          "cumulative": 0.187388875
+        }
+      },
+      "candidate_counts": {
+        "resolved_clinical_matches": {
+          "calls": 2,
+          "cumulative": 1.967495792
+        },
+        "_classify_rows": {
+          "calls": 6,
+          "cumulative": 0.166796
+        },
+        "_evidence_subject_roles": {
+          "calls": 2,
+          "cumulative": 0.208230083
+        },
+        "filter_clinical_matches": {
+          "calls": 2,
+          "cumulative": 1.9324898750000001
+        },
+        "_build_evidence_subject_roles": {
+          "calls": 1,
+          "cumulative": 0.086537708
+        },
+        "deepcopy": {
+          "calls": 1706306,
+          "cumulative": 1.801363378
+        },
+        "_resolve_clinical_matches": {
+          "calls": 2,
+          "cumulative": 1.960259584
+        }
+      }
+    },
+    "result": "Initial24percent timing flag did not reproduce in isolated10-run median or targeted cache ablation; deterministic work and unchanged outputs checked. No performance policy/source change made to hide the flag."
+  },
+  "local": {
+    "passed": 564,
+    "skipped": 24,
+    "skip_guard": "passed; only declared live-tool opt-ins",
+    "initial_setup_attempt": "strict skip guard rejected missing canaries; primary canaries were stale versus reviewed baseline; attached existing qualified PR404 canary inputs,132 owner checks passed, then one complete local rerun passed. No production/test/baseline weakening."
+  },
+  "static": {
+    "python_correctness_new": 0,
+    "python_correctness_existing": 10,
+    "dead_code_unapproved": 0,
+    "diff_check": "pass"
+  },
+  "preservation": {
+    "original_state_manifest_files": 252,
+    "untracked_user_files": 20,
+    "unchanged_before_recompute": true
+  },
+  "private_receipt_sha256": {
+    "COMBINED_RAW_REPLAY_RECEIPT.json": "b2277eb50323d1141f56e749280c1d5bb2ab135f076854054a3761b2fcf9dc04",
+    "COMBINED_CONTROLLED_BENCHMARK.json": "84be417a4f5277406a1b15f7e17200ba3fc1325d0f034f969dcaa6285fc1eb3b",
+    "TIMING_FLAG_FOLLOWUP.json": "11f3a51a89604edd7f35124147177d67d15755bb68189ed545dedf55e27a038b",
+    "LOCAL_INPUT_BINDINGS.json": "943a3c0e6430a517f1feb1ca1571459b49ce33d72f1c7bec1607935f5cbbbb7c",
+    "clean-resume-review.json": "0cb3ec4d774b48e1335a1db0792e6a0b4371b927fecda7a927d92acb9ecc0561",
+    "export-additional-candidates.json": "1271dea4f810e3bcf4c91173e5888885ac686629747ffc73ffaa48202b277658",
+    "reference-index-candidate.json": "8740a1f8481488ca0fb2e3b0c3f74712e525aaff36d2865b0e4a31355538c034"
+  },
+  "limits": [
+    "Source qualification only; whole-fast CI on final candidate still required.",
+    "No normal corpus producer, live snapshot replacement, Supabase write, app import or release in this batch.",
+    "Existing legacy resume reports have schema/count consistency checks, not checksum provenance.",
+    "Scientific completion and installed final-catalog acceptance remain separate gates."
+  ],
+  "captured_runtime_commit": "3a35266ad6c0f3eedb85743372077b33f1cd68c8",
+  "captured_source_sha256": {
+    "scripts/batch_processor.py": "e565718f92e28c7cd4d05344e68f3c55dd38643ce3366a66a8e20ef7f2057eed",
+    "scripts/build_final_db.py": "c50dd7e59a622dd0d363f368d396b931e422b4e90da53a2c6e608ea2ef2f21de",
+    "scripts/enhanced_normalizer.py": "1220372c7d1154d0d78c797fea36ea3d7056e73994f115f0af179f37d3cf30b4",
+    "scripts/enrich_supplements_v3.py": "c2dcf6405c91b5addda8b20def363f28e5b6b31f2c90fe8a14bf5bae84807848",
+    "scripts/evidence_resolver.py": "6a16cc5f62443462154d69d04ee64f1e950583e819a7d2c9bc2b1b411998ef31",
+    "scripts/pipeline_incremental.py": "e081a78d32a6ec48eefd9c68e6002ecc66001e94b41e2bdf6d20825b675eef1f",
+    "scripts/scoring_reference_resolver.py": "b15fe475657e3e05ca1d75fa2e00a421037a5e546735023b354b5706eec6d84d",
+    "scripts/scoring_v4/modules/botanical_profile.py": "4204342557f8ae0ae0f276a2138a39f347e19e68ffa8b0761788b73ef4a158a0",
+    "scripts/scoring_v4/modules/generic_evidence.py": "ca58d88e5ddbbad6a8f788655313593fbf80fd74a104308677b9d9e8f39906a9",
+    "scripts/scoring_v4/modules/generic_formulation.py": "7a37b2facc3eff48a0d331e4459b97d6a3ad292be2dfb42eaa0e926ba40e0cf2",
+    "scripts/scoring_v4/quality_score.py": "7f10e5aa16b7c8b09dd1fd42cb557508dd5369e2758fc8c829899cc2beff7931",
+    "scripts/scoring_v4/quality_score_config.py": "96eca7c9d974515de2d52b79e0b208188370262c1c08638429a5384bd05f48a8",
+    "scripts/unmapped_ingredient_tracker.py": "d71251049d23b86882eece391ca1c42f5b8cd280a8b36d99f6c0a9217b70b51f"
+  },
+  "post_capture_correction": {
+    "cause": "Broken worker initializer no longer triggers parent reference validation after redundant report normalizer removed",
+    "fail_first": "existing unusable unit database node: DID NOT RAISE",
+    "fix": "failure-only parent reference validation after worker resources closed; state reset; original exceptions preserved",
+    "checks": "50 affected checks plus new lifecycle regression; independent three-node check and ordering/exception probes pass",
+    "prior_local": "564 passed,24 declared opt-in skips,strict guard passed154.09s before final resource-close ordering fix",
+    "final_local": "pending",
+    "first_ci": {
+      "run": 42302033849,
+      "head": "93d99141e",
+      "result": "one failure,seven other shards passed; not qualification"
+    },
+    "independent_review": "no remaining blockers",
+    "normal_success_path": "no added reference construction; prior successful-output parity and benchmark retained"
+  },
+  "synthetic_100k": {
+    "status": "passed",
+    "synthetic_input_count": 100000,
+    "checks": {
+      "actual_raw_input_count": 100000,
+      "unchanged_selects_zero_and_preserves_bytes": true,
+      "one_raw_edit_selects_one_each_stage": true,
+      "targeted_clinical_refs_known_rejected_and_unresolved_select_three": true,
+      "successful_items_persist_failed_only_retry_and_failure_preserves_generation": true,
+      "all_three_merged_stage_records_equal_full_deterministic_oracle": true,
+      "score_only_code_change_selects_all_score_no_upstream": true,
+      "actual_second_root_failure_rolls_back_byte_exact": true,
+      "hard_interruption_journal_recovery_restores_byte_exact": true,
+      "corrupt_artifact_refused_by_release_input_owner_and_incremental_reuse": "Owned file checksum mismatch: batch.json",
+      "post_recovery_retry_zero_and_final_oracle_intact": true,
+      "source_unchanged": true
+    },
+    "elapsed_seconds": 576.7029684999725,
+    "stage_record_counts": {
+      "clean": 100000,
+      "enrich": 100000,
+      "score": 100000
+    },
+    "limits": [
+      "Synthetic deterministic producer fixture reused from existing test_pipeline_incremental._partitioned_clean_dataset.",
+      "Fixture monkeypatches current_snapshot and reusable_stage_issue; contract/coverage gates simulated; no fabricated clinical provenance.",
+      "Actual planner, rawreader, ID checks, manifest reader/writer, merge, transaction, recovery and owned input refusal exercised.",
+      "Not actual100kclinicalproducer throughput, normalCLI/realgate acceptance, Supabase/export/app qualification or release approval."
+    ],
+    "source_bindings": {
+      "/Users/seancheick/.codex/worktrees/pipeline-stabilization/dsld_clean/scripts/pipeline_incremental.py": "e081a78d32a6ec48eefd9c68e6002ecc66001e94b41e2bdf6d20825b675eef1f",
+      "/Users/seancheick/.codex/worktrees/pipeline-stabilization/dsld_clean/scripts/stage_manifest.py": "74d4ebcaaa11730822ae4b5b9c5be8796425fc58385b7da1a90f4ef93ea89e25",
+      "/Users/seancheick/.codex/worktrees/pipeline-stabilization/dsld_clean/scripts/tests/test_pipeline_incremental.py": "e0b6a47cf088e4eea6327e455bdab69b4116277b9c069fa55d27d307f49ce40c",
+      "/Users/seancheick/pg_quality/pipeline-stabilization-20261106/scaling-100k/probe.py": "9b116108adc0ab9de27624117cf5e9f806ef55879d4935e17a99d369472a9e5e"
+    }
+  },
+  "completed_run_preservation": {
+    "files": 106158,
+    "logical_bytes": 16861111164,
+    "all_source_and_copy_sha256_equal": true,
+    "private_manifest": "COMPLETED_RUN_PRESERVATION.json"
+  }
+}

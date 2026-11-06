@@ -18,13 +18,10 @@ INVARIANTS:
 from __future__ import annotations
 
 import math
-
-import copy
-import json
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from scoring_v4.dose_safety import dose_safety_consumer_explanation
+from scoring_v4.quality_score_config import config as _config
 from scoring_v4.penalty_registry import (
     EVIDENCE_CAP_KEYS,
     EVIDENCE_FLOOR_KEYS,
@@ -35,16 +32,6 @@ from scoring_v4.pillar_explanations import (
     CONSUMER, FINISHED_REVIEW_RECORD_COUNT_FACT, attach_pillar_explanations, audit_fact,
     every_strain_count_printed, facts_block, _proprietary_blend_facts,
 )
-
-_CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
-_CONFIG_CACHE: Optional[Dict[str, Any]] = None
-
-
-def _config() -> Dict[str, Any]:
-    global _CONFIG_CACHE
-    if _CONFIG_CACHE is None:
-        _CONFIG_CACHE = json.loads(_CONFIG_PATH.read_text())
-    return copy.deepcopy(_CONFIG_CACHE)
 
 
 def _num(value: Any, default: float = 0.0) -> float:
@@ -574,8 +561,8 @@ def shipped_whole_score(score: float) -> int:
     return int(math.floor(float(score) + 0.5))
 
 
-def _tier(score: float) -> str:
-    bands = _config()["tiers"]  # ordered high→low min
+def _tier(score: float, bands: Optional[List[Dict[str, Any]]] = None) -> str:
+    bands = _config()["tiers"] if bands is None else bands  # ordered high→low min
     for band in bands:
         if score >= band["min"]:
             return band["name"]
@@ -1946,7 +1933,7 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     result["quality_pillars_v4"] = pillars
     # Tier from the shipped whole number, so the band name can never disagree
     # with the score printed beside it.
-    result["quality_tier"] = _tier(shipped_whole_score(total))
+    result["quality_tier"] = _tier(shipped_whole_score(total), cfg["tiers"])
     # Quality tiers never rewrite the independent safety/readiness disposition.
     result["quality_score_status"] = "scored"
     result["quality_score_suppressed_reason"] = None

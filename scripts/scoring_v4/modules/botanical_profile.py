@@ -39,6 +39,10 @@ _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 from scoring_input_contract import dose_disclosure_status, is_lent_blend_mass, _positive_quantity
 from scoring_v4.modules.generic_helpers import bio_score_of
 from scoring_v4.quality_score_config import block as _cfg_block
+from scoring_reference_resolver import (
+    _botanical_identity_index as _botanical_identity_set,
+    _therapeutic_index as _dosing_index,
+)
 
 _FVM = _cfg_block("formulation_variant_magnitudes", "botanical")["botanical"]
 
@@ -112,41 +116,6 @@ def _primary_type(product: Dict[str, Any]) -> str:
 
 
 # --- reference data (loaded + indexed once) --------------------------------
-
-@lru_cache(maxsize=1)
-def _dosing_index() -> Dict[str, Dict[str, Any]]:
-    """name/alias -> therapeutic dosing entry (its reference_semantics decision)."""
-    try:
-        raw = json.loads((_DATA_DIR / "rda_therapeutic_dosing.json").read_text())
-    except Exception:  # pragma: no cover
-        return {}
-    index: Dict[str, Dict[str, Any]] = {}
-    for entry in raw.get("therapeutic_dosing", []):
-        if not isinstance(entry, dict):
-            continue
-        for key in [entry.get("id"), entry.get("standard_name")] + list(entry.get("aliases") or []):
-            k = _norm(key)
-            if k:
-                index.setdefault(k, entry)
-    return index
-
-
-@lru_cache(maxsize=1)
-def _botanical_identity_set() -> frozenset:
-    try:
-        raw = json.loads((_DATA_DIR / "botanical_ingredients.json").read_text())
-    except Exception:  # pragma: no cover
-        return frozenset()
-    names = set()
-    for entry in raw.get("botanical_ingredients", []):
-        if not isinstance(entry, dict):
-            continue
-        for key in [entry.get("id"), entry.get("standard_name")] + list(entry.get("aliases") or []):
-            k = _norm(key)
-            if k:
-                names.add(k)
-    return frozenset(names)
-
 
 @lru_cache(maxsize=1)
 def _standardized_botanical_identity_set() -> frozenset:

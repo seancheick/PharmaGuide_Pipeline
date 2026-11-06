@@ -2286,3 +2286,107 @@ def test_source_eligibility_cannot_override_existing_complete_context_schema(mon
     monkeypatch.setattr(ca, 'reviewed_entries', lambda: {record['id']: record})
     assert er.clinical_record_sources_eligible(record, context=context) is False
     assert er.clinical_record_sources_eligible(record) is False
+
+
+@pytest.mark.parametrize("owner_scoped", [False, True])
+@pytest.mark.parametrize("assess_amount", [False, True])
+def test_clinical_resolution_reuses_exact_context_with_detached_results(
+    monkeypatch, owner_scoped, assess_amount,
+):
+    from copy import deepcopy
+    import json
+    from scoring_input_contract import scoring_input_scope
+    from scoring_v4.modules import generic_evidence
+
+    product = json.loads((Path(__file__).parent / "fixtures/stress_gut_evidence_enriched.json").read_text())[0]
+    before = deepcopy(product)
+    options = {"owner_scoped": owner_scoped, "assess_amount": assess_amount}
+    expected = generic_evidence.resolved_clinical_matches(product, **options)
+    assert expected[0]  # Exercise real nested source records, not an empty cache.
+    calls = []
+    original = generic_evidence.filter_clinical_matches
+
+    def counted(*args, **kwargs):
+        calls.append(kwargs)
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(generic_evidence, "filter_clinical_matches", counted)
+    with scoring_input_scope(product):
+        first = generic_evidence.resolved_clinical_matches(product, **options)
+        assert first == expected
+        first[0][0]["references_structured"][0].clear()
+        first[0][0].clear()
+        second = generic_evidence.resolved_clinical_matches(dict(product), **options)
+        assert second == expected
+        second[0][0].clear()
+        assert generic_evidence.resolved_clinical_matches(product, **options) == expected
+        assert len(calls) == 1
+        # Different amount/ownership semantics must never borrow this result.
+        generic_evidence.resolved_clinical_matches(product, **{**options, "assess_amount": not assess_amount})
+        generic_evidence.resolved_clinical_matches(product, **{**options, "owner_scoped": not owner_scoped})
+        assert len(calls) == 3
+        assert generic_evidence.resolved_clinical_matches(deepcopy(product), **options) == expected
+        assert len(calls) == 4  # A different input cannot borrow this pass's result.
+        with pytest.raises(RuntimeError, match="nested pass"):
+            with scoring_input_scope(product):
+                assert generic_evidence.resolved_clinical_matches(product, **options) == expected
+                raise RuntimeError("nested pass")
+        assert len(calls) == 5
+        assert generic_evidence.resolved_clinical_matches(product, **options) == expected
+        assert len(calls) == 5
+    assert product == before
+    assert generic_evidence.resolved_clinical_matches(product, **options) == expected
+    assert len(calls) == 6
+
+
+@pytest.mark.parametrize("module", [None, "generic", "fiber_digestive"])
+def test_evidence_subject_roles_reuse_module_context_without_sharing_rows(monkeypatch, module):
+    from copy import deepcopy
+    import evidence_resolver
+    import scoring_input_contract as contract
+
+    from tests.test_v4_scored_artifact import _product
+
+    product = _product()
+    before = deepcopy(product)
+    expected = evidence_resolver._evidence_subject_roles(product, module)
+    calls = []
+    original = contract.classify_ingredient_roles
+
+    def counted(*args, **kwargs):
+        if kwargs.get("evidence") is True:
+            calls.append(kwargs.get("module"))
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(contract, "classify_ingredient_roles", counted)
+    with contract.scoring_input_scope(product):
+        first = evidence_resolver._evidence_subject_roles(product, module)
+        assert first == expected
+        first[0][0].clear()
+        first[1][0].clear()
+        assert evidence_resolver._evidence_subject_roles(dict(product), module) == expected
+        assert calls == [module]
+        other_module = "sports" if module != "sports" else "generic"
+        evidence_resolver._evidence_subject_roles(product, other_module)
+        assert calls == [module, other_module]
+    assert product == before
+    assert evidence_resolver._evidence_subject_roles(product, module) == expected
+    assert calls == [module, other_module, module]
+
+
+@pytest.mark.parametrize("fixture_index", [0, 1])
+def test_complex_evidence_scoped_artifact_matches_uncached_pass(fixture_index):
+    from copy import deepcopy
+    import json
+    from scoring_v4 import scored_artifact
+
+    product = json.loads((Path(__file__).parent / "fixtures/stress_gut_evidence_enriched.json").read_text())[fixture_index]
+    before = deepcopy(product)
+    uncached = scored_artifact.assemble_scored_artifact(
+        product, scored_artifact.score_product_v4(product),
+    )
+    scoped = scored_artifact.build_scored_artifact(product)
+    for artifact in (uncached, scoped):
+        artifact["scoring_metadata"].pop("scored_date", None)
+    assert scoped == uncached
+    assert product == before

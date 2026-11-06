@@ -651,7 +651,11 @@ def full_stages(checkout, blob=False):
         from enhanced_normalizer import EnhancedDSLDNormalizer
         from enrich_supplements_v3 import SupplementEnricherV3
         from score_supplements_v4 import score_product_v4
-        from scoring_v4.scored_artifact import build_scored_artifact
+        from scoring_v4.scored_artifact import assemble_scored_artifact
+        import scoring_input_contract as scoring_contract
+        # Full replay predates the Oct20 identity projection. Older supported
+        # checkouts assembled directly from the enriched input.
+        identity_view = getattr(scoring_contract, 'score_eligible_identity_view', None)
         if blob:
             from build_final_db import build_detail_blob
         logging.disable(logging.CRITICAL)
@@ -661,11 +665,15 @@ def full_stages(checkout, blob=False):
             cleaned = normalizer.normalize_product(label)
             # enrich_product edits its input in place (ingredient safety_flags): hash Clean's own record.
             enriched, _ = enricher.enrich_product(copy.deepcopy(cleaned))
-            scored = build_scored_artifact(copy.deepcopy(enriched))
+            artifact_input = copy.deepcopy(enriched)
+            scoring_input = identity_view(artifact_input) if identity_view is not None else artifact_input
+            with scoring_contract.scoring_input_scope(scoring_input):
+                projection = score_product_v4(scoring_input)
+                scored = assemble_scored_artifact(artifact_input, copy.deepcopy(projection))
             stages = {'cleaned': cleaned, 'enriched': enriched, 'scored': scored}
             if blob:
                 stages['blob'] = build_detail_blob(copy.deepcopy(enriched), copy.deepcopy(scored))
-            return score_product_v4(copy.deepcopy(enriched)), stages
+            return projection, stages
 
         _RAW_SCORERS[key] = run
     return _RAW_SCORERS[key]

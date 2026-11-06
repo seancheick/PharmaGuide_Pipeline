@@ -10,9 +10,6 @@ the shared formulation penalties.
 
 from __future__ import annotations
 
-from functools import lru_cache
-import json
-from pathlib import Path
 from typing import Any, Callable, Dict, Optional
 
 from scoring_v4.modules.botanical_profile import (
@@ -37,6 +34,7 @@ from scoring_v4.modules.generic_helpers import (
 )
 from scoring_v4.modules.immune_support import immune_support_formulation_adjustment
 from scoring_reference_resolver import parent_relative_form_quality
+from scoring_v4.quality_score_config import block as _v4_block
 
 
 # --- v4 generic Formulation weights ---------------------------------------
@@ -49,22 +47,6 @@ from scoring_reference_resolver import parent_relative_form_quality
 # formulation_penalties). Read once at import; the A-/B- scoring logic stays in
 # code (§13 lock). Fail fast if a block is missing. Drift-guarded by
 # test_v4_formulation_magnitudes_config / test_v4_additive_points_config.
-_V4_CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "quality_score.json"
-
-
-@lru_cache(maxsize=1)
-def _v4_config() -> Dict[str, Any]:
-    return json.loads(_V4_CONFIG_PATH.read_text())
-
-
-def _v4_block(name: str, sentinel: str) -> Dict[str, Any]:
-    cfg = _v4_config()
-    blk = cfg.get(name) if isinstance(cfg, dict) else None
-    if not isinstance(blk, dict) or sentinel not in blk:
-        raise RuntimeError(f"quality_score.json missing {name}.{sentinel} — v4 config not found")
-    return blk
-
-
 _FM = _v4_block("formulation_magnitudes", "dimension_cap")
 
 

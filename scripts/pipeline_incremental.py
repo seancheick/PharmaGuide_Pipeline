@@ -17,7 +17,8 @@ from pathlib import Path
 from pipeline_freshness import (
     DATA_FINGERPRINT_KEY, REFERENCE_FINGERPRINT_KEY,
     STAGES, _reference_data_files, _content_set_fingerprint, stage_data_files, stage_data_fingerprint,
-    stage_input_fingerprints,
+    CODE_FINGERPRINT_KEY, RUNTIME_FINGERPRINT_KEY, stage_code_fingerprint,
+    reference_data_fingerprint, _runtime_fingerprint,
 )
 from stage_manifest import MANIFEST_NAME, StageManifestError, select_stage_input_files, write_stage_manifest_from_directory
 
@@ -224,7 +225,7 @@ def reference_snapshot(repo, *, contents=None):
     """Record changed-entry hashes and lookup vocabularies for bounded invalidation."""
     repo = Path(repo).resolve()
     result = {}
-    for path in _reference_data_files(repo):
+    for path in (contents if contents is not None else _reference_data_files(repo)):
         relative = path.relative_to(repo).as_posix()
         payload = json.loads(contents[path] if contents is not None else path.read_bytes())
         if path.name == "ingredient_quality_map.json":
@@ -468,13 +469,19 @@ def stage_directories(prefix):
 
 def current_snapshot(repo):
     repo = Path(repo).resolve()
-    stages = {stage: stage_input_fingerprints(repo, stage) for stage in STAGES}
     contents = {path: path.read_bytes() for path in _reference_data_files(repo)}
     binding = _content_set_fingerprint(
         contents, root=repo, file_digest=lambda path: hashlib.sha256(contents[path]).digest())
-    if any(fields[REFERENCE_FINGERPRINT_KEY] != binding for fields in stages.values()):
+    runtime = _runtime_fingerprint()
+    stages = {stage: {REFERENCE_FINGERPRINT_KEY: binding,
+                      CODE_FINGERPRINT_KEY: stage_code_fingerprint(repo, stage),
+                      RUNTIME_FINGERPRINT_KEY: runtime} for stage in STAGES}
+    references = reference_snapshot(repo, contents=contents)
+    # Capture is invocation-local; verify actual bytes and inventory after all
+    # derivation, rather than trusting mtimes or reusing its own captured hashes.
+    if reference_data_fingerprint(repo) != binding:
         raise StageManifestError("Reference data changed while capturing dependencies")
-    return {"stages": stages, "references": reference_snapshot(repo, contents=contents),
+    return {"stages": stages, "references": references,
             "evaluation_date": datetime.now(timezone.utc).date().isoformat(),
             "evaluation_local_date": date.today().isoformat()}
 
@@ -694,14 +701,15 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
                 for stage, directory in zip(STAGES, directories)}
     if state_path.exists():
         old = json.loads(state_path.read_text())
+        old_digest = digest(old)
         for stage, directory in zip(STAGES, directories):
             manifest = json.loads((directory / MANIFEST_NAME).read_text())
             fingerprints = manifest["input_fingerprints"]
-            if fingerprints.get("incremental_state_sha256") != digest(old):
+            if fingerprints.get("incremental_state_sha256") != old_digest:
                 raise StageManifestError("Incremental state does not match the owned stage")
             expected = {**old["stages"][stage],
                         DATA_FINGERPRINT_KEY: old["inputs"][stage],
-                        "incremental_state_sha256": digest(old)}
+                        "incremental_state_sha256": old_digest}
             if fingerprints != expected:
                 raise StageManifestError(f"{stage} provenance differs from the verified generation")
             if old["outputs"][stage] != {key: digest(value) for key, value in products[stage].items()}:
@@ -716,13 +724,14 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
             stage: json.loads((directory / MANIFEST_NAME).read_text())["input_fingerprints"][DATA_FINGERPRINT_KEY]
             for stage, directory in zip(STAGES, directories)
         }
+        old_digest = digest(old)
     clean_holds = {name: {} for name in _CLEAN_HOLD_DIRECTORIES}
     if "clean_holds" in old:
         clean_holds = clean_hold_outputs(prefix, expected=old["clean_holds"])
         if clean_hold_hashes(clean_holds) != old["clean_holds"]:
             raise StageManifestError("Clean hold reports differ from the verified generation")
         expected = {**old["stages"]["clean"], DATA_FINGERPRINT_KEY: old["inputs"]["clean"],
-                    "incremental_state_sha256": digest(old)}
+                    "incremental_state_sha256": old_digest}
         for name, rows in clean_holds.items():
             if rows and json.loads((prefix / name / MANIFEST_NAME).read_text()).get("input_fingerprints") != expected:
                 raise StageManifestError("Clean hold provenance differs from the verified generation")

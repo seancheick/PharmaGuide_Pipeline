@@ -107,8 +107,8 @@ def _identity_keys(canonical_id: Any, name: Any, aliases: Any) -> List[str]:
 def _therapeutic_index() -> Dict[str, Dict[str, Any]]:
     """normalized id / standard_name / alias -> therapeutic dosing entry.
 
-    Faithful replica of ``botanical_profile._dosing_index`` so the resolver and
-    the scorer agree on therapeutic-reference membership (parity-tested)."""
+    The botanical scorer consumes this same read-only index, so reference
+    membership and refresh never depend on a second parsed copy."""
     try:
         raw = json.loads(_THERAPEUTIC_PATH.read_text())
     except Exception:  # pragma: no cover - missing data degrades to empty

@@ -197,10 +197,15 @@ def fake_checkout(tmp_path, ingredient_suffix=''):
         'def score_product_v4(product):\n    assert "enriched_date" in product\n'
         '    return {"quality_score_status": "scored", "quality_score_v4_100": 50.0, "v4_module": "fixture"}\n')
     (scripts / 'scoring_v4' / '__init__.py').write_text('')
+    (scripts / 'scoring_input_contract.py').write_text(
+        'from contextlib import nullcontext\ndef score_eligible_identity_view(p): return p\n'
+        'def scoring_input_scope(p): return nullcontext()\n')
     (scripts / 'scoring_v4' / 'scored_artifact.py').write_text(
         'from datetime import datetime\nfrom score_supplements_v4 import score_product_v4\n'
+        'def assemble_scored_artifact(enriched, result):\n'
+        '    return {**result, "dsld_id": str(enriched["id"]), "scoring_metadata": {"scored_date": datetime.now().isoformat()}}\n'
         'def build_scored_artifact(enriched):\n'
-        '    return {**score_product_v4(enriched), "dsld_id": str(enriched["id"]), "scoring_metadata": {"scored_date": datetime.now().isoformat()}}\n')
+        '    return assemble_scored_artifact(enriched, score_product_v4(enriched))\n')
     (scripts / 'build_final_db.py').write_text(
         'def build_detail_blob(enriched, scored):\n'
         '    return {"dsld_id": scored["dsld_id"], "name": enriched["fullName"], "quality_score_v4_100": scored["quality_score_v4_100"]}\n')
@@ -227,9 +232,14 @@ def compare_cli(baseline, candidate, out, *extra):
 
 
 @pytest.mark.parametrize('workers', [1, 2])
-def test_full_snapshot_hashes_every_stage_and_two_runs_agree(tmp_path, workers, monkeypatch):
+@pytest.mark.parametrize('identity_projection', [False, True])
+def test_full_snapshot_hashes_every_stage_and_two_runs_agree(tmp_path, workers, monkeypatch, identity_projection):
     monkeypatch.delenv('PYTHONHASHSEED', raising=False)
     checkout = fake_checkout(tmp_path)
+    if not identity_projection:
+        # Original Oct18 --full targets (ce5694b88) predate this helper.
+        contract = checkout / 'scripts' / 'scoring_input_contract.py'
+        contract.write_text(contract.read_text().replace('def score_eligible_identity_view(p): return p\n', ''))
     frozen, manifest = frozen_labels(tmp_path)
     outs = [tmp_path / 'one.jsonl', tmp_path / 'two.jsonl']
     for out in outs:
@@ -383,3 +393,48 @@ def test_full_compare_rejects_invalid_environment_receipts_even_when_equal(tmp_p
     proc = subprocess.run([sys.executable, HARNESS, 'compare', '--baseline', str(out),
                            '--candidate', str(out), '--out', str(tmp_path / 'bad.json')], capture_output=True, text=True)
     assert proc.returncode == 1 and 'worker_env' in proc.stderr
+
+
+def test_full_replay_scores_once_and_preserves_both_projections(monkeypatch):
+    import copy
+    import enhanced_normalizer
+    import enrich_supplements_v3
+    import score_supplements_v4
+    from scoring_v4 import scored_artifact
+    product = json.loads((Path(__file__).parent / 'fixtures' / 'stress_gut_evidence_enriched.json').read_text())[0]
+    original_product = copy.deepcopy(product)
+    expected_projection = score_supplements_v4.score_product_v4(copy.deepcopy(product))
+    expected_artifact = scored_artifact.build_scored_artifact(copy.deepcopy(product))
+    calls = []
+    original_score = score_supplements_v4.score_product_v4
+
+    def score(value):
+        calls.append(True)
+        return original_score(value)
+
+    class Normalizer:
+        def normalize_product(self, label):
+            return copy.deepcopy(label)
+
+    class Enricher:
+        def enrich_product(self, cleaned):
+            return copy.deepcopy(product), {}
+
+    monkeypatch.setattr(enhanced_normalizer, 'EnhancedDSLDNormalizer', Normalizer)
+    monkeypatch.setattr(enrich_supplements_v3, 'SupplementEnricherV3', Enricher)
+    monkeypatch.setattr(score_supplements_v4, 'score_product_v4', score)
+    monkeypatch.setattr(scored_artifact, 'score_product_v4', score)
+    checkout = str(Path(__file__).resolve().parents[2])
+    key = (checkout, 'full', False)
+    monkeypatch.delitem(replay._RAW_SCORERS, key, raising=False)
+    try:
+        projection, stages = replay.full_stages(checkout)({'id': 'probe'})
+        assert projection == expected_projection
+        assert replay.without_volatile(stages['scored'], 'scored') == replay.without_volatile(expected_artifact, 'scored')
+        assert stages['enriched'] == original_product
+        assert product == original_product
+        assert len(calls) == 1
+        projection['v4_breakdown'].clear()
+        assert replay.without_volatile(stages['scored'], 'scored') == replay.without_volatile(expected_artifact, 'scored')
+    finally:
+        replay._RAW_SCORERS.pop(key, None)
