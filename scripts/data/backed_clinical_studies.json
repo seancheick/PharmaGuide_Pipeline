@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-11-04",
+    "last_updated": "2026-11-06",
     "total_entries": 213,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
@@ -21719,7 +21719,69 @@
       "effect_direction_confidence": "low",
       "effect_direction_rationale": "Reference context only: PMID 37217632 is a protocol and PMID 40819772 reports recruitment feasibility. The cited records do not report Ca-AKG efficacy outcomes; planned or recruited participants are not completed efficacy evidence.",
       "endpoint_relevance_tags": [],
-      "scoring_eligible": false
+      "scoring_eligible": false,
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_akg_37217632_reference_scope",
+          "components": [
+            "PRECLIN_AKG"
+          ],
+          "source_pmids": [
+            "37217632"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer; independently checked by a separate Codex reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated agent review, 2026-11-06; primary source content, exact source scope and independent check recorded in the source-completion research receipt. Not a physician attribution."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "37217632",
+              "location": "Full text PMC10643463 Methods/planned outcomes; no efficacy results",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37217632/"
+            }
+          },
+          "limitations": [
+            "protocol_not_efficacy_results",
+            "Retain this publication as research/protocol context; it supplies no observed Ca-AKG efficacy outcome and does not establish no biological effect. Planned or recruited participants are not completed efficacy participants.",
+            "Record scoring_eligible=false, reference classification, Dose and safety decisions remain unchanged. No dose recommendation or nutrient/preparation equivalence is inferred."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_akg_40819772_reference_scope",
+          "components": [
+            "PRECLIN_AKG"
+          ],
+          "source_pmids": [
+            "40819772"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer; independently checked by a separate Codex reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated agent review, 2026-11-06; primary source content, exact source scope and independent check recorded in the source-completion research receipt. Not a physician attribution."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "40819772",
+              "location": "Publisher-version author-hosted full text: Methods2.3, Results3.1-3.3, Discussion4, Conclusion5; frontmatterDOI10.1016/j.exger.2025.112867",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40819772/"
+            }
+          },
+          "limitations": [
+            "recruitment_feasibility_not_efficacy_results",
+            "Retain this publication as research/protocol context; it supplies no observed Ca-AKG efficacy outcome and does not establish no biological effect. Planned or recruited participants are not completed efficacy participants.",
+            "Record scoring_eligible=false, reference classification, Dose and safety decisions remain unchanged. No dose recommendation or nutrient/preparation equivalence is inferred."
+          ]
+        }
+      ]
     },
     {
       "id": "PRECLIN_APIGENIN",
@@ -35678,7 +35740,40 @@
           "7889885"
         ],
         "reason": "Calcium fructoborate is a distinct compound with its own randomized placebo-controlled trials reporting reductions in inflammatory markers and knee discomfort (catalogued in scripts/audits/evidence_expansion_2026_09/NULL_SCOPE_AUDIT.md, deliberately not cited here so they stay attached to the material that was actually studied); those results are not evidence about plain boron and are not curated on this entry, so rows resolving to calcium fructoborate are excluded rather than inheriting this null. This exclusion does not establish an effective boron dose, a bone or joint effect, or ineffectiveness of calcium fructoborate."
-      }
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_boron_bodybuilder_reference_scope",
+          "components": [
+            "INGR_BORON"
+          ],
+          "source_pmids": [
+            "8508192",
+            "7889885"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer; independently checked by a separate Codex reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated agent review, 2026-11-06; primary source content, exact source scope and independent check recorded in the source-completion research receipt. Not a physician attribution."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "8508192",
+              "location": "Primary abstracts: 19 male bodybuilders, 2.5mg boron/day,7weeks; testosterone/lean mass/strength endpoints, not bone/joint outcomes. Existing record explicitly retains these as one trial reported twice; no positive replication count.",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/8508192/"
+            }
+          },
+          "limitations": [
+            "Retain the human null findings on the measured testosterone, lean-mass and strength endpoints; this rejects their transfer to unstudied generic bone/joint efficacy, not the paper or all possible boron effects.",
+            "Two source publications are not counted as independent confirmation; current record identifies one19-participant trial. No calcium-fructoborate transfer, dose recommendation, efficacy credit or new clinical endpoint is introduced.",
+            "Preserve reference classification and source IDs. Completed delegated agent source review and independent check establish only this bounded no-credit source disposition; no physician review is attributed."
+          ]
+        }
+      ]
     },
     {
       "id": "INGR_ASTRAGALUS",

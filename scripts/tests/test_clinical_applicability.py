@@ -1322,7 +1322,7 @@ def test_completed_negative_calendar_review_is_separate_from_scoring_eligibility
 @pytest.mark.parametrize('case,expected', [
     ('reviewed_exclusion', True), ('missing_review', False), ('foreign_source', False),
     ('missing_locator', False), ('missing_reason', False), ('missing_identity', False),
-    ('unreviewed_reference', False), ('record_hold', False), ('affirmative', False),
+    ('unreviewed_reference', False), ('completed_exclusion_no_points', True), ('affirmative', False),
     ('pending_context', False),
 ])
 def test_reference_source_rejection_can_complete_without_invented_trial_facts(monkeypatch, case, expected):
@@ -1353,7 +1353,7 @@ def test_reference_source_rejection_can_complete_without_invented_trial_facts(mo
         context['components'] = ['different_record']
     elif case == 'unreviewed_reference':
         record['references_structured'].append({'pmid': '12345678'})
-    elif case == 'record_hold':
+    elif case == 'completed_exclusion_no_points':
         record['scoring_eligible'] = False
     elif case == 'affirmative':
         record.update(study_type='rct', evidence_level='ingredient-human')
@@ -2835,3 +2835,73 @@ def test_match_filter_reuses_evidence_projection_without_sharing_rows(monkeypatc
 
     assert contract.get_evidence_subject_rows(product) == pristine
     assert len(calls) == 4
+
+
+@pytest.mark.parametrize('case,complete', [
+    ('finished_no_points', True), ('study_type_mismatch', False),
+    ('evidence_level_mismatch', False), ('uncovered_source', False),
+    ('pending_sibling', False), ('foreign_identity', False),
+    ('missing_locator', False), ('no_contexts', False),
+])
+def test_source_exclusion_completion_does_not_lift_parent_credit_hold(monkeypatch, case, complete):
+    import clinical_applicability as owner
+    from probiotic_measurements import context_accepted_for_scoring
+    context = {'context_id': 'used_protocol_exclusion', 'components': ['used'],
+               'source_pmids': ['39269340'], 'review_status': 'rejected_source',
+               'scoring_eligible': False,
+               'clinical_review': {'reviewer': 'Independent synthetic source reviewer',
+                   'reviewed_at': '2026-11-06', 'scope': 'identity_dose_outcome_applicability'},
+               'dose': {'source_provenance': {'pmid': '39269340',
+                   'source_url': 'https://pubmed.ncbi.nlm.nih.gov/39269340/',
+                   'location': 'Synthetic source mechanics: protocol, no efficacy results'}},
+               'limitations': ['Protocol supplies no observed efficacy results.']}
+    record = {'id': 'used', 'study_type': 'reference', 'evidence_level': 'reference',
+              'scoring_eligible': False, 'references_structured': [{'pmid': '39269340'}],
+              'study_contexts': [context]}
+    if case == 'study_type_mismatch': record['study_type'] = 'rct_single'
+    elif case == 'evidence_level_mismatch': record['evidence_level'] = 'ingredient-human'
+    elif case == 'uncovered_source': record['references_structured'].append({'pmid': '34415830'})
+    elif case == 'pending_sibling':
+        record['study_contexts'].append({**context, 'review_status': 'pending_review'})
+    elif case == 'foreign_identity': context['components'] = ['another']
+    elif case == 'missing_locator': context['dose']['source_provenance'].pop('location')
+    elif case == 'no_contexts': record['study_contexts'] = []
+    before = deepcopy(record)
+    monkeypatch.setattr(owner, 'reviewed_entries', lambda: {'used': record})
+    assert owner.assess_clinical_source_review(record)['is_complete'] is complete
+    assert record == before
+    assert record['scoring_eligible'] is False
+    assert context_accepted_for_scoring(context) is False
+
+
+@pytest.mark.parametrize('record_id,pmids', [
+    ('INGR_BORON', {'8508192', '7889885'}),
+    ('PRECLIN_AKG', {'37217632', '40819772'}),
+])
+def test_finished_noncredit_source_dispositions_cover_retained_boron_akg_sources(record_id, pmids):
+    from clinical_applicability import assess_clinical_source_review
+    from probiotic_measurements import context_accepted_for_scoring
+    from evidence_resolver import clinical_record_sources_eligible
+    record = reviewed_entries()[record_id]
+    before = deepcopy(record)
+    assert record['study_type'] == record['evidence_level'] == 'reference'
+    assert assess_clinical_source_review(record)['is_complete'] is True
+    contexts = record['study_contexts']
+    assert {pmid for context in contexts for pmid in context['source_pmids']} == pmids
+    assert all(context['review_status'] == 'rejected_source' for context in contexts)
+    assert all(not context_accepted_for_scoring(context) for context in contexts)
+    assert clinical_record_sources_eligible(record) is False
+    assert record == before
+    if record_id == 'PRECLIN_AKG':
+        assert record['scoring_eligible'] is False
+
+
+def test_pqq_unread_corrected_source_hold_remains_incomplete():
+    from clinical_applicability import assess_clinical_source_review
+    from evidence_resolver import clinical_record_sources_eligible
+    record = reviewed_entries()['PRECLIN_PQQ']
+    before = deepcopy(record)
+    assert record['scoring_eligible'] is False
+    assert assess_clinical_source_review(record)['is_complete'] is False
+    assert clinical_record_sources_eligible(record) is False
+    assert record == before

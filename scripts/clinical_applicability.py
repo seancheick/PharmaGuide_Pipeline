@@ -957,7 +957,12 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
             rejected_sources.update(sources)
         if not declared_pmids or declared_pmids - rejected_sources:
             errors.append("clinical_source_rejection_coverage_incomplete")
-        if reference.get("scoring_eligible") is False:
+        # A fully covered source exclusion finishes review without lifting the
+        # parent's credit exclusion. Mixed classifications and affirmative
+        # held contexts must retain their ordinary incomplete treatment.
+        if (reference.get("scoring_eligible") is False
+                and not (reference.get("study_type") == "reference"
+                         and reference.get("evidence_level") == "reference")):
             errors.append("clinical_context_eligible_source_missing")
         return {"is_complete": not errors, "errors": errors,
                 "context_ids": [context.get("context_id") for context in contexts]}

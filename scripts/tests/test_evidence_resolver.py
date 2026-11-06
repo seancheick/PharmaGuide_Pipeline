@@ -1963,7 +1963,7 @@ def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifac
 
 
 @pytest.mark.parametrize('reverse', [False, True])
-@pytest.mark.parametrize('reference_state', ['complete', 'unreviewed', 'malformed', 'held', 'positive_open'])
+@pytest.mark.parametrize('reference_state', ['complete', 'rejected_held', 'unreviewed', 'malformed', 'held', 'positive_open'])
 def test_mixed_exclusion_reference_completion_requires_each_record_finished(monkeypatch, reverse, reference_state):
     import copy
     import clinical_applicability as ca
@@ -1974,6 +1974,18 @@ def test_mixed_exclusion_reference_completion_requires_each_record_finished(monk
         reference['study_contexts'][0]['review_status'] = 'pending_review'
     elif reference_state == 'malformed':
         reference['study_contexts'][0]['clinical_review'] = {}
+    elif reference_state == 'rejected_held':
+        reference['scoring_eligible'] = False
+        sources = [str(ref['pmid']) for ref in reference['references_structured'] if ref.get('pmid')]
+        reference['study_contexts'] = [{
+            'context_id': 'alcar_source_exclusion_mechanics', 'components': [reference['id']],
+            'source_pmids': sources, 'review_status': 'rejected_source', 'scoring_eligible': False,
+            'clinical_review': {'reviewer': 'Synthetic independent source reviewer',
+                'reviewed_at': '2026-11-06', 'scope': 'identity_dose_outcome_applicability'},
+            'dose': {'source_provenance': {'pmid': sources[0],
+                'source_url': 'https://pubmed.ncbi.nlm.nih.gov/' + sources[0] + '/',
+                'location': 'Synthetic mechanics only: assessed source scope exclusion'}},
+            'limitations': ['Synthetic no-credit source exclusion; no clinical fact is added.']}]
     elif reference_state == 'held':
         reference['scoring_eligible'] = False
     elif reference_state == 'positive_open':
@@ -1989,7 +2001,7 @@ def test_mixed_exclusion_reference_completion_requires_each_record_finished(monk
     row, product = _excluded_preparation_product('Acetyl L-Carnitine', 'l_carnitine', 'acetyl-l-carnitine (alcar)')
     result = er.resolve_evidence_for_row(row, product)
     assert not result.points_eligible
-    expected = 'evaluated_limited_or_negative' if reference_state == 'complete' else 'not_yet_evaluated'
+    expected = 'evaluated_limited_or_negative' if reference_state in {'complete', 'rejected_held'} else 'not_yet_evaluated'
     assert _resolved_evidence_assessment(result)[0] == expected
 
 
