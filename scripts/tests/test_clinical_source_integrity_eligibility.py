@@ -662,6 +662,9 @@ def test_elderberry_completed_synthesis_review_does_not_invent_generic_credit():
     assert validate_ingredient_context(reviewed, require_complete_review=True) == []
     assert 'Codex' in reviewed['clinical_review']['reviewer']
     assert record['effect_direction'] == 'mixed'
+    assert record['endpoint_relevance_tags'] == []
+    assert 'immune response ↑' not in record['key_endpoints']
+    assert record['health_goals_supported'] == ['Immune Support']
     assert contexts['ingr_elderberry_33827515_scoped_source']['clinical_review']['reviewer'] == 'Dr. Pham'
     assert not er.clinical_record_sources_eligible(record)
     assert not assess_clinical_source_review(record)['is_complete']
@@ -795,5 +798,11 @@ def test_betaine_exercise_prose_keeps_positive_and_null_outcomes_scoped():
     assert 'Fight Gone Bad repetitions positive' in record['notable_studies']
     assert 'Wingate/body-composition null' in record['notable_studies']
     assert 'FDA-approved' not in record['notes']
+    assert record['health_goals_supported'] == []
+    assert record['endpoint_relevance_tags'] == []
+    assert 'primary_outcome' not in record  # no single health category across these trials
+    assert record['category'] == 'sports_performance'
+    assert not any('homocysteine' in e.lower() for e in record['key_endpoints'])
+    assert 'historical' in record['effect_direction_rationale'].lower()
     assert all(c['scoring_eligible'] is False for c in record['study_contexts'])
     assert not assess_clinical_source_review(record)['is_complete']

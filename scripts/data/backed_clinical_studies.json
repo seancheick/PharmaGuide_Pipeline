@@ -18186,7 +18186,6 @@
       "key_endpoints": [
         "cold duration ↓",
         "flu symptoms ↓",
-        "immune response ↑",
         "upper respiratory symptoms ↓"
       ],
       "health_goals_supported": [
@@ -18275,12 +18274,8 @@
       "total_enrollment": 204,
       "registry_completed_trials_count": 13,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=13; total_enrollment=204; endpoint_tags=focus_memory,glycemic_control,digestive_health; notes/citations include mixed-evidence language.",
-      "endpoint_relevance_tags": [
-        "focus_memory",
-        "glycemic_control",
-        "digestive_health"
-      ],
+      "effect_direction_rationale": "Retained mixed classification for the two declared upper-respiratory reviews: small trial counts, heterogeneous formulations and positive, null or uncertain respiratory findings. These sources do not establish cognition, glycemic-control, digestive-treatment or a general immune-response increase. Existing clinical hold and non-scoring source dispositions remain. Legacy registry/enrollment numbers are not independently reconciled trial-family totals.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -22282,7 +22277,7 @@
         "Cardiovascular/Heart Health",
         "Blood Sugar Support"
       ],
-      "notes": "Human randomized and meta-analytic research reports modest blood-pressure and selected cardiometabolic-marker changes, with effects varying by population and regimen. These surrogate findings do not establish prevention of cardiovascular events or extended human lifespan. The specific full-methods source-review hold remains: included trials, preparations, populations, regimens and outcome applicability have not been fully qualified for the two declared syntheses. As of2026-11-06, the publisher-deposited bibliography for PMID41275513 cites the retracted heart-failure trial PMID28118062 (DOI10.1080/19390211.2016.1267059; retraction notice PMID41943494, DOI10.1080/19390211.2026.2656044). This verifies a citation link, not contribution to any particular pooled estimate. Pool membership, weighting and the effect on surviving findings remain unverified. No new Evidence credit or categorical no-benefit conclusion follows from this factual update.",
+      "notes": "Human randomized and meta-analytic research reports modest blood-pressure and selected cardiometabolic-marker changes, with effects varying by population and regimen. These surrogate findings do not establish prevention of cardiovascular events or extended human lifespan. The specific full-methods source-review hold remains: included trials, preparations, populations, regimens and outcome applicability have not been fully qualified for the two declared syntheses. As of 2026-11-06, the publisher-deposited bibliography for PMID 41275513 cites the retracted heart-failure trial PMID 28118062 (DOI 10.1080/19390211.2016.1267059; retraction notice PMID 41943494, DOI 10.1080/19390211.2026.2656044). This verifies a citation link, not contribution to any particular pooled estimate. Pool membership, weighting and the effect on surviving findings remain unverified. No new Evidence credit or categorical no-benefit conclusion follows from this factual update.",
       "study_type": "systematic_review_meta",
       "published_studies": [
         "RCT",
@@ -22290,7 +22285,7 @@
         "meta-analysis"
       ],
       "last_updated": "2026-11-06",
-      "notable_studies": "PMID32871172 (2020) reports blood-pressure, total-cholesterol and triglyceride reductions across heterogeneous clinical populations, with null pooled findings for fasting glucose, HDL-C, LDL-C, BMI and body weight. PMID41275513, first published online in2025, reports34eligible RCTs and additional cardiometabolic-marker pools; that source-reported count is not an independently reconciled trial-family count. Both syntheses still require full-methods and source-applicability review. The newer bibliography cites PMID28118062, retracted on2026-04-06 under notice PMID41943494; reference membership alone does not establish which outcomes used its data or invalidate the entire synthesis. No human longevity finding is established by these sources.",
+      "notable_studies": "PMID 32871172 (2020) reports blood-pressure, total-cholesterol and triglyceride reductions across heterogeneous clinical populations, with null pooled findings for fasting glucose, HDL-C, LDL-C, BMI and body weight. PMID 41275513, first published online in 2025, reports 34 eligible RCTs and additional cardiometabolic-marker pools; that source-reported count is not an independently reconciled trial-family count. Both syntheses still require full-methods and source-applicability review. The newer bibliography cites PMID 28118062, retracted on 2026-04-06 under notice PMID 41943494; reference membership alone does not establish which outcomes used its data or invalidate the entire synthesis. No human longevity finding is established by these sources.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -22849,25 +22844,22 @@
         "trimethylglycine",
         "tmg"
       ],
-      "category": "cardiovascular",
+      "category": "sports_performance",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "homocysteine ↓",
-        "muscle performance ↑"
+        "Body-fat percentage and fat-mass changes during supervised resistance training (PMID 30064450)",
+        "Fight Gone Bad repetitions in trained men; Wingate power and body-composition treatment contrasts null (PMID 37409757)"
       ],
-      "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Increase Energy"
-      ],
-      "notes": "The two currently declared exercise RCTs report preparation- and outcome-specific findings, not general exercise or cardiovascular efficacy. PMID30064450 studied BetaPower2.5g/day in untrained young women undertaking resistance training: body-fat outcomes improved, while strength/power did not show superior between-group effects. PMID37409757 studied Medicaline capsules in trained men:Fight Gone Bad repetitions improved,while Wingate power/body composition did not. Both existing contexts remain approved non-scoring. The2024meta-analysis lower-body-strength question remains under source/method reconciliation; neither a generic credit conclusion nor a categorical no-efficacy conclusion is established by this note.",
+      "health_goals_supported": [],
+      "notes": "The two currently declared exercise RCTs report preparation- and outcome-specific findings, not general exercise or cardiovascular efficacy. PMID 30064450 studied BetaPower 2.5 g/day in untrained young women undertaking resistance training: body-fat outcomes improved, while strength/power did not show superior between-group effects. PMID 37409757 studied Medicaline capsules in trained men: Fight Gone Bad repetitions improved, while Wingate power/body composition did not. Both existing contexts remain approved non-scoring. The 2024 meta-analysis lower-body-strength question remains under source/method reconciliation; neither a generic credit conclusion nor a categorical no-efficacy conclusion is established by this note.",
       "study_type": "rct_multiple",
       "published_studies": [
         "RCT",
         "meta-analysis"
       ],
-      "last_updated": "2026-10-28",
-      "notable_studies": "PMID30064450:23young women completed;BetaPower2.5g/day with supervised resistance training;primary body-fat percentage surrogate positive,secondary squat/bench1RM and power null between groups. PMID37409757:43male recreational CrossFit practitioners;Medicaline capsules2.5or5g/day for21-day crossover periods;Fight Gone Bad repetitions positive,Wingate/body-composition null,and hormone findings mixed. Neither currently declared trial establishes homocysteine reduction,cardiovascular-event prevention or a generic energy benefit. PMID39514262 is retained in the private source-review packet with a fragile positive lower-body pooled signal and unresolved primary-source/method discrepancies;it is not yet a new credit-bearing record.",
+      "last_updated": "2026-11-06",
+      "notable_studies": "PMID 30064450: 23 young women completed; BetaPower 2.5 g/day with supervised resistance training; primary body-fat percentage surrogate positive, secondary squat/bench 1 RM and power null between groups. PMID 37409757: 43 male recreational CrossFit practitioners; Medicaline capsules 2.5 or 5 g/day for 21-day crossover periods; Fight Gone Bad repetitions positive, Wingate/body-composition null, and hormone findings mixed. Neither currently declared trial establishes homocysteine reduction, cardiovascular-event prevention or a generic energy benefit. PMID 39514262 is retained in the private source-review packet with a fragile positive lower-body pooled signal and unresolved primary-source/method discrepancies; it is not yet a new credit-bearing record.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -22934,17 +22926,11 @@
         "unii": "3SCV180C9W"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Cardiovascular/Heart Health",
       "total_enrollment": 100,
       "registry_completed_trials_count": 46,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,meta-analysis; registry_completed_trials_count=46; total_enrollment=100; endpoint_tags=stress_mood,cardiovascular,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
-      ],
+      "effect_direction_rationale": "Historical automated positive_strong/high fields are retained pending explicit qualification; they are not a current approved efficacy grade. The two declared trials measured exercise/body-composition outcomes, not primary cardiovascular, energy, homocysteine, stress/mood, glycemic-control or recovery benefits. Their approved contexts remain non-scoring. The specific lower-body meta-analysis source/method hold remains unresolved. Legacy registry and enrollment counts are not independently qualified trial-family or efficacy-participant totals.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -46775,7 +46761,7 @@
       ],
       "health_goals_supported": [],
       "notes": "The exact free-L-glutamine trial is qualified for its narrow patient-important IBS endpoint. Other known studies and modified preparations remain unfinished; earned source credit must coexist with incomplete ingredient review. No general IBS, sports-performance, muscle-recovery, lower-dose-equivalence or safety claim is established.",
-      "notable_studies": "PMID30108163:115randomized,106completers;43/54active versus3/52whey placebo met the prespecified primary IBS symptom threshold after15g/day for8weeks. Permeability was a secondary surrogate. All other listed sources retain their own reviewed-exclusion or pending status; do not count their citations as independent positive replications.",
+      "notable_studies": "PMID 30108163: 115 randomized, 106 completers; 43/54 active versus 3/52 whey placebo met the prespecified primary IBS symptom threshold after 15 g/day for 8 weeks. Permeability was a secondary surrogate. All other listed sources retain their own reviewed-exclusion or pending status; do not count their citations as independent positive replications.",
       "last_updated": "2026-11-06",
       "references_structured": [
         {
@@ -46926,9 +46912,9 @@
           "trial_family": "glutamine_30108163",
           "population": {
             "age_group": "adult",
-            "description": "Adults eligible at18-72years with RomeIII diarrhea-predominant IBS after a medically documented enteric infection at least1year earlier and objectively increased intestinal permeability. Not other IBS subtypes, IBS-D with normal permeability, healthy athletes, children, pregnancy or lactation."
+            "description": "Adults eligible at 18-72 years with Rome III diarrhea-predominant IBS after a medically documented enteric infection at least 1 year earlier and objectively increased intestinal permeability. Not other IBS subtypes, IBS-D with normal permeability, healthy athletes, children, pregnancy or lactation."
           },
-          "study_design": "Randomized double-blind placebo-controlled two-center eight-week trial;115randomized(59glutamine/56wheyplacebo),106completed(54/52). Published efficacy analysis includes completers only; no full intention-to-treat efficacy analysis is asserted.",
+          "study_design": "Randomized double-blind placebo-controlled two-center eight-week trial; 115 randomized (59 glutamine/56 whey placebo), 106 completed (54/52). Published efficacy analysis includes completers only; no full intention-to-treat efficacy analysis is asserted.",
           "review_status": "clinician_approved",
           "scoring_eligible": true,
           "clinical_review": {
@@ -46938,14 +46924,14 @@
             "basis": "Sean-delegated existing-policy source review with independent fullbody/API content verification on2026-11-06. Exact30108163 oral glutamine, PI-IBS-D/hyperpermeability and named primary outcome qualified; existing literature-study positive_moderate determination retained. Not a physician attribution, new numerical grade, general-population efficacy or Dose threshold."
           },
           "limitations": [
-            "One8-week trial in a narrow selected population;115randomized and106completed. Only completers entered final efficacy analysis. Published discontinuation wording is internally inconsistent; preserve explicit randomized/completer counts and do not label it full intention-to-treat.",
-            "History of enteric infection was documented medically;stool cultures were not obtained. Results do not establish general treatment of all IBS,IBS-C,IBS-D with normal permeability,healthy sports performance or muscle recovery.",
-            "Patients with bacterial overgrowth,celiac disease,significant kidney/liver abnormalities and other exclusion conditions were not studied;children and pregnancy/lactation cannot inherit efficacy or safety conclusions.",
-            "Whey-protein placebo could theoretically affect IBS symptoms;authors did not observe significant worsening in the placebo group. Participants were asked to refrain from alcohol andNSAIDs;this is source-protocol context,not new consumer advice.",
+            "One 8-week trial in a narrow selected population; 115 randomized and 106 completed. Only completers entered final efficacy analysis. Published discontinuation wording is internally inconsistent; preserve explicit randomized/completer counts and do not label it full intention-to-treat.",
+            "History of enteric infection was documented medically; stool cultures were not obtained. Results do not establish general treatment of all IBS, IBS-C, IBS-D with normal permeability, healthy sports performance or muscle recovery.",
+            "Patients with bacterial overgrowth, celiac disease, significant kidney/liver abnormalities and other exclusion conditions were not studied; children and pregnancy/lactation cannot inherit efficacy or safety conclusions.",
+            "Whey-protein placebo could theoretically affect IBS symptoms; authors did not observe significant worsening in the placebo group. Participants were asked to refrain from alcohol and NSAIDs; this is source-protocol context, not new consumer advice.",
             "Permeability is a secondary surrogate and correlated change does not establish mediation or a proven mechanism. Do not pool it as independent clinical replication alongside the patient-important primary result.",
-            "The assigned15g/day regimen over56days does not establish a universal efficacy minimum,optimal long-term dose,UL or general safety clearance. Longer-term durability and replication remain unknown.",
-            "Qualified identity is oral dietary glutamine powder within the existing free-form L-glutamine literature scope;no transfer to N-acetyl-L-glutamine,alanyl-glutamine/Sustamine,unspecified glutamine complexes or protein-bound glutamine.",
-            "The source-specific positive_moderate grade already exists in the literature record and is retained;this context adds verified preparation/population/outcome qualification,not a new numerical grading policy. Other L-glutamine source questions and preparation-specific research remain independently open."
+            "The assigned 15 g/day regimen over 56 days does not establish a universal efficacy minimum, optimal long-term dose, UL or general safety clearance. Longer-term durability and replication remain unknown.",
+            "Qualified identity is oral dietary glutamine powder within the existing free-form L-glutamine literature scope; no transfer to N-acetyl-L-glutamine, alanyl-glutamine/Sustamine, unspecified glutamine complexes or protein-bound glutamine.",
+            "The source-specific positive_moderate grade already exists in the literature record and is retained; this context adds verified preparation/population/outcome qualification, not a new numerical grading policy. Other L-glutamine source questions and preparation-specific research remain independently open."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -46957,14 +46943,14 @@
             "dose_basis": "nominal_assigned_arm",
             "duration_basis": "fixed_protocol",
             "duration_days": 56,
-            "administration_frequency": "5 g powder three times daily, mixed in eight ounces of water;15g/day for8weeks",
+            "administration_frequency": "5 g powder three times daily, mixed in eight ounces of water; 15 g/day for 8 weeks",
             "dosage_forms": [
               "oral powder in water"
             ],
             "co_therapies": [],
-            "reported_regimen": "5 g powder three times daily, mixed in eight ounces of water;15g/day for8weeks",
+            "reported_regimen": "5 g powder three times daily, mixed in eight ounces of water; 15 g/day for 8 weeks",
             "normalization": {
-              "basis": "5g oral glutamine powder three times daily=15g/day;8weeks=56days. This is the assigned30108163 regimen,not a minimum effective dose,general optimal intake,UL or evidence of derivative/formula equivalence."
+              "basis": "5 g oral glutamine powder three times daily = 15 g/day; 8 weeks = 56 days. This is the assigned 30108163 regimen, not a minimum effective dose, general optimal intake, UL or evidence of derivative/formula equivalence."
             },
             "source_provenance": {
               "pmid": "30108163",
@@ -47022,9 +47008,9 @@
             }
           },
           "limitations": [
-            "Fourteenhealthy mencompletedrandomizeddouble-blindrepeatedcounterbalancedcrossoverwiththreeACTIVEdoses(0.3,0.6,0.9g/kgFAT-FREEMASS);≥5daywashoutsand24hGIsymptomfollowup.Nozero-glutamineplaceboefficacycomparison.",
-            "HigherdoseproducedmoreGIsymptoms,usuallymildandtransient;oneparticipantreportedseverebelching/regurgitationonthehighestdose.Notuniversalabsenceofadverseeffects.",
-            "This is measuredacuteGItolerability,notgutrepair,sportsperformance,muscle-recoveryorimmune-efficacyevidence.No chronicULorsafetythreshold isintroduced."
+            "Fourteen healthy men completed randomized double-blind repeated counterbalanced crossover with three ACTIVE doses (0.3, 0.6, 0.9 g/kg FAT-FREE MASS); ≥5 day washouts and 24 h GI symptom followup. No zero-glutamine placebo efficacy comparison.",
+            "Higher dose produced more GI symptoms, usually mild and transient; one participant reported severe belching/regurgitation on the highest dose. Not universal absence of adverse effects.",
+            "This is measured acute GI tolerability, not gut repair, sports performance, muscle-recovery or immune-efficacy evidence. No chronic UL or safety threshold is introduced."
           ]
         },
         {
@@ -47052,9 +47038,9 @@
           "trial_family": "glutamine_33809996",
           "population": {
             "age_group": "adult",
-            "description": "44women in Brazil;sample ages60-80years(mean69.2),while eligibility text allowed60-85. Pre-existing exercise cohort21(11Gln/10placebo) and non-exercising cohort23(12Gln/11placebo). Exercise status was established for at least24months,not randomized by this trial."
+            "description": "44 women in Brazil; sample ages 60-80 years (mean 69.2), while eligibility text allowed 60-85. Pre-existing exercise cohort 21 (11 Gln/10 placebo) and non-exercising cohort 23 (12 Gln/11 placebo). Exercise status was established for at least 24 months, not randomized by this trial."
           },
-          "study_design": "Pre/post30-day double-blind study with randomized supplement assignment within pre-existing exercising/non-exercising cohorts;four smallcells. Authors describe two major endpoint families(antioxidant capacity,and muscle strength/glycemia),without a formal primary/secondary hierarchy for individual outcomes.",
+          "study_design": "Pre/post 30-day double-blind study with randomized supplement assignment within pre-existing exercising/non-exercising cohorts; four small cells. Authors describe two major endpoint families (antioxidant capacity, and muscle strength/glycemia), without a formal primary/secondary hierarchy for individual outcomes.",
           "review_status": "clinician_approved",
           "scoring_eligible": false,
           "clinical_review": {
@@ -47064,17 +47050,17 @@
             "basis": "Sean-delegated existing-policy source review. Official primary Methods/Results,Figures2-4 and their comparison brackets were read independently;reported supplement benefits are within-group changes,not an established glutamine-versus-placebo treatment contrast. Completed bounded non-scoring source assessment,not physician attribution or evidence of no effect."
           },
           "limitations": [
-            "The source names two major endpoint families;the assessment is complete for this reported study and is not held merely because its abstract lacks a named primary. Formal primary/secondary rank for individual outcomes is not invented.",
-            "Published supplement benefits and effect sizes are predominantly within-group pre/post comparisons. Visual brackets inFigures2-4 indicate own-baseline changes or exercising-versus-non-exercising contrasts,not a demonstrated isolated glutamine-versus-placebo difference-in-change. Significance in one group but not another is not itself a treatment effect.",
-            "Under the existing NON_EFFICACY_OUTCOME_ROLES rule,within_group_change cannot qualify affirmative ingredient-purpose credit. This is a bounded nonqualifying source disposition,not proof that glutamine is ineffective or harmful.",
-            "Knee isokinetic strength/power is a directly measured muscle-strength/performance endpoint,consistent with existing patient_important strength/power classifications. That kind is restricted to the measured muscle-strength question:it does not establish glutamine-caused reductions in falls/disability or improved daily mobility. Table2timed-up-and-go differences describe pre-existing exercise-group baseline differences,not a glutamine treatment response.",
-            "BothGSH andGSSG increased;reductive power did not differ. TBARs decreased in all subgroups includingplacebo;do not attribute that shared time trend to glutamine or call it a demonstrated treatment-versus-placebo antioxidant benefit.",
-            "Figure4caption/plot mapping is(a)extensor torque,(b)flexor torque,(c)extensor average power,(d)flexor average power. Some Results prose cites different panelletters;this context follows plotted labels/caption and retains the reporting limitation.",
-            "Smallcells(10-12),multiple outcomes,baseline exercise/lifestyle differences,more arthritis/depression in the sedentary group and incomplete treatment-factor/interaction reporting constrain causal inference. Exercise participation was not randomized.",
-            "No positive evidence transfer to healthy young athletes,sportsrecovery,general diabetes treatment or PI-IBS-D. This distinct Brazilian older-women trial is not a replication of30108163 IBS outcomes.",
-            "10g/day for30days is a studied assignment,not a generic efficacyminimum,optimaldose,UL or safety finding. The protocol statement about discomfort above30g/day is based on personalcommunications and does not establish a warning threshold.",
-            "Preserve30108163 as the only user-authorized0.85 interpretation with its existingpositive_moderate grade and15g/day56-day source scope. Other unresolved source/preparation questions remain pending;finishing this non-scoring review does not complete the ingredient/product.",
-            "The context_id retains the existing source slot identifier;review_status,not the historical identifier suffix,is the sole status owner. No additional study or duplicate context is created."
+            "The source names two major endpoint families; the assessment is complete for this reported study and is not held merely because its abstract lacks a named primary. Formal primary/secondary rank for individual outcomes is not invented.",
+            "Published supplement benefits and effect sizes are predominantly within-group pre/post comparisons. Visual brackets in Figures 2-4 indicate own-baseline changes or exercising-versus-non-exercising contrasts, not a demonstrated isolated glutamine-versus-placebo difference-in-change. Significance in one group but not another is not itself a treatment effect.",
+            "Under the existing NON_EFFICACY_OUTCOME_ROLES rule, within_group_change cannot qualify affirmative ingredient-purpose credit. This is a bounded nonqualifying source disposition, not proof that glutamine is ineffective or harmful.",
+            "Knee isokinetic strength/power is a directly measured muscle-strength/performance endpoint, consistent with existing patient_important strength/power classifications. That kind is restricted to the measured muscle-strength question: it does not establish glutamine-caused reductions in falls/disability or improved daily mobility. Table 2 timed-up-and-go differences describe pre-existing exercise-group baseline differences, not a glutamine treatment response.",
+            "Both GSH and GSSG increased; reductive power did not differ. TBARs decreased in all subgroups including placebo; do not attribute that shared time trend to glutamine or call it a demonstrated treatment-versus-placebo antioxidant benefit.",
+            "Figure 4 caption/plot mapping is (a) extensor torque, (b) flexor torque, (c) extensor average power, (d) flexor average power. Some Results prose cites different panel letters; this context follows plotted labels/caption and retains the reporting limitation.",
+            "Small cells (10-12), multiple outcomes, baseline exercise/lifestyle differences, more arthritis/depression in the sedentary group and incomplete treatment-factor/interaction reporting constrain causal inference. Exercise participation was not randomized.",
+            "No positive evidence transfer to healthy young athletes, sports recovery, general diabetes treatment or PI-IBS-D. This distinct Brazilian older-women trial is not a replication of 30108163 IBS outcomes.",
+            "10 g/day for 30 days is a studied assignment, not a generic efficacy minimum, optimal dose, UL or safety finding. The protocol statement about discomfort above 30 g/day is based on personal communications and does not establish a warning threshold.",
+            "Preserve 30108163 as the only user-authorized 0.85 interpretation with its existing positive_moderate grade and 15 g/day 56-day source scope. Other unresolved source/preparation questions remain pending; finishing this non-scoring review does not complete the ingredient/product.",
+            "The context_id retains the existing source slot identifier; review_status, not the historical identifier suffix, is the sole status owner. No additional study or duplicate context is created."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -47086,7 +47072,7 @@
             "dose_basis": "nominal_assigned_arm",
             "duration_basis": "fixed_protocol",
             "duration_days": 30,
-            "administration_frequency": "Once daily at lunch for30days",
+            "administration_frequency": "Once daily at lunch for 30 days",
             "dosage_forms": [
               "Oral powder mixture in250mLwater"
             ],
@@ -47094,9 +47080,9 @@
               "10g maltodextrin with active glutamine versus20g maltodextrin in comparator",
               "Exercising cohort continued pre-existing supervised combined aerobic/resistance training60-75minutes,3nonconsecutive sessions/week;non-exercising cohort maintained usual routine"
             ],
-            "reported_regimen": "10gL-glutamine+10gmaltodextrin daily in250mLwater at lunch,for30days,versus20gmaltodextrin inwater",
+            "reported_regimen": "10 g L-glutamine + 10 g maltodextrin daily in 250 mL water at lunch, for 30 days, versus 20 g maltodextrin in water",
             "normalization": {
-              "basis": "Assigned L-glutamine10g/day x1000mg/g=10000mg/day;30-dayprotocol. Maltodextrin is not counted as glutamine. No general clinical threshold,optimal intake,upperlimit or equivalence is inferred."
+              "basis": "Assigned L-glutamine 10 g/day x 1000 mg/g = 10000 mg/day; 30-day protocol. Maltodextrin is not counted as glutamine. No general clinical threshold, optimal intake, upper limit or equivalence is inferred."
             },
             "source_provenance": {
               "pmid": "33809996",
@@ -47251,7 +47237,7 @@
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. ",
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
             "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
           ]
         },
@@ -47307,7 +47293,7 @@
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. ",
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
             "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
           ]
         },
@@ -47335,7 +47321,7 @@
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. ",
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
             "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
           ]
         },
@@ -47392,7 +47378,7 @@
         "supported_outcomes": [
           "post_infectious_ibs_d"
         ],
-        "studied_population": "Adults eligible at18-72years with RomeIII diarrhea-predominant IBS after a medically documented enteric infection at least1year earlier and objectively increased intestinal permeability. Not other IBS subtypes, IBS-D with normal permeability, healthy athletes, children, pregnancy or lactation.",
+        "studied_population": "Adults eligible at 18-72 years with Rome III diarrhea-predominant IBS after a medically documented enteric infection at least 1 year earlier and objectively increased intestinal permeability. Not other IBS subtypes, IBS-D with normal permeability, healthy athletes, children, pregnancy or lactation.",
         "source_pmids": [
           "30108163"
         ],
