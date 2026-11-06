@@ -6229,8 +6229,9 @@ class SupplementEnricherV3:
     ) -> None:
         """Reconcile identity after a candidate becomes intentionally non-scorable.
 
-        Recognition is the authoritative primary-identity lane when an IQM
-        candidate did not qualify for scoring.  Safety-table matches remain
+        Recognition supplies primary identity when no verified primary remains;
+        a missing preparation grade cannot replace an established identity.
+        Safety-table matches remain
         orthogonal: they suppress scoring but do not replace a valid cleaner
         identity with a regulatory-record identifier.
         """
@@ -6358,7 +6359,13 @@ class SupplementEnricherV3:
                         "the source ingredient remains unresolved."
                     ),
                 })
-        elif matched_entry_id and recognition_source:
+        elif (matched_entry_id and recognition_source
+              and not (decision.disposition == "clean"
+                       and decision.canonical_id_after
+                       and decision.canonical_id_after == ingredient.get("canonical_id"))):
+            # Failure to grade a preparation does not invalidate its verified
+            # parent identity. Secondary recognition must not replace that
+            # identity and silently remove its existing safety-rule subjects.
             row.update({
                 "canonical_id": matched_entry_id,
                 "canonical_id_after": matched_entry_id,
@@ -6400,7 +6407,7 @@ class SupplementEnricherV3:
             and self._is_known_therapeutic(
                 ing_name_raw, std_name,
                 self.databases.get('ingredient_quality_map', {}),
-                self.databases.get('botanical_ingredients', {}),
+                self.databases.get('botanical_ingredients', {}), source_context=ingredient,
             )
         )
 
@@ -6739,7 +6746,8 @@ class SupplementEnricherV3:
         # high_risk/watchlist entries.  IQM scoring (Section A) and safety
         # penalties (Section B) are independent concerns.
         # =================================================================
-        if self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db):
+        if self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db,
+                                      source_context=ingredient):
             return None
 
         recognized = self._is_recognized_non_scorable(ing_name, std_name, source_context=ingredient)
@@ -6953,7 +6961,7 @@ class SupplementEnricherV3:
         # ingredients are never prevented from promotion by harmful_additives
         # or banned_recalled high_risk/watchlist entries.
         is_known = self._is_known_therapeutic(
-            ing_name, std_name, quality_map, botanicals_db
+            ing_name, std_name, quality_map, botanicals_db, source_context=ingredient
         )
         if is_known:
             return {
@@ -7057,15 +7065,21 @@ class SupplementEnricherV3:
         return False
 
     def _is_known_therapeutic(self, ing_name: str, std_name: str,
-                               quality_map: Dict, botanicals_db: Dict) -> bool:
+                               quality_map: Dict, botanicals_db: Dict,
+                               *, source_context: Optional[Dict] = None) -> bool:
         """Check if ingredient exists in therapeutic databases."""
         # Check quality map. This is an exploratory predicate — we only want
         # a yes/no answer, not a final match. Pass _form_extraction_attempt=True
         # so this call does NOT emit parent_fallback telemetry (which would
         # otherwise leak transient rows into parent_fallback_report.json when
         # the real ingredient enrichment later upgrades the match).
+        source = source_context or {}
         quality_match = self._match_quality_map(
-            ing_name, std_name, quality_map, _form_extraction_attempt=True
+            ing_name, std_name, quality_map, _form_extraction_attempt=True,
+            cleaner_canonical_id=(source.get("canonical_id")
+                                  if source.get("canonical_source_db") == "ingredient_quality_map" else None),
+            cleaned_forms=source.get("forms"),
+            raw_source_text=source.get("raw_source_text") or source.get("name"),
         )
         if quality_match and quality_match.get("match_status") != "FORM_UNMAPPED":
             return True
@@ -15276,7 +15290,7 @@ class SupplementEnricherV3:
                     continue
                 if self._is_known_therapeutic(
                     row.get("name") or "", row.get("standardName") or row.get("name") or "",
-                    quality_map, botanicals_db,
+                    quality_map, botanicals_db, source_context=row,
                 ):
                     non_opaque_source_fields.add(f"{section}[{index}]")
 

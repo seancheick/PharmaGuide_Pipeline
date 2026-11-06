@@ -1742,3 +1742,15 @@ def test_row_notes_wrapper_retains_original_form_source(enricher):
         raw_source_text='Sibelius Sage extract', row_notes='Sibelius Sage extract',
     )
     assert match and match['form_id'] == 'sage extract'
+
+
+def test_rejected_inferred_form_retains_verified_parent_unknown_form(enricher):
+    quality = enricher.databases['ingredient_quality_map']
+    match = enricher._match_quality_map(
+        'PACRAN Cranberry (Vaccinium macrocarpon) powder', 'Cranberry Concentrate', quality,
+        cleaner_canonical_id='cranberry',
+        raw_source_text='PACRAN Cranberry (Vaccinium macrocarpon) powder',
+    )
+    assert match and match['canonical_id'] == 'cranberry'
+    assert match['form_id'] == unknown_form_quality(quality['cranberry'])['form_id']
+    assert match['bio_score'] == unknown_form_quality(quality['cranberry'])['bio_score']
