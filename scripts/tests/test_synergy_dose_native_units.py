@@ -143,3 +143,91 @@ class TestUnconvertibleThresholds:
         assert matched["probiotics"]["evaluated_unit"] is None
         assert matched["probiotics"]["dose_evaluable"] is False
         assert matched["probiotics"]["meets_minimum"] is False
+
+
+@pytest.fixture(scope='module')
+def canonical_synergy_enricher():
+    return SupplementEnricherV3()
+
+
+def _elderberry_source_product(pid, display='Elderberries'):
+    """Retained source facts from293381/335161, reduced to relevant rows."""
+    is_a = pid == '293381'
+    rows = [
+        ('Vitamin C', 'vitamin_c', 60 if is_a else 90, 'mg'),
+        ('Zinc', 'zinc', 2.2 if is_a else 7.5, 'mg'),
+        ('Black Elder Berry Extract', 'elderberry', 50, 'mg'),
+        ('Vitamin A' if is_a else 'Vitamin D3', 'vitamin_a' if is_a else 'vitamin_d',
+         600 if is_a else 30, 'mcg'),
+    ]
+    ingredients = [dict(name=name, standardName=display if canonical == 'elderberry' else name,
+        canonical_id=canonical, canonical_source_db='ingredient_quality_map',
+        quantity=qty, unit=unit, raw_source_path=f'ingredientRows[{i}]',
+        raw_source_text=name, cleaner_row_role='active_scorable', source_section='active')
+        for i, (name, canonical, qty, unit) in enumerate(rows)]
+    return {'id': pid, 'fullName': 'Source qualified multivitamin fixture',
+            'brandName': 'Source fixture', 'activeIngredients': ingredients, 'inactiveIngredients': []}
+
+
+@pytest.mark.parametrize('pid', ['293381', '335161'])
+@pytest.mark.parametrize('display', ['Elderberries', 'European Elder', 'Elderberry'])
+def test_canonical_synergy_survives_source_display_spelling_at_enrichment_boundary(canonical_synergy_enricher, pid, display):
+    enriched, _ = canonical_synergy_enricher.enrich_product(_elderberry_source_product(pid, display))
+    clusters = {c['cluster_id']: c for c in enriched['formulation_data']['synergy_clusters']}
+    for key, count in [('immune_defense', 4), ('respiratory_health_lung_support', 3)]:
+        assert clusters[key]['match_count'] == count
+        elder = next(r for r in clusters[key]['matched_ingredients'] if r['cluster_ingredient'] == 'elderberry')
+        assert (elder['ingredient'], elder['quantity'], elder['unit']) == ('Black Elder Berry Extract', 50, 'mg')
+
+
+@pytest.mark.parametrize('display', ['Elderberry', 'Elderberry extract', 'Elderberryish'])
+def test_known_other_identity_cannot_match_generic_cluster_from_display(canonical_synergy_enricher, display):
+    product = _elderberry_source_product('293381', display)
+    row = product['activeIngredients'][2]
+    row.update(name='Blueberry', raw_source_text='Blueberry', canonical_id='blueberry')
+    clusters = canonical_synergy_enricher._collect_synergy_data(product)
+    assert not any(m['cluster_ingredient'] == 'elderberry'
+                   for c in clusters for m in c['matched_ingredients'])
+
+
+def test_generic_canonical_fallback_does_not_transfer_form_specific_cluster():
+    e = _enricher_with([{
+        'id': 'form_specific', 'standard_name': 'Form specific fixture',
+        'ingredients': ['magnesium glycinate'], 'canonical_ids': ['magnesium'],
+        'min_effective_doses': {'magnesium glycinate': 100},
+        'allow_single_ingredient': True, 'primary_ingredients': ['magnesium glycinate'],
+    }], {})
+    product = _product('Magnesium Oxide', 200, 'mg')
+    product['activeIngredients'][0].update(canonical_id='magnesium', canonical_source_db='ingredient_quality_map')
+    assert e._collect_synergy_data(product) == []
+
+
+def test_canonical_synergy_keeps_strict_nonfunctional_source_excluded(canonical_synergy_enricher):
+    import copy
+    product = _elderberry_source_product('293381')
+    rows = copy.deepcopy(product['activeIngredients'])
+    for row in rows:
+        row.update(mapped=True, mapped_identity=True, scoreable_identity=True,
+                   identity_disposition='clean', score_eligible_by_cleaner=True,
+                   role_classification='active_scorable', dose_class='therapeutic_mass')
+    rows[2].update(scoreable_identity=False, score_eligible_by_cleaner=False,
+                   cleaner_row_role='inactive_excipient', source_section='inactive',
+                   role_classification='recognized_non_scorable')
+    product['activeIngredients'][2].update(
+        cleaner_row_role='inactive_excipient', source_section='inactive',
+        score_eligible_by_cleaner=False)
+    product['ingredient_quality_data'] = {
+        'ingredients': rows, 'ingredients_scorable': [r for i, r in enumerate(rows) if i != 2]}
+    clusters = canonical_synergy_enricher._collect_synergy_data(product)
+    assert not any(m['cluster_ingredient'] == 'elderberry'
+                   for c in clusters for m in c['matched_ingredients'])
+
+
+def test_legacy_synergy_without_canonical_identity_keeps_existing_match(canonical_synergy_enricher):
+    product = _elderberry_source_product('293381', 'Elderberry')
+    for row in product['activeIngredients']:
+        row.pop('canonical_id')
+        row.pop('canonical_source_db')
+    clusters = canonical_synergy_enricher._collect_synergy_data(product)
+    assert any(m['cluster_ingredient'] == 'elderberry'
+               for c in clusters for m in c['matched_ingredients'])

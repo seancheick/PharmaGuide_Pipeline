@@ -12083,11 +12083,17 @@ class SupplementEnricherV3:
                 product['name_inference_provenance'] = list(provenance) + synthetic_display_entries
 
         # Build ingredient lookup
+        identity_registry = self._current_canonical_identity_registry()
         ingredient_info = {}
         for ing in active_ingredients:
             key = self._normalize_text(ing.get('standardName', '') or ing.get('name', ''))
+            canonical_id, _ = identity_registry.canonicalize(
+                str(ing.get('canonical_id') or ''),
+                str(ing.get('canonical_source_db') or ''),
+            )
             ingredient_info[key] = {
                 "name": ing.get('name', ''),
+                "canonical_id": canonical_id,
                 "quantity": ing.get('quantity', 0),
                 "unit": ing.get('unit', '')
             }
@@ -12098,6 +12104,7 @@ class SupplementEnricherV3:
             if cluster.get('scoring_eligible') is False:
                 continue
             cluster_ingredients = cluster.get('ingredients', [])
+            canonical_ids = set(cluster.get('canonical_ids') or [])
             min_doses = cluster.get('min_effective_doses', {})
 
             matched_ings = []
@@ -12142,6 +12149,7 @@ class SupplementEnricherV3:
 
             for cluster_ing in cluster_ingredients:
                 cluster_ing_norm = self._normalize_text(cluster_ing)
+                cluster_canonical = norm_module.make_normalized_key(cluster_ing)
                 # Resolve aliases for this cluster ingredient (Solution A).
                 # The match attempt below tries the cluster ingredient itself
                 # first, then each alias if no direct match. Aliases catch
@@ -12156,7 +12164,15 @@ class SupplementEnricherV3:
 
                     # Prefer exact match to avoid false positives (e.g. "EPA" in "HEPATIC")
                     is_match = False
-                    if cluster_ing_norm == ing_key:
+                    # Only an explicitly declared generic identity may bypass
+                    # display spelling. Form-specific terms keep their existing
+                    # preparation matching; a known different identity cannot
+                    # be overridden by display text.
+                    if cluster_canonical in canonical_ids and ing_data['canonical_id']:
+                        if ing_data['canonical_id'] != cluster_canonical:
+                            continue
+                        is_match = True
+                    elif cluster_ing_norm == ing_key:
                         is_match = True
                     # Loose substring match for long terms (>= 6 chars).
                     elif len(cluster_ing_norm) >= 6 and len(ing_key) >= 6:
