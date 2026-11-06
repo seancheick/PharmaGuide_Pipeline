@@ -16,15 +16,13 @@ that points to the exact dsld_id + field.
 
 Runs against the nine reviewed canary baseline blobs + their fresh rebuilds.
 
-The active dated baseline is the reviewed October28 source integration capture.
-All nine ORIGINAL raw hashes are unchanged. The preserved October18 baseline and
-new manifest retain source-qualified changes: canonical label allergens/inactives,
-material-only Formulation and opaque-complex disclosure, source-qualified Evidence,
-life-stage warning precedence and physical source-row standardization joins.
-No strict assertion or allowed field set changed. See the active baseline's
-SOURCE_REVIEW.md and hashes for per-product causes and independent review.
-The shared artifact-path owner supplies the same baseline to these assertions
-and release readiness; this baseline is not clinical or release approval.
+The active dated baseline retains eight November4 files byte-identically and
+reconciles only1036 with qualified current-main output. All nine original raw
+hashes are unchanged. The existing literal-source rule removes an inferred
+preparation that the label never discloses; canonical identity is retained.
+No assertion or allowed-field set changed. SOURCE_REVIEW.md and manifest.json
+record per-file source provenance and independent review. This development
+fixture is not clinical or release approval.
 
 """
 
@@ -41,7 +39,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 # Keep historical snapshots unchanged; this dated baseline records the reviewed
-# canary contract after the merged November 4 dose, warning and wording batches.
+# canary contract after the reviewed November6 preparation reconciliation.
 from scripts.release_artifact_paths import canary_baseline_dir
 
 BASELINE_DIR = canary_baseline_dir(ROOT)

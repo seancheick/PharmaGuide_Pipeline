@@ -1,0 +1,81 @@
+{
+  "fail_first": "Two existing1036 guarded-field nodes fail against November4 baseline",
+  "files": {
+    "1002": {
+      "blob_sha256": "681f25e5280094db41de657242b758f25a932726ea50659e30ee44eed3ab1a31",
+      "provenance": "byte-identical inherited November4 baseline539ee64f7",
+      "raw_sha256": "456fedd797cc28b6e022824211cf8bc6b045da11d628464a1df21678ad02f93c",
+      "raw_source": "~/pg_quality/clinical_registry_accuracy_20261011/corrections_root/local_canary_raw/1002.json"
+    },
+    "1036": {
+      "blob_sha256": "041e05193627ad296c76b6170c7452f5c80f5200d34c88c7e2bf22c2507ddcea",
+      "provenance": "qualified pre-efficiency992f3d4ca, whole blob equals integrated2247ee982 runtime",
+      "raw_sha256": "94c897e397b02673f9a69f91d4c781a62ad4236754c35be9ea41ec01a8e80b77",
+      "raw_source": "~/pg_quality/clinical_registry_accuracy_20261011/corrections_root/local_canary_raw/1036.json"
+    },
+    "176872": {
+      "blob_sha256": "7ab7d775a20731792d09800dbcc2e44b450a1dba792f1a49a097d224c7f253d5",
+      "provenance": "byte-identical inherited November4 baseline539ee64f7",
+      "raw_sha256": "c5b59d2aaafe8a379f5d84ee4675c8068e4c7d991e5eaa9bc45799a5127a4621",
+      "raw_source": "~/pg_quality/mapped_coverage_169_20261012/xos_raw/176872.json"
+    },
+    "19055": {
+      "blob_sha256": "9174335932e3200f2970a1708b209011b4b213116121f4b890b3adb2597f262f",
+      "provenance": "byte-identical inherited November4 baseline539ee64f7",
+      "raw_sha256": "ee31f4179aa7cc22062aed4ded3bf8695ae27df8b43838117156df1702d9f02c",
+      "raw_source": "~/pg_quality/mapped_coverage_169_20261012/xos_raw/19055.json"
+    },
+    "19067": {
+      "blob_sha256": "9b70a939f593ed37f674fda178e7e359cdb956dae05c0dabfd699f8e29f851ce",
+      "provenance": "byte-identical inherited November4 baseline539ee64f7",
+      "raw_sha256": "5377cb0637f1ec8ca186c33ab1c8bd7bdfffc0759c54987826e344428c74d510",
+      "raw_source": "~/pg_quality/mapped_coverage_169_20261012/xos_raw/19067.json"
+    },
+    "246324": {
+      "blob_sha256": "02da68bfebbfef61ab959a08c7c67ef8c7b403e9cb35539df20cfa816f58cbf1",
+      "provenance": "byte-identical inherited November4 baseline539ee64f7",
+      "raw_sha256": "1932b1e1e03c2e87f84f21da20ba688e257db86fe259eede96996d60d9be9ba4",
+      "raw_source": "~/pg_quality/mapped_coverage_169_20261012/xos_raw/246324.json"
+    },
+    "266975": {
+      "blob_sha256": "d660d65656ad18bc2bf862ceffb8c8004ee91167c5d87a70d141586dfccd1267",
+      "provenance": "byte-identical inherited November4 baseline539ee64f7",
+      "raw_sha256": "902b23dcedb0c7695c26bf774a88ec46fd25543ad4d8a07800dfa9a90cb2d894",
+      "raw_source": "~/pg_quality/mapped_coverage_169_20261012/xos_raw/266975.json"
+    },
+    "306237": {
+      "blob_sha256": "f9e6478f81026a20a030136b0834a865040eb2bf37181c2d503e483570b910ee",
+      "provenance": "byte-identical inherited November4 baseline539ee64f7",
+      "raw_sha256": "05f324a71fab99fda6345cc173c534fa690216e486495a1e94bd5b7984dfa8d2",
+      "raw_source": "~/pg_quality/mapped_coverage_169_20261012/xos_raw/306237.json"
+    },
+    "35491": {
+      "blob_sha256": "0c811b05be06a266abd44059473932c7099e36da38e9b407fd5d32e19bc830f3",
+      "provenance": "byte-identical inherited November4 baseline539ee64f7",
+      "raw_sha256": "0a41d43b6555dd531e3e72fd83921830ff7bffc0d2929aa200a7b057b7c8f100",
+      "raw_source": "~/pg_quality/clinical_registry_accuracy_20261011/corrections_root/local_canary_raw/35491.json"
+    }
+  },
+  "guarded_scope": "Existing E1.2.2 assertions, unchanged",
+  "independent_review": "54 proposed-baseline assertions passed; no remaining blocker",
+  "previous_baseline": "quality_source_reviewed_20261104",
+  "qualification": "Combined scientific PR408 exact-candidate CI and completed local profile required before merge",
+  "raw_inputs": "All nine original raw hashes unchanged and verified against November4 manifest",
+  "retained_byte_identical_ids": [
+    "1002",
+    "176872",
+    "19055",
+    "19067",
+    "246324",
+    "266975",
+    "306237",
+    "35491"
+  ],
+  "review_report_sha256": "ae845499695b5c1b1b4059a096d1022e89fdf62764bcebd7e62b7d724ba1593f",
+  "source_commit": "2247ee982ef886256d4f825ad0e8acc2d4e08de7",
+  "targeted_validation": "61 existing invariant and release-corpus preflight checks pass; assertions/allowlists unchanged",
+  "updated_ids": [
+    "1036"
+  ],
+  "whole_1036_changed_paths": 26
+}
