@@ -212,7 +212,10 @@ def test_scorer_recovery_carries_its_row_reference_through_a_source_required_sco
     source = _product(product_id, label, "Cranberry", "cranberry", "Cranberry Concentrate", quantity, "ingredientRows[0]")
     product, issues = enricher.enrich_product(deepcopy(source))
     assert product.get("enrichment_status") != "validation_failed", issues
-    assert [m["id"] for m in product["evidence_data"]["clinical_matches"]] == []
+    assert {m["id"] for m in product["evidence_data"]["clinical_matches"]} <= {"INGR_CRANBERRY"}
+    # The source-aware preflight may now establish this valid join directly.
+    # Remove only this fixture's direct cache to exercise the recovery seam.
+    product["evidence_data"]["clinical_matches"] = []
     matches, recovered = resolved_clinical_matches(product)
     match = next((item for item in matches if item["id"] == "INGR_CRANBERRY"), None)
     assert match is not None

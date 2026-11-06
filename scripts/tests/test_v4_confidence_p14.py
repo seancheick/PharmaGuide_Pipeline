@@ -95,7 +95,7 @@ def _product(**extra) -> dict:
 
 
 def _install_reviewed_confidence_source(monkeypatch, product, *, direction="positive"):
-    """Approve only this synthetic mechanics source; real registry holds stay intact."""
+    """Isolate this synthetic mechanics source; unrelated real reviews stay intact."""
     import clinical_applicability as owner
     import evidence_resolver
     from test_evidence_resolver import _approved_test_source
@@ -106,10 +106,9 @@ def _install_reviewed_confidence_source(monkeypatch, product, *, direction="posi
                                    name=row["name"])
     source["study_contexts"][0]["outcomes"][0]["direction"] = direction
     current = owner.reviewed_entries()
-    index = evidence_resolver._backed_studies_index()
     monkeypatch.setattr(owner, "reviewed_entries", lambda: {**current, source["id"]: source})
     monkeypatch.setattr(evidence_resolver, "_backed_studies_index", lambda: {
-        **index, row["canonical_id"]: [*index.get(row["canonical_id"], []), source]})
+        row["canonical_id"]: [source]})
     product["evidence_data"]["clinical_matches"] = [{**source,
         "matched_canonical_ids": [row["canonical_id"]],
         "matched_source_row_refs": [row["raw_source_path"]]}]
