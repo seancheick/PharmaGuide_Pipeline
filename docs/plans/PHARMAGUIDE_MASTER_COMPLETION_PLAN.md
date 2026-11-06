@@ -9,6 +9,19 @@ A read-only streaming census scan covered all15,447 products in7.55seconds witho
 
 All-seven-module tests caught an overstrict literal form-key check in the initial fix. The final helper reuses `scoring_reference_resolver::delivers_parent_nutrient` and typed identity relationships; no second form matcher. Existing B-complex full-panel20 and total>=84 assertions stay intact; its invalid B5 fixture identity is corrected to the existing canonical. The now-unused boolean wrapper is removed with zero-consumer/AST proof rather than kept through an exception or artificial caller. Named fail-first, owner and dead-code checks pass. Root’s cross-module checkpoint passes 213 tests across all seven scoring routes. Final bounded measurement and combined CI/local qualification remain open.
 
+### November 6 — reuse existing research before assigning new reviews
+
+Owner: `evidence_resolver.py` and the existing native Evidence/readiness adapters own applicability; `probiotic_measurements.py::clinical_review_provenance_valid` owns probiotic review provenance. Evidence: current frozen census/packet exact-ID reconciliation and read-only runtime/source audit. Will NOT create another resolver, scientific registry, approval status, or blanket clinician attribution.
+
+- [x] Independently bind all6,951 packet IDs to the frozen15,447-product census: no missing or unexpected IDs;8,496 complete/6,951 partial retained. This proves the inventory, not that every dependency needs new research.
+- [ ] Reconcile every unresolved dependency against existing completed decisions before literature assignment: applicable/integrated; applicable/missed; preparation/population/delivery/outcome mismatch; authorization unclear; genuinely unfinished/missing; label-role/identity/amount problem; or finished/unrated disposition. Preserve uncertainty where retained facts cannot prove applicability.
+- [ ] Reconcile probiotic context authorization and actual scoring contribution against historical packets, direct approvals and context countersignatures. A free-text reviewer alone does not prove authorization; a historical agent-authored record is not automatically unauthorized. Preserve valid research and measure before changing eligibility.
+- [ ] Audit incidental flavor/sweetener/processing-role blockers and eight finished/unrated cases through existing owners, without invented efficacy credit or inflated completion counts. Keep222918 remediation separate.
+- [ ] Finish paired #397/#217 qualification, then measure the integrated outputs and final catalog/app acceptance. Source citations are approved as optional `evidence_data.source_references`; native visual proof remains outstanding.
+- [ ] Qualify existing incremental processing with a controlled100,000-input synthetic test after correctness fixes: deterministic accounting, bounded resources, targeted invalidation, interruption/retry and invalid-artifact publication refusal. Do not create another platform or restart existing research.
+
+Sean reports on November6 that Dr.Pham has agreed/signs off on most reviewed decisions and wants work to continue. Bind this to the actual reviewed decisions and retain exceptions; this statement does not identify every context or authorize fabricated per-entry signatures/dates. Routine engineering, factual source verification and reuse auditing continue.
+
 ### Parallel completion work order and nutritional-authority consistency
 
 November6 audit qualification: the8,496/6,951 split is the canonical quality-status count. Eight intentionally finished/unrated products also sit in the legacy partial bucket; report them separately rather than assigning new science work or silently increasing the release numerator. A ninth case222918 requires remediation with known-zero declared actives, not an invented clinical or identity unknown.
