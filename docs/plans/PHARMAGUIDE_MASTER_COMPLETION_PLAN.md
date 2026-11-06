@@ -9,6 +9,16 @@ A read-only streaming census scan covered all15,447 products in7.55seconds witho
 
 All-seven-module tests caught an overstrict literal form-key check in the initial fix. The final helper reuses `scoring_reference_resolver::delivers_parent_nutrient` and typed identity relationships; no second form matcher. Existing B-complex full-panel20 and total>=84 assertions stay intact; its invalid B5 fixture identity is corrected to the existing canonical. The now-unused boolean wrapper is removed with zero-consumer/AST proof rather than kept through an exception or artificial caller. Named fail-first, owner and dead-code checks pass. Root’s cross-module checkpoint passes 213 tests across all seven scoring routes. Final bounded measurement and combined CI/local qualification remain open.
 
+### November 6 — delegated source review and eight exact approvals
+
+Sean confirms that Dr.Pham delegates routine existing-policy research reviews to agents when primary-source/API content and applicability are verified and independently double-checked. A new physician signature is not required for every entry. Preserve actual reviewer attribution; API existence alone, free-text reviewer names and self-asserted digests do not establish source validity. New policy, warning severity/thresholds and specific unresolved clinical holds remain owner decisions. This current delegation supersedes older blanket clinician-only workflow wording; it does not fabricate historical clinician approval.
+
+Sean also confirms the eight exact probiotic contexts in the prepared review sheet were approved by Dr.Pham on **2026-11-01** (relayed2026-11-06). Record only the existing countersignature fields for these eight, preserving original research review dates/basis and every scientific field. Independently checked source/workflow authorization stays at the existing clinical-review owner, not another registry or scoring brain.
+
+- [ ] Finish source-preserving vitaminE mixture upper-bound regression discovered in the final67 capture:307739 must retain possible exposure26–776mg/day, without awarding non-alpha nutritional Evidence.
+- [ ] Complete the shared review-owner validation under delegated agent review, qualify exact eight-record attribution, and retain genuine source/scope holds rather than invent signatures or blanket eligibility.
+- [ ] Finish final combined CI/local qualification and integrate current fixes before another normal pipeline run. Reuse the completed source-bound67 capture and rerun only actual newly affected stages/cases.
+
 ### November 6 — reuse existing research before assigning new reviews
 
 Owner: `evidence_resolver.py` and the existing native Evidence/readiness adapters own applicability; `probiotic_measurements.py::clinical_review_provenance_valid` owns probiotic review provenance. Evidence: current frozen census/packet exact-ID reconciliation and read-only runtime/source audit. Will NOT create another resolver, scientific registry, approval status, or blanket clinician attribution.

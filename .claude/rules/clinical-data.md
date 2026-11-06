@@ -8,6 +8,12 @@ paths:
 
 Curated data is medical-grade: one corrupt entry discredits the whole product.
 
+- **Review authority:** follow Sean's November 6 delegation in `AGENTS.md`. Verified,
+  independently double-checked agent reviews can conclude existing-policy assessments without
+  a new physician signature. Keep agent attribution truthful; an API hit is not verification of
+  scientific applicability. New policy/threshold/severity decisions and named clinical holds
+  remain with their owner. Do not turn legacy review-status wording into a blanket signature gate.
+
 - **Use the `data-fix` skill** for curated-data work: batch related entries by topic, check each
   entry's identity and sources on its own and record a result per entry, apply the batch with one
   script through `scripts/data_batch.py` (load, explicit per-entry patch, save), prove it with
