@@ -1,95 +1,123 @@
-# Clinical projection reuse — November 6, 2026
+# Restore per-view scoring reuse — November 6, 2026
 
-Baseline `7ff36a45f`; runtime candidate `4bea5c1bf`. Behavioral performance change;
-no intended scientific, scoring, source, safety or assessment-status change.
+Baseline `7ff36a45f`; runtime candidate `b42612f94`. Behavioral performance change,
+with no intended scientific, source, scoring, safety or completion difference.
+The exact final CI and integration record is [PR404](https://github.com/seancheick/PharmaGuide_Pipeline/pull/404).
 
-Owner: `scoring_input_contract::scoped_product_view`, consumed by
-`clinical_applicability::_evidence_subject_refs/_resolved_identity_by_ref`.
-Will NOT create: another cache/scorer/registry or a persisted field.
+Owner: `scoring_input_contract::scoped_product_view/scoring_input_scope`, clinical
+applicability's source-reference/identity projections, and the existing scored-artifact
+constructor. Will NOT create: another cache/scorer/registry, public field or policy.
 
-## Root cause and change
+## Root causes and repair
 
-Repeated clinical study checks derived small reference sets and resolved identity maps
-by repeatedly copying the complete Evidence-subject row structures. Reuse those two
-small projections within the existing product/pass scope, keyed by every lineage
-argument. Defensive copies of returned sets/nested maps remain. Changed inputs,
-route-row overrides and calls outside the scope retain the uncached path.
+Repeated study checks copied complete Evidence-subject structures just to derive
+small reference sets and identity maps. Memoize those projections through the
+existing per-pass scope, keyed by every lineage argument, retaining isolated copies.
 
-Four-call profile (two actual enriched products, twice each): Evidence-subject reads
-404→176; recursive deepcopy invocations4,425,962→2,321,316. These recursive calls are
-not independent objects. Scoring-input builds remain30: this diff does not claim to
-remove every remaining rebuild or recover October throughput. New builder counts
-are8 reference derivations (distinct argument sets) and4 identity derivations.
+Final assembly correctly reads original source identities, while scoring may use
+a filtered identity view. Assembly previously ran under the other view's scope and
+rebuilt its inputs repeatedly. Give each distinct whole-product view its own scope;
+keep the one-scope fast path when projection returns the original product.
 
-## Frozen correctness and timing
+Nested scopes retain the existing October probiotic optimization: field-qualified
+facts reuse an enclosing owner ONLY when the declared input objects are identical.
+Full-product caches stay separate. Changed rows, route overrides, returned-value
+mutation and exception cleanup remain guarded. No whole-cache sharing or parallel
+cache framework is introduced. A discarded intermediate scope change lost probiotic
+reuse; that regression was caught and fixed before qualification.
 
-All48 complete scored artifacts, detail blobs and core rows match. Only the replay
-owner's established timestamp exclusions are normalized; core export receives that
-same clock-normalized scored input and a fixed export timestamp. An initial raw
-core comparison differed on scored_date and was not accepted as parity.
-No warnings, identity, exposure, Dose, Evidence eligibility, completeness or public
-score differences are accepted. See `receipt.json` for per-product hashes.
+## Work counts (four actual scoring calls)
 
-The36-product prior qualification cohort includes complex multivitamins, probiotics,
-simple, missing-data and held products. In separate baseline/candidate processes,
-three scoring passes per product give two warm observations: sum of warm medians
-19.9185s→11.6506s (1.71×). Median per-product speedup1.26×; this is not a uniform gain.
-Peak RSS354,041,856→355,221,504bytes. Timing excludes export; inputs are deep-copied
-before timing. No corpus job or competing benchmark was running.
+Two enriched products328119/327944, twice each, same source/input experiment:
 
-Additional same-input brand samples use the smallest, median-size and largest
-serialized enriched products per brand (three each, not entire brand batches):
+| Work | Baseline | Candidate |
+|---|---:|---:|
+| Scoring-input derivations |30|6|
+| Evidence-subject provider calls |404|176|
+| Recursive deepcopy invocations |4,425,962|2,457,186|
+| Primitive deepcopy calls |3,354|752|
 
-| Brand | Sum of baseline warm medians | Candidate | Speedup |
+Recursive invocations are not independent objects. Reference getters still receive180
+requests and identity getters60, but now derive only8 and4 times respectively, per
+valid input/argument set. Six input builds represent the genuinely distinct original
+and projected views, not six redundant builds of one view. Profiler times are not
+used as ordinary elapsed-time benchmarks.
+
+## Frozen correctness and controlled timing
+
+All48 complete scored artifacts, detail blobs and core rows match. Only established
+replay timestamps are normalized; core export receives the same clock-normalized
+scored input plus a fixed export timestamp. No warning, identity, exposure, Dose,
+Evidence, completion or public-score difference is accepted. Initial raw-clock core
+hashes were rejected, not silently called equivalent. Per-product hashes and input/
+source bindings are in `receipt.json`; private runner checks source bytes before/after.
+
+Full raw36 replay also has zero changes across Clean, Enrich, Score and blob, with
+source unchanged and identical frozen manifest/canonical snapshot. Its earlier c2
+baseline is explicitly reused: c2→7ff changes only3docs, no runtime/data. This is not
+a freshly rerun7ff baseline or whole-catalog replay. It covers Enrich's existing
+clinical scope as well as scoring.
+
+Separate baseline/candidate processes score identical captured Enrich inputs three
+times per product; median of the two warm observations excludes the first. Inputs
+are deep-copied before timing. Export is outside timed scoring. No corpus job or
+competing benchmark was running during these measurements.
+
+The36-product qualification cohort includes complex multivitamins, probiotics,
+simple, missing-data and held products. Sum of warm medians20.1129→11.2311seconds
+(1.79×). Additional brand samples select the smallest, median-size and largest
+serialized Enrich products per brand (three each, not entire brand batches):
+
+| Brand | Baseline warm medians | Candidate | Speedup |
 |---|---:|---:|---:|
-| GNC |1.8012s|1.1126s|1.62×|
-| Garden of Life |1.4594s|1.2094s|1.21×|
-| Nature Made |0.6554s|0.3950s|1.66×|
-| BulkSupplements |0.3323s|0.2133s|1.56×|
+| GNC |1.8562s|1.0759s|1.73×|
+| Garden of Life |1.5108s|0.8001s|1.89×|
+| Nature Made |0.6346s|0.3973s|1.60×|
+| BulkSupplements |0.3442s|0.2164s|1.59×|
 
-Brand-process peak RSS300,744,704→300,548,096bytes. The48-product parity processes
-also construct exports and use607,092,736→606,732,288bytes. Neither is peak memory
-for an entire production brand. Receipts are one sequential baseline/candidate
-pair, not a repeated randomized experiment, full-catalog throughput or a promise
-that enrichment/validation becomes equally faster. October comparisons use different
-historical code/data and cannot prove restored performance.
+Median individual speedup across48 is1.24×; gains are not uniform. No measured product
+regressed by both20% and20ms. A dedicated five-pass boundary comparison shows184792
+probiotic61.35→51.84ms,3279631.1900→1.1860s,328119 multivitamin1.2266→0.5555s,
+with exact scored/export parity. Peak RSS for the48-input processes (including export)
+606,552,064→572,473,344bytes. These are samples from one sequential pair, not a
+randomized repeated experiment, whole-brand memory/throughput, a promise about
+Enrich/validation time, or evidence that October30 performance has been restored.
 
-Private frozen inputs, runner, profiles and full receipts are retained under
-`~/pg_quality/catalog-release-20261105/performance-20261106/`. The original completed
-38-dataset run and owned outputs are preserved. No catalog/app publication occurs.
+Private inputs, runner, profiles and receipts are retained under
+`~/pg_quality/catalog-release-20261105/performance-20261106/`.
 
-## Regression protection and qualification
+## Permanent guards and qualification
 
-Three fail-first tests rejected redundant derivation before the fix; five final
-cases pin work counts, all exercised lineage arguments, mutation isolation,
-shallow-copy reuse, changed inputs during an active scope, cross-pass lifetime and
-route-row bypass. Clinical/scoring-input owner files:723 passed; the two additional
-boundary cases also pass. Independent review found no blocking defect.
+Fail-first projection and assembly tests rejected repeated derivation. Nested-scope
+regressions require one shared field derivation but separate whole-product derivations;
+changed inputs, current/ancestor route overrides, copy isolation and failure restoration
+are pinned. Existing October strain work-count/declared-field tests remain enforced.
 
-Two existing scored-artifact scope regressions pass. Local checks pass with564
-passed /24 declared optional skips and strict guard success (135.47s), explicitly
-using the primary checkout's existing artifact directory. The initial isolated
-run had550pass/38skips and failed the strict guard on14 missing-artifact skips;
-it is retained as a failed configuration attempt, not a pass.
+Named owner/consumer slice:767passed29.47s. Final local:564passed/24declared optional
+skips146.36s, strict skip guard passed, with existing artifact directory explicitly
+selected. The initial isolated run lacked that directory (550pass/38skips) and failed
+the guard on14missing-artifact skips; it remains a failed configuration attempt.
+No assertion or skip policy was weakened. Independent review found no blocker.
 
-Full raw36 replay also passes with zero changes across Clean, Enrich, Score and
-blob, source unchanged, same frozen manifest and byte-identical canonical snapshot.
-Baseline reuse is explicit: the earlier c2 snapshot is runtime-equivalent to7ff
-(the only intervening changes are3docs), not a newly rerun baseline. This covers
-Enrich's own existing clinical scope as well as scoring. Exact-candidate whole-fast
-CI still gates integration; its final state is recorded in the qualification PR. AGENTS.md and the PR checklist now require deterministic
-work guards plus frozen correctness/timing/memory receipts on shared scoring changes.
+AGENTS.md and PR checklist now require deterministic work guards plus frozen
+correctness/timing/memory receipts for shared scoring changes. Exact-candidate
+whole-fast CI must pass before merge. The early330ad run was superseded and cancelled,
+never counted as a pass. See PR404 for the completed candidate's checks and merge.
 
-## Release limits
+## Release limits and next owner
 
-This is a bounded performance repair, not completed scientific review or release
-acceptance. The fresh completed-run census is8,480 complete /6,967 partial of15,447
-products, from manifest-owned scored outputs. Export/catalog/alert/signature/device
-qualification remains open. Inspect real stage fingerprints before recomputation;
-do not restamp outputs or launch another normal corpus run merely for this receipt.
-The shared clinical module is in all three transitive stage import closures, so all
-three code fingerprints change. The current incremental selector conservatively
-selects stage IDs on a code/runtime mismatch; unchanged output can stop downstream
-propagation, but this is not proof of affected-only selection for every shared-code
-edit. Preserve the completed baseline, finish planned output-changing work, then
-inspect the actual plan instead of promising an unsupported Score-only rebuild.
+The completed run's manifest-bound baseline count is8,480 complete/6,967 partial of
+15,447, with two recorded input holds and zero producer errors. It is a scored-output
+count, not new-main exported catalog/device qualification. Recorded Evidence blockers
+affect6,481 products (6,154 have Evidence as their sole recorded blocker); counts
+from multiple blocker types overlap. No complete product has recorded release blockers;
+that internal consistency check is not individual scientific verification.
+
+All3 transitive code fingerprints change because the clinical module is imported
+across stages. The existing incremental selector conservatively widens stage IDs for
+code/runtime changes; unchanged outputs can stop downstream propagation, but that is
+not proof of affected-only selection for every code edit. Do not restamp old outputs
+or promise a Score-only rebuild. Preserve the completed run, finish the separately
+owned scientific/infrastructure batches, inspect the actual plan, then coordinate
+one necessary nonpublishing build. No ordinary pipeline, catalog or app publication
+is performed by this optimization.
