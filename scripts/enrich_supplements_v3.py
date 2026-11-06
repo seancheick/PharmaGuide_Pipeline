@@ -10496,6 +10496,26 @@ class SupplementEnricherV3:
         def add_candidate(candidate: Dict):
             if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
                 return
+            # A normalized parent name is identity, not disclosure of a child
+            # form. Keep the existing parent unknown when only standardName
+            # supplied that generic alias; explicit source forms still compete.
+            parent_key = candidate.get("parent_key")
+            parent_data = quality_map.get(parent_key) or {}
+            generic_names = {
+                self._normalize_text(str(value).replace("_", " "))
+                for value in (parent_key, parent_data.get("standard_name"))
+                if value
+            }
+            if (candidate.get("form_key")
+                    and self._is_specific_form_match(candidate.get("match_data"), quality_map)
+                    and candidate.get("match_source") == 1
+                    and self._normalize_text(candidate.get("matched_alias") or "") in generic_names
+                    and not norm_module.find_affirmative_label_match(
+                        re.compile(r"(?<!\w)" + re.escape(self._normalize_text(
+                            candidate.get("matched_alias") or "")) + r"(?!\w)", re.I),
+                        self._normalize_text(ing_name),
+                    )):
+                return
             # A bare parent alias cannot turn a printed powder/dried material
             # into an extract. Retain the parent and its shared unknown
             # form treatment; row-owned explicit extract forms remain valid.
@@ -16509,7 +16529,7 @@ class SupplementEnricherV3:
                                 study_name,
                                 study_aliases,
                                 product,
-                                brand_tokens=study.get("brand_tokens"),
+                                brand_tokens=study.get("brand_tokens"), study=study,
                             )
                         ):
                             # Discovery must also read the retained row that
@@ -16526,7 +16546,7 @@ class SupplementEnricherV3:
                             )
                             if not self._brand_mentioned(
                                 study_name, study_aliases, {},
-                                brand_tokens=study.get("brand_tokens"),
+                                brand_tokens=study.get("brand_tokens"), study=study,
                                 label_text=" ".join(_row_text(
                                     row, source_only=True, preserve_punctuation=True,
                                 ) for row in source_rows),
@@ -16704,8 +16724,9 @@ class SupplementEnricherV3:
         product: Dict,
         brand_tokens: Optional[List[str]] = None,
         label_text: Optional[str] = None,
+        study: Optional[Dict] = None,
     ) -> bool:
-        """Return whether the label explicitly names the studied brand.
+        """Confirm a brand mention, or a reviewed exact-form discovery scope.
 
         ``aliases`` remains the identity-discovery surface and may legitimately
         contain a generic ingredient name. A BRAND_ study instead gates on its
@@ -16713,6 +16734,14 @@ class SupplementEnricherV3:
         study name/aliases, with every match token bounded. ``label_text``
         narrows identity checks to retained source-row names/forms when supplied.
         """
+        # A chemically defined preparation can live in an existing BRAND_
+        # record. This is discovery only: canonical source, preparation,
+        # population and outcome qualification still run before any credit.
+        # Strict spelling callers omit study and retain their brand contract.
+        if study:
+            from clinical_applicability import reviewed_exact_form_source_scope
+            if reviewed_exact_form_source_scope(study):
+                return True
         all_text = label_text.lower() if label_text is not None else self._get_all_product_text_lower(product)
         terms = brand_tokens if brand_tokens else [study_name, *aliases]
         for term in terms:

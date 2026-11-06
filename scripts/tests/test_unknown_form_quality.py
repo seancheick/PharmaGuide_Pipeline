@@ -1496,3 +1496,48 @@ def test_explicit_sambucol_retains_its_existing_branded_form(enricher, label):
     note, _ = _derive_form_note({**match, 'matched_form': match['form_id']},
                                enricher.databases['ingredient_quality_map'])
     assert note and 'Sambucol is a branded elderberry preparation' in note
+
+
+@pytest.mark.parametrize('indexed_map', [True, False])
+def test_standard_parent_name_cannot_supply_a_form_for_a_brand_only_source(enricher, indexed_map):
+    quality = (enricher.databases['ingredient_quality_map'] if indexed_map else copy.deepcopy(IQM))
+    parent = quality['l_carnitine']
+    assert 'carnipure' in parent['aliases']
+    assert 'carnipure' not in parent['forms']['l-carnitine tartrate (lclt)']['aliases']
+    match = enricher._match_quality_map('Carnipure', 'L-Carnitine', quality,
+                                       cleaner_canonical_id='l_carnitine')
+    assert match['form_id'] == 'l-carnitine (unspecified)'
+    assert match['bio_score'] == unknown_form_quality(parent)['bio_score']
+    original = enricher.databases['ingredient_quality_map']
+    try:
+        enricher.databases['ingredient_quality_map'] = quality
+        assert enricher._row_form_match_status(match, match) == 'n/a'
+        assert not enricher._is_specific_form_match(match, quality)
+    finally:
+        enricher.databases['ingredient_quality_map'] = original
+    for raw, standard, expected in [
+        ('L-Carnitine L-Tartrate', 'L-Carnitine', 'l-carnitine tartrate (lclt)'),
+        ('Carnipure LCLT', 'L-Carnitine', 'l-carnitine tartrate (lclt)'),
+        ('L-Carnitine', 'L-Carnitine', 'l-carnitine base (free form)'),
+        ('Carnipure', 'L-Carnitine L-Tartrate', 'l-carnitine tartrate (lclt)'),
+    ]:
+        assert enricher._match_quality_map(raw, standard, quality,
+            cleaner_canonical_id='l_carnitine')['form_id'] == expected
+
+
+@pytest.mark.parametrize('canonical,raw,standard,expected_form', [
+    ('pine_bark_extract', 'French Maritime Pine (Pinus pinaster) extract',
+     'Pine Bark Extract', 'pine bark extract (unspecified)'),
+    ('l_arginine', 'Arginine', 'L-Arginine', None),
+])
+def test_standard_name_guard_retains_unknown_identity_without_inventing_brand_or_base(
+    enricher, canonical, raw, standard, expected_form,
+):
+    quality = enricher.databases['ingredient_quality_map']
+    match = enricher._match_quality_map(raw, standard, quality,
+                                      cleaner_canonical_id=canonical)
+    assert match['canonical_id'] == canonical
+    assert match['form_id'] == expected_form
+    assert match['bio_score'] == unknown_form_quality(quality[canonical])['bio_score']
+    assert enricher._row_form_match_status(match, match) == 'n/a'
+    assert not enricher._is_specific_form_match(match, quality)
