@@ -5,6 +5,7 @@ import io
 import json
 import os
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import URLError
 
@@ -276,9 +277,12 @@ def test_umls_client_can_read_warm_cache_without_api_key(tmp_path, monkeypatch):
         json.dumps(
             {
                 cached_url: {
-                    "result": {
-                        "results": [{"ui": "C0529793", "name": "Sildenafil", "rootSource": "RXNORM"}]
-                    }
+                    "payload": {
+                        "result": {
+                            "results": [{"ui": "C0529793", "name": "Sildenafil", "rootSource": "RXNORM"}]
+                        }
+                    },
+                    "expires_at": (datetime.now(timezone.utc) + timedelta(days=1)).isoformat(),
                 }
             }
         )

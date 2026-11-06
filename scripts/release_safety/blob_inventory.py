@@ -210,6 +210,32 @@ def list_storage_page(bucket, prefix, offset, *, limit=None, timeout_seconds=Non
     return response.json()
 
 
+def list_storage_prefix(client, bucket: str, prefix: str) -> list[dict]:
+    """Collect every item or raise; a partial listing cannot authorize cleanup.
+
+    Audit and legacy-directory maintenance share this complete-prefix policy.
+    Sharded inventory retains its separate partial-result/checkpoint contract.
+    """
+    proxy = client.storage.from_(bucket)
+    items = []
+    offset = 0
+    page_size = 1000
+    while True:
+        page = retry_transient(
+            lambda: list_storage_page(proxy, prefix, offset, limit=page_size),
+            max_attempts=4,
+        )
+        if not isinstance(page, list) or any(
+            not isinstance(item, dict) or not isinstance(item.get("name"), str)
+            or not item["name"] for item in page
+        ):
+            raise ValueError(f"Malformed storage listing for {prefix!r} at offset {offset}")
+        items.extend(page)
+        if len(page) < page_size:
+            return items
+        offset += page_size
+
+
 def _classify(name: str) -> Tuple[str, Optional[str]]:
     """Return ``(category, blob_hash|None)`` for one listed leaf name."""
     if name.endswith(".json"):

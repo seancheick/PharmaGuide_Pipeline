@@ -97,7 +97,7 @@ def _dir_objects(version, count, prefix=""):
 
 
 def test_stale_dirs_list_paginated_raises_instead_of_returning_partial():
-    from release_safety.delete_stale_version_dirs import _list_paginated
+    from release_safety.blob_inventory import list_storage_prefix
 
     objects = _dir_objects("2026.08.24.165613", 1500)
     bucket = _Bucket(
@@ -106,11 +106,11 @@ def test_stale_dirs_list_paginated_raises_instead_of_returning_partial():
     )
 
     with pytest.raises(Exception):
-        _list_paginated(_Client(bucket), "pharmaguide", "v2026.08.24.165613")
+        list_storage_prefix(_Client(bucket), "pharmaguide", "v2026.08.24.165613")
 
 
 def test_stale_dirs_list_paginated_retries_transient_blips():
-    from release_safety.delete_stale_version_dirs import _list_paginated
+    from release_safety.blob_inventory import list_storage_prefix
 
     objects = _dir_objects("2026.08.24.165613", 5)
     bucket = _Bucket(objects)
@@ -125,19 +125,75 @@ def test_stale_dirs_list_paginated_retries_transient_blips():
 
     bucket.list = flaky
 
-    items = _list_paginated(_Client(bucket), "pharmaguide", "v2026.08.24.165613")
+    items = list_storage_prefix(_Client(bucket), "pharmaguide", "v2026.08.24.165613")
 
     assert len(items) == 5
 
 
 def test_storage_audit_list_paginated_raises_instead_of_returning_empty():
     """The audit's 'valid: 0 blobs in storage' failure mode."""
-    from release_safety.storage_audit import _list_paginated
+    from release_safety.blob_inventory import list_storage_prefix
 
     bucket = _Bucket({}, fail_always={"shared/details/sha256/aa"})
 
     with pytest.raises(Exception):
-        _list_paginated(_Client(bucket), "pharmaguide", "shared/details/sha256/aa")
+        list_storage_prefix(_Client(bucket), "pharmaguide", "shared/details/sha256/aa")
+
+
+@pytest.mark.parametrize("consumer", ["audit", "delete_plan"])
+def test_complete_prefix_consumers_use_bounded_listing_once_per_page(consumer):
+    from types import SimpleNamespace
+    from release_safety.blob_inventory import PAGE_TIMEOUT_SECONDS
+    from release_safety.delete_stale_version_dirs import compute_delete_plan
+    from release_safety.storage_audit import _walk_prefix
+
+    prefix = "v2026.08.24.165613"
+    bucket = _Bucket(_dir_objects(prefix[1:], 1500))
+    original_list = bucket.list
+    requests = []
+
+    def request(method, route, **kwargs):
+        assert method == "POST" and route == ["object", "list", "pharmaguide"]
+        assert kwargs["timeout"] == PAGE_TIMEOUT_SECONDS
+        body = kwargs["json"]
+        assert body["sortBy"] == {"column": "name", "order": "asc"}
+        requests.append((body["prefix"], body["offset"]))
+        return SimpleNamespace(json=lambda: original_list(body["prefix"], body))
+
+    bucket.id = "pharmaguide"
+    bucket._request = request
+    bucket.list = lambda *args, **kwargs: pytest.fail("unbounded listing bypassed page owner")
+    client = _manifest_client(bucket)
+    if consumer == "audit":
+        result = _walk_prefix(client, "pharmaguide", prefix)
+        assert result.object_count == 1500 and result.total_bytes == 15000
+        assert requests == [(prefix, 0), (prefix, 1000)]
+    else:
+        result = compute_delete_plan(client)
+        assert result.total_objects == 1500 and result.total_bytes == 15000
+        assert result.candidates[0].objects == tuple(sorted(
+            (name, len(content)) for name, content in bucket.objects.items()
+        ))
+        assert requests == [("", 0), (prefix, 0), (prefix, 1000)]
+
+
+@pytest.mark.parametrize("malformed", [None, {}, ["broken"], [{"metadata": {"size": 10}}]])
+def test_delete_plan_refuses_malformed_later_page(malformed):
+    from release_safety.delete_stale_version_dirs import compute_delete_plan
+
+    prefix = "v2026.08.24.165613"
+    bucket = _Bucket(_dir_objects(prefix[1:], 1500))
+    original = bucket.list
+
+    def list_page(path="", options=None):
+        if path == prefix and options["offset"] == 1000:
+            return malformed
+        return original(path, options)
+
+    bucket.list = list_page
+    bucket.remove = lambda *args: pytest.fail("incomplete inventory must never authorize deletion")
+    with pytest.raises(ValueError, match="Malformed storage listing"):
+        compute_delete_plan(_manifest_client(bucket))
 
 
 def test_compute_delete_plan_fails_closed_when_a_dir_cannot_be_enumerated():

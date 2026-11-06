@@ -59,6 +59,8 @@ SCRIPTS_ROOT = SCRIPT_DIR.parent
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+from api_audit._cache import _get_fresh_payload
+
 import env_loader  # noqa: F401
 
 # ---------------------------------------------------------------------------
@@ -108,26 +110,15 @@ class CompToxClient:
         self._cache: dict[str, dict] = {}
         if self.cache_path and self.cache_path.exists():
             try:
-                self._cache = json.loads(self.cache_path.read_text())
+                loaded = json.loads(self.cache_path.read_text())
+                self._cache = loaded if isinstance(loaded, dict) else {}
             except (json.JSONDecodeError, OSError):
                 self._cache = {}
 
     # -- Cache ---------------------------------------------------------------
 
     def _cache_get(self, key: str) -> Any | None:
-        cached = self._cache.get(key)
-        if not isinstance(cached, dict):
-            return None
-        expires_at = cached.get("expires_at")
-        if isinstance(expires_at, str):
-            try:
-                if datetime.fromisoformat(expires_at) <= datetime.now(timezone.utc):
-                    self._cache.pop(key, None)
-                    return None
-            except ValueError:
-                self._cache.pop(key, None)
-                return None
-        return cached.get("payload")
+        return _get_fresh_payload(self._cache, key)
 
     def _cache_set(self, key: str, payload: Any) -> None:
         self._cache[key] = {

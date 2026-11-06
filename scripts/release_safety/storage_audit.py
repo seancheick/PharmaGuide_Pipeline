@@ -57,6 +57,7 @@ from .quarantine import (
     QUARANTINE_PREFIX,
     list_quarantine_dates,
 )
+from .blob_inventory import list_storage_prefix
 from supabase_client import STORAGE_BUCKET
 
 # ---------------------------------------------------------------------------
@@ -415,7 +416,7 @@ def run_storage_audit(
     per_version_dirs: Dict[str, PrefixStats] = {}
     other_top_prefixes: Dict[str, PrefixStats] = {}
 
-    top_items = _list_paginated(client, bucket, "")
+    top_items = list_storage_prefix(client, bucket, "")
     known_top = {"shared", "pharmaguide", "user_avatars", "product_images"}
 
     for item in top_items:
@@ -536,35 +537,6 @@ def run_storage_audit(
 # ---------------------------------------------------------------------------
 
 
-def _list_paginated(client, bucket: str, prefix: str) -> List[dict]:
-    """List ALL items under a prefix, or raise — never return a truncation.
-
-    The previous ``except: break`` meant one ReadTimeout silently reported
-    "0 blobs in storage" as a valid audit result. Transient blips retry; a
-    give-up raises so the audit fails loudly instead of lying quietly.
-    """
-    from .transient import retry_transient
-
-    items: List[dict] = []
-    offset = 0
-    page_size = 1000
-    while True:
-        page = retry_transient(
-            lambda offset=offset: client.storage.from_(bucket).list(
-                path=prefix,
-                options={"limit": page_size, "offset": offset},
-            ),
-            max_attempts=4,
-        )
-        if not page:
-            break
-        items.extend(page)
-        if len(page) < page_size:
-            break
-        offset += page_size
-    return items
-
-
 def _item_size(item: dict) -> Optional[int]:
     """Extract size from a Supabase list item. Returns None if not available
     (typically directories, or older API responses without metadata)."""
@@ -593,7 +565,7 @@ def _walk_prefix(
     total_bytes = 0
     size_unknown = 0
 
-    items = _list_paginated(client, bucket, prefix)
+    items = list_storage_prefix(client, bucket, prefix)
     for item in items:
         name = item.get("name") if isinstance(item, dict) else None
         if not isinstance(name, str) or not name:
@@ -626,12 +598,12 @@ def _enumerate_detail_blobs(
 ) -> Dict[str, Optional[int]]:
     """Walk shared/details/sha256/{shard}/{hash}.json — return hash -> size."""
     blobs: Dict[str, Optional[int]] = {}
-    shards = _list_paginated(client, bucket, prefix)
+    shards = list_storage_prefix(client, bucket, prefix)
     for shard_item in shards:
         shard_name = (shard_item or {}).get("name")
         if not isinstance(shard_name, str) or len(shard_name) != 2:
             continue
-        for blob_item in _list_paginated(client, bucket, f"{prefix}/{shard_name}"):
+        for blob_item in list_storage_prefix(client, bucket, f"{prefix}/{shard_name}"):
             leaf = (blob_item or {}).get("name")
             if not isinstance(leaf, str) or not leaf.endswith(".json"):
                 continue

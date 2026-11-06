@@ -125,6 +125,8 @@ SCRIPTS_ROOT = SCRIPT_DIR.parent
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+from api_audit._cache import _get_fresh_payload
+
 import env_loader  # noqa: F401
 from clinical_evidence_schema import is_reference_only
 from run_artifacts import atomic_write_json
@@ -222,24 +224,13 @@ class APIClient:
         self.circuit_open = False
         if self.cache_path and self.cache_path.exists():
             try:
-                self._cache = json.loads(self.cache_path.read_text())
+                loaded = json.loads(self.cache_path.read_text())
+                self._cache = loaded if isinstance(loaded, dict) else {}
             except (json.JSONDecodeError, OSError):
                 self._cache = {}
 
     def _cache_get(self, key: str) -> Optional[dict]:
-        cached = self._cache.get(key)
-        if not isinstance(cached, dict):
-            return None
-        expires_at = cached.get("expires_at")
-        if isinstance(expires_at, str):
-            try:
-                if datetime.fromisoformat(expires_at) <= datetime.now(UTC):
-                    self._cache.pop(key, None)
-                    return None
-            except ValueError:
-                self._cache.pop(key, None)
-                return None
-        return cached.get("payload")
+        return _get_fresh_payload(self._cache, key)
 
     def _cache_set(self, key: str, payload: dict) -> None:
         self._cache[key] = {
