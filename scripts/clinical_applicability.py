@@ -907,6 +907,7 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     the curated record. This is completion evidence, not a new dose benchmark.
     """
     from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import clinical_review_provenance_valid
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
     contexts = reference.get("study_contexts")
     if not isinstance(contexts, list) or not contexts:
@@ -951,6 +952,8 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
                 errors.append(prefix + "clinical_source_rejection_incomplete")
             errors.extend(prefix + error for error in validate_ingredient_context(
                 context, known_component_ids={reference.get("id")}, require_complete_review=True))
+            if not clinical_review_provenance_valid(context):
+                errors.append(prefix + "clinical_review_source_unbound")
             rejected_sources.update(sources)
         if not declared_pmids or declared_pmids - rejected_sources:
             errors.append("clinical_source_rejection_coverage_incomplete")
@@ -961,6 +964,8 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     if not contributing:
         errors.append("clinical_contributing_contexts_missing")
     for context in contributing:
+        if not clinical_review_provenance_valid(context):
+            errors.append(str(context.get("context_id") or "unknown") + ":clinical_review_source_unbound")
         context_sources = context.get("source_pmids")
         context_pmids = {str(pmid) for pmid in context_sources} if isinstance(context_sources, list) else set()
         prefix = str(context.get("context_id") or "unknown") + ":"

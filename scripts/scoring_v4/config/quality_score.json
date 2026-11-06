@@ -826,8 +826,8 @@
     },
     "probiotic": {
       "cap_evidence": 20.0,
-      "native_context_review_policy": "clinician_only",
-      "_context_policy_doc": "Clinician-approved exact-strain primary patient-important outcomes own Evidence independently of label amount. Certainty, matching applicability and independent confirmation are assessed once. Dose owns discrete trial-arm comparison; pooled records do not add independent families without curated linkage.",
+      "native_context_review_policy": "authorized_source_review",
+      "_context_policy_doc": "Authorized source-reviewed exact-strain primary patient-important outcomes own Evidence independently of label amount. Attributable agent reviews require verified sources and independent review within the existing rubric; legacy approval enum names are not clinician credential claims. Certainty, matching applicability and independent confirmation are assessed once. Dose owns discrete trial-arm comparison; pooled records do not add independent families without curated linkage.",
       "certainty_cap": 10.0,
       "applicability_cap": 6.0,
       "replication_cap": 4.0,

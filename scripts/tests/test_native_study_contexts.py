@@ -571,12 +571,17 @@ def test_specific_35624_clinical_lock_survives_source_extraction():
     ('negated_claim', 'applicable'), ('foreign_source', 'unresolved'),
     ('unsigned', 'unresolved'), ('unsupported_constraint', 'unresolved'),
 ])
-def test_reviewed_native_claim_exclusion_is_source_bound_and_condition_specific(case, expected):
+def test_reviewed_native_claim_exclusion_is_source_bound_and_condition_specific(case, expected, monkeypatch):
     from clinical_applicability import assess_native_claimed_purpose
-    row = deepcopy(next(c for c in studied_formulas._clinical_strain_registry()[
-        'STRAIN_PLANTARUM_299V']['study_contexts'] if c['source_pmids'] == ['22912552']))
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    row = next(c for c in registry[
+        'STRAIN_PLANTARUM_299V']['study_contexts'] if c['source_pmids'] == ['22912552'])
     row['applicability'] = {'scope': 'ingredient', 'source_pmids': ['22912552'],
                             'excluded_claim_terms': ['digestive balance', 'digestive health']}
+    # Synthetic approved-source fixture: caller variations below must bind to
+    # this recorded restriction, rather than authoring one in caller metadata.
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    row = deepcopy(row)
     product = {'product_name': 'Digestive health probiotic'}
     if case == 'exact_condition':
         product['product_name'] = 'Irritable bowel syndrome and digestive health'

@@ -11,8 +11,12 @@ owner's final review statuses in one atomic write:
 * needs_source_clarification -> ``review_status`` becomes ``adjudication_required`` (held, non-scoring).
 
 Every patch must still match its recorded old value, every touched context must
-pass the frozen contract AND the runtime validator, and the run is bound to the
-registry snapshot it was reviewed against.
+pass the shared frozen/source contract, and the run is bound to the
+registry snapshot it was reviewed against. The legacy clinician_approved enum
+records an approved scoped review, including delegated agent review under the
+existing rubric; the actual reviewer is retained and never relabelled a clinician.
+Source verification and independent review remain authoring/release requirements,
+not authentication conferred by a name or a self-asserted metadata string.
 """
 
 from __future__ import annotations
@@ -118,12 +122,20 @@ def _write_path(root: dict[str, Any], path: str, value: Any) -> None:
 def validate(registry: dict[str, Any], response: dict[str, Any], *, reviewer: str,
              reviewed_at: str) -> tuple[dict[str, Any], dict[str, int]]:
     """Return the prospective registry and a summary; raise on any mismatch."""
-    from studied_formulas import valid_native_study_context
+    from studied_formulas import _valid_native_study_context_payload
+    from probiotic_measurements import _clinical_review_metadata_valid
 
     metadata = response["_metadata"]
     bound_sha = metadata.get("dataset_sha256")
     applied_sha = metadata.get("applied_dataset_sha256")
-    actual_sha = _sha256(REGISTRY)
+    # Bind the actual candidate argument and its digest to one captured source
+    # buffer. A mutable caller object or a second file read is not source proof.
+    source_bytes = REGISTRY.read_bytes()
+    actual_sha = hashlib.sha256(source_bytes).hexdigest()
+    if not isinstance(bound_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", bound_sha):
+        raise ValueError("review response requires dataset snapshot SHA256")
+    if registry != json.loads(source_bytes):
+        raise ValueError("candidate does not match captured source snapshot")
     if applied_sha and actual_sha == applied_sha:
         raise SystemExit("review response already applied to this registry snapshot")
     if bound_sha and bound_sha != actual_sha:
@@ -187,8 +199,13 @@ def validate(registry: dict[str, Any], response: dict[str, Any], *, reviewer: st
             errors = validate_frozen_context(context, known_component_ids=known_ids)
             if errors:
                 raise ValueError(f"{cid}: frozen contract errors {errors}")
-        if not valid_native_study_context(context, owners[cid]):
-            raise ValueError(f"{cid}: fails valid_native_study_context after apply")
+        # Only this source-bound authoring transaction can validate a prospective
+        # review not yet saved in the canonical registry. Runtime callers always
+        # use valid_native_study_context and cannot supply a bypass flag.
+        if (not _valid_native_study_context_payload(context, owners[cid])
+                or (context.get("review_status") == "clinician_approved"
+                    and not _clinical_review_metadata_valid(context))):
+            raise ValueError(f"{cid}: fails source/review validation after apply")
     return prospective, summary
 
 

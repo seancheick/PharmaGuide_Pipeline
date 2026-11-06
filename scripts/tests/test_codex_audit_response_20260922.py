@@ -108,18 +108,26 @@ def _positive_rct(context_id, condition, role=None):
     return base
 
 
-def test_positive_trials_of_different_conditions_are_not_replication():
+def test_positive_trials_of_different_conditions_are_not_replication(monkeypatch):
     entry = deepcopy(_registry()["STRAIN_LACTIS_BB12"])
     entry["study_contexts"] = [_positive_rct("synthetic_a_00000001", "infant_colic"),
                                _positive_rct("synthetic_b_00000002", "adult_constipation")]
+    import studied_formulas
+    registry = _registry()
+    registry[entry['id']] = entry
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
     assert derived_context_evidence(entry)["evidence_strength"] == "medium"
     entry["study_contexts"][1]["condition"] = "infant_colic"
     assert derived_context_evidence(entry)["evidence_strength"] == "strong"
 
 
-def test_a_within_group_primary_change_earns_no_efficacy_credit():
+def test_a_within_group_primary_change_earns_no_efficacy_credit(monkeypatch):
     entry = deepcopy(_registry()["STRAIN_LACTIS_BB12"])
     entry["study_contexts"] = [_positive_rct("synthetic_a_00000001", "infant_colic", role="within_group_change")]
+    import studied_formulas
+    registry = _registry()
+    registry[entry['id']] = entry
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
     assert derived_context_evidence(entry)["effect_direction"] == "unresolved"
 
 

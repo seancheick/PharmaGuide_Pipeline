@@ -186,7 +186,7 @@ def test_affirmative_context_cannot_use_unknown_days_for_fixed_protocol():
         assert 'dose.fixed_protocol_duration_required' in validate_ingredient_context(context)
 
 
-def test_reported_absence_of_outcome_hierarchy_is_a_completed_source_limitation():
+def test_reported_absence_of_outcome_hierarchy_is_a_completed_source_limitation(monkeypatch):
     from copy import deepcopy
     from probiotic_measurements import derived_context_evidence
 
@@ -214,7 +214,11 @@ def test_reported_absence_of_outcome_hierarchy_is_a_completed_source_limitation(
     owner = next(iter(_clinical_strain_registry()))
     native['components'] = [owner]
     native['dose'].update(measurement_type='viable_count', unit='CFU', values=[1_000_000], dose_basis='per_strain_daily')
-    evidence = derived_context_evidence({'id': owner, 'study_contexts': [native]})
+    import studied_formulas
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    registry[owner]['study_contexts'] = [native]
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    evidence = derived_context_evidence(registry[owner])
     assert evidence['effect_direction'] == 'unresolved'
     assert evidence['evidence_strength'] == 'weak'
 
@@ -274,3 +278,14 @@ def test_every_curated_approved_context_states_its_scoring_eligibility():
                         and not isinstance(context.get("scoring_eligible"), bool)):
                     missing.append((record["id"], context.get("context_id")))
     assert missing == []
+
+
+def test_prospective_complete_source_schema_does_not_authorize_runtime_review():
+    from probiotic_measurements import clinical_review_provenance_valid, context_accepted_for_scoring
+    from test_evidence_resolver import _approved_test_source
+
+    record = _approved_test_source({'id': 'INGR_UNPUBLISHED_PROSPECTIVE_SOURCE'})
+    context = record['study_contexts'][0]
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert not clinical_review_provenance_valid(context)
+    assert not context_accepted_for_scoring(context)

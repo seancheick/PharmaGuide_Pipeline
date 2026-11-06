@@ -146,6 +146,18 @@ def _infant_product():
         clinical_strains=[{"strain": "Bifidobacterium lactis BB-12", "clinical_id": "STRAIN_LACTIS_BB12"}])
 
 
+def _complete_infant_source(monkeypatch, *, source_pending=False):
+    """Explicit synthetic source completion, never a caller stamp."""
+    from copy import deepcopy
+    import studied_formulas
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    for context in registry['STRAIN_LACTIS_BB12']['study_contexts']:
+        context['dose']['dosage_forms'] = ['drops']
+        if source_pending:
+            context['dose'].update(dose_status='extraction_pending', values=[])
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+
+
 def test_undosed_strain_receives_reviewed_family_credit_without_dose_points(registry_record_path_only):
     from scoring_v4.modules.probiotic_evidence import score_evidence
     from scoring_v4.modules.generic_evidence import resolved_clinical_matches
@@ -505,20 +517,16 @@ def test_native_contributing_context_receipt_tracks_selected_evidence():
 
 
 @pytest.mark.parametrize('source_pending', [True, False])
-def test_release_blocks_pending_study_extraction_not_unknown_label_cfu(source_pending):
+def test_release_blocks_pending_study_extraction_not_unknown_label_cfu(source_pending, monkeypatch):
     import copy
     from assessment_readiness import evaluate_release_assessment
+    _complete_infant_source(monkeypatch, source_pending=source_pending)
     payload = probiotic_evidence.score_evidence(_infant_product())
     payload = copy.deepcopy(payload)
     contexts = payload['metadata']['contributing_native_contexts']
     assert contexts
-    # This control isolates manufacturer uncertainty using a complete synthetic
-    # delivery fact. The real registry's unextracted delivery remains held.
-    for context in contexts:
-        context['dose']['dosage_forms'] = ['drops']
-    if source_pending:
-        contexts[0]['dose']['dose_status'] = 'extraction_pending'
-        contexts[0]['dose']['values'] = []
+    # The fixture owns complete delivery; pending extraction is recorded in
+    # that source before scoring, rather than invented in the caller payload.
     # Label uncertainty remains distinct from these complete study facts.
     for strain in payload['metadata']['evidence_assessment']['strain_assessments']:
         strain['status'] = 'strain_dose_unknown'
@@ -545,12 +553,11 @@ def test_used_native_context_missing_source_fields_cannot_complete_release(field
 
 
 @pytest.mark.parametrize('field', ['dose_status', 'dose_basis', 'duration_basis', 'dosage_forms', 'source_provenance'])
-def test_used_native_context_missing_regimen_fields_cannot_complete_release(field):
+def test_used_native_context_missing_regimen_fields_cannot_complete_release(field, monkeypatch):
     import copy
     from assessment_readiness import evaluate_release_assessment
+    _complete_infant_source(monkeypatch)
     payload = copy.deepcopy(probiotic_evidence.score_evidence(_infant_product()))
-    for context in payload['metadata']['contributing_native_contexts']:
-        context['dose']['dosage_forms'] = ['drops']  # complete synthetic delivery control
     readiness = {name: {'readiness': 'complete'} for name in
                  ('identity', 'dose', 'evidence', 'verification', 'route')}
     module = {'module': 'probiotic', 'dimensions': {'evidence': payload}}

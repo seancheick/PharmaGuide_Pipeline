@@ -4,7 +4,9 @@ This module owns the structured vocabulary used by newly curated study
 contexts.  Older contexts remain readable through the legacy ``dose.basis``
 field; a context opts into the frozen contract with ``context_schema_version``.
 The validator is deliberately side-effect free so a review packet or patch
-checker can use it without changing the registry.
+checker can use it without changing the registry. Complete-review validation
+checks attributable metadata and full source shape, not canonical publication or
+reviewer credentials; runtime consumers additionally bind the approved source.
 """
 
 from __future__ import annotations
@@ -360,11 +362,11 @@ def validate_frozen_context(
     errors.extend(_dose_errors(context, known_component_ids))
     errors.extend(_outcome_errors(context))
     if require_complete_review:
-        from probiotic_measurements import clinical_review_provenance_valid
+        from probiotic_measurements import _clinical_review_metadata_valid
         # A signed negative finding can be fully reviewed without being
         # eligible for points. Consumers still enforce scoring eligibility.
         if (context.get("review_status") != "clinician_approved"
-                or not clinical_review_provenance_valid(context)):
+                or not _clinical_review_metadata_valid(context)):
             errors.append("review.approval_required")
         for field in ("context_id", "condition", "purpose", "trial_family", "study_design"):
             if not _nonempty_text(context.get(field)):
@@ -437,7 +439,7 @@ def validate_ingredient_context(
     if context.get("review_status") == "rejected_source":
         # A scoped source rejection does not assert a clinical trial regimen.
         # It needs its own traceable source and decision, never invented arms.
-        from probiotic_measurements import clinical_review_provenance_valid
+        from probiotic_measurements import _clinical_review_metadata_valid
         errors = []
         sources = context.get("source_pmids")
         if not _text_list(context.get("components")):
@@ -451,7 +453,7 @@ def validate_ingredient_context(
             errors.append("context_id.required_for_complete_review")
         if context.get("scoring_eligible") is not False:
             errors.append("review.rejected_source_must_not_be_scoring_eligible")
-        if not clinical_review_provenance_valid(context):
+        if not _clinical_review_metadata_valid(context):
             errors.append("review.approval_required")
         dose = context.get("dose")
         provenance = dose.get("source_provenance") if isinstance(dose, Mapping) else None
