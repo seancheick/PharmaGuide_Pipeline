@@ -238,7 +238,7 @@ class TestCrossModuleSpeciesOnlyDisposition:
         ev = score_generic_evidence(p, apply_primary_floor=True)
         assert ev["score"] == 0.0
         # The unresolved collagen preparation remains independent of the species-only zero.
-        assert ev["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+        assert ev["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
         from evidence_resolver import resolve_product_evidence
         assert any(row.canonical_id == "collagen" and row.blocking_reasons
                    for row in resolve_product_evidence(p, owner_scoped=True).resolutions)
