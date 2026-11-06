@@ -12087,13 +12087,14 @@ class SupplementEnricherV3:
         ingredient_info = {}
         for ing in active_ingredients:
             key = self._normalize_text(ing.get('standardName', '') or ing.get('name', ''))
-            canonical_id, _ = identity_registry.canonicalize(
+            canonical_id, canonical_db = identity_registry.canonicalize(
                 str(ing.get('canonical_id') or ''),
                 str(ing.get('canonical_source_db') or ''),
             )
             ingredient_info[key] = {
                 "name": ing.get('name', ''),
                 "canonical_id": canonical_id,
+                "canonical_source_db": canonical_db,
                 "quantity": ing.get('quantity', 0),
                 "unit": ing.get('unit', '')
             }
@@ -12150,6 +12151,16 @@ class SupplementEnricherV3:
             for cluster_ing in cluster_ingredients:
                 cluster_ing_norm = self._normalize_text(cluster_ing)
                 cluster_canonical = norm_module.make_normalized_key(cluster_ing)
+                target_identity = None
+                if cluster_canonical in canonical_ids:
+                    target_identity = identity_registry.canonicalize(
+                        cluster_canonical, 'ingredient_quality_map')
+                    if not identity_registry.standard_names.get(
+                        (target_identity[1], target_identity[0])
+                    ):
+                        target_identity = identity_registry.resolve_verified_preferred(cluster_ing)
+                        if target_identity:
+                            target_identity = identity_registry.canonicalize(*target_identity)
                 # Resolve aliases for this cluster ingredient (Solution A).
                 # The match attempt below tries the cluster ingredient itself
                 # first, then each alias if no direct match. Aliases catch
@@ -12168,14 +12179,19 @@ class SupplementEnricherV3:
                     # display spelling. Form-specific terms keep their existing
                     # preparation matching; a known different identity cannot
                     # be overridden by display text.
-                    if cluster_canonical in canonical_ids and ing_data['canonical_id']:
-                        if ing_data['canonical_id'] != cluster_canonical:
+                    if (target_identity
+                            and ing_data['canonical_source_db'] == target_identity[1]
+                            and identity_registry.standard_names.get(
+                                (ing_data['canonical_source_db'], ing_data['canonical_id']))):
+                        if ing_data['canonical_id'] != target_identity[0]:
                             continue
-                        is_match = True
-                    elif cluster_ing_norm == ing_key:
+                        # A redirected form/alias still needs its existing
+                        # lexical preparation match; its parent cannot prove it.
+                        is_match = cluster_canonical == target_identity[0]
+                    if not is_match and cluster_ing_norm == ing_key:
                         is_match = True
                     # Loose substring match for long terms (>= 6 chars).
-                    elif len(cluster_ing_norm) >= 6 and len(ing_key) >= 6:
+                    elif not is_match and len(cluster_ing_norm) >= 6 and len(ing_key) >= 6:
                         if cluster_ing_norm in ing_key or ing_key in cluster_ing_norm:
                             is_match = True
                     # Word-boundary match for short biochemistry abbreviations
@@ -12184,7 +12200,7 @@ class SupplementEnricherV3:
                     # with an expansion in parens — "DHA (Docosahexaenoic
                     # Acid)" must match cluster ingredient "dha". Word
                     # boundaries (\b) prevent EPA from matching HEPATIC.
-                    elif len(cluster_ing_norm) >= 3 and len(ing_key) >= 3:
+                    elif not is_match and len(cluster_ing_norm) >= 3 and len(ing_key) >= 3:
                         import re as _re
                         if _re.search(
                             r'\b' + _re.escape(cluster_ing_norm) + r'\b',

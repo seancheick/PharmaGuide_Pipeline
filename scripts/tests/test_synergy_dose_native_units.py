@@ -231,3 +231,53 @@ def test_legacy_synergy_without_canonical_identity_keeps_existing_match(canonica
     clusters = canonical_synergy_enricher._collect_synergy_data(product)
     assert any(m['cluster_ingredient'] == 'elderberry'
                for c in clusters for m in c['matched_ingredients'])
+
+
+def test_prepared_alcar_alias_keeps_existing_source_match_at_enrichment_boundary(canonical_synergy_enricher):
+    product = {'id': '294029', 'fullName': 'ALCAR source fixture', 'activeIngredients': [
+        {'name': 'Vitamin B6', 'standardName': 'Vitamin B6 (Pyridoxine)',
+         'canonical_id': 'vitamin_b6_pyridoxine', 'canonical_source_db': 'ingredient_quality_map',
+         'quantity': 6.7, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]',
+         'raw_source_text': 'Vitamin B6', 'cleaner_row_role': 'active_scorable'},
+        {'name': 'Acetyl-L-Carnitine', 'standardName': 'L-Carnitine',
+         'canonical_id': 'l_carnitine', 'canonical_source_db': 'ingredient_quality_map',
+         'quantity': 500, 'unit': 'mg', 'raw_source_path': 'ingredientRows[1]',
+         'raw_source_text': 'Acetyl-L-Carnitine', 'cleaner_row_role': 'active_scorable'},
+    ]}
+    enriched, _ = canonical_synergy_enricher.enrich_product(product)
+    cluster = next((c for c in enriched['formulation_data']['synergy_clusters']
+                    if c['cluster_id'] == 'nerve_health_neuropathy_support'), None)
+    assert cluster is not None
+    alcar = next(m for m in cluster['matched_ingredients'] if m['ingredient'] == 'Acetyl-L-Carnitine')
+    assert alcar['cluster_ingredient'] == 'acetyl-l-carnitine'
+    assert alcar['min_effective_dose'] == 500
+    assert alcar['meets_minimum'] is True
+
+
+def test_cross_namespace_preparation_keeps_existing_lexical_scope(canonical_synergy_enricher):
+    product = {'id': '182627', 'fullName': 'Green tea source fixture', 'activeIngredients': [
+        {'name': 'decaffeinated Green Tea extract', 'standardName': 'Green Tea',
+         'canonical_id': 'green_tea', 'canonical_source_db': 'standardized_botanicals',
+         'quantity': 325, 'unit': 'mg'},
+        {'name': 'Chromium', 'standardName': 'Chromium', 'canonical_id': 'chromium',
+         'canonical_source_db': 'ingredient_quality_map', 'quantity': 500, 'unit': 'mcg'},
+    ]}
+    cluster = next((c for c in canonical_synergy_enricher._collect_synergy_data(product)
+                    if c['cluster_id'] == 'fat_metabolism'), None)
+    assert cluster is not None
+    tea = next(m for m in cluster['matched_ingredients'] if m['cluster_ingredient'] == 'green tea extract')
+    assert tea['quantity'] == 325
+    assert tea['min_effective_dose'] == 400
+    assert tea['meets_minimum'] is False
+
+
+def test_generic_canonical_does_not_establish_branded_preparation():
+    e = _enricher_with([{
+        'id': 'branded_fixture', 'standard_name': 'Branded fixture',
+        'ingredients': ['carnipure'], 'canonical_ids': ['l_carnitine'],
+        'min_effective_doses': {}, 'allow_single_ingredient': True,
+        'primary_ingredients': ['carnipure'],
+    }], {})
+    product = _product('L-Carnitine', 500, 'mg')
+    product['activeIngredients'][0].update(canonical_id='l_carnitine', canonical_source_db='ingredient_quality_map')
+    assert e._collect_synergy_data(product) == []
