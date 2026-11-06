@@ -1,3 +1,9 @@
+## November 5 — ranked completion packet; shared nutritional-authority defect active
+
+Behavioral batch, not yet integrated/qualified. Owner: existing Evidence resolver, RDA/IQM reference joins and seven adapters; frozen census owns prioritization. Will NOT create another scorer/registry/status or fabricate review authority. The private team packet lists6,951 unique partial IDs,1,340 groups and609 canonical dependencies;4,486 are single-canonical Evidence-only. Top20 groups cover1,263 conditional single-dependency opportunities, not guaranteed closures. Codex retains L-carnitine/elderberry/TMG; other teams return exact-preparation source packets to one integrator. No new count is extrapolated from bounded work.
+
+Actual184326 exposes readiness/Dose vitamin A authority but0Evidence because the floor helper misses beta_carotene's curated nutrient group. Niacin independently reproduces alias inconsistency. Shared fix/tests in progress; no new efficacy policy, Dose change, claimed clinical approval or release. Manufacturer Zick citation is independently verified unrelated chamomile DOI10.1186/1472-6882-11-78; valid nutritional authority remains independent. Baseline62+347 raw captures complete with zero errors on immutable0170; candidate captures wait for finished source. Existing mixed-record and elderberry corrections have named tests/independent review; measurement and combined CI/local gates remain owed.
+
 ## November 5 — incremental Clean recovery integrated
 
 Owner: existing incremental executor/state, BatchProcessor processing/categorization/resume, canonical stage manifests and command reporting. No new scorer, scientific status, registry, threshold or approval.
