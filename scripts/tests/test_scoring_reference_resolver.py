@@ -123,12 +123,76 @@ def test_parent_relative_form_quality_falls_back_to_stored_scale_without_parent(
     assert parent_relative_form_quality("not_a_real_canonical_id", 12.0) == 12.0
 
 
-def test_therapeutic_index_parity_with_botanical_profile_dosing_index():
-    """Resolver and the live scorer must agree on therapeutic-reference membership."""
-    from scoring_reference_resolver import _therapeutic_index
-    from scoring_v4.modules.botanical_profile import _dosing_index
+@pytest.mark.parametrize("owner_name,consumer_name,filename", [
+    ("_therapeutic_index", "_dosing_index", "rda_therapeutic_dosing.json"),
+    ("_botanical_identity_index", "_botanical_identity_set", "botanical_ingredients.json"),
+])
+def test_botanical_reference_consumers_parse_one_shared_index(
+    monkeypatch, owner_name, consumer_name, filename,
+):
+    from copy import deepcopy
+    import scoring_reference_resolver as owner
+    from scoring_v4.modules import botanical_profile as consumer
 
-    assert set(_therapeutic_index().keys()) == set(_dosing_index().keys())
+    load = getattr(owner, owner_name)
+    consume = getattr(consumer, consumer_name)
+    expected = deepcopy(load())
+    assert expected == consume()
+    load.cache_clear()
+    consume.cache_clear()
+    reads = []
+    original = Path.read_text
+
+    def read(path, *args, **kwargs):
+        if path.name == filename:
+            reads.append(path)
+        return original(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", read)
+    try:
+        assert load() == expected
+        assert consume() == expected
+        assert len(reads) == 1
+        assert consume() is load()  # Both retain the same read-only reference graph.
+    finally:
+        load.cache_clear()
+        consume.cache_clear()
+
+
+@pytest.mark.parametrize("owner_name,consumer_name,filename,empty", [
+    ("_therapeutic_index", "_dosing_index", "rda_therapeutic_dosing.json", {}),
+    ("_botanical_identity_index", "_botanical_identity_set", "botanical_ingredients.json", frozenset()),
+])
+@pytest.mark.parametrize("missing", [False, True])
+def test_shared_botanical_reference_retains_failure_and_refresh_behavior(
+    monkeypatch, owner_name, consumer_name, filename, empty, missing,
+):
+    import scoring_reference_resolver as owner
+    from scoring_v4.modules import botanical_profile as consumer
+
+    load = getattr(owner, owner_name)
+    consume = getattr(consumer, consumer_name)
+    load.cache_clear()
+    consume.cache_clear()
+    original = Path.read_text
+
+    def unreadable(path, *args, **kwargs):
+        if path.name == filename:
+            if missing:
+                raise FileNotFoundError(filename)
+            return "{"
+        return original(path, *args, **kwargs)
+
+    try:
+        monkeypatch.setattr(Path, "read_text", unreadable)
+        assert load() == consume() == empty
+        monkeypatch.setattr(Path, "read_text", original)
+        load.cache_clear()
+        assert load()
+        assert consume() == load()  # A new reference pass cannot retain a stale consumer copy.
+    finally:
+        load.cache_clear()
+        consume.cache_clear()
 
 
 def test_every_parent_form_reference_is_pinned():
