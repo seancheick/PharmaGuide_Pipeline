@@ -1,0 +1,566 @@
+{
+  "baseline": "7ff36a45f9aac53bc28954c74322fa5d8052582c",
+  "candidate_runtime_commit": "4bea5c1bf",
+  "source_hashes": {
+    "baseline": {
+      "scripts/clinical_applicability.py": "081dd6b8df62b33642eea6dbc0807b025eb291dc882b6da6a22ff5f74e30c292",
+      "scripts/scoring_input_contract.py": "badac0816bd661714098f02c1254300f9b937a8a5a334183f4782ae1e93ee5f6"
+    },
+    "candidate": {
+      "scripts/clinical_applicability.py": "75ef16db4521279b6632fe99e85710d098bff290c8e235d93f2fb9f6671d826b",
+      "scripts/scoring_input_contract.py": "badac0816bd661714098f02c1254300f9b937a8a5a334183f4782ae1e93ee5f6"
+    }
+  },
+  "scope": "48 frozen enriched products; not whole-catalog or clinical throughput",
+  "full_scored_blob_core_parity": true,
+  "products": [
+    {
+      "id": "13260",
+      "scored_sha256": "427996399d49760754587274baa62981687ef8f5ce361b81b69f4e79c4d91a32",
+      "export_sha256": "f4918821ecc218cfdc2bdd40b12f01005dd50e2d194fa4589081b269e8387e27"
+    },
+    {
+      "id": "228833",
+      "scored_sha256": "f749da868ede42c402f68fdb77079790c775af46cae31844632f8558895cb962",
+      "export_sha256": "a29a46a764f9620af7e9746a4f46d4c8e22130c006ba092e0f9043d0ea08fee5"
+    },
+    {
+      "id": "31148",
+      "scored_sha256": "e9c7941f8126a9e603d127f54fcc6f3459850350c6dafd37feaf43ea7c143ca2",
+      "export_sha256": "6d24439832278d84c4bb0a58692a352cd85ebe0c989bf20ac7100c9231571cb9"
+    },
+    {
+      "id": "241290",
+      "scored_sha256": "b6ba16e045c62af771599daa70fca5b5da53f2fb8004ed3d2a97ef0a6f3e1305",
+      "export_sha256": "f5ab27efdb61053e81d938a538846ef6e7eeebadc3101af085bdbfaafeb7fa5e"
+    },
+    {
+      "id": "314749",
+      "scored_sha256": "9f67a882b86eaab6a9e582096177cd10c9b33e54c01484ef30f3967814b5cb78",
+      "export_sha256": "b8bd5fd2716cd884cb4493488a6bf51b18b39dc0a140443283cc454e5f8f2702"
+    },
+    {
+      "id": "28980",
+      "scored_sha256": "963fdd2137a2c5ed4befafbcf7911eaecb7995c611060247236ff5b6d22c0b8c",
+      "export_sha256": "e159ee210b83f42d2047b1f17a07ba3c31f92c07aa28691330e6c486f5a28f9f"
+    },
+    {
+      "id": "179791",
+      "scored_sha256": "1983d1613ab844c7fed7c63530260f9274ef85d96c2cf11edb0478bba5d0625b",
+      "export_sha256": "58a233245ed3d154e42d380cd2ac3afc3ef7de1cc381c0429908036947ff4e88"
+    },
+    {
+      "id": "271329",
+      "scored_sha256": "c91faea99774503ef3cb598512c9eca5a031bcbb6aa8c2571b75c350076495f1",
+      "export_sha256": "f69b0193d90ab3c5762f756a0a3e91e89a92c780094194e5158b4b730f7d4435"
+    },
+    {
+      "id": "302763",
+      "scored_sha256": "275843ca3c28c0a7e2e708130fa2b89ddaf3b0610758a5cfbc5afd18450b4457",
+      "export_sha256": "10dc0d5f657b438ddb41b77d684eb252357f01da5c74e9bd332356e23d31908d"
+    },
+    {
+      "id": "329726",
+      "scored_sha256": "05b2b73e85b57712f86344b0a0ba600eb9b58683ae6c66fe513c76d74aecef94",
+      "export_sha256": "3342844ddcbdef20936e8aab4145b73b3f9762fa515f92dab9497bbe7bde9391"
+    },
+    {
+      "id": "329732",
+      "scored_sha256": "024463e9e027427abdeecfde831ea374d5adc01660c1fd0a5af55cb3a187af3a",
+      "export_sha256": "5582f5771a8821fb7a9d41b57a5a3b61d1550f7186926d6e86f892c0c02e6161"
+    },
+    {
+      "id": "329778",
+      "scored_sha256": "cdb36e0dda6b338e885decdd911c836b62242401841566d3132f768e849bf5ad",
+      "export_sha256": "8b843c644438fc1ab9e242026926a43f835abff4d2bc9544f0c4e4ea10d125e8"
+    },
+    {
+      "id": "178558",
+      "scored_sha256": "d21589586b8f86c99396531588b8d81d21dc89781caf8559dfb034a3605ad907",
+      "export_sha256": "fbee1bd89418b36b7140e631d28c65273ec63b06943bbf39332eccb5cc841d5d"
+    },
+    {
+      "id": "178561",
+      "scored_sha256": "19f32877f41ace2fc4d8b1c5adef2158dda727aa27d3aa90c966ceb16511b1ef",
+      "export_sha256": "1db06ca33bc5e5836097244b21d2c696c301a30640e6204327d5704c6c6998ba"
+    },
+    {
+      "id": "178565",
+      "scored_sha256": "49a2cddc9c84a88dd6345926eb538469cb1378b8c3b5f69b493b4e5b1fb25ea1",
+      "export_sha256": "a5e1a70d5301042976e6c066784d70542883b6bb1dc7873e117f39718ee5d7d5"
+    },
+    {
+      "id": "178571",
+      "scored_sha256": "d1614570970a647bf8c8d139320d6abe0d7bc575f0cc3c5d9e9b100cbd8bbd0f",
+      "export_sha256": "8e2ece1f239f3ff3dd8beb4f1bc5cc901c9c17bc6949ae6b933f6637f928250c"
+    },
+    {
+      "id": "184792",
+      "scored_sha256": "f4e4f09ff32c1d4c4b6de6126d2fcebd63dad302f27b4fe628ad6329cd716dc5",
+      "export_sha256": "e168ea8de3df87dca90650bfd9445dd8cc0c3486621cd03cf6810f0b42d35147"
+    },
+    {
+      "id": "219039",
+      "scored_sha256": "1ba676382e2f2fe23ba3995e3257a7fef6e85c18f04cfad8b00bb36872f8a1ba",
+      "export_sha256": "7606af8c1e59871e9c81e9380fdaae2f87b6607bd105477a4c9aa41ee04ccbeb"
+    },
+    {
+      "id": "221095",
+      "scored_sha256": "d3023cc9cc8e79637893afc612901c45f4119031801e064371f3fd5409a97d06",
+      "export_sha256": "9f8ce35dcef3bcf97a18a50e9a36b4ea7ea050d1f5d93e5ea0278c53e45ce172"
+    },
+    {
+      "id": "231852",
+      "scored_sha256": "b4d5fd65e0fe6e505ed663a32dc4490e8907ef5a2acf806bb6418dce58ccfad0",
+      "export_sha256": "f09e191292dd7c3a35b3dd3dda4930b276a6962a012738cb3ad580005d5c6434"
+    },
+    {
+      "id": "251524",
+      "scored_sha256": "18098f1945fd7bc7699988c1ac62d3243cb3417ded94db71316a3cccba5e5c05",
+      "export_sha256": "e961b1f1d162f6d834f397e767344640fe842a47bf570fc58df539380d615779"
+    },
+    {
+      "id": "269265",
+      "scored_sha256": "f17fab7ecf53df4ceb93112ad90415b0fe13f7c8ea6a6a67466f4ab7647f8139",
+      "export_sha256": "7848455b3d57466c166dd85fa700e34d2dabc8a71601a737c1112ee3da64a3bb"
+    },
+    {
+      "id": "271345",
+      "scored_sha256": "009b601401c9225b44baa6896876462e7b27f1b2b91946f2dbe663ffd2332062",
+      "export_sha256": "1c515c4c44610ac014c9fc5a69621059c1b0cb1d71960d6533c7cc109c2fc11c"
+    },
+    {
+      "id": "272968",
+      "scored_sha256": "62876bbd3ed36709ecdd19e9aa997a41ce2b918c534126cf1aa0868ec5c52181",
+      "export_sha256": "5888201e352e6f8d8e8282719b5a27182a7ed9932df46294b20d5ba5617eeee7"
+    },
+    {
+      "id": "273735",
+      "scored_sha256": "45e1c4803815b33f55863aa81ad8325056421eeb7e6c279533fc0fa3c66cbb06",
+      "export_sha256": "bde0683f370dc65750fd1916c6c43f4f6d626705abe6ee97d3f01314f6ec87be"
+    },
+    {
+      "id": "27807",
+      "scored_sha256": "6813ad58a683fe7938fbabf02b0c96f02e053d890ae688648d118d3c70d34a4c",
+      "export_sha256": "24bbdd2c05e333f6373dd4b88f9cde37593f9767005472910e832d2059a5b86a"
+    },
+    {
+      "id": "302705",
+      "scored_sha256": "6b404825599adeb1981707d77364cc5acf6bd8fac601231d1ac8667f36cc947c",
+      "export_sha256": "42ecf67ea7fa9b96ba6618c24a36ce314f64bdc49db01a50e06f87d33f4200e5"
+    },
+    {
+      "id": "31063",
+      "scored_sha256": "32940d3176935ab55a9f5d18fafab946a6a19c9afee83c0387ba399658a9d49d",
+      "export_sha256": "98b5c6cc243e376dd52ec0e1bfd6dd98f3bf6261d5dd43cda69542663a4bfd9b"
+    },
+    {
+      "id": "326161",
+      "scored_sha256": "ff78bc35a4c8b3d85f389edcb1038cbd91a91c6117023b2eaca9cc1a59974f27",
+      "export_sha256": "7bb02ca651effbc76d9151043cdad636fff23259fdccf27c0cf6c1f672838308"
+    },
+    {
+      "id": "327944",
+      "scored_sha256": "7d381b6901240fae7cf8eaaefae7252b9a5a2e10720063779775ce7eb31b9aa4",
+      "export_sha256": "20e39f2a610e478cdb0420fac8a92d6aed521bc16e33702f5cd402e3d0d22559"
+    },
+    {
+      "id": "327963",
+      "scored_sha256": "e516f80e7018c7f7d10c08354116054fa015ede9ce0c76886bfea0b15d44e4fa",
+      "export_sha256": "5f0a589ed4c7806cc7490749da70cf07d0919f159e1355e89eb21d7b6ec4135c"
+    },
+    {
+      "id": "328119",
+      "scored_sha256": "57375bd5e4c72d27854515205119820f65eba6d0315cd242cf9ecbc198bde0c1",
+      "export_sha256": "fbfa9f51b42a1197046b55223187786a884d1af580fcc96d594dd60b8bad6494"
+    },
+    {
+      "id": "330040",
+      "scored_sha256": "66ed76b5c35f30cb4c81e07642b32ef391c2dfd6a9787b68a8697dce3d713a52",
+      "export_sha256": "b69e06b88b48782d1192025ae8c379a7216f87947d8d35dcd658d0bd2c73442e"
+    },
+    {
+      "id": "330605",
+      "scored_sha256": "9cab1b68235d8282b2d837724ccdd1ee03c6f6e2b6516e88efbf64e4020da634",
+      "export_sha256": "3ea9972801eeda06803d98583a3f8a9de35fa9d07db012e1cb4a4036d8f01253"
+    },
+    {
+      "id": "337206",
+      "scored_sha256": "78840171ca35327e3ca1389d59cfd5f1078f46639b96aae7bb41f76136be064e",
+      "export_sha256": "653648dbbbe39446d3df2a3210d76682cfc57a21ff5564b5989ab8954dee276b"
+    },
+    {
+      "id": "337210",
+      "scored_sha256": "823d40862f0bc4e4d11b96bc41b50d6ce349e6d6a56a6e41465522cd3e8f3e5d",
+      "export_sha256": "7a026b22c5e3d2ac04a2aaa3181ea7a901fe50074efce70cbbaa8561f6610976"
+    },
+    {
+      "id": "341410",
+      "scored_sha256": "49f17fb8caf58b8ebb0c081c5d87d1f8945ab1e0dc1de3bd48baf53df67755fe",
+      "export_sha256": "73ea4e3203d250e7f36495327c19fe5ee2416e98ea8ad154a67b8f03a21fffbb"
+    },
+    {
+      "id": "62680",
+      "scored_sha256": "0d1d3d41211125748d46a03212ac37f6acf37604e92ca9605cbdebf36354cedd",
+      "export_sha256": "2a3f4315ebe7b82dcc4c9d1c1b9562760b0a807d113f909080e19c126936c79e"
+    },
+    {
+      "id": "63666",
+      "scored_sha256": "f8e392008f7defd2880cff375c3850402a67b804ae555d689dbdc57bc2954a98",
+      "export_sha256": "590cda6f020c5fd58cd61f901f5e2d17a3a0c959c7821dcc2217eba659c8800c"
+    },
+    {
+      "id": "69759",
+      "scored_sha256": "552c565173cfc6dded1bc9ed9b7ade2f3b2a18e1ca449f439ce3cfa42423377d",
+      "export_sha256": "b4b47397cb2a6343dc36b073b95474758790aa258d4eb376a02839a0fa046c3b"
+    },
+    {
+      "id": "69770",
+      "scored_sha256": "81c5acd6c89566ac346b90acfb983637ac9a3d55eb2290a7066da9ae270b31df",
+      "export_sha256": "de1c3827ff4b746cc0f1965257bd5c6b9cbd096255ad70793bb29a682b7b8104"
+    },
+    {
+      "id": "70017",
+      "scored_sha256": "574b8c8c3ac5228ea46002279e88d199f21a87f00fec8444e17ec689aa81c064",
+      "export_sha256": "b13f7b5b5e702d1acc2a836f03e290d3c81d46b9b5fd0c12f39908a16ff2a7df"
+    },
+    {
+      "id": "70018",
+      "scored_sha256": "2597b863af3d8aaecd0ecaad3f77db0da1ca20dd2e3194c8737abc962b55e7ec",
+      "export_sha256": "cbeac9ed2c9d2673965635bed8f66ce70c025d5e70dadc5529254c71b70fd452"
+    },
+    {
+      "id": "70021",
+      "scored_sha256": "bc78fe0b3b2798fa3453060e50ac15f09f5a3ef3dee62ed23fa5b80bb0b97d07",
+      "export_sha256": "973765bbaa779f14d190dbe1f2cb6a0e1a6d00e81369a737de19006493342a58"
+    },
+    {
+      "id": "70034",
+      "scored_sha256": "844630b3b7efdbde49d7a7aad452cd4c9efe15140b8549f6f236a1d8fc6f3948",
+      "export_sha256": "e307ee40ebb46148923830c8beac7b6bbe4330b8fc51113992e2b02e38723fdd"
+    },
+    {
+      "id": "74777",
+      "scored_sha256": "78c050f5fbc1600db74a02ca81492272beac323103813b3196c0859bf89d57dd",
+      "export_sha256": "05fdd75753da7a0eacdc4c96e2b9652aa52c6dea5a67e7d4f7939a3f3ec5e044"
+    },
+    {
+      "id": "75571",
+      "scored_sha256": "ca24536ac2a2b8923dfafc1f1abd2f073ae5fc2a74181a0a4ba91694f0415be7",
+      "export_sha256": "cf29d78ba0216ffca89cfc4de95a7e610790ddd0a67e8be79f6cf7434f79ce1e"
+    },
+    {
+      "id": "801",
+      "scored_sha256": "3286a14dde0301152ac4da9b687d5a651552228889e310707ee41f8d85fcb623",
+      "export_sha256": "4a015c3bcffd8db0aa118673b07a26e05274dfcef193c80d73ebebf382c5e7f3"
+    }
+  ],
+  "four_brand_warm_samples": {
+    "baseline": [
+      {
+        "brand": "GNC",
+        "id": "13260",
+        "seconds": [
+          0.34629524999763817,
+          0.009885750012472272,
+          0.009355540969409049
+        ],
+        "warm_median": 0.00962064549094066,
+        "sha256": "427996399d49760754587274baa62981687ef8f5ce361b81b69f4e79c4d91a32"
+      },
+      {
+        "brand": "GNC",
+        "id": "228833",
+        "seconds": [
+          0.173114417004399,
+          0.1680866660317406,
+          0.1651405410375446
+        ],
+        "warm_median": 0.1666136035346426,
+        "sha256": "f749da868ede42c402f68fdb77079790c775af46cae31844632f8558895cb962"
+      },
+      {
+        "brand": "GNC",
+        "id": "31148",
+        "seconds": [
+          1.775162999983877,
+          1.6315055000595748,
+          1.6183355420362204
+        ],
+        "warm_median": 1.6249205210478976,
+        "sha256": "e9c7941f8126a9e603d127f54fcc6f3459850350c6dafd37feaf43ea7c143ca2"
+      },
+      {
+        "brand": "Garden_of_life",
+        "id": "241290",
+        "seconds": [
+          0.006281874957494438,
+          0.005689249956049025,
+          0.005578124895691872
+        ],
+        "warm_median": 0.005633687425870448,
+        "sha256": "b6ba16e045c62af771599daa70fca5b5da53f2fb8004ed3d2a97ef0a6f3e1305"
+      },
+      {
+        "brand": "Garden_of_life",
+        "id": "314749",
+        "seconds": [
+          0.13858316699042916,
+          0.11476920801214874,
+          0.1149597920011729
+        ],
+        "warm_median": 0.11486450000666082,
+        "sha256": "9f67a882b86eaab6a9e582096177cd10c9b33e54c01484ef30f3967814b5cb78"
+      },
+      {
+        "brand": "Garden_of_life",
+        "id": "28980",
+        "seconds": [
+          1.273951832903549,
+          1.3503657089313492,
+          1.3274010000750422
+        ],
+        "warm_median": 1.3388833545031957,
+        "sha256": "963fdd2137a2c5ed4befafbcf7911eaecb7995c611060247236ff5b6d22c0b8c"
+      },
+      {
+        "brand": "Nature_Made",
+        "id": "179791",
+        "seconds": [
+          0.013337207958102226,
+          0.011754167033359408,
+          0.012597832945175469
+        ],
+        "warm_median": 0.012175999989267439,
+        "sha256": "1983d1613ab844c7fed7c63530260f9274ef85d96c2cf11edb0478bba5d0625b"
+      },
+      {
+        "brand": "Nature_Made",
+        "id": "271329",
+        "seconds": [
+          0.04691570799332112,
+          0.04114987491630018,
+          0.03478175005875528
+        ],
+        "warm_median": 0.03796581248752773,
+        "sha256": "c91faea99774503ef3cb598512c9eca5a031bcbb6aa8c2571b75c350076495f1"
+      },
+      {
+        "brand": "Nature_Made",
+        "id": "302763",
+        "seconds": [
+          0.6055041670333594,
+          0.5678179169772193,
+          0.6426790420664474
+        ],
+        "warm_median": 0.6052484795218334,
+        "sha256": "275843ca3c28c0a7e2e708130fa2b89ddaf3b0610758a5cfbc5afd18450b4457"
+      },
+      {
+        "brand": "BulkSupplements",
+        "id": "329726",
+        "seconds": [
+          0.0025258329696953297,
+          0.002265874994918704,
+          0.002163624973036349
+        ],
+        "warm_median": 0.0022147499839775264,
+        "sha256": "05b2b73e85b57712f86344b0a0ba600eb9b58683ae6c66fe513c76d74aecef94"
+      },
+      {
+        "brand": "BulkSupplements",
+        "id": "329732",
+        "seconds": [
+          0.0158621669979766,
+          0.009222749969922006,
+          0.009324040962383151
+        ],
+        "warm_median": 0.009273395466152579,
+        "sha256": "024463e9e027427abdeecfde831ea374d5adc01660c1fd0a5af55cb3a187af3a"
+      },
+      {
+        "brand": "BulkSupplements",
+        "id": "329778",
+        "seconds": [
+          0.3516047910088673,
+          0.3173885829746723,
+          0.32429933303501457
+        ],
+        "warm_median": 0.32084395800484344,
+        "sha256": "cdb36e0dda6b338e885decdd911c836b62242401841566d3132f768e849bf5ad"
+      }
+    ],
+    "candidate": [
+      {
+        "brand": "GNC",
+        "id": "13260",
+        "seconds": [
+          0.34123387502040714,
+          0.009374624933116138,
+          0.00922837492544204
+        ],
+        "warm_median": 0.009301499929279089,
+        "sha256": "427996399d49760754587274baa62981687ef8f5ce361b81b69f4e79c4d91a32"
+      },
+      {
+        "brand": "GNC",
+        "id": "228833",
+        "seconds": [
+          0.13052854093257338,
+          0.1254184580175206,
+          0.12476091703865677
+        ],
+        "warm_median": 0.1250896875280887,
+        "sha256": "f749da868ede42c402f68fdb77079790c775af46cae31844632f8558895cb962"
+      },
+      {
+        "brand": "GNC",
+        "id": "31148",
+        "seconds": [
+          1.1714895409531891,
+          0.9417881659464911,
+          1.0147123750066385
+        ],
+        "warm_median": 0.9782502704765648,
+        "sha256": "e9c7941f8126a9e603d127f54fcc6f3459850350c6dafd37feaf43ea7c143ca2"
+      },
+      {
+        "brand": "Garden_of_life",
+        "id": "241290",
+        "seconds": [
+          0.0062512909062206745,
+          0.005446209106594324,
+          0.00542774994391948
+        ],
+        "warm_median": 0.005436979525256902,
+        "sha256": "b6ba16e045c62af771599daa70fca5b5da53f2fb8004ed3d2a97ef0a6f3e1305"
+      },
+      {
+        "brand": "Garden_of_life",
+        "id": "314749",
+        "seconds": [
+          0.13932433305308223,
+          0.11658754199743271,
+          0.11695666704326868
+        ],
+        "warm_median": 0.1167721045203507,
+        "sha256": "9f67a882b86eaab6a9e582096177cd10c9b33e54c01484ef30f3967814b5cb78"
+      },
+      {
+        "brand": "Garden_of_life",
+        "id": "28980",
+        "seconds": [
+          1.0479465409880504,
+          1.1216065000044182,
+          1.0527871669037268
+        ],
+        "warm_median": 1.0871968334540725,
+        "sha256": "963fdd2137a2c5ed4befafbcf7911eaecb7995c611060247236ff5b6d22c0b8c"
+      },
+      {
+        "brand": "Nature_Made",
+        "id": "179791",
+        "seconds": [
+          0.011166917043738067,
+          0.011015290976502001,
+          0.010952790966257453
+        ],
+        "warm_median": 0.010984040971379727,
+        "sha256": "1983d1613ab844c7fed7c63530260f9274ef85d96c2cf11edb0478bba5d0625b"
+      },
+      {
+        "brand": "Nature_Made",
+        "id": "271329",
+        "seconds": [
+          0.02321108302567154,
+          0.022767791990190744,
+          0.022485916037112474
+        ],
+        "warm_median": 0.02262685401365161,
+        "sha256": "c91faea99774503ef3cb598512c9eca5a031bcbb6aa8c2571b75c350076495f1"
+      },
+      {
+        "brand": "Nature_Made",
+        "id": "302763",
+        "seconds": [
+          0.36151816707570106,
+          0.3622333339881152,
+          0.3605856660287827
+        ],
+        "warm_median": 0.36140950000844896,
+        "sha256": "275843ca3c28c0a7e2e708130fa2b89ddaf3b0610758a5cfbc5afd18450b4457"
+      },
+      {
+        "brand": "BulkSupplements",
+        "id": "329726",
+        "seconds": [
+          0.002503708004951477,
+          0.0022255840012803674,
+          0.0022453329293057323
+        ],
+        "warm_median": 0.00223545846529305,
+        "sha256": "05b2b73e85b57712f86344b0a0ba600eb9b58683ae6c66fe513c76d74aecef94"
+      },
+      {
+        "brand": "BulkSupplements",
+        "id": "329732",
+        "seconds": [
+          0.01526520901825279,
+          0.009269832982681692,
+          0.009045541984960437
+        ],
+        "warm_median": 0.009157687483821064,
+        "sha256": "024463e9e027427abdeecfde831ea374d5adc01660c1fd0a5af55cb3a187af3a"
+      },
+      {
+        "brand": "BulkSupplements",
+        "id": "329778",
+        "seconds": [
+          0.21288616699166596,
+          0.20315166702494025,
+          0.2005825829692185
+        ],
+        "warm_median": 0.20186712499707937,
+        "sha256": "cdb36e0dda6b338e885decdd911c836b62242401841566d3132f768e849bf5ad"
+      }
+    ]
+  },
+  "peak_memory_bytes": {
+    "baseline48": 607092736,
+    "candidate48": 606732288
+  },
+  "benchmark_runner_sha256": "dc266a18385c1428c4986350da8c45521e201e74020803cb1f73f17036d3fa15",
+  "frozen_input_sha256": {
+    "combined48-inputs.json": "f4ab9d938bde1972a26452d59c2f6dd48c70249baa62caba7bddb64b2de52c10",
+    "four-brand-inputs.json": "ea290d25d98b75994b3f72ef9ab838e4f59d3becd93a4efde1cbb977948c2594"
+  },
+  "raw36_full_pipeline": {
+    "inputs_manifest_sha256": "97af68ced40881757373eee3e19bc00084eae9cb5ebdf3c422a7d917fc3dc2ff",
+    "output_sha256": "4d899ea24e10efd92e9a1861c5135e058537fc4a0baf25d747582ecb16b2caaa",
+    "product_count": 36,
+    "source_unchanged": true,
+    "exit_code": 0,
+    "baseline_runtime_equivalent": "c2f33ce5bfe0364a7a179415e1a8e407aebe128c",
+    "changed_products": 0
+  },
+  "stage_fingerprints": {
+    "clean": {
+      "baseline": "0bdcda996416171e2a07388a7f7581f12a04a116321ea73685450bf9d82f7a26",
+      "candidate": "fee92c1898a631e57d284cf8809445a0b4fdedf4bc2b23d11ba5f8db9a6e7300",
+      "changed": true,
+      "imports_clinical_applicability": true
+    },
+    "enrich": {
+      "baseline": "c5519b7f82f0082ca0166bc3faa0053bda28ad0b8b342abb8c26dd5dbad9cd3c",
+      "candidate": "daa5fe6cc5f595cab900c84671f69b7f47c115ca5f5325f558808ba1fa0f3bfc",
+      "changed": true,
+      "imports_clinical_applicability": true
+    },
+    "score": {
+      "baseline": "a84cc201b5436ef471db3d15f73f9dc374421b9b997c7fd64103548686689368",
+      "candidate": "c64e7727fbf3ef29483cd882e72702b8609f6df138a33a84c109aa353a71dc0c",
+      "changed": true,
+      "imports_clinical_applicability": true
+    }
+  }
+}

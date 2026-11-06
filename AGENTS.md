@@ -89,6 +89,18 @@ publication still require Sean; this table is not release approval.
 Pick the rung by what changed and say which rung ran. “Done” requires the evidence for that class;
 a green suite alone never proves clinical accuracy or real-product correctness.
 
+Until beta release qualification, prioritize verified correctness/safety defects,
+performance regressions, scientific completion and release acceptance. Defer discretionary enhancements.
+
+**Preserve scoring performance.** Changes to shared scoring-input, Evidence, identity, clinical-applicability
+or ingredient-copying paths must retain the existing per-product scope and its mutation/input-isolation
+guards. Extend deterministic derivation-count tests for changed reusable views. Before qualification,
+record controlled before/after timings and peak memory on identical frozen representative inputs
+(including complex and held products), together with complete artifact/export parity or reviewed
+intentional differences. Investigate unexplained regressions; green functional CI alone does not
+clear one. Reuse the existing replay and performance receipts; no separate cache framework or
+full-corpus benchmark per edit is required.
+
 **Iteration is targeted; broad validation belongs to a finished batch, not an edit or commit.**
 Never run the whole fast/full/release suite after one edit or one failed test. A bare
 `fast -k <kw>` still collects the broad suite: name the test file or node first. Atomic commits
