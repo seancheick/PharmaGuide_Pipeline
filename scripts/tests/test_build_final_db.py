@@ -7245,3 +7245,78 @@ def test_current_catalog_requires_typed_safety_reader(tmp_path):
         ).fetchone()[0]
     assert minimum == "1.0.1"
     assert manifest["min_app_version"] == minimum
+
+
+def test_export_build_derives_each_product_input_once(tmp_path, monkeypatch):
+    import scoring_input_contract as contract
+    import copy
+    import importlib
+    exporter = importlib.import_module('build_final_db')
+    observed = []
+    original_iter = exporter.iter_staged_products
+    original_fetch = exporter.fetch_staged_product
+
+    def rows(*args, **kwargs):
+        for pid, product in original_iter(*args, **kwargs):
+            observed.append((product, copy.deepcopy(product)))
+            yield pid, product
+
+    def fetch(*args, **kwargs):
+        product = original_fetch(*args, **kwargs)
+        if product is not None:
+            observed.append((product, copy.deepcopy(product)))
+        return product
+
+    monkeypatch.setattr(exporter, 'iter_staged_products', rows)
+    monkeypatch.setattr(exporter, 'fetch_staged_product', fetch)
+    counts = collections.Counter()
+    original = contract._build_scoring_ingredients
+
+    def build(product, *args, **kwargs):
+        counts[str(product.get('dsld_id'))] += 1
+        before = copy.deepcopy(product)
+        result = original(product, *args, **kwargs)
+        assert product == before
+        return result
+
+    monkeypatch.setattr(contract, '_build_scoring_ingredients', build)
+    enriched = [make_enriched(), make_enriched()]
+    scored = [make_scored(), make_scored()]
+    enriched[0]['dsld_id'] = scored[0]['dsld_id'] = '999'
+    enriched[1]['dsld_id'] = scored[1]['dsld_id'] = '1000'
+    before = copy.deepcopy((enriched, scored))
+    result, output = _run_build(tmp_path, enriched, scored)
+    assert result['product_count'] == 2
+    assert result['error_count'] == 0
+    assert counts == {'999': 1, '1000': 1}
+    assert (enriched, scored) == before
+    assert len(observed) == 4
+    assert all(product == baseline for product, baseline in observed)
+    # The production loop must reset its ContextVar before a new caller.
+    assert contract._ACTIVE_SCORING_INPUT_SCOPE.get() is None
+
+
+def test_export_scope_matches_uncached_blob_and_core(tmp_path, monkeypatch):
+    from contextlib import nullcontext
+    import importlib
+    from copy import deepcopy
+    exporter = importlib.import_module('build_final_db')
+    enriched, scored = make_enriched(), make_scored()
+    scored['dsld_id'] = enriched['dsld_id']
+    source = deepcopy((enriched, scored))
+    scoped_root, plain_root = tmp_path / 'scoped', tmp_path / 'plain'
+    scoped_root.mkdir(); plain_root.mkdir()
+    _, scoped = _run_build(scoped_root, [enriched], [scored])
+    monkeypatch.setattr(exporter, 'scoring_input_scope', lambda _: nullcontext())
+    _, plain = _run_build(plain_root, [enriched], [scored])
+    assert json.loads((scoped / 'detail_blobs' / '999.json').read_text()) == json.loads(
+        (plain / 'detail_blobs' / '999.json').read_text())
+    snapshots = []
+    for output in (scoped, plain):
+        with sqlite3.connect(output / 'pharmaguide_core.db') as conn:
+            conn.row_factory = sqlite3.Row
+            row = dict(conn.execute('SELECT * FROM products_core').fetchone())
+            row.pop('exported_at', None)
+            snapshots.append(row)
+    assert snapshots[0] == snapshots[1]
+    assert (enriched, scored) == source

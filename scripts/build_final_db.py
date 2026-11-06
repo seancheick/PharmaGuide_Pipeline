@@ -102,6 +102,7 @@ from scoring_input_contract import (
     active_label_rows,
     dose_disclosure_status,
     get_scoring_ingredients,
+    scoring_input_scope,
 )
 from serving_frequency import (
     select_canonical_serving,
@@ -11577,124 +11578,124 @@ def build_final_db(
         enriched_only_samples: List[str] = []
 
         for pid, enriched in iter_staged_products(stage_conn, "enriched_stage"):
-            scored = fetch_staged_product(stage_conn, "scored_stage", pid)
-            if scored is None:
-                audit_counts["enriched_only"] += 1
-                if len(enriched_only_samples) < 5:
-                    enriched_only_samples.append(pid)
-                continue
+            with scoring_input_scope(enriched):
+                scored = fetch_staged_product(stage_conn, "scored_stage", pid)
+                if scored is None:
+                    audit_counts["enriched_only"] += 1
+                    if len(enriched_only_samples) < 5:
+                        enriched_only_samples.append(pid)
+                    continue
 
-            mark_staged_product_matched(stage_conn, "scored_stage", pid)
+                mark_staged_product_matched(stage_conn, "scored_stage", pid)
 
-            blob_path = os.path.join(detail_dir, f"{pid}.json")
-            tmp_blob_path = f"{blob_path}.tmp"
-            contract_error_bucket = None
-            try:
-                # Quarantine is decided from the source contract, before
-                # constructing a consumer blob that requires resolved rows.
-                contract_issues = validate_export_contract(enriched, scored)
-                (
-                    products_with_warnings_count,
-                    contract_quarantine_count,
-                    contract_failure_count,
-                ) = update_audit_state(
-                    audit_counts,
-                    products_with_warnings_sample,
-                    contract_quarantines,
-                    contract_failures,
-                    products_with_warnings_count,
-                    contract_quarantine_count,
-                    contract_failure_count,
-                    pid,
-                    enriched,
-                    scored,
-                    contract_issues=contract_issues,
-                )
-                if contract_issues:
-                    contract_error_bucket = _classify_export_contract_issues(contract_issues, scored=scored)
-                    raise ValueError("; ".join(contract_issues[:10]))
-                blob = (
-                    build_detail_blob(enriched, scored)
-                    if export_schema_version == EXPORT_SCHEMA_VERSION
-                    else build_detail_blob(
+                blob_path = os.path.join(detail_dir, f"{pid}.json")
+                tmp_blob_path = f"{blob_path}.tmp"
+                contract_error_bucket = None
+                try:
+                    # Quarantine is decided from the source contract, before
+                    # constructing a consumer blob that requires resolved rows.
+                    contract_issues = validate_export_contract(enriched, scored)
+                    (
+                        products_with_warnings_count,
+                        contract_quarantine_count,
+                        contract_failure_count,
+                    ) = update_audit_state(
+                        audit_counts,
+                        products_with_warnings_sample,
+                        contract_quarantines,
+                        contract_failures,
+                        products_with_warnings_count,
+                        contract_quarantine_count,
+                        contract_failure_count,
+                        pid,
                         enriched,
                         scored,
+                        contract_issues=contract_issues,
+                    )
+                    if contract_issues:
+                        contract_error_bucket = _classify_export_contract_issues(contract_issues, scored=scored)
+                        raise ValueError("; ".join(contract_issues[:10]))
+                    blob = (
+                        build_detail_blob(enriched, scored)
+                        if export_schema_version == EXPORT_SCHEMA_VERSION
+                        else build_detail_blob(
+                            enriched,
+                            scored,
+                            export_schema_version=export_schema_version,
+                        )
+                    )
+                    # build_core_row validates safety parity before any write.
+                    blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
+                    blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
+                    full_row = build_core_row(
+                        enriched,
+                        scored,
+                        exported_at,
+                        detail_blob_sha256=blob_sha256,
+                        detail_blob=blob,
                         export_schema_version=export_schema_version,
                     )
-                )
-                # This asserts safety parity; it never rewrites Stage 3.
-                project_export_scored_artifact(enriched, scored, blob)
-                blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
-                blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
-                full_row = build_core_row(
-                    enriched,
-                    scored,
-                    exported_at,
-                    detail_blob_sha256=blob_sha256,
-                    detail_blob=blob,
-                    export_schema_version=export_schema_version,
-                )
-                full_row_by_name = dict(zip(PRODUCTS_CORE_COLUMNS, full_row))
-                row = tuple(full_row_by_name[column] for column in core_columns)
-                if len(row) != expected_core_column_count:
-                    logger.error(
-                        "Product %s: row has %d columns, expected %d",
-                        pid,
-                        len(row),
-                        expected_core_column_count,
-                    )
-                    errors += 1
-                    error_details.append({
-                        "dsld_id": str(pid),
-                        "error": (
-                            f"row has {len(row)} columns, expected "
-                            f"{expected_core_column_count}"
-                        ),
-                    })
-                    continue
-                with open(tmp_blob_path, "w", encoding="utf-8") as f:
-                    f.write(blob_json)
-                c.execute(insert_sql, row)
-                os.replace(tmp_blob_path, blob_path)
-                detail_index[str(pid)] = {
-                    "blob_sha256": blob_sha256,
-                    "storage_path": remote_blob_storage_path(blob_sha256),
-                    "blob_version": int(blob.get("blob_version", 1)),
-                }
-                unique_blob_hashes.add(blob_sha256)
+                    full_row_by_name = dict(zip(PRODUCTS_CORE_COLUMNS, full_row))
+                    row = tuple(full_row_by_name[column] for column in core_columns)
+                    if len(row) != expected_core_column_count:
+                        logger.error(
+                            "Product %s: row has %d columns, expected %d",
+                            pid,
+                            len(row),
+                            expected_core_column_count,
+                        )
+                        errors += 1
+                        error_details.append({
+                            "dsld_id": str(pid),
+                            "error": (
+                                f"row has {len(row)} columns, expected "
+                                f"{expected_core_column_count}"
+                            ),
+                        })
+                        continue
+                    with open(tmp_blob_path, "w", encoding="utf-8") as f:
+                        f.write(blob_json)
+                    c.execute(insert_sql, row)
+                    os.replace(tmp_blob_path, blob_path)
+                    detail_index[str(pid)] = {
+                        "blob_sha256": blob_sha256,
+                        "storage_path": remote_blob_storage_path(blob_sha256),
+                        "blob_version": int(blob.get("blob_version", 1)),
+                    }
+                    unique_blob_hashes.add(blob_sha256)
 
-                inserted += 1
-                since_commit += 1
-                if since_commit >= EXPORT_COMMIT_EVERY:
-                    conn.commit()
-                    since_commit = 0
-            except Exception as e:
-                if os.path.exists(tmp_blob_path):
-                    os.remove(tmp_blob_path)
-                if os.path.exists(blob_path):
-                    os.remove(blob_path)
-                c.execute("DELETE FROM products_core WHERE dsld_id = ?", (str(pid),))
-                msg = str(e)
-                bucket = contract_error_bucket or _classify_export_error(msg, scored=scored)
-                entry = {"dsld_id": str(pid), "error": msg}
-                if bucket == "excluded_by_gate":
-                    # By-design coverage gate (E1.2.5). Product correctly
-                    # excluded; pipeline is working as intended.
-                    logger.warning("Product %s excluded by gate: %s", pid, msg)
-                    excluded_by_gate_count += 1
-                    excluded_by_gate_details.append(entry)
-                elif bucket == "warning":
-                    # Content-quality issue (tone authoring backlog).
-                    # Product excluded but flagged for Dr Pham, not a bug.
-                    logger.warning("Product %s quality warning: %s", pid, msg)
-                    export_warning_count += 1
-                    export_warning_details.append(entry)
-                else:
-                    # Catastrophic — schema drift, unknown enum leak, etc.
-                    # BLOCKS the Supabase sync gate. Must be fixed.
-                    logger.error("Product %s failed: %s", pid, e, exc_info=True)
-                    errors += 1
-                    error_details.append(entry)
+                    inserted += 1
+                    since_commit += 1
+                    if since_commit >= EXPORT_COMMIT_EVERY:
+                        conn.commit()
+                        since_commit = 0
+                except Exception as e:
+                    if os.path.exists(tmp_blob_path):
+                        os.remove(tmp_blob_path)
+                    if os.path.exists(blob_path):
+                        os.remove(blob_path)
+                    c.execute("DELETE FROM products_core WHERE dsld_id = ?", (str(pid),))
+                    msg = str(e)
+                    bucket = contract_error_bucket or _classify_export_error(msg, scored=scored)
+                    entry = {"dsld_id": str(pid), "error": msg}
+                    if bucket == "excluded_by_gate":
+                        # By-design coverage gate (E1.2.5). Product correctly
+                        # excluded; pipeline is working as intended.
+                        logger.warning("Product %s excluded by gate: %s", pid, msg)
+                        excluded_by_gate_count += 1
+                        excluded_by_gate_details.append(entry)
+                    elif bucket == "warning":
+                        # Content-quality issue (tone authoring backlog).
+                        # Product excluded but flagged for Dr Pham, not a bug.
+                        logger.warning("Product %s quality warning: %s", pid, msg)
+                        export_warning_count += 1
+                        export_warning_details.append(entry)
+                    else:
+                        # Catastrophic — schema drift, unknown enum leak, etc.
+                        # BLOCKS the Supabase sync gate. Must be fixed.
+                        logger.error("Product %s failed: %s", pid, e, exc_info=True)
+                        errors += 1
+                        error_details.append(entry)
 
         scored_only_rows = stage_conn.execute(
             "SELECT dsld_id FROM scored_stage WHERE matched = 0 ORDER BY dsld_id LIMIT 5"
