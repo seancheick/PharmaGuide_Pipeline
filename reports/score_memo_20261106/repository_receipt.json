@@ -191,7 +191,7 @@
     "fix": "failure-only parent reference validation after worker resources closed; state reset; original exceptions preserved",
     "checks": "50 affected checks plus new lifecycle regression; independent three-node check and ordering/exception probes pass",
     "prior_local": "564 passed,24 declared opt-in skips,strict guard passed154.09s before final resource-close ordering fix",
-    "final_local": "pending",
+    "final_local": "564 passed,24 declared opt-in skips,strict guard passed156.55s",
     "first_ci": {
       "run": 42302033849,
       "head": "93d99141e",
@@ -241,5 +241,21 @@
     "logical_bytes": 16861111164,
     "all_source_and_copy_sha256_equal": true,
     "private_manifest": "COMPLETED_RUN_PRESERVATION.json"
+  },
+  "performance_pr": {
+    "number": 406,
+    "qualified_head": "60eefc7a0b119a115643daa23d2a6f8801309f0c",
+    "merge": "2247ee982ef886256d4f825ad0e8acc2d4e08de7",
+    "ci_run": 42305303387,
+    "all8_shards_and_readiness": "passed",
+    "merge_tree_equals_qualified_tree": true,
+    "original_primary_hashes_preserved_after_fast_forward": true
+  },
+  "test_only_followup": {
+    "cases": 4,
+    "file_checks": 9,
+    "independent_field_removal_checks": 12,
+    "production_unchanged": true,
+    "qualification": "separate linked follow-up PR"
   }
 }
