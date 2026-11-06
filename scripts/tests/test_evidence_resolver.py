@@ -2372,3 +2372,21 @@ def test_evidence_subject_roles_reuse_module_context_without_sharing_rows(monkey
     assert product == before
     assert evidence_resolver._evidence_subject_roles(product, module) == expected
     assert calls == [module, other_module, module]
+
+
+@pytest.mark.parametrize("fixture_index", [0, 1])
+def test_complex_evidence_scoped_artifact_matches_uncached_pass(fixture_index):
+    from copy import deepcopy
+    import json
+    from scoring_v4 import scored_artifact
+
+    product = json.loads((Path(__file__).parent / "fixtures/stress_gut_evidence_enriched.json").read_text())[fixture_index]
+    before = deepcopy(product)
+    uncached = scored_artifact.assemble_scored_artifact(
+        product, scored_artifact.score_product_v4(product),
+    )
+    scoped = scored_artifact.build_scored_artifact(product)
+    for artifact in (uncached, scoped):
+        artifact["scoring_metadata"].pop("scored_date", None)
+    assert scoped == uncached
+    assert product == before
