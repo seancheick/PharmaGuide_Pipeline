@@ -35,3 +35,7 @@ Identical therapeutic/botanical indexes now share their owner (about0.568MiB of 
 Legacy report restoration verifies existing schemas, counts and owned outputs; it does not invent cryptographic provenance for old reports. Completed-run state/manifests and20 untracked user files remain unchanged. Full candidate CI, final fingerprint-selected nonpublishing regeneration, catalog/alert/signature checks and installed final-catalog acceptance are separate remaining gates in the LEDGER.
 
 Machine-readable source bindings, original benchmark flags and qualification limits: [repository_receipt.json](repository_receipt.json).
+
+The first PR406 qualification run caught one failure: removing redundant reporting initialization also removed parent reference validation after a broken worker initializer. The existing regression reproduced locally and passes after restoring validation only on that failure path. All seven other shards passed. Corrected candidate CI remains required. Fifty fail-closed/lifecycle checks pass.
+
+The existing synthetic100,000-input mechanics harness passed in576.70 seconds: all three stages retain100,000 records; selection, deterministic merge, failed-only retry, byte-exact rollback, interruption recovery and corrupt-artifact refusal pass. Clinical producers and coverage gates are simulated, so this is mechanics scaling evidence only.
