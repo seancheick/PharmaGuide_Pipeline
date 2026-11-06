@@ -1464,22 +1464,16 @@ def test_current_snapshot_shares_reference_capture_and_rechecks_bytes(tmp_path, 
         entry.parent.mkdir(parents=True, exist_ok=True)
         entry.write_text('pass\n')
     counts = {'reads': 0}
-    original_read = Path.read_bytes
     original_open = Path.open
 
-    def read_bytes(path):
-        if path == reference:
-            counts['reads'] += 1
-        return original_read(path)
-
     def open_file(path, *args, **kwargs):
-        if path == reference and args and args[0] == 'rb':
+        mode = args[0] if args else kwargs.get('mode', 'r')
+        if path == reference and mode == 'rb':
             counts['reads'] += 1
         return original_open(path, *args, **kwargs)
 
-    # read_bytes uses io.open directly; count its call and the independent
-    # streaming verification, not implementation details of code hashing.
-    monkeypatch.setattr(Path, 'read_bytes', read_bytes)
+    # Count actual binary opens for capture and independent verification;
+    # read_bytes passes mode by keyword while the streaming reader is positional.
     monkeypatch.setattr(Path, 'open', open_file)
     result = mod.current_snapshot(tmp_path)
     assert counts['reads'] == 2
