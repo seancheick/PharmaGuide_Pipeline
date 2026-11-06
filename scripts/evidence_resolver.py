@@ -493,6 +493,13 @@ def clinical_record_sources_eligible(entry: Mapping[str, Any], *, context=None, 
         from probiotic_measurements import context_accepted_for_scoring
         if not context_accepted_for_scoring(context):
             return False
+        # Approval/provenance cannot override the existing scientific contract.
+        from clinical_evidence_schema import validate_frozen_context, validate_ingredient_context
+        validate = (validate_frozen_context
+                    if context.get("identity_scope") in {"exact_strain", "species_general"}
+                    else validate_ingredient_context)
+        if validate(context, require_complete_review=True):
+            return False
         declared = {str(pmid) for pmid in entry.get("published_studies") or []
                     if re.fullmatch(r"[1-9][0-9]*", str(pmid))}
         declared.update(str(ref["pmid"]) for ref in references

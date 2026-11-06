@@ -2177,3 +2177,23 @@ def test_panel_citations_cover_only_resolved_expected_rows():
         row_key=lambda row: row['canonical_id'])
     assert result['source_references']
     assert all('VitaminC' in ref['url'] for ref in result['source_references'])
+
+
+@pytest.mark.parametrize('invalid', ['unknown_human', 'ambiguous_human', 'nonhuman',
+    'retracted', 'expression_of_concern', 'missing_dose', 'unresolved_outcome'])
+def test_source_eligibility_cannot_override_existing_complete_context_schema(monkeypatch, invalid):
+    import clinical_applicability as ca
+    from clinical_evidence_schema import validate_ingredient_context
+    record = _approved_test_source({'id': 'TEST_COMPLETE_SOURCE_SCHEMA',
+        'study_type': 'rct_single', 'evidence_level': 'ingredient-human'})
+    context = record['study_contexts'][0]
+    if invalid == 'unknown_human': context['human_status'] = 'unknown'
+    elif invalid == 'ambiguous_human': context['human_status'] = 'ambiguous'
+    elif invalid == 'nonhuman': context['human_status'] = 'nonhuman'
+    elif invalid in {'retracted', 'expression_of_concern'}: context['source_integrity'] = invalid
+    elif invalid == 'missing_dose': context['dose'].pop('values')
+    elif invalid == 'unresolved_outcome': context['outcomes'][0]['hierarchy'] = 'unresolved'
+    assert validate_ingredient_context(context, require_complete_review=True)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {record['id']: record})
+    assert er.clinical_record_sources_eligible(record, context=context) is False
+    assert er.clinical_record_sources_eligible(record) is False
