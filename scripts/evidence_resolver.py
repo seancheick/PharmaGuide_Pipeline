@@ -1242,7 +1242,6 @@ def _resolve_evidence_for_row(
                 (decision.get("status") == "not_applicable"
                  and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
                 or (is_reference_only(study)
-                    and study.get("scoring_eligible") is not False
                     and assess_clinical_source_review(study)["is_complete"])
                 for study, decision in zip(deduped_studies, scope_decisions)
             )

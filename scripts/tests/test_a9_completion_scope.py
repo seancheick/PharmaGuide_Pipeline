@@ -419,9 +419,12 @@ def test_a_hidden_amount_a_safety_check_needs_holds_both_statuses(pipeline, labe
     assert scored["safety_assessment_status"] == "incomplete"
     assert SAFETY_OPEN in _release_blockers(scored)
     if subject == "boron":
-        # The undisclosed member retains its separate clinical source hold.
-        assert "evidence_assessment_incomplete" in _release_blockers(scored)
-        assert any(row["canonical_id"] == "boron" and row["reason_code"] == "clinical_sources_ineligible"
+        # Finished source review cannot supply the undisclosed safety amount.
+        assert QUALITY_OPEN in _release_blockers(scored)
+        assert "evidence_assessment_incomplete" not in _release_blockers(scored)
+        assert any(row["canonical_id"] == "boron"
+                   and row["reason_code"] == "reference_only_clinical_record"
+                   and row["state"] == "evaluated_limited_or_negative"
                    for row in scored["assessment_readiness"]["evidence"]["ingredient_assessments"])
     else:
         assert not any(blocker.startswith("evidence_") for blocker in _release_blockers(scored))
