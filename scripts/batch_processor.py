@@ -970,12 +970,20 @@ class BatchProcessor:
             self._worker_resources = resources
             self._worker_count = None
             self._worker_pool = None
+            self._worker_reference_check_required = False
             try:
                 yield
+                if self._worker_reference_check_required:
+                    # A broken initializer may hide an unusable shared reference.
+                    # Recheck only this failure path in the parent before reports
+                    # or a stage manifest can claim a completed invocation.
+                    resources.close()
+                    EnhancedDSLDNormalizer()
             finally:
                 self._worker_resources = None
                 self._worker_count = None
                 self._worker_pool = None
+                self._worker_reference_check_required = False
 
     @contextmanager
     def _batch_workers(self, count):
@@ -1153,6 +1161,7 @@ class BatchProcessor:
                     except Exception as e:
                         if isinstance(e, BrokenProcessPool):
                             self._worker_count = None
+                            self._worker_reference_check_required = True
                         error_msg = f"Failed to process {file_path}: {str(e)}"
                         errors.append(error_msg)
                         batch_logger.error(error_msg)

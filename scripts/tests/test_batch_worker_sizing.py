@@ -334,3 +334,27 @@ def test_real_multibatch_reuse_preserves_products_and_reports(tmp_path, workers)
         return products, reports
 
     assert capture(tmp_path / "fresh_each_batch", False) == capture(tmp_path / "reused", True)
+
+
+def test_broken_worker_reference_recheck_releases_budget_and_resets_state(tmp_path, monkeypatch):
+    import batch_processor as bp
+
+    processor = BatchProcessor(_cfg(tmp_path))
+    events = []
+
+    def verify_references():
+        events.append("validate")
+        assert events == ["workers_closed", "validate"]
+        raise RuntimeError("unusable unit conversions")
+
+    monkeypatch.setattr(bp, "EnhancedDSLDNormalizer", verify_references)
+    with pytest.raises(RuntimeError, match="unit conversions"):
+        with processor._worker_session():
+            processor._worker_resources.callback(events.append, "workers_closed")
+            processor._worker_reference_check_required = True
+    assert processor._worker_resources is None
+    assert processor._worker_reference_check_required is False
+    # A subsequent healthy invocation must not repeat the failed-session check.
+    with processor._worker_session():
+        pass
+    assert events == ["workers_closed", "validate"]
