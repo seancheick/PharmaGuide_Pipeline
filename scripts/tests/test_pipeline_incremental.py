@@ -122,8 +122,23 @@ def test_recovery_restores_previous_generation(tmp_path):
     assert not journal.exists()
 
 
-def test_real_incremental_raw_edit_matches_full_rebuild(tmp_path):
+def _pin_comparison_dates(monkeypatch):
+    """Keep equivalence comparisons on their start date; retain live source hashes."""
+    from datetime import date, datetime, timezone
+    import pipeline_incremental as incremental
+    original = incremental.current_snapshot
+    dates = {"evaluation_date": datetime.now(timezone.utc).date().isoformat(),
+             "evaluation_local_date": date.today().isoformat()}
+
+    def snapshot(repo):
+        return {**original(repo), **dates}
+
+    monkeypatch.setattr(incremental, "current_snapshot", snapshot)
+
+
+def test_real_incremental_raw_edit_matches_full_rebuild(tmp_path, monkeypatch):
     """Normal runner entrypoints, same real labels, full stage-record comparison."""
+    _pin_comparison_dates(monkeypatch)
     from pathlib import Path
     from run_pipeline import PipelineRunner
     from pipeline_incremental import run_incremental, stage_directories, stage_products
@@ -1089,7 +1104,8 @@ def test_incremental_cli_reports_unchanged_held_inputs(monkeypatch, capsys, tmp_
     assert output['held_clean_inputs']['incomplete'] == ['312659']
 
 
-def test_real_null_ingredients_hold_transitions_match_full_rebuild(tmp_path):
+def test_real_null_ingredients_hold_transitions_match_full_rebuild(tmp_path, monkeypatch):
+    _pin_comparison_dates(monkeypatch)
     from pathlib import Path
     from run_pipeline import PipelineRunner
     from pipeline_incremental import run_incremental, stage_directories, stage_products
@@ -1300,3 +1316,44 @@ def test_incremental_clean_global_below_threshold_retains_generation(tmp_path, m
     with pytest.raises(mod.StageManifestError, match='success rate|Success rate|95'):
         mod.run_incremental(runner, raw, prefix)
     assert all(path.read_bytes() == data for path, data in before.items())
+
+
+@pytest.mark.parametrize('clock_field', ['evaluation_date', 'evaluation_local_date'])
+def test_clock_rollover_during_execution_refuses_promotion(tmp_path, monkeypatch, clock_field):
+    mod, runner, raw, prefix, _, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    snapshot[clock_field] = '2026-11-05'
+    # Bind the baseline to the start date before attempting changed input work.
+    mod.run_incremental(runner, raw, prefix)
+    before = {path: path.read_bytes() for directory in (prefix, *mod.stage_directories(prefix)[1:])
+              for path in directory.rglob('*') if path.is_file()}
+    original = runner.run_enrich
+    def rollover(*args, **kwargs):
+        snapshot[clock_field] = '2026-11-06'
+        return original(*args, **kwargs)
+    monkeypatch.setattr(runner, 'run_enrich', rollover)
+    (raw / '1.json').write_text(json.dumps({'id': '1', 'dose': 30}))
+    with pytest.raises(mod.StageManifestError, match='Inputs changed during incremental execution'):
+        mod.run_incremental(runner, raw, prefix)
+    assert all(path.read_bytes() == contents for path, contents in before.items())
+
+
+def test_comparison_date_pin_preserves_live_source_changes(monkeypatch):
+    import pipeline_incremental as incremental
+    source = {'stages': {'clean': {'code': 'before'}}, 'references': {'entry': 'before'},
+              'evaluation_date': '2026-11-05', 'evaluation_local_date': '2026-11-05'}
+    calls = []
+    def real_snapshot(repo):
+        calls.append(repo)
+        return deepcopy(source)
+    monkeypatch.setattr(incremental, 'current_snapshot', real_snapshot)
+    _pin_comparison_dates(monkeypatch)
+    first = incremental.current_snapshot('repo')
+    source['stages']['clean']['code'] = 'after'
+    source['references']['entry'] = 'after'
+    source['evaluation_date'] = source['evaluation_local_date'] = '2026-11-06'
+    second = incremental.current_snapshot('repo')
+    assert calls == ['repo', 'repo']
+    assert first['stages'] != second['stages']
+    assert first['references'] != second['references']
+    for field in ('evaluation_date', 'evaluation_local_date'):
+        assert first[field] == second[field]
