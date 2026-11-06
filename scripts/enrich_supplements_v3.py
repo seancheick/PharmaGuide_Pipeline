@@ -16442,6 +16442,15 @@ class SupplementEnricherV3:
             right_unit = str(right.get("unit") or "").strip().lower()
             return not left_unit or not right_unit or left_unit == right_unit
 
+        quality_rows_by_key: Dict[str, set[int]] = {}
+        for index, row in enumerate(quality_rows):
+            if str(row.get("source_section") or "active").lower() != "active":
+                continue
+            for key in _identity_key_values(
+                row, ("name", "standard_name", "raw_source_text", "original_label")
+            ):
+                quality_rows_by_key.setdefault(key, set()).add(index)
+
         def _quality_rows_for_ingredient(ingredient: Dict) -> List[Dict]:
             ingredient_keys = _identity_key_values(
                 ingredient,
@@ -16450,17 +16459,13 @@ class SupplementEnricherV3:
             if not ingredient_keys:
                 return []
 
-            rows: List[Dict] = []
-            for row in quality_rows:
-                if str(row.get("source_section") or "active").lower() != "active":
-                    continue
-                row_keys = _identity_key_values(
-                    row,
-                    ("name", "standard_name", "raw_source_text", "original_label"),
-                )
-                if ingredient_keys.intersection(row_keys) and _same_quantity_unit(ingredient, row):
-                    rows.append(row)
-            return rows
+            indexes = set()
+            for key in ingredient_keys:
+                indexes.update(quality_rows_by_key.get(key, ()))
+            # Several aliases may reach one row, while separate same-name rows
+            # retain their original order and independent quantity checks.
+            return [quality_rows[index] for index in sorted(indexes)
+                    if _same_quantity_unit(ingredient, quality_rows[index])]
 
         def _clinical_form_candidates(ingredient: Dict, quality_matches: List[Dict]) -> List[str]:
             """Structured form labels can carry the clinical product identity.
