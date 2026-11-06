@@ -279,7 +279,7 @@ class PipelineRunner:
             logger.info('STAGE TIMING: %s | elapsed %.3fs', script_name,
                         time.monotonic() - started)
 
-    def run_clean(self, raw_dir: str, output_dir: str, dry_run: bool = False) -> bool:
+    def run_clean(self, raw_dir: str, output_dir: str, dry_run: bool = False, *, incremental_worker: bool = False) -> bool:
         """
         Stage 1: Clean raw DSLD data
 
@@ -297,6 +297,9 @@ class PipelineRunner:
             "--input-dir", raw_dir,
             "--output-dir", output_dir
         ]
+
+        if incremental_worker:
+            args.append("--incremental-worker")
 
         # Add config if exists
         config_path = self.script_dir / config_file
@@ -757,12 +760,17 @@ class PipelineRunner:
                     return results
             if strict_release_gates and not dry_run:
                 try:
-                    select_stage_input_files(
+                    clean_inputs = select_stage_input_files(
                         Path(enrich_input),
                         "clean",
                         require_manifest=True,
-                        patterns=("*.json",),
+                        patterns=("*.json", "*.jsonl"),
                     )
+                    if any(path.suffix == ".jsonl" for path in clean_inputs):
+                        raise StageManifestError(
+                            "JSONL Clean inputs are not supported by strict full enrichment; "
+                            "rebuild Clean with the default JSON output configuration"
+                        )
                 except StageManifestError as exc:
                     results["stages_failed"].append("clean_stage_ownership")
                     logger.error("Cleaning ownership manifest failed: %s", exc)
@@ -1058,6 +1066,8 @@ Pipeline Flow:
                 print(json.dumps({
                     "rebuilt": {stage: len(ids) for stage, ids in result["stages"].items()},
                     "deleted": len(result["deleted"]), "reasons": result["reasons"],
+                    "held_clean_inputs": result.get("held_clean_inputs", {}),
+                    "held_clean_counts": {name: len(ids) for name, ids in result.get("held_clean_inputs", {}).items()},
                 }, indent=2))
         sys.exit(0)
 

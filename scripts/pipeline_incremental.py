@@ -52,8 +52,9 @@ def raw_products(directory, *, include_paths=False):
 def stage_products(directory, stage):
     rows = {}
     for path in select_stage_input_files(directory, stage, require_manifest=True,
-                                        patterns=("*.json",)):
-        payload = json.loads(path.read_text())
+                                        patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",)):
+        payload = ([json.loads(line) for line in path.read_text(encoding="utf-8").split("\n") if line.strip()]
+                   if path.suffix == ".jsonl" else json.loads(path.read_text()))
         if not isinstance(payload, list):
             raise StageManifestError(f"Expected product array: {path}")
         for product in payload:
@@ -63,6 +64,77 @@ def stage_products(directory, stage):
             rows[identifier] = product
     return rows
 
+
+
+_CLEAN_HOLD_DIRECTORIES = ("incomplete", "needs_review", "errors")
+
+
+def clean_hold_outputs(root, *, expected=None, input_paths=None):
+    """Read existing cleaner dispositions through manifest ownership, never logs.
+
+    A new isolated run may bind per-item errors to its exact captured input
+    paths. Reuse instead needs the prior state-bound receipt digest; a legacy
+    error filename alone never establishes which input failed.
+    """
+    holds = {name: {} for name in _CLEAN_HOLD_DIRECTORIES}
+    input_ids = {}
+    for pid, source in (input_paths or {}).items():
+        input_ids.setdefault((source.resolve(), source.stem + "_error.json"), []).append(pid)
+    expected_ids = {}
+    for pid, checksum in (expected or {}).get("errors", {}).items():
+        expected_ids.setdefault(checksum, []).append(pid)
+    for name in holds:
+        directory = root / name
+        files = sorted(directory.glob("*.json")) + sorted(directory.glob("*.jsonl"))
+        if not files and not (directory / MANIFEST_NAME).exists():
+            continue
+        if (input_paths is None and not (expected or {}).get(name)
+                and not (directory / MANIFEST_NAME).exists()):
+            continue  # Unowned historical sidecars are archived, never adopted as holds.
+        if input_paths is not None:
+            write_stage_manifest_from_directory(directory, "clean", patterns=("*.json", "*.jsonl"))
+        if name != "errors":
+            holds[name] = stage_products(directory, "clean")
+            continue
+        for path in select_stage_input_files(directory, "clean", require_manifest=True):
+            receipt = json.loads(path.read_text())
+            if (not isinstance(receipt, dict) or any(not isinstance(receipt.get(key), str)
+                    or not receipt[key] for key in ("original_file", "error_type", "error_message", "processing_stage"))):
+                raise StageManifestError("Malformed per-item Clean error receipt")
+            if input_paths is not None:
+                matches = input_ids.get((Path(receipt["original_file"]).resolve(), path.name), [])
+            else:
+                matches = expected_ids.get(digest(receipt), [])
+            if len(matches) != 1 or matches[0] in holds[name]:
+                raise StageManifestError("Unbound or duplicate per-item Clean error receipt")
+            holds[name][matches[0]] = receipt
+    ids = [pid for rows in holds.values() for pid in rows]
+    if len(ids) != len(set(ids)):
+        raise StageManifestError("Duplicate Clean hold product ID across dispositions")
+    return holds
+
+
+def clean_hold_hashes(holds):
+    return {name: {pid: digest(row) for pid, row in rows.items()} for name, rows in holds.items()}
+
+
+def write_clean_holds(root, holds, fingerprints):
+    """Retain current full hold reports and bind them to the same generation."""
+    for name, rows in holds.items():
+        if not rows:
+            continue
+        directory = root / name
+        directory.mkdir(parents=True)
+        if name == "errors":
+            for row in rows.values():
+                path = directory / (Path(row["original_file"]).stem + "_error.json")
+                if path.exists():
+                    raise StageManifestError("Clean error receipt filename collision")
+                path.write_text(json.dumps(row, ensure_ascii=False))
+        else:
+            (directory / (name + "_batch_incremental.json")).write_text(
+                json.dumps(list(rows.values()), ensure_ascii=False))
+        write_stage_manifest_from_directory(directory, "clean", input_fingerprints=fingerprints)
 
 def reference_identifiers(value, *, keys=None, visit=None):
     """IDs in emitted or curated records, including rejected/list/context refs."""
@@ -353,14 +425,17 @@ def materialize_merged(original, candidate, stage, merged):
         (candidate / "incremental_empty.json").write_text("[]")
         return
     remaining = dict(merged)
-    for path in select_stage_input_files(original, stage, require_manifest=True):
-        prior = json.loads(path.read_text())
+    for path in select_stage_input_files(original, stage, require_manifest=True,
+            patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",)):
+        prior = ([json.loads(line) for line in path.read_text(encoding="utf-8").split("\n") if line.strip()]
+                 if path.suffix == ".jsonl" else json.loads(path.read_text()))
         kept = [remaining.pop(product_id(row)) for row in prior if product_id(row) in remaining]
         destination = candidate / path.name
         if kept == prior:
             shutil.copy2(path, destination)
         elif kept:
-            destination.write_text(json.dumps(kept, ensure_ascii=False))
+            destination.write_text("\n".join(json.dumps(row, ensure_ascii=False) for row in kept) + "\n"
+                                   if path.suffix == ".jsonl" else json.dumps(kept, ensure_ascii=False))
     if remaining:
         name = "incremental_new_products.json"
         destination = candidate / name
@@ -542,7 +617,7 @@ def verified_bootstrap_source(repo, baseline_repo, directories, raw_dir):
         "Supply the exact --baseline-revision or complete one full build.")
 
 
-def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
+def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fresh_clean_inputs=None):
     state_path = prefix / ".incremental_state.json"
     recovery = prefix.parent / ("." + prefix.name + ".incremental-recovery.json")
     if recovery.exists():
@@ -581,7 +656,15 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
                                          strict_release_gates=True)
             if not result["success"]:
                 raise StageManifestError("Initial dataset build failed")
-            _run_locked(runner, repo, raw_dir, candidate_prefix, False, None)
+            verified = _run_locked(runner, repo, raw_dir, candidate_prefix, False, None,
+                fresh_clean_inputs={pid: raw_dir / raw_names[pid] for pid in raw})
+            plan["held_clean_inputs"] = verified.get("held_clean_inputs", {})
+            plan["reasons"].extend(verified["reasons"])
+            if any(plan["held_clean_inputs"].values()):
+                plan["reasons"].append("Clean held inputs: " + json.dumps(plan["held_clean_inputs"], sort_keys=True))
+            for stage, directory in zip(STAGES, stage_directories(candidate_prefix)):
+                if stage != "clean":
+                    plan["stages"][stage] = sorted(stage_products(directory, stage))
             if (digest(current_snapshot(repo)) != digest(current)
                     or stage_data_fingerprint(stage_data_files(raw_dir)) != raw_binding):
                 raise StageManifestError("Inputs changed during initial incremental build")
@@ -616,6 +699,26 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
             stage: json.loads((directory / MANIFEST_NAME).read_text())["input_fingerprints"][DATA_FINGERPRINT_KEY]
             for stage, directory in zip(STAGES, directories)
         }
+    clean_holds = {name: {} for name in _CLEAN_HOLD_DIRECTORIES}
+    if "clean_holds" in old:
+        clean_holds = clean_hold_outputs(prefix, expected=old["clean_holds"])
+        if clean_hold_hashes(clean_holds) != old["clean_holds"]:
+            raise StageManifestError("Clean hold reports differ from the verified generation")
+        expected = {**old["stages"]["clean"], DATA_FINGERPRINT_KEY: old["inputs"]["clean"],
+                    "incremental_state_sha256": digest(old)}
+        for name, rows in clean_holds.items():
+            if rows and json.loads((prefix / name / MANIFEST_NAME).read_text()).get("input_fingerprints") != expected:
+                raise StageManifestError("Clean hold provenance differs from the verified generation")
+        held = {pid for rows in clean_holds.values() for pid in rows}
+        if held & set(products["clean"]) or held | set(products["clean"]) != set(old["raw"]):
+            raise StageManifestError("Clean successful/held input inventory is inconsistent")
+    if fresh_clean_inputs is not None:
+        if state_path.exists():
+            raise StageManifestError("Fresh Clean proof cannot replace an existing generation")
+        clean_holds = clean_hold_outputs(prefix, input_paths=fresh_clean_inputs)
+        held = {pid for rows in clean_holds.values() for pid in rows}
+        if held & set(products["clean"]) or held | set(products["clean"]) != set(raw):
+            raise StageManifestError("Fresh Clean successful/held input inventory is inconsistent")
     dependency_rows = {key: dependencies(value) for key, value in products["enrich"].items()}
     planned_old = planning_snapshot(old, current, baseline_repo=baseline_repo)
     plan = plan_changes(planned_old, current, raw, dependency_rows)
@@ -631,6 +734,16 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
         plan["stages"]["clean"] = sorted(set(plan["stages"]["clean"]) | affected)
         plan["pending_identity_recheck"] = sorted(set(plan["pending_identity_recheck"]) | affected)
         plan["reasons"].append("raw file bytes or filenames changed: recheck Clean lineage")
+    held = {pid for rows in clean_holds.values() for pid in rows}
+    unproven = set(old["raw"]) - set(products["clean"]) - held
+    retry = (unproven | (set(clean_holds["errors"]) if fresh_clean_inputs is None else set())) & set(raw)
+    if retry:
+        plan["stages"]["clean"] = sorted(set(plan["stages"]["clean"]) | retry)
+        plan["reasons"].append("recheck unproven Clean dispositions or retry explicit per-item errors")
+    for stage in ("enrich", "score"):
+        plan["stages"][stage] = sorted(set(plan["stages"][stage]) - (held - set(plan["stages"]["clean"])))
+    if held:
+        plan["held_clean_inputs"] = {name: sorted(set(rows) & set(raw)) for name, rows in clean_holds.items()}
     if plan_only:
         return plan
     if (state_path.exists() and not plan["deleted"]
@@ -647,10 +760,14 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
     candidate_prefix = transaction / prefix.name
     candidate_dirs = stage_directories(candidate_prefix)
     try:
+        clean_holds = {name: {pid: row for pid, row in rows.items() if pid not in plan["deleted"]}
+                       for name, rows in clean_holds.items()}
         for index, (stage, candidate_dir) in enumerate(zip(STAGES, candidate_dirs)):
-            selected = set(plan["stages"][stage])
+            held = {pid for rows in clean_holds.values() for pid in rows}
+            selected = set(plan["stages"][stage]) - (held if stage != "clean" else set())
+            plan["stages"][stage] = sorted(selected)
             merged = {key: value for key, value in products[stage].items()
-                      if key not in plan["deleted"]}
+                      if key not in plan["deleted"] and (stage == "clean" or key not in held)}
             upstream = raw if index == 0 else products[list(STAGES)[index - 1]]
             if selected:
                 stage_workspace = transaction / ("work-" + stage)
@@ -665,7 +782,7 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
                         # Execute the same parsed label snapshot that was planned.
                         (input_dir / raw_names[key]).write_bytes(raw_bytes[key])
                     output = stage_workspace / "result"
-                    success = runner.run_clean(str(input_dir), str(output))
+                    success = runner.run_clean(str(input_dir), str(output), incremental_worker=True)
                     result_dir = output / "cleaned"
                 else:
                     (input_dir / "batch.json").write_text(json.dumps(list(selected_rows.values()), ensure_ascii=False))
@@ -678,17 +795,44 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
                         result_dir = output / "scored"
                 if not success:
                     raise StageManifestError(f"Incremental {stage} failed; prior outputs retained")
+                fresh_holds = {name: {} for name in _CLEAN_HOLD_DIRECTORIES}
+                if stage == "clean":
+                    manifest_path = result_dir / MANIFEST_NAME
+                    has_holds = any(path.is_file() and not path.name.startswith(".")
+                        for name in _CLEAN_HOLD_DIRECTORIES for pattern in ("*.json", "*.jsonl")
+                        for path in (output / name).glob(pattern))
+                    if has_holds and not manifest_path.is_file():
+                        raise StageManifestError("Clean hold reports have no completed producer manifest")
+                    if manifest_path.exists() and json.loads(manifest_path.read_text()).get("processing_complete") is not True:
+                        raise StageManifestError("Clean reports or output writes are incomplete")
+                    fresh_holds = clean_hold_outputs(output, input_paths={
+                        pid: input_dir / raw_names[pid] for pid in selected})
+                    if not any(path.is_file() and not path.name.startswith(".")
+                               for pattern in ("*.json", "*.jsonl") for path in result_dir.glob(pattern)):
+                        (result_dir / "incremental_empty.json").write_text("[]")
                 # Run the same per-stage ownership boundary for the isolated result.
-                write_stage_manifest_from_directory(result_dir, stage)
+                write_stage_manifest_from_directory(result_dir, stage,
+                    patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",))
                 replacement = stage_products(result_dir, stage)
-                if set(replacement) != selected:
+                fresh_held = {pid for rows in fresh_holds.values() for pid in rows}
+                if set(replacement) & fresh_held or set(replacement) | fresh_held != selected:
                     raise StageManifestError(f"{stage}: output ID inventory differs from selected inputs")
                 if stage == "clean":
-                    changed_clean = {key for key, value in replacement.items()
-                                     if clean_semantics(value) != clean_semantics(merged.get(key))}
+                    changed_clean = {key for key in selected
+                                     if clean_semantics(replacement.get(key)) != clean_semantics(merged.get(key))}
+                    for name in clean_holds:
+                        clean_holds[name] = {pid: row for pid, row in clean_holds[name].items() if pid not in selected}
+                        clean_holds[name].update(fresh_holds[name])
+                    merged = {pid: row for pid, row in merged.items() if pid not in selected}
                     for downstream in ("enrich", "score"):
                         plan["stages"][downstream] = sorted(
-                            set(plan["stages"][downstream]) | changed_clean)
+                            (set(plan["stages"][downstream]) | changed_clean) - fresh_held)
+                    for name, rows in fresh_holds.items():
+                        for pid, row in rows.items():
+                            reason = (row.get("error_message") if name == "errors" else
+                                      (row.get("metadata") or {}).get("completeness", {}).get("missingFields", []))
+                            plan["reasons"].append(f"Clean {name}: {pid}: {reason}")
+                    plan["held_clean_inputs"] = {name: sorted(set(rows) & set(raw)) for name, rows in clean_holds.items()}
                 merged.update(replacement)
                 candidate_root = (candidate_prefix if stage == "clean" else
                                   Path(str(candidate_prefix) + ("_enriched" if stage == "enrich" else "_scored")))
@@ -703,6 +847,24 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
                     if entry != result_dir:
                         copy_artifact(entry, artifact_root / entry.name)
             products[stage] = merged
+            if stage == "clean":
+                held_ids = [pid for rows in clean_holds.values() for pid in rows]
+                if (len(held_ids) != len(set(held_ids)) or set(merged) & set(held_ids)
+                        or set(merged) | set(held_ids) != set(raw)):
+                    raise StageManifestError("Merged Clean successful/held input inventory is inconsistent")
+                from batch_processor import clean_processing_failure, clean_processing_success_rate
+                results = {"cleaned": len(merged), **{name: len(rows) for name, rows in clean_holds.items()}}
+                summary = {"processing_complete": True, "total_files": len(raw), "results": results,
+                           "success_rate": clean_processing_success_rate(results, len(raw))}
+                minimum = None
+                config_file = getattr(runner, "config", {}).get("configs", {}).get("clean")
+                if config_file:
+                    config_path = runner.script_dir / config_file
+                    if config_path.exists():
+                        minimum = json.loads(config_path.read_text(encoding="utf-8")).get("validation", {}).get("min_success_rate")
+                failure = clean_processing_failure(summary, minimum)
+                if failure:
+                    raise StageManifestError("Merged Clean failed: " + failure)
             candidate_dir.mkdir(parents=True)
             materialize_merged(directories[index], candidate_dir, stage, merged)
         # The complete merged enrichment, not merely the changed slice, must pass.
@@ -723,7 +885,10 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
             verified = stage_products(directory, stage)
             if {key: digest(value) for key, value in verified.items()} != owned_binding[stage]:
                 raise StageManifestError("Prior stage outputs changed during incremental execution")
-        state = {**current, "raw": {key: digest(value) for key, value in raw.items()},
+        if "clean_holds" in old and clean_hold_hashes(clean_hold_outputs(prefix, expected=old["clean_holds"])) != old["clean_holds"]:
+            raise StageManifestError("Prior Clean hold reports changed during execution")
+        state = {**current, "clean_holds": clean_hold_hashes(clean_holds),
+                 "raw": {key: digest(value) for key, value in raw.items()},
                  "raw_files": raw_files,
                  "outputs": {stage: {key: digest(value) for key, value in rows.items()}
                              for stage, rows in products.items()},
@@ -737,7 +902,11 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo):
             fingerprints = {**current["stages"][stage],
                             DATA_FINGERPRINT_KEY: state["inputs"][stage],
                             "incremental_state_sha256": state_hash}
-            write_stage_manifest_from_directory(directory, stage, input_fingerprints=fingerprints)
+            write_stage_manifest_from_directory(directory, stage, input_fingerprints=fingerprints,
+                patterns=("*.json", "*.jsonl") if stage == "clean" else ("*.json",))
+        write_clean_holds(candidate_prefix, clean_holds, {
+            **current["stages"]["clean"], DATA_FINGERPRINT_KEY: state["inputs"]["clean"],
+            "incremental_state_sha256": state_hash})
         (candidate_prefix / ".incremental_state.json").write_text(json.dumps(state, sort_keys=True))
         promote_generation(prefix, candidate_prefix, transaction, recovery)
         return plan

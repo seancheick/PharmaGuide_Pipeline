@@ -122,8 +122,23 @@ def test_recovery_restores_previous_generation(tmp_path):
     assert not journal.exists()
 
 
-def test_real_incremental_raw_edit_matches_full_rebuild(tmp_path):
+def _pin_comparison_dates(monkeypatch):
+    """Keep equivalence comparisons on their start date; retain live source hashes."""
+    from datetime import date, datetime, timezone
+    import pipeline_incremental as incremental
+    original = incremental.current_snapshot
+    dates = {"evaluation_date": datetime.now(timezone.utc).date().isoformat(),
+             "evaluation_local_date": date.today().isoformat()}
+
+    def snapshot(repo):
+        return {**original(repo), **dates}
+
+    monkeypatch.setattr(incremental, "current_snapshot", snapshot)
+
+
+def test_real_incremental_raw_edit_matches_full_rebuild(tmp_path, monkeypatch):
     """Normal runner entrypoints, same real labels, full stage-record comparison."""
+    _pin_comparison_dates(monkeypatch)
     from pathlib import Path
     from run_pipeline import PipelineRunner
     from pipeline_incremental import run_incremental, stage_directories, stage_products
@@ -208,7 +223,7 @@ def _synthetic_dataset(tmp_path, monkeypatch):
 
     runner = SimpleNamespace(
         script_dir=tmp_path / "scripts",
-        run_clean=lambda source, output: execute("clean", source, output),
+        run_clean=lambda source, output, **kwargs: execute("clean", source, output),
         run_enrich=lambda source, output: execute("enrich", source, output),
         run_score=lambda source, output: execute("score", source, output),
         run_enrichment_contract_gate=lambda *a, **kw: (True, {}),
@@ -390,9 +405,9 @@ def test_identity_recheck_promotes_a_newly_changed_clean_match_downstream(tmp_pa
     snapshot["references"]["iqm"]["vocabulary"] = "new alias"
     original = runner.run_clean
 
-    def resolve_new_match(source, output):
+    def resolve_new_match(source, output, **kwargs):
         from pathlib import Path
-        assert original(source, output)
+        assert original(source, output, **kwargs)
         path = Path(output) / "cleaned/batch.json"
         rows = json.loads(path.read_text())
         for row in rows:
@@ -534,12 +549,12 @@ def test_raw_bytes_or_inventory_change_cannot_reuse_stale_provenance(tmp_path, m
     expected_bytes = selected_source.read_bytes()
     original_clean = runner.run_clean
 
-    def verify_exact_source_bytes(source, output):
+    def verify_exact_source_bytes(source, output, **kwargs):
         from pathlib import Path
         files = list(Path(source).glob("*.json"))
         assert [path.name for path in files] == [selected_source.name]
         assert files[0].read_bytes() == expected_bytes
-        return original_clean(source, output)
+        return original_clean(source, output, **kwargs)
 
     runner.run_clean = verify_exact_source_bytes
     planned = mod.run_incremental(runner, raw, prefix, plan_only=True)
@@ -865,3 +880,480 @@ def test_newly_applicable_context_matches_full_rebuild_and_reuses_unrelated_mapp
     assert [row['id'] for row in full_outputs['1']['enriched']['evidence_data']['clinical_matches']] == [source['id']]
     assert full_outputs['2'] == prior_outputs['2']
     assert products == untouched
+
+
+def _partitioned_clean_dataset(tmp_path, monkeypatch, *, good_count=1):
+    """Canonical output shapes; only execution is deterministic for failure tests."""
+    from pathlib import Path
+    from stage_manifest import write_stage_manifest
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    if good_count > 1:
+        for identifier in range(3, good_count + 2):
+            (raw / (str(identifier) + '.json')).write_text(json.dumps({'id': str(identifier), 'dose': 20}))
+        mod.run_incremental(runner, raw, prefix)
+        calls.clear()
+    clean_inputs = []
+
+    def clean(source, output, *, incremental_worker=False):
+        calls.append('clean')
+        paths = sorted(Path(source).glob('*.json'))
+        values = [json.loads(path.read_text()) for path in paths]
+        clean_inputs.append([value['id'] for value in values])
+        output = Path(output)
+        cleaned = output / 'cleaned'
+        cleaned.mkdir(parents=True)
+        successes = []
+        holds = {'incomplete': [], 'needs_review': []}
+        for path, value in zip(paths, values):
+            disposition = value.get('test_clean_outcome')
+            if disposition in holds:
+                value['metadata'] = {'completeness': {'missingFields': ['fullName'],
+                                                       'criticalFieldsComplete': False}}
+                holds[disposition].append(value)
+            elif disposition == 'errors' and not getattr(runner, 'test_recover_errors', False):
+                target = output / 'errors'
+                target.mkdir(exist_ok=True)
+                (target / (path.stem + '_error.json')).write_text(json.dumps({
+                    'original_file': str(path), 'error_type': 'SyntheticItemError',
+                    'error_message': 'Synthetic item failure', 'processing_stage': 'normalize',
+                    'timestamp': '2026-11-05T00:00:00Z', 'traceback': None}))
+            elif disposition == 'overlap':
+                holds['incomplete'].append(value)
+                successes.append(value)
+            elif disposition == 'hold_extra':
+                holds['incomplete'].append({**value, 'id': 'unexpected'})
+            elif disposition == 'extra':
+                successes.extend([value, {**value, 'id': 'unexpected'}])
+            elif disposition == 'duplicate':
+                successes.extend([value, value])
+            elif disposition != 'missing':
+                successes.append(value)
+        owned = []
+        if successes:
+            batch = cleaned / 'batch.json'
+            batch.write_text(json.dumps(successes))
+            owned.append(batch)
+        for name, rows in holds.items():
+            if rows:
+                target = output / name
+                target.mkdir()
+                (target / (name + '_batch_1.json')).write_text(json.dumps(rows))
+        write_stage_manifest(cleaned, 'clean', owned)
+        reports = output / 'reports'
+        reports.mkdir()
+        (reports / 'processing_summary.txt').write_text('Synthetic complete per-item disposition report')
+        if getattr(runner, 'test_enforce_rate', False) and not incremental_worker:
+            return len(successes) + sum(map(len, holds.values())) >= 0.95 * len(values)
+        return True
+
+    runner.run_clean = clean
+    return mod, runner, raw, prefix, calls, clean_inputs
+
+
+@pytest.mark.parametrize('disposition', ['incomplete', 'needs_review'])
+def test_clean_hold_eviction_recovery_and_unchanged_resume(tmp_path, monkeypatch, disposition):
+    mod, runner, raw, prefix, calls, clean_inputs = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = disposition
+    (raw / '1.json').write_text(json.dumps(value))
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result['stages'] == {'clean': ['1'], 'enrich': [], 'score': []}
+    assert clean_inputs == [['1']]
+    for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix)):
+        assert set(mod.stage_products(directory, stage)) == {'2'}
+    held = mod.stage_products(prefix / disposition, 'clean')
+    assert set(held) == {'1'}
+    assert held['1']['metadata']['completeness']['missingFields'] == ['fullName']
+    calls.clear()
+    stable = {path: path.read_bytes() for path in prefix.rglob('*.json')}
+    assert all(not ids for ids in mod.run_incremental(runner, raw, prefix)['stages'].values())
+    assert not calls
+    assert all(path.read_bytes() == data for path, data in stable.items())
+    value.pop('test_clean_outcome')
+    (raw / '1.json').write_text(json.dumps(value))
+    restored = mod.run_incremental(runner, raw, prefix)
+    assert restored['stages'] == {stage: ['1'] for stage in mod.STAGES}
+    for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix)):
+        assert set(mod.stage_products(directory, stage)) == {'1', '2'}
+    calls.clear()
+    assert all(not ids for ids in mod.run_incremental(runner, raw, prefix)['stages'].values())
+    assert not calls
+
+
+def test_clean_error_partial_commit_and_retry_only_failed_item(tmp_path, monkeypatch):
+    from pathlib import Path
+    mod, runner, raw, prefix, calls, clean_inputs = _partitioned_clean_dataset(tmp_path, monkeypatch, good_count=20)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'errors'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, prefix)
+    assert set(mod.stage_products(mod.stage_directories(prefix)[2], 'score')) == {str(i) for i in range(2, 22)}
+    assert list((prefix / 'errors').glob('*_error.json'))
+    before = {path: path.read_bytes() for root in (prefix, Path(str(prefix) + '_enriched'), Path(str(prefix) + '_scored'))
+              for path in root.rglob('*') if path.is_file()}
+    def failed_retry(source, output, **kwargs):
+        selected = [json.loads(path.read_text())['id'] for path in Path(source).glob('*.json')]
+        assert selected == ['1']
+        return False
+    with monkeypatch.context() as failed:
+        failed.setattr(runner, 'run_clean', failed_retry)
+        with pytest.raises(mod.StageManifestError, match='Incremental clean failed'):
+            mod.run_incremental(runner, raw, prefix)
+    assert all(path.read_bytes() == data for path, data in before.items())
+    runner.test_recover_errors = True
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result['stages'] == {stage: ['1'] for stage in mod.STAGES}
+    assert clean_inputs == [['1'], ['1']]
+    assert set(mod.stage_products(mod.stage_directories(prefix)[2], 'score')) == {str(i) for i in range(1, 22)}
+    calls.clear()
+    assert all(not ids for ids in mod.run_incremental(runner, raw, prefix)['stages'].values())
+    assert not calls
+
+
+def test_clean_unexplained_missing_output_stays_fatal(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'missing'
+    (raw / '1.json').write_text(json.dumps(value))
+    with pytest.raises(mod.StageManifestError, match='output ID inventory'):
+        mod.run_incremental(runner, raw, prefix)
+
+
+@pytest.mark.parametrize('defect', ['extra', 'duplicate', 'overlap', 'hold_extra'])
+def test_clean_disposition_partition_rejects_unknown_extra_or_duplicate_ids(tmp_path, monkeypatch, defect):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = defect
+    (raw / '1.json').write_text(json.dumps(value))
+    before = (prefix / '.incremental_state.json').read_bytes()
+    with pytest.raises(mod.StageManifestError, match='inventory|[Dd]uplicate'):
+        mod.run_incremental(runner, raw, prefix)
+    assert (prefix / '.incremental_state.json').read_bytes() == before
+
+
+@pytest.mark.parametrize('manifest_defect', ['missing', 'incomplete'])
+def test_clean_holds_cannot_override_missing_or_failed_producer_proof(tmp_path, monkeypatch, manifest_defect):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    clean = runner.run_clean
+    def broken(source, output, **kwargs):
+        from pathlib import Path
+        from stage_manifest import MANIFEST_NAME
+        clean(source, output)
+        manifest = Path(output) / 'cleaned' / MANIFEST_NAME
+        if manifest_defect == 'missing':
+            manifest.unlink()
+        else:
+            payload = json.loads(manifest.read_text())
+            payload['processing_complete'] = False
+            manifest.write_text(json.dumps(payload))
+        return True
+    monkeypatch.setattr(runner, 'run_clean', broken)
+    with pytest.raises(mod.StageManifestError, match='producer manifest|incomplete'):
+        mod.run_incremental(runner, raw, prefix)
+
+
+def test_owned_clean_hold_tampering_is_fatal_before_reuse(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, prefix)
+    held_file = next(path for path in (prefix / 'incomplete').glob('*.json') if not path.name.startswith('.'))
+    held_file.write_text('[]')
+    with pytest.raises(mod.StageManifestError, match='checksum mismatch'):
+        mod.run_incremental(runner, raw, prefix)
+
+
+def test_clean_jsonl_materialization_preserves_controls_and_removes_only_held_id(tmp_path):
+    from stage_manifest import write_stage_manifest
+    from pipeline_incremental import stage_products, materialize_merged
+    old, new = tmp_path / 'old', tmp_path / 'new'
+    old.mkdir()
+    new.mkdir()
+    path = old / 'cleaned_batch_1.jsonl'
+    path.write_text('{"id":"1"}\n{"id":"2"}\n')
+    write_stage_manifest(old, 'clean', [path])
+    assert set(stage_products(old, 'clean')) == {'1', '2'}
+    materialize_merged(old, new, 'clean', {'2': {'id': '2'}})
+    write_stage_manifest(new, 'clean', list(new.glob('*.jsonl')))
+    assert stage_products(new, 'clean') == {'2': {'id': '2'}}
+
+
+def test_incremental_cli_reports_unchanged_held_inputs(monkeypatch, capsys, tmp_path):
+    import sys
+    from types import SimpleNamespace
+    from pathlib import Path
+    import run_pipeline
+    import pipeline_incremental
+    result = {'stages': {stage: [] for stage in ('clean', 'enrich', 'score')},
+              'deleted': [], 'reasons': [],
+              'held_clean_inputs': {'incomplete': ['312659'], 'needs_review': [], 'errors': ['failed-id']}}
+    monkeypatch.setattr(pipeline_incremental, 'run_incremental', lambda *args, **kwargs: result)
+    monkeypatch.setattr(run_pipeline, 'PipelineRunner', lambda *_: SimpleNamespace(
+        script_dir=tmp_path / 'scripts', _resolve_path=lambda path: Path(path)))
+    monkeypatch.setattr(sys, 'argv', ['run_pipeline.py', '--incremental', '--raw-dir', str(tmp_path),
+                                    '--output-prefix', str(tmp_path / 'output')])
+    with pytest.raises(SystemExit) as stopped:
+        run_pipeline.main()
+    assert stopped.value.code == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output['held_clean_counts'] == {'incomplete': 1, 'needs_review': 0, 'errors': 1}
+    assert output['held_clean_inputs']['incomplete'] == ['312659']
+
+
+def test_real_null_ingredients_hold_transitions_match_full_rebuild(tmp_path, monkeypatch):
+    _pin_comparison_dates(monkeypatch)
+    from pathlib import Path
+    from run_pipeline import PipelineRunner
+    from pipeline_incremental import run_incremental, stage_directories, stage_products
+    from audits.quality_redesign.replay import without_volatile
+    repo = Path(__file__).resolve().parents[2]
+    raw = tmp_path / 'raw'
+    raw.mkdir()
+    fixtures = repo / 'scripts/tests/fixtures'
+    labels = {}
+    for name in ('incremental_creatine_336362_raw.json', 'evidence_truth_231852_raw.json'):
+        value = json.loads((fixtures / name).read_text())
+        labels[str(value['id'])] = value
+        (raw / (str(value['id']) + '.json')).write_text(json.dumps(value))
+    runner = PipelineRunner()
+    prefix = tmp_path / 'incremental'
+    run_incremental(runner, raw, prefix)
+    original_control = {stage: stage_products(directory, stage)['231852']
+        for stage, directory in zip(('clean', 'enrich', 'score'), stage_directories(prefix))}
+    for held in (True, False):
+        changed = deepcopy(labels['336362'])
+        if held:
+            changed['ingredientRows'] = None  # Actual Bulk312659/Emergen_C250356 defect shape.
+        (raw / '336362.json').write_text(json.dumps(changed))
+        result = run_incremental(runner, raw, prefix)
+        assert result['stages']['clean'] == ['336362']
+        assert result['stages']['enrich'] == ([] if held else ['336362'])
+        assert result['stages']['score'] == ([] if held else ['336362'])
+        full = tmp_path / ('full_held' if held else 'full_valid')
+        assert runner.run_pipeline(raw_dir=str(raw), output_prefix=str(full), strict_release_gates=True)['success']
+        for stage, left, right in zip(('clean', 'enrich', 'score'), stage_directories(prefix), stage_directories(full)):
+            got, expected = stage_products(left, stage), stage_products(right, stage)
+            assert got['231852'] == original_control[stage]
+            assert {pid: without_volatile(row, {'clean': 'cleaned', 'enrich': 'enriched', 'score': 'scored'}[stage])
+                    for pid, row in got.items()} == {
+                pid: without_volatile(row, {'clean': 'cleaned', 'enrich': 'enriched', 'score': 'scored'}[stage])
+                for pid, row in expected.items()}
+        resumed = run_incremental(runner, raw, prefix)
+        assert all(not ids for ids in resumed['stages'].values())
+
+
+def test_clean_jsonl_executor_promotes_and_reuses_owned_generation(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, _ = _synthetic_dataset(tmp_path, monkeypatch)
+    from stage_manifest import MANIFEST_NAME, write_stage_manifest_from_directory
+    clean = mod.stage_directories(prefix)[0]
+    fingerprints = json.loads((clean / MANIFEST_NAME).read_text())['input_fingerprints']
+    original = clean / 'batch.json'
+    rows = json.loads(original.read_text())
+    original.unlink()
+    lines = clean / 'batch.jsonl'
+    lines.write_text(''.join(json.dumps(row) + '\n' for row in rows))
+    write_stage_manifest_from_directory(clean, 'clean', patterns=('*.json', '*.jsonl'),
+                                        input_fingerprints=fingerprints)
+    mod.run_incremental(runner, raw, prefix)
+    assert set(mod.stage_products(clean, 'clean')) == {'1', '2'}
+    assert 'batch.jsonl' in (clean / MANIFEST_NAME).read_text()
+    (raw / '1.json').write_text(json.dumps({'id': '1', 'dose': 30}))
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result['stages'] == {stage: ['1'] for stage in mod.STAGES}
+    assert mod.stage_products(clean, 'clean') == {'1': {'id': '1', 'dose': 30}, '2': rows[1]}
+    calls.clear()
+    resumed = mod.run_incremental(runner, raw, prefix)
+    assert not calls
+    assert all(not ids for ids in resumed['stages'].values())
+
+
+def test_expected_clean_hold_without_manifest_is_fatal(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    from stage_manifest import MANIFEST_NAME
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, prefix)
+    (prefix / 'incomplete' / MANIFEST_NAME).unlink()
+    with pytest.raises(mod.StageManifestError, match='manifest'):
+        mod.run_incremental(runner, raw, prefix)
+
+
+def test_initial_incremental_result_reports_clean_holds(tmp_path, monkeypatch):
+    from pathlib import Path
+    import shutil
+    mod, runner, raw, seeded, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, seeded)
+    def full_build(**kwargs):
+        for source, target in zip(mod.stage_directories(seeded), mod.stage_directories(Path(kwargs['output_prefix']))):
+            shutil.copytree(source, target)
+        for name in ('incomplete', 'needs_review', 'errors'):
+            if (seeded / name).exists():
+                shutil.copytree(seeded / name, Path(kwargs['output_prefix']) / name)
+        return {'success': True}
+    runner.run_pipeline = full_build
+    fresh = tmp_path / 'fresh'
+    result = mod.run_incremental(runner, raw, fresh)
+    assert result['held_clean_inputs']['incomplete'] == ['1']
+    assert result['stages'] == {'clean': ['1', '2'], 'enrich': ['2'], 'score': ['2']}
+    assert any('incomplete' in reason for reason in result['reasons'])
+    resumed = mod.run_incremental(runner, raw, fresh)
+    assert resumed['held_clean_inputs']['incomplete'] == ['1']
+    assert all(not ids for ids in resumed['stages'].values())
+
+
+def test_initial_partial_clean_error_is_committed_before_next_retry(tmp_path, monkeypatch):
+    from pathlib import Path
+    mod, runner, raw, _, calls, clean_inputs = _partitioned_clean_dataset(tmp_path, monkeypatch, good_count=20)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'errors'
+    (raw / '1.json').write_text(json.dumps(value))
+    def full_build(**kwargs):
+        root = Path(kwargs['output_prefix'])
+        runner.run_clean(kwargs['raw_dir'], root)
+        successful = json.loads((root / 'cleaned' / 'batch.json').read_text())
+        for directory in mod.stage_directories(root)[1:]:
+            directory.mkdir(parents=True)
+            (directory / 'batch.json').write_text(json.dumps(successful))
+        from stage_manifest import write_stage_manifest_from_directory
+        for stage, directory in zip(mod.STAGES, mod.stage_directories(root)):
+            write_stage_manifest_from_directory(directory, stage, input_fingerprints={
+                **mod.current_snapshot(tmp_path)['stages'][stage], 'stage_data_sha256_v1': '1' * 64})
+        return {'success': True}
+    runner.run_pipeline = full_build
+    initial_clean = runner.run_clean
+    def clean_once(source, output, **kwargs):
+        if len(list(Path(source).glob('*.json'))) == 1:
+            return False  # Retrying the only failed item must retain the prior generation.
+        return initial_clean(source, output, **kwargs)
+    runner.run_clean = clean_once
+    fresh = tmp_path / 'fresh_error'
+    result = mod.run_incremental(runner, raw, fresh)
+    assert result['held_clean_inputs']['errors'] == ['1']
+    assert set(result['stages']['score']) == {str(i) for i in range(2, 22)}
+    assert clean_inputs == [sorted(str(i) for i in range(1, 22))]
+    before = {path: path.read_bytes() for root in (fresh, Path(str(fresh) + '_enriched'), Path(str(fresh) + '_scored'))
+              for path in root.rglob('*') if path.is_file()}
+    with pytest.raises(mod.StageManifestError, match='prior outputs retained'):
+        mod.run_incremental(runner, raw, fresh)
+    assert all(path.read_bytes() == contents for path, contents in before.items())
+
+
+@pytest.mark.parametrize('separator', ['\u0085', '\u2028', '\u2029'])
+def test_clean_jsonl_keeps_unicode_line_separators_inside_strings(tmp_path, separator):
+    from stage_manifest import write_stage_manifest
+    from pipeline_incremental import stage_products, materialize_merged
+    old, new = tmp_path / 'old', tmp_path / 'new'
+    old.mkdir()
+    new.mkdir()
+    path = old / 'cleaned_batch_1.jsonl'
+    row = {'id': '1', 'name': 'before' + separator + 'after'}
+    path.write_text(json.dumps(row, ensure_ascii=False) + '\n', encoding='utf-8')
+    write_stage_manifest(old, 'clean', [path])
+    assert stage_products(old, 'clean') == {'1': row}
+    materialize_merged(old, new, 'clean', {'1': row})
+    assert (new / path.name).read_bytes() == path.read_bytes()
+
+
+def test_deleted_clean_hold_is_absent_from_plan_and_execution(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch)
+    value = json.loads((raw / '1.json').read_text())
+    value['test_clean_outcome'] = 'incomplete'
+    (raw / '1.json').write_text(json.dumps(value))
+    mod.run_incremental(runner, raw, prefix)
+    (raw / '1.json').unlink()
+    for plan_only in (True, False):
+        result = mod.run_incremental(runner, raw, prefix, plan_only=plan_only)
+        assert result['deleted'] == ['1']
+        assert all('1' not in ids for ids in result['held_clean_inputs'].values())
+
+
+def test_incremental_clean_rate_uses_whole_verified_dataset(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, clean_inputs = _partitioned_clean_dataset(tmp_path, monkeypatch, good_count=102)
+    for identifier in ('1', '2', '3'):
+        path = raw / (identifier + '.json')
+        row = json.loads(path.read_text())
+        row['test_clean_outcome'] = 'errors'
+        path.write_text(json.dumps(row))
+    mod.run_incremental(runner, raw, prefix)
+    runner.test_enforce_rate = True
+    clean_inputs.clear()
+    calls.clear()
+    path = raw / '4.json'
+    row = json.loads(path.read_text())
+    row['dose'] = 40
+    path.write_text(json.dumps(row))
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result['stages'] == {'clean': ['1', '2', '3', '4'], 'enrich': ['4'], 'score': ['4']}
+    assert clean_inputs == [['1', '2', '3', '4']]
+    assert result['held_clean_inputs']['errors'] == ['1', '2', '3']
+    clean_inputs.clear()
+    resumed = mod.run_incremental(runner, raw, prefix)
+    assert resumed['stages'] == {'clean': ['1', '2', '3'], 'enrich': [], 'score': []}
+    assert clean_inputs == [['1', '2', '3']]
+
+
+@pytest.mark.parametrize('minimum', [None, 99.0])
+def test_incremental_clean_global_below_threshold_retains_generation(tmp_path, monkeypatch, minimum):
+    mod, runner, raw, prefix, _, _ = _partitioned_clean_dataset(tmp_path, monkeypatch,
+        good_count=20 if minimum is not None else 1)
+    if minimum is not None:
+        runner.script_dir.mkdir(parents=True)
+        (runner.script_dir / 'strict_clean.json').write_text(json.dumps({'validation': {'min_success_rate': minimum}}))
+        runner.config = {'configs': {'clean': 'strict_clean.json'}}
+    row = json.loads((raw / '1.json').read_text())
+    row['test_clean_outcome'] = 'errors'
+    (raw / '1.json').write_text(json.dumps(row))
+    before = {path: path.read_bytes() for root in mod.stage_directories(prefix)
+              for path in root.rglob('*') if path.is_file()}
+    with pytest.raises(mod.StageManifestError, match='success rate|Success rate|95'):
+        mod.run_incremental(runner, raw, prefix)
+    assert all(path.read_bytes() == data for path, data in before.items())
+
+
+@pytest.mark.parametrize('clock_field', ['evaluation_date', 'evaluation_local_date'])
+def test_clock_rollover_during_execution_refuses_promotion(tmp_path, monkeypatch, clock_field):
+    mod, runner, raw, prefix, _, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    snapshot[clock_field] = '2026-11-05'
+    # Bind the baseline to the start date before attempting changed input work.
+    mod.run_incremental(runner, raw, prefix)
+    before = {path: path.read_bytes() for directory in (prefix, *mod.stage_directories(prefix)[1:])
+              for path in directory.rglob('*') if path.is_file()}
+    original = runner.run_enrich
+    def rollover(*args, **kwargs):
+        snapshot[clock_field] = '2026-11-06'
+        return original(*args, **kwargs)
+    monkeypatch.setattr(runner, 'run_enrich', rollover)
+    (raw / '1.json').write_text(json.dumps({'id': '1', 'dose': 30}))
+    with pytest.raises(mod.StageManifestError, match='Inputs changed during incremental execution'):
+        mod.run_incremental(runner, raw, prefix)
+    assert all(path.read_bytes() == contents for path, contents in before.items())
+
+
+def test_comparison_date_pin_preserves_live_source_changes(monkeypatch):
+    import pipeline_incremental as incremental
+    source = {'stages': {'clean': {'code': 'before'}}, 'references': {'entry': 'before'},
+              'evaluation_date': '2026-11-05', 'evaluation_local_date': '2026-11-05'}
+    calls = []
+    def real_snapshot(repo):
+        calls.append(repo)
+        return deepcopy(source)
+    monkeypatch.setattr(incremental, 'current_snapshot', real_snapshot)
+    _pin_comparison_dates(monkeypatch)
+    first = incremental.current_snapshot('repo')
+    source['stages']['clean']['code'] = 'after'
+    source['references']['entry'] = 'after'
+    source['evaluation_date'] = source['evaluation_local_date'] = '2026-11-06'
+    second = incremental.current_snapshot('repo')
+    assert calls == ['repo', 'repo']
+    assert first['stages'] != second['stages']
+    assert first['references'] != second['references']
+    for field in ('evaluation_date', 'evaluation_local_date'):
+        assert first[field] == second[field]

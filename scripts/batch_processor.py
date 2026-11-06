@@ -28,7 +28,7 @@ from constants import (
     VALIDATION_THRESHOLDS
 )
 from pipeline_freshness import DATA_FINGERPRINT_KEY, stage_data_fingerprint, stage_input_fingerprints
-from stage_manifest import StageManifestError, write_stage_manifest
+from stage_manifest import MANIFEST_NAME, StageManifestError, select_stage_input_files, write_stage_manifest
 import traceback
 import os
 import hashlib
@@ -38,6 +38,32 @@ import stat
 logger = logging.getLogger(__name__)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+
+
+def clean_processing_success_rate(results: Dict[str, int], total_files: int) -> float:
+    """Processing completion includes recorded holds, never item errors."""
+    accepted = sum(results.get(name, 0) for name in ("cleaned", "needs_review", "incomplete"))
+    return accepted / total_files * 100 if total_files else 0.0
+
+
+def clean_processing_failure(summary: Dict[str, Any], min_success_rate=None, *, check_rate: bool = True) -> Optional[str]:
+    """Shared completion and configured dataset-rate gate.
+
+    Selected workers defer only the rate check; their verified aggregate is
+    checked by the incremental executor before any generation is promoted.
+    """
+    write_failures = summary.get("output_write_failures", 0)
+    report_failures = summary.get("report_write_failures", 0)
+    if not summary.get("processing_complete", True) or write_failures or report_failures:
+        return ("processing summary is incomplete"
+                + (f" ({write_failures} file(s) had output write failures)" if write_failures else "")
+                + (f" ({report_failures} quarantine, unmapped, resume-state or report write(s) failed)"
+                   if report_failures else ""))
+    threshold = 95.0 if min_success_rate is None else min_success_rate
+    if check_rate and summary["total_files"] > 0 and summary["success_rate"] < threshold:
+        return (f"success rate {summary['success_rate']:.1f}% is below minimum threshold {threshold}% "
+                f"({summary['results']['errors']}/{summary['total_files']} files had errors)")
+    return None
 
 
 class PerformanceTracker:
@@ -727,6 +753,21 @@ class BatchProcessor:
         self._stage_inputs = None
         self._clean_stage_inputs()
 
+        if resume:
+            cleaned = self.output_dir / "cleaned"
+            has_outputs = any(path.is_file() and not path.name.startswith(".")
+                for category in ("cleaned", "needs_review", "incomplete", "errors")
+                for pattern in ("*.json", "*.jsonl")
+                for path in (self.output_dir / category).glob(pattern))
+            if has_outputs or (cleaned / MANIFEST_NAME).exists() or self.state_file.exists():
+                try:
+                    select_stage_input_files(cleaned, "clean", require_manifest=True,
+                        patterns=("*.json", "*.jsonl"), allow_empty=True)
+                except StageManifestError as exc:
+                    raise StageManifestError(
+                        f"Resume output ownership is invalid; run a fresh full repair: {exc}"
+                    ) from exc
+
         # Load or create state
         state = None
         if resume:
@@ -780,7 +821,7 @@ class BatchProcessor:
         # FIX 1+2: Skip already-processed files on resume
         processed_set = set(state.processed_file_paths or [])
         using_per_file_resume = False
-        if resume and processed_set:
+        if resume:
             original_count = len(files)
             files = [f for f in files if str(f) not in processed_set]
             skipped_count = original_count - len(files)
@@ -790,19 +831,22 @@ class BatchProcessor:
             state.total_batches = (len(files) + self.batch_size - 1) // self.batch_size
             using_per_file_resume = True
 
-        # FIX C6: On per-file resume, batch_num resets to 0, which would overwrite
-        # previously-written output files (cleaned_batch_1.json, etc.).
-        # Count existing batch output files and use that as the naming offset so
-        # new batches are appended (batch_N+1, batch_N+2, ...) instead of overwriting.
+        # Each disposition may own a different sequence (including held-only
+        # batches). Append after the highest sequence, never after a file count.
         output_batch_offset = 0
         if using_per_file_resume:
-            existing_outputs = list((self.output_dir / "cleaned").glob("cleaned_batch_*.json"))
-            output_batch_offset = len(existing_outputs)
-            if output_batch_offset > 0:
-                logger.info(
-                    "Resume: %d existing batch output files found, new batches will start at batch_%d",
-                    output_batch_offset, output_batch_offset + 1
-                )
+            for category in ("cleaned", "needs_review", "incomplete"):
+                sequences = set()
+                for extension in ("json", "jsonl"):
+                    for path in (self.output_dir / category).glob(f"{category}_batch_*.{extension}"):
+                        suffix = path.stem.removeprefix(category + "_batch_")
+                        if not suffix.isdecimal() or int(suffix) < 1:
+                            raise StageManifestError(f"Invalid batch output sequence: {path}")
+                        sequence = int(suffix)
+                        if sequence in sequences:
+                            raise StageManifestError(f"Conflicting batch output ownership: {path}")
+                        sequences.add(sequence)
+                        output_batch_offset = max(output_batch_offset, sequence)
 
         logger.info(f"Processing {len(files)} files in {state.total_batches} batches")
         logger.info(f"Batch size: {self.batch_size}, Max workers: {self.max_workers}")
@@ -963,7 +1007,7 @@ class BatchProcessor:
                     self.worker_timeout_seconds,
                 )
                 try:
-                    self._categorize_result(
+                    accepted = self._categorize_result(
                         result,
                         cleaned_products,
                         needs_review_products,
@@ -972,7 +1016,8 @@ class BatchProcessor:
                         batch_unmapped,
                         batch_mapped
                     )
-                    processed_files.append(str(file_path))  # Track AFTER successful categorization
+                    if accepted in (STATUS_SUCCESS, STATUS_NEEDS_REVIEW, STATUS_INCOMPLETE):
+                        processed_files.append(str(file_path))
                 except Exception as e:
                     error_msg = f"Failed to categorize result for {file_path}: {str(e)}"
                     errors.append(error_msg)
@@ -1071,7 +1116,7 @@ class BatchProcessor:
                     if result is None:
                         continue
                     try:
-                        self._categorize_result(
+                        accepted = self._categorize_result(
                             result,
                             cleaned_products,
                             needs_review_products,
@@ -1080,7 +1125,8 @@ class BatchProcessor:
                             batch_unmapped,
                             batch_mapped
                         )
-                        processed_files.append(str(file_path))  # Track AFTER successful categorization
+                        if accepted in (STATUS_SUCCESS, STATUS_NEEDS_REVIEW, STATUS_INCOMPLETE):
+                            processed_files.append(str(file_path))
                     except Exception as e:
                         error_msg = f"Failed to categorize result for {file_path}: {str(e)}"
                         errors.append(error_msg)
@@ -1117,6 +1163,7 @@ class BatchProcessor:
 
         summary = {
             "batch_num": batch_num + 1,
+            "total_files": len(files),
             "processed": len(processed_files),
             "cleaned": len(cleaned_products),
             "needs_review": len(needs_review_products),
@@ -1170,6 +1217,19 @@ class BatchProcessor:
                 )
             )
             return
+
+        def reject(reason):
+            errors.append(f"{result.file_path}: {reason}")
+            self._write_quarantine_file(str(result.file_path), StructuredError(
+                file_path=str(result.file_path), exception_type="CategorizationError",
+                message=f"Input {result.raw_id}: {reason}", stage="categorize"))
+
+        if result.status not in (STATUS_SUCCESS, STATUS_NEEDS_REVIEW, STATUS_INCOMPLETE):
+            reject(f"Unknown status {result.status}")
+            return None
+        if not isinstance(result.data, dict) or not result.data:
+            reject("Missing product data and canonical id")
+            return None
 
         # Update unmapped ingredients
         if result.unmapped_ingredients:
@@ -1226,9 +1286,7 @@ class BatchProcessor:
                     "Missing/empty dsld_id in %s — rejecting (dedup requires a canonical id)",
                     result.file_path,
                 )
-                errors.append(
-                    f"{result.file_path}: missing or empty dsld_id (dedup requires canonical id)"
-                )
+                reject("missing or empty dsld_id (dedup requires canonical id)")
                 return
 
             if dsld_id in self.seen_dsld_ids:
@@ -1237,7 +1295,8 @@ class BatchProcessor:
                     "Duplicate dsld_id %s from %s (first seen in %s) — skipping duplicate",
                     dsld_id, result.file_path, first_file,
                 )
-                return
+                reject(f"Duplicate dsld_id {dsld_id}; first seen in {first_file}")
+                return None
             self.seen_dsld_ids[dsld_id] = str(result.file_path)
 
         # Categorize by status
@@ -1247,8 +1306,7 @@ class BatchProcessor:
             needs_review.append(result.data)
         elif result.status == STATUS_INCOMPLETE:
             incomplete.append(result.data)
-        else:
-            errors.append(f"{result.file_path}: Unknown status {result.status}")
+        return result.status
     
     def _extract_mapped_ingredients(self, product_data: Dict, batch_mapped: Counter):
         """Extract mapped ingredients from processed product data"""
@@ -1417,22 +1475,21 @@ class BatchProcessor:
         total_validation_failures = sum(
             r["summary"].get("input_validation_failures", 0) for r in batch_results
         )
-        total_attempted = total_processed + total_validation_failures
+        total_attempted = sum(result["summary"].get("total_files",
+            result["summary"]["processed"] + result["summary"].get("input_validation_failures", 0))
+            for result in batch_results)
 
         # Get performance stats
         perf_stats = self.performance_tracker.get_stats()
 
+        outcomes = {"cleaned": total_cleaned, "needs_review": total_needs_review,
+                    "incomplete": total_incomplete, "errors": total_errors}
         summary = {
             "processing_complete": total_output_write_failures == 0,
             "total_files": total_attempted,
             "input_validation_failures": total_validation_failures,
             "output_write_failures": total_output_write_failures,
-            "results": {
-                "cleaned": total_cleaned,
-                "needs_review": total_needs_review,
-                "incomplete": total_incomplete,
-                "errors": total_errors
-            },
+            "results": outcomes,
             "processing_time": {
                 "total_seconds": total_time,
                 "total_minutes": total_time / 60,
@@ -1440,7 +1497,7 @@ class BatchProcessor:
             },
             "unmapped_ingredients": len(self._true_unmapped_counter()),
             "mapped_ingredients": len(self.global_mapped),
-            "success_rate": (total_cleaned / total_attempted * 100) if total_attempted else 0
+            "success_rate": clean_processing_success_rate(outcomes, total_attempted)
         }
 
         # Add performance metrics if tracking is enabled

@@ -36,13 +36,22 @@ The plan lists selected IDs and the reason for each scope. For lookup changes, `
 
 Exact label corrections select their IDs. Ingredient grade changes select users of the changed parent and unresolved rows. Lookup vocabulary changes recheck all Clean identities, then send actual Clean changes and known affected users through Enrich and Score. Exact-preparation Dose records select their declared source names and unresolved rows. Broad research, unknown reference dependencies and shared code changes widen the affected scope. Score-only code changes retain verified Clean and Enrich. Date-sensitive certification recency and manufacturer lookback assessments use their existing owners to refresh affected Enrich/Score rows when required.
 
+A completed Clean outcome is either a successful product, a recorded review/incomplete hold, or an attributable item error. Incremental execution persists successful products and source-bound hold/error reports in the same owned generation. It reports held IDs and counts even on a no-op run. Unchanged data holds are reused until their source changes; item errors are selected for the next retry. A failed retry retains the previously committed generation. Unexplained missing output, duplicate dispositions, invalid ownership and failed writes remain blocking errors. Processing success does not mean the scientific assessment is complete.
+
+The configured Clean processing-success threshold applies to the **complete verified dataset**, including reused accepted outcomes. Selected workers validate processing and write/report completeness; the incremental executor then uses the same shared gate on the merged inventory before promotion. Persistent item errors therefore cannot make an otherwise qualifying dataset fail merely because its retry slice is small. Reused successes never excuse incomplete writes or other producer failures, and a dataset below the configured threshold is still refused.
+
+Legacy per-file resume also verifies complete output ownership before processing. After a failed or interrupted write, missing/corrupt/incomplete manifests or unowned files require a fresh full repair; resume never adopts partial rows as successful output. Legitimately complete empty Clean output from an all-held or all-error run is distinguished through the same manifest authority. Default strict downstream readers still reject empty product input.
+
+The optional Clean JSONL writer is **not a supported strict full-pipeline input mode**. Production Clean → Enrich uses the default JSON arrays; strict full enrichment rejects JSONL-only and mixed JSON/JSONL input before processing. Incremental bookkeeping can preserve verified JSONL stage files and materializes selected upstream rows as JSON, but that does not qualify the optional JSONL producer mode. Per-file Clean resume appends after the highest sequence across cleaned, needs-review and incomplete outputs in both formats, preserving existing files across numbering gaps.
+
 The complete merged enrichment passes the existing contract and coverage gates. Source and raw inputs must remain stable. All three generations promote together with rollback on an ordinary failure and a recovery journal for an interrupted process. Retry `--incremental` to recover an interrupted promotion. Plan-only refuses a pending recovery and changes no stage outputs. Checksums, reference snapshots and the reuse state are verified before reuse. The final catalog retains every ordinary release gate. Previous non-stage reports, quarantine files and review artifacts are retained under `.incremental_artifacts/prior/<generation>/`, with their historical scope recorded. Reports from selected-product workers are under `.incremental_artifacts/current/<stage>/` beside the selected IDs; they are not whole-dataset reports. Complete merged gate reports remain at the normal output root.
 
 
 ## 1. Which command should I run?
 
-For a retry that reuses verified computation, add `--resume` to the normal full
-command: `bash batch_run_all_datasets.sh --resume`. Before computing,
+Prefer `--incremental --pipeline-only` for a nonpublishing product-level retry.
+The older `--resume` path reuses entire verified stages; use it when that is the
+intended scope, for example `bash batch_run_all_datasets.sh --resume --pipeline-only`. Before computing,
 it prints the plan for every selected brand and approved submission dataset.
 Each stage needs complete ownership, intact output checksums, current code, references and runtime/dependency provenance, and matching upstream
 input bytes/inventory. The first invalid stage
@@ -55,7 +64,7 @@ restamped. All snapshot, safety, export and publication gates remain.
 The batch freezes runtime source before processing and checks it between brands.
 It also binds raw labels before computation and checks them before assembly and
 release. Drift stops the batch immediately; freeze the inputs and retry with
-`--resume`. Do not merge or edit the running checkout. Markdown documentation and files in
+the same retry mode (`--incremental` or `--resume`). Do not merge or edit the running checkout. Markdown documentation and files in
 `scripts/tests/` are excluded from the runtime source freeze.
 
 The summary log records `STAGE TIMING`, dataset product counts, and gate

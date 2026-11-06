@@ -167,6 +167,7 @@ def select_stage_input_files(
     *,
     require_manifest: bool = False,
     patterns: Sequence[str] = ("*.json",),
+    allow_empty: bool = False,
     content_hashes: dict[Path, bytes] | None = None,
 ) -> List[Path]:
     """Return only verified files owned by a successful upstream stage.
@@ -213,12 +214,20 @@ def select_stage_input_files(
 
     names = manifest.get("owned_files")
     checksums = manifest.get("content_sha256")
-    if not isinstance(names, list) or not names:
+    if not isinstance(names, list) or (not names and not allow_empty):
         raise StageManifestError("Stage manifest owns no files")
     if len(names) != len(set(names)):
         raise StageManifestError("Stage manifest contains duplicate owned files")
     if not isinstance(checksums, dict):
         raise StageManifestError("Stage manifest is missing content checksums")
+
+    if not names:
+        if checksums:
+            raise StageManifestError("Empty stage manifest contains unexpected checksums")
+        if discovered:
+            raise StageManifestError("Stage directory contains unowned files: " +
+                                     ", ".join(path.name for path in discovered))
+        return []
 
     owned: List[Path] = []
     for name in names:
