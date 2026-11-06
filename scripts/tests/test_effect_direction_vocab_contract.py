@@ -79,7 +79,26 @@ def test_every_clinical_study_effect_direction_in_vocab(items):
         os.path.dirname(__file__), "..", "data", "backed_clinical_studies.json"
     )
     found = set()
-    _walk(json.load(open(path, encoding="utf-8")), "effect_direction", found)
+    data = json.load(open(path, encoding="utf-8"))
+    # Sean's November6 source-specific interpretation preserves the observed
+    # label. It does not add moderate to the five legacy multiplier meanings.
+    approved = [r for r in data["backed_clinical_studies"] if r["id"] == "INGR_L_GLUTAMINE"]
+    assert len(approved) == 1
+    record = approved[0]
+    assert record["effect_direction"] == "positive_moderate"
+    qualifying = [c for c in record["study_contexts"] if c.get("scoring_eligible")]
+    assert len(qualifying) == 1
+    assert qualifying[0]["context_id"] == "l_glutamine_30108163_pi_ibsd_primary"
+    assert qualifying[0]["source_pmids"] == ["30108163"]
+    assert qualifying[0]["review_status"] == "clinician_approved"
+    # Remove only that approved top-level observed value. Any other record or
+    # nested undeclared effect label must still fail the original vocabulary guard.
+    record = {k: v for k, v in record.items() if k != "effect_direction"}
+    data["backed_clinical_studies"] = [
+        record if r["id"] == "INGR_L_GLUTAMINE" else r
+        for r in data["backed_clinical_studies"]
+    ]
+    _walk(data, "effect_direction", found)
     vocab_ids = {i["id"] for i in items}
     assert found <= vocab_ids, f"effect_directions NOT in vocab: {found - vocab_ids}"
 
