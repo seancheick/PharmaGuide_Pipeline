@@ -3927,6 +3927,17 @@ def get_evidence_subject_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]
     matching and the scorer all read this set, so every owner has had its
     evidence looked up.
     """
+    if _scope_holding(product) is None:
+        return _build_evidence_subject_rows(product)
+    # Detach the first return as well as cache hits: the builder may borrow
+    # rows from the scoped scoring-input result.
+    return scoped_product_view(
+        product, ("evidence_subject_rows",),
+        lambda: deepcopy(_build_evidence_subject_rows(product)), deepcopy,
+    )
+
+
+def _build_evidence_subject_rows(product: Mapping[str, Any]) -> List[Dict[str, Any]]:
     assessable = [
         row for row in get_assessable_evidence_ingredients(product)
         if not _is_ineligible_evidence_subject(row)
