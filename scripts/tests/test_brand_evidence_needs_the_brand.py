@@ -238,7 +238,9 @@ def test_complete_material_evidence_never_belongs_to_one_constituent(dsld_id):
         if dsld_id == '224676':
             # The material blend also owns caffeine; retaining that independent
             # reviewed source must not attribute BCAA research to free leucine.
-            assert points == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48}
+            # Its separate printed tartrate row now has its own reviewed source.
+            assert points == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48,
+                              'l_carnitine': 2.295}
             assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
         else:
             # The separate, source-qualified nutritional-role floor may beat
@@ -440,7 +442,8 @@ def test_real_complete_bcaa_material_inherits_its_primary_members_evidence_purpo
     evidence = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata']
     assert evidence['primary_evidence_floor'] == 14.0
     assert evidence['primary_evidence_floor_canonical'] == 'caffeine'
-    assert evidence['ingredient_points'] == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48}
+    assert evidence['ingredient_points'] == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48,
+                                            'l_carnitine': 2.295}
     receipts = evidence['contributing_record_assessments']
     assert [row['id'] for row in receipts] == ['INGR_CAFFEINE']
     assert receipts[0]['source_review']['is_complete'] is True
@@ -552,3 +555,65 @@ def test_row_brand_discovery_does_not_replace_material_source_proof(record_id, c
         assert matches[0]['applicability_assessment']['status'] == 'applicable'
     else:
         assert matches == []
+
+
+@pytest.mark.parametrize('scopes,source_required,forms,expected', [
+    (['exact_form'], True, ['L-Carnitine L-Tartrate'], True),
+    (['branded_material'], True, ['L-Carnitine L-Tartrate'], False),
+    (['exact_form', 'branded_material'], True, ['L-Carnitine L-Tartrate'], False),
+    ([], True, ['L-Carnitine L-Tartrate'], False),
+    (['exact_form'], False, ['L-Carnitine L-Tartrate'], False),
+    (['exact_form'], 'false', ['L-Carnitine L-Tartrate'], False),
+    (['exact_form'], 1, ['L-Carnitine L-Tartrate'], False),
+    (['exact_form'], True, [''], False),
+    (['exact_form'], True, [1], False),
+    (['exact_form'], True, [], False),
+])
+def test_exact_chemical_form_discovery_does_not_require_a_trade_name(
+    monkeypatch, scopes, source_required, forms, expected,
+):
+    from enrich_supplements_v3 import SupplementEnricherV3
+    import clinical_applicability as ca
+    # Test this discovery gate only; canonical acceptance remains the existing
+    # source owner and is separately enforced before any clinical credit.
+    monkeypatch.setattr(ca, '_accepted_condition_scopes',
+        lambda reference, policy: [{'identity_scope': scope} for scope in scopes])
+    study = {'applicability': {'scope': 'ingredient',
+                              'require_source_label_form': source_required,
+                              'required_form_terms': forms}}
+    enricher = SupplementEnricherV3()
+    assert enricher._brand_mentioned('Carnipure', ['L-Carnitine L-Tartrate'], {},
+        brand_tokens=['Carnipure'], label_text='L-Carnitine L-Tartrate',
+        study=study) is expected
+    # Strict brand-spelling callers do not pass a typed study scope.
+    assert not enricher._brand_mentioned('Carnipure', ['L-Carnitine L-Tartrate'], {},
+        brand_tokens=['Carnipure'], label_text='L-Carnitine L-Tartrate')
+    assert enricher._brand_mentioned('Carnipure', [], {},
+        brand_tokens=['Carnipure'], label_text='Carnipure')
+
+
+@pytest.mark.parametrize('printed', ['Carnipure', 'L-Carnitine', 'Acetyl-L-Carnitine',
+                                     'L-Carnitine Fumarate'])
+def test_lclt_source_scope_does_not_accept_brand_only_or_other_forms(printed):
+    from clinical_applicability import assess_clinical_applicability
+    row = {'name': printed, 'raw_source_text': printed,
+           'raw_source_path': 'ingredientRows[0]', 'canonical_id': 'l_carnitine',
+           'matched_form': 'l-carnitine tartrate (lclt)',
+           'form_id': 'l-carnitine tartrate (lclt)',
+           'quantity': 500, 'unit': 'mg', 'source_section': 'active'}
+    entry = {'ingredient': printed, 'matched_canonical_ids': ['l_carnitine'],
+             'matched_source_row_refs': ['ingredientRows[0]'],
+             'applicability': {'scope': 'ingredient',
+                 'require_source_label_form': True,
+                 'required_form_terms': ['LCLT', 'L-Carnitine L-Tartrate']}}
+    result = assess_clinical_applicability({'activeIngredients': [row]}, entry,
+        assess_amount=False, require_claim_alignment=False)
+    assert result == {'status': 'not_applicable', 'reason_code': 'clinical_form_mismatch'}
+
+
+def test_generic_lclt_is_not_a_strict_brand_spelling():
+    from evidence_resolver import is_reviewed_branded_material
+    assert not is_reviewed_branded_material('l_carnitine', 'L-Carnitine L-Tartrate',
+                                          strict_material_spelling=True)
+    assert is_reviewed_branded_material('l_carnitine', 'Carnipure',
+                                       strict_material_spelling=True)

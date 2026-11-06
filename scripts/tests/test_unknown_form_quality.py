@@ -755,7 +755,7 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('aloe_vera', 'Aloe vera Leaf Extract', {'name': 'Aloe barbadensis leaf extract', 'category': _B, 'ingredientGroup': 'Aloe'}, 'aloe vera (unspecified)'),
     ('rose_hips', 'Rosehip Fruit Extract', {'name': 'Rosae canina Fruit Extract', 'category': _B, 'ingredientGroup': 'Dog Rose'}, 'rose hips extract'),
     ('rose_hips', 'Rose Hip Fruit Extract', {'name': 'Rosa canina Fruit Extract', 'category': _B, 'ingredientGroup': 'Rose Hip'}, 'rose hips extract'),
-    ('perilla_oil', 'Perilla Seed Extract', {'name': 'Perilla frutescens Seed Extract', 'category': _B, 'ingredientGroup': 'perilla'}, 'perilla seed oil'),
+    ('perilla_oil', 'Perilla Seed Oil', {'name': 'Perilla frutescens Seed Oil', 'category': _B, 'ingredientGroup': 'perilla'}, 'perilla seed oil'),
     ('horse_chestnut_seed', 'Horse Chestnut Seed Extract', {'name': 'Aesculus hippocastanum Seed Extract', 'category': _B, 'ingredientGroup': 'Horse Chestnut'}, 'horse chestnut seed (unspecified)'),
     ('chamomile', 'Chamomile Flower Extract', {'name': 'Matricaria recutita Flower Extract', 'category': _B, 'ingredientGroup': 'German Chamomile '}, 'chamomile extract'),
     ('chamomile', 'Chamomile Flowering Top Extract', {'name': 'Matricaria recutita Flowering Top Extract', 'category': _B, 'ingredientGroup': 'German Chamomile '}, 'chamomile extract'),
@@ -1496,3 +1496,197 @@ def test_explicit_sambucol_retains_its_existing_branded_form(enricher, label):
     note, _ = _derive_form_note({**match, 'matched_form': match['form_id']},
                                enricher.databases['ingredient_quality_map'])
     assert note and 'Sambucol is a branded elderberry preparation' in note
+
+
+@pytest.mark.parametrize('indexed_map', [True, False])
+def test_standard_parent_name_cannot_supply_a_form_for_a_brand_only_source(enricher, indexed_map):
+    quality = (enricher.databases['ingredient_quality_map'] if indexed_map else copy.deepcopy(IQM))
+    parent = quality['l_carnitine']
+    assert 'carnipure' in parent['aliases']
+    assert 'carnipure' not in parent['forms']['l-carnitine tartrate (lclt)']['aliases']
+    match = enricher._match_quality_map('Carnipure', 'L-Carnitine', quality,
+                                       cleaner_canonical_id='l_carnitine')
+    assert match['form_id'] == 'l-carnitine (unspecified)'
+    assert match['bio_score'] == unknown_form_quality(parent)['bio_score']
+    original = enricher.databases['ingredient_quality_map']
+    try:
+        enricher.databases['ingredient_quality_map'] = quality
+        assert enricher._row_form_match_status(match, match) == 'n/a'
+        assert not enricher._is_specific_form_match(match, quality)
+    finally:
+        enricher.databases['ingredient_quality_map'] = original
+    for raw, standard, expected in [
+        ('L-Carnitine L-Tartrate', 'L-Carnitine', 'l-carnitine tartrate (lclt)'),
+        ('Carnipure LCLT', 'L-Carnitine', 'l-carnitine tartrate (lclt)'),
+        ('L-Carnitine', 'L-Carnitine', 'l-carnitine base (free form)'),
+        ('Carnipure', 'L-Carnitine L-Tartrate', 'l-carnitine tartrate (lclt)'),
+    ]:
+        assert enricher._match_quality_map(raw, standard, quality,
+            cleaner_canonical_id='l_carnitine')['form_id'] == expected
+
+
+@pytest.mark.parametrize('canonical,raw,standard,expected_form', [
+    ('pine_bark_extract', 'French Maritime Pine (Pinus pinaster) extract',
+     'Pine Bark Extract', 'pine bark extract (unspecified)'),
+    ('l_arginine', 'Arginine', 'L-Arginine', None),
+])
+def test_standard_name_guard_retains_unknown_identity_without_inventing_brand_or_base(
+    enricher, canonical, raw, standard, expected_form,
+):
+    quality = enricher.databases['ingredient_quality_map']
+    match = enricher._match_quality_map(raw, standard, quality,
+                                      cleaner_canonical_id=canonical)
+    assert match['canonical_id'] == canonical
+    assert match['form_id'] == expected_form
+    assert match['bio_score'] == unknown_form_quality(quality[canonical])['bio_score']
+    assert enricher._row_form_match_status(match, match) == 'n/a'
+    assert not enricher._is_specific_form_match(match, quality)
+
+
+@pytest.mark.parametrize('label,standard,canonical,forms,notes,expected', [
+    # Exact retained Clean rows from the bounded actual96 comparison. Repeated
+    # labels cover the same source class; IDs are in the private source receipt.
+    ('Rosehip Fruit Extract', 'Rose Hips', 'rose_hips',
+     [{'name': 'extract', 'source': 'name_extraction'}], None, 'rose hips extract'),
+    ('Rosehip Fruit Extract', 'Rose Hips', 'rose_hips',
+     [{'name': 'extract', 'source': 'name_extraction'}], '10:1', 'rose hips extract'),
+    ('Glycine, Powder', 'L-Glycine', 'l_glycine', [], 'free-form', 'l-glycine powder'),
+    ('Methylsulfonyl-Methane', 'MSM (Methylsulfonylmethane)', 'msm', [], None,
+     'MSM (methylsulfonylmethane)'),
+    ('organic Passion Flower extract', 'Passionflower', 'passionflower',
+     [{'name': 'extract', 'source': 'name_extraction'},
+      {'name': 'organic', 'source': 'name_extraction'}], None, 'passionflower extract'),
+    ('Passion Flower 4:1 extract', 'Passionflower', 'passionflower',
+     [{'name': 'extract', 'source': 'name_extraction'}], None, 'passionflower extract'),
+    ('Passion Flower vine extract', 'Passionflower', 'passionflower',
+     [{'name': 'extract', 'source': 'name_extraction'}], None, 'passionflower extract'),
+    ('dry cold pressed Sunflower seed oil', 'Sunflower Oil', 'sunflower_oil', [], None,
+     'sunflower oil'),
+    ('Antarctic Krill (Euphausia superba) Oil', 'Krill Oil', 'krill_oil', [], None,
+     'standard krill oil'),
+])
+def test_source_owned_form_aliases_survive_a_generic_standard_name(
+    enricher, label, standard, canonical, forms, notes, expected,
+):
+    match = enricher._match_quality_map(label, standard,
+        enricher.databases['ingredient_quality_map'], cleaned_forms=forms,
+        cleaner_canonical_id=canonical, row_notes=notes)
+    assert match['canonical_id'] == canonical
+    assert match['form_id'] == expected
+    assert enricher._row_form_match_status(match, match) == 'mapped'
+
+
+def test_empty_normalized_form_alias_cannot_establish_source_disclosure(enricher):
+    quality = copy.deepcopy(enricher.databases['ingredient_quality_map'])
+    quality['l_carnitine']['forms']['l-carnitine base (free form)']['aliases'].append('---')
+    match = enricher._match_quality_map('???', 'L-Carnitine', quality,
+                                      cleaner_canonical_id='l_carnitine')
+    assert match['form_id'] == 'l-carnitine (unspecified)'
+
+
+@pytest.mark.parametrize('raw,standard,canonical,excluded', [
+    ('red not methylsulfonylmethane', 'MSM (Methylsulfonylmethane)', 'msm',
+     'MSM (methylsulfonylmethane)'),
+    ('Methylsulfonyl-Methane-free', 'MSM (Methylsulfonylmethane)', 'msm',
+     'MSM (methylsulfonylmethane)'),
+    ('Rosehip powder without extract', 'Rose Hips', 'rose_hips', 'rose hips extract'),
+    ('Rosehip Fruit no extract', 'Rose Hips', 'rose_hips', 'rose hips extract'),
+])
+def test_negated_source_aliases_do_not_supply_a_standard_name_form(
+    enricher, raw, standard, canonical, excluded,
+):
+    match = enricher._match_quality_map(raw, standard,
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id=canonical) or {}
+    assert match.get('form_id') != excluded
+
+
+def _krill_clean_source_row():
+    return {
+        'name': 'Antarctic Krill (Euphausia superba) Oil',
+        'raw_source_text': 'Antarctic Krill (Euphausia superba) Oil',
+        'raw_source_path': 'ingredientRows[5]', 'standardName': 'Krill Oil',
+        'canonical_id': 'krill_oil', 'canonical_source_db': 'ingredient_quality_map',
+        'branded_token_extracted': 'Superba', 'forms': [], 'quantity': 150.0, 'unit': 'mg',
+        'mapped': True, 'score_eligible_by_cleaner': True, 'cleaner_row_role': 'active_scorable',
+        'source_section': 'active', 'dose_class': 'therapeutic_mass',
+        'normalized_key': 'antarctic_krill_euphausia_superba_oil',
+        'raw_taxonomy': {'category': 'fat', 'ingredientGroup': 'Krill Oil', 'forms': []},
+    }
+
+
+def test_actual_krill_source_form_survives_an_extracted_brand_token(enricher):
+    # Actual60701 retained Clean row. The species word Superba was also
+    # extracted as a brand token; that discovery token must not erase the
+    # source-owned Antarctic krill oil preparation at the producer boundary.
+    row = _krill_clean_source_row()
+    product = {
+        'id': '60701', 'fullName': 'Super Omega With Krill, Astaxanthin & Olive Fruit Extract',
+        'brandName': 'Life Extension', 'activeIngredients': [row], 'inactiveIngredients': [],
+        'physicalState': {'langualCode': 'E0161', 'langualCodeDescription': 'Softgel Capsule'},
+        'servingSizes': [{'order': 1, 'unit': 'Softgel(s)', 'minQuantity': 2.0,
+                         'maxQuantity': 2.0, 'minDailyServings': 2, 'maxDailyServings': 2,
+                         'normalizedServing': 2.0, 'dailyServingsSource': 'label',
+                         'servingQuantitySource': 'label'}],
+    }
+    enriched, _ = enricher.enrich_product(product)
+    actual = next(row for row in enriched['ingredient_quality_data']['ingredients']
+                  if row['raw_source_path'] == 'ingredientRows[5]')
+    assert (actual['canonical_id'], actual['form_id'], actual['form_match_status'],
+            actual['bio_score']) == ('krill_oil', 'standard krill oil', 'mapped', 13.0)
+    assert (actual['raw_source_text'], actual['quantity'], actual['unit']) == (
+        'Antarctic Krill (Euphausia superba) Oil', 150.0, 'mg')
+
+
+def test_source_label_is_part_of_the_form_match_cache_identity(enricher):
+    quality = enricher.databases['ingredient_quality_map']
+    for source, expected in [
+        ('Superba', None),
+        ('Antarctic Krill (Euphausia superba) Oil', 'standard krill oil'),
+        ('Superba', None),
+    ]:
+        match = enricher._match_quality_map('Superba', 'Krill Oil', quality,
+            cleaner_canonical_id='krill_oil', branded_token='Superba', raw_source_text=source)
+        assert match['form_id'] == expected
+
+
+def test_extracted_token_does_not_hide_source_extract_negation(enricher):
+    match = enricher._match_quality_map('Source token', 'Rose Hips',
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id='rose_hips',
+        raw_source_text='Rosehip powder without extract')
+    assert match['form_id'] is None
+
+
+
+def test_promoted_inactive_adapter_retains_the_original_source_label(enricher, monkeypatch):
+    row = _krill_clean_source_row()
+    row.update(cleaner_row_role='active_misfiled_in_inactive', source_section='inactive',
+               raw_source_path='inactiveIngredients[0]')
+    # Promotion eligibility has its own owner. Isolate the adapter after that
+    # decision so this control checks forwarding, not a new promotion policy.
+    monkeypatch.setattr(enricher, '_should_promote_to_scorable',
+        lambda *args, **kwargs: {'reason': 'known_therapeutic', 'confidence': 'HIGH'})
+    quality = enricher._collect_ingredient_quality_data({
+        'activeIngredients': [], 'inactiveIngredients': [row]})
+    actual = next(row for row in quality['ingredients_scorable']
+                  if row['raw_source_path'] == 'inactiveIngredients[0]')
+    assert (actual['form_id'], actual['form_match_status'], actual['bio_score']) == (
+        'standard krill oil', 'mapped', 13.0)
+
+
+def test_retained_parent_scoped_source_alias_can_prove_the_reviewed_form(enricher):
+    match = enricher._match_quality_map('Extracted token', 'Pterostilbene',
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id='pterostilbene',
+        raw_source_text='dimethylresveratrol')
+    assert match['form_id'] == 'trans-pterostilbene'
+    assert match['bio_score'] == 15
+
+
+@pytest.mark.parametrize("source,canonical", [
+    ("not dimethylresveratrol", "pterostilbene"),
+    ("dimethylresveratrol", "resveratrol"),
+])
+def test_parent_scoped_source_alias_cannot_borrow_another_identity_or_negation(enricher, source, canonical):
+    match = enricher._match_quality_map('Extracted token', 'Pterostilbene',
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id=canonical,
+        raw_source_text=source)
+    assert match is None or match.get('form_id') != 'trans-pterostilbene'

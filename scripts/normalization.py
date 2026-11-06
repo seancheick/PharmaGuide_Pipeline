@@ -24,45 +24,74 @@ ENZYME_ACTIVITY_UNITS = frozenset({
     "lacu", "fcc", "fccpu", "galu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
     "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su", "fu", "hcu", "hdu", "pgu", "endopgu", "xu", "sod",
 })
+def canonicalize_enzyme_activity_unit(unit):
+    """Canonical declared assay spelling only; no cross-assay/mass conversion."""
+    key = re.sub(r"[\s()-]", "", str(unit or "").lower())
+    # Read at most one optional FCC standard header. FCC PU remains its
+    # existing distinct assay; unknown qualifiers never become generic FCC.
+    for after_fcc_header in (False, True):
+        code = re.sub(r"units?$", "", key)
+        if code in ENZYME_ACTIVITY_UNITS:
+            key = code
+        if key in {"fibrinolyticunit", "fibrinolyticunits"}:
+            key = "fu"
+        if after_fcc_header and key in {"lactase", "lactaseunit", "lactaseunits"}:
+            key = "fcc"
+        if key in ENZYME_ACTIVITY_UNITS:
+            return "ENDO-PGU" if key == "endopgu" else key.upper()
+        if after_fcc_header or not key.startswith("fcc"):
+            break
+        key = key[3:]
+    return None
+
+
+_FCC_ASSAY_SPELLINGS = "|".join(
+    re.escape(unit).replace(r"\-", "[- ]?")
+    for unit in sorted({unit.upper() for unit in ENZYME_ACTIVITY_UNITS}
+                       | {canonicalize_enzyme_activity_unit(unit) for unit in ENZYME_ACTIVITY_UNITS},
+                       key=lambda value: (-len(value), value))
+)
+_FCC_ACTIVITY_TOKEN = rf"FCC(?>(?:\s*\([^()]*\)|\s*(?:{_FCC_ASSAY_SPELLINGS})|\s+[a-z]+(?:\s+units?)?)?)(?!\s*\()"
 _ENZYME_ACTIVITY_RE = re.compile(
-    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|SPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCC(?:\s*\(\s*PU\s*\)|\s*PU|\s+lactase\s+units?)|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU|HCU|HDU|ENDO[- ]?PGU|PGU|XU|SOD(?:\s+units?)?|fibrinolytic\s+units?)(?!\w)",
+    r"(?<![\w.,+\-−–—/])(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|SPU|FIP|CU|GDU|DPP[- ]?IV|LACU|"
+    + _FCC_ACTIVITY_TOKEN
+    + r"|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU|FU|HCU|HDU|ENDO[- ]?PGU|PGU|XU|SOD(?:\s+units?)?|fibrinolytic\s+units?)(?!\w)",
     re.IGNORECASE,
 )
 
 
 def extract_enzyme_activity(text, quantity=None, unit=None):
     """Read an explicit activity declaration without treating carrier mass as activity."""
-    normalized_unit = re.sub(r"[\s()-]", "", str(unit or "").lower())
-    if normalized_unit in {"sodunit", "sodunits"}:
-        normalized_unit = "sod"
+    normalized_unit = canonicalize_enzyme_activity_unit(unit)
     try:
-        value = float(str(quantity).replace(",", ""))
+        printed_quantity = str(quantity).strip()
+        value = (None if "," in printed_quantity and not _GROUPED_COUNT_RE.fullmatch(printed_quantity)
+                 else float(printed_quantity.replace(",", "")))
     except (TypeError, ValueError):
         value = None
-    if normalized_unit in ENZYME_ACTIVITY_UNITS and value and math.isfinite(value) and value > 0:
-        return value, "ENDO-PGU" if normalized_unit == "endopgu" else normalized_unit.upper()
+    if normalized_unit and value and math.isfinite(value) and value > 0:
+        return value, normalized_unit
     declaration = str(text or "")
     for match in _ENZYME_ACTIVITY_RE.finditer(declaration):
+        # A range endpoint, negative amount or identifier fragment is not a
+        # declared exact serving activity. Keep the original label unresolved.
+        prefix = declaration[:match.start()]
+        if re.search(r"[-−–—]\s*$|\d[\d,.]*\s+(?:to|through)\s*$", prefix, re.I):
+            continue
         # A potency per mass is not a serving activity. Preserve the label's
         # physical dose; do not infer activity by multiplying a concentration.
         if re.match(r"\s*(?:/|per\b)\s*(?:mg|g|kg|mcg|grams?|milligrams?|kilograms?)\b",
                     declaration[match.end():], re.IGNORECASE):
             continue
-        value = float(match.group("value").replace(",", ""))
+        printed_quantity = match.group("value")
+        if "," in printed_quantity and not _GROUPED_COUNT_RE.fullmatch(printed_quantity):
+            continue
+        value = float(printed_quantity.replace(",", ""))
         if not math.isfinite(value) or value <= 0:
             continue
-        unit_text = re.sub(r"[\s()-]", "", match.group("unit").upper())
-        if unit_text == "ENDOPGU":
-            unit_text = "ENDO-PGU"
-        if unit_text.startswith("SOD"):
-            unit_text = "SOD"
-        if unit_text.startswith("FIBRINOLYTIC"):
-            unit_text = "FU"
-        elif unit_text.startswith("FCCLACTASE"):
-            # The label explicitly names the lactase assay; retain its FCC
-            # units without converting them to another assay or to mass.
-            unit_text = "FCC"
-        return value, unit_text
+        assay = canonicalize_enzyme_activity_unit(match.group("unit"))
+        if assay:
+            return value, assay
     return None, None
 
 # Printed quantity qualifiers DSLD carries on a quantity's ``operator`` ("<1 g",

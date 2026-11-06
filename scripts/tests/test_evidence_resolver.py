@@ -1950,15 +1950,27 @@ def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifac
     row['quantity'] = amount
     result = er.resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
-    assert result.reason_code == 'reference_only_clinical_record'
+    assert result.reason_code == 'clinical_form_mismatch'
     artifact = build_scored_artifact(product)
     assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
     assert 'evidence_assessment_incomplete' not in artifact['assessment_readiness']['release_assessment']['blockers']
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
-    assessments = result.owner_facts['backed_clinical_studies']['assessments']
-    assert {a['id']: a['reason_code'] for a in assessments} == {
+    # The now-reviewed tartrate source is form-excluded too. Inspect each
+    # canonical decision: the valid-source branch need not expose the
+    # reference-only branch's aggregate diagnostic payload.
+    from clinical_applicability import assess_clinical_applicability, reviewed_entries
+    decisions = {}
+    for source_id in ('INGR_L_CARNITINE', 'INGR_ACETYL_L_CARNITINE', 'BRAND_CARNIPURE'):
+        source = {**reviewed_entries()[source_id], 'ingredient': row['name'],
+                  'matched_canonical_ids': ['l_carnitine'],
+                  'matched_source_row_refs': [row['raw_source_path']]}
+        decisions[source_id] = assess_clinical_applicability(
+            product, source, assess_amount=False, require_claim_alignment=False,
+        )['reason_code']
+    assert decisions == {
         'INGR_L_CARNITINE': 'clinical_preparation_mismatch',
         'INGR_ACETYL_L_CARNITINE': 'reference_only_clinical_record',
+        'BRAND_CARNIPURE': 'clinical_form_mismatch',
     }
 
 
@@ -2177,3 +2189,84 @@ def test_panel_citations_cover_only_resolved_expected_rows():
         row_key=lambda row: row['canonical_id'])
     assert result['source_references']
     assert all('VitaminC' in ref['url'] for ref in result['source_references'])
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+@pytest.mark.parametrize('other_review', ['unread_human', 'unread_context', 'unread_reference', 'finished_reference'])
+@pytest.mark.parametrize('trial_scope', ['form_excluded', 'nonpositive', 'applicable'])
+def test_one_finished_trial_cannot_hide_another_unread_source(monkeypatch, reverse, other_review, trial_scope):
+    """Synthetic source mechanics: an exclusion is not a completed whole review."""
+    import copy
+    import clinical_applicability as ca
+    from assessment_readiness import _resolved_evidence_assessment
+    trial = _approved_test_source({'id': 'TEST_SPECIFIC_PREPARATION',
+        'study_type': 'rct_single', 'evidence_level': 'ingredient-human',
+        'effect_direction': 'positive_weak'}, name='Synthetic Test Material')
+    trial['applicability'] = {'scope': 'ingredient', 'required_form_terms': ['special test material']}
+    other = {'id': 'TEST_OTHER_SOURCE', 'standard_name': 'Synthetic Test Material',
+        'study_type': 'rct_single', 'evidence_level': 'ingredient-human',
+        'scoring_eligible': False, 'references_structured': [{'pmid': '39269340'}],
+        'study_contexts': []}
+    if other_review == 'unread_context':
+        other = _approved_test_source({'id': 'TEST_OTHER_SOURCE',
+            'study_type': 'rct_single', 'evidence_level': 'ingredient-human'},
+            name='Synthetic Test Material', pmid='39269340')
+        other['study_contexts'][0]['human_status'] = 'unknown'
+    elif other_review != 'unread_human':
+        other.update(study_type='reference', evidence_level='reference')
+    if other_review == 'finished_reference':
+        other['study_contexts'] = [{
+            'context_id': 'test_other_source_rejection', 'components': [other['id']],
+            'source_pmids': ['39269340'], 'review_status': 'rejected_source', 'scoring_eligible': False,
+            'clinical_review': {'reviewer': 'Synthetic independent mechanics reviewer',
+                'reviewed_at': '2026-11-06', 'scope': 'identity_dose_outcome_applicability'},
+            'dose': {'source_provenance': {'pmid': '39269340',
+                'source_url': 'https://pubmed.ncbi.nlm.nih.gov/39269340/',
+                'location': 'Synthetic mechanics source exclusion, not a clinical data edit'}},
+            'limitations': ['Synthetic finished no-credit source scope.']}]
+    if trial_scope == 'nonpositive':
+        trial['effect_direction'] = 'null'
+        trial['study_contexts'][0]['outcomes'][0]['direction'] = 'null'
+    row = {'name': 'Ordinary Test Material' if trial_scope == 'form_excluded' else 'Special Test Material',
+        'canonical_id': 'synthetic_material', 'mapped': True, 'raw_source_path': 'ingredientRows[0]',
+        'quantity': 100, 'unit': 'mg', 'bio_score': 10}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    studies = [other, trial]
+    if reverse:
+        studies.reverse()
+    before = copy.deepcopy(studies)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {s['id']: s for s in studies})
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'synthetic_material': studies})
+    assert er.clinical_record_sources_eligible(other) is False
+    result = er.resolve_evidence_for_row(row, product)
+    assert studies == before
+    if trial_scope == 'applicable':
+        # One genuinely applicable source is retained despite another unread source.
+        assert result.points_eligible is True
+        assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    elif other_review != 'finished_reference':
+        assert result.points_eligible is False
+        assert _resolved_evidence_assessment(result)[0] == 'not_yet_evaluated'
+    else:
+        assert result.points_eligible is False
+        assert _resolved_evidence_assessment(result)[0] != 'not_yet_evaluated'
+
+
+@pytest.mark.parametrize('invalid', ['unknown_human', 'ambiguous_human', 'nonhuman',
+    'retracted', 'expression_of_concern', 'missing_dose', 'unresolved_outcome'])
+def test_source_eligibility_cannot_override_existing_complete_context_schema(monkeypatch, invalid):
+    import clinical_applicability as ca
+    from clinical_evidence_schema import validate_ingredient_context
+    record = _approved_test_source({'id': 'TEST_COMPLETE_SOURCE_SCHEMA',
+        'study_type': 'rct_single', 'evidence_level': 'ingredient-human'})
+    context = record['study_contexts'][0]
+    if invalid == 'unknown_human': context['human_status'] = 'unknown'
+    elif invalid == 'ambiguous_human': context['human_status'] = 'ambiguous'
+    elif invalid == 'nonhuman': context['human_status'] = 'nonhuman'
+    elif invalid in {'retracted', 'expression_of_concern'}: context['source_integrity'] = invalid
+    elif invalid == 'missing_dose': context['dose'].pop('values')
+    elif invalid == 'unresolved_outcome': context['outcomes'][0]['hierarchy'] = 'unresolved'
+    assert validate_ingredient_context(context, require_complete_review=True)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {record['id']: record})
+    assert er.clinical_record_sources_eligible(record, context=context) is False
+    assert er.clinical_record_sources_eligible(record) is False

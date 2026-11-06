@@ -1010,6 +1010,24 @@ def _accepted_condition_scopes(reference: Mapping, policy: Mapping) -> list:
     ]
 
 
+def reviewed_exact_form_source_scope(reference: Mapping) -> bool:
+    """A reviewed chemical preparation is discoverable without a trademark.
+
+    Classification only; the row's retained preparation, population and outcome
+    still pass the ordinary applicability owner before any points are earned.
+    """
+    policy = reference.get("applicability") or {}
+    if (not _valid_policy(policy)
+            or policy.get("scope") != "ingredient"
+            or policy.get("require_source_label_form") is not True
+            or not policy.get("required_form_terms")):
+        return False
+    contexts = _accepted_condition_scopes(reference, policy)
+    return bool(contexts) and all(
+        context.get("identity_scope") == "exact_form" for context in contexts
+    )
+
+
 def _positioning_is_formula_level(product: Mapping, canonicals: set) -> bool:
     """Whether unattributed product positioning speaks for other ingredients too.
 

@@ -133,15 +133,13 @@ def test_gs15_4_uses_exact_preparation_and_completed_neutral_dose():
     assert dose["metadata"]["benchmark"] == "absent"
     scored = build_scored_artifact(product)
     release = scored["assessment_readiness"]["release_assessment"]
-    assert release["blockers"] == ["identity_assessment_incomplete"]
+    assert release["blockers"] == []
     assert release["unfinished_source_assessment"] is None
-    assert scored["quality_score_status"] == "not_scored"
+    assert scored["quality_score_status"] == "scored"
+    assert "form_quality_unassessed" not in scored["strict_scoring_contract"]["findings"]
     assert scored["product_safety_status"] == "no_known_catalog_concern"
-    from audit_source_of_truth_contract import _release_assessment_export_contained
-    assert _release_assessment_export_contained(
-        scored, product, completion_only=True, warning_only=set(),
-        blocked_warning_only=set(), quarantines={},
-    )
+    from build_final_db import validate_export_contract
+    assert validate_export_contract(product, scored) == []
 
 
 @pytest.mark.parametrize("other", ["Panax ginseng", "steamed red ginseng", "HYFRG", "GINST15"])

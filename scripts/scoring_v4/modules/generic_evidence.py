@@ -1071,12 +1071,13 @@ def _is_verified_product_level_entry(entry: Dict[str, Any]) -> bool:
 
 
 def _is_verified_ingredient_human_entry(entry: Dict[str, Any]) -> bool:
+    from clinical_applicability import reviewed_exact_form_source_scope
     from evidence_resolver import clinical_record_sources_eligible
     if not clinical_record_sources_eligible(entry):
         return False
     if not _safe_list(entry.get("references_structured")):
         return False
-    return _norm_text(entry.get("evidence_level")) in {
+    return reviewed_exact_form_source_scope(entry) or _norm_text(entry.get("evidence_level")) in {
         "ingredient-human",
         "ingredient_human",
     }

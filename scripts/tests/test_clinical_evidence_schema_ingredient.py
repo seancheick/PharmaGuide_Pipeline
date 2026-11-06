@@ -61,6 +61,35 @@ def test_a_valid_ingredient_context_passes_both_the_shared_and_lane_rules():
     assert validate_ingredient_context(_context(), known_component_ids={"gotu_kola"}) == []
 
 
+@pytest.mark.parametrize("unit", ["FU", "FCC", "FCCPU", "ALU", "HUT", "DPPIV", "ENDO-PGU"])
+def test_declared_enzyme_activity_is_representable_without_approving_a_source(unit):
+    # Structural contract only, not a claim about the fixture paper's regimen.
+    context = _context()
+    existing_holds = validate_ingredient_context(context, require_complete_review=True)
+    context["dose"].update(measurement_type="enzyme_activity", unit=unit, values=[100])
+    context["dose"]["source_provenance"]["quote"] = "Synthetic assay representation fixture; not a clinical regimen."
+    assert validate_ingredient_context(context) == []
+    assert "review.approval_required" in existing_holds
+    assert validate_ingredient_context(context, require_complete_review=True) == existing_holds
+    from probiotic_measurements import classify_dose_applicability
+    assert classify_dose_applicability(100, context["dose"]) == (
+        "DOSE_UNKNOWN", "study_dose_not_viable_count",
+    )
+    from clinical_applicability import _valid_policy
+    assert not _valid_policy({"scope": "ingredient", "minimum_daily_dose": 100, "dose_unit": unit})
+
+
+@pytest.mark.parametrize("measurement,unit", [
+    ("enzyme_activity", "mg"), ("enzyme_activity", "CFU"),
+    ("enzyme_activity", "AFU"), ("enzyme_activity", "IU"),
+    ("enzyme_activity", "U"), ("mass", "FU"), ("viable_count", "FCC"),
+])
+def test_activity_cannot_be_relabelled_as_mass_or_viable_count(measurement, unit):
+    context = _context()
+    context["dose"].update(measurement_type=measurement, unit=unit)
+    assert "dose.unit_measurement_mismatch" in validate_ingredient_context(context)
+
+
 def test_probiotic_scopes_are_not_ingredient_scopes_and_vice_versa():
     assert "identity.scope_invalid" in validate_ingredient_context(_context(identity_scope="exact_strain"))
     assert "identity.scope_invalid" not in validate_ingredient_context(_context(identity_scope="exact_form"))

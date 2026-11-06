@@ -272,3 +272,26 @@ def test_chloride_role_cites_primary_dri_without_rewriting_existing_dose_source(
     assert '272' in reference[0]['notes']
     assert rda_ul_reference_entry(canonical_id='chloride')['reference_semantics']['source_ids'] == [
         'https://nap.nationalacademies.org/skim.php?chap=386-396&record_id=11537']
+
+
+def test_exact_reviewed_unrated_form_is_complete_without_a_numeric_grade(monkeypatch):
+    import scoring_reference_resolver as resolver
+    review = {"is_complete": True, "reason_code": "reviewed_unrated_form",
+              "reviewed_by": "Product owner", "reviewed_at": "2026-11-06",
+              "scope": "exact_preparation", "source": "Recorded exact-preparation authorization"}
+    form = {"bio_score": None, "form_quality_assessment": review}
+    monkeypatch.setattr(resolver, "iqm_reference_entry", lambda key: {"forms": {"exact extract": form}} if key == "plant" else None)
+    assert resolver.reviewed_unrated_form("plant", "exact extract")
+    assert resolver.effective_form_bio({}, form) is None
+    assert not resolver.reviewed_unrated_form("other", "exact extract")
+    assert not resolver.reviewed_unrated_form("plant", "other extract")
+    for field, invalid in [("is_complete", 1), ("reason_code", "pending"),
+                           ("reviewed_by", ""), ("reviewed_at", "2026-02-31"),
+                           ("reviewed_at", "2099-01-01"),
+                           ("scope", "ingredient"), ("source", None)]:
+        original = review[field]
+        review[field] = invalid
+        assert not resolver.reviewed_unrated_form("plant", "exact extract"), field
+        review[field] = original
+    form["bio_score"] = 0
+    assert not resolver.reviewed_unrated_form("plant", "exact extract")

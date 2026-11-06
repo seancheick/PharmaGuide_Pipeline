@@ -330,10 +330,11 @@ def test_exact_approved_held_label_is_unscored_and_exportable(pairs, pid):
     release = scored['assessment_readiness']['release_assessment']
     assert release['is_complete'] is False
     if pid == '232035':
-        # The ungraded GS15-4 form stops scoring before Dose. Its separate
-        # Cordyceps assessment remains held and no Dose decision transfers.
-        assert release['blockers'] == ['identity_assessment_incomplete', 'evidence_assessment_incomplete']
-        assert release['unfinished_source_assessment'] is None
+        # Exact GS15 form review is complete without a grade; its separate
+        # Cordyceps Dose and Evidence assessments still block this product.
+        assert release['blockers'] == ['dose_benchmark_identity_unresolved', 'evidence_assessment_incomplete']
+        assert release['unfinished_source_assessment'] == 'dose_benchmark_identity_unresolved'
+        assert 'form_quality_unassessed' not in scored['strict_scoring_contract']['findings']
     else:
         assert 'dose_benchmark_identity_unresolved' in release['blockers']
         assert release['unfinished_source_assessment'] == 'dose_benchmark_identity_unresolved'

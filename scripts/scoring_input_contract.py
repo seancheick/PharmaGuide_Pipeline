@@ -34,6 +34,7 @@ from constants import (
 from scoring_reference_resolver import (
     has_therapeutic_reference,
     iqm_reference_entry,
+    reviewed_unrated_form,
     identity_registry_name_lists,
     is_known_botanical,
 )
@@ -3191,9 +3192,10 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
     if row.get("form_match_status") == "unmapped" and not structural_total:
         findings.append(DISCLOSED_FORM_UNMAPPED_FINDING)
     if (row.get("form_match_status") == "mapped" and not structural_total
-            and row.get("bio_score") is None and row.get("form_id")):
-        # Recognition is not a completed form-quality assessment. A null grade
-        # must remain a blocking owned dependency, never a neutral scored form.
+            and row.get("bio_score") is None and row.get("form_id")
+            and not reviewed_unrated_form(row.get("canonical_id"), row["form_id"])):
+        # Recognition alone is not review. Only an exact, source-bound IQM
+        # completed-unrated assessment permits the existing neutral route rubric.
         findings.append("form_quality_unassessed")
 
     return True, None, findings
