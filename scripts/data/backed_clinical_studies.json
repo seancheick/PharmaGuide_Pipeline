@@ -22280,18 +22280,17 @@
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
-        "Blood Sugar Support",
-        "Healthy Aging/Longevity"
+        "Blood Sugar Support"
       ],
-      "notes": "Human randomized and meta-analytic evidence supports taurine for modest improvements in blood pressure and selected cardiometabolic markers; effects vary by dose and baseline risk.",
+      "notes": "Human randomized and meta-analytic research reports modest blood-pressure and selected cardiometabolic-marker changes, with effects varying by population and regimen. These surrogate findings do not establish prevention of cardiovascular events or extended human lifespan. The specific full-methods source-review hold remains: included trials, preparations, populations, regimens and outcome applicability have not been fully qualified for the two declared syntheses. As of2026-11-06, the publisher-deposited bibliography for PMID41275513 cites the retracted heart-failure trial PMID28118062 (DOI10.1080/19390211.2016.1267059; retraction notice PMID41943494, DOI10.1080/19390211.2026.2656044). This verifies a citation link, not contribution to any particular pooled estimate. Pool membership, weighting and the effect on surviving findings remain unverified. No new Evidence credit or categorical no-benefit conclusion follows from this factual update.",
       "study_type": "systematic_review_meta",
       "published_studies": [
         "RCT",
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-10-28",
-      "notable_studies": "Meta-analysis of RCTs reported blood-pressure and lipid improvements with taurine supplementation (PMID: 32871172). A newer 2025 meta-analysis reported broader cardiometabolic improvements across 34 RCTs (PMID: 41275513).",
+      "last_updated": "2026-11-06",
+      "notable_studies": "PMID32871172 (2020) reports blood-pressure, total-cholesterol and triglyceride reductions across heterogeneous clinical populations, with null pooled findings for fasting glucose, HDL-C, LDL-C, BMI and body weight. PMID41275513, first published online in2025, reports34eligible RCTs and additional cardiometabolic-marker pools; that source-reported count is not an independently reconciled trial-family count. Both syntheses still require full-methods and source-applicability review. The newer bibliography cites PMID28118062, retracted on2026-04-06 under notice PMID41943494; reference membership alone does not establish which outcomes used its data or invalidate the entire synthesis. No human longevity finding is established by these sources.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -22351,12 +22350,10 @@
       "total_enrollment": 240,
       "registry_completed_trials_count": 88,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=88; total_enrollment=240; endpoint_tags=focus_memory,cardiovascular,glycemic_control,digestive_health; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "Existing positive_weak description retained pending full-methods, trial-family and source-integrity qualification. The declared syntheses concern blood-pressure and cardiometabolic markers, not memory, digestive benefit or human lifespan. The newer synthesis bibliography cites a subsequently retracted trial; pool contribution and the effect of its removal remain unverified. No new scoring or clinical conclusion is inferred.",
       "endpoint_relevance_tags": [
-        "focus_memory",
         "cardiovascular",
-        "glycemic_control",
-        "digestive_health"
+        "glycemic_control"
       ],
       "study_contexts": []
     },

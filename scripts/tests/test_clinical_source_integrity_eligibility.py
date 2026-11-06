@@ -669,3 +669,19 @@ def test_elderberry_completed_synthesis_review_does_not_invent_generic_credit():
     assert reviewed['dose']['values'] == []
     assert '176' in reviewed['population']['description'] and '180' in reviewed['population']['description']
     assert 'Cochrane/GRADE review' not in ' '.join(reviewed['limitations'])
+
+
+def test_taurine_integrity_review_preserves_hold_without_inferred_longevity_or_pool_contamination():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    record = reviewed_entries()['INGR_TAURINE']
+    text = record['notes'] + ' ' + record['notable_studies']
+    assert '28118062' in text and '41943494' in text
+    assert '2026-04-06' in text
+    assert 'not contribution to any particular pooled estimate' in text
+    assert 'Healthy Aging/Longevity' not in record['health_goals_supported']
+    assert not {'focus_memory', 'digestive_health'} & set(record['endpoint_relevance_tags'])
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['study_contexts'] == []
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert {ref['pmid'] for ref in record['references_structured']} == {'32871172', '41275513'}
+    assert not er.resolve_evidence_for_canonical('taurine', name='Taurine').points_eligible
