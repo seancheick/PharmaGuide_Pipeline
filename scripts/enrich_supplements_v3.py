@@ -5055,6 +5055,7 @@ class SupplementEnricherV3:
                         branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
                         row_notes=ingredient.get("notes"),
                         source_context=ingredient.get("parentBlend"),
+                        raw_source_text=ingredient.get("raw_source_text") or ingredient.get("name"),
                     )
             context_match_reason = pre_context_match_reason
             authoritative_marker_context = False
@@ -5396,6 +5397,7 @@ class SupplementEnricherV3:
                     branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
                     row_notes=ingredient.get('notes'),
                     source_context=ingredient.get('parentBlend'),
+                    raw_source_text=ingredient.get('raw_source_text') or ingredient.get('name'),
                 )
                 if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
                     match_result = None
@@ -9279,11 +9281,14 @@ class SupplementEnricherV3:
                            branded_token: Optional[str] = None,
                            cleaner_canonical_id: Optional[str] = None,
                            row_notes: Optional[str] = None,
-                           source_context: Optional[str] = None) -> Optional[Dict]:
+                           source_context: Optional[str] = None,
+                           raw_source_text: Optional[str] = None) -> Optional[Dict]:
         """Memoizing wrapper around :meth:`_match_quality_map_impl`.
 
         ``row_notes`` (the row's DSLD notes) is read after the cached match,
         by :meth:`_read_form_in_row_notes`, so it is not part of the key.
+        ``raw_source_text`` retains form disclosure when a discovery token
+        replaces the matching name; it is part of the cache identity.
 
         The match result is a pure function of these arguments plus the static
         (within a run) quality_map, so repeated ingredient labels — ubiquitous in
@@ -9317,7 +9322,7 @@ class SupplementEnricherV3:
                 [
                     ing_name, std_name, _form_extraction_attempt, cleaned_forms,
                     preferred_parent, branded_token, cleaner_canonical_id,
-                    source_context, id(quality_map),
+                    source_context, raw_source_text, id(quality_map),
                 ],
                 sort_keys=True, default=str,
             )
@@ -9327,7 +9332,7 @@ class SupplementEnricherV3:
                 ing_name, std_name, quality_map, _form_extraction_attempt,
                 cleaned_forms, preferred_parent, branded_token,
                 cleaner_canonical_id,
-                source_context,
+                source_context, raw_source_text,
             )
 
         if key in self._match_quality_cache:
@@ -9336,7 +9341,7 @@ class SupplementEnricherV3:
         result = self._match_quality_map_impl(
             ing_name, std_name, quality_map, _form_extraction_attempt,
             cleaned_forms, preferred_parent, branded_token, cleaner_canonical_id,
-            source_context,
+            source_context, raw_source_text,
         )
         # Store an isolated copy (defends against any impl-side aliasing) and
         # hand every caller its own isolated copy — the cache entry is immutable.
@@ -9726,7 +9731,8 @@ class SupplementEnricherV3:
                                 preferred_parent: Optional[str] = None,
                                 branded_token: Optional[str] = None,
                                 cleaner_canonical_id: Optional[str] = None,
-                                source_context: Optional[str] = None) -> Optional[Dict]:
+                                source_context: Optional[str] = None,
+                                raw_source_text: Optional[str] = None) -> Optional[Dict]:
         """
         Match ingredient against quality map using explicit precedence rules.
 
@@ -10294,7 +10300,7 @@ class SupplementEnricherV3:
             add(base_name, 2)
             return sorted(out.items(), key=lambda item: item[1])
 
-        def _build_normalized_candidates() -> List[Tuple[str, int]]:
+        def _build_normalized_candidates(source_name: Optional[str] = None) -> List[Tuple[str, int]]:
             out: Dict[str, int] = {}
 
             def add(value: Optional[str], source: int):
@@ -10320,13 +10326,16 @@ class SupplementEnricherV3:
                     if normed not in out or source < out[normed]:
                         out[normed] = source
 
-            add(ing_name, 0)
+            add(ing_name if source_name is None else source_name, 0)
             add(std_name, 1)
             add(base_name, 2)
             return sorted(out.items(), key=lambda item: item[1])
 
         exact_candidates = _build_exact_candidates()
         normalized_candidates = _build_normalized_candidates()
+        source_candidates = (_build_normalized_candidates(raw_source_text)
+                             if raw_source_text is not None and raw_source_text != ing_name
+                             else normalized_candidates)
 
         def alias_length(match_type: str, alias: str) -> int:
             if match_type == "exact":
@@ -10506,10 +10515,13 @@ class SupplementEnricherV3:
                 for value in (parent_key, parent_data.get("standard_name"))
                 if value
             }
-            if (candidate.get("form_key")
-                    and self._is_specific_form_match(candidate.get("match_data"), quality_map)
-                    and candidate.get("match_source") == 1
-                    and self._normalize_text(candidate.get("matched_alias") or "") in generic_names):
+            standard_parent_form = (
+                candidate.get("form_key")
+                and self._is_specific_form_match(candidate.get("match_data"), quality_map)
+                and candidate.get("match_source") == 1
+                and self._normalize_text(candidate.get("matched_alias") or "") in generic_names
+            )
+            if standard_parent_form:
                 form = (parent_data.get("forms") or {}).get(candidate["form_key"]) or {}
                 source_aliases = {
                     self._norm_form_name(alias)
@@ -10525,17 +10537,18 @@ class SupplementEnricherV3:
                         re.compile(r"(?<!\w)" + re.escape(alias) + r"(?!\w)", re.I),
                         self._norm_form_name(value), spaced_free=True,
                     )
-                    for value, source in normalized_candidates if source == 0
+                    for value, source in source_candidates if source == 0
                     for alias in source_aliases if alias
                 ):
                     return
             # A bare parent alias cannot turn a printed powder/dried material
             # into an extract. Retain the parent and its shared unknown
             # form treatment; row-owned explicit extract forms remain valid.
+            guard_label = (raw_source_text or ing_name) if standard_parent_form else ing_name
             if (
-                re.search(r"\b(?:powder|dried|extract)\b", ing_name, re.I)
+                re.search(r"\b(?:powder|dried|extract)\b", guard_label, re.I)
                 and not norm_module.find_affirmative_label_match(
-                    re.compile(r"\bextract\b", re.I), ing_name, spaced_free=True,
+                    re.compile(r"\bextract\b", re.I), guard_label, spaced_free=True,
                 )
                 and re.search(r"\bextract\b", _resolved_candidate_form_id(candidate) or "", re.I)
             ):

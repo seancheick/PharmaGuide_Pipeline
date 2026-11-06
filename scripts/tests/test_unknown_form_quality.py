@@ -1598,3 +1598,76 @@ def test_negated_source_aliases_do_not_supply_a_standard_name_form(
     match = enricher._match_quality_map(raw, standard,
         enricher.databases['ingredient_quality_map'], cleaner_canonical_id=canonical) or {}
     assert match.get('form_id') != excluded
+
+
+def _krill_clean_source_row():
+    return {
+        'name': 'Antarctic Krill (Euphausia superba) Oil',
+        'raw_source_text': 'Antarctic Krill (Euphausia superba) Oil',
+        'raw_source_path': 'ingredientRows[5]', 'standardName': 'Krill Oil',
+        'canonical_id': 'krill_oil', 'canonical_source_db': 'ingredient_quality_map',
+        'branded_token_extracted': 'Superba', 'forms': [], 'quantity': 150.0, 'unit': 'mg',
+        'mapped': True, 'score_eligible_by_cleaner': True, 'cleaner_row_role': 'active_scorable',
+        'source_section': 'active', 'dose_class': 'therapeutic_mass',
+        'normalized_key': 'antarctic_krill_euphausia_superba_oil',
+        'raw_taxonomy': {'category': 'fat', 'ingredientGroup': 'Krill Oil', 'forms': []},
+    }
+
+
+def test_actual_krill_source_form_survives_an_extracted_brand_token(enricher):
+    # Actual60701 retained Clean row. The species word Superba was also
+    # extracted as a brand token; that discovery token must not erase the
+    # source-owned Antarctic krill oil preparation at the producer boundary.
+    row = _krill_clean_source_row()
+    product = {
+        'id': '60701', 'fullName': 'Super Omega With Krill, Astaxanthin & Olive Fruit Extract',
+        'brandName': 'Life Extension', 'activeIngredients': [row], 'inactiveIngredients': [],
+        'physicalState': {'langualCode': 'E0161', 'langualCodeDescription': 'Softgel Capsule'},
+        'servingSizes': [{'order': 1, 'unit': 'Softgel(s)', 'minQuantity': 2.0,
+                         'maxQuantity': 2.0, 'minDailyServings': 2, 'maxDailyServings': 2,
+                         'normalizedServing': 2.0, 'dailyServingsSource': 'label',
+                         'servingQuantitySource': 'label'}],
+    }
+    enriched, _ = enricher.enrich_product(product)
+    actual = next(row for row in enriched['ingredient_quality_data']['ingredients']
+                  if row['raw_source_path'] == 'ingredientRows[5]')
+    assert (actual['canonical_id'], actual['form_id'], actual['form_match_status'],
+            actual['bio_score']) == ('krill_oil', 'standard krill oil', 'mapped', 13.0)
+    assert (actual['raw_source_text'], actual['quantity'], actual['unit']) == (
+        'Antarctic Krill (Euphausia superba) Oil', 150.0, 'mg')
+
+
+def test_source_label_is_part_of_the_form_match_cache_identity(enricher):
+    quality = enricher.databases['ingredient_quality_map']
+    for source, expected in [
+        ('Superba', None),
+        ('Antarctic Krill (Euphausia superba) Oil', 'standard krill oil'),
+        ('Superba', None),
+    ]:
+        match = enricher._match_quality_map('Superba', 'Krill Oil', quality,
+            cleaner_canonical_id='krill_oil', branded_token='Superba', raw_source_text=source)
+        assert match['form_id'] == expected
+
+
+def test_extracted_token_does_not_hide_source_extract_negation(enricher):
+    match = enricher._match_quality_map('Source token', 'Rose Hips',
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id='rose_hips',
+        raw_source_text='Rosehip powder without extract')
+    assert match['form_id'] is None
+
+
+
+def test_promoted_inactive_adapter_retains_the_original_source_label(enricher, monkeypatch):
+    row = _krill_clean_source_row()
+    row.update(cleaner_row_role='active_misfiled_in_inactive', source_section='inactive',
+               raw_source_path='inactiveIngredients[0]')
+    # Promotion eligibility has its own owner. Isolate the adapter after that
+    # decision so this control checks forwarding, not a new promotion policy.
+    monkeypatch.setattr(enricher, '_should_promote_to_scorable',
+        lambda *args, **kwargs: {'reason': 'known_therapeutic', 'confidence': 'HIGH'})
+    quality = enricher._collect_ingredient_quality_data({
+        'activeIngredients': [], 'inactiveIngredients': [row]})
+    actual = next(row for row in quality['ingredients_scorable']
+                  if row['raw_source_path'] == 'inactiveIngredients[0]')
+    assert (actual['form_id'], actual['form_match_status'], actual['bio_score']) == (
+        'standard krill oil', 'mapped', 13.0)
