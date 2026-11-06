@@ -547,10 +547,10 @@ def build_scored_artifact(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         scored = score_product_v4(scoring_product)
         if scoring_product is enriched_product:
             return assemble_scored_artifact(enriched_product, scored)
-    # Assembly intentionally reads the original source identities. A filtered
-    # scoring view cannot lend its cached facts to that different input, but
-    # the original view still needs per-pass reuse of its own derivations.
-    with scoring_input_scope(enriched_product):
-        return assemble_scored_artifact(enriched_product, scored)
+        # Assembly intentionally reads the original source identities. Keep
+        # whole-product facts separate while retaining field-only views whose
+        # exact input objects (such as probiotic label rows) are shared.
+        with scoring_input_scope(enriched_product):
+            return assemble_scored_artifact(enriched_product, scored)
 
 
