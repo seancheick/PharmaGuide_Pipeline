@@ -185,7 +185,11 @@ class TestCrossModuleExactStrainDisposition:
         # When evaluated by generic_evidence
         ev = score_generic_evidence(p, apply_primary_floor=True)
         assert ev["score"] == 0.0
-        assert ev["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+        # A finished native review does not finish the principal protein research.
+        assert ev["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+        from evidence_resolver import resolve_product_evidence
+        assert any(row.canonical_id in {"protein", "rice_protein"} and row.blocking_reasons
+                   for row in resolve_product_evidence(p, owner_scoped=True).resolutions)
         assert ev["metadata"]["probiotic_component_evidence"] is not None
         assert ev["metadata"]["probiotic_component_evidence"]["disposition_state"] == "research_present_applicability_unestablished"
 
@@ -233,7 +237,11 @@ class TestCrossModuleSpeciesOnlyDisposition:
 
         ev = score_generic_evidence(p, apply_primary_floor=True)
         assert ev["score"] == 0.0
-        assert ev["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
+        # The unresolved collagen preparation remains independent of the species-only zero.
+        assert ev["metadata"]["evidence_result_state"] == "clinical_review_not_covered"
+        from evidence_resolver import resolve_product_evidence
+        assert any(row.canonical_id == "collagen" and row.blocking_reasons
+                   for row in resolve_product_evidence(p, owner_scoped=True).resolutions)
 
     def test_ora_break_it_down_bacillus_subtilis(self):
         """Ora Break it Down (208587) has species-only Bacillus subtilis."""
