@@ -11,6 +11,7 @@ import json
 import math
 import re
 from collections.abc import Mapping
+from copy import deepcopy
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -100,6 +101,17 @@ def _evidence_subject_refs(product: Mapping, *, include_undosed: bool = False,
     Clinical applicability consumes the provider's decision and never rebuilds
     subject eligibility from cleaner roles or display rows.
     """
+    from scoring_input_contract import scoped_product_view
+    return scoped_product_view(
+        product, ("clinical_subject_refs", include_undosed, include_anchor_lineage),
+        lambda: _build_evidence_subject_refs(
+            product, include_undosed=include_undosed,
+            include_anchor_lineage=include_anchor_lineage), set,
+    )
+
+
+def _build_evidence_subject_refs(product: Mapping, *, include_undosed: bool,
+                                 include_anchor_lineage: bool) -> set:
     iqd = product.get("ingredient_quality_data")
     if not isinstance(iqd, Mapping) or not isinstance(iqd.get("ingredients_scorable"), list):
         return set()
@@ -164,6 +176,14 @@ def _resolved_identity_by_ref(product: Mapping) -> dict:
     one carrying ``form_id``/``matched_form``. Deduplication keeps the label copy,
     so a reviewed scope that names a material ("Petadolex") could never see it.
     """
+    from scoring_input_contract import scoped_product_view
+    return scoped_product_view(
+        product, ("clinical_identity_refs",),
+        lambda: _build_resolved_identity_by_ref(product), deepcopy,
+    )
+
+
+def _build_resolved_identity_by_ref(product: Mapping) -> dict:
     resolved: dict = {}
     iqd = product.get("ingredient_quality_data") or {}
     if not isinstance(iqd, Mapping):

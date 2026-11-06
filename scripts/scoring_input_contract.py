@@ -2668,6 +2668,7 @@ class _ScoringInputScope:
 
     product: Dict[str, Any]
     cache: Dict[tuple, Any] = field(default_factory=dict)
+    parent: Optional["_ScoringInputScope"] = None
 
     def holds(self, product: Any) -> bool:
         """Whether ``product`` is this pass's input: the product itself, or a
@@ -2696,10 +2697,18 @@ def _scope_holding(product: Any, fields: Optional[tuple] = None) -> Optional[_Sc
         # where classification swaps in its own rows for each call.
         return None
     if fields is not None:
-        return scope if isinstance(product, Mapping) and all(
-            product.get(name, _NOT_IN_SCOPE) is scope.product.get(name, _NOT_IN_SCOPE)
-            for name in fields
-        ) else None
+        # Nested source projections have separate whole-product caches, but
+        # declared field-only views may already belong to an enclosing scope.
+        # Use the outermost compatible owner so those facts are derived once.
+        compatible = None
+        while scope is not None:
+            if (_ROUTE_SCORING_ROWS_CACHE_KEY not in scope.product
+                    and isinstance(product, Mapping) and all(
+                        product.get(name, _NOT_IN_SCOPE) is scope.product.get(name, _NOT_IN_SCOPE)
+                        for name in fields)):
+                compatible = scope
+            scope = scope.parent
+        return compatible
     return scope if scope.holds(product) else None
 
 
@@ -2736,7 +2745,7 @@ def scoring_input_scope(product: Dict[str, Any]):
     that reuse local to the current call/task, with no product mutation and no
     cross-product or cross-thread cache lifetime.
     """
-    scope = _ScoringInputScope(product=product)
+    scope = _ScoringInputScope(product=product, parent=_ACTIVE_SCORING_INPUT_SCOPE.get())
     token = _ACTIVE_SCORING_INPUT_SCOPE.set(scope)
     try:
         yield scope

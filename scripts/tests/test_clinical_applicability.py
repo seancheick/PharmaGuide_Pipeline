@@ -2911,3 +2911,89 @@ def test_pqq_unread_corrected_source_hold_remains_incomplete():
     assert assess_clinical_source_review(record)['is_complete'] is False
     assert clinical_record_sources_eligible(record) is False
     assert record == before
+
+
+@pytest.mark.parametrize('projection', ['refs', 'identities'])
+def test_clinical_row_projection_reuses_scoped_owner_without_sharing_mutable_results(monkeypatch, projection):
+    import clinical_applicability as owner
+    import scoring_input_contract as contract
+    row = {'name': 'Synthetic source', 'canonical_id': 'source_a',
+           'raw_source_path': 'ingredientRows[0]', 'form_id': 'source form',
+           'scoring_input_kind': 'product_level_evidence', 'linked_rows': ['ingredientRows[1]']}
+    product = {'ingredient_quality_data': {'ingredients_scorable': [row], 'ingredients': [row]}}
+    calls = 0
+    def subjects(value):
+        nonlocal calls
+        calls += 1
+        return value['ingredient_quality_data']['ingredients_scorable']
+    monkeypatch.setattr(contract, 'get_evidence_subject_rows', subjects)
+    derive = owner._evidence_subject_refs if projection == 'refs' else owner._resolved_identity_by_ref
+    with contract.scoring_input_scope(product):
+        first = derive(product)
+        if projection == 'refs':
+            first.clear()
+        else:
+            first['ingredientRows[0]']['canonical_id'] = 'corrupted'
+        second = derive(dict(product))
+        assert calls == 1
+        if projection == 'refs':
+            assert second == {'ingredientRows[0]'}
+        else:
+            assert second['ingredientRows[0]'] == {'form_id': 'source form', 'canonical_id': 'source_a'}
+    derive(product)
+    assert calls == 2  # A finished score pass cannot retain stale product state.
+    other = {'ingredient_quality_data': {'ingredients_scorable': []}}
+    with contract.scoring_input_scope(other):
+        assert derive(other) == (set() if projection == 'refs' else {})
+    assert calls == 3
+
+
+def test_clinical_subject_reference_scope_keeps_all_lineage_options_distinct(monkeypatch):
+    import clinical_applicability as owner
+    import scoring_input_contract as contract
+    anchor = {'raw_source_path': 'ingredientRows[0]', 'scoring_input_kind': 'product_level_evidence',
+              'linked_rows': ['ingredientRows[0].nestedRows[0]']}
+    undosed = {'raw_source_path': 'ingredientRows[1]'}
+    product = {'ingredient_quality_data': {'ingredients_scorable': [anchor, undosed]}}
+    calls = 0
+    def subjects(value):
+        nonlocal calls
+        calls += 1
+        return value['ingredient_quality_data']['ingredients_scorable']
+    monkeypatch.setattr(contract, 'get_evidence_subject_rows', subjects)
+    with contract.scoring_input_scope(product):
+        for _ in range(2):
+            assert owner._evidence_subject_refs(product) == {'ingredientRows[0]'}
+            assert owner._evidence_subject_refs(product, include_anchor_lineage=True) == {
+                'ingredientRows[0]', 'ingredientRows[0].nestedRows[0]'}
+            assert owner._evidence_subject_refs(product, include_undosed=True) == {
+                'ingredientRows[0]', 'ingredientRows[0].nestedRows[0]', 'ingredientRows[1]'}
+    assert calls == 3
+
+
+@pytest.mark.parametrize('projection', ['refs', 'identities'])
+def test_clinical_projection_steps_aside_for_changed_inputs_and_route_overrides(monkeypatch, projection):
+    import clinical_applicability as owner
+    import scoring_input_contract as contract
+    row = {'raw_source_path': 'ingredientRows[0]', 'canonical_id': 'source_a',
+           'scoring_input_kind': 'product_level_evidence'}
+    product = {'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    changed = {'ingredient_quality_data': {'ingredients_scorable': []}}
+    calls = 0
+    def subjects(value):
+        nonlocal calls
+        calls += 1
+        return value['ingredient_quality_data']['ingredients_scorable']
+    monkeypatch.setattr(contract, 'get_evidence_subject_rows', subjects)
+    derive = owner._evidence_subject_refs if projection == 'refs' else owner._resolved_identity_by_ref
+    with contract.scoring_input_scope(product):
+        original = derive(product)
+        for _ in range(2):
+            assert derive(changed) == (set() if projection == 'refs' else {})
+        assert derive(product) == original
+        assert calls == 3
+    overridden = {**product, contract._ROUTE_SCORING_ROWS_CACHE_KEY: [row]}
+    with contract.scoring_input_scope(overridden):
+        derive(overridden)
+        derive(overridden)
+    assert calls == 5

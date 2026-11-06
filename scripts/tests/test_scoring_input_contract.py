@@ -3033,3 +3033,83 @@ def test_unknown_unparenthesized_fcc_assay_never_falls_back_to_bare_fcc(suffix):
 def test_known_or_bare_fcc_does_not_require_an_invented_qualifier(text):
     from normalization import extract_enzyme_activity
     assert extract_enzyme_activity(text) == (4662.0, "FCC")
+
+
+def test_nested_scoring_views_share_only_declared_field_inputs():
+    from copy import deepcopy
+    from scoring_input_contract import scoped_product_view
+    rows = [_row(name='Magnesium')]
+    original = {'activeIngredients': rows, 'ingredient_quality_data': {'version': 'original'}}
+    projected = {**original, 'ingredient_quality_data': {'version': 'projected'}}
+    calls = {'field': 0, 'full': 0}
+    def read(product, *, fields=None):
+        kind = 'field' if fields else 'full'
+        def derive():
+            calls[kind] += 1
+            return {'rows': [{'name': product['activeIngredients'][0]['name']}], 'kind': kind}
+        return scoped_product_view(product, ('nested_test_view', kind), derive, deepcopy, fields=fields)
+    with scoring_input_scope(projected):
+        read(projected)
+        read(projected, fields=('activeIngredients',))
+        with scoring_input_scope(original):
+            assert read(original)['kind'] == 'full'
+            field_result = read(original, fields=('activeIngredients',))
+            assert field_result['kind'] == 'field'
+            field_result['rows'][0]['name'] = 'mutated'
+            assert calls == {'field': 1, 'full': 2}
+            changed = {**original, 'activeIngredients': [_row(name='Zinc', canonical_id='zinc')]}
+            with scoring_input_scope(changed):
+                assert read(changed, fields=('activeIngredients',))['rows'][0]['name'] == 'Zinc'
+        assert read(projected, fields=('activeIngredients',))['rows'][0]['name'] == 'Magnesium'
+        assert calls == {'field': 2, 'full': 2}
+    read(original, fields=('activeIngredients',))
+    assert calls == {'field': 3, 'full': 2}
+
+
+@pytest.mark.parametrize('override_inner', [False, True])
+def test_nested_field_views_preserve_route_override_bypass(override_inner):
+    from copy import deepcopy
+    from scoring_input_contract import scoped_product_view
+    rows = [_row()]
+    outer = {'activeIngredients': rows}
+    inner = {**outer, 'original_source': True}
+    (inner if override_inner else outer)[_ROUTE_SCORING_ROWS_CACHE_KEY] = rows
+    calls = 0
+    def read(product):
+        def derive():
+            nonlocal calls
+            calls += 1
+            return {'name': 'Magnesium'}
+        return scoped_product_view(product, ('nested_route_view',), derive, deepcopy,
+                                   fields=('activeIngredients',))
+    with scoring_input_scope(outer):
+        read(outer)
+        with scoring_input_scope(inner):
+            read(inner)
+            read(inner)
+    assert calls == (3 if override_inner else 2)
+
+
+def test_nested_scope_failure_restores_outer_view_and_isolates_full_cache():
+    from copy import deepcopy
+    import scoring_input_contract as owner
+    original = {'activeIngredients': [_row()], 'source': 'original'}
+    projected = {**original, 'source': 'projected'}
+    calls = 0
+    def read(product):
+        def derive():
+            nonlocal calls
+            calls += 1
+            return {'name': 'Magnesium'}
+        return owner.scoped_product_view(product, ('nested_failure_view',), derive, deepcopy,
+                                         fields=('activeIngredients',))
+    with scoring_input_scope(projected) as outer:
+        read(projected)
+        with pytest.raises(ValueError, match='assembly failed'):
+            with scoring_input_scope(original):
+                read(original)['name'] = 'changed'
+                raise ValueError('assembly failed')
+        assert owner._ACTIVE_SCORING_INPUT_SCOPE.get() is outer
+        assert read(projected) == {'name': 'Magnesium'}
+        assert calls == 1
+    assert owner._ACTIVE_SCORING_INPUT_SCOPE.get() is None

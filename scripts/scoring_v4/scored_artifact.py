@@ -544,9 +544,13 @@ def build_scored_artifact(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     # of repeatedly deriving and regex-scanning identical evidence rows.
     scoring_product = score_eligible_identity_view(enriched_product)
     with scoring_input_scope(scoring_product):
-        return assemble_scored_artifact(
-            enriched_product,
-            score_product_v4(scoring_product),
-        )
+        scored = score_product_v4(scoring_product)
+        if scoring_product is enriched_product:
+            return assemble_scored_artifact(enriched_product, scored)
+        # Assembly intentionally reads the original source identities. Keep
+        # whole-product facts separate while retaining field-only views whose
+        # exact input objects (such as probiotic label rows) are shared.
+        with scoring_input_scope(enriched_product):
+            return assemble_scored_artifact(enriched_product, scored)
 
 
