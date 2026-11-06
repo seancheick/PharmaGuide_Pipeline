@@ -1529,11 +1529,12 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "86e142d1519080dc09e53560e5ee567bcada269cb0f8ad1ee2d12a3036976bac",
+          "source_sha256": "a7ce7f4ef0b4106aa2871f2d26a2f0c81c52086d9046b46bc22dbd5dea5086f2",
           "source_ids": [
-            "PMID:30999017"
+            "PMID:30999017",
+            "PMID:29882843"
           ],
-          "verified_at": "2026-10-27T22:38:13.265370+00:00",
+          "verified_at": "2026-11-06T21:27:13.165858+00:00",
           "is_complete": true,
           "results": [
             {
@@ -1544,6 +1545,15 @@
               "has_erratum": false,
               "article_title": "The effect of blueberry interventions on cognitive performance and mood: A systematic review of randomized controlled trials.",
               "content_sha256": "65c8814881e4c147a1b729de7b786eee3c51a6a4e131d35d2bdcc30eb6e17d5b"
+            },
+            {
+              "source_id": "PMID:29882843",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "A Randomized, Double-Blinded, Placebo-Controlled Study to Compare the Safety and Efficacy of Low Dose Enhanced Wild Blueberry Powder and Wild Blueberry Extract (ThinkBlue™) in Maintenance of Episodic and Working Memory in Older Adults.",
+              "content_sha256": "1705b062fe65829f494ac03c57e1ada05c4348e1024b028c3e5e057efd4d761a"
             }
           ]
         }
@@ -1558,11 +1568,12 @@
         "units": "As reported by sources and label; no mass, volume, marker or food-matrix conversion inferred.",
         "curve": "completed_no_benchmark_neutral",
         "source_ids": [
-          "PMID:30999017"
+          "PMID:30999017",
+          "PMID:29882843"
         ],
-        "rationale": "Source-backed case finding: The review of 12 studies found possible improvements in selected cognitive measures with heterogeneous blueberry interventions. Its included Whyte2018 trial compared enhanced powder formulations and ThinkBlue, a stabilized combination of 100 mg wild-blueberry extract, 10 mg L-cysteine and 1 mg L-glutathione daily (PMID 29882843, Table 2). That combination is not evidence of equivalence to unstandardized blueberry extracts, isolated anthocyanins, whole fruit or plain powders. Variable preparations, doses, durations and anthocyanin content do not establish a general Dose threshold; source-specific clinical qualification remains separate. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added.",
+        "rationale": "Source-backed case finding: The review of 12 studies found possible improvements in selected cognitive measures with heterogeneous blueberry interventions. Its included Whyte2018 trial compared enhanced powder formulations and ThinkBlue, a stabilized combination of 100 mg wild-blueberry extract, 10 mg L-cysteine and 1 mg L-glutathione daily (PMID 29882843, Table 2). That combination is not evidence of equivalence to unstandardized blueberry extracts, isolated anthocyanins, whole fruit or plain powders. Variable preparations, doses, durations and anthocyanin content do not establish a general Dose threshold; source-specific clinical qualification remains separate. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added. Factual source scope reviewed by Codex on 2026-11-06, independently content-checked against the cited review and primary Table 2; the existing neutral Dose policy and absence of a general benchmark are retained.",
         "owner": "scripts/data/literature_evidence_records.json::blueberry",
-        "review_date": "2026-10-27",
+        "review_date": "2026-11-06",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },

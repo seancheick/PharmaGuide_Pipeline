@@ -589,3 +589,5 @@ def test_blueberry_review_retains_its_stabilized_extract_arm_without_generic_tra
     assert record['reference_semantics']['reference_type'] == 'no_benchmark'
     assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
     assert [study['pmid'] for study in record['qualifying_human_studies']] == ['30999017']
+    from dose_assessment import verified_reference_citations
+    assert verified_reference_citations(record), 'Factual source updates must retain qualified neutral Dose'
