@@ -353,7 +353,8 @@ def plan_changes(old, current, raw, dependency_rows):
         after = current["stages"][stage]
         if any(before.get(key) != value for key, value in after.items()
                if key != REFERENCE_FINGERPRINT_KEY):
-            widen(index, ids, f"{stage} code or runtime dependency changed")
+            selected[index].update(ids)
+            reasons.append(f"{stage} code or runtime dependency changed")
     for path in set(old["references"]) | set(current["references"]):
         before = old["references"].get(path)
         after = current["references"].get(path)
@@ -412,10 +413,26 @@ def plan_changes(old, current, raw, dependency_rows):
 
 
 
-def clean_semantics(product):
+def stage_semantics(product, *, stage="clean"):
     value = copy.deepcopy(product)
     if isinstance(value, dict) and isinstance(value.get("metadata"), dict):
         value["metadata"].pop("lastCleaned", None)
+    if stage == "enrich" and isinstance(value, dict):
+        # These are producer clock stamps (enrich_product/build_match_ledger),
+        # not assessment facts. Keep calendar days: dependencies() uses the
+        # local enriched_date for date-sensitive manufacturer reassessment.
+        for owner in ("enrichment_metadata", "match_ledger"):
+            if isinstance(value.get(owner), dict):
+                value[owner].pop("generated_at", None)
+        stamp = value.get("enriched_date")
+        if isinstance(stamp, str):
+            try:
+                instant = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+                if instant.tzinfo is not None:
+                    value["enriched_date"] = (instant.astimezone(timezone.utc).date().isoformat(),
+                                              instant.astimezone().date().isoformat())
+            except ValueError:
+                pass  # Unknown timestamps are semantic changes, never ignored.
     return value
 
 
@@ -819,20 +836,25 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
                     raise StageManifestError(f"{stage}: output ID inventory differs from selected inputs")
                 if stage == "clean":
                     changed_clean = {key for key in selected
-                                     if clean_semantics(replacement.get(key)) != clean_semantics(merged.get(key))}
+                                     if stage_semantics(replacement.get(key)) != stage_semantics(merged.get(key))}
                     for name in clean_holds:
                         clean_holds[name] = {pid: row for pid, row in clean_holds[name].items() if pid not in selected}
                         clean_holds[name].update(fresh_holds[name])
                     merged = {pid: row for pid, row in merged.items() if pid not in selected}
-                    for downstream in ("enrich", "score"):
-                        plan["stages"][downstream] = sorted(
-                            (set(plan["stages"][downstream]) | changed_clean) - fresh_held)
+                    plan["stages"]["enrich"] = sorted(
+                        (set(plan["stages"]["enrich"]) | changed_clean) - fresh_held)
+                    plan["stages"]["score"] = sorted(set(plan["stages"]["score"]) - fresh_held)
                     for name, rows in fresh_holds.items():
                         for pid, row in rows.items():
                             reason = (row.get("error_message") if name == "errors" else
                                       (row.get("metadata") or {}).get("completeness", {}).get("missingFields", []))
                             plan["reasons"].append(f"Clean {name}: {pid}: {reason}")
                     plan["held_clean_inputs"] = {name: sorted(set(rows) & set(raw)) for name, rows in clean_holds.items()}
+                if stage == "enrich":
+                    changed_enrich = {key for key in selected
+                        if stage_semantics(replacement.get(key), stage="enrich")
+                        != stage_semantics(merged.get(key), stage="enrich")}
+                    plan["stages"]["score"] = sorted(set(plan["stages"]["score"]) | changed_enrich)
                 merged.update(replacement)
                 candidate_root = (candidate_prefix if stage == "clean" else
                                   Path(str(candidate_prefix) + ("_enriched" if stage == "enrich" else "_scored")))

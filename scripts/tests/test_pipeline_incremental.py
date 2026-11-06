@@ -1357,3 +1357,94 @@ def test_comparison_date_pin_preserves_live_source_changes(monkeypatch):
     assert first['references'] != second['references']
     for field in ('evaluation_date', 'evaluation_local_date'):
         assert first[field] == second[field]
+
+
+@pytest.mark.parametrize('stage', ['clean', 'enrich'])
+@pytest.mark.parametrize('changed', [False, True])
+def test_code_recheck_propagates_only_changed_stage_products(tmp_path, monkeypatch, stage, changed):
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    snapshot['stages'][stage]['stage_code_sha256_v1'] = digest('new code')
+    original = getattr(runner, 'run_' + stage)
+    def execute(source, output, **kwargs):
+        success = original(source, output, **kwargs)
+        from pathlib import Path
+        path = Path(output) / {'clean': 'cleaned', 'enrich': 'enriched'}[stage] / 'batch.json'
+        rows = json.loads(path.read_text())
+        if changed:
+            changed_row = next(row for row in rows if row['id'] == '1')
+            changed_row['quality_score_status'] = 'suppressed_safety'
+            changed_row['assessment'] = {'is_complete': False}
+        path.write_text(json.dumps(rows))
+        return success
+    monkeypatch.setattr(runner, 'run_' + stage, execute)
+    result = mod.run_incremental(runner, raw, prefix)
+    expected = {'clean': [], 'enrich': [], 'score': []}
+    expected[stage] = ['1', '2']
+    if changed:
+        for downstream in (['enrich', 'score'] if stage == 'clean' else ['score']):
+            expected[downstream] = ['1']
+    assert result['stages'] == expected
+
+
+def test_independent_score_invalidation_survives_unchanged_upstream_recheck(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    for stage in ('clean', 'score'):
+        snapshot['stages'][stage]['stage_code_sha256_v1'] = digest('new ' + stage)
+    assert mod.run_incremental(runner, raw, prefix)['stages'] == {
+        'clean': ['1', '2'], 'enrich': [], 'score': ['1', '2']}
+
+
+def test_enrich_semantics_ignores_clock_only_and_preserves_contract_fields():
+    from pipeline_incremental import stage_semantics
+    row = {'id': '1', 'enriched_date': '2026-11-05T12:00:00Z',
+           'enrichment_metadata': {'generated_at': 'old', 'ready_for_scoring': True},
+           'match_ledger': {'generated_at': 'old', 'unmatched': []},
+           'product_safety_status': 'no_known_catalog_concern',
+           'quality_score_status': 'scored', 'assessment': {'is_complete': True}}
+    later = deepcopy(row)
+    later['enriched_date'] = '2026-11-05T13:00:00Z'
+    later['enrichment_metadata']['generated_at'] = 'new'
+    later['match_ledger']['generated_at'] = 'new'
+    assert stage_semantics(row, stage='enrich') == stage_semantics(later, stage='enrich')
+    for key, value in [('enriched_date', '2026-11-06T12:00:00Z'),
+                       ('product_safety_status', 'blocked'), ('quality_score_status', 'not_scored'),
+                       ('assessment', {'is_complete': False})]:
+        altered = deepcopy(row)
+        altered[key] = value
+        assert stage_semantics(row, stage='enrich') != stage_semantics(altered, stage='enrich')
+    assert row['enrichment_metadata']['generated_at'] == 'old'
+
+
+@pytest.mark.parametrize('stage', ['clean', 'enrich'])
+def test_runtime_recheck_selects_only_own_stage(tmp_path, monkeypatch, stage):
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    snapshot['stages'][stage]['stage_runtime_sha256_v1'] = digest('new runtime')
+    result = mod.run_incremental(runner, raw, prefix)
+    assert result['stages'] == {name: (['1', '2'] if name == stage else []) for name in mod.STAGES}
+
+
+def test_changed_clean_stops_at_unchanged_enrich(tmp_path, monkeypatch):
+    from pathlib import Path
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    snapshot['stages']['clean']['stage_code_sha256_v1'] = digest('new clean')
+    original = runner.run_clean
+    def clean(source, output, **kwargs):
+        success = original(source, output, **kwargs)
+        path = Path(output) / 'cleaned' / 'batch.json'
+        rows = json.loads(path.read_text())
+        next(row for row in rows if row['id'] == '1')['new_clean_fact'] = True
+        path.write_text(json.dumps(rows))
+        return success
+    original_enrich = runner.run_enrich
+    def enrich(source, output):
+        success = original_enrich(source, output)
+        path = Path(output) / 'enriched' / 'batch.json'
+        rows = json.loads(path.read_text())
+        for row in rows:
+            row.pop('new_clean_fact', None)
+        path.write_text(json.dumps(rows))
+        return success
+    monkeypatch.setattr(runner, 'run_clean', clean)
+    monkeypatch.setattr(runner, 'run_enrich', enrich)
+    assert mod.run_incremental(runner, raw, prefix)['stages'] == {
+        'clean': ['1', '2'], 'enrich': ['1'], 'score': []}
