@@ -23212,10 +23212,10 @@ class SupplementEnricherV3:
             from scoring_reference_resolver import vitamin_e_alpha_material
 
             # Unknown alpha share remains in the conservative upper bound.
-            return (str(row.get("canonical_id") or "") == "vitamin_e"
-                    and vitamin_e_alpha_material(
-                        row.get("raw_source_text") or row.get("name") or ""
-                    ) is not False)
+            return vitamin_e_alpha_material(
+                row.get("raw_source_text") or row.get("name") or "",
+                unknown_family_is_possible=str(row.get("canonical_id") or "") == "vitamin_e",
+            ) is not False
 
         def _tree_mg(path: str, family: List[str], servings: float) -> float:
             if path in printed:

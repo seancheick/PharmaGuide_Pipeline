@@ -221,11 +221,15 @@ def delivers_parent_nutrient(canonical_id: Any, form_ids: Any) -> bool:
     return not relationships or not relationships <= NON_DELIVERING_RELATIONSHIPS
 
 
-def vitamin_e_alpha_material(source_text: str) -> Optional[bool]:
+def vitamin_e_alpha_material(
+    source_text: str, *, unknown_family_is_possible: bool = True,
+) -> Optional[bool]:
     """Alpha-tocopherol identity, without inferring its activity or amount.
 
     None retains possible alpha in mixtures/unknown material for conservative
     exposure bounds; it is not affirmative nutritional-role proof.
+    A caller scanning unrelated label rows can exclude unrecognized material
+    unless the existing identity owner places it in the vitamin E family.
     """
     from normalization import find_affirmative_label_match, normalize_text
 
@@ -244,6 +248,8 @@ def vitamin_e_alpha_material(source_text: str) -> Optional[bool]:
         return False
     if tocotrienol:
         return None if tocopherol else False
+    if not tocopherol and not unknown_family_is_possible:
+        return False
     return None
 
 
