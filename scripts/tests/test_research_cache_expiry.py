@@ -125,3 +125,17 @@ def test_malformed_expiry_fetches_fresh_response_once(monkeypatch):
     assert client._get(url) == payload
     assert client._cache[url]["expires_at"] == expiry
     assert calls == [url]
+
+
+@pytest.mark.parametrize('invalid_root', [[], None, 3, 'invalid'])
+def test_malformed_cache_document_recovers_to_writable_empty_cache(client, tmp_path, invalid_root):
+    import json
+    path = tmp_path / 'invalid-cache.json'
+    path.write_text(json.dumps(invalid_root))
+    if isinstance(client, UMLSClient):
+        loaded = UMLSClient('', cache_path=path, emit_errors=False)
+    else:
+        loaded = type(client)(cache_path=path)
+    assert loaded._cache_get('query') is None
+    loaded._cache_set('query', {'fresh': True})
+    assert loaded._cache_get('query') == {'fresh': True}

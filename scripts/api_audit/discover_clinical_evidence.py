@@ -224,7 +224,8 @@ class APIClient:
         self.circuit_open = False
         if self.cache_path and self.cache_path.exists():
             try:
-                self._cache = json.loads(self.cache_path.read_text())
+                loaded = json.loads(self.cache_path.read_text())
+                self._cache = loaded if isinstance(loaded, dict) else {}
             except (json.JSONDecodeError, OSError):
                 self._cache = {}
 
