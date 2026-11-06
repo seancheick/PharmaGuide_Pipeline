@@ -60,12 +60,8 @@ from .lock import (
     StaleLockError,
     acquire_release_lock,
 )
+from .blob_inventory import list_storage_prefix
 from supabase_client import STORAGE_BUCKET
-
-# _list_paginated logic re-implemented below — the storage-audit /
-# quarantine modules don't export an internal listing helper, and
-# duplicating ~10 lines is cleaner than tangling cross-module imports
-# of private functions.
 
 DEFAULT_MANIFEST_TABLE = "export_manifest"
 _VERSION_DIR_RE = re.compile(r"^v\d{4}\.\d{2}\.\d{2}\..+$")
@@ -596,7 +592,7 @@ def _fetch_manifest_versions(client, table_name: str) -> set:
 
 def _list_storage_v_dirs(client, bucket: str) -> List[str]:
     """List top-level v{version}/ directory names in the bucket."""
-    items = _list_paginated(client, bucket, "")
+    items = list_storage_prefix(client, bucket, "")
     out = []
     for item in items:
         name = (item or {}).get("name") if isinstance(item, dict) else None
@@ -618,7 +614,7 @@ def _enumerate_dir_objects(
     out: List[Tuple[str, int]] = []
 
     def walk(prefix: str) -> None:
-        items = _list_paginated(client, bucket, prefix)
+        items = list_storage_prefix(client, bucket, prefix)
         for item in items:
             name = (item or {}).get("name") if isinstance(item, dict) else None
             if not isinstance(name, str):
@@ -632,37 +628,6 @@ def _enumerate_dir_objects(
 
     walk(dir_name)
     return out
-
-
-def _list_paginated(client, bucket: str, prefix: str) -> List[dict]:
-    """List ALL items under a prefix, or raise — never return a truncation.
-
-    The previous ``except: break`` turned a mid-listing failure into an
-    apparently valid partial result. Fed into compute_delete_plan, a
-    partially-enumerated directory gets partially deleted and then reported
-    done — the origin of the 1-object residue dirs. Transient blips are
-    retried; a give-up raises so the caller fails closed.
-    """
-    from .transient import retry_transient
-
-    items: List[dict] = []
-    offset = 0
-    page_size = 1000
-    while True:
-        page = retry_transient(
-            lambda offset=offset: client.storage.from_(bucket).list(
-                path=prefix,
-                options={"limit": page_size, "offset": offset},
-            ),
-            max_attempts=4,
-        )
-        if not page:
-            break
-        items.extend(page)
-        if len(page) < page_size:
-            break
-        offset += page_size
-    return items
 
 
 def _item_size(item: dict) -> Optional[int]:
