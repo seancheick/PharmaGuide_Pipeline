@@ -2339,13 +2339,9 @@ class SupplementEnricherV3:
             == resolved_id
         ):
             return False
-        if self._identity_parent_predicate(
-            self.databases.get("ingredient_quality_map", {})
-        )(source_id, resolved_id):
-            # Reviewed broad-source → specific-preparation relationships (for
-            # example green_tea → green_tea_extract) remain valid.  The guard
-            # targets source→marker substitution, not reviewed specificity.
-            return False
+        # A broader-than relationship permits a source-proven refinement; it
+        # does not itself prove a plant part/preparation. The literal-source
+        # check below must establish that refinement independently.
 
         if (ingredient.get("cleaner_match_method") == "single_declared_nutrient_form"
                 and ingredient.get("canonical_source_db") in BOTANICAL_CANONICAL_SOURCE_DBS):
