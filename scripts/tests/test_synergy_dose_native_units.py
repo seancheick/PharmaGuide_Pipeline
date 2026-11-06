@@ -281,3 +281,104 @@ def test_generic_canonical_does_not_establish_branded_preparation():
     product = _product('L-Carnitine', 500, 'mg')
     product['activeIngredients'][0].update(canonical_id='l_carnitine', canonical_source_db='ingredient_quality_map')
     assert e._collect_synergy_data(product) == []
+
+
+def test_existing_coq10_lexical_alias_keeps_scope_and_resolves_curated_threshold():
+    e = _enricher_with([{
+        'id': 'coq_alias', 'standard_name': 'CoQ10 alias fixture',
+        'ingredients': ['coq10', 'coenzyme q10', 'vitamin c'], 'canonical_ids': ['coq10', 'vitamin_c'],
+        'min_effective_doses': {'coq10': 100}, 'allow_single_ingredient': True,
+        'primary_ingredients': ['coq10', 'coenzyme q10'],
+    }], {})
+    product = _product('Kaneka Ubiquinol', 25, 'mg')
+    product['activeIngredients'][0].update(standardName='Coenzyme Q10', canonical_id='coq10', canonical_source_db='ingredient_quality_map')
+    product['activeIngredients'].append({'name': 'Vitamin C', 'standardName': 'Vitamin C',
+        'canonical_id': 'vitamin_c', 'canonical_source_db': 'ingredient_quality_map', 'quantity': 100, 'unit': 'mg'})
+    member = e._collect_synergy_data(product)[0]['matched_ingredients'][0]
+    assert member['cluster_ingredient'] == 'coenzyme q10'
+    assert member['quantity'] == 25
+    assert member['min_effective_dose'] == 100
+    assert member['meets_minimum'] is False
+
+
+@pytest.mark.parametrize('name', ['N-Acetyl-L-Cysteine', 'N-Acetyl Cysteine'])
+def test_nac_does_not_borrow_cysteine_identity_or_zero_minimum(name):
+    e = _enricher_with([{
+        'id': 'nac_alias', 'standard_name': 'NAC alias fixture',
+        'ingredients': ['cysteine', 'nac', 'n-acetyl cysteine', 'vitamin c'],
+        'canonical_ids': ['l_cysteine', 'nac', 'vitamin_c'], 'min_effective_doses': {'nac': 600},
+        'allow_single_ingredient': True, 'primary_ingredients': ['cysteine', 'nac', 'n-acetyl cysteine'],
+    }], {})
+    product = _product(name, 100, 'mg')
+    product['activeIngredients'][0].update(canonical_id='nac', canonical_source_db='ingredient_quality_map')
+    product['activeIngredients'].append({'name': 'Vitamin C', 'standardName': 'Vitamin C',
+        'canonical_id': 'vitamin_c', 'canonical_source_db': 'ingredient_quality_map', 'quantity': 100, 'unit': 'mg'})
+    member = next(m for m in e._collect_synergy_data(product)[0]['matched_ingredients']
+                  if m['ingredient'] == name)
+    assert member['cluster_ingredient'] != 'cysteine'
+    assert member['min_effective_dose'] == 600
+    assert member['meets_minimum'] is False
+
+
+@pytest.mark.parametrize('form,expected', [('potassium chloride', False), ('potassium citrate', True), ('potassium (unspecified)', False)])
+def test_preparation_cluster_consumes_exact_source_owned_form(form, expected):
+    e = _enricher_with([{
+        'id': 'citrate_fixture', 'standard_name': 'Citrate fixture',
+        'ingredients': ['potassium citrate', 'vitamin c'], 'canonical_ids': ['potassium', 'vitamin_c'],
+        'min_effective_doses': {},
+    }], {})
+    potassium = {'name': 'Potassium', 'standardName': 'Potassium', 'canonical_id': 'potassium',
+                 'canonical_source_db': 'ingredient_quality_map', 'raw_source_text': 'Potassium',
+                 'raw_source_path': 'ingredientRows[0]', 'quantity': 50, 'unit': 'mg'}
+    vitamin_c = {'name': 'Vitamin C', 'standardName': 'Vitamin C', 'canonical_id': 'vitamin_c',
+                 'canonical_source_db': 'ingredient_quality_map', 'raw_source_text': 'Vitamin C',
+                 'raw_source_path': 'ingredientRows[1]', 'quantity': 100, 'unit': 'mg'}
+    quality = [{**r, 'matched_form': form if i == 0 else 'ascorbic acid',
+                'form_id': form if i == 0 else 'ascorbic acid', 'mapped': True,
+                'mapped_identity': True, 'scoreable_identity': True, 'identity_disposition': 'clean',
+                'source_section': 'active', 'cleaner_row_role': 'active_scorable',
+                'score_eligible_by_cleaner': True, 'role_classification': 'active_scorable',
+                'dose_class': 'therapeutic_mass'} for i, r in enumerate([potassium, vitamin_c])]
+    product = {'activeIngredients': [potassium, vitamin_c],
+               'ingredient_quality_data': {'ingredients': quality, 'ingredients_scorable': quality}}
+    clusters = e._collect_synergy_data(product)
+    assert bool(clusters) is expected
+    if clusters:
+        member = next(m for m in clusters[0]['matched_ingredients'] if m['cluster_ingredient'] == 'potassium citrate')
+        assert (member['quantity'], member['unit']) == (50, 'mg')
+
+
+@pytest.mark.parametrize('term,canonical,source_name,other_threshold', [
+    ('acetyl-l-carnitine', 'l_carnitine', 'Acetyl-L-Carnitine', 'levocarnitine'),
+    ('magnesium glycinate', 'magnesium', 'Magnesium Glycinate', 'magnesium oxide'),
+])
+def test_alias_threshold_cannot_cross_specific_preparation_scope(term, canonical, source_name, other_threshold):
+    e = _enricher_with([{
+        'id': 'scope_fixture', 'standard_name': 'Scope fixture', 'ingredients': [term],
+        'canonical_ids': [canonical], 'min_effective_doses': {other_threshold: 1000},
+        'allow_single_ingredient': True, 'primary_ingredients': [term],
+    }], {})
+    product = _product(source_name, 500, 'mg')
+    product['activeIngredients'][0].update(canonical_id=canonical, canonical_source_db='ingredient_quality_map')
+    member = e._collect_synergy_data(product)[0]['matched_ingredients'][0]
+    assert member['min_effective_dose'] == 0
+    assert member['min_effective_dose_unit'] is None
+
+
+def test_prepared_magnesium_scope_is_not_proved_by_parent_display_at_enrichment_boundary():
+    e = _enricher_with([{
+        'id': 'glycinate_fixture', 'standard_name': 'Glycinate fixture',
+        'ingredients': ['magnesium glycinate'], 'canonical_ids': ['magnesium'],
+        'min_effective_doses': {'magnesium glycinate': 100},
+        'allow_single_ingredient': True, 'primary_ingredients': ['magnesium glycinate'],
+    }], {})
+    product = {'id': 'prepared_mg_fixture', 'fullName': 'Magnesium fixture', 'activeIngredients': [{
+        'name': 'Magnesium', 'standardName': 'Magnesium', 'quantity': 200, 'unit': 'mg',
+        'canonical_id': 'magnesium', 'canonical_source_db': 'ingredient_quality_map',
+        'raw_source_path': 'ingredientRows[0]', 'raw_source_text': 'Magnesium',
+        'forms': [{'name': 'Magnesium Oxide'}], 'cleaner_row_role': 'active_scorable',
+    }]}
+    enriched, _ = e.enrich_product(product)
+    quality = enriched['ingredient_quality_data']['ingredients_scorable']
+    assert quality[0]['matched_form'] == 'magnesium oxide'
+    assert enriched['formulation_data']['synergy_clusters'] == []
