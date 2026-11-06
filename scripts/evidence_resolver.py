@@ -31,6 +31,7 @@ from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import Enum
 from functools import lru_cache
+from copy import deepcopy
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Set, Tuple
 
@@ -1749,6 +1750,18 @@ def _evidence_subject_roles(product: Mapping[str, Any], module: Optional[str]):
     strict rows (blend totals, lent masses) are classified alongside so they
     still weigh in the product, but only subjects can own Evidence.
     """
+    from scoring_input_contract import scoped_product_view
+
+    # Explicit caller rows normally bypass role caching. Here the rows are
+    # derived from this immutable product by the same owner on every request.
+    # Preserve module variants and isolate source/scoring rows from callers.
+    return scoped_product_view(
+        product, ("evidence_subject_roles", module),
+        lambda: deepcopy(_build_evidence_subject_roles(product, module)), deepcopy,
+    )
+
+
+def _build_evidence_subject_roles(product: Mapping[str, Any], module: Optional[str]):
     from scoring_input_contract import (
         classify_ingredient_roles,
         get_evidence_subject_rows,

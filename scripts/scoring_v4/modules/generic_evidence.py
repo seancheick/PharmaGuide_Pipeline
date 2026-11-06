@@ -14,6 +14,7 @@ contract so before/after score comparisons stay explainable.
 from __future__ import annotations
 
 from collections import defaultdict
+from copy import deepcopy
 from functools import lru_cache
 import json
 from pathlib import Path
@@ -28,6 +29,7 @@ from scoring_input_contract import (
     get_evidence_subject_rows,
     is_lent_blend_mass,
     is_nutrition_fact_declaration as _contract_is_nutrition_fact,
+    scoped_product_view,
 )
 from scoring_v4.modules.generic_helpers import (
     _as_float,
@@ -654,6 +656,20 @@ def resolved_clinical_matches(
     deliberately narrow contract recoveries once, returning
     ``(all_matches, recovered_matches)`` for provenance.
     """
+    # A scoring scope requires unchanged product/reference inputs for one pass. Keep
+    # amount-aware and owner-scoped decisions separate, and detach the first
+    # return as well as hits: a matched entry may still borrow source fields.
+    return scoped_product_view(
+        product, ("resolved_clinical_matches", owner_scoped, assess_amount),
+        lambda: deepcopy(_resolve_clinical_matches(
+            product, owner_scoped=owner_scoped, assess_amount=assess_amount,
+        )), deepcopy,
+    )
+
+
+def _resolve_clinical_matches(
+    product: Dict[str, Any], *, owner_scoped: bool, assess_amount: bool,
+) -> tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
     product = product if isinstance(product, dict) else {}
     matches = [
         entry
