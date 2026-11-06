@@ -1567,6 +1567,9 @@ def _install_completed_release_context(monkeypatch, dose_status='verified'):
     context['dose']['administration_frequency'] = 'once_daily'
     if dose_status == 'source_not_reported':
         context['dose'].update(values=[], dose_basis='not_applicable', basis='unresolved')
+    # The completed source is published as record 'used'; its component
+    # identity must name that same owner, not the schema helper's placeholder.
+    context['components'] = ['used']
     synthetic_references = [{'pmid': pmid} for pmid in context['source_pmids']]
     monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {'used': {'id': 'used', 'study_contexts': [context],
         'references_structured': synthetic_references}})
@@ -2049,3 +2052,17 @@ def test_eaa_selected_authority_receipt_revalidates_current_source(change):
     elif change == 'cached_only':
         product = {'evidence_data': deepcopy(receipt['metadata'])}
     assert _current_nutrition_authority_receipt(product, receipt) is (change == 'none')
+
+
+def test_completed_release_fixture_is_source_bound_and_rejects_foreign_component(monkeypatch):
+    from copy import deepcopy
+    from probiotic_measurements import clinical_review_provenance_valid
+    from clinical_applicability import assess_clinical_source_review
+
+    context = _install_completed_release_context(monkeypatch)
+    assert context['components'] == ['used']
+    assert clinical_review_provenance_valid(context)
+    assert assess_clinical_source_review({'id': 'used'})['is_complete']
+    forged = deepcopy(context)
+    forged['components'] = ['unpublished-foreign-component']
+    assert not clinical_review_provenance_valid(forged)
