@@ -32,7 +32,7 @@ from scoring_input_contract import (  # noqa: E402
     ("800000 FCCPU", (800000.0, "FCCPU")),
     ("50 GDU", (50.0, "GDU")),
     ("2000 PU", (2000.0, "PU")),
-    ("800000 FCC", (None, None)),
+    ("800000 FCC", (800000.0, "FCC")),
     ("800000 FCC (PUX)", (None, None)),
     ("800000 FCC (PU", (None, None)),
     ("50 GDUα", (None, None)),
@@ -47,7 +47,7 @@ def test_enzyme_activity_reads_explicit_fcc_pu_spelling_without_assay_conversion
     ("2000 fibrinolytic units", (2000.0, "FU")),
     ("2000 FU", (2000.0, "FU")),
     ("120000 SPU", (120000.0, "SPU")),
-    ("800000 FCC", (None, None)),
+    ("800000 FCC", (800000.0, "FCC")),
     ("800000 FCC (PUX)", (None, None)),
     ("50 GDUα", (None, None)),
     ("2400 GDU/g", (None, None)),
@@ -2362,6 +2362,61 @@ def test_enzyme_concentration_is_not_declared_serving_activity(declaration, expe
     assert extract_enzyme_activity(declaration) == expected
     assert SupplementEnricherV3()._extract_enzyme_activity_dose(row) == expected
     assert scoring_contract._extract_enzyme_activity(row) == expected
+
+
+@pytest.mark.parametrize("declaration,quantity,unit", [
+    ("4662 FCC", 4662, "FCC"),
+    ("8000 fibrinolytic units", 8000, "FU"),
+    ("9000 ALU", 9000, "ALU"),
+    ("500000 FCC PU", 500000, "FCCPU"),
+])
+def test_declared_assay_spelling_agrees_in_structured_and_text_sources(declaration, quantity, unit):
+    from normalization import extract_enzyme_activity
+    spelling = declaration.split(" ", 1)[1]
+    assert extract_enzyme_activity(declaration) == (quantity, unit)
+    assert extract_enzyme_activity("", quantity, spelling) == (quantity, unit)
+    assert extract_enzyme_activity(declaration + "/g") == (None, None)
+
+
+@pytest.mark.parametrize("declaration,quantity,unit", [
+    ("25,000 FCC (HUT)", 25000, "HUT"),
+    ("2,000 FCC (ALU)", 2000, "ALU"),
+    ("7,500 FCC (FIP)", 7500, "FIP"),
+    ("100 FCC (CU)", 100, "CU"),
+    ("100 FCC (DU)", 100, "DU"),
+    ("405 FCC FIP", 405, "FIP"),
+])
+def test_fcc_header_does_not_erase_the_printed_assay(declaration, quantity, unit):
+    from normalization import extract_enzyme_activity
+    spelling = declaration.split(" ", 1)[1]
+    for text in (declaration, declaration.lower()):
+        assert extract_enzyme_activity(text) == (quantity, unit)
+    assert extract_enzyme_activity("", quantity, spelling) == (quantity, unit)
+    assert extract_enzyme_activity(declaration + "/g") == (None, None)
+
+
+@pytest.mark.parametrize("declaration", [
+    "250000 FCC Pepsin Units", "250000 FCC (Pepsin Units)",
+    "500 FCC (CFU)", "500 FCC (unknown)", "500 FCC (HUT/g)",
+])
+def test_unknown_fcc_assay_is_not_silently_relabelled_generic_fcc(declaration):
+    from normalization import extract_enzyme_activity
+    assert extract_enzyme_activity(declaration) == (None, None)
+
+
+@pytest.mark.parametrize("declaration", [
+    "-500 FU", "- 500 FU", "500-1000 FU", "500 to 1000 FU",
+    "1e3 FU", "1,5 FU", "CAS 9011-18-1 ALU",
+])
+def test_activity_is_not_invented_from_negative_range_or_malformed_amounts(declaration):
+    from normalization import extract_enzyme_activity
+    assert extract_enzyme_activity(declaration) == (None, None)
+
+
+def test_ambiguous_structured_activity_number_is_not_a_thousands_separator():
+    from normalization import extract_enzyme_activity
+    assert extract_enzyme_activity("", "1,5", "FU") == (None, None)
+    assert extract_enzyme_activity("", "1,500.5", "FU") == (1500.5, "FU")
 
 
 @pytest.mark.parametrize("label_activity", [None, 1000])

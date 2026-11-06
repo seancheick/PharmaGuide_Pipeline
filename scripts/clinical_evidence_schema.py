@@ -12,6 +12,7 @@ reviewer credentials; runtime consumers additionally bind the approved source.
 from __future__ import annotations
 
 import math
+from normalization import ENZYME_ACTIVITY_UNITS, canonicalize_enzyme_activity_unit
 from collections.abc import Mapping, Set
 
 
@@ -108,6 +109,8 @@ OUTCOME_HIERARCHIES = frozenset({"primary", "secondary", "post_hoc", "guideline"
 # One owner for what a study dose counts in: the runtime validator and the dose
 # classifier import this mapping rather than keeping their own copy.
 DOSE_MEASUREMENT_UNITS = {
+    "enzyme_activity": frozenset(canonicalize_enzyme_activity_unit(unit)
+                                  for unit in ENZYME_ACTIVITY_UNITS),
     "viable_count": frozenset({"CFU"}),
     "mass": frozenset({"mg", "g"}),
     "afu": frozenset({"AFU"}),
