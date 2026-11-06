@@ -1,5 +1,20 @@
 # PharmaGuide master completion plan
 
+## November 5 — current run audited; scientific qualification open
+
+Current fixed cohort: **8,496 genuinely complete / 6,951 partial / 15,447 total** on source `304966d458`. Required minimum remains **15,293 complete**, leaving **6,797 additional completions**. Fresh source-owner census used both manifest-owned Enrich and Score, with unchanged source/raw/state/manifest bindings before/after. It is scientific qualification evidence, not an exported-catalog, device or publication approval.
+
+Disjoint old-to-current comparison: 8,273 complete→complete; 127 complete→partial; 223 partial→complete; 6,824 partial→partial. Net +96 is measured; bounded historical closures must not be added again. All 69 blocked products remain present (8 complete, 61 partial).
+
+Conditional Evidence-only single-canonical screening prioritizes L-carnitine143, elderberry112, betaine109, L-glutamine101 and fiber77. These are screening groups, not preparation-qualified clinical review packets or guaranteed unlocks.
+
+Rank shared causes before another normal run: the shared `evidence_assessment_incomplete` hold affects 6,468 products; native probiotic Evidence 284; hidden amounts 181; native omega Evidence 146; identity 119. These overlap. Leading ingredient review groups are blueberry392, broccoli348, TMG/betaine199, L-carnitine196 and elderberry189; ingredient counts are affected users, **not guaranteed completion unlocks**. Resolve actual owner defects first; preserve legitimate source/preparation/clinical holds and already-earned credit. The private current register and receipt are `post-run-audit/CURRENT_CENSUS_SUMMARY.json` and `CURRENT_CENSUS.json.gz`.
+
+- [x] Audit all38 completed datasets:15,449 raw =15,447 successful products at each stage + two owned incomplete records;0errors, duplicates or unexplained omissions.
+- [x] Reconcile fresh fixed-cohort scientific counts, disjoint movements and ranked source causes without extrapolating old bounded counts.
+- [x] Compare the exact original20 products against current stored Score: all totals, six pillars, original explanations, completion and safety unchanged;17 numeric and3 null retained. Private `same20-current-comparison/COMPARISON.md` includes source bindings; this is diagnostic comparison, not approval of provisional ratings.
+- [ ] Complete the shared review/engineering work needed to reach15,293, then qualify the actual export, app compatibility, alerts, signatures and signed device behavior.
+
 ## November 5 — incremental recovery integrated
 
 Owner: `pipeline_incremental.py::run_incremental`, BatchProcessor processing/categorization/resume, and `stage_manifest.py::select_stage_input_files`. Will NOT create another scorer, assessment status, clinical registry or processing threshold.
@@ -12,11 +27,11 @@ Final tested head `72e3fd82b` passed all eight fast shards and Merge readiness i
 
 The exact operator-input plan at runtime source `26c20c727` covers 38 datasets and 15,449 raw IDs per stage, with zero deletions; global raw binding and all 152 state/manifest hashes stayed unchanged. It includes all 35 manual submissions, including 16 untracked source files. The first corrected execution needs a fresh baseline because shared source changed; later affected-input retries reuse successful products. No prior output was restamped and no normal corpus producer was started by this repair.
 
-BulkSupplements `312659` and Emergen_C `250356` still lack ingredient rows. The historical incomplete outcomes remain unproven in the normal generation and require rechecking before their dispositions are recorded. Both IDs sit outside the fixed 15,447-product release cohort. Saving other products does not complete these records or the scientific backlog. Sean runs the nonpublishing command in the operations guide; fresh output census, 99% scientific completion and catalog/device release qualification remain open below.
+BulkSupplements `312659` and Emergen_C `250356` still lack ingredient rows. Sean’s completed run now records both as verified, source-owned incomplete outcomes; neither silently disappears or becomes a successful product. Both IDs sit outside the fixed 15,447-product release cohort. Saving other products does not complete these records or the scientific backlog. Sean runs the nonpublishing command in the operations guide; fresh output census, 99% scientific completion and catalog/device release qualification remain open below.
 
 ## Active target — 99% scientific completion and honest public ratings (November 5)
 
-Sean’s November 5 direction replaces the earlier release-ready threshold: do not activate a new catalog until at least **15,293 of the frozen 15,447 products** have genuinely completed assessments and all mandatory release criteria below pass. The measured source baseline is **8,400 marked complete / 7,047 partial**, not a verified genuine-complete numerator. Subsequent checks identify61 contradictory release receipts and66 additional current native-owner holds (127 unique), so the baseline-plus-owner backlog is at least7,174 before bounded closures. A new genuine-complete numerator requires qualified output reconciliation. Do not change the denominator, invent credit, clear real holds or relabel unfinished research to meet the percentage. Review completion, score availability and safety are separate facts.
+Sean’s November 5 direction replaces the earlier release-ready threshold: do not activate a new catalog until at least **15,293 of the frozen 15,447 products** have genuinely completed assessments and all mandatory release criteria below pass. The historical source baseline was **8,400 marked complete / 7,047 partial**; the current verified numerator is **8,496 complete**, as reconciled above. Subsequent checks identify61 contradictory release receipts and66 additional current native-owner holds (127 unique), so the baseline-plus-owner backlog is at least7,174 before bounded closures. The fresh reconciliation above supersedes that baseline arithmetic. Do not change the denominator, invent credit, clear real holds or relabel unfinished research to meet the percentage. Review completion, score availability and safety are separate facts.
 
 Owner: `scripts/audits/assessment_readiness_shadow.py::build_shadow_report` for the existing measure-only census; `assessment_readiness.py` and `scoring_v4/scored_artifact.py` for decisions; the existing Evidence resolver and seven adapters for qualification; export and `catalog_product_semantics.dart` for public consumers. Evidence: current manifest-owned source counts and Sean’s supplied 99% plan. Will NOT create another completeness engine, clinical registry, provisional public rating, fabricated review or scoring override.
 
@@ -347,8 +362,8 @@ Qualification: existing stage entrypoints and manifest format are reused through
 
 - [x] Remove automatic downstream fan-out for code/runtime invalidation. Recheck the affected stage and propagate only changed per-product semantic results, retaining independent downstream invalidations and safety/hold/source guards.
 - [x] Compare unchanged real-label code rechecks with actual full Clean/Enrich/Score producers; keep exact persisted downstream controls and regressions for changed safety/readiness/identity/amount/source fields.
-- [ ] Qualify completed candidate in required whole-fast CI, independently review, merge and delete its completed branch.
-- [ ] Reconcile the current 38-dataset run's scientific completion census, fixed cohort, shared causes and 20 comparison products before release qualification. Input acceptance already proves 15,449 raw records = 15,447 successful products + two source-owned incomplete records (312659, 250356), with zero unexplained losses/errors/duplicates.
+- [x] Qualify completed candidate in required whole-fast CI, independently review, merge and delete its completed branch. PR394 merged atc97c965b1 after all eight fast shards and readiness passed on c21e0bcb2 (29,198 passed/193 declared skips).
+- [x] Reconcile the current 38-dataset run's scientific completion census, fixed cohort, shared causes and 20 comparison products before release qualification. Input acceptance already proves 15,449 raw records = 15,447 successful products + two source-owned incomplete records (312659, 250356), with zero unexplained losses/errors/duplicates.
 
 Owner: `pipeline_incremental.py::plan_changes/run_incremental/stage_semantics`; existing stage freshness and manifests retain provenance authority. Evidence: owner/source inspection and real-producer differential tests. Will NOT create a second scorer, route policy, code dependency registry or provenance exception. Code inspection at an affected stage remains conservative: generic per-product function reachability is not proven by today's module imports, and this batch does not claim that problem solved. No catalog publication or additional normal corpus run is implied.
 
@@ -2032,3 +2047,21 @@ Source findings are verified and confirmed engineering corrections are implement
 - [x] Integrate the exact four-product source-reviewed exception record (#330, `35654c7af`) after green CI. Its candidate hash is historical; publication was stopped before activation for a reproduced ingredient-display defect.
 - [ ] Qualify/integrate the bounded export repair: ambiguous source quantities must not appear exact, including alternate servings. Focused268tests (including copied-ledger and folded-parenthetical regressions) and nine-label baseline comparison pass; only27808/28993 change. All114producer fingerprints remain current, so retain computation and rebuild catalog only. Local/CI pending.
 - [ ] Complete the new actual-candidate checksum review, live publication, Flutter bundle/CI and installed-app acceptance. No publication or native-app completion is claimed. Xcode first-launch setup remains incomplete.
+
+### Preserved worktree follow-up (November 5)
+
+The branch tips `claude/evidence-backed-970` and `codex/gnc-evidence` are contained in main but had unique uncommitted work. Evidence970 is now removed only after a hash-verified archive of its two modified files, seven unique reports and binary patch; recovery remains available. GNC remains until its valid port passes and integrates. The former's prose-marker pending implementation is superseded by main3dd70438b; preserve its unread-study research notes rather than transplanting stale data/tests. The latter contains an unmerged scoped Evidence-subject cache and mutation-isolation test: audit/port as a separate performance batch while retaining current clinical filter semantics (`assess_amount=False`, `require_claim_alignment=False`). It is not a scoring-policy approval or part of the qualified runner source.
+
+### Preserved November2 blob-churn investigation
+
+The unique documentation on obsolete branch0eb9a4ef1 is retained here as historical evidence, not a live release decision. Its400-product sample compared October22 blobs with the November2 candidate: removing version/fingerprint/date fields left0 identical, and also ignoring empty-value key changes left2/400 identical. Two sibling November2 builds differed in2/15,447 blobs with real label differences in that sample. This did not prove universal determinism: main02f2de4e4 subsequently fixed nondeterministic `blends[].sources` ordering. Content-addressed upload reuse already existed. No provenance/export fields are removed by this historical investigation, and no catalog was published by it. Exact original branch history is preserved in the private worktree-preservation bundle; do not transplant its superseded live-plan checkbox or broad determinism claim.
+
+### Remaining unique GNC cache work — integrated candidate
+
+Owner: `scoring_input_contract.py::get_evidence_subject_rows/scoring_input_scope` and `SupplementEnricherV3._collect_evidence_data`. Will NOT create a scorer, new eligibility rule, cache registry or cross-product lifetime. Port8f85f3460 retains current `assess_amount=False` and `require_claim_alignment=False` and uses the existing scoped-product view. First return and hits detach Evidence rows; the fail-first regression proved that mutating a first returned row previously mutated the scoped scoring rows.
+
+- [x] Audit/port the useful uncommitted cache work against current main rather than copying obsolete clinical filtering. Keep source inputs immutable within a pass and isolate nested/different products.
+- [x] RED→GREEN regression;673 named clinical/input-contract tests; independent5 cases plus nested/exception-reset probe;100 source-bound real products have identical full accepted/rejected structures uncached vs two scoped calls, with unchanged inputs. No clinical review, score or safety credit is invented.
+- [ ] Complete required exact-candidate full CI, merge, then remove the original GNC worktree after private recovery archive and main-containment proof.
+
+Four obsolete pipeline worktrees are already removed after verified preservation: evidence970, catalog-delivery, alert-feed-signing and label-warning. The unsafe catalog-upload `if False` debug patch is archived only, never merged. Remaining obsolete branch histories are bundled before deletion; main already contains nutrition, adult-boundary and held-rule fixes. Active unrelated Website email work and the active editing/primary checkouts remain protected.

@@ -16588,8 +16588,9 @@ class SupplementEnricherV3:
         unsubstantiated = self._check_unsubstantiated_claims(all_text)
 
         from clinical_applicability import filter_clinical_matches
-        matches, rejected = filter_clinical_matches(product, matches, assess_amount=False,
-                                                    require_claim_alignment=False)
+        with scoring_input_scope(product):
+            matches, rejected = filter_clinical_matches(product, matches, assess_amount=False,
+                                                        require_claim_alignment=False)
         return {
             "clinical_matches": matches,
             "rejected_clinical_matches": rejected,

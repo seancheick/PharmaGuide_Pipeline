@@ -2789,3 +2789,49 @@ def test_claim_conjunction_without_new_predicate_keeps_its_negation(text):
     from clinical_applicability import _claimed_purposes, native_product_positioning_categories
     assert _claimed_purposes(text) == set()
     assert native_product_positioning_categories(_claim(text), purposes_only=True) == set()
+
+
+def test_match_filter_reuses_evidence_projection_without_sharing_rows(monkeypatch):
+    from copy import deepcopy
+
+    import scoring_input_contract as contract
+
+    product, match, _ = _repeated_preparation_product(
+        monkeypatch, policy={"scope": "ingredient"},
+    )
+    matches = [match, deepcopy(match)]
+    expected = filter_clinical_matches(product, matches)
+    changed = {**product, "ingredient_quality_data": {"ingredients_scorable": []}}
+    other = {"product_name": "Unrelated product"}
+    expected_changed = contract.get_evidence_subject_rows(changed)
+    expected_other = contract.get_evidence_subject_rows(other)
+    original = contract.get_assessable_evidence_ingredients
+    calls = []
+
+    def counted(value):
+        calls.append(value)
+        return original(value)
+
+    monkeypatch.setattr(contract, "get_assessable_evidence_ingredients", counted)
+    with contract.scoring_input_scope(product):
+        scoring_rows = deepcopy(contract.get_scoring_ingredients(product).rows)
+        first_view = contract.get_evidence_subject_rows(product)
+        for row in first_view:
+            row.clear()
+        assert contract.get_scoring_ingredients(product).rows == scoring_rows
+        assert filter_clinical_matches(product, matches) == expected
+        assert len(calls) == 1
+        rows = contract.get_evidence_subject_rows(dict(product))
+        assert rows
+        pristine = deepcopy(rows)
+        rows[0].clear()
+        assert contract.get_evidence_subject_rows(product) == pristine
+        assert len(calls) == 1
+
+        assert contract.get_evidence_subject_rows(changed) == expected_changed
+        assert len(calls) == 2
+        assert contract.get_evidence_subject_rows(other) == expected_other
+        assert len(calls) == 3
+
+    assert contract.get_evidence_subject_rows(product) == pristine
+    assert len(calls) == 4
