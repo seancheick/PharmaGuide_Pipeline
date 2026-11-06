@@ -429,12 +429,18 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         score = weak_score
         applicability_reason = "ordinary_adult_explicit_epa_dha"
     qualified = score > 0
+    from scoring_reference_resolver import unique_source_references
+
+    selected_references = list(selected.get("references_structured") or []) if selected else []
+    if selected and qualified:
+        selected_references.extend({"pmid": str(pmid)} for pmid in selected.get("source_pmids") or []
+                                   if str(pmid).isdigit())
 
     return {
         "score": round(score, 4),
         "record_id": selected.get("id") if selected is not None else None,
         "record_source_pmids": list(selected.get("source_pmids") or []) if selected is not None else [],
-        "source_references": list(selected.get("references_structured") or []) if selected is not None else [],
+        "source_references": unique_source_references(selected_references),
         "evidence_result_state": "evaluated_authority" if selected is not None else "applicability_unestablished",
         "minimum_daily_epa_dha_mg": round(minimum, 4),
         "maximum_daily_epa_dha_mg": round(maximum, 4),

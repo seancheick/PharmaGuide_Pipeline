@@ -454,6 +454,7 @@ def unique_source_references(references: Any) -> List[Dict[str, Any]]:
     """Deduplicate already selected Evidence sources, without selecting new ones."""
     result = []
     seen = set()
+    seen_pmids = set()
     for ref in references or []:
         if not isinstance(ref, dict):
             continue
@@ -461,8 +462,18 @@ def unique_source_references(references: Any) -> List[Dict[str, Any]]:
         if not identity:
             continue
         key = (identity.lower(), tuple(sorted(ref.get("supports_claims") or [])))
+        pmid = str(ref.get("pmid") or "").strip()
+        if pmid and pmid in seen_pmids:
+            for index, existing in enumerate(result):
+                if str(existing.get("pmid") or "").strip() == pmid:
+                    if set(existing) == {"pmid"} and set(ref) != {"pmid"}:
+                        result[index] = dict(ref)
+                    break
+            continue
         if key not in seen:
             seen.add(key)
+            if pmid:
+                seen_pmids.add(pmid)
             result.append(dict(ref))
     return result
 

@@ -242,3 +242,11 @@ def test_existing_dri_sources_reach_role_reference_without_a_second_identity_lis
                 assert 'disputed' in ref['notes'].lower()
         count += 1
     assert count >= 28
+
+
+def test_source_reference_dedup_preserves_authored_metadata_over_pmid_only_fallback():
+    from scoring_reference_resolver import unique_source_references
+    authored = {'pmid': '18184094', 'title': 'Authored source title',
+                'url': 'https://pubmed.ncbi.nlm.nih.gov/18184094/'}
+    assert unique_source_references([authored, {'pmid': '18184094'}]) == [authored]
+    assert unique_source_references([{'pmid': '18184094'}, authored]) == [authored]

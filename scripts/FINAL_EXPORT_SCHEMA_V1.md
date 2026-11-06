@@ -892,6 +892,9 @@ ambiguity.
   Evidence selected source citations. Optional `source_references` is a list of existing
   structured citation objects (`type`, `title`, `authority`, `url`/`doi`/`pmid`,
   `supports_claims`, `notes` when present), deduplicated by source identity and claim scope.
+  A qualified selected owner PMID without authored citation metadata projects only
+  `{"pmid": "..."}`; it adds no inferred title, authority, study type or study count.
+  An authored citation with the same PMID takes precedence over that minimal fallback.
   It projects only the actual scored Evidence owner's winning/covered sources; it never
   substitutes Dose citations, unselected clinical rows or enrichment's cached citations.
   Nutrition authority citations establish the stated nutrient role, not supplemental
