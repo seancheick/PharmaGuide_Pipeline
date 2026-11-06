@@ -56,11 +56,16 @@ estimates were not qualified by this bounded review.
 
 ## Validation and limits
 
-Fail-first owner, form-matching, exported form-note and nullable-fraction regressions were
-run before the corresponding fixes. Source-bound raw replay covers the identified candidates
-and controls from all seven modules; its measured receipt and exact-candidate qualification
-belong in the existing master plan/ledger. Do not infer numerical or safety invariance solely
-from unit tests, and do not restamp the completed304 catalog as current output.
+Fail-first owner, form-matching, exported form-note and nullable-fraction regressions ran
+before the corresponding fixes. Completed baseline captures at0170 are distinct from the
+completed candidate416 comparison at8ca, later67 raw captures at889 across all seven modules,
+and seven necessary follow-up captures at2f01 restoring the discovered vitaminE upper bound.
+These bounded receipts do not qualify the current whole catalog. The later67 Score/export
+projection atabbedafe0 reuses those captured Enrich inputs and preserves all numeric pillars,
+statuses and warnings, with only enumerated copy/citation/review-provenance metadata changes.
+Combined CI qualification is still pending; the correctly bound local artifact rung passed
+564 checks with24 declared opt-in skips. Exact-source results and limits are in the execution
+ledger. Do not infer invariance from unit tests or restamp completed304 output as current.
 
 Newly accessible L-carnitine and elderberry full texts are preserved in the existing private
 source packets. Access alone does not resolve their population, preparation, outcome or
