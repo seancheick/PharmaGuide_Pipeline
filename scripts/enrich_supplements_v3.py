@@ -12087,6 +12087,14 @@ class SupplementEnricherV3:
         quality_map = self.databases.get('ingredient_quality_map', {})
         quality_rows = (product.get('ingredient_quality_data') or {}).get('ingredients_scorable', [])
         quality_row_ids = {id(row) for row in quality_rows}
+        def _term_identity(text):
+            key = norm_module.make_normalized_key(text)
+            identity = identity_registry.canonicalize(key, 'ingredient_quality_map')
+            if identity_registry.standard_names.get((identity[1], identity[0])):
+                return identity
+            preferred = identity_registry.resolve_verified_preferred(text)
+            return identity_registry.canonicalize(*preferred) if preferred else None
+
         ingredient_info = {}
         for ing in active_ingredients:
             key = self._normalize_text(ing.get('standardName', '') or ing.get('name', ''))
@@ -12110,17 +12118,10 @@ class SupplementEnricherV3:
                 "canonical_id": canonical_id,
                 "canonical_source_db": canonical_db,
                 "form_ids": form_ids,
+                "form_identities": {_term_identity(form) for form in form_ids},
                 "quantity": ing.get('quantity', 0),
                 "unit": ing.get('unit', '')
             }
-
-        def _term_identity(text):
-            key = norm_module.make_normalized_key(text)
-            identity = identity_registry.canonicalize(key, 'ingredient_quality_map')
-            if identity_registry.standard_names.get((identity[1], identity[0])):
-                return identity
-            preferred = identity_registry.resolve_verified_preferred(text)
-            return identity_registry.canonicalize(*preferred) if preferred else None
 
         def _term_form(text, identity):
             if not identity or identity[1] != 'ingredient_quality_map':
@@ -12234,11 +12235,7 @@ class SupplementEnricherV3:
                             # A nutrient row can explicitly name a different
                             # compound as its source. Resolve its owned form ID
                             # with the identity owner; nutrient mass is not compound mass.
-                            source_forms = ing_data['form_ids']
-                            compound_presence_only = bool(source_forms) and all(
-                                _term_identity(form) == target_identity
-                                for form in source_forms
-                            )
+                            compound_presence_only = ing_data['form_identities'] == {target_identity}
                             if not compound_presence_only:
                                 continue
                         # A redirected form/alias still needs its existing
