@@ -181,3 +181,26 @@ def test_form_quality_null_is_explicitly_unassessed_not_a_missing_key():
     findings = []
     check_iqm(findings, data, 'ingredient_quality_map.json')
     assert any(f.issue == 'missing_required_key' and f.path.endswith('bio_score') for f in findings)
+
+
+@pytest.mark.parametrize('mutation,accepted', [
+    (None, True), ('record', False), ('context', False), ('source', False), ('pending', False),
+])
+def test_observed_effect_exception_needs_its_approved_record_context_and_source(mutation, accepted):
+    import copy
+    from clinical_applicability import reviewed_entries
+    from db_integrity_sanity_check import check_clinical_db
+    record = copy.deepcopy(reviewed_entries()['INGR_L_GLUTAMINE'])
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
+    if mutation == 'record':
+        record['id'] = 'UNQUALIFIED_RECORD'
+    elif mutation == 'context':
+        context['context_id'] = 'unqualified_context'
+    elif mutation == 'source':
+        context['source_pmids'] = ['32992440']
+    elif mutation == 'pending':
+        context['review_status'] = 'source_verified_pending_clinical_review'
+    findings = []
+    check_clinical_db(findings, {'backed_clinical_studies':[record]}, 'backed_clinical_studies.json')
+    enum_errors = [f for f in findings if f.path == '[0].effect_direction']
+    assert (not enum_errors) is accepted
