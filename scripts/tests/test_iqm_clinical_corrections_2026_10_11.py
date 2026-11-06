@@ -227,3 +227,27 @@ def test_hmb_evidence_cannot_generalize_gel_exposure_to_all_free_acid_preparatio
         assert "capsule" in rationale.lower()
         assert "universal" in rationale.lower()
     assert forms["hmb free acid (hmb-fa)"]["form_evidence"]["score_supported"] is False
+
+
+def test_elderberry_form_note_does_not_overstate_reviewed_respiratory_evidence():
+    row = _data()["elderberry"]["forms"]["elderberry extract (sambucol)"]
+    notes = row["notes"].lower()
+    assert "strong clinical evidence" not in notes
+    assert "2-4 days" not in notes
+    assert "milbury 2002" not in notes
+    assert "18040528" in notes and "2007" in notes and "frank" in notes
+    assert "urine" in notes and "not total absorption" in notes
+    assert "33827515" in notes and "low to very low" in notes
+    assert "across formulations" in notes
+    # The correction is source interpretation, not a new form calibration or
+    # replacement for the separately reviewed public form description.
+    assert row["bio_score"] == 9
+    assert row["consumer_note_review"]["date"] == "2026-08-08"
+
+
+@pytest.mark.parametrize("form", ["elderberry extract (sambucol)", "elderberry (unspecified)"])
+def test_elderberry_form_does_not_treat_urinary_recovery_as_absolute_absorption(form):
+    row = _data()["elderberry"]["forms"][form]
+    for key in ("value", "range_low", "range_high"):
+        assert row["absorption_structured"][key] is None
+    assert "not established" in row["absorption"].lower()
