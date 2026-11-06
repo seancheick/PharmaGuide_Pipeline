@@ -12,7 +12,7 @@ Final tested head `72e3fd82b` passed all eight fast shards and Merge readiness i
 
 The exact operator-input plan at runtime source `26c20c727` covers 38 datasets and 15,449 raw IDs per stage, with zero deletions; global raw binding and all 152 state/manifest hashes stayed unchanged. It includes all 35 manual submissions, including 16 untracked source files. The first corrected execution needs a fresh baseline because shared source changed; later affected-input retries reuse successful products. No prior output was restamped and no normal corpus producer was started by this repair.
 
-BulkSupplements `312659` and Emergen_C `250356` still lack ingredient rows. They remain explicit source holds outside the fixed 15,447-product release cohort. Saving other products does not complete these records or the scientific backlog. Sean runs the nonpublishing command in the operations guide; fresh output census, 99% scientific completion and catalog/device release qualification remain open below.
+BulkSupplements `312659` and Emergen_C `250356` still lack ingredient rows. The historical incomplete outcomes remain unproven in the normal generation and require rechecking before their dispositions are recorded. Both IDs sit outside the fixed 15,447-product release cohort. Saving other products does not complete these records or the scientific backlog. Sean runs the nonpublishing command in the operations guide; fresh output census, 99% scientific completion and catalog/device release qualification remain open below.
 
 ## Active target — 99% scientific completion and honest public ratings (November 5)
 
