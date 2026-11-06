@@ -648,3 +648,24 @@ def test_generic_shilajit_review_cannot_finish_with_an_unread_sibling(monkeypatc
     assert 'clinical_source_rejection_coverage_incomplete' in result['errors']
     # Finishing the generic preparation question cannot complete other research.
     assert ca.assess_clinical_source_review(records['INGR_UBIQUINOL'])['is_complete'] is False
+
+
+def test_elderberry_completed_synthesis_review_does_not_invent_generic_credit():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_ELDERBERRY']
+    contexts = {c['context_id']: c for c in record['study_contexts']}
+    reviewed = contexts.get('ingr_elderberry_30670267_reviewed_synthesis')
+    assert reviewed is not None
+    assert reviewed['review_status'] == 'clinician_approved'  # compatibility enum; agent review
+    assert reviewed['scoring_eligible'] is False
+    assert validate_ingredient_context(reviewed, require_complete_review=True) == []
+    assert 'Codex' in reviewed['clinical_review']['reviewer']
+    assert record['effect_direction'] == 'mixed'
+    assert contexts['ingr_elderberry_33827515_scoped_source']['clinical_review']['reviewer'] == 'Dr. Pham'
+    assert not er.clinical_record_sources_eligible(record)
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert reviewed['trial_family'] == 'elderberry_respiratory_trials_1995_2016'
+    assert reviewed['dose']['values'] == []
+    assert '176' in reviewed['population']['description'] and '180' in reviewed['population']['description']
+    assert 'Cochrane/GRADE review' not in ' '.join(reviewed['limitations'])

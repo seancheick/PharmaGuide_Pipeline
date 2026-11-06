@@ -18195,7 +18195,7 @@
       "notes": "Human evidence for elderberry in upper-respiratory illness is promising but still limited by small trial counts and heterogeneous preparations. The data do not justify strong antiviral or oseltamivir-equivalence claims.",
       "notable_studies": "The 2021 review indexed as PMID 33827515 found limited evidence for symptom-duration reduction without support for cytokine-storm concerns. Earlier pooled respiratory-symptom evidence is indexed as PMID 30670267. Overall, the trial base remains small and formulation-specific.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-06",
       "references_structured": [
         {
           "type": "pubmed",
@@ -18378,6 +18378,92 @@
             "15080016",
             "9395631",
             "26265958"
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_elderberry_30670267_reviewed_synthesis",
+          "source_pmids": [
+            "30670267"
+          ],
+          "components": [
+            "INGR_ELDERBERRY"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Pooled proprietary elderberry interventions: Sambucol syrup in two trials, a proprietary slow-dissolve lozenge, and proprietary membrane-filtered elderberry capsules; no equivalence to unspecified retail preparations established."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "viral_respiratory_illness",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Codex elderberry source reviewer; independently checked by Codex glycine/blueberry source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated existing-policy agent source review on2026-11-06; accepted30670267 manuscript,33827515 source-table/risk-of-bias and27023596 preparation facts content-checked independently. Completed non-scoring source extraction and applicability boundaries only; no physician attribution or new parent efficacy approval."
+          },
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "elderberry_respiratory_trials_1995_2016",
+          "population": {
+            "description": "Four small randomized publications in participants with influenza or flu-like symptoms, or the symptomatic subgroup of healthy air travellers. The meta-analysis reports 180 participants; Table 1 sums to 176. Children were included only in the 1995 trial. The 2016 prevention trial randomized 312 travellers but only its 29 participants developing colds enter this symptom analysis."
+          },
+          "study_design": "Random-effects synthesis of four randomized publications; symptom duration and severity pooled, with six symptom scales combined for the Kong 2009 contribution. Search completed September 2018. The comparison is elderberry versus placebo; the echinacea-elderberry/oseltamivir trial was excluded.",
+          "outcomes": [
+            {
+              "name": "Pooled upper-respiratory symptom duration/severity favored elderberry: standardized mean difference 1.717 (95% CI 0.840 to 2.593); high heterogeneity I2 83.12%. This pooled signal is not proof of effectiveness of every elderberry preparation.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Influenza subgroup favored elderberry, while the single common-cold contribution was imprecise and crossed the null (0.662; 95% CI -0.096 to 1.421). Prevention is not established by analyzing only participants who developed symptoms.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "The four publication families overlap the elderberry-only trials in PMID 33827515; these two reviews are not independent clinical replications. The unindexed Kong 2009 publication remains identified by citation, not an invented PMID.",
+            "The authors reported low risk using the Downs and Black checklist. The2021review used Cochrane risk-of-bias tools and GRADE and found conduct/reporting concerns. This older positive pooled result does not reverse the existing source-scoped non-scoring33827515 determination.",
+            "Reported total enrollment 180 differs from Table 1 arm totals of 176. Kong is shown as 30/30 in the meta-analysis versus 64 total in the 2021 review. Retain this unresolved reporting discrepancy; no corrected sample count is asserted.",
+            "Small samples, heterogeneous proprietary preparations, mixed symptom instruments and derived summary measurements limit generalization. Three studies disclosed manufacturer funding; the fourth used the same commercial product as a later funded study.",
+            "No common anthocyanin/berry-mass dose, generic preparation equivalence, strong antiviral effect, COVID-19 benefit, or oseltamivir equivalence is established. No new efficacy grade, Dose benchmark or safety finding is authorized by this review.",
+            "This completed non-scoring source context retains the existing mixed/preparation-specific interpretation. It is not proof of no benefit and does not alone close the generic parent assessment.",
+            "Source extraction authored by a Codex elderberry reviewer and independently content-checked by a separate Codex reviewer on2026-11-06 under delegated routine review authority. No physician review or signature is claimed; remaining parent/generic preparation and clinical-qualification holds are unchanged."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": null,
+            "dosage_forms": [],
+            "co_therapies": [],
+            "source_provenance": {
+              "pmid": "30670267",
+              "location": "Accepted manuscript sections 1.2.2-1.2.5, Table 1, sections 1.3.1-1.3.5 and Discussion; preparation mapping cross-checked against PMID 33827515 Table 1 and PMID 27023596 Methods 2.2.",
+              "source_url": "https://doi.org/10.1016/j.ctim.2018.12.004"
+            },
+            "reported_regimen": "No common assigned regimen is reported by this synthesis. Included publications used syrup, lozenge or capsule interventions with distinct protocols; do not infer an equivalent generic daily dose.",
+            "normalization": {
+              "basis": "No pooled daily regimen or validated generic-preparation conversion; empty values express the aggregate limitation, not absent human research."
+            }
+          },
+          "included_study_pmids": [
+            "9395631",
+            "15080016",
+            "27023596"
           ]
         }
       ]
