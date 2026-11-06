@@ -736,7 +736,7 @@
           "sample_size": 106,
           "dose": "15 g/day (5 g 3 times daily)",
           "duration": "8 weeks",
-          "outcome": "significantly reduced IBS symptom severity scores and normalized intestinal permeability",
+          "outcome": "Of 115 randomized participants, 106 completers were analyzed: 43/54 receiving free L-glutamine versus 3/52 receiving whey placebo achieved the prespecified primary reduction of at least 50 IBS symptom-severity points. Participants had post-infectious IBS-D and intestinal hyperpermeability. Secondary symptom/stool measures and the permeability surrogate were separately reported; these findings do not establish benefit in all IBS or healthy/sports populations.",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -756,7 +756,7 @@
           "sample_size": 14,
           "dose": "single beverages of 0.3, 0.6 or 0.9 g/kg fat-free mass (crossover)",
           "duration": "acute",
-          "outcome": "gastrointestinal tolerance established in healthy adults",
+          "outcome": "Acute GI tolerability compared three active L-glutamine doses in 14 healthy men without a zero-glutamine placebo. The highest dose, 0.9 g/kg fat-free mass, produced more GI symptoms, generally mild and transient; this was not an efficacy trial or proof of universal absence of adverse effects.",
           "effect_direction": "neutral",
           "verification_provenance": {
             "pmid_verified": true,
@@ -779,11 +779,11 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "The IBS trial gave 5 g L-glutamine three times daily (15 g/day) for 8 weeks to adults with post-infectious IBS-D and intestinal hyperpermeability. The second study measured acute GI tolerance of single 0.3-0.9 g/kg fat-free-mass doses in healthy men and is not an efficacy trial. Sports performance or muscle recovery is not established by these sources.",
+      "applicability_decision": "The IBS trial gave 5 g free L-glutamine three times daily (15 g/day) for 8 weeks to adults with post-infectious IBS-D and intestinal hyperpermeability. The full primary text confirms its named symptom-severity endpoint and distinguishes 115 randomized participants from 106 analyzed completers. The second study compared acute GI tolerance of three active 0.3-0.9 g/kg fat-free-mass doses in healthy men; the highest dose produced more symptoms and there was no zero-glutamine placebo efficacy comparison. Neither study establishes general sports-performance or muscle-recovery benefit. Other research populations and modified glutamine preparations retain their separate unfinished applicability review.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex full-text source reviewer (elderberry_review), independently checked by Codex root; exact IBS primary scope independently checked by Codex glycine_review on 2026-11-06",
+        "verified_at": "2026-11-06T21:53:01.799816+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },

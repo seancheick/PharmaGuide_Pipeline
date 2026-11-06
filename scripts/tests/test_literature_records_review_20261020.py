@@ -591,3 +591,19 @@ def test_blueberry_review_retains_its_stabilized_extract_arm_without_generic_tra
     assert [study['pmid'] for study in record['qualifying_human_studies']] == ['30999017']
     from dose_assessment import verified_reference_citations
     assert verified_reference_citations(record), 'Factual source updates must retain qualified neutral Dose'
+
+
+def test_glutamine_source_facts_distinguish_completers_primary_outcome_and_tolerability(records):
+    record = records['l_glutamine']
+    efficacy = _study(record, '30108163')
+    tolerability = _study(record, '32992440')
+    assert efficacy['sample_size'] == 106  # analyzed completers, not all randomized participants
+    assert '115 randomized' in efficacy['outcome'] and '106 completers' in efficacy['outcome']
+    assert '43/54' in efficacy['outcome'] and '3/52' in efficacy['outcome']
+    assert 'post-infectious IBS-D' in efficacy['outcome']
+    assert 'without a zero-glutamine placebo' in tolerability['outcome']
+    assert 'more GI symptoms' in tolerability['outcome']
+    assert efficacy['effect_direction'] == 'positive_moderate'  # no invented numerical mapping
+    assert tolerability['effect_direction'] == 'neutral'  # retained source value, not a null efficacy trial
+    assert record['applicability_status'] == 'applicability_unestablished'
+    assert record['effect_direction'] is None
