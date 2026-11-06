@@ -648,3 +648,24 @@ def test_safety_suppression_does_not_complete_unfinished_release(verification_co
     assert artifact["quality_pillars_v4"] is None
     assert artifact["product_safety_status"] == "blocked"
     assert artifact["safety_verdict"] == "BLOCKED"
+
+
+def test_projected_scoring_and_original_assembly_each_reuse_their_own_input(monkeypatch):
+    from copy import deepcopy
+    import scoring_input_contract as contract
+    product = _product()
+    projected = {**product, 'ingredient_quality_data': deepcopy(product['ingredient_quality_data'])}
+    before = deepcopy(product)
+    monkeypatch.setattr(scored_artifact, 'score_eligible_identity_view', lambda source: projected)
+    original = contract._build_scoring_ingredients
+    counts = {}
+    def counted(value, *, strict=True, allow_legacy_fallback=False):
+        key = (id(value['ingredient_quality_data']), strict, allow_legacy_fallback)
+        counts[key] = counts.get(key, 0) + 1
+        return original(value, strict=strict, allow_legacy_fallback=allow_legacy_fallback)
+    monkeypatch.setattr(contract, '_build_scoring_ingredients', counted)
+    scored_artifact.build_scored_artifact(product)
+    assert {key[0] for key in counts} == {
+        id(product['ingredient_quality_data']), id(projected['ingredient_quality_data'])}
+    assert set(counts.values()) == {1}, counts
+    assert product == before
