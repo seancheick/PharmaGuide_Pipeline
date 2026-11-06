@@ -2244,6 +2244,22 @@ def test_one_finished_trial_cannot_hide_another_unread_source(monkeypatch, rever
         # One genuinely applicable source is retained despite another unread source.
         assert result.points_eligible is True
         assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+        pending = other_review != 'finished_reference'
+        assert (_resolved_evidence_assessment(result)[0] == 'not_yet_evaluated') is pending
+        assert er._compose_panel_resolution(product, [result]).is_assessment_complete is not pending
+        # Readiness must retain the same known-open source even when the
+        # separate credit path already produced a supportive or limited match.
+        import assessment_readiness as ar
+        row.update(scoreable_identity=True, identity_disposition='clean',
+                   cleaner_row_role='active_scorable', source_section='active',
+                   dose_class='therapeutic_mass', has_dose=True)
+        for effect in ['positive_weak', 'null']:
+            linked = {**trial, 'matched_canonical_ids': ['synthetic_material'],
+                      'matched_source_row_refs': ['ingredientRows[0]'], 'effect_direction': effect}
+            monkeypatch.setattr(ar, 'resolved_clinical_matches', lambda *a, **kw: ([linked], []))
+            readiness = ar.evaluate_evidence_assessment(product, module='generic')
+            assert (readiness['readiness'] == 'incomplete') is pending
+        assert er.resolve_product_evidence(product).is_assessment_complete is not pending
     elif other_review != 'finished_reference':
         assert result.points_eligible is False
         assert _resolved_evidence_assessment(result)[0] == 'not_yet_evaluated'
