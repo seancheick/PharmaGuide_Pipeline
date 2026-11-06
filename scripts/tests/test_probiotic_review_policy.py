@@ -1,4 +1,4 @@
-"""Native contexts stay non-scoring until an attributable clinical approval."""
+"""Native contexts require a source-bound authorized review; pending stays pending."""
 from copy import deepcopy
 
 import pytest
@@ -11,7 +11,7 @@ from test_native_study_contexts import context
 from test_probiotic_applicability_rubric import strain_product
 
 STUB = "STRAIN_ACIDOPHILUS_LA14"
-REVIEW = {"reviewer": "Dr Test Reviewer", "reviewed_at": "2026-09-13T12:00:00Z",
+REVIEW = {"reviewer": "Synthetic delegated source reviewer", "reviewed_at": "2026-09-13T12:00:00Z",
           "scope": "identity_dose_outcome_applicability"}
 
 
@@ -43,8 +43,8 @@ def la14_product(dose=1e9):
     return product
 
 
-def test_policy_default_is_clinician_only():
-    assert pm.native_context_review_policy() == "clinician_only"
+def test_policy_accepts_authorized_existing_rubric_reviews():
+    assert pm.native_context_review_policy() == "authorized_source_review"
 
 
 def test_verified_stub_without_contexts_stays_pending(registry):
@@ -69,7 +69,7 @@ def test_source_verified_rct_remains_research_only(registry):
     assert score_evidence(la14_product())["score"] == 0
 
 
-def test_attributable_clinician_approval_can_score(registry):
+def test_attributable_delegated_source_approval_can_score(registry):
     registry[STUB]["study_contexts"] = [positive_rct(approved=True)]
     entry = registry[STUB]
     derived = pm.effective_strain_evidence(entry)
@@ -102,9 +102,9 @@ def test_explicitly_ineligible_context_never_scores_after_clinician_approval(reg
     {},
     {"reviewer": "pending", "reviewed_at": "2026-09-13T12:00:00Z",
      "scope": "identity_dose_outcome_applicability"},
-    {"reviewer": "Dr Test Reviewer", "reviewed_at": "2026-09-13T12:00:00",
+    {"reviewer": "Synthetic delegated source reviewer", "reviewed_at": "2026-09-13T12:00:00",
      "scope": "identity_dose_outcome_applicability"},
-    {"reviewer": "Dr Test Reviewer", "reviewed_at": "2026-09-13T12:00:00Z",
+    {"reviewer": "Synthetic delegated source reviewer", "reviewed_at": "2026-09-13T12:00:00Z",
      "scope": "identity_only"},
 ])
 def test_approval_status_without_valid_provenance_never_scores(registry, review):
@@ -205,7 +205,8 @@ def test_spores_dose_without_measurement_type_never_credits_an_identity(registry
 
 
 @pytest.mark.parametrize("value", [None, False, 0, "false", "no", 1, "true"])
-def test_scoring_eligible_requires_explicit_boolean_true(value):
+def test_scoring_eligible_requires_explicit_boolean_true(registry, value):
+    registry[STUB]["study_contexts"] = [positive_rct(approved=True)]
     row = positive_rct(approved=True, scoring_eligible=value)
     assert pm.context_accepted_for_scoring(row) is False
     assert pm.context_accepted_for_scoring(positive_rct(approved=True)) is True
@@ -274,9 +275,143 @@ def test_finished_individual_review_preserves_combination_research(registry, rec
 
 
 @pytest.mark.parametrize("value,accepted", [("2026-09-13", True), ("2999-01-01", False), ("2026-02-30", False)])
-def test_dated_approval_preserves_supplied_date_precision(value, accepted):
+def test_dated_approval_preserves_supplied_date_precision(registry, value, accepted):
     row = positive_rct(approved=True)
     row["clinical_review"]["reviewed_at"] = value
+    registry[STUB]["study_contexts"] = [deepcopy(row)]
     assert pm.context_accepted_for_scoring(row) is accepted
     row["scoring_eligible"] = False
     assert pm.context_accepted_for_scoring(row) is False
+
+
+@pytest.mark.parametrize('field', ['reviewer', 'basis', 'context_id', 'outcomes', 'population', 'source_pmids', 'applicability'])
+def test_approved_review_cannot_be_forged_by_caller_metadata(field):
+    canonical = next(c for c in studied_formulas._clinical_strain_registry()['STRAIN_LGG']['study_contexts']
+                     if c['context_id'] == 'lgg_pediatric_aad_guideline_26756877')
+    forged = deepcopy(canonical)
+    if field == 'reviewer':
+        forged['clinical_review']['reviewer'] = 'Unapproved arbitrary reviewer'
+    elif field == 'basis':
+        forged['clinical_review']['basis'] = 'unverified made-up response'
+    elif field == 'context_id':
+        forged['context_id'] = 'unregistered-context'
+    elif field == 'outcomes':
+        forged['outcomes'][0]['direction'] = 'negative'
+    elif field == 'population':
+        forged['population']['age_group'] = 'adult'
+    elif field == 'source_pmids':
+        forged['source_pmids'] = ['12345678']
+    else:
+        forged['applicability'] = {'status': 'applicable'}
+    assert not pm.clinical_review_provenance_valid(forged)
+    assert not pm.context_accepted_for_scoring(forged)
+
+
+def test_real_agent_review_and_legitimate_derived_context_keep_current_scope():
+    canonical = next(c for c in studied_formulas._clinical_strain_registry()['STRAIN_LGG']['study_contexts']
+                     if c['context_id'] == 'lgg_pediatric_aad_guideline_26756877')
+    assert 'engineering owner' in canonical['clinical_review']['reviewer']
+    assert pm.clinical_review_provenance_valid(canonical)
+    derived = {**deepcopy(canonical), 'status': 'source_context_recorded',
+               'dose_comparison': 'study_daily_dose_unresolved',
+               'label_daily_cfu': None, 'source_row_ref': 'ingredientRows[0]',
+               'clinical_applicability': 'not_established',
+               'applicability_reason': 'study_daily_dose_unresolved'}
+    assert pm.clinical_review_provenance_valid(derived)
+    assert pm.context_accepted_for_scoring(derived)
+
+
+def _prospective_review_fixture(tmp_path, monkeypatch):
+    import hashlib
+    import importlib.util
+    import json
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parents[1] / 'audits/probiotic_curation_queue_2026_09_13/apply_review_response_2026_09_14.py'
+    spec = importlib.util.spec_from_file_location('source_bound_review_authoring_test', path)
+    authoring = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(authoring)
+    source = {'clinically_relevant_strains': [deepcopy(
+        studied_formulas._clinical_strain_registry()['STRAIN_LGG'])]}
+    row = source['clinically_relevant_strains'][0]['study_contexts'][0]
+    row.update(review_status='source_verified_pending_clinical_review', scoring_eligible=False)
+    row.pop('clinical_review', None)
+    source['clinically_relevant_strains'][0]['study_contexts'] = [row]
+    source_path = tmp_path / 'clinically_relevant_strains.json'
+    source_path.write_text(json.dumps(source))
+    monkeypatch.setattr(authoring, 'REGISTRY', source_path)
+    response = {'_metadata': {'dataset_sha256': hashlib.sha256(source_path.read_bytes()).hexdigest()},
+                'reviews': {row['context_id']: {'decision': 'approve_as_written', 'patches': [],
+                                                'reason': 'Synthetic independently checked source decision'}}}
+    return authoring, source, response, row
+
+
+def test_verified_authoring_candidate_is_not_a_public_runtime_bypass(tmp_path, monkeypatch):
+    authoring, source, response, row = _prospective_review_fixture(tmp_path, monkeypatch)
+    candidate, summary = authoring.validate(source, response,
+        reviewer='Agent source reviewer, independently checked under existing rubric',
+        reviewed_at='2026-11-06')
+    approved = candidate['clinically_relevant_strains'][0]['study_contexts'][0]
+    assert summary['approved'] == 1
+    assert approved['review_status'] == 'clinician_approved'  # legacy enum, not clinician attribution
+    assert approved['clinical_review']['reviewer'].startswith('Agent source reviewer')
+    assert not pm.context_accepted_for_scoring(approved)  # not current canonical approval
+    canonical = {entry['id']: entry for entry in candidate['clinically_relevant_strains']}
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: canonical)
+    assert pm.clinical_review_provenance_valid(approved)
+    assert approved['scoring_eligible'] is False  # authoring cannot erase the explicit exclusion
+    assert not pm.context_accepted_for_scoring(approved)
+
+
+@pytest.mark.parametrize('failure', ['missing_hash', 'wrong_hash', 'unknown_context', 'foreign_pmid', 'mutated_payload', 'mutated_boolean_type'])
+def test_prospective_authoring_requires_exact_source_response(tmp_path, monkeypatch, failure):
+    authoring, source, response, row = _prospective_review_fixture(tmp_path, monkeypatch)
+    if failure == 'missing_hash':
+        response['_metadata'].pop('dataset_sha256')
+    elif failure == 'wrong_hash':
+        response['_metadata']['dataset_sha256'] = '0' * 64
+    elif failure == 'unknown_context':
+        response['reviews'] = {'not-in-source': next(iter(response['reviews'].values()))}
+    elif failure == 'mutated_payload':
+        row['condition'] = 'unreviewed-new-condition'
+    elif failure == 'mutated_boolean_type':
+        thresholds = source['clinically_relevant_strains'][0]['cfu_thresholds']
+        assert isinstance(thresholds['dr_pham_signoff'], bool)
+        thresholds['dr_pham_signoff'] = int(thresholds['dr_pham_signoff'])
+    else:
+        response['reviews'][row['context_id']]['patches'] = [{
+            'source_pmid': '12345678', 'field_path': 'purpose',
+            'old_value': row['purpose'], 'new_value': row['purpose']}]
+    with pytest.raises(ValueError):
+        authoring.validate(source, response, reviewer='Agent source reviewer', reviewed_at='2026-11-06')
+
+
+@pytest.mark.parametrize('conflict', [False, True])
+def test_combination_context_copies_require_one_semantic_source_scope(registry, conflict):
+    source = positive_rct(approved=True, identity_scope='combination', components=[STUB, 'STRAIN_LGG'])
+    duplicate = deepcopy(source)
+    if conflict:
+        duplicate['population']['age_group'] = 'child'
+    registry[STUB]['study_contexts'] = [source]
+    registry['STRAIN_LGG']['study_contexts'] = [duplicate]
+    assert pm.clinical_review_provenance_valid(source) is (not conflict)
+
+
+def test_actual_formula_owned_context_uses_existing_formula_reference():
+    from clinical_applicability import reviewed_entries
+    contexts = reviewed_entries()['FORMULA_SEED_DS01']['study_contexts']
+    assert contexts
+    for row in contexts:
+        assert pm.clinical_review_provenance_valid(row)
+        assert pm.context_accepted_for_scoring(row) is (row.get('scoring_eligible') is True)
+
+
+def test_all_actual_native_contexts_retain_explicit_approval_and_eligibility_scope():
+    contexts = [c for entry in studied_formulas._clinical_strain_registry().values()
+                for c in entry.get('study_contexts', [])]
+    assert contexts
+    for row in contexts:
+        expected = (row.get('review_status') == 'clinician_approved'
+                    and row.get('scoring_eligible') is True
+                    and row.get('evidence_role') != 'uncontrolled_intervention')
+        assert pm.context_accepted_for_scoring(row) is expected, row['context_id']

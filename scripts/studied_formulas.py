@@ -993,7 +993,7 @@ def assess_probiotic_component_disposition(product: Mapping) -> dict:
 
 NATIVE_CONTEXT_REVIEW_STATUSES = frozenset({
     "source_verified_pending_clinical_review",  # authored, PMIDs verified, no approval
-    "clinician_approved",                        # the only status that can score
+    "clinician_approved",                        # legacy enum: approved scoped review
     "adjudication_required",                     # conflicting sources; held
     "rejected_source",                           # excluded from research entirely
 })
@@ -1022,7 +1022,14 @@ def reviewed_native_context_present(strain: Mapping) -> bool:
 
 
 def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
-    """Validate a registry context and any claimed clinical approval."""
+    """Validate source facts and bind any approved review to its canonical record."""
+    return (_valid_native_study_context_payload(context, reference_id)
+            and (context.get("review_status") != "clinician_approved"
+                 or clinical_review_provenance_valid(context)))
+
+
+def _valid_native_study_context_payload(context: Mapping, reference_id: str) -> bool:
+    """Shared source shape; prospective authoring still must verify its response."""
     if not isinstance(context, Mapping):
         return False
 
@@ -1066,9 +1073,6 @@ def valid_native_study_context(context: Mapping, reference_id: str) -> bool:
             return False
     eligible = context.get("scoring_eligible")
     if eligible is not None and not isinstance(eligible, bool):
-        return False
-    if (context.get("review_status") == "clinician_approved"
-            and not clinical_review_provenance_valid(context)):
         return False
     components = context["components"]
     if (len(set(components)) != len(components)
@@ -1224,7 +1228,7 @@ def _assess_native_study_contexts(product: Mapping, row: Mapping, reference: Map
 
 def _accepted_context_applicability(context: Mapping, applicability_class: str,
                                     class_reason: str) -> tuple[str, str, float]:
-    """Only an attributable clinician-approved exact-strain context whose tested arm
+    """Only an attributable source-approved exact-strain context whose tested arm
     exactly matches the label's owned daily dose and that
     has a positive primary patient-important outcome establishes applicability.
     Everything else is recorded with the reason it does not."""

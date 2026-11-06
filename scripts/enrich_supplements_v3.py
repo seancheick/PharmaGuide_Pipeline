@@ -12083,14 +12083,55 @@ class SupplementEnricherV3:
                 product['name_inference_provenance'] = list(provenance) + synthetic_display_entries
 
         # Build ingredient lookup
+        identity_registry = self._current_canonical_identity_registry()
+        quality_map = self.databases.get('ingredient_quality_map', {})
+        quality_rows = (product.get('ingredient_quality_data') or {}).get('ingredients_scorable', [])
+        quality_row_ids = {id(row) for row in quality_rows}
+        def _term_identity(text):
+            key = norm_module.make_normalized_key(text)
+            identity = identity_registry.canonicalize(key, 'ingredient_quality_map')
+            if identity_registry.standard_names.get((identity[1], identity[0])):
+                return identity
+            preferred = identity_registry.resolve_verified_preferred(text)
+            return identity_registry.canonicalize(*preferred) if preferred else None
+
         ingredient_info = {}
         for ing in active_ingredients:
             key = self._normalize_text(ing.get('standardName', '') or ing.get('name', ''))
+            canonical_id, canonical_db = identity_registry.canonicalize(
+                str(ing.get('canonical_id') or ''),
+                str(ing.get('canonical_source_db') or ''),
+            )
+            linked = [row for row in source_linked_rows(product, ing, quality_rows)
+                      if id(row) in quality_row_ids]
+            form_ids = {str(form) for row in linked for form in [
+                row.get('form_id') or row.get('matched_form'),
+                *(m.get('form_key') for m in row.get('matched_forms') or [] if isinstance(m, dict)),
+            ] if form}
+            if not product.get('ingredient_quality_data') and canonical_db == 'ingredient_quality_map':
+                source_form = self._specific_form_in_parent(
+                    ing.get('raw_source_text') or ing.get('name', ''), canonical_id, quality_map)
+                if source_form:
+                    form_ids.add(source_form['form_id'])
             ingredient_info[key] = {
                 "name": ing.get('name', ''),
+                "canonical_id": canonical_id,
+                "canonical_source_db": canonical_db,
+                "form_ids": form_ids,
+                "form_identities": {_term_identity(form) for form in form_ids},
                 "quantity": ing.get('quantity', 0),
                 "unit": ing.get('unit', '')
             }
+
+        def _term_form(text, identity):
+            if not identity or identity[1] != 'ingredient_quality_map':
+                return None
+            parent = quality_map.get(identity[0]) or {}
+            if (norm_module.make_normalized_key(text) == identity[0]
+                    or self._normalize_text(text) == self._normalize_text(parent.get('standard_name', ''))):
+                return None
+            match = self._specific_form_in_parent(text, identity[0], quality_map)
+            return match['form_id'] if match else None
 
         matched_clusters = []
 
@@ -12098,6 +12139,7 @@ class SupplementEnricherV3:
             if cluster.get('scoring_eligible') is False:
                 continue
             cluster_ingredients = cluster.get('ingredients', [])
+            canonical_ids = set(cluster.get('canonical_ids') or [])
             min_doses = cluster.get('min_effective_doses', {})
 
             matched_ings = []
@@ -12138,10 +12180,33 @@ class SupplementEnricherV3:
                         best = v
                         best_key = k
                         best_key_len = len(k_norm)
-                return best, best_key
+                if best_key is not None:
+                    return best, best_key
+                # A verified generic synonym may use the existing threshold,
+                # never a different chemical or a different prepared form.
+                identity = _term_identity(cluster_ing_raw)
+                if identity:
+                    form = _term_form(cluster_ing_raw, identity)
+                    candidates = [(value, key) for key, value in min_doses.items()
+                                  if isinstance(key, str) and _term_identity(key) == identity
+                                  and _term_form(key, identity) == form]
+                    units = {dose_units.get(key, 'mg') for _, key in candidates}
+                    if candidates and len(units) == 1:
+                        return max(candidates, key=lambda item: item[0])
+                return 0, None
 
-            for cluster_ing in cluster_ingredients:
+            # Preserve valid authored lexical/preparation matches first. Only
+            # unconsumed source rows can use the generic canonical fallback.
+            matching_order = [(term, fallback) for fallback in (False, True)
+                              for term in cluster_ingredients]
+            for cluster_ing, canonical_fallback in matching_order:
                 cluster_ing_norm = self._normalize_text(cluster_ing)
+                cluster_canonical = norm_module.make_normalized_key(cluster_ing)
+                target_identity = _term_identity(cluster_ing)
+                form_parent = identity_registry.resolve_preferred(cluster_ing)
+                if form_parent:
+                    form_parent = identity_registry.canonicalize(*form_parent)
+                target_form = _term_form(cluster_ing, form_parent)
                 # Resolve aliases for this cluster ingredient (Solution A).
                 # The match attempt below tries the cluster ingredient itself
                 # first, then each alias if no direct match. Aliases catch
@@ -12156,10 +12221,39 @@ class SupplementEnricherV3:
 
                     # Prefer exact match to avoid false positives (e.g. "EPA" in "HEPATIC")
                     is_match = False
-                    if cluster_ing_norm == ing_key:
+                    compound_presence_only = False
+                    # Only an explicitly declared generic identity may bypass
+                    # display spelling. Form-specific terms keep their existing
+                    # preparation matching; a known different identity cannot
+                    # be overridden by display text.
+                    if (target_identity and (cluster_canonical in canonical_ids
+                            or target_identity[0] in canonical_ids)
+                            and ing_data['canonical_source_db'] == target_identity[1]
+                            and identity_registry.standard_names.get(
+                                (ing_data['canonical_source_db'], ing_data['canonical_id']))):
+                        if ing_data['canonical_id'] != target_identity[0]:
+                            # A nutrient row can explicitly name a different
+                            # compound as its source. Resolve its owned form ID
+                            # with the identity owner; nutrient mass is not compound mass.
+                            compound_presence_only = ing_data['form_identities'] == {target_identity}
+                            if not compound_presence_only:
+                                continue
+                        # A redirected form/alias still needs its existing
+                        # lexical preparation match; its parent cannot prove it.
+                        is_match = bool(canonical_fallback and cluster_canonical in canonical_ids
+                                        and cluster_canonical == target_identity[0])
+                    if (target_form and form_parent == (
+                            ing_data['canonical_id'], ing_data['canonical_source_db'])
+                            and ing_data['form_ids'] != {target_form}):
+                        continue
+                    if compound_presence_only:
+                        is_match = True
+                    if canonical_fallback and not is_match:
+                        continue
+                    if not canonical_fallback and cluster_ing_norm == ing_key:
                         is_match = True
                     # Loose substring match for long terms (>= 6 chars).
-                    elif len(cluster_ing_norm) >= 6 and len(ing_key) >= 6:
+                    elif not canonical_fallback and len(cluster_ing_norm) >= 6 and len(ing_key) >= 6:
                         if cluster_ing_norm in ing_key or ing_key in cluster_ing_norm:
                             is_match = True
                     # Word-boundary match for short biochemistry abbreviations
@@ -12168,7 +12262,7 @@ class SupplementEnricherV3:
                     # with an expansion in parens — "DHA (Docosahexaenoic
                     # Acid)" must match cluster ingredient "dha". Word
                     # boundaries (\b) prevent EPA from matching HEPATIC.
-                    elif len(cluster_ing_norm) >= 3 and len(ing_key) >= 3:
+                    elif not canonical_fallback and len(cluster_ing_norm) >= 3 and len(ing_key) >= 3:
                         import re as _re
                         if _re.search(
                             r'\b' + _re.escape(cluster_ing_norm) + r'\b',
@@ -12181,7 +12275,7 @@ class SupplementEnricherV3:
                     # is checked the same three ways (exact, loose substring,
                     # word boundary) — alias resolution doesn't relax the
                     # match rigor, only the canonical form.
-                    if not is_match and cluster_ing_aliases:
+                    if not canonical_fallback and not is_match and cluster_ing_aliases:
                         import re as _re
                         for alias_norm in cluster_ing_aliases:
                             if not alias_norm:
@@ -12254,6 +12348,11 @@ class SupplementEnricherV3:
                                 meets_min = False
                         else:
                             meets_min = qty_num > 0
+
+                        if compound_presence_only:
+                            evaluated_quantity, evaluated_unit = None, None
+                            dose_evaluable = False
+                            meets_min = False
 
                         matched_ings.append({
                             "ingredient": ing_data['name'],
@@ -23110,12 +23209,13 @@ class SupplementEnricherV3:
                 by_path.setdefault(str(row["raw_source_path"]), row)
 
         def _can_hold_alpha(row: Dict[str, Any]) -> bool:
-            # Gamma, delta, beta and tocotrienols on their own stay an open clinical
-            # question; a mixture with no alpha figure may hold any share of alpha.
-            name = self._normalize_text(row.get("name") or "")
-            if "tocopherol" not in name:
-                return "tocotrienol" not in name and str(row.get("canonical_id") or "") == "vitamin_e"
-            return "mixed" in name or not re.search(r"\b(?:gamma|delta|beta)\b", name)
+            from scoring_reference_resolver import vitamin_e_alpha_material
+
+            # Unknown alpha share remains in the conservative upper bound.
+            return vitamin_e_alpha_material(
+                row.get("raw_source_text") or row.get("name") or "",
+                unknown_family_is_possible=str(row.get("canonical_id") or "") == "vitamin_e",
+            ) is not False
 
         def _tree_mg(path: str, family: List[str], servings: float) -> float:
             if path in printed:

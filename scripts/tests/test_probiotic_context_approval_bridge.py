@@ -209,10 +209,11 @@ def test_optional_quality_fields_are_validated_when_present(field, value, valid)
     assert studied_formulas.valid_native_study_context(ctx, "STRAIN_LGG") is valid
 
 
-def test_review_status_vocabulary_is_closed():
+def test_review_status_vocabulary_is_closed(registry):
     for status in ("source_verified_pending_clinical_review",
                    "adjudication_required", "rejected_source"):
         assert studied_formulas.valid_native_study_context(context(review_status=status), "STRAIN_LGG")
+    registry["STRAIN_LGG"]["study_contexts"] = [approved()]
     assert studied_formulas.valid_native_study_context(approved(), "STRAIN_LGG")
     assert not studied_formulas.valid_native_study_context(
         context(review_status="clinician_approved"), "STRAIN_LGG")

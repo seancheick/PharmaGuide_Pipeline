@@ -8543,10 +8543,16 @@ def build_detail_blob(
         blob["adult_multi_coverage"] = (
             adult_multi_coverage if adult_role else _present_only_coverage(adult_multi_coverage)
         )
-    if evidence_data:
+    from scoring_reference_resolver import unique_source_references
+
+    evidence_metadata = safe_dict(safe_dict(safe_dict(
+        scored.get("_v4_module_breakdown")).get("dimensions")).get("evidence")).get("metadata")
+    evidence_sources = unique_source_references(safe_dict(evidence_metadata).get("source_references"))
+    if evidence_data or evidence_sources:
         blob["evidence_data"] = {
             "match_count": evidence_data.get("match_count"),
             "clinical_matches": safe_list(evidence_data.get("clinical_matches")),
+            "source_references": evidence_sources,
             "unsubstantiated_claims": (
                 safe_list(evidence_data["unsubstantiated_claims"].get("claims"))
                 if isinstance(evidence_data.get("unsubstantiated_claims"), dict)

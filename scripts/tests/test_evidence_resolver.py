@@ -1500,8 +1500,8 @@ def test_oral_clinical_credit_cannot_transfer_from_other_route_or_material(cid):
 
 @pytest.mark.parametrize('canonical', ['boron', 'nickel', 'tin', 'inositol', 'vanadium', 'vitamin_unreviewed'])
 def test_classification_category_cannot_manufacture_dri_authority(canonical):
-    assert er.is_essential_dietary_nutrient(canonical, iqm_entry={'category': 'minerals'}) is False
-    assert er.is_essential_dietary_nutrient(canonical, iqm_entry={'category_enum': 'vitamins'}) is False
+    assert er.nutrition_authority_for_row({'canonical_id': canonical, 'category': 'minerals'}) is None
+    assert er.nutrition_authority_for_row({'canonical_id': canonical, 'category_enum': 'vitamins'}) is None
 
 
 @pytest.mark.parametrize('canonical', ['boron', 'inositol', 'vanadium'])
@@ -1515,7 +1515,8 @@ def test_resolver_does_not_complete_non_authority_rows_via_nutrition_category(ca
 @pytest.mark.parametrize('canonical', ['thiamin', 'thiamine', 'vitamin_b1', 'vitamin_b1_thiamine',
                                       'folate', 'biotin', 'pantothenic_acid', 'calcium', 'choline'])
 def test_dri_aliases_use_existing_reference_owner(canonical):
-    assert er.is_essential_dietary_nutrient(canonical) is True
+    facts = er.nutrition_authority_for_row({'canonical_id': canonical})
+    assert facts and facts['is_essential'] is True
     result = er.resolve_evidence_for_canonical(canonical, dose_value=10, dose_unit='mg')
     assert result.reason_code == 'dietary_reference_intake_authority_established'
     assert result.canonical_id == canonical
@@ -1938,3 +1939,229 @@ def test_eaa_authority_keeps_underlying_null_and_mixed_review_facts(canonical, n
     }
     assert nutritional.points_eligible is False
     assert nutritional.owner_facts['nutrition_authority']['scope'] == 'established_nutritional_role'
+
+
+@pytest.mark.parametrize('pid,amount', [('12160', 400), ('4235', 250)])
+def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifact(pid, amount):
+    """Exact retained ALCAR row facts; portable fixture, not a full-label replay."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row, product = _excluded_preparation_product(
+        'Acetyl L-Carnitine', 'l_carnitine', 'acetyl-l-carnitine (alcar)', pid=pid)
+    row['quantity'] = amount
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert result.reason_code == 'reference_only_clinical_record'
+    artifact = build_scored_artifact(product)
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    assert 'evidence_assessment_incomplete' not in artifact['assessment_readiness']['release_assessment']['blockers']
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assessments = result.owner_facts['backed_clinical_studies']['assessments']
+    assert {a['id']: a['reason_code'] for a in assessments} == {
+        'INGR_L_CARNITINE': 'clinical_preparation_mismatch',
+        'INGR_ACETYL_L_CARNITINE': 'reference_only_clinical_record',
+    }
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+@pytest.mark.parametrize('reference_state', ['complete', 'unreviewed', 'malformed', 'held', 'positive_open'])
+def test_mixed_exclusion_reference_completion_requires_each_record_finished(monkeypatch, reverse, reference_state):
+    import copy
+    import clinical_applicability as ca
+    from assessment_readiness import _resolved_evidence_assessment
+    reference = copy.deepcopy(next(s for s in er._load_backed_studies() if s['id'] == 'INGR_ACETYL_L_CARNITINE'))
+    excluded = copy.deepcopy(next(s for s in er._load_backed_studies() if s['id'] == 'INGR_L_CARNITINE'))
+    if reference_state == 'unreviewed':
+        reference['study_contexts'][0]['review_status'] = 'pending_review'
+    elif reference_state == 'malformed':
+        reference['study_contexts'][0]['clinical_review'] = {}
+    elif reference_state == 'held':
+        reference['scoring_eligible'] = False
+    elif reference_state == 'positive_open':
+        reference['evidence_level'] = 'ingredient-human'
+        reference['study_type'] = 'rct_single'
+        reference['study_contexts'] = []
+        assert not er.is_reference_only(reference)
+    studies = [excluded, reference]
+    if reverse:
+        studies.reverse()
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'l_carnitine': studies})
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {s['id']: s for s in studies})
+    row, product = _excluded_preparation_product('Acetyl L-Carnitine', 'l_carnitine', 'acetyl-l-carnitine (alcar)')
+    result = er.resolve_evidence_for_row(row, product)
+    assert not result.points_eligible
+    expected = 'evaluated_limited_or_negative' if reference_state == 'complete' else 'not_yet_evaluated'
+    assert _resolved_evidence_assessment(result)[0] == expected
+
+
+def test_mixed_carnitine_product_keeps_unread_base_open_after_alcar_completion():
+    from assessment_readiness import evaluate_assessment_readiness
+    row, product = _excluded_preparation_product('Acetyl L-Carnitine', 'l_carnitine', 'acetyl-l-carnitine (alcar)', pid='187545')
+    base = {**row, 'name': 'L-Carnitine', 'raw_source_text': 'L-Carnitine',
+            'matched_form': 'l-carnitine base (free form)', 'raw_source_path': 'ingredientRows[1]'}
+    product['activeIngredients'].append(base)
+    product['ingredient_quality_data']['total_active'] = 2
+    readiness = evaluate_assessment_readiness(product, module='generic')
+    assert readiness['evidence']['readiness'] == 'incomplete'
+    assert readiness['evidence']['not_yet_evaluated_count'] == 1
+    assert readiness['evidence']['not_yet_evaluated_row_refs'] == ['ingredientRows[1]']
+
+
+@pytest.mark.parametrize('canonical,name,form', [
+    ('elderberry', 'Elderberry', 'elderberry extract'),
+    ('tmg_betaine', 'Betaine', 'betaine anhydrous'),
+])
+def test_unfinished_positive_source_does_not_become_completed_noncredit(canonical, name, form):
+    from assessment_readiness import _resolved_evidence_assessment
+    row, product = _excluded_preparation_product(name, canonical, form)
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == 'not_yet_evaluated'
+
+
+@pytest.mark.parametrize('canonical,name,form,nutrient', [
+    # Actual184326: printed Vitamin A, resolved natural beta-carotene,7500mcg.
+    ('beta_carotene', 'Vitamin A', 'natural beta-carotene (from dunaliella salina)', 'vitamin_a'),
+    ('beta_carotene', 'Beta-Carotene', 'natural beta-carotene (from dunaliella salina)', 'vitamin_a'),
+    ('niacin', 'Niacin', None, 'niacin'),
+])
+def test_existing_dri_alias_and_source_nutrient_share_row_authority(canonical, name, form, nutrient):
+    from scoring_v4.modules.generic_evidence import _purpose_essential_canonical
+    product = _eaa_product(canonical, name, form, quantity=7500, unit='mcg',
+                           mapped_identity=True, scoreable_identity=True, identity_disposition='clean')
+    row = product['activeIngredients'][0]
+    facts = er.nutrition_authority_for_row(row)
+    assert facts and facts['nutrient'] == nutrient
+    assert facts['is_essential'] is True
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert resolution.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+    assert resolution.owner_facts['nutrition_authority']['nutrient'] == nutrient
+    assert resolution.points_eligible is False
+    from assessment_readiness import _resolved_evidence_assessment
+    assert _resolved_evidence_assessment(resolution)[0] == 'evaluated_supported'
+    assert _purpose_essential_canonical(product) == canonical
+    assert row['quantity'] == 7500 and row['unit'] == 'mcg'
+    assert product['evidence_data']['clinical_matches'] == []
+
+
+@pytest.mark.parametrize('canonical', ['lutein', 'lycopene', 'zeaxanthin', 'boron', 'silicon', 'unrecognized_material'])
+def test_dri_row_authority_never_comes_from_marketing_nutrient_name(canonical):
+    product = _eaa_product(canonical, 'Vitamin A', None)
+    assert er.nutrition_authority_for_row(product['activeIngredients'][0]) is None
+
+
+@pytest.mark.parametrize('changes', [
+    {'mapped': False}, {'mapped_identity': False}, {'scoreable_identity': False},
+    {'identity_disposition': 'ambiguous'}, {'identity_disposition': 'identity_conflict'},
+    {'form_match_status': 'unmapped'},
+    {'matched_form': 'unsupported derivative', 'form_match_status': 'unmapped'},
+    {'source_section': 'inactive'}, {'is_excipient': True},
+])
+def test_source_nutrient_authority_preserves_identity_and_preparation_vetoes(changes):
+    product = _eaa_product('beta_carotene', 'Vitamin A',
+                           'natural beta-carotene (from dunaliella salina)', **changes)
+    row = product['activeIngredients'][0]
+    assert er.nutrition_authority_for_row(row) is None
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert 'nutrition_authority' not in resolution.matched_owners
+
+
+@pytest.mark.parametrize('relationship', ['wrong_stereoisomer', 'different_compound', 'not_a_nutrient_source'])
+def test_source_nutrient_authority_never_overrides_a_typed_form_exclusion(monkeypatch, relationship):
+    import copy
+    import scoring_reference_resolver as references
+    form_name = 'natural beta-carotene (from dunaliella salina)'
+    parent = copy.deepcopy(references.iqm_reference_entry('beta_carotene'))
+    parent['forms'][form_name]['parent_relationship'] = relationship
+    original = references.iqm_reference_entry
+    monkeypatch.setattr(references, 'iqm_reference_entry',
+                        lambda canonical: parent if canonical == 'beta_carotene' else original(canonical))
+    product = _eaa_product('beta_carotene', 'Vitamin A', form_name)
+    row = product['activeIngredients'][0]
+    assert er.nutrition_authority_for_row(row) is None
+    assert 'nutrition_authority' not in er.resolve_evidence_for_row(row, product).matched_owners
+
+
+@pytest.mark.parametrize('canonical,name,form', [
+    ('vitamin_b6_pyridoxine', 'P5P', 'pyridoxal-5-phosphate'),
+    ('vitamin_b9_folate', 'L-5-MTHF', 'l-5-mthf'),
+    ('vitamin_b12_cobalamin', 'Methylcobalamin + Adenosylcobalamin', 'methylcobalamin adenosylcobalamin'),
+])
+def test_qualified_nutrient_role_does_not_require_literal_form_key(canonical, name, form):
+    # These source/display spellings do not replace the producer's qualified
+    # nutrient identity. Formulation owns form quality; this is dietary role.
+    product = _eaa_product(canonical, name, form,
+        mapped_identity=True, scoreable_identity=True, identity_disposition='clean')
+    row = product['activeIngredients'][0]
+    assert er.nutrition_authority_for_row(row)
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+    assert result.points_eligible is False
+
+
+@pytest.mark.parametrize('source', [
+    'Gamma-Tocopherol', 'D-gamma-tocopherol', 'Delta Tocopherol',
+    'Beta-Tocopherol', 'Alpha-Tocotrienol', 'D-Mixed Tocotrienols',
+    'Alpha-tocopherol-free gamma-tocopherol',
+    'Gamma-tocopherol (not alpha-tocopherol)', 'Gamma-tocopherols',
+])
+def test_nonalpha_vitamin_e_source_cannot_borrow_alpha_nutrition_authority(source):
+    # Actual307570 CarotenAll has this canonical parent and Gamma-Tocopherol
+    # source row. A broad mapped IQM family does not prove alpha activity.
+    row = {'canonical_id': 'vitamin_e', 'name': source,
+           'raw_source_text': source, 'standard_name': 'Vitamin E',
+           'matched_form': 'tocotrienols', 'form_match_status': 'mapped',
+           'mapped': True, 'mapped_identity': True, 'scoreable_identity': True,
+           'quantity': 10.0, 'unit': 'mg', 'source_section': 'active',
+           'raw_source_path': 'ingredientRows[6]'}
+    assert er.nutrition_authority_for_row(row) is None
+
+
+@pytest.mark.parametrize('source', [
+    'D-alpha-tocopherol', 'dl-alpha-tocopheryl acetate',
+    'd-alpha-tocopheryl succinate',
+    'd-alpha-tocopheryl acetate with mixed tocotrienols',
+    'mixed tocopherols with alpha-tocopherol',
+])
+def test_alpha_vitamin_e_source_retains_nutritional_role(source):
+    row = {'canonical_id': 'vitamin_e', 'name': source,
+           'raw_source_text': source, 'form_match_status': 'mapped',
+           'mapped': True, 'mapped_identity': True, 'scoreable_identity': True,
+           'quantity': 10.0, 'unit': 'mg', 'source_section': 'active'}
+    assert er.nutrition_authority_for_row(row)['nutrient'] == 'vitamin_e'
+
+
+@pytest.mark.parametrize('source', ['Mixed Tocopherols', 'unidentified preparation'])
+def test_unknown_alpha_source_is_not_proved_by_standardized_vitamin_e_name(source):
+    row = {'canonical_id': 'vitamin_e', 'name': source, 'raw_source_text': source,
+           'standard_name': 'Vitamin E', 'matched_form': 'd-alpha-tocopherol',
+           'form_match_status': 'mapped', 'quantity': 10.0, 'unit': 'mg'}
+    assert er.nutrition_authority_for_row(row) is None
+
+
+def test_independent_printed_vitamin_e_activity_retains_nutritional_role():
+    row = {'canonical_id': 'vitamin_e', 'name': 'Vitamin E',
+           'raw_source_text': 'Vitamin E', 'quantity': 13.4, 'unit': 'mg',
+           'form_match_status': 'mapped'}
+    assert er.nutrition_authority_for_row(row)['nutrient'] == 'vitamin_e'
+
+
+@pytest.mark.parametrize('canonical', ['vitamin_c', 'beta_carotene', 'niacin'])
+def test_qualified_ordinary_nutrient_rows_carry_existing_authority_sources(canonical):
+    source = 'Beta-Carotene' if canonical == 'beta_carotene' else canonical.replace('_', ' ')
+    row = {'canonical_id': canonical, 'name': source, 'raw_source_text': source,
+           'quantity': 100, 'unit': 'mg', 'form_match_status': 'mapped'}
+    facts = er.nutrition_authority_for_row(row)
+    assert facts['source_references']
+    resolved = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
+    assert resolved.owner_facts['nutrition_authority']['source_references'] == facts['source_references']
+
+
+def test_panel_citations_cover_only_resolved_expected_rows():
+    rows = [{'canonical_id': key, 'name': key, 'quantity': 100, 'unit': 'mg'}
+            for key in ['vitamin_c', 'calcium', 'boron']]
+    result = er.resolve_authority_panel_evidence(
+        {'activeIngredients': rows, 'ingredient_quality_data': {
+            'ingredients': rows, 'ingredients_scorable': rows}}, expected_keys=['vitamin_c'],
+        row_key=lambda row: row['canonical_id'])
+    assert result['source_references']
+    assert all('VitaminC' in ref['url'] for ref in result['source_references'])

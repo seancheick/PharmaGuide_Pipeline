@@ -429,12 +429,18 @@ def resolve_omega_evidence_standard(product: Mapping[str, Any]) -> Dict[str, Any
         score = weak_score
         applicability_reason = "ordinary_adult_explicit_epa_dha"
     qualified = score > 0
+    from scoring_reference_resolver import unique_source_references
+
+    selected_references = list(selected.get("references_structured") or []) if selected else []
+    if selected and qualified:
+        selected_references.extend({"pmid": str(pmid)} for pmid in selected.get("source_pmids") or []
+                                   if str(pmid).isdigit())
 
     return {
         "score": round(score, 4),
         "record_id": selected.get("id") if selected is not None else None,
         "record_source_pmids": list(selected.get("source_pmids") or []) if selected is not None else [],
-        "source_references": list(selected.get("references_structured") or []) if selected is not None else [],
+        "source_references": unique_source_references(selected_references),
         "evidence_result_state": "evaluated_authority" if selected is not None else "applicability_unestablished",
         "minimum_daily_epa_dha_mg": round(minimum, 4),
         "maximum_daily_epa_dha_mg": round(maximum, 4),
@@ -532,27 +538,32 @@ def _load_iqm() -> Dict[str, Any]:
     return {k: v for k, v in raw.items() if k != "_metadata" and isinstance(v, dict)}
 
 
-def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Optional[Dict[str, Any]] = None) -> bool:
-    """Use the scoring owner's DRI set, with the shared reference owner's aliases.
-
-    IQM categories and vitamin-like names classify ingredients; neither proves
-    established nutritional authority. A reference may contain only a safety
-    bound or another non-authority assessment, so its presence alone is not enough.
-    """
+def _dietary_nutrient_authority(canonical: str) -> Optional[Dict[str, Any]]:
+    """Join established DRI authority to a resolved identity, never label prose."""
     from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
+    from scoring_reference_resolver import iqm_reference_entry
 
-    if _norm(canonical) in DRI_ESSENTIAL_NUTRIENTS:
-        return True
-    reference = rda_ul_reference_entry(canonical_id=canonical, name=name) or {}
+    canonical = _norm(canonical)
+    if canonical in DRI_ESSENTIAL_NUTRIENTS:
+        return {"nutrient": canonical, "is_essential": True}
+    identity = iqm_reference_entry(canonical) or {}
+    reference = rda_ul_reference_entry(canonical_id=canonical,
+                                      aliases=identity.get("nutrient_group_id")) or {}
     reference_keys = [reference.get("id"), *(reference.get("aliases") or [])]
-    return any(_norm(key) in DRI_ESSENTIAL_NUTRIENTS for key in reference_keys)
+    if any(_norm(key) in DRI_ESSENTIAL_NUTRIENTS for key in reference_keys):
+        # A provitamin source establishes the nutrient's role, not a claim
+        # that the source chemical is itself indispensable or therapeutic.
+        return {"nutrient": reference.get("id"), "is_essential": True}
+    return None
 
 
 def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
     """Source-qualified nutritional role, independent of clinical outcomes/Dose."""
     from normalization import make_normalized_key, strip_label_identity_qualifiers
-    from scoring_reference_resolver import (EAA_CANONICALS, iqm_reference_entry,
-                                          nutritional_role_reference, parent_relationship)
+    from scoring_reference_resolver import (EAA_CANONICALS, IDENTITY_MISMATCH_RELATIONSHIPS,
+                                          delivers_parent_nutrient, iqm_reference_entry,
+                                          nutritional_role_reference, parent_relationship,
+                                          vitamin_e_alpha_material)
     from scoring_input_contract import is_lent_blend_mass
 
     canonical = _norm(row.get("canonical_id"))
@@ -561,11 +572,34 @@ def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, An
             or is_lent_blend_mass(dict(row))):
         return None
     if canonical not in EAA_CANONICALS:
-        from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
-
-        if canonical in DRI_ESSENTIAL_NUTRIENTS:
-            return {"nutrient": canonical, "is_essential": True}
-        return None
+        if canonical == "vitamin_e":
+            source = str(row.get("raw_source_text") or row.get("name") or "")
+            material = vitamin_e_alpha_material(source)
+            # A printed nutrient declaration is independent of a named source
+            # preparation. Broad mapped family/standard names cannot upgrade it.
+            if material is not True and make_normalized_key(source) != "vitamin_e":
+                return None
+        if (any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
+                or _norm(row.get("identity_disposition")) in {"ambiguous", "identity_conflict"}
+                or _norm(row.get("form_match_status")) == "unmapped"):
+            return None
+        forms = (iqm_reference_entry(canonical) or {}).get("forms") or {}
+        form_ids = [row.get("matched_form"), row.get("form_id")]
+        form_ids.extend(form.get("form_key") for form in row.get("matched_forms") or []
+                        if isinstance(form, Mapping))
+        # Formulation owns unknown/display form spellings. The established
+        # delivery owner admits them unless a known form delivers no nutrient;
+        # a typed identity mismatch must still never borrow its parent's role.
+        if any(parent_relationship(forms.get(form_id)) in IDENTITY_MISMATCH_RELATIONSHIPS
+               for form_id in form_ids if form_id):
+            return None
+        if not delivers_parent_nutrient(canonical, form_ids):
+            return None
+        authority = _dietary_nutrient_authority(canonical)
+        reference = nutritional_role_reference(authority["nutrient"]) if authority else None
+        if reference:
+            authority = {**authority, "source_references": reference["source_references"]}
+        return authority
     reference = nutritional_role_reference(canonical)
     if (not reference or _norm(row.get("form_match_status")) != "mapped"
             or any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
@@ -1095,10 +1129,13 @@ def _resolve_evidence_for_row(
                 reason_code="dietary_reference_intake_authority_established",
                 owner_facts=owner_facts,
             )
-    nutr_entry = rda_ul_reference_entry(canonical_id=canonical, name=name)
-    if nutr_entry and is_essential_dietary_nutrient(canonical, name, iqm_entry):
+    nutritional_authority = nutrition_authority_for_row(row_dict)
+    nutr_entry = (rda_ul_reference_entry(canonical_id=nutritional_authority["nutrient"])
+                  if nutritional_authority else None)
+    if nutr_entry:
         matched_owners.append("nutrition_authority")
         owner_facts["nutrition_authority"] = {
+            **nutritional_authority,
             "nutrient": nutr_entry.get("id") or nutr_entry.get("standard_name"),
             "is_essential": True,
             # Adult maximum only; applicable life-stage ULs stay in data[].ul.
@@ -1111,7 +1148,7 @@ def _resolve_evidence_for_row(
             ingredient_name=name,
             matched_owners=matched_owners,
             disposition=EvidenceDisposition.RESOLVED_BY_AUTHORITY.value,
-            points_eligible=False,  # Essential nutrient authority establishes identity/necessity; points earned via dose/generic evidence
+            points_eligible=False,  # Nutritional role is established; existing Evidence adapters own its credit.
             applicability_status="established_essential_nutrient",
             reason_code="dietary_reference_intake_authority_established",
             owner_facts=owner_facts,
@@ -1201,14 +1238,23 @@ def _resolve_evidence_for_row(
                     reason_code="clinical_form_mismatch", owner_facts=owner_facts,
                     blocking_reasons=["form_mismatch_with_clinical_trials"],
                 )
-            reviewed_references = all(
-                is_reference_only(study)
-                and study.get("scoring_eligible") is not False
-                and assess_clinical_source_review(study)["is_complete"]
-                for study in deduped_studies
+            completed_noncontributing = all(
+                (decision.get("status") == "not_applicable"
+                 and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
+                or (is_reference_only(study)
+                    and study.get("scoring_eligible") is not False
+                    and assess_clinical_source_review(study)["is_complete"])
+                for study, decision in zip(deduped_studies, scope_decisions)
             )
-            if reviewed_references:
+            if completed_noncontributing:
                 owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
+                # Each matched record is finished: a preparation exclusion may
+                # coexist with a reviewed reference. Keep their separate facts;
+                # the aggregate reference result grants no efficacy credit.
+                owner_facts["backed_clinical_studies"]["assessments"] = [
+                    {"id": study["id"], **decision}
+                    for study, decision in zip(deduped_studies, scope_decisions)
+                ]
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name,
                     matched_owners=matched_owners,
@@ -2071,6 +2117,7 @@ def resolve_authority_panel_evidence(
     seen: Set[str] = set()
     reasons: Dict[str, str] = {}
     resolutions: List[EvidenceResolution] = []
+    source_references = []
     for row in get_assessable_evidence_ingredients(dict(product)):
         if not isinstance(row, Mapping):
             continue
@@ -2083,12 +2130,16 @@ def resolve_authority_panel_evidence(
         reasons[key] = resolution.reason_code
         if resolution.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
             covered.add(key)
+            source_references.extend(
+                (resolution.owner_facts.get("nutrition_authority") or {}).get("source_references") or [])
 
     unresolved = expected_set - covered
     for key in unresolved - seen:
         reasons[key] = "essential_panel_nutrient_not_disclosed"
 
     score = min(float(full_score), (len(covered) / required) * float(full_score))
+    from scoring_reference_resolver import unique_source_references
+
     return {
         "score": round(score, 4),
         "covered_keys": sorted(covered),
@@ -2096,6 +2147,7 @@ def resolve_authority_panel_evidence(
         "unresolved_keys": sorted(unresolved),
         "resolution_reasons": dict(sorted(reasons.items())),
         "panel_resolution": _compose_panel_resolution(product, resolutions),
+        "source_references": unique_source_references(source_references),
     }
 
 

@@ -513,3 +513,18 @@ def test_omega_population_uses_affirmative_targeting_not_branding(name, brand, g
     result = resolve_omega_evidence_standard(product)
     assert result["score"] == expected
     assert result["prenatal_outcome_credit_awarded"] is False
+
+
+def test_prenatal_citations_project_only_selected_owner_pmids_without_invented_titles():
+    from evidence_resolver import resolve_omega_evidence_standard
+    product = _epa_dha_product(name='Prenatal DHA', epa=200, dha=650,
+        evidence_data={'clinical_matches': [{'pmid': '30480773'}, {'pmid': '99999999'}]})
+    resolved = resolve_omega_evidence_standard(product)
+    assert resolved['record_id'] == 'prenatal_dha_intake_authority'
+    assert resolved['source_references'] == [{'pmid': '18184094'}]
+    assert resolved['record_source_pmids'] == ['18184094']
+    # Neither unrelated/preterm evidence nor stale cached sources can substitute.
+    ordinary = resolve_omega_evidence_standard(_epa_dha_product(evidence_data=product['evidence_data']))
+    assert not any(ref.get('pmid') for ref in ordinary['source_references'])
+    held = resolve_omega_evidence_standard(_epa_dha_product(name='Baby DHA', epa=200, dha=650))
+    assert held['source_references'] == []

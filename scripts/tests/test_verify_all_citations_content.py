@@ -412,6 +412,70 @@ def test_changed_claim_is_rechecked_against_cached_article():
     assert vac.content_matches(article, ['bromelain','digestion'])[0] == 'mismatch'
 
 
+def test_book_title_alone_cannot_disprove_chapter_topic():
+    book = {'title': 'Dietary Reference Intakes', 'subtitle': 'The Essential Guide to Nutrient Requirements',
+            'publication_type': 'edited-book', 'abstract': '', 'mesh_terms': []}
+    assert vac.content_matches(book, ['chloride'])[0] == 'unresolved'
+    # Insufficient book metadata is not a verified topic match.
+    assert vac.content_matches(book, ['chloride'])[1] == 0.0
+    article = {**book, 'publication_type': 'journal-article'}
+    assert vac.content_matches(article, ['chloride'])[0] == 'mismatch'
+    substantive = {**book, 'abstract': 'This chapter concerns sleep and chamomile.'}
+    assert vac.content_matches(substantive, ['chloride'])[0] == 'mismatch'
+
+
+def test_crossref_retains_book_scope_metadata(monkeypatch):
+    def get(url):
+        if 'esearch' in url:
+            return json.dumps({'esearchresult': {'idlist': []}})
+        return json.dumps({'message': {'type': 'edited-book', 'title': ['Dietary Reference Intakes'],
+                                      'subtitle': ['The Essential Guide to Nutrient Requirements']}})
+    monkeypatch.setattr(vac, '_get', get)
+    _, records = vac.resolve_doi_ids(['doi:10.17226/11537'])
+    assert records['doi:10.17226/11537']['publication_type'] == 'edited-book'
+    assert records['doi:10.17226/11537']['subtitle'] == 'The Essential Guide to Nutrient Requirements'
+
+
+def test_unverified_book_is_visible_excluded_from_pass_rate_and_blocks_gate(monkeypatch, tmp_path, capsys):
+    config = {'file': 'books.json', 'array_key': 'entries', 'id_field': 'id'}
+    (tmp_path / 'books.json').write_text(json.dumps({'entries': [
+        {'id': 'book', 'citation': 'doi:10.17226/11537'},
+        {'id': 'ordinary', 'citation': '12345678'}]}))
+    monkeypatch.setattr(vac, 'DATA_DIR', tmp_path)
+    monkeypatch.setattr(vac, 'FILE_CONFIGS', [config])
+    monkeypatch.setattr(vac, 'extract_topic_words', lambda *_: ['chloride', 'electrolytes'])
+    monkeypatch.setattr(vac, 'extract_pmids_from_entry',
+                        lambda entry, _: [{'pmid': entry['citation']}])
+    monkeypatch.setattr(vac, 'fetch_articles', lambda *a, **k: {
+        'doi:10.17226/11537': {'title': 'Dietary Reference Intakes',
+            'publication_type': 'edited-book', 'abstract': '', 'mesh_terms': []},
+        '12345678': {'title': 'Chloride', 'abstract': '', 'mesh_terms': []}})
+    result = vac.verify_file(config)
+    assert result['partial'] == 1  # The genuine one-word overlap keeps its semantics.
+    assert result['unresolved'] == 1
+    assert result['pass_rate'] == '50%'
+    book = result['entries'][0]
+    assert book['status'] == 'unresolved'
+    assert 'primary' in book['suggestion'].lower()
+    # A known-mismatch backlog is not permission to waive unresolved content.
+    baseline = {'backlog': [{'file': 'books.json', 'entry_id': 'book',
+        'pmid': 'doi:10.17226/11537', 'status': 'mismatch'}]}
+    assert vac.baseline_failures([result], baseline) == ([], [('books.json', book)])
+    monkeypatch.setattr(sys, 'argv', ['verifier', '--file', 'books.json'])
+    assert vac.main() == 1
+    assert 'UNRESOLVED book' in capsys.readouterr().out
+    baseline_path = tmp_path / 'baseline.json'
+    baseline_path.write_text(json.dumps(baseline))
+    monkeypatch.setattr(sys, 'argv', ['verifier', '--file', 'books.json',
+                                    '--baseline', str(baseline_path)])
+    assert vac.main() == 1
+    assert 'UNRESOLVED books.json book' in capsys.readouterr().out
+    (tmp_path / 'books.json').write_text(json.dumps({'entries': [
+        {'id': 'ordinary', 'citation': '12345678'}]}))
+    monkeypatch.setattr(sys, 'argv', ['verifier', '--file', 'books.json'])
+    assert vac.main() == 0
+
+
 def test_baseline_console_separates_known_and_new_without_dropping_report(monkeypatch, tmp_path, capsys):
     baseline = tmp_path / 'baseline.json'
     baseline.write_text(json.dumps({'backlog':[{'file':'x.json','entry_id':'known','pmid':'111','status':'mismatch'}]}))

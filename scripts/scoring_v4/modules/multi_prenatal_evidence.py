@@ -84,6 +84,7 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             "authority_expected_keys": authority["expected_keys"],
             "authority_unresolved_keys": authority["unresolved_keys"],
             "authority_resolution_reasons": authority["resolution_reasons"],
+            "source_references": authority.get("source_references", []),
             "evidence_result_state": authority_panel_result_state(product, authority),
         },
     }

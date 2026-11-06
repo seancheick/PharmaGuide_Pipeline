@@ -270,6 +270,18 @@ Source identity, transcription, applicability wiring and removal of unsupported 
 
 ## Non-negotiable data rules
 
+**Review delegation — Sean, November 6, 2026:** agents may complete and authorize routine
+source/applicability reviews within the accepted scientific and scoring policy after per-entry
+API/content verification and an independent double-check. Do not require Dr. Pham's signature
+for every source review or reopen a valid completed decision solely because an agent authored
+it. Preserve the actual research reviewer, source basis, scope, date and independent check;
+never describe agent review as clinician review. API resolution alone is not content verification.
+New scoring/clinical policy, new warning thresholds/severity and specific unresolved clinical
+holds still require their actual owner; ordinary identity, transcription, matching, source
+verification and application of the existing rubric are engineering/research work. Historical
+`clinician_approved` enum values are compatibility data, not proof of who reviewed a context.
+
+
 - **No unverified clinical claim or identifier.** Every mechanism, severity or interaction needs a
   citable source; PMID/CUI/RXCUI/UNII/NCT/CAS/CID are content-verified against the live API. A real
   PMID about the wrong topic is a ghost reference — a defect. Details: `.claude/rules/clinical-data.md`.

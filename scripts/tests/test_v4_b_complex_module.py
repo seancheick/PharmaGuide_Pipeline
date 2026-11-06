@@ -81,7 +81,7 @@ def _ideal_b_complex() -> dict:
         _row("vitamin_b1_thiamine", "Thiamin", 10, "mg", idx=0),
         _row("vitamin_b2_riboflavin", "Riboflavin-5-Phosphate", 10, "mg", matched_form="riboflavin-5-phosphate", idx=1),
         _row("vitamin_b3_niacin", "Niacinamide", 20, "mg", matched_form="niacinamide", idx=2),
-        _row("vitamin_b5_pantothenic_acid", "Pantothenic Acid", 25, "mg", idx=3),
+        _row("vitamin_b5_pantothenic", "Pantothenic Acid", 25, "mg", idx=3),
         _row("vitamin_b6_pyridoxine", "P5P", 10, "mg", matched_form="pyridoxal-5-phosphate", idx=4),
         _row("vitamin_b9_folate", "L-5-MTHF", 400, "mcg", matched_form="l-5-mthf", idx=5),
         _row("vitamin_b12_cobalamin", "Methylcobalamin + Adenosylcobalamin", 500, "mcg", matched_form="methylcobalamin adenosylcobalamin", idx=6),
@@ -243,3 +243,18 @@ def test_over_ul_b_complex_takes_the_dose_ceiling_and_keeps_the_safety_concern()
     assert "no daily amount" in scored["quality_pillars_v4"]["dose"]["reason"]
     assert "B1_harmful_additives" not in scored["v4_breakdown"]["module"]["dimensions"]["formulation"]["penalties"]
     assert scored["quality_score_v4_100"] < 80.0
+
+
+def test_b_complex_authority_citations_do_not_change_covered_panel(monkeypatch):
+    from scoring_v4.modules.b_complex import _score_evidence
+    import scoring_reference_resolver as refs
+
+    product = _ideal_b_complex()
+    cited = _score_evidence(product)
+    assert cited['metadata']['source_references']
+    assert all(ref['type'] == 'authority' for ref in cited['metadata']['source_references'])
+    monkeypatch.setattr(refs, 'nutritional_role_reference', lambda canonical: None)
+    uncited = _score_evidence(product)
+    assert cited['score'] == uncited['score']
+    assert cited['components'] == uncited['components']
+    assert cited['metadata']['authority_covered_keys'] == uncited['metadata']['authority_covered_keys']

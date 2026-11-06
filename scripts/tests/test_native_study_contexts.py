@@ -571,12 +571,17 @@ def test_specific_35624_clinical_lock_survives_source_extraction():
     ('negated_claim', 'applicable'), ('foreign_source', 'unresolved'),
     ('unsigned', 'unresolved'), ('unsupported_constraint', 'unresolved'),
 ])
-def test_reviewed_native_claim_exclusion_is_source_bound_and_condition_specific(case, expected):
+def test_reviewed_native_claim_exclusion_is_source_bound_and_condition_specific(case, expected, monkeypatch):
     from clinical_applicability import assess_native_claimed_purpose
-    row = deepcopy(next(c for c in studied_formulas._clinical_strain_registry()[
-        'STRAIN_PLANTARUM_299V']['study_contexts'] if c['source_pmids'] == ['22912552']))
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    row = next(c for c in registry[
+        'STRAIN_PLANTARUM_299V']['study_contexts'] if c['source_pmids'] == ['22912552'])
     row['applicability'] = {'scope': 'ingredient', 'source_pmids': ['22912552'],
                             'excluded_claim_terms': ['digestive balance', 'digestive health']}
+    # Synthetic approved-source fixture: caller variations below must bind to
+    # this recorded restriction, rather than authoring one in caller metadata.
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
+    row = deepcopy(row)
     product = {'product_name': 'Digestive health probiotic'}
     if case == 'exact_condition':
         product['product_name'] = 'Irritable bowel syndrome and digestive health'
@@ -706,3 +711,67 @@ def test_reviewed_ibs_endpoint_hierarchies_complete_without_changing_claims(
     else:
         unresolved = next(c for c in entry["study_contexts"] if c["context_id"] == "is2_pediatric_ibs_chewable_29695183")
         assert "outcomes.review_incomplete" in validate_frozen_context(unresolved, require_complete_review=True)
+
+
+# Sean attested2026-11-06: these eight exact existing reviews were approved
+# by Dr Pham on November1. No clinical clock time or new grading was supplied.
+NOVEMBER1_COUNTERSIGNED_CONTEXTS = [
+    ('STRAIN_LGG', 'lgg_pediatric_acute_gastroenteritis_30462938',
+     '2894eeb2f8f96bfc9785341a442b39ea3b2ad8f6ae2ae8fa34b78f9f96d2ca94'),
+    ('STRAIN_PLANTARUM_HEAL9', 'heal9_moderate_stress_cognition_37571403',
+     '2df7a4280071d14eac8c2749448acf6bae868b2625d0f92c321afef21b7fcd15'),
+    ('STRAIN_PARACASEI_8700', 'p8700_metabolic_syndrome_37506599',
+     'd156dd90d933195d72c9a5744adc2c1606e15ba8cde591546f35d840b920a642'),
+    ('STRAIN_FERMENTUM_ME3', 'me3_healthy_volunteers_oxidative_stress_16080791',
+     '36ffc7ac24636846639c6962f6643aa20283b41fb566316a7ed741fe242e78c2'),
+    ('STRAIN_LONGUM_1714', 'b1714_impaired_sleep_quality_38355674',
+     '49531ebc7c852ac7d3fca516549aa74d21234bb80c081941c7fdf0b18516dc56'),
+    ('STRAIN_LONGUM_1714', 'b1714_low_mood_42060410',
+     'd2b95865aa15412d7ee4f2e2b90f6d4eba5d02b7fe2bfcd7e34cb1710fa49d2b'),
+    ('STRAIN_LACTIS_UABla12', 'uabla12_ibs_three_arm_32019158',
+     'f601effd0e750cbb0c72ce7c459543ea4aa3140938fa4802aec28af6252bbc43'),
+    ('STRAIN_ACIDOPHILUS_LAFTI_L10', 'lafti_l10_elite_athletes_urti_27363733',
+     'f6cd01a32f0e3ac76b40f54a6a5446d9589ca04becbf23bca9d6d077716597de'),
+]
+
+
+@pytest.mark.parametrize("strain_id,context_id,approved_scope_sha256", NOVEMBER1_COUNTERSIGNED_CONTEXTS)
+def test_november1_exact_context_countersignature_preserves_research_and_scope(
+    strain_id, context_id, approved_scope_sha256,
+):
+    from datetime import date
+    import hashlib
+    import json
+
+    record = studied_formulas._clinical_strain_registry()[strain_id]
+    ctx = next(c for c in record["study_contexts"] if c["context_id"] == context_id)
+    review = ctx["clinical_review"]
+    assert review["countersigned_by"] == "Dr Pham"
+    assert review["countersigned_at"] == "2026-11-01"
+    assert date.fromisoformat(review["countersigned_at"]) <= date.today()
+    assert "2026-11-06" in review["countersign_note"]
+    assert context_id in review["countersign_note"]
+    assert review["reviewer"] == (
+        "Claude Opus 5 research review (Codex audit response, 2026-09-22), delegated by Sean B "
+        "(engineering owner); not a clinician sign-off")
+    assert review["reviewed_at"] == "2026-09-22T15:34:46Z"
+    assert review["basis"] == "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json"
+    assert review["scope"] == "identity_dose_outcome_applicability"
+    assert review["decision"] == "approve"
+    scope = {key: value for key, value in ctx.items() if key != "clinical_review"}
+    digest = hashlib.sha256(json.dumps(scope, sort_keys=True, separators=(",", ":"),
+                                     ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+    assert digest == approved_scope_sha256
+    # Existing acceptance remains unchanged; this provenance patch does not
+    # fix the separately audited arbitrary-reviewer authorization gap.
+    assert pm.clinical_review_provenance_valid(ctx)
+    assert pm.context_accepted_for_scoring(ctx)
+
+
+def test_november1_countersignature_is_not_a_blanket_registry_approval():
+    contexts = [ctx for entry in studied_formulas._clinical_strain_registry().values()
+                for ctx in entry.get("study_contexts", [])]
+    signed = {ctx["context_id"] for ctx in contexts
+              if ctx.get("clinical_review", {}).get("countersigned_at") == "2026-11-01"}
+    assert signed == {context_id for _, context_id, _ in NOVEMBER1_COUNTERSIGNED_CONTEXTS}
+    assert len(signed) == 8

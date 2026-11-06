@@ -288,6 +288,8 @@ def resolve_doi_ids(doi_ids: list[str]) -> tuple[dict[str, str], dict[str, dict]
             work = json.loads(raw).get("message", {})
             crossref[cid] = {
                 "title": " ".join(work.get("title") or []),
+                "subtitle": " ".join(work.get("subtitle") or []),
+                "publication_type": work.get("type"),
                 "abstract": re.sub(r"<[^>]+>", "", work.get("abstract") or "").strip(),
                 "mesh_terms": [],
             }
@@ -435,12 +437,15 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
     - "match" (>= 2 topic words found in title+abstract+mesh)
     - "partial" (1 topic word found)
     - "mismatch" (0 topic words found)
+    - "unresolved" (book metadata cannot establish its chapter's content)
     """
     if not article:
         return "not_found", 0.0
 
     text = (
         article.get("title", "")
+        + " "
+        + article.get("subtitle", "")
         + " "
         + article.get("abstract", "")
         + " "
@@ -459,6 +464,12 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
     elif len(matches) == 1:
         return "partial", ratio
     else:
+        # A whole-book title cannot establish that an unseen chapter lacks the
+        # topic. Retain manual review, with zero matching confidence; substantive
+        # text and journal articles still receive the ordinary mismatch guard.
+        if (article.get("publication_type") in {"book", "edited-book", "monograph"}
+                and not article.get("abstract") and not article.get("mesh_terms")):
+            return "unresolved", 0.0
         return "mismatch", 0.0
 
 
@@ -666,12 +677,15 @@ def verify_file(config: dict, only_ids: set[str] | None = None) -> dict:
                 result["suggestion"] = "REPLACE — paper does not mention claimed topic"
             elif status == "partial":
                 result["suggestion"] = "REVIEW — only partial topic match"
+            elif status == "unresolved":
+                result["suggestion"] = "MANUAL REVIEW — verify the primary chapter; book metadata has no topic overlap"
             results.append(result)
 
     match_count = sum(1 for r in results if r["status"] == "match")
     partial_count = sum(1 for r in results if r["status"] == "partial")
     mismatch_count = sum(1 for r in results if r["status"] == "mismatch")
     notfound_count = sum(1 for r in results if r["status"] == "not_found")
+    unresolved_count = sum(1 for r in results if r["status"] == "unresolved")
 
     return {
         "file": config["file"],
@@ -680,6 +694,7 @@ def verify_file(config: dict, only_ids: set[str] | None = None) -> dict:
         "partial": partial_count,
         "mismatch": mismatch_count,
         "not_found": notfound_count,
+        "unresolved": unresolved_count,
         "pass_rate": f"{(match_count + partial_count) / max(len(results), 1):.0%}",
         "entries": results,
         "retrieval": {"cached_records_or_requests": client.cache_hits - before[0],
@@ -699,7 +714,7 @@ def baseline_failures(results: list[dict], baseline: dict) -> tuple[list, list]:
     new, unresolved = [], []
     for result in results:
         for entry in result.get("entries", []):
-            if entry["status"] == "not_found":
+            if entry["status"] in {"not_found", "unresolved"}:
                 unresolved.append((result["file"], entry))
             elif entry["status"] == "mismatch" and (result["file"], entry["entry_id"], entry["pmid"]) not in known:
                 new.append((result["file"], entry))
@@ -740,6 +755,7 @@ def main():
     all_results = []
     total_match = 0
     total_mismatch = 0
+    total_unresolved = 0
 
     for config in configs:
         only_ids = changed_entry_ids(config, args.changed_since) if args.changed_since else None
@@ -749,13 +765,15 @@ def main():
         all_results.append(result)
         total_match += result.get("match", 0)
         total_mismatch += result.get("mismatch", 0)
+        total_unresolved += result.get("not_found", 0) + result.get("unresolved", 0)
 
         print(f"\n  {result['file']}:")
         print(f"    Citations: {result.get('total_citations', 0)}")
         print(f"    ✅ Match: {result.get('match', 0)}")
         print(f"    ⚠️  Partial: {result.get('partial', 0)}")
         print(f"    ❌ Mismatch: {result.get('mismatch', 0)}")
-        print(f"    Unresolved: {result.get('not_found', 0)}; retrieval: {result.get('retrieval', {})}")
+        print(f"    Unresolved: {result.get('not_found', 0) + result.get('unresolved', 0)}; "
+              f"retrieval: {result.get('retrieval', {})}")
         print(f"    Pass rate: {result.get('pass_rate', 'N/A')}")
 
         # Print mismatches (every citation when checking a batch)
@@ -765,9 +783,12 @@ def main():
                       f"{entry['article_title'][:100]}")
             elif entry["status"] == "mismatch" and not args.baseline:
                 print(f"    ❌ {entry['entry_id']} {cite_label(entry['pmid'])}: {entry['article_title']}")
+            elif entry["status"] == "unresolved":
+                print(f"    UNRESOLVED {entry['entry_id']} {cite_label(entry['pmid'])}: "
+                      f"{entry['article_title']} — primary content review required")
 
     print(f"\n{'=' * 60}")
-    print(f"TOTAL: ✅ {total_match} match  ❌ {total_mismatch} mismatch")
+    print(f"TOTAL: ✅ {total_match} match  ❌ {total_mismatch} mismatch; {total_unresolved} unresolved")
 
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
@@ -786,7 +807,7 @@ def main():
         return 1 if new or unresolved else 0
 
     return 1 if total_mismatch > 0 or any(
-        r.get("not_found", 0) or r.get("status") == "not_found" for r in all_results
+        r.get("not_found", 0) or r.get("unresolved", 0) or r.get("status") == "not_found" for r in all_results
     ) else 0
 
 

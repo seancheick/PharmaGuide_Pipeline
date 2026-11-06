@@ -12,6 +12,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -179,3 +181,94 @@ def test_eaa_identity_family_import_and_route_reexport_perform_no_data_reads(mon
         importlib.reload(routes)
         assert routes.EAA_CANONICALS is resolver.EAA_CANONICALS
         assert len(routes.EAA_CANONICALS) == 9
+
+
+@pytest.mark.parametrize(('source', 'expected'), [
+    ('D-alpha-tocopherol', True),
+    ('dl-alpha-tocopheryl acetate', True),
+    ('d-alpha tocopheryl succinate', True),
+    ('α-tocopherol', True),
+    ('d-alpha-tocopheryl acetate with mixed tocotrienols', True),
+    ('mixed tocopherols with alpha-tocopherol', True),
+    ('Alpha-tocopherol-free gamma-tocopherol', False),
+    ('Gamma-tocopherol (not alpha-tocopherol)', False),
+    ('Gamma-tocopherols', False),
+    ('Delta-tocopherols', False),
+    ('Gamma-Tocopherol', False),
+    ('D-delta-tocopherol', False),
+    ('beta-tocopherol', False),
+    ('Alpha-Tocotrienol', False),
+    ('D-Mixed Tocotrienols', False),
+    ('Mixed Tocopherols', None),
+    ('Mixed Tocotrienols/Tocopherols', None),
+    ('Vitamin E', None),
+    ('unidentified preparation', None),
+    ('', None),
+])
+def test_vitamin_e_alpha_material_keeps_identity_separate_from_amount(source, expected):
+    from scoring_reference_resolver import vitamin_e_alpha_material
+
+    # Unknown material may contain alpha, but does not prove an alpha amount.
+    assert vitamin_e_alpha_material(source) is expected
+
+
+def test_existing_dri_sources_reach_role_reference_without_a_second_identity_list():
+    from evidence_resolver import _dietary_nutrient_authority
+    from scoring_reference_resolver import _rda_ul_index, nutritional_role_reference
+
+    # Derive coverage from existing source/reference owners, not a new nutrient registry.
+    count = 0
+    entries = {entry["id"]: entry for entry in _rda_ul_index().values()}
+    for entry in entries.values():
+        canonical = entry.get('id')
+        if not _dietary_nutrient_authority(canonical):
+            continue
+        urls = (entry.get('reference_semantics') or {}).get('source_ids') or []
+        if not urls or not any('ods.od.nih.gov' in str(u) or 'nationalacademies.org' in str(u) for u in urls):
+            continue
+        reference = nutritional_role_reference(canonical)
+        assert reference and reference['source_references'], canonical
+        for identity in [canonical, *entry.get('aliases', [])]:
+            authority = _dietary_nutrient_authority(identity)
+            if authority:
+                joined = nutritional_role_reference(authority['nutrient'])
+                assert joined['source_references'] == reference['source_references'], identity
+        for ref in reference['source_references']:
+            assert ref['title'] and ref['url']
+            assert ref['type'] == 'authority'
+            assert not ref.get('pmid')
+            if canonical == 'chromium':
+                assert 'established_nutritional_role' not in ref['supports_claims']
+                assert 'disputed' in ref['notes'].lower()
+        count += 1
+    assert count >= 28
+
+
+def test_source_reference_dedup_preserves_authored_metadata_over_pmid_only_fallback():
+    from scoring_reference_resolver import unique_source_references
+    authored = {'pmid': '18184094', 'title': 'Authored source title',
+                'url': 'https://pubmed.ncbi.nlm.nih.gov/18184094/'}
+    assert unique_source_references([authored, {'pmid': '18184094'}]) == [authored]
+    assert unique_source_references([{'pmid': '18184094'}, authored]) == [authored]
+
+
+def test_source_reference_dedup_keeps_distinct_authored_claim_scopes():
+    from scoring_reference_resolver import unique_source_references
+    first = {'pmid': '18184094', 'title': 'Authored source',
+             'supports_claims': ['nutritional_intake']}
+    second = {**first, 'supports_claims': ['population_scope']}
+    assert unique_source_references([first, second, {'pmid': '18184094'}]) == [first, second]
+    assert unique_source_references([{'pmid': '18184094'}, first, second]) == [first, second]
+
+
+def test_chloride_role_cites_primary_dri_without_rewriting_existing_dose_source():
+    from scoring_reference_resolver import nutritional_role_reference, rda_ul_reference_entry
+    reference = nutritional_role_reference('chloride')['source_references']
+    assert len(reference) == 1
+    assert reference[0]['doi'] == '10.17226/10925'
+    assert reference[0]['title'] == (
+        'Dietary Reference Intakes for Water, Potassium, Sodium, Chloride, and Sulfate')
+    assert reference[0]['url'] == 'https://www.nationalacademies.org/read/10925/chapter/8'
+    assert '272' in reference[0]['notes']
+    assert rda_ul_reference_entry(canonical_id='chloride')['reference_semantics']['source_ids'] == [
+        'https://nap.nationalacademies.org/skim.php?chap=386-396&record_id=11537']

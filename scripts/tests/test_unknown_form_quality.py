@@ -821,7 +821,7 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('luteolin', 'Luteolin Phytosome', {'name': 'Phospholipid Complex', 'category': 'blend', 'ingredientGroup': 'Blend'}, 'luteolin (unspecified)'),
     ('vitamin_c', 'Vitamin C', {'name': 'Calcium L-Ascorbate', 'category': 'mineral', 'ingredientGroup': 'Calcium'}, 'calcium ascorbate'),
     ('protease', 'Protease, Bacterial', {'name': 'Alkaline Protease, Bacterial', 'category': 'enzyme', 'ingredientGroup': 'Proteolytic Enzymes (Proteases)'}, 'protease (fungal/bacterial)'),
-    ('elderberry', 'ElderCraft', {'name': 'European Black Elderberry Extract', 'category': _B, 'ingredientGroup': 'European Elder'}, 'elderberry extract (sambucol)'),
+    ('elderberry', 'ElderCraft', {'name': 'European Black Elderberry Extract', 'category': _B, 'ingredientGroup': 'European Elder'}, 'elderberry (unspecified)'),
     ('goji_berry', 'Goji Berry Fruit Juice, Powder', {'name': 'Lycium barbarum Fruit Juice, Powder', 'category': _B, 'ingredientGroup': 'Goji'}, 'goji berry (unspecified)'),
     ('blood_orange_extract', 'Sicilian Blood Orange Fruit, Peel Extract', {'name': 'Citrus sinensis var. Moro Fruit Extract', 'category': _B, 'ingredientGroup': 'Sweet Orange'}, 'blood orange extract (unspecified)'),
     ('blood_orange_extract', 'Sicilian Blood Orange Fruit, Peel Extract', {'name': 'Citrus sinensis var. Moro Peel Extract', 'category': _B, 'ingredientGroup': 'Sweet Orange'}, 'blood orange extract (unspecified)'),
@@ -1460,3 +1460,39 @@ def test_generic_ginseng_consumer_note_does_not_deny_declared_root_or_marker(
     assert 'without identifying species' not in ingredient['form_note']
     assert ingredient['form_note_preview'] == ingredient['form_note']
     assert enriched['ingredient_quality_data']['ingredients'][0]['raw_source_text'] == raw['ingredientRows'][0]['name']
+
+
+@pytest.mark.parametrize('label', [
+    'premium cultivar Elderberries',  # Actual204048 nested source; not Sambucol.
+    'standardized elderberry', 'elderberry extract', 'black elderberry fruit',
+    'ElderCraft', 'NordicElderberry',
+])
+def test_generic_or_other_branded_elderberry_does_not_inherit_sambucol(enricher, label):
+    from build_final_db import _derive_form_note
+    match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],
+                                        cleaner_canonical_id='elderberry')
+    assert (match['canonical_id'], match['form_id']) == ('elderberry', 'elderberry (unspecified)')
+    # The export owner must consume the upstream reading, without inventing
+    # another brand detector. Keep the printed child amount and source binding.
+    source = {'name': label, 'quantity': 16.0, 'unit': 'Gram(s)',
+              'raw_source_path': 'ingredientRows[0].nestedRows[0]'}
+    row = {**match, **source, 'matched_form': match['form_id']}
+    before = copy.deepcopy(row)
+    note, preview = _derive_form_note(row, enricher.databases['ingredient_quality_map'])
+    assert note and 'does not establish a specific proprietary elderberry preparation' in note
+    assert 'sambucol' not in note.lower()
+    assert row == before
+    assert (row['quantity'], row['unit'], row['raw_source_path']) == (
+        16.0, 'Gram(s)', 'ingredientRows[0].nestedRows[0]')
+
+
+@pytest.mark.parametrize('label', ['Sambucol', 'sambucol supplement'])
+def test_explicit_sambucol_retains_its_existing_branded_form(enricher, label):
+    from build_final_db import _derive_form_note
+    match = enricher._match_quality_map(label, label, enricher.databases['ingredient_quality_map'],
+                                        cleaner_canonical_id='elderberry')
+    assert (match['canonical_id'], match['form_id']) == ('elderberry', 'elderberry extract (sambucol)')
+    assert match['bio_score'] == 9
+    note, _ = _derive_form_note({**match, 'matched_form': match['form_id']},
+                               enricher.databases['ingredient_quality_map'])
+    assert note and 'Sambucol is a branded elderberry preparation' in note

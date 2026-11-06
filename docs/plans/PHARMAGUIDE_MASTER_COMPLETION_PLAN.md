@@ -2,7 +2,53 @@
 
 ## November 5 — current run audited; scientific qualification open
 
-Current fixed cohort: **8,496 genuinely complete / 6,951 partial / 15,447 total** on source `304966d458`. Required minimum remains **15,293 complete**, leaving **6,797 additional completions**. Fresh source-owner census used both manifest-owned Enrich and Score, with unchanged source/raw/state/manifest bindings before/after. It is scientific qualification evidence, not an exported-catalog, device or publication approval.
+
+### November 6 — systematic Evidence audit and cross-module guard
+
+A read-only streaming census scan covered all15,447 products in7.55seconds without rescoring; source hashes stayed unchanged. Five actual generic-floor recognized-authority/zero cases (184325,184326,294483,310684,79660) share the beta-carotene join defect. A static240-alias RDA inventory found no remaining authority-key mismatch. The other authority/zero, complete/material-row and source-review flags require their native route, principal scope and actually contributing receipt before being called defects. Finished no-credit reviews are not assumed correct merely because they are closed, and missing processing is not scientific zero.
+
+All-seven-module tests caught an overstrict literal form-key check in the initial fix. The final helper reuses `scoring_reference_resolver::delivers_parent_nutrient` and typed identity relationships; no second form matcher. Existing B-complex full-panel20 and total>=84 assertions stay intact; its invalid B5 fixture identity is corrected to the existing canonical. The now-unused boolean wrapper is removed with zero-consumer/AST proof rather than kept through an exception or artificial caller. Named fail-first, owner and dead-code checks pass. Root’s cross-module checkpoint passes213 tests across all seven scoring routes. Bounded67 raw plus7 follow-up measurements and a later67 Score/export projection are complete with their exact source bindings; they do not qualify a new whole catalog. Local artifact compatibility passed564 checks/24declared opt-in skips. Combined whole-fast candidate CI remains open.
+
+### November 6 — delegated source review and eight exact approvals
+
+Sean confirms that Dr.Pham delegates routine existing-policy research reviews to agents when primary-source/API content and applicability are verified and independently double-checked. A new physician signature is not required for every entry. Preserve actual reviewer attribution; API existence alone, free-text reviewer names and self-asserted digests do not establish source validity. New policy, warning severity/thresholds and specific unresolved clinical holds remain owner decisions. This current delegation supersedes older blanket clinician-only workflow wording; it does not fabricate historical clinician approval.
+
+Sean also confirms the eight exact probiotic contexts in the prepared review sheet were approved by Dr.Pham on **2026-11-01** (relayed2026-11-06). Record only the existing countersignature fields for these eight, preserving original research review dates/basis and every scientific field. Independently checked source/workflow authorization stays at the existing clinical-review owner, not another registry or scoring brain.
+
+- [x] Fix source-preserving vitaminE mixture upper-bound regression:307739 retains26–776mg/day in the seven-label raw follow-up; all seven exported warnings match the baseline, without awarding non-alpha nutritional Evidence.
+- [x] Complete shared review-owner validation and exact eight-record attribution, preserving genuine source/scope holds. Named owner checks and selected-source comparisons pass; integration remains below.
+- [ ] Finish final combined CI/local qualification and integrate current fixes before another normal pipeline run. Reuse the completed source-bound67 capture and rerun only actual newly affected stages/cases.
+
+### November 6 — reuse existing research before assigning new reviews
+
+Owner: `evidence_resolver.py` and the existing native Evidence/readiness adapters own applicability; `probiotic_measurements.py::clinical_review_provenance_valid` owns probiotic review provenance. Evidence: current frozen census/packet exact-ID reconciliation and read-only runtime/source audit. Will NOT create another resolver, scientific registry, approval status, or blanket clinician attribution.
+
+- [x] Independently bind all6,951 packet IDs to the frozen15,447-product census: no missing or unexpected IDs;8,496 complete/6,951 partial retained. This proves the inventory, not that every dependency needs new research.
+- [ ] Reconcile every unresolved dependency against existing completed decisions before literature assignment: applicable/integrated; applicable/missed; preparation/population/delivery/outcome mismatch; authorization unclear; genuinely unfinished/missing; label-role/identity/amount problem; or finished/unrated disposition. Preserve uncertainty where retained facts cannot prove applicability.
+- [ ] Reconcile probiotic context authorization and actual scoring contribution against historical packets, direct approvals and context countersignatures. A free-text reviewer alone does not prove authorization; a historical agent-authored record is not automatically unauthorized. Preserve valid research and measure before changing eligibility.
+- [ ] Audit incidental flavor/sweetener/processing-role blockers and eight finished/unrated cases through existing owners, without invented efficacy credit or inflated completion counts. Keep222918 remediation separate.
+- [ ] Finish paired #397/#217 qualification, then measure the integrated outputs and final catalog/app acceptance. Source citations are approved as optional `evidence_data.source_references`; isolated native source-sheet rendering is verified; ordinary installed-catalog and signed-device acceptance remain outstanding.
+- [ ] Qualify existing incremental processing with a controlled100,000-input synthetic test after correctness fixes: deterministic accounting, bounded resources, targeted invalidation, interruption/retry and invalid-artifact publication refusal. Do not create another platform or restart existing research.
+
+Sean reports on November6 that Dr.Pham has agreed/signs off on most reviewed decisions and wants work to continue. Bind this to the actual reviewed decisions and retain exceptions; this statement does not identify every context or authorize fabricated per-entry signatures/dates. Routine engineering, factual source verification and reuse auditing continue.
+
+### Parallel completion work order and nutritional-authority consistency
+
+November6 audit qualification: the8,496/6,951 split is the canonical quality-status count. Eight intentionally finished/unrated products also sit in the legacy partial bucket; report them separately rather than assigning new science work or silently increasing the release numerator. A ninth case222918 requires remediation with known-zero declared actives, not an invented clinical or identity unknown.
+
+Owner: `assessment_readiness_shadow.py::build_shadow_report` supplies the frozen census; `evidence_resolver.py::nutrition_authority_for_row` and existing category adapters own Evidence eligibility; `scoring_reference_resolver` owns RDA/IQM identity joins. Will NOT create a second scorer, ingredient registry, public state, approval, or product-specific override.
+
+The private ready-to-forward `assessment-team-handoff.zip` contains all6,951 partial IDs, their full blocker sets,1,340 disjoint groups and609 ranked canonical dependencies, generated from the existing checksum-bound census without rescoring. Disjoint queue:4,486 single-canonical Evidence-only;1,299 multi-canonical Evidence-only;355 module-owned Evidence-only with no emitted canonical;173 native probiotic-only;144 native omega-only;494 other/mixed blockers. Top20 single-canonical groups cover1,263 products;1,326 Evidence-only products have their entire unresolved dependency set within those20. These are conditional opportunities, not promised closures. Codex owns L-carnitine, elderberry and TMG/betaine; external reviewers take the remaining ranked batches and return preparation-specific primary-source packets to one integrator. Exact review authority, source location, trial-family independence and every existing hold must be preserved. Research discovery is not a clinical approval.
+
+- [x] Produce the full ranked, exact-ID external-team packet and bounded review/coordination instructions. Private path: `/Users/seancheick/pg_quality/catalog-release-20261105/assessment-team-handoff/README.md`.
+- [ ] Qualify and integrate the implemented shared nutritional-authority join: beta-carotene product184326 has vitamin A authority in readiness/Dose but misses Evidence role credit; niacin exposes the same alias mismatch. Reuse canonical RDA aliases/IQM nutrient grouping, reject non-delivering/unresolved identities and non-provitamin carotenoids. No antioxidant efficacy or automatic20-point credit follows from the nutritional role.
+- [ ] Complete the mixed finished-record and elderberry preparation/source corrections, bounded raw replay, independent review and combined CI/local qualification. Global counts remain the completed304 run until new artifacts qualify.
+- [ ] Integrate ranked research batches plus native/identity/Dose owners, then perform one fingerprint-selected necessary rebuild and fresh whole-cohort reconciliation; verify export, app/alerts/signatures and signed-device behavior before release.
+
+Manufacturer citations are discovery leads, not automatic credit. Pure Encapsulations' linked beta-carotene page cites Zick2011,11:78, but DOI`10.1186/1472-6882-11-78` is a chamomile/insomnia study. This unrelated citation is excluded; it does not erase independent vitamin A nutritional authority. Source: NIH ODS Vitamin A professional fact sheet and the publisher article, checked2026-11-05. Label claims remain separate from ingredient Evidence; Dose, Formulation and safety remain independent.
+
+
+Current fixed cohort quality-status counts: **8,496 complete / 6,951 partial / 15,447 total** on source `304966d458`. Required minimum remains **15,293 complete**, leaving **6,797 additional completions**. Fresh source-owner census used both manifest-owned Enrich and Score, with unchanged source/raw/state/manifest bindings before/after. It is scientific qualification evidence, not an exported-catalog, device or publication approval.
 
 Disjoint old-to-current comparison: 8,273 complete→complete; 127 complete→partial; 223 partial→complete; 6,824 partial→partial. Net +96 is measured; bounded historical closures must not be added again. All 69 blocked products remain present (8 complete, 61 partial).
 
@@ -2074,3 +2120,7 @@ Five obsolete pipeline worktrees are removed after verified preservation: GNC pl
 - [ ] Finish the genuine scientific backlog, then one necessary rebuild and actual catalog/export/alert/signature/device qualification. **Do not rerun the normal pipeline merely to repeat this unchanged backlog.** The cache port changes all3producer code fingerprints while references/runtime stay unchanged: retain304artifacts as the audited completed-run baseline, not current release provenance. Choose earliest required stages once the remaining source batch is finished; do not restamp old manifests.
 
 Private sealed receipts: `post-run-audit/SHARED_CODE_PROPAGATION_QUALIFICATION.json`, `GNC_CACHE_MERGE_QUALIFICATION.json`, `GNC_CACHE_STAGE_PROVENANCE.json`, the current census/same20 reports and `worktree-preservation/` recovery inventories. Documentation-only closure does not require another whole-fast checkpoint for the identical qualified runtime source.
+
+### November 6 — final citation-gate follow-up
+
+Candidate6250fe1c0 passed all eight fast CI shards and merge readiness (run42184171816); local artifact compatibility passed564 checks/24 declared opt-in skips. Subsequent review found title-only book metadata could count as a passing partial. The shared verifier now reports unresolved content visibly, excludes it from the pass rate and blocks both normal and baseline modes;35 focused tests pass. Chloride now cites the verified primary DRI chapter rather than the summary guide; existing Dose references remain intact and five affected-scope controls are unchanged. These follow-ups require the final candidate CI before merge. No whole-catalog recount or release is claimed.

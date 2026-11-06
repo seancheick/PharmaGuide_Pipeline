@@ -505,3 +505,16 @@ def test_species_fallback_note_does_not_claim_the_label_omits_a_printed_strain()
     assert "This label" not in note
     assert "without a strain" not in note
     assert "species" in note.lower()
+
+
+def test_elderberry_unspecified_copy_is_not_a_proprietary_identity_claim():
+    import json
+    index = json.loads((Path(__file__).parents[1] / 'data/ingredient_quality_map.json').read_text())
+    form = index['elderberry']['forms']['elderberry (unspecified)']
+    row = {'canonical_id': 'elderberry', 'matched_form': 'elderberry (unspecified)',
+           'bio_score': form['bio_score']}
+    note, preview = _derive_form_note(row, index)
+    assert note == 'This assessment does not establish a specific proprietary elderberry preparation.'
+    assert preview == note
+    assert form['consumer_note_review']['by'] == 'Agent factual correction'
+    assert form['consumer_note_review']['date'] != '2026-08-08'

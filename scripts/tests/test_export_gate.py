@@ -1941,3 +1941,28 @@ def test_core_reference_data_does_not_export_unqualified_private_identity_rules(
     assert 'RULE_IQM_CASCARA_SAGRADA_PREGNANCY' in {r['id'] for r in payload['interaction_rules']}
     assert payload['_metadata']['total_entries'] == len(payload['interaction_rules'])
     assert payload['_metadata']['total_rules'] == len(payload['interaction_rules'])
+
+
+def test_evidence_authority_citations_export_only_actual_scored_owner_sources():
+    enriched = _base_enriched(evidence_data={'clinical_matches': [],
+        'source_references': [{'url': 'https://irrelevant.example', 'title': 'Unread'}]})
+    reference = {'type': 'authority', 'authority': 'NIH Office of Dietary Supplements',
+                 'title': 'Vitamin C - Health Professional Fact Sheet',
+                 'url': 'https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/',
+                 'supports_claims': ['established_nutritional_role']}
+    scored = _base_scored(_v4_module_breakdown={'dimensions': {'evidence': {
+        'metadata': {'source_references': [reference, reference]}}}})
+    blob = build_detail_blob(enriched, scored)
+    assert blob['evidence_data']['source_references'] == [reference]
+    # An older scored artifact has no new citation proof; Enrich cannot substitute it.
+    old = build_detail_blob(enriched, _base_scored())
+    assert old['evidence_data'].get('source_references', []) == []
+
+
+def test_authority_citations_can_export_without_clinical_match_enrichment():
+    reference = {'type': 'authority', 'title': 'NASEM nutrient role',
+                 'url': 'https://www.nationalacademies.org/read/10490/chapter/12'}
+    scored = _base_scored(_v4_module_breakdown={'dimensions': {'evidence': {
+        'metadata': {'source_references': [reference]}}}})
+    blob = build_detail_blob(_base_enriched(evidence_data={}), scored)
+    assert blob['evidence_data']['source_references'] == [reference]

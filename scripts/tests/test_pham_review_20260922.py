@@ -40,9 +40,13 @@ def _combination(**changes) -> dict:
 
 # --- the one code change: a frozen record may name an unregistered component ---
 
-def test_a_declared_unregistered_component_keeps_a_combination_record_valid():
+def test_a_declared_unregistered_component_keeps_a_combination_record_valid(monkeypatch):
     context = _combination(components=[LA5, BB12, LC01],
                            component_registration_status="unregistered_components_present")
+    import studied_formulas
+    registry = deepcopy(studied_formulas._clinical_strain_registry())
+    registry[LA5]['study_contexts'] = [context]
+    monkeypatch.setattr(studied_formulas, '_clinical_strain_registry', lambda: registry)
     assert valid_native_study_context(context, LA5)
     assert valid_native_study_context(context, BB12)
 

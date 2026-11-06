@@ -96,8 +96,7 @@ def test_authority_owner_remains_headline_when_secondary_research_does_not_apply
     pillar = _pillar_evidence(evidence, 20, "generic_single_molecule", _config())
     assert pillar["score"] == 11.1
     assert pillar["reason"] == (
-        "Established nutritional authority recognizes the physiological necessity of these "
-        "essential nutrients."
+        "Evidence credit reflects the nutritional reference assessment for these ingredients."
     )
 
 
@@ -299,3 +298,26 @@ def test_product_level_owner_is_not_nothing_to_assess():
 
 def test_no_rows_at_all_stays_nothing_to_assess_when_owner_scoped():
     assert _owner_state(_product(ingredients=[], matches=[])) == "no_assessable_actives"
+
+
+def test_positive_authority_explanation_does_not_universally_claim_essentiality():
+    # The same result covers essential nutrients, omega intake guidance and the
+    # existing historical chromium reference policy. Copy must not upgrade scope.
+    for archetype in ('generic_single_molecule', 'omega', 'b_complex'):
+        dim = {'score': 10, 'metadata': {'evidence_result_state': 'evaluated_authority'}}
+        pillar = _pillar_evidence(dim, 20, archetype, _config())
+        assert pillar['reason'] == (
+            'Evidence credit reflects the nutritional reference assessment for these ingredients.')
+        assert pillar['score'] > 0
+        assert pillar['evidence_result_state'] == 'evaluated_authority'
+
+
+def test_authority_copy_preserves_zero_and_open_review_meaning():
+    assert _zero_reason('evaluated_authority') == (
+        'These ingredients were reviewed against established nutritional authority, '
+        'which earned no Evidence points for this product.')
+    dim = {'score': 10, 'metadata': {'evidence_result_state': 'clinical_review_not_covered'}}
+    pillar = _pillar_evidence(dim, 20, 'generic_single_molecule', _config())
+    assert pillar['reason'] == (
+        'Some research on this label earned credit, but our review of the rest is still open, '
+        'so this assessment is not finished.')

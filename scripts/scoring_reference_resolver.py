@@ -221,6 +221,38 @@ def delivers_parent_nutrient(canonical_id: Any, form_ids: Any) -> bool:
     return not relationships or not relationships <= NON_DELIVERING_RELATIONSHIPS
 
 
+def vitamin_e_alpha_material(
+    source_text: str, *, unknown_family_is_possible: bool = True,
+) -> Optional[bool]:
+    """Alpha-tocopherol identity, without inferring its activity or amount.
+
+    None retains possible alpha in mixtures/unknown material for conservative
+    exposure bounds; it is not affirmative nutritional-role proof.
+    A caller scanning unrelated label rows can exclude unrecognized material
+    unless the existing identity owner places it in the vitamin E family.
+    """
+    from normalization import find_affirmative_label_match, normalize_text
+
+    text = normalize_text(source_text or "")
+    alpha = re.compile(r"\balpha[ -]+tocopher(?:ol|yl)s?\b")
+    if find_affirmative_label_match(alpha, text, spaced_free=True):
+        return True
+    tocopherol = bool(find_affirmative_label_match(
+        re.compile(r"\btocopher(?:ol|yl)s?\b"), text, spaced_free=True))
+    tocotrienol = bool(find_affirmative_label_match(
+        re.compile(r"\btocotrienols?\b"), text, spaced_free=True))
+    nonalpha = find_affirmative_label_match(
+        re.compile(r"\b(?:beta|gamma|delta)[ -]+tocopher(?:ol|yl)s?\b"),
+        text, spaced_free=True)
+    if nonalpha and "mixed" not in text and not tocotrienol:
+        return False
+    if tocotrienol:
+        return None if tocopherol else False
+    if not tocopherol and not unknown_family_is_possible:
+        return False
+    return None
+
+
 def floor_eligible(form: Dict[str, Any]) -> bool:
     """Whether a named form may define the nondisclosure floor."""
     return parent_relationship(form) is None
@@ -406,22 +438,53 @@ def nutrition_reference_dependencies(canonical_id: Any) -> Tuple[str, ...]:
 
 
 def nutritional_role_reference(canonical_id: Any) -> Optional[Dict[str, Any]]:
-    """Evidence-only group reference; never exports the mixture's Dose values.
+    """Evidence source context only; never exports any reference's Dose values.
 
-    All nine identities depend on this existing reference, including forms
-    that cannot claim the role. Row qualification remains the Evidence owner's
-    job; family membership alone is not nutritional authority.
+    EAA identities read their existing group reference; ordinary nutrients read
+    their own RDA reference. Row qualification remains the Evidence owner's
+    job; reference membership or source availability never establishes eligibility.
     """
-    if _norm(canonical_id) not in EAA_CANONICALS:
-        return None
-    entry = rda_ul_reference_entry(canonical_id=nutrition_reference_dependencies(canonical_id)[0]) or {}
+    dependencies = nutrition_reference_dependencies(canonical_id)
+    entry = rda_ul_reference_entry(canonical_id=dependencies[0] if dependencies else canonical_id) or {}
     references = [dict(ref) for ref in entry.get("references_structured") or []
                   if isinstance(ref, dict) and ref.get("type") == "authority"
                   and ref.get("authority") and (ref.get("doi") or ref.get("url"))
-                  and "established_nutritional_role" in (ref.get("supports_claims") or [])]
+                  and set(ref.get("supports_claims") or []) & {
+                      "established_nutritional_role", "nutrient_reference_context"}]
     if not references:
         return None
     return {"id": entry.get("id"), "source_references": references}
+
+
+def unique_source_references(references: Any) -> List[Dict[str, Any]]:
+    """Deduplicate already selected Evidence sources, without selecting new ones."""
+    result = []
+    seen = set()
+    seen_pmids = set()
+    for ref in references or []:
+        if not isinstance(ref, dict):
+            continue
+        identity = str(ref.get("doi") or ref.get("url") or ref.get("pmid") or "").strip()
+        if not identity:
+            continue
+        key = (identity.lower(), tuple(sorted(ref.get("supports_claims") or [])))
+        pmid = str(ref.get("pmid") or "").strip()
+        if pmid and pmid in seen_pmids:
+            if set(ref) == {"pmid"}:
+                continue
+            index = next((i for i, existing in enumerate(result)
+                          if set(existing) == {"pmid"}
+                          and str(existing["pmid"]).strip() == pmid), None)
+            if index is not None:
+                result[index] = dict(ref)
+                seen.add(key)
+                continue
+        if key not in seen:
+            seen.add(key)
+            if pmid:
+                seen_pmids.add(pmid)
+            result.append(dict(ref))
+    return result
 
 
 @lru_cache(maxsize=1)

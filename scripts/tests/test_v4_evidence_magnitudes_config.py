@@ -39,7 +39,7 @@ EXPECTED = {
     },
     "probiotic": {
         "cap_evidence": 20.0, "certainty_cap": 10.0, "applicability_cap": 6.0,
-        "replication_cap": 4.0, "native_context_review_policy": "clinician_only",
+        "replication_cap": 4.0, "native_context_review_policy": "authorized_source_review",
         "alignment_weights": {"direct": 1.0, "partial": 0.75, "broad": 0.5,
                               "not_evaluable": 0.0, "none": 0.0},
         "generic_identity_weight": 0.5,

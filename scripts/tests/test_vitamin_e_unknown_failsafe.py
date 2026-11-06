@@ -359,3 +359,28 @@ def test_multiple_family_rows_do_not_turn_nonalpha_mass_into_adequacy(enricher, 
     parent = next(r for r in result['adequacy_results'] if r.get('amount') == 15)
     assert parent['scoring_eligible'] is True
     assert parent['pct_rda'] == pytest.approx(100)
+
+
+@pytest.mark.parametrize(('source', 'canonical', 'expected_high'), [
+    ('Tocotrienol-Tocopherol Complex', None, 776.0),
+    ('Mixed Tocopherols', None, 776.0),
+    ('Gamma-Tocopherol', None, 26.0),
+    ('Tocotrienols', 'vitamin_e', 26.0),
+    ('Unidentified herb', None, 26.0),
+    ('Unidentified preparation', 'vitamin_e', 776.0),
+])
+def test_alpha_bound_retains_recognized_unmapped_mixture_mass(enricher, source, canonical, expected_high):
+    #307739 prints13mg VitaminE beside375mg mixed complex at2daily servings.
+    # The label mixture has no canonical identity but still has possible alpha mass.
+    alpha = {'name': 'Vitamin E', 'raw_source_text': 'Vitamin E',
+             'canonical_id': 'vitamin_e', 'quantity': 13, 'unit': 'mg',
+             'raw_source_path': 'ingredientRows[0]'}
+    mixture = {'name': source, 'raw_source_text': source,
+               'canonical_id': canonical, 'quantity': 375, 'unit': 'mg',
+               'raw_source_path': 'ingredientRows[1]'}
+    rda = {'servings_per_day_max': 2, 'safety_exposure': {'per_day': 26, 'unit': 'mg'}}
+    enricher._stamp_vitamin_e_ranges(
+        [(rda, 26, 'ingredientRows[0]')], [alpha],
+        {id(alpha): alpha}, [alpha, mixture])
+    assert rda['safety_exposure'].get('low_per_day', 26) == pytest.approx(26)
+    assert rda['safety_exposure'].get('high_per_day', 26) == pytest.approx(expected_high)

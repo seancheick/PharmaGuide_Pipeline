@@ -199,7 +199,9 @@ BLOB_TOP_LEVEL: dict[str, dict[str, Any]] = {
     "formulation_detail": {"required": True},
     "serving_info": {"required": True},
     "manufacturer_detail": {"required": True},
-    "evidence_data": {"required": True},
+    "evidence_data": {"required": True, "notes": (
+        "Optional source_references list contains only the scored Evidence owner's "
+        "selected/covered source citations; absent in older catalogs.")},
     "rda_ul_data": {"required": True},
     "nutrition_detail": {"required": True},
     "unmapped_actives": {"required": True},

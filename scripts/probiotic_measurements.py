@@ -605,7 +605,7 @@ def _probiotic_evidence_policy() -> dict:
     """The owner's native-context policy lives with the scoring config (one brain)."""
     from scoring_v4.quality_score_config import block as config_block
     block = config_block("evidence_magnitudes", "probiotic")["probiotic"]
-    return {"review_policy": block.get("native_context_review_policy", "clinician_only"),
+    return {"review_policy": block.get("native_context_review_policy", "authorized_source_review"),
             "dose": dict(config_block("dose_magnitudes", "probiotic")["probiotic"].get("dose_applicability_policy") or {})}
 
 
@@ -615,8 +615,8 @@ def native_context_review_policy() -> str:
 
 IDENTITY_CONFIDENCE_ACCEPTED = frozenset({
     "clinical_identity_reviewed", "deposit_crosswalk_verified", "canonical_identity_verified"})
-def clinical_review_provenance_valid(context) -> bool:
-    """Require an attributable, dated clinical approval with an explicit scope."""
+def _clinical_review_metadata_valid(context) -> bool:
+    """Structural attribution only; authorization belongs to verified source authoring."""
     if not isinstance(context, Mapping):
         return False
     review = context.get("clinical_review")
@@ -648,7 +648,63 @@ def clinical_review_provenance_valid(context) -> bool:
     return parsed <= datetime.now(parsed.tzinfo) + timedelta(minutes=5)
 
 
-# A context's review is finished once a clinician approves it or its source is
+# Added by the existing native applicability producer, not authored study facts.
+_DERIVED_CONTEXT_FIELDS = frozenset({
+    "status", "dose_comparison", "label_daily_cfu", "dose_applicability_class",
+    "dose_applicability_credit", "source_row_ref", "delivery_comparison",
+    "claimed_purpose_assessment", "population_applicability",
+    "clinical_applicability", "applicability_reason",
+})
+
+
+def _canonical_review_context(context):
+    """Find this source context through the existing component/clinical owners."""
+    context_id = context.get("context_id")
+    components = context.get("components")
+    if not isinstance(context_id, str) or not isinstance(components, list):
+        return None
+    from studied_formulas import _clinical_strain_registry
+    from clinical_applicability import reviewed_entries
+
+    candidates = {}
+    # Both are existing source owners. Formula and ingredient contexts share
+    # reviewed_entries; no new index, approval registry or packet loader.
+    for registry in (_clinical_strain_registry(), reviewed_entries()):
+        for component in components:
+            if not isinstance(component, str):
+                return None
+            for row in (registry.get(component) or {}).get("study_contexts", []):
+                if isinstance(row, Mapping) and row.get("context_id") == context_id:
+                    candidates[id(row)] = row
+    if not candidates:
+        return None
+    first = next(iter(candidates.values()))
+    # A combination may be filed identically under more than one component;
+    # contradictory copies cannot authorize any caller view.
+    return first if all(row == first for row in candidates.values()) else None
+
+
+
+def clinical_review_provenance_valid(context) -> bool:
+    """Bind attributable review facts to the current approved source context.
+
+    Source verification and independent authorization are enforced by reviewed
+    authoring/release workflows. This is reference binding, not authentication
+    of clinician credentials. The legacy approval enum includes delegated agent
+    reviews under the existing rubric; its name does not assert clinician review.
+    """
+    if not _clinical_review_metadata_valid(context):
+        return False
+    canonical = _canonical_review_context(context)
+    if canonical is None:
+        return False
+    if set(context) - set(canonical) - _DERIVED_CONTEXT_FIELDS:
+        return False
+    return all(key in context and context[key] == value
+               for key, value in canonical.items())
+
+
+# A context's review is finished once its authorized scoped review is approved or its source is
 # rejected. An approved context that does not apply to a label is a finished
 # conclusion about that label, not pending work.
 CONTEXT_REVIEW_FINISHED_STATUSES = frozenset({"clinician_approved", "rejected_source"})
@@ -659,7 +715,7 @@ def context_review_finished(context) -> bool:
 
 
 def context_accepted_for_scoring(context) -> bool:
-    """Only an attributable clinician approval can authorize clinical scoring."""
+    """Only a source-bound approved review can authorize scoring under its scope."""
     if not isinstance(context, Mapping):
         return False
     # This descriptive role is intentionally non-scoring, including legacy

@@ -1675,3 +1675,23 @@ def test_eaa_nutritional_credit_does_not_create_performance_trial_receipts():
     assert result['metadata']['contributing_record_assessments'] == []
     assert result['metadata']['evidence_result_state'] == 'evaluated_authority'
     assert result['metadata']['source_references'][0]['supports_claims'] == ['established_nutritional_role']
+
+
+@pytest.mark.parametrize(('canonical', 'name'), [
+    ('vitamin_c', 'Vitamin C'), ('beta_carotene', 'Beta-Carotene'),
+])
+def test_nutrient_source_citation_is_metadata_only(canonical, name, monkeypatch):
+    from scoring_v4.modules import generic_evidence as module
+    import scoring_reference_resolver as refs
+
+    row = _ingredient(canonical_id=canonical, name=name)
+    product = {'product_name': name, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]},
+               'evidence_data': {'clinical_matches': []}}
+    cited = module.score_evidence(product, apply_primary_floor=True)
+    assert cited['metadata']['source_references']
+    monkeypatch.setattr(refs, 'nutritional_role_reference', lambda canonical: None)
+    uncited = module.score_evidence(product, apply_primary_floor=True)
+    assert cited['score'] == uncited['score']
+    assert cited['components'] == uncited['components']
+    assert cited['metadata']['evidence_result_state'] == uncited['metadata']['evidence_result_state']
