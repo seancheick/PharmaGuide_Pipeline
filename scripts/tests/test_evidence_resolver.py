@@ -2101,6 +2101,8 @@ def test_qualified_nutrient_role_does_not_require_literal_form_key(canonical, na
 @pytest.mark.parametrize('source', [
     'Gamma-Tocopherol', 'D-gamma-tocopherol', 'Delta Tocopherol',
     'Beta-Tocopherol', 'Alpha-Tocotrienol', 'D-Mixed Tocotrienols',
+    'Alpha-tocopherol-free gamma-tocopherol',
+    'Gamma-tocopherol (not alpha-tocopherol)', 'Gamma-tocopherols',
 ])
 def test_nonalpha_vitamin_e_source_cannot_borrow_alpha_nutrition_authority(source):
     # Actual307570 CarotenAll has this canonical parent and Gamma-Tocopherol
@@ -2117,6 +2119,8 @@ def test_nonalpha_vitamin_e_source_cannot_borrow_alpha_nutrition_authority(sourc
 @pytest.mark.parametrize('source', [
     'D-alpha-tocopherol', 'dl-alpha-tocopheryl acetate',
     'd-alpha-tocopheryl succinate',
+    'd-alpha-tocopheryl acetate with mixed tocotrienols',
+    'mixed tocopherols with alpha-tocopherol',
 ])
 def test_alpha_vitamin_e_source_retains_nutritional_role(source):
     row = {'canonical_id': 'vitamin_e', 'name': source,

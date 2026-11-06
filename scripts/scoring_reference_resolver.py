@@ -227,19 +227,23 @@ def vitamin_e_alpha_material(source_text: str) -> Optional[bool]:
     None retains possible alpha in mixtures/unknown material for conservative
     exposure bounds; it is not affirmative nutritional-role proof.
     """
-    from normalization import normalize_text
+    from normalization import find_affirmative_label_match, normalize_text
 
     text = normalize_text(source_text or "")
-    tocopherol = bool(re.search(r"\btocopher(?:ol|yl)s?\b", text))
-    tocotrienol = bool(re.search(r"\btocotrienols?\b", text))
+    alpha = re.compile(r"\balpha[ -]+tocopher(?:ol|yl)s?\b")
+    if find_affirmative_label_match(alpha, text, spaced_free=True):
+        return True
+    tocopherol = bool(find_affirmative_label_match(
+        re.compile(r"\btocopher(?:ol|yl)s?\b"), text, spaced_free=True))
+    tocotrienol = bool(find_affirmative_label_match(
+        re.compile(r"\btocotrienols?\b"), text, spaced_free=True))
+    nonalpha = find_affirmative_label_match(
+        re.compile(r"\b(?:beta|gamma|delta)[ -]+tocopher(?:ol|yl)s?\b"),
+        text, spaced_free=True)
+    if nonalpha and "mixed" not in text and not tocotrienol:
+        return False
     if tocotrienol:
         return None if tocopherol else False
-    if not tocopherol or "mixed" in text:
-        return None
-    if re.search(r"\balpha[ -]+tocopher(?:ol|yl)\b", text):
-        return True
-    if re.search(r"\b(?:beta|gamma|delta)[ -]+tocopher(?:ol|yl)\b", text):
-        return False
     return None
 
 
