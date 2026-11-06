@@ -464,12 +464,15 @@ def unique_source_references(references: Any) -> List[Dict[str, Any]]:
         key = (identity.lower(), tuple(sorted(ref.get("supports_claims") or [])))
         pmid = str(ref.get("pmid") or "").strip()
         if pmid and pmid in seen_pmids:
-            for index, existing in enumerate(result):
-                if str(existing.get("pmid") or "").strip() == pmid:
-                    if set(existing) == {"pmid"} and set(ref) != {"pmid"}:
-                        result[index] = dict(ref)
-                    break
-            continue
+            if set(ref) == {"pmid"}:
+                continue
+            index = next((i for i, existing in enumerate(result)
+                          if set(existing) == {"pmid"}
+                          and str(existing["pmid"]).strip() == pmid), None)
+            if index is not None:
+                result[index] = dict(ref)
+                seen.add(key)
+                continue
         if key not in seen:
             seen.add(key)
             if pmid:

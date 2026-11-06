@@ -250,3 +250,12 @@ def test_source_reference_dedup_preserves_authored_metadata_over_pmid_only_fallb
                 'url': 'https://pubmed.ncbi.nlm.nih.gov/18184094/'}
     assert unique_source_references([authored, {'pmid': '18184094'}]) == [authored]
     assert unique_source_references([{'pmid': '18184094'}, authored]) == [authored]
+
+
+def test_source_reference_dedup_keeps_distinct_authored_claim_scopes():
+    from scoring_reference_resolver import unique_source_references
+    first = {'pmid': '18184094', 'title': 'Authored source',
+             'supports_claims': ['nutritional_intake']}
+    second = {**first, 'supports_claims': ['population_scope']}
+    assert unique_source_references([first, second, {'pmid': '18184094'}]) == [first, second]
+    assert unique_source_references([{'pmid': '18184094'}, first, second]) == [first, second]
