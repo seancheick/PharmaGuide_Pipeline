@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 656,
       "total_forms": 1477,
-      "total_form_aliases": 12305,
+      "total_form_aliases": 12300,
       "parents_with_parent_aliases": 152,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -53521,17 +53521,12 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Perilla frutescens seed oil contains alpha-linolenic acid (ALA). PMID 12323085 administered isotope-labelled ALA with a mixed meal to six young men; EPA and DPA appeared in circulation, while labelled DHA enrichment was not apparent under the study conditions. This is bounded ALA-metabolism context, not perilla-product bioequivalence, whole-oil absolute absorption, a form grade or proof of absent conversion in every population. The separate PMID 12591004 attribution and authored oil absorption calibration are not validated by this source check.",
+        "notes": "Perilla frutescens seed oil contains alpha-linolenic acid (ALA). PMID 12323085 administered isotope-labelled ALA with a mixed meal to six young men; EPA and DPA appeared in circulation, while labelled DHA enrichment was not apparent under the study conditions. This is bounded ALA-metabolism context, not perilla-product bioequivalence, whole-oil absolute absorption, a form grade or proof of absent conversion in every population. The separate PMID 12591004 attribution and authored oil absorption calibration are not validated by this source check. Identity-only alias correction reviewed by Agent, 2026-11-06: BeneGut is Amino Up's water-soluble Perilla leaf preparation, not seed oil (https://www.aminoup.jp/en/products/perillaextract/; manufacturer label https://www.gnc.com/on/demandware.static/-/Sites-GNC-Library/default/v1574951434331/pdf/215990_lbl.pdf). Generic extract and seed-extract wording does not establish an oil preparation.",
         "aliases": [
           "perilla oil",
-          "perilla extract",
           "perilla frutescens seed oil",
           "perilla frutescens oil",
-          "egoma oil",
-          "Benegut Perilla extract",
-          "benegut perilla (perilla frutescens) extract",
-          "perilla (perilla frutescens) extract",
-          "Perilla Seed Extract"
+          "egoma oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -53540,9 +53535,7 @@
           "range_high": null,
           "quality": "unknown"
         },
-        "source_form_aliases": [
-          "perilla frutescens seed extract"
-        ]
+        "source_form_aliases": []
       }
     },
     "match_rules": {

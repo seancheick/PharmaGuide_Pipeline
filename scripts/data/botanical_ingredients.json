@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-10-29",
-    "total_entries": 559,
+    "last_updated": "2026-11-06",
+    "total_entries": 560,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -10990,14 +10990,14 @@
       "latin_name": "Perilla frutescens",
       "aliases": [
         "benegut perilla leaf extract",
-        "Perilla frutescens",
         "perilla leaf extract",
-        "perilla aerial part",
-        "perilla aerial part extract"
+        "Benegut Perilla extract",
+        "benegut perilla (perilla frutescens) extract",
+        "Perilla frutescens leaf extract"
       ],
       "category": "leaf",
-      "notes": "Perilla frutescens (Lamiaceae) leaf. Shiso/Zi Su Ye in TCM. Contains rosmarinic acid and luteolin. Anti-allergic properties via lipoxygenase inhibition. Traditional respiratory and digestive herb.",
-      "last_updated": "2026-03-01",
+      "notes": "Perilla frutescens (Lamiaceae) leaf. Shiso/Zi Su Ye in TCM. Contains rosmarinic acid and luteolin. Anti-allergic properties via lipoxygenase inhibition. Traditional respiratory and digestive herb. Identity-only alias correction reviewed by Agent, 2026-11-06: Amino Up identifies its BeneGut preparation as a water-soluble extract of green Perilla leaves (https://www.aminoup.jp/en/products/perillaextract/); the manufacturer label identifies BeneGut perilla extract (leaf), 150 mg (https://www.gnc.com/on/demandware.static/-/Sites-GNC-Library/default/v1574951434331/pdf/215990_lbl.pdf). This identifies the named BeneGut preparation only; generic extract or seed-extract labels do not establish leaf identity. Existing UNII T4L5881Y68 was content-verified as PERILLA FRUTESCENS LEAF in the official GSRS API on 2026-11-06. No clinical-benefit, dose or seed-oil equivalence conclusion is added. The species-only alias Perilla frutescens does not establish leaf tissue; its Latin-name metadata is retained without using it as a leaf-preparation claim. Generic, species-only, seed-extract and aerial-part identity aliases are retained by the genus-level perilla_unspecified record; source-declared parts remain separate label facts.",
+      "last_updated": "2026-11-06",
       "external_ids": {
         "unii": "T4L5881Y68"
       },
@@ -11017,6 +11017,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "perilla_unspecified",
+      "standard_name": "Perilla",
+      "latin_name": "Perilla",
+      "aliases": [
+        "perilla extract",
+        "perilla (perilla frutescens) extract",
+        "Perilla frutescens",
+        "Perilla Seed Extract",
+        "perilla frutescens seed extract",
+        "perilla aerial part",
+        "perilla aerial part extract",
+        "perilla frutescens aerial part extract"
+      ],
+      "category": "herb",
+      "notes": "Genus-level identity-only record for Perilla labels that do not establish a modeled leaf preparation or seed oil. Printed species and plant-part wording remain source facts; this record does not infer a species, tissue, oil, standardization, clinical effect, dose benchmark or form grade. NCBI Taxonomy identifies Perilla as a genus in Lamiaceae (https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=48385), content-verified via its public taxonomy API by Agent on 2026-11-06. No clinical credit or numerical calibration is assigned.",
+      "last_updated": "2026-11-06",
+      "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
