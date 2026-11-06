@@ -32,8 +32,8 @@
     "statistics": {
       "total_parents": 656,
       "total_forms": 1477,
-      "total_form_aliases": 12306,
-      "parents_with_parent_aliases": 151,
+      "total_form_aliases": 12305,
+      "parents_with_parent_aliases": 152,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-11-05",
+    "last_updated": "2026-11-06",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -20051,7 +20051,6 @@
           "carnipure LCLT",
           "l-carnitine l-tartrate",
           "l-carnitine-l-tartrate",
-          "carnipure",
           "l-carnitine l- tartrate"
         ],
         "dosage_importance": 0.5,
@@ -20241,7 +20240,9 @@
         }
       ]
     },
-    "aliases": []
+    "aliases": [
+      "carnipure"
+    ]
   },
   "tmg_betaine": {
     "standard_name": "TMG (Trimethylglycine)",

@@ -38,6 +38,8 @@ def eligible_carnitine_sources(monkeypatch, enricher, clinical_entries):
     import evidence_resolver
     from scoring_v4.modules import generic_evidence
     from test_evidence_resolver import _approved_test_source
+    loaders = (generic_evidence._verified_ingredient_human_evidence_entries,
+               generic_evidence._verified_product_level_evidence_entries)
     sources = {}
     for source_id in ("INGR_L_CARNITINE", "BRAND_CARNIPURE"):
         original = deepcopy(clinical_entries[source_id])
@@ -69,7 +71,12 @@ def eligible_carnitine_sources(monkeypatch, enricher, clinical_entries):
     payload = enricher.databases["backed_clinical_studies"]
     monkeypatch.setitem(enricher.databases, "backed_clinical_studies", {**payload,
         "backed_clinical_studies": [sources.get(row["id"], row) for row in payload["backed_clinical_studies"]]})
-    return sources
+    yield sources
+    # These indexes depend on the canonical source owner replaced above. Do
+    # not let a synthetic approval context cache real-data exclusions for the
+    # next test after monkeypatch restores the published source owner.
+    for loader in loaders:
+        loader.cache_clear()
 
 
 
@@ -405,11 +412,42 @@ def test_brand_and_generic_carnitine_evidence_share_one_ingredient_group(
     assert payload["metadata"]["top_n_applied"] == 1
 
 
-def test_actual_carnitine_records_cannot_earn_preparation_only_credit():
+def test_reviewed_tartrate_source_cannot_lend_credit_to_unreviewed_base():
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
-    for source_id in ("INGR_L_CARNITINE", "BRAND_CARNIPURE"):
-        assert assess_clinical_source_review(reviewed_entries()[source_id])["is_complete"] is False
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment
+    assert assess_clinical_source_review(reviewed_entries()["INGR_L_CARNITINE"])["is_complete"] is False
+    assert assess_clinical_source_review(reviewed_entries()["BRAND_CARNIPURE"])["is_complete"] is True
     product = _single_l_carnitine_product(name="L-Carnitine", matched_form="L-Carnitine Base")
     result = score_evidence(product, apply_primary_floor=True)
     assert result["score"] == 0
     assert result["metadata"]["recovered_matches"] == []
+    # A completed tartrate exclusion must not hide the base's unread sources.
+    resolution = resolve_evidence_for_row(
+        product["ingredient_quality_data"]["ingredients_scorable"][0], product,
+    )
+    assert resolution.points_eligible is False
+    assert _resolved_evidence_assessment(resolution)[0] == "not_yet_evaluated"
+
+
+@pytest.mark.parametrize("name, eligible", [
+    ("L-Carnitine L-Tartrate", True),
+    ("Carnipure L-Carnitine Tartrate", True),
+    ("Carnipure", False),
+    ("L-Carnitine", False),
+    ("L-Carnitine Fumarate", False),
+    ("Acetyl-L-Carnitine", False),
+])
+def test_actual_reviewed_carnipure_source_requires_printed_tartrate(name, eligible):
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from evidence_resolver import resolve_evidence_for_row
+
+    source = reviewed_entries()["BRAND_CARNIPURE"]
+    assert assess_clinical_source_review(source)["is_complete"]
+    # Deliberately misleading enriched form: only the retained label can prove
+    # preparation identity, including when the trademark is present.
+    product = _single_l_carnitine_product(name=name, matched_form="L-Carnitine L-Tartrate")
+    row = product["ingredient_quality_data"]["ingredients_scorable"][0]
+    resolution = resolve_evidence_for_row(row, product)
+    assert resolution.points_eligible is eligible
+    assert (score_evidence(product, apply_primary_floor=True)["score"] > 0) is eligible
