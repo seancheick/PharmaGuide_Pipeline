@@ -1,4 +1,4 @@
-November 6 current audit: #402 implements preserved positive-credit/pending-review completeness and source-backed form qualification. A real five-product warning-loss regression was caught before merge; verified primary identity and source-aware preflight repairs are implemented. Final affected comparisons, stable-source local checks and exact CI remain pending in the existing LEDGER. No fresh global count or release approval is asserted.
+November 6 audit integrated: #402 merged at2ece572791 after exactc2f33ce5b passed all8fast CI shards and Merge readiness, final local564/24declared skips and independent review. Final36 raw comparisons preserve clinical warning facts and physical label amounts;72 actual Product Detail/Compare component checks pass. Earned Evidence remains visible separately from unfinished review. Source qualification is complete for this batch; a fresh whole-catalog census, export/alert/signature and signed-device acceptance remain open in the existing LEDGER.
 # PharmaGuide master completion plan
 
 ## November 5 — current run audited; scientific qualification open
