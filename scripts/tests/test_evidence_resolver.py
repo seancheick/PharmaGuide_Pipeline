@@ -1950,15 +1950,27 @@ def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifac
     row['quantity'] = amount
     result = er.resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
-    assert result.reason_code == 'reference_only_clinical_record'
+    assert result.reason_code == 'clinical_form_mismatch'
     artifact = build_scored_artifact(product)
     assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
     assert 'evidence_assessment_incomplete' not in artifact['assessment_readiness']['release_assessment']['blockers']
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
-    assessments = result.owner_facts['backed_clinical_studies']['assessments']
-    assert {a['id']: a['reason_code'] for a in assessments} == {
+    # The now-reviewed tartrate source is form-excluded too. Inspect each
+    # canonical decision: the valid-source branch need not expose the
+    # reference-only branch's aggregate diagnostic payload.
+    from clinical_applicability import assess_clinical_applicability, reviewed_entries
+    decisions = {}
+    for source_id in ('INGR_L_CARNITINE', 'INGR_ACETYL_L_CARNITINE', 'BRAND_CARNIPURE'):
+        source = {**reviewed_entries()[source_id], 'ingredient': row['name'],
+                  'matched_canonical_ids': ['l_carnitine'],
+                  'matched_source_row_refs': [row['raw_source_path']]}
+        decisions[source_id] = assess_clinical_applicability(
+            product, source, assess_amount=False, require_claim_alignment=False,
+        )['reason_code']
+    assert decisions == {
         'INGR_L_CARNITINE': 'clinical_preparation_mismatch',
         'INGR_ACETYL_L_CARNITINE': 'reference_only_clinical_record',
+        'BRAND_CARNIPURE': 'clinical_form_mismatch',
     }
 
 

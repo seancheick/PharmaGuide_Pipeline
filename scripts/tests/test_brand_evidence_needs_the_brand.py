@@ -238,7 +238,9 @@ def test_complete_material_evidence_never_belongs_to_one_constituent(dsld_id):
         if dsld_id == '224676':
             # The material blend also owns caffeine; retaining that independent
             # reviewed source must not attribute BCAA research to free leucine.
-            assert points == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48}
+            # Its separate printed tartrate row now has its own reviewed source.
+            assert points == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48,
+                              'l_carnitine': 2.295}
             assert artifact['quality_pillars_v4']['evidence']['score'] == 15.6
         else:
             # The separate, source-qualified nutritional-role floor may beat
@@ -440,7 +442,8 @@ def test_real_complete_bcaa_material_inherits_its_primary_members_evidence_purpo
     evidence = artifact['_v4_module_breakdown']['dimensions']['evidence']['metadata']
     assert evidence['primary_evidence_floor'] == 14.0
     assert evidence['primary_evidence_floor_canonical'] == 'caffeine'
-    assert evidence['ingredient_points'] == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48}
+    assert evidence['ingredient_points'] == {'branched_chain_amino_acids': 4.59, 'caffeine': 6.48,
+                                            'l_carnitine': 2.295}
     receipts = evidence['contributing_record_assessments']
     assert [row['id'] for row in receipts] == ['INGR_CAFFEINE']
     assert receipts[0]['source_review']['is_complete'] is True
