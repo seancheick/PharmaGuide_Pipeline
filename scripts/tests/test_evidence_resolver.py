@@ -2015,3 +2015,54 @@ def test_unfinished_positive_source_does_not_become_completed_noncredit(canonica
     result = er.resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
     assert _resolved_evidence_assessment(result)[0] == 'not_yet_evaluated'
+
+
+@pytest.mark.parametrize('canonical,name,form,nutrient', [
+    # Actual184326: printed Vitamin A, resolved natural beta-carotene,7500mcg.
+    ('beta_carotene', 'Vitamin A', 'natural beta-carotene (from dunaliella salina)', 'vitamin_a'),
+    ('beta_carotene', 'Beta-Carotene', 'natural beta-carotene (from dunaliella salina)', 'vitamin_a'),
+    ('niacin', 'Niacin', None, 'niacin'),
+])
+def test_existing_dri_alias_and_source_nutrient_share_row_authority(canonical, name, form, nutrient):
+    from scoring_v4.modules.generic_evidence import _purpose_essential_canonical
+    product = _eaa_product(canonical, name, form, quantity=7500, unit='mcg',
+                           mapped_identity=True, scoreable_identity=True, identity_disposition='clean')
+    row = product['activeIngredients'][0]
+    facts = er.nutrition_authority_for_row(row)
+    assert facts and facts['nutrient'] == nutrient
+    assert facts['is_essential'] is True
+    assert _purpose_essential_canonical(product) == canonical
+    assert row['quantity'] == 7500 and row['unit'] == 'mcg'
+    assert product['evidence_data']['clinical_matches'] == []
+
+
+@pytest.mark.parametrize('canonical', ['lutein', 'lycopene', 'zeaxanthin', 'boron', 'silicon', 'unrecognized_material'])
+def test_dri_row_authority_never_comes_from_marketing_nutrient_name(canonical):
+    product = _eaa_product(canonical, 'Vitamin A', None)
+    assert er.nutrition_authority_for_row(product['activeIngredients'][0]) is None
+
+
+@pytest.mark.parametrize('changes', [
+    {'mapped': False}, {'mapped_identity': False}, {'scoreable_identity': False},
+    {'identity_disposition': 'ambiguous'}, {'identity_disposition': 'identity_conflict'},
+    {'form_match_status': 'unmapped'}, {'matched_form': 'unsupported derivative'},
+    {'source_section': 'inactive'}, {'is_excipient': True},
+])
+def test_source_nutrient_authority_preserves_identity_and_preparation_vetoes(changes):
+    product = _eaa_product('beta_carotene', 'Vitamin A',
+                           'natural beta-carotene (from dunaliella salina)', **changes)
+    assert er.nutrition_authority_for_row(product['activeIngredients'][0]) is None
+
+
+@pytest.mark.parametrize('relationship', ['wrong_stereoisomer', 'different_compound', 'not_a_nutrient_source'])
+def test_source_nutrient_authority_never_overrides_a_typed_form_exclusion(monkeypatch, relationship):
+    import copy
+    import scoring_reference_resolver as references
+    form_name = 'natural beta-carotene (from dunaliella salina)'
+    parent = copy.deepcopy(references.iqm_reference_entry('beta_carotene'))
+    parent['forms'][form_name]['parent_relationship'] = relationship
+    original = references.iqm_reference_entry
+    monkeypatch.setattr(references, 'iqm_reference_entry',
+                        lambda canonical: parent if canonical == 'beta_carotene' else original(canonical))
+    row = _eaa_product('beta_carotene', 'Vitamin A', form_name)['activeIngredients'][0]
+    assert er.nutrition_authority_for_row(row) is None

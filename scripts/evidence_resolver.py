@@ -532,20 +532,31 @@ def _load_iqm() -> Dict[str, Any]:
     return {k: v for k, v in raw.items() if k != "_metadata" and isinstance(v, dict)}
 
 
-def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Optional[Dict[str, Any]] = None) -> bool:
-    """Use the scoring owner's DRI set, with the shared reference owner's aliases.
-
-    IQM categories and vitamin-like names classify ingredients; neither proves
-    established nutritional authority. A reference may contain only a safety
-    bound or another non-authority assessment, so its presence alone is not enough.
-    """
+def _dietary_nutrient_authority(canonical: str) -> Optional[Dict[str, Any]]:
+    """Join established DRI authority to a resolved identity, never label prose."""
     from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
+    from scoring_reference_resolver import iqm_reference_entry
 
-    if _norm(canonical) in DRI_ESSENTIAL_NUTRIENTS:
-        return True
-    reference = rda_ul_reference_entry(canonical_id=canonical, name=name) or {}
+    canonical = _norm(canonical)
+    if canonical in DRI_ESSENTIAL_NUTRIENTS:
+        return {"nutrient": canonical, "is_essential": True}
+    identity = iqm_reference_entry(canonical) or {}
+    reference = rda_ul_reference_entry(canonical_id=canonical,
+                                      aliases=identity.get("nutrient_group_id")) or {}
     reference_keys = [reference.get("id"), *(reference.get("aliases") or [])]
-    return any(_norm(key) in DRI_ESSENTIAL_NUTRIENTS for key in reference_keys)
+    if any(_norm(key) in DRI_ESSENTIAL_NUTRIENTS for key in reference_keys):
+        # A provitamin source establishes the nutrient's role, not a claim
+        # that the source chemical is itself indispensable or therapeutic.
+        return {"nutrient": reference.get("id"), "is_essential": True}
+    return None
+
+
+def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Optional[Dict[str, Any]] = None) -> bool:
+    """Established DRI identity/aliases and curated nutrient grouping only.
+
+    A name, IQM category or UL-only reference cannot establish this authority.
+    """
+    return _dietary_nutrient_authority(canonical) is not None
 
 
 def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
@@ -561,11 +572,18 @@ def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, An
             or is_lent_blend_mass(dict(row))):
         return None
     if canonical not in EAA_CANONICALS:
-        from scoring_v4.modules.generic_evidence import DRI_ESSENTIAL_NUTRIENTS
-
-        if canonical in DRI_ESSENTIAL_NUTRIENTS:
-            return {"nutrient": canonical, "is_essential": True}
-        return None
+        if (any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
+                or _norm(row.get("identity_disposition")) in {"ambiguous", "identity_conflict"}
+                or _norm(row.get("form_match_status")) == "unmapped"):
+            return None
+        forms = (iqm_reference_entry(canonical) or {}).get("forms") or {}
+        form_ids = [row.get("matched_form"), row.get("form_id")]
+        form_ids.extend(form.get("form_key") for form in row.get("matched_forms") or []
+                        if isinstance(form, Mapping))
+        if any(form_id and (form_id not in forms or parent_relationship(forms[form_id]))
+               for form_id in form_ids):
+            return None
+        return _dietary_nutrient_authority(canonical)
     reference = nutritional_role_reference(canonical)
     if (not reference or _norm(row.get("form_match_status")) != "mapped"
             or any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
