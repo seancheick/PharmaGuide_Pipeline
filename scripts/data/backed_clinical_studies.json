@@ -22860,14 +22860,14 @@
         "Cardiovascular/Heart Health",
         "Increase Energy"
       ],
-      "notes": "Multiple human exercise RCTs showing body composition and performance benefits at 2-2.5g/day. Also established as methyl donor for homocysteine reduction (FDA-approved for homocystinuria). Previously misclassified as preclinical.",
+      "notes": "The two currently declared exercise RCTs report preparation- and outcome-specific findings, not general exercise or cardiovascular efficacy. PMID30064450 studied BetaPower2.5g/day in untrained young women undertaking resistance training: body-fat outcomes improved, while strength/power did not show superior between-group effects. PMID37409757 studied Medicaline capsules in trained men:Fight Gone Bad repetitions improved,while Wingate power/body composition did not. Both existing contexts remain approved non-scoring. The2024meta-analysis lower-body-strength question remains under source/method reconciliation; neither a generic credit conclusion nor a categorical no-efficacy conclusion is established by this note.",
       "study_type": "rct_multiple",
       "published_studies": [
         "RCT",
         "meta-analysis"
       ],
       "last_updated": "2026-10-28",
-      "notable_studies": "Human randomized trials report that betaine supplementation can improve body-composition or performance endpoints in trained populations. In collegiate females, a double-blind placebo-controlled trial (PMID 30064450) improved body-composition outcomes, and a later crossover RCT in CrossFit-trained adults (PMID 37409757) improved performance-related measures and testosterone without materially changing Wingate power.",
+      "notable_studies": "PMID30064450:23young women completed;BetaPower2.5g/day with supervised resistance training;primary body-fat percentage surrogate positive,secondary squat/bench1RM and power null between groups. PMID37409757:43male recreational CrossFit practitioners;Medicaline capsules2.5or5g/day for21-day crossover periods;Fight Gone Bad repetitions positive,Wingate/body-composition null,and hormone findings mixed. Neither currently declared trial establishes homocysteine reduction,cardiovascular-event prevention or a generic energy benefit. PMID39514262 is retained in the private source-review packet with a fragile positive lower-body pooled signal and unresolved primary-source/method discrepancies;it is not yet a new credit-bearing record.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -47030,30 +47030,118 @@
         {
           "context_schema_version": "1.1.0",
           "context_id": "l_glutamine_33809996_qualification_pending",
-          "components": [
-            "INGR_L_GLUTAMINE"
-          ],
           "source_pmids": [
             "33809996"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "L-glutamine",
+            "preparation": "Oral L-glutamine powder10g/day with10g maltodextrin in250mLwater;not N-acetyl-L-glutamine,alanyl-glutamine/Sustamine or an unspecified glutamine complex"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "muscle_strength",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "glutamine_33809996",
+          "population": {
+            "age_group": "adult",
+            "description": "44women in Brazil;sample ages60-80years(mean69.2),while eligibility text allowed60-85. Pre-existing exercise cohort21(11Gln/10placebo) and non-exercising cohort23(12Gln/11placebo). Exercise status was established for at least24months,not randomized by this trial."
+          },
+          "study_design": "Pre/post30-day double-blind study with randomized supplement assignment within pre-existing exercising/non-exercising cohorts;four smallcells. Authors describe two major endpoint families(antioxidant capacity,and muscle strength/glycemia),without a formal primary/secondary hierarchy for individual outcomes.",
+          "review_status": "clinician_approved",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewer": "Codex L-glutamine source reviewer; independently full-text and figure-checked by Codex glycine/blueberry source reviewer",
             "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
-          },
-          "dose": {
-            "source_provenance": {
-              "pmid": "33809996",
-              "source_url": "https://pubmed.ncbi.nlm.nih.gov/33809996/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
-            }
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-delegated existing-policy source review. Official primary Methods/Results,Figures2-4 and their comparison brackets were read independently;reported supplement benefits are within-group changes,not an established glutamine-versus-placebo treatment contrast. Completed bounded non-scoring source assessment,not physician attribution or evidence of no effect."
           },
           "limitations": [
-            "Full text has been read; source-specific qualification remains unfinished. Reported within-group changes must not be promoted to a glutamine-versus-placebo treatment effect.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
-          ]
+            "The source names two major endpoint families;the assessment is complete for this reported study and is not held merely because its abstract lacks a named primary. Formal primary/secondary rank for individual outcomes is not invented.",
+            "Published supplement benefits and effect sizes are predominantly within-group pre/post comparisons. Visual brackets inFigures2-4 indicate own-baseline changes or exercising-versus-non-exercising contrasts,not a demonstrated isolated glutamine-versus-placebo difference-in-change. Significance in one group but not another is not itself a treatment effect.",
+            "Under the existing NON_EFFICACY_OUTCOME_ROLES rule,within_group_change cannot qualify affirmative ingredient-purpose credit. This is a bounded nonqualifying source disposition,not proof that glutamine is ineffective or harmful.",
+            "Knee isokinetic strength/power is a directly measured muscle-strength/performance endpoint,consistent with existing patient_important strength/power classifications. That kind is restricted to the measured muscle-strength question:it does not establish glutamine-caused reductions in falls/disability or improved daily mobility. Table2timed-up-and-go differences describe pre-existing exercise-group baseline differences,not a glutamine treatment response.",
+            "BothGSH andGSSG increased;reductive power did not differ. TBARs decreased in all subgroups includingplacebo;do not attribute that shared time trend to glutamine or call it a demonstrated treatment-versus-placebo antioxidant benefit.",
+            "Figure4caption/plot mapping is(a)extensor torque,(b)flexor torque,(c)extensor average power,(d)flexor average power. Some Results prose cites different panelletters;this context follows plotted labels/caption and retains the reporting limitation.",
+            "Smallcells(10-12),multiple outcomes,baseline exercise/lifestyle differences,more arthritis/depression in the sedentary group and incomplete treatment-factor/interaction reporting constrain causal inference. Exercise participation was not randomized.",
+            "No positive evidence transfer to healthy young athletes,sportsrecovery,general diabetes treatment or PI-IBS-D. This distinct Brazilian older-women trial is not a replication of30108163 IBS outcomes.",
+            "10g/day for30days is a studied assignment,not a generic efficacyminimum,optimaldose,UL or safety finding. The protocol statement about discomfort above30g/day is based on personalcommunications and does not establish a warning threshold.",
+            "Preserve30108163 as the only user-authorized0.85 interpretation with its existingpositive_moderate grade and15g/day56-day source scope. Other unresolved source/preparation questions remain pending;finishing this non-scoring review does not complete the ingredient/product.",
+            "The context_id retains the existing source slot identifier;review_status,not the historical identifier suffix,is the sole status owner. No additional study or duplicate context is created."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              10000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 30,
+            "administration_frequency": "Once daily at lunch for30days",
+            "dosage_forms": [
+              "Oral powder mixture in250mLwater"
+            ],
+            "co_therapies": [
+              "10g maltodextrin with active glutamine versus20g maltodextrin in comparator",
+              "Exercising cohort continued pre-existing supervised combined aerobic/resistance training60-75minutes,3nonconsecutive sessions/week;non-exercising cohort maintained usual routine"
+            ],
+            "reported_regimen": "10gL-glutamine+10gmaltodextrin daily in250mLwater at lunch,for30days,versus20gmaltodextrin inwater",
+            "normalization": {
+              "basis": "Assigned L-glutamine10g/day x1000mg/g=10000mg/day;30-dayprotocol. Maltodextrin is not counted as glutamine. No general clinical threshold,optimal intake,upperlimit or equivalence is inferred."
+            },
+            "source_provenance": {
+              "pmid": "33809996",
+              "location": "Methods2.1-2.2,2.5-2.9;Results3;Figures2-4 and captions(visually checked);Discussion;Table1design andTable2baselinecontext",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8004646/"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Knee extensor/flexor peak torque increased from own baseline in Gln subgroups;extensor average power increased in exercisedGln subgroup. Figure4 does not present an isolated glutamine-versus-placebo difference-in-change",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "D-fructosamine decreased from own baseline in both Gln subgroups;insulin decreased from own baseline in non-exercisingGln subgroup. Reported intergroup contrasts compare exercising with non-exercising cohorts",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "ReducedGSH and oxidizedGSSG increased from own baseline in Gln subgroups;these changes do not by themselves establish improved redox balance or patient benefit",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "No differences were observed in reported reductive-power ratio(Figure3C)",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "Flexor knee average power showed no reported intergroup or intragroup difference(Figure4d);this is a measured strength/performance endpoint,not evidence on falls,disability or daily mobility",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "within_group_change"
+            }
+          ],
+          "comparator": "20g maltodextrin in250mLwater daily at lunch,versus10gL-glutamine plus10g maltodextrin;powder appearance/taste/texture matched"
         },
         {
           "context_schema_version": "1.1.0",

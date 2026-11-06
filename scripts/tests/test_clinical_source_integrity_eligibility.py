@@ -767,3 +767,33 @@ def test_pending_source_context_can_retain_unknown_facts_without_inventing_a_reg
     assert validate_ingredient_context(forged)
     asserted = {**context, 'dose':{**context['dose'], 'values':[15000]}}
     assert validate_ingredient_context(asserted)
+
+
+def test_glutamine_older_women_review_finishes_without_borrowing_ibs_credit():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_review_finished
+    from clinical_applicability import qualifying_purpose_outcomes
+    record = reviewed_entries()['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['33809996'])
+    assert context_review_finished(context)
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context['scoring_eligible'] is False
+    assert context['dose']['values'] == [10000]
+    assert context['dose']['duration_days'] == 30
+    assert {o['outcome_role'] for o in context['outcomes']} == {'within_group_change'}
+    assert qualifying_purpose_outcomes(context) == ([], False)
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert len([c for c in record['study_contexts'] if not context_review_finished(c)]) == 8
+
+
+def test_betaine_exercise_prose_keeps_positive_and_null_outcomes_scoped():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['PRECLIN_BETAINE_ANHYDROUS']
+    assert 'not general exercise or cardiovascular efficacy' in record['notes']
+    assert 'strength/power did not show superior between-group effects' in record['notes']
+    assert 'Fight Gone Bad repetitions positive' in record['notable_studies']
+    assert 'Wingate/body-composition null' in record['notable_studies']
+    assert 'FDA-approved' not in record['notes']
+    assert all(c['scoring_eligible'] is False for c in record['study_contexts'])
+    assert not assess_clinical_source_review(record)['is_complete']
