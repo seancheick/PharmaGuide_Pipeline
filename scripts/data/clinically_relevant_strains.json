@@ -3,7 +3,7 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.1",
-    "last_updated": "2026-11-05",
+    "last_updated": "2026-11-06",
     "total_entries": 132,
     "data_source": null,
     "version": "2.4.1",
@@ -784,7 +784,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham",
+            "countersigned_at": "2026-11-01",
+            "countersign_note": "Sean attested on 2026-11-06 that Dr Pham approved this exact existing context (lgg_pediatric_acute_gastroenteritis_30462938; PMID 30462938) on 2026-11-01. Approval is limited to the recorded preparation, population, regimen and outcomes, including null, surrogate and source-extraction restrictions. Original delegated research reviewer, date and basis are retained; no broader clinical efficacy, positive grading or general Dose benchmark is approved."
           }
         }
       ],
@@ -5148,7 +5151,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham",
+            "countersigned_at": "2026-11-01",
+            "countersign_note": "Sean attested on 2026-11-06 that Dr Pham approved this exact existing context (heal9_moderate_stress_cognition_37571403; PMID 37571403) on 2026-11-01. Approval is limited to the recorded preparation, population, regimen and outcomes, including null, surrogate and source-extraction restrictions. Original delegated research reviewer, date and basis are retained; no broader clinical efficacy, positive grading or general Dose benchmark is approved."
           }
         }
       ],
@@ -5352,7 +5358,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham",
+            "countersigned_at": "2026-11-01",
+            "countersign_note": "Sean attested on 2026-11-06 that Dr Pham approved this exact existing context (p8700_metabolic_syndrome_37506599; PMID 37506599) on 2026-11-01. Approval is limited to the recorded preparation, population, regimen and outcomes, including null, surrogate and source-extraction restrictions. Original delegated research reviewer, date and basis are retained; no broader clinical efficacy, positive grading or general Dose benchmark is approved."
           }
         }
       ],
@@ -12912,7 +12921,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham",
+            "countersigned_at": "2026-11-01",
+            "countersign_note": "Sean attested on 2026-11-06 that Dr Pham approved this exact existing context (me3_healthy_volunteers_oxidative_stress_16080791; PMID 16080791) on 2026-11-01. Approval is limited to the recorded preparation, population, regimen and outcomes, including null, surrogate and source-extraction restrictions. Original delegated research reviewer, date and basis are retained; no broader clinical efficacy, positive grading or general Dose benchmark is approved."
           }
         }
       ],
@@ -13550,7 +13562,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham",
+            "countersigned_at": "2026-11-01",
+            "countersign_note": "Sean attested on 2026-11-06 that Dr Pham approved this exact existing context (b1714_impaired_sleep_quality_38355674; PMID 38355674) on 2026-11-01. Approval is limited to the recorded preparation, population, regimen and outcomes, including null, surrogate and source-extraction restrictions. Original delegated research reviewer, date and basis are retained; no broader clinical efficacy, positive grading or general Dose benchmark is approved."
           }
         },
         {
@@ -13630,7 +13645,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham",
+            "countersigned_at": "2026-11-01",
+            "countersign_note": "Sean attested on 2026-11-06 that Dr Pham approved this exact existing context (b1714_low_mood_42060410; PMID 42060410) on 2026-11-01. Approval is limited to the recorded preparation, population, regimen and outcomes, including null, surrogate and source-extraction restrictions. Original delegated research reviewer, date and basis are retained; no broader clinical efficacy, positive grading or general Dose benchmark is approved."
           }
         }
       ],
@@ -15054,7 +15072,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham",
+            "countersigned_at": "2026-11-01",
+            "countersign_note": "Sean attested on 2026-11-06 that Dr Pham approved this exact existing context (uabla12_ibs_three_arm_32019158; PMID 32019158) on 2026-11-01. Approval is limited to the recorded preparation, population, regimen and outcomes, including null, surrogate and source-extraction restrictions. Original delegated research reviewer, date and basis are retained; no broader clinical efficacy, positive grading or general Dose benchmark is approved."
           }
         }
       ],
@@ -21154,7 +21175,10 @@
             "reviewed_at": "2026-09-22T15:34:46Z",
             "scope": "identity_dose_outcome_applicability",
             "basis": "scripts/audits/closure_20260921/CODEX_AUDIT_RESPONSE_20260922.json",
-            "decision": "approve"
+            "decision": "approve",
+            "countersigned_by": "Dr Pham",
+            "countersigned_at": "2026-11-01",
+            "countersign_note": "Sean attested on 2026-11-06 that Dr Pham approved this exact existing context (lafti_l10_elite_athletes_urti_27363733; PMID 27363733) on 2026-11-01. Approval is limited to the recorded preparation, population, regimen and outcomes, including null, surrogate and source-extraction restrictions. Original delegated research reviewer, date and basis are retained; no broader clinical efficacy, positive grading or general Dose benchmark is approved."
           }
         }
       ],
