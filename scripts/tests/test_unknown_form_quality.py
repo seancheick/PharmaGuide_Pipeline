@@ -1541,3 +1541,60 @@ def test_standard_name_guard_retains_unknown_identity_without_inventing_brand_or
     assert match['bio_score'] == unknown_form_quality(quality[canonical])['bio_score']
     assert enricher._row_form_match_status(match, match) == 'n/a'
     assert not enricher._is_specific_form_match(match, quality)
+
+
+@pytest.mark.parametrize('label,standard,canonical,forms,notes,expected', [
+    # Exact retained Clean rows from the bounded actual96 comparison. Repeated
+    # labels cover the same source class; IDs are in the private source receipt.
+    ('Rosehip Fruit Extract', 'Rose Hips', 'rose_hips',
+     [{'name': 'extract', 'source': 'name_extraction'}], None, 'rose hips extract'),
+    ('Rosehip Fruit Extract', 'Rose Hips', 'rose_hips',
+     [{'name': 'extract', 'source': 'name_extraction'}], '10:1', 'rose hips extract'),
+    ('Glycine, Powder', 'L-Glycine', 'l_glycine', [], 'free-form', 'l-glycine powder'),
+    ('Methylsulfonyl-Methane', 'MSM (Methylsulfonylmethane)', 'msm', [], None,
+     'MSM (methylsulfonylmethane)'),
+    ('organic Passion Flower extract', 'Passionflower', 'passionflower',
+     [{'name': 'extract', 'source': 'name_extraction'},
+      {'name': 'organic', 'source': 'name_extraction'}], None, 'passionflower extract'),
+    ('Passion Flower 4:1 extract', 'Passionflower', 'passionflower',
+     [{'name': 'extract', 'source': 'name_extraction'}], None, 'passionflower extract'),
+    ('Passion Flower vine extract', 'Passionflower', 'passionflower',
+     [{'name': 'extract', 'source': 'name_extraction'}], None, 'passionflower extract'),
+    ('dry cold pressed Sunflower seed oil', 'Sunflower Oil', 'sunflower_oil', [], None,
+     'sunflower oil'),
+    ('Antarctic Krill (Euphausia superba) Oil', 'Krill Oil', 'krill_oil', [], None,
+     'standard krill oil'),
+])
+def test_source_owned_form_aliases_survive_a_generic_standard_name(
+    enricher, label, standard, canonical, forms, notes, expected,
+):
+    match = enricher._match_quality_map(label, standard,
+        enricher.databases['ingredient_quality_map'], cleaned_forms=forms,
+        cleaner_canonical_id=canonical, row_notes=notes)
+    assert match['canonical_id'] == canonical
+    assert match['form_id'] == expected
+    assert enricher._row_form_match_status(match, match) == 'mapped'
+
+
+def test_empty_normalized_form_alias_cannot_establish_source_disclosure(enricher):
+    quality = copy.deepcopy(enricher.databases['ingredient_quality_map'])
+    quality['l_carnitine']['forms']['l-carnitine base (free form)']['aliases'].append('---')
+    match = enricher._match_quality_map('???', 'L-Carnitine', quality,
+                                      cleaner_canonical_id='l_carnitine')
+    assert match['form_id'] == 'l-carnitine (unspecified)'
+
+
+@pytest.mark.parametrize('raw,standard,canonical,excluded', [
+    ('red not methylsulfonylmethane', 'MSM (Methylsulfonylmethane)', 'msm',
+     'MSM (methylsulfonylmethane)'),
+    ('Methylsulfonyl-Methane-free', 'MSM (Methylsulfonylmethane)', 'msm',
+     'MSM (methylsulfonylmethane)'),
+    ('Rosehip powder without extract', 'Rose Hips', 'rose_hips', 'rose hips extract'),
+    ('Rosehip Fruit no extract', 'Rose Hips', 'rose_hips', 'rose hips extract'),
+])
+def test_negated_source_aliases_do_not_supply_a_standard_name_form(
+    enricher, raw, standard, canonical, excluded,
+):
+    match = enricher._match_quality_map(raw, standard,
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id=canonical) or {}
+    assert match.get('form_id') != excluded

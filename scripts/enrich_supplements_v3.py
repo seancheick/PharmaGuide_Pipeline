@@ -10509,19 +10509,34 @@ class SupplementEnricherV3:
             if (candidate.get("form_key")
                     and self._is_specific_form_match(candidate.get("match_data"), quality_map)
                     and candidate.get("match_source") == 1
-                    and self._normalize_text(candidate.get("matched_alias") or "") in generic_names
-                    and not norm_module.find_affirmative_label_match(
-                        re.compile(r"(?<!\w)" + re.escape(self._normalize_text(
-                            candidate.get("matched_alias") or "")) + r"(?!\w)", re.I),
-                        self._normalize_text(ing_name),
-                    )):
-                return
+                    and self._normalize_text(candidate.get("matched_alias") or "") in generic_names):
+                form = (parent_data.get("forms") or {}).get(candidate["form_key"]) or {}
+                source_aliases = {
+                    self._norm_form_name(alias)
+                    for alias in [candidate["form_key"], *(form.get("aliases") or [])]
+                    if alias
+                }
+                # Reuse the matcher's retained raw-label variants (not the
+                # standardized/base candidates) and form punctuation owner.
+                # A source-owned alias or explicit preparation still proves
+                # this form even when a generic standardName won the tier.
+                if not any(
+                    norm_module.find_affirmative_label_match(
+                        re.compile(r"(?<!\w)" + re.escape(alias) + r"(?!\w)", re.I),
+                        self._norm_form_name(value), spaced_free=True,
+                    )
+                    for value, source in normalized_candidates if source == 0
+                    for alias in source_aliases if alias
+                ):
+                    return
             # A bare parent alias cannot turn a printed powder/dried material
             # into an extract. Retain the parent and its shared unknown
             # form treatment; row-owned explicit extract forms remain valid.
             if (
-                re.search(r"\b(?:powder|dried)\b", ing_name, re.I)
-                and not re.search(r"\bextract\b", ing_name, re.I)
+                re.search(r"\b(?:powder|dried|extract)\b", ing_name, re.I)
+                and not norm_module.find_affirmative_label_match(
+                    re.compile(r"\bextract\b", re.I), ing_name, spaced_free=True,
+                )
                 and re.search(r"\bextract\b", _resolved_candidate_form_id(candidate) or "", re.I)
             ):
                 return
