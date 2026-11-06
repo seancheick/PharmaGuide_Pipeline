@@ -584,6 +584,38 @@ def test_assembled_tier_matches_shipped_score() -> None:
     assert out["quality_tier"] == qs._tier(qs.shipped_whole_score(out["quality_score_v4_100"]))
 
 
+def test_public_score_reuses_shared_config_without_whole_config_copies(monkeypatch):
+    import copy
+    import importlib
+    from scoring_v4 import quality_score as qs, quality_score_config
+    from scoring_v4.modules import generic_formulation
+
+    cfg = quality_score_config.config()
+    before = copy.deepcopy(cfg)
+    expected = qs.assemble_quality_score(_shadow())
+    reads, copies = [], []
+    original_read = Path.read_text
+    original_copy = copy.deepcopy
+
+    def read(path, *args, **kwargs):
+        if path.name == "quality_score.json":
+            reads.append(path)
+        return original_read(path, *args, **kwargs)
+
+    def clone(value, *args, **kwargs):
+        if isinstance(value, dict) and {"pillars", "tiers", "suppression"} <= value.keys():
+            copies.append(value)
+        return original_copy(value, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", read)
+    monkeypatch.setattr(copy, "deepcopy", clone)
+    importlib.reload(generic_formulation)
+    assert qs.assemble_quality_score(_shadow()) == expected
+    assert quality_score_config.config() == before
+    assert reads == []
+    assert copies == []
+
+
 # ---- reason integrity ------------------------------------------------------
 
 def test_every_pillar_has_a_reason() -> None:

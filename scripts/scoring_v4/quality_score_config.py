@@ -3,8 +3,8 @@
 Leaf module: holds NO scoring logic and imports NO scoring module, so every
 scoring module can read its calibration magnitudes from here without an import
 cycle (§13 lock stays satisfied — values come from config, logic stays in the
-modules). Mirrors the cached-load pattern in quality_score.py._config, but is
-importable by the low-level dimension modules.
+modules). Public score assembly and the low-level dimension modules read the
+same parsed config; consumers treat it as read-only for the process lifetime.
 
 Used by the config-hoist refactor (2026-07-04) that moves hardcoded point
 values / caps / thresholds out of the modules into named `*_magnitudes` blocks.
@@ -31,7 +31,7 @@ def _cached_config() -> Dict[str, Any]:
 
 
 def config(*, fresh: bool = False) -> Dict[str, Any]:
-    """Parsed config, cached for scoring; fresh reads serve dashboard reloads."""
+    """Read-only config cached for scoring; fresh reads serve dashboard reloads."""
     return _read_config() if fresh else _cached_config()
 
 
