@@ -35,7 +35,7 @@ def canonicalize_enzyme_activity_unit(unit):
             key = code
         if key in {"fibrinolyticunit", "fibrinolyticunits"}:
             key = "fu"
-        if after_fcc_header and key in {"lactaseunit", "lactaseunits"}:
+        if after_fcc_header and key in {"lactase", "lactaseunit", "lactaseunits"}:
             key = "fcc"
         if key in ENZYME_ACTIVITY_UNITS:
             return "ENDO-PGU" if key == "endopgu" else key.upper()
@@ -51,7 +51,7 @@ _FCC_ASSAY_SPELLINGS = "|".join(
                        | {canonicalize_enzyme_activity_unit(unit) for unit in ENZYME_ACTIVITY_UNITS},
                        key=lambda value: (-len(value), value))
 )
-_FCC_ACTIVITY_TOKEN = rf"FCC(?:\s*\([^()]*\)|\s*(?:{_FCC_ASSAY_SPELLINGS})|\s+[a-z]+\s+units?)?(?!\s*\()"
+_FCC_ACTIVITY_TOKEN = rf"FCC(?>(?:\s*\([^()]*\)|\s*(?:{_FCC_ASSAY_SPELLINGS})|\s+[a-z]+(?:\s+units?)?)?)(?!\s*\()"
 _ENZYME_ACTIVITY_RE = re.compile(
     r"(?<![\w.,+\-−–—/])(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|SPU|FIP|CU|GDU|DPP[- ]?IV|LACU|"
     + _FCC_ACTIVITY_TOKEN

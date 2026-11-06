@@ -3021,3 +3021,15 @@ def test_exact_reviewed_unrated_form_does_not_clear_other_form_holds(monkeypatch
     findings = set(result.contract_findings)
     assert bool(findings & {"form_quality_unassessed", "disclosed_form_unmapped"}) is held
     assert row["bio_score"] is None
+
+
+@pytest.mark.parametrize("suffix", ["CFU", "IU", "UI", "PUX", "Pepsin", "cfu", "pepsin"])
+def test_unknown_unparenthesized_fcc_assay_never_falls_back_to_bare_fcc(suffix):
+    from normalization import extract_enzyme_activity
+    assert extract_enzyme_activity(f"500 FCC {suffix}") == (None, None)
+
+
+@pytest.mark.parametrize("text", ["4662 FCC", "4662 FCC; taken daily", "4662 FCC lactase taken daily"])
+def test_known_or_bare_fcc_does_not_require_an_invented_qualifier(text):
+    from normalization import extract_enzyme_activity
+    assert extract_enzyme_activity(text) == (4662.0, "FCC")
