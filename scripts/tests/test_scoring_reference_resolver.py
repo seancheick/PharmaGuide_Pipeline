@@ -259,3 +259,16 @@ def test_source_reference_dedup_keeps_distinct_authored_claim_scopes():
     second = {**first, 'supports_claims': ['population_scope']}
     assert unique_source_references([first, second, {'pmid': '18184094'}]) == [first, second]
     assert unique_source_references([{'pmid': '18184094'}, first, second]) == [first, second]
+
+
+def test_chloride_role_cites_primary_dri_without_rewriting_existing_dose_source():
+    from scoring_reference_resolver import nutritional_role_reference, rda_ul_reference_entry
+    reference = nutritional_role_reference('chloride')['source_references']
+    assert len(reference) == 1
+    assert reference[0]['doi'] == '10.17226/10925'
+    assert reference[0]['title'] == (
+        'Dietary Reference Intakes for Water, Potassium, Sodium, Chloride, and Sulfate')
+    assert reference[0]['url'] == 'https://www.nationalacademies.org/read/10925/chapter/8'
+    assert '272' in reference[0]['notes']
+    assert rda_ul_reference_entry(canonical_id='chloride')['reference_semantics']['source_ids'] == [
+        'https://nap.nationalacademies.org/skim.php?chap=386-396&record_id=11537']

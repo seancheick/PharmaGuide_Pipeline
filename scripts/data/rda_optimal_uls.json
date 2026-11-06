@@ -6797,14 +6797,14 @@
         {
           "type": "authority",
           "authority": "Institute of Medicine, National Academies",
-          "title": "Dietary Reference Intakes: The Essential Guide to Nutrient Requirements",
-          "url": "https://www.nationalacademies.org/read/11537/chapter/44",
+          "title": "Dietary Reference Intakes for Water, Potassium, Sodium, Chloride, and Sulfate",
+          "url": "https://www.nationalacademies.org/read/10925/chapter/8",
           "supports_claims": [
             "established_nutritional_role"
           ],
-          "notes": "Sodium and Chloride, pages386–396, Function(page388): chloride supports fluid/electrolyte balance and gastric hydrochloric acid. The legacy skim URL redirects to front matter; chapter identity and matching role text corroborated against the official underlying 2005 DRI chapter (10.17226/10925). Nutritional role only, not a new Dose benchmark, clinical efficacy or safety threshold. Source content checked 2026-11-06.",
-          "doi": "10.17226/11537",
-          "published_date": "2006"
+          "notes": "Chapter 6, Sodium and Chloride, page 272, Background Information — Function: chloride is an osmotically active extracellular anion supporting fluid and electrolyte balance and gastric hydrochloric acid. Official primary chapter checked on 2026-11-06. This citation supports nutritional role only; no supplemental clinical benefit, dosing recommendation or personal-safety conclusion is inferred.",
+          "doi": "10.17226/10925",
+          "published_date": "2005"
         }
       ]
     },
