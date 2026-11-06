@@ -12,6 +12,8 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -179,3 +181,26 @@ def test_eaa_identity_family_import_and_route_reexport_perform_no_data_reads(mon
         importlib.reload(routes)
         assert routes.EAA_CANONICALS is resolver.EAA_CANONICALS
         assert len(routes.EAA_CANONICALS) == 9
+
+
+@pytest.mark.parametrize(('source', 'expected'), [
+    ('D-alpha-tocopherol', True),
+    ('dl-alpha-tocopheryl acetate', True),
+    ('d-alpha tocopheryl succinate', True),
+    ('α-tocopherol', True),
+    ('Gamma-Tocopherol', False),
+    ('D-delta-tocopherol', False),
+    ('beta-tocopherol', False),
+    ('Alpha-Tocotrienol', False),
+    ('D-Mixed Tocotrienols', False),
+    ('Mixed Tocopherols', None),
+    ('Mixed Tocotrienols/Tocopherols', None),
+    ('Vitamin E', None),
+    ('unidentified preparation', None),
+    ('', None),
+])
+def test_vitamin_e_alpha_material_keeps_identity_separate_from_amount(source, expected):
+    from scoring_reference_resolver import vitamin_e_alpha_material
+
+    # Unknown material may contain alpha, but does not prove an alpha amount.
+    assert vitamin_e_alpha_material(source) is expected

@@ -2096,3 +2096,46 @@ def test_qualified_nutrient_role_does_not_require_literal_form_key(canonical, na
     result = er.resolve_evidence_for_row(row, product)
     assert result.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
     assert result.points_eligible is False
+
+
+@pytest.mark.parametrize('source', [
+    'Gamma-Tocopherol', 'D-gamma-tocopherol', 'Delta Tocopherol',
+    'Beta-Tocopherol', 'Alpha-Tocotrienol', 'D-Mixed Tocotrienols',
+])
+def test_nonalpha_vitamin_e_source_cannot_borrow_alpha_nutrition_authority(source):
+    # Actual307570 CarotenAll has this canonical parent and Gamma-Tocopherol
+    # source row. A broad mapped IQM family does not prove alpha activity.
+    row = {'canonical_id': 'vitamin_e', 'name': source,
+           'raw_source_text': source, 'standard_name': 'Vitamin E',
+           'matched_form': 'tocotrienols', 'form_match_status': 'mapped',
+           'mapped': True, 'mapped_identity': True, 'scoreable_identity': True,
+           'quantity': 10.0, 'unit': 'mg', 'source_section': 'active',
+           'raw_source_path': 'ingredientRows[6]'}
+    assert er.nutrition_authority_for_row(row) is None
+
+
+@pytest.mark.parametrize('source', [
+    'D-alpha-tocopherol', 'dl-alpha-tocopheryl acetate',
+    'd-alpha-tocopheryl succinate',
+])
+def test_alpha_vitamin_e_source_retains_nutritional_role(source):
+    row = {'canonical_id': 'vitamin_e', 'name': source,
+           'raw_source_text': source, 'form_match_status': 'mapped',
+           'mapped': True, 'mapped_identity': True, 'scoreable_identity': True,
+           'quantity': 10.0, 'unit': 'mg', 'source_section': 'active'}
+    assert er.nutrition_authority_for_row(row)['nutrient'] == 'vitamin_e'
+
+
+@pytest.mark.parametrize('source', ['Mixed Tocopherols', 'unidentified preparation'])
+def test_unknown_alpha_source_is_not_proved_by_standardized_vitamin_e_name(source):
+    row = {'canonical_id': 'vitamin_e', 'name': source, 'raw_source_text': source,
+           'standard_name': 'Vitamin E', 'matched_form': 'd-alpha-tocopherol',
+           'form_match_status': 'mapped', 'quantity': 10.0, 'unit': 'mg'}
+    assert er.nutrition_authority_for_row(row) is None
+
+
+def test_independent_printed_vitamin_e_activity_retains_nutritional_role():
+    row = {'canonical_id': 'vitamin_e', 'name': 'Vitamin E',
+           'raw_source_text': 'Vitamin E', 'quantity': 13.4, 'unit': 'mg',
+           'form_match_status': 'mapped'}
+    assert er.nutrition_authority_for_row(row)['nutrient'] == 'vitamin_e'

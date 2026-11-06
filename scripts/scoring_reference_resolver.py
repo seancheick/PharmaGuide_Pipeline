@@ -221,6 +221,28 @@ def delivers_parent_nutrient(canonical_id: Any, form_ids: Any) -> bool:
     return not relationships or not relationships <= NON_DELIVERING_RELATIONSHIPS
 
 
+def vitamin_e_alpha_material(source_text: str) -> Optional[bool]:
+    """Alpha-tocopherol identity, without inferring its activity or amount.
+
+    None retains possible alpha in mixtures/unknown material for conservative
+    exposure bounds; it is not affirmative nutritional-role proof.
+    """
+    from normalization import normalize_text
+
+    text = normalize_text(source_text or "")
+    tocopherol = bool(re.search(r"\btocopher(?:ol|yl)s?\b", text))
+    tocotrienol = bool(re.search(r"\btocotrienols?\b", text))
+    if tocotrienol:
+        return None if tocopherol else False
+    if not tocopherol or "mixed" in text:
+        return None
+    if re.search(r"\balpha[ -]+tocopher(?:ol|yl)\b", text):
+        return True
+    if re.search(r"\b(?:beta|gamma|delta)[ -]+tocopher(?:ol|yl)\b", text):
+        return False
+    return None
+
+
 def floor_eligible(form: Dict[str, Any]) -> bool:
     """Whether a named form may define the nondisclosure floor."""
     return parent_relationship(form) is None

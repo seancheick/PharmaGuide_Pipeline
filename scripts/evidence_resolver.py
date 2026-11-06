@@ -556,7 +556,8 @@ def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, An
     from normalization import make_normalized_key, strip_label_identity_qualifiers
     from scoring_reference_resolver import (EAA_CANONICALS, IDENTITY_MISMATCH_RELATIONSHIPS,
                                           delivers_parent_nutrient, iqm_reference_entry,
-                                          nutritional_role_reference, parent_relationship)
+                                          nutritional_role_reference, parent_relationship,
+                                          vitamin_e_alpha_material)
     from scoring_input_contract import is_lent_blend_mass
 
     canonical = _norm(row.get("canonical_id"))
@@ -565,6 +566,13 @@ def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, An
             or is_lent_blend_mass(dict(row))):
         return None
     if canonical not in EAA_CANONICALS:
+        if canonical == "vitamin_e":
+            source = str(row.get("raw_source_text") or row.get("name") or "")
+            material = vitamin_e_alpha_material(source)
+            # A printed nutrient declaration is independent of a named source
+            # preparation. Broad mapped family/standard names cannot upgrade it.
+            if material is not True and make_normalized_key(source) != "vitamin_e":
+                return None
         if (any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
                 or _norm(row.get("identity_disposition")) in {"ambiguous", "identity_conflict"}
                 or _norm(row.get("form_match_status")) == "unmapped"):
