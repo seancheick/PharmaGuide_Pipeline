@@ -1,3 +1,4 @@
+<!-- Current post-399 audit checkpoint: #402 implements preserved positive-credit/pending-review completeness and source-backed inferred form qualification; original enzyme panels checked. Final bounded comparisons, exact CI and integration remain pending. See the existing LEDGER entry; this is not a new global count or release approval. -->
 # PharmaGuide master completion plan
 
 ## November 5 — current run audited; scientific qualification open
