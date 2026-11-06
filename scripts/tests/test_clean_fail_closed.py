@@ -82,14 +82,46 @@ def test_unmapped_report_failure_is_recorded_without_a_fallback_file(tmp_path, m
     processor = BatchProcessor(_make_config(tmp_path))
     processor.global_unmapped.update({"Mystery Root": 2})
 
-    def fail(self, processed_count_override=None):
+    def fail(self, *args, **kwargs):
         raise OSError("disk full")
 
-    monkeypatch.setattr(EnhancedDSLDNormalizer, "process_and_save_unmapped_tracking", fail)
+    monkeypatch.setattr("unmapped_ingredient_tracker.UnmappedIngredientTracker.process_and_save_unmapped_tracking", fail)
     processor._save_unmapped_ingredients(processed_count_override=1)
 
     assert processor.report_write_failures == [str(processor.output_dir / "unmapped")]
     assert not (processor.output_dir / "unmapped" / "unmapped_ingredients.json").exists()
+
+
+def test_unmapped_report_reuses_collected_details_without_loading_references(tmp_path, monkeypatch):
+    import batch_processor
+    from unmapped_ingredient_tracker import UnmappedIngredientTracker
+
+    processor = BatchProcessor(_make_config(tmp_path))
+    processor.global_unmapped.update({"Unknown Active": 2, "Unknown Inactive": 1,
+                                      "Recognized": 3, "Undosed Child": 4})
+    processor.global_unmapped_active.update({"Unknown Active", "Undosed Child"})
+    processor.global_unmapped_details = {
+        "Unknown Active": {"processed_name": "unknown active", "is_active": True},
+        "Unknown Inactive": {"processed_name": "unknown inactive", "is_active": False},
+        "Recognized": {"recognized_non_identity": True, "is_active": False},
+        "Undosed Child": {"non_scoreable_cleaner_row": True, "is_active": True},
+    }
+    expected = UnmappedIngredientTracker(tmp_path / "expected")
+    expected.process_unmapped_ingredients(processor.global_unmapped, processor.global_unmapped_active,
+                                         processor.global_unmapped_details, processed_count_override=7)
+    expected.save_tracking_files()
+    monkeypatch.setattr(batch_processor, "EnhancedDSLDNormalizer",
+                        lambda: pytest.fail("Reporting must not reload normalization references"))
+
+    processor._save_unmapped_ingredients(processed_count_override=7)
+
+    assert not processor.report_write_failures
+    for expected_path in sorted(expected.output_path.glob("*.json")):
+        baseline = json.loads(expected_path.read_text())
+        actual = json.loads((processor.output_dir / "unmapped" / expected_path.name).read_text())
+        baseline.get("metadata", {}).pop("generated_at", None)
+        actual.get("metadata", {}).pop("generated_at", None)
+        assert actual == baseline
 
 
 def test_report_write_failure_marks_the_stage_incomplete(tmp_path, monkeypatch):

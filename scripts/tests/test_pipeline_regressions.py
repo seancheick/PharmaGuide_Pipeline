@@ -3905,7 +3905,6 @@ def test_unmapped_tracker_writes_needs_verification_reports(tmp_path):
 
 def test_normalizer_marks_chopchinee_as_needs_verification(tmp_path):
     normalizer = EnhancedDSLDNormalizer()
-    normalizer.set_output_directory(tmp_path)
     normalizer.unmapped_ingredients["Chopchinee"] = 1
     normalizer.unmapped_details["Chopchinee"] = {
         "processed_name": "chopchinee",
@@ -3919,7 +3918,9 @@ def test_normalizer_marks_chopchinee_as_needs_verification(tmp_path):
         "next_verification_step": "Obtain manufacturer or authoritative monograph confirmation",
     }
 
-    normalizer.process_and_save_unmapped_tracking()
+    UnmappedIngredientTracker(tmp_path / "unmapped").process_and_save_unmapped_tracking(
+        normalizer.unmapped_ingredients, normalizer.unmapped_details
+    )
 
     needs_active = json.loads((tmp_path / "unmapped" / "needs_verification_active_ingredients.json").read_text())
     assert needs_active["ingredients"][0]["label_text"] == "Chopchinee"
@@ -3927,7 +3928,6 @@ def test_normalizer_marks_chopchinee_as_needs_verification(tmp_path):
 
 def test_normalizer_marks_vidarikanda_as_needs_verification(tmp_path):
     normalizer = EnhancedDSLDNormalizer()
-    normalizer.set_output_directory(tmp_path)
     normalizer.unmapped_ingredients["Vidarikanda"] = 1
     normalizer.unmapped_details["Vidarikanda"] = {
         "processed_name": "vidarikanda",
@@ -3941,7 +3941,9 @@ def test_normalizer_marks_vidarikanda_as_needs_verification(tmp_path):
         "next_verification_step": "Obtain manufacturer or authoritative monograph confirmation for whether the label intends Pueraria tuberosa or the DSLD-listed finger leaf morning glory identity.",
     }
 
-    normalizer.process_and_save_unmapped_tracking()
+    UnmappedIngredientTracker(tmp_path / "unmapped").process_and_save_unmapped_tracking(
+        normalizer.unmapped_ingredients, normalizer.unmapped_details
+    )
 
     needs_active = json.loads((tmp_path / "unmapped" / "needs_verification_active_ingredients.json").read_text())
     assert needs_active["ingredients"][0]["label_text"] == "Vidarikanda"
@@ -3949,7 +3951,6 @@ def test_normalizer_marks_vidarikanda_as_needs_verification(tmp_path):
 
 def test_normalizer_marks_annine_and_pyroxide_hcl_as_needs_verification_inactive(tmp_path):
     normalizer = EnhancedDSLDNormalizer()
-    normalizer.set_output_directory(tmp_path)
     normalizer.unmapped_ingredients["Annine"] = 1
     normalizer.unmapped_details["Annine"] = {
         "processed_name": "annine",
@@ -3975,7 +3976,9 @@ def test_normalizer_marks_annine_and_pyroxide_hcl_as_needs_verification_inactive
         "next_verification_step": "Confirm the original label text to determine whether this is a DSLD typo such as Pyridoxine HCl or another ingredient entirely.",
     }
 
-    normalizer.process_and_save_unmapped_tracking()
+    UnmappedIngredientTracker(tmp_path / "unmapped").process_and_save_unmapped_tracking(
+        normalizer.unmapped_ingredients, normalizer.unmapped_details
+    )
 
     needs_inactive = json.loads((tmp_path / "unmapped" / "needs_verification_inactive_ingredients.json").read_text())
     labels = {row["label_text"] for row in needs_inactive["ingredients"]}

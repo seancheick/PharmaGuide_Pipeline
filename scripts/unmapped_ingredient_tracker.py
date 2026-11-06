@@ -125,6 +125,26 @@ class UnmappedIngredientTracker:
         
         logger.debug(f"Processed {len(unmapped_data)} unmapped ingredients")
     
+    def process_and_save_unmapped_tracking(
+        self, unmapped_data: Dict[str, int], details_by_name: Dict[str, Dict[str, Any]],
+        processed_count_override: Optional[int] = None,
+    ) -> Dict[str, int]:
+        """Write collected diagnostics without loading normalization references."""
+        self.process_unmapped_ingredients(
+            unmapped_data,
+            {name for name in unmapped_data if details_by_name.get(name, {}).get("is_active", False)},
+            details_by_name,
+            processed_count_override=processed_count_override,
+        )
+        self.save_tracking_files()
+        return {
+            "active_count": len(self.unmapped_active),
+            "inactive_count": len(self.unmapped_inactive),
+            "total_count": len(self.unmapped_active) + len(self.unmapped_inactive),
+            "recognized_count": len(self.recognized_non_identity),
+            "non_scoreable_count": len(self.non_scoreable_unmapped),
+        }
+
     def save_tracking_files(self):
         """Save tracking data to JSON files"""
         try:

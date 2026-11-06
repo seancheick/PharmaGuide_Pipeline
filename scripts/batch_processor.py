@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional, Set
 from datetime import datetime, timezone
 from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures.process import BrokenProcessPool
+from contextlib import ExitStack, contextmanager
 from collections import Counter
 from dataclasses import dataclass, asdict
 from tqdm import tqdm
@@ -18,6 +20,7 @@ except ImportError:
     psutil = None
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
+from unmapped_ingredient_tracker import UnmappedIngredientTracker
 from dsld_validator import DSLDValidator
 from constants import (
     STATUS_SUCCESS,
@@ -865,37 +868,38 @@ class BatchProcessor:
         batch_results = []
         start_batch = 0 if using_per_file_resume else state.last_completed_batch + 1
 
-        for batch_num in range(start_batch, state.total_batches):
-            batch_start = batch_num * self.batch_size
-            batch_end = min(batch_start + self.batch_size, len(files))
-            batch_files = files[batch_start:batch_end]
+        with self._worker_session():
+            for batch_num in range(start_batch, state.total_batches):
+                batch_start = batch_num * self.batch_size
+                batch_end = min(batch_start + self.batch_size, len(files))
+                batch_files = files[batch_start:batch_end]
 
-            # FIX C6: Use output_batch_offset to produce non-colliding file names on resume
-            output_batch_num = output_batch_offset + (batch_num - start_batch)
+                # FIX C6: Use output_batch_offset to produce non-colliding file names on resume
+                output_batch_num = output_batch_offset + (batch_num - start_batch)
 
-            logger.info(f"Processing batch {batch_num + 1}/{state.total_batches} ({len(batch_files)} files)")
+                logger.info(f"Processing batch {batch_num + 1}/{state.total_batches} ({len(batch_files)} files)")
 
-            # Process batch
-            batch_result = self.process_batch(batch_num, batch_files, output_batch_num=output_batch_num)
-            batch_results.append(batch_result)
+                # Process batch
+                batch_result = self.process_batch(batch_num, batch_files, output_batch_num=output_batch_num)
+                batch_results.append(batch_result)
             
-            # Update state — only advance last_completed_batch AND record the
-            # batch's files as processed when outputs were written successfully.
-            # A failed write must NOT mark the files processed: per-file resume
-            # filters processed_file_paths out, so a recorded-but-unwritten batch
-            # would be permanently skipped on resume — silent data loss reported
-            # as success.
-            if batch_result.get("write_success", True):
-                state.last_completed_batch = batch_num
-                state.processed_files += len(batch_result.get("processed_files", []))
-                # FIX 1+2: Track processed file paths for per-file resume
-                state.processed_file_paths.extend(batch_result.get("processed_files", []))
-            state.last_updated = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-            state.errors.extend(batch_result.get("errors", []))
-            self.save_state(state)
+                # Update state — only advance last_completed_batch AND record the
+                # batch's files as processed when outputs were written successfully.
+                # A failed write must NOT mark the files processed: per-file resume
+                # filters processed_file_paths out, so a recorded-but-unwritten batch
+                # would be permanently skipped on resume — silent data loss reported
+                # as success.
+                if batch_result.get("write_success", True):
+                    state.last_completed_batch = batch_num
+                    state.processed_files += len(batch_result.get("processed_files", []))
+                    # FIX 1+2: Track processed file paths for per-file resume
+                    state.processed_file_paths.extend(batch_result.get("processed_files", []))
+                state.last_updated = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+                state.errors.extend(batch_result.get("errors", []))
+                self.save_state(state)
             
-            # Log batch completion
-            logger.info(f"Batch {batch_num + 1} complete: {batch_result['summary']}")
+                # Log batch completion
+                logger.info(f"Batch {batch_num + 1} complete: {batch_result['summary']}")
         
         # Generate final summary
         total_time = time.time() - start_time
@@ -939,6 +943,44 @@ class BatchProcessor:
             return self.max_workers
         return max(1, min(self.max_workers, file_count // per_worker))
 
+    @contextmanager
+    def _worker_session(self):
+        """Keep workers within one input/reference-bound processing invocation."""
+        with ExitStack() as resources:
+            self._worker_resources = resources
+            self._worker_count = None
+            self._worker_pool = None
+            try:
+                yield
+            finally:
+                self._worker_resources = None
+                self._worker_count = None
+                self._worker_pool = None
+
+    @contextmanager
+    def _batch_workers(self, count):
+        if getattr(self, "_worker_resources", None) is None:
+            # Direct process_batch callers still get self-contained resources.
+            with self._worker_session():
+                with self._batch_workers(count) as executor:
+                    yield executor
+            return
+        if self._worker_count != count:
+            # Release the old budget before a smaller tail or replacement pool.
+            self._worker_resources.close()
+            self._worker_count = None
+            if count == 1:
+                self._worker_resources.callback(_clear_serial_worker)
+                init_worker(str(self.output_dir))
+                self._worker_pool = None
+            else:
+                self._worker_pool = self._worker_resources.enter_context(ProcessPoolExecutor(
+                    max_workers=count, initializer=init_worker,
+                    initargs=(str(self.output_dir),),
+                ))
+            self._worker_count = count
+        yield self._worker_pool
+
     def process_batch(self, batch_num: int, files: List[Path], output_batch_num: Optional[int] = None) -> Dict[str, Any]:
         """Process a single batch of files"""
         batch_start_time = time.time()
@@ -977,92 +1019,86 @@ class BatchProcessor:
                 "(configured max %d); skips redundant reference reload",
                 len(files), effective_workers, self.max_workers,
             )
-        if effective_workers == 1:
-            # Single-threaded processing
-            # PERFORMANCE FIX: Initialize worker once before processing files
-            init_worker(str(self.output_dir))
-            for file_path in files:
-                # FIX 7: Validate input file before processing
-                is_valid, validation_error = self.validate_input_file(file_path)
-                if not is_valid:
-                    error_msg = f"Input validation failed for {file_path}: {validation_error}"
-                    errors.append(error_msg)
-                    input_validation_failures += 1
-                    batch_logger.error(error_msg)
-                    # FIX 4: Write structured quarantine for validation failures
-                    self._write_quarantine_file(
-                        str(file_path),
-                        StructuredError(
-                            file_path=str(file_path),
-                            exception_type="InputValidationError",
-                            message=validation_error,
-                            stage="validate"
+        with self._batch_workers(effective_workers) as executor:
+            if effective_workers == 1:
+                # Single-threaded processing
+                for file_path in files:
+                    # FIX 7: Validate input file before processing
+                    is_valid, validation_error = self.validate_input_file(file_path)
+                    if not is_valid:
+                        error_msg = f"Input validation failed for {file_path}: {validation_error}"
+                        errors.append(error_msg)
+                        input_validation_failures += 1
+                        batch_logger.error(error_msg)
+                        # FIX 4: Write structured quarantine for validation failures
+                        self._write_quarantine_file(
+                            str(file_path),
+                            StructuredError(
+                                file_path=str(file_path),
+                                exception_type="InputValidationError",
+                                message=validation_error,
+                                stage="validate"
+                            )
                         )
-                    )
-                    continue
+                        continue
 
-                result = process_single_file_with_timeout(
-                    str(file_path),
-                    str(self.output_dir),
-                    self.worker_timeout_seconds,
-                )
-                try:
-                    accepted = self._categorize_result(
-                        result,
-                        cleaned_products,
-                        needs_review_products,
-                        incomplete_products,
-                        errors,
-                        batch_unmapped,
-                        batch_mapped
-                    )
-                    if accepted in (STATUS_SUCCESS, STATUS_NEEDS_REVIEW, STATUS_INCOMPLETE):
-                        processed_files.append(str(file_path))
-                except Exception as e:
-                    error_msg = f"Failed to categorize result for {file_path}: {str(e)}"
-                    errors.append(error_msg)
-                    batch_logger.error(error_msg)
-                    self._write_quarantine_file(
+                    result = process_single_file_with_timeout(
                         str(file_path),
-                        StructuredError(
-                            file_path=str(file_path),
-                            exception_type=type(e).__name__,
-                            message=str(e),
-                            stage="categorize",
-                            traceback=traceback.format_exc()
-                        )
+                        str(self.output_dir),
+                        self.worker_timeout_seconds,
                     )
-        else:
-            # Multi-threaded processing with worker initialization
-            # PERFORMANCE FIX: Initialize normalizer once per worker, not per file
-
-            # FIX 7: Pre-validate all files before submitting to executor
-            valid_files = []
-            for file_path in files:
-                is_valid, validation_error = self.validate_input_file(file_path)
-                if not is_valid:
-                    error_msg = f"Input validation failed: {file_path}: {validation_error}"
-                    errors.append(error_msg)
-                    input_validation_failures += 1
-                    batch_logger.error(error_msg)
-                    # FIX 4: Write structured quarantine for validation failures
-                    self._write_quarantine_file(
-                        str(file_path),
-                        StructuredError(
-                            file_path=str(file_path),
-                            exception_type="InputValidationError",
-                            message=validation_error,
-                            stage="validate"
+                    try:
+                        accepted = self._categorize_result(
+                            result,
+                            cleaned_products,
+                            needs_review_products,
+                            incomplete_products,
+                            errors,
+                            batch_unmapped,
+                            batch_mapped
                         )
-                    )
-                else:
-                    valid_files.append(file_path)
+                        if accepted in (STATUS_SUCCESS, STATUS_NEEDS_REVIEW, STATUS_INCOMPLETE):
+                            processed_files.append(str(file_path))
+                    except Exception as e:
+                        error_msg = f"Failed to categorize result for {file_path}: {str(e)}"
+                        errors.append(error_msg)
+                        batch_logger.error(error_msg)
+                        self._write_quarantine_file(
+                            str(file_path),
+                            StructuredError(
+                                file_path=str(file_path),
+                                exception_type=type(e).__name__,
+                                message=str(e),
+                                stage="categorize",
+                                traceback=traceback.format_exc()
+                            )
+                        )
+            else:
+                # Multi-threaded processing with worker initialization
+                # PERFORMANCE FIX: Initialize normalizer once per worker, not per file
 
-            with ProcessPoolExecutor(
-                max_workers=effective_workers,
-                initializer=init_worker,
-                initargs=(str(self.output_dir),)
-            ) as executor:
+                # FIX 7: Pre-validate all files before submitting to executor
+                valid_files = []
+                for file_path in files:
+                    is_valid, validation_error = self.validate_input_file(file_path)
+                    if not is_valid:
+                        error_msg = f"Input validation failed: {file_path}: {validation_error}"
+                        errors.append(error_msg)
+                        input_validation_failures += 1
+                        batch_logger.error(error_msg)
+                        # FIX 4: Write structured quarantine for validation failures
+                        self._write_quarantine_file(
+                            str(file_path),
+                            StructuredError(
+                                file_path=str(file_path),
+                                exception_type="InputValidationError",
+                                message=validation_error,
+                                stage="validate"
+                            )
+                        )
+                    else:
+                        valid_files.append(file_path)
+
                 # Submit only validated files
                 future_to_file = {
                     executor.submit(
@@ -1095,6 +1131,8 @@ class BatchProcessor:
                         result = future.result()
                         completed_results[str(file_path)] = result
                     except Exception as e:
+                        if isinstance(e, BrokenProcessPool):
+                            self._worker_count = None
                         error_msg = f"Failed to process {file_path}: {str(e)}"
                         errors.append(error_msg)
                         batch_logger.error(error_msg)
@@ -1391,17 +1429,10 @@ class BatchProcessor:
     
     def _save_unmapped_ingredients(self, processed_count_override: Optional[int] = None):
         """Save cumulative unmapped ingredients using enhanced tracking"""
-        # Create a temporary normalizer to process the global unmapped ingredients
-        temp_normalizer = EnhancedDSLDNormalizer()
-        temp_normalizer.set_output_directory(self.output_dir)
-        
-        # Transfer global unmapped data to the normalizer
-        temp_normalizer.unmapped_ingredients = self.global_unmapped.copy()
-
         # Preserve per-label details from worker normalization so reporting can
         # distinguish ordinary unmapped rows from needs-verification cases.
-        temp_normalizer.unmapped_details = {}
-        for name, count in self.global_unmapped.items():
+        details_by_name = {}
+        for name in self.global_unmapped:
             detail = dict(self.global_unmapped_details.get(name, {}))
             if not detail:
                 detail = {
@@ -1410,11 +1441,13 @@ class BatchProcessor:
                     "variations_tried": [],
                 }
             detail["is_active"] = name in self.global_unmapped_active
-            temp_normalizer.unmapped_details[name] = detail
+            details_by_name[name] = detail
         
         # Process and save with enhanced tracking
         try:
-            result = temp_normalizer.process_and_save_unmapped_tracking(
+            tracker = UnmappedIngredientTracker(self.output_dir / "unmapped")
+            result = tracker.process_and_save_unmapped_tracking(
+                self.global_unmapped, details_by_name,
                 processed_count_override=processed_count_override
             )
             logger.info(
@@ -1895,7 +1928,13 @@ class BatchProcessor:
 # Global variables for worker processes (initialized once per worker)
 _worker_normalizer = None
 _worker_validator = None
-_worker_output_dir = None
+
+
+def _clear_serial_worker():
+    """Release invocation-owned references instead of retaining a stale worker."""
+    global _worker_normalizer, _worker_validator
+    _worker_normalizer = None
+    _worker_validator = None
 
 
 def init_worker(output_dir: str = None, from_defensive_init: bool = False):
@@ -1911,7 +1950,7 @@ def init_worker(output_dir: str = None, from_defensive_init: bool = False):
     Raises:
         RuntimeError: If critical reference files fail to load
     """
-    global _worker_normalizer, _worker_validator, _worker_output_dir
+    global _worker_normalizer, _worker_validator
     # FIX 11: os is already imported at module level, no need to reimport
 
     # Log warning if this is a defensive initialization
@@ -1924,9 +1963,6 @@ def init_worker(output_dir: str = None, from_defensive_init: bool = False):
 
     # Initialize normalizer ONCE per worker (loads all databases once)
     _worker_normalizer = EnhancedDSLDNormalizer()
-    if output_dir:
-        _worker_normalizer.set_output_directory(Path(output_dir))
-        _worker_output_dir = output_dir
 
     # Initialize validator ONCE per worker
     _worker_validator = DSLDValidator()
@@ -2028,8 +2064,11 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
         normalizer = _worker_normalizer
         validator = _worker_validator
 
-        # DELTA TRACKING: Snapshot unmapped ingredients BEFORE processing this file
-        # This prevents shared state accumulation from affecting per-file stats
+        # The coordinator already owns cumulative reports. Keep worker diagnostics
+        # per label, including after failures, so long-lived workers cannot retain
+        # another label's context or copy its growing history for every product.
+        normalizer.unmapped_ingredients.clear()
+        normalizer.unmapped_details.clear()
         unmapped_before = normalizer.get_unmapped_snapshot()
 
         # Normalize the data

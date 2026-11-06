@@ -57,7 +57,6 @@ def test_tracker_routes_recognized_rows_out_of_unmapped_lists(tmp_path):
 
 def test_normalizer_tracking_counts_only_true_identity_gaps(tmp_path):
     normalizer = EnhancedDSLDNormalizer()
-    normalizer.set_output_directory(tmp_path)
     normalizer.unmapped_ingredients.update({
         "Mannitol": 4,
         "No-dose Blend Child": 3,
@@ -79,7 +78,9 @@ def test_normalizer_tracking_counts_only_true_identity_gaps(tmp_path):
         "Genuinely Unknown Active": {"is_active": True},
     })
 
-    result = normalizer.process_and_save_unmapped_tracking()
+    result = UnmappedIngredientTracker(tmp_path / "unmapped").process_and_save_unmapped_tracking(
+        normalizer.unmapped_ingredients, normalizer.unmapped_details
+    )
 
     assert result == {
         "active_count": 1,
