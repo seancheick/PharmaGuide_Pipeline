@@ -755,7 +755,7 @@ def test_a_held_source_or_marker_token_leaves_the_row_unheld(enricher, parent, l
     ('aloe_vera', 'Aloe vera Leaf Extract', {'name': 'Aloe barbadensis leaf extract', 'category': _B, 'ingredientGroup': 'Aloe'}, 'aloe vera (unspecified)'),
     ('rose_hips', 'Rosehip Fruit Extract', {'name': 'Rosae canina Fruit Extract', 'category': _B, 'ingredientGroup': 'Dog Rose'}, 'rose hips extract'),
     ('rose_hips', 'Rose Hip Fruit Extract', {'name': 'Rosa canina Fruit Extract', 'category': _B, 'ingredientGroup': 'Rose Hip'}, 'rose hips extract'),
-    ('perilla_oil', 'Perilla Seed Extract', {'name': 'Perilla frutescens Seed Extract', 'category': _B, 'ingredientGroup': 'perilla'}, 'perilla seed oil'),
+    ('perilla_oil', 'Perilla Seed Oil', {'name': 'Perilla frutescens Seed Oil', 'category': _B, 'ingredientGroup': 'perilla'}, 'perilla seed oil'),
     ('horse_chestnut_seed', 'Horse Chestnut Seed Extract', {'name': 'Aesculus hippocastanum Seed Extract', 'category': _B, 'ingredientGroup': 'Horse Chestnut'}, 'horse chestnut seed (unspecified)'),
     ('chamomile', 'Chamomile Flower Extract', {'name': 'Matricaria recutita Flower Extract', 'category': _B, 'ingredientGroup': 'German Chamomile '}, 'chamomile extract'),
     ('chamomile', 'Chamomile Flowering Top Extract', {'name': 'Matricaria recutita Flowering Top Extract', 'category': _B, 'ingredientGroup': 'German Chamomile '}, 'chamomile extract'),
@@ -1671,3 +1671,22 @@ def test_promoted_inactive_adapter_retains_the_original_source_label(enricher, m
                   if row['raw_source_path'] == 'inactiveIngredients[0]')
     assert (actual['form_id'], actual['form_match_status'], actual['bio_score']) == (
         'standard krill oil', 'mapped', 13.0)
+
+
+def test_retained_parent_scoped_source_alias_can_prove_the_reviewed_form(enricher):
+    match = enricher._match_quality_map('Extracted token', 'Pterostilbene',
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id='pterostilbene',
+        raw_source_text='dimethylresveratrol')
+    assert match['form_id'] == 'trans-pterostilbene'
+    assert match['bio_score'] == 15
+
+
+@pytest.mark.parametrize("source,canonical", [
+    ("not dimethylresveratrol", "pterostilbene"),
+    ("dimethylresveratrol", "resveratrol"),
+])
+def test_parent_scoped_source_alias_cannot_borrow_another_identity_or_negation(enricher, source, canonical):
+    match = enricher._match_quality_map('Extracted token', 'Pterostilbene',
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id=canonical,
+        raw_source_text=source)
+    assert match is None or match.get('form_id') != 'trans-pterostilbene'

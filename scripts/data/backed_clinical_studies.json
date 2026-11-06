@@ -3969,7 +3969,7 @@
       "health_goals_supported": [
         "Muscle Growth & Recovery"
       ],
-      "notes": "Two small double-blind crossover trials evaluated 2 g/day active L-carnitine delivered as L-tartrate for post-exercise recovery markers (10 resistance-trained men and 18 healthy middle-aged adults). They support a cautious recovery-biomarker signal, not broad energy, performance, cardiovascular, or muscle-growth efficacy. Both cited studies administered 2 g/day of active L-carnitine delivered as L-carnitine L-tartrate, not 2 g of tartrate salt. The 10- and 18-participant crossover studies emphasize recovery biomarkers rather than durable performance outcomes. Completed delegated-agent source contexts and independent primary-body review2026-11-06 preserve the limited source-specific findings. This record concerns the defined2:1L-carnitine L-tartrate chemical, not every Carnipure product: Lonza also offers crystalline L-carnitine. Source quantities are active L-carnitine; the2002report separately declares2944mg/day salt, whereas the2010report does not print salt mass. Neither amount becomes a general Dose benchmark or a conversion for retail labels.",
+      "notes": "Two small double-blind crossover trials evaluated 2 g/day active L-carnitine delivered as L-tartrate for post-exercise recovery markers (10 resistance-trained men and 18 healthy middle-aged adults). They support a cautious recovery-biomarker signal, not broad energy, performance, cardiovascular, or muscle-growth efficacy. Both cited studies administered 2 g/day of active L-carnitine delivered as L-carnitine L-tartrate, not 2 g of tartrate salt. The 10- and 18-participant crossover studies emphasize recovery biomarkers rather than durable performance outcomes. Completed delegated-agent source contexts and independent primary-body review 2026-11-06 preserve the limited source-specific findings. This record concerns the defined 2:1 L-carnitine L-tartrate chemical, not every Carnipure product: Lonza also offers crystalline L-carnitine. Source quantities are active L-carnitine; the 2002 report separately declares 2944 mg/day salt, whereas the 2010 report does not print salt mass. Neither amount becomes a general Dose benchmark or a conversion for retail labels.",
       "study_type": "rct_multiple",
       "last_updated": "2026-11-06",
       "notable_studies": "PMID 11788381 studied 10 resistance-trained men and PMID 20045157 studied 18 middle-aged adults in crossover protocols. Both provided 2 g/day active L-carnitine as tartrate, with recovery biomarker endpoints rather than proven durable performance improvement.",
@@ -4132,7 +4132,7 @@
           "identity": {
             "branded_material": "L-CARNIPURE L-carnitine L-tartrate",
             "manufacturer": "Lonza",
-            "standardization": "736mg LCLT per capsule delivers500mg L-carnitine and236mg L-tartrate; source-specific declaration only",
+            "standardization": "736 mg LCLT per capsule delivers 500 mg L-carnitine and 236 mg L-tartrate; source-specific declaration only",
             "chemical_form": "L-carnitine L-tartrate (2:1 salt; levocarnitine tartrate)"
           },
           "exposure_basis": "supplement_dose",
@@ -4146,19 +4146,19 @@
           "trial_family": "source_11788381",
           "population": {
             "age_group": "adult",
-            "description": "10healthy recreationally weight-trained men, mean age23.7±2.3years; squat training for at least1year. No female, child, pregnant or patient population inference."
+            "description": "10 healthy recreationally weight-trained men, mean age 23.7 ± 2.3 years; squat training for at least 1 year. No female, child, pregnant or patient population inference."
           },
-          "study_design": "Randomized doubleblind balanced placebo-controlled crossover;3weeks supplementation percondition continued through recovery;1weekwashout; repeated standardized squat challenge.",
+          "study_design": "Randomized double blind balanced placebo-controlled crossover; 3 weeks supplementation per condition continued through recovery; 1 week washout; repeated standardized squat challenge.",
           "outcomes": [
             {
-              "name": "MRI-defined skeletal muscle tissue disruption after high-repetition squat exercise lower with LCLT at days1and4 postexercise.",
+              "name": "MRI-defined skeletal muscle tissue disruption after high-repetition squat exercise lower with LCLT at days 1 and 4 postexercise.",
               "hierarchy": "primary",
               "kind": "surrogate",
               "direction": "positive",
               "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "Perceived muscle soreness lower on days1,2,4postexercise; not a demonstrated performance or universal recovery outcome.",
+              "name": "Perceived muscle soreness lower on days 1, 2, 4 postexercise; not a demonstrated performance or universal recovery outcome.",
               "hierarchy": "secondary",
               "kind": "patient_important",
               "direction": "positive",
@@ -4166,10 +4166,10 @@
             }
           ],
           "limitations": [
-            "Small10-man crossover sample;1weekwashout and repeated exercise challenge; no claim that carryover/repeated-bout effects are excluded.",
+            "Small 10-man crossover sample; 1 week washout and repeated exercise challenge; no claim that carryover/repeated-bout effects are excluded.",
             "Lonza-funded; one author affiliated with Lonza. No independent replication inferred.",
             "Soreness is secondary to the stated primary muscle-disruption purpose. MRI surrogate names only itself under current rubric; no general recovery/performance/weight claim.",
-            "Included in32154768: one primary evidencefamily, never a second independent trial alongside that synthesis. Crosspublication participant overlap not established;11788381 is not11880112.",
+            "Included in 32154768: one primary evidence family, never a second independent trial alongside that synthesis. Cross publication participant overlap not established; 11788381 is not 11880112.",
             "Exact LCLT preparation/source-declared delivered L-carnitine only; no freebase/fumarate/ALCAR equivalence or general Dose benchmark."
           ],
           "dose": {
@@ -4182,21 +4182,21 @@
             "dose_basis": "nominal_assigned_arm",
             "duration_basis": "fixed_protocol",
             "duration_days": 21,
-            "administration_frequency": "Four capsules/day:two with breakfast,two with lunch; supplementation continued through recovery.",
+            "administration_frequency": "Four capsules/day: two with breakfast, two with lunch; supplementation continued through recovery.",
             "dosage_forms": [
               "capsule"
             ],
             "co_therapies": [
-              "Standardized5sets15–20repetitions squat at50%1RM inbothconditions; no training D1–D6."
+              "Standardized 5 sets 15–20 repetitions squat at 50% 1RM in both conditions; no training D1–D6."
             ],
             "source_provenance": {
               "pmid": "11788381",
               "source_url": "https://doi.org/10.1152/ajpendo.00277.2001",
-              "location": "Publisher-typeset retained body ppE475Methods(design,subjects,supplementation),E479Results/Table1, E481funding; primary purposeE475."
+              "location": "Publisher-typeset retained body pp E475 Methods (design, subjects, supplementation), E479 Results/Table 1, E481 funding; primary purpose E475."
             },
-            "reported_regimen": "2944mgLCLT/day via4source-defined736mgcapsules, delivering2000mgL-carnitine/day;3weeks before challenge and continued through recovery.",
+            "reported_regimen": "2944 mg LCLT/day via 4 source-defined 736 mg capsules, delivering 2000 mg L-carnitine/day; 3 weeks before challenge and continued through recovery.",
             "normalization": {
-              "basis": "values stores2000mg/dayACTIVE L-carnitine deliveredasLCLT. Source-declared4x736mg=2944mgLCLTsalt/day retainedonlyinreported_regimen; no labelconversionornewbenchmark."
+              "basis": "values stores 2000 mg/day ACTIVE L-carnitine delivered as LCLT. Source-declared 4 x 736 mg = 2944 mg LCLT salt/day retained only in reported_regimen; no label conversion or new benchmark."
             }
           },
           "review_status": "clinician_approved",
@@ -4205,7 +4205,7 @@
             "reviewer": "Codex independent source reviewer (Sean-authorized agent)",
             "reviewed_at": "2026-11-06",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Independent fullbody verification against separate assessment_census source proposal; officialPubMed PMID/DOI/title verified. Exact preparation/MRI outcome only; not clinician attribution. Preparation identity independently checked against FDA GSRS UNII4D8F2Q45LQ, PubChemCID57349413 and USP/Lonza descriptions of the defined2:1salt; brand alone can also describe crystalline L-carnitine. No generic label-mass conversion or PK equivalence is inferred."
+            "basis": "Independent full body verification against separate assessment_census source proposal; official PubMed PMID/DOI/title verified. Exact preparation/MRI outcome only; not clinician attribution. Preparation identity independently checked against FDA GSRS UNII 4D8F2Q45LQ, PubChem CID 57349413 and USP/Lonza descriptions of the defined 2:1 salt; brand alone can also describe crystalline L-carnitine. No generic label-mass conversion or PK equivalence is inferred."
           }
         },
         {
@@ -4221,7 +4221,7 @@
           "identity": {
             "branded_material": "Carnipure tartrate",
             "manufacturer": "Lonza",
-            "standardization": "Fourcapsules deliver2000mgactiveL-carnitine/day; exactsaltmass notspecifiedinthispaper, no2944mgtransferfromothertrial.",
+            "standardization": "Four capsules deliver 2000 mg active L-carnitine/day; exact salt mass not specified in this paper, no 2944 mg transfer from other trial.",
             "chemical_form": "L-carnitine L-tartrate (2:1 salt; levocarnitine tartrate)"
           },
           "exposure_basis": "supplement_dose",
@@ -4235,26 +4235,26 @@
           "trial_family": "source_20045157",
           "population": {
             "age_group": "adult",
-            "description": "18healthyrecreationallyactiveadults40–65years,9men(mean45.4),9women(mean51.9); notresistancetrained; no medicalconditions/musculoskeletalinjury"
+            "description": "18 healthy recreationally active adults 40–65 years, 9 men (mean 45.4), 9 women (mean 51.9); not resistance trained; no medical conditions/musculoskeletal injury"
           },
-          "study_design": "Withinsexmatched randomizedstartingcondition, doubleblind balancedcrossover;3weekspretreatmentplus3recoverydayspercondition;1weekwashout. Men squat,womenlegpress; repeatedexercisechallenge.",
+          "study_design": "Within sex matched randomized starting condition, double blind balanced crossover; 3 weeks pretreatment plus 3 recovery days per condition; 1 week washout. Men squat, women legpress; repeated exercise challenge.",
           "outcomes": [
             {
-              "name": "Biochemicalmetabolicstress/muscledisruptionmarkers attenuated atreportedtimepoints afterresistanceexercise",
+              "name": "Biochemical metabolic stress/muscle disruption markers attenuated at reported timepoints after resistance exercise",
               "hierarchy": "not_reported",
               "kind": "surrogate",
               "direction": "positive",
               "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "Soreness lower in men after exercise and recoverydays1/4; in women recoverydays1/2; no declared primary hierarchy and no functional-performance benefit.",
+              "name": "Soreness lower in men after exercise and recovery days 1/4; in women recovery days 1/2; no declared primary hierarchy and no functional-performance benefit.",
               "hierarchy": "not_reported",
               "kind": "patient_important",
               "direction": "positive",
               "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "Strength,power,getupandgo/stairclimbing notimproved",
+              "name": "Strength, power, get up and go/stair climbing not improved",
               "hierarchy": "not_reported",
               "kind": "patient_important",
               "direction": "null",
@@ -4262,14 +4262,14 @@
             }
           ],
           "limitations": [
-            "18-personcrossover; smallsexstrata9each, not18perarm or36independentparticipants.",
-            "No explicitprimary/secondaryoutcomehierarchy found; do notpromotesoreness overfunctionalnull. NoMRIendpoint inthisstudy.",
-            "Oneweekwashout normalizesserumcarnitine perauthors butdoesnotindependentlyexclude repeatedbout/carryovereffects.",
-            "SameUConnresearchgroup/Lonzasponsor as2002; distinctdescribedcohort isnotindependentinvestigatorreplication. Participantleveloverlapnotproven fromdeidentifiedreports.",
-            "No broadperformance/musclegrowth/energy/weight/clinicalpatientclaim. No freebase/fumarate/ALCARtransfer or newDosebenchmark.",
-            "Fullbodyread via coauthorAcademiaupload and cachedthirdpartytypesetPDFwebreader; directlocalPDFnetworkunreachable, no localbodyhashclaimed.",
+            "18-person crossover; small sex strata 9 each, not 18 per arm or 36 independent participants.",
+            "No explicit primary/secondary outcome hierarchy found; do not promote soreness over functional null. No MRI endpoint in this study.",
+            "One week washout normalizes serum carnitine per authors but does not independently exclude repeated bout/carryover effects.",
+            "Same UConn research group/Lonza sponsor as 2002; distinct described cohort is not independent investigator replication. Participant level overlap not proven from deidentified reports.",
+            "No broad performance/muscle growth/energy/weight/clinical patient claim. No freebase/fumarate/ALCAR transfer or new Dose benchmark.",
+            "Full body read via coauthor Academia upload and cached third party typeset PDF web reader; direct local PDF network unreachable, no local body hash claimed.",
             "Sex and exercise protocol are confounded: men squatted and women used legpress; no causal sex-effect conclusion.",
-            "Diet/activity repeated between periods; no exercise, alcohol or pain medication60hours beforechallenge throughD4. Repeated-bout/carryover not excluded solely by serum normalization."
+            "Diet/activity repeated between periods; no exercise, alcohol or pain medication 60 hours before challenge through D4. Repeated-bout/carryover not excluded solely by serum normalization."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -4281,21 +4281,21 @@
             "dose_basis": "nominal_assigned_arm",
             "duration_basis": "fixed_protocol",
             "duration_days": 24,
-            "administration_frequency": "Twocapsulesbreakfast andtwolunch,21daysbeforechallengeplus3recoverydays",
+            "administration_frequency": "Two capsules breakfast and two lunch, 21 days before challenge plus 3 recovery days",
             "dosage_forms": [
               "capsule"
             ],
             "co_therapies": [
-              "Matchednormaldiet/activity;4sets15repetitions50%1RM squat(men)/legpress(women)"
+              "Matched normal diet/activity; 4 sets 15 repetitions 50% 1RM squat (men)/legpress (women)"
             ],
-            "reported_regimen": "2000mgactiveL-carnitine/day asCarnipuretartrate,not2000mgsalt",
+            "reported_regimen": "2000 mg active L-carnitine/day as Carnipure tartrate, not 2000 mg salt",
             "normalization": {
-              "basis": "values stores2000mg/dayACTIVE L-carnitine deliveredasCarnipuretartrate. ThispaperdoesnotstateexactLCLTsaltmass; no2944mgtransferfrom2002 orlabelconversion."
+              "basis": "values stores 2000 mg/day ACTIVE L-carnitine delivered as Carnipure tartrate. This paper does not state exact LCLT salt mass; no 2944 mg transfer from 2002 or label conversion."
             },
             "source_provenance": {
               "pmid": "20045157",
               "source_url": "https://doi.org/10.1016/j.metabol.2009.11.012",
-              "location": "Author-upload publisher-typeset text pp1191–1194Methods2.1–2.5;pp1196–1197Results3.5–3.7/Fig7;pp1198–1199Discussion/Acknowledgment. Official DOI/title identity corroborated; no localPDFbytehash claimed."
+              "location": "Author-upload publisher-typeset text pp 1191–1194 Methods 2.1–2.5; pp 1196–1197 Results 3.5–3.7/Fig 7; pp 1198–1199 Discussion/Acknowledgment. Official DOI/title identity corroborated; no local PDF byte hash claimed."
             }
           },
           "review_status": "clinician_approved",
@@ -4304,7 +4304,7 @@
             "reviewer": "Codex independent source review (Sean-authorized agent)",
             "reviewed_at": "2026-11-06",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Independent fullbody read of coauthor-upload publisher-typeset text Methods2.1–2.5/Results3/Discussion4/Acknowledgment, compared with separate agent draft. Existingrubric scoped completion, not physician attribution; positive soreness and functionalnull preserved. Preparation identity independently checked against FDA GSRS UNII4D8F2Q45LQ, PubChemCID57349413 and USP/Lonza descriptions of the defined2:1salt; brand alone can also describe crystalline L-carnitine. No generic label-mass conversion or PK equivalence is inferred."
+            "basis": "Independent full body read of coauthor-upload publisher-typeset text Methods 2.1–2.5/Results 3/Discussion 4/Acknowledgment, compared with separate agent draft. Existing rubric scoped completion, not physician attribution; positive soreness and functional null preserved. Preparation identity independently checked against FDA GSRS UNII 4D8F2Q45LQ, PubChem CID 57349413 and USP/Lonza descriptions of the defined 2:1 salt; brand alone can also describe crystalline L-carnitine. No generic label-mass conversion or PK equivalence is inferred."
           }
         }
       ],
@@ -4328,7 +4328,7 @@
         "supported_outcomes": [
           "exercise_induced_muscle_damage"
         ],
-        "studied_population": "Source-specific contexts:10healthy young resistance-trained men;18healthy middle-aged recreationally active men and women. No patient, pregnancy or pediatric inference.",
+        "studied_population": "Source-specific contexts: 10 healthy young resistance-trained men; 18 healthy middle-aged recreationally active men and women. No patient, pregnancy or pediatric inference.",
         "reviewed_at": "2026-11-06",
         "reason": "Both reports studied defined L-carnitine L-tartrate. Verified chemical spellings discover that same preparation; bare Carnipure, freebase, fumarate and ALCAR do not establish this source identity. Source context outcomes remain MRI-specific or unranked recovery measurements; functional null findings are retained. No general performance claim or Dose benchmark."
       }

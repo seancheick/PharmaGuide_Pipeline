@@ -41,14 +41,11 @@ def run():
         enriched, _ = enricher.enrich_product(normalizer.normalize_product(raw))
         scored = build_scored_artifact(enriched)
         if pid == "328751":
-            # The ungraded GS15-4 preparation now keeps this label unscored.
-            # Exercise the same B2 owner without requiring a public score.
-            from scoring_v4.modules.generic_transparency import score_transparency
-
-            assert scored["quality_score_status"] == "not_scored"
-            transparency = score_transparency(enriched)
-        else:
-            transparency = scored["_v4_module_breakdown"]["dimensions"]["transparency"]
+            # Its exact GS15 review is complete without a numerical form grade.
+            # Exercise allergen disclosure through the actual scored artifact.
+            assert scored["quality_score_status"] == "scored"
+            assert "form_quality_unassessed" not in scored["strict_scoring_contract"]["findings"]
+        transparency = scored["_v4_module_breakdown"]["dimensions"]["transparency"]
         return enriched, transparency
 
     return _run

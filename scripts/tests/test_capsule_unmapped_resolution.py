@@ -149,7 +149,7 @@ class TestCapsuleAliasCoverage:
         [
             ("Flax (Linum usitatissimum) powder", "flaxseed", "flaxseed meal/powder"),
             ("Black Currant (Ribes nigrum) oil", "black_currant", "black currant extract"),
-            ("Perilla Seed Extract", "perilla_oil", "perilla seed oil"),
+            ("Perilla Seed Oil", "perilla_oil", "perilla seed oil"),
             ("Grape Whole Fruit Extract", "grape_seed_extract", "whole grape extract"),
             ("Mixed Tocotrienols/Tocopherols", "vitamin_e", "tocotrienols"),
             ("BioEcolians A-Glucooligosaccharide", "prebiotics", "alpha-glucooligosaccharides (alpha-GOS)"),

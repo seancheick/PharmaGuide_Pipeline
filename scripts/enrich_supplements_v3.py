@@ -10540,7 +10540,19 @@ class SupplementEnricherV3:
                     for value, source in source_candidates if source == 0
                     for alias in source_aliases if alias
                 ):
-                    return
+                    # These aliases are identity clues only within the parent's
+                    # cleaner-established scope, never global synonym guesses.
+                    if parent_key != cleaner_iqm_canonical or not any(
+                        value == self._normalize_text(alias)
+                        and norm_module.find_affirmative_label_match(
+                            re.compile(r"(?<!\w)" + re.escape(self._norm_form_name(alias)) + r"(?!\w)", re.I),
+                            self._norm_form_name(value), spaced_free=True,
+                        )
+                        for value, source in source_candidates if source == 0
+                        for alias in form.get("source_form_aliases") or []
+                        if self._norm_form_name(alias)
+                    ):
+                        return
             # A bare parent alias cannot turn a printed powder/dried material
             # into an extract. Retain the parent and its shared unknown
             # form treatment; row-owned explicit extract forms remain valid.
