@@ -574,3 +574,18 @@ def test_real_dream_release_completed_dose_review_preserves_evidence_and_safety(
     for pillar in ['formulation', 'evidence', 'transparency', 'verification', 'safety_hygiene']:
         assert before['quality_pillars_v4'][pillar]['score'] == after['quality_pillars_v4'][pillar]['score']
     assert before['_v4_safety_gate'] == after['_v4_safety_gate']
+
+
+def test_blueberry_review_retains_its_stabilized_extract_arm_without_generic_transfer(records):
+    record = records['blueberry']
+    decision = record['applicability_decision']
+    assert 'extracts were not studied' not in json.dumps(record)
+    assert 'ThinkBlue' in decision
+    assert all(term in decision for term in ['100 mg', '10 mg', '1 mg', 'L-cysteine', 'L-glutathione'])
+    assert '29882843' in decision  # primary Table 2, not a second independent trial
+    assert 'not evidence of equivalence' in decision
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['studied_dose_exposure'] == {}
+    assert record['reference_semantics']['reference_type'] == 'no_benchmark'
+    assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+    assert [study['pmid'] for study in record['qualifying_human_studies']] == ['30999017']

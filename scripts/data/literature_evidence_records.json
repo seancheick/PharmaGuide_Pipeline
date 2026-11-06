@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-04",
+    "last_updated": "2026-11-06",
     "total_entries": 845,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
@@ -1492,7 +1492,7 @@
     },
     {
       "canonical_id": "blueberry",
-      "material_form": "Freeze-dried blueberry powder (9 of 12 studies), whole blueberries (2) or blueberry concentrate (1)",
+      "material_form": "Freeze-dried blueberry powders, whole blueberries and blueberry concentrate; one included trial also compared enhanced wild-blueberry powders and a stabilized wild-blueberry-extract formulation",
       "search_query": "(\"Blueberry\"[tiab] OR \"Vaccinium\"[tiab]) AND (cognition[tiab] OR cognitive[tiab] OR vascular[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
       "search_date": "2026-09-17",
       "databases_searched": [
@@ -1521,7 +1521,7 @@
       "effect_direction": "positive_weak",
       "population_context": "Children, young adults and older adults with or without cognitive impairment",
       "studied_dose_exposure": {},
-      "applicability_decision": "A systematic review of 12 studies (mostly freeze-dried blueberry) found blueberries may improve some cognitive measures; doses, durations and anthocyanin content varied too much for a dose threshold, and anthocyanin extracts were not studied.",
+      "applicability_decision": "The review of 12 studies found possible improvements in selected cognitive measures with heterogeneous blueberry interventions. Its included Whyte2018 trial compared enhanced powder formulations and ThinkBlue, a stabilized combination of 100 mg wild-blueberry extract, 10 mg L-cysteine and 1 mg L-glutathione daily (PMID 29882843, Table 2). That combination is not evidence of equivalence to unstandardized blueberry extracts, isolated anthocyanins, whole fruit or plain powders. Variable preparations, doses, durations and anthocyanin content do not establish a general Dose threshold; source-specific clinical qualification remains separate.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -1551,7 +1551,7 @@
       "reference_semantics": {
         "reference_type": "no_benchmark",
         "scope": "General catalog Dose for identified blueberry only. Existing source-specific exposures remain descriptive; no universal minimum, optimal interval, preparation conversion or safety ceiling is established by them. This is not absence of research or universal null efficacy.",
-        "preparation": "Freeze-dried blueberry powder (9 of 12 studies), whole blueberries (2) or blueberry concentrate (1)",
+        "preparation": "Freeze-dried blueberry powders, whole blueberries and blueberry concentrate; one included trial also compared enhanced wild-blueberry powders and a stabilized wild-blueberry-extract formulation",
         "purpose": "General catalog Dose only; exact clinical purpose, Evidence determination and independent safety applicability remain with existing owners.",
         "population": "Children, young adults and older adults with or without cognitive impairment",
         "exposure_basis": "minimum_directed_daily_use",
@@ -1560,7 +1560,7 @@
         "source_ids": [
           "PMID:30999017"
         ],
-        "rationale": "Source-backed case finding: A systematic review of 12 studies (mostly freeze-dried blueberry) found blueberries may improve some cognitive measures; doses, durations and anthocyanin content varied too much for a dose threshold, and anthocyanin extracts were not studied. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added.",
+        "rationale": "Source-backed case finding: The review of 12 studies found possible improvements in selected cognitive measures with heterogeneous blueberry interventions. Its included Whyte2018 trial compared enhanced powder formulations and ThinkBlue, a stabilized combination of 100 mg wild-blueberry extract, 10 mg L-cysteine and 1 mg L-glutathione daily (PMID 29882843, Table 2). That combination is not evidence of equivalence to unstandardized blueberry extracts, isolated anthocyanins, whole fruit or plain powders. Variable preparations, doses, durations and anthocyanin content do not establish a general Dose threshold; source-specific clinical qualification remains separate. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added.",
         "owner": "scripts/data/literature_evidence_records.json::blueberry",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
@@ -2559,7 +2559,24 @@
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
-      "applicability_status": "applicability_unestablished"
+      "applicability_status": "applicability_unestablished",
+      "documented_review_scope": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "broccoli sprout beverage"
+        ],
+        "excluded_form_terms": [
+          "whole broccoli vegetable powder",
+          "whole vegetable powder",
+          "broccoli floret",
+          "broccoli florets"
+        ],
+        "source_pmids": [
+          "24913818"
+        ],
+        "reviewed_at": "2026-11-06"
+      }
     },
     {
       "canonical_id": "l_phenylalanine",

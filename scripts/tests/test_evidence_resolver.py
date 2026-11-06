@@ -569,7 +569,7 @@ def test_false_transfer_canary_pumpkin_food_vs_extract():
 def test_false_transfer_canary_broccoli_food_vs_extract():
     """Crude broccoli vegetable powder cannot inherit standardized sulforaphane sprout extract trials."""
     res = er.resolve_evidence_for_canonical("broccoli", dose_value=500.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+    assert res.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert "literature_applicability_unestablished" in res.blocking_reasons
 
 
@@ -648,12 +648,14 @@ def test_material_context_preserves_specific_disclosure():
     res_crude_broccoli = er.resolve_evidence_for_row({
         "canonical_id": "broccoli",
         "name": "Broccoli Powder",
+        "mapped": True,
+        "raw_source_path": "ingredientRows[0]",
         "raw_source_text": "Broccoli (Brassica oleracea) whole vegetable powder",
         "amount": 500,
         "unit": "mg",
     })
     assert res_crude_broccoli.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert res_crude_broccoli.applicability_status == "crude_whole_food_powder_blocked"
+    assert res_crude_broccoli.reason_code == "clinical_form_excluded"
 
     # 2. Standardized broccoli sprout extract with sulforaphane is not blocked
     # as a crude food: it reaches the sulforaphane clinical record. That record
@@ -2390,3 +2392,47 @@ def test_complex_evidence_scoped_artifact_matches_uncached_pass(fixture_index):
         artifact["scoring_metadata"].pop("scored_date", None)
     assert scoped == uncached
     assert product == before
+
+
+@pytest.mark.parametrize('canonical', ['casein', 'pea_protein', 'rice_protein'])
+def test_principal_protein_source_without_projection_marker_remains_unfinished(canonical):
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED
+    row = {'name': canonical, 'raw_source_text': canonical,
+           'canonical_id': canonical, 'mapped': True, 'bio_score': 10,
+           'quantity': 25, 'unit': 'g', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'product_name': canonical + ' Protein', 'primary_type': 'protein_powder',
+               'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.reason_code == 'primary_nutritional_ingredient_requires_source_review'
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+    assert result.points_eligible is False
+
+
+@pytest.mark.parametrize('name', ['Whole broccoli vegetable powder',
+                                  'Broccoli (Brassica oleracea) whole vegetable powder',
+                                  'Broccoli (florets) powder'])
+def test_reviewed_broccoli_preparation_exclusion_is_finished_without_efficacy_credit(name):
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+    row = {'name': name, 'raw_source_text': name, 'canonical_id': 'broccoli',
+           'raw_source_path': 'ingredientRows[0]', 'mapped': True,
+           'quantity': 500, 'unit': 'mg'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.reason_code == 'clinical_form_excluded'
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+
+
+@pytest.mark.parametrize('name', ['Broccoli', 'Broccoli powder', 'Broccoli extract',
+                                  'Broccoli sprout beverage'])
+def test_broccoli_unknown_or_unqualified_preparation_is_not_a_finished_zero(name):
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED
+    row = {'name': name, 'raw_source_text': name, 'canonical_id': 'broccoli',
+           'raw_source_path': 'ingredientRows[0]', 'mapped': True,
+           'quantity': 500, 'unit': 'mg'}
+    result = er.resolve_evidence_for_row(row, {'activeIngredients': [row],
+        'ingredient_quality_data': {'ingredients_scorable': [row]}})
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED

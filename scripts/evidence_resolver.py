@@ -1509,7 +1509,12 @@ def _resolve_evidence_for_row(
                               if row_dict.get("evidence_type") == "sports_primary_dose" else [])
             sources_complete = bool(source_results) and compose_product_resolution_state(
                 source_results)[1]
-            if row_dict.get("evidence_type") == "sports_primary_dose" and not sources_complete:
+            primary_protein = (
+                row_dict.get("evidence_type") == "sports_primary_dose"
+                or (canonical in ROUTE_FEATURE_PROTEIN_CANONICALS and product
+                    and evidence_row_key(row_dict) in evidence_prominent_row_keys(product))
+            )
+            if primary_protein and not sources_complete:
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name,
                     matched_owners=matched_owners,
@@ -1572,23 +1577,6 @@ def _resolve_evidence_for_row(
         combined_text = f"{raw_text} {form_text}".strip()
 
         material_form_matched = False
-        if canonical == "broccoli":
-            if any(k in combined_text for k in ("sprout", "sulforaphane", "glucoraphanin")):
-                material_form_matched = True
-            else:
-                blocking_reasons.append("literature_applicability_unestablished")
-                return EvidenceResolution(
-                    canonical_id=canonical,
-                    ingredient_name=name,
-                    matched_owners=matched_owners,
-                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                    points_eligible=False,
-                    applicability_status="crude_whole_food_powder_blocked",
-                    reason_code="crude_vegetable_powder_cannot_inherit_purified_extract_trials",
-                    owner_facts=owner_facts,
-                    blocking_reasons=blocking_reasons,
-                )
-
         if canonical == "pumpkin":
             if any(k in combined_text for k in ("oil", "seed oil", "lipid")):
                 material_form_matched = True
@@ -1659,6 +1647,14 @@ def _resolve_evidence_for_row(
                     canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
                     disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
                     points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code=decision["reason_code"], owner_facts=owner_facts,
+                    blocking_reasons=["literature_applicability_unestablished"],
+                )
+            else:
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
+                    points_eligible=False, applicability_status="literature_applicability_unestablished",
                     reason_code=decision["reason_code"], owner_facts=owner_facts,
                     blocking_reasons=["literature_applicability_unestablished"],
                 )
