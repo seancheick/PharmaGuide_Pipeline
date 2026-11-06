@@ -6229,8 +6229,8 @@ class SupplementEnricherV3:
     ) -> None:
         """Reconcile identity after a candidate becomes intentionally non-scorable.
 
-        Recognition supplies primary identity when no verified primary remains;
-        a missing preparation grade cannot replace an established identity.
+        Recognition may own a separately scoped preparation. A functional
+        flavor/filler role cannot replace a verified primary substance.
         Safety-table matches remain
         orthogonal: they suppress scoring but do not replace a valid cleaner
         identity with a regulatory-record identifier.
@@ -6360,12 +6360,12 @@ class SupplementEnricherV3:
                     ),
                 })
         elif (matched_entry_id and recognition_source
-              and not (decision.disposition == "clean"
-                       and decision.canonical_id_after
-                       and decision.canonical_id_after == ingredient.get("canonical_id"))):
-            # Failure to grade a preparation does not invalidate its verified
-            # parent identity. Secondary recognition must not replace that
-            # identity and silently remove its existing safety-rule subjects.
+              and not (decision.disposition == "clean" and decision.canonical_id_after
+                       and recognition_source == "other_ingredients"
+                       and recognition_reason in ADDITIVE_TYPES_SKIP_SCORING)):
+            # A flavor/filler role cannot replace a verified primary substance
+            # and remove its safety subjects. Prepared botanical and pending
+            # active records retain their existing, independently scoped owner.
             row.update({
                 "canonical_id": matched_entry_id,
                 "canonical_id_after": matched_entry_id,
@@ -7074,11 +7074,18 @@ class SupplementEnricherV3:
         # otherwise leak transient rows into parent_fallback_report.json when
         # the real ingredient enrichment later upgrades the match).
         source = source_context or {}
+        canonical = (source.get("canonical_id")
+                     if source.get("canonical_source_db") == "ingredient_quality_map" else None)
+        if canonical:
+            decision, _, _ = self._resolve_iqd_identity(
+                source, None, quality_map, allow_unscoreable_taxonomy_only=True,
+            )
+            if decision.canonical_id_after != canonical or decision.disposition != "clean":
+                canonical = None
         quality_match = self._match_quality_map(
             ing_name, std_name, quality_map, _form_extraction_attempt=True,
-            cleaner_canonical_id=(source.get("canonical_id")
-                                  if source.get("canonical_source_db") == "ingredient_quality_map" else None),
-            cleaned_forms=source.get("forms"),
+            cleaner_canonical_id=canonical,
+            cleaned_forms=source.get("forms"), row_notes=source.get("notes"),
             raw_source_text=source.get("raw_source_text") or source.get("name"),
         )
         if quality_match and quality_match.get("match_status") != "FORM_UNMAPPED":

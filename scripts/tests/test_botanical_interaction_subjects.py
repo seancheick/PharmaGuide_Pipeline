@@ -438,7 +438,8 @@ def test_whole_willow_bark_mass_cannot_suppress_a_salicylate_precaution(enricher
     )
 
 
-def test_unverified_preparation_cannot_replace_verified_parent_with_recognition(enricher):
+@pytest.mark.parametrize('alternate_cleaner', [False, True])
+def test_unverified_preparation_cannot_replace_verified_parent_with_recognition(enricher, alternate_cleaner):
     ingredient = {
         'name': 'PACRAN Cranberry (Vaccinium macrocarpon) powder',
         'raw_source_text': 'PACRAN Cranberry (Vaccinium macrocarpon) powder',
@@ -447,10 +448,16 @@ def test_unverified_preparation_cannot_replace_verified_parent_with_recognition(
         'raw_source_path': 'ingredientRows[1]', 'quantity': 300, 'unit': 'mg',
     }
     from enrich_supplements_v3 import SKIP_REASON_RECOGNIZED_NON_SCORABLE
+    quality = enricher.databases['ingredient_quality_map']
+    primary = None
+    if alternate_cleaner:
+        ingredient.update(canonical_id='NHA_CRANBERRY_EXTRACT', canonical_source_db='other_ingredients')
+        primary = enricher._match_quality_map('cranberry', 'cranberry', quality)
     row = {**ingredient, 'skip_reason': SKIP_REASON_RECOGNIZED_NON_SCORABLE}
     enricher._restamp_recognized_non_scorable_identity(
-        row, ingredient, None, enricher.databases['ingredient_quality_map'],
+        row, ingredient, primary, quality,
         recognition={'recognition_source': 'other_ingredients',
+                     'recognition_reason': 'flavor_natural',
                      'matched_entry_id': 'NHA_CRANBERRY_EXTRACT',
                      'matched_entry_name': 'Cranberry Extract'},
     )

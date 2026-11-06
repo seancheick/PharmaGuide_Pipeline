@@ -110,6 +110,8 @@ def test_ceylon_denial_is_recorded_on_the_real_label_path(enricher, product_id, 
     rejected = product["evidence_data"].get("rejected_clinical_matches") or []
     reasons = {item.get("id"): item.get("reason_code") for item in rejected}
     assert reasons.get("INGR_CINNAMON_EXTRACT") == "clinical_identity_excluded"
+    assert product["activeIngredients"][0]["raw_source_text"] == label
+    assert score_evidence(product)["score"] == 0  # No Cassia credit for either Ceylon representation.
 
 
 def test_cassia_cinnamon_preparation_cannot_bypass_missing_source_approval():
