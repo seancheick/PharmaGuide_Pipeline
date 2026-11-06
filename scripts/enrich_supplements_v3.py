@@ -9307,7 +9307,7 @@ class SupplementEnricherV3:
                 ing_name, std_name, quality_map, cleaned_forms=cleaned_forms,
                 preferred_parent=preferred_parent, branded_token=branded_token,
                 cleaner_canonical_id=cleaner_canonical_id,
-                source_context=source_context,
+                source_context=source_context, raw_source_text=raw_source_text,
             )
             parent = (match or {}).get("canonical_id")
             if negative_match_terms_veto(
@@ -10336,6 +10336,12 @@ class SupplementEnricherV3:
         source_candidates = (_build_normalized_candidates(raw_source_text)
                              if raw_source_text is not None and raw_source_text != ing_name
                              else normalized_candidates)
+        for disclosed_form in cleaned_forms or []:
+            if isinstance(disclosed_form, dict) and disclosed_form.get("name"):
+                source_candidates.extend(
+                    (value, source) for value, source in
+                    _build_normalized_candidates(disclosed_form["name"]) if source == 0
+                )
 
         def alias_length(match_type: str, alias: str) -> int:
             if match_type == "exact":
@@ -10526,7 +10532,22 @@ class SupplementEnricherV3:
                 # standardized/base candidates) and form punctuation owner.
                 # A source-owned alias or explicit preparation still proves
                 # this form even when a generic standardName won the tier.
-                if not any(
+                # The shared strain owner already knows exact registered aliases
+                # and punctuation variants. Require the same reference on both
+                # sides; a standardized species/name alone proves no strain.
+                strain_source_proof = False
+                if (parent_data.get("category") == "probiotics"
+                        and parent_key == cleaner_iqm_canonical):
+                    from studied_formulas import (
+                        _clinical_strain_registry, clinical_strain_identity_matches,
+                    )
+                    labels = [value for value, source in source_candidates if source == 0]
+                    strain_source_proof = any(
+                        clinical_strain_identity_matches(candidate["form_key"], reference)
+                        and any(clinical_strain_identity_matches(label, reference) for label in labels)
+                        for reference in _clinical_strain_registry().values()
+                    )
+                if not strain_source_proof and not any(
                     norm_module.find_affirmative_label_match(
                         re.compile(r"(?<!\w)" + re.escape(alias) + r"(?!\w)", re.I),
                         self._norm_form_name(value), spaced_free=True,

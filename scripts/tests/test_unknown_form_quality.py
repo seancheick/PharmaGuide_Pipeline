@@ -1699,3 +1699,46 @@ def test_bare_carnipure_cannot_inherit_tartrate_from_a_standardized_name(enriche
         branded_token='Carnipure', raw_source_text='Carnipure')
     assert match is not None
     assert 'tartrate' not in (match.get('form_id') or '').lower()
+
+
+@pytest.mark.parametrize('raw,standard,parent,forms,expected', [
+    ('HOWARU', 'Lactobacillus rhamnosus HN001', 'lactobacillus_rhamnosus',
+     [{'name': 'L. rhamnosus HN001'}], 'lactobacillus rhamnosus hn001'),
+    ('Bacillus coagulans Unique IS2', 'Bacillus coagulans Unique IS-2',
+     'bacillus_coagulans', [], 'bacillus coagulans unique is-2'),
+    ('Lactobacillus acidophillus La-14', 'Lactobacillus acidophilus La-14',
+     'lactobacillus_acidophilus', [], 'lactobacillus acidophilus la-14'),
+])
+def test_inferred_form_guard_preserves_disclosed_strain_proof(
+    enricher, raw, standard, parent, forms, expected,
+):
+    match = enricher._match_quality_map(
+        raw, standard, enricher.databases['ingredient_quality_map'],
+        cleaner_canonical_id=parent, cleaned_forms=forms, raw_source_text=raw,
+    )
+    assert match['canonical_id'] == parent
+    assert match['form_id'] == expected
+
+
+@pytest.mark.parametrize('raw,forms', [
+    ('HOWARU', []),
+    ('Lactobacillus rhamnosus HN0010', []),
+    ('HOWARU', [{'name': 'L. rhamnosus GG'}]),
+    ('Not Lactobacillus rhamnosus HN001', []),
+])
+def test_registered_strain_source_proof_does_not_borrow_an_inferred_identity(enricher, raw, forms):
+    match = enricher._match_quality_map(
+        raw, 'Lactobacillus rhamnosus HN001', enricher.databases['ingredient_quality_map'],
+        cleaner_canonical_id='lactobacillus_rhamnosus', cleaned_forms=forms,
+        raw_source_text=raw,
+    )
+    assert match['form_id'] != 'lactobacillus rhamnosus hn001'
+
+
+def test_row_notes_wrapper_retains_original_form_source(enricher):
+    quality = enricher.databases['ingredient_quality_map']
+    match = enricher._match_quality_map(
+        'Sibelius', 'Sage Leaf Extract', quality, branded_token='Sibelius',
+        raw_source_text='Sibelius Sage extract', row_notes='Sibelius Sage extract',
+    )
+    assert match and match['form_id'] == 'sage extract'
