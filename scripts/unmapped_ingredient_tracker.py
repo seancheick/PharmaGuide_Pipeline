@@ -125,6 +125,79 @@ class UnmappedIngredientTracker:
         
         logger.debug(f"Processed {len(unmapped_data)} unmapped ingredients")
     
+    def load_unmapped_tracking(self, processed_count: int):
+        """Recover the existing report snapshot; reject inconsistent reports.
+
+        The batch state supplies the product count. No normalization or identity
+        decision is repeated while restoring the tracker inputs.
+        """
+        counts = {}
+        details = {}
+
+        def read(filename, key, total_key, container_type, value_type):
+            with (self.output_path / filename).open(encoding="utf-8") as handle:
+                report = json.load(handle)
+            metadata = report["metadata"]
+            rows = report[key]
+            if not isinstance(rows, container_type):
+                raise ValueError(f"{filename}: invalid report container")
+            if any(type(metadata[field]) is not int or metadata[field] < 0
+                   for field in ("products_processed", total_key, "total_occurrences")):
+                raise ValueError(f"{filename}: invalid metadata count")
+            if isinstance(rows, dict) and any(not isinstance(name, str) or not name for name in rows):
+                raise ValueError(f"{filename}: invalid ingredient name")
+            if metadata["products_processed"] != processed_count:
+                raise ValueError(f"{filename}: product count differs from resume state")
+            if metadata[total_key] != len(rows):
+                raise ValueError(f"{filename}: entry count is inconsistent")
+            values = list(rows.values()) if isinstance(rows, dict) else rows
+            if any(type(value) is not value_type for value in values):
+                raise ValueError(f"{filename}: invalid report entry")
+            occurrences = [value if value_type is int else value["occurrences"] for value in values]
+            if any(type(count) is not int or count <= 0 for count in occurrences):
+                raise ValueError(f"{filename}: invalid occurrence count")
+            if metadata["total_occurrences"] != sum(occurrences):
+                raise ValueError(f"{filename}: occurrence total is inconsistent")
+            return rows
+
+        for active, label in ((True, "active"), (False, "inactive")):
+            rows = read(f"unmapped_{label}_ingredients.json", "unmapped_ingredients", "total_unmapped", dict, int)
+            for name, count in rows.items():
+                if name in counts:
+                    raise ValueError(f"Duplicate identity-gap report entry: {name}")
+                counts[name] = count
+                details[name] = {"is_active": active}
+
+        for filename, key, total_key, flag in (
+            ("recognized_non_identity_ingredients.json", "recognized_ingredients", "total_recognized", "recognized_non_identity"),
+            ("non_scoreable_unmapped_ingredients.json", "ingredients", "total_excluded", "non_scoreable_cleaner_row"),
+        ):
+            rows = read(filename, key, total_key, dict, dict)
+            for name, row in rows.items():
+                if name in counts or type(row["is_active"]) is not bool:
+                    raise ValueError(f"Invalid audit-only report entry: {name}")
+                counts[name] = row["occurrences"]
+                details[name] = {key: value for key, value in row.items() if key != "occurrences"}
+                details[name][flag] = True
+
+        for active, label in ((True, "active"), (False, "inactive")):
+            rows = read(f"needs_verification_{label}_ingredients.json", "ingredients", "total_needs_verification", list, dict)
+            seen = set()
+            for row in rows:
+                name = row["label_text"]
+                if (name in seen or counts.get(name) != row["occurrences"]
+                        or details[name] != {"is_active": active}):
+                    raise ValueError(f"Inconsistent needs-verification report entry: {name}")
+                seen.add(name)
+                details[name].update({
+                    "needs_verification": True,
+                    "verification_reason": row["reason"],
+                    "raw_ingredient_group": row.get("raw_ingredient_group"),
+                    "conflicting_candidates": row.get("conflicting_candidates", []),
+                    "next_verification_step": row.get("next_verification_step"),
+                })
+        return counts, details
+
     def process_and_save_unmapped_tracking(
         self, unmapped_data: Dict[str, int], details_by_name: Dict[str, Dict[str, Any]],
         processed_count_override: Optional[int] = None,

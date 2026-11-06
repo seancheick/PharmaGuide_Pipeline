@@ -745,6 +745,15 @@ class BatchProcessor:
     def process_all_files(self, files: List[Path], resume: bool = False) -> Dict[str, Any]:
         """Process all files in batches"""
         start_time = time.time()
+        # Coordinator diagnostics belong to this invocation's generation, even
+        # when a caller reuses a BatchProcessor instance.
+        self.global_unmapped.clear()
+        self.global_unmapped_active.clear()
+        self.global_unmapped_details.clear()
+        self.global_mapped.clear()
+        self.seen_dsld_ids.clear()
+        self.report_write_failures.clear()
+        self.performance_tracker = PerformanceTracker()
         logger.info("Preparing processing state for %d files", len(files))
         # Pin the code and reference data this run starts with; the manifest
         # re-checks them at the end.
@@ -820,6 +829,10 @@ class BatchProcessor:
                 "Initial processing state ready in %.2fs",
                 time.time() - manifest_build_start,
             )
+
+        prior_outcomes = {"cleaned": 0, "needs_review": 0, "incomplete": 0}
+        if resume and state.processed_files:
+            prior_outcomes = self._restore_resume_reports(state)
 
         # FIX 1+2: Skip already-processed files on resume
         processed_set = set(state.processed_file_paths or [])
@@ -904,9 +917,16 @@ class BatchProcessor:
         # Generate final summary
         total_time = time.time() - start_time
         summary = self._generate_final_summary(batch_results, total_time)
-        
-        # Save unmapped ingredients
-        self._save_unmapped_ingredients(processed_count_override=state.processed_files)
+        if any(prior_outcomes.values()):
+            summary["total_files"] += sum(prior_outcomes.values())
+            for category, count in prior_outcomes.items():
+                summary["results"][category] += count
+            summary["success_rate"] = clean_processing_success_rate(
+                summary["results"], summary["total_files"])
+
+        # A no-work resume retains the verified report bytes, including dates.
+        if batch_results or not state.processed_files:
+            self._save_unmapped_ingredients(processed_count_override=state.processed_files)
         
         # Generate processing report
         self._generate_processing_report(summary, batch_results)
@@ -1233,6 +1253,14 @@ class BatchProcessor:
             "write_success": write_ok,
         }
     
+    @staticmethod
+    def _product_id(product: Dict[str, Any]) -> str:
+        """Use the same accepted product ID for live and resumed deduplication."""
+        raw_id = product.get("id")
+        if raw_id is None or (isinstance(raw_id, str) and raw_id.strip() == ""):
+            raw_id = product.get("dsld_id")
+        return str(raw_id).strip() if raw_id is not None else ""
+
     def _categorize_result(self, result: ProcessingResult, cleaned: List,
                           needs_review: List, incomplete: List, errors: List,
                           batch_unmapped: Counter, batch_mapped: Counter = None):
@@ -1269,20 +1297,6 @@ class BatchProcessor:
             reject("Missing product data and canonical id")
             return None
 
-        # Update unmapped ingredients
-        if result.unmapped_ingredients:
-            batch_unmapped.update(result.unmapped_ingredients)
-
-        # Track which unmapped ingredients are active
-        if result.unmapped_active:
-            self.global_unmapped_active.update(result.unmapped_active)
-        if result.unmapped_details:
-            self.global_unmapped_details.update(result.unmapped_details)
-
-        # Extract and count mapped ingredients from the processed data
-        if batch_mapped is not None and result.data:
-            self._extract_mapped_ingredients(result.data, batch_mapped)
-
         # FIX 7: Verify output structure before categorizing
         if result.data:
             # Pass raw_id for ID preservation check (wrapped in dict for verify_output)
@@ -1310,14 +1324,7 @@ class BatchProcessor:
         # without a canonical id we cannot dedup safely, and two empty-id
         # records would otherwise both slip through.
         if result.data:
-            raw_id = result.data.get('id')
-            if raw_id is None or (isinstance(raw_id, str) and raw_id.strip() == ''):
-                raw_id = result.data.get('dsld_id')
-            dsld_id = (
-                str(raw_id).strip()
-                if raw_id is not None and (not isinstance(raw_id, str) or raw_id.strip() != '')
-                else ''
-            )
+            dsld_id = self._product_id(result.data)
 
             if not dsld_id:
                 logger.error(
@@ -1336,6 +1343,20 @@ class BatchProcessor:
                 reject(f"Duplicate dsld_id {dsld_id}; first seen in {first_file}")
                 return None
             self.seen_dsld_ids[dsld_id] = str(result.file_path)
+
+        # Update unmapped ingredients
+        if result.unmapped_ingredients:
+            batch_unmapped.update(result.unmapped_ingredients)
+
+        # Track which unmapped ingredients are active
+        if result.unmapped_active:
+            self.global_unmapped_active.update(result.unmapped_active)
+        if result.unmapped_details:
+            self.global_unmapped_details.update(result.unmapped_details)
+
+        # Extract and count mapped ingredients from the processed data
+        if batch_mapped is not None and result.data:
+            self._extract_mapped_ingredients(result.data, batch_mapped)
 
         # Categorize by status
         if result.status == STATUS_SUCCESS:
@@ -1427,6 +1448,37 @@ class BatchProcessor:
                     pass
             return False
     
+    def _restore_resume_reports(self, state: BatchState) -> Dict[str, int]:
+        """Restore cumulative diagnostics and counts before appending outputs."""
+        try:
+            counts, details = UnmappedIngredientTracker(
+                self.output_dir / "unmapped").load_unmapped_tracking(state.processed_files)
+            outcomes = {"cleaned": 0, "needs_review": 0, "incomplete": 0}
+            for category in outcomes:
+                for path in sorted((self.output_dir / category).glob(f"{category}_batch_*.*")):
+                    if path.suffix not in (".json", ".jsonl"):
+                        continue
+                    with path.open(encoding="utf-8") as handle:
+                        products = (json.loads(line) for line in handle if line.strip()) if path.suffix == ".jsonl" else json.load(handle)
+                        for product in products:
+                            outcomes[category] += 1
+                            self._extract_mapped_ingredients(product, self.global_mapped)
+                            identifier = self._product_id(product)
+                            if not identifier or identifier in self.seen_dsld_ids:
+                                raise ValueError("missing or duplicate product ID in prior outputs")
+                            self.seen_dsld_ids[identifier] = str(path)
+            if (sum(outcomes.values()) != state.processed_files
+                    or len(set(state.processed_file_paths)) != state.processed_files):
+                raise ValueError("output counts differ from resume state")
+            self.global_unmapped.update(counts)
+            self.global_unmapped_details.update(details)
+            self.global_unmapped_active.update(name for name in counts if details[name]["is_active"])
+            return outcomes
+        except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+            raise StageManifestError(
+                f"Resume report snapshot is invalid; run a fresh full repair: {exc}"
+            ) from exc
+
     def _save_unmapped_ingredients(self, processed_count_override: Optional[int] = None):
         """Save cumulative unmapped ingredients using enhanced tracking"""
         # Preserve per-label details from worker normalization so reporting can
