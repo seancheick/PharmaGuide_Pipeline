@@ -25,7 +25,7 @@ EVIDENCE = ["evidence_assessment_incomplete"]
 
 # Label, and the rows left open on it where the review was never performed.
 COMPLETES = [
-    pytest.param("a9_partial_full_evidence_328830_raw.json", True, id="multi_panel_read_addin_open"),
+    pytest.param("a9_partial_full_evidence_328830_raw.json", False, id="multi_panel_beta_authority_complete"),
     pytest.param("a9_completion_2715_raw.json", False, id="sports_adjunct_by_materiality"),
     pytest.param("a9_completion_252445_raw.json", False, id="finished_review_outside_scope"),
     pytest.param("raw_bamboo_252349.json", False, id="finished_authority_no_credit"),
@@ -80,6 +80,51 @@ def test_a_review_that_cant_change_the_answer_doesnt_hold_the_product(pipeline, 
     # Completing the product says nothing about rows nobody read, and neither does its copy.
     assert bool(_unreviewed_rows(scored)) is open_rows
     assert ("weren't individually reviewed" in scored["quality_pillars_v4"]["evidence"]["reason"]) is open_rows
+
+
+def test_multi_panel_beta_carotene_is_a_finished_authority_review(pipeline):
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    scored = build_scored_artifact(_enrich(pipeline, "a9_partial_full_evidence_328830_raw.json"))
+    beta = next(row for row in scored["assessment_readiness"]["evidence"]["ingredient_assessments"]
+                if row["canonical_id"] == "beta_carotene")
+    assert beta["state"] == "evaluated_supported"
+    assert beta["reason_code"] == "dietary_reference_intake_authority_established"
+    assert scored["quality_assessment_status"] == "complete"
+    assert _release_blockers(scored) == []
+
+
+def test_multi_panel_counterfactual_unread_adjunct_preserves_scope_and_copy(pipeline, monkeypatch):
+    import assessment_readiness
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    # Synthetic assessment variant of the real label, not a claim about its
+    # current review: retain boron's real identity/amount/adjunct role, but model
+    # an individual review not yet performed. The panel still owns completion.
+    owner = assessment_readiness.evaluate_evidence_assessment
+
+    def with_unread_adjunct(*args, **kwargs):
+        result = owner(*args, **kwargs)
+        boron = next(row for row in result["ingredient_assessments"]
+                     if row["canonical_id"] == "boron")
+        assert boron["role"] == "adjunct" and not boron["material"]
+        prior_applicability = boron["evidence_applicability"]
+        applicability = assessment_readiness.EVIDENCE_APPLICABILITY_INDIVIDUAL
+        result["applicability_counts"][prior_applicability] -= 1
+        result["applicability_counts"][applicability] = result["applicability_counts"].get(applicability, 0) + 1
+        result["individual_assessment_count"] += 1
+        boron.update(state="not_yet_evaluated", evidence_applicability=applicability,
+                     reason_code="no_reviewed_evidence_assessment")
+        result.update(readiness="incomplete", not_yet_evaluated_count=1,
+                      not_yet_evaluated_row_refs=[boron["source_row_ref"]])
+        return result
+
+    monkeypatch.setattr(assessment_readiness, "evaluate_evidence_assessment", with_unread_adjunct)
+    scored = build_scored_artifact(_enrich(pipeline, "a9_partial_full_evidence_328830_raw.json"))
+    assert scored["quality_assessment_status"] == "complete"
+    assert _release_blockers(scored) == []
+    assert {row["canonical_id"] for row in _unreviewed_rows(scored)} == {"boron"}
+    assert "weren't individually reviewed" in scored["quality_pillars_v4"]["evidence"]["reason"]
 
 
 def test_sports_nutrition_review_does_not_relabel_nonmaterial_adjuncts(pipeline):

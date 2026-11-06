@@ -5,7 +5,8 @@ companion baselines + established framework rules (B1 mushroom, B19
 flavonoid, B18 probiotic, B16/B21 Crominex, etc.). NO new PMID research.
 
 Key applications:
-  • Anthocyanin class-poor: bilberry, cranberry, elderberry (B19/B31)
+  • Anthocyanin class-poor: bilberry, cranberry (B19/B31); unspecified
+    elderberry absolute absorption remains unknown after source-content review
   • Mushroom class-poor: chaga, lion's mane, maitake (B1)
   • CoQ10/curcumin/phytosterol class-poor (B7/B8)
   • Mineral class baselines: chromium (~2%), molybdenum (~91%),
@@ -74,11 +75,23 @@ B32_BANDS = [
 ]
 
 
+def _assert_unspecified_elderberry_absorption_unknown(form):
+    assert form['absorption_structured'] == dict(
+        value=None, range_low=None, range_high=None, quality='unknown')
+    assert 'Absolute oral absorption fraction not established' in form['absorption']
+    assert 'PMID:18040528' in form['notes']
+    assert 'urinary recovery of intact anthocyanins is not an absolute absorption estimate' in form['notes']
+    assert 'no measured oral absorption fraction for this unspecified preparation is retained' in form['notes']
+
+
 @pytest.mark.parametrize('pid,fname,vmin,vmax,basis', B32_BANDS)
 def test_b32_value_in_band(iqm, pid, fname, vmin, vmax, basis):
     """Each form's struct.value must sit in evidence band."""
     form = iqm[pid]['forms'].get(fname)
     assert form is not None, f'{pid}::{fname} missing'
+    if (pid, fname) == ('elderberry', 'elderberry (unspecified)'):
+        _assert_unspecified_elderberry_absorption_unknown(form)
+        return
     reviewed_unknown = {'l-theanine (unspecified)': ['34562208', 'mouse pharmacokinetics'],
      'coq10 (unspecified)': ['carrier preparation are unspecified'],
      # Source-content review: class assignment was not a human measurement.
@@ -115,8 +128,7 @@ def test_d_tyrosine_below_l_tyrosine_class(iqm):
 
 
 def test_anthocyanin_class_consistent(iqm):
-    """All anthocyanin-class forms (bilberry, cranberry, elderberry) must
-    cluster in 0-0.05 band per González-Barrio 2010 / Czank 2013.
+    """Retain bilberry/cranberry bands, without inventing elderberry absorption.
     """
     forms = [
         ('bilberry', 'bilberry (unspecified)'),
@@ -126,6 +138,9 @@ def test_anthocyanin_class_consistent(iqm):
     for pid, fname in forms:
         form = iqm[pid]['forms'].get(fname)
         if form is None:
+            continue
+        if pid == 'elderberry':
+            _assert_unspecified_elderberry_absorption_unknown(form)
             continue
         v = (form.get('absorption_structured') or {}).get('value')
         assert v is not None and v <= 0.05, (
