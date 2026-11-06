@@ -1704,7 +1704,7 @@ def test_primary_protein_projection_is_not_completed_by_a_carrier_review():
     assert resolution.blocking_reasons
 
 
-@pytest.mark.parametrize("canonical", ["l_glutamine", "glutathione", "green_coffee_bean"])
+@pytest.mark.parametrize("canonical", ["glutathione", "green_coffee_bean"])
 def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
     from assessment_readiness import EVIDENCE_NOT_YET_EVALUATED, _resolved_evidence_assessment
 
@@ -1713,6 +1713,14 @@ def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
     assert result.reason_code == "literature_applicability_unestablished"
     assert not result.points_eligible
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+
+
+def test_glutamine_known_source_does_not_finish_unread_siblings_or_infer_source_form():
+    result = er.resolve_evidence_for_canonical("l_glutamine")
+    assert result.owner_facts["backed_clinical_studies"]["effect_directions"] == ["positive_moderate"]
+    assert not result.points_eligible
+    assert "clinical_sources_ineligible" in result.blocking_reasons
+    assert "clinical_source_row_unresolved" in result.blocking_reasons
 
 
 @pytest.mark.parametrize("canonical", ["casein", "pea_protein", "rice_protein"])

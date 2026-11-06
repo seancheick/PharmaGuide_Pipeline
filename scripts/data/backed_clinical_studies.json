@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
     "last_updated": "2026-11-06",
-    "total_entries": 213,
+    "total_entries": 214,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -46739,6 +46739,616 @@
           "doi": "10.1016/s0168-8278(98)80237-7"
         }
       ]
+    },
+    {
+      "id": "INGR_L_GLUTAMINE",
+      "standard_name": "L-Glutamine",
+      "aliases": [
+        "glutamine",
+        "l-glutamine",
+        "micronized glutamine"
+      ],
+      "category": "digestive_gut",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_single",
+      "effect_direction": "positive_moderate",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Retain the observed positive_moderate label from PMID30108163. Sean authorized only this independently verified context to use the existing weak-positive multiplier on2026-11-06; no other study, preparation, population or outcome inherits it. One narrow trial with completer-only analysis does not establish general efficacy.",
+      "published_studies": [
+        "30108163",
+        "32992440",
+        "33809996",
+        "38193521",
+        "35106632",
+        "39397201",
+        "34844156",
+        "42366260",
+        "41053591",
+        "38243579",
+        "40748005"
+      ],
+      "score_contribution": "tier_2",
+      "total_enrollment": 115,
+      "registry_completed_trials_count": null,
+      "key_endpoints": [
+        "Prespecified reduction of at least50points in IBS symptom severity in post-infectious IBS-D with intestinal hyperpermeability"
+      ],
+      "health_goals_supported": [],
+      "notes": "The exact free-L-glutamine trial is qualified for its narrow patient-important IBS endpoint. Other known studies and modified preparations remain unfinished; earned source credit must coexist with incomplete ingredient review. No general IBS, sports-performance, muscle-recovery, lower-dose-equivalence or safety claim is established.",
+      "notable_studies": "PMID30108163:115randomized,106completers;43/54active versus3/52whey placebo met the prespecified primary IBS symptom threshold after15g/day for8weeks. Permeability was a secondary surrogate. All other listed sources retain their own reviewed-exclusion or pending status; do not count their citations as independent positive replications.",
+      "last_updated": "2026-11-06",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "30108163",
+          "title": "Randomised placebo-controlled trial of dietary glutamine supplements for postinfectious irritable bowel syndrome.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30108163/",
+          "doi": "10.1136/gutjnl-2017-315136",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "32992440",
+          "title": "Gastrointestinal Tolerance of Low, Medium and High Dose Acute Oral l-Glutamine Supplementation in Healthy Adults: A Pilot Study.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32992440/",
+          "doi": "10.3390/nu12102953",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "33809996",
+          "title": "L-Glutamine Supplementation Enhances Strength and Power of Knee Muscles and Improves Glycemia Control and Plasma Redox Balance in Exercising Elderly Women.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33809996/",
+          "doi": "10.3390/nu13031025",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38193521",
+          "title": "Supplementation of L-glutamine enhanced mucosal immunity and improved hormonal status of combat-sport athletes.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38193521/",
+          "doi": "10.1080/15502783.2023.2300259",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "35106632",
+          "title": "Effects of oral cystine and glutamine on exercise-induced changes in gastrointestinal permeability and damage markers in young men.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35106632/",
+          "doi": "10.1007/s00394-022-02806-1",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39397201",
+          "title": "A systematic review and meta-analysis of clinical trials on the effects of glutamine supplementation on gut permeability in adults.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39397201/",
+          "doi": "10.1007/s00726-024-03420-7",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "34844156",
+          "title": "Glutamine supplementation can reduce some atherosclerosis markers after exhaustive exercise in young healthy males.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34844156/",
+          "doi": "10.1016/j.nut.2021.111506",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "42366260",
+          "title": "The effects of glutamine supplementation on inflammatory and oxidative stress indices in chronic diseases: a systematic review.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42366260/",
+          "doi": "10.1007/s00726-026-03543-z",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "41053591",
+          "title": "Glutamine prevents diarrhea in colorectal cancer patients undergoing chemotherapy or chemoradiotherapy: a meta-analysis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41053591/",
+          "doi": "10.1186/s12876-025-04308-w",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38243579",
+          "title": "Glutamine Supplementation on Burn Patients: A Systematic Review and Meta-analysis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38243579/",
+          "doi": "10.1093/jbcr/irae007",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "40748005",
+          "title": "The Role of Glutamine and Arginine in Wound Healing of Pressure Ulcers: A Systematic Review.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40748005/",
+          "doi": "10.1111/wrr.70077",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_30108163_pi_ibsd_primary",
+          "source_pmids": [
+            "30108163"
+          ],
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "L-glutamine",
+            "preparation": "Free-form oral L-glutamine powder; not N-acetyl-L-glutamine, alanyl-glutamine/Sustamine, or an unspecified glutamine complex"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "postinfectious_ibs_d",
+          "purpose": "treatment",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "glutamine_30108163",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults eligible at18-72years with RomeIII diarrhea-predominant IBS after a medically documented enteric infection at least1year earlier and objectively increased intestinal permeability. Not other IBS subtypes, IBS-D with normal permeability, healthy athletes, children, pregnancy or lactation."
+          },
+          "study_design": "Randomized double-blind placebo-controlled two-center eight-week trial;115randomized(59glutamine/56wheyplacebo),106completed(54/52). Published efficacy analysis includes completers only; no full intention-to-treat efficacy analysis is asserted.",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "clinical_review": {
+            "reviewer": "Codex L-glutamine source reviewer; independently checked by Codex glycine/blueberry source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-delegated existing-policy source review with independent fullbody/API content verification on2026-11-06. Exact30108163 oral glutamine, PI-IBS-D/hyperpermeability and named primary outcome qualified; existing literature-study positive_moderate determination retained. Not a physician attribution, new numerical grade, general-population efficacy or Dose threshold."
+          },
+          "limitations": [
+            "One8-week trial in a narrow selected population;115randomized and106completed. Only completers entered final efficacy analysis. Published discontinuation wording is internally inconsistent; preserve explicit randomized/completer counts and do not label it full intention-to-treat.",
+            "History of enteric infection was documented medically;stool cultures were not obtained. Results do not establish general treatment of all IBS,IBS-C,IBS-D with normal permeability,healthy sports performance or muscle recovery.",
+            "Patients with bacterial overgrowth,celiac disease,significant kidney/liver abnormalities and other exclusion conditions were not studied;children and pregnancy/lactation cannot inherit efficacy or safety conclusions.",
+            "Whey-protein placebo could theoretically affect IBS symptoms;authors did not observe significant worsening in the placebo group. Participants were asked to refrain from alcohol andNSAIDs;this is source-protocol context,not new consumer advice.",
+            "Permeability is a secondary surrogate and correlated change does not establish mediation or a proven mechanism. Do not pool it as independent clinical replication alongside the patient-important primary result.",
+            "The assigned15g/day regimen over56days does not establish a universal efficacy minimum,optimal long-term dose,UL or general safety clearance. Longer-term durability and replication remain unknown.",
+            "Qualified identity is oral dietary glutamine powder within the existing free-form L-glutamine literature scope;no transfer to N-acetyl-L-glutamine,alanyl-glutamine/Sustamine,unspecified glutamine complexes or protein-bound glutamine.",
+            "The source-specific positive_moderate grade already exists in the literature record and is retained;this context adds verified preparation/population/outcome qualification,not a new numerical grading policy. Other L-glutamine source questions and preparation-specific research remain independently open."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              15
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "administration_frequency": "5 g powder three times daily, mixed in eight ounces of water;15g/day for8weeks",
+            "dosage_forms": [
+              "oral powder in water"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "5 g powder three times daily, mixed in eight ounces of water;15g/day for8weeks",
+            "normalization": {
+              "basis": "5g oral glutamine powder three times daily=15g/day;8weeks=56days. This is the assigned30108163 regimen,not a minimum effective dose,general optimal intake,UL or evidence of derivative/formula equivalence."
+            },
+            "source_provenance": {
+              "pmid": "30108163",
+              "location": "Methods:Eligibility Criteria,Randomization,Follow-up and Data Management,Statistical Analysis;Results:Patients and Outcomes;Tables1-3;Discussion:limitations",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9549483/"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "At8weeks,at least50-point reduction in validated IBS symptom severity score occurred in43/54(79.6%)glutamine versus3/52(5.8%)whey-placebo completers,p<0.0001",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Raw IBS symptom severity,daily stool frequency and Bristol stool form improved versus placebo in between-group comparisons of pre/post change(Table3)",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Urinary lactulose/mannitol intestinal-permeability ratio improved versus placebo in between-group comparison of pre/post change(Table3);a barrier-function biomarker,not an independent patient-important outcome",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "comparator": "Whey-protein powder,5g three times daily in water,matched forcolor/consistency/taste"
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_32992440_tolerance_not_efficacy",
+          "source_pmids": [
+            "32992440"
+          ],
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer (elderberry_review), independently checked by Codex root",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full-text dose-tolerability review,2026-11-06; three active doses, not efficacy. No physician attribution."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "32992440",
+              "location": "FullbodyMethods2.2/2.5/2.6,Results4.2,Discussion;officialPMC7601811",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/32992440/"
+            }
+          },
+          "limitations": [
+            "Fourteenhealthy mencompletedrandomizeddouble-blindrepeatedcounterbalancedcrossoverwiththreeACTIVEdoses(0.3,0.6,0.9g/kgFAT-FREEMASS);≥5daywashoutsand24hGIsymptomfollowup.Nozero-glutamineplaceboefficacycomparison.",
+            "HigherdoseproducedmoreGIsymptoms,usuallymildandtransient;oneparticipantreportedseverebelching/regurgitationonthehighestdose.Notuniversalabsenceofadverseeffects.",
+            "This is measuredacuteGItolerability,notgutrepair,sportsperformance,muscle-recoveryorimmune-efficacyevidence.No chronicULorsafetythreshold isintroduced."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_33809996_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "33809996"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "33809996",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/33809996/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Full text has been read; source-specific qualification remains unfinished. Reported within-group changes must not be promoted to a glutamine-versus-placebo treatment effect.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_38193521_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "38193521"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "38193521",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/38193521/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Full text has been read; source-specific qualification remains unfinished. Crossover period/washout and reported URTI denominator/analysis ambiguity remain unresolved; retain reported positive and null findings, not generic credit.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_35106632_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "35106632"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "35106632",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/35106632/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Combined-intervention results cannot establish isolated free-L-glutamine benefit.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_39397201_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "39397201"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "39397201",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/39397201/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Full text has been read; source-specific qualification remains unfinished. Heterogeneous populations, pooling and reporting contradictions require reconciliation; neither generic null efficacy nor a dose threshold is established.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_34844156_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "34844156"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "34844156",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/34844156/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. ",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_42366260_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "42366260"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "42366260",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/42366260/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Oral and parenteral source scopes and overlapping trial families require separate review.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_41053591_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "41053591"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "41053591",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41053591/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. ",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_38243579_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "38243579"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "38243579",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/38243579/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. ",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_40748005_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "40748005"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "40748005",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40748005/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Combined-intervention results cannot establish isolated free-L-glutamine benefit.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "glutamine"
+        ],
+        "excluded_form_terms": [
+          "n acetyl",
+          "acetyl glutamine",
+          "alanyl",
+          "sustamine",
+          "glutamine complex",
+          "glutamic acid",
+          "d glutamine",
+          "hydrochloride",
+          "hcl",
+          "ethyl ester",
+          "alpha ketoglutarate",
+          "akg",
+          "peptide"
+        ],
+        "supported_outcomes": [
+          "post_infectious_ibs_d"
+        ],
+        "studied_population": "Adults eligible at18-72years with RomeIII diarrhea-predominant IBS after a medically documented enteric infection at least1year earlier and objectively increased intestinal permeability. Not other IBS subtypes, IBS-D with normal permeability, healthy athletes, children, pregnancy or lactation.",
+        "source_pmids": [
+          "30108163"
+        ],
+        "reviewed_at": "2026-11-06"
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for the identified preparation only; not a recommendation or proof of lower-dose efficacy.",
+        "preparation": "Free L-glutamine; no equivalence to N-acetyl, alanyl-glutamine/Sustamine or unspecified complexes",
+        "purpose": "General catalog Dose only; exact source-specific clinical Evidence is separately qualified",
+        "population": "Adults with post-infectious IBS-D and increased intestinal permeability in the qualifying trial; no broader population transfer",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:30108163"
+        ],
+        "rationale": "The qualifying primary trial assigned 5g three times daily for eight weeks versus whey placebo. One tested regimen does not establish a general efficacy minimum, optimal interval, lower-dose equivalence or upper limit. Apply the existing DoseV4.1 completed-neutral policy without creating a numerical benchmark. Source content independently reviewed by Codex source reviewers on2026-11-06.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_L_GLUTAMINE",
+        "review_date": "2026-11-06",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      },
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "34cd41109634d4c2774c0425e91d21d015d0d43c1b4f05c0388c71cd59205f5c",
+          "source_ids": [
+            "PMID:30108163"
+          ],
+          "verified_at": "2026-11-06T22:36:37.585290+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:30108163",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Randomised placebo-controlled trial of dietary glutamine supplements for postinfectious irritable bowel syndrome.",
+              "content_sha256": "067d3fbb0414a121d3862b0ad17674d1eb6e67fd65e32f564447d14defb12a1f",
+              "notes": "Primary oral glutamine powder is retained within the existing curated free-L-glutamine scope; this bibliographic topic proof does not independently establish stereochemistry or derivative equivalence."
+            }
+          ]
+        }
+      }
     }
   ]
 }

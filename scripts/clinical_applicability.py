@@ -927,7 +927,7 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     the curated record. This is completion evidence, not a new dose benchmark.
     """
     from clinical_evidence_schema import validate_ingredient_context
-    from probiotic_measurements import clinical_review_provenance_valid
+    from probiotic_measurements import clinical_review_provenance_valid, context_review_finished
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
     contexts = reference.get("study_contexts")
     if not isinstance(contexts, list) or not contexts:
@@ -957,7 +957,8 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     excluded_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")
                       and not clinical_record_sources_eligible({"references_structured": [ref]})}
     eligible_pmids = declared_pmids - excluded_pmids
-    errors = []
+    errors = [str(context.get("context_id") or "unknown") + ":review.approval_required"
+              for context in contexts if not context_review_finished(context)]
     if reference_only and not contributing:
         # A source-transfer rejection is a completed non-affirmative decision,
         # not an affirmative trial with an invented regimen or primary outcome.

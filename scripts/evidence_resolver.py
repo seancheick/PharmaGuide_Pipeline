@@ -1234,6 +1234,10 @@ def _resolve_evidence_for_row(
             scope_decisions.append(assess_clinical_applicability(
                 product or {"activeIngredients": [row_dict]}, scoped,
                 assess_amount=False, require_claim_alignment=False))
+        from probiotic_measurements import context_review_finished
+        unfinished_contexts = [any(not context_review_finished(context)
+                                   for context in study.get("study_contexts") or [])
+                               for study in deduped_studies]
         noncontributing_complete = [
             (decision.get("status") == "not_applicable"
              and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
@@ -1241,8 +1245,10 @@ def _resolve_evidence_for_row(
                 and assess_clinical_source_review(study)["is_complete"])
             for study, decision in zip(deduped_studies, scope_decisions)
         ]
+        noncontributing_complete = [finished and not pending
+                                   for finished, pending in zip(noncontributing_complete, unfinished_contexts)]
         if not valid_studies:
-            if all(decision.get("status") == "not_applicable"
+            if not any(unfinished_contexts) and all(decision.get("status") == "not_applicable"
                    and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
                    for decision in scope_decisions):
                 owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
@@ -1280,7 +1286,10 @@ def _resolve_evidence_for_row(
             record_states = []
             unresolved_reasons = []
             inapplicable_reasons = []
-            for study, decision, finished in zip(deduped_studies, scope_decisions, noncontributing_complete):
+            for study, decision, finished, pending in zip(
+                    deduped_studies, scope_decisions, noncontributing_complete, unfinished_contexts):
+                if pending:
+                    unresolved_reasons.append("clinical_sources_ineligible")
                 if study not in valid_studies:
                     # A qualified but inapplicable sibling cannot finish an
                     # unrelated unread source. A truly applicable source still

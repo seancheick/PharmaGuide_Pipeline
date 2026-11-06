@@ -439,6 +439,26 @@ def validate_ingredient_context(
 
     if not isinstance(context, Mapping):
         return ["context.invalid"]
+    if (context.get("review_status") == "source_verified_pending_clinical_review"
+            and "identity_scope" not in context):
+        # A source inventory may know the paper without knowing its regimen,
+        # preparation or outcomes. Reuse the source-only rejection shape, but
+        # a pending context can never pass complete-review validation.
+        errors = validate_ingredient_context(
+            {**context, "review_status": "rejected_source"},
+            known_component_ids=known_component_ids,
+        )
+        allowed = {"context_schema_version", "context_id", "components", "source_pmids",
+                   "review_status", "scoring_eligible", "clinical_review", "dose", "limitations"}
+        dose = context.get("dose")
+        if (set(context) - allowed or not isinstance(dose, Mapping)
+                or set(dose) - {"source_provenance"}):
+            errors.append("context.pending_source_stub_invalid")
+        if context.get("context_schema_version") != CONTEXT_SCHEMA_VERSION:
+            errors.append("context.schema_version_invalid")
+        if require_complete_review:
+            errors.append("review.approval_required")
+        return errors
     if context.get("review_status") == "rejected_source":
         # A scoped source rejection does not assert a clinical trial regimen.
         # It needs its own traceable source and decision, never invented arms.

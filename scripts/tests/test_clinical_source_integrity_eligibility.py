@@ -685,3 +685,85 @@ def test_taurine_integrity_review_preserves_hold_without_inferred_longevity_or_p
     assert not assess_clinical_source_review(record)['is_complete']
     assert {ref['pmid'] for ref in record['references_structured']} == {'32871172', '41275513'}
     assert not er.resolve_evidence_for_canonical('taurine', name='Taurine').points_eligible
+
+
+def _glutamine_scoring_product(name='L-Glutamine', claim='', amount=500):
+    row = {'name': name, 'raw_source_text': name, 'standard_name': 'L-Glutamine',
+           'canonical_id': 'l_glutamine', 'mapped': True, 'bio_score': 11,
+           'matched_form': 'l-glutamine powder' if name == 'L-Glutamine' else name,
+           'quantity': amount, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    return {'product_name': claim or name, 'status': 'active', 'form_factor': 'capsule',
+            'activeIngredients': [row],
+            'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+
+
+@pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
+def test_approved_glutamine_context_earns_claim_independent_credit_while_other_review_stays_open(claim):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries().get('INGR_L_GLUTAMINE')
+    assert record is not None
+    assert record['effect_direction'] == 'positive_moderate'
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
+    assert context['dose']['values'] == [15]
+    assert context['dose']['unit'] == 'g'
+    assert context['dose']['duration_days'] == 56
+    assert 'enteric infection' in context['population']['description'].lower()
+    assert 'increased intestinal permeability' in context['population']['description'].lower()
+    assert not assess_clinical_source_review(record)['is_complete']
+    artifact = build_scored_artifact(_glutamine_scoring_product(claim=claim))
+    assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+    assert artifact['quality_assessment_status'] == 'partial'
+    result = score_evidence(_glutamine_scoring_product(claim=claim), apply_primary_floor=True)
+    receipt = next(r for r in result['metadata']['contributing_record_assessments']
+                   if r['id'] == 'INGR_L_GLUTAMINE')
+    assert {str(r['pmid']) for r in receipt['source_references']} == {'30108163'}
+    assert receipt['source_review']['is_complete'] is False
+
+
+@pytest.mark.parametrize('name', ['N-Acetyl-L-Glutamine', 'Sustamine L-Alanyl-L-Glutamine',
+                                  'Glutamine Complex', 'D-Glutamine', 'L-Glutamine Hydrochloride',
+                                  'L-Glutamine HCl', 'L-Glutamine Ethyl Ester', 'Glutamine AKG', 'Glutamine Peptide'])
+def test_glutamine_derivatives_do_not_borrow_trial_or_finish_their_pending_research(name):
+    product = _glutamine_scoring_product(name=name)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+    assert artifact['quality_assessment_status'] == 'partial'
+
+
+def test_glutamine_interpretation_needs_exact_verified_selected_context():
+    from scoring_v4.modules.generic_evidence import _entry_raw_points, resolved_clinical_matches
+    product = _glutamine_scoring_product()
+    matches = resolved_clinical_matches(product, owner_scoped=True, assess_amount=False)[0]
+    selected = next((r for r in matches if r.get('id') == 'INGR_L_GLUTAMINE'), None)
+    assert selected is not None
+    assert selected['effect_direction'] == 'positive_moderate'
+    assert _entry_raw_points(selected) > 0
+    forged = copy.deepcopy(selected)
+    forged['applicability_assessment']['population_applicability']['context_ids'] = ['different_context']
+    assert _entry_raw_points(forged) == 0
+    unscoped = {k:v for k,v in selected.items() if k != 'applicability_assessment'}
+    assert _entry_raw_points(unscoped) == 0
+    assert _entry_raw_points({**selected, 'id':'OTHER_RECORD', 'source_data':'backed_clinical_studies:OTHER_RECORD'}) == 0
+    from scoring_v4.modules.generic_evidence import EFFECT_DIRECTION_MULTIPLIERS
+    assert 'positive_moderate' not in EFFECT_DIRECTION_MULTIPLIERS
+
+
+def test_pending_source_context_can_retain_unknown_facts_without_inventing_a_regimen():
+    from clinical_evidence_schema import validate_ingredient_context
+    context = {'context_schema_version':'1.1.0', 'context_id':'unread_source',
+               'components':['INGR_L_GLUTAMINE'], 'source_pmids':['42366260'],
+               'review_status':'source_verified_pending_clinical_review', 'scoring_eligible':False,
+               'clinical_review':{'reviewer':'Codex source inventory', 'reviewed_at':'2026-11-06',
+                                  'scope':'identity_dose_outcome_applicability'},
+               'dose':{'source_provenance':{'pmid':'42366260',
+                      'source_url':'https://pubmed.ncbi.nlm.nih.gov/42366260/',
+                      'location':'Bibliographic identity/abstract; full-methods qualification pending'}},
+               'limitations':['Preparation, route-specific outcomes and regimen remain unqualified.']}
+    assert validate_ingredient_context(context) == []
+    assert 'review.approval_required' in validate_ingredient_context(context, require_complete_review=True)
+    forged = {**context, 'scoring_eligible':True}
+    assert validate_ingredient_context(forged)
+    asserted = {**context, 'dose':{**context['dose'], 'values':[15000]}}
+    assert validate_ingredient_context(asserted)

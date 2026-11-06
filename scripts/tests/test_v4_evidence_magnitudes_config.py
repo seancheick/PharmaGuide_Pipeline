@@ -33,6 +33,14 @@ EXPECTED = {
         # 2026-09-18: evidence that did not show a benefit earns no affirmative credit.
         "effect_direction_multipliers": {"positive_strong": 1.0, "positive_weak": 0.85,
                                          "mixed": 0.6, "null": 0.0, "negative": 0.0},
+        "context_effect_direction_interpretations": [{
+            "record_id": "INGR_L_GLUTAMINE",
+            "context_id": "l_glutamine_30108163_pi_ibsd_primary",
+            "source_pmids": ["30108163"],
+            "observed_effect_direction": "positive_moderate",
+            "multiplier_key": "positive_weak",
+            "approved_by": "Sean", "approved_at": "2026-11-06",
+        }],
         "enrollment_quality_bands": [[50.0, 0.6], [200.0, 0.8], [500.0, 1.0], [1000.0, 1.1]],
         "top_n_weights": [1.0, 0.7, 0.5, 0.3],
         "depth_bonus_bands": [[20.0, 0.25], [40.0, 0.5]],

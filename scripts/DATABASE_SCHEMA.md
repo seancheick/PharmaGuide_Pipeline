@@ -987,7 +987,13 @@ Each record and each `qualifying_human_studies[]` entry keeps two different fact
 - `effect_direction` is the observed effect only: `positive_strong`, `positive_moderate`,
   `positive_weak`, `mixed`, `null` or `negative`, or `null` (JSON) when the review ended
   without an applicable effect. `positive_moderate` is kept as recorded until its typed
-  meaning is set. One study (L-glutamine, PMID 32992440) keeps its recorded `neutral`.
+  meaning is set. Sean approved one source-specific exception on November 6, 2026:
+  `INGR_L_GLUTAMINE` context `l_glutamine_30108163_pi_ibsd_primary` uses the existing
+  weak-positive weight (0.85), retaining `positive_moderate`. The centralized config
+  requires the verified selected context and source row; this does not map other
+  moderate findings. Scope remains free L-glutamine, adults with post-infectious
+  IBS-D and increased permeability, 5 g three times daily for eight weeks. This
+  creates no general Dose benchmark; sibling reviews remain incomplete. One study (L-glutamine, PMID 32992440) keeps its recorded `neutral`.
 - `applicability_status` is the review result: `applicability_unestablished`,
   `no_qualifying_human_evidence`, `not_efficacy_relevant`, `identity_material_unresolved`,
   or, beside an effect, `applicable_reviewed_trials` / `reviewed_null_evidence`.

@@ -67,7 +67,17 @@ def test_packet_drafts_pass_the_authoring_rules_and_carry_no_approval():
 
 def test_packet_drafts_stay_outside_the_data_file():
     packeted = {path.stem for path in (AUDIT / "packet").glob("*.json")}
-    assert not packeted & set(reviewed_entries())
+    # The original packet remains unsigned. Only its independently qualified
+    # successor may enter production, with unfinished sibling sources retained.
+    assert packeted & set(reviewed_entries()) == {"INGR_L_GLUTAMINE"}
+    record = reviewed_entries()["INGR_L_GLUTAMINE"]
+    approved = [c for c in record["study_contexts"] if c["scoring_eligible"]]
+    assert len(approved) == 1
+    assert approved[0]["source_pmids"] == ["30108163"]
+    assert approved[0]["review_status"] == "clinician_approved"
+    assert "Codex" in approved[0]["clinical_review"]["reviewer"]
+    from clinical_applicability import assess_clinical_source_review
+    assert not assess_clinical_source_review(record)["is_complete"]
 
 
 def _audit_module(name):
