@@ -2948,3 +2948,21 @@ def test_recognized_form_without_quality_assessment_remains_incomplete():
     artifact = build_scored_artifact(product)
     assert "form_quality_unassessed" in artifact["strict_scoring_contract"]["findings"]
     assert artifact["quality_score_status"] == "not_scored"
+
+
+@pytest.mark.parametrize("mapped, complete, held", [
+    ("mapped", True, False), ("mapped", False, True), ("unmapped", True, True),
+])
+def test_exact_reviewed_unrated_form_does_not_clear_other_form_holds(monkeypatch, mapped, complete, held):
+    import scoring_reference_resolver as resolver
+    form = {"bio_score": None, "form_quality_assessment": {
+        "is_complete": complete, "reason_code": "reviewed_unrated_form",
+        "reviewed_by": "Product owner", "reviewed_at": "2026-11-06",
+        "scope": "exact_preparation", "source": "Exact preparation review receipt"}}
+    monkeypatch.setattr(resolver, "iqm_reference_entry", lambda key: {"forms": {"exact extract": form}})
+    row = _row(name="Reviewed extract", canonical_id="plant", bio_score=None,
+               form_match_status=mapped, form_id="exact extract")
+    result = get_scoring_ingredients(_product([row]), strict=True)
+    findings = set(result.contract_findings)
+    assert bool(findings & {"form_quality_unassessed", "disclosed_form_unmapped"}) is held
+    assert row["bio_score"] is None

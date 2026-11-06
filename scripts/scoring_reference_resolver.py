@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import date
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -355,6 +356,38 @@ def effective_form_bio(parent: Dict[str, Any], form: Dict[str, Any]) -> Optional
     if authored and (authored[1] is form or authored[1] == form):
         return unknown_form_quality(parent)["bio_score"]
     return bio
+
+
+def reviewed_unrated_form(canonical_id: Any, form_id: Any) -> bool:
+    """Exact IQM preparation reviewed without assigning a numerical form grade.
+
+    This completes only the form review. Existing route rubrics retain ownership
+    of neutral Formulation; identity, Dose and Evidence are independent.
+    """
+    if not isinstance(form_id, str) or not form_id:
+        return False
+    parent = iqm_reference_entry(canonical_id) or {}
+    form = (parent.get("forms") or {}).get(form_id)
+    if not isinstance(form, dict) or form.get("bio_score") is not None:
+        return False
+    if parent_relationship(form):
+        return False
+    review = form.get("form_quality_assessment")
+    if not isinstance(review, dict):
+        return False
+    if (review.get("is_complete") is not True
+            or review.get("reason_code") != "reviewed_unrated_form"
+            or review.get("scope") != "exact_preparation"):
+        return False
+    if not all(isinstance(review.get(key), str) and review[key].strip()
+               for key in ("reviewed_by", "reviewed_at", "source")):
+        return False
+    try:
+        if date.fromisoformat(review["reviewed_at"]) > date.today():
+            return False
+    except ValueError:
+        return False
+    return True
 
 
 def parent_best_form_quality(canonical_id: Any) -> Optional[float]:

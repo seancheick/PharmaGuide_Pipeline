@@ -26786,6 +26786,14 @@
     "forms": {
       "gs15-4 enzyme-fermented asian ginseng root extract": {
         "bio_score": null,
+        "form_quality_assessment": {
+          "is_complete": true,
+          "reason_code": "reviewed_unrated_form",
+          "reviewed_by": "Sean, product owner (scoped representation authorization)",
+          "reviewed_at": "2026-11-06",
+          "scope": "exact_preparation",
+          "source": "Sean approved the scoped reviewed-unrated record on 2026-11-06, following the signed exact-GS15-4 ruling. Ilhwa preparation identity: https://www.ilhwa-usa.com/about-us. No numerical bioavailability grade, preparation equivalence or Evidence credit is authorized by this record."
+        },
         "absorption": "unknown for this exact preparation",
         "absorption_structured": {
           "quality": "unknown",
