@@ -1201,14 +1201,23 @@ def _resolve_evidence_for_row(
                     reason_code="clinical_form_mismatch", owner_facts=owner_facts,
                     blocking_reasons=["form_mismatch_with_clinical_trials"],
                 )
-            reviewed_references = all(
-                is_reference_only(study)
-                and study.get("scoring_eligible") is not False
-                and assess_clinical_source_review(study)["is_complete"]
-                for study in deduped_studies
+            completed_noncontributing = all(
+                (decision.get("status") == "not_applicable"
+                 and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
+                or (is_reference_only(study)
+                    and study.get("scoring_eligible") is not False
+                    and assess_clinical_source_review(study)["is_complete"])
+                for study, decision in zip(deduped_studies, scope_decisions)
             )
-            if reviewed_references:
+            if completed_noncontributing:
                 owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
+                # Each matched record is finished: a preparation exclusion may
+                # coexist with a reviewed reference. Keep their separate facts;
+                # the aggregate reference result grants no efficacy credit.
+                owner_facts["backed_clinical_studies"]["assessments"] = [
+                    {"id": study["id"], **decision}
+                    for study, decision in zip(deduped_studies, scope_decisions)
+                ]
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name,
                     matched_owners=matched_owners,

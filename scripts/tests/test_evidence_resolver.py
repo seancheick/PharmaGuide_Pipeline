@@ -1938,3 +1938,78 @@ def test_eaa_authority_keeps_underlying_null_and_mixed_review_facts(canonical, n
     }
     assert nutritional.points_eligible is False
     assert nutritional.owner_facts['nutrition_authority']['scope'] == 'established_nutritional_role'
+
+
+@pytest.mark.parametrize('pid,amount', [('12160', 400), ('4235', 250)])
+def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifact(pid, amount):
+    """Exact retained ALCAR row facts; portable fixture, not a full-label replay."""
+    from scoring_v4.scored_artifact import build_scored_artifact
+    row, product = _excluded_preparation_product(
+        'Acetyl L-Carnitine', 'l_carnitine', 'acetyl-l-carnitine (alcar)', pid=pid)
+    row['quantity'] = amount
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert result.reason_code == 'reference_only_clinical_record'
+    artifact = build_scored_artifact(product)
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    assert 'evidence_assessment_incomplete' not in artifact['assessment_readiness']['release_assessment']['blockers']
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assessments = result.owner_facts['backed_clinical_studies']['assessments']
+    assert {a['id']: a['reason_code'] for a in assessments} == {
+        'INGR_L_CARNITINE': 'clinical_preparation_mismatch',
+        'INGR_ACETYL_L_CARNITINE': 'reference_only_clinical_record',
+    }
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+@pytest.mark.parametrize('reference_state', ['complete', 'unreviewed', 'malformed', 'held', 'positive_open'])
+def test_mixed_exclusion_reference_completion_requires_each_record_finished(monkeypatch, reverse, reference_state):
+    import copy
+    import clinical_applicability as ca
+    from assessment_readiness import _resolved_evidence_assessment
+    reference = copy.deepcopy(next(s for s in er._load_backed_studies() if s['id'] == 'INGR_ACETYL_L_CARNITINE'))
+    excluded = copy.deepcopy(next(s for s in er._load_backed_studies() if s['id'] == 'INGR_L_CARNITINE'))
+    if reference_state == 'unreviewed':
+        reference['study_contexts'][0]['review_status'] = 'pending_review'
+    elif reference_state == 'malformed':
+        reference['study_contexts'][0]['clinical_review'] = {}
+    elif reference_state == 'held':
+        reference['scoring_eligible'] = False
+    elif reference_state == 'positive_open':
+        reference['evidence_level'] = 'ingredient-human'
+        reference['study_contexts'] = []
+    studies = [excluded, reference]
+    if reverse:
+        studies.reverse()
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'l_carnitine': studies})
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {s['id']: s for s in studies})
+    row, product = _excluded_preparation_product('Acetyl L-Carnitine', 'l_carnitine', 'acetyl-l-carnitine (alcar)')
+    result = er.resolve_evidence_for_row(row, product)
+    assert not result.points_eligible
+    expected = 'evaluated_limited_or_negative' if reference_state == 'complete' else 'not_yet_evaluated'
+    assert _resolved_evidence_assessment(result)[0] == expected
+
+
+def test_mixed_carnitine_product_keeps_unread_base_open_after_alcar_completion():
+    from assessment_readiness import evaluate_assessment_readiness
+    row, product = _excluded_preparation_product('Acetyl L-Carnitine', 'l_carnitine', 'acetyl-l-carnitine (alcar)', pid='187545')
+    base = {**row, 'name': 'L-Carnitine', 'raw_source_text': 'L-Carnitine',
+            'matched_form': 'l-carnitine base (free form)', 'raw_source_path': 'ingredientRows[1]'}
+    product['activeIngredients'].append(base)
+    product['ingredient_quality_data']['total_active'] = 2
+    readiness = evaluate_assessment_readiness(product, module='generic')
+    assert readiness['evidence']['readiness'] == 'incomplete'
+    assert readiness['evidence']['not_yet_evaluated_count'] == 1
+    assert readiness['evidence']['not_yet_evaluated_row_refs'] == ['ingredientRows[1]']
+
+
+@pytest.mark.parametrize('canonical,name,form', [
+    ('elderberry', 'Elderberry', 'elderberry extract'),
+    ('tmg_betaine', 'Betaine', 'betaine anhydrous'),
+])
+def test_unfinished_positive_source_does_not_become_completed_noncredit(canonical, name, form):
+    from assessment_readiness import _resolved_evidence_assessment
+    row, product = _excluded_preparation_product(name, canonical, form)
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == 'not_yet_evaluated'
