@@ -1086,7 +1086,7 @@ _EVIDENCE_ZERO_REASON = {
         "ingredients."
     ),
     "evaluated_authority": (
-        "Established nutritional authority recognizes the physiological necessity of these essential nutrients."
+        "Evidence credit reflects the nutritional reference assessment for these ingredients."
     ),
     "no_qualifying_human_evidence": (
         "We reviewed the research but found no qualifying human clinical evidence of benefit applicable to this product."
