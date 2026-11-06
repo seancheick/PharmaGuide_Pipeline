@@ -45,7 +45,6 @@ SAFETY_COUNT_KEYS = [
 @dataclass
 class DashboardData:
     db_path: Path | None = None
-    db_conn: sqlite3.Connection | None = None
     export_manifest: dict[str, Any] | None = None
     export_audit: dict[str, Any] | None = None
     detail_index: dict[str, Any] | None = None
@@ -158,7 +157,6 @@ def _report_timestamp(path: Path, content: dict[str, Any] | None = None, text: s
     return _mtime(path)
 
 
-@st.cache_resource
 def get_sqlite_connection(db_path: Path) -> sqlite3.Connection | None:
     if not db_path.exists():
         return None
@@ -902,8 +900,44 @@ def _load_scoring_config_snapshot(db_conn: sqlite3.Connection | None, warnings: 
     }
 
 
-@st.cache_resource(ttl=300)
+def _catalog_identity(build_root: Path) -> tuple:
+    """Observe replacement/in-place updates, without hashing the catalog per rerun.
+
+    This is a dashboard cache key, never release provenance. Directory identity
+    also detects atomic promotion and rollback of the complete artifact set.
+    """
+    identities = []
+    for name in (
+        "", "pharmaguide_core.db", "pharmaguide_core.db-wal",
+        "export_manifest.json", "export_audit_report.json", "detail_index.json",
+        "label_mismatch_summary.json", "detail_blobs",
+    ):
+        try:
+            stat = (build_root / name).stat()
+            identities.append((stat.st_dev, stat.st_ino, stat.st_size,
+                               stat.st_mtime_ns, stat.st_ctime_ns))
+        except FileNotFoundError:
+            identities.append(None)
+    return tuple(identities)
+
+
 def load_dashboard_data(config: Any) -> DashboardData:
+    """Reuse one coherent snapshot, retrying a concurrent catalog promotion."""
+    for _attempt in range(3):
+        identity = _catalog_identity(config.build_root)
+        try:
+            data = _load_dashboard_data(config, identity)
+        except (OSError, sqlite3.Error, RuntimeError):
+            if _catalog_identity(config.build_root) == identity:
+                raise
+        else:
+            if _catalog_identity(config.build_root) == identity:
+                return data
+    raise RuntimeError("Catalog changed repeatedly while loading the dashboard; refresh after promotion finishes.")
+
+
+@st.cache_resource(ttl=300, max_entries=8, show_spinner=False)
+def _load_dashboard_data(config: Any, catalog_identity: tuple) -> DashboardData:
     data = DashboardData(
         scan_dir=config.scan_dir,
         build_root=config.build_root,
@@ -912,15 +946,23 @@ def load_dashboard_data(config: Any) -> DashboardData:
     )
 
     data.db_path = config.build_root / "pharmaguide_core.db"
-    data.db_conn = get_sqlite_connection(data.db_path)
     data.export_manifest = safe_load_json(config.build_root / "export_manifest.json")
     data.export_audit = safe_load_json(config.build_root / "export_audit_report.json")
     data.detail_index = safe_load_json(config.build_root / "detail_index.json")
     data.detail_blobs_dir = config.build_root / "detail_blobs"
     data.processing_state = safe_load_json(config.scan_dir / "logs" / "processing_state.json")
-    data.scoring_config_snapshot = _load_scoring_config_snapshot(data.db_conn, data.warnings)
-
     data.integrity_data = (data.export_manifest or {}).get("integrity", {}) or None
+    # Only derived data belongs in the cache. A retained SQLite handle points
+    # at the retired inode after promotion and may fail even after the TTL.
+    conn = get_sqlite_connection(data.db_path)
+    try:
+        data.scoring_config_snapshot = _load_scoring_config_snapshot(conn, data.warnings)
+        data.shared_metrics = _compute_shared_metrics(
+            conn, data.export_manifest, data.export_audit, data.integrity_data,
+        )
+    finally:
+        if conn is not None:
+            conn.close()
     data.alert_thresholds = _load_alert_thresholds()
     data.build_history = _discover_build_history(config.build_root, config.dataset_root)
 
@@ -996,7 +1038,6 @@ def load_dashboard_data(config: Any) -> DashboardData:
     if live_pipeline_candidates:
         data.latest_batch_at = max(live_pipeline_candidates)
 
-    data.shared_metrics = _compute_shared_metrics(data.db_conn, data.export_manifest, data.export_audit, data.integrity_data)
     data.index = IndexReader(default_paths(config.scan_dir, config.build_root))
     data.label_trust = compute_label_trust(
         data.index.label_records(),
@@ -1010,4 +1051,8 @@ def load_dashboard_data(config: Any) -> DashboardData:
         data.caers_signals = caers_raw.get("signals", {})
         data.caers_metadata = caers_raw.get("_metadata", {})
 
+    # Do not cache a mixture of pre- and post-promotion artifacts. The public
+    # loader retries under the new identity, including errors from an old DB.
+    if _catalog_identity(config.build_root) != catalog_identity:
+        raise RuntimeError("Catalog changed while loading the dashboard.")
     return data
