@@ -206,3 +206,19 @@ def test_prenatal_evidence_keeps_its_five_priority_members_when_dose_adds_cholin
             assert artifact['quality_pillars_v4']['evidence']['score'] == expected
             assert evidence['metadata']['authority_full_count'] == 5
             assert evidence['metadata']['authority_expected_keys'] == original_members
+
+
+def test_panel_sources_describe_covered_nutrients_without_changing_score(monkeypatch):
+    from scoring_v4.modules.multi_prenatal_evidence import score_evidence
+    import scoring_reference_resolver as refs
+
+    product = _product(ingredients=[_ingredient('vitamin_c'), _ingredient('calcium')])
+    cited = score_evidence(product)
+    assert cited['metadata']['source_references']
+    assert all('VitaminC' in ref['url'] or 'Calcium' in ref['url']
+               for ref in cited['metadata']['source_references'])
+    monkeypatch.setattr(refs, 'nutritional_role_reference', lambda canonical: None)
+    uncited = score_evidence(product)
+    assert cited['score'] == uncited['score']
+    assert cited['components'] == uncited['components']
+    assert cited['metadata']['authority_covered_keys'] == uncited['metadata']['authority_covered_keys']

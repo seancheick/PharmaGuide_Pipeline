@@ -210,3 +210,35 @@ def test_vitamin_e_alpha_material_keeps_identity_separate_from_amount(source, ex
 
     # Unknown material may contain alpha, but does not prove an alpha amount.
     assert vitamin_e_alpha_material(source) is expected
+
+
+def test_existing_dri_sources_reach_role_reference_without_a_second_identity_list():
+    from evidence_resolver import _dietary_nutrient_authority
+    from scoring_reference_resolver import _rda_ul_index, nutritional_role_reference
+
+    # Derive coverage from existing source/reference owners, not a new nutrient registry.
+    count = 0
+    entries = {entry["id"]: entry for entry in _rda_ul_index().values()}
+    for entry in entries.values():
+        canonical = entry.get('id')
+        if not _dietary_nutrient_authority(canonical):
+            continue
+        urls = (entry.get('reference_semantics') or {}).get('source_ids') or []
+        if not urls or not any('ods.od.nih.gov' in str(u) or 'nationalacademies.org' in str(u) for u in urls):
+            continue
+        reference = nutritional_role_reference(canonical)
+        assert reference and reference['source_references'], canonical
+        for identity in [canonical, *entry.get('aliases', [])]:
+            authority = _dietary_nutrient_authority(identity)
+            if authority:
+                joined = nutritional_role_reference(authority['nutrient'])
+                assert joined['source_references'] == reference['source_references'], identity
+        for ref in reference['source_references']:
+            assert ref['title'] and ref['url']
+            assert ref['type'] == 'authority'
+            assert not ref.get('pmid')
+            if canonical == 'chromium':
+                assert 'established_nutritional_role' not in ref['supports_claims']
+                assert 'disputed' in ref['notes'].lower()
+        count += 1
+    assert count >= 28

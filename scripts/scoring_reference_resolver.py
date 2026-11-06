@@ -432,22 +432,39 @@ def nutrition_reference_dependencies(canonical_id: Any) -> Tuple[str, ...]:
 
 
 def nutritional_role_reference(canonical_id: Any) -> Optional[Dict[str, Any]]:
-    """Evidence-only group reference; never exports the mixture's Dose values.
+    """Evidence source context only; never exports any reference's Dose values.
 
-    All nine identities depend on this existing reference, including forms
-    that cannot claim the role. Row qualification remains the Evidence owner's
-    job; family membership alone is not nutritional authority.
+    EAA identities read their existing group reference; ordinary nutrients read
+    their own RDA reference. Row qualification remains the Evidence owner's
+    job; reference membership or source availability never establishes eligibility.
     """
-    if _norm(canonical_id) not in EAA_CANONICALS:
-        return None
-    entry = rda_ul_reference_entry(canonical_id=nutrition_reference_dependencies(canonical_id)[0]) or {}
+    dependencies = nutrition_reference_dependencies(canonical_id)
+    entry = rda_ul_reference_entry(canonical_id=dependencies[0] if dependencies else canonical_id) or {}
     references = [dict(ref) for ref in entry.get("references_structured") or []
                   if isinstance(ref, dict) and ref.get("type") == "authority"
                   and ref.get("authority") and (ref.get("doi") or ref.get("url"))
-                  and "established_nutritional_role" in (ref.get("supports_claims") or [])]
+                  and set(ref.get("supports_claims") or []) & {
+                      "established_nutritional_role", "nutrient_reference_context"}]
     if not references:
         return None
     return {"id": entry.get("id"), "source_references": references}
+
+
+def unique_source_references(references: Any) -> List[Dict[str, Any]]:
+    """Deduplicate already selected Evidence sources, without selecting new ones."""
+    result = []
+    seen = set()
+    for ref in references or []:
+        if not isinstance(ref, dict):
+            continue
+        identity = str(ref.get("doi") or ref.get("url") or ref.get("pmid") or "").strip()
+        if not identity:
+            continue
+        key = (identity.lower(), tuple(sorted(ref.get("supports_claims") or [])))
+        if key not in seen:
+            seen.add(key)
+            result.append(dict(ref))
+    return result
 
 
 @lru_cache(maxsize=1)

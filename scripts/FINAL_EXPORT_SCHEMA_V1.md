@@ -888,7 +888,18 @@ ambiguity.
 - Inactive ingredient `notes` now come from `other_ingredients.json` reference data.
   `additive_type` is reliable. If the ingredient matched `harmful_additives.json`,
   safety-specific `notes` take priority.
-- `evidence_data` is included when enrichment produced clinical match output for the product.
+- `evidence_data` is included when enrichment produced clinical match output or scored
+  Evidence selected source citations. Optional `source_references` is a list of existing
+  structured citation objects (`type`, `title`, `authority`, `url`/`doi`/`pmid`,
+  `supports_claims`, `notes` when present), deduplicated by source identity and claim scope.
+  It projects only the actual scored Evidence owner's winning/covered sources; it never
+  substitutes Dose citations, unselected clinical rows or enrichment's cached citations.
+  Nutrition authority citations establish the stated nutrient role, not supplemental
+  clinical efficacy, score calibration, a Dose benchmark or personal safety. Chromium's
+  NIH citation is explicitly disputed-essentiality reference context, preserving the
+  existing numerical policy without representing a new essentiality approval. Older
+  catalogs may omit the list. Flutter consumer: `features/product_detail/v2/sections/
+  evidence_section.dart` (Evidence section), through the connected detail blob.
 - `rda_ul_data` is included when enrichment emitted an RDA/UL analysis block. It may still
   contain `collection_enabled: false` with a reason. When absent entirely, the app treats it
   as unavailable.

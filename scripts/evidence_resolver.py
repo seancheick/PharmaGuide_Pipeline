@@ -589,7 +589,11 @@ def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, An
             return None
         if not delivers_parent_nutrient(canonical, form_ids):
             return None
-        return _dietary_nutrient_authority(canonical)
+        authority = _dietary_nutrient_authority(canonical)
+        reference = nutritional_role_reference(authority["nutrient"]) if authority else None
+        if reference:
+            authority = {**authority, "source_references": reference["source_references"]}
+        return authority
     reference = nutritional_role_reference(canonical)
     if (not reference or _norm(row.get("form_match_status")) != "mapped"
             or any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
@@ -1125,6 +1129,7 @@ def _resolve_evidence_for_row(
     if nutr_entry:
         matched_owners.append("nutrition_authority")
         owner_facts["nutrition_authority"] = {
+            **nutritional_authority,
             "nutrient": nutr_entry.get("id") or nutr_entry.get("standard_name"),
             "is_essential": True,
             # Adult maximum only; applicable life-stage ULs stay in data[].ul.
@@ -2106,6 +2111,7 @@ def resolve_authority_panel_evidence(
     seen: Set[str] = set()
     reasons: Dict[str, str] = {}
     resolutions: List[EvidenceResolution] = []
+    source_references = []
     for row in get_assessable_evidence_ingredients(dict(product)):
         if not isinstance(row, Mapping):
             continue
@@ -2118,12 +2124,16 @@ def resolve_authority_panel_evidence(
         reasons[key] = resolution.reason_code
         if resolution.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value:
             covered.add(key)
+            source_references.extend(
+                (resolution.owner_facts.get("nutrition_authority") or {}).get("source_references") or [])
 
     unresolved = expected_set - covered
     for key in unresolved - seen:
         reasons[key] = "essential_panel_nutrient_not_disclosed"
 
     score = min(float(full_score), (len(covered) / required) * float(full_score))
+    from scoring_reference_resolver import unique_source_references
+
     return {
         "score": round(score, 4),
         "covered_keys": sorted(covered),
@@ -2131,6 +2141,7 @@ def resolve_authority_panel_evidence(
         "unresolved_keys": sorted(unresolved),
         "resolution_reasons": dict(sorted(reasons.items())),
         "panel_resolution": _compose_panel_resolution(product, resolutions),
+        "source_references": unique_source_references(source_references),
     }
 
 

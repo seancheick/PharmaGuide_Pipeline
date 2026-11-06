@@ -3,7 +3,7 @@
     "description": "RDA (Recommended Dietary Allowance), optimal dosing, and UL (Upper Limit) reference values for nutrient dosing validation",
     "purpose": "dosing_validation",
     "schema_version": "5.1.2",
-    "last_updated": "2026-11-05",
+    "last_updated": "2026-11-06",
     "reference_data_contract": {
       "contract_version": "1",
       "reference_version": "5.1.6-2026-10-19-folate-ul-label-units",
@@ -352,7 +352,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::vitamin_a",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin A and Carotenoids - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Vision, epithelial differentiation, immune function and development; provitamin A carotenoids can supply vitamin A. Retinol/retinyl esters and beta-carotene, alpha-carotene, beta-cryptoxanthin; not all carotenoids. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Vitamin C",
@@ -586,7 +598,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::vitamin_c",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin C - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Collagen, carnitine and neurotransmitter biosynthesis; physiological antioxidant function. Established nutrient role does not establish supplement treatment or disease prevention. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Vitamin D",
@@ -829,7 +853,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::vitamin_d",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin D - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Calcium absorption and mineral homeostasis support bone mineralization; physiological cellular functions. Endogenous skin synthesis occurs; role proof is not a universal supplement requirement. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Vitamin E",
@@ -1062,7 +1098,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::vitamin_e",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin E - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Alpha-tocopherol meets human vitamin E requirements and has physiological antioxidant activity. ONLY alpha-tocopherol meets requirements; other tocopherols/tocotrienols cannot inherit this proof. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Vitamin K",
@@ -1253,7 +1301,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::vitamin_k",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin K - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Cofactor for synthesis of proteins involved in coagulation and bone metabolism. Role evidence is not a claim that supplemental vitamin K prevents fractures or treats disease. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Thiamin",
@@ -1438,7 +1498,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::thiamin",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Thiamin - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Thiamin-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Thiamin diphosphate cofactor for energy metabolism and cellular growth/function. No clinical supplement benefit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Riboflavin",
@@ -1621,7 +1693,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::riboflavin",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Riboflavin - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Riboflavin-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "FMN/FAD coenzyme functions in energy production and metabolism. No clinical supplement benefit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Niacin",
@@ -1868,7 +1952,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::niacin",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Niacin - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "NAD/NADP coenzyme functions in energy metabolism and cellular reactions. Can also derive from tryptophan; no high-dose lipid or other treatment credit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Vitamin B6",
@@ -2113,7 +2209,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::vitamin_b6",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin B6 - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Coenzyme functions in protein metabolism and multiple other enzymatic reactions. No particular supplement dose or treatment efficacy inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Folate",
@@ -2357,7 +2465,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::folate",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Folate - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "One-carbon transfer, nucleic acid synthesis and amino acid metabolism. Specific folate forms and clinical prevention claims require their own scope. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Vitamin B12",
@@ -2547,7 +2667,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::vitamin_b12",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Vitamin B12 - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Cofactor for methionine synthase and methylmalonyl-CoA mutase; blood and nervous system functions. No energy or cognitive supplement benefit inferred in replete people. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Biotin",
@@ -2735,7 +2867,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::biotin",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Biotin - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Biotin-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Cofactor for carboxylases participating in fatty acid, glucose and amino acid metabolism. No cosmetic or performance outcome inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Pantothenic Acid",
@@ -2921,7 +3065,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::pantothenic_acid",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Pantothenic Acid - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/PantothenicAcid-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Coenzyme A and acyl carrier protein functions in fatty acid metabolism. No clinical supplement benefit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Choline",
@@ -3159,7 +3315,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::choline",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Choline - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Choline-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Cell membranes, acetylcholine production, methyl metabolism and lipid transport. Endogenous synthesis usually insufficient; no cognitive supplement benefit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Inositol",
@@ -3582,7 +3750,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::calcium",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Calcium - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Structural bone and teeth mineral; intracellular signaling, muscle and nerve function. No Dose curve or individual supplement indication established. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Magnesium",
@@ -3815,7 +3995,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::magnesium",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Magnesium - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Enzyme cofactor supporting protein synthesis, muscle/nerve function and energy metabolism. No clinical efficacy inferred for a particular salt or indication. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Iron",
@@ -4050,7 +4242,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::iron",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Iron - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Hemoglobin and myoglobin oxygen handling; growth and cellular functions. No universal iron supplementation indication inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Zinc",
@@ -4283,7 +4487,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::zinc",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Zinc - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Enzyme activity, protein/DNA synthesis, immune function, wound healing and development. No cold treatment or other clinical outcome inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Copper",
@@ -4516,7 +4732,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::copper",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Copper - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Copper-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Enzyme cofactor in energy production, iron metabolism, connective tissue and neurotransmitter synthesis. No supplement clinical outcome inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Selenium",
@@ -4749,7 +4977,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::selenium",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Selenium - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Selenoprotein functions in reproduction, thyroid metabolism and oxidative protection. No disease prevention claim inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Iodine",
@@ -4983,7 +5223,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::iodine",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Iodine - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Component of thyroid hormones required for metabolic regulation and normal development. No individual thyroid disease treatment recommendation inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Chromium",
@@ -5168,7 +5420,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::chromium",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Chromium - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
+          "supports_claims": [
+            "nutrient_reference_context"
+          ],
+          "notes": "FNB historically considered chromium essential in 2001 and set AIs; current NIH explains essentiality is disputed. NOT unqualified proof of established essentiality: recent research challenges necessity and FNB has not reevaluated its 2001 classification. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Manganese",
@@ -5401,7 +5665,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::manganese",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Manganese - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Manganese-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Enzyme cofactor supporting metabolism, antioxidant enzymes and bone formation. No clinical supplement benefit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Molybdenum",
@@ -5631,7 +5907,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::molybdenum",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Molybdenum - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Molybdenum-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Cofactor for enzymes metabolizing sulfur-containing amino acids and other compounds. No clinical supplement benefit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Phosphorus",
@@ -5864,7 +6152,19 @@
         "owner": "scripts/data/rda_optimal_uls.json::phosphorus",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "NIH Office of Dietary Supplements",
+          "title": "Phosphorus - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Phosphorus-HealthProfessional/",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Bone and teeth mineral; phospholipids, nucleic acids and cellular energy compounds. No clinical supplement benefit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold."
+        }
+      ]
     },
     {
       "standard_name": "Potassium",
@@ -6048,7 +6348,20 @@
         "owner": "scripts/data/rda_optimal_uls.json::potassium",
         "review_date": "2026-10-18",
         "approval_status": "approved_existing_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "National Academies of Sciences, Engineering, and Medicine",
+          "title": "Dietary Reference Intakes for Sodium and Potassium — Consensus Study Report Highlights (March 2019)",
+          "url": "https://nap.nationalacademies.org/resource/25353/030519DRISodiumPotassium.pdf",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Essential nutrient with physiological homeostasis and fluid/cellular functions. The highlights document establishes nutrient role; amounts and clinical conclusions not reapproved here. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold.",
+          "published_date": "2019"
+        }
+      ]
     },
     {
       "standard_name": "Sodium",
@@ -6234,7 +6547,20 @@
         "owner": "scripts/data/rda_optimal_uls.json::sodium",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "National Academies of Sciences, Engineering, and Medicine",
+          "title": "Dietary Reference Intakes for Sodium and Potassium — Consensus Study Report Highlights (March 2019)",
+          "url": "https://nap.nationalacademies.org/resource/25353/030519DRISodiumPotassium.pdf",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Essential nutrient with physiological homeostasis and fluid/cellular functions. Essentiality does not imply sodium supplements are beneficial; no Dose or disease credit inferred. Source content checked 2026-11-06; nutritional-role/reference context only, not supplemental clinical efficacy, a Dose benchmark or a safety threshold.",
+          "published_date": "2019"
+        }
+      ]
     },
     {
       "standard_name": "Chloride",
@@ -6466,7 +6792,21 @@
         "owner": "scripts/data/rda_optimal_uls.json::chloride",
         "review_date": "2026-10-18",
         "approval_status": "approved_sean_policy_2026_10_18"
-      }
+      },
+      "references_structured": [
+        {
+          "type": "authority",
+          "authority": "Institute of Medicine, National Academies",
+          "title": "Dietary Reference Intakes: The Essential Guide to Nutrient Requirements",
+          "url": "https://www.nationalacademies.org/read/11537/chapter/44",
+          "supports_claims": [
+            "established_nutritional_role"
+          ],
+          "notes": "Sodium and Chloride, pages386–396, Function(page388): chloride supports fluid/electrolyte balance and gastric hydrochloric acid. The legacy skim URL redirects to front matter; chapter identity and matching role text corroborated against the official underlying 2005 DRI chapter (10.17226/10925). Nutritional role only, not a new Dose benchmark, clinical efficacy or safety threshold. Source content checked 2026-11-06.",
+          "doi": "10.17226/11537",
+          "published_date": "2006"
+        }
+      ]
     },
     {
       "standard_name": "Fluoride",

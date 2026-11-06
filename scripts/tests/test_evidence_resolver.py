@@ -2143,3 +2143,25 @@ def test_independent_printed_vitamin_e_activity_retains_nutritional_role():
            'raw_source_text': 'Vitamin E', 'quantity': 13.4, 'unit': 'mg',
            'form_match_status': 'mapped'}
     assert er.nutrition_authority_for_row(row)['nutrient'] == 'vitamin_e'
+
+
+@pytest.mark.parametrize('canonical', ['vitamin_c', 'beta_carotene', 'niacin'])
+def test_qualified_ordinary_nutrient_rows_carry_existing_authority_sources(canonical):
+    source = 'Beta-Carotene' if canonical == 'beta_carotene' else canonical.replace('_', ' ')
+    row = {'canonical_id': canonical, 'name': source, 'raw_source_text': source,
+           'quantity': 100, 'unit': 'mg', 'form_match_status': 'mapped'}
+    facts = er.nutrition_authority_for_row(row)
+    assert facts['source_references']
+    resolved = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
+    assert resolved.owner_facts['nutrition_authority']['source_references'] == facts['source_references']
+
+
+def test_panel_citations_cover_only_resolved_expected_rows():
+    rows = [{'canonical_id': key, 'name': key, 'quantity': 100, 'unit': 'mg'}
+            for key in ['vitamin_c', 'calcium', 'boron']]
+    result = er.resolve_authority_panel_evidence(
+        {'activeIngredients': rows, 'ingredient_quality_data': {
+            'ingredients': rows, 'ingredients_scorable': rows}}, expected_keys=['vitamin_c'],
+        row_key=lambda row: row['canonical_id'])
+    assert result['source_references']
+    assert all('VitaminC' in ref['url'] for ref in result['source_references'])

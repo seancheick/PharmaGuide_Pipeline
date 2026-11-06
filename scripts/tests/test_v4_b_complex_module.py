@@ -243,3 +243,18 @@ def test_over_ul_b_complex_takes_the_dose_ceiling_and_keeps_the_safety_concern()
     assert "no daily amount" in scored["quality_pillars_v4"]["dose"]["reason"]
     assert "B1_harmful_additives" not in scored["v4_breakdown"]["module"]["dimensions"]["formulation"]["penalties"]
     assert scored["quality_score_v4_100"] < 80.0
+
+
+def test_b_complex_authority_citations_do_not_change_covered_panel(monkeypatch):
+    from scoring_v4.modules.b_complex import _score_evidence
+    import scoring_reference_resolver as refs
+
+    product = _ideal_b_complex()
+    cited = _score_evidence(product)
+    assert cited['metadata']['source_references']
+    assert all(ref['type'] == 'authority' for ref in cited['metadata']['source_references'])
+    monkeypatch.setattr(refs, 'nutritional_role_reference', lambda canonical: None)
+    uncited = _score_evidence(product)
+    assert cited['score'] == uncited['score']
+    assert cited['components'] == uncited['components']
+    assert cited['metadata']['authority_covered_keys'] == uncited['metadata']['authority_covered_keys']
