@@ -569,7 +569,7 @@ def test_false_transfer_canary_pumpkin_food_vs_extract():
 def test_false_transfer_canary_broccoli_food_vs_extract():
     """Crude broccoli vegetable powder cannot inherit standardized sulforaphane sprout extract trials."""
     res = er.resolve_evidence_for_canonical("broccoli", dose_value=500.0, dose_unit="mg")
-    assert res.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert res.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
     assert "literature_applicability_unestablished" in res.blocking_reasons
 
 

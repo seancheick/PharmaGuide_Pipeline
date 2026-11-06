@@ -1175,7 +1175,7 @@
         }
       }
     },
-    "expected_overall": "literature_resolution_required",
+    "expected_overall": "research_present_applicability_unestablished",
     "expected_blockers": [
       "literature_applicability_unestablished"
     ]

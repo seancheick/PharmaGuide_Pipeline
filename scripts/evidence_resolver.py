@@ -1660,11 +1660,13 @@ def _resolve_evidence_for_row(
                     blocking_reasons=["literature_applicability_unestablished"],
                 )
             else:
+                # An unresolved preparation uses the existing open-applicability
+                # contract; a scope mismatch is not a completed negative review.
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
-                    disposition=EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value,
-                    points_eligible=False, applicability_status="literature_applicability_unestablished",
-                    reason_code=decision["reason_code"], owner_facts=owner_facts,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code="literature_applicability_unestablished", owner_facts=owner_facts,
                     blocking_reasons=["literature_applicability_unestablished"],
                 )
 
