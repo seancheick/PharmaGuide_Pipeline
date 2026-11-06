@@ -2124,3 +2124,13 @@ Private sealed receipts: `post-run-audit/SHARED_CODE_PROPAGATION_QUALIFICATION.j
 ### November 6 — final citation-gate follow-up
 
 Candidate6250fe1c0 passed all eight fast CI shards and merge readiness (run42184171816); local artifact compatibility passed564 checks/24 declared opt-in skips. Subsequent review found title-only book metadata could count as a passing partial. The shared verifier now reports unresolved content visibly, excludes it from the pass rate and blocks both normal and baseline modes;35 focused tests pass. Chloride now cites the verified primary DRI chapter rather than the summary guide; existing Dose references remain intact and five affected-scope controls are unchanged. These follow-ups require the final candidate CI before merge. No whole-catalog recount or release is claimed.
+
+### November6 — core integrated; reference-source completion qualified in isolation
+
+- [x] Merge shared Evidence producer397 at9542510d after final exact-candidate CI42187829192 and local564/24; delete its integrated branch after containment proof.
+- [x] Reuse and independently verify Boron/AKG existing sources; separate completed rejected-source review from point eligibility through the existing shared owners. Fully validated reference/reference exclusions can finish without lifting parent scoring_eligible=false; genuine holds remain.1066named checks and independent41boundary checks pass.
+- [x] Measure all66 reached labels plus4controls through full raw/export:32fullclosures,0reopens, no numeric pillar/score/tier/safety/source/amount/warning changes. Both captures source-stable and input-identical; every51 changed field path independently classified. These are bounded closures, not a fresh global census.
+- [ ] Finish this reference-source batch's combined local/CI qualification and merge green. Finish app217's three citation fixes and merge green.
+- [ ] Continue preparation-specific existing-source reviews (recovered L-carnitine recovery/weight papers, corrected larch surrogate packet, remaining shared source-regimen representation). No generic preparation transfer or manufactured credit.
+
+The frozen global baseline remains8,496complete/6,951partial. User will run the normal pipeline after planned source batches integrate; release still requires fresh counts, actual exported catalog/app/alert/signature and signed-device acceptance.
