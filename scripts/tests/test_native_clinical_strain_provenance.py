@@ -752,3 +752,26 @@ def test_label_strain_views_read_only_active_ingredients():
         recording = _ReadRecordingProduct(product)
         derive(recording)
         assert recording.read == {"activeIngredients"}, (derive.__name__, recording.read)
+
+
+def test_bb536_synbiotic_pilot_records_reported_null_between_group_endpoints():
+    import json
+    from pathlib import Path
+    data = json.loads((Path(__file__).resolve().parents[1] /
+                       'data/clinically_relevant_strains.json').read_text())
+    record = next(row for row in data['clinically_relevant_strains']
+                  if row['id'] == 'STRAIN_LONGUM_BB536')
+    context = next(row for row in record['study_contexts']
+                   if row['context_id'] == 'bb536_guar_gum_auto_hsct_pilot_36792187')
+    outcomes = {row['name']: row for row in context['outcomes']}
+    assert outcomes['total_parenteral_nutrition_duration']['direction'] == 'null'
+    assert outcomes['grade_3_or_higher_diarrhea_duration']['direction'] == 'null'
+    assert outcomes['total_parenteral_nutrition_duration']['hierarchy'] == 'primary'
+    limitations = ' '.join(context['limitations'])
+    assert 'without between-group tests' not in limitations
+    assert '0.623' in limitations and '0.622' in limitations
+    assert 'isolate' in limitations and 'guar gum' in limitations
+    assert context['dose']['co_therapies'] == ['guar gum']
+    assert context['sample_size'] == 12
+    assert 'Codex' in context['clinical_review']['reviewer']
+    assert '2026-09-14' in context['clinical_review']['basis']  # preserved review history

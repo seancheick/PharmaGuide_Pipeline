@@ -8829,7 +8829,7 @@
             "source_provenance": {
               "pmid": "36792187",
               "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10641206/",
-              "location": "full_text_methods"
+              "location": "Full text Methods (study supplements and endpoints), Results Table 2 (TPN), Table 3 (diarrhea)"
             }
           },
           "outcomes": [
@@ -8837,19 +8837,19 @@
               "name": "total_parenteral_nutrition_duration",
               "hierarchy": "primary",
               "kind": "patient_important",
-              "direction": "unresolved"
+              "direction": "null"
             },
             {
               "name": "grade_3_or_higher_diarrhea_duration",
               "hierarchy": "secondary",
               "kind": "patient_important",
-              "direction": "unresolved"
+              "direction": "null"
             }
           ],
           "trial_family": "kobe_bb536_synbiotic_36792187",
           "limitations": [
-            "Pilot with 12 patients; medians reported without between-group tests (TPN 15 vs 17.5 days).",
-            "Synbiotic with guar gum; hospital population."
+            "Pilot with 12 patients (6 per group). Table 2 reports TPN duration medians 15 versus 17.5 days, between-group p=0.623; Table 3 reports grade 3/4 diarrhea duration medians 2.5 versus 6.5 days, p=0.622. Neither comparison was statistically significant; this small pilot cannot exclude a clinically important difference.",
+            "Synbiotic Gfine combined BB536 with guar gum; dextrin placebo replaced both components. This comparison does not isolate a BB536 strain effect and cannot establish benefit for a different preparation or general consumer population. Hospital auto-HSCT population only."
           ],
           "review_status": "clinician_approved",
           "study_design": "rct",
@@ -8864,11 +8864,10 @@
           "evidence_role": "direct_rct",
           "component_registration_status": "fully_registered",
           "clinical_review": {
-            "reviewer": "Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review",
-            "reviewed_at": "2026-09-14T22:23:43Z",
+            "reviewer": "Codex source reviewer; independently checked by Codex betaine_review",
+            "reviewed_at": "2026-11-06",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json",
-            "decision": "approve_with_correction"
+            "basis": "Sean-authorized delegated factual source review, 2026-11-06. Official full text PMC10641206 Tables 2 and 3 report null between-group tests; this corrects transcription, not a new efficacy or safety policy. Independent source check by Codex betaine_review and root. Historical review retained: {\"basis\": \"docs/plans/PROBIOTIC_EVIDENCE_REVIEW_RESPONSE_2026-09-14.json\", \"decision\": \"approve_with_correction\", \"reviewed_at\": \"2026-09-14T22:23:43Z\", \"reviewer\": \"Sean B (engineering owner), approving the 2026-09-14 Claude Fable 5.1 research review\", \"scope\": \"identity_dose_outcome_applicability\"}"
           },
           "scoring_eligible": true
         },
