@@ -36893,7 +36893,7 @@
       "notes": "Human research is retained as preparation-specific context, not generic-product efficacy. Neither unspecified resin/extract nor the words processed or purified establish equivalence to the studied interventions. The marketed preparation and specification of the older processed material remain unverified.",
       "notable_studies": "PMID 26395129: PrimaVie, 250 mg twice daily for 90 days, 96 healthy men aged 45-55 randomized and 75 completed; androgen biomarkers increased versus placebo. PMID 20078516: processed shilajit 100 mg twice daily for 90 days in oligospermia; 60 screened, 35 enrolled, 28 completed; semen and hormone changes compared with baseline, without a randomized control group. These are not multiple generic-shilajit RCTs.",
       "study_type": "reference",
-      "last_updated": "2026-10-14",
+      "last_updated": "2026-11-06",
       "references_structured": [
         {
           "type": "pubmed",
@@ -37018,7 +37018,69 @@
             }
           ]
         }
-      }
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_shilajit_generic_20078516_preparation_transfer",
+          "components": [
+            "PRECLIN_SHILAJIT_GENERIC"
+          ],
+          "source_pmids": [
+            "20078516"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer; independently checked by Codex elderberry_review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated source review, 2026-11-06, applying existing preparation-specific transfer policy. Live source identity/content and retained source-specific findings independently checked by Codex elderberry_review on 2026-11-06; receipt scripts/audits/pending_items_20260926/LEDGER.md, November 6 Evidence completion. Not physician review."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "20078516",
+              "location": "PubMed abstract: study enrollment, processed material, regimen and before/after results",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/20078516/"
+            }
+          },
+          "limitations": [
+            "Uncontrolled before-after study in oligospermic men: 35 enrolled and 28 completed 100 mg processed shilajit twice daily for 90 days. Reported semen and hormone changes are relative to baseline, not a randomized placebo comparison.",
+            "The source does not establish that an unspecified commercial resin, extract or fulvic-acid complex is equivalent to the processed study material. Retain the human findings as preparation-specific context; reject generic-product transfer only, not the existence of human research.",
+            "No generic efficacy conclusion, clinical dose benchmark, new safety threshold or alteration of the existing no-general-benchmark Dose decision is made."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_shilajit_generic_26395129_preparation_transfer",
+          "components": [
+            "PRECLIN_SHILAJIT_GENERIC"
+          ],
+          "source_pmids": [
+            "26395129"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer; independently checked by Codex elderberry_review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated source review, 2026-11-06, applying existing preparation-specific transfer policy. Live source identity/content and retained source-specific findings independently checked by Codex elderberry_review on 2026-11-06; receipt scripts/audits/pending_items_20260926/LEDGER.md, November 6 Evidence completion. Not physician review."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "26395129",
+              "location": "Existing source-verified PrimaVie context: Materials and methods/Preparation and analysis of the drug, Dosage regimen, Results/Table 2; live PubMed abstract identity/regimen/outcomes",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/26395129/"
+            }
+          },
+          "limitations": [
+            "Randomized double-blind placebo-controlled study of exact PrimaVie purified shilajit in healthy men aged 45-55, 250 mg twice daily for 90 days. Positive androgen-biomarker findings and the existing branded-material context remain intact.",
+            "Generic shilajit, unspecified resin/extract, fulvic-acid complex and the words processed or purified do not establish the exact PrimaVie preparation or its standardization. This rejects transfer to the generic record, not the branded trial or its scoped positive findings.",
+            "Biomarker changes do not establish symptomatic benefit, fertility, strength, energy or longevity. No generic efficacy grade, preparation equivalence, clinical dose benchmark or safety determination is introduced."
+          ]
+        }
+      ]
     },
     {
       "id": "INGR_PEA",

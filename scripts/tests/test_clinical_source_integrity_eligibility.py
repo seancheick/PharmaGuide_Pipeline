@@ -593,3 +593,58 @@ def test_retrieved_full_reports_have_factual_contexts_without_invented_approval(
                        for note in context['limitations'])
         else:
             assert any('single aggregate regimen' in note for note in context['limitations'])
+
+
+def test_generic_shilajit_source_review_finishes_without_borrowing_primavie_credit():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_accepted_for_scoring
+
+    record = reviewed_entries()['PRECLIN_SHILAJIT_GENERIC']
+    review = assess_clinical_source_review(record)
+    assert review['is_complete'] is True, review['errors']
+    assert record['study_type'] == record['evidence_level'] == 'reference'
+    assert not er.clinical_record_sources_eligible(record)
+    assert {pmid for context in record['study_contexts'] for pmid in context['source_pmids']} == {
+        '20078516', '26395129'}
+    for context in record['study_contexts']:
+        assert context['components'] == ['PRECLIN_SHILAJIT_GENERIC']
+        assert context['review_status'] == 'rejected_source'
+        assert context['scoring_eligible'] is False
+        assert validate_ingredient_context(context, require_complete_review=True) == []
+        assert not context_accepted_for_scoring(context)
+        assert 'Codex' in context['clinical_review']['reviewer']
+        assert 'Dr. Pham' not in context['clinical_review']['reviewer']
+    branded = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
+    assert assess_clinical_source_review(branded)['is_complete'] is True
+    assert any(context_accepted_for_scoring(context) for context in branded['study_contexts'])
+
+
+def test_generic_shilajit_completed_source_exclusion_reaches_scored_readiness():
+    row = {'name': 'Shilajit', 'standard_name': 'Shilajit', 'canonical_id': 'shilajit',
+           'mapped': True, 'quantity': 500, 'unit': 'mg', 'bio_score': 10,
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'status': 'active', 'form_factor': 'capsule',
+               'supplement_type': {'type': 'single_nutrient'},
+               'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    artifact = build_scored_artifact(product)
+    assessment = artifact['assessment_readiness']['evidence']
+    assert assessment['readiness'] == 'complete', assessment
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert assessment['not_yet_evaluated_count'] == 0
+
+
+@pytest.mark.parametrize('missing_pmid', ['20078516', '26395129'])
+def test_generic_shilajit_review_cannot_finish_with_an_unread_sibling(monkeypatch, missing_pmid):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['PRECLIN_SHILAJIT_GENERIC']
+    record['study_contexts'] = [context for context in record['study_contexts']
+                                if missing_pmid not in context['source_pmids']]
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    result = ca.assess_clinical_source_review(record)
+    assert result['is_complete'] is False
+    assert 'clinical_source_rejection_coverage_incomplete' in result['errors']
+    # Finishing the generic preparation question cannot complete other research.
+    assert ca.assess_clinical_source_review(records['INGR_UBIQUINOL'])['is_complete'] is False
