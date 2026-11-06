@@ -12220,6 +12220,7 @@ class SupplementEnricherV3:
 
                     # Prefer exact match to avoid false positives (e.g. "EPA" in "HEPATIC")
                     is_match = False
+                    compound_presence_only = False
                     # Only an explicitly declared generic identity may bypass
                     # display spelling. Form-specific terms keep their existing
                     # preparation matching; a known different identity cannot
@@ -12230,7 +12231,16 @@ class SupplementEnricherV3:
                             and identity_registry.standard_names.get(
                                 (ing_data['canonical_source_db'], ing_data['canonical_id']))):
                         if ing_data['canonical_id'] != target_identity[0]:
-                            continue
+                            # A nutrient row can explicitly name a different
+                            # compound as its source. Resolve its owned form ID
+                            # with the identity owner; nutrient mass is not compound mass.
+                            source_forms = ing_data['form_ids']
+                            compound_presence_only = bool(source_forms) and all(
+                                _term_identity(form) == target_identity
+                                for form in source_forms
+                            )
+                            if not compound_presence_only:
+                                continue
                         # A redirected form/alias still needs its existing
                         # lexical preparation match; its parent cannot prove it.
                         is_match = bool(canonical_fallback and cluster_canonical in canonical_ids
@@ -12239,6 +12249,8 @@ class SupplementEnricherV3:
                             ing_data['canonical_id'], ing_data['canonical_source_db'])
                             and ing_data['form_ids'] != {target_form}):
                         continue
+                    if compound_presence_only:
+                        is_match = True
                     if canonical_fallback and not is_match:
                         continue
                     if not canonical_fallback and cluster_ing_norm == ing_key:
@@ -12339,6 +12351,11 @@ class SupplementEnricherV3:
                                 meets_min = False
                         else:
                             meets_min = qty_num > 0
+
+                        if compound_presence_only:
+                            evaluated_quantity, evaluated_unit = None, None
+                            dose_evaluable = False
+                            meets_min = False
 
                         matched_ings.append({
                             "ingredient": ing_data['name'],

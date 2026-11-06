@@ -382,3 +382,41 @@ def test_prepared_magnesium_scope_is_not_proved_by_parent_display_at_enrichment_
     quality = enriched['ingredient_quality_data']['ingredients_scorable']
     assert quality[0]['matched_form'] == 'magnesium oxide'
     assert enriched['formulation_data']['synergy_clusters'] == []
+
+
+@pytest.mark.parametrize('form,present', [
+    ('alpha-GPC', True), ('choline bitartrate', False),
+    ('CDP-choline (citicoline)', False), ('choline (unspecified)', False),
+])
+@pytest.mark.parametrize('minimum', [0, 300])
+def test_parent_nutrient_exact_compound_presence_does_not_transfer_mass(form, present, minimum):
+    e = _enricher_with([{
+        'id': 'cognitive_performance', 'standard_name': 'Cognitive fixture',
+        'ingredients': ['choline alfoscerate', 'phosphatidylcholine'],
+        'canonical_ids': ['alpha_gpc', 'phosphatidylcholine'],
+        'min_effective_doses': {'choline alfoscerate': minimum},
+    }], {})
+    source = {'name': 'Choline', 'standardName': 'Choline', 'canonical_id': 'choline',
+              'canonical_source_db': 'ingredient_quality_map', 'quantity': 120, 'unit': 'mg',
+              'raw_source_path': 'ingredientRows[25]', 'raw_source_text': 'Choline'}
+    pc = {'name': 'Phosphatidylcholine', 'standardName': 'Phosphatidylcholine',
+          'canonical_id': 'phosphatidylcholine', 'canonical_source_db': 'ingredient_quality_map',
+          'quantity': 150, 'unit': 'mg', 'raw_source_path': 'ingredientRows[26]'}
+    quality = [{**source, 'form_id': form, 'matched_form': form, 'mapped': True,
+                'mapped_identity': True, 'scoreable_identity': True, 'identity_disposition': 'clean',
+                'source_section': 'active', 'cleaner_row_role': 'active_scorable',
+                'score_eligible_by_cleaner': True, 'role_classification': 'active_scorable',
+                'dose_class': 'therapeutic_mass'}]
+    quality.append({**quality[0], **pc, 'form_id': 'phosphatidylcholine (unspecified)',
+                    'matched_form': 'phosphatidylcholine (unspecified)'})
+    product = {'id': '60740', 'activeIngredients': [source, pc],
+               'ingredient_quality_data': {'ingredients': quality, 'ingredients_scorable': quality}}
+    clusters = e._collect_synergy_data(product)
+    assert bool(clusters) is present
+    if present:
+        member = next(m for m in clusters[0]['matched_ingredients'] if m['ingredient'] == 'Choline')
+        assert (member['quantity'], member['unit']) == (120, 'mg')
+        assert member['evaluated_quantity'] is None
+        assert member['evaluated_unit'] is None
+        assert member['dose_evaluable'] is False
+        assert member['meets_minimum'] is False
