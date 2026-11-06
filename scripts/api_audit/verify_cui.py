@@ -58,6 +58,8 @@ SCRIPTS_ROOT = SCRIPT_DIR.parent
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+from api_audit._cache import _get_fresh_payload
+
 import env_loader  # noqa: F401 — loads .env into os.environ
 import ssl
 import urllib.request
@@ -191,24 +193,8 @@ class UMLSClient:
                 self._cache = {}
 
     def _cache_get(self, key: str) -> dict | None:
-        cached = self._cache.get(key)
-        if not isinstance(cached, dict):
-            return None
-
-        payload = cached.get("payload")
-        if isinstance(payload, dict):
-            expires_at = cached.get("expires_at")
-            if isinstance(expires_at, str):
-                try:
-                    if datetime.fromisoformat(expires_at) <= datetime.now(UTC):
-                        self._cache.pop(key, None)
-                        return None
-                except ValueError:
-                    self._cache.pop(key, None)
-                    return None
-            return payload
-
-        return cached
+        payload = _get_fresh_payload(self._cache, key)
+        return payload if isinstance(payload, dict) else None
 
     def _cache_set(self, key: str, value: dict) -> None:
         now = datetime.now(UTC)
