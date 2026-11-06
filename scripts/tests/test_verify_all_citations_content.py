@@ -412,6 +412,30 @@ def test_changed_claim_is_rechecked_against_cached_article():
     assert vac.content_matches(article, ['bromelain','digestion'])[0] == 'mismatch'
 
 
+def test_book_title_alone_cannot_disprove_chapter_topic():
+    book = {'title': 'Dietary Reference Intakes', 'subtitle': 'The Essential Guide to Nutrient Requirements',
+            'publication_type': 'edited-book', 'abstract': '', 'mesh_terms': []}
+    assert vac.content_matches(book, ['chloride'])[0] == 'partial'
+    # Insufficient book metadata is not a verified topic match.
+    assert vac.content_matches(book, ['chloride'])[1] == 0.0
+    article = {**book, 'publication_type': 'journal-article'}
+    assert vac.content_matches(article, ['chloride'])[0] == 'mismatch'
+    substantive = {**book, 'abstract': 'This chapter concerns sleep and chamomile.'}
+    assert vac.content_matches(substantive, ['chloride'])[0] == 'mismatch'
+
+
+def test_crossref_retains_book_scope_metadata(monkeypatch):
+    def get(url):
+        if 'esearch' in url:
+            return json.dumps({'esearchresult': {'idlist': []}})
+        return json.dumps({'message': {'type': 'edited-book', 'title': ['Dietary Reference Intakes'],
+                                      'subtitle': ['The Essential Guide to Nutrient Requirements']}})
+    monkeypatch.setattr(vac, '_get', get)
+    _, records = vac.resolve_doi_ids(['doi:10.17226/11537'])
+    assert records['doi:10.17226/11537']['publication_type'] == 'edited-book'
+    assert records['doi:10.17226/11537']['subtitle'] == 'The Essential Guide to Nutrient Requirements'
+
+
 def test_baseline_console_separates_known_and_new_without_dropping_report(monkeypatch, tmp_path, capsys):
     baseline = tmp_path / 'baseline.json'
     baseline.write_text(json.dumps({'backlog':[{'file':'x.json','entry_id':'known','pmid':'111','status':'mismatch'}]}))

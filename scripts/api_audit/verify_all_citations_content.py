@@ -288,6 +288,8 @@ def resolve_doi_ids(doi_ids: list[str]) -> tuple[dict[str, str], dict[str, dict]
             work = json.loads(raw).get("message", {})
             crossref[cid] = {
                 "title": " ".join(work.get("title") or []),
+                "subtitle": " ".join(work.get("subtitle") or []),
+                "publication_type": work.get("type"),
                 "abstract": re.sub(r"<[^>]+>", "", work.get("abstract") or "").strip(),
                 "mesh_terms": [],
             }
@@ -442,6 +444,8 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
     text = (
         article.get("title", "")
         + " "
+        + article.get("subtitle", "")
+        + " "
         + article.get("abstract", "")
         + " "
         + " ".join(article.get("mesh_terms", []))
@@ -459,6 +463,12 @@ def content_matches(article: dict, topic_words: list[str]) -> tuple[str, float]:
     elif len(matches) == 1:
         return "partial", ratio
     else:
+        # A whole-book title cannot establish that an unseen chapter lacks the
+        # topic. Retain manual review, with zero matching confidence; substantive
+        # text and journal articles still receive the ordinary mismatch guard.
+        if (article.get("publication_type") in {"book", "edited-book", "monograph"}
+                and not article.get("abstract") and not article.get("mesh_terms")):
+            return "partial", 0.0
         return "mismatch", 0.0
 
 
