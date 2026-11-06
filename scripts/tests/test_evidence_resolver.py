@@ -1977,7 +1977,9 @@ def test_mixed_exclusion_reference_completion_requires_each_record_finished(monk
         reference['scoring_eligible'] = False
     elif reference_state == 'positive_open':
         reference['evidence_level'] = 'ingredient-human'
+        reference['study_type'] = 'rct_single'
         reference['study_contexts'] = []
+        assert not er.is_reference_only(reference)
     studies = [excluded, reference]
     if reverse:
         studies.reverse()
