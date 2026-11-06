@@ -56,7 +56,9 @@ def test_authority_copy_requires_awarded_points():
         "These ingredients were reviewed against established nutritional authority, "
         "which earned no Evidence points for this product.")
     credited, _ = _evidence_pillar("evaluated_authority", 10.0, "generic_single_molecule")
-    assert credited["reason"].startswith("Established nutritional authority recognizes")
+    assert credited["reason"] == (
+        "Evidence credit reflects the nutritional reference assessment for these ingredients.")
+    assert "physiological necessity" not in credited["reason"]
 
 
 # ---- F10: Dose and Formulation copy must match what was assessed -----------
