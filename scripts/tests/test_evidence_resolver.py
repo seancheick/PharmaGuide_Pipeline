@@ -2179,6 +2179,67 @@ def test_panel_citations_cover_only_resolved_expected_rows():
     assert all('VitaminC' in ref['url'] for ref in result['source_references'])
 
 
+@pytest.mark.parametrize('reverse', [False, True])
+@pytest.mark.parametrize('other_review', ['unread_human', 'unread_context', 'unread_reference', 'finished_reference'])
+@pytest.mark.parametrize('trial_scope', ['form_excluded', 'nonpositive', 'applicable'])
+def test_one_finished_trial_cannot_hide_another_unread_source(monkeypatch, reverse, other_review, trial_scope):
+    """Synthetic source mechanics: an exclusion is not a completed whole review."""
+    import copy
+    import clinical_applicability as ca
+    from assessment_readiness import _resolved_evidence_assessment
+    trial = _approved_test_source({'id': 'TEST_SPECIFIC_PREPARATION',
+        'study_type': 'rct_single', 'evidence_level': 'ingredient-human',
+        'effect_direction': 'positive_weak'}, name='Synthetic Test Material')
+    trial['applicability'] = {'scope': 'ingredient', 'required_form_terms': ['special test material']}
+    other = {'id': 'TEST_OTHER_SOURCE', 'standard_name': 'Synthetic Test Material',
+        'study_type': 'rct_single', 'evidence_level': 'ingredient-human',
+        'scoring_eligible': False, 'references_structured': [{'pmid': '39269340'}],
+        'study_contexts': []}
+    if other_review == 'unread_context':
+        other = _approved_test_source({'id': 'TEST_OTHER_SOURCE',
+            'study_type': 'rct_single', 'evidence_level': 'ingredient-human'},
+            name='Synthetic Test Material', pmid='39269340')
+        other['study_contexts'][0]['human_status'] = 'unknown'
+    elif other_review != 'unread_human':
+        other.update(study_type='reference', evidence_level='reference')
+    if other_review == 'finished_reference':
+        other['study_contexts'] = [{
+            'context_id': 'test_other_source_rejection', 'components': [other['id']],
+            'source_pmids': ['39269340'], 'review_status': 'rejected_source', 'scoring_eligible': False,
+            'clinical_review': {'reviewer': 'Synthetic independent mechanics reviewer',
+                'reviewed_at': '2026-11-06', 'scope': 'identity_dose_outcome_applicability'},
+            'dose': {'source_provenance': {'pmid': '39269340',
+                'source_url': 'https://pubmed.ncbi.nlm.nih.gov/39269340/',
+                'location': 'Synthetic mechanics source exclusion, not a clinical data edit'}},
+            'limitations': ['Synthetic finished no-credit source scope.']}]
+    if trial_scope == 'nonpositive':
+        trial['effect_direction'] = 'null'
+        trial['study_contexts'][0]['outcomes'][0]['direction'] = 'null'
+    row = {'name': 'Ordinary Test Material' if trial_scope == 'form_excluded' else 'Special Test Material',
+        'canonical_id': 'synthetic_material', 'mapped': True, 'raw_source_path': 'ingredientRows[0]',
+        'quantity': 100, 'unit': 'mg', 'bio_score': 10}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    studies = [other, trial]
+    if reverse:
+        studies.reverse()
+    before = copy.deepcopy(studies)
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {s['id']: s for s in studies})
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: {'synthetic_material': studies})
+    assert er.clinical_record_sources_eligible(other) is False
+    result = er.resolve_evidence_for_row(row, product)
+    assert studies == before
+    if trial_scope == 'applicable':
+        # One genuinely applicable source is retained despite another unread source.
+        assert result.points_eligible is True
+        assert result.disposition == EvidenceDisposition.RESOLVED_BY_REVIEWED_CLINICAL_EVIDENCE.value
+    elif other_review != 'finished_reference':
+        assert result.points_eligible is False
+        assert _resolved_evidence_assessment(result)[0] == 'not_yet_evaluated'
+    else:
+        assert result.points_eligible is False
+        assert _resolved_evidence_assessment(result)[0] != 'not_yet_evaluated'
+
+
 @pytest.mark.parametrize('invalid', ['unknown_human', 'ambiguous_human', 'nonhuman',
     'retracted', 'expression_of_concern', 'missing_dose', 'unresolved_outcome'])
 def test_source_eligibility_cannot_override_existing_complete_context_schema(monkeypatch, invalid):

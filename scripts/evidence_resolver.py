@@ -1219,21 +1219,28 @@ def _resolve_evidence_for_row(
         matched_owners.append("backed_clinical_studies")
         # Check study types, effect directions, and applicability
         valid_studies = [s for s in deduped_studies if clinical_record_sources_eligible(s)]
+        from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review
+        # The shared scope owner checks known preparation exclusions before
+        # a source hold. A finished material mismatch grants no credit and
+        # must not be reopened merely because the source is non-contributing.
+        # Every matched record must reach that conclusion: an unrelated open
+        # source still keeps the ingredient's research unresolved.
+        scope_decisions = []
+        for study in deduped_studies:
+            scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
+            if source_ref:
+                scoped["matched_source_row_refs"] = [source_ref]
+            scope_decisions.append(assess_clinical_applicability(
+                product or {"activeIngredients": [row_dict]}, scoped,
+                assess_amount=False, require_claim_alignment=False))
+        noncontributing_complete = [
+            (decision.get("status") == "not_applicable"
+             and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
+            or (is_reference_only(study)
+                and assess_clinical_source_review(study)["is_complete"])
+            for study, decision in zip(deduped_studies, scope_decisions)
+        ]
         if not valid_studies:
-            from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review
-            # The shared scope owner checks known preparation exclusions before
-            # a source hold. A finished material mismatch grants no credit and
-            # must not be reopened merely because the source is non-contributing.
-            # Every matched record must reach that conclusion: an unrelated open
-            # source still keeps the ingredient's research unresolved.
-            scope_decisions = []
-            for study in deduped_studies:
-                scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
-                if source_ref:
-                    scoped["matched_source_row_refs"] = [source_ref]
-                scope_decisions.append(assess_clinical_applicability(
-                    product or {"activeIngredients": [row_dict]}, scoped,
-                    assess_amount=False, require_claim_alignment=False))
             if all(decision.get("status") == "not_applicable"
                    and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
                    for decision in scope_decisions):
@@ -1245,13 +1252,7 @@ def _resolve_evidence_for_row(
                     reason_code="clinical_form_mismatch", owner_facts=owner_facts,
                     blocking_reasons=["form_mismatch_with_clinical_trials"],
                 )
-            completed_noncontributing = all(
-                (decision.get("status") == "not_applicable"
-                 and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
-                or (is_reference_only(study)
-                    and assess_clinical_source_review(study)["is_complete"])
-                for study, decision in zip(deduped_studies, scope_decisions)
-            )
+            completed_noncontributing = all(noncontributing_complete)
             if completed_noncontributing:
                 owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
                 # Each matched record is finished: a preparation exclusion may
@@ -1275,17 +1276,20 @@ def _resolve_evidence_for_row(
             # Check applicability: preparation/form only. Amount adequacy is owned
             # by Dose; assessment readiness separately withholds a required missing
             # amount, so Evidence must not turn an amount into efficacy eligibility.
-            from clinical_applicability import assess_clinical_applicability
-            scope_product = product or {"activeIngredients": [row_dict]}
-            source_ref = row_dict.get("raw_source_path") or row_dict.get("source_row_ref")
             record_states = []
             unresolved_reasons = []
             inapplicable_reasons = []
-            for study in valid_studies:
-                scoped = {**study, "ingredient": name, "matched_canonical_ids": [canonical]}
-                if source_ref:
-                    scoped["matched_source_row_refs"] = [source_ref]
-                decision = assess_clinical_applicability(scope_product, scoped, assess_amount=False, require_claim_alignment=False)
+            for study, decision, finished in zip(deduped_studies, scope_decisions, noncontributing_complete):
+                if study not in valid_studies:
+                    # A qualified but inapplicable sibling cannot finish an
+                    # unrelated unread source. A truly applicable source still
+                    # wins below, preserving independently valid evidence.
+                    if not finished:
+                        record_states.append("unresolved")
+                        unresolved_reasons.append(
+                            decision["reason_code"] if decision["status"] == "unresolved"
+                            else "clinical_sources_ineligible")
+                    continue
                 if decision["status"] == "unresolved":
                     record_states.append("unresolved")
                     unresolved_reasons.append(decision["reason_code"])
