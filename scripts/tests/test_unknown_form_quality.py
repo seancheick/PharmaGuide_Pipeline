@@ -1519,7 +1519,7 @@ def test_standard_parent_name_cannot_supply_a_form_for_a_brand_only_source(enric
         ('L-Carnitine L-Tartrate', 'L-Carnitine', 'l-carnitine tartrate (lclt)'),
         ('Carnipure LCLT', 'L-Carnitine', 'l-carnitine tartrate (lclt)'),
         ('L-Carnitine', 'L-Carnitine', 'l-carnitine base (free form)'),
-        ('Carnipure', 'L-Carnitine L-Tartrate', 'l-carnitine tartrate (lclt)'),
+        ('Carnipure', 'L-Carnitine L-Tartrate', 'l-carnitine (unspecified)'),
     ]:
         assert enricher._match_quality_map(raw, standard, quality,
             cleaner_canonical_id='l_carnitine')['form_id'] == expected
@@ -1690,3 +1690,12 @@ def test_parent_scoped_source_alias_cannot_borrow_another_identity_or_negation(e
         enricher.databases['ingredient_quality_map'], cleaner_canonical_id=canonical,
         raw_source_text=source)
     assert match is None or match.get('form_id') != 'trans-pterostilbene'
+
+
+@pytest.mark.parametrize('standard', ['L-Carnitine', 'L-Carnitine L-Tartrate'])
+def test_bare_carnipure_cannot_inherit_tartrate_from_a_standardized_name(enricher, standard):
+    match = enricher._match_quality_map('Carnipure', standard,
+        enricher.databases['ingredient_quality_map'], cleaner_canonical_id='l_carnitine',
+        branded_token='Carnipure', raw_source_text='Carnipure')
+    assert match is not None
+    assert 'tartrate' not in (match.get('form_id') or '').lower()

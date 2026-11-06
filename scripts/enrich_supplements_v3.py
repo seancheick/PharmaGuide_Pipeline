@@ -10505,23 +10505,17 @@ class SupplementEnricherV3:
         def add_candidate(candidate: Dict):
             if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
                 return
-            # A normalized parent name is identity, not disclosure of a child
-            # form. Keep the existing parent unknown when only standardName
-            # supplied that generic alias; explicit source forms still compete.
+            # A standardized name is inferred identity, not disclosure of a
+            # specific preparation. Only the retained source/form facts can
+            # support a child grade; the parent still supplies its unknown form.
             parent_key = candidate.get("parent_key")
             parent_data = quality_map.get(parent_key) or {}
-            generic_names = {
-                self._normalize_text(str(value).replace("_", " "))
-                for value in (parent_key, parent_data.get("standard_name"))
-                if value
-            }
-            standard_parent_form = (
+            standard_inferred_form = (
                 candidate.get("form_key")
                 and self._is_specific_form_match(candidate.get("match_data"), quality_map)
                 and candidate.get("match_source") == 1
-                and self._normalize_text(candidate.get("matched_alias") or "") in generic_names
             )
-            if standard_parent_form:
+            if standard_inferred_form:
                 form = (parent_data.get("forms") or {}).get(candidate["form_key"]) or {}
                 source_aliases = {
                     self._norm_form_name(alias)
@@ -10556,7 +10550,7 @@ class SupplementEnricherV3:
             # A bare parent alias cannot turn a printed powder/dried material
             # into an extract. Retain the parent and its shared unknown
             # form treatment; row-owned explicit extract forms remain valid.
-            guard_label = (raw_source_text or ing_name) if standard_parent_form else ing_name
+            guard_label = (raw_source_text or ing_name) if standard_inferred_form else ing_name
             if (
                 re.search(r"\b(?:powder|dried|extract)\b", guard_label, re.I)
                 and not norm_module.find_affirmative_label_match(
