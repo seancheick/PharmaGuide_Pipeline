@@ -81,7 +81,7 @@ def _ideal_b_complex() -> dict:
         _row("vitamin_b1_thiamine", "Thiamin", 10, "mg", idx=0),
         _row("vitamin_b2_riboflavin", "Riboflavin-5-Phosphate", 10, "mg", matched_form="riboflavin-5-phosphate", idx=1),
         _row("vitamin_b3_niacin", "Niacinamide", 20, "mg", matched_form="niacinamide", idx=2),
-        _row("vitamin_b5_pantothenic_acid", "Pantothenic Acid", 25, "mg", idx=3),
+        _row("vitamin_b5_pantothenic", "Pantothenic Acid", 25, "mg", idx=3),
         _row("vitamin_b6_pyridoxine", "P5P", 10, "mg", matched_form="pyridoxal-5-phosphate", idx=4),
         _row("vitamin_b9_folate", "L-5-MTHF", 400, "mcg", matched_form="l-5-mthf", idx=5),
         _row("vitamin_b12_cobalamin", "Methylcobalamin + Adenosylcobalamin", 500, "mcg", matched_form="methylcobalamin adenosylcobalamin", idx=6),

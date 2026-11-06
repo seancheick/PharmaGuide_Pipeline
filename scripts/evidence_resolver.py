@@ -562,7 +562,8 @@ def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Opt
 def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
     """Source-qualified nutritional role, independent of clinical outcomes/Dose."""
     from normalization import make_normalized_key, strip_label_identity_qualifiers
-    from scoring_reference_resolver import (EAA_CANONICALS, iqm_reference_entry,
+    from scoring_reference_resolver import (EAA_CANONICALS, IDENTITY_MISMATCH_RELATIONSHIPS,
+                                          delivers_parent_nutrient, iqm_reference_entry,
                                           nutritional_role_reference, parent_relationship)
     from scoring_input_contract import is_lent_blend_mass
 
@@ -580,8 +581,13 @@ def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, An
         form_ids = [row.get("matched_form"), row.get("form_id")]
         form_ids.extend(form.get("form_key") for form in row.get("matched_forms") or []
                         if isinstance(form, Mapping))
-        if any(form_id and (form_id not in forms or parent_relationship(forms[form_id]))
-               for form_id in form_ids):
+        # Formulation owns unknown/display form spellings. The established
+        # delivery owner admits them unless a known form delivers no nutrient;
+        # a typed identity mismatch must still never borrow its parent's role.
+        if any(parent_relationship(forms.get(form_id)) in IDENTITY_MISMATCH_RELATIONSHIPS
+               for form_id in form_ids if form_id):
+            return None
+        if not delivers_parent_nutrient(canonical, form_ids):
             return None
         return _dietary_nutrient_authority(canonical)
     reference = nutritional_role_reference(canonical)

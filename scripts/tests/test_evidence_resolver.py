@@ -2051,7 +2051,8 @@ def test_dri_row_authority_never_comes_from_marketing_nutrient_name(canonical):
 @pytest.mark.parametrize('changes', [
     {'mapped': False}, {'mapped_identity': False}, {'scoreable_identity': False},
     {'identity_disposition': 'ambiguous'}, {'identity_disposition': 'identity_conflict'},
-    {'form_match_status': 'unmapped'}, {'matched_form': 'unsupported derivative'},
+    {'form_match_status': 'unmapped'},
+    {'matched_form': 'unsupported derivative', 'form_match_status': 'unmapped'},
     {'source_section': 'inactive'}, {'is_excipient': True},
 ])
 def test_source_nutrient_authority_preserves_identity_and_preparation_vetoes(changes):
@@ -2077,3 +2078,20 @@ def test_source_nutrient_authority_never_overrides_a_typed_form_exclusion(monkey
     row = product['activeIngredients'][0]
     assert er.nutrition_authority_for_row(row) is None
     assert 'nutrition_authority' not in er.resolve_evidence_for_row(row, product).matched_owners
+
+
+@pytest.mark.parametrize('canonical,name,form', [
+    ('vitamin_b6_pyridoxine', 'P5P', 'pyridoxal-5-phosphate'),
+    ('vitamin_b9_folate', 'L-5-MTHF', 'l-5-mthf'),
+    ('vitamin_b12_cobalamin', 'Methylcobalamin + Adenosylcobalamin', 'methylcobalamin adenosylcobalamin'),
+])
+def test_qualified_nutrient_role_does_not_require_literal_form_key(canonical, name, form):
+    # These source/display spellings do not replace the producer's qualified
+    # nutrient identity. Formulation owns form quality; this is dietary role.
+    product = _eaa_product(canonical, name, form,
+        mapped_identity=True, scoreable_identity=True, identity_disposition='clean')
+    row = product['activeIngredients'][0]
+    assert er.nutrition_authority_for_row(row)
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.RESOLVED_BY_AUTHORITY.value
+    assert result.points_eligible is False
