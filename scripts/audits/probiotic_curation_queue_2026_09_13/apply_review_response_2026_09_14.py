@@ -134,7 +134,11 @@ def validate(registry: dict[str, Any], response: dict[str, Any], *, reviewer: st
     actual_sha = hashlib.sha256(source_bytes).hexdigest()
     if not isinstance(bound_sha, str) or not re.fullmatch(r"[0-9a-f]{64}", bound_sha):
         raise ValueError("review response requires dataset snapshot SHA256")
-    if registry != json.loads(source_bytes):
+    # Python considers False == 0 and True == 1. Source equality must also
+    # preserve JSON types, including existing clinical sign-off booleans.
+    if json.dumps(registry, sort_keys=True, allow_nan=False) != json.dumps(
+        json.loads(source_bytes), sort_keys=True, allow_nan=False
+    ):
         raise ValueError("candidate does not match captured source snapshot")
     if applied_sha and actual_sha == applied_sha:
         raise SystemExit("review response already applied to this registry snapshot")

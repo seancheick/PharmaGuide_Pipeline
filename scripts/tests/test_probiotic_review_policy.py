@@ -363,7 +363,7 @@ def test_verified_authoring_candidate_is_not_a_public_runtime_bypass(tmp_path, m
     assert not pm.context_accepted_for_scoring(approved)
 
 
-@pytest.mark.parametrize('failure', ['missing_hash', 'wrong_hash', 'unknown_context', 'foreign_pmid', 'mutated_payload'])
+@pytest.mark.parametrize('failure', ['missing_hash', 'wrong_hash', 'unknown_context', 'foreign_pmid', 'mutated_payload', 'mutated_boolean_type'])
 def test_prospective_authoring_requires_exact_source_response(tmp_path, monkeypatch, failure):
     authoring, source, response, row = _prospective_review_fixture(tmp_path, monkeypatch)
     if failure == 'missing_hash':
@@ -374,6 +374,10 @@ def test_prospective_authoring_requires_exact_source_response(tmp_path, monkeypa
         response['reviews'] = {'not-in-source': next(iter(response['reviews'].values()))}
     elif failure == 'mutated_payload':
         row['condition'] = 'unreviewed-new-condition'
+    elif failure == 'mutated_boolean_type':
+        thresholds = source['clinically_relevant_strains'][0]['cfu_thresholds']
+        assert isinstance(thresholds['dr_pham_signoff'], bool)
+        thresholds['dr_pham_signoff'] = int(thresholds['dr_pham_signoff'])
     else:
         response['reviews'][row['context_id']]['patches'] = [{
             'source_pmid': '12345678', 'field_path': 'purpose',
