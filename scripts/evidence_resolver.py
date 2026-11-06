@@ -551,14 +551,6 @@ def _dietary_nutrient_authority(canonical: str) -> Optional[Dict[str, Any]]:
     return None
 
 
-def is_essential_dietary_nutrient(canonical: str, name: str = "", iqm_entry: Optional[Dict[str, Any]] = None) -> bool:
-    """Established DRI identity/aliases and curated nutrient grouping only.
-
-    A name, IQM category or UL-only reference cannot establish this authority.
-    """
-    return _dietary_nutrient_authority(canonical) is not None
-
-
 def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
     """Source-qualified nutritional role, independent of clinical outcomes/Dose."""
     from normalization import make_normalized_key, strip_label_identity_qualifiers

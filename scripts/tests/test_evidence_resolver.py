@@ -1500,8 +1500,8 @@ def test_oral_clinical_credit_cannot_transfer_from_other_route_or_material(cid):
 
 @pytest.mark.parametrize('canonical', ['boron', 'nickel', 'tin', 'inositol', 'vanadium', 'vitamin_unreviewed'])
 def test_classification_category_cannot_manufacture_dri_authority(canonical):
-    assert er.is_essential_dietary_nutrient(canonical, iqm_entry={'category': 'minerals'}) is False
-    assert er.is_essential_dietary_nutrient(canonical, iqm_entry={'category_enum': 'vitamins'}) is False
+    assert er.nutrition_authority_for_row({'canonical_id': canonical, 'category': 'minerals'}) is None
+    assert er.nutrition_authority_for_row({'canonical_id': canonical, 'category_enum': 'vitamins'}) is None
 
 
 @pytest.mark.parametrize('canonical', ['boron', 'inositol', 'vanadium'])
@@ -1515,7 +1515,8 @@ def test_resolver_does_not_complete_non_authority_rows_via_nutrition_category(ca
 @pytest.mark.parametrize('canonical', ['thiamin', 'thiamine', 'vitamin_b1', 'vitamin_b1_thiamine',
                                       'folate', 'biotin', 'pantothenic_acid', 'calcium', 'choline'])
 def test_dri_aliases_use_existing_reference_owner(canonical):
-    assert er.is_essential_dietary_nutrient(canonical) is True
+    facts = er.nutrition_authority_for_row({'canonical_id': canonical})
+    assert facts and facts['is_essential'] is True
     result = er.resolve_evidence_for_canonical(canonical, dose_value=10, dose_unit='mg')
     assert result.reason_code == 'dietary_reference_intake_authority_established'
     assert result.canonical_id == canonical
