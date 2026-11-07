@@ -1265,11 +1265,18 @@ def _entry_excludes_recovery_context(
             )
         )
     )
-    return _excluded_identity_matches(
-        entry,
-        product_identity,
-        excluded,
-    )
+    if not _excluded_identity_matches(entry, product_identity, excluded):
+        return False
+    # A title can name a separate derivative beside this row's studied form.
+    # Bind that exclusion to its own source row before using the legacy title
+    # fallback; never let NALT elsewhere veto explicitly separate L-tyrosine.
+    from evidence_resolver import evidence_row_key
+    row_key = evidence_row_key(row)
+    if any(evidence_row_key(other) != row_key
+           and _entry_excludes_recovery_context(entry, other, {})
+           for other in get_evidence_subject_rows(product)):
+        return False
+    return True
 
 
 def _excluded_identity_matches(

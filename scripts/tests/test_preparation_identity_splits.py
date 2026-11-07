@@ -86,6 +86,61 @@ def _hits(enriched, name):
     return hits
 
 
+@pytest.mark.parametrize("name,expected", [
+    ("Coconut Fruit Water, Powder", "coconut_water"),
+    ("Coconut Water Powder", "coconut_water"),
+    ("Tender Coconut Water Solids", "coconut_water"),
+    ("Coconut MCT Oil", "mct_oil"),
+    ("MCT oil C8/C10", "mct_oil"),
+])
+def test_coconut_water_cannot_inherit_mct_oil_identity(pipeline, name, expected):
+    row = _raw_row(1, name, "Coconut", quantity=2000, unit="mg")
+    enriched = pipeline(_raw_product(990104, [row]))
+    assert {r["canonical_id"] for r in _rows(enriched, name)} == {expected}
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["quantity"] == 2000 and active["unit"] == "mg"
+    assert active["raw_source_text"] == name
+
+
+def test_unspecified_coconut_does_not_establish_fractionated_mct_oil(pipeline):
+    enriched = pipeline(_raw_product(990105, [
+        _raw_row(1, "Coconut", "Coconut", quantity=2000, unit="mg"),
+    ]))
+    assert all(r.get("canonical_id") != "mct_oil" for r in _rows(enriched, "Coconut"))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == "Coconut")
+    assert active.get("canonical_id") != "mct_oil"
+    assert active["raw_source_text"] == "Coconut"
+
+
+@pytest.mark.parametrize("unii", [None, "3RT3536DHY"])
+@pytest.mark.parametrize("label", ["organic raw whole Coconut", "whole organic Coconut",
+                                   "whole raw Coconut", "whole organic raw Coconut",
+                                   "whole raw organic Coconut"])
+def test_active_whole_coconut_is_not_an_inactive_descriptor_or_iron_product(pipeline, unii, label):
+    whole = _raw_row(2, label, "Coconut", quantity=28, unit="Gram(s)")
+    whole["uniiCode"] = unii
+    iron = _raw_row(1, "Iron", "Iron", category="mineral", quantity=1, unit="mg")
+    iron["quantity"][0]["operator"] = "<"
+    raw = _raw_product(990106, [iron, whole])
+    raw['fullName'] = 'Raw Coconut'
+    enriched = pipeline(raw)
+    active = next(r for r in enriched['activeIngredients'] if r['raw_source_text'] == label)
+    assert active.get('canonical_id') not in {'mct_oil', 'PII_COCONUT_SOURCE_DESCRIPTOR'}
+    assert active['quantity'] == 28 and active['unit'] == 'Gram(s)'
+    from scoring_input_contract import get_classification_ingredients
+    subjects = get_classification_ingredients(enriched).rows
+    assert any(r.get('raw_source_path') == active['raw_source_path'] for r in subjects)
+    assert enriched['supplement_type']['type'] == 'general_supplement'
+
+
+def test_plain_inactive_coconut_retains_its_source_disclosure_identity(pipeline):
+    raw = _raw_product(990107, [_raw_row(1, 'Iron', 'Iron', category='mineral', quantity=1, unit='mg')])
+    raw['otheringredients'] = {'text': 'Coconut', 'ingredients': [{'name': 'Coconut'}]}
+    enriched = pipeline(raw)
+    assert any(r.get('canonical_id') == 'PII_COCONUT_SOURCE_DESCRIPTOR'
+               for r in enriched['inactiveIngredients'])
+
+
 @pytest.mark.parametrize("name,group,expected,old_rule", [
     ("Bionectria ochroleuca", "Bionectria ochroleuca", "bionectria_ochroleuca",
      "RULE_IQM_CORDYCEPS_AUTOIMMUNE"),

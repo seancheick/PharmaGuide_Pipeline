@@ -1207,12 +1207,44 @@ def _resolve_evidence_for_row(
                 if reference:
                     matching_studies.append(reference)
     # Deduplicate studies by ID
+    from scoring_v4.modules.generic_evidence import _entry_excludes_recovery_context
+    from clinical_applicability import assess_clinical_applicability
+    from probiotic_measurements import context_review_finished
+    # Use the existing identity index, restricted to this row's explicit
+    # preparation. A broad parent exclusion alone cannot finish unread work.
+    preparation_owners = {
+        study.get("id"): study
+        for field in ("raw_source_text", "name", "matched_form")
+        for study in studies_idx.get(_canonical_text(row_dict.get(field)), [])
+    }
     seen_ids = set()
     deduped_studies = []
     for s in matching_studies:
         sid = s.get("id")
         if sid and sid not in seen_ids:
             seen_ids.add(sid)
+            # Canonical family joins cannot bypass the same declared identity
+            # exclusions used by scoring recovery. An excluded preparation's
+            # finished review does not inherit this record's pending sources.
+            if _entry_excludes_recovery_context(s, row_dict, product or {}):
+                excluded_by_specific_owner = False
+                for owner_id, owner in preparation_owners.items():
+                    if owner_id == sid or _entry_excludes_recovery_context(owner, row_dict, product or {}):
+                        continue
+                    scoped_owner = {**owner, "ingredient": name, "matched_canonical_ids": [canonical]}
+                    if source_ref:
+                        scoped_owner["matched_source_row_refs"] = [source_ref]
+                    decision = assess_clinical_applicability(
+                        product or {"activeIngredients": [row_dict]}, scoped_owner,
+                        assess_amount=False, require_claim_alignment=False)
+                    if (decision.get("status") == "not_applicable"
+                            and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
+                            and all(context_review_finished(context)
+                                    for context in owner.get("study_contexts") or [])):
+                        excluded_by_specific_owner = True
+                        break
+                if excluded_by_specific_owner:
+                    continue
             deduped_studies.append(s)
 
     unresolved_clinical_source = False
