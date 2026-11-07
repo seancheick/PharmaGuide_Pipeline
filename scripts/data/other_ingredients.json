@@ -4563,7 +4563,11 @@
       "is_label_descriptor": true,
       "match_rules": {
         "negative_match_terms": [
-          "whole coconut"
+          "whole coconut",
+          "whole organic coconut",
+          "whole raw coconut",
+          "whole organic raw coconut",
+          "whole raw organic coconut"
         ]
       }
     },
