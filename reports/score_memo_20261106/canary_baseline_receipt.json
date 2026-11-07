@@ -59,7 +59,7 @@
   "guarded_scope": "Existing E1.2.2 assertions, unchanged",
   "independent_review": "54 proposed-baseline assertions passed; no remaining blocker",
   "previous_baseline": "quality_source_reviewed_20261104",
-  "qualification": "Combined scientific PR408 exact-candidate CI and completed local profile required before merge",
+  "qualification": "PR407 independently qualified by exact candidate 635fa53cd61fa210de1b22624f5dce13009ca299: CI42317906584 all eight fast shards and Merge readiness passed. PR408 qualification is separate and is not a prerequisite.",
   "raw_inputs": "All nine original raw hashes unchanged and verified against November4 manifest",
   "retained_byte_identical_ids": [
     "1002",

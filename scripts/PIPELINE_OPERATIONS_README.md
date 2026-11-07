@@ -466,6 +466,12 @@ and app publication.
 To run the complete local assembly and validation train without cloud uploads,
 interaction-asset publication, or app-bundle writes:
 
+A valid Flutter checkout and Supabase read access are still required for parity
+and catalog comparisons, even with these skip flags. Supply `--flutter-repo`
+for a nondefault checkout, and configure `SUPABASE_URL` and
+`SUPABASE_SERVICE_ROLE_KEY` before running. These checks can fail after local
+outputs have been replaced.
+
 ```bash
 bash scripts/release_full.sh \
   --skip-supabase --skip-flutter --skip-product-images
