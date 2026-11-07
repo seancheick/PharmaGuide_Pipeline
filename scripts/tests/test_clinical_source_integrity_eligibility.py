@@ -806,3 +806,38 @@ def test_betaine_exercise_prose_keeps_positive_and_null_outcomes_scoped():
     assert 'historical' in record['effect_direction_rationale'].lower()
     assert all(c['scoring_eligible'] is False for c in record['study_contexts'])
     assert not assess_clinical_source_review(record)['is_complete']
+
+
+def test_l_carnitine_finished_recovery_source_keeps_weight_and_preparation_holds():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()["INGR_L_CARNITINE"]
+    contexts = {c["context_id"]: c for c in record["study_contexts"]}
+    recovery = contexts["ingr_l_carnitine_32154768_recovery_source_review"]
+    assert validate_ingredient_context(recovery, require_complete_review=True) == []
+    assert recovery["scoring_eligible"] is False
+    assert any(o["direction"] == "positive" for o in recovery["outcomes"])
+    assert "Codex" in recovery["clinical_review"]["reviewer"]
+    weight = contexts["ingr_l_carnitine_32359762_weight_source_review"]
+    assert weight["review_status"] == "source_verified_pending_clinical_review"
+    assert weight["source_integrity"] == "none"
+    assert "36852455" in " ".join(weight["limitations"])
+    assert not assess_clinical_source_review(record)["is_complete"]
+    assert not er.clinical_record_sources_eligible(record)
+
+
+def test_glycine_finished_factual_sources_do_not_complete_unread_review_or_activate_grade():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()["INGR_GLYCINE"]
+    contexts = {pmid: c for c in record["study_contexts"] for pmid in c["source_pmids"]}
+    human = contexts["22529837"]
+    assert validate_ingredient_context(human, require_complete_review=True) == []
+    assert human["dose"]["values"] == [3000]
+    assert human["dose"]["duration_days"] == 3
+    assert human["scoring_eligible"] is False
+    assert contexts["25533534"]["scoring_eligible"] is False
+    assert contexts["37851316"]["review_status"] == "source_verified_pending_clinical_review"
+    assert record["scoring_eligible"] is False
+    assert not assess_clinical_source_review(record)["is_complete"]
+    assert not er.clinical_record_sources_eligible(record)

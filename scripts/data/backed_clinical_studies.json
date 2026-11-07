@@ -4570,7 +4570,7 @@
           "limitations": [
             "Mixed randomized and non-randomized designs; narrative synthesis only, not a pooled RCT estimate. Not credit-bearing.",
             "Dose range is 1-4 g/day in the abstract but 1 to 4.5 g/day in Results; discrepancy retained.",
-            "Declared meta-analyses 32154768 (7 RCTs, exercise-induced muscle damage; soreness improved at 0-96 h) and 32359762 (37 RCTs, 2292 participants; body weight WMD -1.21 kg, -1.73 to -0.68) have no open full text; abstracts give no per-trial regimens, forms or included-trial lists, so no context could be completed for them.",
+            "Declared meta-analyses 32154768 and 32359762 now have retained full-body source packets and source-specific contexts. Recovery review 32154768 has a completed non-credit source representation preserving primary-regimen/randomization discrepancies and preparation/population boundaries. Weight review 32359762 remains pending an attributable constituent-integrity/sensitivity and primary extraction disposition; included trial 26666519 has formal expression of concern 36852455. Neither meta-analysis is classified as retracted. Do not infer product equivalence, universal efficacy or general Dose benchmarks.",
             "Do not transfer centenarian findings to ordinary healthy adults or add overlapping older-women reports as independent cohorts.",
             "Despite restrictive abstract wording, the source table includes carbohydrate and leucine cointerventions; these cannot be ignored.",
             "Physical dosage form is not specified uniformly by the source table; no capsule assumption.",
@@ -4617,6 +4617,220 @@
             "30485835",
             "31636806",
             "32033285"
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_l_carnitine_32154768_recovery_source_review",
+          "source_pmids": [
+            "32154768"
+          ],
+          "components": [
+            "INGR_L_CARNITINE"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Oral L-carnitine and L-carnitine L-tartrate in separately identified source trials; salt mass not equated with base; no fumarate or ALCAR scope"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "exercise_induced_muscle_damage",
+          "purpose": "recovery",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_32154768",
+          "population": {
+            "age_group": "adult",
+            "description": "The meta-analysis reports 79 healthy participants, 70 men and 9 women, across trained and untrained groups. The Ho primary reports mean ages 45.4 for men and 51.9 for women, reversed in the meta-analysis table. Limited female evidence; no pediatric, pregnancy or patient transfer."
+          },
+          "study_design": "Systematic review/meta-analysis reporting seven randomized publications, six crossover and one parallel; primary PMID 8858401 instead describes a fixed placebo-then-active sequence. These are seven publications, not seven independently proven randomized cohorts.",
+          "outcomes": [
+            {
+              "name": "Post-exercise muscle soreness improved in pooled follow-up analyses; substantial later-time heterogeneity",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "CK/myoglobin/LDH pooled effects were follow-up-specific; no sustained biomarker or performance conclusion",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Seven publications, nine dose/sex analytic strata; Spiering doses share eight participants. Repeated follow-up times are not independent participants or trials.",
+            "The meta-analysis reports79 participants,70men/9women; its Discussion describes results as healthy adult males despite included female stratum. Preserve discrepancy and limited female evidence.",
+            "Three publications Jadad<3; four>=3; five publications have graph-extracted outcomes; substantial soreness heterogeneity at48/72/96h.",
+            "Muscle-damage marker effects are time-limited; do not infer persistent biomarker effect or athletic performance benefit.",
+            "Salt mass is not converted to L-carnitine base; no physical capsule/tablet equivalence or fumarate/ALCAR transfer.",
+            "Paper reports no significant preparation-type subgroup effect for soreness/CK; lack of interaction does not prove all preparations equivalent.",
+            "No new grade, clinical benchmark, safety claim or automatic product closure proposed.",
+            "Previous claimed Volek2002 overlap with32958033 retracted: exactpublication11788381 differs from11880112. Distinctpublications may stillshareparticipants; overlapunknown.",
+            "The source reports significant funnel/Egger asymmetry for soreness, CK and myoglobin (all p<0.001), not LDH (p=0.31). Leave-one-study-out stability does not resolve publication bias or shared-participant dose strata.",
+            "The source reports subgroup benefit in untrained participants rather than trained participants; CK findings were confined to resistance-training subgroups. No broad trained-athlete recovery/performance inference.",
+            "Completed source-specific non-credit review. The exact source and primary discrepancy receipts are recorded; absence of uniform-regimen equivalence does not mean the full source was unread. Generic source-to-product affirmative qualification remains unresolved.",
+            "Existing Carnipure11788381/20045157 exact primary contexts remain independent source owners; their inclusion in this synthesis is not independent confirmation and does not reopen those finished reviews."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "duration_days": null,
+            "administration_frequency": "Daily, source-trial-specific",
+            "dosage_forms": [
+              "Oral L-carnitine or LCLT; physical form not uniformly established"
+            ],
+            "co_therapies": [
+              "Extra drug/diet/other supplement interventions excluded by review criteria; exercise varies"
+            ],
+            "source_provenance": {
+              "pmid": "32154768",
+              "location": "Methods inclusion/exclusion and analysis; Table1; Results study features/outcomes; Discussion limitations",
+              "source_url": "https://doi.org/10.1080/07315724.2019.1661804"
+            },
+            "reported_regimen": "Source metaTable1–3g/day1–4weeks; primary8803503 instead reports acute2gpre+2gduringmarathon. Primary11788381/20045157 specify2gL-carnitine delivered asLCLT, not2gsalt. Exactprimaryregimens retained separately.",
+            "normalization": {
+              "basis": "No uniform pooled dose or duration: source and primary regimen conflicts are preserved. Empty scalar values do not mean dose extraction is unfinished; the primary-specific regimens remain in reported_regimen and the source receipt. No salt-to-base conversion or efficacy benchmark."
+            }
+          },
+          "included_study_pmids": [
+            "8321112",
+            "8858401",
+            "8803503",
+            "11788381",
+            "17313301",
+            "20045157",
+            "25834706"
+          ],
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex agent /root/betaine_review; independent check of /root/elderberry_review source packet",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed non-credit source representation under delegated existing policy. Retained full source Methods/Results and reconciled seven-primary packet inspected; declared source identity reverified live. Compatibility approval enum does not imply clinician review. Positive soreness result is retained; unresolved generic preparation/population and primary-regimen discrepancies prevent uniform affirmative transfer. No numerical grade or dose benchmark authorized."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_l_carnitine_32359762_weight_source_review",
+          "source_pmids": [
+            "32359762"
+          ],
+          "components": [
+            "INGR_L_CARNITINE"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Heterogeneous carnitine preparations across included source trials, explicitly including L-carnitine, LCLT, acetyl-L-carnitine and glycine-propionyl-L-carnitine; no chemical or retail-product equivalence implied."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "body_weight_and_composition",
+          "purpose": "weight_management",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_32359762",
+          "population": {
+            "age_group": "adult",
+            "description": "37 adult trials, reported 2292 participants; heterogeneous healthy and clinical populations, with overweight/obesity common. Matched diet, exercise or drug cointerventions vary. Results must not be applied uniformly to healthy normal-weight adults or all carnitine forms."
+          },
+          "study_design": "Random-effects meta-analysis and dose-response analysis; mostly parallel trials plus one crossover. Search through January2019. Full retained copy is an uncorrected publisher proof from a public mirror, not an official OA/license assertion.",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source review /root/elderberry_review; independently checked /root/betaine_review2026-11-06; constituent qualification still pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full-body extraction and cited constituent linkage are available and inspected; no blanket unread claim. Positive pooled weight estimate is historical. FormalEOC36852455 applies to included26666519, not32359762. Precise integrity/sensitivity, preparation/subgroup and unresolved primary extraction disposition remains required; no current affirmative activation."
+          },
+          "outcomes": [
+            {
+              "name": "Reported pooled body-weight change -1.21kg (95%CI -1.73 to -0.68); BMI and fat-mass reductions also reported. These are historical source estimates, not a currently qualified generic-product benefit.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Overall waist circumference and body-fat percentage comparisons were not statistically significant; fat-mass significance was sensitive to removal of the centenarian trial.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": null,
+            "dosage_forms": [],
+            "co_therapies": [
+              "Matched dietary restriction, exercise and medication cointerventions differ across trials."
+            ],
+            "reported_regimen": "Source trial doses250–4000mg/day for3–48weeks across distinct preparations; no common assigned regimen. Reported nonlinear peak near2000mg/day is not a validated minimum, optimal supplement target or salt-equivalence conversion.",
+            "normalization": {
+              "basis": "No single pooled regimen; preserve trial-specific material and exposure. Do not convert the dose-response curve into a general Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "32359762",
+              "location": "Retained full body Methods eligibility/extraction,Table1,Results3.1–3.7,Tables2–6,Discussion;included reference20 cross-checked to current formal expression of concern.",
+              "source_url": "https://doi.org/10.1016/j.clnesp.2020.03.008"
+            }
+          },
+          "included_study_pmids": [
+            "26666519",
+            "20423740",
+            "28832573",
+            "27225722",
+            "27432821",
+            "26149189",
+            "25352725",
+            "23349733",
+            "24454315",
+            "22818869",
+            "21439850",
+            "20812958",
+            "24393648",
+            "29696241",
+            "21224234",
+            "20068559",
+            "20683173",
+            "19604523",
+            "19056606",
+            "18065594",
+            "16446007",
+            "12875611",
+            "12867219",
+            "20414546",
+            "16612469",
+            "10861338",
+            "17042889",
+            "18272931"
+          ],
+          "limitations": [
+            "The meta-analysis includes Samimi2016,PMID26666519,as source reference20. Live PubMed/EuropePMC and publisher notice confirm Expression of Concern36852455/DOI10.1111/cen.14891 published2023-02-27 due unresolved research-integrity concerns. The pooled estimate predates that notice.",
+            "Do not mark the meta-analysis itself retracted or expression_of_concern: the formal notice concerns an included primary trial. Current positive qualification requires an attributable constituent-integrity/sensitivity disposition, not a fabricated exclusion re-analysis.",
+            "Formulations include ALCAR and glycine-propionyl material. The current generic record preparation exclusions are authored boundaries, not proof those forms are absent from this source. No pooled estimate may be transferred across these chemicals.",
+            "Nearly90% of included trials have unclear allocation concealment, and only two have low-risk outcome-assessor blinding. Most trials did not make anthropometry primary; source high-quality sensitivity supported body weight only.",
+            "Multiple source publications may share trial families; earlier review publication counts, included primary counts and trial strata must not be added as independent confirmations.",
+            "No new grade, generic efficacy claim, Dose benchmark, safety threshold or product closure is proposed. The current generic record remains mixed and held; approved Carnipure and completed ALCAR decisions stay intact.",
+            "Full included-publication map retains37citations:28primary PMIDs verified and six further exact primary/publisher identities resolved without new PMID; three remain secondary/citation-only. Publisher identity alone is not full content verification. Ref84isobservational despite all-RCT framing; ref70download was wrong paper and rejected. Exact source-access and extraction limits remain."
           ]
         }
       ],
@@ -17965,7 +18179,164 @@
       "endpoint_relevance_tags": [
         "sleep"
       ],
-      "scoring_eligible": false
+      "scoring_eligible": false,
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_glycine_22529837_sleep_restriction_source_scope",
+          "components": [
+            "INGR_GLYCINE"
+          ],
+          "source_pmids": [
+            "22529837"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Flavoured glycine, 3 g; no glycine-chelate, collagen, protein or GlyNAC equivalence"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "acute_partial_sleep_restriction",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "population": {
+            "age_group": "adult",
+            "description": "Ten healthy male Ajinomoto employees aged 30-61 without sleep disorders enrolled; seven analyzed after one dropout and two medication-related exclusions."
+          },
+          "study_design": "Randomized single-blinded placebo-controlled crossover trial; 7-14 recovery nights between periods; three nights per treatment with time in bed restricted by 25%.",
+          "trial_family": "glycine_22529837_sleep_restriction",
+          "comparator": "Flavoured reduced malt-sugar placebo",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex glycine source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Factual source review by Codex glycine source reviewer, independently checked by Codex /root/elderberry_review on 2026-11-06 against live source content. Agent review, not physician review. Human primary Methods/Tables 1-2 and review Table 1/reference discrepancies independently checked. Nonhuman exclusion independently supported by live abstract/figures; independent access to full animal Methods was blocked, so no full-Methods double-check is claimed. Existing parent grade and scoring-eligibility hold remain unchanged; no new numerical benchmark or efficacy activation."
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              3000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 3,
+            "administration_frequency": "Once each night, 30 minutes before bedtime",
+            "dosage_forms": [
+              "Oral flavoured glycine; physical delivery form not otherwise specified"
+            ],
+            "co_therapies": [
+              "Protocol-imposed 25% time-in-bed restriction; no daytime naps"
+            ],
+            "reported_regimen": "3 g glycine 30 minutes before bedtime for three consecutive nights per treatment period",
+            "normalization": {
+              "basis": "3 g x 1000 = 3000 mg per nightly administered glycine dose; not a minimum effective dose or general catalog benchmark"
+            },
+            "source_provenance": {
+              "pmid": "22529837",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3328957/",
+              "location": "Materials and Methods, Human study, Participants and Methods; Results, Human study, Tables 1-2 and Figures 1-2"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Daytime VAS fatigue on day 1 improved; day 3 had no significant between-treatment difference",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "VAS sleepiness and fatigue-complaint questionnaire did not show significant between-treatment improvement",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Psychomotor-vigilance reaction time decreased on day 1 and day 3; other performance tests did not show significant treatment effects",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Only seven participants analyzed, all healthy adult men employed by the ingredient company; very short experimental sleep restriction rather than treatment of diagnosed insomnia.",
+            "Single blinding, attrition/exclusions, multiple outcomes and no established prespecified outcome hierarchy; systematic review 37851316 judges the healthy-population sleep evidence high risk of bias.",
+            "Day 1 fatigue p=0.022; VAS sleepiness p=0.098 and fatigue questionnaire total p=0.080. Psychomotor-vigilance reaction time treatment p=0.003 on day 1 and printed p=0.05 on day 3. Preserve the borderline printed value.",
+            "Animal melatonin/SCN findings elsewhere in this publication are not human sleep, mechanistic or safety proof.",
+            "No conclusion about chronic insomnia, women, children, pregnancy, disease treatment, glycine bound in chelates or formula equivalence. This completed bounded source description retains observed positive and nonsignificant findings; it does not resolve the parent positive_strong grade or source-specific efficacy/applicability hold.",
+            "Participants were Ajinomoto employees; three authors have Ajinomoto research-lab affiliations and two have University of Miyazaki affiliations. The paper declares no potential commercial/financial conflict. This is one seven-analyzed-participant crossover trial, not multiple independent treatment arms or a general nutritional-authority assessment. The separate rat part of this article grants no human mechanistic or safety claim."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_glycine_25533534_nonhuman_scope",
+          "components": [
+            "INGR_GLYCINE"
+          ],
+          "source_pmids": [
+            "25533534"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex glycine source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Factual source review by Codex glycine source reviewer, independently checked by Codex /root/elderberry_review on 2026-11-06 against live source content. Agent review, not physician review. Human primary Methods/Tables 1-2 and review Table 1/reference discrepancies independently checked. Nonhuman exclusion independently supported by live abstract/figures; independent access to full animal Methods was blocked, so no full-Methods double-check is claimed. Existing parent grade and scoring-eligibility hold remain unchanged; no new numerical benchmark or efficacy activation."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "25533534",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4397399/",
+              "location": "Live PubMed abstract and MeSH; official PMC4397399 Methods: Animals and Sleep Analysis describe Sprague-Dawley/Wistar rats. This context rejects human clinical transfer without importing any animal regimen into a human Dose assessment."
+            }
+          },
+          "limitations": [
+            "Rat mechanistic experiments cannot be transferred to human clinical sleep efficacy, hypothermia mechanism or safety; source is retained as nonhuman context, not rejected as an invalid paper.",
+            "Preserve the existing reference-level scoring_eligible=false exclusion. No animal dose is converted into a human or catalog Dose benchmark.",
+            "This completed nonhuman-scope exclusion does not finish the parent human-efficacy or applicability determination. Preserve the source as genuine mechanistic research and its existing reference-level scoring exclusion; do not relabel animal results as negative human efficacy."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_glycine_37851316_scope_pending",
+          "components": [
+            "INGR_GLYCINE"
+          ],
+          "source_pmids": [
+            "37851316"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex glycine source inventory; remaining source-specific applicability review pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Factual source review by Codex glycine source reviewer, independently checked by Codex /root/elderberry_review on 2026-11-06 against live source content. Agent review, not physician review. Human primary Methods/Tables 1-2 and review Table 1/reference discrepancies independently checked. Nonhuman exclusion independently supported by live abstract/figures; independent access to full animal Methods was blocked, so no full-Methods double-check is claimed. Existing parent grade and scoring-eligibility hold remain unchanged; no new numerical benchmark or efficacy activation."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "37851316",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10828290/",
+              "location": "Full review Table 1, sleep/nervous-system subsection, risk-of-bias and limitations; references 47, 51, 53. Exact included-primary sleep-source mapping remains unresolved."
+            }
+          },
+          "limitations": [
+            "The review reports small high-risk-of-bias sleep studies. Its Table 1 Bannai 2012 row resembles the 10-men restricted-sleep protocol, but reference 47 is PMID 22293292/DOI 10.1254/jphs.11r04fm, a narrative review, not PMID 22529837. Do not invent explicit 22529837 inclusion or treat the review and trial as independent replication.",
+            "Yamadera 2007 and Inagawa 2006 are retained under the exact cited DOIs 10.1111/j.1479-8425.2007.00262.x and 10.1111/j.1479-8425.2006.00193.x. Their primary methods/preparation/population applicability has not been independently qualified in this packet; no PMID or positive-eligibility assumption is invented.",
+            "This broad 50-study review spans different populations, conditions, delivery routes and exposures. Unread or unresolved primary-source questions cannot become blanket no-credit or a generic sleep-benefit determination. Existing parent-grade and applicability hold remains."
+          ]
+        }
+      ]
     },
     {
       "id": "INGR_TART_CHERRY",
