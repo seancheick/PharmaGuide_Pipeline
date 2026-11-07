@@ -829,10 +829,10 @@
             "human_subjects_verified": true,
             "topic_match_verified": true,
             "retracted": false,
-            "verified_source": "https://biomind.co.il/wp-content/uploads/2022/02/Tyrosine-improves-cognitive-performance-and-reduces-min.pdf",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/10230711/",
             "verified_at": "2026-11-07",
             "abstract_evidence_quote": "No effects on mood",
-            "verified_by": "Codex /root/tyrosine_completion and independent /root checked indexed primary page205 Methods and primary Subjects/publisher sections. The direct PDF now returns404; no complete PDF or complete outcome review claimed. Agent source reviews, not clinician review."
+            "verified_by": "Codex /root/tyrosine_completion and independent /root checked indexed primary page205 Methods and primary Subjects/publisher sections. The direct PDF now returns404; no complete PDF or complete outcome review claimed. Agent source reviews, not clinician review. Reading basis: indexed primary Methods page205 from https://biomind.co.il/wp-content/uploads/2022/02/Tyrosine-improves-cognitive-performance-and-reduces-min.pdf and official publisher Subjects/Results previews https://www.sciencedirect.com/science/article/pii/S0361923098001634 ; receipt l-tyrosine-review/10230711_PRIMARY_METHODS_ACCESS_RECEIPT.json. Direct mirror returned404 in reviewed receipt; no downloaded full PDF, full-article review or PDF checksum claimed. Canonical PubMed identifies the article."
           },
           "dose": "One 500 mL drink daily for five days: 70 g PROTIFAR protein-rich powder containing 2 g tyrosine (2 g/day) versus 67 g FANTOMALT carbohydrate powder without protein; 255 kcal each. This is not five 2 g doses per day.",
           "duration": "Five consecutive daily administrations; posttest on day6 of the combat course.",
@@ -853,9 +853,9 @@
             "human_subjects_verified": true,
             "topic_match_verified": true,
             "retracted": false,
-            "verified_source": "https://magistralbr.caldic.com/storage/product-files/1046511437.pdf",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24433977/",
             "verified_at": "2026-11-06",
-            "verified_by": "Codex /root/elderberry_review source reading,2026-11-06; independent Codex /root/glycine_review content double-check,2026-11-06. Agent reviews,not clinician review. Full Methods/Results content basis; mirror access is not publisherOA."
+            "verified_by": "Codex /root/elderberry_review source reading,2026-11-06; independent Codex /root/glycine_review content double-check,2026-11-06. Agent reviews,not clinician review. Full Methods/Results content basis; mirror access is not publisherOA. Downloaded publisher-layout primary PDF mirror: https://magistralbr.caldic.com/storage/product-files/1046511437.pdf; retained local PDF SHA256 27e6245498daaae8bb7527026c16573ac994c6c7e028a6b0f507311fdfc7d6a9. Canonical PubMed link identifies the article; mirror access is not publisher open access."
           }
         },
         {
@@ -873,9 +873,9 @@
             "human_subjects_verified": true,
             "topic_match_verified": true,
             "retracted": false,
-            "verified_source": "https://assets.zyrosite.com/mjE00v40gJI3bQMZ/tyrosine-promotes-cognitive-flexibility-YX4GGQbw3EuepODa.pdf",
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25598314/",
             "verified_at": "2026-11-06",
-            "verified_by": "Codex /root/elderberry_review source reading,2026-11-06; independent Codex /root/glycine_review content double-check,2026-11-06. Agent reviews,not clinician review. Full Methods/Results content basis; mirror access is not publisherOA."
+            "verified_by": "Codex /root/elderberry_review source reading,2026-11-06; independent Codex /root/glycine_review content double-check,2026-11-06. Agent reviews,not clinician review. Full Methods/Results content basis; mirror access is not publisherOA. Reading basis: publisher-layout primary PDF through web extraction at https://assets.zyrosite.com/mjE00v40gJI3bQMZ/tyrosine-promotes-cognitive-flexibility-YX4GGQbw3EuepODa.pdf; receipt l-tyrosine-review/25598314_PUBLIC_PRIMARY_WEB_RECEIPT.json. Direct PDF download returned HTTP403 on 2026-11-07; no local PDF or PDF checksum claimed. Canonical PubMed identifies the article, not fulltext access."
           }
         },
         {
@@ -2209,9 +2209,9 @@
             "verified_at": "2026-11-07T05:27:03.091063+00:00",
             "abstract_evidence_quote": "In this randomized controlled trial, we evaluated whether acute and long-term effects of MCT on cognitive function on young individuals surpass those of long-chain triglycerides (LCT)."
           },
-          "dose": "Source states16.3mL Nisshin oil contains12gMCT,75%C8/25%C10;acute oil in oatmeal and daily breakfast oil,not pureC8/C12,capsules or a conversion-derived amount.",
-          "duration": "Acute75min assessment and4-week daily regimen in same participants;chronic testing>=1day after finaloil;women27±3days.",
-          "outcome": "Single-blind parallel trial,47 enrolled and36 protocol completers(18/arm;20men/16women),36 is the completer count,not an independently established randomized denominator. Acute reverse-Stroop interference favored MCT(P=.02);acute memory/n-back comparisons null. Four-week2-back match reaction time/variability favored MCT(P=.04/.02),but no-match errors favored olive oil(P=.048);other comparisons largely null. Same cohort supplies acute/chronic observations,not independent trials. No formal primary hierarchy inferred from power calculation on one major inhibitory-control outcome. One withdrawal for GI distress;other attrition includes sampling discomfort,infection,scheduling. Authors acknowledge multiplicity/Type-I risk without correction and power limits."
+          "dose": "The source states that 16.3 mL Nisshin oil contains 12 g MCT, with 75% C8 and 25% C10. Acute oil was supplied in oatmeal and daily oil with breakfast. This is not pure C8, C12 or capsules, and the mass is source-reported rather than calculated from volume.",
+          "duration": "Acute assessment 75 minutes after ingestion and a four-week daily regimen in the same participants; chronic testing at least one day after the final oil dose; women 27 ± 3 days.",
+          "outcome": "Single-blind parallel trial: 47 enrolled and 36 protocol completers (18 per arm; 20 men and 16 women). The 36 is the completer count, not an independently established randomized denominator. Acute reverse-Stroop interference favored MCT (p=.02); acute memory and n-back comparisons were null. Four-week 2-back match reaction time and variability favored MCT (p=.04 and .02), but no-match errors favored olive oil (p=.048); other comparisons were largely null. The same cohort supplies the acute and chronic observations, not independent trials. No formal primary hierarchy is inferred from a power calculation on one major inhibitory-control outcome. One withdrawal was due to GI distress; other attrition included sampling discomfort, infection and scheduling. The authors acknowledge multiplicity/Type-I risk without correction and power limits."
         },
         {
           "pmid": "25636220",
@@ -2229,12 +2229,12 @@
             "verified_at": "2026-11-07T05:27:03.091063+00:00",
             "abstract_evidence_quote": "To conduct a systematic review and meta-analysis of randomized controlled trials comparing the effects of MCTs, specifically C8:0 and C10:0, to long-chain triglycerides (LCTs) on weight loss and body composition in adults."
           },
-          "outcome": "C8/C10 dietary replacement for LCT,not generic additive retail-oil efficacy.21publications grouped into13trial families;modest pooled body-weight difference -0.51kg(95%CI -0.80to-0.23) and other body-composition findings;secondary lipid comparisons null. Structured MCT/LCT oils,food matrices,energy-control designs and cointerventions vary:three studies added phytosterols/stanols and one psyllium. Abstract-reported749 is retained;Results arithmetic239+250parallel+90crossover yields579,whereas table participant-column sum is638. These are unreconciled constructs,not verified unique enrollment or proof of an error. Multiple reports and crossover periods are not independent cohorts;primary-level arm/exposure/family reconciliation remains unfinished.",
+          "outcome": "C8/C10 dietary replacement for LCT, not generic additive retail-oil efficacy. Twenty-one publications were grouped into 13 trial families. The modest pooled body-weight difference was −0.51 kg (95% CI −0.80 to −0.23), with other body-composition findings; secondary lipid comparisons were null. Structured MCT/LCT oils, food matrices, energy-control designs and cointerventions vary: three studies added phytosterols/stanols and one psyllium. The abstract-reported 749 is retained; Results arithmetic of 239 + 250 parallel participants and 90 crossover participants yields 579, whereas the table participant-column sum is 638. These are unreconciled constructs, not verified unique enrollment or proof of an error. Multiple reports and crossover periods are not independent cohorts; primary-level arm, exposure and family reconciliation remains unfinished.",
           "duration": "Included studies>3weeks;source Results27days–16weeks;no common assigned regimen."
         }
       ],
       "effect_direction": "positive_weak",
-      "population_context": "Source-specific36young-adult completers in the47-enrolled cognition trial;adult dietary MCT-versus-LCT replacement cohorts in the13-family weight review. Abstract749/Results579/table638 constructs remain unreconciled and are not asserted as verified unique participants.",
+      "population_context": "Source-specific 36 young-adult completers in the 47-enrolled cognition trial; adult dietary MCT-versus-LCT replacement cohorts in the 13-family weight review. The abstract 749, Results 579 and table 638 constructs remain unreconciled and are not asserted as verified unique participants.",
       "studied_dose_exposure": {
         "values": [
           12000
@@ -2242,7 +2242,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Retain limited,preparation- and outcome-specific human findings without activating a new grade or generic efficacy.41443401 used Nisshin75%C8/25%C10;the source states16.3mLoil contains12gMCT. Its acute reverse-Stroop and selected4-week n-back benefits coexist with null/opposing findings,multiplicity and attrition limits.25636220 concerns dietary LCT replacement with C8/C10-containing oils/foods,including structured MCT/LCT matrices,three phytosterol/stanol cointerventions and one psyllium context;family,arm/exposure and749/579/638denominator constructs require reconciliation. No pureC8,C12/coconut-oil,capsule or general dietary-addition equivalence;no universal minimum,continuous effective window or12g target. Positive-shadow processing/source applicability remains unfinished;these facts do not close products or erase independent holds.",
+      "applicability_decision": "Retain limited, preparation- and outcome-specific human findings without activating a new grade or generic efficacy. PMID 41443401 used Nisshin oil with 75% C8 and 25% C10; the source states that 16.3 mL oil contains 12 g MCT. Its acute reverse-Stroop and selected four-week n-back benefits coexist with null or opposing findings, multiplicity and attrition limits. PMID 25636220 concerns dietary LCT replacement with C8/C10-containing oils and foods, including structured MCT/LCT matrices, three phytosterol/stanol cointerventions and one psyllium context. Trial-family, arm/exposure and 749/579/638 denominator constructs require reconciliation. No pure C8, C12/coconut-oil, capsule or general dietary-addition equivalence is established; no universal minimum, continuous effective window or 12 g target follows. Reviews of constituent methods and preparation applicability remain unfinished; these facts do not complete product assessments or remove independent holds.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "Codex agent /root/betaine_review source-content review; independently checked by Codex agent /root/elderberry_review,not clinician review",

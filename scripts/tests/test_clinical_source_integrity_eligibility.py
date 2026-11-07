@@ -819,8 +819,69 @@ def test_tyrosine_narrative_review_is_finished_without_becoming_independent_tria
     assert validate_ingredient_context(context, require_complete_review=True) == []
     assert record['published_studies_count'] == 1 and record['total_enrollment'] == 22
     assert {p for c in record['study_contexts'] if not context_review_finished(c)
-            for p in c['source_pmids']} == {'29980424', '38290812'}
+            for p in c['source_pmids']} == {'25598314', '36548401', '29980424', '38290812'}
     assert not assess_clinical_source_review(record)['is_complete']
+
+
+@pytest.mark.parametrize('pmid', ['36548401', '39820592'])
+def test_tyrosine_limitations_belong_to_their_actual_trial_family(pmid):
+    from clinical_applicability import reviewed_entries
+    context = next(c for c in reviewed_entries()['INGR_L_TYROSINE']['study_contexts']
+                   if c['source_pmids'] == [pmid])
+    text = ' '.join(context['limitations'])
+    assert 'Leiden female-sample' not in text
+    if pmid == '36548401':
+        assert 'same 28 analyzed men' in text
+        assert 'not independently enrolled trials' in text
+    else:
+        assert 'Part A' in text and 'same sample' in text
+        assert 'not an independent replication' in text
+    assert context['scoring_eligible'] is False
+
+
+def test_tyrosine_provenance_identifies_articles_and_actual_reading_basis():
+    from clinical_applicability import reviewed_entries
+    contexts = reviewed_entries()['INGR_L_TYROSINE']['study_contexts']
+    for pmid in ['24433977', '25598314', '26424423', '10230711']:
+        context = next(c for c in contexts if c['source_pmids'] == [pmid])
+        provenance = context['dose']['source_provenance']
+        assert provenance['source_url'] == f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/'
+        location = provenance['location']
+        assert 'mirror' in location.lower()
+        if pmid in {'24433977', '26424423'}:
+            assert 'SHA256' in location
+        else:
+            assert 'receipt' in location.lower()
+
+
+def test_tyrosine_unmade_applicability_decisions_survive_other_source_closures(monkeypatch):
+    from copy import deepcopy
+    import clinical_applicability as ca
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    record = deepcopy(reviewed_entries()['INGR_L_TYROSINE'])
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {record['id']: record})
+    template = next(c for c in record['study_contexts'] if c['source_pmids'] == ['26424423'])
+
+    def close_sources(pmids):
+        for index, context in enumerate(record['study_contexts']):
+            pmid, = context['source_pmids']
+            if pmid not in pmids:
+                continue
+            closed = deepcopy(template)
+            closed.update(context_id=context['context_id'], source_pmids=[pmid])
+            closed['clinical_review']['reviewer'] = 'Synthetic completion-mechanics control, not a clinical finding'
+            closed['dose']['source_provenance'].update(
+                pmid=pmid, source_url=f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/',
+                location='Synthetic completed-sibling control; no new scientific approval')
+            assert validate_ingredient_context(closed, require_complete_review=True) == []
+            record['study_contexts'][index] = closed
+
+    close_sources({'29980424', '38290812'})
+    assert not assess_clinical_source_review(record)['is_complete']
+    close_sources({'25598314', '36548401'})
+    assert assess_clinical_source_review(record)['is_complete']
+    assert [c['source_pmids'] for c in record['study_contexts'] if c['scoring_eligible']] == [['24433977']]
 
 
 @pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
