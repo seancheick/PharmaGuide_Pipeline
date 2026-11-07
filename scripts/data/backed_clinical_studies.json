@@ -48251,7 +48251,13 @@
           "dl-tyrosine",
           "dl tyrosine",
           "d,l-tyrosine",
-          "d l tyrosine"
+          "d l tyrosine",
+          "N-Acetyl-L-Tyrosine",
+          "N-Acetyl Tyrosine",
+          "NALT",
+          "D-Tyrosine",
+          "DL-Tyrosine",
+          "D,L-Tyrosine"
         ],
         "require_source_label_form": true,
         "reviewed_at": "2026-11-07",
@@ -48834,7 +48840,7 @@
           },
           "included_study_pmids": "extraction_pending",
           "clinical_review": {
-            "reviewer": "Codex /root/tyrosine_completion source-content review; independentnewfulltextcheck pending; notclinicianreview",
+            "reviewer": "Codex /root/tyrosine_completion source-content review; independent full-text source-content check by /root on 2026-11-07. Agent reviews, not clinician review; pooled precision qualification remains pending.",
             "reviewed_at": "2026-11-07",
             "scope": "identity_dose_outcome_applicability",
             "basis": "Officialacceptedmanuscript recovered; actualforest andfamily/denominator constructs inspected. Poolednumericalprecision/familymethodreview remainsopen. No genericzero,benchmark or enrollmentinference."
