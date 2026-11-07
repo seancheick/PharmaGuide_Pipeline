@@ -1,3 +1,9 @@
+## November 7 — midnight incremental acceptance repair
+
+Owner: `pipeline_incremental.py::_run_locked/current_snapshot/dependencies/plan_changes`; evidence: source binding includes UTC/local dates, existing per-row certification/manufacturer clock dependencies. Will NOT create: frozen evaluation dates, another freshness policy, scorer, registry or public contract.
+
+Reproduced: One_A_Day116 completed Clean/Enrich/Score across23:59–00:00, then calendar-only source digest drift refused promotion. Four fail-first rollover regressions reproduced the refusal. Correction reuses the completed isolated candidate through the existing planner, refreshing only stale Enrich/Score rows, re-running merged gates and source/raw/prior-output validation, and promoting only a date-consistent generation. Bounded refreshes retain prior live bytes on failure. Historical candidate passes and older receipts remain preserved with collision refusal. Classification: behavioral pipeline orchestration; no scientific policy or producer calculation change. Targeted/current-candidate qualification and integration are recorded in the repair PR; no corpus or release initiated here.
+
 ## November 6 — repository stabilization execution tracker
 
 Approved: all twelve findings plus proportionate verified candidates; qualified merges and one fingerprint-selected final nonpublishing build. Baseline `7ff36a45f`. Preserve completed corpus, raw labels, manifests and research receipts. Scientific work continues with the existing source-review lane.
