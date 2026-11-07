@@ -1276,3 +1276,47 @@ def test_read_human_source_facts_preserve_unfinished_ingredient_assessment(canon
     if canonical == "collagen":
         assert "unread corrigendum" not in narrative.lower()
         assert "no changed study methods" in narrative.lower()
+
+
+@pytest.mark.parametrize("canonical, label, expected", [
+    ("nattokinase", "Nattokinase", "not_yet_evaluated"),
+    ("nattokinase", "Natto extract", "not_yet_evaluated"),
+    ("glutathione", "Glutathione", "not_yet_evaluated"),
+    ("glutathione", "S-Acetyl L-Glutathione", "evaluated_limited_or_negative"),
+    ("glutathione", "Liposomal Reduced L-Glutathione", "evaluated_limited_or_negative"),
+])
+def test_missing_studied_preparation_proof_cannot_finish_zero_credit(canonical, label, expected):
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment
+    product = _tyrosine_scoring_product(name=label)
+    row = product["activeIngredients"][0]
+    row.update(canonical_id=canonical, standard_name=canonical,
+               matched_form=label, form_match_status="mapped")
+    result = resolve_evidence_for_row(row, product)
+    assert not result.points_eligible
+    assert _resolved_evidence_assessment(result)[0] == expected
+    artifact = build_scored_artifact(product)
+    assert (artifact["assessment_readiness"]["evidence"]["readiness"] == "complete") == (expected != "not_yet_evaluated")
+    if expected == "not_yet_evaluated":
+        assert "clinical_source_label_unresolved" in result.blocking_reasons
+
+
+@pytest.mark.parametrize("unknown_first", [True, False])
+def test_an_excluded_sibling_does_not_finish_an_unresolved_preparation(unknown_first):
+    from clinical_applicability import assess_clinical_applicability
+    product = _tyrosine_scoring_product(name="Glutathione")
+    row = product["activeIngredients"][0]
+    row.update(canonical_id="glutathione", standard_name="Glutathione",
+               matched_form="Glutathione", form_match_status="mapped")
+    excluded = {**row, "name": "S-Acetyl L-Glutathione", "raw_source_text": "S-Acetyl L-Glutathione",
+                "matched_form": "S-Acetyl L-Glutathione", "raw_source_path": "ingredientRows[1]"}
+    rows = [row, excluded] if unknown_first else [excluded, row]
+    product["activeIngredients"] = rows
+    product["ingredient_quality_data"]["ingredients"] = rows
+    product["ingredient_quality_data"]["ingredients_scorable"] = rows
+    decision = assess_clinical_applicability(product, {"id": "INGR_REDUCED_GLUTATHIONE",
+        "matched_canonical_ids": ["glutathione"],
+        "matched_source_row_refs": ["ingredientRows[0]", "ingredientRows[1]"]},
+        assess_amount=False, require_claim_alignment=False)
+    assert decision["status"] == "unresolved"
+    assert decision["reason_code"] == "clinical_source_label_unresolved"

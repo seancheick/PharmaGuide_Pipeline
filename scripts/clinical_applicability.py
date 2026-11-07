@@ -1395,15 +1395,18 @@ def assess_clinical_applicability(
                 preparation_text += " " + _row_text(heading, source_only=True, preserve_punctuation=True)
         literal_source = normalize_text(preparation_text)
         preparation_key = " " + _key(preparation_text).replace(" as ", " ") + " "
-        if forms and not any(
-            find_affirmative_label_match(
-                re.compile(r"(?<!\w)" + re.escape(normalize_text(form)) + r"(?!\w)", re.I), literal_source
-            ) if "+" in form else find_affirmative_label_match(
-                re.compile(r"(?<!\w)" + re.escape(_key(form)) + r"(?!\w)", re.I), preparation_key
-            )
+        required_patterns = [
+            (re.compile(r"(?<!\w)" + re.escape(normalize_text(form) if "+" in form else _key(form))
+                        + r"(?!\w)", re.I), literal_source if "+" in form else preparation_key)
             for form in forms
-        ):
-            reasons.append("clinical_form_mismatch")
+        ]
+        if forms and not any(find_affirmative_label_match(pattern, source)
+                             for pattern, source in required_patterns):
+            # A negated preparation is a known nonmatch. Mere absence of its
+            # label proof is unknown and cannot finish a zero-credit review.
+            explicitly_denied = any(pattern.search(source) for pattern, source in required_patterns)
+            reasons.append("clinical_source_label_unresolved"
+                           if source_only and not explicitly_denied else "clinical_form_mismatch")
             continue
         amount = _number(row.get("quantity"))
         unit_scale = _mass_unit_scale(row.get("unit_normalized") or row.get("unit"))
@@ -1461,10 +1464,13 @@ def assess_clinical_applicability(
                 "supported_outcomes": policy.get("supported_outcomes", []),
                 "studied_population": policy.get("studied_population"),
                 "scope": "ingredient", **scope}
-    reason = reasons[0] if reasons else "clinical_source_row_unresolved"
-    status = ("unresolved" if reason in {
+    unresolved_reasons = {
         "clinical_source_row_unresolved", "clinical_source_label_unresolved", "clinical_dose_unresolved",
-    } else "not_applicable")
+    }
+    # A finished exclusion on one row cannot settle an unknown sibling.
+    reason = next((reason for reason in reasons if reason in unresolved_reasons),
+                  reasons[0] if reasons else "clinical_source_row_unresolved")
+    status = "unresolved" if reason in unresolved_reasons else "not_applicable"
     return {"status": status, "reason_code": reason}
 
 
