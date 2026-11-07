@@ -753,7 +753,10 @@ class InactiveIngredientResolver:
         # 3. other_ingredients
         for t in terms:
             entry = self._other_index.get(t)
-            if entry:
+            if entry and not negative_match_terms_veto(
+                [raw_name, t],
+                (entry.get("match_rules") or {}).get("negative_match_terms", []),
+            ):
                 return finish(self._from_other(raw_name, entry))
 
         # 3b. other_ingredients, punctuation-insensitive.
@@ -762,7 +765,10 @@ class InactiveIngredientResolver:
             if not key:
                 continue
             entry = self._other_key_index.get(key)
-            if entry:
+            if entry and not negative_match_terms_veto(
+                [raw_name, t],
+                (entry.get("match_rules") or {}).get("negative_match_terms", []),
+            ):
                 return finish(self._from_other(raw_name, entry))
 
         # 4. unmatched — well-formed unknown
