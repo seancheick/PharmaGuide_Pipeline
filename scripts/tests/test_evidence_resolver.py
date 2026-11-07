@@ -2444,3 +2444,10 @@ def test_broccoli_unknown_or_unqualified_preparation_is_not_a_finished_zero(name
         'ingredient_quality_data': {'ingredients_scorable': [row]}})
     assert result.points_eligible is False
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+
+
+def test_bioactive_casein_is_not_completed_as_ordinary_food_protein():
+    result = er.resolve_evidence_for_canonical("casein_hydrolysate", dose_value=150, dose_unit="mg")
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert "literature_verification_pending" in result.blocking_reasons
+    assert result.points_eligible is False

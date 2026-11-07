@@ -19953,7 +19953,7 @@
     },
     {
       "canonical_id": "casein_hydrolysate",
-      "material_form": "Casein hydrolysate protein base",
+      "material_form": "Casein hydrolysate, including bioactive alpha-s1-casein/alpha-casozepine decapeptide preparations; ordinary nutritional protein matrices are a distinct application.",
       "search_query": "casein_hydrolysate dietary supplementation whole food matrix",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -19962,18 +19962,17 @@
       "records_screened": 10,
       "qualifying_human_studies": [],
       "effect_direction": null,
-      "population_context": "general dietary intake / food powder matrix",
+      "population_context": "Preparation-specific adult sleep/stress research; correspondence of current bioactive milk peptide labels to studied preparations remains unresolved.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Casein hydrolysate protein base is a culinary food powder, nutrient base, or flavor/carrier matrix; not scored for therapeutic clinical efficacy.",
-      "applicability_status": "not_efficacy_relevant",
+      "applicability_decision": "The ordinary protein/food-matrix conclusion does not complete assessment of bioactive casein decapeptide preparations. PMID 31252661 (DOI 10.3390/nu11071466; official full text PMC6682925 reviewed November 6, 2026 by Codex agent) studies Ingredia Lactium 300 mg/day containing 6.6 mg alpha-s1-casein (f91-100) for four weeks in adults with poor sleep. Selected diary/actigraphy findings coexist with null symptom-scale and polysomnography treatment comparisons. PMID 17136040 (DOI 10.1038/sj.ejcn.1602553; live API and primary publisher abstract content verified November 6, 2026) studies Ingredia 150 mg/day for 30 days in 63 women with stress-related symptoms; full methods remain subscription-restricted. These are research leads, not qualified evidence that unbranded casein decapeptide labels contain Lactium or an equivalent preparation. Preparation composition, source/full-methods, trial-family independence and applicability review remain required. This correction establishes no affirmative efficacy credit, negative efficacy conclusion, general Dose benchmark or safety threshold.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified",
-      "reason_code": "food_powder_or_flavor_matrix"
+      "verification_result": "authoritative_pubmed_verified"
     },
     {
       "canonical_id": "chlorogenic_acids",
