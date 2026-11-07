@@ -1363,9 +1363,17 @@ def assess_clinical_applicability(
         # from any form layer must still reject the row. Otherwise an
         # enrichment-derived "seed oil" can disappear when source taxonomy is
         # absent and incorrectly satisfy the broader cranberry scope.
-        exclusion_text = text if not source_only else text + _row_text(row)
+        documented_scope = reference.get("documented_review_scope") == policy
+        exclusion_text = text if not source_only or documented_scope else text + _row_text(row)
+        # A finished literature exclusion must be proved by the label's own
+        # preparation, not a default mapped form. Extract/standardized powder
+        # is not the crude powder covered by a whole-food review.
+        prepared_source = bool(set(text.split()) & {
+            "extract", "extracts", "concentrate", "concentrated", "standardized", "standardised",
+        }) if documented_scope else False
         if any(
             " " + _key(term) + " " in exclusion_text
+            and not (prepared_source and "powder" in _key(term).split())
             for term in policy.get("excluded_form_terms", [])
         ):
             reasons.append("clinical_form_excluded")

@@ -19217,7 +19217,10 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "24144075",
+        "24287284",
+        "37739728"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -19229,7 +19232,7 @@
       ],
       "notes": "FDA-approved heart health claim; extensive evidence for cholesterol reduction.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-06",
       "notable_studies": "Abumweis et al. (2008, PMID 19109655) meta-analysis of 59 RCTs found plant sterols/stanols lowered LDL-C by about 8.8%, with benefit continuing up to roughly 3 g/day. Scholle et al. (2016) later reported additional LDL-C lowering in statin-treated patients.",
       "references_structured": [
         {
@@ -19250,6 +19253,60 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "24144075",
+          "doi": "10.1016/j.jand.2013.07.006",
+          "title": "Cholesterol-lowering efficacy of plant sterols/stanols provided in capsule and tablet formats: results of a systematic review and meta-analysis.",
+          "citation": "Journal of the Academy of Nutrition and Dietetics",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24144075/",
+          "published_date": "2013-11-01",
+          "publication_types": [
+            "Meta-Analysis",
+            "Comparative Study",
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "europe_pmc_core_and_independent_pubmed_primary_content_review"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "24287284",
+          "doi": "10.1016/j.jand.2013.09.023",
+          "title": "A softgel dietary supplement containing esterified plant sterols and stanols improves the blood lipid profile of adults with primary hypercholesterolemia: a randomized, double-blind, placebo-controlled replication study.",
+          "citation": "Journal of the Academy of Nutrition and Dietetics",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24287284/",
+          "published_date": "2013-11-26",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "europe_pmc_core_and_independent_pubmed_primary_content_review"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "37739728",
+          "doi": "10.1016/j.clnesp.2023.08.022",
+          "title": "Phytosterol supplementation in capsules or tablets as adjunctive treatment for hypercholesterolemia: A systematic review of randomized controlled trials.",
+          "citation": "Clinical nutrition ESPEN",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37739728/",
+          "published_date": "2023-08-28",
+          "publication_types": [
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "europe_pmc_core_and_independent_pubmed_primary_content_review"
         }
       ],
       "effect_direction": "positive_strong",
@@ -19419,6 +19476,204 @@
             "reviewer": "Dr. Pham",
             "reviewed_at": "2026-10-28",
             "scope": "identity_dose_outcome_applicability"
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_plant_sterols_24144075_bounded_source_scope",
+          "components": [
+            "INGR_PLANT_STEROLS"
+          ],
+          "source_pmids": [
+            "24144075"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Formulation-specific sterol/stanol capsule/tablet trials; ester, free sterol and stanol-lecithin preparations are distinct; no unspecified retail equivalence."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "elevated_ldl_cholesterol",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer /root/elderberry_review; independent content check /root/glycine_review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed factual noncredit source review under existing policy after live identity and actual full Methods/Results/Tables checks, independently double-checked on 2026-11-06. Agent review, not physician review. Preparation mixtures, source-specific dose/exposure limits and trial overlap remain explicit; parent clinical/grade/Dose/safety decisions are unchanged."
+          },
+          "trial_family": "plant_sterol_24144075_capsule_tablet_synthesis",
+          "population": {
+            "age_group": "adult",
+            "description": "Eight publications;263 analyzed adults,9 strata including2 McPherson strata; baseline lipids varied."
+          },
+          "study_design": "Randomized placebo-controlled trials screened with Jadad>=3; fasting LDL named primary synthesis endpoint. Food comparison indirect, reusing19109655.",
+          "dose": {
+            "source_provenance": {
+              "pmid": "24144075",
+              "source_url": "https://www.researchgate.net/publication/258062749_Cholesterol-Lowering_Efficacy_of_Plant_SterolsStanols_Provided_in_Capsule_and_Tablet_Formats_Results_of_a_Systematic_Review_and_Meta-Analysis",
+              "location": "Primary author-uploaded full text,Methods,Tables1–2,Results,Discussion"
+            },
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "administration_frequency": "Trial-specific schedules: Carr three times daily with each meal; Myrie once daily with supper; remaining Table2 strata twice daily with breakfast/supper, two main meals, main meal/dinner or breakfast/dinner.",
+            "dosage_forms": [
+              "Oral capsules",
+              "Oral tablets"
+            ],
+            "co_therapies": [
+              "Background diet and medication differ by source trial; no uniform dietary regimen or absence of co-therapy is established. The included Goldberg2006 publication concerns patients on statin drugs. Methods exclude studies adding another co-intervention; do not interpret this as proving every included participant was medication-free."
+            ],
+            "reported_regimen": "Heterogeneous capsule/tablet regimens for4–6weeks; Table2 reports distinct ester, free-sterol and stanol-lecithin preparations and dosing schedules. No single pooled assigned dose or catalog benchmark."
+          },
+          "outcomes": [
+            {
+              "name": "Pooled LDL reduction0.31mmol/L; Results CI−0.39to−0.24, I²0%; abstract upperCI−0.23.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Four-to-six-week heterogeneous preparations; one null formulation(Ottestad). Absence of heterogeneity does not prove clinical equivalence.",
+            "Table2:Carr3g explicitly as ester despite free-dose header; do not infer standardized active-dose benchmark.",
+            "Eight included publications are not nine independent trials; bibliographic membership is not per-primary methods approval.",
+            "Jones disclosed sterol-industry research/consulting and company ownership; no funding reported.",
+            "No cardiovascular-event or glycemic benefit established here. Existing food-only source exclusion and parent clinical/preparation hold remain."
+          ],
+          "included_study_pmids": [
+            "15969949",
+            "19535421",
+            "22378727",
+            "22796122",
+            "23623012",
+            "22087585",
+            "16442399",
+            "17707978"
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_plant_sterols_24287284_bounded_source_scope",
+          "components": [
+            "INGR_PLANT_STEROLS"
+          ],
+          "source_pmids": [
+            "24287284"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Reducol esterified mixture:81%sterols/19%stanols; Pharmavite softgels; not generic sterol powder, ester-mass or formulation equivalence."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "elevated_ldl_cholesterol",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer /root/elderberry_review; independent content check /root/glycine_review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed factual noncredit source review under existing policy after live identity and actual full Methods/Results/Tables checks, independently double-checked on 2026-11-06. Agent review, not physician review. Preparation mixtures, source-specific dose/exposure limits and trial overlap remain explicit; parent clinical/grade/Dose/safety decisions are unchanged."
+          },
+          "trial_family": "plant_sterol_mckenney_richmond_2011_2012",
+          "population": {
+            "age_group": "adult",
+            "description": "30 randomized/completed adults(8men/22women); eligible21–79,LDL130–<220mg/dL."
+          },
+          "study_design": "Double-blind crossover:5-weekTLC-diet lead-in then2six-week periods,no washout;30analyzed. Independent Richmond cohort from earlier22796122.",
+          "comparator": "Four placebo softgels plus same dietary advice",
+          "dose": {
+            "source_provenance": {
+              "pmid": "24287284",
+              "source_url": "https://www.researchgate.net/publication/259172040_A_Softgel_Dietary_Supplement_Containing_Esterified_Plant_Sterols_and_Stanols_Improves_the_Blood_Lipid_Profile_of_Adults_with_Primary_Hypercholesterolemia_A_Randomized_Double-Blind_Placebo-Controlled_R",
+              "location": "Primary author-uploaded full text,StudyDesign,Products,StatisticalAnalyses,Tables1–2"
+            },
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              1800
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 42,
+            "reported_regimen": "1800mg sterol/stanol moiety supplied as approximately2900mg ester daily;4softgels,two each with2main meals",
+            "normalization": {
+              "basis": "Source reports1.8g sterol/stanol and approximately2.9g ester distinctly;1.8g x1000=1800mg moiety. Factual assigned dose,not new benchmark."
+            },
+            "administration_frequency": "Four softgel capsules daily: two with each of two main meals, at consistent times, swallowed whole with water or another beverage.",
+            "dosage_forms": [
+              "Oral softgel capsules"
+            ],
+            "co_therapies": [
+              "Weight-maintenance NCEP Therapeutic Lifestyle Changes diet instructed throughout five-week lead-in and both six-week treatment periods, with same advice in placebo condition. Avoid other added-sterol/stanol foods or supplements; maintain habitual physical activity. Dietary targets were not fully achieved on average; no assumption of perfect TLC adherence."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "LDL percent-change treatment difference−4.3%,p=.008.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Total/nonHDL lower;HDL,triglycerides andTC/HDL nonsignificant.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Four capsules/day,two with each main meal:1.8g sterol/stanol moiety supplied as approximately2.9g ester; factual regimen only,not a generic Dose benchmark.",
+            "No washout; sequence interaction assessed. Other exclusion criteria refer to earlier trial,not fully reproduced in this paper.",
+            "Manufacturer-funded;authors manufacturer employees or funded contractors. Independent cohort is not sponsor-independent replication.",
+            "Short-term lipid endpoints; no cardiovascular-event prevention established. Parent clinical/preparation hold retained."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_plant_sterols_37739728_bounded_source_scope",
+          "components": [
+            "INGR_PLANT_STEROLS"
+          ],
+          "source_pmids": [
+            "37739728"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex agent /root/elderberry_review (source research; not clinician review); independent check pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Source identity and abstract content verified; full Methods, included-trial preparations, outcomes and independent trial families remain unqualified. This source-only pending context asserts no regimen/population/outcome, grants no points, and keeps review unfinished."
+          },
+          "limitations": [
+            "Abstract reports10includedarticles; exact preparations,trial-family overlap and full risk-of-bias methods remain unverified. Do not count reviews and their primaries as independent replication."
+          ],
+          "dose": {
+            "source_provenance": {
+              "pmid": "37739728",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37739728/",
+              "location": "Live abstract only; fullbody unavailable"
+            }
           }
         }
       ]
@@ -41684,7 +41939,7 @@
         "Healthy Aging/Longevity"
       ],
       "notes": "Proanthocyanidin-rich extract from Vitis vinifera seeds with 52 completed clinical trials on ClinicalTrials.gov. Primary evidence in blood pressure reduction (NCT00869193, n=70 placebo-controlled RCT), insulin resistance in metabolic syndrome (NCT01889368, UC Davis), and cardiovascular biomarkers. Phase 1 data in diastolic heart failure (NCT01185067, Michigan) and breast cancer chemoprevention (NCT00100893, City of Hope). Dose-response data available for glucose control at 300-900mg (NCT02254317).",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-06",
       "notable_studies": "NCT00869193 (n=70 RCT): Unilever/Edinburgh double-blind placebo-controlled 8-week trial of GSE on ambulatory blood pressure in subjects with elevated BP. NCT01889368 (n=19 RCT): UC Davis study of 300mg GSE for insulin resistance and oxidized LDL in metabolic syndrome, 30-day intervention. NCT01185067 (n=15 Phase 1): University of Michigan MegaNatural-BP GSE in heart failure with preserved ejection fraction. NCT01688154 (n=16 RCT): Grape seed proanthocyanidins for postprandial triglyceride reduction.",
       "references_structured": [
         {
@@ -41759,7 +42014,7 @@
           "identity": {
             "branded_material": "Enovita",
             "manufacturer": "Indena",
-            "standardization": "White-wine grape seed water extract standardized to >=95.0% OPCs (spectrophotometry); 5-10% monomeric catechin/epicatechin"
+            "standardization": "White-wine grape seed water extract standardized to >=95.0% OPCs by spectrophotometry; Methods 2.2 reports 5.0–15.0% catechin and epicatechin by HPLC, whereas the Introduction describes 5–10%. This source discrepancy is retained; no general extract equivalence or marker-dose conversion is established."
           },
           "exposure_basis": "supplement_dose",
           "route": "oral",
@@ -41793,14 +42048,14 @@
               "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "Men-only post hoc after a gender-by-product interaction: SBP -4.6 mmHg (95% CI -6.9 to -2.3), DBP -3.2 mmHg (-5.1 to -1.4) at 16 weeks",
+              "name": "Men-only exploratory analysis after a gender-by-product interaction: Table 2 adjusted GSEe-versus-placebo baseline-corrected differences at 16 weeks were systolic BP -3.76 mmHg (95% CI -7.16 to -0.37; p=0.0306) and diastolic BP -2.98 mmHg (-5.70 to -0.27; p=0.0320). The narrative reductions -4.6 and -3.2 mmHg are not these between-group estimates.",
               "hierarchy": "post_hoc",
               "kind": "surrogate",
               "direction": "positive",
               "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "Perceived stress (PSQ) worries domain reduced in GSEe group (p=0.0199); additional objective",
+              "name": "Perceived stress PSQ20 worries domain: GSEe within-group reduction p=0.0199; between-group comparison of V3-minus-V1 change p=0.0252. This additional outcome does not replace the null primary blood-pressure comparison.",
               "hierarchy": "secondary",
               "kind": "patient_important",
               "direction": "positive",

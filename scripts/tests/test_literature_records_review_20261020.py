@@ -78,7 +78,6 @@ def test_effect_direction_holds_only_an_observed_effect(records):
 
 # Rows whose PMID is a different paper (review, in-vitro or animal study) than the trial recorded.
 NO_VERIFIED_TRIAL = {
-    "l_carnosine": "20091069",              # beta-alanine review
     "l_phenylalanine": "37629744",          # Parkinson's depression review
     "docosapentaenoic_acid_dpa": "30716358",  # narrative review
     "dimethyl_glycine": "34823458",         # DMG-in-autism review
@@ -117,7 +116,10 @@ def test_broccoli_cites_the_sprout_trial_it_cannot_inherit(records):
 
 @pytest.mark.parametrize("cid", ["l_carnosine", "l_phenylalanine"])
 def test_a_wrong_paper_row_is_removed(records, cid):
-    assert records[cid]["qualifying_human_studies"] == []
+    wrong = {"l_carnosine": "20091069", "l_phenylalanine": "37629744"}[cid]
+    assert wrong not in {s["pmid"]for s in records[cid]["qualifying_human_studies"]}
+    if cid == "l_phenylalanine":
+        assert records[cid]["qualifying_human_studies"] == []
 
 
 # Evidence for one preparation credited to another: combination, food, beverage, topical,
@@ -607,3 +609,14 @@ def test_glutamine_source_facts_distinguish_completers_primary_outcome_and_toler
     assert tolerability['effect_direction'] == 'neutral'  # retained source value, not a null efficacy trial
     assert record['applicability_status'] == 'applicability_unestablished'
     assert record['effect_direction'] is None
+
+
+def test_bounded_carnosine_sources_do_not_reinstate_beta_alanine_or_establish_generic_efficacy(records):
+    record = records["l_carnosine"]
+    studies = {s["pmid"]: s for s in record["qualifying_human_studies"]}
+    assert set(studies) == {"39919936", "39599686", "34174842"}
+    assert record["effect_direction"] is None
+    assert record["applicability_status"] == "applicability_unestablished"
+    assert "N-acetyl" in record["material_form"]
+    assert "absolute" in str(studies["34174842"]).lower()
+    assert "percent" in str(studies["34174842"]).lower()

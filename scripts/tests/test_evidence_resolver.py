@@ -2434,11 +2434,14 @@ def test_reviewed_broccoli_preparation_exclusion_is_finished_without_efficacy_cr
 
 
 @pytest.mark.parametrize('name', ['Broccoli', 'Broccoli powder', 'Broccoli extract',
-                                  'Broccoli sprout beverage'])
+                                  'Broccoli sprout beverage', 'Broccoli floret extract',
+                                  'Broccoli florets extract', 'Broccoli floret powder extract',
+                                  'Standardized broccoli florets powder'])
 def test_broccoli_unknown_or_unqualified_preparation_is_not_a_finished_zero(name):
     from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED
     row = {'name': name, 'raw_source_text': name, 'canonical_id': 'broccoli',
            'raw_source_path': 'ingredientRows[0]', 'mapped': True,
+           'matched_form': 'Broccoli florets powder',
            'quantity': 500, 'unit': 'mg'}
     result = er.resolve_evidence_for_row(row, {'activeIngredients': [row],
         'ingredient_quality_data': {'ingredients_scorable': [row]}})

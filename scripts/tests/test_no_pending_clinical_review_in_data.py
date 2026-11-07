@@ -1,7 +1,7 @@
 """Unqualified clinical drafts stay outside production decisions.
 
 Independently checked source inventories may retain exact non-scoring holds
-beside completed source reviews. Glutamine and glycine source-only stubs make
+beside completed source reviews. Glutamine, glycine and plant-sterol source-only stubs make
 no regimen/population/outcome assertions. The carnitine weight synthesis has
 verified source content but unresolved constituent-integrity/applicability.
 These contexts must remain unfinished; all other pending drafts stay excluded.
@@ -35,6 +35,7 @@ def test_no_data_file_holds_a_pending_review_context():
         },
         "INGR_GLYCINE": {"37851316"},
         "INGR_L_CARNITINE": {"32359762"},
+        "INGR_PLANT_STEROLS": {"37739728"},
     }
     observed = {key: set() for key in known_unfinished_sources}
     found = []

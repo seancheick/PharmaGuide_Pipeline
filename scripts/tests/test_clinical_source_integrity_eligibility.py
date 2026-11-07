@@ -841,3 +841,29 @@ def test_glycine_finished_factual_sources_do_not_complete_unread_review_or_activ
     assert record["scoring_eligible"] is False
     assert not assess_clinical_source_review(record)["is_complete"]
     assert not er.clinical_record_sources_eligible(record)
+
+
+def test_grape_seed_source_preserves_preparation_and_analysis_distinctions():
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()["INGR_GRAPE_SEED_EXTRACT"]
+    context = next(c for c in record["study_contexts"] if c["source_pmids"] == ["33671310"])
+    assert "15.0%" in context["identity"]["standardization"]
+    assert "Introduction" in context["identity"]["standardization"]
+    text = " ".join(o["name"]for o in context["outcomes"])
+    assert "-3.76" in text and "-2.98" in text and "0.0252" in text
+    assert context["scoring_eligible"] is False
+
+
+def test_plant_sterol_completed_source_extractions_preserve_unread_synthesis():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()["INGR_PLANT_STEROLS"]
+    contexts = {pmid: c for c in record["study_contexts"]for pmid in c["source_pmids"]}
+    for pmid in ["24144075", "24287284"]:
+        assert validate_ingredient_context(contexts[pmid], require_complete_review=True) == []
+        assert contexts[pmid]["scoring_eligible"] is False
+        assert "Codex" in contexts[pmid]["clinical_review"]["reviewer"]
+    assert contexts["37739728"]["review_status"] == "source_verified_pending_clinical_review"
+    assert "identity_scope" not in contexts["37739728"]
+    assert not assess_clinical_source_review(record)["is_complete"]
+    assert not er.clinical_record_sources_eligible(record)

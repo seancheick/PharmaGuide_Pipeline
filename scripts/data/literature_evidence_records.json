@@ -2388,7 +2388,7 @@
     },
     {
       "canonical_id": "l_carnosine",
-      "material_form": "L-carnosine",
+      "material_form": "Oral L-carnosine; exact source-specific preparations only, not N-acetyl-L-carnosine, zinc-carnosine/polaprezinc, anserine combinations or beta-alanine.",
       "search_query": "carnosine supplementation randomized controlled trial healthy",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -2396,16 +2396,74 @@
         "Cochrane Library"
       ],
       "records_screened": 38,
-      "qualifying_human_studies": [],
+      "qualifying_human_studies": [
+        {
+          "pmid": "39919936",
+          "title": "Carnosine supplementation improves cognitive outcomes in younger participants of the NEAT trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 299,
+          "dose": "1,000 mg twice daily (2 g/day); cornstarch placebo.",
+          "duration": "Approximately 6 and 12 weeks",
+          "outcome": "Post hoc secondary NEAT cognition analysis: whole-cohort aggregate scores were null. Selected speed and domain findings in ages 23–35 were positive, alongside negative changes in individual domains. Post-randomization exclusions included poor compliance and biochemical nonresponse.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Carnosine supplementation improves cognitive outcomes in younger participants of the NEAT trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12014415/",
+            "verified_at": "2026-11-06"
+          }
+        },
+        {
+          "pmid": "39599686",
+          "title": "Carnosine Supplementation Has No Effect on Inflammatory Markers in Adults with Prediabetes and Type 2 Diabetes: A Randomised Controlled Trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 49,
+          "dose": "CarnoPure/Flamma, 1,000 mg twice daily (2 g/day); methylcellulose placebo.",
+          "duration": "14 weeks",
+          "outcome": "Secondary inflammatory/adipokine analysis in prediabetes or well-controlled type 2 diabetes: no significant treatment differences; 41 completers. This is not a negative-efficacy or harm finding and must not be substituted for the primary glycemic findings from the same cohort.",
+          "effect_direction": "null",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Carnosine Supplementation Has No Effect on Inflammatory Markers in Adults with Prediabetes and Type 2 Diabetes: A Randomised Controlled Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11597812/",
+            "verified_at": "2026-11-06"
+          }
+        },
+        {
+          "pmid": "34174842",
+          "title": "Effect of Oral carnosine supplementation on urinary TGF-β in diabetic nephropathy: a randomized controlled trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 40,
+          "dose": "Tokai Bussan gelatin capsules, two 500 mg units after breakfast and after dinner (2 g/day); starch placebo.",
+          "duration": "12 weeks",
+          "outcome": "In diabetic nephropathy, the between-group comparison of absolute mean change in urinary TGF-beta was not significant (Results/Figure 2A). An additional percentage-change urinary TGF-beta/creatinine analysis favored carnosine (P=0.03; 95% CI 3.48 to 64.54; Figure 2B). Albuminuria and renal-function measures were unchanged. Preserve both analyses; no independently established prespecified primary-analysis success or clinical renal benefit.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of Oral carnosine supplementation on urinary TGF-β in diabetic nephropathy: a randomized controlled trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8235831/",
+            "verified_at": "2026-11-06"
+          }
+        }
+      ],
       "effect_direction": null,
-      "population_context": "Not established: no verified human L-carnosine trial is cited",
+      "population_context": "Source-specific healthy adult NEAT posthoc cognition, prediabetes/well-controlledT2D secondary inflammation, and diabetic-nephropathy biomarker cohorts; not interchangeable populations.",
       "studied_dose_exposure": {},
-      "applicability_decision": "No verified human L-carnosine trial is recorded. The previously cited PMID 20091069 is a review of beta-alanine supplementation, not an L-carnosine trial, and the recorded dose, duration and sample size were not in it. Evidence review pending.",
-      "verification_result": "verification_failure_unresolved",
+      "applicability_decision": "The previous PMID 20091069 beta-alanine citation remains rejected because it studied a different administered substance. Verified oral L-carnosine research now includes PMID 39919936 (NEAT, registry NCT03314987), PMID 39599686 (secondary analysis, registry NCT02917928), and PMID 34174842. These three bounded reviews record source-specific mixed/null outcomes, not general efficacy or a grade. Companion reports from NCT02917928, including primary glycemic findings, represent the same cohort rather than independent confirmations. Other positive, null, combination and disease-context sources identified by existing screening still require content/applicability review; this review does not exhaust the literature. N-acetyl-L-carnosine and other derivatives do not borrow plain oral L-carnosine findings. Preparation/population boundaries and source-family review remain unfinished; no product completion, general Dose benchmark or safety threshold is established.",
+      "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": false,
+        "verified_by": "Codex source reviewer /root/betaine_review; independent content double-check /root/scientific_review on 2026-11-06",
+        "verified_at": "2026-11-07T01:25:40.373213+00:00",
+        "all_pmids_verified": true,
         "retractions_found": false
       },
       "applicability_status": "applicability_unestablished"
@@ -2580,8 +2638,8 @@
         "excluded_form_terms": [
           "whole broccoli vegetable powder",
           "whole vegetable powder",
-          "broccoli floret",
-          "broccoli florets"
+          "broccoli floret powder",
+          "broccoli florets powder"
         ],
         "source_pmids": [
           "24913818"

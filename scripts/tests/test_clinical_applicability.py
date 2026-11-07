@@ -2997,3 +2997,23 @@ def test_clinical_projection_steps_aside_for_changed_inputs_and_route_overrides(
         derive(overridden)
         derive(overridden)
     assert calls == 5
+
+
+@pytest.mark.parametrize("canonical,source,stale_form,excluded", [
+    ("turmeric", "Turmeric root powder extract", "root powder", False),
+    ("ginkgo", "Ginkgo leaf powder standardized to flavone glycosides", "leaf powder", False),
+    ("collagen", "Hydrolyzed collagen peptides", "UC-II", False),
+    ("collagen", "UC-II undenatured collagen", "collagen peptides", True),
+])
+def test_documented_review_exclusions_need_source_preparation_proof(canonical, source, stale_form, excluded):
+    from pathlib import Path
+    records = json.loads((Path(__file__).parents[1] / "data/literature_evidence_records.json").read_text())
+    record = next(r for r in records["literature_evidence_records"] if r["canonical_id"] == canonical)
+    row = _row(canonical, source)
+    row.update(raw_source_text=source, matched_form=stale_form, form_id=stale_form)
+    product = {"activeIngredients": [row], "ingredient_quality_data": {"ingredients": [row], "ingredients_scorable": [row]}}
+    scoped = {**record, "applicability": record["documented_review_scope"],
+              "ingredient": source, "matched_canonical_ids": [canonical],
+              "matched_source_row_refs": [row["raw_source_path"]]}
+    result = assess_clinical_applicability(product, scoped, assess_amount=False, require_claim_alignment=False)
+    assert (result.get("reason_code") == "clinical_form_excluded") is excluded
