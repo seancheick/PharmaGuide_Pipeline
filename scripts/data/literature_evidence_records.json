@@ -829,10 +829,14 @@
             "human_subjects_verified": true,
             "topic_match_verified": true,
             "retracted": false,
-            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/10230711/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
-            "abstract_evidence_quote": "No effects on mood"
-          }
+            "verified_source": "https://biomind.co.il/wp-content/uploads/2022/02/Tyrosine-improves-cognitive-performance-and-reduces-min.pdf",
+            "verified_at": "2026-11-07",
+            "abstract_evidence_quote": "No effects on mood",
+            "verified_by": "Codex /root/tyrosine_completion and independent /root checked indexed primary page205 Methods and primary Subjects/publisher sections. The direct PDF now returns404; no complete PDF or complete outcome review claimed. Agent source reviews, not clinician review."
+          },
+          "dose": "One 500 mL drink daily for five days: 70 g PROTIFAR protein-rich powder containing 2 g tyrosine (2 g/day) versus 67 g FANTOMALT carbohydrate powder without protein; 255 kcal each. This is not five 2 g doses per day.",
+          "duration": "Five consecutive daily administrations; posttest on day6 of the combat course.",
+          "outcome": "The protein-rich drink comparison favored memory/tracking and reported lower systolic pressure; mood was not different. 32 cadets were assigned 16/16; 11 injury withdrawals left 21 analyzed in groups of 10/11. Different protein/amino-acid and carbohydrate matrices do not isolate L-tyrosine causality. No formal primary hierarchy or complete outcome-denominator review is claimed."
         },
         {
           "pmid": "24433977",
@@ -936,7 +940,7 @@
       "effect_direction": "positive_weak",
       "population_context": "Existing military combat/stress source plus distinct acute-task samples: 22 healthy women (24433977); 22 female undergraduates aged 17–23 (25598314); 30 men recruited and 28 analyzed (36548401); and eight male soccer players exercising in heat (39820592). These populations and conditions are not interchangeable.",
       "studied_dose_exposure": {},
-      "applicability_decision": "The military trial gave a protein-rich drink containing 2 g tyrosine, five daily doses, during a combat training course (21 cadets); a review concludes tyrosine helps cognition mainly in short-term stressful or demanding situations. No mg/kg threshold is stated by these sources, and daily chronic mood support is not established. Four additional independently checked source descriptions preserve acute positive and null task findings without assigning a new aggregate grade, clinical point value, dose threshold or eligibility decision. No acute-to-chronic, NALT or formula equivalence is established. The 39820592 source does not report supplier, physical starting form or stereochemical assay; 36548401 describes oral L-tyrosine in juice without explicitly naming an active powder form. Participant independence between the two Leiden papers is unproven; Part A of 39820592 uses the same cohort. Full Methods/dose for 29980424 remain unread. The official accepted full manuscript for 38290812 has now been read; source-listed eight-paper membership is extracted, but endpoint-subset and shared-comparison precision remain unresolved. Its reported null endurance estimates do not negate the separate acute cognitive findings. Factual source review does not establish whole-ingredient or product completion.",
+      "applicability_decision": "The military trial gave one protein-rich drink daily for five days, containing 2 g tyrosine per drink (2 g/day). Thirty-two cadets were assigned; 21 were analyzed. PROTIFAR protein/amino-acid and FANTOMALT carbohydrate drinks differ beyond tyrosine, so their reported positive findings do not isolate L-tyrosine. A review concludes tyrosine may help cognition mainly in short-term stressful or demanding situations. No mg/kg threshold is stated by these sources, and daily chronic mood support is not established. Four additional independently checked source descriptions preserve acute positive and null task findings without assigning a new aggregate grade, clinical point value, dose threshold or eligibility decision. No acute-to-chronic, NALT or formula equivalence is established. The 39820592 source does not report supplier, physical starting form or stereochemical assay; 36548401 describes oral L-tyrosine in juice without explicitly naming an active powder form. Participant independence between the two Leiden papers is unproven; Part A of 39820592 uses the same cohort. Full Methods/dose for 29980424 remain unread. The official accepted full manuscript for 38290812 has now been read; source-listed eight-paper membership is extracted, but endpoint-subset and shared-comparison precision remain unresolved. Its reported null endurance estimates do not negate the separate acute cognitive findings. Factual source review does not establish whole-ingredient or product completion.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",

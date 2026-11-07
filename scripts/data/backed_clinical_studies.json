@@ -48869,29 +48869,34 @@
         },
         {
           "context_schema_version": "1.1.0",
-          "context_id": "ingr_l_tyrosine_10230711_source_qualification_pending",
+          "context_id": "l_tyrosine_10230711_food_matrix_transfer",
           "components": [
             "INGR_L_TYROSINE"
           ],
           "source_pmids": [
             "10230711"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex source inventory; existing literature obligation preserved",
+            "reviewer": "Codex /root/tyrosine_completion source-section review; independent source-content and existing-policy check by /root on 2026-11-07. Agent reviews, not clinician review.",
             "reviewed_at": "2026-11-07",
-            "scope": "identity_dose_outcome_applicability"
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Bounded source-to-isolated-tyrosine transfer exclusion only. Primary article page205 intervention/procedure sections and primary Subjects text verified independently through indexed primary content, with the official publisher preview and live PMID identity. Direct mirror currently404; no full-PDF download or complete outcome review is claimed. Differing protein/amino-acid and carbohydrate drinks do not isolate tyrosine."
           },
           "dose": {
             "source_provenance": {
               "pmid": "10230711",
-              "source_url": "https://pubmed.ncbi.nlm.nih.gov/10230711/",
-              "location": "Existing literature identity/abstract record retained; full source-to-preparation/outcome qualification remains open."
+              "source_url": "https://biomind.co.il/wp-content/uploads/2022/02/Tyrosine-improves-cognitive-performance-and-reduces-min.pdf",
+              "location": "Primaryarticle page205intervention/Procedure indexedcontent,plusofficialpublisherSubjects/Results previews https://www.sciencedirect.com/science/article/pii/S0361923098001634; directmirror404,notclaimedfullPDFdownload."
             }
           },
           "limitations": [
-            "Prior positive source findings remain in the original literature record. A new qualified source cannot erase this independent review obligation or infer a completed negative."
+            "The actual contrast was 500 mL orange juice with 70 g PROTIFAR protein-rich powder (42 g protein including 2 g naturally occurring tyrosine and other amino acids) versus 67 g FANTOMALT carbohydrate powder without protein. Both drinks supplied 255 kcal; this does not isolate free tyrosine from the different macronutrient/amino-acid matrices.",
+            "Primary Methods specify one drink daily for five days: 2 g/day tyrosine as a descriptive food-matrix exposure, not five 2 g administrations per day, a 10 g/day regimen, a general Dose benchmark or lower-dose equivalence.",
+            "Thirty-two cadets were assigned 16/16; 11 withdrew due to injuries, leaving 21 analyzed in groups of 10/11. Do not describe 21 as randomized enrollment or sum repeated administrations as independent trials.",
+            "Positive drink comparisons and null mood observations are preserved. This exclusion addresses unsupported isolated L-tyrosine/NALT/protein-blend causal transfer, not publication rejection, all-outcome null efficacy or proof that tyrosine has no effects.",
+            "Formal primary hierarchy, every outcome denominator and a full source-outcome review are not inferred from these indexed sections. Other unread studies and independent holds remain open."
           ]
         }
       ],

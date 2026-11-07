@@ -323,6 +323,18 @@ def test_tyrosine_endurance_review_keeps_contrasts_separate_from_enrollment(reco
     assert '29980424 remain unread' in records['l_tyrosine']['applicability_decision']
 
 
+def test_cadet_drink_is_one_daily_protein_food_not_five_pure_tyrosine_doses(records):
+    record = records['l_tyrosine']
+    study = _study(record, '10230711')
+    assert study['sample_size'] == 21  # analyzed, not randomized enrollment
+    assert study['effect_direction'] == 'positive_strong'  # drink finding retained
+    assert '2 g/day' in study['dose'] and 'five days' in study['dose']
+    assert 'PROTIFAR' in study['dose'] and 'FANTOMALT' in study['dose']
+    assert '32' in study['outcome'] and '21' in study['outcome']
+    assert 'do not isolate' in study['outcome']
+    assert 'five daily doses' not in record['applicability_decision']
+
+
 def test_mct_review_preserves_mixed_findings_without_inventing_unique_enrollment(records):
     record = records["mct_oil"]
     assert record["effect_direction"] == "positive_weak"

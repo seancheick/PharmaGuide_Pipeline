@@ -748,6 +748,21 @@ def test_tyrosine_derivatives_and_unspecified_stereochemistry_do_not_borrow_sour
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
 
 
+def test_cadet_protein_drink_review_rejects_only_isolated_tyrosine_transfer():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_review_finished
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['10230711'])
+    assert context['review_status'] == 'rejected_source'
+    assert context_review_finished(context)
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context['scoring_eligible'] is False
+    assert 'PROTIFAR' in ' '.join(context['limitations'])
+    assert 'FANTOMALT' in ' '.join(context['limitations'])
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
 @pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
 def test_approved_glutamine_context_earns_claim_independent_credit_while_other_review_stays_open(claim):
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
