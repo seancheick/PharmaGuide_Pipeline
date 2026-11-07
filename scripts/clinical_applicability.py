@@ -1467,8 +1467,9 @@ def assess_clinical_applicability(
     unresolved_reasons = {
         "clinical_source_row_unresolved", "clinical_source_label_unresolved", "clinical_dose_unresolved",
     }
-    # A finished exclusion on one row cannot settle an unknown sibling.
-    reason = next((reason for reason in reasons if reason in unresolved_reasons),
+    # A finished exclusion cannot settle a sibling's missing preparation proof.
+    reason = next((reason for reason in reasons
+                   if source_only and reason == "clinical_source_label_unresolved"),
                   reasons[0] if reasons else "clinical_source_row_unresolved")
     status = "unresolved" if reason in unresolved_reasons else "not_applicable"
     return {"status": status, "reason_code": reason}

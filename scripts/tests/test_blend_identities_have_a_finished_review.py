@@ -327,6 +327,7 @@ def test_finished_blend_does_not_finish_empty_alfalfa_source_review(enriched):
     pending = [(row.canonical_id, row.blocking_reasons) for row in resolution.resolutions
                if row.disposition == "literature_resolution_required"]
     assert pending == [("alfalfa", ["literature_verification_pending"]),
+                       ("tart_cherry", ["clinical_source_label_unresolved"]),
                        ("cabbage_extract", ["literature_verification_pending"])]
     evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
     assert evidence["display_state"] == "not_yet_reviewed"

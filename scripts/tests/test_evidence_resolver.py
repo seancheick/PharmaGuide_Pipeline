@@ -1982,7 +1982,7 @@ def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifac
     assert decisions == {
         'INGR_L_CARNITINE': 'clinical_preparation_mismatch',
         'INGR_ACETYL_L_CARNITINE': 'reference_only_clinical_record',
-        'BRAND_CARNIPURE': 'clinical_form_mismatch',
+        'BRAND_CARNIPURE': 'clinical_form_excluded',
     }
 
 

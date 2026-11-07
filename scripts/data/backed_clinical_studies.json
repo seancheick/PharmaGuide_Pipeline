@@ -4330,7 +4330,17 @@
         ],
         "studied_population": "Source-specific contexts: 10 healthy young resistance-trained men; 18 healthy middle-aged recreationally active men and women. No patient, pregnancy or pediatric inference.",
         "reviewed_at": "2026-11-06",
-        "reason": "Both reports studied defined L-carnitine L-tartrate. Verified chemical spellings discover that same preparation; bare Carnipure, freebase, fumarate and ALCAR do not establish this source identity. Source context outcomes remain MRI-specific or unranked recovery measurements; functional null findings are retained. No general performance claim or Dose benchmark."
+        "reason": "Both reports studied defined L-carnitine L-tartrate. Verified chemical spellings discover that same preparation; bare Carnipure, freebase, fumarate and ALCAR do not establish this source identity. Source context outcomes remain MRI-specific or unranked recovery measurements; functional null findings are retained. No general performance claim or Dose benchmark. Explicit named acetyl, fumarate and free-base preparations are outside these L-tartrate trials; an unspecified Carnipure or L-carnitine label remains unresolved.",
+        "excluded_form_terms": [
+          "acetyl l carnitine",
+          "acetyl carnitine",
+          "alcar",
+          "carnitine fumarate",
+          "levocarnitine fumarate",
+          "free form",
+          "freebase",
+          "free base"
+        ]
       }
     },
     {
