@@ -1234,10 +1234,37 @@ def _resolve_evidence_for_row(
             scope_decisions.append(assess_clinical_applicability(
                 product or {"activeIngredients": [row_dict]}, scoped,
                 assess_amount=False, require_claim_alignment=False))
-        from probiotic_measurements import context_review_finished
-        unfinished_contexts = [any(not context_review_finished(context)
-                                   for context in study.get("study_contexts") or [])
-                               for study in deduped_studies]
+        from probiotic_measurements import context_review_finished, _clinical_review_metadata_valid
+        from clinical_evidence_schema import validate_ingredient_context
+        unfinished_contexts = []
+        for study, decision in zip(deduped_studies, scope_decisions):
+            preparation_excluded = (
+                decision.get("status") == "not_applicable"
+                and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
+            )
+            declared_pmids = set()
+            if preparation_excluded:
+                declared_pmids = {str(ref["pmid"]) for ref in study.get("references_structured") or []
+                                  if isinstance(ref, dict) and ref.get("pmid")}
+                declared_pmids.update(str(pmid) for pmid in study.get("published_studies") or []
+                                      if re.fullmatch(r"[1-9][0-9]*", str(pmid)))
+            unfinished_contexts.append(any(
+                not context_review_finished(context)
+                and not (
+                    preparation_excluded
+                    and isinstance(context, dict)
+                    and context.get("review_status") == "source_verified_pending_clinical_review"
+                    and context.get("identity_scope")
+                    and context.get("human_status") == "confirmed"
+                    and _clinical_review_metadata_valid(context)
+                    and not validate_ingredient_context(context, known_component_ids={study["id"]})
+                    and set(context["source_pmids"]) <= declared_pmids
+                )
+                for context in study.get("study_contexts") or []
+            ))
+        # A verified, scoped pending source remains unfinished, but cannot
+        # reopen this same owner's explicit preparation exclusion. Unknown
+        # source-only stubs still block: their preparation has not been read.
         noncontributing_complete = [
             (decision.get("status") == "not_applicable"
              and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)

@@ -2451,3 +2451,33 @@ def test_bioactive_casein_is_not_completed_as_ordinary_food_protein():
     assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     assert "literature_verification_pending" in result.blocking_reasons
     assert result.points_eligible is False
+
+
+@pytest.mark.parametrize("damage", [None, "unscoped", "human_unknown", "malformed", "unverified_status", "wrong_component", "foreign_source"])
+def test_pending_source_preserves_only_previously_qualified_preparation_exclusions(monkeypatch, damage):
+    import copy
+    import clinical_applicability as ca
+    from assessment_readiness import _resolved_evidence_assessment
+    record = copy.deepcopy(next(s for s in er._load_backed_studies() if s["id"] == "INGR_L_CARNITINE"))
+    context = next(c for c in record["study_contexts"] if c["source_pmids"] == ["32359762"])
+    if damage == "unscoped":
+        context.pop("identity_scope")
+    elif damage == "human_unknown":
+        context["human_status"] = "unknown"
+    elif damage == "malformed":
+        context["clinical_review"] = {}
+    elif damage == "unverified_status":
+        context["review_status"] = "pending_review"
+    elif damage == "wrong_component":
+        context["components"] = ["UNRELATED_RECORD"]
+    elif damage == "foreign_source":
+        context["source_pmids"] = ["30108163"]
+        context["dose"]["source_provenance"]["pmid"] = "30108163"
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"l_carnitine": [record]})
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {record["id"]: record})
+    row, product = _excluded_preparation_product("Acetyl L-Carnitine", "l_carnitine", "acetyl-l-carnitine (alcar)")
+    result = er.resolve_evidence_for_row(row, product)
+    assert not result.points_eligible
+    assert not ca.assess_clinical_source_review(record)["is_complete"]
+    expected = "evaluated_limited_or_negative" if damage is None else "not_yet_evaluated"
+    assert _resolved_evidence_assessment(result)[0] == expected
