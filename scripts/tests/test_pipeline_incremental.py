@@ -1442,6 +1442,19 @@ def test_clock_refresh_failure_retains_original_generation(tmp_path, monkeypatch
             assert path.read_bytes() == content
 
 
+def test_calendar_change_without_stale_rows_preserves_unchanged_generation(tmp_path, monkeypatch):
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    before = {path: path.read_bytes() for directory in mod.stage_directories(prefix)
+              for path in directory.rglob('*') if path.is_file()}
+    state = (prefix / '.incremental_state.json').read_bytes()
+    snapshot['evaluation_local_date'] = '2026-11-07'
+    result = mod.run_incremental(runner, raw, prefix)
+    assert not calls
+    assert all(not ids for ids in result['stages'].values())
+    assert (prefix / '.incremental_state.json').read_bytes() == state
+    assert all(path.read_bytes() == data for path, data in before.items())
+
+
 def test_unstable_clock_is_bounded_and_preserves_live_generation(tmp_path, monkeypatch):
     from datetime import date, timedelta
     mod, runner, raw, prefix, _, snapshot = _synthetic_dataset(tmp_path, monkeypatch)

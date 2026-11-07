@@ -673,14 +673,14 @@ def _refresh_candidate_clock(runner, repo, raw_dir, candidate_prefix, current, r
         # Reuse the completed candidate through the same dependency planner,
         # producers, gates and transactional owner. Only stale rows are selected.
         refresh = _run_locked(runner, repo, raw_dir, candidate_prefix, False, None,
-                              clock_refreshes=clock_refreshes - attempt - 1)
+                              clock_refreshes=clock_refreshes - attempt - 1, refresh_clock=True)
         refresh["reasons"].append("calendar rollover: revalidated candidate freshness")
         refreshed.append(refresh)
     raise AssertionError("Clock refresh bound exhausted")
 
 
 def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fresh_clean_inputs=None,
-                clock_refreshes=2):
+                clock_refreshes=2, refresh_clock=False):
     state_path = prefix / ".incremental_state.json"
     recovery = prefix.parent / ("." + prefix.name + ".incremental-recovery.json")
     if recovery.exists():
@@ -816,8 +816,8 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
             and not any(plan["stages"].values())
             and old["stages"] == current["stages"]
             and old["references"] == current["references"]
-            and all(old.get(key) == current.get(key)
-                    for key in ("evaluation_date", "evaluation_local_date"))
+            and (not refresh_clock or all(old.get(key) == current.get(key)
+                    for key in ("evaluation_date", "evaluation_local_date")))
             and raw_binding == old["inputs"]["clean"]):
         return plan
 
