@@ -1695,3 +1695,35 @@ def test_nutrient_source_citation_is_metadata_only(canonical, name, monkeypatch)
     assert cited['score'] == uncited['score']
     assert cited['components'] == uncited['components']
     assert cited['metadata']['evidence_result_state'] == uncited['metadata']['evidence_result_state']
+
+
+@pytest.mark.parametrize("reverse_references", [False, True])
+def test_numerical_receipt_cites_only_qualified_context_without_finishing_sibling(monkeypatch, reverse_references):
+    from copy import deepcopy
+    from scoring_v4.modules.generic_evidence import score_evidence
+    match = _match(id="INGR_ASHWAGANDHA", ingredient="Ashwagandha", standard_name="Ashwagandha",
+                   study_type="rct_multiple", effect_direction="positive_weak")
+    source = _use_approved_mechanics_sources(monkeypatch, match)[0]
+    sibling = "26424423"  # Opaque identity for a synthetic pending-source fixture.
+    source["references_structured"].append({"type": "pubmed", "pmid": sibling,
+        "pmid_verified": True, "topic_match_verified": True, "retracted": False})
+    source["study_contexts"].append({"context_schema_version": "1.1.0",
+        "context_id": "synthetic_unread_sibling", "components": [source["id"]],
+        "source_pmids": [sibling], "review_status": "source_verified_pending_clinical_review",
+        "scoring_eligible": False, "clinical_review": deepcopy(source["study_contexts"][0]["clinical_review"]),
+        "dose": {"source_provenance": {"pmid": sibling,
+            "source_url": "https://pubmed.ncbi.nlm.nih.gov/26424423/",
+            "location": "Synthetic source-only fixture; not a clinical extraction."}},
+        "limitations": ["Synthetic unfinished source; no regimen or clinical finding asserted."]})
+    if reverse_references:
+        source["references_structured"].reverse()
+    original = deepcopy(source)
+    product = _product(ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha",
+                         quantity=1000)], matches=[match])
+    result = score_evidence(product, apply_primary_floor=False)
+    assert result["score"] > 0  # Qualified research survives the independent unfinished review.
+    receipts = result["metadata"]["contributing_record_assessments"]
+    assert len(receipts) == 1
+    assert {r["pmid"] for r in receipts[0]["source_references"]} == {"28661438"}
+    assert receipts[0]["source_review"]["is_complete"] is False
+    assert source == original  # The canonical inventory and pending source are preserved.
