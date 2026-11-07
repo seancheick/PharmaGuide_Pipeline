@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-11-06",
+    "last_updated": "2026-11-07",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -42911,8 +42911,7 @@
           "fractionated coconut oil",
           "MCT Oil 99%",
           "62% MCTs",
-          "Coconut MCT Oil",
-          "Coconut"
+          "Coconut MCT Oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -66567,7 +66566,8 @@
           "coconut water concentrate powder",
           "cococin",
           "cococin coconut water powder",
-          "cococin ws"
+          "cococin ws",
+          "Coconut Fruit Water, Powder"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {

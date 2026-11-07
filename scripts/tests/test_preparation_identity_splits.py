@@ -86,6 +86,31 @@ def _hits(enriched, name):
     return hits
 
 
+@pytest.mark.parametrize("name,expected", [
+    ("Coconut Fruit Water, Powder", "coconut_water"),
+    ("Coconut Water Powder", "coconut_water"),
+    ("Coconut MCT Oil", "mct_oil"),
+    ("MCT oil C8/C10", "mct_oil"),
+])
+def test_coconut_water_cannot_inherit_mct_oil_identity(pipeline, name, expected):
+    row = _raw_row(1, name, "Coconut", quantity=2000, unit="mg")
+    enriched = pipeline(_raw_product(990104, [row]))
+    assert {r["canonical_id"] for r in _rows(enriched, name)} == {expected}
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == name)
+    assert active["quantity"] == 2000 and active["unit"] == "mg"
+    assert active["raw_source_text"] == name
+
+
+def test_unspecified_coconut_does_not_establish_fractionated_mct_oil(pipeline):
+    enriched = pipeline(_raw_product(990105, [
+        _raw_row(1, "Coconut", "Coconut", quantity=2000, unit="mg"),
+    ]))
+    assert all(r.get("canonical_id") != "mct_oil" for r in _rows(enriched, "Coconut"))
+    active = next(r for r in enriched["activeIngredients"] if r["name"] == "Coconut")
+    assert active.get("canonical_id") != "mct_oil"
+    assert active["raw_source_text"] == "Coconut"
+
+
 @pytest.mark.parametrize("name,group,expected,old_rule", [
     ("Bionectria ochroleuca", "Bionectria ochroleuca", "bionectria_ochroleuca",
      "RULE_IQM_CORDYCEPS_AUTOIMMUNE"),
