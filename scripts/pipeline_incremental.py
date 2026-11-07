@@ -559,7 +559,10 @@ def preserve_generation_artifacts(prefix, candidate_prefix):
         current_history = candidate / ".incremental_artifacts"
         old_history = live / ".incremental_artifacts"
         if (old_history / "prior").exists():
-            copy_artifact(old_history / "prior", current_history / "prior")
+            # A clock-refreshed candidate can already retain its own earlier
+            # pass. Merge distinct generations without overwriting any receipt.
+            for entry in (old_history / "prior").iterdir():
+                copy_artifact(entry, current_history / "prior" / entry.name)
         stage_name = {"clean": "cleaned", "enrich": "enriched", "score": "scored"}[stage]
         manifest = json.loads((live / stage_name / MANIFEST_NAME).read_text())
         extras = [entry for entry in live.iterdir()
@@ -641,7 +644,43 @@ def verified_bootstrap_source(repo, baseline_repo, directories, raw_dir):
         "Supply the exact --baseline-revision or complete one full build.")
 
 
-def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fresh_clean_inputs=None):
+def _execution_source_binding(snapshot):
+    # Calendar changes are handled by the existing per-product freshness owner.
+    # Every other dependency, including future snapshot fields, remains bound.
+    return digest({key: value for key, value in snapshot.items()
+                   if key not in {"evaluation_date", "evaluation_local_date"}})
+
+
+def _refresh_candidate_clock(runner, repo, raw_dir, candidate_prefix, current, raw_binding,
+                             clock_refreshes):
+    """Replan a completed isolated generation; never promote stale calendar facts."""
+    refreshed = []
+    source_binding = _execution_source_binding(current)
+    for attempt in range(clock_refreshes + 1):
+        live = current_snapshot(repo)
+        if (_execution_source_binding(live) != source_binding
+                or stage_data_fingerprint(stage_data_files(raw_dir)) != raw_binding):
+            raise StageManifestError("Inputs changed during incremental execution")
+        state = json.loads((candidate_prefix / ".incremental_state.json").read_text())
+        if all(state.get(key) == live.get(key)
+               for key in ("evaluation_date", "evaluation_local_date")):
+            if refreshed and any(dependencies(row)["clock_refresh_required"] for row in
+                    stage_products(stage_directories(candidate_prefix)[1], "enrich").values()):
+                raise StageManifestError("Date-sensitive candidate remained stale after freshness refresh")
+            return refreshed
+        if attempt == clock_refreshes:
+            raise StageManifestError("Evaluation clock did not stabilize during freshness refresh")
+        # Reuse the completed candidate through the same dependency planner,
+        # producers, gates and transactional owner. Only stale rows are selected.
+        refresh = _run_locked(runner, repo, raw_dir, candidate_prefix, False, None,
+                              clock_refreshes=clock_refreshes - attempt - 1, refresh_clock=True)
+        refresh["reasons"].append("calendar rollover: revalidated candidate freshness")
+        refreshed.append(refresh)
+    raise AssertionError("Clock refresh bound exhausted")
+
+
+def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fresh_clean_inputs=None,
+                clock_refreshes=2, refresh_clock=False):
     state_path = prefix / ".incremental_state.json"
     recovery = prefix.parent / ("." + prefix.name + ".incremental-recovery.json")
     if recovery.exists():
@@ -681,7 +720,8 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
             if not result["success"]:
                 raise StageManifestError("Initial dataset build failed")
             verified = _run_locked(runner, repo, raw_dir, candidate_prefix, False, None,
-                fresh_clean_inputs={pid: raw_dir / raw_names[pid] for pid in raw})
+                fresh_clean_inputs={pid: raw_dir / raw_names[pid] for pid in raw},
+                clock_refreshes=clock_refreshes)
             plan["held_clean_inputs"] = verified.get("held_clean_inputs", {})
             plan["reasons"].extend(verified["reasons"])
             if any(plan["held_clean_inputs"].values()):
@@ -689,9 +729,9 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
             for stage, directory in zip(STAGES, stage_directories(candidate_prefix)):
                 if stage != "clean":
                     plan["stages"][stage] = sorted(stage_products(directory, stage))
-            if (digest(current_snapshot(repo)) != digest(current)
-                    or stage_data_fingerprint(stage_data_files(raw_dir)) != raw_binding):
-                raise StageManifestError("Inputs changed during initial incremental build")
+            for refresh in _refresh_candidate_clock(runner, repo, raw_dir, candidate_prefix, current,
+                                                    raw_binding, clock_refreshes):
+                plan["reasons"].extend(refresh["reasons"])
             promote_generation(prefix, candidate_prefix, transaction, recovery)
             return plan
         finally:
@@ -776,10 +816,11 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
             and not any(plan["stages"].values())
             and old["stages"] == current["stages"]
             and old["references"] == current["references"]
+            and (not refresh_clock or all(old.get(key) == current.get(key)
+                    for key in ("evaluation_date", "evaluation_local_date")))
             and raw_binding == old["inputs"]["clean"]):
         return plan
 
-    source_binding = digest(current)
     owned_binding = {stage: {key: digest(value) for key, value in rows.items()}
                      for stage, rows in products.items()}
     transaction = Path(tempfile.mkdtemp(prefix="." + prefix.name + ".incremental-", dir=prefix.parent))
@@ -909,15 +950,6 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
             products=all_enriched, strict_mode=True)
         if not valid:
             raise StageManifestError("Merged coverage gate failed")
-        if (digest(current_snapshot(repo)) != source_binding
-                or stage_data_fingerprint(stage_data_files(raw_dir)) != raw_binding):
-            raise StageManifestError("Inputs changed during incremental execution")
-        for stage, directory in zip(STAGES, directories):
-            verified = stage_products(directory, stage)
-            if {key: digest(value) for key, value in verified.items()} != owned_binding[stage]:
-                raise StageManifestError("Prior stage outputs changed during incremental execution")
-        if "clean_holds" in old and clean_hold_hashes(clean_hold_outputs(prefix, expected=old["clean_holds"])) != old["clean_holds"]:
-            raise StageManifestError("Prior Clean hold reports changed during execution")
         state = {**current, "clean_holds": clean_hold_hashes(clean_holds),
                  "raw": {key: digest(value) for key, value in raw.items()},
                  "raw_files": raw_files,
@@ -939,6 +971,17 @@ def _run_locked(runner, repo, raw_dir, prefix, plan_only, baseline_repo, *, fres
             **current["stages"]["clean"], DATA_FINGERPRINT_KEY: state["inputs"]["clean"],
             "incremental_state_sha256": state_hash})
         (candidate_prefix / ".incremental_state.json").write_text(json.dumps(state, sort_keys=True))
+        for refresh in _refresh_candidate_clock(runner, repo, raw_dir, candidate_prefix, current,
+                                                raw_binding, clock_refreshes):
+            for stage in STAGES:
+                plan["stages"][stage] = sorted(set(plan["stages"][stage]) | set(refresh["stages"][stage]))
+            plan["reasons"].extend(refresh["reasons"])
+        for stage, directory in zip(STAGES, directories):
+            verified = stage_products(directory, stage)
+            if {key: digest(value) for key, value in verified.items()} != owned_binding[stage]:
+                raise StageManifestError("Prior stage outputs changed during incremental execution")
+        if "clean_holds" in old and clean_hold_hashes(clean_hold_outputs(prefix, expected=old["clean_holds"])) != old["clean_holds"]:
+            raise StageManifestError("Prior Clean hold reports changed during execution")
         promote_generation(prefix, candidate_prefix, transaction, recovery)
         return plan
     finally:
