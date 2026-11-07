@@ -6,8 +6,8 @@ no regimen/population/outcome assertions. The carnitine weight synthesis has
 verified source content but unresolved constituent-integrity/applicability.
 These contexts must remain unfinished; all other pending drafts stay excluded.
 Tyrosine's exact source holds retain verified abstract/full-text facts and no
-eligibility. Two retain assigned study doses while applicability decisions are
-open; the other two have no extracted common regimen.
+eligibility. One retains its assigned study dose while applicability remains open;
+two others have no extracted common regimen.
 """
 import json
 from pathlib import Path
@@ -39,7 +39,7 @@ def test_no_data_file_holds_a_pending_review_context():
         "INGR_GLYCINE": {"37851316"},
         "INGR_L_CARNITINE": {"32359762"},
         "INGR_PLANT_STEROLS": {"37739728"},
-        "INGR_L_TYROSINE": {"25598314", "36548401", "29980424", "38290812"},
+        "INGR_L_TYROSINE": {"25598314", "29980424", "38290812"},
     }
     observed = {key: set() for key in known_unfinished_sources}
     found = []
@@ -62,7 +62,7 @@ def test_no_data_file_holds_a_pending_review_context():
                 assert context["scoring_eligible"] is False
                 if record["id"] == "INGR_L_TYROSINE":
                     assert context["human_status"] == "confirmed"
-                    if context['source_pmids'][0] in {'25598314', '36548401'}:
+                    if context['source_pmids'][0] == '25598314':
                         assert context['identity_scope'] == 'exact_form'
                         assert context['identity']['chemical_form'].startswith('L-tyrosine;')
                         assert context['dose']['values'] == [2000]

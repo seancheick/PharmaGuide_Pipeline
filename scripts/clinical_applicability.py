@@ -1365,6 +1365,12 @@ def assess_clinical_applicability(
         # absent and incorrectly satisfy the broader cranberry scope.
         documented_scope = reference.get("documented_review_scope") == policy
         exclusion_text = text if not source_only or documented_scope else text + _row_text(row)
+        if (source_only and policy.get("excluded_form_terms")
+                and (product.get("delivery_data") or {}).get("systems")):
+            # Reuse the delivery owner's label/row binding and negation checks.
+            # A known coating cannot disappear merely because its source is
+            # the sole-active title rather than the ingredient's printed name.
+            exclusion_text += " " + " ".join(sorted(_source_delivery_forms(product, row))) + " "
         # A finished literature exclusion must be proved by the label's own
         # preparation, not a default mapped form. Extract/standardized powder
         # is not the crude powder covered by a whole-food review.
