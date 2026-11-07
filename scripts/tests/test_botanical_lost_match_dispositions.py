@@ -183,7 +183,7 @@ def test_bare_boswellia_serrata_row_stays_denied_until_source_proves_extract():
     match = {"id": "PRECLIN_BOSWELLIA", "ingredient": "Boswellia serrata", "matched_source_row_refs": ["ingredientRows[0]"]}
     accepted, rejected = filter_clinical_matches(source, [match])
     assert accepted == []
-    assert rejected[0]["reason_code"] == "clinical_form_mismatch"
+    assert rejected[0]["reason_code"] == "clinical_source_label_unresolved"
 
 
 def test_misspelled_generic_cinnamon_label_retains_the_unapproved_family_disposition():

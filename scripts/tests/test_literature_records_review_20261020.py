@@ -66,7 +66,9 @@ def test_effect_direction_holds_only_an_observed_effect(records):
         if record["effect_direction"] is None:
             assert record.get("applicability_status") in LITERATURE_REVIEW_RESULTS, cid
         else:
-            assert record.get("applicability_status") not in LITERATURE_REVIEW_RESULTS, cid
+            # A recorded source effect and unresolved product applicability are
+            # separate facts; preserving the source label cannot grant credit.
+            assert record.get("applicability_status") not in LITERATURE_REVIEW_RESULTS - {"applicability_unestablished"}, cid
         for study in record["qualifying_human_studies"]:
             effect = study.get("effect_direction")
             if (cid, study.get("pmid")) in RECORDED_EFFECT_EXCEPTIONS:
@@ -98,8 +100,13 @@ def test_a_record_without_a_verified_trial_reads_review_pending(records, cid, pm
     assert record["studied_dose_exposure"] == {}
     for study in record["qualifying_human_studies"]:
         # a kept non-trial citation is labelled as what it is and carries no trial figures
-        assert study["pmid"] == pmid and study["scoring_eligible"] is False
-        assert not {"sample_size", "dose", "duration"} & set(study)
+        assert study["scoring_eligible"] is False
+        if cid == "l_phenylalanine":
+            assert study["pmid"] in {"28919843", "32560181"}
+            assert study["pmid"] != pmid
+        else:
+            assert study["pmid"] == pmid
+            assert not {"sample_size", "dose", "duration"} & set(study)
     assert pmid in record["applicability_decision"]
     logging.disable(logging.WARNING)
     resolution = resolve_evidence_for_canonical(cid)
@@ -119,7 +126,9 @@ def test_a_wrong_paper_row_is_removed(records, cid):
     wrong = {"l_carnosine": "20091069", "l_phenylalanine": "37629744"}[cid]
     assert wrong not in {s["pmid"]for s in records[cid]["qualifying_human_studies"]}
     if cid == "l_phenylalanine":
-        assert records[cid]["qualifying_human_studies"] == []
+        assert {s["pmid"] for s in records[cid]["qualifying_human_studies"]} == {"28919843", "32560181"}
+        assert all(s["scoring_eligible"] is False for s in records[cid]["qualifying_human_studies"])
+        assert records[cid]["applicability_status"] == "applicability_unestablished"
 
 
 # Evidence for one preparation credited to another: combination, food, beverage, topical,

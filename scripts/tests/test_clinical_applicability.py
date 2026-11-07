@@ -790,7 +790,7 @@ def test_source_required_anchor_binds_printed_child_before_structural_header(mon
     assert result['status']=='applicable'
     assert result['source_row_ref']==child['raw_source_path']
     child['raw_source_text']='Different Material';child['name']='Different Material'
-    assert ca.assess_clinical_applicability(product,entry,assess_amount=False)['status']=='not_applicable'
+    assert ca.assess_clinical_applicability(product,entry,assess_amount=False)['status']=='unresolved'
 
 
 @pytest.mark.parametrize("source_name,source_form,eligible", [

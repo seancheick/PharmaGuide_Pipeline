@@ -10,7 +10,8 @@ NEW_IDS = ['251616', '252704', '254795', '254796', '254797', '327984',
            '294273', '311852', '312355', '312356', '312357',
            '269718', '232921', '232928', '231921', '328831', '59635']
 NEW_BLOCKERS = {
-    **{pid: ['dose_benchmark_identity_unresolved'] for pid in NEW_IDS[:11]},
+    **{pid: ['dose_benchmark_identity_unresolved', 'evidence_assessment_incomplete']
+       for pid in NEW_IDS[:11]},
     **{pid: ['dose_amount_unread'] for pid in NEW_IDS[11:16]},
     **{pid: ['dose_benchmark_identity_unresolved', 'evidence_assessment_incomplete']
        for pid in NEW_IDS[16:21]},
@@ -218,6 +219,12 @@ def test_newly_approved_raw_label_remains_held_without_public_quality(newly_appr
     release = scored['assessment_readiness']['release_assessment']
     assert release['is_complete'] is False
     assert release['blockers'] == NEW_BLOCKERS[pid]
+    if pid in NEW_IDS[:11]:
+        # The generic horsetail preparation cannot finish its source-specific
+        # review, independently of the unresolved Dose benchmark.
+        assert any(row.get('canonical_id') == 'horsetail'
+                   and row.get('state') == 'not_yet_evaluated'
+                   for row in scored['assessment_readiness']['evidence']['ingredient_assessments'])
     assert scored['quality_score_status'] == 'not_scored'
     assert scored['verdict'] == 'NOT_SCORED'
     assert scored['score_unavailable_reason'] == 'release_assessment_incomplete'
