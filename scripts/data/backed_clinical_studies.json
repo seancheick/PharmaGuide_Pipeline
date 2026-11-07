@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-11-06",
+    "last_updated": "2026-11-07",
     "total_entries": 214,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
@@ -23590,7 +23590,7 @@
       "total_enrollment": 100,
       "registry_completed_trials_count": 46,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Historical automated positive_strong/high fields are retained pending explicit qualification; they are not a current approved efficacy grade. The two earlier declared trials measured exercise/body-composition outcomes, not primary cardiovascular, energy, homocysteine, stress/mood, glycemic-control or recovery benefits. Their approved contexts remain non-scoring. The specific lower-body meta-analysis source/method hold remains unresolved. Legacy registry and enrollment counts are not independently qualified trial-family or efficacy-participant totals. Additional primary36501070 is a completed non-credit bounded source review; it neither requalifies historical positive_strong/high fields nor supplies the unresolved pooled-strength decision. The completed source-to-RCT transfer exclusion for PMID 36009767 preserves genuine research and uncertainty; it does not supply a new efficacy grade or resolve the pooled-strength hold.",
+      "effect_direction_rationale": "Historical automated positive_strong/high fields are retained pending explicit qualification; they are not a current approved efficacy grade. The two earlier declared trials measured exercise/body-composition outcomes, not primary cardiovascular, energy, homocysteine, stress/mood, glycemic-control or recovery benefits. Their approved contexts remain non-scoring. The specific lower-body meta-analysis source/method hold remains unresolved. Legacy registry and enrollment counts are not independently qualified trial-family or efficacy-participant totals. Additional primary PMID 36501070 is a completed non-credit bounded source review; it neither requalifies historical positive_strong/high fields nor supplies the unresolved pooled-strength decision. The completed source-to-RCT transfer exclusion for PMID 36009767 preserves genuine research and uncertainty; it does not supply a new efficacy grade or resolve the pooled-strength hold.",
       "endpoint_relevance_tags": [],
       "study_contexts": [
         {
@@ -23806,7 +23806,7 @@
             "reviewer": "Codex agent /root/elderberry_review; independently source-checked by Codex agent /root/betaine_review; not clinician review",
             "reviewed_at": "2026-11-06",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Completed bounded non-credit source review under delegated existing policy. Exact proposal c0086c364560c09c824188b107aecd6a506c3cc991cd050f8ffc690c0bcde896 independently checked against fresh MED identity and official PMC9739923 full Methods/Results on2026-11-06; MACHEK_INDEPENDENT_SOURCE_APPROVAL.json records verification. This compatibility approval enum is agent source review, not clinician review or pooled/product efficacy authorization. The named lower-body synthesis hold and current source-specific non-credit decisions remain."
+            "basis": "Completed bounded non-credit source review under delegated existing policy. Exact proposal c0086c364560c09c824188b107aecd6a506c3cc991cd050f8ffc690c0bcde896 independently checked against fresh MED identity and official PMC9739923 full Methods/Results on 2026-11-06; MACHEK_INDEPENDENT_SOURCE_APPROVAL.json records verification. This compatibility approval enum is agent source review, not clinician review or pooled/product efficacy authorization. The named lower-body synthesis hold and current source-specific non-credit decisions remain."
           },
           "trial_family": "betaine_primary_36501070",
           "population": {
