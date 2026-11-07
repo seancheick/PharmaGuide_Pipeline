@@ -748,6 +748,50 @@ def test_tyrosine_derivatives_and_unspecified_stereochemistry_do_not_borrow_sour
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
 
 
+@pytest.mark.parametrize('name', ['N-Acetyl L-Tyrosine', 'N-Acetyl Tyrosine', 'NALT'])
+def test_free_tyrosine_pending_sources_cannot_reopen_finished_nalt_exclusion(name):
+    product = _tyrosine_scoring_product(name=name)
+    resolution = er.resolve_product_evidence(product)
+    assert resolution.is_assessment_complete
+    assert all(not r.points_eligible for r in resolution.resolutions)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+@pytest.mark.parametrize('specific_owner', ['absent', 'unfinished'])
+def test_tyrosine_denylist_alone_cannot_finish_unread_preparation(monkeypatch, specific_owner):
+    from copy import deepcopy
+    index = deepcopy(er._backed_studies_index())
+    for key, studies in index.items():
+        if specific_owner == 'absent':
+            index[key] = [s for s in studies if s['id'] != 'INGR_N_ACETYL_L_TYROSINE']
+        else:
+            for study in studies:
+                if study['id'] == 'INGR_N_ACETYL_L_TYROSINE':
+                    study['study_contexts'] = [{'review_status': 'source_verified_pending_clinical_review'}]
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: index)
+    result = er.resolve_product_evidence(_tyrosine_scoring_product(name='NALT'))
+    assert not result.is_assessment_complete
+    assert all(not row.points_eligible for row in result.resolutions)
+
+
+def test_distinct_nalt_row_does_not_exclude_a_separate_free_tyrosine_source():
+    from clinical_applicability import reviewed_entries
+    from scoring_v4.modules.generic_evidence import _entry_excludes_recovery_context
+    product = _tyrosine_scoring_product(claim='NALT and L-Tyrosine')
+    free_row = product['activeIngredients'][0]
+    derivative = {**free_row, 'name': 'N-Acetyl L-Tyrosine',
+                  'raw_source_text': 'N-Acetyl L-Tyrosine', 'raw_source_path': 'ingredientRows[1]'}
+    product['activeIngredients'].append(derivative)
+    product['ingredient_quality_data']['ingredients'] = [free_row, derivative]
+    product['ingredient_quality_data']['ingredients_scorable'] = [free_row, derivative]
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    assert not _entry_excludes_recovery_context(record, free_row, product)
+    assert _entry_excludes_recovery_context(record, derivative, product)
+    assert score_evidence(product)['score'] > 0
+
+
 def test_cadet_protein_drink_review_rejects_only_isolated_tyrosine_transfer():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     from clinical_evidence_schema import validate_ingredient_context
