@@ -1319,22 +1319,168 @@ def test_incremental_clean_global_below_threshold_retains_generation(tmp_path, m
 
 
 @pytest.mark.parametrize('clock_field', ['evaluation_date', 'evaluation_local_date'])
-def test_clock_rollover_during_execution_refuses_promotion(tmp_path, monkeypatch, clock_field):
-    mod, runner, raw, prefix, _, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+@pytest.mark.parametrize('date_sensitive', [False, True])
+def test_clock_rollover_refreshes_only_stale_candidate_rows(tmp_path, monkeypatch, clock_field, date_sensitive):
+    from pathlib import Path
+    mod, runner, raw, prefix, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
     snapshot[clock_field] = '2026-11-05'
-    # Bind the baseline to the start date before attempting changed input work.
     mod.run_incremental(runner, raw, prefix)
-    before = {path: path.read_bytes() for directory in (prefix, *mod.stage_directories(prefix)[1:])
+    untouched = {stage: deepcopy(mod.stage_products(directory, stage)['2'])
+                 for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix))}
+    retained = prefix / '.incremental_artifacts/prior/frozen/receipt.json'
+    retained.parent.mkdir(parents=True, exist_ok=True)
+    retained.write_text('{"retained": "older generation"}')
+    sidecar = prefix / 'reports/review.json'
+    sidecar.parent.mkdir(parents=True, exist_ok=True)
+    sidecar.write_text('{"retained": "review notes"}')
+    original = runner.run_enrich
+    ages = []
+    def enrich(source, output):
+        age = int(snapshot[clock_field] == '2026-11-06')
+        ages.append(age)
+        success = original(source, output)
+        if date_sensitive:
+            path = Path(output) / 'enriched/batch.json'
+            rows = json.loads(path.read_text())
+            for row in rows:
+                row['cert'] = {'snapshot_date': '2026-11-05', 'snapshot_age_days': age,
+                               'recency_status': 'fresh'}
+            path.write_text(json.dumps(rows))
+        snapshot[clock_field] = '2026-11-06'
+        return success
+    monkeypatch.setattr(runner, 'run_enrich', enrich)
+    monkeypatch.setattr('cert_resolver._recency_status',
+                        lambda _: ('fresh', int(snapshot[clock_field] == '2026-11-06')))
+    (raw / '1.json').write_text(json.dumps({'id': '1', 'dose': 30}))
+    result = mod.run_incremental(runner, raw, prefix)
+    assert calls == ['clean', 'enrich', 'score'] + (['enrich', 'score'] if date_sensitive else [])
+    assert ages == ([0, 1] if date_sensitive else [0])
+    assert retained.read_text() == '{"retained": "older generation"}'
+    reviews = list((prefix / '.incremental_artifacts/prior').rglob('review.json'))
+    assert len(reviews) == 1
+    assert reviews[0].read_text() == '{"retained": "review notes"}'
+    assert result['stages'] == {stage: ['1'] for stage in mod.STAGES}
+    state = json.loads((prefix / '.incremental_state.json').read_text())
+    assert state[clock_field] == '2026-11-06'
+    for stage, directory in zip(mod.STAGES, mod.stage_directories(prefix)):
+        rows = mod.stage_products(directory, stage)
+        assert rows['1']['dose'] == 30
+        assert rows['2'] == untouched[stage]
+        if date_sensitive and stage != 'clean':
+            assert rows['1']['cert']['snapshot_age_days'] == 1
+    assert not mod.dependencies(mod.stage_products(mod.stage_directories(prefix)[1], 'enrich')['1'])['clock_refresh_required']
+
+
+@pytest.mark.parametrize('change', ['source', 'raw'])
+def test_rollover_does_not_hide_real_input_changes(tmp_path, monkeypatch, change):
+    mod, runner, raw, prefix, _, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    snapshot['evaluation_local_date'] = '2026-11-05'
+    mod.run_incremental(runner, raw, prefix)
+    before = {path: path.read_bytes() for directory in mod.stage_directories(prefix)
               for path in directory.rglob('*') if path.is_file()}
     original = runner.run_enrich
-    def rollover(*args, **kwargs):
-        snapshot[clock_field] = '2026-11-06'
-        return original(*args, **kwargs)
-    monkeypatch.setattr(runner, 'run_enrich', rollover)
+    def mutate(*args):
+        success = original(*args)
+        snapshot['evaluation_local_date'] = '2026-11-06'
+        if change == 'source':
+            snapshot['references']['iqm']['vocabulary'] = 'changed'
+        else:
+            (raw / '2.json').write_text(json.dumps({'id': '2', 'dose': 99}))
+        return success
+    monkeypatch.setattr(runner, 'run_enrich', mutate)
     (raw / '1.json').write_text(json.dumps({'id': '1', 'dose': 30}))
     with pytest.raises(mod.StageManifestError, match='Inputs changed during incremental execution'):
         mod.run_incremental(runner, raw, prefix)
-    assert all(path.read_bytes() == contents for path, contents in before.items())
+    assert all(path.read_bytes() == data for path, data in before.items())
+
+
+@pytest.mark.parametrize('failure', ['stale_result', 'producer', 'gate', 'source', 'raw', 'live_output'])
+def test_clock_refresh_failure_retains_original_generation(tmp_path, monkeypatch, failure):
+    from pathlib import Path
+    mod, runner, raw, prefix, _, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    snapshot['evaluation_local_date'] = '2026-11-06'
+    mod.run_incremental(runner, raw, prefix)
+    live_files = {path: path.read_bytes() for directory in mod.stage_directories(prefix)
+                  for path in directory.rglob('*') if path.is_file()}
+    original = runner.run_enrich
+    refreshes = []
+    def enrich(source, output):
+        is_refresh = snapshot['evaluation_local_date'] == '2026-11-07'
+        success = original(source, output)
+        path = Path(output) / 'enriched/batch.json'
+        rows = json.loads(path.read_text())
+        for row in rows:
+            row['cert'] = {'snapshot_date': '2026-11-06',
+                           'snapshot_age_days': int(is_refresh and failure != 'stale_result')}
+        path.write_text(json.dumps(rows))
+        if is_refresh:
+            refreshes.append(True)
+            if failure == 'producer':
+                return False
+            if failure == 'gate':
+                runner.run_coverage_gate = lambda *a, **kw: (False, {})
+            if failure == 'source':
+                snapshot['references']['iqm']['vocabulary'] = 'changed'
+            if failure == 'raw':
+                (raw / '2.json').write_text(json.dumps({'id': '2', 'dose': 99}))
+            if failure == 'live_output':
+                target = mod.stage_directories(prefix)[0] / 'batch.json'
+                target.write_text('[{"id":"1","dose":999},{"id":"2","dose":20}]')
+        snapshot['evaluation_local_date'] = '2026-11-07'
+        return success
+    monkeypatch.setattr(runner, 'run_enrich', enrich)
+    monkeypatch.setattr('cert_resolver._recency_status',
+                        lambda _: ('fresh', int(snapshot['evaluation_local_date'] == '2026-11-07')))
+    (raw / '1.json').write_text(json.dumps({'id': '1', 'dose': 30}))
+    with pytest.raises(mod.StageManifestError):
+        mod.run_incremental(runner, raw, prefix)
+    assert refreshes == [True]
+    for path, content in live_files.items():
+        if failure == 'live_output' and path == mod.stage_directories(prefix)[0] / 'batch.json':
+            assert '999' in path.read_text()  # External mutation is never overwritten.
+        else:
+            assert path.read_bytes() == content
+
+
+def test_unstable_clock_is_bounded_and_preserves_live_generation(tmp_path, monkeypatch):
+    from datetime import date, timedelta
+    mod, runner, raw, prefix, _, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    before = {path: path.read_bytes() for directory in mod.stage_directories(prefix)
+              for path in directory.rglob('*') if path.is_file()}
+    reads = []
+    def moving_snapshot(*_):
+        reads.append(None)
+        value = deepcopy(snapshot)
+        value['evaluation_local_date'] = (date(2026, 11, 7) + timedelta(days=len(reads))).isoformat()
+        return value
+    monkeypatch.setattr(mod, 'current_snapshot', moving_snapshot)
+    (raw / '1.json').write_text(json.dumps({'id': '1', 'dose': 30}))
+    with pytest.raises(mod.StageManifestError, match='clock did not stabilize'):
+        mod.run_incremental(runner, raw, prefix)
+    assert len(reads) < 15
+    assert all(path.read_bytes() == data for path, data in before.items())
+
+
+def test_initial_build_can_cross_midnight(tmp_path, monkeypatch):
+    from pathlib import Path
+    import shutil
+    mod, runner, raw, seeded, calls, snapshot = _synthetic_dataset(tmp_path, monkeypatch)
+    snapshot['evaluation_local_date'] = '2026-11-06'
+    def full_build(**kwargs):
+        for source, target in zip(mod.stage_directories(seeded),
+                                  mod.stage_directories(Path(kwargs['output_prefix']))):
+            shutil.copytree(source, target)
+        snapshot['evaluation_local_date'] = '2026-11-07'
+        return {'success': True}
+    runner.run_pipeline = full_build
+    fresh = tmp_path / 'fresh'
+    result = mod.run_incremental(runner, raw, fresh)
+    assert not calls
+    assert result['stages'] == {stage: ['1', '2'] for stage in mod.STAGES}
+    state = json.loads((fresh / '.incremental_state.json').read_text())
+    assert state['evaluation_local_date'] == '2026-11-07'
+    for stage, directory in zip(mod.STAGES, mod.stage_directories(fresh)):
+        assert set(mod.stage_products(directory, stage)) == {'1', '2'}
 
 
 def test_comparison_date_pin_preserves_live_source_changes(monkeypatch):
