@@ -2179,6 +2179,14 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         identity_row = identity_row_for(raw_active)
         if identity_row is not None:
             identity_row = _as_scored(identity_row)
+            if (
+                score_exclusion_reason(identity_row) == "recognized_non_scorable"
+                and identity_row.get("recognition_source") == "other_ingredients"
+            ):
+                # The other-ingredient owner deliberately excludes this
+                # preparation. A printed amount cannot revive it as an active.
+                # Unrated botanical identities retain their separate contract.
+                continue
             if _identity_projection_rejection_reason(raw_active, identity_row):
                 # The shared required-conflict ledger retains this exposure
                 # for coverage/readiness; it cannot become scoring evidence.
