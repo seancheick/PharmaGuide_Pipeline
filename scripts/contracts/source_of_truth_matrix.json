@@ -580,7 +580,7 @@
       "field_kind": "display-only",
       "source_data_files": ["raw DSLD product JSON"],
       "consumers": ["scripts/build_final_db.py", "Flutter app"],
-      "forbidden_recomputation": ["display and recognized_non_scorable rows may feed label fidelity/search/warnings but cannot feed scoring, supplement taxonomy, synergy, active unmapped gates, or percentile routing"],
+      "forbidden_recomputation": ["display and recognized_non_scorable IQD rows cannot directly supply ingredient/form grades or promote display-only material into scoring, taxonomy, synergy, active-unmapped gates or percentile routing; this does not remove cleaner-owned active exposure projected by scoring_input_contract as label_active_projection or qualified native nutrient evidence. Those projections preserve literal identity/amount/source lineage and existing Dose/Evidence assessment without borrowing an IQM grade or unrelated clinical credit"],
       "fallback_class": "flutter_backward_compat",
       "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
       "tests": ["scripts/tests/test_label_fidelity_contract.py", "scripts/tests/test_source_of_truth_contract.py"],

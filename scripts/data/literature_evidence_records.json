@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-04",
+    "last_updated": "2026-11-06",
     "total_entries": 845,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
@@ -736,7 +736,7 @@
           "sample_size": 106,
           "dose": "15 g/day (5 g 3 times daily)",
           "duration": "8 weeks",
-          "outcome": "significantly reduced IBS symptom severity scores and normalized intestinal permeability",
+          "outcome": "Of 115 randomized participants, 106 completers were analyzed: 43/54 receiving free L-glutamine versus 3/52 receiving whey placebo achieved the prespecified primary reduction of at least 50 IBS symptom-severity points. Participants had post-infectious IBS-D and intestinal hyperpermeability. Secondary symptom/stool measures and the permeability surrogate were separately reported; these findings do not establish benefit in all IBS or healthy/sports populations.",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -756,7 +756,7 @@
           "sample_size": 14,
           "dose": "single beverages of 0.3, 0.6 or 0.9 g/kg fat-free mass (crossover)",
           "duration": "acute",
-          "outcome": "gastrointestinal tolerance established in healthy adults",
+          "outcome": "Acute GI tolerability compared three active L-glutamine doses in 14 healthy men without a zero-glutamine placebo. The highest dose, 0.9 g/kg fat-free mass, produced more GI symptoms, generally mild and transient; this was not an efficacy trial or proof of universal absence of adverse effects.",
           "effect_direction": "neutral",
           "verification_provenance": {
             "pmid_verified": true,
@@ -779,11 +779,11 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "The IBS trial gave 5 g L-glutamine three times daily (15 g/day) for 8 weeks to adults with post-infectious IBS-D and intestinal hyperpermeability. The second study measured acute GI tolerance of single 0.3-0.9 g/kg fat-free-mass doses in healthy men and is not an efficacy trial. Sports performance or muscle recovery is not established by these sources.",
+      "applicability_decision": "The IBS trial gave 5 g free L-glutamine three times daily (15 g/day) for 8 weeks to adults with post-infectious IBS-D and intestinal hyperpermeability. The full primary text confirms its named symptom-severity endpoint and distinguishes 115 randomized participants from 106 analyzed completers. The second study compared acute GI tolerance of three active 0.3-0.9 g/kg fat-free-mass doses in healthy men; the highest dose produced more symptoms and there was no zero-glutamine placebo efficacy comparison. Neither study establishes general sports-performance or muscle-recovery benefit. Other research populations and modified glutamine preparations retain their separate unfinished applicability review.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex full-text source reviewer (elderberry_review), independently checked by Codex root; exact IBS primary scope independently checked by Codex glycine_review on 2026-11-06",
+        "verified_at": "2026-11-06T21:53:01.799816+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
@@ -1492,7 +1492,7 @@
     },
     {
       "canonical_id": "blueberry",
-      "material_form": "Freeze-dried blueberry powder (9 of 12 studies), whole blueberries (2) or blueberry concentrate (1)",
+      "material_form": "Freeze-dried blueberry powders, whole blueberries and blueberry concentrate; one included trial also compared enhanced wild-blueberry powders and a stabilized wild-blueberry-extract formulation",
       "search_query": "(\"Blueberry\"[tiab] OR \"Vaccinium\"[tiab]) AND (cognition[tiab] OR cognitive[tiab] OR vascular[tiab]) AND (randomized controlled trial[pt] OR systematic review[pt]) NOT (animals[mh] NOT humans[mh])",
       "search_date": "2026-09-17",
       "databases_searched": [
@@ -1521,7 +1521,7 @@
       "effect_direction": "positive_weak",
       "population_context": "Children, young adults and older adults with or without cognitive impairment",
       "studied_dose_exposure": {},
-      "applicability_decision": "A systematic review of 12 studies (mostly freeze-dried blueberry) found blueberries may improve some cognitive measures; doses, durations and anthocyanin content varied too much for a dose threshold, and anthocyanin extracts were not studied.",
+      "applicability_decision": "The review of 12 studies found possible improvements in selected cognitive measures with heterogeneous blueberry interventions. Its included Whyte2018 trial compared enhanced powder formulations and ThinkBlue, a stabilized combination of 100 mg wild-blueberry extract, 10 mg L-cysteine and 1 mg L-glutathione daily (PMID 29882843, Table 2). That combination is not evidence of equivalence to unstandardized blueberry extracts, isolated anthocyanins, whole fruit or plain powders. Variable preparations, doses, durations and anthocyanin content do not establish a general Dose threshold; source-specific clinical qualification remains separate.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -1529,11 +1529,12 @@
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
-          "source_sha256": "86e142d1519080dc09e53560e5ee567bcada269cb0f8ad1ee2d12a3036976bac",
+          "source_sha256": "a7ce7f4ef0b4106aa2871f2d26a2f0c81c52086d9046b46bc22dbd5dea5086f2",
           "source_ids": [
-            "PMID:30999017"
+            "PMID:30999017",
+            "PMID:29882843"
           ],
-          "verified_at": "2026-10-27T22:38:13.265370+00:00",
+          "verified_at": "2026-11-06T21:27:13.165858+00:00",
           "is_complete": true,
           "results": [
             {
@@ -1544,6 +1545,15 @@
               "has_erratum": false,
               "article_title": "The effect of blueberry interventions on cognitive performance and mood: A systematic review of randomized controlled trials.",
               "content_sha256": "65c8814881e4c147a1b729de7b786eee3c51a6a4e131d35d2bdcc30eb6e17d5b"
+            },
+            {
+              "source_id": "PMID:29882843",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "A Randomized, Double-Blinded, Placebo-Controlled Study to Compare the Safety and Efficacy of Low Dose Enhanced Wild Blueberry Powder and Wild Blueberry Extract (ThinkBlue™) in Maintenance of Episodic and Working Memory in Older Adults.",
+              "content_sha256": "1705b062fe65829f494ac03c57e1ada05c4348e1024b028c3e5e057efd4d761a"
             }
           ]
         }
@@ -1551,18 +1561,19 @@
       "reference_semantics": {
         "reference_type": "no_benchmark",
         "scope": "General catalog Dose for identified blueberry only. Existing source-specific exposures remain descriptive; no universal minimum, optimal interval, preparation conversion or safety ceiling is established by them. This is not absence of research or universal null efficacy.",
-        "preparation": "Freeze-dried blueberry powder (9 of 12 studies), whole blueberries (2) or blueberry concentrate (1)",
+        "preparation": "Freeze-dried blueberry powders, whole blueberries and blueberry concentrate; one included trial also compared enhanced wild-blueberry powders and a stabilized wild-blueberry-extract formulation",
         "purpose": "General catalog Dose only; exact clinical purpose, Evidence determination and independent safety applicability remain with existing owners.",
         "population": "Children, young adults and older adults with or without cognitive impairment",
         "exposure_basis": "minimum_directed_daily_use",
         "units": "As reported by sources and label; no mass, volume, marker or food-matrix conversion inferred.",
         "curve": "completed_no_benchmark_neutral",
         "source_ids": [
-          "PMID:30999017"
+          "PMID:30999017",
+          "PMID:29882843"
         ],
-        "rationale": "Source-backed case finding: A systematic review of 12 studies (mostly freeze-dried blueberry) found blueberries may improve some cognitive measures; doses, durations and anthocyanin content varied too much for a dose threshold, and anthocyanin extracts were not studied. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added.",
+        "rationale": "Source-backed case finding: The review of 12 studies found possible improvements in selected cognitive measures with heterogeneous blueberry interventions. Its included Whyte2018 trial compared enhanced powder formulations and ThinkBlue, a stabilized combination of 100 mg wild-blueberry extract, 10 mg L-cysteine and 1 mg L-glutathione daily (PMID 29882843, Table 2). That combination is not evidence of equivalence to unstandardized blueberry extracts, isolated anthocyanins, whole fruit or plain powders. Variable preparations, doses, durations and anthocyanin content do not establish a general Dose threshold; source-specific clinical qualification remains separate. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added. Factual source scope reviewed by Codex on 2026-11-06, independently content-checked against the cited review and primary Table 2; the existing neutral Dose policy and absence of a general benchmark are retained.",
         "owner": "scripts/data/literature_evidence_records.json::blueberry",
-        "review_date": "2026-10-27",
+        "review_date": "2026-11-06",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       }
     },
@@ -2377,7 +2388,7 @@
     },
     {
       "canonical_id": "l_carnosine",
-      "material_form": "L-carnosine",
+      "material_form": "Oral L-carnosine; exact source-specific preparations only, not N-acetyl-L-carnosine, zinc-carnosine/polaprezinc, anserine combinations or beta-alanine.",
       "search_query": "carnosine supplementation randomized controlled trial healthy",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -2385,16 +2396,74 @@
         "Cochrane Library"
       ],
       "records_screened": 38,
-      "qualifying_human_studies": [],
+      "qualifying_human_studies": [
+        {
+          "pmid": "39919936",
+          "title": "Carnosine supplementation improves cognitive outcomes in younger participants of the NEAT trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 299,
+          "dose": "1,000 mg twice daily (2 g/day); cornstarch placebo.",
+          "duration": "Approximately 6 and 12 weeks",
+          "outcome": "Post hoc secondary NEAT cognition analysis: whole-cohort aggregate scores were null. Selected speed and domain findings in ages 23–35 were positive, alongside negative changes in individual domains. Post-randomization exclusions included poor compliance and biochemical nonresponse.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Carnosine supplementation improves cognitive outcomes in younger participants of the NEAT trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12014415/",
+            "verified_at": "2026-11-06"
+          }
+        },
+        {
+          "pmid": "39599686",
+          "title": "Carnosine Supplementation Has No Effect on Inflammatory Markers in Adults with Prediabetes and Type 2 Diabetes: A Randomised Controlled Trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 49,
+          "dose": "CarnoPure/Flamma, 1,000 mg twice daily (2 g/day); methylcellulose placebo.",
+          "duration": "14 weeks",
+          "outcome": "Secondary inflammatory/adipokine analysis in prediabetes or well-controlled type 2 diabetes: no significant treatment differences; 41 completers. This is not a negative-efficacy or harm finding and must not be substituted for the primary glycemic findings from the same cohort.",
+          "effect_direction": "null",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Carnosine Supplementation Has No Effect on Inflammatory Markers in Adults with Prediabetes and Type 2 Diabetes: A Randomised Controlled Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11597812/",
+            "verified_at": "2026-11-06"
+          }
+        },
+        {
+          "pmid": "34174842",
+          "title": "Effect of Oral carnosine supplementation on urinary TGF-β in diabetic nephropathy: a randomized controlled trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 40,
+          "dose": "Tokai Bussan gelatin capsules, two 500 mg units after breakfast and after dinner (2 g/day); starch placebo.",
+          "duration": "12 weeks",
+          "outcome": "In diabetic nephropathy, the between-group comparison of absolute mean change in urinary TGF-beta was not significant (Results/Figure 2A). An additional percentage-change urinary TGF-beta/creatinine analysis favored carnosine (P=0.03; 95% CI 3.48 to 64.54; Figure 2B). Albuminuria and renal-function measures were unchanged. Preserve both analyses; no independently established prespecified primary-analysis success or clinical renal benefit.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effect of Oral carnosine supplementation on urinary TGF-β in diabetic nephropathy: a randomized controlled trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8235831/",
+            "verified_at": "2026-11-06"
+          }
+        }
+      ],
       "effect_direction": null,
-      "population_context": "Not established: no verified human L-carnosine trial is cited",
+      "population_context": "Source-specific healthy adult NEAT posthoc cognition, prediabetes/well-controlledT2D secondary inflammation, and diabetic-nephropathy biomarker cohorts; not interchangeable populations.",
       "studied_dose_exposure": {},
-      "applicability_decision": "No verified human L-carnosine trial is recorded. The previously cited PMID 20091069 is a review of beta-alanine supplementation, not an L-carnosine trial, and the recorded dose, duration and sample size were not in it. Evidence review pending.",
-      "verification_result": "verification_failure_unresolved",
+      "applicability_decision": "The previous PMID 20091069 beta-alanine citation remains rejected because it studied a different administered substance. Verified oral L-carnosine research now includes PMID 39919936 (NEAT, registry NCT03314987), PMID 39599686 (secondary analysis, registry NCT02917928), and PMID 34174842. These three bounded reviews record source-specific mixed/null outcomes, not general efficacy or a grade. Companion reports from NCT02917928, including primary glycemic findings, represent the same cohort rather than independent confirmations. Other positive, null, combination and disease-context sources identified by existing screening still require content/applicability review; this review does not exhaust the literature. N-acetyl-L-carnosine and other derivatives do not borrow plain oral L-carnosine findings. Preparation/population boundaries and source-family review remain unfinished; no product completion, general Dose benchmark or safety threshold is established.",
+      "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
-        "all_pmids_verified": false,
+        "verified_by": "Codex source reviewer /root/betaine_review; independent content double-check /root/scientific_review on 2026-11-06",
+        "verified_at": "2026-11-07T01:25:40.373213+00:00",
+        "all_pmids_verified": true,
         "retractions_found": false
       },
       "applicability_status": "applicability_unestablished"
@@ -2559,7 +2628,24 @@
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
-      "applicability_status": "applicability_unestablished"
+      "applicability_status": "applicability_unestablished",
+      "documented_review_scope": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "broccoli sprout beverage"
+        ],
+        "excluded_form_terms": [
+          "whole broccoli vegetable powder",
+          "whole vegetable powder",
+          "broccoli floret powder",
+          "broccoli florets powder"
+        ],
+        "source_pmids": [
+          "24913818"
+        ],
+        "reviewed_at": "2026-11-06"
+      }
     },
     {
       "canonical_id": "l_phenylalanine",
@@ -19925,7 +20011,7 @@
     },
     {
       "canonical_id": "casein_hydrolysate",
-      "material_form": "Casein hydrolysate protein base",
+      "material_form": "Casein hydrolysate, including bioactive alpha-s1-casein/alpha-casozepine decapeptide preparations; ordinary nutritional protein matrices are a distinct application.",
       "search_query": "casein_hydrolysate dietary supplementation whole food matrix",
       "search_date": "2026-09-20",
       "databases_searched": [
@@ -19934,18 +20020,17 @@
       "records_screened": 10,
       "qualifying_human_studies": [],
       "effect_direction": null,
-      "population_context": "general dietary intake / food powder matrix",
+      "population_context": "Preparation-specific adult sleep/stress research; correspondence of current bioactive milk peptide labels to studied preparations remains unresolved.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Casein hydrolysate protein base is a culinary food powder, nutrient base, or flavor/carrier matrix; not scored for therapeutic clinical efficacy.",
-      "applicability_status": "not_efficacy_relevant",
+      "applicability_decision": "The ordinary protein/food-matrix conclusion does not complete assessment of bioactive casein decapeptide preparations. PMID 31252661 (DOI 10.3390/nu11071466; official full text PMC6682925 reviewed November 6, 2026 by Codex agent) studies Ingredia Lactium 300 mg/day containing 6.6 mg alpha-s1-casein (f91-100) for four weeks in adults with poor sleep. Selected diary/actigraphy findings coexist with null symptom-scale and polysomnography treatment comparisons. PMID 17136040 (DOI 10.1038/sj.ejcn.1602553; live API and primary publisher abstract content verified November 6, 2026) studies Ingredia 150 mg/day for 30 days in 63 women with stress-related symptoms; full methods remain subscription-restricted. These are research leads, not qualified evidence that unbranded casein decapeptide labels contain Lactium or an equivalent preparation. Preparation composition, source/full-methods, trial-family independence and applicability review remain required. This correction establishes no affirmative efficacy credit, negative efficacy conclusion, general Dose benchmark or safety threshold.",
+      "applicability_status": "applicability_unestablished",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "verification_result": "authoritative_pubmed_verified",
-      "reason_code": "food_powder_or_flavor_matrix"
+      "verification_result": "authoritative_pubmed_verified"
     },
     {
       "canonical_id": "chlorogenic_acids",

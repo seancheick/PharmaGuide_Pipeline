@@ -1234,6 +1234,37 @@ def _resolve_evidence_for_row(
             scope_decisions.append(assess_clinical_applicability(
                 product or {"activeIngredients": [row_dict]}, scoped,
                 assess_amount=False, require_claim_alignment=False))
+        from probiotic_measurements import context_review_finished, _clinical_review_metadata_valid
+        from clinical_evidence_schema import validate_ingredient_context
+        unfinished_contexts = []
+        for study, decision in zip(deduped_studies, scope_decisions):
+            preparation_excluded = (
+                decision.get("status") == "not_applicable"
+                and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
+            )
+            declared_pmids = set()
+            if preparation_excluded:
+                declared_pmids = {str(ref["pmid"]) for ref in study.get("references_structured") or []
+                                  if isinstance(ref, dict) and ref.get("pmid")}
+                declared_pmids.update(str(pmid) for pmid in study.get("published_studies") or []
+                                      if re.fullmatch(r"[1-9][0-9]*", str(pmid)))
+            unfinished_contexts.append(any(
+                not context_review_finished(context)
+                and not (
+                    preparation_excluded
+                    and isinstance(context, dict)
+                    and context.get("review_status") == "source_verified_pending_clinical_review"
+                    and context.get("identity_scope")
+                    and context.get("human_status") == "confirmed"
+                    and _clinical_review_metadata_valid(context)
+                    and not validate_ingredient_context(context, known_component_ids={study["id"]})
+                    and set(context["source_pmids"]) <= declared_pmids
+                )
+                for context in study.get("study_contexts") or []
+            ))
+        # A verified, scoped pending source remains unfinished, but cannot
+        # reopen this same owner's explicit preparation exclusion. Unknown
+        # source-only stubs still block: their preparation has not been read.
         noncontributing_complete = [
             (decision.get("status") == "not_applicable"
              and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
@@ -1241,8 +1272,10 @@ def _resolve_evidence_for_row(
                 and assess_clinical_source_review(study)["is_complete"])
             for study, decision in zip(deduped_studies, scope_decisions)
         ]
+        noncontributing_complete = [finished and not pending
+                                   for finished, pending in zip(noncontributing_complete, unfinished_contexts)]
         if not valid_studies:
-            if all(decision.get("status") == "not_applicable"
+            if not any(unfinished_contexts) and all(decision.get("status") == "not_applicable"
                    and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
                    for decision in scope_decisions):
                 owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
@@ -1280,7 +1313,10 @@ def _resolve_evidence_for_row(
             record_states = []
             unresolved_reasons = []
             inapplicable_reasons = []
-            for study, decision, finished in zip(deduped_studies, scope_decisions, noncontributing_complete):
+            for study, decision, finished, pending in zip(
+                    deduped_studies, scope_decisions, noncontributing_complete, unfinished_contexts):
+                if pending:
+                    unresolved_reasons.append("clinical_sources_ineligible")
                 if study not in valid_studies:
                     # A qualified but inapplicable sibling cannot finish an
                     # unrelated unread source. A truly applicable source still
@@ -1509,7 +1545,12 @@ def _resolve_evidence_for_row(
                               if row_dict.get("evidence_type") == "sports_primary_dose" else [])
             sources_complete = bool(source_results) and compose_product_resolution_state(
                 source_results)[1]
-            if row_dict.get("evidence_type") == "sports_primary_dose" and not sources_complete:
+            primary_protein = (
+                row_dict.get("evidence_type") == "sports_primary_dose"
+                or (canonical in ROUTE_FEATURE_PROTEIN_CANONICALS and product
+                    and evidence_row_key(row_dict) in evidence_prominent_row_keys(product))
+            )
+            if primary_protein and not sources_complete:
                 return EvidenceResolution(
                     canonical_id=canonical, ingredient_name=name,
                     matched_owners=matched_owners,
@@ -1572,23 +1613,6 @@ def _resolve_evidence_for_row(
         combined_text = f"{raw_text} {form_text}".strip()
 
         material_form_matched = False
-        if canonical == "broccoli":
-            if any(k in combined_text for k in ("sprout", "sulforaphane", "glucoraphanin")):
-                material_form_matched = True
-            else:
-                blocking_reasons.append("literature_applicability_unestablished")
-                return EvidenceResolution(
-                    canonical_id=canonical,
-                    ingredient_name=name,
-                    matched_owners=matched_owners,
-                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
-                    points_eligible=False,
-                    applicability_status="crude_whole_food_powder_blocked",
-                    reason_code="crude_vegetable_powder_cannot_inherit_purified_extract_trials",
-                    owner_facts=owner_facts,
-                    blocking_reasons=blocking_reasons,
-                )
-
         if canonical == "pumpkin":
             if any(k in combined_text for k in ("oil", "seed oil", "lipid")):
                 material_form_matched = True
@@ -1660,6 +1684,16 @@ def _resolve_evidence_for_row(
                     disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
                     points_eligible=False, applicability_status="applicability_unestablished",
                     reason_code=decision["reason_code"], owner_facts=owner_facts,
+                    blocking_reasons=["literature_applicability_unestablished"],
+                )
+            else:
+                # An unresolved preparation uses the existing open-applicability
+                # contract; a scope mismatch is not a completed negative review.
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code="literature_applicability_unestablished", owner_facts=owner_facts,
                     blocking_reasons=["literature_applicability_unestablished"],
                 )
 

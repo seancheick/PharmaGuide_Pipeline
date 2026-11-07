@@ -648,12 +648,14 @@ def test_material_context_preserves_specific_disclosure():
     res_crude_broccoli = er.resolve_evidence_for_row({
         "canonical_id": "broccoli",
         "name": "Broccoli Powder",
+        "mapped": True,
+        "raw_source_path": "ingredientRows[0]",
         "raw_source_text": "Broccoli (Brassica oleracea) whole vegetable powder",
         "amount": 500,
         "unit": "mg",
     })
     assert res_crude_broccoli.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
-    assert res_crude_broccoli.applicability_status == "crude_whole_food_powder_blocked"
+    assert res_crude_broccoli.reason_code == "clinical_form_excluded"
 
     # 2. Standardized broccoli sprout extract with sulforaphane is not blocked
     # as a crude food: it reaches the sulforaphane clinical record. That record
@@ -1702,7 +1704,7 @@ def test_primary_protein_projection_is_not_completed_by_a_carrier_review():
     assert resolution.blocking_reasons
 
 
-@pytest.mark.parametrize("canonical", ["l_glutamine", "glutathione", "green_coffee_bean"])
+@pytest.mark.parametrize("canonical", ["glutathione", "green_coffee_bean"])
 def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
     from assessment_readiness import EVIDENCE_NOT_YET_EVALUATED, _resolved_evidence_assessment
 
@@ -1711,6 +1713,14 @@ def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
     assert result.reason_code == "literature_applicability_unestablished"
     assert not result.points_eligible
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+
+
+def test_glutamine_known_source_does_not_finish_unread_siblings_or_infer_source_form():
+    result = er.resolve_evidence_for_canonical("l_glutamine")
+    assert result.owner_facts["backed_clinical_studies"]["effect_directions"] == ["positive_moderate"]
+    assert not result.points_eligible
+    assert "clinical_sources_ineligible" in result.blocking_reasons
+    assert "clinical_source_row_unresolved" in result.blocking_reasons
 
 
 @pytest.mark.parametrize("canonical", ["casein", "pea_protein", "rice_protein"])
@@ -2390,3 +2400,87 @@ def test_complex_evidence_scoped_artifact_matches_uncached_pass(fixture_index):
         artifact["scoring_metadata"].pop("scored_date", None)
     assert scoped == uncached
     assert product == before
+
+
+@pytest.mark.parametrize('canonical', ['casein', 'pea_protein', 'rice_protein'])
+def test_principal_protein_source_without_projection_marker_remains_unfinished(canonical):
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED
+    row = {'name': canonical, 'raw_source_text': canonical,
+           'canonical_id': canonical, 'mapped': True, 'bio_score': 10,
+           'quantity': 25, 'unit': 'g', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'product_name': canonical + ' Protein', 'primary_type': 'protein_powder',
+               'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert result.reason_code == 'primary_nutritional_ingredient_requires_source_review'
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+    assert result.points_eligible is False
+
+
+@pytest.mark.parametrize('name', ['Whole broccoli vegetable powder',
+                                  'Broccoli (Brassica oleracea) whole vegetable powder',
+                                  'Broccoli (florets) powder'])
+def test_reviewed_broccoli_preparation_exclusion_is_finished_without_efficacy_credit(name):
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+    row = {'name': name, 'raw_source_text': name, 'canonical_id': 'broccoli',
+           'raw_source_path': 'ingredientRows[0]', 'mapped': True,
+           'quantity': 500, 'unit': 'mg'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.reason_code == 'clinical_form_excluded'
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+
+
+@pytest.mark.parametrize('name', ['Broccoli', 'Broccoli powder', 'Broccoli extract',
+                                  'Broccoli sprout beverage', 'Broccoli floret extract',
+                                  'Broccoli florets extract', 'Broccoli floret powder extract',
+                                  'Standardized broccoli florets powder'])
+def test_broccoli_unknown_or_unqualified_preparation_is_not_a_finished_zero(name):
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED
+    row = {'name': name, 'raw_source_text': name, 'canonical_id': 'broccoli',
+           'raw_source_path': 'ingredientRows[0]', 'mapped': True,
+           'matched_form': 'Broccoli florets powder',
+           'quantity': 500, 'unit': 'mg'}
+    result = er.resolve_evidence_for_row(row, {'activeIngredients': [row],
+        'ingredient_quality_data': {'ingredients_scorable': [row]}})
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
+
+
+def test_bioactive_casein_is_not_completed_as_ordinary_food_protein():
+    result = er.resolve_evidence_for_canonical("casein_hydrolysate", dose_value=150, dose_unit="mg")
+    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    assert "literature_verification_pending" in result.blocking_reasons
+    assert result.points_eligible is False
+
+
+@pytest.mark.parametrize("damage", [None, "unscoped", "human_unknown", "malformed", "unverified_status", "wrong_component", "foreign_source"])
+def test_pending_source_preserves_only_previously_qualified_preparation_exclusions(monkeypatch, damage):
+    import copy
+    import clinical_applicability as ca
+    from assessment_readiness import _resolved_evidence_assessment
+    record = copy.deepcopy(next(s for s in er._load_backed_studies() if s["id"] == "INGR_L_CARNITINE"))
+    context = next(c for c in record["study_contexts"] if c["source_pmids"] == ["32359762"])
+    if damage == "unscoped":
+        context.pop("identity_scope")
+    elif damage == "human_unknown":
+        context["human_status"] = "unknown"
+    elif damage == "malformed":
+        context["clinical_review"] = {}
+    elif damage == "unverified_status":
+        context["review_status"] = "pending_review"
+    elif damage == "wrong_component":
+        context["components"] = ["UNRELATED_RECORD"]
+    elif damage == "foreign_source":
+        context["source_pmids"] = ["30108163"]
+        context["dose"]["source_provenance"]["pmid"] = "30108163"
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {"l_carnitine": [record]})
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {record["id"]: record})
+    row, product = _excluded_preparation_product("Acetyl L-Carnitine", "l_carnitine", "acetyl-l-carnitine (alcar)")
+    result = er.resolve_evidence_for_row(row, product)
+    assert not result.points_eligible
+    assert not ca.assess_clinical_source_review(record)["is_complete"]
+    expected = "evaluated_limited_or_negative" if damage is None else "not_yet_evaluated"
+    assert _resolved_evidence_assessment(result)[0] == expected

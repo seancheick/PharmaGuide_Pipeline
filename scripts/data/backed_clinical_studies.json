@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
     "last_updated": "2026-11-06",
-    "total_entries": 213,
+    "total_entries": 214,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -4570,7 +4570,7 @@
           "limitations": [
             "Mixed randomized and non-randomized designs; narrative synthesis only, not a pooled RCT estimate. Not credit-bearing.",
             "Dose range is 1-4 g/day in the abstract but 1 to 4.5 g/day in Results; discrepancy retained.",
-            "Declared meta-analyses 32154768 (7 RCTs, exercise-induced muscle damage; soreness improved at 0-96 h) and 32359762 (37 RCTs, 2292 participants; body weight WMD -1.21 kg, -1.73 to -0.68) have no open full text; abstracts give no per-trial regimens, forms or included-trial lists, so no context could be completed for them.",
+            "Declared meta-analyses 32154768 and 32359762 now have retained full-body source packets and source-specific contexts. Recovery review 32154768 has a completed non-credit source representation preserving primary-regimen/randomization discrepancies and preparation/population boundaries. Weight review 32359762 remains pending an attributable constituent-integrity/sensitivity and primary extraction disposition; included trial 26666519 has formal expression of concern 36852455. Neither meta-analysis is classified as retracted. Do not infer product equivalence, universal efficacy or general Dose benchmarks.",
             "Do not transfer centenarian findings to ordinary healthy adults or add overlapping older-women reports as independent cohorts.",
             "Despite restrictive abstract wording, the source table includes carbohydrate and leucine cointerventions; these cannot be ignored.",
             "Physical dosage form is not specified uniformly by the source table; no capsule assumption.",
@@ -4617,6 +4617,220 @@
             "30485835",
             "31636806",
             "32033285"
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_l_carnitine_32154768_recovery_source_review",
+          "source_pmids": [
+            "32154768"
+          ],
+          "components": [
+            "INGR_L_CARNITINE"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Oral L-carnitine and L-carnitine L-tartrate in separately identified source trials; salt mass not equated with base; no fumarate or ALCAR scope"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "exercise_induced_muscle_damage",
+          "purpose": "recovery",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_32154768",
+          "population": {
+            "age_group": "adult",
+            "description": "The meta-analysis reports 79 healthy participants, 70 men and 9 women, across trained and untrained groups. The Ho primary reports mean ages 45.4 for men and 51.9 for women, reversed in the meta-analysis table. Limited female evidence; no pediatric, pregnancy or patient transfer."
+          },
+          "study_design": "Systematic review/meta-analysis reporting seven randomized publications, six crossover and one parallel; primary PMID 8858401 instead describes a fixed placebo-then-active sequence. These are seven publications, not seven independently proven randomized cohorts.",
+          "outcomes": [
+            {
+              "name": "Post-exercise muscle soreness improved in pooled follow-up analyses; substantial later-time heterogeneity",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "CK/myoglobin/LDH pooled effects were follow-up-specific; no sustained biomarker or performance conclusion",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Seven publications, nine dose/sex analytic strata; Spiering doses share eight participants. Repeated follow-up times are not independent participants or trials.",
+            "The meta-analysis reports79 participants,70men/9women; its Discussion describes results as healthy adult males despite included female stratum. Preserve discrepancy and limited female evidence.",
+            "Three publications Jadad<3; four>=3; five publications have graph-extracted outcomes; substantial soreness heterogeneity at48/72/96h.",
+            "Muscle-damage marker effects are time-limited; do not infer persistent biomarker effect or athletic performance benefit.",
+            "Salt mass is not converted to L-carnitine base; no physical capsule/tablet equivalence or fumarate/ALCAR transfer.",
+            "Paper reports no significant preparation-type subgroup effect for soreness/CK; lack of interaction does not prove all preparations equivalent.",
+            "No new grade, clinical benchmark, safety claim or automatic product closure proposed.",
+            "Previous claimed Volek2002 overlap with32958033 retracted: exactpublication11788381 differs from11880112. Distinctpublications may stillshareparticipants; overlapunknown.",
+            "The source reports significant funnel/Egger asymmetry for soreness, CK and myoglobin (all p<0.001), not LDH (p=0.31). Leave-one-study-out stability does not resolve publication bias or shared-participant dose strata.",
+            "The source reports subgroup benefit in untrained participants rather than trained participants; CK findings were confined to resistance-training subgroups. No broad trained-athlete recovery/performance inference.",
+            "Completed source-specific non-credit review. The exact source and primary discrepancy receipts are recorded; absence of uniform-regimen equivalence does not mean the full source was unread. Generic source-to-product affirmative qualification remains unresolved.",
+            "Existing Carnipure11788381/20045157 exact primary contexts remain independent source owners; their inclusion in this synthesis is not independent confirmation and does not reopen those finished reviews."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "duration_days": null,
+            "administration_frequency": "Daily, source-trial-specific",
+            "dosage_forms": [
+              "Oral L-carnitine or LCLT; physical form not uniformly established"
+            ],
+            "co_therapies": [
+              "Extra drug/diet/other supplement interventions excluded by review criteria; exercise varies"
+            ],
+            "source_provenance": {
+              "pmid": "32154768",
+              "location": "Methods inclusion/exclusion and analysis; Table1; Results study features/outcomes; Discussion limitations",
+              "source_url": "https://doi.org/10.1080/07315724.2019.1661804"
+            },
+            "reported_regimen": "Source metaTable1–3g/day1–4weeks; primary8803503 instead reports acute2gpre+2gduringmarathon. Primary11788381/20045157 specify2gL-carnitine delivered asLCLT, not2gsalt. Exactprimaryregimens retained separately.",
+            "normalization": {
+              "basis": "No uniform pooled dose or duration: source and primary regimen conflicts are preserved. Empty scalar values do not mean dose extraction is unfinished; the primary-specific regimens remain in reported_regimen and the source receipt. No salt-to-base conversion or efficacy benchmark."
+            }
+          },
+          "included_study_pmids": [
+            "8321112",
+            "8858401",
+            "8803503",
+            "11788381",
+            "17313301",
+            "20045157",
+            "25834706"
+          ],
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex agent /root/betaine_review; independent check of /root/elderberry_review source packet",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed non-credit source representation under delegated existing policy. Retained full source Methods/Results and reconciled seven-primary packet inspected; declared source identity reverified live. Compatibility approval enum does not imply clinician review. Positive soreness result is retained; unresolved generic preparation/population and primary-regimen discrepancies prevent uniform affirmative transfer. No numerical grade or dose benchmark authorized."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_l_carnitine_32359762_weight_source_review",
+          "source_pmids": [
+            "32359762"
+          ],
+          "components": [
+            "INGR_L_CARNITINE"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Heterogeneous carnitine preparations across included source trials, explicitly including L-carnitine, LCLT, acetyl-L-carnitine and glycine-propionyl-L-carnitine; no chemical or retail-product equivalence implied."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "body_weight_and_composition",
+          "purpose": "weight_management",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_32359762",
+          "population": {
+            "age_group": "adult",
+            "description": "37 adult trials, reported 2292 participants; heterogeneous healthy and clinical populations, with overweight/obesity common. Matched diet, exercise or drug cointerventions vary. Results must not be applied uniformly to healthy normal-weight adults or all carnitine forms."
+          },
+          "study_design": "Random-effects meta-analysis and dose-response analysis; mostly parallel trials plus one crossover. Search through January2019. Full retained copy is an uncorrected publisher proof from a public mirror, not an official OA/license assertion.",
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source review /root/elderberry_review; independently checked /root/betaine_review2026-11-06; constituent qualification still pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full-body extraction and cited constituent linkage are available and inspected; no blanket unread claim. Positive pooled weight estimate is historical. FormalEOC36852455 applies to included26666519, not32359762. Precise integrity/sensitivity, preparation/subgroup and unresolved primary extraction disposition remains required; no current affirmative activation."
+          },
+          "outcomes": [
+            {
+              "name": "Reported pooled body-weight change -1.21kg (95%CI -1.73 to -0.68); BMI and fat-mass reductions also reported. These are historical source estimates, not a currently qualified generic-product benefit.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Overall waist circumference and body-fat percentage comparisons were not statistically significant; fat-mass significance was sensitive to removal of the centenarian trial.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": null,
+            "dosage_forms": [],
+            "co_therapies": [
+              "Matched dietary restriction, exercise and medication cointerventions differ across trials."
+            ],
+            "reported_regimen": "Source trial doses250–4000mg/day for3–48weeks across distinct preparations; no common assigned regimen. Reported nonlinear peak near2000mg/day is not a validated minimum, optimal supplement target or salt-equivalence conversion.",
+            "normalization": {
+              "basis": "No single pooled regimen; preserve trial-specific material and exposure. Do not convert the dose-response curve into a general Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "32359762",
+              "location": "Retained full body Methods eligibility/extraction,Table1,Results3.1–3.7,Tables2–6,Discussion;included reference20 cross-checked to current formal expression of concern.",
+              "source_url": "https://doi.org/10.1016/j.clnesp.2020.03.008"
+            }
+          },
+          "included_study_pmids": [
+            "26666519",
+            "20423740",
+            "28832573",
+            "27225722",
+            "27432821",
+            "26149189",
+            "25352725",
+            "23349733",
+            "24454315",
+            "22818869",
+            "21439850",
+            "20812958",
+            "24393648",
+            "29696241",
+            "21224234",
+            "20068559",
+            "20683173",
+            "19604523",
+            "19056606",
+            "18065594",
+            "16446007",
+            "12875611",
+            "12867219",
+            "20414546",
+            "16612469",
+            "10861338",
+            "17042889",
+            "18272931"
+          ],
+          "limitations": [
+            "The meta-analysis includes Samimi2016,PMID26666519,as source reference20. Live PubMed/EuropePMC and publisher notice confirm Expression of Concern36852455/DOI10.1111/cen.14891 published2023-02-27 due unresolved research-integrity concerns. The pooled estimate predates that notice.",
+            "Do not mark the meta-analysis itself retracted or expression_of_concern: the formal notice concerns an included primary trial. Current positive qualification requires an attributable constituent-integrity/sensitivity disposition, not a fabricated exclusion re-analysis.",
+            "Formulations include ALCAR and glycine-propionyl material. The current generic record preparation exclusions are authored boundaries, not proof those forms are absent from this source. No pooled estimate may be transferred across these chemicals.",
+            "Nearly90% of included trials have unclear allocation concealment, and only two have low-risk outcome-assessor blinding. Most trials did not make anthropometry primary; source high-quality sensitivity supported body weight only.",
+            "Multiple source publications may share trial families; earlier review publication counts, included primary counts and trial strata must not be added as independent confirmations.",
+            "No new grade, generic efficacy claim, Dose benchmark, safety threshold or product closure is proposed. The current generic record remains mixed and held; approved Carnipure and completed ALCAR decisions stay intact.",
+            "Full included-publication map retains37citations:28primary PMIDs verified and six further exact primary/publisher identities resolved without new PMID; three remain secondary/citation-only. Publisher identity alone is not full content verification. Ref84isobservational despite all-RCT framing; ref70download was wrong paper and rejected. Exact source-access and extraction limits remain."
           ]
         }
       ],
@@ -17965,7 +18179,164 @@
       "endpoint_relevance_tags": [
         "sleep"
       ],
-      "scoring_eligible": false
+      "scoring_eligible": false,
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_glycine_22529837_sleep_restriction_source_scope",
+          "components": [
+            "INGR_GLYCINE"
+          ],
+          "source_pmids": [
+            "22529837"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Flavoured glycine, 3 g; no glycine-chelate, collagen, protein or GlyNAC equivalence"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "acute_partial_sleep_restriction",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "population": {
+            "age_group": "adult",
+            "description": "Ten healthy male Ajinomoto employees aged 30-61 without sleep disorders enrolled; seven analyzed after one dropout and two medication-related exclusions."
+          },
+          "study_design": "Randomized single-blinded placebo-controlled crossover trial; 7-14 recovery nights between periods; three nights per treatment with time in bed restricted by 25%.",
+          "trial_family": "glycine_22529837_sleep_restriction",
+          "comparator": "Flavoured reduced malt-sugar placebo",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex glycine source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Factual source review by Codex glycine source reviewer, independently checked by Codex /root/elderberry_review on 2026-11-06 against live source content. Agent review, not physician review. Human primary Methods/Tables 1-2 and review Table 1/reference discrepancies independently checked. Nonhuman exclusion independently supported by live abstract/figures; independent access to full animal Methods was blocked, so no full-Methods double-check is claimed. Existing parent grade and scoring-eligibility hold remain unchanged; no new numerical benchmark or efficacy activation."
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              3000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 3,
+            "administration_frequency": "Once each night, 30 minutes before bedtime",
+            "dosage_forms": [
+              "Oral flavoured glycine; physical delivery form not otherwise specified"
+            ],
+            "co_therapies": [
+              "Protocol-imposed 25% time-in-bed restriction; no daytime naps"
+            ],
+            "reported_regimen": "3 g glycine 30 minutes before bedtime for three consecutive nights per treatment period",
+            "normalization": {
+              "basis": "3 g x 1000 = 3000 mg per nightly administered glycine dose; not a minimum effective dose or general catalog benchmark"
+            },
+            "source_provenance": {
+              "pmid": "22529837",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3328957/",
+              "location": "Materials and Methods, Human study, Participants and Methods; Results, Human study, Tables 1-2 and Figures 1-2"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Daytime VAS fatigue on day 1 improved; day 3 had no significant between-treatment difference",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "VAS sleepiness and fatigue-complaint questionnaire did not show significant between-treatment improvement",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Psychomotor-vigilance reaction time decreased on day 1 and day 3; other performance tests did not show significant treatment effects",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Only seven participants analyzed, all healthy adult men employed by the ingredient company; very short experimental sleep restriction rather than treatment of diagnosed insomnia.",
+            "Single blinding, attrition/exclusions, multiple outcomes and no established prespecified outcome hierarchy; systematic review 37851316 judges the healthy-population sleep evidence high risk of bias.",
+            "Day 1 fatigue p=0.022; VAS sleepiness p=0.098 and fatigue questionnaire total p=0.080. Psychomotor-vigilance reaction time treatment p=0.003 on day 1 and printed p=0.05 on day 3. Preserve the borderline printed value.",
+            "Animal melatonin/SCN findings elsewhere in this publication are not human sleep, mechanistic or safety proof.",
+            "No conclusion about chronic insomnia, women, children, pregnancy, disease treatment, glycine bound in chelates or formula equivalence. This completed bounded source description retains observed positive and nonsignificant findings; it does not resolve the parent positive_strong grade or source-specific efficacy/applicability hold.",
+            "Participants were Ajinomoto employees; three authors have Ajinomoto research-lab affiliations and two have University of Miyazaki affiliations. The paper declares no potential commercial/financial conflict. This is one seven-analyzed-participant crossover trial, not multiple independent treatment arms or a general nutritional-authority assessment. The separate rat part of this article grants no human mechanistic or safety claim."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_glycine_25533534_nonhuman_scope",
+          "components": [
+            "INGR_GLYCINE"
+          ],
+          "source_pmids": [
+            "25533534"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex glycine source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Factual source review by Codex glycine source reviewer, independently checked by Codex /root/elderberry_review on 2026-11-06 against live source content. Agent review, not physician review. Human primary Methods/Tables 1-2 and review Table 1/reference discrepancies independently checked. Nonhuman exclusion independently supported by live abstract/figures; independent access to full animal Methods was blocked, so no full-Methods double-check is claimed. Existing parent grade and scoring-eligibility hold remain unchanged; no new numerical benchmark or efficacy activation."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "25533534",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4397399/",
+              "location": "Live PubMed abstract and MeSH; official PMC4397399 Methods: Animals and Sleep Analysis describe Sprague-Dawley/Wistar rats. This context rejects human clinical transfer without importing any animal regimen into a human Dose assessment."
+            }
+          },
+          "limitations": [
+            "Rat mechanistic experiments cannot be transferred to human clinical sleep efficacy, hypothermia mechanism or safety; source is retained as nonhuman context, not rejected as an invalid paper.",
+            "Preserve the existing reference-level scoring_eligible=false exclusion. No animal dose is converted into a human or catalog Dose benchmark.",
+            "This completed nonhuman-scope exclusion does not finish the parent human-efficacy or applicability determination. Preserve the source as genuine mechanistic research and its existing reference-level scoring exclusion; do not relabel animal results as negative human efficacy."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_glycine_37851316_scope_pending",
+          "components": [
+            "INGR_GLYCINE"
+          ],
+          "source_pmids": [
+            "37851316"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex glycine source inventory; remaining source-specific applicability review pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Factual source review by Codex glycine source reviewer, independently checked by Codex /root/elderberry_review on 2026-11-06 against live source content. Agent review, not physician review. Human primary Methods/Tables 1-2 and review Table 1/reference discrepancies independently checked. Nonhuman exclusion independently supported by live abstract/figures; independent access to full animal Methods was blocked, so no full-Methods double-check is claimed. Existing parent grade and scoring-eligibility hold remain unchanged; no new numerical benchmark or efficacy activation."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "37851316",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10828290/",
+              "location": "Full review Table 1, sleep/nervous-system subsection, risk-of-bias and limitations; references 47, 51, 53. Exact included-primary sleep-source mapping remains unresolved."
+            }
+          },
+          "limitations": [
+            "The review reports small high-risk-of-bias sleep studies. Its Table 1 Bannai 2012 row resembles the 10-men restricted-sleep protocol, but reference 47 is PMID 22293292/DOI 10.1254/jphs.11r04fm, a narrative review, not PMID 22529837. Do not invent explicit 22529837 inclusion or treat the review and trial as independent replication.",
+            "Yamadera 2007 and Inagawa 2006 are retained under the exact cited DOIs 10.1111/j.1479-8425.2007.00262.x and 10.1111/j.1479-8425.2006.00193.x. Their primary methods/preparation/population applicability has not been independently qualified in this packet; no PMID or positive-eligibility assumption is invented.",
+            "This broad 50-study review spans different populations, conditions, delivery routes and exposures. Unread or unresolved primary-source questions cannot become blanket no-credit or a generic sleep-benefit determination. Existing parent-grade and applicability hold remains."
+          ]
+        }
+      ]
     },
     {
       "id": "INGR_TART_CHERRY",
@@ -18186,7 +18557,6 @@
       "key_endpoints": [
         "cold duration ↓",
         "flu symptoms ↓",
-        "immune response ↑",
         "upper respiratory symptoms ↓"
       ],
       "health_goals_supported": [
@@ -18195,7 +18565,7 @@
       "notes": "Human evidence for elderberry in upper-respiratory illness is promising but still limited by small trial counts and heterogeneous preparations. The data do not justify strong antiviral or oseltamivir-equivalence claims.",
       "notable_studies": "The 2021 review indexed as PMID 33827515 found limited evidence for symptom-duration reduction without support for cytokine-storm concerns. Earlier pooled respiratory-symptom evidence is indexed as PMID 30670267. Overall, the trial base remains small and formulation-specific.",
       "study_type": "rct_multiple",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-06",
       "references_structured": [
         {
           "type": "pubmed",
@@ -18275,12 +18645,8 @@
       "total_enrollment": 204,
       "registry_completed_trials_count": 13,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=13; total_enrollment=204; endpoint_tags=focus_memory,glycemic_control,digestive_health; notes/citations include mixed-evidence language.",
-      "endpoint_relevance_tags": [
-        "focus_memory",
-        "glycemic_control",
-        "digestive_health"
-      ],
+      "effect_direction_rationale": "Retained mixed classification for the two declared upper-respiratory reviews: small trial counts, heterogeneous formulations and positive, null or uncertain respiratory findings. These sources do not establish cognition, glycemic-control, digestive-treatment or a general immune-response increase. Existing clinical hold and non-scoring source dispositions remain. Legacy registry/enrollment numbers are not independently reconciled trial-family totals.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -18378,6 +18744,92 @@
             "15080016",
             "9395631",
             "26265958"
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_elderberry_30670267_reviewed_synthesis",
+          "source_pmids": [
+            "30670267"
+          ],
+          "components": [
+            "INGR_ELDERBERRY"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Pooled proprietary elderberry interventions: Sambucol syrup in two trials, a proprietary slow-dissolve lozenge, and proprietary membrane-filtered elderberry capsules; no equivalence to unspecified retail preparations established."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "viral_respiratory_illness",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Codex elderberry source reviewer; independently checked by Codex glycine/blueberry source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated existing-policy agent source review on2026-11-06; accepted30670267 manuscript,33827515 source-table/risk-of-bias and27023596 preparation facts content-checked independently. Completed non-scoring source extraction and applicability boundaries only; no physician attribution or new parent efficacy approval."
+          },
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "elderberry_respiratory_trials_1995_2016",
+          "population": {
+            "description": "Four small randomized publications in participants with influenza or flu-like symptoms, or the symptomatic subgroup of healthy air travellers. The meta-analysis reports 180 participants; Table 1 sums to 176. Children were included only in the 1995 trial. The 2016 prevention trial randomized 312 travellers but only its 29 participants developing colds enter this symptom analysis."
+          },
+          "study_design": "Random-effects synthesis of four randomized publications; symptom duration and severity pooled, with six symptom scales combined for the Kong 2009 contribution. Search completed September 2018. The comparison is elderberry versus placebo; the echinacea-elderberry/oseltamivir trial was excluded.",
+          "outcomes": [
+            {
+              "name": "Pooled upper-respiratory symptom duration/severity favored elderberry: standardized mean difference 1.717 (95% CI 0.840 to 2.593); high heterogeneity I2 83.12%. This pooled signal is not proof of effectiveness of every elderberry preparation.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Influenza subgroup favored elderberry, while the single common-cold contribution was imprecise and crossed the null (0.662; 95% CI -0.096 to 1.421). Prevention is not established by analyzing only participants who developed symptoms.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "The four publication families overlap the elderberry-only trials in PMID 33827515; these two reviews are not independent clinical replications. The unindexed Kong 2009 publication remains identified by citation, not an invented PMID.",
+            "The authors reported low risk using the Downs and Black checklist. The2021review used Cochrane risk-of-bias tools and GRADE and found conduct/reporting concerns. This older positive pooled result does not reverse the existing source-scoped non-scoring33827515 determination.",
+            "Reported total enrollment 180 differs from Table 1 arm totals of 176. Kong is shown as 30/30 in the meta-analysis versus 64 total in the 2021 review. Retain this unresolved reporting discrepancy; no corrected sample count is asserted.",
+            "Small samples, heterogeneous proprietary preparations, mixed symptom instruments and derived summary measurements limit generalization. Three studies disclosed manufacturer funding; the fourth used the same commercial product as a later funded study.",
+            "No common anthocyanin/berry-mass dose, generic preparation equivalence, strong antiviral effect, COVID-19 benefit, or oseltamivir equivalence is established. No new efficacy grade, Dose benchmark or safety finding is authorized by this review.",
+            "This completed non-scoring source context retains the existing mixed/preparation-specific interpretation. It is not proof of no benefit and does not alone close the generic parent assessment.",
+            "Source extraction authored by a Codex elderberry reviewer and independently content-checked by a separate Codex reviewer on2026-11-06 under delegated routine review authority. No physician review or signature is claimed; remaining parent/generic preparation and clinical-qualification holds are unchanged."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": null,
+            "dosage_forms": [],
+            "co_therapies": [],
+            "source_provenance": {
+              "pmid": "30670267",
+              "location": "Accepted manuscript sections 1.2.2-1.2.5, Table 1, sections 1.3.1-1.3.5 and Discussion; preparation mapping cross-checked against PMID 33827515 Table 1 and PMID 27023596 Methods 2.2.",
+              "source_url": "https://doi.org/10.1016/j.ctim.2018.12.004"
+            },
+            "reported_regimen": "No common assigned regimen is reported by this synthesis. Included publications used syrup, lozenge or capsule interventions with distinct protocols; do not infer an equivalent generic daily dose.",
+            "normalization": {
+              "basis": "No pooled daily regimen or validated generic-preparation conversion; empty values express the aggregate limitation, not absent human research."
+            }
+          },
+          "included_study_pmids": [
+            "9395631",
+            "15080016",
+            "27023596"
           ]
         }
       ]
@@ -18765,7 +19217,10 @@
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
-        "meta-analysis"
+        "meta-analysis",
+        "24144075",
+        "24287284",
+        "37739728"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -18777,7 +19232,7 @@
       ],
       "notes": "FDA-approved heart health claim; extensive evidence for cholesterol reduction.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-06",
       "notable_studies": "Abumweis et al. (2008, PMID 19109655) meta-analysis of 59 RCTs found plant sterols/stanols lowered LDL-C by about 8.8%, with benefit continuing up to roughly 3 g/day. Scholle et al. (2016) later reported additional LDL-C lowering in statin-treated patients.",
       "references_structured": [
         {
@@ -18798,6 +19253,60 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "24144075",
+          "doi": "10.1016/j.jand.2013.07.006",
+          "title": "Cholesterol-lowering efficacy of plant sterols/stanols provided in capsule and tablet formats: results of a systematic review and meta-analysis.",
+          "citation": "Journal of the Academy of Nutrition and Dietetics",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24144075/",
+          "published_date": "2013-11-01",
+          "publication_types": [
+            "Meta-Analysis",
+            "Comparative Study",
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "europe_pmc_core_and_independent_pubmed_primary_content_review"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "24287284",
+          "doi": "10.1016/j.jand.2013.09.023",
+          "title": "A softgel dietary supplement containing esterified plant sterols and stanols improves the blood lipid profile of adults with primary hypercholesterolemia: a randomized, double-blind, placebo-controlled replication study.",
+          "citation": "Journal of the Academy of Nutrition and Dietetics",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24287284/",
+          "published_date": "2013-11-26",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "europe_pmc_core_and_independent_pubmed_primary_content_review"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "37739728",
+          "doi": "10.1016/j.clnesp.2023.08.022",
+          "title": "Phytosterol supplementation in capsules or tablets as adjunctive treatment for hypercholesterolemia: A systematic review of randomized controlled trials.",
+          "citation": "Clinical nutrition ESPEN",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37739728/",
+          "published_date": "2023-08-28",
+          "publication_types": [
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "europe_pmc_core_and_independent_pubmed_primary_content_review"
         }
       ],
       "effect_direction": "positive_strong",
@@ -18967,6 +19476,204 @@
             "reviewer": "Dr. Pham",
             "reviewed_at": "2026-10-28",
             "scope": "identity_dose_outcome_applicability"
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_plant_sterols_24144075_bounded_source_scope",
+          "components": [
+            "INGR_PLANT_STEROLS"
+          ],
+          "source_pmids": [
+            "24144075"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Formulation-specific sterol/stanol capsule/tablet trials; ester, free sterol and stanol-lecithin preparations are distinct; no unspecified retail equivalence."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "elevated_ldl_cholesterol",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer /root/elderberry_review; independent content check /root/glycine_review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed factual noncredit source review under existing policy after live identity and actual full Methods/Results/Tables checks, independently double-checked on 2026-11-06. Agent review, not physician review. Preparation mixtures, source-specific dose/exposure limits and trial overlap remain explicit; parent clinical/grade/Dose/safety decisions are unchanged."
+          },
+          "trial_family": "plant_sterol_24144075_capsule_tablet_synthesis",
+          "population": {
+            "age_group": "adult",
+            "description": "Eight publications;263 analyzed adults,9 strata including2 McPherson strata; baseline lipids varied."
+          },
+          "study_design": "Randomized placebo-controlled trials screened with Jadad>=3; fasting LDL named primary synthesis endpoint. Food comparison indirect, reusing19109655.",
+          "dose": {
+            "source_provenance": {
+              "pmid": "24144075",
+              "source_url": "https://www.researchgate.net/publication/258062749_Cholesterol-Lowering_Efficacy_of_Plant_SterolsStanols_Provided_in_Capsule_and_Tablet_Formats_Results_of_a_Systematic_Review_and_Meta-Analysis",
+              "location": "Primary author-uploaded full text,Methods,Tables1–2,Results,Discussion"
+            },
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "administration_frequency": "Trial-specific schedules: Carr three times daily with each meal; Myrie once daily with supper; remaining Table2 strata twice daily with breakfast/supper, two main meals, main meal/dinner or breakfast/dinner.",
+            "dosage_forms": [
+              "Oral capsules",
+              "Oral tablets"
+            ],
+            "co_therapies": [
+              "Background diet and medication differ by source trial; no uniform dietary regimen or absence of co-therapy is established. The included Goldberg2006 publication concerns patients on statin drugs. Methods exclude studies adding another co-intervention; do not interpret this as proving every included participant was medication-free."
+            ],
+            "reported_regimen": "Heterogeneous capsule/tablet regimens for4–6weeks; Table2 reports distinct ester, free-sterol and stanol-lecithin preparations and dosing schedules. No single pooled assigned dose or catalog benchmark."
+          },
+          "outcomes": [
+            {
+              "name": "Pooled LDL reduction0.31mmol/L; Results CI−0.39to−0.24, I²0%; abstract upperCI−0.23.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Four-to-six-week heterogeneous preparations; one null formulation(Ottestad). Absence of heterogeneity does not prove clinical equivalence.",
+            "Table2:Carr3g explicitly as ester despite free-dose header; do not infer standardized active-dose benchmark.",
+            "Eight included publications are not nine independent trials; bibliographic membership is not per-primary methods approval.",
+            "Jones disclosed sterol-industry research/consulting and company ownership; no funding reported.",
+            "No cardiovascular-event or glycemic benefit established here. Existing food-only source exclusion and parent clinical/preparation hold remain."
+          ],
+          "included_study_pmids": [
+            "15969949",
+            "19535421",
+            "22378727",
+            "22796122",
+            "23623012",
+            "22087585",
+            "16442399",
+            "17707978"
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_plant_sterols_24287284_bounded_source_scope",
+          "components": [
+            "INGR_PLANT_STEROLS"
+          ],
+          "source_pmids": [
+            "24287284"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Reducol esterified mixture:81%sterols/19%stanols; Pharmavite softgels; not generic sterol powder, ester-mass or formulation equivalence."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "elevated_ldl_cholesterol",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer /root/elderberry_review; independent content check /root/glycine_review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Completed factual noncredit source review under existing policy after live identity and actual full Methods/Results/Tables checks, independently double-checked on 2026-11-06. Agent review, not physician review. Preparation mixtures, source-specific dose/exposure limits and trial overlap remain explicit; parent clinical/grade/Dose/safety decisions are unchanged."
+          },
+          "trial_family": "plant_sterol_mckenney_richmond_2011_2012",
+          "population": {
+            "age_group": "adult",
+            "description": "30 randomized/completed adults(8men/22women); eligible21–79,LDL130–<220mg/dL."
+          },
+          "study_design": "Double-blind crossover:5-weekTLC-diet lead-in then2six-week periods,no washout;30analyzed. Independent Richmond cohort from earlier22796122.",
+          "comparator": "Four placebo softgels plus same dietary advice",
+          "dose": {
+            "source_provenance": {
+              "pmid": "24287284",
+              "source_url": "https://www.researchgate.net/publication/259172040_A_Softgel_Dietary_Supplement_Containing_Esterified_Plant_Sterols_and_Stanols_Improves_the_Blood_Lipid_Profile_of_Adults_with_Primary_Hypercholesterolemia_A_Randomized_Double-Blind_Placebo-Controlled_R",
+              "location": "Primary author-uploaded full text,StudyDesign,Products,StatisticalAnalyses,Tables1–2"
+            },
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              1800
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 42,
+            "reported_regimen": "1800mg sterol/stanol moiety supplied as approximately2900mg ester daily;4softgels,two each with2main meals",
+            "normalization": {
+              "basis": "Source reports1.8g sterol/stanol and approximately2.9g ester distinctly;1.8g x1000=1800mg moiety. Factual assigned dose,not new benchmark."
+            },
+            "administration_frequency": "Four softgel capsules daily: two with each of two main meals, at consistent times, swallowed whole with water or another beverage.",
+            "dosage_forms": [
+              "Oral softgel capsules"
+            ],
+            "co_therapies": [
+              "Weight-maintenance NCEP Therapeutic Lifestyle Changes diet instructed throughout five-week lead-in and both six-week treatment periods, with same advice in placebo condition. Avoid other added-sterol/stanol foods or supplements; maintain habitual physical activity. Dietary targets were not fully achieved on average; no assumption of perfect TLC adherence."
+            ]
+          },
+          "outcomes": [
+            {
+              "name": "LDL percent-change treatment difference−4.3%,p=.008.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Total/nonHDL lower;HDL,triglycerides andTC/HDL nonsignificant.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Four capsules/day,two with each main meal:1.8g sterol/stanol moiety supplied as approximately2.9g ester; factual regimen only,not a generic Dose benchmark.",
+            "No washout; sequence interaction assessed. Other exclusion criteria refer to earlier trial,not fully reproduced in this paper.",
+            "Manufacturer-funded;authors manufacturer employees or funded contractors. Independent cohort is not sponsor-independent replication.",
+            "Short-term lipid endpoints; no cardiovascular-event prevention established. Parent clinical/preparation hold retained."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_plant_sterols_37739728_bounded_source_scope",
+          "components": [
+            "INGR_PLANT_STEROLS"
+          ],
+          "source_pmids": [
+            "37739728"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex agent /root/elderberry_review (source research; not clinician review); independent check pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Source identity and abstract content verified; full Methods, included-trial preparations, outcomes and independent trial families remain unqualified. This source-only pending context asserts no regimen/population/outcome, grants no points, and keeps review unfinished."
+          },
+          "limitations": [
+            "Abstract reports10includedarticles; exact preparations,trial-family overlap and full risk-of-bias methods remain unverified. Do not count reviews and their primaries as independent replication."
+          ],
+          "dose": {
+            "source_provenance": {
+              "pmid": "37739728",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/37739728/",
+              "location": "Live abstract only; fullbody unavailable"
+            }
           }
         }
       ]
@@ -22194,18 +22901,17 @@
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health",
-        "Blood Sugar Support",
-        "Healthy Aging/Longevity"
+        "Blood Sugar Support"
       ],
-      "notes": "Human randomized and meta-analytic evidence supports taurine for modest improvements in blood pressure and selected cardiometabolic markers; effects vary by dose and baseline risk.",
+      "notes": "Human randomized and meta-analytic research reports modest blood-pressure and selected cardiometabolic-marker changes, with effects varying by population and regimen. These surrogate findings do not establish prevention of cardiovascular events or extended human lifespan. The specific full-methods source-review hold remains: included trials, preparations, populations, regimens and outcome applicability have not been fully qualified for the two declared syntheses. As of 2026-11-06, the publisher-deposited bibliography for PMID 41275513 cites the retracted heart-failure trial PMID 28118062 (DOI 10.1080/19390211.2016.1267059; retraction notice PMID 41943494, DOI 10.1080/19390211.2026.2656044). This verifies a citation link, not contribution to any particular pooled estimate. Pool membership, weighting and the effect on surviving findings remain unverified. No new Evidence credit or categorical no-benefit conclusion follows from this factual update.",
       "study_type": "systematic_review_meta",
       "published_studies": [
         "RCT",
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-10-28",
-      "notable_studies": "Meta-analysis of RCTs reported blood-pressure and lipid improvements with taurine supplementation (PMID: 32871172). A newer 2025 meta-analysis reported broader cardiometabolic improvements across 34 RCTs (PMID: 41275513).",
+      "last_updated": "2026-11-06",
+      "notable_studies": "PMID 32871172 (2020) reports blood-pressure, total-cholesterol and triglyceride reductions across heterogeneous clinical populations, with null pooled findings for fasting glucose, HDL-C, LDL-C, BMI and body weight. PMID 41275513, first published online in 2025, reports 34 eligible RCTs and additional cardiometabolic-marker pools; that source-reported count is not an independently reconciled trial-family count. Both syntheses still require full-methods and source-applicability review. The newer bibliography cites PMID 28118062, retracted on 2026-04-06 under notice PMID 41943494; reference membership alone does not establish which outcomes used its data or invalidate the entire synthesis. No human longevity finding is established by these sources.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -22265,12 +22971,10 @@
       "total_enrollment": 240,
       "registry_completed_trials_count": 88,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,systematic_review,meta-analysis; registry_completed_trials_count=88; total_enrollment=240; endpoint_tags=focus_memory,cardiovascular,glycemic_control,digestive_health; notes/citations include weak-effect language.",
+      "effect_direction_rationale": "Existing positive_weak description retained pending full-methods, trial-family and source-integrity qualification. The declared syntheses concern blood-pressure and cardiometabolic markers, not memory, digestive benefit or human lifespan. The newer synthesis bibliography cites a subsequently retracted trial; pool contribution and the effect of its removal remain unverified. No new scoring or clinical conclusion is inferred.",
       "endpoint_relevance_tags": [
-        "focus_memory",
         "cardiovascular",
-        "glycemic_control",
-        "digestive_health"
+        "glycemic_control"
       ],
       "study_contexts": []
     },
@@ -22766,25 +23470,22 @@
         "trimethylglycine",
         "tmg"
       ],
-      "category": "cardiovascular",
+      "category": "sports_performance",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "homocysteine ↓",
-        "muscle performance ↑"
+        "Body-fat percentage and fat-mass changes during supervised resistance training (PMID 30064450)",
+        "Fight Gone Bad repetitions in trained men; Wingate power and body-composition treatment contrasts null (PMID 37409757)"
       ],
-      "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Increase Energy"
-      ],
-      "notes": "Multiple human exercise RCTs showing body composition and performance benefits at 2-2.5g/day. Also established as methyl donor for homocysteine reduction (FDA-approved for homocystinuria). Previously misclassified as preclinical.",
+      "health_goals_supported": [],
+      "notes": "The two currently declared exercise RCTs report preparation- and outcome-specific findings, not general exercise or cardiovascular efficacy. PMID 30064450 studied BetaPower 2.5 g/day in untrained young women undertaking resistance training: body-fat outcomes improved, while strength/power did not show superior between-group effects. PMID 37409757 studied Medicaline capsules in trained men: Fight Gone Bad repetitions improved, while Wingate power/body composition did not. Both existing contexts remain approved non-scoring. The 2024 meta-analysis lower-body-strength question remains under source/method reconciliation; neither a generic credit conclusion nor a categorical no-efficacy conclusion is established by this note.",
       "study_type": "rct_multiple",
       "published_studies": [
         "RCT",
         "meta-analysis"
       ],
-      "last_updated": "2026-10-28",
-      "notable_studies": "Human randomized trials report that betaine supplementation can improve body-composition or performance endpoints in trained populations. In collegiate females, a double-blind placebo-controlled trial (PMID 30064450) improved body-composition outcomes, and a later crossover RCT in CrossFit-trained adults (PMID 37409757) improved performance-related measures and testosterone without materially changing Wingate power.",
+      "last_updated": "2026-11-06",
+      "notable_studies": "PMID 30064450: 23 young women completed; BetaPower 2.5 g/day with supervised resistance training; primary body-fat percentage surrogate positive, secondary squat/bench 1 RM and power null between groups. PMID 37409757: 43 male recreational CrossFit practitioners; Medicaline capsules 2.5 or 5 g/day for 21-day crossover periods; Fight Gone Bad repetitions positive, Wingate/body-composition null, and hormone findings mixed. Neither currently declared trial establishes homocysteine reduction, cardiovascular-event prevention or a generic energy benefit. PMID 39514262 is retained in the private source-review packet with a fragile positive lower-body pooled signal and unresolved primary-source/method discrepancies; it is not yet a new credit-bearing record.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -22851,17 +23552,11 @@
         "unii": "3SCV180C9W"
       },
       "effect_direction": "positive_strong",
-      "primary_outcome": "Cardiovascular/Heart Health",
       "total_enrollment": 100,
       "registry_completed_trials_count": 46,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,meta-analysis; registry_completed_trials_count=46; total_enrollment=100; endpoint_tags=stress_mood,cardiovascular,glycemic_control,muscle_recovery; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "cardiovascular",
-        "glycemic_control",
-        "muscle_recovery"
-      ],
+      "effect_direction_rationale": "Historical automated positive_strong/high fields are retained pending explicit qualification; they are not a current approved efficacy grade. The two declared trials measured exercise/body-composition outcomes, not primary cardiovascular, energy, homocysteine, stress/mood, glycemic-control or recovery benefits. Their approved contexts remain non-scoring. The specific lower-body meta-analysis source/method hold remains unresolved. Legacy registry and enrollment counts are not independently qualified trial-family or efficacy-participant totals.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -36893,7 +37588,7 @@
       "notes": "Human research is retained as preparation-specific context, not generic-product efficacy. Neither unspecified resin/extract nor the words processed or purified establish equivalence to the studied interventions. The marketed preparation and specification of the older processed material remain unverified.",
       "notable_studies": "PMID 26395129: PrimaVie, 250 mg twice daily for 90 days, 96 healthy men aged 45-55 randomized and 75 completed; androgen biomarkers increased versus placebo. PMID 20078516: processed shilajit 100 mg twice daily for 90 days in oligospermia; 60 screened, 35 enrolled, 28 completed; semen and hormone changes compared with baseline, without a randomized control group. These are not multiple generic-shilajit RCTs.",
       "study_type": "reference",
-      "last_updated": "2026-10-14",
+      "last_updated": "2026-11-06",
       "references_structured": [
         {
           "type": "pubmed",
@@ -37018,7 +37713,69 @@
             }
           ]
         }
-      }
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_shilajit_generic_20078516_preparation_transfer",
+          "components": [
+            "PRECLIN_SHILAJIT_GENERIC"
+          ],
+          "source_pmids": [
+            "20078516"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer; independently checked by Codex elderberry_review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated source review, 2026-11-06, applying existing preparation-specific transfer policy. Live source identity/content and retained source-specific findings independently checked by Codex elderberry_review on 2026-11-06; receipt scripts/audits/pending_items_20260926/LEDGER.md, November 6 Evidence completion. Not physician review."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "20078516",
+              "location": "PubMed abstract: study enrollment, processed material, regimen and before/after results",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/20078516/"
+            }
+          },
+          "limitations": [
+            "Uncontrolled before-after study in oligospermic men: 35 enrolled and 28 completed 100 mg processed shilajit twice daily for 90 days. Reported semen and hormone changes are relative to baseline, not a randomized placebo comparison.",
+            "The source does not establish that an unspecified commercial resin, extract or fulvic-acid complex is equivalent to the processed study material. Retain the human findings as preparation-specific context; reject generic-product transfer only, not the existence of human research.",
+            "No generic efficacy conclusion, clinical dose benchmark, new safety threshold or alteration of the existing no-general-benchmark Dose decision is made."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_shilajit_generic_26395129_preparation_transfer",
+          "components": [
+            "PRECLIN_SHILAJIT_GENERIC"
+          ],
+          "source_pmids": [
+            "26395129"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer; independently checked by Codex elderberry_review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-authorized delegated source review, 2026-11-06, applying existing preparation-specific transfer policy. Live source identity/content and retained source-specific findings independently checked by Codex elderberry_review on 2026-11-06; receipt scripts/audits/pending_items_20260926/LEDGER.md, November 6 Evidence completion. Not physician review."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "26395129",
+              "location": "Existing source-verified PrimaVie context: Materials and methods/Preparation and analysis of the drug, Dosage regimen, Results/Table 2; live PubMed abstract identity/regimen/outcomes",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/26395129/"
+            }
+          },
+          "limitations": [
+            "Randomized double-blind placebo-controlled study of exact PrimaVie purified shilajit in healthy men aged 45-55, 250 mg twice daily for 90 days. Positive androgen-biomarker findings and the existing branded-material context remain intact.",
+            "Generic shilajit, unspecified resin/extract, fulvic-acid complex and the words processed or purified do not establish the exact PrimaVie preparation or its standardization. This rejects transfer to the generic record, not the branded trial or its scoped positive findings.",
+            "Biomarker changes do not establish symptomatic benefit, fertility, strength, energy or longevity. No generic efficacy grade, preparation equivalence, clinical dose benchmark or safety determination is introduced."
+          ]
+        }
+      ]
     },
     {
       "id": "INGR_PEA",
@@ -41182,7 +41939,7 @@
         "Healthy Aging/Longevity"
       ],
       "notes": "Proanthocyanidin-rich extract from Vitis vinifera seeds with 52 completed clinical trials on ClinicalTrials.gov. Primary evidence in blood pressure reduction (NCT00869193, n=70 placebo-controlled RCT), insulin resistance in metabolic syndrome (NCT01889368, UC Davis), and cardiovascular biomarkers. Phase 1 data in diastolic heart failure (NCT01185067, Michigan) and breast cancer chemoprevention (NCT00100893, City of Hope). Dose-response data available for glucose control at 300-900mg (NCT02254317).",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-06",
       "notable_studies": "NCT00869193 (n=70 RCT): Unilever/Edinburgh double-blind placebo-controlled 8-week trial of GSE on ambulatory blood pressure in subjects with elevated BP. NCT01889368 (n=19 RCT): UC Davis study of 300mg GSE for insulin resistance and oxidized LDL in metabolic syndrome, 30-day intervention. NCT01185067 (n=15 Phase 1): University of Michigan MegaNatural-BP GSE in heart failure with preserved ejection fraction. NCT01688154 (n=16 RCT): Grape seed proanthocyanidins for postprandial triglyceride reduction.",
       "references_structured": [
         {
@@ -41257,7 +42014,7 @@
           "identity": {
             "branded_material": "Enovita",
             "manufacturer": "Indena",
-            "standardization": "White-wine grape seed water extract standardized to >=95.0% OPCs (spectrophotometry); 5-10% monomeric catechin/epicatechin"
+            "standardization": "White-wine grape seed water extract standardized to >=95.0% OPCs by spectrophotometry; Methods 2.2 reports 5.0–15.0% catechin and epicatechin by HPLC, whereas the Introduction describes 5–10%. This source discrepancy is retained; no general extract equivalence or marker-dose conversion is established."
           },
           "exposure_basis": "supplement_dose",
           "route": "oral",
@@ -41291,14 +42048,14 @@
               "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "Men-only post hoc after a gender-by-product interaction: SBP -4.6 mmHg (95% CI -6.9 to -2.3), DBP -3.2 mmHg (-5.1 to -1.4) at 16 weeks",
+              "name": "Men-only exploratory analysis after a gender-by-product interaction: Table 2 adjusted GSEe-versus-placebo baseline-corrected differences at 16 weeks were systolic BP -3.76 mmHg (95% CI -7.16 to -0.37; p=0.0306) and diastolic BP -2.98 mmHg (-5.70 to -0.27; p=0.0320). The narrative reductions -4.6 and -3.2 mmHg are not these between-group estimates.",
               "hierarchy": "post_hoc",
               "kind": "surrogate",
               "direction": "positive",
               "outcome_role": "direct_between_group_effect"
             },
             {
-              "name": "Perceived stress (PSQ) worries domain reduced in GSEe group (p=0.0199); additional objective",
+              "name": "Perceived stress PSQ20 worries domain: GSEe within-group reduction p=0.0199; between-group comparison of V3-minus-V1 change p=0.0252. This additional outcome does not replace the null primary blood-pressure comparison.",
               "hierarchy": "secondary",
               "kind": "patient_important",
               "direction": "positive",
@@ -46594,6 +47351,704 @@
           "doi": "10.1016/s0168-8278(98)80237-7"
         }
       ]
+    },
+    {
+      "id": "INGR_L_GLUTAMINE",
+      "standard_name": "L-Glutamine",
+      "aliases": [
+        "glutamine",
+        "l-glutamine",
+        "micronized glutamine"
+      ],
+      "category": "digestive_gut",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_single",
+      "effect_direction": "positive_moderate",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Retain the observed positive_moderate label from PMID30108163. Sean authorized only this independently verified context to use the existing weak-positive multiplier on2026-11-06; no other study, preparation, population or outcome inherits it. One narrow trial with completer-only analysis does not establish general efficacy.",
+      "published_studies": [
+        "30108163",
+        "32992440",
+        "33809996",
+        "38193521",
+        "35106632",
+        "39397201",
+        "34844156",
+        "42366260",
+        "41053591",
+        "38243579",
+        "40748005"
+      ],
+      "score_contribution": "tier_2",
+      "total_enrollment": 115,
+      "registry_completed_trials_count": null,
+      "key_endpoints": [
+        "Prespecified reduction of at least50points in IBS symptom severity in post-infectious IBS-D with intestinal hyperpermeability"
+      ],
+      "health_goals_supported": [],
+      "notes": "The exact free-L-glutamine trial is qualified for its narrow patient-important IBS endpoint. Other known studies and modified preparations remain unfinished; earned source credit must coexist with incomplete ingredient review. No general IBS, sports-performance, muscle-recovery, lower-dose-equivalence or safety claim is established.",
+      "notable_studies": "PMID 30108163: 115 randomized, 106 completers; 43/54 active versus 3/52 whey placebo met the prespecified primary IBS symptom threshold after 15 g/day for 8 weeks. Permeability was a secondary surrogate. All other listed sources retain their own reviewed-exclusion or pending status; do not count their citations as independent positive replications.",
+      "last_updated": "2026-11-06",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "30108163",
+          "title": "Randomised placebo-controlled trial of dietary glutamine supplements for postinfectious irritable bowel syndrome.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30108163/",
+          "doi": "10.1136/gutjnl-2017-315136",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "32992440",
+          "title": "Gastrointestinal Tolerance of Low, Medium and High Dose Acute Oral l-Glutamine Supplementation in Healthy Adults: A Pilot Study.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32992440/",
+          "doi": "10.3390/nu12102953",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "33809996",
+          "title": "L-Glutamine Supplementation Enhances Strength and Power of Knee Muscles and Improves Glycemia Control and Plasma Redox Balance in Exercising Elderly Women.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33809996/",
+          "doi": "10.3390/nu13031025",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38193521",
+          "title": "Supplementation of L-glutamine enhanced mucosal immunity and improved hormonal status of combat-sport athletes.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38193521/",
+          "doi": "10.1080/15502783.2023.2300259",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "35106632",
+          "title": "Effects of oral cystine and glutamine on exercise-induced changes in gastrointestinal permeability and damage markers in young men.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35106632/",
+          "doi": "10.1007/s00394-022-02806-1",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39397201",
+          "title": "A systematic review and meta-analysis of clinical trials on the effects of glutamine supplementation on gut permeability in adults.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39397201/",
+          "doi": "10.1007/s00726-024-03420-7",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "34844156",
+          "title": "Glutamine supplementation can reduce some atherosclerosis markers after exhaustive exercise in young healthy males.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34844156/",
+          "doi": "10.1016/j.nut.2021.111506",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "42366260",
+          "title": "The effects of glutamine supplementation on inflammatory and oxidative stress indices in chronic diseases: a systematic review.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42366260/",
+          "doi": "10.1007/s00726-026-03543-z",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "41053591",
+          "title": "Glutamine prevents diarrhea in colorectal cancer patients undergoing chemotherapy or chemoradiotherapy: a meta-analysis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41053591/",
+          "doi": "10.1186/s12876-025-04308-w",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "38243579",
+          "title": "Glutamine Supplementation on Burn Patients: A Systematic Review and Meta-analysis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38243579/",
+          "doi": "10.1093/jbcr/irae007",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "40748005",
+          "title": "The Role of Glutamine and Arginine in Wound Healing of Pressure Ulcers: A Systematic Review.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40748005/",
+          "doi": "10.1111/wrr.70077",
+          "retracted": false,
+          "expression_of_concern": false,
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_30108163_pi_ibsd_primary",
+          "source_pmids": [
+            "30108163"
+          ],
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "L-glutamine",
+            "preparation": "Free-form oral L-glutamine powder; not N-acetyl-L-glutamine, alanyl-glutamine/Sustamine, or an unspecified glutamine complex"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "postinfectious_ibs_d",
+          "purpose": "treatment",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "glutamine_30108163",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults eligible at 18-72 years with Rome III diarrhea-predominant IBS after a medically documented enteric infection at least 1 year earlier and objectively increased intestinal permeability. Not other IBS subtypes, IBS-D with normal permeability, healthy athletes, children, pregnancy or lactation."
+          },
+          "study_design": "Randomized double-blind placebo-controlled two-center eight-week trial; 115 randomized (59 glutamine/56 whey placebo), 106 completed (54/52). Published efficacy analysis includes completers only; no full intention-to-treat efficacy analysis is asserted.",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "clinical_review": {
+            "reviewer": "Codex L-glutamine source reviewer; independently checked by Codex glycine/blueberry source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-delegated existing-policy source review with independent fullbody/API content verification on2026-11-06. Exact30108163 oral glutamine, PI-IBS-D/hyperpermeability and named primary outcome qualified; existing literature-study positive_moderate determination retained. Not a physician attribution, new numerical grade, general-population efficacy or Dose threshold."
+          },
+          "limitations": [
+            "One 8-week trial in a narrow selected population; 115 randomized and 106 completed. Only completers entered final efficacy analysis. Published discontinuation wording is internally inconsistent; preserve explicit randomized/completer counts and do not label it full intention-to-treat.",
+            "History of enteric infection was documented medically; stool cultures were not obtained. Results do not establish general treatment of all IBS, IBS-C, IBS-D with normal permeability, healthy sports performance or muscle recovery.",
+            "Patients with bacterial overgrowth, celiac disease, significant kidney/liver abnormalities and other exclusion conditions were not studied; children and pregnancy/lactation cannot inherit efficacy or safety conclusions.",
+            "Whey-protein placebo could theoretically affect IBS symptoms; authors did not observe significant worsening in the placebo group. Participants were asked to refrain from alcohol and NSAIDs; this is source-protocol context, not new consumer advice.",
+            "Permeability is a secondary surrogate and correlated change does not establish mediation or a proven mechanism. Do not pool it as independent clinical replication alongside the patient-important primary result.",
+            "The assigned 15 g/day regimen over 56 days does not establish a universal efficacy minimum, optimal long-term dose, UL or general safety clearance. Longer-term durability and replication remain unknown.",
+            "Qualified identity is oral dietary glutamine powder within the existing free-form L-glutamine literature scope; no transfer to N-acetyl-L-glutamine, alanyl-glutamine/Sustamine, unspecified glutamine complexes or protein-bound glutamine.",
+            "The source-specific positive_moderate grade already exists in the literature record and is retained; this context adds verified preparation/population/outcome qualification, not a new numerical grading policy. Other L-glutamine source questions and preparation-specific research remain independently open."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              15
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "administration_frequency": "5 g powder three times daily, mixed in eight ounces of water; 15 g/day for 8 weeks",
+            "dosage_forms": [
+              "oral powder in water"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "5 g powder three times daily, mixed in eight ounces of water; 15 g/day for 8 weeks",
+            "normalization": {
+              "basis": "5 g oral glutamine powder three times daily = 15 g/day; 8 weeks = 56 days. This is the assigned 30108163 regimen, not a minimum effective dose, general optimal intake, UL or evidence of derivative/formula equivalence."
+            },
+            "source_provenance": {
+              "pmid": "30108163",
+              "location": "Methods:Eligibility Criteria,Randomization,Follow-up and Data Management,Statistical Analysis;Results:Patients and Outcomes;Tables1-3;Discussion:limitations",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9549483/"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "At8weeks,at least50-point reduction in validated IBS symptom severity score occurred in43/54(79.6%)glutamine versus3/52(5.8%)whey-placebo completers,p<0.0001",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Raw IBS symptom severity,daily stool frequency and Bristol stool form improved versus placebo in between-group comparisons of pre/post change(Table3)",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Urinary lactulose/mannitol intestinal-permeability ratio improved versus placebo in between-group comparison of pre/post change(Table3);a barrier-function biomarker,not an independent patient-important outcome",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "surrogate"
+            }
+          ],
+          "comparator": "Whey-protein powder,5g three times daily in water,matched forcolor/consistency/taste"
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_32992440_tolerance_not_efficacy",
+          "source_pmids": [
+            "32992440"
+          ],
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex source reviewer (elderberry_review), independently checked by Codex root",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full-text dose-tolerability review,2026-11-06; three active doses, not efficacy. No physician attribution."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "32992440",
+              "location": "FullbodyMethods2.2/2.5/2.6,Results4.2,Discussion;officialPMC7601811",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/32992440/"
+            }
+          },
+          "limitations": [
+            "Fourteen healthy men completed randomized double-blind repeated counterbalanced crossover with three ACTIVE doses (0.3, 0.6, 0.9 g/kg FAT-FREE MASS); ≥5 day washouts and 24 h GI symptom followup. No zero-glutamine placebo efficacy comparison.",
+            "Higher dose produced more GI symptoms, usually mild and transient; one participant reported severe belching/regurgitation on the highest dose. Not universal absence of adverse effects.",
+            "This is measured acute GI tolerability, not gut repair, sports performance, muscle-recovery or immune-efficacy evidence. No chronic UL or safety threshold is introduced."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_33809996_qualification_pending",
+          "source_pmids": [
+            "33809996"
+          ],
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "L-glutamine",
+            "preparation": "Oral L-glutamine powder10g/day with10g maltodextrin in250mLwater;not N-acetyl-L-glutamine,alanyl-glutamine/Sustamine or an unspecified glutamine complex"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "muscle_strength",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "glutamine_33809996",
+          "population": {
+            "age_group": "adult",
+            "description": "44 women in Brazil; sample ages 60-80 years (mean 69.2), while eligibility text allowed 60-85. Pre-existing exercise cohort 21 (11 Gln/10 placebo) and non-exercising cohort 23 (12 Gln/11 placebo). Exercise status was established for at least 24 months, not randomized by this trial."
+          },
+          "study_design": "Pre/post 30-day double-blind study with randomized supplement assignment within pre-existing exercising/non-exercising cohorts; four small cells. Authors describe two major endpoint families (antioxidant capacity, and muscle strength/glycemia), without a formal primary/secondary hierarchy for individual outcomes.",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex L-glutamine source reviewer; independently full-text and figure-checked by Codex glycine/blueberry source reviewer",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Sean-delegated existing-policy source review. Official primary Methods/Results,Figures2-4 and their comparison brackets were read independently;reported supplement benefits are within-group changes,not an established glutamine-versus-placebo treatment contrast. Completed bounded non-scoring source assessment,not physician attribution or evidence of no effect."
+          },
+          "limitations": [
+            "The source names two major endpoint families; the assessment is complete for this reported study and is not held merely because its abstract lacks a named primary. Formal primary/secondary rank for individual outcomes is not invented.",
+            "Published supplement benefits and effect sizes are predominantly within-group pre/post comparisons. Visual brackets in Figures 2-4 indicate own-baseline changes or exercising-versus-non-exercising contrasts, not a demonstrated isolated glutamine-versus-placebo difference-in-change. Significance in one group but not another is not itself a treatment effect.",
+            "Under the existing NON_EFFICACY_OUTCOME_ROLES rule, within_group_change cannot qualify affirmative ingredient-purpose credit. This is a bounded nonqualifying source disposition, not proof that glutamine is ineffective or harmful.",
+            "Knee isokinetic strength/power is a directly measured muscle-strength/performance endpoint, consistent with existing patient_important strength/power classifications. That kind is restricted to the measured muscle-strength question: it does not establish glutamine-caused reductions in falls/disability or improved daily mobility. Table 2 timed-up-and-go differences describe pre-existing exercise-group baseline differences, not a glutamine treatment response.",
+            "Both GSH and GSSG increased; reductive power did not differ. TBARs decreased in all subgroups including placebo; do not attribute that shared time trend to glutamine or call it a demonstrated treatment-versus-placebo antioxidant benefit.",
+            "Figure 4 caption/plot mapping is (a) extensor torque, (b) flexor torque, (c) extensor average power, (d) flexor average power. Some Results prose cites different panel letters; this context follows plotted labels/caption and retains the reporting limitation.",
+            "Small cells (10-12), multiple outcomes, baseline exercise/lifestyle differences, more arthritis/depression in the sedentary group and incomplete treatment-factor/interaction reporting constrain causal inference. Exercise participation was not randomized.",
+            "No positive evidence transfer to healthy young athletes, sports recovery, general diabetes treatment or PI-IBS-D. This distinct Brazilian older-women trial is not a replication of 30108163 IBS outcomes.",
+            "10 g/day for 30 days is a studied assignment, not a generic efficacy minimum, optimal dose, UL or safety finding. The protocol statement about discomfort above 30 g/day is based on personal communications and does not establish a warning threshold.",
+            "Preserve 30108163 as the only user-authorized 0.85 interpretation with its existing positive_moderate grade and 15 g/day 56-day source scope. Other unresolved source/preparation questions remain pending; finishing this non-scoring review does not complete the ingredient/product.",
+            "The context_id retains the existing source slot identifier; review_status, not the historical identifier suffix, is the sole status owner. No additional study or duplicate context is created."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              10000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 30,
+            "administration_frequency": "Once daily at lunch for 30 days",
+            "dosage_forms": [
+              "Oral powder mixture in250mLwater"
+            ],
+            "co_therapies": [
+              "10g maltodextrin with active glutamine versus20g maltodextrin in comparator",
+              "Exercising cohort continued pre-existing supervised combined aerobic/resistance training60-75minutes,3nonconsecutive sessions/week;non-exercising cohort maintained usual routine"
+            ],
+            "reported_regimen": "10 g L-glutamine + 10 g maltodextrin daily in 250 mL water at lunch, for 30 days, versus 20 g maltodextrin in water",
+            "normalization": {
+              "basis": "Assigned L-glutamine 10 g/day x 1000 mg/g = 10000 mg/day; 30-day protocol. Maltodextrin is not counted as glutamine. No general clinical threshold, optimal intake, upper limit or equivalence is inferred."
+            },
+            "source_provenance": {
+              "pmid": "33809996",
+              "location": "Methods2.1-2.2,2.5-2.9;Results3;Figures2-4 and captions(visually checked);Discussion;Table1design andTable2baselinecontext",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8004646/"
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Knee extensor/flexor peak torque increased from own baseline in Gln subgroups;extensor average power increased in exercisedGln subgroup. Figure4 does not present an isolated glutamine-versus-placebo difference-in-change",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "D-fructosamine decreased from own baseline in both Gln subgroups;insulin decreased from own baseline in non-exercisingGln subgroup. Reported intergroup contrasts compare exercising with non-exercising cohorts",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "ReducedGSH and oxidizedGSSG increased from own baseline in Gln subgroups;these changes do not by themselves establish improved redox balance or patient benefit",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "No differences were observed in reported reductive-power ratio(Figure3C)",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "Flexor knee average power showed no reported intergroup or intragroup difference(Figure4d);this is a measured strength/performance endpoint,not evidence on falls,disability or daily mobility",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "within_group_change"
+            }
+          ],
+          "comparator": "20g maltodextrin in250mLwater daily at lunch,versus10gL-glutamine plus10g maltodextrin;powder appearance/taste/texture matched"
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_38193521_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "38193521"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "38193521",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/38193521/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Full text has been read; source-specific qualification remains unfinished. Crossover period/washout and reported URTI denominator/analysis ambiguity remain unresolved; retain reported positive and null findings, not generic credit.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_35106632_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "35106632"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "35106632",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/35106632/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Combined-intervention results cannot establish isolated free-L-glutamine benefit.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_39397201_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "39397201"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "39397201",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/39397201/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Full text has been read; source-specific qualification remains unfinished. Heterogeneous populations, pooling and reporting contradictions require reconciliation; neither generic null efficacy nor a dose threshold is established.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_34844156_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "34844156"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "34844156",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/34844156/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_42366260_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "42366260"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "42366260",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/42366260/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Oral and parenteral source scopes and overlapping trial families require separate review.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_41053591_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "41053591"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "41053591",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41053591/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_38243579_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "38243579"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "38243579",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/38243579/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_glutamine_40748005_qualification_pending",
+          "components": [
+            "INGR_L_GLUTAMINE"
+          ],
+          "source_pmids": [
+            "40748005"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability"
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "40748005",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/40748005/",
+              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+            }
+          },
+          "limitations": [
+            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Combined-intervention results cannot establish isolated free-L-glutamine benefit.",
+            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+          ]
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "glutamine"
+        ],
+        "excluded_form_terms": [
+          "n acetyl",
+          "acetyl glutamine",
+          "alanyl",
+          "sustamine",
+          "glutamine complex",
+          "glutamic acid",
+          "d glutamine",
+          "hydrochloride",
+          "hcl",
+          "ethyl ester",
+          "alpha ketoglutarate",
+          "akg",
+          "peptide"
+        ],
+        "supported_outcomes": [
+          "post_infectious_ibs_d"
+        ],
+        "studied_population": "Adults eligible at 18-72 years with Rome III diarrhea-predominant IBS after a medically documented enteric infection at least 1 year earlier and objectively increased intestinal permeability. Not other IBS subtypes, IBS-D with normal permeability, healthy athletes, children, pregnancy or lactation.",
+        "source_pmids": [
+          "30108163"
+        ],
+        "reviewed_at": "2026-11-06"
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose for the identified preparation only; not a recommendation or proof of lower-dose efficacy.",
+        "preparation": "Free L-glutamine; no equivalence to N-acetyl, alanyl-glutamine/Sustamine or unspecified complexes",
+        "purpose": "General catalog Dose only; exact source-specific clinical Evidence is separately qualified",
+        "population": "Adults with post-infectious IBS-D and increased intestinal permeability in the qualifying trial; no broader population transfer",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:30108163"
+        ],
+        "rationale": "The qualifying primary trial assigned 5g three times daily for eight weeks versus whey placebo. One tested regimen does not establish a general efficacy minimum, optimal interval, lower-dose equivalence or upper limit. Apply the existing DoseV4.1 completed-neutral policy without creating a numerical benchmark. Source content independently reviewed by Codex source reviewers on2026-11-06.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_L_GLUTAMINE",
+        "review_date": "2026-11-06",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      },
+      "verification_provenance": {
+        "reference_citations": {
+          "source_sha256": "34cd41109634d4c2774c0425e91d21d015d0d43c1b4f05c0388c71cd59205f5c",
+          "source_ids": [
+            "PMID:30108163"
+          ],
+          "verified_at": "2026-11-06T22:36:37.585290+00:00",
+          "is_complete": true,
+          "results": [
+            {
+              "source_id": "PMID:30108163",
+              "verified": true,
+              "retracted": false,
+              "expression_of_concern": false,
+              "has_erratum": false,
+              "article_title": "Randomised placebo-controlled trial of dietary glutamine supplements for postinfectious irritable bowel syndrome.",
+              "content_sha256": "067d3fbb0414a121d3862b0ad17674d1eb6e67fd65e32f564447d14defb12a1f",
+              "notes": "Primary oral glutamine powder is retained within the existing curated free-L-glutamine scope; this bibliographic topic proof does not independently establish stereochemistry or derivative equivalence."
+            }
+          ]
+        }
+      }
     }
   ]
 }

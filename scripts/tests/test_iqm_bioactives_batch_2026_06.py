@@ -59,6 +59,7 @@ def _resolve(enricher, label):
         ("Ornithine Aspartate", "L-Ornithine", 13.0, "l-ornithine l-aspartate (lola)"),
         ("N-Acetyl L-Carnosine", "L-Carnosine", 6.0, "n-acetyl-l-carnosine"),
         ("N-Acetyl-L-Carnosine", "L-Carnosine", 6.0, "n-acetyl-l-carnosine"),
+        ("N-Acetyl L-Carnosine, Powder", "L-Carnosine", 6.0, "n-acetyl-l-carnosine"),
         ("Creatinol O-Phosphate", "Creatinol O-Phosphate", 5.0, "creatinol o-phosphate (unspecified)"),
     ],
 )

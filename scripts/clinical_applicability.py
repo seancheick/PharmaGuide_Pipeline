@@ -927,7 +927,7 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     the curated record. This is completion evidence, not a new dose benchmark.
     """
     from clinical_evidence_schema import validate_ingredient_context
-    from probiotic_measurements import clinical_review_provenance_valid
+    from probiotic_measurements import clinical_review_provenance_valid, context_review_finished
     reference = reviewed_entries().get(str(entry.get("id") or entry.get("study_id")), {})
     contexts = reference.get("study_contexts")
     if not isinstance(contexts, list) or not contexts:
@@ -957,7 +957,8 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     excluded_pmids = {str(ref["pmid"]) for ref in references if ref.get("pmid")
                       and not clinical_record_sources_eligible({"references_structured": [ref]})}
     eligible_pmids = declared_pmids - excluded_pmids
-    errors = []
+    errors = [str(context.get("context_id") or "unknown") + ":review.approval_required"
+              for context in contexts if not context_review_finished(context)]
     if reference_only and not contributing:
         # A source-transfer rejection is a completed non-affirmative decision,
         # not an affirmative trial with an invented regimen or primary outcome.
@@ -1362,9 +1363,17 @@ def assess_clinical_applicability(
         # from any form layer must still reject the row. Otherwise an
         # enrichment-derived "seed oil" can disappear when source taxonomy is
         # absent and incorrectly satisfy the broader cranberry scope.
-        exclusion_text = text if not source_only else text + _row_text(row)
+        documented_scope = reference.get("documented_review_scope") == policy
+        exclusion_text = text if not source_only or documented_scope else text + _row_text(row)
+        # A finished literature exclusion must be proved by the label's own
+        # preparation, not a default mapped form. Extract/standardized powder
+        # is not the crude powder covered by a whole-food review.
+        prepared_source = bool(set(text.split()) & {
+            "extract", "extracts", "concentrate", "concentrated", "standardized", "standardised",
+        }) if documented_scope else False
         if any(
             " " + _key(term) + " " in exclusion_text
+            and not (prepared_source and "powder" in _key(term).split())
             for term in policy.get("excluded_form_terms", [])
         ):
             reasons.append("clinical_form_excluded")

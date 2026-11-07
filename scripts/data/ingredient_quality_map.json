@@ -32,7 +32,7 @@
     "statistics": {
       "total_parents": 656,
       "total_forms": 1477,
-      "total_form_aliases": 12300,
+      "total_form_aliases": 12301,
       "parents_with_parent_aliases": 152,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -56625,7 +56625,8 @@
           "n-acetyl l-carnosine",
           "n-acetylcarnosine",
           "n-acetyl carnosine",
-          "nac carnosine"
+          "nac carnosine",
+          "N-Acetyl L-Carnosine, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

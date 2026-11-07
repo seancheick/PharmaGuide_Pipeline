@@ -96,6 +96,7 @@ EVIDENCE_LEVEL_MULTIPLIERS: Dict[str, float] = {
 # one decision. 2026-09-18: null is 0.0 in that one place, so a study that did not show a
 # benefit earns no affirmative efficacy credit anywhere.
 EFFECT_DIRECTION_MULTIPLIERS: Dict[str, float] = dict(_EM["effect_direction_multipliers"])
+_EFFECT_FLOOR_MULTIPLIER = EFFECT_DIRECTION_MULTIPLIERS
 
 ENROLLMENT_ELIGIBLE_STUDY_TYPES = frozenset(
     {"systematic_review_meta", "rct_multiple", "rct_single"}
@@ -152,7 +153,6 @@ DRI_ESSENTIAL_NUTRIENTS = frozenset({
 # Effect-strength weight on the primary floor. It IS the pipeline's multiplier map, not a
 # copy of it: a direction that earns no affirmative credit in the pipeline may not anchor a
 # floor either. Directions worth 0 (null, negative) are skipped by the caller.
-_EFFECT_FLOOR_MULTIPLIER = EFFECT_DIRECTION_MULTIPLIERS
 # Prototype toggle (Phase 8 spike). Set ENABLED=False for the no-floor baseline.
 # The floor is gated on the strongly-evidenced ingredient being PROMINENT
 # (evidence_resolver.evidence_prominent_row_keys, from the shared role owner), so it
@@ -399,12 +399,16 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         formula_review = entry.get("applicability_assessment", {}) if entry.get("evidence_origin") == "verified_formula_contract" else {}
         population = decision.get("studied_population") or formula_review.get("studied_population")
         outcomes = decision.get("supported_outcomes") or formula_review.get("supported_outcomes")
+        source_refs = reference.get("references_structured") or reference.get("references") or []
+        interpreted_sources = _effect_direction_assessment(entry)["source_pmids"]
+        if interpreted_sources is not None:
+            source_refs = [ref for ref in source_refs if str(ref.get("pmid")) in interpreted_sources]
         receipts.append({"id": _entry_id(entry), "status": decision["status"],
                          "reason_code": decision["reason_code"],
                          "scope_qualification_complete": bool(decision["status"] == "applicable" and population and outcomes),
                          "source_review": assess_clinical_source_review(entry),
                          "studied_population": population, "supported_outcomes": outcomes or [],
-                         "source_references": reference.get("references_structured") or reference.get("references") or [],
+                         "source_references": source_refs,
                          "studied_regimens": reference.get("studied_regimens"),
                          "reference_semantics": reference.get("reference_semantics")})
 
@@ -1740,7 +1744,7 @@ def _primary_mass_floor(
         if not isinstance(entry, dict):
             continue
         effect = _norm_text(entry.get("effect_direction"))
-        effect_multiplier = _EFFECT_FLOOR_MULTIPLIER.get(effect, 0.0)
+        effect_multiplier = _effect_direction_assessment(entry)["multiplier"]
         if effect_multiplier <= 0.0:
             continue
         canonical = _canonical_from_entry(entry)
@@ -1785,6 +1789,36 @@ def _primary_mass_floor(
     return floor, floor_canon
 
 
+def _effect_direction_assessment(entry: Dict[str, Any]) -> dict:
+    """Read the one config policy without rewriting observed scientific facts."""
+    effect = _norm_text(entry.get("effect_direction"))
+    ordinary = {"multiplier": EFFECT_DIRECTION_MULTIPLIERS.get(effect, 0.0), "source_pmids": None}
+    for policy in _EM.get("context_effect_direction_interpretations", []):
+        if (_clinical_source_id(entry) != policy["record_id"]
+                or effect != policy["observed_effect_direction"]):
+            continue
+        decision = entry.get("applicability_assessment") or {}
+        population = decision.get("population_applicability") or {}
+        if (decision.get("status") != "applicable" or population.get("state") != "eligible"
+                or set(population.get("context_ids") or []) != {policy["context_id"]}
+                or not entry.get("matched_source_row_refs")):
+            continue
+        from clinical_applicability import reviewed_entries
+        from evidence_resolver import clinical_record_sources_eligible
+        reference = reviewed_entries().get(policy["record_id"], {})
+        if reference.get("effect_direction") != effect:
+            continue
+        context = next((row for row in reference.get("study_contexts") or []
+                        if row.get("context_id") == policy["context_id"]), None)
+        if (context is None or set(context.get("source_pmids") or []) != set(policy["source_pmids"])
+                or not clinical_record_sources_eligible(
+                    reference, context=context, source_pmids=policy["source_pmids"])):
+            continue
+        return {"multiplier": EFFECT_DIRECTION_MULTIPLIERS.get(policy["multiplier_key"], 0.0),
+                "source_pmids": policy["source_pmids"]}
+    return ordinary
+
+
 def _entry_raw_points(entry: Dict[str, Any]) -> float:
     base = _as_float(entry.get("base_points"), None)
     if base is None:
@@ -1801,8 +1835,7 @@ def _entry_raw_points(entry: Dict[str, Any]) -> float:
     # Missing, unknown, or unresolved direction cannot inherit efficacy. Every
     # shipped evidence record is expected to state this explicitly; malformed
     # or incomplete review data fails closed instead of defaulting positive.
-    effect = _norm_text(entry.get("effect_direction"))
-    raw *= EFFECT_DIRECTION_MULTIPLIERS.get(effect, 0.0)
+    raw *= _effect_direction_assessment(entry)["multiplier"]
     if raw <= 0:
         return 0.0
 

@@ -593,3 +593,277 @@ def test_retrieved_full_reports_have_factual_contexts_without_invented_approval(
                        for note in context['limitations'])
         else:
             assert any('single aggregate regimen' in note for note in context['limitations'])
+
+
+def test_generic_shilajit_source_review_finishes_without_borrowing_primavie_credit():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_accepted_for_scoring
+
+    record = reviewed_entries()['PRECLIN_SHILAJIT_GENERIC']
+    review = assess_clinical_source_review(record)
+    assert review['is_complete'] is True, review['errors']
+    assert record['study_type'] == record['evidence_level'] == 'reference'
+    assert not er.clinical_record_sources_eligible(record)
+    assert {pmid for context in record['study_contexts'] for pmid in context['source_pmids']} == {
+        '20078516', '26395129'}
+    for context in record['study_contexts']:
+        assert context['components'] == ['PRECLIN_SHILAJIT_GENERIC']
+        assert context['review_status'] == 'rejected_source'
+        assert context['scoring_eligible'] is False
+        assert validate_ingredient_context(context, require_complete_review=True) == []
+        assert not context_accepted_for_scoring(context)
+        assert 'Codex' in context['clinical_review']['reviewer']
+        assert 'Dr. Pham' not in context['clinical_review']['reviewer']
+    branded = reviewed_entries()['BRAND_PRIMAVIE_SHILAJIT']
+    assert assess_clinical_source_review(branded)['is_complete'] is True
+    assert any(context_accepted_for_scoring(context) for context in branded['study_contexts'])
+
+
+def test_generic_shilajit_completed_source_exclusion_reaches_scored_readiness():
+    row = {'name': 'Shilajit', 'standard_name': 'Shilajit', 'canonical_id': 'shilajit',
+           'mapped': True, 'quantity': 500, 'unit': 'mg', 'bio_score': 10,
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'status': 'active', 'form_factor': 'capsule',
+               'supplement_type': {'type': 'single_nutrient'},
+               'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    artifact = build_scored_artifact(product)
+    assessment = artifact['assessment_readiness']['evidence']
+    assert assessment['readiness'] == 'complete', assessment
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert assessment['not_yet_evaluated_count'] == 0
+
+
+@pytest.mark.parametrize('missing_pmid', ['20078516', '26395129'])
+def test_generic_shilajit_review_cannot_finish_with_an_unread_sibling(monkeypatch, missing_pmid):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['PRECLIN_SHILAJIT_GENERIC']
+    record['study_contexts'] = [context for context in record['study_contexts']
+                                if missing_pmid not in context['source_pmids']]
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    result = ca.assess_clinical_source_review(record)
+    assert result['is_complete'] is False
+    assert 'clinical_source_rejection_coverage_incomplete' in result['errors']
+    # Finishing the generic preparation question cannot complete other research.
+    assert ca.assess_clinical_source_review(records['INGR_UBIQUINOL'])['is_complete'] is False
+
+
+def test_elderberry_completed_synthesis_review_does_not_invent_generic_credit():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_ELDERBERRY']
+    contexts = {c['context_id']: c for c in record['study_contexts']}
+    reviewed = contexts.get('ingr_elderberry_30670267_reviewed_synthesis')
+    assert reviewed is not None
+    assert reviewed['review_status'] == 'clinician_approved'  # compatibility enum; agent review
+    assert reviewed['scoring_eligible'] is False
+    assert validate_ingredient_context(reviewed, require_complete_review=True) == []
+    assert 'Codex' in reviewed['clinical_review']['reviewer']
+    assert record['effect_direction'] == 'mixed'
+    assert record['endpoint_relevance_tags'] == []
+    assert 'immune response ↑' not in record['key_endpoints']
+    assert record['health_goals_supported'] == ['Immune Support']
+    assert contexts['ingr_elderberry_33827515_scoped_source']['clinical_review']['reviewer'] == 'Dr. Pham'
+    assert not er.clinical_record_sources_eligible(record)
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert reviewed['trial_family'] == 'elderberry_respiratory_trials_1995_2016'
+    assert reviewed['dose']['values'] == []
+    assert '176' in reviewed['population']['description'] and '180' in reviewed['population']['description']
+    assert 'Cochrane/GRADE review' not in ' '.join(reviewed['limitations'])
+
+
+def test_taurine_integrity_review_preserves_hold_without_inferred_longevity_or_pool_contamination():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    record = reviewed_entries()['INGR_TAURINE']
+    text = record['notes'] + ' ' + record['notable_studies']
+    assert '28118062' in text and '41943494' in text
+    assert '2026-04-06' in text
+    assert 'not contribution to any particular pooled estimate' in text
+    assert 'Healthy Aging/Longevity' not in record['health_goals_supported']
+    assert not {'focus_memory', 'digestive_health'} & set(record['endpoint_relevance_tags'])
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['study_contexts'] == []
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert {ref['pmid'] for ref in record['references_structured']} == {'32871172', '41275513'}
+    assert not er.resolve_evidence_for_canonical('taurine', name='Taurine').points_eligible
+
+
+def _glutamine_scoring_product(name='L-Glutamine', claim='', amount=500):
+    row = {'name': name, 'raw_source_text': name, 'standard_name': 'L-Glutamine',
+           'canonical_id': 'l_glutamine', 'mapped': True, 'bio_score': 11,
+           'matched_form': 'l-glutamine powder' if name == 'L-Glutamine' else name,
+           'quantity': amount, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    return {'product_name': claim or name, 'status': 'active', 'form_factor': 'capsule',
+            'activeIngredients': [row],
+            'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+
+
+@pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
+def test_approved_glutamine_context_earns_claim_independent_credit_while_other_review_stays_open(claim):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries().get('INGR_L_GLUTAMINE')
+    assert record is not None
+    assert record['effect_direction'] == 'positive_moderate'
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
+    assert context['dose']['values'] == [15]
+    assert context['dose']['unit'] == 'g'
+    assert context['dose']['duration_days'] == 56
+    assert 'enteric infection' in context['population']['description'].lower()
+    assert 'increased intestinal permeability' in context['population']['description'].lower()
+    assert not assess_clinical_source_review(record)['is_complete']
+    artifact = build_scored_artifact(_glutamine_scoring_product(claim=claim))
+    assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+    assert artifact['quality_assessment_status'] == 'partial'
+    result = score_evidence(_glutamine_scoring_product(claim=claim), apply_primary_floor=True)
+    receipt = next(r for r in result['metadata']['contributing_record_assessments']
+                   if r['id'] == 'INGR_L_GLUTAMINE')
+    assert {str(r['pmid']) for r in receipt['source_references']} == {'30108163'}
+    assert receipt['source_review']['is_complete'] is False
+
+
+@pytest.mark.parametrize('name', ['N-Acetyl-L-Glutamine', 'Sustamine L-Alanyl-L-Glutamine',
+                                  'Glutamine Complex', 'D-Glutamine', 'L-Glutamine Hydrochloride',
+                                  'L-Glutamine HCl', 'L-Glutamine Ethyl Ester', 'Glutamine AKG', 'Glutamine Peptide'])
+def test_glutamine_derivatives_do_not_borrow_trial_or_finish_their_pending_research(name):
+    product = _glutamine_scoring_product(name=name)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+    assert artifact['quality_assessment_status'] == 'partial'
+
+
+def test_glutamine_interpretation_needs_exact_verified_selected_context():
+    from scoring_v4.modules.generic_evidence import _entry_raw_points, resolved_clinical_matches
+    product = _glutamine_scoring_product()
+    matches = resolved_clinical_matches(product, owner_scoped=True, assess_amount=False)[0]
+    selected = next((r for r in matches if r.get('id') == 'INGR_L_GLUTAMINE'), None)
+    assert selected is not None
+    assert selected['effect_direction'] == 'positive_moderate'
+    assert _entry_raw_points(selected) > 0
+    forged = copy.deepcopy(selected)
+    forged['applicability_assessment']['population_applicability']['context_ids'] = ['different_context']
+    assert _entry_raw_points(forged) == 0
+    unscoped = {k:v for k,v in selected.items() if k != 'applicability_assessment'}
+    assert _entry_raw_points(unscoped) == 0
+    assert _entry_raw_points({**selected, 'id':'OTHER_RECORD', 'source_data':'backed_clinical_studies:OTHER_RECORD'}) == 0
+    from scoring_v4.modules.generic_evidence import EFFECT_DIRECTION_MULTIPLIERS
+    assert 'positive_moderate' not in EFFECT_DIRECTION_MULTIPLIERS
+
+
+def test_pending_source_context_can_retain_unknown_facts_without_inventing_a_regimen():
+    from clinical_evidence_schema import validate_ingredient_context
+    context = {'context_schema_version':'1.1.0', 'context_id':'unread_source',
+               'components':['INGR_L_GLUTAMINE'], 'source_pmids':['42366260'],
+               'review_status':'source_verified_pending_clinical_review', 'scoring_eligible':False,
+               'clinical_review':{'reviewer':'Codex source inventory', 'reviewed_at':'2026-11-06',
+                                  'scope':'identity_dose_outcome_applicability'},
+               'dose':{'source_provenance':{'pmid':'42366260',
+                      'source_url':'https://pubmed.ncbi.nlm.nih.gov/42366260/',
+                      'location':'Bibliographic identity/abstract; full-methods qualification pending'}},
+               'limitations':['Preparation, route-specific outcomes and regimen remain unqualified.']}
+    assert validate_ingredient_context(context) == []
+    assert 'review.approval_required' in validate_ingredient_context(context, require_complete_review=True)
+    forged = {**context, 'scoring_eligible':True}
+    assert validate_ingredient_context(forged)
+    asserted = {**context, 'dose':{**context['dose'], 'values':[15000]}}
+    assert validate_ingredient_context(asserted)
+
+
+def test_glutamine_older_women_review_finishes_without_borrowing_ibs_credit():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_review_finished
+    from clinical_applicability import qualifying_purpose_outcomes
+    record = reviewed_entries()['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['33809996'])
+    assert context_review_finished(context)
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context['scoring_eligible'] is False
+    assert context['dose']['values'] == [10000]
+    assert context['dose']['duration_days'] == 30
+    assert {o['outcome_role'] for o in context['outcomes']} == {'within_group_change'}
+    assert qualifying_purpose_outcomes(context) == ([], False)
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert len([c for c in record['study_contexts'] if not context_review_finished(c)]) == 8
+
+
+def test_betaine_exercise_prose_keeps_positive_and_null_outcomes_scoped():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['PRECLIN_BETAINE_ANHYDROUS']
+    assert 'not general exercise or cardiovascular efficacy' in record['notes']
+    assert 'strength/power did not show superior between-group effects' in record['notes']
+    assert 'Fight Gone Bad repetitions positive' in record['notable_studies']
+    assert 'Wingate/body-composition null' in record['notable_studies']
+    assert 'FDA-approved' not in record['notes']
+    assert record['health_goals_supported'] == []
+    assert record['endpoint_relevance_tags'] == []
+    assert 'primary_outcome' not in record  # no single health category across these trials
+    assert record['category'] == 'sports_performance'
+    assert not any('homocysteine' in e.lower() for e in record['key_endpoints'])
+    assert 'historical' in record['effect_direction_rationale'].lower()
+    assert all(c['scoring_eligible'] is False for c in record['study_contexts'])
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
+def test_l_carnitine_finished_recovery_source_keeps_weight_and_preparation_holds():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()["INGR_L_CARNITINE"]
+    contexts = {c["context_id"]: c for c in record["study_contexts"]}
+    recovery = contexts["ingr_l_carnitine_32154768_recovery_source_review"]
+    assert validate_ingredient_context(recovery, require_complete_review=True) == []
+    assert recovery["scoring_eligible"] is False
+    assert any(o["direction"] == "positive" for o in recovery["outcomes"])
+    assert "Codex" in recovery["clinical_review"]["reviewer"]
+    weight = contexts["ingr_l_carnitine_32359762_weight_source_review"]
+    assert weight["review_status"] == "source_verified_pending_clinical_review"
+    assert weight["source_integrity"] == "none"
+    assert "36852455" in " ".join(weight["limitations"])
+    assert not assess_clinical_source_review(record)["is_complete"]
+    assert not er.clinical_record_sources_eligible(record)
+
+
+def test_glycine_finished_factual_sources_do_not_complete_unread_review_or_activate_grade():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()["INGR_GLYCINE"]
+    contexts = {pmid: c for c in record["study_contexts"] for pmid in c["source_pmids"]}
+    human = contexts["22529837"]
+    assert validate_ingredient_context(human, require_complete_review=True) == []
+    assert human["dose"]["values"] == [3000]
+    assert human["dose"]["duration_days"] == 3
+    assert human["scoring_eligible"] is False
+    assert contexts["25533534"]["scoring_eligible"] is False
+    assert contexts["37851316"]["review_status"] == "source_verified_pending_clinical_review"
+    assert record["scoring_eligible"] is False
+    assert not assess_clinical_source_review(record)["is_complete"]
+    assert not er.clinical_record_sources_eligible(record)
+
+
+def test_grape_seed_source_preserves_preparation_and_analysis_distinctions():
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()["INGR_GRAPE_SEED_EXTRACT"]
+    context = next(c for c in record["study_contexts"] if c["source_pmids"] == ["33671310"])
+    assert "15.0%" in context["identity"]["standardization"]
+    assert "Introduction" in context["identity"]["standardization"]
+    text = " ".join(o["name"]for o in context["outcomes"])
+    assert "-3.76" in text and "-2.98" in text and "0.0252" in text
+    assert context["scoring_eligible"] is False
+
+
+def test_plant_sterol_completed_source_extractions_preserve_unread_synthesis():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()["INGR_PLANT_STEROLS"]
+    contexts = {pmid: c for c in record["study_contexts"]for pmid in c["source_pmids"]}
+    for pmid in ["24144075", "24287284"]:
+        assert validate_ingredient_context(contexts[pmid], require_complete_review=True) == []
+        assert contexts[pmid]["scoring_eligible"] is False
+        assert "Codex" in contexts[pmid]["clinical_review"]["reviewer"]
+    assert contexts["37739728"]["review_status"] == "source_verified_pending_clinical_review"
+    assert "identity_scope" not in contexts["37739728"]
+    assert not assess_clinical_source_review(record)["is_complete"]
+    assert not er.clinical_record_sources_eligible(record)

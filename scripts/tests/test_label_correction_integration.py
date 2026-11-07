@@ -1251,3 +1251,24 @@ def test_verified_identity_correction_cannot_authorize_stale_or_forged_export(mu
     elif mutation == "missing_unii": active["source_correction"].pop("original_unii_code")
     elif mutation == "duplicate": enriched["activeIngredients"].append(dict(active))
     assert _verified_corrected_source_label(enriched, row, source) is None
+
+
+@pytest.mark.parametrize("pid", [252635, 254271, 254272, 254273])
+def test_bulk_cystine_source_identity_is_corrected_without_borrowed_chemistry(normalizer, pid):
+    raw = _make_raw_product(pid, [])
+    raw["fullName"] = "L-Cystine"
+    raw["ingredientRows"] = [{"name": "Alpha-Glucan Oligosaccharide",
+        "category": "complex carbohydrate", "ingredientGroup": "Alpha Glucans",
+        "uniiCode": "S95658MI3W", "quantity": [{"quantity": 500, "unit": "mg"}],
+        "forms": [], "nestedRows": []}]
+    import copy
+    row = normalizer.normalize_product(copy.deepcopy(raw))["activeIngredients"][0]
+    assert row["name"] == "L-Cystine"
+    assert row["canonical_id"] == "l_cystine"
+    assert row["uniiCode"] is None
+    assert (row["quantity"], row["unit"]) == (500, "mg")
+    assert row["source_correction"]["original_ingredient_text"] == "Alpha-Glucan Oligosaccharide"
+    raw["id"] = 999999999
+    control = normalizer.normalize_product(raw)["activeIngredients"][0]
+    assert control["name"] == "Alpha-Glucan Oligosaccharide"
+    assert control["uniiCode"] == "S95658MI3W"

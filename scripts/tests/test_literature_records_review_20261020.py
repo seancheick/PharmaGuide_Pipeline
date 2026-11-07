@@ -78,7 +78,6 @@ def test_effect_direction_holds_only_an_observed_effect(records):
 
 # Rows whose PMID is a different paper (review, in-vitro or animal study) than the trial recorded.
 NO_VERIFIED_TRIAL = {
-    "l_carnosine": "20091069",              # beta-alanine review
     "l_phenylalanine": "37629744",          # Parkinson's depression review
     "docosapentaenoic_acid_dpa": "30716358",  # narrative review
     "dimethyl_glycine": "34823458",         # DMG-in-autism review
@@ -117,7 +116,10 @@ def test_broccoli_cites_the_sprout_trial_it_cannot_inherit(records):
 
 @pytest.mark.parametrize("cid", ["l_carnosine", "l_phenylalanine"])
 def test_a_wrong_paper_row_is_removed(records, cid):
-    assert records[cid]["qualifying_human_studies"] == []
+    wrong = {"l_carnosine": "20091069", "l_phenylalanine": "37629744"}[cid]
+    assert wrong not in {s["pmid"]for s in records[cid]["qualifying_human_studies"]}
+    if cid == "l_phenylalanine":
+        assert records[cid]["qualifying_human_studies"] == []
 
 
 # Evidence for one preparation credited to another: combination, food, beverage, topical,
@@ -574,3 +576,47 @@ def test_real_dream_release_completed_dose_review_preserves_evidence_and_safety(
     for pillar in ['formulation', 'evidence', 'transparency', 'verification', 'safety_hygiene']:
         assert before['quality_pillars_v4'][pillar]['score'] == after['quality_pillars_v4'][pillar]['score']
     assert before['_v4_safety_gate'] == after['_v4_safety_gate']
+
+
+def test_blueberry_review_retains_its_stabilized_extract_arm_without_generic_transfer(records):
+    record = records['blueberry']
+    decision = record['applicability_decision']
+    assert 'extracts were not studied' not in json.dumps(record)
+    assert 'ThinkBlue' in decision
+    assert all(term in decision for term in ['100 mg', '10 mg', '1 mg', 'L-cysteine', 'L-glutathione'])
+    assert '29882843' in decision  # primary Table 2, not a second independent trial
+    assert 'not evidence of equivalence' in decision
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['studied_dose_exposure'] == {}
+    assert record['reference_semantics']['reference_type'] == 'no_benchmark'
+    assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+    assert [study['pmid'] for study in record['qualifying_human_studies']] == ['30999017']
+    from dose_assessment import verified_reference_citations
+    assert verified_reference_citations(record), 'Factual source updates must retain qualified neutral Dose'
+
+
+def test_glutamine_source_facts_distinguish_completers_primary_outcome_and_tolerability(records):
+    record = records['l_glutamine']
+    efficacy = _study(record, '30108163')
+    tolerability = _study(record, '32992440')
+    assert efficacy['sample_size'] == 106  # analyzed completers, not all randomized participants
+    assert '115 randomized' in efficacy['outcome'] and '106 completers' in efficacy['outcome']
+    assert '43/54' in efficacy['outcome'] and '3/52' in efficacy['outcome']
+    assert 'post-infectious IBS-D' in efficacy['outcome']
+    assert 'without a zero-glutamine placebo' in tolerability['outcome']
+    assert 'more GI symptoms' in tolerability['outcome']
+    assert efficacy['effect_direction'] == 'positive_moderate'  # no invented numerical mapping
+    assert tolerability['effect_direction'] == 'neutral'  # retained source value, not a null efficacy trial
+    assert record['applicability_status'] == 'applicability_unestablished'
+    assert record['effect_direction'] is None
+
+
+def test_bounded_carnosine_sources_do_not_reinstate_beta_alanine_or_establish_generic_efficacy(records):
+    record = records["l_carnosine"]
+    studies = {s["pmid"]: s for s in record["qualifying_human_studies"]}
+    assert set(studies) == {"39919936", "39599686", "34174842"}
+    assert record["effect_direction"] is None
+    assert record["applicability_status"] == "applicability_unestablished"
+    assert "N-acetyl" in record["material_form"]
+    assert "absolute" in str(studies["34174842"]).lower()
+    assert "percent" in str(studies["34174842"]).lower()

@@ -654,6 +654,10 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
     valid_confidence = _load_vocab_ids(
         "confidence_tier_vocab.json", "confidence_tiers"
     )
+    from scoring_v4.quality_score_config import config
+    from probiotic_measurements import context_review_finished
+    interpretations = config()["evidence_magnitudes"]["generic"].get(
+        "context_effect_direction_interpretations", [])
 
     for i, e in enumerate(raw):
         if not isinstance(e, dict):
@@ -675,7 +679,20 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
         if "category" in e and valid_clinical_indication:
             _check_enum(findings, file, e, i, "category", valid_clinical_indication)
         if "effect_direction" in e and valid_effect_direction:
-            _check_enum(findings, file, e, i, "effect_direction", valid_effect_direction)
+            # Preserve a qualified observed label without extending the legacy
+            # multiplier vocabulary. Only the central scorer interprets it.
+            scoped_labels = {
+                rule["observed_effect_direction"] for rule in interpretations
+                if rule["record_id"] == e.get("id") and any(
+                    context.get("context_id") == rule["context_id"]
+                    and set(context.get("source_pmids") or []) == set(rule["source_pmids"])
+                    and context_review_finished(context)
+                    and clinical_record_sources_eligible(
+                        e, context=context, source_pmids=rule["source_pmids"])
+                    for context in e.get("study_contexts") or []
+                )
+            }
+            _check_enum(findings, file, e, i, "effect_direction", valid_effect_direction | scoped_labels)
         if "effect_direction_confidence" in e and valid_confidence:
             _check_enum(findings, file, e, i, "effect_direction_confidence", valid_confidence)
         source_hold = not clinical_record_sources_eligible(e)
