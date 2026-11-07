@@ -23478,14 +23478,14 @@
         "Fight Gone Bad repetitions in trained men; Wingate power and body-composition treatment contrasts null (PMID 37409757)"
       ],
       "health_goals_supported": [],
-      "notes": "The two earlier declared exercise RCTs report preparation- and outcome-specific findings, not general exercise or cardiovascular efficacy. PMID 30064450 studied BetaPower 2.5 g/day in untrained young women undertaking resistance training: body-fat outcomes improved, while strength/power did not show superior between-group effects. PMID 37409757 studied Medicaline capsules in trained men: Fight Gone Bad repetitions improved, while Wingate power/body composition did not. Those two contexts remain approved non-scoring. The 2024 meta-analysis lower-body-strength question remains under source/method reconciliation; neither a generic credit conclusion nor a categorical no-efficacy conclusion is established by this note. PMID 36501070 is additionally recorded as a completed bounded non-credit primary-source review: parallel 9 BET/9 placebo, VPX 6 g/day for 14 days, day 12 one-leg 1 RM and subsequent exercise-repetition supplement comparisons null; within-participant leg/exercise conditions are not supplement-period crossover. This additional source does not resolve the signed pooled lower-body-strength hold.",
+      "notes": "The two earlier declared exercise RCTs report preparation- and outcome-specific findings, not general exercise or cardiovascular efficacy. PMID 30064450 studied BetaPower 2.5 g/day in untrained young women undertaking resistance training: body-fat outcomes improved, while strength/power did not show superior between-group effects. PMID 37409757 studied Medicaline capsules in trained men: Fight Gone Bad repetitions improved, while Wingate power/body composition did not. Those two contexts remain approved non-scoring. The 2024 meta-analysis lower-body-strength question remains under source/method reconciliation; neither a generic credit conclusion nor a categorical no-efficacy conclusion is established by this note. PMID 36501070 is additionally recorded as a completed bounded non-credit primary-source review: parallel 9 BET/9 placebo, VPX 6 g/day for 14 days, day 12 one-leg 1 RM and subsequent exercise-repetition supplement comparisons null; within-participant leg/exercise conditions are not supplement-period crossover. This additional source does not resolve the signed pooled lower-body-strength hold. PMID 36009767 remains valid human intervention research. Its published allocation description does not establish randomization, so the bounded completed review excludes unsupported RCT qualification and causal transfer only; it does not reject the study or infer no possible efficacy. The signed pooled-method hold remains open.",
       "study_type": "rct_multiple",
       "published_studies": [
         "RCT",
         "meta-analysis"
       ],
       "last_updated": "2026-11-06",
-      "notable_studies": "PMID 30064450: 23 young women completed; BetaPower 2.5 g/day with supervised resistance training; primary body-fat percentage surrogate positive, secondary squat/bench 1 RM and power null between groups. PMID 37409757: 43 male recreational CrossFit practitioners; Medicaline capsules 2.5 or 5 g/day for 21-day crossover periods; Fight Gone Bad repetitions positive, Wingate/body-composition null, and hormone findings mixed. Neither of those trials establishes homocysteine reduction, cardiovascular-event prevention or a generic energy benefit. PMID 39514262 is retained in the private source-review packet with a fragile positive lower-body pooled signal and unresolved primary-source/method discrepancies; it is not yet a new credit-bearing record. PMID 36501070: 18 men, parallel 9/9, VPX 6 g/day for 14 days; day 12 one-leg 1 RM and later total-repetition supplement contrasts null; B-vitamin complex in 16/18. No generic efficacy or preparation equivalence follows.",
+      "notable_studies": "PMID 30064450: 23 young women completed; BetaPower 2.5 g/day with supervised resistance training; primary body-fat percentage surrogate positive, secondary squat/bench 1 RM and power null between groups. PMID 37409757: 43 male recreational CrossFit practitioners; Medicaline capsules 2.5 or 5 g/day for 21-day crossover periods; Fight Gone Bad repetitions positive, Wingate/body-composition null, and hormone findings mixed. Neither of those trials establishes homocysteine reduction, cardiovascular-event prevention or a generic energy benefit. PMID 39514262 is retained in the private source-review packet with a fragile positive lower-body pooled signal and unresolved primary-source/method discrepancies; it is not yet a new credit-bearing record. PMID 36501070: 18 men, parallel 9/9, VPX 6 g/day for 14 days; day 12 one-leg 1 RM and later total-repetition supplement contrasts null; B-vitamin complex in 16/18. No generic efficacy or preparation equivalence follows. PMID 36009767: 5 g/day for six weeks; 16 performance participants (9/7) and 14 blood participants (7/7). Assignment was described according to baseline half-squat 1 RM, without established randomized allocation. Within-arm improvements and nonsignificant between-group comparisons remain distinct. The synthesis table lists 2.5 g/day; this discrepancy is preserved, without silently reanalyzing the pool.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -23565,6 +23565,22 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "europepmc_core_and_official_pmc_fulltext_agent_review"
+        },
+        {
+          "type": "pubmed",
+          "pmid": "36009767",
+          "title": "Effects of 6-Week Betaine Supplementation on Muscular Performance in Male Collegiate Athletes.",
+          "year": "2022",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36009767/",
+          "pmid_verified": true,
+          "topic_match_verified": true,
+          "verified_title": "Effects of 6-Week Betaine Supplementation on Muscular Performance in Male Collegiate Athletes.",
+          "verified_journal": "Biology",
+          "verified_year": "2022",
+          "verification_date": "2026-11-06",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "europe_pmc_med_api_and_official_pmc_full_text"
         }
       ],
       "external_ids": {
@@ -23574,7 +23590,7 @@
       "total_enrollment": 100,
       "registry_completed_trials_count": 46,
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Historical automated positive_strong/high fields are retained pending explicit qualification; they are not a current approved efficacy grade. The two earlier declared trials measured exercise/body-composition outcomes, not primary cardiovascular, energy, homocysteine, stress/mood, glycemic-control or recovery benefits. Their approved contexts remain non-scoring. The specific lower-body meta-analysis source/method hold remains unresolved. Legacy registry and enrollment counts are not independently qualified trial-family or efficacy-participant totals. Additional primary36501070 is a completed non-credit bounded source review; it neither requalifies historical positive_strong/high fields nor supplies the unresolved pooled-strength decision.",
+      "effect_direction_rationale": "Historical automated positive_strong/high fields are retained pending explicit qualification; they are not a current approved efficacy grade. The two earlier declared trials measured exercise/body-composition outcomes, not primary cardiovascular, energy, homocysteine, stress/mood, glycemic-control or recovery benefits. Their approved contexts remain non-scoring. The specific lower-body meta-analysis source/method hold remains unresolved. Legacy registry and enrollment counts are not independently qualified trial-family or efficacy-participant totals. Additional primary36501070 is a completed non-credit bounded source review; it neither requalifies historical positive_strong/high fields nor supplies the unresolved pooled-strength decision. The completed source-to-RCT transfer exclusion for PMID 36009767 preserves genuine research and uncertainty; it does not supply a new efficacy grade or resolve the pooled-strength hold.",
       "endpoint_relevance_tags": [],
       "study_contexts": [
         {
@@ -23840,6 +23856,38 @@
             "Meta-analysis 39514262 forest 18/18 reflects two legs from 9/9 men. Primary mixed ANOVA includes leg within participant. Combining legs requires undisclosed covariance handling; do not invent a correlation.",
             "B-vitamin coadministration and exercise-condition effects cannot become isolated betaine efficacy.",
             "Other endocrine, lactate and gene-expression outcomes are not qualified by this bounded lower-body review; no blanket all-endpoint null finding or new grade."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_betaine_anhydrous_36009767_rct_transfer_scope",
+          "components": [
+            "PRECLIN_BETAINE_ANHYDROUS"
+          ],
+          "source_pmids": [
+            "36009767"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root; independently reviewed by Codex /root/scientific_review; not clinician review",
+            "reviewed_at": "2026-11-06",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Source identity and official primary full content verified by Codex /root. The exact bounded proposal was independently reviewed and approved by Codex /root/scientific_review on 2026-11-06 under the existing source-transfer exclusion policy. Agent research, not clinician review. This decision rejects unsupported RCT qualification and causal credit transfer only; it does not reject the publication, genuine human research or all possible efficacy, and it does not establish absent randomization or a Dose benchmark."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "36009767",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9404903/",
+              "location": "Abstract; Methods 2.1 participants/allocation, 2.2 and 2.7 regimen; Results performance and blood comparisons. Official primary full text and live MED API identity."
+            }
+          },
+          "limitations": [
+            "Valid human intervention research is retained. Sixteen male collegiate athletes completed performance assessments (9 betaine/7 placebo); blood results used 14 participants (7/7). These are different analysis populations, not 20 efficacy completers.",
+            "The primary reports assignment according to baseline half-squat 1 RM and does not establish a random allocation procedure. Randomization is unverified, not proven absent. This source cannot supply affirmative direct-RCT qualification on that reporting basis. No observational or uncontrolled role is invented.",
+            "The studied regimen was 5 g/day for six weeks; the synthesis table lists 2.5 g/day. Preserve the source discrepancy rather than silently repairing or reanalyzing the published pool. No general Dose benchmark or lower-dose equivalence follows.",
+            "Reported within-arm improvements are retained as within-arm findings. Between-group comparisons were not statistically significant; neither a causal betaine benefit nor proof of no possible efficacy follows from this bounded review.",
+            "This is only a source-to-RCT/affirmative-transfer exclusion. Other source reviews, pooled-method questions and the signed parent strength hold remain open. The genuine human study and its scientific provenance remain available."
           ]
         }
       ]
