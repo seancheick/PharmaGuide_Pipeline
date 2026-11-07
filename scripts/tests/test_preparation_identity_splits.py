@@ -89,6 +89,7 @@ def _hits(enriched, name):
 @pytest.mark.parametrize("name,expected", [
     ("Coconut Fruit Water, Powder", "coconut_water"),
     ("Coconut Water Powder", "coconut_water"),
+    ("Tender Coconut Water Solids", "coconut_water"),
     ("Coconut MCT Oil", "mct_oil"),
     ("MCT oil C8/C10", "mct_oil"),
 ])
@@ -109,6 +110,32 @@ def test_unspecified_coconut_does_not_establish_fractionated_mct_oil(pipeline):
     active = next(r for r in enriched["activeIngredients"] if r["name"] == "Coconut")
     assert active.get("canonical_id") != "mct_oil"
     assert active["raw_source_text"] == "Coconut"
+
+
+@pytest.mark.parametrize("unii", [None, "3RT3536DHY"])
+def test_active_whole_coconut_is_not_an_inactive_descriptor_or_iron_product(pipeline, unii):
+    whole = _raw_row(2, "organic raw whole Coconut", "Coconut", quantity=28, unit="Gram(s)")
+    whole["uniiCode"] = unii
+    iron = _raw_row(1, "Iron", "Iron", category="mineral", quantity=1, unit="mg")
+    iron["quantity"][0]["operator"] = "<"
+    raw = _raw_product(990106, [iron, whole])
+    raw['fullName'] = 'Raw Coconut'
+    enriched = pipeline(raw)
+    active = next(r for r in enriched['activeIngredients'] if 'whole Coconut' in r['name'])
+    assert active.get('canonical_id') not in {'mct_oil', 'PII_COCONUT_SOURCE_DESCRIPTOR'}
+    assert active['quantity'] == 28 and active['unit'] == 'Gram(s)'
+    from scoring_input_contract import get_classification_ingredients
+    subjects = get_classification_ingredients(enriched).rows
+    assert any(r.get('raw_source_path') == active['raw_source_path'] for r in subjects)
+    assert enriched['supplement_type']['type'] == 'general_supplement'
+
+
+def test_plain_inactive_coconut_retains_its_source_disclosure_identity(pipeline):
+    raw = _raw_product(990107, [_raw_row(1, 'Iron', 'Iron', category='mineral', quantity=1, unit='mg')])
+    raw['otheringredients'] = {'text': 'Coconut', 'ingredients': [{'name': 'Coconut'}]}
+    enriched = pipeline(raw)
+    assert any(r.get('canonical_id') == 'PII_COCONUT_SOURCE_DESCRIPTOR'
+               for r in enriched['inactiveIngredients'])
 
 
 @pytest.mark.parametrize("name,group,expected,old_rule", [
