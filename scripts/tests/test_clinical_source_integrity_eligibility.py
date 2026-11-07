@@ -700,6 +700,54 @@ def _glutamine_scoring_product(name='L-Glutamine', claim='', amount=500):
             'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
 
 
+def _tyrosine_scoring_product(name='L-Tyrosine', claim=''):
+    row = {'name': name, 'raw_source_text': name, 'standard_name': 'L-Tyrosine',
+           'canonical_id': 'l_tyrosine', 'mapped': True, 'bio_score': 10,
+           'matched_form': 'l-tyrosine', 'quantity': 500, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    return {'product_name': claim or name, 'status': 'active', 'form_factor': 'capsule',
+            'activeIngredients': [row],
+            'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+
+
+@pytest.mark.parametrize('claim', ['', 'L-Tyrosine Mood Support', 'L-Tyrosine Muscle Recovery'])
+def test_tyrosine_acute_research_credit_keeps_unfinished_sources_open(claim):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from dose_assessment import positive_clinical_benchmark
+    record = reviewed_entries().get('INGR_L_TYROSINE')
+    assert record is not None
+    assert record['study_type'] == 'rct_single' and record['effect_direction'] == 'mixed'
+    assert record['published_studies_count'] == 1 and record['total_enrollment'] == 22
+    assert {p for c in record['study_contexts'] for p in c['source_pmids']} == {
+        '24433977', '25598314', '36548401', '39820592', '29980424', '38290812',
+        '26424423', '10230711',
+    }
+    assert not assess_clinical_source_review(record)['is_complete']
+    context = next(c for c in record['study_contexts'] if c.get('scoring_eligible'))
+    assert context['source_pmids'] == ['24433977']
+    assert context['dose']['values'] == [2000]
+    assert {o['direction'] for o in context['outcomes']} == {'positive', 'null'}
+    assert all(o['hierarchy'] == 'not_reported' for o in context['outcomes'])
+    assert 'min_clinical_dose' not in record
+    product = _tyrosine_scoring_product(claim=claim)
+    assert positive_clinical_benchmark(product, product['activeIngredients'][0]) is None
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+    assert artifact['quality_assessment_status'] == 'partial'
+    result = score_evidence(product)
+    receipt = next(r for r in result['metadata']['contributing_record_assessments']
+                   if r['id'] == 'INGR_L_TYROSINE')
+    assert {str(r['pmid']) for r in receipt['source_references']} == {'24433977'}
+    assert receipt['source_review']['is_complete'] is False
+
+
+@pytest.mark.parametrize('name', ['Tyrosine', 'D-Tyrosine', 'DL-Tyrosine',
+                                  'D,L-Tyrosine', 'N-Acetyl-L-Tyrosine', 'NALT'])
+def test_tyrosine_derivatives_and_unspecified_stereochemistry_do_not_borrow_source(name):
+    artifact = build_scored_artifact(_tyrosine_scoring_product(name=name))
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+
+
 @pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
 def test_approved_glutamine_context_earns_claim_independent_credit_while_other_review_stays_open(claim):
     from clinical_applicability import reviewed_entries, assess_clinical_source_review

@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-06",
+    "last_updated": "2026-11-07",
     "total_entries": 845,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
@@ -833,12 +833,110 @@
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "No effects on mood"
           }
+        },
+        {
+          "pmid": "24433977",
+          "title": "Eating to stop: tyrosine supplementation enhances inhibitory control but not response execution.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 22,
+          "dose": "Single oral 2 g L-tyrosine powder (Bulkpowders) in 400 mL orange juice, versus 2 g cellulose in the same carrier; overnight fasting; assessment one hour after ingestion.",
+          "duration": "Two acute crossover sessions, separated by 3–7 days.",
+          "outcome": "Twenty-two healthy women (mean age 20.4). Stop-signal inhibition latency was shorter with tyrosine (214 versus 228 ms; p<0.05), while go-response latency was not different (401 versus 397 ms). No designated clinical primary-outcome hierarchy is established. This is an acute laboratory task finding, not evidence of chronic mood or general daily cognitive benefit. No N-acetyl-L-tyrosine, protein-bound or blend equivalence is inferred. No minimum effective dose or general catalog Dose benchmark is assigned.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Eating to stop: tyrosine supplementation enhances inhibitory control but not response execution.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://magistralbr.caldic.com/storage/product-files/1046511437.pdf",
+            "verified_at": "2026-11-06",
+            "verified_by": "Codex /root/elderberry_review source reading,2026-11-06; independent Codex /root/glycine_review content double-check,2026-11-06. Agent reviews,not clinician review. Full Methods/Results content basis; mirror access is not publisherOA."
+          }
+        },
+        {
+          "pmid": "25598314",
+          "title": "Tyrosine promotes cognitive flexibility: evidence from proactive vs. reactive control during task switching performance.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 22,
+          "dose": "Single oral 2 g L-tyrosine powder (Bulkpowders) or 2 g cellulose in 400 mL orange juice; overnight fasting; an apple permitted after 30 minutes; assessment one hour after ingestion.",
+          "duration": "Two acute crossover sessions, separated by 3–7 days.",
+          "outcome": "Twenty-two female Leiden undergraduates, aged 17–23 (mean 19.3), so the sample is not exclusively 18 or older. Switching costs improved at the long 1,200 ms preparation interval (p=0.009), but not at the short 150 ms interval (p=0.927); the three-way interaction was p=0.047. Error rates, mood and blood pressure did not show tyrosine effects. This is not an all-interval or clinical cognitive benefit. No N-acetyl-L-tyrosine, protein-bound or blend equivalence is inferred. No minimum effective dose or general catalog Dose benchmark is assigned.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Tyrosine promotes cognitive flexibility: evidence from proactive vs. reactive control during task switching performance.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://assets.zyrosite.com/mjE00v40gJI3bQMZ/tyrosine-promotes-cognitive-flexibility-YX4GGQbw3EuepODa.pdf",
+            "verified_at": "2026-11-06",
+            "verified_by": "Codex /root/elderberry_review source reading,2026-11-06; independent Codex /root/glycine_review content double-check,2026-11-06. Agent reviews,not clinician review. Full Methods/Results content basis; mirror access is not publisherOA."
+          }
+        },
+        {
+          "pmid": "36548401",
+          "title": "The catecholamine precursor Tyrosine reduces autonomic arousal and decreases decision thresholds in reinforcement learning and temporal discounting.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 30,
+          "dose": "Single oral 2 g L-tyrosine supplied by The Hut.com, dissolved in 200 mL orange juice, versus 2 g cellulose in the same carrier; cognitive assessment began 75 minutes later. The administration passage does not explicitly specify the active physical powder form.",
+          "duration": "Two acute crossover sessions, separated by 7–28 days.",
+          "outcome": "Thirty healthy men were recruited; two were excluded before analysis and 28 were analyzed. Reaction times were faster, while first-stage stay probability showed no condition effect. Model-based control and temporal-discounting findings depended on the specified analyses or models. Multiple model parameters, a small male-only sample, and no direct central dopamine/norepinephrine measurement limit interpretation. No general clinical benefit is established. No N-acetyl-L-tyrosine, protein-bound or blend equivalence is inferred. No minimum effective dose or general catalog Dose benchmark is assigned.",
+          "effect_direction": "mixed",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The catecholamine precursor Tyrosine reduces autonomic arousal and decreases decision thresholds in reinforcement learning and temporal discounting.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9822114/",
+            "verified_at": "2026-11-06",
+            "verified_by": "Codex /root/elderberry_review source reading,2026-11-06; independent Codex /root/glycine_review content double-check,2026-11-06. Agent reviews,not clinician review. Full Methods/Results content basis; mirror access is not publisherOA."
+          }
+        },
+        {
+          "pmid": "39820592",
+          "title": "Tyrosine supplementation is ineffective in facilitating soccer players' physical and cognitive performance during high-intensity intermittent exercise in hot conditions.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 8,
+          "dose": "A single 150 mg/kg tyrosine supplement dose added to 250 mL sugar-free squash one hour before exercise, versus squash alone. Individual absolute amounts, supplier, physical starting form and stereochemical assay are not reported here.",
+          "duration": "Two acute crossover conditions, separated by seven days.",
+          "outcome": "Eight trained male student soccer players exercised at 32°C and 50% relative humidity. Peak power (condition p=0.486) and decision accuracy (condition p=0.627) did not improve; performance interactions and perceptual comparisons were also nonsignificant. A metanephrine interaction is not a performance benefit. Part A of the wider project used the same participants and is not independent replication. The small, pandemic-limited sample does not establish equivalence or universal ineffectiveness. No N-acetyl-L-tyrosine, protein-bound or blend equivalence is inferred. No minimum effective dose or general catalog Dose benchmark is assigned.",
+          "effect_direction": "null",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Tyrosine supplementation is ineffective in facilitating soccer players' physical and cognitive performance during high-intensity intermittent exercise in hot conditions.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737745/",
+            "verified_at": "2026-11-06",
+            "verified_by": "Codex /root/elderberry_review source reading,2026-11-06; independent Codex /root/glycine_review content double-check,2026-11-06. Agent reviews,not clinician review. Full Methods/Results content basis; mirror access is not publisherOA."
+          }
+        },
+        {
+          "pmid": "38290812",
+          "title": "The effect of tyrosine supplementation on whole-body endurance performance in physically active population: A systematic review and meta-analysis including GRADE qualification.",
+          "study_type": "systematic_review_meta",
+          "effect_direction": "null",
+          "dose": "Source tables describe multiple acute regimens, including 25 mg/kg, split or single 150 mg/kg exposures, 20 g in two 10 g doses, and 150/300/400 mg/kg dose conditions. Water, drinks and applesauce carriers differ. No single assigned regimen or general catalog Dose benchmark is established.",
+          "outcome": "The source reports no significant pooled whole-body endurance difference (SMD -0.01, 95% CI -0.32 to 0.29; p=0.93), with null TTE and ETT subgroup estimates. Eight papers yield ten comparisons; the three 2020 doses share one n=8 cohort. Table 2 cohort counts sum to 78; the forest totals 83 per condition after using a Sutton n=9 endpoint subset instead of Table 2 n=20 and repeating the three 2020 dose comparisons. These are different constructs, not verified unique enrollment or proof of an error; 83 per condition does not establish 166 independent participants. Endpoint subsets and shared-control/crossover covariance need reconciliation before pooled precision is qualified. The reported pooled null does not mean all constituent trials were null: the source table retains a positive 2011 TTE finding. The authors' moderate GRADE judgment is reported, not independently regraded. No universal ineffectiveness or cognitive-task conclusion follows.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "The effect of tyrosine supplementation on whole-body endurance performance in physically active population: A systematic review and meta-analysis including GRADE qualification.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://cris.unibo.it/retrieve/handle/11585/960349/85018984-e91d-4d40-8754-66442c023c51/Last%2Bsubmission%2Bversion%2BTyrosin%2BDalton.pdf",
+            "verified_at": "2026-11-07",
+            "verified_by": "Codex /root/tyrosine_completion accepted-manuscript content review; independent /root content check of Methods, Tables 2/4/5 and Figure 2 on 2026-11-07. Agent source reviews, not clinician review."
+          }
         }
       ],
       "effect_direction": "positive_weak",
-      "population_context": "Healthy adults under acute stress or cognitive demand (a military combat training course in the trial)",
+      "population_context": "Existing military combat/stress source plus distinct acute-task samples: 22 healthy women (24433977); 22 female undergraduates aged 17–23 (25598314); 30 men recruited and 28 analyzed (36548401); and eight male soccer players exercising in heat (39820592). These populations and conditions are not interchangeable.",
       "studied_dose_exposure": {},
-      "applicability_decision": "The military trial gave a protein-rich drink containing 2 g tyrosine, five daily doses, during a combat training course (21 cadets); a review concludes tyrosine helps cognition mainly in short-term stressful or demanding situations. No mg/kg threshold is stated by these sources, and daily chronic mood support is not established.",
+      "applicability_decision": "The military trial gave a protein-rich drink containing 2 g tyrosine, five daily doses, during a combat training course (21 cadets); a review concludes tyrosine helps cognition mainly in short-term stressful or demanding situations. No mg/kg threshold is stated by these sources, and daily chronic mood support is not established. Four additional independently checked source descriptions preserve acute positive and null task findings without assigning a new aggregate grade, clinical point value, dose threshold or eligibility decision. No acute-to-chronic, NALT or formula equivalence is established. The 39820592 source does not report supplier, physical starting form or stereochemical assay; 36548401 describes oral L-tyrosine in juice without explicitly naming an active powder form. Participant independence between the two Leiden papers is unproven; Part A of 39820592 uses the same cohort. Full Methods/dose for 29980424 remain unread. The official accepted full manuscript for 38290812 has now been read; source-listed eight-paper membership is extracted, but endpoint-subset and shared-comparison precision remain unresolved. Its reported null endurance estimates do not negate the separate acute cognitive findings. Factual source review does not establish whole-ingredient or product completion.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -1008,15 +1106,34 @@
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "Systematic literature searches up to January 2024 were carried out using electronic databases, including PubMed, Web of Science, and Scopus, to identify eligible RCTs assessing the effects of pomegranate on blood pressure as an outcome."
           }
+        },
+        {
+          "pmid": "40218993",
+          "title": "Effects of Pomegranate Extract on Inflammatory Markers and Cardiometabolic Risk Factors in Adults Aged 55-70 Years: A Randomised Controlled Parallel Trial.",
+          "study_type": "rct",
+          "sample_size": 86,
+          "dose": "740 mg/day (two 370 mg capsules) for 12 weeks. Euromed pomegranate extract: 36% punicalagins and 1.3% ellagic acid. Same-family Methods (39997528, corrected by 41440743) identify whole-fruit hydro-extraction. No juice, whole-fruit powder, POMx or Pomella equivalence is established.",
+          "duration": "12 weeks (84 days)",
+          "outcome": "Primary serum IL-6 treatment-by-time interaction p=0.02. Secondary SBP interaction p=0.04; 5.22±1.26 mmHg (SE) is the extract-arm within-group baseline-to-week-12 change, not a between-arm effect magnitude. DBP interaction p=0.3 was not significant. Other inflammatory/metabolic comparisons were mixed or null. Of 86 allocated participants (43 per arm), 76 completed; two partial follow-ups were reportedly included in analysis, and available-case denominators varied. NCT05588479; companion 39997528 and correction 41440743 belong to this one family, not independent confirmation. No cardiovascular-event prevention or general clinical benefit is established.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Effects of Pomegranate Extract on Inflammatory Markers and Cardiometabolic Risk Factors in Adults Aged 55-70 Years: A Randomised Controlled Parallel Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/40218993/",
+            "verified_at": "2026-11-07T04:26:05.711012+00:00",
+            "abstract_evidence_quote": "A significant interaction between treatment and time was observed for the IL-6 (p = 0.02)"
+          }
         }
       ],
       "effect_direction": "positive_weak",
-      "population_context": "Adults in 22 RCTs; larger systolic reductions when baseline SBP > 130 mmHg",
+      "population_context": "Adults in the existing 22-RCT synthesis; larger systolic reductions were reported when baseline SBP >130 mmHg. The separately reviewed Euromed extract trial enrolled adults aged 55–70 years with normal weight or overweight and excluded diagnosed chronic disease, obesity and medications affecting blood pressure, lipids or inflammation. Its source-specific population is not generalized to all products or adults.",
       "studied_dose_exposure": {},
-      "applicability_decision": "The meta-analysis includes human extract trials with heterogeneous systolic-pressure benefit; extract diastolic results were not statistically significant. Evidence does not establish a universal standardized-extract or punicalagin regimen.",
+      "applicability_decision": "Existing positive_weak literature classification is retained; source-specific qualification and scoring integration remain unfinished. PMID 40218993 tested Euromed extract at 740 mg/day for 12 weeks in adults aged 55–70 years. Same-family 39997528 Methods identify whole-fruit hydro-extraction; correction 41440743 changes that companion paper's punicalagin content from 75% to 36%, agreeing with the 36% punicalagins/1.3% ellagic acid reported in 40218993. The primary IL-6 interaction and secondary SBP interaction were positive; DBP interaction was not significant. The reported 5.22 mmHg SBP reduction is within the extract arm. These are surrogate outcomes, not cardiovascular-event prevention. No juice, whole-fruit powder, POMx or Pomella equivalence, universal extract regimen, efficacy minimum or safety limit is established. Full methods, preparation subgroups and trial-family membership for 38410857, 29173650, 25826143 and 34498307 remain unqualified. The previously stored claim that the meta-analysis extract subgroup had nonsignificant DBP is not established by the reviewed abstract and is not treated as a verified finding here. No signed IL-6-specific clinical lock was found in the inspected current owners/rulings; the earlier agent question does not create one. This factual source addition does not activate efficacy credit or finish ingredient/product assessment.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_by": "scripts/api_audit/verify_literature_records.py; bounded factual source 40218993 reviewed by Codex /root/glycine_review, independently checked by Codex /root/betaine_review, 2026-11-07. Whole-fruit/timing basis from same-family 39997528 Methods and corrected composition from 41440743; no independent replication or clinician attribution. Other source methods remain unfinished. Existing reference_citations is a separate 38410857-only Dose proof and does not verify this new Evidence source.",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
@@ -2058,7 +2175,6 @@
           "title": "Both a single dose and a 4-week daily regimen of medium-chain triglycerides boost certain aspects of cognitive function in young adults: A randomized controlled trial.",
           "study_type": "rct",
           "sample_size": 36,
-          "primary_endpoint": "inhibitory control after a single dose and working memory after the 4-week daily regimen",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -2067,18 +2183,18 @@
             "topic_match_verified": true,
             "retracted": false,
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/41443401/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "verified_at": "2026-11-07T05:27:03.091063+00:00",
             "abstract_evidence_quote": "In this randomized controlled trial, we evaluated whether acute and long-term effects of MCT on cognitive function on young individuals surpass those of long-chain triglycerides (LCT)."
           },
-          "dose": "12 g MCT",
-          "duration": "single-dose assessment and a 4-week daily regimen"
+          "dose": "Source states16.3mL Nisshin oil contains12gMCT,75%C8/25%C10;acute oil in oatmeal and daily breakfast oil,not pureC8/C12,capsules or a conversion-derived amount.",
+          "duration": "Acute75min assessment and4-week daily regimen in same participants;chronic testing>=1day after finaloil;women27±3days.",
+          "outcome": "Single-blind parallel trial,47 enrolled and36 protocol completers(18/arm;20men/16women),36 is the completer count,not an independently established randomized denominator. Acute reverse-Stroop interference favored MCT(P=.02);acute memory/n-back comparisons null. Four-week2-back match reaction time/variability favored MCT(P=.04/.02),but no-match errors favored olive oil(P=.048);other comparisons largely null. Same cohort supplies acute/chronic observations,not independent trials. No formal primary hierarchy inferred from power calculation on one major inhibitory-control outcome. One withdrawal for GI distress;other attrition includes sampling discomfort,infection,scheduling. Authors acknowledge multiplicity/Type-I risk without correction and power limits."
         },
         {
           "pmid": "25636220",
           "title": "Effects of medium-chain triglycerides on weight loss and body composition: a meta-analysis of randomized controlled trials.",
           "study_type": "systematic_review_meta",
           "sample_size": 749,
-          "primary_endpoint": "body weight and waist circumference reduction",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -2087,13 +2203,15 @@
             "topic_match_verified": true,
             "retracted": false,
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25636220/",
-            "verified_at": "2026-09-21T07:39:42.986936+00:00",
+            "verified_at": "2026-11-07T05:27:03.091063+00:00",
             "abstract_evidence_quote": "To conduct a systematic review and meta-analysis of randomized controlled trials comparing the effects of MCTs, specifically C8:0 and C10:0, to long-chain triglycerides (LCTs) on weight loss and body composition in adults."
-          }
+          },
+          "outcome": "C8/C10 dietary replacement for LCT,not generic additive retail-oil efficacy.21publications grouped into13trial families;modest pooled body-weight difference -0.51kg(95%CI -0.80to-0.23) and other body-composition findings;secondary lipid comparisons null. Structured MCT/LCT oils,food matrices,energy-control designs and cointerventions vary:three studies added phytosterols/stanols and one psyllium. Abstract-reported749 is retained;Results arithmetic239+250parallel+90crossover yields579,whereas table participant-column sum is638. These are unreconciled constructs,not verified unique enrollment or proof of an error. Multiple reports and crossover periods are not independent cohorts;primary-level arm/exposure/family reconciliation remains unfinished.",
+          "duration": "Included studies>3weeks;source Results27days–16weeks;no common assigned regimen."
         }
       ],
       "effect_direction": "positive_weak",
-      "population_context": "Young adults in the discrete 12 g MCT cognition trial; healthy adult dietary MCT-versus-LCT replacement trials in the weight/body-composition meta-analysis",
+      "population_context": "Source-specific36young-adult completers in the47-enrolled cognition trial;adult dietary MCT-versus-LCT replacement cohorts in the13-family weight review. Abstract749/Results579/table638 constructs remain unreconciled and are not asserted as verified unique participants.",
       "studied_dose_exposure": {
         "values": [
           12000
@@ -2101,11 +2219,11 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "The cognition trial tested a discrete 12 g MCT intervention with acute and four-week assessments. The weight/body-composition meta-analysis compared dietary MCT replacement for LCT and called for dose determination. Neither source establishes a universal 10 g/day minimum or a continuously effective 10–20 g/day window.",
+      "applicability_decision": "Retain limited,preparation- and outcome-specific human findings without activating a new grade or generic efficacy.41443401 used Nisshin75%C8/25%C10;the source states16.3mLoil contains12gMCT. Its acute reverse-Stroop and selected4-week n-back benefits coexist with null/opposing findings,multiplicity and attrition limits.25636220 concerns dietary LCT replacement with C8/C10-containing oils/foods,including structured MCT/LCT matrices,three phytosterol/stanol cointerventions and one psyllium context;family,arm/exposure and749/579/638denominator constructs require reconciliation. No pureC8,C12/coconut-oil,capsule or general dietary-addition equivalence;no universal minimum,continuous effective window or12g target. Positive-shadow processing/source applicability remains unfinished;these facts do not close products or erase independent holds.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex agent /root/betaine_review source-content review; independently checked by Codex agent /root/elderberry_review,not clinician review",
+        "verified_at": "2026-11-07T05:27:03.091063+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
