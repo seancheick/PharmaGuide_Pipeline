@@ -363,6 +363,21 @@ def test_pomegranate_corrected_extract_and_companion_are_one_trial_family(record
     assert record["studied_dose_exposure"] == {}
 
 
+def test_pomegranate_companion_keeps_secondary_positive_and_shared_family(records):
+    record = records['pomegranate']
+    study = _study(record, '39997528')
+    assert '36% punicalagins' in study['dose']
+    assert study['effect_direction'] == 'mixed'
+    assert 'WCST' in study['outcome'] and 'p=0.05' in study['outcome']
+    assert 'secondary' in study['outcome'] and 'IL-6' in study['outcome']
+    assert '86 enrolled' in study['outcome'] and '76 completed' in study['outcome']
+    assert 'not independent replication' in study['outcome']
+    assert 'sample_size' not in study
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['verification_provenance']['reference_citations']['source_ids'] == ['PMID:38410857']
+    assert record['studied_dose_exposure'] == {}
+
+
 def test_fucoxanthin_preserves_component_surrogate_without_weight_loss_transfer(records):
     record = records["fucoxanthin"]
     study = _study(record, "19840063")

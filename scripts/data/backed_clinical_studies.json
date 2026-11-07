@@ -48849,22 +48849,26 @@
           "source_pmids": [
             "26424423"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex source inventory; existing literature obligation preserved",
+            "reviewer": "Codex /root/tyrosine_completion primary-content review; independent source-content and existing-policy check by /root on 2026-11-07. Agent reviews, not clinician review.",
             "reviewed_at": "2026-11-07",
-            "scope": "identity_dose_outcome_applicability"
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Publisher-layout full review and live MED identity verified. Narrative synthesis and overlapping primary studies cannot count as an independently enrolled trial or support unqualified preparation/outcome transfer. Positive observations and qualified primary context retained."
           },
           "dose": {
             "source_provenance": {
               "pmid": "26424423",
-              "source_url": "https://pubmed.ncbi.nlm.nih.gov/26424423/",
-              "location": "Existing literature identity/abstract record retained; full source-to-preparation/outcome qualification remains open."
+              "source_url": "https://panixen-focus.com/wp-content/uploads/2025/08/1313159604.pdf",
+              "location": "Primaryreview pp50–55,Sections1,2.1–2.3,3andTable1;actualfull8pagePDFretainedwithchecksum."
             }
           },
           "limitations": [
-            "Prior positive source findings remain in the original literature record. A new qualified source cannot erase this independent review obligation or infer a completed negative."
+            "This narrative review is genuine research but not a separate direct RCT, systematic synthesis, independently enrolled cohort or pooled effect estimate. It cannot increase numerical trial depth or supply generic efficacy by itself.",
+            "Positive source observations remain in their actual scope; the completed24433977 primary context is unchanged. Review and constituent reports cannot be counted as independent replication.",
+            "This exclusion finishes only the review-to-unqualified-transfer decision; it is not a universal negative, source deletion, all-constituent individual verification, a general Dose benchmark or product-completion finding.",
+            "Actual unread29980424 source Methods and38290812 endpoint-subset/shared-comparison qualification remain separate open obligations."
           ]
         },
         {

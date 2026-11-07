@@ -807,6 +807,22 @@ def test_cadet_protein_drink_review_rejects_only_isolated_tyrosine_transfer():
     assert not assess_clinical_source_review(record)['is_complete']
 
 
+def test_tyrosine_narrative_review_is_finished_without_becoming_independent_trial():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from probiotic_measurements import context_review_finished
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['26424423'])
+    assert context['review_status'] == 'rejected_source'
+    assert context['scoring_eligible'] is False
+    assert context_review_finished(context)
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert record['published_studies_count'] == 1 and record['total_enrollment'] == 22
+    assert {p for c in record['study_contexts'] if not context_review_finished(c)
+            for p in c['source_pmids']} == {'29980424', '38290812'}
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
 @pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
 def test_approved_glutamine_context_earns_claim_independent_credit_while_other_review_stays_open(claim):
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
