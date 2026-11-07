@@ -867,3 +867,19 @@ def test_plant_sterol_completed_source_extractions_preserve_unread_synthesis():
     assert "identity_scope" not in contexts["37739728"]
     assert not assess_clinical_source_review(record)["is_complete"]
     assert not er.clinical_record_sources_eligible(record)
+
+
+def test_machek_finished_primary_review_cannot_clear_betaine_pool_hold():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_review_finished, clinical_review_provenance_valid
+    record = reviewed_entries()["PRECLIN_BETAINE_ANHYDROUS"]
+    contexts = [c for c in record["study_contexts"] if "36501070" in c["source_pmids"]]
+    assert len(contexts) == 1  # Legs/exercise conditions are not independent trial families.
+    context = contexts[0]
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context_review_finished(context)
+    assert clinical_review_provenance_valid(context)
+    assert context["scoring_eligible"] is False
+    assert not assess_clinical_source_review(record)["is_complete"]
+    assert not er.clinical_record_sources_eligible(record)
