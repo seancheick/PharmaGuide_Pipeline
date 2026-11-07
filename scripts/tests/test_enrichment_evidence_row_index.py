@@ -75,3 +75,17 @@ def test_quality_join_preserves_quantity_unknowns_and_original_order(discovery, 
     found = discovery(product, rows)
 
     assert [value for value in found[0] if value.startswith("prepared-")] == expected
+
+
+@pytest.mark.parametrize("ingredient_field", ["raw_source_text", "standardName"])
+@pytest.mark.parametrize("quality_field", ["raw_source_text", "standard_name"])
+def test_quality_join_matches_through_one_identity_field(discovery, ingredient_field, quality_field):
+    ingredient = {"name": "Unrelated printed name", ingredient_field: "Vitamin C"}
+    rows = [
+        {"name": "Unrelated quality name", quality_field: "Vitamin-C",
+         "matched_form": "prepared-only-match"},
+        {"name": "Unrelated control", "matched_form": "prepared-control"},
+    ]
+    found = discovery({"activeIngredients": [ingredient]}, rows)
+    assert len(found) == 1
+    assert [value for value in found[0] if value.startswith("prepared-")] == ["prepared-only-match"]

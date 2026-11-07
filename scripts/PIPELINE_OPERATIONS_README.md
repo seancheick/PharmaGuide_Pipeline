@@ -309,6 +309,19 @@ also update the local checkout. A rejected candidate is discarded, not
 restamped. Check the actual stage fingerprints before deciding whether only
 export assembly, rather than any pipeline stage, needs repeating.
 
+For an isolated catalog build that preserves both live output directories, use
+the existing candidate mode after the stage inputs are current:
+
+```bash
+bash scripts/rebuild_dashboard_snapshot.sh \
+  --candidate-only --candidate-root /absolute/new/candidate-directory
+```
+
+The parent directory must exist; choose a new absolute path outside the repository.
+Every snapshot gate still runs. This builds catalog candidates without replacing
+`scripts/dist` or `scripts/final_db_output`; it does not build or publish a new
+interaction DB, import app assets, or prove installed delivery.
+
 ### 2.5 Full release
 
 After a successful snapshot, the batch invokes:
@@ -449,6 +462,28 @@ report full completion. No cleanup is attempted on that path.
 Before Supabase, release runs the cleaner/enrichment/clinical/interaction/
 freshness/export/RDA/scoring-snapshot contracts. A failure there stops cloud
 and app publication.
+
+To run the complete local assembly and validation train without cloud uploads,
+interaction-asset publication, or app-bundle writes:
+
+A valid Flutter checkout and Supabase read access are still required for parity
+and catalog comparisons, even with these skip flags. Supply `--flutter-repo`
+for a nondefault checkout, and configure `SUPABASE_URL` and
+`SUPABASE_SERVICE_ROLE_KEY` before running. These checks can fail after local
+outputs have been replaced.
+
+```bash
+bash scripts/release_full.sh \
+  --skip-supabase --skip-flutter --skip-product-images
+```
+
+This can replace the local `scripts/dist` and `scripts/final_db_output` only
+after their normal build gates; preserve the required comparison baseline first.
+Keep live identity and citation checks enabled; leave `SKIP_LIVE_IDENTITY_GATES`
+unset for qualification. Publication-only checks may be
+skipped in this mode, so its successful exit does not establish publication,
+alert/signature qualification, or installed-app delivery. Use the applicable
+read-only owners for those checks before making such claims.
 
 Useful release options:
 
