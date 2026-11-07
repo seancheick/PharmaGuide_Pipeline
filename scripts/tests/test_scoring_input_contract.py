@@ -1846,10 +1846,17 @@ def test_derived_active_evidence_carries_its_clean_iqd_disposition():
     assert [row["canonical_id"] for row in result.rows] == ["magnesium"]
 
 
+@pytest.mark.parametrize("excluded_identity", [False, True])
 def test_scoring_input_scope_builds_each_contract_variant_once(
-    monkeypatch: pytest.MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch, excluded_identity,
 ):
-    product = _product([_row()])
+    row = _row()
+    if excluded_identity:
+        row.update(role_classification="recognized_non_scorable",
+                   score_exclusion_reason="recognized_non_scorable",
+                   recognition_source="other_ingredients",
+                   recognized_non_scorable=True, scoreable_identity=False)
+    product = _product([row])
     calls = 0
     original = scoring_contract._build_scoring_ingredients
 
@@ -3115,36 +3122,23 @@ def test_nested_scope_failure_restores_outer_view_and_isolates_full_cache():
     assert owner._ACTIVE_SCORING_INPUT_SCOPE.get() is None
 
 
-def test_recognized_non_scorable_identity_cannot_be_revived_by_active_projection():
-    source = {"name": "Alpha-Glucan Oligosaccharide", "standardName": "Alpha-Glucan Oligosaccharide",
-              "canonical_id": "NHA_ALPHA_GLUCAN_OLIGOSACCHARIDE", "canonical_source_db": "other_ingredients",
-              "quantity": 500, "unit": "mg", "raw_source_path": "ingredientRows[0]",
-              "raw_source_text": "Alpha-Glucan Oligosaccharide", "source_section": "active",
+def test_other_ingredient_exclusion_does_not_erase_explicit_dha_owner():
+    source = {"name": "Omega-3 DHA", "raw_source_text": "Omega-3 DHA",
+              "standardName": "Fish Oil", "canonical_id": "fish_oil",
+              "canonical_source_db": "ingredient_quality_map", "quantity": 50, "unit": "mg",
+              "forms": [{"name": "DHA", "source": "name_extraction"}],
+              "raw_source_path": "ingredientRows[16]", "source_section": "active",
               "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
               "dose_class": "therapeutic_mass"}
-    identity = {**source, "recognized_non_scorable": True, "scoreable_identity": False,
-                "score_included": False, "score_exclusion_reason": "recognized_non_scorable",
-                "role_classification": "recognized_non_scorable",
-                "recognition_source": "other_ingredients",
-                "recognized_entry_id": "NHA_ALPHA_GLUCAN_OLIGOSACCHARIDE"}
-    product = {"activeIngredients": [source], "ingredient_quality_data": {"ingredients": [identity], "ingredients_scorable": [], "ingredients_skipped": []}}
-    assert not derive_product_scoring_evidence(product)
-    assert not get_scoring_ingredients(product, strict=True).rows
-    assert product["activeIngredients"][0] == source
-
-
-def test_persisted_active_projection_cannot_override_current_non_scorable_owner():
-    source = {"name": "Alpha-Glucan Oligosaccharide", "standardName": "Alpha-Glucan Oligosaccharide",
-              "canonical_id": "NHA_ALPHA_GLUCAN_OLIGOSACCHARIDE", "canonical_source_db": "other_ingredients",
-              "quantity": 500, "unit": "mg", "raw_source_path": "ingredientRows[0]",
-              "raw_source_text": "Alpha-Glucan Oligosaccharide", "source_section": "active",
-              "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
-              "dose_class": "therapeutic_mass"}
-    identity = dict(source)
-    product = {"activeIngredients": [source], "ingredient_quality_data": {"ingredients": [identity], "ingredients_scorable": [], "ingredients_skipped": []}}
-    product["product_scoring_evidence"] = derive_product_scoring_evidence(product)
-    assert product["product_scoring_evidence"]
-    identity.update(recognized_non_scorable=True, scoreable_identity=False, score_included=False,
-                    score_exclusion_reason="recognized_non_scorable", role_classification="recognized_non_scorable",
-                    recognition_source="other_ingredients")
-    assert not get_scoring_ingredients(product, strict=True).rows
+    identity = {**source, "canonical_id": "PII_PURIFIED_FISH_OIL",
+                "canonical_id_after": "PII_PURIFIED_FISH_OIL", "canonical_source_db": "other_ingredients",
+                "standard_name": "Purified Fish Oil", "identity_disposition": "repaired",
+                "recognized_non_scorable": True, "scoreable_identity": False,
+                "recognition_source": "other_ingredients", "recognized_entry_id": "PII_PURIFIED_FISH_OIL",
+                "score_exclusion_reason": "recognized_non_scorable", "role_classification": "recognized_non_scorable"}
+    product = {"activeIngredients": [source], "ingredient_quality_data": {"ingredients": [identity],
+               "ingredients_scorable": [], "ingredients_skipped": []}}
+    evidence = derive_product_scoring_evidence(product)
+    [dha] = [r for r in evidence if r["evidence_type"] == "omega_epa_dha_aggregate"]
+    assert (dha["canonical_id"], dha["dose_value"], dha["dose_unit"]) == ("dha", 50, "mg")
+    assert not any(r["evidence_type"] == "blend_anchor_mass" for r in evidence)
