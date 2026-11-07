@@ -98,9 +98,13 @@ def test_mct_source_reports_36_participants_and_a_discrete_12_g_regimen():
     study = next(study for study in row['qualifying_human_studies']
                  if study['pmid'] == '41443401')
     assert study['sample_size'] == 36
-    assert study['dose'] == '12 g MCT'
+    assert 'contains12gMCT' in study['dose']
+    assert '16.3mL Nisshin oil' in study['dose']
+    assert '75%C8/25%C10' in study['dose']
+    assert '47 enrolled and36 protocol completers' in study['outcome']
     assert row['studied_dose_exposure']['values'] == [12000]
-    assert 'working memory' in study['primary_endpoint']
+    assert 'primary_endpoint' not in study  # No formal outcome hierarchy established.
+    assert 'no-match errors favored olive oil' in study['outcome']
     assert 'minimum' in row['applicability_decision']
 
 

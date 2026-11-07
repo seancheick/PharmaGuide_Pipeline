@@ -1,10 +1,12 @@
 """Unqualified clinical drafts stay outside production decisions.
 
 Independently checked source inventories may retain exact non-scoring holds
-beside completed source reviews. Glutamine, glycine and plant-sterol source-only stubs make
+beside completed source reviews. Glutamine, tyrosine, glycine and plant-sterol source-only stubs make
 no regimen/population/outcome assertions. The carnitine weight synthesis has
 verified source content but unresolved constituent-integrity/applicability.
 These contexts must remain unfinished; all other pending drafts stay excluded.
+Tyrosine's two exact source holds retain verified abstract/full-text facts,
+empty dose values and no eligibility; their preparation/precision work is open.
 """
 import json
 from pathlib import Path
@@ -36,6 +38,7 @@ def test_no_data_file_holds_a_pending_review_context():
         "INGR_GLYCINE": {"37851316"},
         "INGR_L_CARNITINE": {"32359762"},
         "INGR_PLANT_STEROLS": {"37739728"},
+        "INGR_L_TYROSINE": {"29980424", "38290812"},
     }
     observed = {key: set() for key in known_unfinished_sources}
     found = []
@@ -56,7 +59,13 @@ def test_no_data_file_holds_a_pending_review_context():
                 observed[record["id"]].update(context["source_pmids"])
                 assert context["components"] == [record["id"]]
                 assert context["scoring_eligible"] is False
-                if record["id"] != "INGR_L_CARNITINE":
+                if record["id"] == "INGR_L_TYROSINE":
+                    assert context["identity_scope"] == "ingredient_general"
+                    assert context["identity"] == {}
+                    assert context["human_status"] == "confirmed"
+                    assert context["dose"]["values"] == []
+                    assert context["dose"]["dose_status"] in {"extraction_pending", "source_not_reported"}
+                elif record["id"] != "INGR_L_CARNITINE":
                     assert "identity_scope" not in context
                 else:
                     assert context["source_integrity"] == "none"
