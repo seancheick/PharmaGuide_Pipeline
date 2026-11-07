@@ -19,7 +19,7 @@ lanes, and they do not substitute for each other.
 | | fast lane (this) | slow lane (catalog) |
 |---|---|---|
 | cadence | minutes | weekly/monthly |
-| says | "stop taking this" | BLOCKED verdict, score suppression, search exclusion |
+| says | "stop taking this" | BLOCKED verdict with its reason retained, quality score suppression |
 
 **This lane may only add state, never subtract it.** Retracting an alert clears *its own* signal and
 nothing else — a catalog BLOCKED verdict survives until the catalog's separately reviewed data
