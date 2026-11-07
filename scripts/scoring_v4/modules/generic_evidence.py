@@ -400,6 +400,18 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
         population = decision.get("studied_population") or formula_review.get("studied_population")
         outcomes = decision.get("supported_outcomes") or formula_review.get("supported_outcomes")
         source_refs = reference.get("references_structured") or reference.get("references") or []
+        context_ids = set((decision.get("population_applicability") or {}).get("context_ids") or [])
+        if context_ids:
+            # This receipt attributes the selected numerical contribution, not
+            # the canonical inventory of related or unfinished research.
+            # Source-review completeness still uses the full canonical record.
+            qualified_pmids = {
+                str(pmid) for context in reference.get("study_contexts") or []
+                if isinstance(context, dict) and context.get("context_id") in context_ids
+                for pmid in context.get("source_pmids") or []
+            }
+            source_refs = [ref for ref in source_refs
+                           if isinstance(ref, dict) and str(ref.get("pmid")) in qualified_pmids]
         interpreted_sources = _effect_direction_assessment(entry)["source_pmids"]
         if interpreted_sources is not None:
             source_refs = [ref for ref in source_refs if str(ref.get("pmid")) in interpreted_sources]
