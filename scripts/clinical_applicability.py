@@ -365,10 +365,9 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=(), *,
         match = re.fullmatch(r"activeIngredients\[(\d+)\]", source)
         if source == row.get("raw_source_path"):
             source_text = _row_text(row, source_only=True, preserve_punctuation=True)
-            if product_level:
-                # Delivery extraction also retains this same label row's notes.
-                # Quality can use that assertion without borrowing another row.
-                source_text += " " + str(row.get("notes") or "")
+            # The delivery owner also inspects this source row's notes.
+            # Keep the assertion bound to this row for clinical exclusions too.
+            source_text += " " + str(row.get("notes") or "")
         elif match:
             active = product.get("activeIngredients") or []
             index = int(match.group(1))
@@ -376,6 +375,7 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=(), *,
                 original = active[index]
                 if original.get("raw_source_path") == row.get("raw_source_path"):
                     source_text = _row_text(original, source_only=True, preserve_punctuation=True)
+                    source_text += " " + str(original.get("notes") or "")
         elif product_level or (len(originals) == 1 and originals[0].get("raw_source_path") == row.get("raw_source_path")):
             match = re.fullmatch(r"statements\[(\d+)\]", source)
             if match:

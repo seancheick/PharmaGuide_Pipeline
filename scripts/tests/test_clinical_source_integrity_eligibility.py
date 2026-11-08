@@ -1320,3 +1320,48 @@ def test_an_excluded_sibling_does_not_finish_an_unresolved_preparation(unknown_f
         assess_amount=False, require_claim_alignment=False)
     assert decision["status"] == "unresolved"
     assert decision["reason_code"] == "clinical_source_label_unresolved"
+
+
+@pytest.mark.parametrize("notes,source,eligible", [
+    ("Liposomal", "ingredientRows[0]", False),
+    ("Liposomal", "activeIngredients[0]", False),
+    ("Non-liposomal", "ingredientRows[0]", True),
+    ("Ordinary capsules", "ingredientRows[0]", True),
+    ("Liposomal", "activeIngredients[1]", True),
+])
+def test_clinical_exclusion_checks_only_delivery_bound_row_notes(notes, source, eligible):
+    product = _tyrosine_scoring_product(name="Setria Reduced L-Glutathione")
+    row = product["activeIngredients"][0]
+    row.update(canonical_id="glutathione", standard_name="Reduced L-Glutathione",
+               matched_form="reduced l-glutathione", form_match_status="mapped", notes=notes)
+    extra = {**row, "canonical_id": "vitamin_c", "name": "Vitamin C",
+             "raw_source_text": "Vitamin C", "raw_source_path": "ingredientRows[1]"}
+    product["activeIngredients"].append(extra)
+    product["delivery_data"] = {"systems": [{"canonical_name": "liposomal",
+        "raw_source_text": "liposomal", "match_source": source}]}
+    result = score_evidence(product)
+    receipts = result["metadata"]["contributing_record_assessments"]
+    assert any(r["id"] == "INGR_REDUCED_GLUTATHIONE" for r in receipts) is eligible
+
+
+def test_grouped_source_review_prose_keeps_limits_readable_and_status_current():
+    import json
+    data = Path(__file__).resolve().parents[1] / "data"
+    backed = json.loads((data / "backed_clinical_studies.json").read_text())
+    literature = json.loads((data / "literature_evidence_records.json").read_text())
+    text = json.dumps([backed, literature], ensure_ascii=False)
+    for unreadable in ("Sixhealthyyoungmen", "Capsuleseachcontained",
+                       "doesnotestablishstandalonefreePABA", "healthyadultsexual",
+                       "mgELEMENTALlithiumaslithiumaspartate", "notindependentrandomizedreplication"):
+        assert unreadable not in text
+    assert "Only PMID 24433977 is proposed to contribute" not in text
+    tyrosine = next(r for r in backed["backed_clinical_studies"] if r["id"] == "INGR_L_TYROSINE")
+    pending = {pmid for c in tyrosine["study_contexts"]
+               if c.get("review_status") == "source_verified_pending_clinical_review"
+               for pmid in c.get("source_pmids", [])}
+    assert "25598314" in pending
+    for cid in ("paba", "lithium"):
+        record = next(r for r in literature["literature_evidence_records"] if r["canonical_id"] == cid)
+        assert "independent source-content check completed" in record["applicability_decision"]
+        assert "applicability review stay open" in record["applicability_decision"]
+        assert record["applicability_status"] == "applicability_unestablished"
