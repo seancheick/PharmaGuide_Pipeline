@@ -703,7 +703,7 @@ def test_absence_of_qualifying_studies_cannot_emit_reviewed_null():
     - no_qualifying_human_evidence: reproducible search found 0 qualifying human trials.
     """
     # A machine-only empty receipt establishes neither reviewed null nor absence.
-    for cid in ["juniper", "l_norvaline", "eyebright", "damiana", "muira_puama"]:
+    for cid in ["juniper", "damiana", "muira_puama"]:
         _assert_incomplete_source_review(cid)
 
     # 2. Genuine reviewed null cases with qualifying human studies must emit REVIEWED_NULL_UNFAVORABLE
@@ -784,8 +784,8 @@ def test_phase4_batch4_null_unfavorable_canaries():
 def test_phase4_batch4_no_qualifying_evidence_canaries():
     """Batch 4 unverified legacy search records finding 0 qualifying human trials must remain incomplete."""
     zero_study_cids = [
-        "sarsaparilla", "catuaba", "corn_silk", "motherwort_herb",
-        "raspberry_ketones", "cnidium", "organ_extracts", "black_radish", "plantain"
+        "sarsaparilla", "corn_silk", "motherwort_herb",
+        "organ_extracts", "black_radish", "plantain"
     ]
     for cid in zero_study_cids:
         _assert_incomplete_source_review(cid)
@@ -824,8 +824,10 @@ def test_phase4_batch4_standardized_clinical_canaries():
 
 def test_phase4_semantic_applicability_canaries():
     """Semantic applicability canaries: verify interventions match credited identity."""
-    # 1. Colostrinin polypeptide cannot transfer to standalone L-proline (0 qualifying trials)
-    _assert_incomplete_source_review("l_proline")
+    # 1. The read uncontrolled oral study is not a clinical collagen benefit.
+    proline = er.resolve_evidence_for_canonical("l_proline")
+    assert not proline.points_eligible
+    assert proline.blocking_reasons == ["literature_applicability_unestablished"]
 
     # 2. Material / drug / combination mismatches must stay applicability_unestablished
     canary_unestablished = [
@@ -1704,7 +1706,7 @@ def test_primary_protein_projection_is_not_completed_by_a_carrier_review():
     assert resolution.blocking_reasons
 
 
-@pytest.mark.parametrize("canonical", ["glutathione", "green_coffee_bean"])
+@pytest.mark.parametrize("canonical", ["green_coffee_bean"])
 def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
     from assessment_readiness import EVIDENCE_NOT_YET_EVALUATED, _resolved_evidence_assessment
 
@@ -1980,7 +1982,7 @@ def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifac
     assert decisions == {
         'INGR_L_CARNITINE': 'clinical_preparation_mismatch',
         'INGR_ACETYL_L_CARNITINE': 'reference_only_clinical_record',
-        'BRAND_CARNIPURE': 'clinical_form_mismatch',
+        'BRAND_CARNIPURE': 'clinical_form_excluded',
     }
 
 
@@ -2484,3 +2486,26 @@ def test_pending_source_preserves_only_previously_qualified_preparation_exclusio
     assert not ca.assess_clinical_source_review(record)["is_complete"]
     expected = "evaluated_limited_or_negative" if damage is None else "not_yet_evaluated"
     assert _resolved_evidence_assessment(result)[0] == expected
+
+
+@pytest.mark.parametrize("canonical", ["l_norvaline", "eyebright", "catuaba", "cnidium", "phenylethylamine"])
+def test_independently_reviewed_bounded_gaps_finish_without_inventing_null_trials(canonical):
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert result.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert not result.points_eligible and result.blocking_reasons == []
+    record = er._load_literature_evidence()[canonical]
+    assert record["effect_direction"] is None and record["qualifying_human_studies"] == []
+
+
+@pytest.mark.parametrize("canonical", ["l_proline", "chaga", "raspberry_ketones", "maca_root"])
+def test_read_human_research_with_unfinished_scope_keeps_real_blocker(canonical):
+    result = er.resolve_evidence_for_canonical(canonical)
+    assert not result.points_eligible
+    assert result.blocking_reasons == ["literature_applicability_unestablished"]
+
+
+def test_glutathione_canonical_alone_does_not_invent_label_preparation():
+    result = er.resolve_evidence_for_canonical("glutathione")
+    assert not result.points_eligible
+    assert result.blocking_reasons == ["clinical_source_row_unresolved"]
+    assert result.owner_facts["backed_clinical_studies"]

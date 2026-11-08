@@ -1607,11 +1607,14 @@
             "verified_source": "https://pubmed.ncbi.nlm.nih.gov/24791752/",
             "verified_at": "2026-09-21T07:39:42.986936+00:00",
             "abstract_evidence_quote": "GSH levels in blood increased after 1, 3 and 6 months versus baseline at both doses."
-          }
+          },
+          "dose": "Setria reduced glutathione, 250 or 1,000 mg/day as two capsules per day; cellulose placebo",
+          "duration": "6 months followed by 1-month washout",
+          "outcome": "Body-store glutathione biomarkers increased in selected placebo-controlled comparisons; see Figures 2 and 3 for endpoint/time/dose-specific comparisons. Immune assays were subset secondary/exploratory measurements; no clinical disease endpoint was established."
         }
       ],
       "effect_direction": null,
-      "population_context": "Healthy adults",
+      "population_context": "Healthy nonsmoking adults; 61 enrolled, 60 received intervention and 54 completed at least 6 months and were analyzed (16 placebo, 18 at 250 mg/day, 20 at 1,000 mg/day).",
       "studied_dose_exposure": {
         "values": [
           250,
@@ -1620,7 +1623,7 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "One 6-month RCT in 54 healthy non-smoking adults found 250 or 1,000 mg/day oral GSH raised blood, erythrocyte, plasma, lymphocyte and buccal GSH stores. The abstract does not name the branded material, so brand-specific transfer is not established.",
+      "applicability_decision": "Full primary source PMID 24791752 identifies Setria reduced glutathione supplied by Kyowa Hakko. Participants took two capsules daily totaling 250 or 1,000 mg/day for 6 months, followed by a 1-month washout. Figures 2 and 3 distinguish within-arm baseline comparisons from placebo comparisons: selected body glutathione measures, including high-dose 6-month measures, increased versus placebo. These are body-store biomarker findings, not demonstrated disease prevention, clinical immune benefit or a general efficacy minimum. Lymphocyte proliferation and neutrophil-function measures were not significantly improved; NK-cell findings were exploratory subset immune assays. Preparation transfer to liposomal, S-acetyl, sustained-release or other formulations is not established by this study.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -2798,14 +2801,35 @@
         "Cochrane Library"
       ],
       "records_screened": 25,
-      "qualifying_human_studies": [],
+      "qualifying_human_studies": [
+        {
+          "pmid": "28919843",
+          "title": "The effects of phenylalanine on exercise-induced fat oxidation: a preliminary, double-blind, placebo-controlled, crossover trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 6,
+          "dose": "3 g oral L-phenylalanine once, 30 minutes before 60 minutes cycling at 50% VO2 max; empty cellulose capsule control; crossover visits≥6 days apart.",
+          "duration": "Acute laboratory visits",
+          "outcome": "Six healthy young men: treatment-by-time interactions for RER and glycerol were significant, with selected time-point differences; glucagon increased. Glucose, lactate, free fatty acids and ketone bodies did not differ. Surrogate fat oxidation/metabolic findings, not demonstrated weight loss, clinical performance or mood benefit. Retrospectively registeredUMIN000027502; industry funding/employee authors.",
+          "scoring_eligible": false
+        },
+        {
+          "pmid": "32560181",
+          "title": "Effects of L-Phenylalanine on Energy Intake and Glycaemia-Impacts on Appetite Perceptions, Gastrointestinal Hormones and Gastric Emptying in Healthy Males.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 27,
+          "dose": "5 g or 10 g L-phenylalanine in 100 mL suspension by nasogastric/intragastric bolus, versus matched vehicle; visits 3–7 days apart. This is not ordinary oral capsule administration.",
+          "duration": "Acute randomized double-blind crossover visits; partsAandB",
+          "outcome": "16 healthy normal-weight men in each part, with 5 overlap(27 unique, not 32 independent participants). 10 g reduced single buffet energy intake(900 versus 1084 kcal control) and postdrink glucose AUC/peak; 5 g did not show the same contrasts. Gastric emptying was unchanged; CCK, insulin, glucagon changes and GLP1/PYY null/trend findings retained. No chronic weight loss, diabetes treatment or mood claim follows.",
+          "scoring_eligible": false
+        }
+      ],
       "effect_direction": null,
-      "population_context": "Not established: no verified human L-phenylalanine trial is cited",
+      "population_context": "Source 28919843: six healthy active young men; source 32560181:27 unique healthy normal-weight men across two overlapping 16-person parts. Other therapeutic target populations unresolved.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Essential amino acid under DRI authority. No verified human L-phenylalanine trial is recorded: the previously cited PMID 37629744 is a review of depression treatments in Parkinson's disease, and the recorded open-label trial facts were not in it. Evidence review pending.",
+      "applicability_decision": "Essential amino-acid nutritional authority remains with nutrition_authority_for_row: exact mapped L-phenylalanine base plus source-qualified L-form label text can establish nutritional role, independently of therapeutic research. A canonical-only diagnostic, D-form or DL-racemate does not establish that authority. Human L-phenylalanine research is not absent: full sources 28919843 and 32560181 report acute metabolic/intake findings in healthy young men, with distinct oral exercise versus intragastric feeding designs. These do not establish chronic weight loss, general mood efficacy, D/DL equivalence or a universal Dose. 32560181 parts A/B share 5 participants and count 27 unique, not 32 independent. 32991046 oral L/D crossover and older depression/vitiligo/PK/tolerability sources require source-specific review; combination/light therapy findings are not standalone L-form monotherapy. Prior ghost 37629744 remains rejected; no facts are borrowed from it. Therapeutic applicability remains open; preserve PKU contraindication and all independent safety. Codex source review 2026-11-07; independent source check completed; applicability review stays open.",
       "verification_result": "verification_failure_unresolved",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_by": "scripts/api_audit/verify_literature_records.py; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": false,
         "retractions_found": false
@@ -2901,16 +2925,11 @@
       "qualifying_human_studies": [],
       "effect_direction": null,
       "population_context": "healthy adults",
-      "studied_dose_exposure": {
-        "values": [
-          100
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "No qualifying human placebo-controlled clinical trials establishing standalone efficacy for general wellness or anti-graying claims.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Bounded search/source review 2026-11-07 does not establish standalone free PABA efficacy for general wellness or anti-graying. Human PABA-related research must not be erased: PMID 24183994 compared free PABA tablets and potassium aminobenzoate capsules/food in 20 people for urinary collection recovery, not clinical benefit; full methods not yet qualified. Potaba 15774254 and 8151563 are potassium aminobenzoate drug trials in Peyronie's disease/scleroderma, not free PABA 100–500 mg wellness studies. 15774254 abstract reports plaque-related benefit with 103 randomized/75 valid case completers, but pre-existing curvature and pain findings do not show the same benefit; full methods not read here. Historical hair report 14794992 has only bibliographic verification/no abstract; its primary text remains unread. A newly published 2026 grey-hair combination trial includes PABA with Fo-Ti, black sesame, vitamins/minerals and a topical serum; no isolated PABA attribution or dose is inferred and full source qualification remains pending. No new null grade, review approval, Dose benchmark or safety change is assigned. Current free PABA applicability remains unestablished. Codex source review; independent source-content check completed as recorded in verification_provenance; the identified unread Methods, remaining sources and applicability review stay open.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_by": "scripts/api_audit/verify_literature_records.py; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
@@ -3882,7 +3901,7 @@
           "study_type": "randomized_controlled_trial",
           "dose": "500 mg 2x/day standardized extract",
           "duration": "8 weeks",
-          "outcome": "SBP and DBP fell from baseline, not significantly different from captopril; triglycerides fell with olive leaf extract",
+          "outcome": "Primary clinic SBP change after 8 weeks was -11.5 mmHg with olive leaf extract and -13.7 mmHg with captopril; the between-group contrast was nonsignificant (p=0.098, 95% CI -0.413 to 4.861 mmHg). Both arms improved from baseline. The active-comparator design supplies no placebo contrast; nonsignificance alone is not proof of equivalence. Secondary LDL change favored olive extract (p=0.032), while triglyceride change did not differ between arms (p=0.150).",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -3897,7 +3916,7 @@
         }
       ],
       "effect_direction": "positive_moderate",
-      "population_context": "adults with stage-1 hypertension",
+      "population_context": "Adults aged 25-60 with stage-1 hypertension persisting after a 4-week placebo/diet run-in (PMID 21036583); not an all-age or normotensive population.",
       "studied_dose_exposure": {
         "values": [
           1000
@@ -3905,10 +3924,10 @@
         "unit": "mg",
         "basis": "daily_intake"
       },
-      "applicability_decision": "Olive leaf extract (EFLA 943) 500 mg twice daily for 8 weeks lowered SBP and DBP from baseline in stage-1 hypertension, similarly to captopril (active-controlled; no placebo arm).",
+      "applicability_decision": "Full-source review of PMID 21036583: Livitens film-coated caplets contained 500 mg Benolea (EFLA 943), an 80% ethanol dried-leaf extract standardized to 16-24% oleuropein (studied batch 19.9%). Subjects aged 25-60 with stage-1 hypertension received 500 mg twice daily for 8 weeks after 4 weeks of placebo/diet run-in; low-fat/low-sodium advice continued in both arms. The primary SBP contrast against titrated captopril was nonsignificant; within-arm reductions and the authors' comparability interpretation do not establish placebo benefit or retail-powder equivalence. Fig 1 reports 232 enrolled, 179 continuing after run-in, 162 completing and 148 in per-protocol efficacy analysis; this is not 232 treatment completers. PMID 41805711 separately tested a mixed leaf-plus-fruit formula, with no significant primary SBP advantage versus placebo; it neither isolates leaf efficacy nor settles all preparations. Existing positive_moderate direction is preserved as recorded, not newly endorsed. Preparation/population and remaining-source review remain open; no general Dose benchmark or completion is added. Codex source review 2026-11-07; independent source check completed; remaining applicability review stays open.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_by": "scripts/api_audit/verify_literature_records.py; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
@@ -3948,7 +3967,8 @@
         "owner": "scripts/data/literature_evidence_records.json::olive_leaf_powder",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
-      }
+      },
+      "applicability_status": "applicability_unestablished"
     },
     {
       "canonical_id": "lecithin",
@@ -5099,9 +5119,9 @@
           "title": "A single-dose of oral nattokinase potentiates thrombolysis and anti-coagulation profiles.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 12,
-          "dose": "single dose of 2,000 FU nattokinase (NSK-SD)",
-          "duration": "acute",
-          "outcome": "statistically significant elevation in D-dimer and antithrombin concentration",
+          "dose": "Single 2,000 FU NSK-SD softgel, matched placebo; crossover washout longer than 2 weeks",
+          "duration": "Single dose, 8-hour biomarker follow-up",
+          "outcome": "Selected coagulation/fibrinolysis biomarkers changed versus placebo; all stayed in normal ranges. Other measured variables were null. No clinical thrombotic or cardiovascular event outcome.",
           "effect_direction": "positive_moderate",
           "verification_provenance": {
             "pmid_verified": true,
@@ -5116,7 +5136,7 @@
         }
       ],
       "effect_direction": "positive_moderate",
-      "population_context": "healthy male subjects",
+      "population_context": "12 healthy young Japanese men, mean age 22.3 years, without medications or hematologic/venous/arterial disease",
       "studied_dose_exposure": {
         "values": [
           2000
@@ -5124,7 +5144,7 @@
         "unit": "FU",
         "basis": "single_dose"
       },
-      "applicability_decision": "A single 2,000 FU dose of nattokinase (NSK-SD) changed coagulation and fibrinolysis markers, all within normal ranges, in 12 healthy young men (crossover). The abstract gives no mg amount or daily-use outcome.",
+      "applicability_decision": "Full primary source PMID 26109079 tests one 2,000-FU NSK-SD softgel (Japan Bio Science Laboratory) against placebo in a double-blind randomized crossover with more than 2 weeks washout. Blood biomarkers were assessed over 8 hours. D-dimer, fibrin/fibrinogen degradation products, aPTT, factor VIII and antithrombin showed selected significant changes versus placebo under Bonferroni comparisons; all remained within normal ranges, and other measured variables were null. This is an acute preparation-specific biomarker experiment in 12 healthy young men, not evidence of prevention or treatment of thrombosis, cardiovascular events, chronic-use outcomes or substitution for anticoagulant medication. No FU-to-mg conversion or generic preparation equivalence is established.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "scripts/api_audit/verify_literature_records.py",
@@ -6879,25 +6899,31 @@
         "PubMed"
       ],
       "records_screened": 12,
-      "qualifying_human_studies": [],
+      "qualifying_human_studies": [
+        {
+          "pmid": "41290715",
+          "title": "L-proline supplementation affects non-volatile flavour perception through oral microbiome metabolic pathways.",
+          "study_type": "uncontrolled_before_after",
+          "sample_size": 20,
+          "dose": "1000 mg oral L-proline each morning in capsules; not a general efficacy benchmark.",
+          "duration": "5 treatment days within a 3-week before/during/after protocol",
+          "outcome": "Healthy participants aged 18-65 (12 women, 8 men) underwent daily sensory and salivary assessments. Menthol-taste intensity increased before versus during supplementation (p=0.011), while the other tastants did not significantly change. Microbial pathway beta diversity changed (p=0.008), whereas overall taxonomic alpha/beta diversity did not. No placebo group, random allocation, connective-tissue benefit or clinical skin/joint outcome was established.",
+          "scoring_eligible": false
+        }
+      ],
       "effect_direction": null,
-      "population_context": "adults requiring connective tissue collagen precursors",
-      "studied_dose_exposure": {
-        "values": [
-          500
-        ],
-        "unit": "mg"
-      },
-      "applicability_decision": "Reproducible literature search identified no qualifying clinical efficacy trials for standalone oral L-proline supplementation (Colostrinin proline-rich polypeptide is not L-proline).",
+      "population_context": "Source 41290715:20 healthy adults aged 18-65; no established connective-tissue clinical target population.",
+      "studied_dose_exposure": {},
+      "applicability_decision": "Bounded source-content review 2026-11-07: human oral L-proline research exists. PMID 41290715 is an uncontrolled 20-person sensory/microbiome experiment, not a placebo-controlled clinical efficacy trial or a collagen/skin/joint benefit finding. Its 1000 mg/day for 5 days is descriptive. DOI10.1038/s41598-026-70978-5 is live Crossref-identity verified and publisher-reported as a 30-man randomized tolerability study; only its abstract/disclosures were accessible, so its full methods are not qualified here and no general safety threshold follows. Human sperm ex-vivo studies, Colostrinin/proline-rich peptides, IV immunoglobulin stabilizers, nitrosation challenge studies and multi-ingredient wound products do not establish standalone oral L-proline clinical efficacy. Other primary studies remain subject to source-specific review; this is not a claim that human research is absent or all efficacy is null. Existing clinical applicability remains unresolved. Agent review by Codex; independent source check completed.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_by": "scripts/api_audit/verify_literature_records.py; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "applicability_status": "no_qualifying_human_evidence",
-      "reason_code": "no_qualifying_trials_found"
+      "applicability_status": "applicability_unestablished",
+      "reason_code": "clinical_applicability_unreviewed"
     },
     {
       "canonical_id": "red_clover",
@@ -8722,25 +8748,25 @@
     },
     {
       "canonical_id": "l_norvaline",
-      "material_form": "L-Norvaline",
-      "search_query": "l-norvaline nitric oxide exercise clinical trial human",
-      "search_date": "2026-09-20",
+      "material_form": "Oral standalone L-norvaline, the L stereoisomer; not norleucine, valine, norvaline-containing peptides/prodrugs or endogenous norvaline biomarkers.",
+      "search_query": "(TITLE_ABS:norvaline OR TITLE_ABS:\"n-propylglycine\" OR TITLE_ABS:\"2-aminopentanoic acid\") AND (TITLE_ABS:human OR TITLE_ABS:clinical OR TITLE_ABS:trial OR TITLE_ABS:patient OR TITLE_ABS:volunteer OR TITLE_ABS:randomized) AND SRC:MED; supplementary exact-synonym human-index search: (norvaline OR \"L-norvaline\" OR \"2-aminopentanoic acid\") AND (MESH_DESCR:Humans OR PUB_TYPE:\"Clinical Trial\" OR PUB_TYPE:\"Randomized Controlled Trial\") AND SRC:MED",
+      "search_date": "2026-11-07",
       "databases_searched": [
-        "PubMed"
+        "PubMed/MED indexed records via EuropePMC REST API"
       ],
-      "records_screened": 10,
+      "records_screened": 77,
       "qualifying_human_studies": [],
       "effect_direction": null,
-      "population_context": "athletes",
+      "population_context": "Human oral supplementation efficacy, including exercise/performance; human metabolite observations are retained separately.",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
+      "applicability_decision": "Bounded PubMed/MED title-and-abstract source review on 2026-11-07 did not identify a qualifying controlled human efficacy study administering standalone oral L-norvaline. This is an evidence-gap assessment, not a clinical null result, universal absence claim or safety clearance. PMID 39330485 is a human sitting-interruption trial measuring a norvaline derivative, not administering norvaline; PMID 30830377 is an observational kidney-disease metabolomics cohort, not supplementation. PMID 30703532 reports mammalian-cell cytotoxicity, not human supplement-dose toxicity; PMID 31861122 is a methodological commentary, not a human safety trial. Rodent administration and chemically different derivatives do not establish oral human efficacy or exposure equivalence. Existing identity, Dose and safety uncertainty remain.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex source-content research; independently checked by /root/scientific_review and root. Agent review, not clinician review.",
+        "verified_at": "2026-11-07",
         "all_pmids_verified": true,
         "retractions_found": false
       },
@@ -8899,12 +8925,13 @@
     {
       "canonical_id": "eyebright",
       "material_form": "Euphrasia officinalis extract",
-      "search_query": "Euphrasia officinalis eyebright conjunctivitis randomized clinical trial",
-      "search_date": "2026-09-20",
+      "search_query": "(TITLE_ABS:Euphrasia OR TITLE_ABS:eyebright) AND (MESH:Humans OR TITLE_ABS:patient* OR TITLE_ABS:clinical OR TITLE_ABS:volunteer* OR TITLE_ABS:trial OR TITLE_ABS:men OR TITLE_ABS:women) ; TITLE_ABS:\"Euphrasia rostkoviana\" OR TITLE_ABS:\"Euphrasia officinalis\" OR TITLE_ABS:\"Euphrasia stricta\" ; (Euphrasia[Title/Abstract] OR eyebright[Title/Abstract]) AND humans[MeSH Terms]",
+      "search_date": "2026-11-07",
       "databases_searched": [
-        "PubMed"
+        "PubMed/MEDLINE",
+        "Europe PMC"
       ],
-      "records_screened": 12,
+      "records_screened": 56,
       "qualifying_human_studies": [],
       "effect_direction": null,
       "population_context": "adults",
@@ -8912,11 +8939,11 @@
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Bounded PubMed source-content review2026-10-27: related research inspected (PMID32850558). Neonatal eye-drop research concerns a different route/preparation/population from oral Euphrasia extracts; no oral dose threshold follows. This establishes a general Dose no-numerical-curve conclusion under existing approvedpolicy only. Existing Evidence eligibility, preparation/purpose/population decisions, identity and safety obligations remain separately enforced; no positivegrade or clinicalsign-off is assigned.",
+      "applicability_decision": "Bounded source-content review 2026-11-07 found human research on Euphrasia eye drops, not qualifying controlled standalone oral efficacy evidence for catalog eyebright powders/extracts. PMID 32850558 randomized 84 neonates to Weleda Euphrasia or saline, one drop per eye four times daily for 96 hours with shared eye washing/lacrimal massage: primary treatment success was null (55.0% versus 51.2%, p=0.85); nonsignificant secondary symptom trends are not established efficacy. PMID 11152054 is an open one-arm 65-patient Euphrasia rostkoviana eyedrop cohort reporting improvement, not an oral controlled trial. These human publications are preserved; neither establishes efficacy or a dosage benchmark for swallowed Euphrasia preparations. This is a bounded oral-source gap, not absence of human publications or a universal null conclusion.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex source-content research; independently checked by /root/scientific_review and root. Agent review, not clinician review.",
+        "verified_at": "2026-11-07T11:52:51.305527+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -8956,7 +8983,7 @@
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
-      "notes": "Superseded source-inventory wording retained for traceability: Reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence. Exact current source-labelled subjects: Eyebright; Eyebright Aerial Part Extract; Eyebright extract; raw Eyebright powder. Do not treat an extract as a culinary powder or assume a whole fruit is its isolated marker. Historical material_form must be reconciled against these source-bound occurrences before calling exact preparation equivalent.",
+      "notes": "Search scope includes Euphrasia/eyebright and exact officinalis/rostkoviana/stricta names. Human-indexed searches also return unrelated Eyebright intraocular-lens manufacturer studies, human-cell experiments and ethnobotanical surveys: these are not oral clinical efficacy trials. Full primary 32850558 and authoritative primary abstract 11152054 were content-reviewed. Keep distinct Euphrasia species and routes; no oral/topical or species equivalence is approved.",
       "applicability_status": "no_qualifying_human_evidence"
     },
     {
@@ -9288,13 +9315,13 @@
     {
       "canonical_id": "chaga",
       "material_form": "Inonotus obliquus fruiting body / mycelium extract",
-      "search_query": "Inonotus obliquus chaga randomized controlled trial clinical human",
-      "search_date": "2026-09-20",
+      "search_query": "(TITLE_ABS:\"Inonotus obliquus\" OR TITLE_ABS:chaga) AND (MESH:Humans OR TITLE_ABS:patient* OR TITLE_ABS:clinical OR TITLE_ABS:volunteer* OR TITLE_ABS:trial OR TITLE_ABS:men OR TITLE_ABS:women) ; TITLE_ABS:befungin OR TITLE_ABS:бефунгин OR TITLE_ABS:\"Fuscoporia obliqua\" ; (\"Inonotus obliquus\"[Title/Abstract] OR chaga[Title/Abstract]) AND humans[MeSH Terms]",
+      "search_date": "2026-11-07",
       "databases_searched": [
-        "PubMed",
-        "Cochrane Library"
+        "PubMed/MEDLINE",
+        "Europe PMC"
       ],
-      "records_screened": 30,
+      "records_screened": 78,
       "qualifying_human_studies": [],
       "effect_direction": null,
       "population_context": "adults",
@@ -9302,11 +9329,11 @@
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Bounded PubMed source-content review2026-10-27: related research inspected (PMID28462133). DTS20 contains20%Inonotus plus three other plants; a mixture trial cannot establish standalone chaga dose or hangover efficacy. This establishes a general Dose no-numerical-curve conclusion under existing approvedpolicy only. Existing Evidence eligibility, preparation/purpose/population decisions, identity and safety obligations remain separately enforced; no positivegrade or clinicalsign-off is assigned.",
+      "applicability_decision": "Human research exists and the earlier categorical no-qualifying-human-evidence statement is not yet defensible. Exact-synonym search found PMID 18416085, an indexed randomized/crossover Fuscoporia obliqua report in 14 diet-treated type 2 diabetic patients with 12 matched healthy controls; the abstract reports acute postprandial glucose/endothelial findings, but exact preparation, dose, allocation, comparison and outcome hierarchy need full-primary review. DOI10.3793/jaam.4.1 is a separate 60-analyzed-adult 8-week randomized double-blind study of 5 or 15mL/day cultured-mycelium Charga extract against 15mL/day balsamico vinegar, not generic wild conk/powder equivalence. Its many within-arm favorable findings, null immune measures and adverse metabolic/symptom findings must remain distinct. PMID 28462133 is a 20-man acute crossover with 2.5g DTS20 four-herb mixture containing 20%chaga: positive plasma alcohol/antioxidant measures do not isolate chaga, while acetaldehyde, TBARS and transaminase comparisons were null. Full clinical/preparation assessment remains open; no grade or general Dose benchmark is assigned.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex research agent /root/elderberry_review; original draft requested an independent check before application; not clinician review; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
+        "verified_at": "2026-11-07T11:52:51.305527+00:00",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -9346,8 +9373,8 @@
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"
       },
-      "notes": "Superseded source-inventory wording retained for traceability: Preclinical in vitro and murine antioxidant data extensive, but reproducible search identified zero qualifying randomized human clinical efficacy trials; no qualifying human evidence. Exact current source-labelled subjects: Chaga (Inonotus obliquus) Mushroom extract; Chaga Mushroom; Chaga Mushroom Sporocarp Extract; Chaga Mushroom Sporocarp Extract, Powder; Chaga Mushroom extract. Do not treat an extract as a culinary powder or assume a whole fruit is its isolated marker. Historical material_form must be reconciled against these source-bound occurrences before calling exact preparation equivalent.",
-      "applicability_status": "no_qualifying_human_evidence"
+      "notes": "Identity: NIH taxonomy confirms Inonotus obliquus/chaga; live GBIF exact match identifies Fuscoporia obliqua as a synonym of accepted Inonotus obliquus. Taxonomic synonymy does not establish preparation equivalence. Additional oral human records 4755970(psoriasis), 7278096 and 4798418(Befungin/peptic ulcer) have no available MED abstracts and require original-primary preparation/control review; a vendor translation of 4755970 is not verified original source. PMID 18997282 exposed extracted patient lymphocytes in vitro, not oral patient treatment. Preserve oxalate-nephropathy reports 23149251, 32419395, 35451393; the latter includes vitaminC co-use. Do not infer event prevention, dose safety or no human research.",
+      "applicability_status": "applicability_unestablished"
     },
     {
       "canonical_id": "sarsaparilla",
@@ -9414,25 +9441,25 @@
     },
     {
       "canonical_id": "catuaba",
-      "material_form": "Trichilia catigua bark extract",
-      "search_query": "Trichilia catigua catuaba clinical trial human randomized",
-      "search_date": "2026-09-20",
+      "material_form": "Trichilia catigua bark, source-specific powder or extract; not other catuaba species or a multibotanical Catuama formula.",
+      "search_query": "(TITLE_ABS:catuaba OR TITLE_ABS:\"Trichilia catigua\" OR TITLE_ABS:\"Erythroxylum vacciniifolium\" OR TITLE_ABS:\"Anemopaegma arvense\" OR TITLE_ABS:catuama) AND (TITLE_ABS:human OR TITLE_ABS:clinical OR TITLE_ABS:trial OR TITLE_ABS:patient OR TITLE_ABS:volunteer OR TITLE_ABS:randomized) AND SRC:MED; supplementary exact-synonym human-index search: (catuaba OR catuama OR \"Trichilia catigua\" OR \"Erythroxylum vacciniifolium\" OR \"Anemopaegma mirandum\" OR \"Anemopaegma arvense\") AND (MESH_DESCR:Humans OR PUB_TYPE:\"Clinical Trial\" OR PUB_TYPE:\"Randomized Controlled Trial\") AND SRC:MED",
+      "search_date": "2026-11-07",
       "databases_searched": [
-        "PubMed"
+        "PubMed/MED indexed records via EuropePMC REST API"
       ],
-      "records_screened": 10,
+      "records_screened": 19,
       "qualifying_human_studies": [],
       "effect_direction": null,
-      "population_context": "adults",
+      "population_context": "Oral standalone Trichilia catigua bark efficacy; actual Catuama studies concern healthy-volunteer tolerability or burning-mouth patients.",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Bounded PubMed source-content review2026-10-27: related research inspected (PMID15798997). Catuama is an explicitly named four-plant mixture studied for tolerability; no standalone Trichilia bark efficacy dose follows. This establishes a general Dose no-numerical-curve conclusion under existing approvedpolicy only. Existing Evidence eligibility, preparation/purpose/population decisions, identity and safety obligations remain separately enforced; no positivegrade or clinicalsign-off is assigned.",
+      "applicability_decision": "Bounded PubMed/MED source review on 2026-11-07 did not identify qualifying controlled human efficacy evidence attributable to standalone oral Trichilia catigua bark. Genuine related human research is retained: PMID 15798997 studied a named four-plant Catuama liquid, 25mL twice daily 28 days in healthy volunteers, for tolerability; its reported findings are not proof of universal safety or standalone efficacy. PMID 22669143 randomized 72burning-mouth patients 38/34 to a Catuama herbal compound or placebo, two capsules daily 8 weeks, with symptom contrasts favoring the compound and follow-up 12 weeks. This positive combination finding is not a null trial and cannot isolate Trichilia benefit or its dose. Full RCT methods were not reviewed; the bounded standalone-transfer exclusion relies on the primary abstract explicitly identifying a compound intervention. Catuaba-labelled Erythroxylum/Anemopaegma cell/animal studies do not establish Trichilia species or oral human efficacy. No generic aphrodisiac/energy benefit or efficacy threshold follows; preserve independent Dose and safety owners.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex source-content research; independently checked by /root/scientific_review and root. Agent review, not clinician review.",
+        "verified_at": "2026-11-07",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -10873,17 +10900,28 @@
         "PubMed"
       ],
       "records_screened": 22,
-      "qualifying_human_studies": [],
+      "qualifying_human_studies": [
+        {
+          "pmid": "39356507",
+          "title": "Lithium Aspartate for Long COVID Fatigue and Cognitive Dysfunction: A Randomized Clinical Trial.",
+          "study_type": "randomized_controlled_trial",
+          "sample_size": 52,
+          "dose": "Capsules each contained 5 mg ELEMENTAL lithium as lithium aspartate; 10 mg/day initial 10 days, increase 15 mg/day last 11 days if symptoms bothersome. Not 10–15 mg salt mass.",
+          "duration": "3 weeksdouble-blind, then 2 weeksopen-label; laterrelated 6 weekdose-finding extension",
+          "outcome": "52 randomized(26/arm), 50 completed. Combined FSS-7/BFSS primary contrast−3.6(95% CI−16.6 to 9.5), p=.59; secondary outcomes nonsignificant. Same-cohort open-label followup and selected dose-finding(5 enrolled, 3 completed) reported numerically greater benefit at 40–45 mg elemental/day; not independent randomized replication or proven higher-doseefficacy. Corrected abstract BDI-II eligibility<29(not<24), per 39446333. Single-site, small, all White, long COVID population; BFSS developed for the study.",
+          "scoring_eligible": false
+        }
+      ],
       "effect_direction": null,
       "population_context": "adults",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Over-the-counter elemental micro-dose lithium salts lack reproducible randomized human clinical trials; pharmaceutical lithium carbonate trials do not transfer to OTC orotate; applicability unestablished.",
+      "applicability_decision": "Human research exists for supplement lithium salts. Fully read corrected PMID 39356507 tested lithium ASPARTATE delivering 10–15 mg elemental lithium/day for 3 weeks in 52 randomized patients with neurologic post-COVID symptoms and found no significant primary or secondary between-group benefit. Its open-label higher-dose extension is the same clinical family, uncontrolled and selected, not independent positive confirmation. PMID 3718672 is older uncontrolled lithium OROTATE rehabilitation research: 42 selected≥6 month continuers out of 105 initial patients, 150 mg orotate salt/day with diet and variable cointerventions; abstract reviewed but full methods not qualified. Retain reported observations without assigning causality or converting 150 mg salt to elemental lithium. Parkinson pilot 37215748, post hoc 42383093 and human brain PK 38810780 need individual review/family reconciliation. Pharmaceutical carbonate, supplement aspartate/orotate and water exposures do not transfer automatically. No universal null, no healthy supplement efficacy, no Dose benchmark or new safety assurance is assigned. Current generic ingredient applicability remains unestablished. Codex source review 2026-11-07; independent source-content check completed as recorded in verification_provenance; the identified unread Methods, remaining sources and applicability review stay open.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_by": "scripts/api_audit/verify_literature_records.py; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
@@ -12071,12 +12109,13 @@
     {
       "canonical_id": "raspberry_ketones",
       "material_form": "4-(4-Hydroxyphenyl)butan-2-one synthetic / extract",
-      "search_query": "raspberry ketone weight loss clinical trial human",
-      "search_date": "2026-09-20",
+      "search_query": "(TITLE_ABS:\"raspberry ketone\" OR TITLE_ABS:\"raspberry ketones\" OR TITLE_ABS:\"4-(4-hydroxyphenyl)butan-2-one\") AND (MESH:Humans OR TITLE_ABS:patient* OR TITLE_ABS:clinical OR TITLE_ABS:volunteer* OR TITLE_ABS:trial OR TITLE_ABS:men OR TITLE_ABS:women) ; (\"raspberry ketone\"[Title/Abstract] OR \"raspberry ketones\"[Title/Abstract] OR rheosmin[Title/Abstract] OR frambinone[Title/Abstract]) AND humans[MeSH Terms]",
+      "search_date": "2026-11-07",
       "databases_searched": [
-        "PubMed"
+        "PubMed/MEDLINE",
+        "Europe PMC"
       ],
-      "records_screened": 15,
+      "records_screened": 45,
       "qualifying_human_studies": [],
       "effect_direction": null,
       "population_context": "adults",
@@ -12084,15 +12123,16 @@
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Preclinical in vitro lipolysis claims; reproducible search found zero qualifying standalone randomized human clinical trials for weight loss; no qualifying human evidence.",
+      "applicability_decision": "Human oral research exists; replace categorical zero-standalone-trial wording pending source-specific assessment. Official primary Khazaal 2015, Int J Pharm Sci Rev Res 31(2):69–75 reports randomized single-blind three-arm 12-week treatment in 60 women with obesity, 56 analyzed(RK 20/control 18/L-carnitine 18), with Vitatrix pure raspberry ketones 500 mg once daily plus shared diet/activity advice versus no-treatment control. Body-weight comparison with control is explicitly nonsignificant; waist/BMI and selected oxidative-stress findings are reported positive, 8-isoprostane null. Several percentage calculations/reporting details require reconciliation; no new grade is assigned. Mosah 2015, 31(2):63–68 has the same authors, setting, allocation, regimen and matching baseline values and should be treated as the same family unless independence is demonstrated. PMID 26317375 reports 26-person randomized crossover acute raspberry-ketones supplement arm with null RMR/substrate findings; exact composition/dose requires full Methods. No blanket zero or generic favorable conclusion is justified.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex research agent /root/elderberry_review; original draft requested an independent check before application; not clinician review; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
+        "verified_at": "2026-11-07T11:52:51.305527+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "applicability_status": "no_qualifying_human_evidence"
+      "applicability_status": "applicability_unestablished",
+      "notes": "Keep isolated compound 4-(4-hydroxyphenyl)butan-2-one/rheosmin/frambinone distinct from whole raspberry fruit. Preserve combination-trial 23601452(METABO, 70 randomized/45 completed, 8 weeks plus diet/exercise, positive mixture findings) and 29111889(mixture, 36 participants, 8 weeks, body/adipokine findings); do not attribute mixture efficacy to isolated raspberry ketone or assume trial independence without membership review. PMID 18321745 reports 0.01% topical human hair/skin observations, not oral weight-loss evidence. Preserve 36726887 severe arrhythmia case report with infection/unknown mixed-product confounding and 32870171 coronary-vasospasm case title (full report unread); causal ingredient attribution and new severity are not established by this review."
     },
     {
       "canonical_id": "naringin",
@@ -13242,25 +13282,25 @@
     },
     {
       "canonical_id": "cnidium",
-      "material_form": "Cnidium monnieri seed extract (standardized to osthole)",
-      "search_query": "Cnidium monnieri osthole clinical trial human randomized",
-      "search_date": "2026-09-20",
+      "material_form": "Oral standalone Cnidium monnieri fruit/seed material and source-labelled extracts; not Cnidium officinale, isolated osthole/other coumarins, topical mixtures or other species containing osthole.",
+      "search_query": "(TITLE_ABS:\"Cnidium monnieri\" OR TITLE_ABS:\"Selinum monnieri\" OR TITLE_ABS:osthole OR TITLE_ABS:osthol OR TITLE_ABS:\"she chuang zi\") AND (TITLE_ABS:human OR TITLE_ABS:clinical OR TITLE_ABS:trial OR TITLE_ABS:patient OR TITLE_ABS:volunteer OR TITLE_ABS:randomized) AND SRC:MED; supplementary exact-synonym human-index search: (\"Cnidium monnieri\" OR \"Selinum monnieri\" OR osthole OR osthol OR \"Fructus Cnidii\" OR \"Semen Cnidii\" OR \"She chuang zi\") AND (MESH_DESCR:Humans OR PUB_TYPE:\"Clinical Trial\" OR PUB_TYPE:\"Randomized Controlled Trial\") AND SRC:MED",
+      "search_date": "2026-11-07",
       "databases_searched": [
-        "PubMed"
+        "PubMed/MED indexed records via EuropePMC REST API"
       ],
-      "records_screened": 14,
+      "records_screened": 200,
       "qualifying_human_studies": [],
       "effect_direction": null,
-      "population_context": "adults",
+      "population_context": "Human oral standalone Cnidium monnieri efficacy; topical dermatology formulas and animal/cell pharmacology remain separate.",
       "studied_dose_exposure": {
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Preclinical nitric oxide and phosphodiesterase data in rodents; reproducible search found zero qualifying randomized human clinical trials; no qualifying human evidence.",
+      "applicability_decision": "Bounded PubMed/MED source review on 2026-11-07 did not identify qualifying controlled human oral standalone Cnidium monnieri efficacy evidence. This is an indexed evidence gap, not an established null effect or claim that no human research exists. PMID 37328084 synthesizes 20 randomized trials of TOPICAL multiherbal treatments for atopic dermatitis, with pooled symptom benefit and Cnidium identified among core herbs; topical/mixture findings cannot be transferred to oral isolated Cnidium. PMID 39756395 uses nasal-polyp mice and in-vitro systems, not treated human patients. PMID 24928566 is CMS-1 imperatorin-rich fraction toxicity in rats and dogs, not a clinical safety trial. Full review PMID 32028721 describes extensive mostly osthole preclinical research and animal pharmacokinetics; human cell lines, microsomes, transport assays and synthetic derivatives do not establish oral clinical efficacy. No osthole-to-extract mass or safety-threshold transfer; existing Dose and safety remain unchanged.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex source-content research; independently checked by /root/scientific_review and root. Agent review, not clinician review.",
+        "verified_at": "2026-11-07",
         "all_pmids_verified": true,
         "retractions_found": false,
         "reference_citations": {
@@ -13516,12 +13556,13 @@
     {
       "canonical_id": "phenylethylamine",
       "material_form": "Beta-Phenylethylamine hydrochloride (PEA)",
-      "search_query": "phenylethylamine oral supplementation clinical trial human randomized",
-      "search_date": "2026-09-20",
+      "search_query": "(TITLE:\"phenylethylamine\" OR TITLE:\"phenethylamine\" OR TITLE_ABS:\"beta-phenylethylamine\" OR TITLE_ABS:\"2-phenylethylamine\") AND (MESH:Humans OR TITLE_ABS:patient* OR TITLE_ABS:clinical OR TITLE_ABS:volunteer* OR TITLE_ABS:trial OR TITLE_ABS:men OR TITLE_ABS:women) ; (TITLE_ABS:\"phenylethylamine\" OR TITLE_ABS:\"phenethylamine\") AND (TITLE_ABS:oral OR TITLE_ABS:depression OR TITLE_ABS:administered OR TITLE_ABS:supplementation) AND (TITLE_ABS:patients OR TITLE_ABS:volunteers OR TITLE_ABS:humans OR TITLE_ABS:clinical) ; (TITLE_ABS:\"phenylethylamine\" OR TITLE_ABS:\"phenethylamine\") AND (TITLE_ABS:randomized OR TITLE_ABS:controlled OR PUB_TYPE:\"Randomized Controlled Trial\") AND (TITLE_ABS:oral OR TITLE_ABS:supplement OR TITLE_ABS:depression) ; (phenylethylamine[Title/Abstract] OR phenethylamine[Title/Abstract]) AND humans[MeSH Terms]",
+      "search_date": "2026-11-07",
       "databases_searched": [
-        "PubMed"
+        "PubMed/MEDLINE",
+        "Europe PMC"
       ],
-      "records_screened": 15,
+      "records_screened": 99,
       "qualifying_human_studies": [],
       "effect_direction": null,
       "population_context": "adults",
@@ -13529,15 +13570,16 @@
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Trace amine subject to near-complete gastrointestinal and hepatic first-pass deamination by monoamine oxidase B; lacks qualifying oral RCT evidence; applicability unestablished.",
+      "applicability_decision": "Bounded source-content review 2026-11-07 located human phenylethylamine research but no qualifying controlled standalone oral efficacy trial for catalog PEA. PMID 9081552 is an uncontrolled follow-up of 14 previously responding depressed outpatients on PEA 10–60 mg/day plus selegiline 10 mg/day; 12 maintained response at reassessment. The selected responders and co-treatment prevent inference of standalone PEA efficacy. Earlier 8044048 is a letter, and 7711493 a review, not independent randomized replication. Human oral administration/metabolism studies 26481102 (250 mg PEA hydrochloride, two healthy men) and 34729800 investigate urinary doping markers, not therapeutic efficacy. PMID 864482 investigates acute oral amines and EEG; its abstract reports little EEG change after PEA in migrainous subjects, not validated mood, attention or clinical-treatment benefit. Quantitative near-complete gastrointestinal/hepatic first-pass or human absolute bioavailability is not established here. Preserve the existing warning against combining PEA with monoamine oxidase inhibitors; this research is not a recommendation to use that combination.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex source-content research; independently checked by /root/scientific_review and root. Agent review, not clinician review.",
+        "verified_at": "2026-11-07T11:52:51.305527+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
-      "applicability_status": "applicability_unestablished"
+      "applicability_status": "no_qualifying_human_evidence",
+      "notes": "Identity scope is beta-/2-phenylethylamine (phenethylamine), including explicitly reported hydrochloride in 26481102, not alpha-phenylethylamine, phenylalanine, MDMA, substituted phenethylamine drugs or other stimulants. Additional human reports include selegiline+PEA-associated panic/mood instability 26198572 (title verified; full report not read), observational depression markers 1557506/1017374 and mechanistic review 11281991; none is standalone controlled oral efficacy evidence. PEA+selegiline papers and responder follow-up are not independent efficacy families. PK urinary recovery is not an absolute-bioavailability estimate. Safety conclusions remain with existing owners."
     },
     {
       "canonical_id": "turkey_rhubarb_root",
@@ -30912,7 +30954,7 @@
     },
     {
       "canonical_id": "maca_root",
-      "material_form": "Lepidium meyenii root extract",
+      "material_form": "Maca root; exact preparation-specific dried, gelatinized and extracted materials must remain distinct. Existing whole-product labels are not presumed to be extracts.",
       "search_query": "(\"maca root\"[tiab] OR \"Lepidium\"[tiab]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]",
       "search_date": "2026-09-21",
       "databases_searched": [
@@ -30920,20 +30962,101 @@
         "Cochrane Library"
       ],
       "records_screened": 25,
-      "qualifying_human_studies": [],
+      "qualifying_human_studies": [
+        {
+          "pmid": "20691074",
+          "title": "Maca (L. meyenii) for improving sexual function: a systematic review.",
+          "study_type": "systematic_review",
+          "effect_direction": "mixed",
+          "dose": "Source-specific dried root 2.4/3.5 g/day or gelatinized preparations 1.5–3 g/day; not a common extract dose.",
+          "duration": "Source-specific 2–12 weeks; dried-root crossover 6 weeks/period.",
+          "outcome": "Four RCT families, 131 reported participants: dried root mild-ED and postmenopausal studies favored maca; gelatinized healthy-men sexual desire favored maca at 8/12 weeks but not 4 weeks; 8-cyclist crossover between-group sexual-desire contrast null despite within-maca improvement. Review reports no sequence-generation or allocation-concealment methods, small samples and no adverse-event assessments. No generic hormone, fertility or exercise benefit.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Maca (L. meyenii) for improving sexual function: a systematic review.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/20691074/",
+            "verified_at": "2026-11-07",
+            "verified_by": "Codex agent /root/betaine_review; actual official primary full text read via EuropePMC XML; original draft requested an independent check; source-content check subsequently completed as recorded in the parent verification_provenance, not clinician review; receipt PMC2928177_FULLTEXT.xml SHA256 adc60fd502c077ddef3e951fa16d90eb4227864f63db32bf13e9108c35442b99"
+          },
+          "scoring_eligible": false
+        },
+        {
+          "pmid": "25954318",
+          "title": "A double-blind placebo-controlled trial of maca root as treatment for antidepressant-induced sexual dysfunction in women.",
+          "study_type": "randomized_controlled_trial",
+          "effect_direction": "mixed",
+          "dose": "Commercial, botanically vouchered and macamide-analyzed maca root 1.5 g twice daily; 3 g/day; no gelatinization/extract ratio inferred.",
+          "duration": "12weeks",
+          "outcome": "45 randomized women with remitted depression on stable antidepressants; 42 modified ITT 21/21. Overall changes in ASEX/MGH-SFQ total scores not significantly different, including menopausal subgroups. Remission proportions numerically higher in small postmenopausal subset, but cited subgroup OR confidence intervals cross 1; selective item/correlation findings do not establish aggregate primary success. Three adverse-event withdrawals, attribution uncertain; no general safety reassurance.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "A double-blind placebo-controlled trial of maca root as treatment for antidepressant-induced sexual dysfunction in women.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/25954318/",
+            "verified_at": "2026-11-07",
+            "verified_by": "Codex agent /root/betaine_review; actual official primary full text read via EuropePMC XML; original draft requested an independent check; source-content check subsequently completed as recorded in the parent verification_provenance, not clinician review; receipt 25954318_FULLTEXT.xml SHA256 e02790d38065600701460b4edc2483fc0b3538ab06161c6a30cb3b7d3380d4d2"
+          },
+          "scoring_eligible": false
+        },
+        {
+          "pmid": "36110519",
+          "title": "Maca (Lepidium meyenii Walp.) on semen quality parameters: A systematic review and meta-analysis.",
+          "study_type": "systematic_review_meta_analysis",
+          "effect_direction": "mixed",
+          "dose": "Trials 1–5 g/day; gelatinized yellow maca, gelatinized unspecified maca, extract; 12–16 weeks; no preparation equivalence.",
+          "duration": "12–16weeks",
+          "outcome": "Five RCT families, not 5 uniform positive trials. Infertility sperm-concentration pool null: WMD 2.22, 95% CI−2.94 to 7.37, p=.4, I2=91%. Other semen measures mixed; source table includes concentration/progressive-motility contrasts favoring placebo in healthy men and total-count contrast favoring placebo in 2021 infertile men. These are comparative findings, not proven harm. Semen surrogates do not establish pregnancy/live-birth benefit. One abstract and one unpublished report; all arms/sources not interchangeable.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Maca (Lepidium meyenii Walp.) on semen quality parameters: A systematic review and meta-analysis.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/36110519/",
+            "verified_at": "2026-11-07",
+            "verified_by": "Codex agent /root/betaine_review; actual official primary full text read via EuropePMC XML; original draft requested an independent check; source-content check subsequently completed as recorded in the parent verification_provenance, not clinician review; receipt 36110519_FULLTEXT.xml SHA256 51dc0c5508bcfe2190c1dbbcf20a18096a1c16021851cec6d99299d862ee5d85"
+          },
+          "scoring_eligible": false
+        },
+        {
+          "pmid": "36593713",
+          "title": "Efficacy and Safety of Maca (Lepidium meyenii) in Patients with Symptoms of Late-Onset Hypogonadism: A Randomized, Double-Blind, Placebo-Controlled Clinical Trial.",
+          "study_type": "randomized_controlled_trial",
+          "effect_direction": "mixed",
+          "dose": "Six 1000 mg product capsules daily, each 833 mg gelatinized maca powder: approximately 5 g/day actual maca, not 6 g/day maca. Powder release specification n-benzyl-hexadecanamide 115–175 microgram/g.",
+          "duration": "12weeks",
+          "outcome": "Results/flow 88 randomized 44/44; 80 completers 41/39 (abstract incorrectly describes 80 as randomly assigned). Eugonadal men>40, mean~65 with AMS>=27; primary AMS change favored maca at 12 weeks, p<.0001 between-groups; secondary IIEF/IPSS positive. Total/free testosterone null between-groups, p=.444/.9184; body weight/waist and most lipids null, triglyceride contrast positive. Not testosterone-replacement efficacy, not unselected healthy-adult equivalence. GI symptoms 2 maca; preserve source-specific observation without global safety clearance.",
+          "verification_provenance": {
+            "pmid_verified": true,
+            "authoritative_live_title": "Efficacy and Safety of Maca (Lepidium meyenii) in Patients with Symptoms of Late-Onset Hypogonadism: A Randomized, Double-Blind, Placebo-Controlled Clinical Trial.",
+            "human_subjects_verified": true,
+            "topic_match_verified": true,
+            "retracted": false,
+            "verified_source": "https://pubmed.ncbi.nlm.nih.gov/36593713/",
+            "verified_at": "2026-11-07",
+            "verified_by": "Codex agent /root/betaine_review; actual official primary full text read via EuropePMC XML; original draft requested an independent check; source-content check subsequently completed as recorded in the parent verification_provenance, not clinician review; receipt 36593713_FULLTEXT.xml SHA256 71a73d12693f54891b07cbd0ab4cd136b4a0c62bfd84a2120274fd5af0d756f2"
+          },
+          "scoring_eligible": false
+        }
+      ],
       "effect_direction": null,
-      "population_context": "standardized extract / therapeutic preparation lacking finished product trial",
+      "population_context": "Separate mild ED/healthy adult sexual-desire/postmenopausal, antidepressant-associated sexual dysfunction, healthy/infertile male semen, and older eugonadal men with LOH-symptom cohorts.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Clinical research literature present for Lepidium meyenii root extract, but product-level applicability in dietary supplements remains unestablished without verified marker specification or finished formula trial.",
+      "applicability_decision": "Verified research includes dried or gelatinized root as well as extracts; a universal standardized-marker or finished-formula-trial prerequisite is not supported merely by the name maca. Sources include mixed positive/null and comparative negative findings. Apply source-specific preparation, population and measured outcome boundaries; do not transfer hormone, fertility, exercise or colored-root claims. Current reviewed sources do not exhaust the existing 33 candidate screening list. This proposal records completed source reading, not a new grade or finished generic assessment. Source reviews: PMIDs 20691074, 25954318, 36110519, 36593713; remaining candidate sources and exact product applicability remain open.",
       "applicability_status": "applicability_unestablished",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
+        "verified_by": "scripts/api_audit/verify_literature_records.py; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
         "verified_at": "2026-09-21T07:39:42.986936+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
       "verification_result": "authoritative_pubmed_verified",
-      "reason_code": "crude_material_lacks_standardization"
+      "reason_code": "clinical_applicability_unreviewed"
     },
     {
       "canonical_id": "cissus_quadrangularis",
@@ -41034,7 +41157,7 @@
     },
     {
       "canonical_id": "collagen",
-      "notes": "PMID 31919527 (whey versus collagen peptides, muscle protein synthesis) has an unread corrigendum, PMID 33301004, so it is retired from qualifying_human_studies until that notice is read.",
+      "notes": "PMID 33301004 corrigendum to PMID 31919527 has now been read in full on official PMC7727335. It adds Stuart Phillips' personal fees from Enhanced Recovery, equity in Exerkine and issued/pending Exerkine patents, reported as outside the submitted work. The notice reports no changed study methods, outcomes or effect estimates. PMID 31919527 remains outside qualifying_human_studies pending its own full primary-methods/applicability review; reading a disclosure correction does not qualify the trial, expand the skin/joint review scope or override the signed INGR_COLLAGEN_PEPTIDES restriction. Codex source review 2026-11-07; not clinician review.",
       "documented_review_scope": {
         "scope": "ingredient",
         "require_source_label_form": true,
@@ -41177,7 +41300,7 @@
       "applicability_status": "applicability_unestablished",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-03: 142 titles screened, abstracts of the cited studies read; no clinician approval and no scoring credit; receipts scripts/audits/evidence_review_batch1_20261102",
+        "verified_by": "Claude live PubMed esearch/efetch review 2026-11-03: 142 titles screened, abstracts of the cited studies read; no clinician approval and no scoring credit; receipts scripts/audits/evidence_review_batch1_20261102; Codex source-content review independently checked by /root/scientific_review and root, 2026-11-07. Agent review, not clinician review; source-specific methods and eligibility holds retained.",
         "verified_at": "2026-11-03T00:00:00+00:00",
         "all_pmids_verified": true,
         "retractions_found": false

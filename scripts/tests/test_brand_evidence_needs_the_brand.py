@@ -108,12 +108,12 @@ def test_generic_identity_or_another_row_cannot_supply_exact_brand_scope(record_
     entry = {'id': record_id, 'matched_source_row_refs': ['ingredientRows[0]'],
              'matched_canonical_ids': [canonical]}
     decision = assess_clinical_applicability(product, entry, assess_amount=False)
-    assert decision['status'] == 'not_applicable'
-    assert decision['reason_code'] == 'clinical_form_mismatch'
+    assert decision['status'] == 'unresolved'
+    assert decision['reason_code'] == 'clinical_source_label_unresolved'
     sibling = deepcopy(row)
     sibling.update(name=branded, raw_source_text=branded, raw_source_path='ingredientRows[1]')
     product['activeIngredients'].append(sibling)
-    assert assess_clinical_applicability(product, entry, assess_amount=False)['reason_code'] == 'clinical_form_mismatch'
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['reason_code'] == 'clinical_source_label_unresolved'
     exact = {**entry, 'matched_source_row_refs': ['ingredientRows[1]']}
     assert assess_clinical_applicability(product, exact, assess_amount=False)['status'] == 'applicable'
 
@@ -608,7 +608,7 @@ def test_lclt_source_scope_does_not_accept_brand_only_or_other_forms(printed):
                  'required_form_terms': ['LCLT', 'L-Carnitine L-Tartrate']}}
     result = assess_clinical_applicability({'activeIngredients': [row]}, entry,
         assess_amount=False, require_claim_alignment=False)
-    assert result == {'status': 'not_applicable', 'reason_code': 'clinical_form_mismatch'}
+    assert result == {'status': 'unresolved', 'reason_code': 'clinical_source_label_unresolved'}
 
 
 def test_generic_lclt_is_not_a_strict_brand_spelling():

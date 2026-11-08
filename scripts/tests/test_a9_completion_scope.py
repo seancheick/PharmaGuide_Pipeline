@@ -421,7 +421,9 @@ def test_a_hidden_amount_a_safety_check_needs_holds_both_statuses(pipeline, labe
     if subject == "boron":
         # Finished source review cannot supply the undisclosed safety amount.
         assert QUALITY_OPEN in _release_blockers(scored)
-        assert "evidence_assessment_incomplete" not in _release_blockers(scored)
+        # The separate bare MSM preparation is still unproved; finishing the
+        # boron reference cannot settle it or supply the missing safety amount.
+        assert "evidence_assessment_incomplete" in _release_blockers(scored)
         assert any(row["canonical_id"] == "boron"
                    and row["reason_code"] == "reference_only_clinical_record"
                    and row["state"] == "evaluated_limited_or_negative"
@@ -581,9 +583,10 @@ def test_a_measured_zero_isnt_a_hidden_amount(pipeline):
 def test_mixed_formula_keeps_its_reviewed_omega_ingredient_complete(pipeline):
     from scoring_v4.scored_artifact import build_scored_artifact
     scored = build_scored_artifact(_enrich(pipeline, "a9_title_subject_221657_raw.json"))
-    assert scored["quality_assessment_status"] == "partial"
+    assert scored["quality_assessment_status"] == "complete"
     rows = scored["assessment_readiness"]["evidence"]["ingredient_assessments"]
-    assert any(row["canonical_id"] == "glutathione" and row["state"] == "not_yet_evaluated" for row in rows)
+    assert any(row["canonical_id"] == "glutathione" and row["state"] == "evaluated_limited_or_negative"
+               and "INGR_REDUCED_GLUTATHIONE" in row["evidence_ids"] for row in rows)
     for canonical in ("epa", "dha"):
         row = next(row for row in rows if row["canonical_id"] == canonical)
         assert row["state"] == "evaluated_supported"

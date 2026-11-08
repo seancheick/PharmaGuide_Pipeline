@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
     "last_updated": "2026-11-07",
-    "total_entries": 215,
+    "total_entries": 217,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -4330,7 +4330,17 @@
         ],
         "studied_population": "Source-specific contexts: 10 healthy young resistance-trained men; 18 healthy middle-aged recreationally active men and women. No patient, pregnancy or pediatric inference.",
         "reviewed_at": "2026-11-06",
-        "reason": "Both reports studied defined L-carnitine L-tartrate. Verified chemical spellings discover that same preparation; bare Carnipure, freebase, fumarate and ALCAR do not establish this source identity. Source context outcomes remain MRI-specific or unranked recovery measurements; functional null findings are retained. No general performance claim or Dose benchmark."
+        "reason": "Both reports studied defined L-carnitine L-tartrate. Verified chemical spellings discover that same preparation; bare Carnipure, freebase, fumarate and ALCAR do not establish this source identity. Source context outcomes remain MRI-specific or unranked recovery measurements; functional null findings are retained. No general performance claim or Dose benchmark. Explicit named acetyl, fumarate and free-base preparations are outside these L-tartrate trials; an unspecified Carnipure or L-carnitine label remains unresolved.",
+        "excluded_form_terms": [
+          "acetyl l carnitine",
+          "acetyl carnitine",
+          "alcar",
+          "carnitine fumarate",
+          "levocarnitine fumarate",
+          "free form",
+          "freebase",
+          "free base"
+        ]
       }
     },
     {
@@ -48204,7 +48214,7 @@
       ],
       "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
-      "study_type": "rct_single",
+      "study_type": "rct_multiple",
       "published_studies": [
         "36548401",
         "25598314",
@@ -48218,21 +48228,24 @@
       "score_contribution": "tier_3",
       "effect_direction": "mixed",
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "One independently source-qualified randomized crossover supports the specific acute stop-signal inhibition surrogate, while go-response latency was null. Other task findings are mixed or population-specific; no general daily cognitive, mood or endurance efficacy is established. Retain existing mixed weight; do not globally change the literature positive_weak label.",
+      "effect_direction_rationale": "Two independently source-qualified randomized crossovers support distinct acute laboratory surrogates: stop-signal inhibition in 22 healthy women and task reaction time in 28 healthy men. Go-response, payout/stay-probability and other model findings remain null or mixed. These are not two replications of one clinical benefit. Retain existing mixed weight and low confidence; no general daily cognition, mood or endurance efficacy is established.",
       "key_endpoints": [
-        "Acute stop-signal response inhibition latency"
+        "Acute stop-signal response inhibition latency",
+        "Acute model-agnostic reaction time in sequential reinforcement learning and temporal discounting"
       ],
       "health_goals_supported": [],
-      "notes": "One independently source-qualified acute stop-signal inhibition context is eligible under the existing unranked-outcome rubric. The null go-response result is retained. This is not general daily cognition, mood, endurance, disease-treatment, safety or lower-dose-equivalence support. Other known source obligations remain open. The two Leiden papers are not proven independent; no pooled enrollment or replicated trial count is asserted.",
+      "notes": "Two source-qualified acute laboratory contexts are eligible under the existing unranked-outcome rubric, with distinct outcomes and populations. Null/mixed findings remain visible. The 22 analyzed women in 24433977 and 28 analyzed men in 36548401 are disjoint cohorts; two tasks within 36548401 are one trial. The unresolved 24433977/25598314 Leiden overlap does not add a trial or enrollment. Other source obligations remain pending. No general daily cognition, mood, endurance, disease-treatment, safety or lower-dose-equivalence claim follows. Trial-level analyzed counts 22 and 28 remain in source contexts; do not sum them into total_enrollment or claim a verified registry enrollment for these papers.",
       "last_updated": "2026-11-07",
       "applicability": {
         "scope": "ingredient",
-        "studied_population": "Twenty-two healthy adult women, mean age 20.4, in one acute laboratory crossover",
+        "studied_population": "Twenty-two healthy adult women in 24433977 and 28 analyzed healthy adult men in 36548401; distinct acute laboratory crossover cohorts, with source-specific population boundaries retained.",
         "supported_outcomes": [
-          "stop-signal response inhibition latency"
+          "stop-signal response inhibition latency",
+          "model-agnostic reaction time in sequential reinforcement learning and temporal discounting"
         ],
         "source_pmids": [
-          "24433977"
+          "24433977",
+          "36548401"
         ],
         "required_form_terms": [
           "l-tyrosine",
@@ -48261,7 +48274,7 @@
         ],
         "require_source_label_form": true,
         "reviewed_at": "2026-11-07",
-        "reason": "Exact source-labeled oral L-tyrosine only. A positive unranked stop-signal surrogate qualifies under existing policy; it does not establish chronic cognition, mood, disease treatment, lower-dose equivalence or a general Dose benchmark. Ingredient Evidence does not require a matching marketing claim."
+        "reason": "Exact source-labeled oral L-tyrosine only. Reviewed unranked laboratory surrogates qualify under existing policy, with source-specific population and outcome scope. Ingredient Evidence does not require a matching marketing claim. No chronic cognition, mood, disease treatment, lower-dose equivalence or general Dose benchmark is established."
       },
       "references_structured": [
         {
@@ -48447,8 +48460,9 @@
             "reviewer": "Codex source-content review /root/elderberry_review; independent factual check /root/glycine_review; existing-rubric interpretation /root/tyrosine_completion; reviewed by /root and independently qualified by /root/scientific_review. Agent reviews, not clinician review.",
             "reviewed_at": "2026-11-07",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. Only PMID 24433977 is proposed to contribute, using existing mixed weighting; no new scoring policy or Dose benchmark."
-          }
+            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. PMIDs 24433977 and 36548401 are source-qualified within their distinct recorded outcome and population scopes, using existing mixed weighting; PMID 25598314 remains noneligible and pending; no new scoring policy or Dose benchmark."
+          },
+          "sample_size": 22
         },
         {
           "context_schema_version": "1.1.0",
@@ -48527,7 +48541,7 @@
             "reviewer": "Codex source-content review /root/elderberry_review; independent factual check /root/glycine_review; existing-rubric interpretation /root/tyrosine_completion; reviewed by /root and independently qualified by /root/scientific_review. Agent reviews, not clinician review.",
             "reviewed_at": "2026-11-07",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. Only PMID 24433977 is proposed to contribute, using existing mixed weighting; no new scoring policy or Dose benchmark. Source content is verified, but the recorded 17–23-year population applicability implementation hold remains open. Numerical eligibility is not a completed decision; preserve pending status until the truthful source-population boundary is implemented and independently checked."
+            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. PMIDs 24433977 and 36548401 are source-qualified within their distinct recorded outcome and population scopes, using existing mixed weighting; PMID 25598314 remains noneligible and pending; no new scoring policy or Dose benchmark. Source content is verified, but the recorded 17–23-year population applicability implementation hold remains open. Numerical eligibility is not a completed decision; preserve pending status until the truthful source-population boundary is implemented and independently checked."
           }
         },
         {
@@ -48550,14 +48564,14 @@
           "component_registration_status": "fully_registered",
           "condition": "healthy_cognition",
           "purpose": "cognitive_support",
-          "review_status": "source_verified_pending_clinical_review",
-          "scoring_eligible": false,
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
           "trial_family": "ingr_l_tyrosine_36548401",
           "population": {
             "age_group": "adult",
-            "description": "30 healthy men recruited; two psychiatric/depressive-screen exclusions; 28 analyzed."
+            "description": "Thirty healthy male volunteers participated; two were excluded before data analysis for psychiatric/depressive-screen criteria; 28 analyzed."
           },
           "study_design": "Randomized double-blind within-subject placebo crossover; 7–28 days between sessions; 2 g The Hut.com tyrosine or cellulose in 200 mL orange juice; tasks 75 minutes later.",
           "outcomes": [
@@ -48589,7 +48603,7 @@
             "Both tasks were performed by the same 28 analyzed men in this crossover study. Multiple task or computational-model analyses of this cohort are not independently enrolled trials; do not count them as separate replications.",
             "No direct central dopamine or norepinephrine measurement; multiple model parameters and Bayesian comparisons; small male-only sample; no prespecified clinical primary endpoint.",
             "Actual agent attribution retained. Compatibility clinician_approved value is not a physician review. No general chronic efficacy, disease-treatment, safety or lower-dose-equivalence conclusion.",
-            "Reaction-time and computational findings remain distinct from general cognitive performance. Independent interpretation of a credit-bearing RT-only source context is still required; this proposal does not reject its positive observations."
+            "Reviewed under the existing approved-unranked surrogate rubric for model-agnostic task reaction time only. Null payout/stay-probability and mixed computational findings do not establish general cognitive performance, reward benefit or clinical efficacy."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -48619,11 +48633,12 @@
             }
           },
           "clinical_review": {
-            "reviewer": "Codex source-content review /root/elderberry_review; independent factual check /root/glycine_review; existing-rubric interpretation /root/tyrosine_completion; reviewed by /root and independently qualified by /root/scientific_review. Agent reviews, not clinician review.",
+            "reviewer": "Codex source-content review /root/elderberry_review; independent factual check /root/glycine_review; existing-rubric interpretation /root/tyrosine_completion; source and interpretation checked by /root; independent interpretation /root/scientific_review. Agent reviews, not clinician review.",
             "reviewed_at": "2026-11-07",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. Only PMID 24433977 is proposed to contribute, using existing mixed weighting; no new scoring policy or Dose benchmark. Source content is verified, but the recorded RT-only benefit interpretation remains an unmade eligibility decision. Preserve pending status until interpretation under the existing rubric is independently completed; do not treat temporary noneligibility as a finished zero-credit assessment."
-          }
+            "basis": "Primary full XML and live API identity/content verified; narrow direct between-condition reaction-time surrogate qualifies under the existing approved-unranked outcome rubric. Two tasks are one cohort of 28 analyzed healthy men; null payout/stay-probability and mixed/model-dependent results remain distinct. No prespecified clinical primary, general cognition benefit, chronic regimen, lower-dose equivalence or Dose benchmark is inferred. Independent interpretation: POST411_TYROSINE255_365_INTERPRETATION_REVIEW.json (2026-11-07). Compatibility clinician_approved does not assert physician review."
+          },
+          "sample_size": 28
         },
         {
           "context_schema_version": "1.1.0",
@@ -48700,7 +48715,7 @@
             "reviewer": "Codex source-content review /root/elderberry_review; independent factual check /root/glycine_review; existing-rubric interpretation /root/tyrosine_completion; reviewed by /root and independently qualified by /root/scientific_review. Agent reviews, not clinician review.",
             "reviewed_at": "2026-11-07",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. Only PMID 24433977 is proposed to contribute, using existing mixed weighting; no new scoring policy or Dose benchmark."
+            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. PMIDs 24433977 and 36548401 are source-qualified within their distinct recorded outcome and population scopes, using existing mixed weighting; PMID 25598314 remains noneligible and pending; no new scoring policy or Dose benchmark."
           }
         },
         {
@@ -48910,8 +48925,7 @@
           ]
         }
       ],
-      "published_studies_count": 1,
-      "total_enrollment": 22,
+      "published_studies_count": 2,
       "registry_completed_trials_count": null,
       "exclude_aliases": [
         "N-Acetyl-L-Tyrosine",
@@ -48922,6 +48936,383 @@
         "D,L-Tyrosine"
       ],
       "exclude_alias_match_mode": "bounded_phrase"
+    },
+    {
+      "id": "INGR_REDUCED_GLUTATHIONE",
+      "standard_name": "Reduced L-Glutathione",
+      "aliases": [
+        "Glutathione",
+        "L-Glutathione",
+        "Reduced Glutathione",
+        "GSH",
+        "Setria"
+      ],
+      "category": "antioxidant",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_single",
+      "published_studies": [
+        "24791752"
+      ],
+      "published_studies_count": 1,
+      "total_enrollment": 61,
+      "score_contribution": "tier_3",
+      "effect_direction": "mixed",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Independent source review applies the existing mixed-outcome category to this trial: selected laboratory markers improved while other measurements did not. Only the named surrogate findings qualify; clinical benefit and general efficacy are not established.",
+      "key_endpoints": [
+        "Blood glutathione status during supplementation"
+      ],
+      "health_goals_supported": [],
+      "notes": "One source-qualified randomized trial. The exact preparation, population and outcome limits are retained. Repeated outcomes, timepoints and dose arms do not add independent replication. The assigned study exposure does not establish an effective minimum or general Dose benchmark. Historical source labels remain unchanged in the literature inventory. NCT01044277 reports 61 enrolled; the publication distinguishes 60 receiving intervention and 54 analyzed completers.",
+      "last_updated": "2026-11-07",
+      "applicability": {
+        "scope": "ingredient",
+        "studied_population": "Healthy nonsmoking adult men and women; 61 enrolled, 60 received intervention, 54 completed and analyzed; 76% women. Eligibility age 30–79; analyzed participants age 28–72 (mean 46.6), as reported.",
+        "supported_outcomes": [
+          "blood_glutathione_status"
+        ],
+        "source_pmids": [
+          "24791752"
+        ],
+        "required_form_terms": [
+          "reduced l-glutathione",
+          "reduced l glutathione",
+          "l-glutathione",
+          "l glutathione",
+          "reduced glutathione",
+          "glutathione reduced",
+          "gsh",
+          "setria"
+        ],
+        "excluded_form_terms": [
+          "liposomal",
+          "lypospheric",
+          "vesisorb",
+          "capsoil",
+          "nanoemulsion",
+          "micellar",
+          "phytosome",
+          "self-emulsifying",
+          "acetyl",
+          "acetylglutathione",
+          "s-acetyl",
+          "s acetyl",
+          "oxidized",
+          "gssg",
+          "disulfide",
+          "sublingual",
+          "buccal",
+          "modified release",
+          "modified-release",
+          "sustained release",
+          "sustained-release",
+          "time-release",
+          "delayed-release",
+          "extended release",
+          "enteric",
+          "acid-resistant",
+          "drcaps",
+          "d-glutathione",
+          "d glutathione",
+          "dl-glutathione",
+          "dl glutathione",
+          "d,l-glutathione",
+          "d l glutathione",
+          "glutathione peroxidase",
+          "glutathione reductase",
+          "gsh-px"
+        ],
+        "require_source_label_form": true,
+        "reviewed_at": "2026-11-07",
+        "reason": "Ingredient research applies to source-labeled reduced L-glutathione/GSH in ordinary swallowed preparations. Setria is the source supplier material, not a required trademark for the same chemical form. Generic or altered forms, clinical benefit, dose minimum, safety and bioavailability equivalence are not established."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "PubMed",
+          "pmid": "24791752",
+          "title": "Randomized controlled trial of oral glutathione supplementation on body stores of glutathione.",
+          "citation": "Randomized controlled trial of oral glutathione supplementation on body stores of glutathione.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24791752/",
+          "doi": "10.1007/s00394-014-0706-z",
+          "publication_types": [
+            "Comparative Study",
+            "Research Support, Non-U.S. Gov't",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ]
+        }
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_reduced_glutathione_24791752",
+          "components": [
+            "INGR_REDUCED_GLUTATHIONE"
+          ],
+          "source_pmids": [
+            "24791752"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "preparation": "Setria reduced glutathione supplied by Kyowa Hakko, in ordinary oral capsules with cellulose; placebo cellulose.",
+            "chemical_form": "Reduced L-glutathione (GSH); no liposomal, S-acetyl, oxidized, sublingual or modified-release equivalence.",
+            "branded_material": "Setria",
+            "manufacturer": "Kyowa Hakko USA, Inc. (source supplier named in the trial)"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "blood_glutathione_status",
+          "purpose": "blood_glutathione_status",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_24791752",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy nonsmoking adult men and women; 61 enrolled, 60 received intervention, 54 completed and analyzed; 76% women. Eligibility age 30–79; analyzed participants age 28–72 (mean 46.6), as reported."
+          },
+          "study_design": "Randomized double-blind parallel three-arm placebo-controlled study; one trial family, two active dose arms, six months then one-month washout. Repeated compartments/timepoints and immune subsets are not independent trials.",
+          "outcomes": [
+            {
+              "name": "Blood glutathione status at six months: selected high-dose treatment/placebo contrasts positive (Figure 2 daggers). Current NCT01044277 names blood glutathione status at 6–7 months as primary. No clinical health benefit is inferred.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "After one-month washout, glutathione stores declined toward baseline; six-month treatment findings do not establish a persistent effect after discontinuation or positivity at every dose/time/compartment.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "Selected buccal-cell glutathione store comparisons in Figure 3 were positive; this extra cellular compartment is not a separate trial or a clinical efficacy outcome.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Lymphocyte proliferation and neutrophil function did not significantly improve.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "NK-cell cytotoxicity in small subsets at three months increased from baseline (Figure 5, Student t-test; n 6 placebo/high-dose, n 5 low-dose); this is not an established placebo-controlled clinical immune benefit.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            }
+          ],
+          "limitations": [
+            "The studied material was Setria reduced L-glutathione with cellulose. This chemical-form review requires explicit reduced L-glutathione/GSH label proof; no proprietary active matrix is established, and the source supplier name alone is not a necessary identity condition.",
+            "Body-store biomarkers do not establish clinical immune benefit, disease prevention, symptom improvement or general antioxidant efficacy.",
+            "Selected placebo contrasts differ from within-arm baseline comparisons; not every dose/time/compartment was positive.",
+            "One trial, 54 completers; two active dose arms, repeated timepoints and immune subsets add no independent replication.",
+            "Kyowa-funded study and supplied products; sponsor/research support disclosures retained. No safety reassurance or lower-dose equivalence.",
+            "Current NCT01044277 API declares blood glutathione status primary and oxidative-stress/immune biomarkers secondary, with linked PMID 24791752. Registry first posted 2010-01-07 before reported 2010-02 start; current wording updated 2022. Unchanged 2010 prospective outcome wording was not verified. The washout trajectory is descriptive within-group change, not a claim of placebo contrast or persistent efficacy."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              250,
+              1000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "endpoint_followup_only",
+            "duration_days": null,
+            "administration_frequency": "Paper reports two capsules daily; current NCT01044277 specifies 125 mg or 500 mg twice daily, totaling 250 or 1000 mg/day for six months, then one-month washout.",
+            "dosage_forms": [
+              "Ordinary oral capsules"
+            ],
+            "co_therapies": [
+              "No antioxidant or GSH supplement use during the preceding month; habitual diet not a clinical intervention."
+            ],
+            "reported_regimen": "Setria 250 or 1000 mg/day for six months; two separate randomized arms, no general efficacy minimum.",
+            "normalization": {
+              "basis": "Two 125 mg or two 500 mg capsules/day. Six months retained as reported; no fabricated 180-day duration or interpolated Dose curve."
+            },
+            "source_provenance": {
+              "pmid": "24791752",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24791752/",
+              "location": "Full primary PDF Methods/Subjects/Statistics/Results, Figures 2/3 visually checked; Setria and placebo formulations explicit. Local PDF SHA256 c565051f39c6637a3f586ffb6edbc858b4bc01e3e2f71c7b2d05649e510609c9"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Codex research /root/elderberry_review; root primary-content check /root; independent source interpretation /root/scientific_review. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-07",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results and live source identity checked; narrow unranked surrogate interpretation independently reviewed in COMBINED_CINNAMON_GSH_NATTO_SOURCE_INTERPRETATION_REVIEW.json. Exact native preparation/schema/scope independently checked in GSH_NATTO_FINAL_EXACT_NATIVE_APPROVAL.json. No new scoring scale, general clinical-benefit conclusion or Dose benchmark. Root independently verified https://clinicaltrials.gov/api/v2/studies/NCT01044277 (linked PMID 24791752, current primary/secondary designation), distinguished baseline-only Figure 5 NK findings, and visually checked Figure 2/3 treatment-placebo daggers. This exact-primary mapping and its corrected regimen/washout roles were independently confirmed in GSH_NATTO_FINAL_EXACT_NATIVE_APPROVAL.json. Exact chemical-form scope is independently reviewed in GSH_CHEMICAL_EXACT_FORM_OWNER_REVIEW.json. Other physical/chemical formulations remain excluded; no clinical, safety or dose equivalence is inferred."
+          },
+          "trial_registration": "NCT01044277",
+          "sample_size": 54
+        }
+      ]
+    },
+    {
+      "id": "INGR_NATTOKINASE",
+      "standard_name": "Nattokinase",
+      "aliases": [
+        "NSK-SD",
+        "NSK SD"
+      ],
+      "category": "cardiovascular",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_single",
+      "published_studies": [
+        "26109079"
+      ],
+      "published_studies_count": 1,
+      "total_enrollment": 12,
+      "score_contribution": "tier_3",
+      "effect_direction": "mixed",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Independent source review applies the existing mixed-outcome category to this trial: selected laboratory markers improved while other measurements did not. Only the named surrogate findings qualify; clinical benefit and general efficacy are not established.",
+      "key_endpoints": [
+        "coagulation_fibrinolysis_markers"
+      ],
+      "health_goals_supported": [],
+      "notes": "One source-qualified randomized trial. The exact preparation, population and outcome limits are retained. Repeated outcomes, timepoints and dose arms do not add independent replication. The assigned study exposure does not establish an effective minimum or general Dose benchmark. Historical source labels remain unchanged in the literature inventory.",
+      "last_updated": "2026-11-07",
+      "applicability": {
+        "scope": "ingredient",
+        "studied_population": "12 healthy young Japanese men, mean 22.3 years; no medication or history of hematologic, venous or arterial disease.",
+        "supported_outcomes": [
+          "coagulation_fibrinolysis_markers"
+        ],
+        "source_pmids": [
+          "26109079"
+        ],
+        "required_form_terms": [
+          "nsk-sd",
+          "nsk sd"
+        ],
+        "excluded_form_terms": [
+          "natto food",
+          "whole natto"
+        ],
+        "require_source_label_form": true,
+        "reviewed_at": "2026-11-07",
+        "reason": "The finding applies to the exact studied preparation and named surrogate, with source-specific population and outcome limits. Other formulations, clinical health benefits, personal safety and an effective dose minimum are not established."
+      },
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "PubMed",
+          "pmid": "26109079",
+          "title": "A single-dose of oral nattokinase potentiates thrombolysis and anti-coagulation profiles.",
+          "citation": "A single-dose of oral nattokinase potentiates thrombolysis and anti-coagulation profiles.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26109079/",
+          "doi": "10.1038/srep11601",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ]
+        }
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_nattokinase_26109079",
+          "components": [
+            "INGR_NATTOKINASE"
+          ],
+          "source_pmids": [
+            "26109079"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "preparation": "NSK-SD nattokinase softgel, Japan Bio Science Laboratory, 2000 FU; matched placebo.",
+            "chemical_form": "Nattokinase enzymatic preparation; no whole-natto, other enzyme or FU-to-mass equivalence.",
+            "branded_material": "NSK-SD",
+            "manufacturer": "Japan Bio Science Laboratory Co., Ltd (source named in the trial)"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "coagulation_fibrinolysis_markers",
+          "purpose": "coagulation_fibrinolysis_markers",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_26109079",
+          "population": {
+            "age_group": "adult",
+            "description": "12 healthy young Japanese men, mean 22.3 years; no medication or history of hematologic, venous or arterial disease."
+          },
+          "study_design": "Randomized double-blind placebo crossover in 12 men; single 2000 FU NSK-SD softgel, more than two-week washout, baseline and 2/4/6/8-hour blood measurements. One cohort, not two independent trials.",
+          "outcomes": [
+            {
+              "name": "Selected D-dimer, fibrin/fibrinogen degradation product, aPTT, factorVIII and antithrombin comparisons changed versus placebo under Bonferroni correction; results remained within normal ranges.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Other measured blood parameters showed no significant treatment/placebo difference; no clinical thrombotic or cardiovascular event endpoint was tested.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Exact NSK-SD acute biomarker experiment only; no generic nattokinase-preparation or chronic-regimen equivalence.",
+            "Selected coagulation/fibrinolysis marker changes do not establish prevention/treatment of thrombosis, cardiovascular events or substitution for medication.",
+            "12 healthy young men and eight-hour follow-up; no pregnancy, pediatric, disease-population or safety conclusion.",
+            "Original literature positive_moderate label is retained verbatim. This proposed native mixed interpretation is an independently reviewed positive/null marker assessment, not a generic multiplier mapping or the glutamine 30108163 exception."
+          ],
+          "dose": {
+            "measurement_type": "enzyme_activity",
+            "unit": "FU",
+            "values": [
+              2000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "single_challenge",
+            "duration_basis": "endpoint_followup_only",
+            "duration_days": null,
+            "administration_frequency": "One softgel in active crossover session; blood follow-up eight hours.",
+            "dosage_forms": [
+              "NSK-SD softgel capsule"
+            ],
+            "co_therapies": [
+              "Matched water/calorie intake in both crossover conditions; no medications."
+            ],
+            "reported_regimen": "Single 2000 FU NSK-SD dose; no daily-use efficacy minimum.",
+            "normalization": {
+              "basis": "FU retained as measured activity. No mass conversion, daily-dose benchmark or proportional efficacy assumption."
+            },
+            "source_provenance": {
+              "pmid": "26109079",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/26109079/",
+              "location": "Official full primary XML Methods/Experimental Procedures/Data analysis/Results/Figure 2/Table 1; local XML SHA256 88551216e4b90ae08da5c8a24816952752172f2f6bde6d7b6f9c5a72efd1469a"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Codex research /root/elderberry_review; root primary-content check /root; independent source interpretation /root/scientific_review. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-07",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results and live source identity checked; narrow unranked surrogate interpretation independently reviewed in COMBINED_CINNAMON_GSH_NATTO_SOURCE_INTERPRETATION_REVIEW.json. Exact native preparation/schema/scope independently checked in GSH_NATTO_FINAL_EXACT_NATIVE_APPROVAL.json. No new scoring scale, general clinical-benefit conclusion or Dose benchmark."
+          }
+        }
+      ]
     }
   ]
 }

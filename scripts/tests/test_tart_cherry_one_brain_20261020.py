@@ -85,7 +85,7 @@ def test_juice_trials_do_not_credit_a_dry_extract(pipeline, pid):
     ("Montmorency Tart Cherry Juice", "unresolved", "invalid_applicability_contract"),
     ("Tart Cherry Juice Powder", "not_applicable", "clinical_form_excluded"),
     ("Tart Cherry Extract", "not_applicable", "clinical_form_excluded"),
-    ("Tart Cherry", "not_applicable", "clinical_form_mismatch"),
+    ("Tart Cherry", "unresolved", "clinical_source_label_unresolved"),
 ])
 def test_ingr_tart_cherry_applies_to_juice_only(text, status, reason):
     from clinical_applicability import assess_clinical_applicability

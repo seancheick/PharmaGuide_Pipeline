@@ -193,7 +193,13 @@ def test_records_waiting_on_clinician_stay_held(cid, name, reason):
 def test_paper_with_an_unread_correction_stays_retired(records, cid, pmid):
     assert pmid not in {study["pmid"] for study in records[cid]["qualifying_human_studies"]}
     assert pmid not in records[cid]["applicability_decision"]
-    assert pmid in records[cid]["notes"] and "retired from qualifying_human_studies" in records[cid]["notes"]
+    assert pmid in records[cid]["notes"]
+    if cid == "collagen":
+        assert "33301004" in records[cid]["notes"]
+        assert "no changed study methods, outcomes or effect estimates" in records[cid]["notes"]
+        assert "remains outside qualifying_human_studies" in records[cid]["notes"]
+    else:
+        assert "retired from qualifying_human_studies" in records[cid]["notes"]
 
 
 def test_no_review_claims_clinician_approval_or_credit(records, spec):

@@ -114,7 +114,7 @@ def test_enrichment_derived_form_cannot_satisfy_a_source_required_term():
              "matched_source_row_refs": ["ingredientRows[0]"]}
     accepted, rejected = filter_clinical_matches(source, [match])
     assert accepted == []
-    assert rejected[0]["reason_code"] == "clinical_form_mismatch"
+    assert rejected[0]["reason_code"] == "clinical_source_label_unresolved"
 
 
 @pytest.mark.parametrize("raw_taxonomy", [None, {"category": "botanical", "forms": []}])
