@@ -3017,3 +3017,24 @@ def test_documented_review_exclusions_need_source_preparation_proof(canonical, s
               "matched_source_row_refs": [row["raw_source_path"]]}
     result = assess_clinical_applicability(product, scoped, assess_amount=False, require_claim_alignment=False)
     assert (result.get("reason_code") == "clinical_form_excluded") is excluded
+
+
+@pytest.mark.parametrize('notes,accepted', [
+    ('Not ileocolonic', True), ('Non-ileocolonic', True),
+    ('Ileocolonic release', False), ('Not colon-targeted', True),
+    ('Colon-targeted release', False),
+    ('Not ileocolonic. Uses ileocolonic release.', False),
+])
+def test_row_bound_delivery_does_not_treat_negated_exclusion_as_present(notes, accepted):
+    row = {'name': 'Enteric-coated Peppermint Oil', 'canonical_id': 'peppermint',
+           'raw_source_text': 'Enteric-coated Peppermint Oil',
+           'raw_source_path': 'ingredientRows[0]', 'notes': notes,
+           'quantity': 200, 'unit': 'mg'}
+    product = {'activeIngredients': [row], 'delivery_data': {'systems': [{
+        'canonical_name': 'enteric-coated', 'raw_source_text': 'Enteric-coated',
+        'match_source': 'ingredientRows[0]',
+    }]}}
+    entry = {**reviewed_entries()['INGR_PEPPERMINT_OIL'],
+             'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert (result['status'] == 'applicable') is accepted

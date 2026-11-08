@@ -390,8 +390,12 @@ def _source_delivery_forms(product: Mapping, row: Mapping, excluded_terms=(), *,
                 source_text = json.dumps(product.get("physicalState") or {})
             elif re.fullmatch(r"netContents\[\d+\]", source):
                 source_text = json.dumps(product.get("netContents") or [])
-        normalized_source = " " + _key(source_text) + " "
-        if any(" " + _key(term) + " " in normalized_source for term in excluded_terms):
+        # Preserve clause boundaries and let the shared negation owner decide
+        # whether an excluded delivery is actually asserted by this source.
+        if any(find_affirmative_label_match(
+                re.compile(r"(?<!\w)" + r"[\s-]+".join(re.escape(part) for part in _key(term).split())
+                           + r"(?!\w)", re.I), normalize_text(source_text))
+               for term in excluded_terms):
             continue
         marker_pattern = re.compile(r"(?<!\w)" + re.escape(marker) + r"(?!\w)", re.I)
         if not marker_pattern.search(source_text):
