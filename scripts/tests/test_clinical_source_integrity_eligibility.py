@@ -1909,3 +1909,15 @@ def test_known_capsule_with_unestablished_preparation_is_not_a_completed_deliver
     assert resolution.reason_code != 'clinical_delivery_mismatch'
     assert resolution.applicability_status == 'applicability_unestablished'
     assert (row, product) == original
+
+
+def test_sterol_source_limitations_keep_full_verifiable_identifiers():
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()['INGR_PLANT_STEROLS']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    pooled = ' '.join(contexts['24144075']['limitations'])
+    exact = ' '.join(contexts['24287284']['limitations'])
+    assert 'PMID 24287284' in pooled and 'PMID 37739728' in pooled
+    assert 'PMID 24144075' in exact
+    assert 'Exact242preparation' not in pooled and 'unread377 source' not in pooled
+    assert 'qualified241capsule' not in exact
