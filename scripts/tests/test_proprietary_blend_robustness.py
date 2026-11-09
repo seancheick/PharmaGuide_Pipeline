@@ -21,7 +21,7 @@ def _partial_blend() -> dict:
 
 def test_same_blend_projected_in_two_sections_is_penalized_once() -> None:
     detector = ProprietaryBlendDetector()
-    blend = _partial_blend()
+    blend = {**_partial_blend(), "raw_source_path": "ingredientRows[0]"}
 
     result = detector.analyze_product({
         "activeIngredients": [blend],

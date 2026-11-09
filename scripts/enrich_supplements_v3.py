@@ -15513,7 +15513,9 @@ class SupplementEnricherV3:
                     nested = ingredient.get("forms") or []
                 source_nested_count = len(nested)
                 nested = [child for child in nested
-                          if not (isinstance(child, dict) and child.get("is_excipient") is True)]
+                          if not (isinstance(child, dict) and (
+                              child.get("is_excipient") is True
+                              or child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES))]
                 quantity = ingredient.get('quantity', 0) or 0
                 unit = ingredient.get('unit', '') or ''
                 ingredient_group = ingredient.get('ingredientGroup', '') or ''

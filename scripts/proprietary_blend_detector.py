@@ -113,9 +113,8 @@ class DetectedBlend:
         - mg_bucket: 5mg bucket (to tolerate parsing variance like 33.9 vs 34.1)
         - ingredient_count: distinguishes same-named blends with different structures
 
-        This prevents:
-        - Double-penalizing same blend detected from multiple fields
-        - Under-penalizing distinct same-named blends (e.g., inner vs outer capsule)
+        analyze_product combines this content key with source-row ownership;
+        matching names and amounts alone never establish one physical blend.
         """
         normalized = self.blend_name.lower().strip()
         if self.blend_total_amount is not None:
@@ -351,7 +350,7 @@ class ProprietaryBlendDetector:
             elif isinstance(stmt, str):
                 search_fields.append(("statements", [{"name": stmt}]))
 
-        seen_blends = set()  # DetectedBlend.dedupe_key values
+        seen_blends = set()  # Content key plus physical source-row ownership.
 
         for field_name, field_data in search_fields:
             if not field_data:
@@ -361,9 +360,12 @@ class ProprietaryBlendDetector:
                 for i, item in enumerate(field_data):
                     source_field = f"{field_name}[{i}]"
                     blend = self._analyze_ingredient_for_blend(item, source_field, seen_blends)
-                    if blend and blend.dedupe_key not in seen_blends:
-                        detected_blends.append(blend)
-                        seen_blends.add(blend.dedupe_key)
+                    if blend:
+                        owner = item.get("raw_source_path") if isinstance(item, dict) else None
+                        key = (*blend.dedupe_key, owner or source_field)
+                        if key not in seen_blends:
+                            detected_blends.append(blend)
+                            seen_blends.add(key)
 
         # Calculate totals
         total_penalty = sum(b.penalty_applicable for b in detected_blends)
