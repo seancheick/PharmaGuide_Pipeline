@@ -91,6 +91,13 @@ def test_lemon_balm_unread_methods_do_not_turn_unverified_counts_into_depth():
     assert '34449930' in record['notes'] and '12 databases' in record['notes']
 
 
+def test_lemon_balm_unread_preparation_does_not_inherit_flower_specific_unii():
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()['INGR_LEMON_BALM']
+    assert 'unii' not in record['external_ids']
+    assert 'RCU5REA2I1' not in str(record)
+
+
 def test_bacopa_positive_task_names_keep_cognition_claim_alignment():
     from clinical_applicability import assess_clinical_applicability, reviewed_entries
     name = 'Bacopa monnieri extract'

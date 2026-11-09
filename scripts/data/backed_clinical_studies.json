@@ -23522,7 +23522,7 @@
       "health_goals_supported": [
         "Reduce Stress/Anxiety"
       ],
-      "notes": "PMID 34449930 reports pooled depression/anxiety symptom findings favoring lemon balm, with substantial heterogeneity and differing acute/chronic methods. It does not establish cognitive-performance efficacy or a universal preparation/dose threshold. Its abstract reports searching 12 databases, not 12 independently verified trials. The historical 123 enrollment and 12 registry-trial counts were not reconciled to source trial families and have been removed. Actual full Methods, Results and included-study tables remain unread: publisher access was denied and the exact Deakin repository record is embargoed without public files as of November 9, 2026. Preparation, population and product applicability remain unqualified; metadata or abstract access does not complete this review.",
+      "notes": "PMID 34449930 reports pooled depression/anxiety symptom findings favoring lemon balm, with substantial heterogeneity and differing acute/chronic methods. It does not establish cognitive-performance efficacy or a universal preparation/dose threshold. Its abstract reports searching 12 databases, not 12 independently verified trials. The historical 123 enrollment and 12 registry-trial counts were not reconciled to source trial families and have been removed. Actual full Methods, Results and included-study tables remain unread: publisher access was denied and the exact Deakin repository record is embargoed without public files as of November 9, 2026. Preparation, population and product applicability remain unqualified; metadata or abstract access does not complete this review. The prior flower-specific identifier has been removed. No replacement plant-part identifier is assigned before the study material is verified.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-11-09",
       "notable_studies": "PMID 34449930 reports pooled improvements in anxiety and depression scores versus placebo, with substantial heterogeneity and methodological differences across a small number of trials. The present retained reference does not supply a cognitive-performance determination.",
@@ -23557,9 +23557,7 @@
           "verification_source": "pubmed_eutils"
         }
       ],
-      "external_ids": {
-        "unii": "RCU5REA2I1"
-      },
+      "external_ids": {},
       "effect_direction": "positive_weak",
       "primary_outcome": "Reduce Stress/Anxiety",
       "effect_direction_confidence": "medium",
