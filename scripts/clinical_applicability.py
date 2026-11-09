@@ -862,7 +862,10 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
     never a precaution). Any other restriction fails only on an explicit label
     conflict. This never infers an individual user's condition.
     """
-    from rda_ul_calculator import label_is_for_children, _target_group_text
+    from rda_ul_calculator import (
+        _AGE, _pediatric_years, _target_group_text,
+        label_is_for_children, label_pediatric_age_ranges,
+    )
     from scoring_input_contract import _ROUTE_PRENATAL_KEYWORDS, _route_product_label_text
     population = context.get("population")
     if not isinstance(population, Mapping) or not isinstance(population.get("description"), str) or not population["description"].strip():
@@ -901,6 +904,29 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
         # A legacy signed population description without a typed age group
         # cannot establish that pediatric use was studied.
         return "unresolved"
+    if children and population.get("age_group") == "mixed":
+        age_pattern = re.compile(
+            r"\b(?:age|aged|ages)\s*" + _AGE + r"\s*(?:[-–—]|to)\s*" + _AGE, re.I)
+        source_ranges = [
+            _pediatric_years(match.group(0).lower())
+            for sentence in re.split(r"[.;]", description)
+            if _studied_subjects(age_pattern, sentence)
+            for match in age_pattern.finditer(sentence)
+        ]
+        if source_ranges:
+            bands = label_pediatric_age_ranges({**dict(product), "targetGroups": groups})
+            if not bands or "unresolved" in bands:
+                return "unresolved"
+            # Use the owner's exact label intervals, not coarse NASEM-band
+            # overlap as proof that every targeted age was studied.
+            targets = [_pediatric_years(text) for group, text in zip(groups, group_texts)
+                       if label_pediatric_age_ranges({"targetGroups": [group]})]
+            if all(not any(low < end and start < high for start, end in source_ranges)
+                   for low, high in targets):
+                return "explicit_conflict"
+            if not all(any(start <= low and high <= end for start, end in source_ranges)
+                       for low, high in targets):
+                return "unresolved"
     # Pregnant women are not interchangeable with a studied nonpregnant group.
     if pregnancy and not _studied_subjects(_PREGNANT_SUBJECTS, description):
         return "explicit_conflict"
