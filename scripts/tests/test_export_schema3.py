@@ -6,6 +6,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from export_schema import (  # noqa: E402
@@ -291,6 +293,7 @@ def test_schema_3_rehydrates_pregnancy_warning_and_dedup_provenance() -> None:
 
 def test_schema_3_rejects_interaction_warning_without_stable_rule_id() -> None:
     blob = _schema2_blob()
+    blob["warnings"][0] = dict(blob["warnings"][0])
     blob["warnings"][0].pop("source_rule_id")
 
     try:
@@ -299,3 +302,22 @@ def test_schema_3_rejects_interaction_warning_without_stable_rule_id() -> None:
         assert "stable source_rule_id" in str(exc)
     else:  # pragma: no cover - assertion branch
         raise AssertionError("schema 3 must not delete warning prose without a rule id")
+
+
+@pytest.mark.parametrize("condition_ids", [[], ["current_smoker"]])
+def test_schema3_pure_dose_warning_roundtrip(condition_ids):
+    warning = json.loads(json.dumps(FULL_INTERACTION_WARNING))
+    warning.update(title="Beta-carotene / dose", detail="Reviewed dose context.", action=None,
+                   alert_headline="Dose guidance", alert_body="Reviewed dose context.",
+                   informational_note=None, condition_ids=condition_ids, drug_class_ids=[],
+                   ingredient_name="Beta-carotene", direction=None, materiality=None,
+                   profile_gate={"gate_type": "dose"}, evidence_level="ungraded")
+    threshold = {"scope": None, "alert_headline": warning["alert_headline"],
+                 "alert_body": warning["alert_body"], "sources": warning["sources"]}
+    rule = {"id": warning["source_rule_id"], "dose_thresholds": [threshold],
+            "condition_rules": [], "drug_class_rules": []}
+    projected = project_detail_blob({"warnings": [warning]}, export_schema_version="3.0.0")
+    assert resolve_warning_rule_refs(projected["warning_rule_refs"], rules_by_id={rule["id"]: rule}) == [warning]
+    threshold["alert_body"] = "Different unreviewed copy"
+    with pytest.raises(ValueError, match="no matching reviewed copy"):
+        resolve_warning_rule_refs(projected["warning_rule_refs"], rules_by_id={rule["id"]: rule})

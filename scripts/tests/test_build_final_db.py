@@ -7393,3 +7393,24 @@ def test_dose_warning_exports_its_own_evidence_grade(evidence):
     [warning] = [w for w in blob["warnings"] if w.get("source_rule_id") == "RULE_TEST_DOSE"]
     assert warning["evidence_level"] == evidence
     assert warning["sources"] == ["https://example.test/source"]
+
+
+def test_production_dose_warning_copy_rehydrates_without_inventing_an_action():
+    from export_schema import project_detail_blob, resolve_warning_rule_refs
+
+    enriched = make_enriched()
+    threshold = {"scope": None, "alert_headline": "Dose context", "alert_body": "Reviewed dose context."}
+    enriched["interaction_profile"] = {"ingredient_alerts": [{
+        "rule_id": "RULE_TEST_DOSE", "ingredient": "Example", "dose_hits": [{
+            **threshold, "severity": "caution", "evidence_level": "ungraded",
+            "profile_gate": {"gate_type": "dose"}, "sources": ["https://example.test/source"],
+        }],
+    }]}
+    blob = build_detail_blob(enriched, make_scored())
+    [warning] = [w for w in blob["warnings"] if w.get("source_rule_id") == "RULE_TEST_DOSE"]
+    refs = project_detail_blob(blob, export_schema_version="3.0.0")["warning_rule_refs"]
+    [resolved] = resolve_warning_rule_refs(refs, rules_by_id={"RULE_TEST_DOSE": {"dose_thresholds": [threshold]}})
+    for field in ("detail", "action", "alert_headline", "alert_body", "informational_note"):
+        assert resolved.get(field) == warning.get(field)
+    assert resolved["sources"] == warning["sources"]
+    assert resolved["title"] == warning["title"]

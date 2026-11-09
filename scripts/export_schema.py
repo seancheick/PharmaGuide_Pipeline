@@ -195,6 +195,15 @@ def _candidate_rule_subentries(
     condition_ids = _normalized_ids(ref.get("condition_ids"))
     drug_class_ids = _normalized_ids(ref.get("drug_class_ids"))
     candidates: list[tuple[Mapping[str, Any], str]] = []
+    # Pure-dose cards can carry condition IDs for stack-dose targeting, but
+    # their authored copy still belongs to the unscoped dose threshold.
+    gate = ref.get("profile_gate")
+    if (isinstance(gate, Mapping) and gate.get("gate_type") == "dose") or not (condition_ids or drug_class_ids):
+        candidates.extend(
+            (threshold, "dose")
+            for threshold in _safe_list(rule.get("dose_thresholds"))
+            if isinstance(threshold, Mapping) and threshold.get("scope") is None
+        )
     if condition_ids:
         condition_id = condition_ids[0]
         for candidate in _safe_list(rule.get("condition_rules")):
@@ -224,6 +233,14 @@ def _candidate_rule_subentries(
 def _subentry_copy(
     subentry: Mapping[str, Any], subentry_kind: str
 ) -> dict[str, Any]:
+    if subentry_kind == "dose":
+        return {
+            "detail": str(subentry.get("alert_body") or ""),
+            "action": None,
+            "alert_headline": subentry.get("alert_headline"),
+            "alert_body": subentry.get("alert_body"),
+            "informational_note": None,
+        }
     return {
         "detail": str(subentry.get("mechanism") or ""),
         "action": str(
@@ -265,7 +282,7 @@ def _resolved_warning(
     condition_ids = _normalized_ids(ref.get("condition_ids"))
     drug_class_ids = _normalized_ids(ref.get("drug_class_ids"))
     ingredient_name = str(ref.get("ingredient_name") or "").strip()
-    scope_id = (condition_ids or drug_class_ids or [""])[0]
+    scope_id = "dose" if subentry_kind == "dose" else (condition_ids or drug_class_ids or [""])[0]
     severity = ref.get("severity") or subentry.get("severity")
     warning_type = ref.get("type") or (
         "drug_interaction" if drug_class_ids else "interaction"
