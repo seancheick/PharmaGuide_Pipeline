@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 
+from constants import CLEANER_NON_EFFICACY_ROLES
 from scoring_input_contract import disclosed_source_amount
 
 logger = logging.getLogger(__name__)
@@ -51,6 +52,23 @@ def disclosure_tier(
     if without_amounts == 0 or (total_declared and sole_single_source and with_amounts + without_amounts == 1):
         return "full"
     return "partial" if total_declared else "none"
+
+
+def is_disclosure_component(row: Any) -> bool:
+    """Keep physical member mass; analytical markers are not additive members.
+
+    Undosed functional constituents do not create active opacity. A quantified
+    carrier still discloses part of the physical blend mass, without assigning
+    the remainder as a dose to any active constituent.
+    """
+    if not isinstance(row, dict):
+        return True
+    role = row.get("cleaner_row_role")
+    if role in CLEANER_NON_EFFICACY_ROLES and role != "inactive":
+        return False
+    if role == "inactive" or row.get("is_excipient") is True:
+        return disclosed_source_amount(row)[0] is not None
+    return True
 
 
 def _row_has_amount(row: Dict[str, Any]) -> bool:
@@ -559,7 +577,7 @@ class ProprietaryBlendDetector:
 
         sub_ingredients = [
             sub for sub in sub_ingredients
-            if not (isinstance(sub, dict) and sub.get("is_excipient") is True)
+            if is_disclosure_component(sub)
         ]
 
         if sub_ingredients:

@@ -161,7 +161,7 @@ import form_vocab as _form_vocab  # noqa: E402
 # Import scoring hardening modules
 from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer
-from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier, _row_has_amount
+from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier, _row_has_amount, is_disclosure_component
 
 # One direct child row of a raw label row: "<parent>.nestedRows[3]".
 _RAW_CHILD_ROW = re.compile(r"\.nestedRows\[\d+\]")
@@ -15433,8 +15433,7 @@ class SupplementEnricherV3:
             for child in children:
                 if not isinstance(child, dict):
                     continue
-                if (child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES
-                        or child.get("is_excipient") is True):
+                if not is_disclosure_component(child):
                     continue
                 child_name = (child.get("name", "") or "").strip()
                 child_qty, child_unit = disclosed_source_amount(child)
@@ -15513,9 +15512,7 @@ class SupplementEnricherV3:
                     nested = ingredient.get("forms") or []
                 source_nested_count = len(nested)
                 nested = [child for child in nested
-                          if not (isinstance(child, dict) and (
-                              child.get("is_excipient") is True
-                              or child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES))]
+                          if is_disclosure_component(child)]
                 quantity = ingredient.get('quantity', 0) or 0
                 unit = ingredient.get('unit', '') or ''
                 ingredient_group = ingredient.get('ingredientGroup', '') or ''
@@ -15677,7 +15674,7 @@ class SupplementEnricherV3:
                 ]
                 if len(nested) != source_nested_count:
                     disclosure = disclosure_tier(
-                        isinstance(quantity, (int, float)) and quantity > 0,
+                        disclosed_source_amount(ingredient)[0] is not None,
                         len(children_with_amounts), len(children_without_amounts),
                     )
                 cleaning_blends.append({

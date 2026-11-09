@@ -886,3 +886,40 @@ def test_blend_hierarchy_repairs_reject_changed_source(boundary_pipeline, pid, c
         raw['ingredientRows'][11]['nestedRows'][1]['name'] = 'Different source constituent'
     with pytest.raises(ValueError, match='Reviewed hierarchy'):
         normalizer.normalize_product(raw)
+
+
+@pytest.mark.parametrize("carrier_amount,total_unit,expected_tier,known_mass", [
+    (900, "mg", "partial", 900),
+    (0, "NP", "none", 0),
+])
+def test_filtered_functional_child_preserves_mass_and_total_uncertainty(
+    boundary_pipeline, carrier_amount, total_unit, expected_tier, known_mass
+):
+    normalizer, enricher = boundary_pipeline
+    product = {"id": "carrier_boundary", "activeIngredients": [{
+        "name": "Proprietary Herbal Blend", "quantity": 1000, "unit": total_unit,
+        "proprietaryBlend": True, "disclosureLevel": expected_tier,
+        "nestedIngredients": [
+            {"name": "Cellulose", "quantity": carrier_amount, "unit": "mg", "is_excipient": True},
+            {"name": "Ashwagandha", "quantity": 0, "unit": "NP"},
+            {"name": "Rhodiola", "quantity": 0, "unit": "NP"},
+        ],
+    }], "inactiveIngredients": []}
+    data = enricher._collect_proprietary_data(product)
+    assert data["blends"]
+    assert all(b["disclosure_level"] == expected_tier for b in data["blends"])
+    import json
+    from pathlib import Path
+    raw = json.loads((Path(__file__).parent / "fixtures/blend_preparation_213448_raw.json").read_text())
+    cleaned = normalizer.normalize_product(raw)
+    cleaned["activeIngredients"].extend(product["activeIngredients"])
+    enriched, errors = enricher.enrich_product(cleaned)
+    assert not errors
+    artifact = build_scored_artifact(enriched)
+    evidence = artifact["_v4_module_breakdown"]["dimensions"]["transparency"]["metadata"]["B5_blend_evidence"]
+    assert evidence
+    assert evidence[0]["disclosed_child_mg_sum"] == known_mass
+    if total_unit == "mg":
+        assert evidence[0]["hidden_mass_mg"] == 100
+    else:
+        assert evidence[0]["hidden_mass_mg"] is None
