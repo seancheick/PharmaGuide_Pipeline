@@ -233,6 +233,16 @@ def test_mixed_source_age_scope_preserves_adults_without_lending_to_children(age
     assert (product, context) == original
 
 
+@pytest.mark.parametrize('summary', ['mean', 'median', 'average'])
+def test_age_summaries_are_not_population_eligibility_bounds(summary):
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': 'mixed', 'description': (
+        f'Schoolchildren ({summary} age 9–12), adolescent swimmers and adults '
+        'were included; the full participant age range was not reported.')}}
+    assert assess_context_population(
+        {'fullName': 'Junior Vitamin C', 'targetGroups': ['Children 14–18']}, context) == 'eligible'
+
+
 def test_context_applicability_cannot_borrow_another_sources_approval(monkeypatch):
     source = _distinct_regimen_source(monkeypatch)
     source["study_contexts"][1]["applicability"]["source_pmids"] = ["28661438"]

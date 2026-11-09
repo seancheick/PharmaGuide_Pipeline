@@ -912,6 +912,8 @@ def assess_context_population(product: Mapping, context: Mapping) -> str:
             for sentence in re.split(r"[.;]", description)
             if _studied_subjects(age_pattern, sentence)
             for match in age_pattern.finditer(sentence)
+            if not re.search(r"\b(?:mean|median|average)(?:\s*\([^)]*\))?\s*$",
+                             sentence[:match.start()], re.I)
         ]
         if source_ranges:
             bands = label_pediatric_age_ranges({**dict(product), "targetGroups": groups})
