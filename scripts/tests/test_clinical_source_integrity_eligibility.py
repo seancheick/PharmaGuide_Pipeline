@@ -1382,21 +1382,23 @@ def test_five_family_bounded_noncredit_sources_are_finished(entry_id, pmids):
     assert all('Codex' in c['clinical_review']['reviewer'] for c in contexts)
 
 
-def test_msm_retains_one_qualified_trial_and_unfinished_sources():
+def test_msm_keeps_three_distinct_generic_trials_without_inventing_a_dose_range():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     entries = reviewed_entries()
     for key in ('INGR_MSM', 'BRAND_OPTIMSM'):
-        assert entries[key]['study_type'] == 'rct_single'
+        assert entries[key]['study_type'] == 'rct_multiple'
         assert entries[key]['effect_direction'] == 'mixed'
+        assert entries[key]['total_enrollment'] == 88  # Largest study, never 88 + 50.
     source = entries['INGR_MSM']
     assert source['applicability']['required_form_terms'] == ['OptiMSM', 'MSM', 'methylsulfonylmethane']
-    assert source['applicability']['minimum_daily_dose'] == 2000
-    assert source['applicability']['maximum_daily_dose'] == 2000
+    assert 'minimum_daily_dose' not in source['applicability']
+    assert {context['applicability']['minimum_daily_dose'] for context in source['study_contexts']
+            if context['scoring_eligible']} == {1500, 2000, 6000}
     pending = {p for c in source['study_contexts']
                if c['review_status'] == 'source_verified_pending_clinical_review'
                for p in c['source_pmids']}
-    assert pending == {'16309928', '21708034', '17516722'}
-    assert assess_clinical_source_review({'id': 'INGR_MSM'})['is_complete'] is False
+    assert pending == set()
+    assert assess_clinical_source_review({'id': 'INGR_MSM'})['is_complete'] is True
     assert entries['BRAND_OPTIMSM']['study_contexts'][0]['clinical_review']['reviewer'] == 'Dr. Pham'
 
 
@@ -1430,7 +1432,7 @@ def test_shared_msm_trial_cannot_earn_points_twice(entry_ids, floor):
     assert sum(combined['metadata']['ingredient_points'].values()) == max(
         sum(measured([key])['metadata']['ingredient_points'].values()) for key in entry_ids)
     generic = next(r for r in combined['metadata']['contributing_record_assessments'] if r['id'] == 'INGR_MSM')
-    assert generic['source_review']['is_complete'] is False
+    assert generic['source_review']['is_complete'] is True
 
 
 def test_trial_family_dedup_keeps_independent_sources_and_identity_scopes(monkeypatch):
@@ -1572,16 +1574,104 @@ def test_creapure_reference_cannot_hide_unfinished_or_invalid_source(monkeypatch
         product['activeIngredients'][0], product).blocking_reasons
 
 
-def test_msm_recovered_175_methods_preserve_positive_findings_and_reporting_hold():
+def test_msm_recovered_175_methods_preserve_reported_benefit_and_unreported_result_limits():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     record = reviewed_entries()['INGR_MSM']
     context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['17516722'])
-    assert context['review_status'] == 'source_verified_pending_clinical_review'
-    assert context['scoring_eligible'] is False
-    assert 'full primary' in context['dose']['source_provenance']['location'].lower()
+    assert context['review_status'] == 'clinician_approved'
+    assert context['scoring_eligible'] is True
+    location = context['dose']['source_provenance']['location']
+    assert 'p355' in location and 'p358' in location and 'p359' in location
     text = ' '.join(context['limitations'])
     assert 'principal' in text and 'unreported' in text
     assert 'positive' in text and 'placebo' in text
-    assert '30' in text and '28' in text
+    assert '30' in context['population']['description'] and '28' in context['population']['description']
     assert 'unread' not in text.lower()
-    assert not assess_clinical_source_review(record)['is_complete']
+    assert assess_clinical_source_review(record)['is_complete']
+
+
+def test_msm_175_main_mobility_review_finishes_without_inventing_missing_results():
+    from clinical_applicability import (reviewed_entries, assess_clinical_source_review,
+                                        qualifying_purpose_outcomes)
+    from clinical_evidence_schema import validate_ingredient_context
+    entries = reviewed_entries()
+    record = entries['INGR_MSM']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['17516722'])
+    assert context['review_status'] == 'clinician_approved'
+    assert context['scoring_eligible'] is True
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context['sample_size'] == 58
+    assert context['dose']['values'] == [1500]
+    assert context['dose']['duration_days'] == 84
+    assert context['identity'].get('branded_material') != 'OptiMSM'
+    outcomes, held = qualifying_purpose_outcomes(context)
+    assert not held
+    assert len(outcomes) == 1
+    assert 'mobility' in outcomes[0]['name'].lower()
+    assert outcomes[0]['hierarchy'] == 'primary'
+    assert outcomes[0]['outcome_role'] == 'direct_between_group_effect'
+    limitations = ' '.join(context['limitations']).lower()
+    assert 'responder' in limitations and 'unreported' in limitations
+    assert 'swelling' in limitations and '0.39' in limitations and '0.75' in limitations
+    assert not any('responder' in outcome['name'].lower() for outcome in outcomes)
+    assert assess_clinical_source_review(record)['is_complete'] is True
+    assert record['effect_direction'] == 'mixed'
+    assert record['total_enrollment'] == 88
+    assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+    assert not any('17516722' in c['source_pmids'] for c in entries['BRAND_OPTIMSM']['study_contexts'])
+
+
+@pytest.mark.parametrize('broad_raw', [3.0, 6.0])
+def test_contained_trial_witness_preserves_independent_units_in_every_order(broad_raw):
+    from itertools import permutations
+    from scoring_v4.modules.generic_evidence import _select_trial_family_contributions
+    candidates = [
+        (frozenset({'a'}), 2.0, 'msm', 'A'),
+        (frozenset({'b'}), 2.0, 'msm', 'B'),
+        (frozenset({'a', 'b'}), broad_raw, 'msm', 'C'),
+        (frozenset({'d'}), 1.0, 'msm', 'D'),
+    ]
+    for ordering in permutations(candidates):
+        working = list(ordering)
+        before = copy.deepcopy(working)
+        assert sum(row[1] for row in _select_trial_family_contributions(working)) == max(4.0, broad_raw) + 1.0
+        assert working == before
+
+
+@pytest.mark.parametrize('floor', [False, True])
+def test_subsumed_msm_witness_keeps_its_independent_pending_review(monkeypatch, floor):
+    import clinical_applicability as ca
+    entries = copy.deepcopy(ca.reviewed_entries())
+    pending = next(c for c in entries['INGR_MSM']['study_contexts'] if c['source_pmids'] == ['21708034'])
+    pending['review_status'] = 'source_verified_pending_clinical_review'
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: entries)
+    product = _tyrosine_scoring_product(name='OptiMSM Methylsulfonylmethane')
+    row = product['activeIngredients'][0]
+    row.update(canonical_id='msm', standard_name='MSM', matched_form='msm')
+    ids = ['BRAND_OPTIMSM', 'INGR_MSM']
+    for order in (ids, ids[::-1]):
+        candidate = copy.deepcopy(product)
+        matches = [{**entries[key], 'ingredient': row['name'],
+                    'matched_source_row_refs': [row['raw_source_path']],
+                    'matched_canonical_ids': ['msm']} for key in order]
+        candidate['evidence_data'] = {'clinical_matches': matches}
+        before = copy.deepcopy(candidate)
+        result = score_evidence(candidate, accepted_matches=matches, apply_primary_floor=floor)
+        generic = next(r for r in result['metadata']['contributing_record_assessments'] if r['id'] == 'INGR_MSM')
+        assert generic['source_review']['is_complete'] is False
+        assert candidate == before
+
+
+@pytest.mark.parametrize('record_id,pmid', [
+    ('INGR_MSM', '17516722'), ('INGR_MSM', '37447322'), ('BRAND_OPTIMSM', '37447322'),
+])
+@pytest.mark.parametrize('target,expected', [
+    ('Breastfeeding women', 'explicit_conflict'), ('Lactating mothers', 'explicit_conflict'),
+    ('Men', 'eligible'), ('Women', 'eligible'),
+])
+def test_msm_documented_population_exclusions_use_existing_population_owner(record_id, pmid, target, expected):
+    from clinical_applicability import reviewed_entries, assess_context_population
+    context = next(c for c in reviewed_entries()[record_id]['study_contexts']
+                   if c['source_pmids'] == [pmid])
+    product = {'fullName': target + ' Joint Support', 'targetGroups': [target]}
+    assert assess_context_population(product, context) == expected

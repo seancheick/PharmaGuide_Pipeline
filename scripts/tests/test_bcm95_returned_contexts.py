@@ -115,7 +115,7 @@ def test_optimsm_return_closes_exact_trial_source_without_double_counting():
         assert context['outcomes'][0]['hierarchy'] == 'primary'
         assert context['outcomes'][0]['direction'] == 'positive'
         assert context['outcomes'][1]['direction'] == 'null'
-        assert assess_clinical_source_review(record)['is_complete'] is (key == 'BRAND_OPTIMSM')
+        assert assess_clinical_source_review(record)['is_complete'] is True
         assert record['health_goals_supported'] == ['Joint & Bone Health']
         assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
         contexts.append(context)
@@ -126,12 +126,14 @@ def test_msm_trial_keeps_qualified_identity_and_exact_daily_regimen():
     from clinical_applicability import assess_clinical_applicability
     for key in ('BRAND_OPTIMSM', 'INGR_MSM'):
         for name, amount, expected in (
+            ('OptiMSM', 1500, 'applicable' if key == 'INGR_MSM' else 'not_applicable'),
             ('OptiMSM', 2000, 'applicable'),
             ('MSM', 2000, 'applicable' if key == 'INGR_MSM' else 'unresolved'),
             ('methylsulfonylmethane', 2000, 'applicable' if key == 'INGR_MSM' else 'unresolved'),
-            ('liposomal MSM', 2000, 'not_applicable' if key == 'INGR_MSM' else 'unresolved'),
+            ('liposomal MSM', 2000, 'not_applicable'),
             ('OptiMSM', 1000, 'not_applicable'),
-            ('OptiMSM', 6000, 'not_applicable'),
+            ('OptiMSM', 4000, 'not_applicable'),
+            ('OptiMSM', 6000, 'applicable'),
         ):
             row = {'name': name, 'raw_source_text': name,
                    'canonical_id': 'msm', 'mapped': True, 'quantity': amount,
@@ -141,7 +143,13 @@ def test_msm_trial_keeps_qualified_identity_and_exact_daily_regimen():
                        'ingredient_quality_data': {'ingredients_scorable': [row]}}
             entry = {'id': key, 'matched_canonical_ids': ['msm'],
                      'matched_source_row_refs': ['ingredientRows[0]']}
-            assert assess_clinical_applicability(product, entry)['status'] == expected
+            result = assess_clinical_applicability(product, entry)
+            assert result['status'] == expected
+            if expected == 'applicable':
+                selected = set(result['population_applicability']['context_ids'])
+                sources = {pmid for context in reviewed_entries()[key]['study_contexts']
+                           if context['context_id'] in selected for pmid in context['source_pmids']}
+                assert sources == { {1500: '17516722', 2000: '37447322', 6000: '16309928'}[amount] }
 
 
 def test_named_source_reviews_complete_only_general_dose_benchmark():
@@ -513,6 +521,6 @@ def test_missing_source_preparation_proof_cannot_be_completed_as_a_form_mismatch
                'ingredient_quality_data': {'ingredients_scorable': [row]}}
     result = resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
-    assert result.reason_code == 'clinical_sources_ineligible'
+    assert result.reason_code == 'clinical_source_label_unresolved'
     assert result.applicability_status != 'applicable_reviewed_trials'
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED

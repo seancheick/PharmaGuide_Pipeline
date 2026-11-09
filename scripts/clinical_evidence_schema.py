@@ -492,6 +492,10 @@ def validate_ingredient_context(
         return errors
     errors = list(validate_frozen_context(context, known_component_ids=known_component_ids,
                                          require_complete_review=require_complete_review))
+    if "applicability" in context:
+        from clinical_applicability import _context_applicability_policy
+        if _context_applicability_policy({}, context) is None:
+            errors.append("applicability.source_scope_invalid")
 
     scope = context.get("identity_scope")
     if scope not in INGREDIENT_IDENTITY_SCOPES:

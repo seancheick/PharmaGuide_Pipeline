@@ -115,6 +115,238 @@ def scoped_entry(policy: object, monkeypatch) -> dict:
     }, "Zinc (as zinc acetate)")
 
 
+def _distinct_regimen_source(monkeypatch):
+    """Synthetic source scopes, not clinical approvals or Dose benchmarks."""
+    source = scoped_entry({"scope": "ingredient", "required_form_terms": ["zinc acetate"],
+                           "source_pmids": ["28661438", "11788381"]}, monkeypatch)
+    first = source["study_contexts"][0]
+    second = deepcopy(first)
+    second.update(context_id="synthetic_second_regimen", source_pmids=["11788381"],
+                  trial_family="synthetic_second_family")
+    second["dose"]["source_provenance"]["pmid"] = "11788381"
+    source["references_structured"].append({"pmid": "11788381", "retracted": False})
+    source["study_contexts"].append(second)
+    for context, amount in ((first, 2000), (second, 6000)):
+        context["dose"]["values"] = [amount]
+        context["applicability"] = {
+            "scope": "ingredient", "source_pmids": context["source_pmids"],
+            "dose_unit": "mg", "minimum_daily_dose": amount, "maximum_daily_dose": amount,
+            "studied_population": "Synthetic adults at a distinct source regimen",
+        }
+    return source
+
+
+@pytest.mark.parametrize("amount,expected", [(2000, 0), (6000, 1), (4000, None)])
+def test_distinct_source_regimens_do_not_form_a_continuous_amount_range(monkeypatch, amount, expected):
+    source = _distinct_regimen_source(monkeypatch)
+    product = zinc_product("zinc acetate", amount)
+    product["serving_basis"] = {"min_servings_per_day": 1, "max_servings_per_day": 1}
+    original = deepcopy(source)
+    decision = assess_clinical_applicability(product, source, require_claim_alignment=False)
+    if expected is None:
+        assert decision["status"] == "not_applicable"
+    else:
+        assert decision["status"] == "applicable"
+        assert decision["population_applicability"]["context_ids"] == [
+            source["study_contexts"][expected]["context_id"]]
+        assert decision["qualifying_study_type"] == "rct_single"
+    assert source == original
+
+
+def test_ingredient_evidence_preserves_both_source_regimens_without_dose_adequacy(monkeypatch):
+    source = _distinct_regimen_source(monkeypatch)
+    product = zinc_product("zinc acetate", 4000)
+    decision = assess_clinical_applicability(
+        product, source, assess_amount=False, require_claim_alignment=False)
+    assert decision["status"] == "applicable"
+    assert decision["qualifying_study_type"] == "rct_multiple"
+    assert decision["population_applicability"]["context_ids"] == [
+        context["context_id"] for context in source["study_contexts"]]
+
+
+@pytest.mark.parametrize("reverse", [False, True])
+@pytest.mark.parametrize("role", ["meta_analysis", "systematic_review"])
+def test_mixed_context_roles_do_not_inherit_first_rct_depth(monkeypatch, reverse, role):
+    source = _distinct_regimen_source(monkeypatch)
+    source.update(study_type="systematic_review_meta", total_enrollment=72)
+    source["study_contexts"][1]["evidence_role"] = role
+    source["study_contexts"][1]["included_study_pmids"] = ["28661438"]
+    from clinical_evidence_schema import validate_ingredient_context
+    assert all(validate_ingredient_context(context, require_complete_review=True) == []
+               for context in source["study_contexts"])
+    if reverse:
+        source["study_contexts"].reverse()
+    original = deepcopy(source)
+    decision = assess_clinical_applicability(
+        zinc_product("zinc acetate", 4000), source,
+        assess_amount=False, require_claim_alignment=False)
+    assert decision["status"] == "applicable"
+    assert len(decision["population_applicability"]["context_ids"]) == 2
+    assert "qualifying_study_type" not in decision
+    accepted, rejected = filter_clinical_matches(
+        zinc_product("zinc acetate", 4000), [source],
+        assess_amount=False, require_claim_alignment=False)
+    assert rejected == [] and len(accepted) == 1
+    assert accepted[0]["study_type"] == "systematic_review_meta"
+    assert accepted[0]["total_enrollment"] == 72
+    assert source == original
+
+
+@pytest.mark.parametrize("scope,status,reason", [
+    ("formula_context_only", "not_applicable", "formula_reference_not_individual_evidence"),
+    ("unsupported", "unresolved", "unsupported_applicability_scope"),
+])
+def test_ingredient_context_cannot_override_parent_scope(monkeypatch, scope, status, reason):
+    source = _distinct_regimen_source(monkeypatch)
+    source["applicability"]["scope"] = scope
+    original = deepcopy(source)
+    decision = assess_clinical_applicability(
+        zinc_product("zinc acetate", 4000), source,
+        assess_amount=False, require_claim_alignment=False)
+    assert decision["status"] == status
+    assert decision["reason_code"] == reason
+    assert source == original
+
+
+def test_context_applicability_cannot_borrow_another_sources_approval(monkeypatch):
+    source = _distinct_regimen_source(monkeypatch)
+    source["study_contexts"][1]["applicability"]["source_pmids"] = ["28661438"]
+    decision = assess_clinical_applicability(
+        zinc_product("zinc acetate", 6000), source, assess_amount=False,
+        require_claim_alignment=False)
+    assert decision["status"] == "unresolved"
+    assert decision["reason_code"] == "invalid_applicability_contract"
+
+
+def test_context_policy_source_binding_is_validated_by_the_source_schema(monkeypatch):
+    from clinical_evidence_schema import validate_ingredient_context
+    source = _distinct_regimen_source(monkeypatch)
+    context = source["study_contexts"][1]
+    context["applicability"]["source_pmids"] = ["28661438"]
+    assert "applicability.source_scope_invalid" in validate_ingredient_context(
+        context, known_component_ids={source["id"]}, require_complete_review=True)
+
+
+@pytest.mark.parametrize("sources", [[["11788381"]], [{"pmid": "11788381"}], True, None])
+def test_malformed_context_sources_fail_closed_without_losing_sibling_scope(monkeypatch, sources):
+    from clinical_evidence_schema import validate_ingredient_context
+    source = _distinct_regimen_source(monkeypatch)
+    context = source['study_contexts'][1]
+    context['source_pmids'] = sources
+    assert 'applicability.source_scope_invalid' in validate_ingredient_context(
+        context, known_component_ids={source['id']}, require_complete_review=True)
+    assert assess_clinical_applicability(zinc_product('zinc acetate', 6000), source,
+        assess_amount=False, require_claim_alignment=False)['status'] == 'unresolved'
+
+
+def test_context_scopes_preserve_original_pending_source_obligations(monkeypatch):
+    from clinical_applicability import assess_clinical_source_review
+    source = _distinct_regimen_source(monkeypatch)
+    pending = deepcopy(source["study_contexts"][0])
+    pending.update(context_id="synthetic_unfinished_source", review_status="pending", scoring_eligible=False)
+    source["study_contexts"].append(pending)
+    assert assess_clinical_applicability(zinc_product("zinc acetate", 6000), source,
+        assess_amount=False, require_claim_alignment=False)["status"] == "applicable"
+    review = assess_clinical_source_review(source)
+    assert review["is_complete"] is False
+    assert any("synthetic_unfinished_source" in error for error in review["errors"])
+
+
+@pytest.mark.parametrize("reverse", [False, True])
+def test_context_scopes_keep_form_amount_and_source_row_bound_together(monkeypatch, reverse):
+    source = _distinct_regimen_source(monkeypatch)
+    source["study_contexts"][1]["applicability"]["required_form_terms"] = ["zinc bisglycinate"]
+    product = zinc_product("zinc acetate", 2000)
+    product["serving_basis"] = {"min_servings_per_day": 1, "max_servings_per_day": 1}
+    rows = product["ingredient_quality_data"]["ingredients_scorable"]
+    other = deepcopy(rows[0])
+    other.update(name="Zinc bisglycinate", quantity=6000, forms=[{"name": "zinc bisglycinate"}],
+                 raw_source_path="ingredientRows[1]")
+    rows.append(other)
+    source["matched_source_row_refs"] = ["ingredientRows[0]", "ingredientRows[1]"]
+    if reverse:
+        rows.reverse()
+    before = deepcopy(product)
+    decision = assess_clinical_applicability(product, source, require_claim_alignment=False)
+    assert decision["status"] == "applicable"
+    assert set(decision["matched_source_row_refs"]) == {"ingredientRows[0]", "ingredientRows[1]"}
+    assert decision["qualifying_study_type"] == "rct_multiple"
+    other["quantity"] = 2000
+    decision = assess_clinical_applicability(product, source, require_claim_alignment=False)
+    assert decision["population_applicability"]["context_ids"] == [source["study_contexts"][0]["context_id"]]
+    assert decision["matched_source_row_refs"] == ["ingredientRows[0]"]
+    other["quantity"] = 6000
+    assert product == before
+
+
+def test_source_scope_dispatch_reuses_per_product_subject_derivations(monkeypatch):
+    from collections import Counter
+    import clinical_applicability as ca
+    from scoring_input_contract import scoring_input_scope
+    source = _distinct_regimen_source(monkeypatch)
+    product = zinc_product("zinc acetate", 4000)
+    original = ca._build_evidence_subject_refs
+    calls = Counter()
+    def measured(value, **options):
+        calls[tuple(sorted(options.items()))] += 1
+        return original(value, **options)
+    monkeypatch.setattr(ca, "_build_evidence_subject_refs", measured)
+    with scoring_input_scope(product):
+        first = assess_clinical_applicability(product, source, assess_amount=False,
+                                             require_claim_alignment=False)
+        assert first['status'] == 'applicable'
+        assert calls and all(count == 1 for count in calls.values())
+        before = calls.copy()
+        assert assess_clinical_applicability(product, source, assess_amount=False,
+                                             require_claim_alignment=False) == first
+        assert calls == before
+    changed = zinc_product("zinc bisglycinate", 4000)
+    with scoring_input_scope(changed):
+        assert assess_clinical_applicability(changed, source, assess_amount=False,
+            require_claim_alignment=False)['status'] == 'not_applicable'
+    assert all(count == 2 for count in calls.values())
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+def test_scoped_msm_claim_explanation_uses_best_supported_context_in_either_order(monkeypatch, reverse):
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    source = records['INGR_MSM']
+    if reverse:
+        source['study_contexts'].reverse()
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    row = {'name': 'MSM', 'raw_source_text': 'MSM', 'canonical_id': 'msm', 'mapped': True,
+           'quantity': 2000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': 'MSM knee osteoarthritis', 'activeIngredients': [row],
+        'ingredient_quality_data': {'ingredients_scorable': [row]},
+        'statements': [{'type': 'Formulation re: Other', 'notes': 'MSM supports immune health.'}]}
+    entry = {**source, 'ingredient': 'MSM', 'matched_canonical_ids': ['msm'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    decision = assess_clinical_applicability(product, entry, assess_amount=False,
+                                            require_claim_alignment=False)
+    assert decision['claim_alignment']['state'] == 'aligned'
+    assert 'affirmative_exact_source_condition_claim' in json.dumps(decision['claim_alignment'])
+    assert len(decision['population_applicability']['context_ids']) == 3
+
+
+@pytest.mark.parametrize('entry_id', ['INGR_MSM', 'BRAND_OPTIMSM'])
+@pytest.mark.parametrize('name', ['Liposomal OptiMSM', 'OptiMSM sustained release'])
+def test_scoped_msm_brand_and_generic_both_preserve_ordinary_preparation_boundary(entry_id, name):
+    row = {'name': name, 'raw_source_text': name, 'canonical_id': 'msm', 'mapped': True,
+           'quantity': 2000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': name, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    entry = {**reviewed_entries()[entry_id], 'ingredient': name, 'matched_canonical_ids': ['msm'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    decision = assess_clinical_applicability(product, entry, assess_amount=False,
+                                            require_claim_alignment=False)
+    assert decision['status'] == 'not_applicable'
+    assert decision['reason_code'] == 'clinical_form_excluded'
+    row.update(name='OptiMSM', raw_source_text='OptiMSM')
+    assert assess_clinical_applicability(product, entry, assess_amount=False,
+        require_claim_alignment=False)['status'] == 'applicable'
+
+
 @pytest.mark.parametrize("policy", [
     {}, [], False, "ingredient",
     {"scope": []},

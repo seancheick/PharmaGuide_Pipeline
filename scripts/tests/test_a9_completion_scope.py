@@ -421,9 +421,15 @@ def test_a_hidden_amount_a_safety_check_needs_holds_both_statuses(pipeline, labe
     if subject == "boron":
         # Finished source review cannot supply the undisclosed safety amount.
         assert QUALITY_OPEN in _release_blockers(scored)
-        # The separate bare MSM preparation is still unproved; finishing the
-        # boron reference cannot settle it or supply the missing safety amount.
-        assert "evidence_assessment_incomplete" in _release_blockers(scored)
+        # Finished MSM research does not supply the undisclosed safety amount.
+        evidence = scored["assessment_readiness"]["evidence"]
+        assert evidence["readiness"] == "complete"
+        assert evidence["not_yet_evaluated_count"] == 0
+        assert "evidence_assessment_incomplete" not in _release_blockers(scored)
+        assert any(row["canonical_id"] == "msm"
+                   and row["reason_code"] == "reviewed_human_clinical_evidence_matched"
+                   and row["state"] == "evaluated_supported"
+                   for row in evidence["ingredient_assessments"])
         assert any(row["canonical_id"] == "boron"
                    and row["reason_code"] == "reference_only_clinical_record"
                    and row["state"] == "evaluated_limited_or_negative"

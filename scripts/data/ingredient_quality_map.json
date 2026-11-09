@@ -53,7 +53,7 @@
       "vitamins": 25
     },
     "schema_version": "5.6.1",
-    "last_updated": "2026-11-07",
+    "last_updated": "2026-11-09",
     "pipeline_integration": "Used by enrichment to assign form quality (bio_score) to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive).",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -12204,7 +12204,7 @@
           "by": "Product owner approval",
           "date": "2026-08-08"
         },
-        "notes": "Creatine ethyl ester is a distinct ester. PMID23957855 studied in-vitro stability and did not support rapid acidic conversion; PMID19585404 studied plasma rather than gastric conditions. The30-man trial PMID19228401 found muscle creatine above placebo and no significant monohydrate/ester muscle difference. These endpoints do not establish near-zero5%functional absorption or universal equivalence; actual preparation/dose and creatinine response matter.",
+        "notes": "Creatine ethyl ester is a distinct ester. PMID23957855 studied in-vitro stability and did not support rapid acidic conversion; PMID19585404 studied plasma rather than gastric conditions. In the 30-completer trial PMID19228401, Results/Figure 2 report muscle creatine above placebo in both active groups, but Discussion/conclusion conflict with that result for the ester. Preserve this unresolved biochemical source interpretation; no verified ester/monohydrate equivalence follows. Group-main and time effects do not establish an ester-specific change-score benefit. Serum creatinine elevations are laboratory findings, not proof of renal injury. These endpoints do not establish near-zero or 5% functional absorption or universal equivalence; actual preparation/dose and creatinine response matter.",
         "aliases": [
           "CEE",
           "ethyl creatine",
