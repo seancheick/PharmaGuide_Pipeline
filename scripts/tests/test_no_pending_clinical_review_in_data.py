@@ -37,6 +37,7 @@ def test_no_data_file_holds_a_pending_review_context():
             "42366260", "41053591", "38243579", "40748005",
         },
         "INGR_GLYCINE": {"37851316"},
+        "INGR_MSM": {"16309928", "21708034", "17516722"},
         "INGR_L_CARNITINE": {"32359762"},
         "INGR_PLANT_STEROLS": {"37739728"},
         "INGR_L_TYROSINE": {"25598314", "29980424", "38290812"},
@@ -60,7 +61,13 @@ def test_no_data_file_holds_a_pending_review_context():
                 observed[record["id"]].update(context["source_pmids"])
                 assert context["components"] == [record["id"]]
                 assert context["scoring_eligible"] is False
-                if record["id"] == "INGR_L_TYROSINE":
+                if record["id"] == "INGR_MSM":
+                    assert "identity_scope" not in context
+                    assert set(context["dose"]) == {"source_provenance"}
+                    assert context["dose"]["source_provenance"]["pmid"] == context["source_pmids"][0]
+                    assert context["limitations"]
+                    assert "Codex" in context["clinical_review"]["reviewer"]
+                elif record["id"] == "INGR_L_TYROSINE":
                     assert context["human_status"] == "confirmed"
                     if context['source_pmids'][0] == '25598314':
                         assert context['identity_scope'] == 'exact_form'

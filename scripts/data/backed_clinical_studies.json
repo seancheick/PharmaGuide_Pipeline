@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-11-07",
+    "last_updated": "2026-11-08",
     "total_entries": 217,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
@@ -3195,10 +3195,10 @@
       "health_goals_supported": [
         "Muscle Growth & Recovery"
       ],
-      "notes": "High-purity creatine monohydrate source with published trials explicitly using Creapure in methods, but most efficacy conclusions still reflect the broader creatine-monohydrate literature rather than unique Creapure superiority. Cited comparator studies randomized 36 and used 10 crossover participants. Their preparation-specific use does not establish unique branded superiority over other verified creatine monohydrate. Retained-source scope and limitations: Creatine-monohydrate comparator findings in training/retention studies; neither retained study tests cognition or proves every commercial preparation equivalent (PMID: 22971354; 24568653)",
+      "notes": "Two retained primary reports explicitly identify Creapure but do not provide isolated Creapure-versus-no-creatine efficacy contrasts. Jagim 22971354 compares three active creatine regimens:abstract 36 randomized, body 41 recruited/36 completed, muscle subset 25. Oliver 24568653 compares tarragon versus tarragon placebo with identical Creapure in both crossover periods:Figure 1 shows 20 eligible/12 started/10 completers; performance 9. Time-related gains and null active-comparator/add-on contrasts remain distinct. No unique brand superiority, equivalence or general Dose benchmark follows. The separately qualified monohydrate body-composition owner remains independent. The historical automated count of five completed registry trials had no identified NCT/source receipt and is not retained as verified evidence; no replacement count is invented.",
       "study_type": "rct_single",
       "last_updated": "2026-10-11",
-      "notable_studies": "Jagim et al. (2012, PMID 22971354) used Creapure creatine monohydrate as the comparator in a double-blind resistance-training trial and confirmed expected increases in muscle creatine and training adaptation with standard creatine monohydrate dosing. Oliver et al. (2014, PMID 24568653) also used Creapure in a crossover retention study. These support Creapure as a validated source material, while the wider ergogenic evidence remains generic creatine literature.",
+      "notable_studies": "Jagim 2012 (22971354):Creapure loading 20 g/day for 7 days then 5 g/day for 21 days, versus two Kre-Alkalyn active regimens; no significant treatment-by-time efficacy differences, with selected time-related gains. Oliver 2014 (24568653):all periods receive Creapure 5 g twice daily for 5 days, with tarragon or tarragon placebo pre-dose; add-on contrasts null, selected time-related retention/performance gains retained. Neither is an isolated branded placebo-controlled efficacy trial.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -3217,7 +3217,9 @@
           "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Full primary source reviewed: active-comparator or add-on design, without a no-creatine control. Within-time improvements and null between-active contrasts do not establish standalone Creapure efficacy or equivalence."
         },
         {
           "type": "pubmed",
@@ -3236,7 +3238,9 @@
           "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Full primary source reviewed: active-comparator or add-on design, without a no-creatine control. Within-time improvements and null between-active contrasts do not establish standalone Creapure efficacy or equivalence."
         }
       ],
       "external_ids": {
@@ -3245,12 +3249,223 @@
       "effect_direction": "positive_strong",
       "primary_outcome": "Muscle Growth & Recovery",
       "total_enrollment": null,
-      "registry_completed_trials_count": 5,
       "effect_direction_confidence": "medium",
       "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
-      ]
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "brand_creapure_22971354_bounded_noncredit_source",
+          "components": [
+            "BRAND_CREAPURE"
+          ],
+          "source_pmids": [
+            "22971354"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Creapure",
+            "manufacturer": "AlzChem AG",
+            "preparation": "Source-identified creatine monohydrate; no equivalence to other creatine preparations or branded efficacy superiority inferred."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "creatine_comparator_physiology",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_22971354",
+          "population": {
+            "sample_size": 36,
+            "description": "Apparently healthy resistance-trained men, mean age 20.2 years. Body: 41 recruited/consented/familiarized, 36 completed (12 per active group); abstract describes36 randomized. Muscle-creatine analysis used 25, with two missing day 7 values carried forward; no reconstructed randomized denominator. Individual age ranges were not stated; the mean must not be converted into a verified minimum/maximum age."
+          },
+          "study_design": "Double-blind randomized three-active-group parallel study,28 days; matched on body weight, training history and age. Creapure monohydrate compared with low-dose and nominal dose-matched Kre-Alkalyn; no no-creatine placebo arm. Habitual resistance training continued, not a newly controlled training efficacy comparison.",
+          "outcomes": [
+            {
+              "name": "Muscle free-creatine, body composition, bench/leg-press strength and Wingate variables: no significant treatment-by-time differences between active creatine preparations; muscle-creatine interaction Wilks p = .55 and body-composition interaction p = .90.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Muscle free-creatine, body mass/fat-free mass, bench press and selected Wingate measures increased over time across active groups; these time effects have no untreated/no-creatine control.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "Low-dose buffered-creatine versus Creapure post-hoc muscle-creatine trend p = .053; not a statistically significant superiority contrast.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "post_hoc_subgroup"
+            },
+            {
+              "name": "Serum creatinine rose more with the higher nominal doses (interaction p = .03); transient LDL contrast was reported during loading. These selected laboratory observations are not a clinical safety clearance or a new warning threshold.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "companion_reported_context"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              5,
+              20
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 28,
+            "administration_frequency": "Creapure: 5 g four times daily for 7 days, then 5 g once daily for 21 days.",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [
+              "Habitual resistance training; small dextrose capsule excipient (about 60 mg/capsule). Active comparators: Kre-Alkalyn nominal 1.5 g/day or 20 g/day loading then 5 g/day."
+            ],
+            "reported_regimen": "Creapure loading 20 g/day for 7 days followed by5 g/day for 21 days; discrete phases, not a studied continuous 5–20 g efficacy interval.",
+            "normalization": {
+              "basis": "Assigned nominal monohydrate doses retained; certificate measured 5.16 g monohydrate per eight Creapure capsules. Do not replace the assigned regimen with an extrapolated assay-adjusted dose or create a universal minimum."
+            },
+            "source_provenance": {
+              "pmid": "22971354",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/22971354/",
+              "location": "Full primary Methods, Results, tables and competing interests; official NCBI BioC full text 22971354_BIOC.xml. No abstract-only qualification."
+            }
+          },
+          "limitations": [
+            "Finished noncredit source review is proposed, not a new grade, branded superiority claim, generic form equivalence, Dose benchmark or ingredient/product completion. Existing separately qualified INGR_CREATINE_MONOHYDRATE evidence must remain independent.",
+            "Distinct source protocols and publication families do not prove participant-level disjointness; do not sum samples or count these active-comparator reports as independent placebo-controlled branded efficacy replications. No registry identifier or completed-registry-trial count is established.",
+            "AlzChem funded the study and supplied preparations; authors declare independent collection/analysis, with investigator consultancy disclosures. Commercially supported source, not independent funding replication.",
+            "A priori power calculation targets 12 per group; no uniquely prespecified primary clinical endpoint identified. Multiple laboratory outcomes and Tukey LSD post-hoc testing; p = .053 remains a trend, not proof of superiority.",
+            "Neither absence of significant active-comparator differences nor time-related gains establish equivalence/noninferiority, standalone placebo-controlled efficacy or lack of benefit for any preparation.",
+            "Source count discrepancy (abstract 36 randomized versus body 41 initially recruited and36 completed) and muscle subgroup 25 are preserved. No assertion that all41 were randomized or that all36 contributed biopsies.",
+            "Reported absence of side-effect withdrawals/no reported side effects applies only to this short study; preserve independent safety owners and do not describe products or regimens as safe.",
+            "Outcome-specific denominators also differ:Table 8 bench press and Table 9 Wingate use 11 rather than 12 in KA-H. Do not present 36 as the denominator for every endpoint."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/creapure_source_review; independent primary-content and applicability check by Codex /root. Agent reviews, not physician review.",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live API identity and full original content checked. Proposed routine noncredit source completion under the existing between-group/within-group rubric; independent source/applicability check required before application. No clinician approval asserted. Independent content/applicability check completed on 2026-11-08; existing compatibility status records the actual agent review, not clinician approval."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "brand_creapure_24568653_bounded_noncredit_source",
+          "components": [
+            "BRAND_CREAPURE"
+          ],
+          "source_pmids": [
+            "24568653"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Creapure",
+            "manufacturer": "AlzChem AG",
+            "preparation": "Source-identified creatine monohydrate; no equivalence to other creatine preparations or branded efficacy superiority inferred."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "creatine_comparator_physiology",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_24568653",
+          "population": {
+            "sample_size": 10,
+            "description": "Apparently healthy recreationally trained men, mean age 20 years. Visually checked Figure 1: 20 eligible, 8 withdrew before starting, 12 began, 2 withdrew before crossover, 10 completed; performance analysis9 because one declined crossover testing after an unrelated prior injury. Individual age ranges were not stated; the mean must not be converted into a verified minimum/maximum age."
+          },
+          "study_design": "Double-blind randomized crossover add-on study. Both periods provide identical Creapure 5 g twice daily for 5 days; Russian-tarragon extract or tarragon placebo precedes each administration. Six-week washout;10 completers are one repeated cohort, not 20 independent participants.",
+          "outcomes": [
+            {
+              "name": "Adding Russian tarragon to background Creapure did not significantly change whole-body creatine retention, muscle free-creatine or Wingate capacity versus tarragon placebo plus the same Creapure. Total retention 31.7 versus 30.6 g,p = .82; muscle-creatine interaction p = .34. This tests the add-on, not creatine versus no creatine.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "companion_reported_context"
+            },
+            {
+              "name": "Whole-body retention and muscle free-creatine increased over time in both background-Creapure periods; selected mean-power/total-work time effects also increased by day 5, while peak power showed no time effect. No no-creatine control establishes isolated efficacy.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "within_group_change"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              10
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 5,
+            "administration_frequency": "Creapure 5 g at 0800 and 2000 for 5 days per crossover period; six-week washout.",
+            "dosage_forms": [
+              "oral creatine monohydrate; the capsule description belongs to the tarragon/placebo pre-dose and does not establish a Creapure capsule form"
+            ],
+            "co_therapies": [
+              "Aqueous Russian-tarragon extract (Finzelberg) or Luvos Heilerde placebo capsules 30 minutes before Creapure; source tarragon capsule count/mass reporting conflicts retained, not converted to a verified daily dose."
+            ],
+            "reported_regimen": "Creapure 5 g twice daily (10 g/day) for 5 days per period. Abstract/discussion describe 500 mg tarragon pre-dose; Supplementation Protocol says two capsules containing500 mg and Experimental Design prints 2×500 g. Do not silently normalize the tarragon amount.",
+            "normalization": {
+              "basis": "Two assigned5 g monohydrate doses/day = 10 g/day. This is descriptive protocol exposure, not a clinical efficacy minimum or retail Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "24568653",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24568653/",
+              "location": "Full primary Methods, Results, tables and competing interests; official NCBI BioC full text 24568653_BIOC.xml. No abstract-only qualification."
+            }
+          },
+          "limitations": [
+            "Finished noncredit source review is proposed, not a new grade, branded superiority claim, generic form equivalence, Dose benchmark or ingredient/product completion. Existing separately qualified INGR_CREATINE_MONOHYDRATE evidence must remain independent.",
+            "Distinct source protocols and publication families do not prove participant-level disjointness; do not sum samples or count these active-comparator reports as independent placebo-controlled branded efficacy replications. No registry identifier or completed-registry-trial count is established.",
+            "The matched placebo applies to the Russian-tarragon add-on; every period includes Creapure. Positive within-period/time findings cannot become a placebo-controlled Creapure efficacy effect.",
+            "Martin Bauer Group/Finzelberg funded the study and prepared supplement distribution; three authors were named on related pending patents; investigator consultancy disclosed. No inference of independent commercial replication.",
+            "Figure 1 participant flow and performance subgroup 9 are retained separately from 10 biochemical completers; no verified unique enrollment sum.",
+            "Tarragon capsule mass/count wording conflicts across abstract and Methods (including printed 2×500 g); creatine5 g twice-daily exposure is consistent. This completed noncredit scope does not resolve the tarragon dosing discrepancy or infer a higher dose.",
+            "Whole-body retention is estimated from intake minus urinary creatine, not direct tissue distribution. Muscle biopsies assess free creatine; phosphocreatine assays were not reported after out-of-range/variable results. Do not relabel free creatine as validated total-creatine/PCr efficacy.",
+            "No reported side effects among short-term completers is a bounded observation, not a general safety claim. No disease, cognition, lower-dose, chronic-use or formulation-transfer conclusion."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/creapure_source_review; independent primary-content and applicability check by Codex /root. Agent reviews, not physician review.",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live API identity and full original content checked. Proposed routine noncredit source completion under the existing between-group/within-group rubric; independent source/applicability check required before application. No clinician approval asserted. Independent content/applicability check completed on 2026-11-08; existing compatibility status records the actual agent review, not clinician approval."
+          }
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "creapure"
+        ],
+        "source_pmids": [
+          "22971354",
+          "24568653"
+        ],
+        "studied_population": "Source-specific trained male comparator/add-on cohorts with reported mean ages about 20 years; individual age ranges were not stated. This bounded noncredit source completion does not establish unique branded efficacy, generic preparation equivalence or other populations.",
+        "reviewed_at": "2026-11-08"
+      }
     },
     {
       "id": "BRAND_QUATREFOLIC",
@@ -6323,7 +6538,7 @@
         "Joint & Bone Health"
       ],
       "notes": "Distilled MSM with explicit randomized human evidence in knee pain and osteoarthritis; newer mild-knee-pain data extend support but remain ingredient-like rather than uniquely product-specific. Studied doses: 6 g/day (PMID 16309928, MSM 3 g twice daily; source not named in the abstract) and 2 g/day (PMID 37447322, ten 200 mg OptiMSM tablets). Generic MSM draws on INGR_MSM, not on this brand record. Cited studies randomized 50 OA and 88 mild-knee-discomfort participants. Selected pain/function findings at 6 g/day and JKOM findings at 2 g/day must remain dose-specific. Methods 2.3 confirms OptiMSM for the 88-person mild-knee-pain trial. No unique aggregate with the separate historical pilot is asserted. Retained-source scope and limitations: Knee osteoarthritis pain/function in a small pilot (PMID: 16309928) Mild knee-pain JKOM outcomes; not exercise-recovery or measured anti-inflammatory efficacy (PMID: 37447322) Source context 37447322 is now encoded under the signed limited A015/A093 decisions, with the exact OptiMSM identity confirmed in Methods 2.3. This same trial is shared by BRAND_OPTIMSM and INGR_MSM, not independent replication. The 6 g/day osteoarthritis pilot remains historical context and cannot broaden the accepted preparation, dose or outcome. Exact product correspondence remains independently checked.",
-      "study_type": "rct_multiple",
+      "study_type": "rct_single",
       "last_updated": "2026-10-27",
       "notable_studies": "Kim et al. (2006, PMID 16309928) placebo-controlled osteoarthritis trial found improved pain and physical function with MSM. More recent randomized knee-pain data include Toguchi et al. (2023, PMID 37447322), which showed improved quality-of-life measures after 12 weeks of MSM intake.",
       "references_structured": [
@@ -6587,7 +6802,7 @@
       ],
       "category": "joint_bone",
       "evidence_level": "ingredient-human",
-      "study_type": "rct_multiple",
+      "study_type": "rct_single",
       "published_studies": [
         "RCT"
       ],
@@ -6599,7 +6814,7 @@
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Ingredient-level record for methylsulfonylmethane. Two small randomized, double-blind, placebo-controlled trials: knee osteoarthritis, 50 adults, MSM 3 g twice daily (6 g/day) for 12 weeks, lower WOMAC pain and physical-function impairment, no change in stiffness or total symptoms (PMID 16309928, a pilot); mild knee pain, 88 adults, 2 g/day (OptiMSM) for 12 weeks, primary JKOM total score better than placebo (p = 0.046) (PMID 37447322). These discrete regimens do not establish a general 2 g/day efficacy minimum. Not evidence for energy, recovery or general inflammation claims. Source context 37447322 is now encoded under the signed limited A015/A093 decisions, with the exact OptiMSM identity confirmed in Methods 2.3. This same trial is shared by BRAND_OPTIMSM and INGR_MSM, not independent replication. The 6 g/day osteoarthritis pilot remains historical context and cannot broaden the accepted preparation, dose or outcome. Exact product correspondence remains independently checked.",
+      "notes": "Human MSM research includes distinct knee populations and regimens. PMID 37447322 tested distilled OptiMSM at 2 g/day for 12 weeks in adults with mild knee discomfort, with a borderline positive primary JKOM score and null JOA and inflammatory-marker findings. The full primary paper for PMID 16309928 also identifies OptiMSM, supplied by Cardinal Nutrition, but used a one-week titration to 6 g/day in knee osteoarthritis. Pain and physical-function findings were positive, while stiffness, total WOMAC symptoms and global assessments were not significantly different. These studies do not establish a continuous 2–6 g/day efficacy range, a universal minimum, general anti-inflammatory benefit or long-term safety. Additional human studies, PMIDs 21708034 and 17516722, retain specific design or source-content holds. The original signed finding for PMID 37447322 and all separate Dose and Safety decisions remain unchanged. Only PMID 37447322 is currently qualified for numerical contribution. The source-level chemical identity/application check for this generic record was performed by Codex /root and independently by /root/grouped_correctness_check on 2026-11-08. This does not assert retail purity, manufacturing, altered-delivery, dose or safety equivalence. Dr. Pham's original limited OptiMSM decision and date remain intact in BRAND_OPTIMSM.",
       "last_updated": "2026-10-27",
       "notable_studies": "Kim et al. (2006, PMID 16309928): 6 g/day MSM improved WOMAC pain and physical function in knee osteoarthritis over 12 weeks (pilot, n=50). Toguchi et al. (2023, PMID 37447322): 2 g/day MSM improved the JKOM total score in adults with mild knee pain over 12 weeks (n=88).",
       "references_structured": [
@@ -6642,7 +6857,7 @@
           "supports_claims": [],
           "verification_source": "pubmed_eutils",
           "scoring_eligible": false,
-          "notes": "Retained historical pilot; separate 6 g/day osteoarthritis context is not covered by the accepted 2 g/day mild-knee-pain decision. No scoring transfer until a qualifying scoped assessment supports it."
+          "notes": "The full primary paper has now been read and names distilled OptiMSM from Cardinal Nutrition, with source-specific purity assays. This separate osteoarthritis trial used a titration to 6 g/day and is not covered by the signed 2 g/day mild-knee-pain finding. Its existing noneligibility remains until its own outcome, regimen and applicability decision has been independently qualified."
         },
         {
           "type": "pubmed",
@@ -6673,6 +6888,26 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "21708034",
+          "doi": "10.1186/1472-6882-11-50",
+          "title": "Efficacy of methylsulfonylmethane supplementation on osteoarthritis of the knee: a randomized controlled study.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21708034/",
+          "scoring_eligible": false,
+          "notes": "Known relevant human source. Full primary content read; allocation/design qualification remains pending."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "17516722",
+          "doi": "10.2165/00044011-200424060-00005",
+          "title": "Randomised, Double-Blind, Parallel, Placebo-Controlled Study of Oral Glucosamine, Methylsulfonylmethane and their Combination in Osteoarthritis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/17516722/",
+          "scoring_eligible": false,
+          "notes": "Known relevant human source. Primary abstract read; full Methods and applicability qualification remain pending."
         }
       ],
       "external_ids": {
@@ -6717,10 +6952,12 @@
           "components": [
             "INGR_MSM"
           ],
-          "identity_scope": "branded_material",
+          "identity_scope": "exact_form",
           "identity": {
-            "branded_material": "OptiMSM",
-            "manufacturer": "Bergstrom Nutrition"
+            "chemical_form": "Isolated methylsulfonylmethane (MSM; dimethyl sulfone), not dimethyl sulfoxide or generic sulfur.",
+            "preparation": "The primary trial supplied distilled OptiMSM in oral tablets; source supplier/manufacturing observations are retained without a retail-purity or altered-delivery equivalence claim.",
+            "manufacturer": "Bergstrom Nutrition",
+            "branded_material": "OptiMSM"
           },
           "exposure_basis": "supplement_dose",
           "route": "oral",
@@ -6794,9 +7031,94 @@
             "The trial material is OptiMSM. It does not by itself establish every retail MSM product, formulation, daily amount or purpose as applicable. The older 6 g/day knee-osteoarthritis pilot is a separate context."
           ],
           "clinical_review": {
-            "reviewer": "Dr. Pham",
-            "reviewed_at": "2026-10-26",
-            "scope": "identity_dose_outcome_applicability"
+            "reviewer": "Codex /root source-content and chemical-form applicability review; independent check by Codex /root/grouped_correctness_check. Agent reviews, not a new clinician approval.",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary source and live chemical/source identities verified. The original Dr. Pham A015/A093 limited outcome decision of 2026-10-26 is the antecedent and is preserved unchanged in BRAND_OPTIMSM. This new agent determination qualifies explicitly identified ordinary oral MSM through the existing chemical-form owner; it does not expand the original clinical outcome, regimen, population or Dose benchmark. The same trial family is shared with BRAND_OPTIMSM and cannot count as independent replication."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_msm_16309928_source_qualification_pending",
+          "components": [
+            "INGR_MSM"
+          ],
+          "source_pmids": [
+            "16309928"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "16309928",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/16309928/",
+              "location": "Full primary PDF: Methods, Results, Tables II–IV and Discussion; retained MSM_16309928_PRIMARY_LIVAR.pdf."
+            }
+          },
+          "limitations": [
+            "Full source content has been read. The separate osteoarthritis population, titrated 6 g/day regimen, mixed co-primary findings and analysis-reporting limitations require exact source-applicability qualification. The signed finding for PMID 37447322 does not approve this trial."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/scientific_review source-content research; source-content/identity check by Codex /root. The specific clinical/application work below remains unfinished; no physician review is asserted.",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full source content has been read. The separate osteoarthritis population, titrated 6 g/day regimen, mixed co-primary findings and analysis-reporting limitations require exact source-applicability qualification. The signed finding for PMID 37447322 does not approve this trial."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_msm_21708034_source_qualification_pending",
+          "components": [
+            "INGR_MSM"
+          ],
+          "source_pmids": [
+            "21708034"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "21708034",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/21708034/",
+              "location": "Official full XML, PMC3141601: Methods, Enrollment, Dosage and Results Tables 2–3."
+            }
+          },
+          "limitations": [
+            "Full source content has been read. Sequential even/odd allocation and conflicting source reporting require a truthful design and RCT-transfer decision. The valid positive and null human observations remain preserved."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/scientific_review source-content research; source-content/identity check by Codex /root. The specific clinical/application work below remains unfinished; no physician review is asserted.",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full source content has been read. Sequential even/odd allocation and conflicting source reporting require a truthful design and RCT-transfer decision. The valid positive and null human observations remain preserved."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_msm_17516722_source_qualification_pending",
+          "components": [
+            "INGR_MSM"
+          ],
+          "source_pmids": [
+            "17516722"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "17516722",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/17516722/",
+              "location": "Live MED record and Springer primary abstract only; the publisher endpoint returned a subscription preview rather than full Methods."
+            }
+          },
+          "limitations": [
+            "Full Methods, exact preparation, arm-level participant flow, outcome hierarchy and comparison qualification remain unread. The standalone MSM arm is genuine; no absence-of-research or null-effect conclusion follows."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/scientific_review source-content research; source-content/identity check by Codex /root. The specific clinical/application work below remains unfinished; no physician review is asserted.",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full Methods, exact preparation, arm-level participant flow, outcome hierarchy and comparison qualification remain unread. The standalone MSM arm is genuine; no absence-of-research or null-effect conclusion follows."
           }
         }
       ],
@@ -6804,7 +7126,9 @@
         "scope": "ingredient",
         "require_source_label_form": true,
         "required_form_terms": [
-          "OptiMSM"
+          "OptiMSM",
+          "MSM",
+          "methylsulfonylmethane"
         ],
         "minimum_daily_dose": 2000,
         "maximum_daily_dose": 2000,
@@ -6816,8 +7140,18 @@
           "Joint & Bone Health"
         ],
         "studied_population": "Adults with mild knee discomfort, Kellgren-Lawrence grade 0 or 1; not established knee-osteoarthritis treatment or prevention.",
-        "reviewed_at": "2026-10-26",
-        "reason": "Signed A015/A093 accepts only the exact OptiMSM 2,000 mg/day, 12-week mild-knee-pain finding. Equal dose bounds establish correspondence to this discrete tested regimen, not an efficacy minimum, optimal intake, safety ceiling or continuous 2-6 g range. Other preparations and the historical 6 g/day pilot remain separate; general catalog Dose retains its completed-neutral reference."
+        "reviewed_at": "2026-11-08",
+        "reason": "Source-row proof of the isolated MSM chemical form is required. Primary Methods identify distilled OptiMSM; chemical-form correspondence was checked by Codex /root and independently by /root/grouped_correctness_check under the existing identity-first policy on 2026-11-08. The actual signed A015/A093 finding remains the narrow 2 g/day, 12-week mild-knee-discomfort context, not unique branded efficacy or a universal minimum. Exact 2000 mg correspondence and source selection remain unchanged. Other chemical/delivery forms, the separate 6 g/day osteoarthritis trial, and independent Dose/Safety decisions are not transferred.",
+        "excluded_form_terms": [
+          "dimethyl sulfoxide",
+          "DMSO",
+          "liposomal",
+          "sublingual",
+          "modified release",
+          "sustained release",
+          "time release",
+          "topical"
+        ]
       },
       "verification_provenance": {
         "reference_citations": {
@@ -20951,7 +21285,7 @@
       "health_goals_supported": [
         "Digestive Health"
       ],
-      "notes": "Human evidence supports the inulin-type fructan family (inulin, oligofructose and short-chain FOS), not every unspecified prebiotic fiber. PMID 35833477 evaluates chicory-derived preparations: 3–20 g/day, 50 studies/2525 participants, with bowel-function benefits in healthy subjects and no significant bifidogenic benefit in the gastrointestinal-disorder subgroup. Live bibliographic metadata for PMID 35833477 lists BENEO support and author affiliations; precise funder roles require full-text review. PMID 34555168 reviews healthy adults and mixed chain lengths/preparations, with positive and null laxation/calcium findings; support from General Mills is disclosed. Those outcomes cannot be transferred uniformly between inulin and FOS or treated as whole retail-formula trials. PMID 38309832 reports small cardiometabolic risk-factor effects with low or very low certainty, not cardiovascular-event prevention. Review populations overlap and must not be summed as unique enrollment. Historic automated registry discovery supplied 420 enrollment/224 completed trials without an identified NCT receipt; neither is retained as verified evidence metadata. Trial exposure remains a source fact for existing Dose review; no universal studied-dose benchmark is established.",
+      "notes": "Human evidence supports the inulin-type fructan family (inulin, oligofructose and short-chain FOS), not every unspecified prebiotic fiber. PMID 35833477 evaluates chicory-derived preparations: 3–20 g/day, 50 studies/2525 participants, with bowel-function benefits in healthy subjects and no significant bifidogenic benefit in the gastrointestinal-disorder subgroup. Live bibliographic metadata for PMID 35833477 lists BENEO support and author affiliations; precise funder roles require full-text review. PMID 34555168 reviews healthy adults and mixed chain lengths/preparations, with positive and null laxation/calcium findings; support from General Mills is disclosed. Those outcomes cannot be transferred uniformly between inulin and FOS or treated as whole retail-formula trials. PMID 38309832 reports small cardiometabolic risk-factor effects with low or very low certainty, not cardiovascular-event prevention. Review populations overlap and must not be summed as unique enrollment. Historic automated registry discovery supplied 420 enrollment/224 completed trials without an identified NCT receipt; neither is retained as verified evidence metadata. Trial exposure remains a source fact for existing Dose review; no universal studied-dose benchmark is established. November 8, 2026: two additional bounded source-content reviews completed by Codex research agent and independently checked by Codex /root. PMID 27492975 preserves a positive primary finding for exact Orafti GR Inulin, with null secondary findings and increased gas; exact preparation transfer remains unestablished. PMID 38309832 preserves small positive lipid/weight findings and null outcomes without numerical meta-analysis transfer. PMID 35833477 full Methods remains unread; no whole-ingredient completion or general Dose benchmark follows.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-10-28",
       "notable_studies": "PMID 35833477: chicory-derived inulin-type fructans increase Bifidobacterium (surrogate), with bowel-function benefits in healthy subjects; gastrointestinal-disorder bifidogenic subgroup was not significant. PMID 34555168: healthy-adult ITF review; 11 of 20 stool-frequency studies positive and nine null, mixed calcium-related findings (absorption, balance and serum concentrations are distinct outcomes); effects depend on preparation/chain length. PMID 38309832: 55 RCTs/2518 participants, small LDL/triglyceride/body-weight changes with low to very low certainty and little to no significant effect on other risk factors. These review totals are not unique trial-enrollment or published-replication counts for this entry.",
@@ -21066,6 +21400,11 @@
             "not_cardiovascular_event_reduction"
           ],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "pmid": "27492975",
+          "title": "Effect of consumption of chicory inulin on bowel function in healthy subjects with constipation: a randomized, double-blind, placebo-controlled trial.",
+          "scoring_eligible": false
         }
       ],
       "external_ids": {
@@ -21258,6 +21597,246 @@
             "reviewed_at": "2026-10-28",
             "scope": "identity_dose_outcome_applicability"
           }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_inulin_27492975_scoped_source",
+          "components": [
+            "INGR_INULIN"
+          ],
+          "source_pmids": [
+            "27492975"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Chicory-derived inulin, explicitly Orafti GR Inulin",
+            "preparation": "Identical sachets containing 4 g Orafti GR Inulin; no raw-root, other chain-length or other branded material equivalence established."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "bowel_function",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_27492975",
+          "clinical_review": {
+            "reviewer": "Codex research agent /root/creapure_source_review; agent review, not clinician review; independent source-content/application check by Codex /root",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary main-article content and live identity checked by the research agent and independently checked by Codex /root on 2026-11-08. Completed factual source review only; numerical eligibility remains false because exact preparation/population transfer is unestablished. This is agent review, not physician approval. Original source findings, unresolved supplementary/primary extraction and independent reviews remain explicit."
+          },
+          "population": {
+            "sample_size": 44,
+            "description": "54 enrolled/randomized; 44 per-protocol analyzed (33 women, 11 men; mean age 46.9 years). Adults aged 20–75 years, otherwise healthy with 2–3 stools/week for at least six months; excludes relevant GI disease and motility medication. Sample_size is the analyzed cohort, not randomized enrollment."
+          },
+          "study_design": "Double-blind randomized 1:1 sequence crossover; two four-week intervention periods, each preceded by two-week placebo run-in, with two-week intervening washout. Placebo is 12 g/day maltodextrin DE 19. Paired Wilcoxon analysis in 44 per-protocol participants; paper-designated confirmatory primary frequency endpoint.",
+          "outcomes": [
+            {
+              "name": "Stool frequency: median 4.0 versus 3.0/week, p = .038.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Stool consistency p = .1808; satisfaction p = .059; physical discomfort p = .298; straining, incomplete emptying, bloating and abdominal discomfort not significantly different. Exploratory secondary endpoints, not proof of general quality-of-life improvement.",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Passage of gas increased: 1.9 versus 1.1 on the five-point scale, p < .001.",
+              "hierarchy": "secondary",
+              "kind": "patient_important",
+              "direction": "negative",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              12
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 28,
+            "administration_frequency": "4 g three times daily with breakfast, lunch and dinner.",
+            "dosage_forms": [
+              "oral powder sachet"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "12 g/day Orafti GR Inulin, three 4 g sachets each mixed in 200 mL drink, for four weeks in its crossover period.",
+            "normalization": {
+              "basis": "Exact assigned study-material mass retained; not a new general Dose benchmark or lower-dose equivalence."
+            },
+            "source_provenance": {
+              "pmid": "27492975",
+              "source_url": "https://doi.org/10.1080/09637486.2016.1212819",
+              "location": "Full original-layout article Methods/Results, flow diagram and Tables 1–3; archived primary PDF with SHA256 in research receipt."
+            }
+          },
+          "limitations": [
+            "Exact Orafti GR preparation only. No inferred equivalence to all inulin, oligofructose, FOS, GOS, XOS, raw chicory root or unknown prebiotic mixtures.",
+            "NCT02548247 live record: study March 2011–May 2012; first submitted September 4, 2015 and first posted September 14, 2015. Retrospective registration does not prove prospective endpoint prespecification.",
+            "Companion PMID 28213610 / PMC5739857 explicitly uses the same NCT02548247 cohort: 42 of 44 valid participants supplied stool samples. One family, not an additional efficacy replication.",
+            "BENEO funded the trial and had input in design/outcome selection; BENEO and BioTeSys author roles disclosed. Do not describe this as independent commercial replication.",
+            "Two dropouts and eight further exclusions; per-protocol result with fewer than the 48 planned completers. Preserve observed primary benefit and null/adverse secondary results.",
+            "A qualified single RCT cannot inherit the parent systematic-review/meta-analysis scoring weight. Use the existing scoring owner, exact material scope and retained positive_weak finding; no new grade or benchmark.",
+            "Independent source 35833477 remains unfinished; no whole-ingredient or product completion follows automatically."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_inulin_38309832_scoped_source",
+          "components": [
+            "INGR_INULIN"
+          ],
+          "source_pmids": [
+            "38309832"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Heterogeneous inulin-type fructans: inulin, high-performance inulin, FOS, oligofructose, agave fructans, food matrices, synbiotic and background co-intervention trials. No single interchangeable formulation."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "cardiometabolic_risk_factors",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_38309832",
+          "clinical_review": {
+            "reviewer": "Codex research agent /root/creapure_source_review; agent review, not clinician review; independent source-content/application check by Codex /root",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary main-article content and live identity checked by the research agent and independently checked by Codex /root on 2026-11-08. Completed factual source review only; numerical eligibility remains false because exact preparation/population transfer is unestablished. This is agent review, not physician approval. Original source findings, unresolved supplementary/primary extraction and independent reviews remain explicit."
+          },
+          "included_study_pmids": [
+            "26819923",
+            "9925124",
+            "26430929",
+            "28620472",
+            "30971437",
+            "26669430",
+            "24715424",
+            "26860809",
+            "24059649",
+            "23135760",
+            "19254816",
+            "15158296",
+            "26500686",
+            "26571012",
+            "32340903",
+            "10827212",
+            "30661690",
+            "29417384",
+            "19386741",
+            "29490721",
+            "28730743",
+            "29391930",
+            "24706266",
+            "25196301",
+            "22703579",
+            "24919604",
+            "31241002",
+            "20096897",
+            "20509823",
+            "29258261",
+            "26987626",
+            "25909598",
+            "17618955",
+            "24664349",
+            "10655953",
+            "12600843",
+            "8644690",
+            "26151029",
+            "9301412",
+            "25331262",
+            "20938778",
+            "24398786",
+            "10048793",
+            "34579112",
+            "34910161",
+            "35261049",
+            "33565558"
+          ],
+          "population": {
+            "sample_size": 2518,
+            "description": "Source-reported aggregate 55 RCTs and 2518 participants; not independently deduplicated enrollment. Table 1 N is completed participants. Broad adult healthy and cardiometabolic-risk populations; 36 parallel and 19 crossover studies. Not an established exact preparation/population transfer."
+          },
+          "study_design": "Systematic review and meta-analysis through May 15, 2022. Primary outcomes LDL, triglycerides and fasting blood glucose. Random-effects REML for at least five studies, fixed effect otherwise. Main crossover analysis explicitly naive, with paired covariance sensitivities reported separately; no independent supplement reanalysis performed.",
+          "outcomes": [
+            {
+              "name": "LDL MD −0.14 mmol/L (95% CI −0.24 to −0.05), 38 RCTs/1879 participants, I² 84.8%, very-low certainty.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Triglycerides MD −0.06 mmol/L (−0.12 to −0.01), 40 RCTs/1732, I² 57.5%, low certainty.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Fasting glucose CI −0.16 to +0.05 mmol/L, 36 RCTs/1505, I² 72.9%, very-low certainty, null. Results MD −0.06 versus Table 2 −0.05 retained as a printed discrepancy.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Body weight MD −0.97 kg (−1.28 to −0.66), 36 RCTs/1672, low certainty; BMI, blood pressure, HbA1c and most other risk-factor outcomes generally null. No cardiovascular event evidence.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": null,
+            "dosage_forms": [],
+            "co_therapies": [],
+            "reported_regimen": "No single assigned preparation/regimen. Results report median 10 g/day, range 0.75–30 g/day, median eight weeks (two weeks to two years); Discussion reports upper dose 40 g/day instead. No reconciled universal effective-dose interval.",
+            "source_provenance": {
+              "pmid": "38309832",
+              "source_url": "https://doi.org/10.1016/j.ajcnut.2023.10.030",
+              "location": "Full main article author-uploaded primary manuscript/publisher-layout text on ResearchGate, Methods/Results/Table 1/Table 2/disclosures; original supplements and raw primary data not independently reviewed."
+            }
+          },
+          "limitations": [
+            "Finished factual source review is recorded with numerical eligibility false: exact preparation/population and synbiotic/co-intervention applicability remain unestablished. Low certainty alone is not a finding of no human research or no benefit.",
+            "Included_study_pmids lists 47 verified publication identity pointers, not all 55 individually qualified primary studies or independent families. Eight actual source citations remain without unique live MED resolution; see checked pointer manifest.",
+            "Methods exclude prior gastric bypass, but Table 1 labels Fernandes 2016 healthy. Exact cited primary PMID 25909598 / DOI 10.1007/s11695-015-1574-x explicitly studies Roux-en-Y gastric bypass. Its Table 1 outcomes are BMI/weight; do not claim this contradiction invalidates LDL/TG pools.",
+            "Source reports 30 ITF, five synbiotic and ten co-intervention studies, totaling 45 despite 55 total; category reference enumeration appears different. Preserve discrepancy without inventing ten studies.",
+            "Dose upper ranges conflict (Results 30 versus Discussion 40 g/day). Food matrix versus active fructan mass requires primary-source reconciliation; no benchmark or equivalence created.",
+            "Primary crossover covariance analysis is naive; paired sensitivities use rho 0, .33, .66 and .99. Supplementary plots were not independently inspected/recomputed.",
+            "Age, BMI and diabetes subgroup analyses are post hoc; duration/dose subgroup findings do not define a universal minimum or optimal regimen.",
+            "Authors report no funding for this review, with extensive commercial relationships disclosed. Not a BENEO-funded meta-analysis and not free of industry ties.",
+            "Source reports 16 low risk, 22 high risk and 17 some-concern trials. Two eligible trials lacked usable data. No cardiovascular event prevention or general safety conclusion.",
+            "PMID 26151029 chicory-root-tea citation exists in Table 1; its primary Methods are not qualified here. Do not convert unqualified raw-root preparation into no human research.",
+            "Separate PMID 35833477 full Methods/source review remains on hold; parent mixed effect direction, Dose, safety and independent review holds remain unchanged."
+          ]
         }
       ]
     },
@@ -23899,6 +24478,97 @@
             "Reported within-arm improvements are retained as within-arm findings. Between-group comparisons were not statistically significant; neither a causal betaine benefit nor proof of no possible efficacy follows from this bounded review.",
             "This is only a source-to-RCT/affirmative-transfer exclusion. Other source reviews, pooled-method questions and the signed parent strength hold remain open. The genuine human study and its scientific provenance remain available."
           ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_betaine_anhydrous_21744011_bounded_primary_source",
+          "components": [
+            "PRECLIN_BETAINE_ANHYDROUS"
+          ],
+          "source_pmids": [
+            "21744011"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Betaine supplied by Ethika, dissolved in water; the published paper does not establish a branded chemical preparation or assay purity. No betaine hydrochloride equivalence is inferred."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "exercise_performance",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "trial_family": "source_21744011",
+          "clinical_review": {
+            "reviewer": "Codex /root/glycine_review; independent primary-content and applicability check by Codex /root. Agent reviews, not physician review.",
+            "reviewed_at": "2026-11-08",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Private bounded source review completed against the publisher-typeset full paper in a web reader plus the separately retained author manuscript and live NIH identity. This is agent research, not physician review or resolution of the signed pooled-strength hold. Independent content/applicability check completed on 2026-11-08; existing compatibility status records the actual agent review, not clinician approval."
+          },
+          "population": {
+            "age_group": "adult",
+            "description": "34 men aged 18–30, without resistance training for at least six months: betaine n=9, creatine n=9, betaine-plus-creatine n=8 and placebo n=8. These explicit published Methods counts replace neither endpoint-specific analyzed counts nor missing MRS measurements."
+          },
+          "study_design": "Double-blind randomized parallel four-arm study in Sao Paulo, October 2010–January 2011; block-of-four randomization stratified by baseline 1 RM. Three familiarization sessions preceded baseline and post-10-day measurements. Participants refrained from exercise training; this is not a supplement-period crossover. Power was measured over six maximal-velocity repetitions at 60% of 1 RM.",
+          "comparator": "Matched 20 g/day dextrose in every arm. Placebo had dextrose alone; betaine monotherapy is evaluated separately from creatine and betaine-plus-creatine arms.",
+          "outcomes": [
+            {
+              "name": "Muscle phosphorylcreatine content did not differ for betaine versus placebo (p=0.78), or for creatine versus creatine-plus-betaine (p=0.99). Creatine-containing arms improved versus placebo; those effects are not attributable to betaine alone.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "No significant betaine-versus-placebo difference in 1 RM strength or muscle power. No significant additional effect of betaine when added to creatine. Body composition did not differ between groups; within-arm creatine strength gains are not betaine treatment effects.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "This is a bounded source-specific non-credit finding, not a categorical finding that all betaine research is null. No new aggregate grade or efficacy minimum follows.",
+            "No explicit primary/secondary outcome hierarchy is designated in the accessible author manuscript; title order is not used to invent one.",
+            "Published Methods explicitly assigns betaine9, creatine9, combination8 and placebo8 participants. The blinding-response percentages for the eight-person arms do not match those arm sizes; retain the reporting discrepancy rather than inferring different randomized enrollment.",
+            "Although Statistical analysis states intention-to-treat irrespective of compliance, published Figure2 states that two betaine participants missed the postintervention MRS assessment and were excluded from that endpoint. The PCr analysis cannot be described as complete data for every randomized participant.",
+            "The earlier public author draft omitted explicit arm sizes and said four familiarization sessions. The publisher-typeset paper specifies three sessions and9/9/8/8 arms; the published source controls these facts. Source labels, null effects and the assigned regimen are preserved.",
+            "This primary is included in PMID39514262. It counts as one clinical family, never an additional independent trial alongside the synthesis.",
+            "The signed lower-body pooled-method/application hold remains: correlated legs/exercises, crossover pairing/period handling and source-regimen discrepancies are not resolved by this parallel-study review.",
+            "No transfer to homocysteine clinical benefit, cardiovascular outcomes, generic energy or betaine HCl. All existing Dose and safety decisions are preserved.",
+            "Published full paper was content-read through the Academia web reader; direct local retrieval was403. No local published-body hash is claimed. The retained author draft remains separately bound and is not silently relabeled as the final paper."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              2000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 10,
+            "administration_frequency": "Two daily doses, after lunch and dinner, diluted in water.",
+            "dosage_forms": [
+              "Coded supplement packages dissolved in water; no capsule form inferred."
+            ],
+            "co_therapies": [
+              "20 g/day dextrose in all arms. Separate creatine-containing arms received 20 g/day creatine monohydrate; these are not the isolated betaine comparison."
+            ],
+            "reported_regimen": "Betaine 2 g/day for 10 days in the betaine and combination arms; placebo and all active arms received matched dextrose.",
+            "normalization": {
+              "basis": "Only the reported 2 g/day assigned betaine regimen is expressed as 2000 mg/day; no general efficacy threshold, salt conversion or Dose curve."
+            },
+            "source_provenance": {
+              "pmid": "21744011",
+              "source_url": "https://cefise.com.br/wp-content/uploads/2020/04/03_Creatine-but-not-betaine-supplementation-increases-muscle-phosphorylcreatine-content-and-strength-performance.pdf",
+              "location": "Publisher-typeset Amino Acids42:2299–2305: Materials and methods pp2300–2301; Results/Tables1–2 p2302; Figure2 MRS attrition p2303; Discussion/Acknowledgments pp2303–2305. Public author draft retained separately."
+            }
+          }
         }
       ]
     },
@@ -27532,7 +28202,7 @@
       "health_goals_supported": [
         "Focus & Mental Clarity"
       ],
-      "notes": "Human evidence is real but mixed and condition-specific. A 2019 Cochrane review found very-low-certainty evidence for diabetic peripheral-neuropathy pain and could not establish safety, while another 2019 review reported a pain reduction across diabetic and HIV-associated neuropathy trials. Cognitive reviews conflict: a positive meta-analysis in mild cognitive impairment or early Alzheimer disease contrasts with a Cochrane dementia review that found no objective cognitive or functional benefit. A separate Cochrane review found insufficient, very-low-quality evidence for cognitive enhancement in healthy adults. This record must not be presented as broad focus, energy, or neuroprotection efficacy.",
+      "notes": "Human evidence is real but mixed and condition-specific. The 2019 Cochrane diabetic-neuropathy review reports a pain estimate favoring ALC but rates the evidence very low certainty and cannot establish safety; another 2019 review reports benefit across diabetic and HIV-associated neuropathy trials. Cognitive sources also differ: the positive MCI/early-Alzheimer meta-analysis and the older Cochrane dementia record must be read in their exact versions. The original 2003 abstract reported no objective cognitive benefit, while its linked expanded 2005 full review retains selected categorical-global and 24-week MMSE findings but no consistent longer-term cognitive or functional benefit or recommendation for routine use. The healthy-cognition Cochrane review judged sparse L-carnitine data insufficient; its actual included trials were not direct ALCAR trials. No broad focus, energy or neuroprotection efficacy follows.",
       "study_type": "reference",
       "published_studies": [
         "systematic_review",
@@ -27679,7 +28349,7 @@
       "effect_direction": "mixed",
       "primary_outcome": "Focus & Mental Clarity",
       "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Mixed is a high-confidence classification of conflicting, condition-specific systematic reviews, not a claim of moderate universal benefit. PubMed E-utilities verified all five references on 2026-08-06. The 2019 Cochrane diabetic-neuropathy review judged pain evidence very low certainty; another neuropathy review reported benefit. A positive MCI/early-Alzheimer meta-analysis conflicts with Cochrane reviews finding no objective dementia benefit and insufficient evidence in healthy adults.",
+      "effect_direction_rationale": "Mixed remains the existing high-confidence classification of conflicting, condition-specific systematic reviews, not a universal-benefit grade. The 2019 Cochrane diabetic-neuropathy evidence is very low certainty despite a favorable pain estimate; another neuropathy review reports benefit. Cognitive source versions differ: the original 2003 dementia abstract and linked expanded 2005 full body must not share incompatible trial counts or estimates. Selected categorical-global and 24-week MMSE findings in the latter do not establish consistent cognitive or functional benefit. Healthy-cognition evidence is insufficient and its included trials used L-carnitine, not a direct ALCAR preparation. This factual source update changes no aggregate grade or numerical eligibility.",
       "endpoint_relevance_tags": [
         "focus_memory"
       ],
@@ -27823,8 +28493,13 @@
             }
           },
           "limitations": [
-            "Cochrane 2017: only 2 RCTs in young healthy adults; no effect of L-carnitine on reaction time, vigilance, immediate memory or delayed recall after 3 days (about 200 participants); very low quality; authors could draw no conclusion. Abstract only; full text not retrieved.",
-            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+            "Official full source PMC6464592 was read by Codex on 2026-11-08 (Methods, included-study tables, effects and Conclusions). The earlier abstract-only access limitation is resolved; the specific historical non-credit decision is preserved.",
+            "The review allowed L-carnitine, acetyl-L-carnitine and propionyl-L-carnitine in its eligibility criteria, but its two included trials actually administered L-carnitine. It is not a direct acetyl-L-carnitine efficacy pool and establishes no chemical equivalence.",
+            "Benton 2004 enrolled 400 women across four arms (carnitine, lecithin, combination and placebo); exact arm allocations were unreported. The review estimated about 200 participants in the isolated carnitine/placebo comparison, not 400 independent monotherapy participants. Oral 500 mg/day was assigned for three days; cognition comparisons were nonsignificant and very-low-certainty.",
+            "Muniz-Pumares 2011 was an 18-person crossover conference abstract, comparing a rhodiola beverage with versus without a single 500 mg L-carnitine dose. Matched rhodiola does not erase the comparator contrast, but this is not an acetyl-L-carnitine monotherapy replication. Detailed results and primary methods were unavailable to the review.",
+            "The source reports 418 enrolled across the two trial publications, not 418 people with complete isolated-L-carnitine comparison data. It performed no meta-analysis and judged the evidence too limited to conclude efficacy or safety. Nonsignificant findings are not proof of universal cognitive inefficacy.",
+            "Existing review_status=rejected_source, scoring_eligible=false, the actual Dr. Pham reviewer/date/decision, source labels, Dose and safety remain unchanged. Full-source processing by Codex is not a replacement clinician approval.",
+            "Source-content check completed by Codex /root on 2026-11-08 against the retained primary source/version; the original clinical reviewer, date, scope, review status and numerical noneligibility are unchanged."
           ]
         },
         {
@@ -27851,8 +28526,14 @@
             }
           },
           "limitations": [
-            "Cochrane 2003: 11 double-blind RCTs, all Alzheimer's disease; Clinical Global Impression improved at 12 and 24 weeks (OR 2.33 and 3.91) but not at 52 weeks, and no benefit on cognition, dementia severity, function or CGI as a continuous measure. Abstract only.",
-            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+            "The official linked full source PMC6991156 was read by Codex on 2026-11-08, including Methods, Results, included-study tables, Conclusions and revision History. It is an expanded review version: History records additional company reports/trials in 2005, no new studies in the 2007 search and a 2008 format amendment. This version distinction must not be silently collapsed into the original 2003 PubMed abstract.",
+            "The original 2003 PubMed abstract reported 11 trials and no objective cognitive benefit; the expanded full body reports 16 included studies, 15 contributing to meta-analysis. Its categorical clinical-global-impression effects favor ALC at 12 and 24 weeks (OR 1.90 and 2.33 respectively), but not 52 weeks. The older abstract uses different odds ratios. Do not combine trial counts or estimates across versions.",
+            "The expanded body reports a small 24-week MMSE advantage (WMD 0.69,95% CI 0.09 to 1.29;p=.02), with nonsignificant 12- and 52-week MMSE effects. ADAS-cog and pooled daily-function measures were nonsignificant. Selected positive test/time-point findings must be retained; they do not establish consistent cognition or functional benefit.",
+            "Trials were placebo-controlled parallel studies in dementia populations, predominantly probable Alzheimer disease, with differing diagnostic rigor, doses and follow-up. Most used 2 g/day ALC (range 1–3 g/day), usually six months (range three months to one year). No healthy-adult focus inference, product equivalence or Dose benchmark follows.",
+            "Sigma-Tau supplied additional company reports and supported many trials; the added reports are not all independent publications. The review explicitly consolidates duplicate reports, including Livingston 1991/James 1992. Completer data predominated, and many tests/time points were compared; the authors considered chance findings possible and did not recommend routine use.",
+            "The current Dr. Pham decision and rejected/non-credit context are preserved as the historical 2003 source-based ruling. The later full-body findings require truthful source-version qualification in current descriptive prose, not retrospective rewriting of who reviewed that older decision. Independent review must verify this exact version relationship before applying factual updates.",
+            "No new efficacy grade, clinical approval, source-label change, parent completion, Dose or safety conclusion is proposed. The other cognitive/neuropathy sources and their independent conditions remain intact.",
+            "Source-content check completed by Codex /root on 2026-11-08 against the retained primary source/version; the original clinical reviewer, date, scope, review status and numerical noneligibility are unchanged."
           ]
         },
         {
@@ -27879,8 +28560,14 @@
             }
           },
           "limitations": [
-            "2003 meta-analysis: double-blind placebo-controlled trials >=3 months in MCI and mild AD, 1.5-3.0 g/day; integrated effect size 0.201 (95% CI 0.107-0.295) and CGI-CH 0.32 (0.18-0.47). Full text not retrieved.",
-            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+            "Publisher-typeset full paper for PMID 12598816 was read in the web PDF reader on 2026-11-08: International Clinical Psychopharmacology 2003;18:61–71, matching the live NIH title/authors/journal/pages. Direct local mirror retrieval returned 403, so no local PDF-body hash is claimed. The filename contains 2002, but the paper itself is the 2003 publication; source labels are unchanged.",
+            "The review selected 21 parallel double-blind placebo-controlled trials in MCI or mild Alzheimer disease, including manufacturer-supplied reports. It reports 1479 included patients and 1204 with end-study assessments (591 ALC/613 placebo); these are not 1479 complete endpoint participants or healthy adults. Selected mild-disease subsets from four large trials were supplied from Sigma-Tau databases, and three small mixed-severity studies could not be cleanly separated.",
+            "The authors designated integrated all-scale effect and clinical global impression of change as primary efficacy parameters. The reported summary effect 0.201 (95% CI 0.107–0.295) and CGI-change effect 0.32 (95% CI 0.18–0.47) favor ALC and are retained. Drawing and learning subcategories were nonsignificant; positive pooled results do not mean every test or individual study was positive.",
+            "Within-study scale effects were combined with a Hedges estimator for correlated data using a fixed assumed correlation 0.5 because observed correlations were sparse. The source reports this assumption; it was not independently reestimated here and must not be imported into the unrelated TMG 39514262 calculation. Completer data predominated, with approximately 20% dropout overall and no imputation for scale-level missing data.",
+            "Studies assigned 1.5–3.0 g/day for 3, 6 or 12 months. No significant dose-effect correlation was reported. These heterogeneous assigned regimens do not establish a Dose threshold, oral bioavailability equivalence or general healthy-adult focus efficacy. Activities of daily living, instrumental daily living and language were excluded from the chosen efficacy composite; no functional-independence benefit is inferred.",
+            "Many included trial families overlap the Cochrane dementia source 12804452, including reports consolidated as James/Livingston, Sano/Mayeux and other shared named studies. Review publications, alternative report titles and repeated time points are not independent clinical replications. No comprehensive participant-level independence verification or new trial count is claimed.",
+            "Commercial-source data and the source assumptions are retained as limitations without inventing misconduct. The pre-existing Dr. Pham condition-specific non-credit ruling, reviewer/date, rejected_source status, mixed parent grade, source labels, Dose and safety remain unchanged. This source-content completion is by Codex, not a new clinician efficacy decision or whole-ingredient completion.",
+            "Source-content check completed by Codex /root on 2026-11-08 against the retained primary source/version; the original clinical reviewer, date, scope, review status and numerical noneligibility are unchanged."
           ]
         },
         {
@@ -27907,8 +28594,15 @@
             }
           },
           "limitations": [
-            "Cochrane 2019: 4 studies, 907 participants; pain VAS MD -9.16 mm (-16.76 to -1.57) versus placebo, very low certainty; no difference at <=1500 mg/day; safety could not be judged. Abstract only.",
-            "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
+            "Full source reviewed by Codex on 2026-11-08: official PMC6953387 Methods, Results, risk-of-bias assessments, included-study tables and Conclusions. This replaces the prior abstract-only access description; it does not change the existing Dr. Pham non-credit ruling, source labels, review_status, reviewer, Dose or safety policy.",
+            "The review reports four studies in three publications with 907 included participants: three placebo-controlled studies and one methylcobalamin-controlled study. Its pain meta-analysis uses 540 participants, not 907; two Sima trial families share one paper, and pain was assessed only in 342 of 1335 randomized participants who reported pain as their most bothersome symptom. Publication counts, randomized cohorts and endpoint analysis counts must not be interchanged.",
+            "Pain at 6–12 months favored ALC by a mean 9.16 mm on a 100 mm VAS (95% CI 1.57–16.76 mm favoring ALC), but certainty was very low. The review could not report the planned 30%/50% pain-responder outcomes; the continuous mean difference is not an established responder benefit or a categorical null.",
+            "The  >1500 mg/day subgroup favored ALC (MD−14.93 mm, 95% CI −19.16 to−10.70;381 participants), while ≤1500 mg/day showed no clear difference (MD−0.05 mm, 95% CI −10.00 to 9.89;159 participants). These sparse source subgroup analyses do not establish a Dose threshold or free-carnitine equivalence.",
+            "DeGrandis2002 used an intramuscular 1000mg/day phase for 10 days followed by oral 2000mg/day for 355 days; Sima trial arms used oral 1500 or 3000mg/day for one year; Li2016 used oral 1500mg/day versus methylcobalamin for 24 weeks. A pooled placebo estimate is not uniformly oral-only exposure. No uniform physical dosage form or retail-salt equivalence is inferred.",
+            "Li2016 did not measure pain and supplies an active comparator, not a placebo pain trial. Functional impairment and symptom changes showed no clear between-treatment difference; selected neurophysiological findings are not broad clinical recovery or quality-of-life evidence. No included study measured quality of life.",
+            "The review identifies substantial missing/reporting data, high risk of bias in the two Sima families and manufacturer involvement in all included trials. Its own risk-of-bias summaries differ in calling DeGrandis low versus unclear; no independent risk reassessment is invented. Safety evidence was too uncertain to judge; no safety reassurance follows.",
+            "The current specific non-credit/off-claim ruling remains intact. Full source-content processing by Codex /root/glycine_review and independent content check by Codex /root on 2026-11-08 do not constitute a new clinician assessment or whole-ingredient completion.",
+            "Source-content check completed by Codex /root on 2026-11-08 against the retained primary source/version; the original clinical reviewer, date, scope, review status and numerical noneligibility are unchanged."
           ]
         }
       ],

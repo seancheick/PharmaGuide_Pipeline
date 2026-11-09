@@ -1365,3 +1365,129 @@ def test_grouped_source_review_prose_keeps_limits_readable_and_status_current():
         assert "independent source-content check completed" in record["applicability_decision"]
         assert "applicability review stay open" in record["applicability_decision"]
         assert record["applicability_status"] == "applicability_unestablished"
+
+
+@pytest.mark.parametrize('entry_id,pmids', [
+    ('BRAND_CREAPURE', {'22971354', '24568653'}),
+    ('PRECLIN_BETAINE_ANHYDROUS', {'21744011'}),
+])
+def test_five_family_bounded_noncredit_sources_are_finished(entry_id, pmids):
+    from clinical_applicability import reviewed_entries
+    entry = reviewed_entries()[entry_id]
+    contexts = [c for c in entry.get('study_contexts', [])
+                if set(c.get('source_pmids', [])) & pmids]
+    assert {p for c in contexts for p in c['source_pmids']} == pmids
+    assert all(c['review_status'] == 'clinician_approved' and c['scoring_eligible'] is False
+               for c in contexts)
+    assert all('Codex' in c['clinical_review']['reviewer'] for c in contexts)
+
+
+def test_msm_retains_one_qualified_trial_and_unfinished_sources():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    entries = reviewed_entries()
+    for key in ('INGR_MSM', 'BRAND_OPTIMSM'):
+        assert entries[key]['study_type'] == 'rct_single'
+        assert entries[key]['effect_direction'] == 'mixed'
+    source = entries['INGR_MSM']
+    assert source['applicability']['required_form_terms'] == ['OptiMSM', 'MSM', 'methylsulfonylmethane']
+    assert source['applicability']['minimum_daily_dose'] == 2000
+    assert source['applicability']['maximum_daily_dose'] == 2000
+    pending = {p for c in source['study_contexts']
+               if c['review_status'] == 'source_verified_pending_clinical_review'
+               for p in c['source_pmids']}
+    assert pending == {'16309928', '21708034', '17516722'}
+    assert assess_clinical_source_review({'id': 'INGR_MSM'})['is_complete'] is False
+    assert entries['BRAND_OPTIMSM']['study_contexts'][0]['clinical_review']['reviewer'] == 'Dr. Pham'
+
+
+@pytest.mark.parametrize('entry_ids', [
+    ['BRAND_OPTIMSM', 'INGR_MSM'], ['INGR_MSM', 'BRAND_OPTIMSM'],
+])
+@pytest.mark.parametrize('floor', [False, True])
+def test_shared_msm_trial_cannot_earn_points_twice(entry_ids, floor):
+    from clinical_applicability import reviewed_entries
+    product = _tyrosine_scoring_product(name='OptiMSM Methylsulfonylmethane')
+    row = product['activeIngredients'][0]
+    row.update(canonical_id='msm', standard_name='MSM', matched_form='msm')
+    entries = reviewed_entries()
+
+    def measured(ids):
+        candidate = copy.deepcopy(product)
+        matches = [{**entries[key], 'ingredient': row['name'],
+                    'matched_source_row_refs': [row['raw_source_path']],
+                    'matched_canonical_ids': ['msm']} for key in ids]
+        candidate['evidence_data'] = {'clinical_matches': matches}
+        return score_evidence(candidate, accepted_matches=matches, apply_primary_floor=floor)
+
+    single = max(measured([key])['score'] for key in entry_ids)
+    combined = measured(entry_ids)
+    assert combined['score'] == single
+    # Both records still carry review obligations and source provenance.
+    assert {r['id'] for r in combined['metadata']['contributing_record_assessments']} == set(entry_ids)
+
+    assert combined['components']['clinical_evidence_pipeline'] == max(
+        measured([key])['components']['clinical_evidence_pipeline'] for key in entry_ids)
+    assert sum(combined['metadata']['ingredient_points'].values()) == max(
+        sum(measured([key])['metadata']['ingredient_points'].values()) for key in entry_ids)
+    generic = next(r for r in combined['metadata']['contributing_record_assessments'] if r['id'] == 'INGR_MSM')
+    assert generic['source_review']['is_complete'] is False
+
+
+def test_trial_family_dedup_keeps_independent_sources_and_identity_scopes(monkeypatch):
+    import clinical_applicability as ca
+    from scoring_v4.modules import generic_evidence as ge
+    product = _tyrosine_scoring_product(name='OptiMSM Methylsulfonylmethane')
+    row = product['activeIngredients'][0]
+    row.update(canonical_id='msm', standard_name='MSM', matched_form='msm')
+    entries = copy.deepcopy(ca.reviewed_entries())
+    originals = ca.reviewed_entries()
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: entries)
+    def measure(ids):
+        matches = [{**entries[key], 'ingredient': row['name'],
+                    'matched_source_row_refs': [row['raw_source_path']],
+                    'matched_canonical_ids': ['msm']} for key in ids]
+        candidate = copy.deepcopy(product)
+        candidate['evidence_data'] = {'clinical_matches': matches}
+        return score_evidence(candidate, accepted_matches=matches)
+    ids = ['BRAND_OPTIMSM', 'INGR_MSM']
+    for c in entries['INGR_MSM']['study_contexts']:
+        if c['scoring_eligible']:
+            c['trial_family'] = 'independent_test_trial'
+    result = measure(ids)
+    expected = sum(sum(measure([key])['metadata']['ingredient_points'].values()) for key in ids)
+    assert sum(result['metadata']['ingredient_points'].values()) == pytest.approx(expected)
+    assert expected > 0
+    # Isolate the already-qualified numerical aggregation seam: the same family
+    # tag must not collapse two different physical ingredient owners.
+    entries['INGR_MSM'] = copy.deepcopy(originals['INGR_MSM'])
+    matches = [{**entries[key], 'matched_canonical_ids': [canonical],
+                'applicability_assessment': {'population_applicability': {
+                    'context_ids': [entries[key]['study_contexts'][0]['context_id']]}}}
+               for key, canonical in zip(ids, ['msm', 'separate_test_identity'])]
+    selected_matches = list(matches)
+    monkeypatch.setattr(ge, 'resolved_clinical_matches', lambda *a, **kw: (selected_matches, []))
+    monkeypatch.setattr(ge, '_matched_active_canonical', lambda e, *a, **kw: e['matched_canonical_ids'][0])
+    result = score_evidence(copy.deepcopy(product), accepted_matches=matches)
+    assert len(result['metadata']['ingredient_points']) == 2
+    separate = 0
+    for match in matches:
+        selected_matches[:] = [match]
+        separate += sum(score_evidence(copy.deepcopy(product), accepted_matches=[match])['metadata']['ingredient_points'].values())
+    assert separate > 0
+    assert sum(result['metadata']['ingredient_points'].values()) == pytest.approx(separate)
+
+
+def test_inulin_source_completion_preserves_preparation_and_unread_source_holds():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_INULIN']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    for pmid in ('27492975', '38309832'):
+        assert contexts[pmid]['review_status'] == 'clinician_approved'
+        assert contexts[pmid]['scoring_eligible'] is False
+        assert 'Codex /root' in contexts[pmid]['clinical_review']['reviewer']
+    assert contexts['27492975']['dose']['values'] == [12]
+    assert contexts['27492975']['population']['sample_size'] == 44
+    assert 'Orafti GR' in contexts['27492975']['identity']['preparation']
+    assert {o['direction'] for o in contexts['27492975']['outcomes']} == {'positive', 'null', 'negative'}
+    assert len(contexts['38309832']['included_study_pmids']) == 47
+    assert not assess_clinical_source_review(record)['is_complete']

@@ -115,19 +115,21 @@ def test_optimsm_return_closes_exact_trial_source_without_double_counting():
         assert context['outcomes'][0]['hierarchy'] == 'primary'
         assert context['outcomes'][0]['direction'] == 'positive'
         assert context['outcomes'][1]['direction'] == 'null'
-        assert assess_clinical_source_review(record)['is_complete'] is True
+        assert assess_clinical_source_review(record)['is_complete'] is (key == 'BRAND_OPTIMSM')
         assert record['health_goals_supported'] == ['Joint & Bone Health']
         assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
         contexts.append(context)
     assert contexts[0]['trial_family'] == contexts[1]['trial_family']
 
 
-def test_optimsm_trial_does_not_credit_generic_material_or_other_daily_regimens():
+def test_msm_trial_keeps_qualified_identity_and_exact_daily_regimen():
     from clinical_applicability import assess_clinical_applicability
     for key in ('BRAND_OPTIMSM', 'INGR_MSM'):
         for name, amount, expected in (
             ('OptiMSM', 2000, 'applicable'),
-            ('MSM', 2000, 'unresolved'),
+            ('MSM', 2000, 'applicable' if key == 'INGR_MSM' else 'unresolved'),
+            ('methylsulfonylmethane', 2000, 'applicable' if key == 'INGR_MSM' else 'unresolved'),
+            ('liposomal MSM', 2000, 'not_applicable' if key == 'INGR_MSM' else 'unresolved'),
             ('OptiMSM', 1000, 'not_applicable'),
             ('OptiMSM', 6000, 'not_applicable'),
         ):
@@ -511,5 +513,6 @@ def test_missing_source_preparation_proof_cannot_be_completed_as_a_form_mismatch
                'ingredient_quality_data': {'ingredients_scorable': [row]}}
     result = resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
-    assert result.reason_code == 'clinical_source_label_unresolved'
+    assert result.reason_code == 'clinical_sources_ineligible'
+    assert result.applicability_status != 'applicable_reviewed_trials'
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
