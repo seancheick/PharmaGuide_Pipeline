@@ -1491,3 +1491,14 @@ def test_inulin_source_completion_preserves_preparation_and_unread_source_holds(
     assert {o['direction'] for o in contexts['27492975']['outcomes']} == {'positive', 'null', 'negative'}
     assert len(contexts['38309832']['included_study_pmids']) == 47
     assert not assess_clinical_source_review(record)['is_complete']
+
+
+def test_inulin_fernandes_pointer_keeps_actual_doi_and_unresolved_cohort():
+    from clinical_applicability import reviewed_entries
+    context = next(c for c in reviewed_entries()['INGR_INULIN']['study_contexts']
+                   if c['source_pmids'] == ['38309832'])
+    text = ' '.join(context['limitations'])
+    assert '10.1097/MCG.0000000000000328' in text
+    assert '10.1007/s11695-015-1574-x' not in text
+    assert 'healthy' in text and 'RYGB' in text
+    assert 'not established' in text
