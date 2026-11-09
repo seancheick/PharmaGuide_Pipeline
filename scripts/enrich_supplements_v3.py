@@ -15479,16 +15479,20 @@ class SupplementEnricherV3:
                 }
 
             for idx, ingredient in enumerate(ingredient_list):
-                if (ingredient.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES
-                        or ingredient.get("is_excipient") is True
-                        or ingredient.get("raw_source_path") in source_only_preparations):
-                    continue
                 is_nested = bool(ingredient.get('isNestedIngredient', False))
                 parent_blend = (ingredient.get('parentBlend', '') or '').strip()
                 parent_source_path = str(
                     ingredient.get("parent_source_path") or ""
                 ).strip()
                 structurally_nested = is_nested or bool(parent_source_path)
+                # Quantified carriers disclose physical parent mass in either
+                # nested or flattened projections; they never own an active blend.
+                if (not is_disclosure_component(ingredient)
+                        or ((ingredient.get("cleaner_row_role") == "inactive"
+                             or ingredient.get("is_excipient") is True)
+                            and not (structurally_nested and parent_blend))
+                        or ingredient.get("raw_source_path") in source_only_preparations):
+                    continue
                 is_blend = (
                     ingredient.get('proprietaryBlend', False)
                     or ingredient.get("cleaner_row_role") == "blend_header_total"
@@ -15549,9 +15553,8 @@ class SupplementEnricherV3:
                 # "Probiotic & Microbiome Blend") do NOT resolve to a single
                 # canonical ingredient, so they fall through and keep the B5
                 # opacity penalty.
-                if (
-                    source_field in non_opaque_source_fields
-                ):
+                if (source_field in non_opaque_source_fields
+                        and not (structurally_nested and parent_blend)):
                     continue
 
                 # Roll nested rows under parent blend key when available.

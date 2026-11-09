@@ -888,12 +888,14 @@ def test_blend_hierarchy_repairs_reject_changed_source(boundary_pipeline, pid, c
         normalizer.normalize_product(raw)
 
 
+@pytest.mark.parametrize("shape", ["nested", "flattened"])
+@pytest.mark.parametrize("functional_disposition", ["is_excipient", "inactive"])
 @pytest.mark.parametrize("carrier_amount,total_unit,expected_tier,known_mass", [
     (900, "mg", "partial", 900),
     (0, "NP", "none", 0),
 ])
 def test_filtered_functional_child_preserves_mass_and_total_uncertainty(
-    boundary_pipeline, carrier_amount, total_unit, expected_tier, known_mass
+    boundary_pipeline, carrier_amount, total_unit, expected_tier, known_mass, shape, functional_disposition
 ):
     normalizer, enricher = boundary_pipeline
     product = {"id": "carrier_boundary", "activeIngredients": [{
@@ -905,6 +907,22 @@ def test_filtered_functional_child_preserves_mass_and_total_uncertainty(
             {"name": "Rhodiola", "quantity": 0, "unit": "NP"},
         ],
     }], "inactiveIngredients": []}
+    carrier = product["activeIngredients"][0]["nestedIngredients"][0]
+    if functional_disposition == "inactive":
+        carrier.pop("is_excipient")
+        carrier["cleaner_row_role"] = "inactive"
+    if shape == "flattened":
+        parent = product["activeIngredients"][0]
+        parent["raw_source_path"] = "ingredientRows[99]"
+        children = parent.pop("nestedIngredients")
+        for index, child in enumerate(children):
+            child.update({"isNestedIngredient": True, "parentBlend": parent["name"],
+                          "parent_source_path": parent["raw_source_path"],
+                          "raw_source_path": f"ingredientRows[99].nestedRows[{index}]",
+                          "parentBlendMass": 1000, "parentBlendUnit": total_unit})
+        product["activeIngredients"].extend(children)
+        product["label_source_rows"] = [{"raw_source_path": r["raw_source_path"]}
+                                          for r in product["activeIngredients"]]
     data = enricher._collect_proprietary_data(product)
     assert data["blends"]
     assert all(b["disclosure_level"] == expected_tier for b in data["blends"])
@@ -913,6 +931,7 @@ def test_filtered_functional_child_preserves_mass_and_total_uncertainty(
     raw = json.loads((Path(__file__).parent / "fixtures/blend_preparation_213448_raw.json").read_text())
     cleaned = normalizer.normalize_product(raw)
     cleaned["activeIngredients"].extend(product["activeIngredients"])
+    cleaned.setdefault("label_source_rows", []).extend(product.get("label_source_rows", []))
     enriched, errors = enricher.enrich_product(cleaned)
     assert not errors
     artifact = build_scored_artifact(enriched)
