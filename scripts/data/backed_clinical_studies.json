@@ -6904,7 +6904,17 @@
         ],
         "studied_population": "Distinct source-specific contexts: mild knee discomfort at 2 g/day and symptomatic knee OA with a one-week titration to a 6 g/day maintenance target; not interchangeable populations or a continuous dose range.",
         "reviewed_at": "2026-10-26",
-        "reason": "Source-specific preparation, population, outcome and requested amount correspondence are assessed separately for each independently reviewed context. Original 37447322 signed context remains intact. Ingredient Evidence credits qualified research without creating Dose adequacy or retail regimen equivalence."
+        "reason": "Source-specific preparation, population, outcome and requested amount correspondence are assessed separately for each independently reviewed context. Original 37447322 signed context remains intact. Ingredient Evidence credits qualified research without creating Dose adequacy or retail regimen equivalence.",
+        "excluded_form_terms": [
+          "dimethyl sulfoxide",
+          "DMSO",
+          "liposomal",
+          "sublingual",
+          "modified release",
+          "sustained release",
+          "time release",
+          "topical"
+        ]
       },
       "verification_provenance": {
         "reference_citations": {

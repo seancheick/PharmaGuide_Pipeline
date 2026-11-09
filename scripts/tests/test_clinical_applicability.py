@@ -285,6 +285,24 @@ def test_scoped_msm_claim_explanation_uses_best_supported_context_in_either_orde
     assert len(decision['population_applicability']['context_ids']) == 2
 
 
+@pytest.mark.parametrize('entry_id', ['INGR_MSM', 'BRAND_OPTIMSM'])
+@pytest.mark.parametrize('name', ['Liposomal OptiMSM', 'OptiMSM sustained release'])
+def test_scoped_msm_brand_and_generic_both_preserve_ordinary_preparation_boundary(entry_id, name):
+    row = {'name': name, 'raw_source_text': name, 'canonical_id': 'msm', 'mapped': True,
+           'quantity': 2000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': name, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    entry = {**reviewed_entries()[entry_id], 'ingredient': name, 'matched_canonical_ids': ['msm'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    decision = assess_clinical_applicability(product, entry, assess_amount=False,
+                                            require_claim_alignment=False)
+    assert decision['status'] == 'not_applicable'
+    assert decision['reason_code'] == 'clinical_form_excluded'
+    row.update(name='OptiMSM', raw_source_text='OptiMSM')
+    assert assess_clinical_applicability(product, entry, assess_amount=False,
+        require_claim_alignment=False)['status'] == 'applicable'
+
+
 @pytest.mark.parametrize("policy", [
     {}, [], False, "ingredient",
     {"scope": []},
