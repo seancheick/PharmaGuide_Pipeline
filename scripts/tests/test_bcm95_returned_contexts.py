@@ -129,9 +129,10 @@ def test_msm_trial_keeps_qualified_identity_and_exact_daily_regimen():
             ('OptiMSM', 2000, 'applicable'),
             ('MSM', 2000, 'applicable' if key == 'INGR_MSM' else 'unresolved'),
             ('methylsulfonylmethane', 2000, 'applicable' if key == 'INGR_MSM' else 'unresolved'),
-            ('liposomal MSM', 2000, 'not_applicable' if key == 'INGR_MSM' else 'unresolved'),
+            ('liposomal MSM', 2000, 'not_applicable'),
             ('OptiMSM', 1000, 'not_applicable'),
-            ('OptiMSM', 6000, 'not_applicable'),
+            ('OptiMSM', 4000, 'not_applicable'),
+            ('OptiMSM', 6000, 'applicable'),
         ):
             row = {'name': name, 'raw_source_text': name,
                    'canonical_id': 'msm', 'mapped': True, 'quantity': amount,
@@ -141,7 +142,13 @@ def test_msm_trial_keeps_qualified_identity_and_exact_daily_regimen():
                        'ingredient_quality_data': {'ingredients_scorable': [row]}}
             entry = {'id': key, 'matched_canonical_ids': ['msm'],
                      'matched_source_row_refs': ['ingredientRows[0]']}
-            assert assess_clinical_applicability(product, entry)['status'] == expected
+            result = assess_clinical_applicability(product, entry)
+            assert result['status'] == expected
+            if expected == 'applicable':
+                selected = set(result['population_applicability']['context_ids'])
+                sources = {pmid for context in reviewed_entries()[key]['study_contexts']
+                           if context['context_id'] in selected for pmid in context['source_pmids']}
+                assert sources == ({'37447322'} if amount == 2000 else {'16309928'})
 
 
 def test_named_source_reviews_complete_only_general_dose_benchmark():
