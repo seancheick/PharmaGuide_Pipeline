@@ -66,7 +66,9 @@ def test_effect_direction_holds_only_an_observed_effect(records):
         if record["effect_direction"] is None:
             assert record.get("applicability_status") in LITERATURE_REVIEW_RESULTS, cid
         else:
-            assert record.get("applicability_status") not in LITERATURE_REVIEW_RESULTS, cid
+            # A recorded source effect and unresolved product applicability are
+            # separate facts; preserving the source label cannot grant credit.
+            assert record.get("applicability_status") not in LITERATURE_REVIEW_RESULTS - {"applicability_unestablished"}, cid
         for study in record["qualifying_human_studies"]:
             effect = study.get("effect_direction")
             if (cid, study.get("pmid")) in RECORDED_EFFECT_EXCEPTIONS:
@@ -98,8 +100,13 @@ def test_a_record_without_a_verified_trial_reads_review_pending(records, cid, pm
     assert record["studied_dose_exposure"] == {}
     for study in record["qualifying_human_studies"]:
         # a kept non-trial citation is labelled as what it is and carries no trial figures
-        assert study["pmid"] == pmid and study["scoring_eligible"] is False
-        assert not {"sample_size", "dose", "duration"} & set(study)
+        assert study["scoring_eligible"] is False
+        if cid == "l_phenylalanine":
+            assert study["pmid"] in {"28919843", "32560181"}
+            assert study["pmid"] != pmid
+        else:
+            assert study["pmid"] == pmid
+            assert not {"sample_size", "dose", "duration"} & set(study)
     assert pmid in record["applicability_decision"]
     logging.disable(logging.WARNING)
     resolution = resolve_evidence_for_canonical(cid)
@@ -119,7 +126,9 @@ def test_a_wrong_paper_row_is_removed(records, cid):
     wrong = {"l_carnosine": "20091069", "l_phenylalanine": "37629744"}[cid]
     assert wrong not in {s["pmid"]for s in records[cid]["qualifying_human_studies"]}
     if cid == "l_phenylalanine":
-        assert records[cid]["qualifying_human_studies"] == []
+        assert {s["pmid"] for s in records[cid]["qualifying_human_studies"]} == {"28919843", "32560181"}
+        assert all(s["scoring_eligible"] is False for s in records[cid]["qualifying_human_studies"])
+        assert records[cid]["applicability_status"] == "applicability_unestablished"
 
 
 # Evidence for one preparation credited to another: combination, food, beverage, topical,
@@ -283,10 +292,99 @@ def test_pomegranate_preserves_verified_extract_research(records):
     assert record["effect_direction"] == "positive_weak"
     assert record["studied_dose_exposure"] == {}
     assert _study(record, "38410857")["effect_direction"] == "positive_weak"
-    assert "extract diastolic results were not statistically significant" in record["applicability_decision"]
+    # The abstract does not establish the formerly asserted extract-subgroup
+    # DBP result. Preserve the positive literature finding without certifying it.
+    assert "not established by the reviewed abstract" in record["applicability_decision"]
+    assert "extract diastolic results were not statistically significant" not in record["applicability_decision"]
     assert "mainly to juice" not in record["applicability_decision"]
     resolution = resolve_evidence_for_canonical("pomegranate")
     assert "literature_applicability_unestablished" not in resolution.blocking_reasons
+
+
+def test_tyrosine_source_reviews_keep_acute_tasks_and_preparations_distinct(records):
+    record = records["l_tyrosine"]
+    assert record["effect_direction"] == "positive_weak"
+    assert record["studied_dose_exposure"] == {}
+    assert {s["pmid"] for s in record["qualifying_human_studies"]} >= {
+        "26424423", "10230711", "24433977", "25598314", "36548401", "39820592",
+    }
+    switching = _study(record, "25598314")
+    assert "17–23" in switching["outcome"]
+    assert "1,200 ms" in switching["outcome"] and "150 ms" in switching["outcome"]
+    learning = _study(record, "36548401")
+    assert "28 were analyzed" in learning["outcome"]
+    assert "does not explicitly specify" in learning["dose"]
+    heat = _study(record, "39820592")
+    assert heat["sample_size"] == 8 and heat["effect_direction"] == "null"
+    assert "150 mg/kg" in heat["dose"]
+    assert "stereochemical assay are not reported" in heat["dose"]
+    assert "same participants" in heat["outcome"]
+
+
+def test_tyrosine_endurance_review_keeps_contrasts_separate_from_enrollment(records):
+    study = _study(records['l_tyrosine'], '38290812')
+    assert study['effect_direction'] == 'null'
+    assert 'sample_size' not in study
+    assert all(value in study['outcome'] for value in ('78', '83', 'ten comparisons'))
+    assert 'different constructs' in study['outcome']
+    assert 'all constituent trials were null' in study['outcome']
+    assert 'covariance' in study['outcome']
+    assert '29980424 remain unread' in records['l_tyrosine']['applicability_decision']
+
+
+def test_cadet_drink_is_one_daily_protein_food_not_five_pure_tyrosine_doses(records):
+    record = records['l_tyrosine']
+    study = _study(record, '10230711')
+    assert study['sample_size'] == 21  # analyzed, not randomized enrollment
+    assert study['effect_direction'] == 'positive_strong'  # drink finding retained
+    assert '2 g/day' in study['dose'] and 'five days' in study['dose']
+    assert 'PROTIFAR' in study['dose'] and 'FANTOMALT' in study['dose']
+    assert '32' in study['outcome'] and '21' in study['outcome']
+    assert 'do not isolate' in study['outcome']
+    assert 'five daily doses' not in record['applicability_decision']
+
+
+def test_mct_review_preserves_mixed_findings_without_inventing_unique_enrollment(records):
+    record = records["mct_oil"]
+    assert record["effect_direction"] == "positive_weak"
+    cognition = _study(record, "41443401")
+    assert cognition["sample_size"] == 36
+    assert "47" in cognition["outcome"] and "reverse-Stroop" in cognition["outcome"]
+    assert "errors" in cognition["outcome"] and "olive oil" in cognition["outcome"]
+    pooled = _study(record, "25636220")
+    assert pooled["sample_size"] == 749
+    assert all(n in pooled["outcome"] for n in ("579", "638", "13", "psyllium"))
+    assert "not verified unique enrollment" in pooled["outcome"]
+    assert record["reference_semantics"]["reference_type"] == "no_benchmark"
+
+
+def test_pomegranate_corrected_extract_and_companion_are_one_trial_family(records):
+    record = records["pomegranate"]
+    study = _study(record, "40218993")
+    assert study["sample_size"] == 86
+    assert "36% punicalagins" in study["dose"] and "740 mg/day" in study["dose"]
+    assert "whole-fruit" in study["dose"]
+    assert "within" in study["outcome"] and "not a between-arm" in study["outcome"]
+    assert all(pmid in study["outcome"] for pmid in ("39997528", "41440743"))
+    assert "not independent confirmation" in study["outcome"]
+    assert "not established by the reviewed abstract" in record["applicability_decision"]
+    assert record["verification_provenance"]["reference_citations"]["source_ids"] == ["PMID:38410857"]
+    assert record["studied_dose_exposure"] == {}
+
+
+def test_pomegranate_companion_keeps_secondary_positive_and_shared_family(records):
+    record = records['pomegranate']
+    study = _study(record, '39997528')
+    assert '36% punicalagins' in study['dose']
+    assert study['effect_direction'] == 'mixed'
+    assert 'WCST' in study['outcome'] and 'p=0.05' in study['outcome']
+    assert 'secondary' in study['outcome'] and 'IL-6' in study['outcome']
+    assert '86 enrolled' in study['outcome'] and '76 completed' in study['outcome']
+    assert 'not independent replication' in study['outcome']
+    assert 'sample_size' not in study
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['verification_provenance']['reference_citations']['source_ids'] == ['PMID:38410857']
+    assert record['studied_dose_exposure'] == {}
 
 
 def test_fucoxanthin_preserves_component_surrogate_without_weight_loss_transfer(records):

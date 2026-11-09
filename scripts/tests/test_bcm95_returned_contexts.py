@@ -115,19 +115,21 @@ def test_optimsm_return_closes_exact_trial_source_without_double_counting():
         assert context['outcomes'][0]['hierarchy'] == 'primary'
         assert context['outcomes'][0]['direction'] == 'positive'
         assert context['outcomes'][1]['direction'] == 'null'
-        assert assess_clinical_source_review(record)['is_complete'] is True
+        assert assess_clinical_source_review(record)['is_complete'] is (key == 'BRAND_OPTIMSM')
         assert record['health_goals_supported'] == ['Joint & Bone Health']
         assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
         contexts.append(context)
     assert contexts[0]['trial_family'] == contexts[1]['trial_family']
 
 
-def test_optimsm_trial_does_not_credit_generic_material_or_other_daily_regimens():
+def test_msm_trial_keeps_qualified_identity_and_exact_daily_regimen():
     from clinical_applicability import assess_clinical_applicability
     for key in ('BRAND_OPTIMSM', 'INGR_MSM'):
         for name, amount, expected in (
             ('OptiMSM', 2000, 'applicable'),
-            ('MSM', 2000, 'not_applicable'),
+            ('MSM', 2000, 'applicable' if key == 'INGR_MSM' else 'unresolved'),
+            ('methylsulfonylmethane', 2000, 'applicable' if key == 'INGR_MSM' else 'unresolved'),
+            ('liposomal MSM', 2000, 'not_applicable' if key == 'INGR_MSM' else 'unresolved'),
             ('OptiMSM', 1000, 'not_applicable'),
             ('OptiMSM', 6000, 'not_applicable'),
         ):
@@ -235,7 +237,7 @@ def test_hyaluronan_source_limitation_is_complete_without_generic_material_trans
     # surrogate into an independently positive qualifying endpoint.
     assert c['outcomes'][0]['direction'] == 'mixed'
     assert c['outcomes'][0]['kind'] == 'surrogate'
-    for name, amount, reason in [('Hyaluronic acid', 120, 'clinical_form_mismatch'),
+    for name, amount, reason in [('Hyaluronic acid', 120, 'clinical_source_label_unresolved'),
                                  ('Hyabest S LF-P Hyaluronic Acid', 120, 'clinical_outcome_not_qualified'),
                                  ('Hyabest S LF-P Hyaluronic Acid', 60, 'below_applicable_clinical_dose')]:
         row = {'name': name, 'raw_source_text': name, 'canonical_id': 'hyaluronic_acid',
@@ -247,7 +249,7 @@ def test_hyaluronan_source_limitation_is_complete_without_generic_material_trans
         decision = assess_clinical_applicability(product, {'id': record['id'],
             'matched_source_row_refs': ['ingredientRows[0]'],
             'matched_canonical_ids': ['hyaluronic_acid']})
-        assert decision['status'] == 'not_applicable'
+        assert decision['status'] == ('unresolved' if name == 'Hyaluronic acid' else 'not_applicable')
         assert decision['reason_code'] == reason
 
 
@@ -376,7 +378,7 @@ def test_preparation_plus_sign_is_not_erased_or_rescued_by_a_negated_name(monkey
         'applicability': {'scope': 'ingredient', 'require_source_label_form': True,
                           'required_form_terms': ['Levagen+']}}, name='Levagen+')
     monkeypatch.setattr(clinical_applicability, 'reviewed_entries', lambda: {policy['id']: policy})
-    for name, expected in [('Levagen+', 'applicable'), ('Levagen®+', 'applicable'), ('Levagen', 'not_applicable'),
+    for name, expected in [('Levagen+', 'applicable'), ('Levagen®+', 'applicable'), ('Levagen', 'unresolved'),
                            ('not Levagen+', 'not_applicable')]:
         row = {'name': name, 'raw_source_text': name, 'canonical_id': 'palmitoylethanolamide',
                'quantity': 600, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
@@ -511,5 +513,6 @@ def test_missing_source_preparation_proof_cannot_be_completed_as_a_form_mismatch
                'ingredient_quality_data': {'ingredients_scorable': [row]}}
     result = resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
-    assert result.reason_code == 'clinical_source_label_unresolved'
+    assert result.reason_code == 'clinical_sources_ineligible'
+    assert result.applicability_status != 'applicable_reviewed_trials'
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED

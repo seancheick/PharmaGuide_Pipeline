@@ -227,7 +227,13 @@ def test_an_upper_limit_nutrient_with_no_amount_withholds_only_the_all_clear(pip
     assert scored["assessment_readiness"]["release_assessment"]["upper_limit_amounts_unknown"] == unknown
     assert scored["safety_assessment_status"] == "incomplete"
     assert scored["product_safety_status"] == "no_known_catalog_concern"
-    assert scored["quality_assessment_status"] == "complete"
+    # The separate generic DIM preparation is unknown; this cannot turn
+    # into a finished zero or settle the undisclosed Vitamin E safety amount.
+    assert scored["quality_assessment_status"] == "partial"
+    assert any(row["canonical_id"] == "diindolylmethane"
+               and row["reason_code"] == "no_reviewed_evidence_assessment"
+               and row["state"] == "not_yet_evaluated"
+               for row in scored["assessment_readiness"]["evidence"]["ingredient_assessments"])
     assert scored["quality_score_v4_100"] == score
 
 

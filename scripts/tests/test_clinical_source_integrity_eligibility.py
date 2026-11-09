@@ -700,6 +700,194 @@ def _glutamine_scoring_product(name='L-Glutamine', claim='', amount=500):
             'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
 
 
+def _tyrosine_scoring_product(name='L-Tyrosine', claim=''):
+    row = {'name': name, 'raw_source_text': name, 'standard_name': 'L-Tyrosine',
+           'canonical_id': 'l_tyrosine', 'mapped': True, 'bio_score': 10,
+           'matched_form': 'l-tyrosine', 'quantity': 500, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    return {'product_name': claim or name, 'status': 'active', 'form_factor': 'capsule',
+            'activeIngredients': [row],
+            'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+
+
+@pytest.mark.parametrize('claim', ['', 'L-Tyrosine Mood Support', 'L-Tyrosine Muscle Recovery'])
+def test_tyrosine_acute_research_credit_keeps_unfinished_sources_open(claim):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from dose_assessment import positive_clinical_benchmark
+    record = reviewed_entries().get('INGR_L_TYROSINE')
+    assert record is not None
+    assert record['study_type'] == 'rct_multiple' and record['effect_direction'] == 'mixed'
+    assert record['published_studies_count'] == 2
+    assert 'total_enrollment' not in record  # Never sum independent trials into a largest-trial field.
+    assert {p for c in record['study_contexts'] for p in c['source_pmids']} == {
+        '24433977', '25598314', '36548401', '39820592', '29980424', '38290812',
+        '26424423', '10230711',
+    }
+    assert not assess_clinical_source_review(record)['is_complete']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['24433977'])
+    assert context['scoring_eligible'] is True
+    assert context['source_pmids'] == ['24433977']
+    assert context['dose']['values'] == [2000]
+    assert {o['direction'] for o in context['outcomes']} == {'positive', 'null'}
+    assert all(o['hierarchy'] == 'not_reported' for o in context['outcomes'])
+    assert 'min_clinical_dose' not in record
+    product = _tyrosine_scoring_product(claim=claim)
+    assert positive_clinical_benchmark(product, product['activeIngredients'][0]) is None
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+    assert artifact['quality_assessment_status'] == 'partial'
+    result = score_evidence(product)
+    receipt = next(r for r in result['metadata']['contributing_record_assessments']
+                   if r['id'] == 'INGR_L_TYROSINE')
+    assert {str(r['pmid']) for r in receipt['source_references']} == {'24433977', '36548401'}
+    assert receipt['source_review']['is_complete'] is False
+
+
+@pytest.mark.parametrize('name', ['Tyrosine', 'D-Tyrosine', 'DL-Tyrosine',
+                                  'D,L-Tyrosine', 'N-Acetyl-L-Tyrosine', 'NALT'])
+def test_tyrosine_derivatives_and_unspecified_stereochemistry_do_not_borrow_source(name):
+    artifact = build_scored_artifact(_tyrosine_scoring_product(name=name))
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('name', ['N-Acetyl L-Tyrosine', 'N-Acetyl Tyrosine', 'NALT'])
+def test_free_tyrosine_pending_sources_cannot_reopen_finished_nalt_exclusion(name):
+    product = _tyrosine_scoring_product(name=name)
+    resolution = er.resolve_product_evidence(product)
+    assert resolution.is_assessment_complete
+    assert all(not r.points_eligible for r in resolution.resolutions)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+@pytest.mark.parametrize('specific_owner', ['absent', 'unfinished'])
+def test_tyrosine_denylist_alone_cannot_finish_unread_preparation(monkeypatch, specific_owner):
+    from copy import deepcopy
+    index = deepcopy(er._backed_studies_index())
+    for key, studies in index.items():
+        if specific_owner == 'absent':
+            index[key] = [s for s in studies if s['id'] != 'INGR_N_ACETYL_L_TYROSINE']
+        else:
+            for study in studies:
+                if study['id'] == 'INGR_N_ACETYL_L_TYROSINE':
+                    study['study_contexts'] = [{'review_status': 'source_verified_pending_clinical_review'}]
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: index)
+    result = er.resolve_product_evidence(_tyrosine_scoring_product(name='NALT'))
+    assert not result.is_assessment_complete
+    assert all(not row.points_eligible for row in result.resolutions)
+
+
+def test_distinct_nalt_row_does_not_exclude_a_separate_free_tyrosine_source():
+    from clinical_applicability import reviewed_entries
+    from scoring_v4.modules.generic_evidence import _entry_excludes_recovery_context
+    product = _tyrosine_scoring_product(claim='NALT and L-Tyrosine')
+    free_row = product['activeIngredients'][0]
+    derivative = {**free_row, 'name': 'N-Acetyl L-Tyrosine',
+                  'raw_source_text': 'N-Acetyl L-Tyrosine', 'raw_source_path': 'ingredientRows[1]'}
+    product['activeIngredients'].append(derivative)
+    product['ingredient_quality_data']['ingredients'] = [free_row, derivative]
+    product['ingredient_quality_data']['ingredients_scorable'] = [free_row, derivative]
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    assert not _entry_excludes_recovery_context(record, free_row, product)
+    assert _entry_excludes_recovery_context(record, derivative, product)
+    assert score_evidence(product)['score'] > 0
+
+
+def test_cadet_protein_drink_review_rejects_only_isolated_tyrosine_transfer():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_review_finished
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['10230711'])
+    assert context['review_status'] == 'rejected_source'
+    assert context_review_finished(context)
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context['scoring_eligible'] is False
+    assert 'PROTIFAR' in ' '.join(context['limitations'])
+    assert 'FANTOMALT' in ' '.join(context['limitations'])
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
+def test_tyrosine_narrative_review_is_finished_without_becoming_independent_trial():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from probiotic_measurements import context_review_finished
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['26424423'])
+    assert context['review_status'] == 'rejected_source'
+    assert context['scoring_eligible'] is False
+    assert context_review_finished(context)
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert record['published_studies_count'] == 2
+    assert 'total_enrollment' not in record  # Never sum independent trials into a largest-trial field.
+    assert {p for c in record['study_contexts'] if not context_review_finished(c)
+            for p in c['source_pmids']} == {'25598314', '29980424', '38290812'}
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
+@pytest.mark.parametrize('pmid', ['36548401', '39820592'])
+def test_tyrosine_limitations_belong_to_their_actual_trial_family(pmid):
+    from clinical_applicability import reviewed_entries
+    context = next(c for c in reviewed_entries()['INGR_L_TYROSINE']['study_contexts']
+                   if c['source_pmids'] == [pmid])
+    text = ' '.join(context['limitations'])
+    assert 'Leiden female-sample' not in text
+    if pmid == '36548401':
+        assert 'same 28 analyzed men' in text
+        assert 'not independently enrolled trials' in text
+    else:
+        assert 'Part A' in text and 'same sample' in text
+        assert 'not an independent replication' in text
+    assert context['scoring_eligible'] is (pmid == '36548401')
+
+
+def test_tyrosine_provenance_identifies_articles_and_actual_reading_basis():
+    from clinical_applicability import reviewed_entries
+    contexts = reviewed_entries()['INGR_L_TYROSINE']['study_contexts']
+    for pmid in ['24433977', '25598314', '26424423', '10230711']:
+        context = next(c for c in contexts if c['source_pmids'] == [pmid])
+        provenance = context['dose']['source_provenance']
+        assert provenance['source_url'] == f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/'
+        location = provenance['location']
+        assert 'mirror' in location.lower()
+        if pmid in {'24433977', '26424423'}:
+            assert 'SHA256' in location
+        else:
+            assert 'receipt' in location.lower()
+
+
+def test_tyrosine_unmade_applicability_decisions_survive_other_source_closures(monkeypatch):
+    from copy import deepcopy
+    import clinical_applicability as ca
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    record = deepcopy(reviewed_entries()['INGR_L_TYROSINE'])
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {record['id']: record})
+    template = next(c for c in record['study_contexts'] if c['source_pmids'] == ['26424423'])
+
+    def close_sources(pmids):
+        for index, context in enumerate(record['study_contexts']):
+            pmid, = context['source_pmids']
+            if pmid not in pmids:
+                continue
+            closed = deepcopy(template)
+            closed.update(context_id=context['context_id'], source_pmids=[pmid])
+            closed['clinical_review']['reviewer'] = 'Synthetic completion-mechanics control, not a clinical finding'
+            closed['dose']['source_provenance'].update(
+                pmid=pmid, source_url=f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/',
+                location='Synthetic completed-sibling control; no new scientific approval')
+            assert validate_ingredient_context(closed, require_complete_review=True) == []
+            record['study_contexts'][index] = closed
+
+    close_sources({'29980424', '38290812'})
+    assert not assess_clinical_source_review(record)['is_complete']
+    close_sources({'25598314'})
+    assert assess_clinical_source_review(record)['is_complete']
+    assert {p for c in record['study_contexts'] if c['scoring_eligible']
+            for p in c['source_pmids']} == {'24433977', '36548401'}
+
+
 @pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
 def test_approved_glutamine_context_earns_claim_independent_credit_while_other_review_stays_open(claim):
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
@@ -903,3 +1091,497 @@ def test_yang_rct_transfer_exclusion_preserves_human_research_and_parent_hold():
     assert reference["pmid_verified"] and reference["topic_match_verified"]
     assert not assess_clinical_source_review(record)["is_complete"]
     assert not er.clinical_record_sources_eligible(record)
+
+
+@pytest.mark.parametrize("label, expected_sources", [
+    ("L-Tyrosine", {"24433977", "36548401"}),
+    ("Men L-Tyrosine", {"36548401"}),
+    ("Women L-Tyrosine", {"24433977"}),
+])
+def test_tyrosine_reviewed_reaction_time_source_is_population_scoped(label, expected_sources):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    from dose_assessment import positive_clinical_benchmark
+    record = reviewed_entries()["INGR_L_TYROSINE"]
+    context = next(c for c in record["study_contexts"] if c["source_pmids"] == ["36548401"])
+    assert context["review_status"] == "clinician_approved"
+    assert context["scoring_eligible"] is True
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context["dose"]["values"] == [2000]
+    assert context["dose"]["dose_basis"] == "single_challenge"
+    assert {o["direction"] for o in context["outcomes"]} == {"positive", "null", "mixed"}
+    assert all(o["hierarchy"] == "not_reported" for o in context["outcomes"])
+    assert record["study_type"] == "rct_multiple"
+    assert record["published_studies_count"] == 2
+    assert "total_enrollment" not in record
+    assert context["sample_size"] == 28
+    assert record["effect_direction"] == "mixed"
+    assert not assess_clinical_source_review(record)["is_complete"]
+    product = _tyrosine_scoring_product(claim=label)
+    assert positive_clinical_benchmark(product, product["activeIngredients"][0]) is None
+    artifact = build_scored_artifact(product)
+    assert artifact["quality_assessment_status"] == "partial"
+    result = score_evidence(product)
+    receipt = next(r for r in result["metadata"]["contributing_record_assessments"]
+                   if r["id"] == "INGR_L_TYROSINE")
+    assert {str(r["pmid"]) for r in receipt["source_references"]} == expected_sources
+    assert receipt["source_review"]["is_complete"] is False
+
+
+@pytest.mark.parametrize("record_id, canonical, label, pmid, excluded", [
+    ("INGR_REDUCED_GLUTATHIONE", "glutathione", "Setria Reduced L-Glutathione", "24791752", "Liposomal Setria Glutathione"),
+    ("INGR_NATTOKINASE", "nattokinase", "Nattokinase NSK-SD", "26109079", "Natto extract"),
+])
+def test_exact_reviewed_biomarker_sources_keep_scope_and_no_dose_curve(record_id, canonical, label, pmid, excluded):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review, qualifying_purpose_outcomes
+    from clinical_evidence_schema import validate_ingredient_context
+    from dose_assessment import positive_clinical_benchmark
+    record = reviewed_entries().get(record_id)
+    assert record is not None
+    assert record["published_studies_count"] == 1
+    assert record["effect_direction"] == "mixed"
+    assert assess_clinical_source_review(record)["is_complete"]
+    context, = record["study_contexts"]
+    assert context["source_pmids"] == [pmid]
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    outcomes, held = qualifying_purpose_outcomes(context)
+    assert outcomes and not held
+    if canonical == "glutathione":
+        assert context["trial_registration"] == "NCT01044277"
+        assert record["total_enrollment"] == 61 and context["sample_size"] == 54
+        assert all(o["hierarchy"] == "primary" for o in outcomes)
+        assert all("NK-cell" not in o["name"] for o in outcomes)
+    else:
+        assert context["dose"]["measurement_type"] == "enzyme_activity"
+        assert context["dose"]["unit"] == "FU"
+        assert context["dose"]["values"] == [2000]
+        assert context["dose"]["dose_basis"] == "single_challenge"
+    product = _tyrosine_scoring_product(name=label)
+    row = product["activeIngredients"][0]
+    row.update(canonical_id=canonical, standard_name=record["standard_name"], matched_form=label,
+               form_match_status="mapped")
+    assert positive_clinical_benchmark(product, row) is None
+    result = score_evidence(product)
+    receipt = next(r for r in result["metadata"]["contributing_record_assessments"] if r["id"] == record_id)
+    assert result["score"] > 0
+    assert {str(r["pmid"]) for r in receipt["source_references"]} == {pmid}
+    assert receipt["source_review"]["is_complete"] is True
+    assert build_scored_artifact(product)["assessment_readiness"]["evidence"]["readiness"] == "complete"
+    row.update(name=excluded, raw_source_text=excluded, matched_form=excluded)
+    assert score_evidence(product)["score"] == 0
+    row.update(name=label, raw_source_text=label, matched_form=label)
+    product["targetGroups"] = ["Children 4–8"]
+    assert score_evidence(product)["score"] == 0
+
+
+@pytest.mark.parametrize("canonical, retained_pmid", [
+    ("l_norvaline", "39330485"), ("catuaba", "22669143"),
+    ("cnidium", "37328084"), ("eyebright", "32850558"),
+    ("phenylethylamine", "9081552"),
+])
+def test_bounded_oral_evidence_gaps_preserve_related_human_research(canonical, retained_pmid):
+    from evidence_resolver import _load_literature_evidence, resolve_evidence_for_canonical
+    record = _load_literature_evidence()[canonical]
+    assert record["applicability_status"] == "no_qualifying_human_evidence"
+    assert record["effect_direction"] is None
+    assert record["qualifying_human_studies"] == []
+    assert retained_pmid in record["applicability_decision"]
+    assert "oral" in record["applicability_decision"].lower()
+    assert record["records_screened"] > 0
+    assert "Codex" in record["verification_provenance"]["verified_by"]
+    assert "independent" in record["verification_provenance"]["verified_by"].lower()
+    resolution = resolve_evidence_for_canonical(canonical, name=canonical.replace("_", " "))
+    assert resolution.disposition == "no_qualifying_human_evidence"
+    assert resolution.points_eligible is False
+
+
+@pytest.mark.parametrize("label, eligible", [
+    ("Reduced L-Glutathione", True), ("L-Glutathione (Reduced Form)", True),
+    ("Reduced Glutathione (GSH)", True), ("Setria Reduced L-Glutathione", True),
+    ("Glutathione", False), ("Liposomal Reduced L-Glutathione", False),
+    ("S-Acetyl L-Glutathione", False), ("Oxidized L-Glutathione (GSSG)", False),
+    ("L-Glutathione Disulfide", False), ("D-Glutathione", False),
+    ("DL-Glutathione", False), ("Sublingual Reduced L-Glutathione", False),
+    ("Modified-release Reduced L-Glutathione", False),
+])
+def test_glutathione_chemical_form_proof_is_row_grounded_not_brand_inferred(label, eligible):
+    product = _tyrosine_scoring_product(name=label, claim="Setria antioxidant support")
+    row = product["activeIngredients"][0]
+    # A stale/inferred prepared form and brand-bearing title cannot supply the label proof.
+    row.update(canonical_id="glutathione", standard_name="Reduced L-Glutathione",
+               matched_form="reduced l-glutathione", form_match_status="mapped")
+    result = score_evidence(product)
+    assert (result["score"] > 0) is eligible
+
+
+@pytest.mark.parametrize("source_case, eligible", [
+    ("sole_active", False), ("other_row", True),
+    ("stale_marker", True), ("negated_marker", True),
+])
+def test_clinical_preparation_exclusion_uses_bound_delivery_source(source_case, eligible):
+    product = _tyrosine_scoring_product(name="Setria Reduced L-Glutathione")
+    row = product["activeIngredients"][0]
+    row.update(canonical_id="glutathione", standard_name="Reduced L-Glutathione",
+               matched_form="reduced l-glutathione", form_match_status="mapped")
+    product["fullName"] = "Liposomal Setria Reduced L-Glutathione"
+    match_source = "fullName"
+    if source_case == "other_row":
+        extra = {**row, "canonical_id": "vitamin_c", "name": "Liposomal Vitamin C",
+                 "raw_source_text": "Liposomal Vitamin C", "standard_name": "Vitamin C",
+                 "raw_source_path": "ingredientRows[1]"}
+        product["activeIngredients"].append(extra)
+        product["ingredient_quality_data"]["ingredients"].append(extra)
+        product["ingredient_quality_data"]["ingredients_scorable"].append(extra)
+        match_source = "activeIngredients[1]"
+    elif source_case == "stale_marker":
+        product["fullName"] = "Setria Reduced L-Glutathione"
+    elif source_case == "negated_marker":
+        product["fullName"] = "Non-liposomal Setria Reduced L-Glutathione"
+    product["delivery_data"] = {"systems": [{
+        "canonical_name": "liposomal", "raw_source_text": "liposomal",
+        "match_source": match_source,
+    }]}
+    result = score_evidence(product)
+    receipts = result["metadata"]["contributing_record_assessments"]
+    assert any(r["id"] == "INGR_REDUCED_GLUTATHIONE" for r in receipts) is eligible
+
+
+@pytest.mark.parametrize("canonical, retained_source", [
+    ("maca_root", "36593713"), ("olive_leaf_powder", "21036583"),
+    ("collagen", "33301004"), ("l_proline", "41290715"),
+    ("l_phenylalanine", "32560181"), ("lithium", "39356507"),
+    ("paba", "14794992"), ("chaga", "18416085"),
+    ("raspberry_ketones", "26317375"),
+])
+def test_read_human_source_facts_preserve_unfinished_ingredient_assessment(canonical, retained_source):
+    from evidence_resolver import _load_literature_evidence
+    record = _load_literature_evidence()[canonical]
+    assert record["applicability_status"] == "applicability_unestablished"
+    narrative = record.get("applicability_decision", "") + " " + record.get("notes", "")
+    assert retained_source in narrative
+    assert "independent" in record["verification_provenance"]["verified_by"].lower()
+    if canonical in {"l_proline", "paba"}:
+        assert not record["studied_dose_exposure"]
+    if canonical == "maca_root":
+        assert record["reason_code"] != "crude_material_lacks_standardization"
+        study = next(s for s in record["qualifying_human_studies"] if s["pmid"] == "36593713")
+        assert "833" in study["dose"] and "5g" in study["dose"].replace(" ", "")
+    if canonical == "l_phenylalanine":
+        study = next(s for s in record["qualifying_human_studies"] if s["pmid"] == "32560181")
+        assert study["sample_size"] == 27 and "intragastric" in study["dose"].lower()
+    if canonical == "lithium":
+        study = next(s for s in record["qualifying_human_studies"] if s["pmid"] == "39356507")
+        assert "elemental" in study["dose"].lower()
+        assert ".59" in study["outcome"]
+    if canonical == "collagen":
+        assert "unread corrigendum" not in narrative.lower()
+        assert "no changed study methods" in narrative.lower()
+
+
+@pytest.mark.parametrize("canonical, label, expected", [
+    ("nattokinase", "Nattokinase", "not_yet_evaluated"),
+    ("nattokinase", "Natto extract", "not_yet_evaluated"),
+    ("glutathione", "Glutathione", "not_yet_evaluated"),
+    ("glutathione", "S-Acetyl L-Glutathione", "evaluated_limited_or_negative"),
+    ("glutathione", "Liposomal Reduced L-Glutathione", "evaluated_limited_or_negative"),
+])
+def test_missing_studied_preparation_proof_cannot_finish_zero_credit(canonical, label, expected):
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment
+    product = _tyrosine_scoring_product(name=label)
+    row = product["activeIngredients"][0]
+    row.update(canonical_id=canonical, standard_name=canonical,
+               matched_form=label, form_match_status="mapped")
+    result = resolve_evidence_for_row(row, product)
+    assert not result.points_eligible
+    assert _resolved_evidence_assessment(result)[0] == expected
+    artifact = build_scored_artifact(product)
+    assert (artifact["assessment_readiness"]["evidence"]["readiness"] == "complete") == (expected != "not_yet_evaluated")
+    if expected == "not_yet_evaluated":
+        assert "clinical_source_label_unresolved" in result.blocking_reasons
+
+
+@pytest.mark.parametrize("unknown_first", [True, False])
+def test_an_excluded_sibling_does_not_finish_an_unresolved_preparation(unknown_first):
+    from clinical_applicability import assess_clinical_applicability
+    product = _tyrosine_scoring_product(name="Glutathione")
+    row = product["activeIngredients"][0]
+    row.update(canonical_id="glutathione", standard_name="Glutathione",
+               matched_form="Glutathione", form_match_status="mapped")
+    excluded = {**row, "name": "S-Acetyl L-Glutathione", "raw_source_text": "S-Acetyl L-Glutathione",
+                "matched_form": "S-Acetyl L-Glutathione", "raw_source_path": "ingredientRows[1]"}
+    rows = [row, excluded] if unknown_first else [excluded, row]
+    product["activeIngredients"] = rows
+    product["ingredient_quality_data"]["ingredients"] = rows
+    product["ingredient_quality_data"]["ingredients_scorable"] = rows
+    decision = assess_clinical_applicability(product, {"id": "INGR_REDUCED_GLUTATHIONE",
+        "matched_canonical_ids": ["glutathione"],
+        "matched_source_row_refs": ["ingredientRows[0]", "ingredientRows[1]"]},
+        assess_amount=False, require_claim_alignment=False)
+    assert decision["status"] == "unresolved"
+    assert decision["reason_code"] == "clinical_source_label_unresolved"
+
+
+@pytest.mark.parametrize("notes,source,eligible", [
+    ("Liposomal", "ingredientRows[0]", False),
+    ("Liposomal", "activeIngredients[0]", False),
+    ("Non-liposomal", "ingredientRows[0]", True),
+    ("Ordinary capsules", "ingredientRows[0]", True),
+    ("Liposomal", "activeIngredients[1]", True),
+])
+def test_clinical_exclusion_checks_only_delivery_bound_row_notes(notes, source, eligible):
+    product = _tyrosine_scoring_product(name="Setria Reduced L-Glutathione")
+    row = product["activeIngredients"][0]
+    row.update(canonical_id="glutathione", standard_name="Reduced L-Glutathione",
+               matched_form="reduced l-glutathione", form_match_status="mapped", notes=notes)
+    extra = {**row, "canonical_id": "vitamin_c", "name": "Vitamin C",
+             "raw_source_text": "Vitamin C", "raw_source_path": "ingredientRows[1]"}
+    product["activeIngredients"].append(extra)
+    product["delivery_data"] = {"systems": [{"canonical_name": "liposomal",
+        "raw_source_text": "liposomal", "match_source": source}]}
+    result = score_evidence(product)
+    receipts = result["metadata"]["contributing_record_assessments"]
+    assert any(r["id"] == "INGR_REDUCED_GLUTATHIONE" for r in receipts) is eligible
+
+
+def test_grouped_source_review_prose_keeps_limits_readable_and_status_current():
+    import json
+    data = Path(__file__).resolve().parents[1] / "data"
+    backed = json.loads((data / "backed_clinical_studies.json").read_text())
+    literature = json.loads((data / "literature_evidence_records.json").read_text())
+    text = json.dumps([backed, literature], ensure_ascii=False)
+    for unreadable in ("Sixhealthyyoungmen", "Capsuleseachcontained",
+                       "doesnotestablishstandalonefreePABA", "healthyadultsexual",
+                       "mgELEMENTALlithiumaslithiumaspartate", "notindependentrandomizedreplication"):
+        assert unreadable not in text
+    assert "Only PMID 24433977 is proposed to contribute" not in text
+    tyrosine = next(r for r in backed["backed_clinical_studies"] if r["id"] == "INGR_L_TYROSINE")
+    pending = {pmid for c in tyrosine["study_contexts"]
+               if c.get("review_status") == "source_verified_pending_clinical_review"
+               for pmid in c.get("source_pmids", [])}
+    assert "25598314" in pending
+    for cid in ("paba", "lithium"):
+        record = next(r for r in literature["literature_evidence_records"] if r["canonical_id"] == cid)
+        assert "independent source-content check completed" in record["applicability_decision"]
+        assert "applicability review stay open" in record["applicability_decision"]
+        assert record["applicability_status"] == "applicability_unestablished"
+
+
+@pytest.mark.parametrize('entry_id,pmids', [
+    ('BRAND_CREAPURE', {'22971354', '24568653'}),
+    ('PRECLIN_BETAINE_ANHYDROUS', {'21744011'}),
+])
+def test_five_family_bounded_noncredit_sources_are_finished(entry_id, pmids):
+    from clinical_applicability import reviewed_entries
+    entry = reviewed_entries()[entry_id]
+    contexts = [c for c in entry.get('study_contexts', [])
+                if set(c.get('source_pmids', [])) & pmids]
+    assert {p for c in contexts for p in c['source_pmids']} == pmids
+    assert all(c['review_status'] == 'clinician_approved' and c['scoring_eligible'] is False
+               for c in contexts)
+    assert all('Codex' in c['clinical_review']['reviewer'] for c in contexts)
+
+
+def test_msm_retains_one_qualified_trial_and_unfinished_sources():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    entries = reviewed_entries()
+    for key in ('INGR_MSM', 'BRAND_OPTIMSM'):
+        assert entries[key]['study_type'] == 'rct_single'
+        assert entries[key]['effect_direction'] == 'mixed'
+    source = entries['INGR_MSM']
+    assert source['applicability']['required_form_terms'] == ['OptiMSM', 'MSM', 'methylsulfonylmethane']
+    assert source['applicability']['minimum_daily_dose'] == 2000
+    assert source['applicability']['maximum_daily_dose'] == 2000
+    pending = {p for c in source['study_contexts']
+               if c['review_status'] == 'source_verified_pending_clinical_review'
+               for p in c['source_pmids']}
+    assert pending == {'16309928', '21708034', '17516722'}
+    assert assess_clinical_source_review({'id': 'INGR_MSM'})['is_complete'] is False
+    assert entries['BRAND_OPTIMSM']['study_contexts'][0]['clinical_review']['reviewer'] == 'Dr. Pham'
+
+
+@pytest.mark.parametrize('entry_ids', [
+    ['BRAND_OPTIMSM', 'INGR_MSM'], ['INGR_MSM', 'BRAND_OPTIMSM'],
+])
+@pytest.mark.parametrize('floor', [False, True])
+def test_shared_msm_trial_cannot_earn_points_twice(entry_ids, floor):
+    from clinical_applicability import reviewed_entries
+    product = _tyrosine_scoring_product(name='OptiMSM Methylsulfonylmethane')
+    row = product['activeIngredients'][0]
+    row.update(canonical_id='msm', standard_name='MSM', matched_form='msm')
+    entries = reviewed_entries()
+
+    def measured(ids):
+        candidate = copy.deepcopy(product)
+        matches = [{**entries[key], 'ingredient': row['name'],
+                    'matched_source_row_refs': [row['raw_source_path']],
+                    'matched_canonical_ids': ['msm']} for key in ids]
+        candidate['evidence_data'] = {'clinical_matches': matches}
+        return score_evidence(candidate, accepted_matches=matches, apply_primary_floor=floor)
+
+    single = max(measured([key])['score'] for key in entry_ids)
+    combined = measured(entry_ids)
+    assert combined['score'] == single
+    # Both records still carry review obligations and source provenance.
+    assert {r['id'] for r in combined['metadata']['contributing_record_assessments']} == set(entry_ids)
+
+    assert combined['components']['clinical_evidence_pipeline'] == max(
+        measured([key])['components']['clinical_evidence_pipeline'] for key in entry_ids)
+    assert sum(combined['metadata']['ingredient_points'].values()) == max(
+        sum(measured([key])['metadata']['ingredient_points'].values()) for key in entry_ids)
+    generic = next(r for r in combined['metadata']['contributing_record_assessments'] if r['id'] == 'INGR_MSM')
+    assert generic['source_review']['is_complete'] is False
+
+
+def test_trial_family_dedup_keeps_independent_sources_and_identity_scopes(monkeypatch):
+    import clinical_applicability as ca
+    from scoring_v4.modules import generic_evidence as ge
+    product = _tyrosine_scoring_product(name='OptiMSM Methylsulfonylmethane')
+    row = product['activeIngredients'][0]
+    row.update(canonical_id='msm', standard_name='MSM', matched_form='msm')
+    entries = copy.deepcopy(ca.reviewed_entries())
+    originals = ca.reviewed_entries()
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: entries)
+    def measure(ids):
+        matches = [{**entries[key], 'ingredient': row['name'],
+                    'matched_source_row_refs': [row['raw_source_path']],
+                    'matched_canonical_ids': ['msm']} for key in ids]
+        candidate = copy.deepcopy(product)
+        candidate['evidence_data'] = {'clinical_matches': matches}
+        return score_evidence(candidate, accepted_matches=matches)
+    ids = ['BRAND_OPTIMSM', 'INGR_MSM']
+    for c in entries['INGR_MSM']['study_contexts']:
+        if c['scoring_eligible']:
+            c['trial_family'] = 'independent_test_trial'
+    result = measure(ids)
+    expected = sum(sum(measure([key])['metadata']['ingredient_points'].values()) for key in ids)
+    assert sum(result['metadata']['ingredient_points'].values()) == pytest.approx(expected)
+    assert expected > 0
+    # Isolate the already-qualified numerical aggregation seam: the same family
+    # tag must not collapse two different physical ingredient owners.
+    entries['INGR_MSM'] = copy.deepcopy(originals['INGR_MSM'])
+    matches = [{**entries[key], 'matched_canonical_ids': [canonical],
+                'applicability_assessment': {'population_applicability': {
+                    'context_ids': [entries[key]['study_contexts'][0]['context_id']]}}}
+               for key, canonical in zip(ids, ['msm', 'separate_test_identity'])]
+    selected_matches = list(matches)
+    monkeypatch.setattr(ge, 'resolved_clinical_matches', lambda *a, **kw: (selected_matches, []))
+    monkeypatch.setattr(ge, '_matched_active_canonical', lambda e, *a, **kw: e['matched_canonical_ids'][0])
+    result = score_evidence(copy.deepcopy(product), accepted_matches=matches)
+    assert len(result['metadata']['ingredient_points']) == 2
+    separate = 0
+    for match in matches:
+        selected_matches[:] = [match]
+        separate += sum(score_evidence(copy.deepcopy(product), accepted_matches=[match])['metadata']['ingredient_points'].values())
+    assert separate > 0
+    assert sum(result['metadata']['ingredient_points'].values()) == pytest.approx(separate)
+
+
+def test_inulin_source_completion_preserves_preparation_and_unread_source_holds():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_INULIN']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    for pmid in ('27492975', '38309832'):
+        assert contexts[pmid]['review_status'] == 'clinician_approved'
+        assert contexts[pmid]['scoring_eligible'] is False
+        assert 'Codex /root' in contexts[pmid]['clinical_review']['reviewer']
+    assert contexts['27492975']['dose']['values'] == [12]
+    assert contexts['27492975']['population']['sample_size'] == 44
+    assert 'Orafti GR' in contexts['27492975']['identity']['preparation']
+    assert {o['direction'] for o in contexts['27492975']['outcomes']} == {'positive', 'null', 'negative'}
+    assert len(contexts['38309832']['included_study_pmids']) == 47
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
+def test_inulin_fernandes_pointer_keeps_actual_doi_and_unresolved_cohort():
+    from clinical_applicability import reviewed_entries
+    context = next(c for c in reviewed_entries()['INGR_INULIN']['study_contexts']
+                   if c['source_pmids'] == ['38309832'])
+    text = ' '.join(context['limitations'])
+    assert '10.1097/MCG.0000000000000328' in text
+    assert '10.1007/s11695-015-1574-x' not in text
+    assert 'healthy' in text and 'RYGB' in text
+    assert 'not established' in text
+
+
+def test_chicory_factual_source_update_preserves_approved_neutral_dose_proof():
+    from evidence_resolver import _load_literature_evidence
+    from dose_assessment import verified_reference_citations
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    record = _load_literature_evidence()['chicory_root']
+    assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+    assert verified_reference_citations(record)
+    assert _botanical_benchmark({'canonical_id': 'chicory_root'}) == 'absent'
+
+
+def _creapure_scoring_product():
+    product = _tyrosine_scoring_product(name='Creapure')
+    product['activeIngredients'][0].update(canonical_id='creatine_monohydrate',
+        standard_name='Creatine', matched_form='creatine monohydrate', quantity=5000)
+    return product
+
+
+def test_completed_creapure_reference_preserves_generic_trial_credit():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_EVALUATED_SUPPORTED
+    entries = reviewed_entries()
+    brand = entries['BRAND_CREAPURE']
+    assert brand['study_type'] == brand['evidence_level'] == 'reference'
+    assert brand['effect_direction'] == 'positive_strong'  # Historical description retained.
+    assert all('scoring_eligible' not in ref for ref in brand['references_structured'])
+    assert all(c['scoring_eligible'] is False for c in brand['study_contexts'])
+    assert assess_clinical_source_review(brand)['is_complete']
+    product = _creapure_scoring_product()
+    row = product['activeIngredients'][0]
+    def measured(ids):
+        candidate = copy.deepcopy(product)
+        matches = [{**entries[key], 'ingredient': row['name'],
+                    'matched_source_row_refs': [row['raw_source_path']],
+                    'matched_canonical_ids': ['creatine_monohydrate']} for key in ids]
+        candidate['evidence_data'] = {'clinical_matches': matches}
+        return score_evidence(candidate, accepted_matches=matches)
+    ingredient = measured(['INGR_CREATINE_MONOHYDRATE'])
+    both = measured(['INGR_CREATINE_MONOHYDRATE', 'BRAND_CREAPURE'])
+    assert ingredient['score'] > 0
+    assert both['score'] == ingredient['score']
+    assert both['metadata']['ingredient_points'] == ingredient['metadata']['ingredient_points']
+    assert measured(['BRAND_CREAPURE'])['score'] == 0
+    resolution = resolve_evidence_for_row(row, product)
+    assert resolution.points_eligible and resolution.blocking_reasons == []
+    assert _resolved_evidence_assessment(resolution)[0] == EVIDENCE_EVALUATED_SUPPORTED
+
+
+@pytest.mark.parametrize('change', ['pending', 'malformed'])
+def test_creapure_reference_cannot_hide_unfinished_or_invalid_source(monkeypatch, change):
+    import clinical_applicability as ca
+    from evidence_resolver import resolve_evidence_for_row
+    entries = copy.deepcopy(ca.reviewed_entries())
+    brand = entries['BRAND_CREAPURE']
+    if change == 'pending':
+        extra = copy.deepcopy(brand['study_contexts'][0])
+        extra['context_id'] += '_pending_control'
+        extra['review_status'] = 'source_verified_pending_clinical_review'
+        brand['study_contexts'].append(extra)
+    else:
+        brand['study_contexts'][0]['clinical_review'] = {}
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: entries)
+    assert not ca.assess_clinical_source_review(brand)['is_complete']
+    product = _creapure_scoring_product()
+    assert 'clinical_sources_ineligible' in resolve_evidence_for_row(
+        product['activeIngredients'][0], product).blocking_reasons
+
+
+def test_msm_recovered_175_methods_preserve_positive_findings_and_reporting_hold():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_MSM']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['17516722'])
+    assert context['review_status'] == 'source_verified_pending_clinical_review'
+    assert context['scoring_eligible'] is False
+    assert 'full primary' in context['dose']['source_provenance']['location'].lower()
+    text = ' '.join(context['limitations'])
+    assert 'principal' in text and 'unreported' in text
+    assert 'positive' in text and 'placebo' in text
+    assert '30' in text and '28' in text
+    assert 'unread' not in text.lower()
+    assert not assess_clinical_source_review(record)['is_complete']

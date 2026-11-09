@@ -99,7 +99,7 @@ def test_title_ucii_discovers_candidate_but_does_not_prove_generic_cartilage_mat
     assert "BRAND_UCII" not in _clinical_ids(enriched)
     rejected = next(m for m in enriched["evidence_data"]["rejected_clinical_matches"]
                     if m.get("id") == "BRAND_UCII")
-    assert rejected["reason_code"] == "clinical_form_mismatch"
+    assert rejected["reason_code"] == "clinical_source_label_unresolved"
 
 
 def test_real_182041_retained_source_qualifies_exact_ucii_material(enricher):

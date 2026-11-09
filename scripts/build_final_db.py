@@ -3165,8 +3165,9 @@ def build_banned_substance_detail(
             bsd["date"] = reg_date.strip()
         source_urls = w.get("source_urls")
         if isinstance(source_urls, list):
-            cleaned = [u.strip() for u in source_urls
-                       if isinstance(u, str) and u.strip()]
+            cleaned = [url.strip() for ref in source_urls
+                       for url in [ref.get("url") if isinstance(ref, dict) else ref]
+                       if isinstance(url, str) and url.strip()]
             if cleaned:
                 bsd["source_urls"] = cleaned
         return bsd
@@ -7241,6 +7242,14 @@ def _append_dose_only_rows(ingredients: List[Dict], analyzed_rows: Any) -> None:
 
 
 @lru_cache(maxsize=1)
+def _public_profile_warning_rules() -> Dict[str, Dict]:
+    """Reuse the rule DB's public registry owner for lossless compaction."""
+    from build_interaction_db import load_profile_warning_rules
+    _, rules = load_profile_warning_rules(Path(__file__).parent / "data" / "ingredient_interaction_rules.json")
+    return {rule["id"]: rule for rule in rules}
+
+
+@lru_cache(maxsize=1)
 def _identity_uncertainty_rules() -> Dict[str, Dict]:
     """Internal matching rules; public warnings carry their already-bound result."""
     path = Path(__file__).parent / "data" / "ingredient_interaction_rules.json"
@@ -7312,11 +7321,10 @@ def _qualify_identity_uncertainty_copy(enriched: Dict, ingredients: List[Dict],
                 continue
             warning.update(detail=notice, safety_warning=notice,
                            safety_warning_one_liner="Ingredient identity needs clarification before use.",
-                           title="Ingredient identity needs review", sources=sources,
+                           title="Ingredient identity needs review", sources=sources, source_urls=sources,
                            source="interaction_rules", matched_rule_id=rule["id"],
                            ingredient_name=alert.get("ingredient_name"), jurisdictions=[])
             if held_subject:
-                warning["source_urls"] = sources
                 warning["identifiers"] = {}
 
 
@@ -8000,12 +8008,13 @@ def build_detail_blob(
             "title": f"{title_prefix}: {name}",
             "detail": safe_str(reference.get("reason") or flag.get("evidence_text")),
             "source": "banned_recalled_ingredients",
+            "clinical_risk": safe_str(reference.get("clinical_risk_enum") or flag.get("clinical_risk_enum")),
             # Same ban entry as the substance-match card above, so the same
             # context: one hazard, one card after dedup.
             "ban_context": safe_str(reference.get("ban_context") or flag.get("ban_context")) or None,
-            **({"source_urls": _safety_reference_urls(
+            "source_urls": _safety_reference_urls(
                 reference.get("references_structured") or flag.get("references_structured")
-            )} if status == "watchlist" else {}),
+            ),
             "matched_rule_id": rule_id or None,
             "ingredient_name": name,
             "safety_warning": reference.get("safety_warning") or flag.get("safety_warning"),
@@ -8205,6 +8214,7 @@ def build_detail_blob(
                     "ingredient_name": ing_name,
                     "ingredient_canonical_id": ingredient_canonical_id or None,
                     "sources": safe_list(hit.get("sources")),
+                    "evidence_level": safe_str(hit.get("evidence_level")) or "ungraded",
                     "dose_threshold_evaluation": None,
                     "dose_decision": compact_dose_decision(hit.get("dose_decision")),
                     "source": "interaction_rules",
@@ -8373,6 +8383,7 @@ def build_detail_blob(
                 # one dedup key: one hazard, one card.
                 "ban_context": safe_str(reference.get("ban_context")) or None,
                 "source": "inactive_ingredient_resolver",
+                "source_urls": _safety_reference_urls(reference.get("references_structured")),
                 "display_mode_default": dm_default,
                 "clinical_risk": safe_str(ing.get("harmful_severity")) or None,
                 "inactive_policy": safe_str(ing.get("inactive_policy")) or None,
@@ -9039,6 +9050,7 @@ def build_detail_blob(
     return project_detail_blob(
         blob,
         export_schema_version=export_schema_version,
+        rules_by_id=_public_profile_warning_rules() if export_schema_major(export_schema_version) >= 3 else None,
     )
 
 

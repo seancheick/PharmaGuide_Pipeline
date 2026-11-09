@@ -337,7 +337,8 @@ def test_scoring_inputs_equal_main_when_a_row_keeps_an_identity(enrich, dsld_id,
         resolution = resolve_product_evidence(product, owner_scoped=True)
         pending = [(row.canonical_id, row.blocking_reasons) for row in resolution.resolutions
                    if row.disposition == "literature_resolution_required"]
-        assert pending == [("grape", ["literature_verification_pending"])]
+        assert pending == [("grape", ["literature_verification_pending"]),
+                           ("tart_cherry", ["clinical_source_label_unresolved"])]
         data = json.loads((SCRIPTS / "data" / "literature_evidence_records.json").read_text())
         source = next(row for row in data["literature_evidence_records"] if row["canonical_id"] == "grape")
         assert source["qualifying_human_studies"] == []

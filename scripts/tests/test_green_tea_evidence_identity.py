@@ -186,7 +186,7 @@ def test_replayed_generic_match_does_not_credit_unproven_preparation(name: str, 
         product, product["evidence_data"]["clinical_matches"],
     )
     assert accepted == []
-    assert rejected[0]["reason_code"] == "clinical_form_mismatch"
+    assert rejected[0]["reason_code"] == "clinical_source_label_unresolved"
     assert product == before
 
 

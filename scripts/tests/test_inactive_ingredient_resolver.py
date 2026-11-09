@@ -459,3 +459,16 @@ def test_resolver_precedence_banned_beats_harmful_and_other(resolver) -> None:
 # Audit hooks the resolver must expose
 # ---------------------------------------------------------------------------
 
+
+
+@pytest.mark.parametrize("standard_name", ["Coconut", "Coconut!"])
+@pytest.mark.parametrize("raw_name", [
+    "whole Coconut", "whole organic Coconut", "whole raw Coconut",
+    "whole organic raw Coconut", "whole raw organic Coconut",
+])
+def test_whole_coconut_raw_label_vetoes_generic_inactive_alias(resolver, raw_name, standard_name):
+    result = resolver.resolve(raw_name=raw_name, standard_name=standard_name)
+    assert result.matched_rule_id != "PII_COCONUT_SOURCE_DESCRIPTOR"
+    assert result.raw_name == raw_name
+    plain = resolver.resolve(raw_name="Coconut", standard_name=standard_name)
+    assert plain.matched_rule_id == "PII_COCONUT_SOURCE_DESCRIPTOR"

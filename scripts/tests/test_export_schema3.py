@@ -6,6 +6,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from export_schema import (  # noqa: E402
@@ -235,7 +237,7 @@ def test_schema_3_removes_only_redundant_consumer_payloads() -> None:
 
 def test_schema_3_warning_refs_rehydrate_byte_equivalent_interaction_copy() -> None:
     source = _schema2_blob()
-    projected = project_detail_blob(source, export_schema_version="3.0.0")
+    projected = project_detail_blob(source, export_schema_version="3.0.0", rules_by_id={RULE["id"]: RULE})
 
     assert projected["warnings"] == [source["warnings"][1]]
     assert len(projected["warning_rule_refs"]) == 1
@@ -280,7 +282,7 @@ def test_schema_3_rehydrates_pregnancy_warning_and_dedup_provenance() -> None:
     blob = _schema2_blob()
     blob["warnings"] = [PREGNANCY_WARNING]
 
-    projected = project_detail_blob(blob, export_schema_version="3.0.0")
+    projected = project_detail_blob(blob, export_schema_version="3.0.0", rules_by_id={rule["id"]: rule})
     resolved = resolve_warning_rule_refs(
         projected["warning_rule_refs"],
         rules_by_id={rule["id"]: rule},
@@ -291,6 +293,7 @@ def test_schema_3_rehydrates_pregnancy_warning_and_dedup_provenance() -> None:
 
 def test_schema_3_rejects_interaction_warning_without_stable_rule_id() -> None:
     blob = _schema2_blob()
+    blob["warnings"][0] = dict(blob["warnings"][0])
     blob["warnings"][0].pop("source_rule_id")
 
     try:
@@ -299,3 +302,48 @@ def test_schema_3_rejects_interaction_warning_without_stable_rule_id() -> None:
         assert "stable source_rule_id" in str(exc)
     else:  # pragma: no cover - assertion branch
         raise AssertionError("schema 3 must not delete warning prose without a rule id")
+
+
+@pytest.mark.parametrize("condition_ids", [[], ["current_smoker"]])
+def test_schema3_pure_dose_warning_roundtrip(condition_ids):
+    warning = json.loads(json.dumps(FULL_INTERACTION_WARNING))
+    warning.update(title="Beta-carotene / dose", detail="Reviewed dose context.", action=None,
+                   alert_headline="Dose guidance", alert_body="Reviewed dose context.",
+                   informational_note=None, condition_ids=condition_ids, drug_class_ids=[],
+                   ingredient_name="Beta-carotene", direction=None, materiality=None,
+                   profile_gate={"gate_type": "dose"}, evidence_level="ungraded")
+    threshold = {"scope": None, "alert_headline": warning["alert_headline"],
+                 "alert_body": warning["alert_body"], "sources": warning["sources"]}
+    rule = {"id": warning["source_rule_id"], "dose_thresholds": [threshold],
+            "condition_rules": [], "drug_class_rules": []}
+    projected = project_detail_blob({"warnings": [warning]}, export_schema_version="3.0.0", rules_by_id={rule["id"]: rule})
+    assert resolve_warning_rule_refs(projected["warning_rule_refs"], rules_by_id={rule["id"]: rule}) == [warning]
+    # An older reference without a grade must not inherit a later rule grade.
+    ref = projected["warning_rule_refs"][0]
+    ref.pop("evidence_level")
+    threshold["evidence_level"] = "established"
+    [resolved] = resolve_warning_rule_refs([ref], rules_by_id={rule["id"]: rule})
+    assert resolved["evidence_level"] == "ungraded"
+    ref["evidence_level"] = "limited"
+    [resolved] = resolve_warning_rule_refs([ref], rules_by_id={rule["id"]: rule})
+    assert resolved["evidence_level"] == "limited"
+    threshold["alert_body"] = "Different unreviewed copy"
+    with pytest.raises(ValueError, match="no matching reviewed copy"):
+        resolve_warning_rule_refs(projected["warning_rule_refs"], rules_by_id={rule["id"]: rule})
+
+
+def test_schema3_keeps_qualified_identity_notice_inline():
+    warning = {"type": "high_risk_ingredient", "severity": "caution",
+               "source": "interaction_rules", "matched_rule_id": "RULE_CASCARA_UNRESOLVED_IDENTITY",
+               "title": "Ingredient identity needs review", "detail": "Label identity needs clarification.",
+               "sources": ["https://example.test/label"], "source_urls": ["https://example.test/label"]}
+    projected = project_detail_blob({"warnings": [warning]}, export_schema_version="3.0.0")
+    assert projected["warnings"] == [warning]
+    assert projected["warning_rule_refs"] == []
+
+
+def test_schema3_keeps_full_warning_without_a_verified_rule_index():
+    source = _schema2_blob()
+    projected = project_detail_blob(source, export_schema_version="3.0.0")
+    assert projected["warnings"] == source["warnings"]
+    assert projected["warning_rule_refs"] == []

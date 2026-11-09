@@ -141,3 +141,19 @@ def test_real_labels(pid, high):
     cards = [w for w in blob["warnings"] if (w.get("profile_gate") or {}).get("gate_type") == "dose"
              and (w.get("dose_decision") or {}).get("consumer_disposition") == "review"]
     assert [w["alert_headline"] for w in cards] == (["High-dose beta-carotene: check your lung risk"] if high else [])
+
+
+@pytest.mark.parametrize("authored,expected", [(None, "ungraded"), ("limited", "limited")])
+def test_pure_dose_hit_keeps_only_its_authored_evidence(enricher, monkeypatch, authored, expected):
+    rules = json.loads(json.dumps(enricher.databases["ingredient_interaction_rules"]))
+    for rule in rules["interaction_rules"]:
+        for threshold in rule.get("dose_thresholds", []):
+            if threshold.get("scope") is None:
+                if authored is not None:
+                    threshold["evidence_level"] = authored
+    monkeypatch.setitem(enricher.databases, "ingredient_interaction_rules", rules)
+    enriched, _ = _hits(enricher, [_row("beta_carotene", "beta-carotene (unspecified)", "Beta-Carotene", 30, "mg")])
+    hits = [h for a in enriched["interaction_profile"]["ingredient_alerts"] for h in a.get("dose_hits", [])]
+    assert hits
+    assert all(h["evidence_level"] == expected for h in hits)
+    assert all(h["sources"] for h in hits)

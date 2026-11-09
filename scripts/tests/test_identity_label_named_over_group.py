@@ -5,7 +5,8 @@ name proves with the identity of DSLD's coarse ingredientGroup: organic Wheat Gr
 "Couch Grass", Green Bell Pepper as chili pepper, Lactococcus cremoris as L. lactis, Ginger root
 Olive leaf extract as olive fruit extract (losing its interaction rule).
 A "Proprietary Blend" group still classifies a branded complex as a blend. Genuine repairs (a "Vitamin E" row first matched to its
-sunflower-oil source, "Charcoal, Activated" first matched to MCT oil) must stay repaired.
+sunflower-oil source) must stay repaired. Coconut-derived charcoal must match charcoal directly,
+without first borrowing the removed generic Coconut-to-MCT alias.
 """
 import json
 import logging
@@ -89,13 +90,25 @@ def test_proprietary_blend_group_keeps_a_branded_complex_a_blend(products):
 
 @pytest.mark.parametrize("dsld_id,path,before,canonical", [
     ("204501", "ingredientRows[11]", "sunflower_oil", "vitamin_e"),
-    ("329902", "ingredientRows[0]", "mct_oil", "activated_charcoal"),
     # The printed words name IQM ginger, the scoring identity (2026-09-27 coherence fix).
     ("15698", "ingredientRows[0].nestedRows[3]", "ginger_extract", "ginger"),
 ])
 def test_genuine_repairs_still_replace_a_wrong_first_match(products, dsld_id, path, before, canonical):
     row = _row(products[dsld_id][0], path)
     assert (row["canonical_id_before"], row["canonical_id"], row["identity_disposition"]) == (before, canonical, "repaired")
+
+
+def test_coconut_source_does_not_make_activated_charcoal_an_mct_first_match(products):
+    enriched, blob = products['329902']
+    row = _row(enriched, 'ingredientRows[0]')
+    assert (row['canonical_id_before'], row['canonical_id'], row['identity_disposition']) == (
+        'activated_charcoal', 'activated_charcoal', 'clean')
+    assert row['raw_source_text'] == 'Charcoal, Activated'
+    assert row['quantity'] == 1200 and row['unit'] == 'mg'
+    exported = [r for r in blob['display_ingredients'] if r.get('raw_source_path') == 'ingredientRows[0]']
+    assert exported and all(r.get('canonical_id') == 'PII_ACTIVATED_CARBON'
+                            and r.get('analysis', {}).get('canonical_id') == 'activated_charcoal'
+                            for r in exported)
 
 
 @pytest.mark.parametrize("literal,owner,not_owner", [

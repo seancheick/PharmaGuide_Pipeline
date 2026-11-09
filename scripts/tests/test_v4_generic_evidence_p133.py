@@ -1727,3 +1727,18 @@ def test_numerical_receipt_cites_only_qualified_context_without_finishing_siblin
     assert {r["pmid"] for r in receipts[0]["source_references"]} == {"28661438"}
     assert receipts[0]["source_review"]["is_complete"] is False
     assert source == original  # The canonical inventory and pending source are preserved.
+
+
+def test_zero_marker_scale_is_not_a_contributing_source_review(monkeypatch) -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+    positive = _match(id='SYNTHETIC_POSITIVE_MARKER')
+    zero = _match(id='SYNTHETIC_ZERO_MARKER', marker_confidence_scale=0.0)
+    _use_approved_mechanics_sources(monkeypatch, positive, zero)
+    result = score_evidence(_product(matches=[positive, zero]))
+    assert result['score'] > 0
+    assert {r['id'] for r in result['metadata']['contributing_record_assessments']} == {
+        'SYNTHETIC_POSITIVE_MARKER'}
+    control = score_evidence(_product(matches=[positive]))
+    assert result['score'] == control['score']
+    assert result['components']['clinical_evidence_pipeline'] == control['components']['clinical_evidence_pipeline']
+    assert result['metadata']['ingredient_points'] == control['metadata']['ingredient_points']
