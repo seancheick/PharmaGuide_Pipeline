@@ -23,6 +23,17 @@ def _study(record, pmid):
     return next(s for s in record["qualifying_human_studies"] if s["pmid"] == pmid)
 
 
+def test_pomegranate_neutral_dose_does_not_assert_unread_extract_dbp_subgroup(records):
+    from dose_assessment import verified_reference_citations
+    record = records['pomegranate']
+    reference = record['reference_semantics']
+    assert 'extract diastolic results were not statistically significant' not in reference['rationale']
+    assert reference['reference_type'] == 'no_benchmark'
+    assert reference['curve'] == 'completed_no_benchmark_neutral'
+    assert reference['source_ids'] == ['PMID:38410857']
+    assert verified_reference_citations(record)
+
+
 # A review closed these with no qualifying study. The owner keeps no rows for them,
 # so each decision names the study that used to be the row.
 @pytest.mark.parametrize("cid, pmid", [
