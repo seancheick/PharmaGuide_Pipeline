@@ -208,8 +208,9 @@ def test_glycine_rat_mechanism_is_not_human_clinical_efficacy():
     assert 'rat mechanism evidence only' in row['notable_studies']
     assert row['endpoint_relevance_tags'] == ['sleep']
     assert clinical_record_sources_eligible(row)
-    assert not clinical_record_sources_eligible(row, source_pmids=["25533534"])
-    assert not clinical_record_sources_eligible(row, source_pmids=["37851316"])
+    contexts = {c["source_pmids"][0]: c for c in row["study_contexts"]}
+    for pmid in ["25533534", "37851316"]:
+        assert not clinical_record_sources_eligible(row, context=contexts[pmid], source_pmids=[pmid])
 
 
 def test_same_conflicting_depression_reviews_do_not_establish_joint_or_adjunct_credit():

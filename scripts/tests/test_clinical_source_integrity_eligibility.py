@@ -1792,6 +1792,7 @@ def test_plant_sterol_capsule_class_source_qualifies_without_closing_unread_revi
     assert record['effect_direction_confidence'] == 'low'
     assert 'total_enrollment' not in record and 'registry_completed_trials_count' not in record
     assert record['endpoint_relevance_tags'] == ['cardiovascular']
+    assert record['key_endpoints'] == ['LDL cholesterol ↓']
     assert 'FDA-approved' not in record['notes']
     assert contexts['19109655']['scoring_eligible'] is False
     assert contexts['24287284']['scoring_eligible'] is False
