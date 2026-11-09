@@ -7378,3 +7378,18 @@ def test_contaminant_safety_flags_keep_registry_citations(rule_id, status):
     blob = build_detail_blob(enriched, make_scored(verdict="BLOCKED"))
     [warning] = [w for w in blob["warnings"] if w.get("matched_rule_id") == rule_id]
     assert warning["source_urls"]
+
+
+@pytest.mark.parametrize("evidence", ["limited", "ungraded"])
+def test_dose_warning_exports_its_own_evidence_grade(evidence):
+    enriched = make_enriched()
+    enriched["interaction_profile"] = {"ingredient_alerts": [{
+        "rule_id": "RULE_TEST_DOSE", "ingredient": "Example", "dose_hits": [{
+            "severity": "caution", "evidence_level": evidence,
+            "sources": ["https://example.test/source"], "alert_body": "Dose context",
+        }],
+    }]}
+    blob = build_detail_blob(enriched, make_scored())
+    [warning] = [w for w in blob["warnings"] if w.get("source_rule_id") == "RULE_TEST_DOSE"]
+    assert warning["evidence_level"] == evidence
+    assert warning["sources"] == ["https://example.test/source"]

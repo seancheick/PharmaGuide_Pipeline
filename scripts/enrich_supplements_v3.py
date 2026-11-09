@@ -22578,6 +22578,9 @@ class SupplementEnricherV3:
                     source_set.update(sources)
                     dose_hits.append({
                         "severity": severity,
+                        # A dose threshold has its own source assessment. Never
+                        # borrow a condition/drug rule's evidence grade.
+                        "evidence_level": str(threshold.get("evidence_level") or "ungraded").strip().lower(),
                         "sources": sources,
                         # The card itself is for every viewer. A stack total can only
                         # meet a tier a warning targets, so name who shares this tier.

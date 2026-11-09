@@ -8205,6 +8205,7 @@ def build_detail_blob(
                     "ingredient_name": ing_name,
                     "ingredient_canonical_id": ingredient_canonical_id or None,
                     "sources": safe_list(hit.get("sources")),
+                    "evidence_level": safe_str(hit.get("evidence_level")) or "ungraded",
                     "dose_threshold_evaluation": None,
                     "dose_decision": compact_dose_decision(hit.get("dose_decision")),
                     "source": "interaction_rules",
