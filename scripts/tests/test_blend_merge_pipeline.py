@@ -773,3 +773,172 @@ class TestInactiveIngredientBlends:
         # Verify the inactive blend was captured
         blend_names = [b['name'].lower() for b in result['blends']]
         assert any('coating' in name for name in blend_names)
+
+
+@pytest.fixture(scope="module")
+def boundary_pipeline():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    return EnhancedDSLDNormalizer(), SupplementEnricherV3()
+
+
+def _boundary_raw(dsld_id):
+    import json
+    from pathlib import Path
+    return json.loads((Path(__file__).parent / 'fixtures' / f'blend_boundary_{dsld_id}_raw.json').read_text())
+
+
+def test_distinct_identical_detector_rows_reach_final_artifact(boundary_pipeline):
+    import copy
+    import json
+    from pathlib import Path
+    normalizer, enricher = boundary_pipeline
+    raw = json.loads((Path(__file__).parent / 'fixtures/blend_preparation_213448_raw.json').read_text())
+    raw['fullName'] = 'Independent Blend Boundary'
+    row = {'name': 'Proprietary Herbal Blend', 'category': 'blend',
+           'ingredientGroup': 'Blend (Combination)', 'forms': [],
+           'quantity': [{'quantity': 100, 'unit': 'mg'}],
+           'nestedRows': [{'name': 'Ashwagandha', 'category': 'botanical', 'quantity': [], 'forms': []},
+                          {'name': 'Rhodiola', 'category': 'botanical', 'quantity': [], 'forms': []}]}
+    raw['ingredientRows'].extend([copy.deepcopy(row), copy.deepcopy(row)])
+    cleaned = normalizer.normalize_product(raw)
+    detected = enricher.blend_detector.analyze_product(cleaned)
+    assert len([b for b in detected.blends_detected if b.matched_text == 'Proprietary Herbal Blend']) == 2
+    enriched, errors = enricher.enrich_product(cleaned)
+    assert not errors
+    artifact = build_scored_artifact(enriched)
+    evidence = artifact['_v4_module_breakdown']['dimensions']['transparency']['metadata']['B5_blend_evidence']
+    assert len([b for b in evidence if b['blend_name'] == 'Proprietary Herbal Blend']) == 2
+
+
+def test_real_parent_body_without_consumer_ref_is_charged_once(boundary_pipeline):
+    import copy
+    normalizer, enricher = boundary_pipeline
+    cleaned = normalizer.normalize_product(_boundary_raw(336897))
+    assert all('source_row_ref' not in row for row in cleaned['activeIngredients'])
+    enriched, errors = enricher.enrich_product(cleaned)
+    assert not errors
+    relevant = [b for b in enriched['proprietary_blends'] if 'veggie berry' in b['name'].lower()]
+    assert len(relevant) == 1
+    assert relevant[0]['source_row_ref']
+    assert len(relevant[0]['source_fields']) > 1
+    before = build_scored_artifact(enriched)
+    without_refs = copy.deepcopy(enriched)
+    for blends in (without_refs['proprietary_blends'], without_refs['proprietary_data']['blends']):
+        for blend in blends:
+            blend.pop('source_row_ref', None)
+    after = build_scored_artifact(without_refs)
+    def b5(artifact):
+        return artifact['_v4_module_breakdown']['dimensions']['transparency']
+    assert b5(before)['penalties'] == b5(after)['penalties']
+    assert len(b5(after)['metadata']['B5_blend_evidence']) == len(b5(before)['metadata']['B5_blend_evidence'])
+    relevant_evidence = [b for b in b5(after)['metadata']['B5_blend_evidence'] if 'veggie berry' in b['blend_name'].lower()]
+    assert len(relevant_evidence) == 1
+    assert relevant_evidence[0]['computed_blend_penalty_magnitude'] > 0
+
+
+@pytest.mark.parametrize('pid', [64231, 64232])
+def test_herbs_keep_printed_blend_owner_not_magnesium(boundary_pipeline, pid):
+    normalizer, enricher = boundary_pipeline
+    cleaned = normalizer.normalize_product(_boundary_raw(pid))
+    magnesium = next(row for row in cleaned['activeIngredients'] if row['name'] == 'Magnesium')
+    assert magnesium['quantity'] == 20
+    enriched, errors = enricher.enrich_product(cleaned)
+    assert not errors
+    blend = next(b for b in enriched['proprietary_blends'] if b.get('hidden_count', 0) >= 7)
+    assert blend['name'] == 'Proprietary Herbal Blend'
+    assert blend['blend_total_mg'] == 35
+    artifact = build_scored_artifact(enriched)
+    evidence = artifact['_v4_module_breakdown']['dimensions']['transparency']['metadata']['B5_blend_evidence']
+    assert any(b['blend_name'] == 'Proprietary Herbal Blend' and b['blend_total_mg'] == 35 for b in evidence)
+    assert not any(b['blend_name'] == 'Magnesium' for b in evidence)
+
+
+def test_polyphenol_footnote_does_not_disclose_fruit_members(boundary_pipeline):
+    normalizer, enricher = boundary_pipeline
+    cleaned = normalizer.normalize_product(_boundary_raw(19069))
+    marker = next(row for row in cleaned['activeIngredients'] if 'provides 200 mg' in row['name'])
+    assert marker['quantity'] == 200
+    assert marker['cleaner_row_role'] == 'source_descriptor'
+    enriched, errors = enricher.enrich_product(cleaned)
+    assert not errors
+    [blend] = [b for b in enriched['proprietary_blends'] if b['name'] == 'Proprietary Fruit & Vegetable Blend']
+    assert blend['disclosure_level'] == 'partial'
+    assert len(blend['child_ingredients']) == 6
+    assert all(child.get('amount') is None for child in blend['child_ingredients'])
+    assert enriched['proprietary_data']['total_active_mg'] == 550  # calcium170+blend380; marker200 is not another active.
+    artifact = build_scored_artifact(enriched)
+    assert artifact['_v4_module_breakdown']['dimensions']['transparency']['penalties']['B5_proprietary_blend_opacity'] < 0
+    sugar = enriched['dietary_sensitivity_data']['sugar']
+    assert sugar['amount_g'] is None and sugar['level'] is None
+    formulation = artifact['_v4_module_breakdown']['dimensions']['formulation']
+    assert formulation['metadata']['formula_checks']['B1_dietary_sugar'] == 0
+
+
+@pytest.mark.parametrize('pid,change', [(64231, 'parent_amount'), (64232, 'child_identity'), (19069, 'child_identity')])
+def test_blend_hierarchy_repairs_reject_changed_source(boundary_pipeline, pid, change):
+    normalizer, _ = boundary_pipeline
+    raw = _boundary_raw(pid)
+    if change == 'parent_amount':
+        raw['ingredientRows'][15]['quantity'][0]['quantity'] = 36
+    elif pid == 19069:
+        raw['ingredientRows'][1]['forms'][0]['name'] = 'Different source constituent'
+    else:
+        raw['ingredientRows'][11]['nestedRows'][1]['name'] = 'Different source constituent'
+    with pytest.raises(ValueError, match='Reviewed hierarchy'):
+        normalizer.normalize_product(raw)
+
+
+@pytest.mark.parametrize("shape", ["nested", "flattened"])
+@pytest.mark.parametrize("functional_disposition", ["is_excipient", "inactive"])
+@pytest.mark.parametrize("carrier_amount,total_unit,expected_tier,known_mass", [
+    (900, "mg", "partial", 900),
+    (0, "NP", "none", 0),
+])
+def test_filtered_functional_child_preserves_mass_and_total_uncertainty(
+    boundary_pipeline, carrier_amount, total_unit, expected_tier, known_mass, shape, functional_disposition
+):
+    normalizer, enricher = boundary_pipeline
+    product = {"id": "carrier_boundary", "activeIngredients": [{
+        "name": "Proprietary Herbal Blend", "quantity": 1000, "unit": total_unit,
+        "proprietaryBlend": True, "disclosureLevel": expected_tier,
+        "nestedIngredients": [
+            {"name": "Cellulose", "quantity": carrier_amount, "unit": "mg", "is_excipient": True},
+            {"name": "Ashwagandha", "quantity": 0, "unit": "NP"},
+            {"name": "Rhodiola", "quantity": 0, "unit": "NP"},
+        ],
+    }], "inactiveIngredients": []}
+    carrier = product["activeIngredients"][0]["nestedIngredients"][0]
+    if functional_disposition == "inactive":
+        carrier.pop("is_excipient")
+        carrier["cleaner_row_role"] = "inactive"
+    if shape == "flattened":
+        parent = product["activeIngredients"][0]
+        parent["raw_source_path"] = "ingredientRows[99]"
+        children = parent.pop("nestedIngredients")
+        for index, child in enumerate(children):
+            child.update({"isNestedIngredient": True, "parentBlend": parent["name"],
+                          "parent_source_path": parent["raw_source_path"],
+                          "raw_source_path": f"ingredientRows[99].nestedRows[{index}]",
+                          "parentBlendMass": 1000, "parentBlendUnit": total_unit})
+        product["activeIngredients"].extend(children)
+        product["label_source_rows"] = [{"raw_source_path": r["raw_source_path"]}
+                                          for r in product["activeIngredients"]]
+    data = enricher._collect_proprietary_data(product)
+    assert data["blends"]
+    assert all(b["disclosure_level"] == expected_tier for b in data["blends"])
+    import json
+    from pathlib import Path
+    raw = json.loads((Path(__file__).parent / "fixtures/blend_preparation_213448_raw.json").read_text())
+    cleaned = normalizer.normalize_product(raw)
+    cleaned["activeIngredients"].extend(product["activeIngredients"])
+    cleaned.setdefault("label_source_rows", []).extend(product.get("label_source_rows", []))
+    enriched, errors = enricher.enrich_product(cleaned)
+    assert not errors
+    artifact = build_scored_artifact(enriched)
+    evidence = artifact["_v4_module_breakdown"]["dimensions"]["transparency"]["metadata"]["B5_blend_evidence"]
+    assert evidence
+    assert evidence[0]["disclosed_child_mg_sum"] == known_mass
+    if total_unit == "mg":
+        assert evidence[0]["hidden_mass_mg"] == 100
+    else:
+        assert evidence[0]["hidden_mass_mg"] is None

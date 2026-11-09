@@ -25,6 +25,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 
+from constants import CLEANER_NON_EFFICACY_ROLES
 from scoring_input_contract import disclosed_source_amount
 
 logger = logging.getLogger(__name__)
@@ -51,6 +52,23 @@ def disclosure_tier(
     if without_amounts == 0 or (total_declared and sole_single_source and with_amounts + without_amounts == 1):
         return "full"
     return "partial" if total_declared else "none"
+
+
+def is_disclosure_component(row: Any) -> bool:
+    """Keep physical member mass; analytical markers are not additive members.
+
+    Undosed functional constituents do not create active opacity. A quantified
+    carrier still discloses part of the physical blend mass, without assigning
+    the remainder as a dose to any active constituent.
+    """
+    if not isinstance(row, dict):
+        return True
+    role = row.get("cleaner_row_role")
+    if role in CLEANER_NON_EFFICACY_ROLES and role != "inactive":
+        return False
+    if role == "inactive" or row.get("is_excipient") is True:
+        return disclosed_source_amount(row)[0] is not None
+    return True
 
 
 def _row_has_amount(row: Dict[str, Any]) -> bool:
@@ -113,9 +131,8 @@ class DetectedBlend:
         - mg_bucket: 5mg bucket (to tolerate parsing variance like 33.9 vs 34.1)
         - ingredient_count: distinguishes same-named blends with different structures
 
-        This prevents:
-        - Double-penalizing same blend detected from multiple fields
-        - Under-penalizing distinct same-named blends (e.g., inner vs outer capsule)
+        analyze_product combines this content key with source-row ownership;
+        matching names and amounts alone never establish one physical blend.
         """
         normalized = self.blend_name.lower().strip()
         if self.blend_total_amount is not None:
@@ -351,7 +368,7 @@ class ProprietaryBlendDetector:
             elif isinstance(stmt, str):
                 search_fields.append(("statements", [{"name": stmt}]))
 
-        seen_blends = set()  # DetectedBlend.dedupe_key values
+        seen_blends = set()  # Content key plus physical source-row ownership.
 
         for field_name, field_data in search_fields:
             if not field_data:
@@ -361,9 +378,12 @@ class ProprietaryBlendDetector:
                 for i, item in enumerate(field_data):
                     source_field = f"{field_name}[{i}]"
                     blend = self._analyze_ingredient_for_blend(item, source_field, seen_blends)
-                    if blend and blend.dedupe_key not in seen_blends:
-                        detected_blends.append(blend)
-                        seen_blends.add(blend.dedupe_key)
+                    if blend:
+                        owner = item.get("raw_source_path") if isinstance(item, dict) else None
+                        key = (*blend.dedupe_key, owner or source_field)
+                        if key not in seen_blends:
+                            detected_blends.append(blend)
+                            seen_blends.add(key)
 
         # Calculate totals
         total_penalty = sum(b.penalty_applicable for b in detected_blends)
@@ -400,6 +420,10 @@ class ProprietaryBlendDetector:
         seen_blends: set
     ) -> Optional[DetectedBlend]:
         """Analyze a single ingredient/field for blend patterns."""
+
+        # Consume the existing source disposition before detector deduplication.
+        if isinstance(ingredient, dict) and ingredient.get("is_excipient") is True:
+            return None
 
         # Get text to search
         if isinstance(ingredient, dict):
@@ -550,6 +574,11 @@ class ProprietaryBlendDetector:
                              blend_data.get("subIngredients", []) or \
                              blend_data.get("components", []) or \
                              blend_data.get("nestedIngredients", [])
+
+        sub_ingredients = [
+            sub for sub in sub_ingredients
+            if is_disclosure_component(sub)
+        ]
 
         if sub_ingredients:
             result["ingredients_listed"] = True

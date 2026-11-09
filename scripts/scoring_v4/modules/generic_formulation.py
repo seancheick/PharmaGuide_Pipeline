@@ -223,8 +223,12 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
     elif level == "moderate":
         penalty = DIETARY_SUGAR_MODERATE_PENALTY
         reason = "moderate_sugar_grams"
-    elif (high_glycemic or syrup_sources) and not canonical_finds_no_sugar:
-        # Real added sugar / high-glycemic — check FIRST so alcohol+syrup stays here.
+    elif (high_glycemic or syrup_sources) and not canonical_finds_no_sugar and (
+        sugar.get("contains_sugar") or sugar.get("has_added_sugar") or sugar_sources
+    ):
+        # Unknown sugar content is not a positive sugar finding. The source
+        # owner must identify sugar; a carrier classification alone cannot.
+        # Check real sugar first so alcohol+syrup keeps its existing treatment.
         penalty = DIETARY_SUGAR_HIGH_GLYCEMIC_OR_SYRUP_PENALTY
         reason = "high_glycemic_or_syrup"
     elif sugar_alcohols:

@@ -592,6 +592,7 @@ def test_b5_dedupes_parent_and_child_rows_for_same_blend_total() -> None:
         "unit": "mg",
         "source_field": "activeIngredients[19]",
         "source_path": "activeIngredients[19]",
+        "source_row_ref": "activeIngredients[19]",
         "sources": ["cleaning"],
     }
     child_list = {
@@ -604,6 +605,7 @@ def test_b5_dedupes_parent_and_child_rows_for_same_blend_total() -> None:
         "nested_count": 3,
         "source_field": "activeIngredients[20]",
         "source_path": "activeIngredients[20]",
+        "source_row_ref": "activeIngredients[19]",
         "sources": ["cleaning"],
         "child_ingredients": [
             {"name": "Broccoli", "amount": None, "unit": ""},
@@ -753,3 +755,21 @@ def test_printed_parent_total_and_individually_disclosed_children_are_transparen
         else:
             bad_rows[0]["quantity"] = 999
         assert build_scored_artifact(bad)["quality_pillars_v4"]["transparency"]["score"] < 15
+
+
+def test_b5_preserves_distinct_same_name_source_blends() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    blends = [
+        {**_opaque_blend(name="Herbal Blend", total_mg=100),
+         "source_field": f"activeIngredients[{index}]",
+         "source_path": f"activeIngredients[{index}]"}
+        for index in (0, 1)
+    ]
+    result = score_transparency(_product(blends=blends))
+    assert len(result["metadata"]["B5_blend_evidence"]) == 2
+    from scoring_v4.scored_artifact import build_scored_artifact
+    artifact = build_scored_artifact(_product(blends=blends))
+    final = artifact["_v4_module_breakdown"]["dimensions"]["transparency"]
+    assert len(final["metadata"]["B5_blend_evidence"]) == 2
+    assert final["penalties"]["B5_proprietary_blend_opacity"] == result["penalties"]["B5_proprietary_blend_opacity"]

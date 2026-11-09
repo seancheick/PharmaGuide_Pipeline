@@ -48,7 +48,9 @@ def test_syrup_stays_real_sugar_band():
 
 
 def test_high_glycemic_stays_real_sugar_band():
-    d = _det(sweeteners={"high_glycemic": ["glucose"]})
+    d = _det(sugar={"contains_sugar": True, "has_added_sugar": True,
+                    "sugar_sources": ["glucose"]},
+             sweeteners={"high_glycemic": ["glucose"]})
     assert d["penalty"] == 2.0
     assert d["reason"] == "high_glycemic_or_syrup"
 
