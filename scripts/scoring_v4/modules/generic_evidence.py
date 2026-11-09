@@ -272,7 +272,7 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             else _canonical_from_entry(entry)
         )
         if canonical:
-            families = _qualified_trial_families(entry)
+            families = _qualified_trial_families(entry) if raw > 0 else frozenset()
             identities = tuple(sorted(_matched_canonical_ids(entry))) or (canonical,)
             family_key = (identities, families) if families else None
             prior = family_contributions.get(family_key) if family_key else None
@@ -288,9 +288,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 family_contributions[family_key] = (raw, canonical, entry_id)
             # Duplicate numerical witnesses still carry real source-review
             # obligations. Do not make their unfinished reviews disappear.
-            contributing_entries[entry_id] = (canonical, entry)
-            if family_key:
-                contributing_families[entry_id] = family_key
+            if raw > 0:
+                contributing_entries[entry_id] = (canonical, entry)
+                if family_key:
+                    contributing_families[entry_id] = family_key
 
     capped_scores = sorted(
         (min(CAP_PER_INGREDIENT, pts) for pts in ingredient_points.values()),
