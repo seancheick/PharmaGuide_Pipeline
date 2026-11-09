@@ -928,7 +928,7 @@ def _blend_name_total_key(blend: Dict[str, Any]) -> Optional[Tuple[str, ...]]:
     if not name_key or blend_total_mg is None:
         return None
     key = ("name_total", name_key, f"{round(blend_total_mg, 3):.3f}")
-    source_owner = _norm_text(blend.get("source_row_ref"))
+    source_owner = _norm_text(blend.get("source_row_ref") or _source_path_for_blend(blend))
     return key + (source_owner,) if source_owner else key
 
 

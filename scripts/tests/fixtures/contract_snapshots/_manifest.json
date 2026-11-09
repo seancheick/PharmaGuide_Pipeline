@@ -1316,6 +1316,22 @@
       ],
       "source_commit": "3143d026e (PR #338), replayed from the frozen corpus a9_corpus_20261103",
       "notes": "Status only: Sean's completion rule, November 3. Each label's open rows can't change its Evidence answer, so quality_assessment_status moves partial to complete. Score, tier, safety and every other frozen field are unchanged, and the other 27 snapshots match."
+    },
+    {
+      "date": "2026-11-09",
+      "dsld_ids": [
+        182730,
+        288344,
+        278454,
+        223084,
+        306381,
+        241353,
+        274498,
+        293943,
+        327416
+      ],
+      "source_commit": "acf7fa9e4 runtime baseline; eebec37f9 unfinished-source preservation and accepted INGR_COQ10 context review",
+      "notes": "Tests-only, source-reviewed expectation correction. Live NIH DSLD ingredientRows and servingSizes match all nine frozen raw labels. Eight products retain evidence_assessment_incomplete under the current canonical resolver: 182730 Kre-Alkalyn/L-glutamine; 223084 creatine ethyl ester; 241353/274498/288344/327416 unresolved individual botanical/food-source research; 278454 omega-3 source applicability; 306381 taurine. Their quality status is partial, not a completed scientific zero; this supersedes older completeness pins without changing runtime or research holds. CoQ10 293943 earns the existing reviewed INGR_COQ10 Evidence contribution (15.6 public points), changing total61.8\u219277.4 and tier/grade toGood; live content checks confirm PMID39462324 and25282031 concern adjunctive chronic-heart-failure treatment, not universal energy/prevention or efficacy of this exact120mg regimen. Existing clinical reviewer/scope decisions are retained; this follow-up is independent agent verification, not new clinician review. All safety/identity/other frozen fields unchanged; exact per-entry diff, source traces and independent review in /Users/seancheick/pg_quality/canary-corrections-20261109/."
     }
   ]
 }
