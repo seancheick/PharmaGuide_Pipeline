@@ -208,6 +208,41 @@ def test_ingredient_context_cannot_override_parent_scope(monkeypatch, scope, sta
     assert source == original
 
 
+@pytest.mark.parametrize("ages,groups,title,expected", [
+    ("15–60", ["Children 4–8"], "Kids Performance", "explicit_conflict"),
+    ("15–60", ["Children 14–18"], "Teen Performance", "unresolved"),
+    ("15–60", ["Children 15–17"], "Teen Performance", "eligible"),
+    ("15–60", [], "Kids Performance", "unresolved"),
+    ("15–60", ["Children"], "Kids Performance", "unresolved"),
+    ("17–23", ["Children 4–8"], "Kids Performance", "explicit_conflict"),
+    ("17–23", ["Children 17–18"], "Teen Performance", "eligible"),
+    ("17–23", ["Children 14–18"], "Teen Performance", "unresolved"),
+    ("15–60", "Children 4–8", "Kids Performance", "explicit_conflict"),
+    ("15–60", {"name": "Children 4–8"}, "Kids Performance", "explicit_conflict"),
+    ("15–60", ["Adults 18–50"], "Adult Performance", "eligible"),
+    ("17–23", ["Women 18–50"], "Women's Performance", "eligible"),
+])
+def test_mixed_source_age_scope_preserves_adults_without_lending_to_children(ages, groups, title, expected):
+    from clinical_applicability import assess_context_population
+    context = {"population": {"age_group": "mixed", "description": (
+        f"The source eligibility criterion was ages {ages} years; adolescent and adult cohorts "
+        "were included. The complete observed participant age range was not reported.")}}
+    product = {"fullName": title, "targetGroups": groups}
+    original = deepcopy((product, context))
+    assert assess_context_population(product, context) == expected
+    assert (product, context) == original
+
+
+@pytest.mark.parametrize('summary', ['mean', 'median', 'average'])
+def test_age_summaries_are_not_population_eligibility_bounds(summary):
+    from clinical_applicability import assess_context_population
+    context = {'population': {'age_group': 'mixed', 'description': (
+        f'Schoolchildren ({summary} age 9–12), adolescent swimmers and adults '
+        'were included; the full participant age range was not reported.')}}
+    assert assess_context_population(
+        {'fullName': 'Junior Vitamin C', 'targetGroups': ['Children 14–18']}, context) == 'eligible'
+
+
 def test_context_applicability_cannot_borrow_another_sources_approval(monkeypatch):
     source = _distinct_regimen_source(monkeypatch)
     source["study_contexts"][1]["applicability"]["source_pmids"] = ["28661438"]
