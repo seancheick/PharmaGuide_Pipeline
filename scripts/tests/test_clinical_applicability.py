@@ -263,6 +263,28 @@ def test_source_scope_dispatch_reuses_per_product_subject_derivations(monkeypatc
     assert all(count == 2 for count in calls.values())
 
 
+@pytest.mark.parametrize('reverse', [False, True])
+def test_scoped_msm_claim_explanation_uses_best_supported_context_in_either_order(monkeypatch, reverse):
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    source = records['INGR_MSM']
+    if reverse:
+        source['study_contexts'].reverse()
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    row = {'name': 'MSM', 'raw_source_text': 'MSM', 'canonical_id': 'msm', 'mapped': True,
+           'quantity': 2000, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': 'MSM knee osteoarthritis', 'activeIngredients': [row],
+        'ingredient_quality_data': {'ingredients_scorable': [row]},
+        'statements': [{'type': 'Formulation re: Other', 'notes': 'MSM supports immune health.'}]}
+    entry = {**source, 'ingredient': 'MSM', 'matched_canonical_ids': ['msm'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    decision = assess_clinical_applicability(product, entry, assess_amount=False,
+                                            require_claim_alignment=False)
+    assert decision['claim_alignment']['state'] == 'aligned'
+    assert 'affirmative_exact_source_condition_claim' in json.dumps(decision['claim_alignment'])
+    assert len(decision['population_applicability']['context_ids']) == 2
+
+
 @pytest.mark.parametrize("policy", [
     {}, [], False, "ingredient",
     {"scope": []},

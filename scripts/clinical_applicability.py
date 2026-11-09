@@ -496,6 +496,7 @@ def _valid_native_claim_scope(context: Mapping) -> bool:
 
 
 _CREDITABLE_CLAIM_STATES = {"absent", "aligned", "mixed"}
+_CLAIM_ALIGNMENT_RANK = {"aligned": 0, "mixed": 1, "absent": 2, "unrelated": 3, "ambiguous": 4}
 # The shared affirmative matcher's rule: a negation earlier in the clause
 # negates what follows it ("Not for children", "free of soy").
 _POSITIONING_NEGATION = re.compile(
@@ -1135,9 +1136,9 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
                 "population_applicability": {"state": "eligible", "context_ids": [
                     context["context_id"] for context, _ in qualifying]}}
     qualifying = affirmative
-    rank = {"aligned": 0, "mixed": 1, "absent": 2, "unrelated": 3, "ambiguous": 4}
     components = {
-        "claim_alignment": min((claim for _, claim in qualifying), key=lambda claim: rank[claim["state"]]),
+        "claim_alignment": min((claim for _, claim in qualifying),
+                               key=lambda claim: _CLAIM_ALIGNMENT_RANK[claim["state"]]),
         "population_applicability": {"state": "eligible",
                                      "context_ids": [context.get("context_id") for context, _ in qualifying]},
     }
@@ -1270,6 +1271,8 @@ def _assess_context_applicability(product: Mapping, entry: Mapping, reference: M
         return next((decision for decision in decisions if decision.get("status") == "unresolved"),
                     decisions[0])
     result = dict(accepted[0])
+    result["claim_alignment"] = min((decision["claim_alignment"] for decision in accepted),
+                                   key=lambda claim: _CLAIM_ALIGNMENT_RANK[claim["state"]])
     context_ids = list(dict.fromkeys(context_id for decision in accepted
         for context_id in decision.get("population_applicability", {}).get("context_ids", [])))
     result["population_applicability"] = {"state": "eligible", "context_ids": context_ids}
