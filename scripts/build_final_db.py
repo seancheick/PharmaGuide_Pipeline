@@ -8003,9 +8003,9 @@ def build_detail_blob(
             # Same ban entry as the substance-match card above, so the same
             # context: one hazard, one card after dedup.
             "ban_context": safe_str(reference.get("ban_context") or flag.get("ban_context")) or None,
-            **({"source_urls": _safety_reference_urls(
+            "source_urls": _safety_reference_urls(
                 reference.get("references_structured") or flag.get("references_structured")
-            )} if status == "watchlist" else {}),
+            ),
             "matched_rule_id": rule_id or None,
             "ingredient_name": name,
             "safety_warning": reference.get("safety_warning") or flag.get("safety_warning"),
@@ -8373,6 +8373,7 @@ def build_detail_blob(
                 # one dedup key: one hazard, one card.
                 "ban_context": safe_str(reference.get("ban_context")) or None,
                 "source": "inactive_ingredient_resolver",
+                "source_urls": _safety_reference_urls(reference.get("references_structured")),
                 "display_mode_default": dm_default,
                 "clinical_risk": safe_str(ing.get("harmful_severity")) or None,
                 "inactive_policy": safe_str(ing.get("inactive_policy")) or None,

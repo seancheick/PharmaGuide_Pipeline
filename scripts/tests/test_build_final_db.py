@@ -7343,3 +7343,38 @@ def test_dose_dependent_risk_does_not_replace_authored_warning_severity():
          "jurisdictions": [{"jurisdiction_code": "US", "region": "US"}]},
     )
     assert policy["severity"] == "high"
+
+
+@pytest.mark.parametrize("name,rule_id", [
+    ("Partially Hydrogenated Soybean Oil", "BANNED_PHO"),
+    ("Cascara Sagrada", "ADD_CASCARA_SAGRADA"),
+    ("Titanium Dioxide", "BANNED_ADD_TITANIUM_DIOXIDE"),
+])
+def test_resolver_safety_warnings_keep_registry_citations(name, rule_id):
+    enriched = make_enriched()
+    enriched["activeIngredients"] = []
+    enriched["inactiveIngredients"] = [{"name": name, "raw_source_text": name, "standardName": name}]
+    enriched["contaminant_data"]["banned_substances"] = {"substances": []}
+    blob = build_detail_blob(enriched, make_scored(verdict="BLOCKED"))
+    [warning] = [w for w in blob["warnings"] if w.get("matched_rule_id") == rule_id]
+    registry = json.loads((Path(__file__).parents[1] / "data/banned_recalled_ingredients.json").read_text())
+    entry = next(r for r in registry["ingredients"] if r["id"] == rule_id)
+    assert {r["url"] for r in warning["source_urls"]} == {
+        r["url"] for r in entry["references_structured"] if r.get("url")
+    }
+    assert warning["safety_warning"] == entry["safety_warning"]
+
+
+@pytest.mark.parametrize("rule_id,status", [("BANNED_PHO", "banned"), ("RISK_YOHIMBE", "high_risk")])
+def test_contaminant_safety_flags_keep_registry_citations(rule_id, status):
+    enriched = make_enriched()
+    enriched["activeIngredients"] = []
+    enriched["inactiveIngredients"] = []
+    enriched["contaminant_data"]["banned_substances"] = {
+        "substances": [], "safety_flags": [{
+            "source_db": "banned_recalled_ingredients", "entry_id": rule_id, "status": status,
+        }],
+    }
+    blob = build_detail_blob(enriched, make_scored(verdict="BLOCKED"))
+    [warning] = [w for w in blob["warnings"] if w.get("matched_rule_id") == rule_id]
+    assert warning["source_urls"]
