@@ -304,7 +304,7 @@ def _resolved_warning(
         "ingredient_name": ingredient_name,
         "ingredient_canonical_id": ref.get("ingredient_canonical_id"),
         "evidence_level": str(
-            ref.get("evidence_level", subentry.get("evidence_level")) or ""
+            ref.get("evidence_level", "ungraded" if subentry_kind == "dose" else subentry.get("evidence_level")) or ""
         ),
         "sources": copy.deepcopy(
             _safe_list(ref.get("sources", subentry.get("sources")))

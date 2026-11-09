@@ -318,6 +318,15 @@ def test_schema3_pure_dose_warning_roundtrip(condition_ids):
             "condition_rules": [], "drug_class_rules": []}
     projected = project_detail_blob({"warnings": [warning]}, export_schema_version="3.0.0")
     assert resolve_warning_rule_refs(projected["warning_rule_refs"], rules_by_id={rule["id"]: rule}) == [warning]
+    # An older reference without a grade must not inherit a later rule grade.
+    ref = projected["warning_rule_refs"][0]
+    ref.pop("evidence_level")
+    threshold["evidence_level"] = "established"
+    [resolved] = resolve_warning_rule_refs([ref], rules_by_id={rule["id"]: rule})
+    assert resolved["evidence_level"] == "ungraded"
+    ref["evidence_level"] = "limited"
+    [resolved] = resolve_warning_rule_refs([ref], rules_by_id={rule["id"]: rule})
+    assert resolved["evidence_level"] == "limited"
     threshold["alert_body"] = "Different unreviewed copy"
     with pytest.raises(ValueError, match="no matching reviewed copy"):
         resolve_warning_rule_refs(projected["warning_rule_refs"], rules_by_id={rule["id"]: rule})
