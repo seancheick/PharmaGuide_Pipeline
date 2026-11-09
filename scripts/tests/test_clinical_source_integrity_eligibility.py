@@ -975,14 +975,26 @@ def test_glutamine_older_women_review_finishes_without_borrowing_ibs_credit():
     assert {o['outcome_role'] for o in context['outcomes']} == {'within_group_change'}
     assert qualifying_purpose_outcomes(context) == ([], False)
     assert not assess_clinical_source_review(record)['is_complete']
-    assert len([c for c in record['study_contexts'] if not context_review_finished(c)]) == 8
+    assert {c['source_pmids'][0] for c in record['study_contexts'] if not context_review_finished(c)} == {
+        '38193521', '34844156', '42366260', '41053591', '38243579'}
 
 
-def test_betaine_exercise_prose_keeps_positive_and_null_outcomes_scoped():
+def test_betaine_limited_published_finding_finishes_with_scoped_positive_and_null_outcomes():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
     record = reviewed_entries()['PRECLIN_BETAINE_ANHYDROUS']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['39514262'])
+    assert record['notes'].startswith('Limited evidence for lower-body strength.')
+    assert (record['effect_direction'], record['effect_direction_confidence']) == ('positive_weak', 'low')
+    assert record['study_type'] == 'systematic_review_meta'
+    assert record['total_enrollment'] is None  # The historical 100 is not the qualified pool.
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context['review_status'] == 'clinician_approved' and context['scoring_eligible'] is True
+    assert context['evidence_role'] == 'meta_analysis'
+    assert {o['direction'] for o in context['outcomes']} >= {'positive', 'null'}
+    assert 'eligibility' in context['population']['description'].lower()
+    assert 'adult-only' in context['population']['description'].lower()
     assert 'not general exercise or cardiovascular efficacy' in record['notes']
-    assert 'strength/power did not show superior between-group effects' in record['notes']
     assert 'Fight Gone Bad repetitions positive' in record['notable_studies']
     assert 'Wingate/body-composition null' in record['notable_studies']
     assert 'FDA-approved' not in record['notes']
@@ -991,9 +1003,52 @@ def test_betaine_exercise_prose_keeps_positive_and_null_outcomes_scoped():
     assert 'primary_outcome' not in record  # no single health category across these trials
     assert record['category'] == 'sports_performance'
     assert not any('homocysteine' in e.lower() for e in record['key_endpoints'])
-    assert 'historical' in record['effect_direction_rationale'].lower()
-    assert all(c['scoring_eligible'] is False for c in record['study_contexts'])
+    assert 'sensitive to individual studies' in record['effect_direction_rationale'].lower()
+    assert all(c['scoring_eligible'] is False for c in record['study_contexts'] if c is not context)
+    assert assess_clinical_source_review(record)['is_complete']
+
+
+@pytest.mark.parametrize('name,groups,eligible', [
+    ('Betaine Anhydrous', ['Adults 18–50'], True),
+    ('Betaine Hydrochloride', ['Adults 18–50'], False),
+    ('Liposomal Betaine', ['Adults 18–50'], False),
+    ('Kids Betaine Anhydrous', ['Children 4–8'], False),
+])
+def test_tmg_limited_finding_is_adult_form_scoped_without_a_claim_or_dose_benchmark(name, groups, eligible):
+    from clinical_applicability import reviewed_entries
+    from dose_assessment import positive_clinical_benchmark
+    record = reviewed_entries()['PRECLIN_BETAINE_ANHYDROUS']
+    product = _tyrosine_scoring_product(name=name)
+    row = product['activeIngredients'][0]
+    row.update(canonical_id='tmg_betaine', standard_name='Betaine', matched_form=name)
+    product['targetGroups'] = groups
+    product['evidence_data'] = {'clinical_matches': [{
+        **record, 'ingredient': name, 'matched_canonical_ids': ['tmg_betaine'],
+        'matched_source_row_refs': [row['raw_source_path']],
+    }]}
+    points = score_evidence(product, apply_primary_floor=False)['score']
+    assert (points > 0) is eligible
+    assert positive_clinical_benchmark(product, row) is None
+
+
+@pytest.mark.parametrize('pmid', ['35106632', '39397201', '40748005'])
+def test_glutamine_bounded_transfer_reviews_finish_without_lending_combination_or_pool_credit(pmid):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_review_finished
+    record = reviewed_entries()['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == [pmid])
+    assert context_review_finished(context)
+    assert context['review_status'] == 'rejected_source' and context['scoring_eligible'] is False
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert 'not clinician' in context['clinical_review']['reviewer']
+    if pmid == '40748005':
+        assert 'abstract' in context['clinical_review']['basis'].lower()
+    # Other source obligations and the original narrow IBS decision remain separate.
     assert not assess_clinical_source_review(record)['is_complete']
+    ibs = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
+    assert ibs['scoring_eligible'] is True
+    assert record['effect_direction'] == 'positive_moderate'
 
 
 def test_l_carnitine_finished_recovery_source_keeps_weight_and_preparation_holds():
@@ -1057,7 +1112,18 @@ def test_plant_sterol_completed_source_extractions_preserve_unread_synthesis():
     assert not er.clinical_record_sources_eligible(record)
 
 
-def test_machek_finished_primary_review_cannot_clear_betaine_pool_hold():
+def _betaine_with_pending_published_source(monkeypatch, record):
+    import clinical_applicability as ca
+    records = ca.reviewed_entries()
+    pending = copy.deepcopy(record)
+    context = next(c for c in pending['study_contexts'] if c['source_pmids'] == ['39514262'])
+    context['review_status'] = 'source_verified_pending_clinical_review'
+    context['scoring_eligible'] = False
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {**records, pending['id']: pending})
+    return pending
+
+
+def test_machek_finished_primary_review_cannot_clear_betaine_pool_hold(monkeypatch):
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from clinical_evidence_schema import validate_ingredient_context
     from probiotic_measurements import context_review_finished, clinical_review_provenance_valid
@@ -1069,11 +1135,14 @@ def test_machek_finished_primary_review_cannot_clear_betaine_pool_hold():
     assert context_review_finished(context)
     assert clinical_review_provenance_valid(context)
     assert context["scoring_eligible"] is False
-    assert not assess_clinical_source_review(record)["is_complete"]
-    assert not er.clinical_record_sources_eligible(record)
+    assert assess_clinical_source_review(record)["is_complete"]
+    # Its own finished review cannot substitute for the independent synthesis review.
+    pending = _betaine_with_pending_published_source(monkeypatch, record)
+    assert not assess_clinical_source_review(pending)["is_complete"]
+    assert not er.clinical_record_sources_eligible(pending)
 
 
-def test_yang_rct_transfer_exclusion_preserves_human_research_and_parent_hold():
+def test_yang_rct_transfer_exclusion_preserves_human_research_and_parent_hold(monkeypatch):
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from clinical_evidence_schema import validate_ingredient_context
     from probiotic_measurements import context_review_finished, clinical_review_provenance_valid
@@ -1089,8 +1158,10 @@ def test_yang_rct_transfer_exclusion_preserves_human_research_and_parent_hold():
     assert context_review_finished(context) and clinical_review_provenance_valid(context)
     reference = next(r for r in record["references_structured"] if r.get("pmid") == "36009767")
     assert reference["pmid_verified"] and reference["topic_match_verified"]
-    assert not assess_clinical_source_review(record)["is_complete"]
-    assert not er.clinical_record_sources_eligible(record)
+    assert assess_clinical_source_review(record)["is_complete"]
+    pending = _betaine_with_pending_published_source(monkeypatch, record)
+    assert not assess_clinical_source_review(pending)["is_complete"]
+    assert not er.clinical_record_sources_eligible(pending)
 
 
 @pytest.mark.parametrize("label, expected_sources", [
@@ -1552,6 +1623,78 @@ def test_completed_creapure_reference_preserves_generic_trial_credit():
     resolution = resolve_evidence_for_row(row, product)
     assert resolution.points_eligible and resolution.blocking_reasons == []
     assert _resolved_evidence_assessment(resolution)[0] == EVIDENCE_EVALUATED_SUPPORTED
+
+
+@pytest.mark.parametrize('source_label_present', [True, False])
+def test_kre_alkalyn_finished_limited_reference_does_not_borrow_monohydrate_credit(source_label_present):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from clinical_evidence_schema import validate_ingredient_context
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+    entry = reviewed_entries().get('BRAND_KRE_ALKALYN')
+    assert entry is not None
+    assert entry['study_type'] == entry['evidence_level'] == 'reference'
+    assert entry['total_enrollment'] is None
+    assert entry['health_goals_supported'] == []
+    assert 'primary_outcome' not in entry  # No primary rank was established by the source.
+    assert len(entry['study_contexts']) == 1
+    context = entry['study_contexts'][0]
+    assert context['source_pmids'] == ['22971354'] and context['scoring_eligible'] is False
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert assess_clinical_source_review(entry)['is_complete']
+    assert {o['outcome_role'] for o in context['outcomes']} >= {
+        'direct_between_group_effect', 'within_group_change'}
+    product = _creapure_scoring_product()
+    row = product['activeIngredients'][0]
+    row.update(name='Kre-Alkalyn', raw_source_text='Kre-Alkalyn', matched_form='Kre-Alkalyn')
+    product['product_name'] = 'Kre-Alkalyn'
+    if not source_label_present:
+        row.pop('raw_source_text')
+    resolution = resolve_evidence_for_row(row, product)
+    assert resolution.points_eligible is False
+    if not source_label_present:
+        assert 'clinical_source_label_unresolved' in resolution.blocking_reasons
+        return
+    assert resolution.blocking_reasons == []
+    assert _resolved_evidence_assessment(resolution)[0] == EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE
+    assert score_evidence(product)['score'] == 0
+    # A distinct monohydrate row keeps its own research even under this title.
+    mixed = copy.deepcopy(product)
+    monohydrate = {**mixed['activeIngredients'][0], 'name': 'Creatine Monohydrate',
+                   'raw_source_text': 'Creatine Monohydrate', 'matched_form': 'creatine monohydrate',
+                   'raw_source_path': 'ingredientRows[1]', 'quantity': 3000}
+    mixed['activeIngredients'].append(monohydrate)
+    for key in ('ingredients', 'ingredients_scorable'):
+        mixed['ingredient_quality_data'][key].append(monohydrate)
+    assert resolve_evidence_for_row(monohydrate, mixed).points_eligible
+    mixed['evidence_data'] = {'clinical_matches': [{
+        **reviewed_entries()['INGR_CREATINE_MONOHYDRATE'],
+        'ingredient': monohydrate['name'], 'matched_canonical_ids': ['creatine_monohydrate'],
+        'matched_source_row_refs': [monohydrate['raw_source_path']],
+    }]}
+    assert score_evidence(mixed)['score'] > 0
+
+
+@pytest.mark.parametrize('change', ['pending', 'malformed'])
+def test_kre_reference_cannot_finish_while_its_own_review_is_incomplete(monkeypatch, change):
+    import clinical_applicability as ca
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_NOT_YET_EVALUATED
+    records = ca.reviewed_entries()
+    pending = copy.deepcopy(records['BRAND_KRE_ALKALYN'])
+    context = pending['study_contexts'][0]
+    if change == 'pending':
+        context['review_status'] = 'source_verified_pending_clinical_review'
+    else:
+        context['clinical_review'] = {}
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {**records, pending['id']: pending})
+    product = _creapure_scoring_product()
+    row = product['activeIngredients'][0]
+    row.update(name='Kre-Alkalyn', raw_source_text='Kre-Alkalyn', matched_form='Kre-Alkalyn')
+    product['product_name'] = 'Kre-Alkalyn'
+    resolution = resolve_evidence_for_row(row, product)
+    assert not resolution.points_eligible and resolution.blocking_reasons
+    assert _resolved_evidence_assessment(resolution)[0] == EVIDENCE_NOT_YET_EVALUATED
 
 
 @pytest.mark.parametrize('change', ['pending', 'malformed'])

@@ -33,8 +33,7 @@ def test_no_data_file_holds_a_pending_review_context():
     from probiotic_measurements import context_review_finished
     known_unfinished_sources = {
         "INGR_L_GLUTAMINE": {
-            "38193521", "35106632", "39397201", "34844156",
-            "42366260", "41053591", "38243579", "40748005",
+            "38193521", "34844156", "42366260", "41053591", "38243579",
         },
         "INGR_GLYCINE": {"37851316"},
         "INGR_MSM": set(),

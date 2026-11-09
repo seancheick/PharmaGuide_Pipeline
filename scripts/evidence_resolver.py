@@ -1306,7 +1306,9 @@ def _resolve_evidence_for_row(
         ]
         noncontributing_complete = [finished and not pending
                                    for finished, pending in zip(noncontributing_complete, unfinished_contexts)]
-        if not valid_studies:
+        # Global source eligibility cannot hide a finished exact reference
+        # when that source's preparation is excluded for this physical row.
+        if not valid_studies or all(noncontributing_complete):
             if not any(unfinished_contexts) and all(decision.get("status") == "not_applicable"
                    and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS
                    for decision in scope_decisions):
