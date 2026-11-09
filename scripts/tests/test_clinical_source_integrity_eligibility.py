@@ -1145,7 +1145,7 @@ def test_l_carnitine_finished_recovery_source_keeps_weight_and_preparation_holds
     assert not er.clinical_record_sources_eligible(record)
 
 
-def test_glycine_finished_factual_sources_do_not_complete_unread_review_or_activate_grade():
+def test_glycine_qualified_human_source_keeps_rat_and_review_transfer_exclusions():
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from clinical_evidence_schema import validate_ingredient_context
     record = reviewed_entries()["INGR_GLYCINE"]
@@ -1154,12 +1154,13 @@ def test_glycine_finished_factual_sources_do_not_complete_unread_review_or_activ
     assert validate_ingredient_context(human, require_complete_review=True) == []
     assert human["dose"]["values"] == [3000]
     assert human["dose"]["duration_days"] == 3
-    assert human["scoring_eligible"] is False
+    assert human["scoring_eligible"] is True
     assert contexts["25533534"]["scoring_eligible"] is False
-    assert contexts["37851316"]["review_status"] == "source_verified_pending_clinical_review"
-    assert record["scoring_eligible"] is False
-    assert not assess_clinical_source_review(record)["is_complete"]
-    assert not er.clinical_record_sources_eligible(record)
+    assert contexts["37851316"]["review_status"] == "rejected_source"
+    assert record["effect_direction"] == "positive_weak"
+    assert record["effect_direction_confidence"] == "low"
+    assert assess_clinical_source_review(record)["is_complete"]
+    assert er.clinical_record_sources_eligible(record)
 
 
 def test_grape_seed_source_preserves_preparation_and_analysis_distinctions():
@@ -1173,19 +1174,19 @@ def test_grape_seed_source_preserves_preparation_and_analysis_distinctions():
     assert context["scoring_eligible"] is False
 
 
-def test_plant_sterol_completed_source_extractions_preserve_unread_synthesis():
+def test_plant_sterol_capsule_synthesis_keeps_other_source_scopes_and_unread_hold():
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from clinical_evidence_schema import validate_ingredient_context
     record = reviewed_entries()["INGR_PLANT_STEROLS"]
     contexts = {pmid: c for c in record["study_contexts"]for pmid in c["source_pmids"]}
     for pmid in ["24144075", "24287284"]:
         assert validate_ingredient_context(contexts[pmid], require_complete_review=True) == []
-        assert contexts[pmid]["scoring_eligible"] is False
+        assert contexts[pmid]["scoring_eligible"] is (pmid == "24144075")
         assert "Codex" in contexts[pmid]["clinical_review"]["reviewer"]
     assert contexts["37739728"]["review_status"] == "source_verified_pending_clinical_review"
     assert "identity_scope" not in contexts["37739728"]
     assert not assess_clinical_source_review(record)["is_complete"]
-    assert not er.clinical_record_sources_eligible(record)
+    assert er.clinical_record_sources_eligible(record)
 
 
 def _betaine_with_pending_published_source(monkeypatch, record):
@@ -2070,3 +2071,172 @@ def test_hcl_pk_references_stay_noneligible_beside_the_new_primary_ph_finding():
         if not expected:
             assert context_review_finished(context)
             assert context['scoring_eligible'] is False
+def test_glycine_bounded_human_assessment_finishes_without_borrowed_review_depth():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_review_finished
+    record = reviewed_entries()['INGR_GLYCINE']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    human = contexts['22529837']
+    assert human['scoring_eligible'] is True
+    assert validate_ingredient_context(human, require_complete_review=True) == []
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['effect_direction_confidence'] == 'low'
+    assert record['study_type'] == 'rct_single'
+    assert record['published_studies_count'] == 1
+    assert 'total_enrollment' not in record and 'registry_completed_trials_count' not in record
+    assert 'min_clinical_dose' not in record
+    assert all(o['hierarchy'] == 'not_reported' for o in human['outcomes'])
+    assert {o['direction'] for o in human['outcomes']} >= {'positive', 'null'}
+    review = contexts['37851316']
+    assert review['review_status'] == 'rejected_source'
+    assert context_review_finished(review)
+    assert validate_ingredient_context(review, require_complete_review=True) == []
+    assert review['scoring_eligible'] is False
+    text = ' '.join(review['limitations'])
+    assert '22293292' in text and 'Inagawa' in text and 'unread' in text
+    assert contexts['25533534']['review_status'] == 'rejected_source'
+    assert assess_clinical_source_review(record)['is_complete']
+    assert er.clinical_record_sources_eligible(record)
+
+
+def test_plant_sterol_capsule_class_source_qualifies_without_closing_unread_review():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_PLANT_STEROLS']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    assert contexts['24144075']['scoring_eligible'] is True
+    assert validate_ingredient_context(contexts['24144075'], require_complete_review=True) == []
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['effect_direction_confidence'] == 'low'
+    assert 'total_enrollment' not in record and 'registry_completed_trials_count' not in record
+    assert record['endpoint_relevance_tags'] == ['cardiovascular']
+    assert record['key_endpoints'] == ['LDL cholesterol ↓']
+    assert 'FDA-approved' not in record['notes']
+    assert contexts['19109655']['scoring_eligible'] is False
+    assert contexts['24287284']['scoring_eligible'] is False
+    assert contexts['37739728']['review_status'] == 'source_verified_pending_clinical_review'
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
+@pytest.mark.parametrize('name,canonical,delivery,eligible', [
+    ('Plant Sterols and Plant Stanols Esters', 'phytosterols', 'Softgel', True),
+    ('Plant Sterols', 'phytosterols', 'Capsule', True),
+    ('Phytosterols', 'phytosterols', 'Tablet', True),
+    ('Plant Stanols', 'phytosterols', 'Capsule', True),
+    ('Plant Sterols', 'phytosterols', 'Powder', False),
+    ('Plant Sterols', 'phytosterols', 'Liquid', False),
+    ('Plant Sterols', 'phytosterols', '', False),
+    ('Beta-Sitosterol', 'beta_sitosterol', 'Capsule', False),
+    ('Beta-Sitosterol', 'phytosterols', 'Capsule', False),
+])
+def test_plant_sterol_class_review_uses_retained_delivery_and_mixture_identity(name, canonical, delivery, eligible):
+    from clinical_applicability import filter_clinical_matches, reviewed_entries
+    record = reviewed_entries()['INGR_PLANT_STEROLS']
+    row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
+           'canonical_id': canonical, 'mapped': True, 'quantity': 1800, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': 'Adult lipid supplement', 'physicalState': {'name': delivery},
+               'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**record, 'ingredient': name, 'matched_canonical_ids': [canonical],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    original = copy.deepcopy((product, entry))
+    matches, _ = filter_clinical_matches(product, [entry], assess_amount=False)
+    assert bool(matches) is eligible
+    if eligible:
+        assert matches[0]['applicability_assessment']['population_applicability']['context_ids'] == [
+            'ingr_plant_sterols_24144075_bounded_source_scope']
+        assert 'total_enrollment' not in matches[0]
+    assert (product, entry) == original
+
+
+@pytest.mark.parametrize('name,canonical,title,eligible', [
+    ('L-Glycine', 'l_glycine', 'Adult Glycine', True),
+    ('Glycine', 'glycine', 'Adult Glycine', True),
+    ('Glycine', 'l_glycine', "Women's Glycine", False),
+    ('Glycine', 'l_glycine', 'Kids Glycine', False),
+    ('Magnesium Glycinate', 'magnesium', 'Adult Magnesium', False),
+    ('Glycine Propionyl L-Carnitine', 'l_glycine', 'Adult Carnitine', False),
+    ('GlyNAC', 'l_glycine', 'Adult GlyNAC', False),
+])
+def test_glycine_qualified_source_preserves_population_and_free_material_boundaries(name, canonical, title, eligible):
+    from clinical_applicability import filter_clinical_matches, reviewed_entries
+    record = reviewed_entries()['INGR_GLYCINE']
+    row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
+           'canonical_id': canonical, 'mapped': True, 'quantity': 3000, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': title, 'physicalState': {'name': 'Powder'},
+               'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**record, 'ingredient': name, 'matched_canonical_ids': [canonical],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    original = copy.deepcopy((product, entry))
+    matches, _ = filter_clinical_matches(product, [entry], assess_amount=False)
+    assert bool(matches) is eligible
+    if eligible:
+        assert matches[0]['study_type'] == 'rct_single'
+        assert matches[0]['applicability_assessment']['population_applicability']['context_ids'] == [
+            'ingr_glycine_22529837_sleep_restriction_source_scope']
+        assert 'total_enrollment' not in matches[0]
+        product['evidence_data'] = {'clinical_matches': [entry]}
+        artifact = build_scored_artifact(product)
+        assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+        product.pop('evidence_data')
+    assert (product, entry) == original
+
+
+@pytest.mark.parametrize('physical,eligible', [
+    ({'langualCode': 'E0161', 'langualCodeDescription': 'Softgel Capsule'}, True),
+    ({'langualCode': 'E0159', 'langualCodeDescription': 'Capsule'}, True),
+    ({'langualCode': 'E0155', 'langualCodeDescription': 'Tablet or Pill'}, True),
+    ({'langualCode': 'E0162', 'langualCodeDescription': 'Powder'}, False),
+    ({'langualCodeDescription': 'Unknown'}, False),
+    ({}, False),
+])
+def test_clinical_source_delivery_reads_retained_dsld_description(physical, eligible):
+    from clinical_applicability import filter_clinical_matches, reviewed_entries
+    row = {'name': 'Plant Sterols', 'raw_source_text': 'Plant Sterols',
+           'source_label_name': 'Plant Sterols', 'canonical_id': 'phytosterols',
+           'mapped': True, 'quantity': 1800, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': 'Adult lipid supplement', 'physicalState': physical,
+               'form_factor_canonical': 'softgel',  # A stale guess must not override retained powder/unknown.
+               'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**reviewed_entries()['INGR_PLANT_STEROLS'], 'ingredient': 'Plant Sterols',
+             'matched_canonical_ids': ['phytosterols'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    original = copy.deepcopy((product, entry))
+    matches, _ = filter_clinical_matches(product, [entry], assess_amount=False)
+    assert bool(matches) is eligible
+    assert (product, entry) == original
+
+
+@pytest.mark.parametrize('canonical,name,amount', [
+    ('hyaluronic_acid', 'Hyaluronic Acid', 150),
+    ('american_ginseng', 'American Ginseng', 1100),
+])
+def test_known_capsule_with_unestablished_preparation_is_not_a_completed_delivery_exclusion(canonical, name, amount):
+    row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
+           'canonical_id': canonical, 'mapped': True, 'quantity': amount, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': name, 'physicalState': {'langualCodeDescription': 'Capsule'},
+               'form_factor_canonical': 'capsule', 'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    original = copy.deepcopy((row, product))
+    resolution = er.resolve_evidence_for_row(row, product=product)
+    assert resolution.points_eligible is False
+    assert resolution.reason_code != 'clinical_delivery_mismatch'
+    assert resolution.applicability_status == 'applicability_unestablished'
+    assert (row, product) == original
+
+
+def test_sterol_source_limitations_keep_full_verifiable_identifiers():
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()['INGR_PLANT_STEROLS']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    pooled = ' '.join(contexts['24144075']['limitations'])
+    exact = ' '.join(contexts['24287284']['limitations'])
+    assert 'PMID 24287284' in pooled and 'PMID 37739728' in pooled
+    assert 'PMID 24144075' in exact
+    assert 'Exact242preparation' not in pooled and 'unread377 source' not in pooled
+    assert 'qualified241capsule' not in exact

@@ -18795,21 +18795,20 @@
       "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
-        "RCT",
-        "crossover"
+        "22529837",
+        "25533534",
+        "37851316"
       ],
       "score_contribution": "tier_2",
       "key_endpoints": [
-        "In a small human sleep-restriction study, 3 g glycine before bedtime for three nights reduced subjective next-day fatigue and improved psychomotor vigilance; sleepiness findings varied by measure (PMID: 22529837).",
-        "A systematic review describes small human sleep studies with high risk of bias; a general clinical sleep benefit is not established by this bounded source review (PMID: 37851316)."
+        "Day-1 subjective fatigue during experimental partial sleep restriction; day-3 subjective findings null.",
+        "Psychomotor-vigilance reaction time: treatment p=.003 on day1 and printed p=.05 on day3; planned unranked surrogate, not an established insomnia endpoint."
       ],
-      "health_goals_supported": [
-        "Sleep Quality"
-      ],
-      "notes": "Human evidence for bedtime glycine is limited by small samples and risk of bias. The sleep-restriction study assessed next-day fatigue, sleepiness and performance. The cited sleep-promoting, sleep-latency and hypothermia mechanism study was conducted in rats and cannot establish those outcomes in humans.",
+      "health_goals_supported": [],
+      "notes": "Limited human evidence concerns next-day function during three nights of experimental sleep restriction, not treatment of diagnosed insomnia. Source22529837 analyzed seven healthy adult men; positive, null and mixed outcomes remain explicit. Animal mechanisms and the heterogeneous descriptive review do not supply independent human efficacy or replication. No generic safety or Dose benchmark follows.",
       "study_type": "rct_single",
-      "last_updated": "2026-10-23",
-      "notable_studies": "PMID 22529837 studied 3 g glycine before bedtime during three nights of restricted sleep in healthy volunteers and also reported separate animal mechanistic work. PMID 25533534 studied sleep-promoting and hypothermic mechanisms in rats; it is retained for mechanism context only and excluded from affirmative human clinical scoring. PMID 37851316 reviewed human glycine studies and identified small samples and high risk of bias in the healthy-population sleep evidence.",
+      "last_updated": "2026-11-09",
+      "notable_studies": "PMID22529837: 3g oral flavoured glycine before bedtime during three nights of partial sleep restriction; day-1 fatigue and PVT findings qualify narrowly. PMID25533534 is rat mechanism evidence only. PMID37851316 descriptively reviews heterogeneous adult studies and identifies small, high-risk-of-bias sleep research; its generic independent-efficacy/depth transfer is excluded. Yamadera2007 full primary DOI10.1111/j.1479-8425.2007.00262.x provides limited qualitative sleep findings, without invented PMID/native trial credit. Inagawa2006 DOI10.1111/j.1479-8425.2006.00193.x primary Methods remain unread and individually unqualified.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -18894,22 +18893,22 @@
           "evidence_grade": "systematic_review",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "note": "Completed bounded exclusion from independent generic sleep/geroprotection efficacy and clinical depth. Small positive primary findings remain; this is not a finding of human inefficacy or invalid research. Actual Table1 reference47 mismatch and separately unqualified Inagawa primary retained in context."
         }
       ],
       "external_ids": {
         "unii": "TE7660XO1C"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Sleep Quality",
-      "total_enrollment": 948,
-      "registry_completed_trials_count": 145,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "The stored positive_strong grade has not been re-established by this factual correction. Human sleep evidence is small and at high risk of bias; PMID 25533534 is animal mechanism evidence. Existing score eligibility is held pending source-specific human efficacy and applicability adjudication; this note is not a replacement clinical grade.",
+      "effect_direction": "positive_weak",
+      "primary_outcome": "Focus & Mental Clarity",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Limited source-qualified acute sleep-restriction findings from one small randomized crossover in healthy adult men: day-1 subjective fatigue and unranked psychomotor-vigilance reaction time improved; day-3 subjective fatigue and other measures were null or mixed. Weak positive interpretation with low confidence reflects seven analyzed men, short duration, single blinding, attrition and multiple outcomes; not treatment of insomnia or general sleep-quality efficacy. No review, animal or unqualified constituent adds independent depth.",
       "endpoint_relevance_tags": [
         "sleep"
       ],
-      "scoring_eligible": false,
+      "scoring_eligible": true,
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -18940,12 +18939,12 @@
           "trial_family": "glycine_22529837_sleep_restriction",
           "comparator": "Flavoured reduced malt-sugar placebo",
           "review_status": "clinician_approved",
-          "scoring_eligible": false,
+          "scoring_eligible": true,
           "clinical_review": {
-            "reviewer": "Codex glycine source reviewer",
-            "reviewed_at": "2026-11-06",
+            "reviewer": "Codex /root primary-content and existing-rubric review; source double-check /root/tyrosine_sources and independent /root/parallel_scientific_check. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Factual source review by Codex glycine source reviewer, independently checked by Codex /root/elderberry_review on 2026-11-06 against live source content. Agent review, not physician review. Human primary Methods/Tables 1-2 and review Table 1/reference discrepancies independently checked. Nonhuman exclusion independently supported by live abstract/figures; independent access to full animal Methods was blocked, so no full-Methods double-check is claimed. Existing parent grade and scoring-eligibility hold remain unchanged; no new numerical benchmark or efficacy activation."
+            "basis": "Actual full primary Methods/Results/Tables1–2 read and live identity/content verified. Planned unranked PVT and day-1 fatigue findings qualify narrowly as positive_weak/low under existing policy, with day-3 subjective null, printed PVT p=.05, single blinding, attrition and seven healthy adult men retained. No general insomnia, chronic sleep benefit, animal mechanism, enrollment aggregation or Dose benchmark."
           },
           "dose": {
             "measurement_type": "mass",
@@ -19002,7 +19001,7 @@
             "Single blinding, attrition/exclusions, multiple outcomes and no established prespecified outcome hierarchy; systematic review 37851316 judges the healthy-population sleep evidence high risk of bias.",
             "Day 1 fatigue p=0.022; VAS sleepiness p=0.098 and fatigue questionnaire total p=0.080. Psychomotor-vigilance reaction time treatment p=0.003 on day 1 and printed p=0.05 on day 3. Preserve the borderline printed value.",
             "Animal melatonin/SCN findings elsewhere in this publication are not human sleep, mechanistic or safety proof.",
-            "No conclusion about chronic insomnia, women, children, pregnancy, disease treatment, glycine bound in chelates or formula equivalence. This completed bounded source description retains observed positive and nonsignificant findings; it does not resolve the parent positive_strong grade or source-specific efficacy/applicability hold.",
+            "No conclusion about chronic insomnia, women, children, pregnancy, disease treatment, glycine bound in chelates or formula equivalence. The completed limited positive_weak/low assessment retains observed positive and nonsignificant findings under the source-specific scope.",
             "Participants were Ajinomoto employees; three authors have Ajinomoto research-lab affiliations and two have University of Miyazaki affiliations. The paper declares no potential commercial/financial conflict. This is one seven-analyzed-participant crossover trial, not multiple independent treatment arms or a general nutritional-authority assessment. The separate rat part of this article grants no human mechanistic or safety claim."
           ]
         },
@@ -19045,28 +19044,59 @@
           "source_pmids": [
             "37851316"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex glycine source inventory; remaining source-specific applicability review pending",
-            "reviewed_at": "2026-11-06",
+            "reviewer": "Codex /root full-content review; independent source check /root/tyrosine_sources and separate /root/parallel_scientific_check. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Factual source review by Codex glycine source reviewer, independently checked by Codex /root/elderberry_review on 2026-11-06 against live source content. Agent review, not physician review. Human primary Methods/Tables 1-2 and review Table 1/reference discrepancies independently checked. Nonhuman exclusion independently supported by live abstract/figures; independent access to full animal Methods was blocked, so no full-Methods double-check is claimed. Existing parent grade and scoring-eligibility hold remain unchanged; no new numerical benchmark or efficacy activation."
+            "basis": "Independent full primary-content review of official PMC10828290 Methods, Results, Table1, sleep discussion, risk-of-bias, limitations and references47/51/53; agent review, not physician review. Completed bounded rejection of transfer from this descriptive heterogeneous review to independent generic clinical sleep/geroprotection efficacy or depth credit. Not a finding of human inefficacy, invalid research, or individual qualification of all50studies. Independent second check completed November9; source-specific noncredit transfer decision under existing policy, not a universal rule excluding descriptive reviews."
           },
           "dose": {
             "source_provenance": {
               "pmid": "37851316",
               "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10828290/",
-              "location": "Full review Table 1, sleep/nervous-system subsection, risk-of-bias and limitations; references 47, 51, 53. Exact included-primary sleep-source mapping remains unresolved."
+              "location": "Methods eligibility/data analysis; Results Table1 and nervous-system/sleep subsection; risk of bias; Discussion limitations; references47,51,53."
             }
           },
           "limitations": [
-            "The review reports small high-risk-of-bias sleep studies. Its Table 1 Bannai 2012 row resembles the 10-men restricted-sleep protocol, but reference 47 is PMID 22293292/DOI 10.1254/jphs.11r04fm, a narrative review, not PMID 22529837. Do not invent explicit 22529837 inclusion or treat the review and trial as independent replication.",
-            "Yamadera 2007 and Inagawa 2006 are retained under the exact cited DOIs 10.1111/j.1479-8425.2007.00262.x and 10.1111/j.1479-8425.2006.00193.x. Their primary methods/preparation/population applicability has not been independently qualified in this packet; no PMID or positive-eligibility assumption is invented.",
-            "This broad 50-study review spans different populations, conditions, delivery routes and exposures. Unread or unresolved primary-source questions cannot become blanket no-credit or a generic sleep-benefit determination. Existing parent-grade and applicability hold remains."
+            "This descriptive review performs no meta-analysis; it mixes pre/post and controlled significance and classifies a system positive when any measured outcome is significant. Across50studies, populations, routes, diseases and exposures differ. It is not an independently randomized trial, pooled sleep estimate, enrollment source or general geroprotection efficacy demonstration.",
+            "Small high-risk-of-bias sleep studies include promising source-specific findings that remain retained; the review does not establish generic sleep efficacy and its exclusion from independent generic clinical depth does not assert a human null. Verified22529837 and Yamadera2007 positive and null findings remain source-specific.",
+            "Table1 Bannai2012 row resembles10-men sleep-restriction study, but reference47 is narrative22293292/DOI10.1254/jphs.11r04fm, not22529837. Do not silently replace the reference or count independent replication.",
+            "Yamadera2007 DOI10.1111/j.1479-8425.2007.00262.x actual full publisher Methods/Results reviewed;11participants, singleblind short crossover, selected unranked sleep improvements and nulls. No invented PMID, added enrollment, independent cohort or direct native-context activation. Inagawa2006 DOI10.1111/j.1479-8425.2006.00193.x primary abstract/identity verified but full Methods/Results unread; it remains individually unqualified, with actual denominator and complete outcomes unresolved.",
+            "Bounded source-transfer assessment only: no claim every cited primary has been individually qualified. Separate rat mechanisms and combined compounds do not grant human oral glycine sleep efficacy, safety or product equivalence. No numerical Dosebenchmark is derived."
           ]
         }
-      ]
+      ],
+      "published_studies_count": 1,
+      "applicability": {
+        "scope": "ingredient",
+        "source_pmids": [
+          "22529837"
+        ],
+        "required_form_terms": [
+          "glycine",
+          "l-glycine",
+          "aminoacetic acid"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "glycinate",
+          "glycine chelate",
+          "dimethylglycine",
+          "trimethylglycine",
+          "glycine propionyl",
+          "glycyl",
+          "GlyNAC",
+          "collagen"
+        ],
+        "supported_outcomes": [
+          "acute_partial_sleep_restriction"
+        ],
+        "studied_population": "Healthy adult men without sleep disorders under short experimental sleep restriction; source-specific boundaries retained.",
+        "reviewed_at": "2026-11-09",
+        "reason": "Free oral glycine research only; qualified next-day fatigue/PVT scope under acute partial sleep restriction. No general sleep-quality, insomnia, chronic use, female/pediatric population, chelate/protein/combination equivalence, generic Dose minimum or safety conclusion."
+      }
     },
     {
       "id": "INGR_TART_CHERRY",
@@ -19954,16 +19984,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "LDL cholesterol ↓",
-        "total cholesterol ↓"
+        "LDL cholesterol ↓"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health"
       ],
-      "notes": "FDA-approved heart health claim; extensive evidence for cholesterol reduction.",
+      "notes": "Limited short-term capsule/tablet research supports LDL lowering for studied plant sterol/stanol preparations. This does not establish cardiovascular-event prevention, efficacy of every retail formulation or FDA approval of a supplement. Food-only evidence cannot qualify capsule research; the distinct capsule/tablet synthesis supplies that source prerequisite.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-11-06",
-      "notable_studies": "Abumweis et al. (2008, PMID 19109655) meta-analysis of 59 RCTs found plant sterols/stanols lowered LDL-C by about 8.8%, with benefit continuing up to roughly 3 g/day. Scholle et al. (2016) later reported additional LDL-C lowering in statin-treated patients.",
+      "last_updated": "2026-11-09",
+      "notable_studies": "PMID24144075 pools eight capsule/tablet publications with nine strata; preparation-specific results vary and one formulation was null. PMID24287284 is a separate source-specific esterified Reducol softgel primary, retained noncredit pending exact preparation/strength qualification; it is not additional class replication. PMID19109655 food-carrier synthesis remains noncredit for supplement transfer. Actual37739728 full Methods/Results/included tables remain unread and pending; no inferred ten-study membership.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -20039,15 +20068,12 @@
           "verification_source": "europe_pmc_core_and_independent_pubmed_primary_content_review"
         }
       ],
-      "effect_direction": "positive_strong",
+      "effect_direction": "positive_weak",
       "primary_outcome": "Cardiovascular/Heart Health",
-      "total_enrollment": 242,
-      "registry_completed_trials_count": 6,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT,meta-analysis; registry_completed_trials_count=6; total_enrollment=242; endpoint_tags=cardiovascular,glycemic_control; notes/citations contain no automated downgrade signals.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Limited positive primary LDL surrogate result from capsule/tablet synthesis24144075: published pooled difference−0.31mmol/L, Results95%CI−0.39to−0.24, I2=0%. Weak positive/low confidence conservatively reflects short4–6week heterogeneous preparations and one null formulation; no cardiovascular-event benefit, universal product equivalence or Dose benchmark. Food-only studies, exact Reducol primary and unread37739728 do not add qualified independent depth here.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "glycemic_control"
+        "cardiovascular"
       ],
       "study_contexts": [
         {
@@ -20230,12 +20256,12 @@
           "human_status": "confirmed",
           "source_integrity": "none",
           "review_status": "clinician_approved",
-          "scoring_eligible": false,
+          "scoring_eligible": true,
           "clinical_review": {
-            "reviewer": "Codex source reviewer /root/elderberry_review; independent content check /root/glycine_review",
-            "reviewed_at": "2026-11-06",
+            "reviewer": "Codex /root actual source-content/applicability review; independent /root/parallel_scientific_check. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Completed factual noncredit source review under existing policy after live identity and actual full Methods/Results/Tables checks, independently double-checked on 2026-11-06. Agent review, not physician review. Preparation mixtures, source-specific dose/exposure limits and trial overlap remain explicit; parent clinical/grade/Dose/safety decisions are unchanged."
+            "basis": "Actual full Methods, Results, Tables1–2 and eight exact included-source identifiers checked. Published primary LDL pool qualifies limited plant sterol/stanol capsule/tablet class research under existing policy, with preparation variability and null Ottestad retained. No universal formulation identity/COA requirement, named Reducol prerequisite for this broader pool, inherited strong grade/enrollment, extra independent replication, event benefit, generic Dose benchmark or safety conclusion."
           },
           "trial_family": "plant_sterol_24144075_capsule_tablet_synthesis",
           "population": {
@@ -20279,7 +20305,7 @@
             "Table2:Carr3g explicitly as ester despite free-dose header; do not infer standardized active-dose benchmark.",
             "Eight included publications are not nine independent trials; bibliographic membership is not per-primary methods approval.",
             "Jones disclosed sterol-industry research/consulting and company ownership; no funding reported.",
-            "No cardiovascular-event or glycemic benefit established here. Existing food-only source exclusion and parent clinical/preparation hold remain."
+            "No cardiovascular-event or glycemic benefit established here. Food-only source exclusion remains; this separate supplement-class source qualifies only within the retained capsule/tablet mixture-identity scope. The exact preparation obligation for PMID 24287284 and unread source PMID 37739728 remain separate."
           ],
           "included_study_pmids": [
             "15969949",
@@ -20375,7 +20401,7 @@
             "Four capsules/day,two with each main meal:1.8g sterol/stanol moiety supplied as approximately2.9g ester; factual regimen only,not a generic Dose benchmark.",
             "No washout; sequence interaction assessed. Other exclusion criteria refer to earlier trial,not fully reproduced in this paper.",
             "Manufacturer-funded;authors manufacturer employees or funded contractors. Independent cohort is not sponsor-independent replication.",
-            "Short-term lipid endpoints; no cardiovascular-event prevention established. Parent clinical/preparation hold retained."
+            "Short-term lipid endpoints; no cardiovascular-event prevention established. This exact-source context remains noncredit pending source-bound named preparation/strength qualification; the separately qualified capsule/tablet class in PMID 24144075 does not activate this primary or add its enrollment."
           ]
         },
         {
@@ -20390,10 +20416,10 @@
           "review_status": "source_verified_pending_clinical_review",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex agent /root/elderberry_review (source research; not clinician review); independent check pending",
-            "reviewed_at": "2026-11-06",
+            "reviewer": "Codex /root source-access/content review; independent /root/mct_pomegranate_sources. Agent review, not clinician review; full source review remains pending.",
+            "reviewed_at": "2026-11-09",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Source identity and abstract content verified; full Methods, included-trial preparations, outcomes and independent trial families remain unqualified. This source-only pending context asserts no regimen/population/outcome, grants no points, and keeps review unfinished."
+            "basis": "Exact live PMID/DOI/abstract verified. Actual full Methods/Results/included tables remain unretrieved after official publisher, TDM, institutional and author-linked routes; metadata/preview is not full content. No inferred ten-study membership, preparation, population, regimen, independence or completed review."
           },
           "limitations": [
             "Abstract reports10includedarticles; exact preparations,trial-family overlap and full risk-of-bias methods remain unverified. Do not count reviews and their primaries as independent replication."
@@ -20402,11 +20428,46 @@
             "source_provenance": {
               "pmid": "37739728",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/37739728/",
-              "location": "Live abstract only; fullbody unavailable"
+              "location": "Live identity and abstract verified November9; actual full Methods/Results/included tables not retrieved. Publisher/TDM/author-linked access diagnostics retained; lack of retrieval is not proof unavailable."
             }
           }
         }
-      ]
+      ],
+      "published_studies_count": 1,
+      "applicability": {
+        "scope": "ingredient",
+        "source_pmids": [
+          "24144075"
+        ],
+        "required_form_terms": [
+          "plant sterols",
+          "plant stanols",
+          "plant sterol",
+          "plant stanol",
+          "phytosterols",
+          "phytosterol"
+        ],
+        "require_source_label_form": true,
+        "dosage_forms": [
+          "capsule",
+          "softgel",
+          "tablet"
+        ],
+        "excluded_canonical_ids": [
+          "beta_sitosterol"
+        ],
+        "excluded_claim_terms": [
+          "prostate",
+          "benign prostatic hyperplasia",
+          "BPH"
+        ],
+        "supported_outcomes": [
+          "elevated_ldl_cholesterol"
+        ],
+        "studied_population": "Adults in source-specific capsule/tablet LDL trials; no child, sitosterolemia or cardiovascular-event inference.",
+        "reviewed_at": "2026-11-09",
+        "reason": "Limited capsule/tablet plant sterol/stanol class LDL Evidence from24144075, not isolated beta-sitosterol, generic powders, fortified foods, prostate benefits or guaranteed equivalence of every formulation. No Dose benchmark or safety determination."
+      }
     },
     {
       "id": "INGR_RED_YEAST_RICE",

@@ -1419,7 +1419,7 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
             alignment["excluded_terms"] = list(dict.fromkeys(excluded_terms))
     physical = product.get("physicalState") or {}
     if isinstance(physical, Mapping):
-        physical = physical.get("name")
+        physical = physical.get("name") or physical.get("langualCodeDescription")
     dosage_form = _key(product.get("form_factor_canonical") or product.get("form_factor") or physical)
     allowed = {_key(f) for f in policy.get("dosage_forms") or []}
 
