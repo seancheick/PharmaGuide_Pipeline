@@ -8,9 +8,11 @@ at 6 g/day (PMID 16309928, 3 g twice daily) and 2 g/day (PMID 37447322, ten
 500 mg MSM/day at minimum use and read Evidence 15.6/20 "evaluated_applicable"
 after MSM became title-named (review, 2026-09-29).
 
-The returned A015/A093 decisions accept one exact OptiMSM mild-knee-pain
-trial, not every generic MSM preparation. The 2 g and historical 6 g amounts
-remain discrete source facts, not a continuous efficacy range or minimum.
+The returned A015/A093 finding retains one mild-knee-pain trial. Independent
+source qualification confirms ordinary oral MSM chemical identity without
+transferring branded manufacturing or purity credit. Altered preparations stay
+outside that scope. The 2 g and historical 6 g amounts remain discrete source
+facts, not a continuous efficacy range or minimum.
 General Dose uses the separately accepted neutral policy.
 """
 import json
@@ -34,10 +36,18 @@ def test_optimsm_is_the_brand_only_and_msm_is_ingredient_level():
     assert {"msm", "methylsulfonylmethane"} <= set(msm["aliases"])
     for entry in (msm, entries["BRAND_OPTIMSM"]):
         assert (entry["min_clinical_dose"], entry["max_studied_clinical_dose"], entry["dose_unit"]) == (2000, 6000, "mg")
-        assert {r["pmid"] for r in entry["references_structured"]} == {"16309928", "37447322"}
+        assert entry['study_type'] == 'rct_single'
+        assert entry['applicability']['source_pmids'] == ['37447322']
+        assert entry['applicability']['minimum_daily_dose'] == 2000
+        assert entry['applicability']['maximum_daily_dose'] == 2000
+    assert {r['pmid'] for r in entries['BRAND_OPTIMSM']['references_structured']} == {'16309928', '37447322'}
+    assert {r['pmid'] for r in msm['references_structured']} == {
+        '16309928', '37447322', '21708034', '17516722'}
+    assert {p for c in msm['study_contexts'] if c['scoring_eligible']
+            for p in c['source_pmids']} == {'37447322'}
 
 
-def test_generic_msm_cannot_inherit_the_exact_optimsm_trial():
+def test_generic_msm_research_keeps_brand_and_general_dose_credit_separate():
     from enhanced_normalizer import EnhancedDSLDNormalizer
     from enrich_supplements_v3 import SupplementEnricherV3
     from scoring_v4.scored_artifact import build_scored_artifact
@@ -46,10 +56,19 @@ def test_generic_msm_cannot_inherit_the_exact_optimsm_trial():
     raw = json.loads((FIXTURES / "title_short_name_182940_raw.json").read_text())
     enriched, _ = SupplementEnricherV3().enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
     matches = {m.get("id") for m in (enriched.get("evidence_data") or {}).get("clinical_matches") or []}
-    assert "INGR_MSM" not in matches and "BRAND_OPTIMSM" not in matches
+    assert "INGR_MSM" in matches and "BRAND_OPTIMSM" not in matches
     artifact = build_scored_artifact(enriched)
     evidence = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]
     dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
+    assert artifact['quality_assessment_status'] == 'partial'
+    assert 'evidence_assessment_incomplete' in artifact['assessment_readiness']['release_assessment']['blockers']
+    from clinical_applicability import assess_clinical_source_review
+    assert not assess_clinical_source_review(_entries()['INGR_MSM'])['is_complete']
+    # Discovery is separate from the native module's selected numerical path;
+    # an unfinished ingredient review remains a hold even if it earned no points.
+    subject = next(r for r in artifact['assessment_readiness']['evidence']['ingredient_assessments']
+                   if r['canonical_id'] == 'msm')
+    assert subject['state'] == 'not_yet_evaluated'
     assert "SUB_CLINICAL_DOSE_DETECTED" not in json.dumps(evidence)
     msm = next(
         item for item in dose["metadata"]["specialized_purpose_assessments"]

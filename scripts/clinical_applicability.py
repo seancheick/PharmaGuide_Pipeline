@@ -1164,9 +1164,15 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     # Derive design from the contexts that actually qualified, including when
     # a held synthesis was removed before this function received the contexts.
     if all(context.get("evidence_role") == "direct_rct" for context, _ in qualifying):
-        families = {context.get("trial_family") or context.get("context_id") for context, _ in qualifying}
+        families = _context_trial_families(context for context, _ in qualifying)
         components["qualifying_study_type"] = "rct_single" if len(families) == 1 else "rct_multiple"
     return components
+
+
+def _context_trial_families(contexts) -> frozenset[str]:
+    """Reuse the curated independent-family identity, not publication counts."""
+    return frozenset(str(context.get("trial_family") or context["context_id"])
+                     for context in contexts)
 
 
 def _study_read_and_verified(study: Mapping) -> bool:

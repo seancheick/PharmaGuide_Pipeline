@@ -224,6 +224,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     contributing_entries = {}
     floor_receipt = {}
     ingredient_points: Dict[str, float] = defaultdict(float)
+    family_contributions = {}
+    contributing_families = {}
     matched_entry_ids: set[str] = set()
     scoped_matches: List[Dict[str, Any]] = []
     scoped_recovered_matches: List[Dict[str, Any]] = []
@@ -270,9 +272,26 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             else _canonical_from_entry(entry)
         )
         if canonical:
-            ingredient_points[canonical] += raw
+            families = _qualified_trial_families(entry) if raw > 0 else frozenset()
+            identities = tuple(sorted(_matched_canonical_ids(entry))) or (canonical,)
+            family_key = (identities, families) if families else None
+            prior = family_contributions.get(family_key) if family_key else None
+            if prior is None:
+                ingredient_points[canonical] += raw
+                if family_key:
+                    family_contributions[family_key] = (raw, canonical, entry_id)
+            elif raw > prior[0] or (raw == prior[0] and entry_id < prior[2]):
+                ingredient_points[prior[1]] -= prior[0]
+                if ingredient_points[prior[1]] == 0:
+                    del ingredient_points[prior[1]]
+                ingredient_points[canonical] += raw
+                family_contributions[family_key] = (raw, canonical, entry_id)
+            # Duplicate numerical witnesses still carry real source-review
+            # obligations. Do not make their unfinished reviews disappear.
             if raw > 0:
                 contributing_entries[entry_id] = (canonical, entry)
+                if family_key:
+                    contributing_families[entry_id] = family_key
 
     capped_scores = sorted(
         (min(CAP_PER_INGREDIENT, pts) for pts in ingredient_points.values()),
@@ -382,6 +401,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                             if canonical in top_canonicals]
             if depth_bonus > 0 and scoped_matches:
                 dependencies.append(max(scoped_matches, key=lambda entry: _published_study_count(entry) or 0))
+    dependency_families = {contributing_families[_entry_id(entry)] for entry in dependencies
+                           if _entry_id(entry) in contributing_families}
+    dependencies.extend(entry for entry_id, (_, entry) in contributing_entries.items()
+                        if contributing_families.get(entry_id) in dependency_families)
     from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review, reviewed_entries
     receipts = []
     for entry in {_entry_id(entry): entry for entry in dependencies}.values():
@@ -1836,6 +1859,19 @@ def _effect_direction_assessment(entry: Dict[str, Any]) -> dict:
         return {"multiplier": EFFECT_DIRECTION_MULTIPLIERS.get(policy["multiplier_key"], 0.0),
                 "source_pmids": policy["source_pmids"]}
     return ordinary
+
+
+def _qualified_trial_families(entry: Dict[str, Any]) -> frozenset[str]:
+    from clinical_applicability import _context_trial_families, reviewed_entries
+    ids = {value for value in _safe_list(_safe_dict(_safe_dict(
+        entry.get("applicability_assessment")).get("population_applicability")).get("context_ids"))
+           if isinstance(value, str)}
+    if not ids:
+        return frozenset()
+    reference = reviewed_entries().get(_clinical_source_id(entry), {})
+    return _context_trial_families(context for context in reference.get("study_contexts") or []
+                                   if isinstance(context, dict) and context.get("context_id") in ids
+                                   and context.get("scoring_eligible") is True)
 
 
 def _entry_raw_points(entry: Dict[str, Any]) -> float:

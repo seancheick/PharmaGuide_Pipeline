@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-07",
+    "last_updated": "2026-11-08",
     "total_entries": 845,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
@@ -4088,10 +4088,10 @@
       "effect_direction": null,
       "population_context": "Healthy adults studied with inulin-type fructans; not every prebiotic carbohydrate family.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Human research is present for inulin/FOS. Preparation-specific clinical applicability must be established; inulin evidence must not be transferred to XOS, GOS, unspecified prebiotic or phage preparations. Positive microbial findings are surrogate outcomes.",
+      "applicability_decision": "Human research is present for inulin/FOS, including heterogeneous positive and null findings. PMID 34555168 is a qualitative healthy-adult review; PMID 38309832 reports small low/very-low-certainty lipid and body-weight findings but null fasting-glucose and many secondary findings across heterogeneous preparations and populations. Exact preparation/population and synbiotic/co-intervention applicability remain unestablished; no generic credit transfers to XOS, GOS, unspecified prebiotic or phage preparations. The exact Orafti GR primary bowel-frequency finding in PMID 27492975 is one RCT family, not a generic prebiotic meta-analysis.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "manual_primary_source_content_review",
+        "verified_by": "manual_primary_source_content_review; November 8, 2026 full primary main-article content/API review by Codex research agent, independently checked by Codex /root; prior source-hash receipts preserved. Agent review, not clinician approval; source-specific preparation and independent holds remain open.",
         "verified_at": "2026-10-04",
         "all_pmids_verified": true,
         "retractions_found": false
@@ -10466,9 +10466,9 @@
           "title": "Effect of consumption of chicory inulin on bowel function in healthy subjects with constipation: a randomized, double-blind, placebo-controlled trial.",
           "study_type": "randomized_controlled_trial",
           "sample_size": 44,
-          "dose": "12 g/day chicory native inulin",
-          "duration": "4 weeks",
-          "outcome": "Orafti Inulin 12 g/day for four weeks increased stool frequency versus placebo in adults with constipation; raw chicory-root equivalence is not established.",
+          "dose": "12 g/day Orafti GR Inulin from chicory, in three 4 g sachets",
+          "duration": "Four weeks per intervention period in a randomized crossover study",
+          "outcome": "54 adults were enrolled/randomized and 44 were analyzed per protocol. Orafti GR Inulin 12 g/day increased primary weekly stool frequency versus maltodextrin placebo (median 4 versus 3, p = .038). Stool consistency (p = .1808) and satisfaction (p = .059) were not significantly different; gas passage increased (p < .001). No raw chicory-root or lower-dose equivalence is established.",
           "effect_direction": "positive_weak",
           "verification_provenance": {
             "pmid_verified": true,
@@ -10483,17 +10483,17 @@
         }
       ],
       "effect_direction": null,
-      "population_context": "Adults with constipation in the Orafti Inulin trial.",
+      "population_context": "Otherwise healthy adults aged 20–75 with 2–3 stools/week for at least six months; 54 enrolled/randomized and 44 per-protocol analyzed in the exact Orafti GR Inulin trial.",
       "studied_dose_exposure": {
         "values": [
           12000
         ],
         "unit": "mg"
       },
-      "applicability_decision": "PMID27492975 tested Orafti chicory inulin12g/day for4weeks, with increased stool frequency versus placebo. This does not establish5g/day efficacy or equivalence to raw chicory root. Preparation applicability remains unestablished without explicit reviewed inulin preparation.",
+      "applicability_decision": "PMID 27492975 supports a narrow primary stool-frequency finding for Orafti GR Inulin 12 g/day for four weeks in otherwise healthy adults with constipation. General preparation applicability remains unestablished: no equivalent effect for raw chicory root, 5 g/day or other inulin formulations is inferred. Retrospectively registered NCT02548247 and companion PMID 28213610 describe the same trial family, not independent replications.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "manual_primary_source_content_review",
+        "verified_by": "manual_primary_source_content_review; November 8, 2026 full primary main-article content/API review by Codex research agent, independently checked by Codex /root; prior source-hash receipts preserved. Agent review, not clinician approval; source-specific preparation and independent holds remain open.",
         "verified_at": "2026-10-04",
         "all_pmids_verified": true,
         "retractions_found": false,
@@ -10527,7 +10527,7 @@
         "supported_outcomes": [
           "digestive"
         ],
-        "studied_population": "Adults with constipation; Orafti chicory inulin trial, not raw botanical root.",
+        "studied_population": "Otherwise healthy adults aged 20–75 with 2–3 stools/week; exact Orafti GR chicory inulin preparation, not raw botanical root.",
         "source_pmids": [
           "27492975"
         ],
