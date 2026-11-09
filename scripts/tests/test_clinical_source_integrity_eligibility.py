@@ -1570,3 +1570,18 @@ def test_creapure_reference_cannot_hide_unfinished_or_invalid_source(monkeypatch
     product = _creapure_scoring_product()
     assert 'clinical_sources_ineligible' in resolve_evidence_for_row(
         product['activeIngredients'][0], product).blocking_reasons
+
+
+def test_msm_recovered_175_methods_preserve_positive_findings_and_reporting_hold():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_MSM']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['17516722'])
+    assert context['review_status'] == 'source_verified_pending_clinical_review'
+    assert context['scoring_eligible'] is False
+    assert 'full primary' in context['dose']['source_provenance']['location'].lower()
+    text = ' '.join(context['limitations'])
+    assert 'principal' in text and 'unreported' in text
+    assert 'positive' in text and 'placebo' in text
+    assert '30' in text and '28' in text
+    assert 'unread' not in text.lower()
+    assert not assess_clinical_source_review(record)['is_complete']

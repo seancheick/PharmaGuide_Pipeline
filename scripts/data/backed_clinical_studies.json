@@ -7105,18 +7105,21 @@
           "dose": {
             "source_provenance": {
               "pmid": "17516722",
-              "source_url": "https://pubmed.ncbi.nlm.nih.gov/17516722/",
-              "location": "Live MED record and Springer primary abstract only; the publisher endpoint returned a subscription preview rather than full Methods."
+              "source_url": "https://assospharma.com/pdf/qr/kondromin/12-Usha2004.pdf",
+              "location": "Full primary journal PDF, pages 355-359: Methods, statistical analysis, participant flow, Results and Figures 1-4; live MED identity and DOI checked. Numerical outcome-hierarchy/reporting qualification remains pending."
             }
           },
           "limitations": [
-            "Full Methods, exact preparation, arm-level participant flow, outcome hierarchy and comparison qualification remain unread. The standalone MSM arm is genuine; no absence-of-research or null-effect conclusion follows."
+            "Full primary content is independently checked. The trial randomized 118 overall: 30 to standalone MSM, 30 glucosamine, 30 combination and 28 placebo. The isolated MSM/placebo comparison has 58 assigned participants, not 118; reported losses were 3/3/2/4 with ITT/LOCF analysis.",
+            "Standalone Healers-supplied MSM was 500 mg three times daily for 12 weeks. This is not the accepted 2 g/day OptiMSM regimen, a general Dose minimum or proof of manufacturing/preparation equivalence.",
+            "The principal composite responder analysis is specified, but responder counts and its Fisher comparison are unreported. The paper also lists main measures and reports positive placebo-controlled walking/joint-mobility findings. Their hierarchy/reporting qualification remains unresolved; do not erase positive research or manufacture a completed-zero conclusion.",
+            "Printed VAS and Lequesne changes are largely within-arm; do not invent isolated between-arm p-values. Figure 2 shows an MSM swelling endpoint near 0.75 while the text reports 0.39. Preserve that discrepancy rather than select the favorable value. Short trial tolerability does not establish general safety."
           ],
           "clinical_review": {
             "reviewer": "Codex /root/scientific_review source-content research; source-content/identity check by Codex /root. The specific clinical/application work below remains unfinished; no physician review is asserted.",
             "reviewed_at": "2026-11-08",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full Methods, exact preparation, arm-level participant flow, outcome hierarchy and comparison qualification remain unread. The standalone MSM arm is genuine; no absence-of-research or null-effect conclusion follows."
+            "basis": "Full primary content/API identity reviewed by Codex /root/scientific_review and independently checked by Codex /root on 2026-11-08, including visual Figure 1-4 checks. Factual access/content review is finished; the specific principal-outcome and reporting interpretation remains pending under the existing scientific rubric. No physician approval, numerical eligibility, dose benchmark or source rejection is asserted."
           }
         }
       ],
@@ -21402,7 +21405,8 @@
         {
           "pmid": "27492975",
           "title": "Effect of consumption of chicory inulin on bowel function in healthy subjects with constipation: a randomized, double-blind, placebo-controlled trial.",
-          "scoring_eligible": false
+          "scoring_eligible": false,
+          "supports_claims": []
         }
       ],
       "external_ids": {
