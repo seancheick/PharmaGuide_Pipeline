@@ -322,6 +322,20 @@ def test_verified_excipient_does_not_emit_opacity(enricher):
     result = enricher._collect_proprietary_data(product)
     assert result["blends"] == []
 
+    import json
+    from pathlib import Path
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((Path(__file__).parent / "fixtures/blend_preparation_213448_raw.json").read_text())
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    cleaned["activeIngredients"].append(product["activeIngredients"][0])
+    enriched, _ = enricher.enrich_product(cleaned)
+    artifact = build_scored_artifact(enriched)
+    assert not enriched["proprietary_data"]["blends"]
+    transparency = artifact["_v4_module_breakdown"]["dimensions"]["transparency"]
+    assert transparency["penalties"]["B5_proprietary_blend_opacity"] == 0
+
 
 def test_excipient_child_does_not_exempt_active_parent(enricher):
     product = _single_active_product("Proprietary Energy Blend", "Proprietary Energy Blend", qty=500)
