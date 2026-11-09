@@ -3165,8 +3165,9 @@ def build_banned_substance_detail(
             bsd["date"] = reg_date.strip()
         source_urls = w.get("source_urls")
         if isinstance(source_urls, list):
-            cleaned = [u.strip() for u in source_urls
-                       if isinstance(u, str) and u.strip()]
+            cleaned = [url.strip() for ref in source_urls
+                       for url in [ref.get("url") if isinstance(ref, dict) else ref]
+                       if isinstance(url, str) and url.strip()]
             if cleaned:
                 bsd["source_urls"] = cleaned
         return bsd

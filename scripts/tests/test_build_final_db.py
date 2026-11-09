@@ -7415,3 +7415,13 @@ def test_production_dose_warning_copy_rehydrates_without_inventing_an_action():
         assert resolved.get(field) == warning.get(field)
     assert resolved["sources"] == warning["sources"]
     assert resolved["title"] == warning["title"]
+
+def test_resolver_citations_reach_blocked_product_preflight():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = []
+    enriched["inactiveIngredients"] = [{"name": "Partially Hydrogenated Soybean Oil"}]
+    enriched["contaminant_data"]["banned_substances"] = {"substances": []}
+    blob = build_detail_blob(enriched, make_scored(verdict="BLOCKED"))
+    [warning] = [w for w in blob["warnings"] if w.get("matched_rule_id") == "BANNED_PHO"]
+    assert blob["banned_substance_detail"]["source_urls"] == [r["url"] for r in warning["source_urls"]]
+

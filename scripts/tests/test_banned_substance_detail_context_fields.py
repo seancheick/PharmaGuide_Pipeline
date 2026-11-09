@@ -271,3 +271,14 @@ def test_bsd_substance_name_extracted_from_title() -> None:
     bsd = build_banned_substance_detail(_enriched_with_banned(), [_full_warning()])
     assert bsd is not None
     assert bsd["substance_name"] == "Brominated Vegetable Oil"
+
+
+def test_bsd_extracts_structured_citations_and_preserves_legacy_strings():
+    from scripts.build_final_db import build_banned_substance_detail
+    warning = _full_warning()
+    warning["source_urls"] = [
+        {"url": " https://example.test/structured ", "title": "Source"},
+        " https://example.test/legacy ", {"url": " "}, {"url": 3}, {}, None, 4,
+    ]
+    detail = build_banned_substance_detail(_enriched_with_banned(), [warning])
+    assert detail["source_urls"] == ["https://example.test/structured", "https://example.test/legacy"]
