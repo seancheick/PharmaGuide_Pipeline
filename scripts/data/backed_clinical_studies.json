@@ -49453,29 +49453,36 @@
         "39820592",
         "38290812",
         "26424423",
-        "10230711"
+        "10230711",
+        "42275440"
       ],
       "score_contribution": "tier_3",
       "effect_direction": "mixed",
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Two independently source-qualified randomized crossovers support distinct acute laboratory surrogates: stop-signal inhibition in 22 healthy women and task reaction time in 28 healthy men. Go-response, payout/stay-probability and other model findings remain null or mixed. These are not two replications of one clinical benefit. Retain existing mixed weight and low confidence; no general daily cognition, mood or endurance efficacy is established.",
+      "effect_direction_rationale": "Limited source-qualified acute laboratory findings concern stop-signal latency, long-1200 ms switching cost, task reaction time and optimal choices in a restless-bandit task. Null short-interval, go-response, payout/stay and mixed modelling findings remain visible. The two Leiden papers have unresolved participant overlap and share one conservative independent-depth group. Retain mixed weighting and low confidence; no general daily cognition, mood or endurance efficacy is established.",
       "key_endpoints": [
         "Acute stop-signal response inhibition latency",
-        "Acute model-agnostic reaction time in sequential reinforcement learning and temporal discounting"
+        "Acute model-agnostic reaction time in sequential reinforcement learning and temporal discounting",
+        "Acute long-1200 ms response-stimulus-interval task-switching cost",
+        "Proportion of highest-value choices in the restless-bandit task"
       ],
       "health_goals_supported": [],
-      "notes": "Two source-qualified acute laboratory contexts are eligible under the existing unranked-outcome rubric, with distinct outcomes and populations. Null/mixed findings remain visible. The 22 analyzed women in 24433977 and 28 analyzed men in 36548401 are disjoint cohorts; two tasks within 36548401 are one trial. The unresolved 24433977/25598314 Leiden overlap does not add a trial or enrollment. Other source obligations remain pending. No general daily cognition, mood, endurance, disease-treatment, safety or lower-dose-equivalence claim follows. Trial-level analyzed counts 22 and 28 remain in source contexts; do not sum them into total_enrollment or claim a verified registry enrollment for these papers.",
-      "last_updated": "2026-11-07",
+      "notes": "Four source-qualified acute laboratory papers retain narrow outcomes and populations across three independent-depth groups. The 24433977/25598314 Leiden papers count as one conservative independent-depth group because participant overlap is unknown, not proven identical; 36548401 is a separate male cohort and its two tasks are one trial. Do not sum enrollment. Published endurance synthesis 38290812 has a completed noncredit review with precision/denominator limitations retained. Actual Methods/preparation for 29980424 remain unread. The 2026 trial 42275440 and its actual OSF preregistration support a narrow, prospectively listed optimal-choice surrogate using the existing canonical tyrosine identity; null physiological/directed-exploration findings and slightly slower responses remain explicit. No supplier assay or general cognitive benefit is inferred. No grade, generic Dose benchmark, lower-dose equivalence, chronic, disease-treatment or safety claim is added.",
+      "last_updated": "2026-11-09",
       "applicability": {
         "scope": "ingredient",
-        "studied_population": "Twenty-two healthy adult women in 24433977 and 28 analyzed healthy adult men in 36548401; distinct acute laboratory crossover cohorts, with source-specific population boundaries retained.",
+        "studied_population": "Source-specific populations: 22 healthy adult women in 24433977; 22 female undergraduates aged 17–23 in 25598314; 28 analyzed healthy adult men in 36548401. The 2026 42275440 cohort analyzed 63 healthy adults, including 32 self-identified women, ages 18–52. Overlap of the two Leiden female samples is unknown; no combined enrollment.",
         "supported_outcomes": [
           "stop-signal response inhibition latency",
-          "model-agnostic reaction time in sequential reinforcement learning and temporal discounting"
+          "model-agnostic reaction time in sequential reinforcement learning and temporal discounting",
+          "long-1200 ms response-stimulus-interval task-switching cost",
+          "proportion of highest-value choices in the restless-bandit task"
         ],
         "source_pmids": [
           "24433977",
-          "36548401"
+          "25598314",
+          "36548401",
+          "42275440"
         ],
         "required_form_terms": [
           "l-tyrosine",
@@ -49503,7 +49510,7 @@
           "D,L-Tyrosine"
         ],
         "require_source_label_form": true,
-        "reviewed_at": "2026-11-07",
+        "reviewed_at": "2026-11-09",
         "reason": "Exact source-labeled oral L-tyrosine only. Reviewed unranked laboratory surrogates qualify under existing policy, with source-specific population and outcome scope. Ingredient Evidence does not require a matching marketing claim. No chronic cognition, mood, disease treatment, lower-dose equivalence or general Dose benchmark is established."
       },
       "references_structured": [
@@ -49604,6 +49611,14 @@
           "pmid": "10230711",
           "title": "Tyrosine improves cognitive performance and reduces blood pressure in cadets after one week of a combat training course.",
           "url": "https://pubmed.ncbi.nlm.nih.gov/10230711/"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "42275440",
+          "title": "Catecholamine precursor modulation of human exploration: Evidence from a large gender-balanced sample.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42275440/",
+          "doi": "10.1371/journal.pcbi.1014356"
         }
       ],
       "study_contexts": [
@@ -49631,7 +49646,7 @@
           "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
-          "trial_family": "ingr_l_tyrosine_24433977",
+          "trial_family": "leiden_24433977_25598314_independence_unresolved",
           "population": {
             "age_group": "adult",
             "description": "22 healthy women, mean age 20.4; two sessions 3–7 days apart."
@@ -49657,7 +49672,8 @@
             "Acute laboratory or sports task outcomes; not chronic mood, clinical-disease treatment or general daily cognitive benefit.",
             "No dose-response minimum or generic catalog benchmark follows from the assigned dose. Source-specific positive and null findings retained.",
             "Separate publication identifiers do not prove participant independence; the two Leiden female-sample papers lack an explicit cross-paper cohort-overlap declaration. Do not sum participants or count synthesis and its constituents as replication.",
-            "Actual agent attribution retained. Compatibility clinician_approved value is not a physician review. No general chronic efficacy, disease-treatment, safety or lower-dose-equivalence conclusion."
+            "Actual agent attribution retained. Compatibility clinician_approved value is not a physician review. No general chronic efficacy, disease-treatment, safety or lower-dose-equivalence conclusion.",
+            "Conservative independent-depth grouping with the other Leiden female-sample paper: participant overlap is unresolved, not proven identical. These two papers add at most one independent family here; no summed enrollment or extra replication is assigned."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -49690,7 +49706,7 @@
             "reviewer": "Codex source-content review /root/elderberry_review; independent factual check /root/glycine_review; existing-rubric interpretation /root/tyrosine_completion; reviewed by /root and independently qualified by /root/scientific_review. Agent reviews, not clinician review.",
             "reviewed_at": "2026-11-07",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. PMIDs 24433977 and 36548401 are source-qualified within their distinct recorded outcome and population scopes, using existing mixed weighting; PMID 25598314 remains noneligible and pending; no new scoring policy or Dose benchmark."
+            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. PMIDs 24433977 and 36548401 are source-qualified within their distinct recorded outcome and population scopes, using existing mixed weighting; the separate PMID 25598314 assessment is recorded in its own current source context; no new scoring policy or Dose benchmark."
           },
           "sample_size": 22
         },
@@ -49712,13 +49728,13 @@
           "route": "oral",
           "evidence_role": "direct_rct",
           "component_registration_status": "fully_registered",
-          "condition": "healthy_cognition",
-          "purpose": "cognitive_support",
-          "review_status": "source_verified_pending_clinical_review",
-          "scoring_eligible": false,
+          "condition": "long_interval_task_switching_cost",
+          "purpose": "acute long-interval task-switching cost",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
           "human_status": "confirmed",
           "source_integrity": "none",
-          "trial_family": "ingr_l_tyrosine_25598314",
+          "trial_family": "leiden_24433977_25598314_independence_unresolved",
           "population": {
             "age_group": "mixed",
             "description": "22 female Leiden undergraduates; age 17–23, mean 19.3; do not label exclusively adult."
@@ -49726,10 +49742,17 @@
           "study_design": "Randomized double-blind counterbalanced crossover; two sessions 3–7 days apart; 2 g Bulkpowders L-tyrosine or cellulose in 400 mL orange juice; task one hour later.",
           "outcomes": [
             {
-              "name": "Switching-cost benefit at the long 1200 ms interval, p = .009; short 150 ms interval null, p = .927; condition × task repetition × interval p = .047. Errors, mood and BP did not show tyrosine effects.",
+              "name": "Reduced task-switching cost at the planned 1200 ms response-stimulus interval; condition × repetition × interval interaction p=.047, Fisher LSD long-interval contrast p=.009.",
               "hierarchy": "not_reported",
               "kind": "surrogate",
-              "direction": "mixed",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Short 150 ms interval switching-cost contrast p=.927; errors, mood, heart rate and blood-pressure measures did not show a tyrosine effect.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
               "outcome_role": "direct_between_group_effect"
             }
           ],
@@ -49738,7 +49761,9 @@
             "No dose-response minimum or generic catalog benchmark follows from the assigned dose. Source-specific positive and null findings retained.",
             "Separate publication identifiers do not prove participant independence; the two Leiden female-sample papers lack an explicit cross-paper cohort-overlap declaration. Do not sum participants or count synthesis and its constituents as replication.",
             "Actual agent attribution retained. Compatibility clinician_approved value is not a physician review. No general chronic efficacy, disease-treatment, safety or lower-dose-equivalence conclusion.",
-            "The exact 17–23-year source population spans adolescents and adults. Current population owner does not enforce adolescent_and_adult against generic child labels; do not activate this context without a tested truthful population boundary. This is a numerical applicability implementation hold, not a conclusion that long-interval benefit is absent."
+            "Conservative independent-depth grouping with the other Leiden female-sample paper: participant overlap is unresolved, not proven identical. These two papers add at most one independent family here; no summed enrollment or extra replication is assigned.",
+            "The 150/1200 ms factor and repeated-measures analysis were planned in Methods; Fisher LSD is a follow-up comparison, not a formally designated primary endpoint. No preregistration or multiplicity-adjusted confirmatory claim is made.",
+            "The exact 17–23-year source population remains mixed. The canonical population owner enforces reported age bounds; no young-child or unplaced child-range applicability is inferred."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -49768,10 +49793,10 @@
             }
           },
           "clinical_review": {
-            "reviewer": "Codex source-content review /root/elderberry_review; independent factual check /root/glycine_review; existing-rubric interpretation /root/tyrosine_completion; reviewed by /root and independently qualified by /root/scientific_review. Agent reviews, not clinician review.",
-            "reviewed_at": "2026-11-07",
+            "reviewer": "Codex /root source-content review; independently checked by /root/parallel_scientific_check and prior /root/grouped_correctness_check existing-policy review. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. PMIDs 24433977 and 36548401 are source-qualified within their distinct recorded outcome and population scopes, using existing mixed weighting; PMID 25598314 remains noneligible and pending; no new scoring policy or Dose benchmark. Source content is verified, but the recorded 17–23-year population applicability implementation hold remains open. Numerical eligibility is not a completed decision; preserve pending status until the truthful source-population boundary is implemented and independently checked."
+            "basis": "Full primary Methods 2.1–2.4, Results 3.1–3.2 and Tables 1–2 read. The planned long-1200 ms laboratory contrast qualifies under the existing unranked-outcome rubric, with null short-interval/error/mood/physiological findings retained. Exact mixed 17–23 source-age limits use the tested canonical population owner. Unknown 244/255 participant overlap is conservatively one independent-depth group, not asserted identical; no added enrollment, grade or Dose benchmark."
           }
         },
         {
@@ -49945,7 +49970,7 @@
             "reviewer": "Codex source-content review /root/elderberry_review; independent factual check /root/glycine_review; existing-rubric interpretation /root/tyrosine_completion; reviewed by /root and independently qualified by /root/scientific_review. Agent reviews, not clinician review.",
             "reviewed_at": "2026-11-07",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. PMIDs 24433977 and 36548401 are source-qualified within their distinct recorded outcome and population scopes, using existing mixed weighting; PMID 25598314 remains noneligible and pending; no new scoring policy or Dose benchmark."
+            "basis": "Full primary contents and live API identity/content receipts; exact studied preparation, population, regimen and outcome hierarchy retained. PMIDs 24433977 and 36548401 are source-qualified within their distinct recorded outcome and population scopes, using existing mixed weighting; the separate PMID 25598314 assessment is recorded in its own current source context; no new scoring policy or Dose benchmark."
           }
         },
         {
@@ -50043,7 +50068,7 @@
           "component_registration_status": "fully_registered",
           "condition": "endurance_performance",
           "purpose": "performance",
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "clinician_approved",
           "scoring_eligible": false,
           "human_status": "confirmed",
           "source_integrity": "none",
@@ -50052,7 +50077,7 @@
             "age_group": "adult",
             "description": "Eight source-listed male exercise-study cohorts; reported mean ages 20–32. Table 2 cohort Ns, endpoint subsets and contrast counts are different constructs; no verified unique enrollment assigned."
           },
-          "study_design": "Systematic review and random-effects inverse-variance meta-analysis of acute placebo-controlled double-blind crossover/counterbalanced studies; search through 3 August 2023; PROSPERO CRD42023386871 (as reported; registry not independently checked here).",
+          "study_design": "Systematic review and random-effects inverse-variance meta-analysis of acute double-blind crossover/counterbalanced comparisons; search through August 3, 2023. The review calls controls placebo; primary 24389518 abstract identifies isocaloric whey, so inert-control equivalence is not assumed. PROSPERO CRD42023386871 is source-reported, not independently registry-verified here.",
           "outcomes": [
             {
               "name": "Source-reported whole-body endurance pooled SMD −0.01 (95% CI −0.32, 0.29; p = .93), TTE .02 (p = .94), ETT −.04 (p = .85); no statistically significant pooled difference.",
@@ -50063,7 +50088,10 @@
             }
           ],
           "limitations": [
-            "The full manuscript is now read, not missing. Eight papers and ten comparisons do not establish ten independent cohorts. Source Table 2 total 78 and forest 83 represent different constructions: Sutton endpoint subset and repeated 2020 dose contrasts require primary-level reconciliation before pooled precision is relied upon. No categorical efficacy zero or unique enrollment is inferred."
+            "Bounded review of the published endurance synthesis only. Pooled nonsignificance is not proof of equivalence, universal inefficacy or a completed zero; Table 5 retains a positive Tumilty 2011 time-to-exhaustion finding. Acute cognition findings are a separate scope.",
+            "Eight papers and ten comparisons do not establish ten independent cohorts. Tumilty 2020 contributes three dose comparisons sharing an n=8 cohort/control; Sutton is n=9 in the forest versus n=20 in Table 2. Table 2 Ns sum to 78, while forest/GRADE totals are 83 comparison constructions, not verified unique enrollment.",
+            "The manuscript reports inverse-variance random-effects SMDs with within-group SDs, without a described crossover/shared-placebo covariance treatment. Published CI precision and constituent endpoint subsets were not independently reconstructed; the source-reported moderate GRADE is not a new PharmaGuide grade.",
+            "No generic exposure minimum, Dose curve, chronic benefit, safety determination or individual constituent-trial qualification follows. The eight constituent identifiers were checked against exact bibliography DOI/title and live abstract content. This does not individually qualify their Methods or confer eight independent clinical-trial credits. Tumilty 2014 uses isocaloric whey as its comparator; Coull 2016 performance Study 2 (n=8) is distinct from serum-dose Study 1 (n=21). The source labels Chinevere 2001 in some tables while the DOI publication is 2002."
           ],
           "dose": {
             "measurement_type": "mass",
@@ -50080,15 +50108,24 @@
             "source_provenance": {
               "pmid": "38290812",
               "source_url": "https://cris.unibo.it/retrieve/handle/11585/960349/85018984-e91d-4d40-8754-66442c023c51/Last%2Bsubmission%2Bversion%2BTyrosin%2BDalton.pdf",
-              "location": "Institutional accepted full manuscript Methods, Table 2, Table 4 and forest plot read November 7; source null estimates retained, endpoint subset and comparison covariance qualification unfinished."
+              "location": "Institutional accepted manuscript Methods pp7–11, Results pp11–15, Tables 2/4/5 and Figure 2 p34; full body and forest read November 9. Current institutional PDF SHA256 ef2f9bc26804d1ddb924b817eca08ce54f3fbd01e18fca3d0bf6861133381550; only repository-cover date differs from prior capture. Published estimates retained without independent precision reconstruction."
             }
           },
-          "included_study_pmids": "extraction_pending",
+          "included_study_pmids": [
+            "9623632",
+            "12381742",
+            "16089275",
+            "21437603",
+            "23011654",
+            "24389518",
+            "26285023",
+            "31834099"
+          ],
           "clinical_review": {
-            "reviewer": "Codex /root/tyrosine_completion source-content review; independent full-text source-content check by /root on 2026-11-07. Agent reviews, not clinician review; pooled precision qualification remains pending.",
-            "reviewed_at": "2026-11-07",
+            "reviewer": "Codex /root full-manuscript and forest-plot review; independent primary-content check /root/tyrosine_sources and /root/parallel_scientific_check. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Official accepted manuscript recovered; actual forest plot and family/denominator constructs inspected. Pooled numerical precision and trial-family method review remain open. No generic zero, benchmark or enrollment inference."
+            "basis": "Institutional accepted full manuscript Methods, Results, Tables 2/4/5 and Figure 2 read. Completed noncredit assessment of the limited published null endurance pools; shared-control/crossover precision and denominator limitations remain explicit. Independent raw-data or RevMan reconstruction is not required to record this bounded published finding. No efficacy zero, equivalence, numerical depth, enrollment, new grade or general Dose benchmark is inferred."
           }
         },
         {
@@ -50153,9 +50190,114 @@
             "Positive drink comparisons and null mood observations are preserved. This exclusion addresses unsupported isolated L-tyrosine/NALT/protein-blend causal transfer, not publication rejection, all-outcome null efficacy or proof that tyrosine has no effects.",
             "Formal primary hierarchy, every outcome denominator and a full source-outcome review are not inferred from these indexed sections. Other unread studies and independent holds remain open."
           ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_l_tyrosine_42275440",
+          "components": [
+            "INGR_L_TYROSINE"
+          ],
+          "source_pmids": [
+            "42275440"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Source-reported oral tyrosine/TYR (TheHut.com Ltd.), 2 g dissolved in 200 mL orange juice. The existing canonical tyrosine alias is independently identified as L-tyrosine (PubChem CID 6057); no D-, DL-, N-acetyl or protein-matrix transfer.",
+            "chemical_form": "Canonical L-tyrosine identity from the accepted chemical name tyrosine: PubChem CID 6057, CAS 60-18-4, (2S). No source chemical assay, purity certificate or physical powder form is claimed."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "restless_bandit_optimal_choice_performance",
+          "purpose": "acute laboratory proportion of highest-value choices in a four-armed restless-bandit task",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "OSF_4z39r_42275440",
+          "population": {
+            "age_group": "adult",
+            "description": "63 analyzed healthy adults, including 32 self-identified women; ages 18–52, mean 23.38 ± 5.30. Of 69 who completed participation, six were excluded. Predominantly educated, western, white, cisgender young volunteers."
+          },
+          "study_design": "Randomized, counterbalanced, double-blind placebo-controlled within-subject experiment; two visits 3–5 days apart. Paper-reported preregistration and actual February 2023 uploaded analysis plan read; one cohort across tasks and models, without an independent collection-chronology claim.",
+          "sample_size": 63,
+          "outcomes": [
+            {
+              "name": "Highest-value choices increased versus placebo in the restless-bandit task: condition estimate +0.0164, approximately 1.64 percentage points, p=.019 (Table 1). Prospectively listed model-free measure; formal primary/secondary rank not designated.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Median task reaction time increased slightly, +0.00430 seconds, p=.045 (Table 1), opposite the predicted reduction.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "negative",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Registered-model directed exploration showed no credible condition effect (phi shift −0.09, 95% HDI −0.45 to 0.34). Physiological changes did not differ, all p>.41; predicted DDM threshold reduction was not established.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Exploratory higher-order-perseveration model yielded reduced directed exploration and value-independent perseveration. Not the qualifying prospective positive outcome.",
+              "hierarchy": "post_hoc",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Source tyrosine/TYR uses the existing canonical compound-name identity, independently verified as PubChem CID 6057 (2S). No chemical assay, supplier purity certificate, physical powder form or derivative equivalence is claimed. Existing product-label preparation restrictions remain.",
+            "A laboratory surrogate is not general daily cognition, psychiatric treatment, chronic benefit or patient-important clinical efficacy.",
+            "Highest-value-choice performance was listed in the February 2023 model-free analysis plan, without a formal primary-outcome rank. Null and contrary hypotheses remain; exploratory HOP modelling supplies no qualifying credit.",
+            "Parent mixed weighting and low confidence remain. No new grade, general Dose benchmark, total enrollment or independent-trial-depth increment is inferred.",
+            "One registered experiment/cohort across tasks and models; the temporal-discounting task is not another trial in this paper. This study is a separately planned OSF 2023 experiment extending the earlier 2022 report, not replication of every earlier endpoint.",
+            "Fixed 2 g challenge in a restricted healthy adult sample; no dose-response minimum, chronic or safety determination, or lower-dose equivalence.",
+            "Monoamine mechanism was not directly established, and adherence to instructed dietary restrictions was not directly controlled.",
+            "Source facts and canonical chemical-name mapping independently read by Codex agents, not clinician review. The absence of an explicit L-prefix alone is not a new source-completion requirement."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              2000
+            ],
+            "dose_status": "verified",
+            "dose_basis": "single_challenge",
+            "duration_basis": "endpoint_followup_only",
+            "duration_days": null,
+            "administration_frequency": "Single assigned 2 g dose in the active session; visits 3–5 days apart",
+            "dosage_forms": [
+              "Oral tyrosine dissolved in orange juice; physical starting form not inferred"
+            ],
+            "co_therapies": [
+              "Same 200 mL orange-juice carrier in placebo condition; avoidance of protein-rich food and alcohol was instructed."
+            ],
+            "reported_regimen": "2 g tyrosine or microcrystalline-cellulose placebo in 200 mL orange juice; 60-minute wait, then a 10–15-minute temporal-discounting task before the bandit task. No minimum-effective-dose or chronic benchmark.",
+            "normalization": {
+              "basis": "2 g × 1000 = 2000 mg assigned challenge only."
+            },
+            "source_provenance": {
+              "pmid": "42275440",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13719043/",
+              "location": "Official full primary Methods (Sample, Procedure, model-agnostic analysis); Results Table 1 and computational Tables 3/7; Limitations. Actual OSF PreRegTYR23.pdf (February 13, 2023, version 1), hypotheses, sampling plan and model-free Bandit Task analysis; PDF checksum verified."
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Codex /root/tyrosine_sources source-content and existing-rubric review; /root independent primary, Table 1 and Methods check, November 9, 2026. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official full XML, live PMID/DOI identity and actual uploaded OSF analysis plan read, with paper-reported preregistration. Planned unranked optimal-choice findings retain null/contrary hypotheses and exploratory distinctions. The source-reported tyrosine name matches the existing canonical alias, independently checked against PubChem CID 6057 and distinct D/DL/N-acetyl identities. Narrow optimal-choice qualification uses the existing approved-unranked rubric; no supplier assay, primary designation, grade, confidence or Dose-policy change."
+          }
         }
       ],
-      "published_studies_count": 2,
+      "published_studies_count": 3,
       "registry_completed_trials_count": null,
       "exclude_aliases": [
         "N-Acetyl-L-Tyrosine",

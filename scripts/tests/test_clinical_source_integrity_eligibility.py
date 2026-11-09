@@ -717,11 +717,11 @@ def test_tyrosine_acute_research_credit_keeps_unfinished_sources_open(claim):
     record = reviewed_entries().get('INGR_L_TYROSINE')
     assert record is not None
     assert record['study_type'] == 'rct_multiple' and record['effect_direction'] == 'mixed'
-    assert record['published_studies_count'] == 2
+    assert record['published_studies_count'] == 3
     assert 'total_enrollment' not in record  # Never sum independent trials into a largest-trial field.
     assert {p for c in record['study_contexts'] for p in c['source_pmids']} == {
         '24433977', '25598314', '36548401', '39820592', '29980424', '38290812',
-        '26424423', '10230711',
+        '26424423', '10230711', '42275440',
     }
     assert not assess_clinical_source_review(record)['is_complete']
     context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['24433977'])
@@ -739,7 +739,7 @@ def test_tyrosine_acute_research_credit_keeps_unfinished_sources_open(claim):
     result = score_evidence(product)
     receipt = next(r for r in result['metadata']['contributing_record_assessments']
                    if r['id'] == 'INGR_L_TYROSINE')
-    assert {str(r['pmid']) for r in receipt['source_references']} == {'24433977', '36548401'}
+    assert {str(r['pmid']) for r in receipt['source_references']} == {'24433977', '25598314', '36548401', '42275440'}
     assert receipt['source_review']['is_complete'] is False
 
 
@@ -819,11 +819,86 @@ def test_tyrosine_narrative_review_is_finished_without_becoming_independent_tria
     assert context['scoring_eligible'] is False
     assert context_review_finished(context)
     assert validate_ingredient_context(context, require_complete_review=True) == []
-    assert record['published_studies_count'] == 2
+    assert record['published_studies_count'] == 3
     assert 'total_enrollment' not in record  # Never sum independent trials into a largest-trial field.
     assert {p for c in record['study_contexts'] if not context_review_finished(c)
-            for p in c['source_pmids']} == {'25598314', '29980424', '38290812'}
+            for p in c['source_pmids']} == {'29980424'}
     assert not assess_clinical_source_review(record)['is_complete']
+
+
+def test_tyrosine_planned_long_interval_source_preserves_independence_limits():
+    from clinical_applicability import reviewed_entries, qualifying_purpose_outcomes, _context_trial_families
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    context = contexts['25598314']
+    assert context['scoring_eligible'] is True
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    outcomes, held = qualifying_purpose_outcomes(context)
+    assert not held and len(outcomes) == 1
+    assert '1200' in outcomes[0]['name']
+    assert outcomes[0]['hierarchy'] == 'not_reported'
+    assert context['population']['age_group'] == 'mixed'
+    assert '17' in context['population']['description']
+    assert {o['direction'] for o in context['outcomes']} >= {'positive', 'null'}
+    assert contexts['24433977']['trial_family'] == context['trial_family']
+    assert len(_context_trial_families([contexts[p] for p in ['24433977', '25598314', '36548401']])) == 2
+    assert record['published_studies_count'] == 3
+    assert 'total_enrollment' not in record and 'min_clinical_dose' not in record
+    assert record['effect_direction'] == 'mixed'
+
+
+def test_tyrosine_published_endurance_null_review_is_finished_without_efficacy_zero():
+    from clinical_applicability import reviewed_entries, qualifying_purpose_outcomes
+    from clinical_evidence_schema import validate_ingredient_context
+    from probiotic_measurements import context_review_finished
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['38290812'])
+    assert context_review_finished(context)
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert context['scoring_eligible'] is False
+    assert qualifying_purpose_outcomes(context)[0] == []
+    assert all(o['direction'] == 'null' for o in context['outcomes'])
+    assert 'Sutton' in ' '.join(context['limitations'])
+    assert 'total_enrollment' not in record
+    assert record['effect_direction'] == 'mixed'  # Acute cognitive findings remain qualified.
+
+
+@pytest.mark.parametrize('groups,title,expected', [
+    (['Children 4–8'], 'Kids Focus', 'explicit_conflict'),
+    (['Children 14–18'], 'Teen Focus', 'unresolved'),
+    (['Children 17–18'], 'Teen Focus', 'eligible'),
+    ([], 'Kids Focus', 'unresolved'),
+    (['Women 18–50'], 'Women Focus', 'eligible'),
+    (['Men 18–50'], 'Men Focus', 'explicit_conflict'),
+])
+def test_qualified_tyrosine_long_interval_uses_actual_source_population(groups, title, expected):
+    from clinical_applicability import reviewed_entries, assess_context_population
+    context = next(c for c in reviewed_entries()['INGR_L_TYROSINE']['study_contexts']
+                   if c['source_pmids'] == ['25598314'])
+    assert assess_context_population({'targetGroups': groups, 'fullName': title}, context) == expected
+
+
+def test_new_tyrosine_trial_uses_canonical_name_without_borrowing_enrollment():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review, qualifying_purpose_outcomes
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_L_TYROSINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['42275440'])
+    assert validate_ingredient_context(context) == []
+    assert context['scoring_eligible'] is True
+    assert context['component_registration_status'] == 'fully_registered'
+    assert context['sample_size'] == 63
+    assert {o['direction'] for o in context['outcomes']} >= {'positive', 'negative', 'null'}
+    assert context['outcomes'][0]['hierarchy'] == 'not_reported'
+    outcomes, held = qualifying_purpose_outcomes(context)
+    assert not held and len(outcomes) == 1
+    assert 'highest-value' in outcomes[0]['name'].lower()
+    assert '6057' in context['identity']['chemical_form']
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert 'total_enrollment' not in record
+    receipt = next(r for r in score_evidence(_tyrosine_scoring_product())['metadata']['contributing_record_assessments']
+                   if r['id'] == record['id'])
+    assert '42275440' in {str(r['pmid']) for r in receipt['source_references']}
 
 
 @pytest.mark.parametrize('pmid', ['36548401', '39820592'])
@@ -857,7 +932,7 @@ def test_tyrosine_provenance_identifies_articles_and_actual_reading_basis():
             assert 'receipt' in location.lower()
 
 
-def test_tyrosine_unmade_applicability_decisions_survive_other_source_closures(monkeypatch):
+def test_tyrosine_unread_methods_remain_open_until_their_own_review(monkeypatch):
     from copy import deepcopy
     import clinical_applicability as ca
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
@@ -880,12 +955,11 @@ def test_tyrosine_unmade_applicability_decisions_survive_other_source_closures(m
             assert validate_ingredient_context(closed, require_complete_review=True) == []
             record['study_contexts'][index] = closed
 
-    close_sources({'29980424', '38290812'})
     assert not assess_clinical_source_review(record)['is_complete']
-    close_sources({'25598314'})
+    close_sources({'29980424'})
     assert assess_clinical_source_review(record)['is_complete']
     assert {p for c in record['study_contexts'] if c['scoring_eligible']
-            for p in c['source_pmids']} == {'24433977', '36548401'}
+            for p in c['source_pmids']} == {'24433977', '25598314', '36548401', '42275440'}
 
 
 @pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
@@ -1165,9 +1239,9 @@ def test_yang_rct_transfer_exclusion_preserves_human_research_and_parent_hold(mo
 
 
 @pytest.mark.parametrize("label, expected_sources", [
-    ("L-Tyrosine", {"24433977", "36548401"}),
-    ("Men L-Tyrosine", {"36548401"}),
-    ("Women L-Tyrosine", {"24433977"}),
+    ("L-Tyrosine", {"24433977", "25598314", "36548401", "42275440"}),
+    ("Men L-Tyrosine", {"36548401", "42275440"}),
+    ("Women L-Tyrosine", {"24433977", "25598314", "42275440"}),
 ])
 def test_tyrosine_reviewed_reaction_time_source_is_population_scoped(label, expected_sources):
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
@@ -1183,7 +1257,7 @@ def test_tyrosine_reviewed_reaction_time_source_is_population_scoped(label, expe
     assert {o["direction"] for o in context["outcomes"]} == {"positive", "null", "mixed"}
     assert all(o["hierarchy"] == "not_reported" for o in context["outcomes"])
     assert record["study_type"] == "rct_multiple"
-    assert record["published_studies_count"] == 2
+    assert record["published_studies_count"] == 3
     assert "total_enrollment" not in record
     assert context["sample_size"] == 28
     assert record["effect_direction"] == "mixed"
@@ -1430,7 +1504,7 @@ def test_grouped_source_review_prose_keeps_limits_readable_and_status_current():
     pending = {pmid for c in tyrosine["study_contexts"]
                if c.get("review_status") == "source_verified_pending_clinical_review"
                for pmid in c.get("source_pmids", [])}
-    assert "25598314" in pending
+    assert pending == {"29980424"}
     for cid in ("paba", "lithium"):
         record = next(r for r in literature["literature_evidence_records"] if r["canonical_id"] == cid)
         assert "independent source-content check completed" in record["applicability_decision"]
