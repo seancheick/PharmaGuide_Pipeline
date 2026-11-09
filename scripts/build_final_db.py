@@ -1156,6 +1156,11 @@ def _safety_warning_policy_projection(
         entry.get("severity_level") or entry.get("clinical_risk_enum"),
         "critical" if status == "banned" else "high" if status in {"recalled", "high_risk"} else "moderate",
     ).lower()
+    # Clinical risk describes dose sensitivity, not a warning-severity wire
+    # value. Keep it in clinical_risk; preserve the app's conservative caution
+    # interpretation without emitting an unknown severity (Sentry 2T/2V).
+    if severity == "dose_dependent":
+        severity = "caution"
     if not us_applicable:
         severity = "informational"
 

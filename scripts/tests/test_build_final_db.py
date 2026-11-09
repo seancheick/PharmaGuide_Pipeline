@@ -2960,6 +2960,7 @@ def test_watchlist_safety_flag_retains_registry_citations():
     [warning] = [row for row in blob["warnings"]
                  if row.get("matched_rule_id") == "WATCH_WITHAFERIN_A"]
     assert warning["type"] == "watchlist_substance"
+    assert warning["severity"] == "caution"
     assert warning["source_urls"]
     assert warning["safety_warning"]
 
@@ -7320,3 +7321,25 @@ def test_export_scope_matches_uncached_blob_and_core(tmp_path, monkeypatch):
             snapshots.append(row)
     assert snapshots[0] == snapshots[1]
     assert (enriched, scored) == source
+
+
+@pytest.mark.parametrize(
+    ("rule_id", "expected"),
+    [
+        ("WATCH_WITHAFERIN_A", "caution"),
+        ("ADD_SODIUM_TETRABORATE", "informational"),
+    ],
+)
+def test_dose_dependent_registry_risk_exports_a_known_warning_severity(rule_id, expected):
+    policy = _safety_warning_policy_projection(rule_id, "watchlist")
+    assert policy["entry"]["clinical_risk_enum"] == "dose_dependent"
+    assert policy["severity"] == expected
+
+
+def test_dose_dependent_risk_does_not_replace_authored_warning_severity():
+    policy = _safety_warning_policy_projection(
+        "SENTRY_TEST_AUTHORED_SEVERITY", "watchlist",
+        {"severity_level": "high", "clinical_risk_enum": "dose_dependent",
+         "jurisdictions": [{"jurisdiction_code": "US", "region": "US"}]},
+    )
+    assert policy["severity"] == "high"
