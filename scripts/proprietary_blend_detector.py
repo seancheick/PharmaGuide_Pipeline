@@ -401,6 +401,10 @@ class ProprietaryBlendDetector:
     ) -> Optional[DetectedBlend]:
         """Analyze a single ingredient/field for blend patterns."""
 
+        # Consume the existing source disposition before detector deduplication.
+        if isinstance(ingredient, dict) and ingredient.get("is_excipient") is True:
+            return None
+
         # Get text to search
         if isinstance(ingredient, dict):
             name = ingredient.get("name", "") or ingredient.get("ingredient", "")
@@ -550,6 +554,11 @@ class ProprietaryBlendDetector:
                              blend_data.get("subIngredients", []) or \
                              blend_data.get("components", []) or \
                              blend_data.get("nestedIngredients", [])
+
+        sub_ingredients = [
+            sub for sub in sub_ingredients
+            if not (isinstance(sub, dict) and sub.get("is_excipient") is True)
+        ]
 
         if sub_ingredients:
             result["ingredients_listed"] = True

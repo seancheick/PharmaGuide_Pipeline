@@ -346,3 +346,28 @@ def test_excipient_child_does_not_exempt_active_parent(enricher):
     result = enricher._collect_proprietary_data(product)
     assert result["blends"]
     assert any(blend["disclosure_level"] != "full" for blend in result["blends"])
+    assert all(
+        child["name"] != "Natural Flavor"
+        for blend in result["blends"] for child in blend.get("child_ingredients", [])
+    )
+
+
+def test_excipient_cannot_consume_later_active_detector_entry(enricher):
+    product = _single_active_product("Fruit Blend", "Fruit Blend", qty=20)
+    first = product["activeIngredients"][0]
+    first["is_excipient"] = True
+    product["activeIngredients"].append({**first, "is_excipient": False, "proprietaryBlend": False})
+    result = enricher._collect_proprietary_data(product)
+    assert result["blends"]
+    assert any(blend.get("source_field") == "activeIngredients[1]" for blend in result["blends"])
+
+
+def test_excipient_child_does_not_make_known_active_opaque(enricher):
+    product = _single_active_product("Proprietary Energy Blend", "Proprietary Energy Blend", qty=500)
+    product["activeIngredients"][0]["nestedIngredients"] = [
+        {"name": "Caffeine", "quantity": 100, "unit": "mg"},
+        {"name": "Natural Flavor", "is_excipient": True},
+    ]
+    result = enricher._collect_proprietary_data(product)
+    assert result["blends"]
+    assert all(blend["disclosure_level"] == "full" for blend in result["blends"])

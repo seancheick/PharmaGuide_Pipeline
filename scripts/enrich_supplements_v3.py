@@ -15433,7 +15433,8 @@ class SupplementEnricherV3:
             for child in children:
                 if not isinstance(child, dict):
                     continue
-                if child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES:
+                if (child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES
+                        or child.get("is_excipient") is True):
                     continue
                 child_name = (child.get("name", "") or "").strip()
                 child_qty, child_unit = disclosed_source_amount(child)
@@ -15510,6 +15511,9 @@ class SupplementEnricherV3:
                 if (not nested and ingredient.get("cleaner_row_role") == "blend_header_total"
                         and "blend" in str(ingredient.get("ingredientGroup") or "").casefold()):
                     nested = ingredient.get("forms") or []
+                source_nested_count = len(nested)
+                nested = [child for child in nested
+                          if not (isinstance(child, dict) and child.get("is_excipient") is True)]
                 quantity = ingredient.get('quantity', 0) or 0
                 unit = ingredient.get('unit', '') or ''
                 ingredient_group = ingredient.get('ingredientGroup', '') or ''
@@ -15669,6 +15673,11 @@ class SupplementEnricherV3:
                     {"name": child_name, "amount": None, "unit": ""}
                     for child_name in children_without_amounts
                 ]
+                if len(nested) != source_nested_count:
+                    disclosure = disclosure_tier(
+                        isinstance(quantity, (int, float)) and quantity > 0,
+                        len(children_with_amounts), len(children_without_amounts),
+                    )
                 cleaning_blends.append({
                     "name": ingredient.get('name', ''),
                     "disclosure_level": disclosure,
