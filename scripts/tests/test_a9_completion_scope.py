@@ -354,7 +354,8 @@ def test_a_finished_label_stays_complete(pipeline):
 
 @pytest.mark.parametrize("label, open_row, hidden", [
     ("a9_hidden_amount_2219_raw.json", "l_phenylalanine", "creatine"),
-    ("a9_hidden_amount_2221_raw.json", "tmg_betaine", "creatine"),
+    # TMG is now reviewed; guanidinoacetate still supplies this label's unread-row case.
+    ("a9_hidden_amount_2221_raw.json", "guanidinoacetate", "creatine"),
     ("a9_hidden_amount_25712_raw.json", "l_isoleucine", "bcaa"),
 ])
 def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, label, open_row, hidden, monkeypatch):

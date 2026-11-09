@@ -175,18 +175,32 @@ def test_fiber_review_stays_out_of_the_data():
 @pytest.mark.parametrize("cid, name, reason", [
     ("l_carnitine", "L-Carnitine", "clinical_sources_ineligible"),
     ("elderberry", "Elderberry", "clinical_sources_ineligible"),
-    ("tmg_betaine", "Betaine Anhydrous", "literature_reviewed_human_clinical_evidence"),
     ("phytosterols", "Plant Sterols", "clinical_sources_ineligible"),
     ("taurine", "Taurine", "clinical_source_contexts_missing"),
     ("grape_seed_extract", "Grape Seed Extract", "clinical_sources_ineligible"),
 ])
-def test_records_waiting_on_clinician_stay_held(cid, name, reason):
+def test_records_with_unfinished_source_reviews_stay_held(cid, name, reason):
     from evidence_resolver import resolve_evidence_for_canonical
     logging.disable(logging.WARNING)
     resolution = resolve_evidence_for_canonical(cid, name=name)
     assert resolution.reason_code == reason
     assert resolution.points_eligible is False
     assert _review_state(resolution) == "not_yet_evaluated"
+
+
+def test_source_qualified_tmg_supersedes_the_older_unfinished_literature_review():
+    from clinical_applicability import reviewed_entries
+    from evidence_resolver import resolve_evidence_for_canonical
+
+    record = reviewed_entries()["PRECLIN_BETAINE_ANHYDROUS"]
+    source = next(c for c in record["study_contexts"] if c["source_pmids"] == ["39514262"])
+    assert source["scoring_eligible"] is True
+    assert record["effect_direction"] == "positive_weak"
+    assert record["effect_direction_confidence"] == "low"
+    resolution = resolve_evidence_for_canonical("tmg_betaine", name="Betaine Anhydrous")
+    assert resolution.reason_code == "reviewed_human_clinical_evidence_matched"
+    assert resolution.points_eligible is True
+    assert _review_state(resolution) == "evaluated_supported"
 
 
 @pytest.mark.parametrize("cid, pmid", [("ginkgo", "19017911"), ("collagen", "31919527")])
