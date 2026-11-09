@@ -44,7 +44,10 @@ def _normalized_ids(value: Any) -> list[str]:
 
 
 def _is_interaction_rule_warning(warning: Mapping[str, Any]) -> bool:
-    return str(warning.get("source") or "").strip() == "interaction_rules"
+    return (
+        str(warning.get("source") or "").strip() == "interaction_rules"
+        and warning.get("type") in {"interaction", "drug_interaction", "diagnostic_interference"}
+    )
 
 
 _WARNING_REF_DYNAMIC_FIELDS = (
@@ -123,7 +126,8 @@ def _strip_schema3_rda_duplicates(rda_ul_data: dict[str, Any]) -> None:
 
 
 def project_detail_blob(
-    blob: dict[str, Any], *, export_schema_version: str
+    blob: dict[str, Any], *, export_schema_version: str,
+    rules_by_id: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Project one freshly built detail blob into a versioned public shape.
 
@@ -146,12 +150,26 @@ def project_detail_blob(
         for warning in _safe_list(projected.get("warnings"))
         if isinstance(warning, dict)
     ]
-    rule_warnings = [warning for warning in warnings if _is_interaction_rule_warning(warning)]
-    display_warnings = [warning for warning in warnings if not _is_interaction_rule_warning(warning)]
+    display_warnings = []
+    refs = []
+    for warning in warnings:
+        if not _is_interaction_rule_warning(warning):
+            display_warnings.append(warning)
+            continue
+        ref = _warning_rule_ref(warning)
+        rule = rules_by_id.get(ref["rule_id"]) if rules_by_id is not None else None
+        try:
+            # Target-specific/derived copy stays pipeline-authored. Remove it
+            # only when the shipped rule can recover the complete warning.
+            resolved = _resolved_warning(ref, rule) if isinstance(rule, Mapping) else None
+        except ValueError:
+            resolved = None
+        if resolved != warning:
+            display_warnings.append(warning)
+        else:
+            refs.append(ref)
     projected["warnings"] = display_warnings
-    projected["warning_rule_refs"] = [
-        _warning_rule_ref(warning) for warning in rule_warnings
-    ]
+    projected["warning_rule_refs"] = refs
     projected.pop("warnings_profile_gated", None)
 
     projected.pop("section_breakdown", None)

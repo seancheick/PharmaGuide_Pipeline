@@ -7242,6 +7242,14 @@ def _append_dose_only_rows(ingredients: List[Dict], analyzed_rows: Any) -> None:
 
 
 @lru_cache(maxsize=1)
+def _public_profile_warning_rules() -> Dict[str, Dict]:
+    """Reuse the rule DB's public registry owner for lossless compaction."""
+    from build_interaction_db import load_profile_warning_rules
+    _, rules = load_profile_warning_rules(Path(__file__).parent / "data" / "ingredient_interaction_rules.json")
+    return {rule["id"]: rule for rule in rules}
+
+
+@lru_cache(maxsize=1)
 def _identity_uncertainty_rules() -> Dict[str, Dict]:
     """Internal matching rules; public warnings carry their already-bound result."""
     path = Path(__file__).parent / "data" / "ingredient_interaction_rules.json"
@@ -9042,6 +9050,7 @@ def build_detail_blob(
     return project_detail_blob(
         blob,
         export_schema_version=export_schema_version,
+        rules_by_id=_public_profile_warning_rules() if export_schema_major(export_schema_version) >= 3 else None,
     )
 
 

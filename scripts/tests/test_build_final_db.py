@@ -7397,7 +7397,7 @@ def test_dose_warning_exports_its_own_evidence_grade(evidence):
 
 
 def test_production_dose_warning_copy_rehydrates_without_inventing_an_action():
-    from export_schema import project_detail_blob, resolve_warning_rule_refs
+    from export_schema import _warning_rule_ref, resolve_warning_rule_refs
 
     enriched = make_enriched()
     threshold = {"scope": None, "alert_headline": "Dose context", "alert_body": "Reviewed dose context."}
@@ -7409,12 +7409,15 @@ def test_production_dose_warning_copy_rehydrates_without_inventing_an_action():
     }]}
     blob = build_detail_blob(enriched, make_scored())
     [warning] = [w for w in blob["warnings"] if w.get("source_rule_id") == "RULE_TEST_DOSE"]
-    refs = project_detail_blob(blob, export_schema_version="3.0.0")["warning_rule_refs"]
+    # Older schema-3 writers compacted this actual shape without the
+    # lossless check; the reader must still recover its optional/null copy.
+    refs = [_warning_rule_ref(warning)]
     [resolved] = resolve_warning_rule_refs(refs, rules_by_id={"RULE_TEST_DOSE": {"dose_thresholds": [threshold]}})
     for field in ("detail", "action", "alert_headline", "alert_body", "informational_note"):
         assert resolved.get(field) == warning.get(field)
     assert resolved["sources"] == warning["sources"]
     assert resolved["title"] == warning["title"]
+
 
 def test_resolver_citations_reach_blocked_product_preflight():
     enriched = make_enriched()
@@ -7425,3 +7428,19 @@ def test_resolver_citations_reach_blocked_product_preflight():
     [warning] = [w for w in blob["warnings"] if w.get("matched_rule_id") == "BANNED_PHO"]
     assert blob["banned_substance_detail"]["source_urls"] == [r["url"] for r in warning["source_urls"]]
 
+
+def test_schema3_keeps_pipeline_targeted_copy_when_registry_copy_differs():
+    enriched = make_enriched()
+    rule_id = "RULE_IQM_FOLATE_TTC"
+    enriched["interaction_profile"] = {"ingredient_alerts": [{
+        "rule_id": rule_id, "ingredient_name": "Folate", "condition_hits": [{
+            "condition_id": "pregnancy", "severity": "monitor", "evidence_level": "probable",
+            "mechanism": "Pipeline target-specific context", "action": "Monitoring is advised during pregnancy.",
+            "alert_headline": "Pregnancy: monitoring is advised", "alert_body": "Pipeline target-specific context",
+            "sources": ["https://example.test/source"],
+        }],
+    }]}
+    blob = build_detail_blob(enriched, make_scored(), export_schema_version="3.0.0")
+    [warning] = [w for w in blob["warnings"] if w.get("source_rule_id") == rule_id]
+    assert warning["alert_body"] == "Pipeline target-specific context"
+    assert not any(ref["rule_id"] == rule_id for ref in blob["warning_rule_refs"])

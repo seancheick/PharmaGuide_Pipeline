@@ -237,7 +237,7 @@ def test_schema_3_removes_only_redundant_consumer_payloads() -> None:
 
 def test_schema_3_warning_refs_rehydrate_byte_equivalent_interaction_copy() -> None:
     source = _schema2_blob()
-    projected = project_detail_blob(source, export_schema_version="3.0.0")
+    projected = project_detail_blob(source, export_schema_version="3.0.0", rules_by_id={RULE["id"]: RULE})
 
     assert projected["warnings"] == [source["warnings"][1]]
     assert len(projected["warning_rule_refs"]) == 1
@@ -282,7 +282,7 @@ def test_schema_3_rehydrates_pregnancy_warning_and_dedup_provenance() -> None:
     blob = _schema2_blob()
     blob["warnings"] = [PREGNANCY_WARNING]
 
-    projected = project_detail_blob(blob, export_schema_version="3.0.0")
+    projected = project_detail_blob(blob, export_schema_version="3.0.0", rules_by_id={rule["id"]: rule})
     resolved = resolve_warning_rule_refs(
         projected["warning_rule_refs"],
         rules_by_id={rule["id"]: rule},
@@ -316,7 +316,7 @@ def test_schema3_pure_dose_warning_roundtrip(condition_ids):
                  "alert_body": warning["alert_body"], "sources": warning["sources"]}
     rule = {"id": warning["source_rule_id"], "dose_thresholds": [threshold],
             "condition_rules": [], "drug_class_rules": []}
-    projected = project_detail_blob({"warnings": [warning]}, export_schema_version="3.0.0")
+    projected = project_detail_blob({"warnings": [warning]}, export_schema_version="3.0.0", rules_by_id={rule["id"]: rule})
     assert resolve_warning_rule_refs(projected["warning_rule_refs"], rules_by_id={rule["id"]: rule}) == [warning]
     # An older reference without a grade must not inherit a later rule grade.
     ref = projected["warning_rule_refs"][0]
@@ -330,3 +330,20 @@ def test_schema3_pure_dose_warning_roundtrip(condition_ids):
     threshold["alert_body"] = "Different unreviewed copy"
     with pytest.raises(ValueError, match="no matching reviewed copy"):
         resolve_warning_rule_refs(projected["warning_rule_refs"], rules_by_id={rule["id"]: rule})
+
+
+def test_schema3_keeps_qualified_identity_notice_inline():
+    warning = {"type": "high_risk_ingredient", "severity": "caution",
+               "source": "interaction_rules", "matched_rule_id": "RULE_CASCARA_UNRESOLVED_IDENTITY",
+               "title": "Ingredient identity needs review", "detail": "Label identity needs clarification.",
+               "sources": ["https://example.test/label"], "source_urls": ["https://example.test/label"]}
+    projected = project_detail_blob({"warnings": [warning]}, export_schema_version="3.0.0")
+    assert projected["warnings"] == [warning]
+    assert projected["warning_rule_refs"] == []
+
+
+def test_schema3_keeps_full_warning_without_a_verified_rule_index():
+    source = _schema2_blob()
+    projected = project_detail_blob(source, export_schema_version="3.0.0")
+    assert projected["warnings"] == source["warnings"]
+    assert projected["warning_rule_refs"] == []
