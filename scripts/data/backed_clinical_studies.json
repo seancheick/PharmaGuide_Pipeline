@@ -6667,7 +6667,7 @@
           "purpose": "treatment",
           "population": {
             "age_group": "adult",
-            "description": "Healthy Japanese adults aged at least 20 with mild knee pain and Kellgren-Lawrence grade 0 or 1; 88 randomized, 80 per-protocol efficacy analyses and 88 safety analyses. Participants undergoing knee-disease treatment or using medicines/supplements were excluded."
+            "description": "Healthy Japanese adults aged at least 20 with mild knee pain and Kellgren-Lawrence grade 0 or 1; 88 randomized, 80 per-protocol efficacy analyses and 88 safety analyses. Participants undergoing knee-disease treatment or using medicines/supplements were excluded. Pregnant participants were excluded. Breastfeeding participants were excluded. Participants planning pregnancy were excluded."
           },
           "study_design": "Randomized, double-blind, placebo-controlled parallel-group trial; 44 assigned to each arm; lactose placebo; per-protocol primary analysis.",
           "trial_family": "optimsm_mild_knee_pain_37447322",
@@ -7126,7 +7126,7 @@
           "purpose": "treatment",
           "population": {
             "age_group": "adult",
-            "description": "Healthy Japanese adults aged at least 20 with mild knee pain and Kellgren-Lawrence grade 0 or 1; 88 randomized, 80 per-protocol efficacy analyses and 88 safety analyses. Participants undergoing knee-disease treatment or using medicines/supplements were excluded."
+            "description": "Healthy Japanese adults aged at least 20 with mild knee pain and Kellgren-Lawrence grade 0 or 1; 88 randomized, 80 per-protocol efficacy analyses and 88 safety analyses. Participants undergoing knee-disease treatment or using medicines/supplements were excluded. Pregnant participants were excluded. Breastfeeding participants were excluded. Participants planning pregnancy were excluded."
           },
           "study_design": "Randomized, double-blind, placebo-controlled parallel-group trial; 44 assigned to each arm; lactose placebo; per-protocol primary analysis.",
           "trial_family": "optimsm_mild_knee_pain_37447322",
@@ -7404,7 +7404,7 @@
           "purpose": "treatment",
           "population": {
             "age_group": "adult",
-            "description": "Men and women aged 40–70 with mild-to-moderate radiographic knee osteoarthritis, symptoms for at least six months, Lequesne index 8–18 and mostly Kellgren–Lawrence grades 1–3. The standalone comparison randomized 30 to MSM and 28 to placebo within a four-arm 118-person trial; no claim that all 118 received isolated MSM."
+            "description": "Men and women aged 40–70 with mild-to-moderate radiographic knee osteoarthritis, symptoms for at least six months, Lequesne index 8–18 and mostly Kellgren–Lawrence grades 1–3. The standalone comparison randomized 30 to MSM and 28 to placebo within a four-arm 118-person trial; no claim that all 118 received isolated MSM. Pregnant participants were excluded. Lactating mothers were excluded."
           },
           "study_design": "Single-centre randomized, double-blind, parallel, placebo-controlled four-arm trial. Paper reports five blocks of 24 planned, with 118 actually allocated as 30 glucosamine, 30 MSM, 30 combination and 28 placebo. ITT with last observation carried forward; exact sequence generation/concealment details beyond block design are not reported.",
           "trial_family": "msm_usha_naidu_17516722_hyderabad",

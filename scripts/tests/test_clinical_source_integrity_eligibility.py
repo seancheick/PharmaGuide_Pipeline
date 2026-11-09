@@ -1660,3 +1660,18 @@ def test_subsumed_msm_witness_keeps_its_independent_pending_review(monkeypatch, 
         generic = next(r for r in result['metadata']['contributing_record_assessments'] if r['id'] == 'INGR_MSM')
         assert generic['source_review']['is_complete'] is False
         assert candidate == before
+
+
+@pytest.mark.parametrize('record_id,pmid', [
+    ('INGR_MSM', '17516722'), ('INGR_MSM', '37447322'), ('BRAND_OPTIMSM', '37447322'),
+])
+@pytest.mark.parametrize('target,expected', [
+    ('Breastfeeding women', 'explicit_conflict'), ('Lactating mothers', 'explicit_conflict'),
+    ('Men', 'eligible'), ('Women', 'eligible'),
+])
+def test_msm_documented_population_exclusions_use_existing_population_owner(record_id, pmid, target, expected):
+    from clinical_applicability import reviewed_entries, assess_context_population
+    context = next(c for c in reviewed_entries()[record_id]['study_contexts']
+                   if c['source_pmids'] == [pmid])
+    product = {'fullName': target + ' Joint Support', 'targetGroups': [target]}
+    assert assess_context_population(product, context) == expected
