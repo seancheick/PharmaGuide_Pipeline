@@ -2961,6 +2961,7 @@ def test_watchlist_safety_flag_retains_registry_citations():
                  if row.get("matched_rule_id") == "WATCH_WITHAFERIN_A"]
     assert warning["type"] == "watchlist_substance"
     assert warning["severity"] == "caution"
+    assert warning["clinical_risk"] == "dose_dependent"
     assert warning["source_urls"]
     assert warning["safety_warning"]
 

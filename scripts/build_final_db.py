@@ -8000,6 +8000,7 @@ def build_detail_blob(
             "title": f"{title_prefix}: {name}",
             "detail": safe_str(reference.get("reason") or flag.get("evidence_text")),
             "source": "banned_recalled_ingredients",
+            "clinical_risk": safe_str(reference.get("clinical_risk_enum") or flag.get("clinical_risk_enum")),
             # Same ban entry as the substance-match card above, so the same
             # context: one hazard, one card after dedup.
             "ban_context": safe_str(reference.get("ban_context") or flag.get("ban_context")) or None,
