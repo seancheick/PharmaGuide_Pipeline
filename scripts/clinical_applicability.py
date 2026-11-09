@@ -1289,6 +1289,7 @@ def _assess_context_applicability(product: Mapping, entry: Mapping, reference: M
     result["matched_canonical_ids"] = list(dict.fromkeys(value for decision in accepted
         for value in decision.get("matched_canonical_ids", [])))
     selected = [context for context in contexts if context.get("context_id") in context_ids]
+    result.pop("qualifying_study_type", None)
     if selected and all(context.get("evidence_role") == "direct_rct" for context in selected):
         result["qualifying_study_type"] = (
             "rct_single" if len(_context_trial_families(selected)) == 1 else "rct_multiple")
@@ -1348,7 +1349,8 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
         policy = {"scope": "ingredient"}
     if not _valid_policy(policy):
         return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
-    if select_contexts and any(isinstance(context, Mapping) and "applicability" in context
+    if select_contexts and policy.get("scope") == "ingredient" and any(
+                               isinstance(context, Mapping) and "applicability" in context
                                for context in reference.get("study_contexts") or []):
         return _assess_context_applicability(
             product, entry, reference, policy, assess_amount=assess_amount,

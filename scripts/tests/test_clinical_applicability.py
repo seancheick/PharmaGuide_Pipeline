@@ -164,6 +164,50 @@ def test_ingredient_evidence_preserves_both_source_regimens_without_dose_adequac
         context["context_id"] for context in source["study_contexts"]]
 
 
+@pytest.mark.parametrize("reverse", [False, True])
+@pytest.mark.parametrize("role", ["meta_analysis", "systematic_review"])
+def test_mixed_context_roles_do_not_inherit_first_rct_depth(monkeypatch, reverse, role):
+    source = _distinct_regimen_source(monkeypatch)
+    source.update(study_type="systematic_review_meta", total_enrollment=72)
+    source["study_contexts"][1]["evidence_role"] = role
+    source["study_contexts"][1]["included_study_pmids"] = ["28661438"]
+    from clinical_evidence_schema import validate_ingredient_context
+    assert all(validate_ingredient_context(context, require_complete_review=True) == []
+               for context in source["study_contexts"])
+    if reverse:
+        source["study_contexts"].reverse()
+    original = deepcopy(source)
+    decision = assess_clinical_applicability(
+        zinc_product("zinc acetate", 4000), source,
+        assess_amount=False, require_claim_alignment=False)
+    assert decision["status"] == "applicable"
+    assert len(decision["population_applicability"]["context_ids"]) == 2
+    assert "qualifying_study_type" not in decision
+    accepted, rejected = filter_clinical_matches(
+        zinc_product("zinc acetate", 4000), [source],
+        assess_amount=False, require_claim_alignment=False)
+    assert rejected == [] and len(accepted) == 1
+    assert accepted[0]["study_type"] == "systematic_review_meta"
+    assert accepted[0]["total_enrollment"] == 72
+    assert source == original
+
+
+@pytest.mark.parametrize("scope,status,reason", [
+    ("formula_context_only", "not_applicable", "formula_reference_not_individual_evidence"),
+    ("unsupported", "unresolved", "unsupported_applicability_scope"),
+])
+def test_ingredient_context_cannot_override_parent_scope(monkeypatch, scope, status, reason):
+    source = _distinct_regimen_source(monkeypatch)
+    source["applicability"]["scope"] = scope
+    original = deepcopy(source)
+    decision = assess_clinical_applicability(
+        zinc_product("zinc acetate", 4000), source,
+        assess_amount=False, require_claim_alignment=False)
+    assert decision["status"] == status
+    assert decision["reason_code"] == reason
+    assert source == original
+
+
 def test_context_applicability_cannot_borrow_another_sources_approval(monkeypatch):
     source = _distinct_regimen_source(monkeypatch)
     source["study_contexts"][1]["applicability"]["source_pmids"] = ["28661438"]
