@@ -9,6 +9,7 @@ detail blobs are rejected before accounting begins.
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 import hashlib
 import json
 import sqlite3
@@ -47,22 +48,9 @@ def _field_bytes(key: str, value: Any) -> int:
 
 
 def _load_rules(path: Path) -> dict[str, dict[str, Any]]:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    metadata = payload.get("_metadata") if isinstance(payload, dict) else None
-    rules = payload.get("interaction_rules") if isinstance(payload, dict) else None
-    if not isinstance(metadata, dict) or not isinstance(rules, list):
-        raise ValueError("profile warning registry requires metadata and rules")
-    if metadata.get("total_entries") != len(rules):
-        raise ValueError("profile warning registry total_entries mismatch")
-    by_id: dict[str, dict[str, Any]] = {}
-    for rule in rules:
-        if not isinstance(rule, dict):
-            raise ValueError("profile warning registry contains a non-object")
-        rule_id = str(rule.get("id") or "").strip()
-        if not rule_id or rule_id in by_id:
-            raise ValueError("profile warning registry ids must be unique/nonempty")
-        by_id[rule_id] = rule
-    return by_id
+    from build_interaction_db import load_profile_warning_rules
+    _, rules = load_profile_warning_rules(path)
+    return {rule["id"]: rule for rule in rules}
 
 
 def _owned_blob_paths(build_dir: Path, manifest: dict[str, Any]) -> list[Path]:
@@ -149,7 +137,9 @@ def _account_removed_families(
     ]
     refs = projected.get("warning_rule_refs")
     refs = refs if isinstance(refs, list) else []
-    for index, warning in enumerate(source_interactions):
+    retained = projected.get("warnings", [])
+    removed_interactions = [warning for warning in source_interactions if warning not in retained]
+    for index, warning in enumerate(removed_interactions):
         source_size = len(_json_bytes(warning))
         ref_size = len(_json_bytes(refs[index])) if index < len(refs) else 0
         families["interaction_warning_prose"]["occurrences"] += 1
@@ -216,7 +206,7 @@ def build_schema3_payload_report(
         blob = json.loads(raw)
         if not isinstance(blob, dict):
             raise ValueError(f"detail blob {path.name} is not an object")
-        projected = project_detail_blob(blob, export_schema_version="3.0.0")
+        projected = project_detail_blob(blob, export_schema_version="3.0.0", rules_by_id=rules_by_id)
         source_bytes += len(raw)
         projected_bytes += len(_json_bytes(projected))
         _account_removed_families(blob, projected, families)
@@ -232,7 +222,13 @@ def build_schema3_payload_report(
             refs = projected.get("warning_rule_refs")
             refs = refs if isinstance(refs, list) else []
             resolved = resolve_warning_rule_refs(refs, rules_by_id=rules_by_id)
-            if resolved != original_interactions:
+            retained = [warning for warning in projected.get("warnings", [])
+                        if isinstance(warning, dict) and warning.get("source") == "interaction_rules"]
+            # Inline derived warnings and compact exact-copy refs are separate
+            # lanes; every complete warning and duplicate count must survive.
+            actual = Counter(json.dumps(w, sort_keys=True) for w in retained + resolved)
+            expected = Counter(json.dumps(w, sort_keys=True) for w in original_interactions)
+            if actual != expected:
                 raise ValueError("resolved interaction warning differs from source")
 
             profile_rows = blob.get("warnings_profile_gated")

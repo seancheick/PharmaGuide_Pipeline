@@ -149,3 +149,15 @@ def test_report_rejects_blob_outside_core_manifest_ownership(tmp_path: Path) -> 
 
     with pytest.raises(ValueError, match="manifest ownership"):
         build_schema3_payload_report(build, rules)
+
+
+def test_report_does_not_count_retained_targeted_copy_as_removed(tmp_path):
+    build, rules = _fixture(tmp_path)
+    path = build / "detail_blobs/p1.json"
+    blob = json.loads(path.read_text())
+    blob["warnings"][0]["detail"] = "Pipeline-targeted context"
+    blob["warnings_profile_gated"][0]["detail"] = "Pipeline-targeted context"
+    path.write_text(json.dumps(blob))
+    report = build_schema3_payload_report(build, rules)
+    assert report["warning_equivalence"]["failures"] == 0
+    assert report["removed_families"]["interaction_warning_prose"] == {"occurrences": 0, "bytes": 0}

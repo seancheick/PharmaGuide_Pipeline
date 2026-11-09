@@ -44,7 +44,10 @@ def _normalized_ids(value: Any) -> list[str]:
 
 
 def _is_interaction_rule_warning(warning: Mapping[str, Any]) -> bool:
-    return str(warning.get("source") or "").strip() == "interaction_rules"
+    return (
+        str(warning.get("source") or "").strip() == "interaction_rules"
+        and warning.get("type") in {"interaction", "drug_interaction", "diagnostic_interference"}
+    )
 
 
 _WARNING_REF_DYNAMIC_FIELDS = (
@@ -123,7 +126,8 @@ def _strip_schema3_rda_duplicates(rda_ul_data: dict[str, Any]) -> None:
 
 
 def project_detail_blob(
-    blob: dict[str, Any], *, export_schema_version: str
+    blob: dict[str, Any], *, export_schema_version: str,
+    rules_by_id: Mapping[str, Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Project one freshly built detail blob into a versioned public shape.
 
@@ -146,12 +150,26 @@ def project_detail_blob(
         for warning in _safe_list(projected.get("warnings"))
         if isinstance(warning, dict)
     ]
-    rule_warnings = [warning for warning in warnings if _is_interaction_rule_warning(warning)]
-    display_warnings = [warning for warning in warnings if not _is_interaction_rule_warning(warning)]
+    display_warnings = []
+    refs = []
+    for warning in warnings:
+        if not _is_interaction_rule_warning(warning):
+            display_warnings.append(warning)
+            continue
+        ref = _warning_rule_ref(warning)
+        rule = rules_by_id.get(ref["rule_id"]) if rules_by_id is not None else None
+        try:
+            # Target-specific/derived copy stays pipeline-authored. Remove it
+            # only when the shipped rule can recover the complete warning.
+            resolved = _resolved_warning(ref, rule) if isinstance(rule, Mapping) else None
+        except ValueError:
+            resolved = None
+        if resolved != warning:
+            display_warnings.append(warning)
+        else:
+            refs.append(ref)
     projected["warnings"] = display_warnings
-    projected["warning_rule_refs"] = [
-        _warning_rule_ref(warning) for warning in rule_warnings
-    ]
+    projected["warning_rule_refs"] = refs
     projected.pop("warnings_profile_gated", None)
 
     projected.pop("section_breakdown", None)
@@ -195,6 +213,15 @@ def _candidate_rule_subentries(
     condition_ids = _normalized_ids(ref.get("condition_ids"))
     drug_class_ids = _normalized_ids(ref.get("drug_class_ids"))
     candidates: list[tuple[Mapping[str, Any], str]] = []
+    # Pure-dose cards can carry condition IDs for stack-dose targeting, but
+    # their authored copy still belongs to the unscoped dose threshold.
+    gate = ref.get("profile_gate")
+    if (isinstance(gate, Mapping) and gate.get("gate_type") == "dose") or not (condition_ids or drug_class_ids):
+        candidates.extend(
+            (threshold, "dose")
+            for threshold in _safe_list(rule.get("dose_thresholds"))
+            if isinstance(threshold, Mapping) and threshold.get("scope") is None
+        )
     if condition_ids:
         condition_id = condition_ids[0]
         for candidate in _safe_list(rule.get("condition_rules")):
@@ -224,6 +251,14 @@ def _candidate_rule_subentries(
 def _subentry_copy(
     subentry: Mapping[str, Any], subentry_kind: str
 ) -> dict[str, Any]:
+    if subentry_kind == "dose":
+        return {
+            "detail": str(subentry.get("alert_body") or ""),
+            "action": None,
+            "alert_headline": subentry.get("alert_headline"),
+            "alert_body": subentry.get("alert_body"),
+            "informational_note": None,
+        }
     return {
         "detail": str(subentry.get("mechanism") or ""),
         "action": str(
@@ -265,7 +300,7 @@ def _resolved_warning(
     condition_ids = _normalized_ids(ref.get("condition_ids"))
     drug_class_ids = _normalized_ids(ref.get("drug_class_ids"))
     ingredient_name = str(ref.get("ingredient_name") or "").strip()
-    scope_id = (condition_ids or drug_class_ids or [""])[0]
+    scope_id = "dose" if subentry_kind == "dose" else (condition_ids or drug_class_ids or [""])[0]
     severity = ref.get("severity") or subentry.get("severity")
     warning_type = ref.get("type") or (
         "drug_interaction" if drug_class_ids else "interaction"
@@ -287,7 +322,7 @@ def _resolved_warning(
         "ingredient_name": ingredient_name,
         "ingredient_canonical_id": ref.get("ingredient_canonical_id"),
         "evidence_level": str(
-            ref.get("evidence_level", subentry.get("evidence_level")) or ""
+            ref.get("evidence_level", "ungraded" if subentry_kind == "dose" else subentry.get("evidence_level")) or ""
         ),
         "sources": copy.deepcopy(
             _safe_list(ref.get("sources", subentry.get("sources")))
