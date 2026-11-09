@@ -175,6 +175,15 @@ Primary key: `backed_clinical_studies` (array)
 | `aggregate_canonical_ids` | string[] | NO | Complete set of disclosed canonical ingredient identities required for one aggregate evidence record. Enrichment emits the record once only when the full set is present; scoring sums their convertible daily doses and declines dose-scope credit when any required component is missing. |
 
 Clinical evidence notes:
+- When independent source contexts require different applicability constraints,
+  `study_contexts[].applicability` reuses the existing ingredient applicability
+  fields. Its nonempty `source_pmids` must belong to that same context; every
+  eligible context in that record must carry a valid scope. The existing
+  clinical applicability owner evaluates each scope separately and merges only
+  successful contexts. Requested amount correspondence preserves discrete
+  regimens; amount-independent ingredient Evidence does not create Dose
+  adequacy, population equivalence or a continuous efficacy range. Source-review
+  completeness still checks the original record and all unfinished obligations.
 - Clinical entries require source-backed `key_endpoints`; read `_metadata.total_entries` rather than copying a drifting count into documentation.
 - `references_structured` supports three reference types: `clinical_trial` (NCT ID), `pubmed` (PMID/DOI), and `chembl` (ChEMBL ID + max_phase).
 - `effect_direction` is required on clinical efficacy entries. Reference-only summaries may omit it when no aggregate efficacy determination is established; do not invent an effect grade or backfill one for heterogeneous source summaries. Read the live file when distribution counts are needed.

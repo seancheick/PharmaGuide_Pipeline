@@ -1072,7 +1072,8 @@ def _positioning_is_formula_level(product: Mapping, canonicals: set) -> bool:
                    if str(row.get("canonical_id")) in canonicals)
 
 
-def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, contexts: list, *, require_claim_alignment: bool) -> dict:
+def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, contexts: list, *,
+                             require_claim_alignment: bool, reference: Mapping | None = None) -> dict:
     """Return a blocking decision, or the components a qualifying scope adds.
 
     Population and claim are judged per context, so one applicable context
@@ -1145,7 +1146,8 @@ def _assess_condition_scopes(product: Mapping, entry: Mapping, policy: Mapping, 
     # count. A fully retained signed scope may be narrower than its source
     # population (for example hypertensive participants within a BP review).
     from scoring_v4.modules.generic_evidence import _clinical_source_id
-    reference = reviewed_entries().get(_clinical_source_id(dict(entry)), entry)
+    if reference is None:
+        reference = reviewed_entries().get(_clinical_source_id(dict(entry)), entry)
     original_ids = {context.get("context_id") for context in reference.get("study_contexts") or []
                     if context.get("scoring_eligible") is True}
     qualifying_ids = {context.get("context_id") for context, _ in qualifying}
@@ -1225,6 +1227,71 @@ def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Map
     return {"claim_alignment": claim, "population_applicability": {"state": population}}
 
 
+def _context_applicability_policy(policy: Mapping, context: Mapping) -> dict | None:
+    """Bind an existing applicability vocabulary to this context's sources."""
+    scoped = context.get("applicability")
+    if not isinstance(scoped, Mapping) or scoped.get("scope") != "ingredient":
+        return None
+    merged = {**policy, **scoped}
+    sources = scoped.get("source_pmids")
+    context_sources = context.get("source_pmids")
+    if (not _valid_policy(merged) or not isinstance(sources, list) or not sources
+            or not _valid_policy({"scope": "ingredient", "source_pmids": context_sources})
+            or not set(sources) <= set(context_sources)):
+        return None
+    return merged
+
+
+def _assess_context_applicability(product: Mapping, entry: Mapping, reference: Mapping,
+                                  policy: Mapping, *, assess_amount: bool,
+                                  require_claim_alignment: bool) -> dict:
+    """Use the same matcher independently for each reviewed source scope.
+
+    Amount correspondence is requested by the caller. Ingredient Evidence
+    deliberately leaves it to Dose, without equating distinct study regimens.
+    Source-review completeness always reads the original canonical record.
+    """
+    # A malformed approved scope must not disappear during eligibility
+    # filtering and silently lend its parent policy to a sibling source.
+    if any(isinstance(context, Mapping) and context.get("scoring_eligible") is True
+           and _context_applicability_policy(policy, context) is None
+           for context in reference.get("study_contexts") or []):
+        return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+    contexts = _accepted_condition_scopes(reference, policy)
+    scoped = [(context, _context_applicability_policy(policy, context)) for context in contexts]
+    if not scoped or any(own_policy is None for _, own_policy in scoped):
+        return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+    decisions = [_assess_reference_applicability(
+        product, entry, {**reference, "applicability": own_policy, "study_contexts": [context]},
+        assess_amount=assess_amount, require_claim_alignment=require_claim_alignment,
+        select_contexts=False) for context, own_policy in scoped]
+    accepted = [decision for decision in decisions if decision.get("status") == "applicable"]
+    if not accepted:
+        return next((decision for decision in decisions if decision.get("status") == "unresolved"),
+                    decisions[0])
+    result = dict(accepted[0])
+    context_ids = list(dict.fromkeys(context_id for decision in accepted
+        for context_id in decision.get("population_applicability", {}).get("context_ids", [])))
+    result["population_applicability"] = {"state": "eligible", "context_ids": context_ids}
+    result["supported_outcomes"] = list(dict.fromkeys(outcome for decision in accepted
+                                                       for outcome in decision.get("supported_outcomes", [])))
+    result["studied_population"] = "; ".join(dict.fromkeys(
+        decision["studied_population"] for decision in accepted if decision.get("studied_population")))
+    refs = list(dict.fromkeys(ref for decision in accepted
+        for ref in (decision.get("matched_source_row_refs") or [decision.get("source_row_ref")]) if ref))
+    if refs:
+        result["matched_source_row_refs"] = refs
+        if len(refs) > 1:
+            result.pop("source_row_ref", None)
+    result["matched_canonical_ids"] = list(dict.fromkeys(value for decision in accepted
+        for value in decision.get("matched_canonical_ids", [])))
+    selected = [context for context in contexts if context.get("context_id") in context_ids]
+    if selected and all(context.get("evidence_role") == "direct_rct" for context in selected):
+        result["qualifying_study_type"] = (
+            "rct_single" if len(_context_trial_families(selected)) == 1 else "rct_multiple")
+    return result
+
+
 def assess_clinical_applicability(
     product: Mapping, entry: Mapping, *, assess_amount: bool = True,
     require_claim_alignment: bool = True,
@@ -1235,6 +1302,15 @@ def assess_clinical_applicability(
     reference = reviewed_entries().get(_clinical_source_id(dict(entry))) if registry_backed else entry
     if reference is None:
         return {"status": "unresolved", "reason_code": "clinical_source_contexts_missing"}
+    return _assess_reference_applicability(
+        product, entry, reference, assess_amount=assess_amount,
+        require_claim_alignment=require_claim_alignment)
+
+
+def _assess_reference_applicability(product: Mapping, entry: Mapping, reference: Mapping, *,
+                                    assess_amount: bool, require_claim_alignment: bool,
+                                    select_contexts: bool = True) -> dict:
+    """Apply one canonical reference or its source-bound, shallow context view."""
     # The curated owner can retain research for context while withdrawing
     # numerical credit. An old enriched positive stamp cannot reverse that.
     if is_reference_only(reference):
@@ -1269,6 +1345,11 @@ def assess_clinical_applicability(
         policy = {"scope": "ingredient"}
     if not _valid_policy(policy):
         return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+    if select_contexts and any(isinstance(context, Mapping) and "applicability" in context
+                               for context in reference.get("study_contexts") or []):
+        return _assess_context_applicability(
+            product, entry, reference, policy, assess_amount=assess_amount,
+            require_claim_alignment=require_claim_alignment)
     if policy.get("scope") == "formula_context_only":
         return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
     if policy.get("scope") != "ingredient":
@@ -1289,7 +1370,8 @@ def assess_clinical_applicability(
         scope = {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
     else:
         scope = (_assess_condition_scopes(product, entry, policy, accepted_scopes,
-                                          require_claim_alignment=require_claim_alignment)
+                                          require_claim_alignment=require_claim_alignment,
+                                          reference=reference)
                  if accepted_scopes else {})
     # A source, claim or population block is decided after preparation, so a
     # known material mismatch is preserved and passing rows retain provenance.

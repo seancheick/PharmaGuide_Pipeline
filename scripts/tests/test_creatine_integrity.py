@@ -122,6 +122,15 @@ def test_cee_failed_prodrug(iqm):
     assert 'above placebo' in form['notes']
 
 
+def test_cee_retains_conflicting_primary_muscle_creatine_reporting(iqm):
+    form = iqm['creatine_monohydrate']['forms']['creatine ethyl ester']
+    assert 'Results/Figure 2' in form['notes']
+    assert 'Discussion/conclusion' in form['notes']
+    assert 'unresolved' in form['notes']
+    assert form['bio_score'] == 4
+    assert form['absorption_structured']['value'] is None
+
+
 
 def test_no_phantom_schedel_2000_citation(iqm):
     """The non-existent "Schedel 2000" creatine PK citation must not appear

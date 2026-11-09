@@ -3,8 +3,8 @@
     "purpose": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict",
     "description": "Reviewed GHOST-SUSPECT findings from verify_backed_studies_citations.py --strict. A suspect blocks the release gate until it is reviewed here with a rationale that states why the live PubMed record does support the entry. Removing an entry re-arms the gate for that citation.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-10-31",
-    "total_entries": 8
+    "last_updated": "2026-11-08",
+    "total_entries": 9
   },
   "reviewed": [
     {
@@ -70,6 +70,14 @@
       "rationale": "Primary PubMed content verifies an oligofructose secondary biomarker analysis of a prior randomized placebo-controlled trial (21 g/day,12 weeks,37 participants with available samples). The inspected inulin-type-fructan synthesis includes this publication; oligofructose wording causes the generic ingredient-word heuristic to miss the correspondence. This is included-publication provenance only, not an independent participant cohort, ingredient-wide efficacy, universal inulin dose threshold or accepted product claim. Preserve null IL-6,TNF-alpha,MCP-1,adiponectin and resistin findings and the pending source context/eligibility holds. No clinical approval or safety clearance is added.",
       "reviewed_by": "Codex primary NIH content and included-study-table verification",
       "reviewed_at": "2026-10-27"
+    },
+    {
+      "pmid": "24398786",
+      "entry_id": "INGR_INULIN",
+      "live_title": "Freeze-dried powdered yacon: effects of FOS on serum glucose, lipids and intestinal transit in the elderly.",
+      "rationale": "False lexical ghost for an included-publication pointer, not an isolated-chicory efficacy citation. Live primary metadata explicitly identifies fructooligosaccharides (FOS) delivered in freeze-dried yacon: 7.4 g/day for 9 weeks in 72 elderly participants. Exact DOI 10.1007/s00394-013-0648-x and source reference 79 bind this paper to the bibliography of PMID 38309832. INGR_INULIN retains it only in included_study_pmids of its completed noncredit 38309832 context. The food matrix, older population and mixed reported findings do not establish isolated inulin, chicory, retail-preparation or numerical efficacy equivalence. This acknowledgment preserves bibliography identity only; no scoring eligibility, effect grade, Dose benchmark or source-review hold changes.",
+      "reviewed_by": "Codex /root; independently checked by Codex /root/grouped_correctness_check; agent source-identity review, not clinician review",
+      "reviewed_at": "2026-11-08"
     }
   ]
 }

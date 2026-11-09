@@ -36,15 +36,37 @@ def test_optimsm_is_the_brand_only_and_msm_is_ingredient_level():
     assert {"msm", "methylsulfonylmethane"} <= set(msm["aliases"])
     for entry in (msm, entries["BRAND_OPTIMSM"]):
         assert (entry["min_clinical_dose"], entry["max_studied_clinical_dose"], entry["dose_unit"]) == (2000, 6000, "mg")
-        assert entry['study_type'] == 'rct_single'
-        assert entry['applicability']['source_pmids'] == ['37447322']
-        assert entry['applicability']['minimum_daily_dose'] == 2000
-        assert entry['applicability']['maximum_daily_dose'] == 2000
+        assert entry['study_type'] == 'rct_multiple'
+        assert set(entry['applicability']['source_pmids']) == {'37447322', '16309928'}
+        assert 'minimum_daily_dose' not in entry['applicability']
+        accepted = [context for context in entry['study_contexts'] if context['scoring_eligible']]
+        assert {tuple(context['source_pmids']) for context in accepted} == {
+            ('37447322',), ('16309928',)}
+        assert {context['applicability']['minimum_daily_dose'] for context in accepted} == {2000, 6000}
+        assert all(context['applicability']['minimum_daily_dose'] ==
+                   context['applicability']['maximum_daily_dose'] for context in accepted)
     assert {r['pmid'] for r in entries['BRAND_OPTIMSM']['references_structured']} == {'16309928', '37447322'}
     assert {r['pmid'] for r in msm['references_structured']} == {
         '16309928', '37447322', '21708034', '17516722'}
     assert {p for c in msm['study_contexts'] if c['scoring_eligible']
-            for p in c['source_pmids']} == {'37447322'}
+            for p in c['source_pmids']} == {'37447322', '16309928'}
+
+
+def test_msm_source_reviews_preserve_mixed_oa_and_alternating_controlled_human_findings():
+    entry = _entries()['INGR_MSM']
+    contexts = {context['source_pmids'][0]: context for context in entry['study_contexts']}
+    oa = contexts['16309928']
+    assert oa['review_status'] == 'clinician_approved' and oa['scoring_eligible'] is True
+    assert {outcome['direction'] for outcome in oa['outcomes']
+            if outcome['hierarchy'] == 'primary'} == {'positive', 'null'}
+    assert oa['dose']['values'] == [6000]
+    assert 'titration' in oa['dose']['reported_regimen'].lower()
+    alternate = contexts['21708034']
+    assert alternate['review_status'] == 'rejected_source'
+    assert alternate['scoring_eligible'] is False
+    text = ' '.join(alternate['limitations']).lower()
+    assert 'alternation' in text and 'positive' in text and 'null' in text
+    assert contexts['17516722']['review_status'] == 'source_verified_pending_clinical_review'
 
 
 def test_generic_msm_research_keeps_brand_and_general_dose_credit_separate():

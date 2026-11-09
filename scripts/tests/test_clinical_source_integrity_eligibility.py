@@ -1382,20 +1382,22 @@ def test_five_family_bounded_noncredit_sources_are_finished(entry_id, pmids):
     assert all('Codex' in c['clinical_review']['reviewer'] for c in contexts)
 
 
-def test_msm_retains_one_qualified_trial_and_unfinished_sources():
+def test_msm_keeps_two_distinct_qualified_trials_and_the_unresolved_primary_hold():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     entries = reviewed_entries()
     for key in ('INGR_MSM', 'BRAND_OPTIMSM'):
-        assert entries[key]['study_type'] == 'rct_single'
+        assert entries[key]['study_type'] == 'rct_multiple'
         assert entries[key]['effect_direction'] == 'mixed'
+        assert entries[key]['total_enrollment'] == 88  # Largest study, never 88 + 50.
     source = entries['INGR_MSM']
     assert source['applicability']['required_form_terms'] == ['OptiMSM', 'MSM', 'methylsulfonylmethane']
-    assert source['applicability']['minimum_daily_dose'] == 2000
-    assert source['applicability']['maximum_daily_dose'] == 2000
+    assert 'minimum_daily_dose' not in source['applicability']
+    assert {context['applicability']['minimum_daily_dose'] for context in source['study_contexts']
+            if context['scoring_eligible']} == {2000, 6000}
     pending = {p for c in source['study_contexts']
                if c['review_status'] == 'source_verified_pending_clinical_review'
                for p in c['source_pmids']}
-    assert pending == {'16309928', '21708034', '17516722'}
+    assert pending == {'17516722'}
     assert assess_clinical_source_review({'id': 'INGR_MSM'})['is_complete'] is False
     assert entries['BRAND_OPTIMSM']['study_contexts'][0]['clinical_review']['reviewer'] == 'Dr. Pham'
 
