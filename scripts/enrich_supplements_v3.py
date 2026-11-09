@@ -161,7 +161,7 @@ import form_vocab as _form_vocab  # noqa: E402
 # Import scoring hardening modules
 from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer
-from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier, _row_has_amount
+from proprietary_blend_detector import ProprietaryBlendDetector, disclosure_tier, _row_has_amount, is_disclosure_component
 
 # One direct child row of a raw label row: "<parent>.nestedRows[3]".
 _RAW_CHILD_ROW = re.compile(r"\.nestedRows\[\d+\]")
@@ -15261,7 +15261,8 @@ class SupplementEnricherV3:
                 # Source descriptors are the cleaner's provenance decision,
                 # not independently formulated hidden actives. Their elemental
                 # profile can remain unknown without creating B5 opacity.
-                if row.get("cleaner_row_role") == "source_descriptor":
+                if (row.get("cleaner_row_role") == "source_descriptor"
+                        or row.get("is_excipient") is True):
                     non_opaque_source_fields.add(f"{section}[{index}]")
                     continue
                 ref = str(row.get("raw_source_path") or "")
@@ -15432,7 +15433,7 @@ class SupplementEnricherV3:
             for child in children:
                 if not isinstance(child, dict):
                     continue
-                if child.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES:
+                if not is_disclosure_component(child):
                     continue
                 child_name = (child.get("name", "") or "").strip()
                 child_qty, child_unit = disclosed_source_amount(child)
@@ -15478,15 +15479,20 @@ class SupplementEnricherV3:
                 }
 
             for idx, ingredient in enumerate(ingredient_list):
-                if (ingredient.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES
-                        or ingredient.get("raw_source_path") in source_only_preparations):
-                    continue
                 is_nested = bool(ingredient.get('isNestedIngredient', False))
                 parent_blend = (ingredient.get('parentBlend', '') or '').strip()
                 parent_source_path = str(
                     ingredient.get("parent_source_path") or ""
                 ).strip()
                 structurally_nested = is_nested or bool(parent_source_path)
+                # Quantified carriers disclose physical parent mass in either
+                # nested or flattened projections; they never own an active blend.
+                if (not is_disclosure_component(ingredient)
+                        or ((ingredient.get("cleaner_row_role") == "inactive"
+                             or ingredient.get("is_excipient") is True)
+                            and not (structurally_nested and parent_blend))
+                        or ingredient.get("raw_source_path") in source_only_preparations):
+                    continue
                 is_blend = (
                     ingredient.get('proprietaryBlend', False)
                     or ingredient.get("cleaner_row_role") == "blend_header_total"
@@ -15508,6 +15514,9 @@ class SupplementEnricherV3:
                 if (not nested and ingredient.get("cleaner_row_role") == "blend_header_total"
                         and "blend" in str(ingredient.get("ingredientGroup") or "").casefold()):
                     nested = ingredient.get("forms") or []
+                source_nested_count = len(nested)
+                nested = [child for child in nested
+                          if is_disclosure_component(child)]
                 quantity = ingredient.get('quantity', 0) or 0
                 unit = ingredient.get('unit', '') or ''
                 ingredient_group = ingredient.get('ingredientGroup', '') or ''
@@ -15544,9 +15553,8 @@ class SupplementEnricherV3:
                 # "Probiotic & Microbiome Blend") do NOT resolve to a single
                 # canonical ingredient, so they fall through and keep the B5
                 # opacity penalty.
-                if (
-                    source_field in non_opaque_source_fields
-                ):
+                if (source_field in non_opaque_source_fields
+                        and not (structurally_nested and parent_blend)):
                     continue
 
                 # Roll nested rows under parent blend key when available.
@@ -15667,6 +15675,11 @@ class SupplementEnricherV3:
                     {"name": child_name, "amount": None, "unit": ""}
                     for child_name in children_without_amounts
                 ]
+                if len(nested) != source_nested_count:
+                    disclosure = disclosure_tier(
+                        disclosed_source_amount(ingredient)[0] is not None,
+                        len(children_with_amounts), len(children_without_amounts),
+                    )
                 cleaning_blends.append({
                     "name": ingredient.get('name', ''),
                     "disclosure_level": disclosure,
@@ -15819,6 +15832,9 @@ class SupplementEnricherV3:
         # Step 3c: Compute total_active_mg for scorer B5 impact calculation.
         total_active_mg = 0.0
         for ing in active_ingredients:
+            if (ing.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES
+                    or ing.get("is_excipient") is True):
+                continue
             if self._excluded_text_reason(ing.get("name") or "") == SKIP_REASON_NUTRITION_FACT:
                 # A Nutrition Facts line (chloride, like sodium) is not active
                 # mass (register D22).
