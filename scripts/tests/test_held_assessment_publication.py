@@ -21,7 +21,8 @@ NEW_BLOCKERS = {
 # 330196-330199 left this list on 2026-11-01: their exact 4:1 powder Dose
 # scope completed (test_exact_approved_botanical_dose_scopes.py). The title
 # and blend-total fixes resolved Dose here too; Evidence remains unfinished.
-RELEASE_FAILURE_IDS = ['18551', '178728']
+# 18551's TMG review completed on2026-11-09; its transition is tested below.
+RELEASE_FAILURE_IDS = ['178728']
 RELEASE_FAILURE_BLOCKERS = {pid: ['evidence_assessment_incomplete'] for pid in RELEASE_FAILURE_IDS}
 
 
@@ -41,6 +42,36 @@ def release_failure_pairs():
         assert not errors, pid
         pairs[pid] = enriched, score_product_v4(score_eligible_identity_view(enriched))
     return pairs
+
+
+def test_finished_tmg_review_releases_18551_but_reopening_it_restores_the_hold(monkeypatch):
+    import clinical_applicability as ca
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrich_supplements_v3 import SupplementEnricherV3
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((Path(__file__).parent / 'fixtures' / 'raw_held_assessment_18551.json').read_text())
+    enriched, errors = SupplementEnricherV3().enrich_product(
+        EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    complete = build_scored_artifact(deepcopy(enriched))
+    assert complete['quality_score_status'] == 'scored'
+    assert complete['assessment_readiness']['release_assessment']['is_complete'] is True
+    assert complete['assessment_readiness']['release_assessment']['blockers'] == []
+
+    # A standing label hold follows the actual review state, not a permanent ID exception.
+    records = ca.reviewed_entries()
+    pending = deepcopy(records['PRECLIN_BETAINE_ANHYDROUS'])
+    context = next(c for c in pending['study_contexts'] if c['source_pmids'] == ['39514262'])
+    context['review_status'] = 'source_verified_pending_clinical_review'
+    context['scoring_eligible'] = False
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {**records, pending['id']: pending})
+    held = build_scored_artifact(deepcopy(enriched))
+    assert held['quality_score_status'] == 'not_scored'
+    assert held['quality_score_v4_100'] is None
+    assert held['assessment_readiness']['release_assessment']['blockers'] == ['evidence_assessment_incomplete']
+    assert held['product_safety_status'] == complete['product_safety_status']
+    assert held['_v4_safety_gate'] == complete['_v4_safety_gate']
 
 
 @pytest.mark.parametrize('pid', RELEASE_FAILURE_IDS)

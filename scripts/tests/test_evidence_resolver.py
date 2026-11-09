@@ -1962,14 +1962,13 @@ def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifac
     row['quantity'] = amount
     result = er.resolve_evidence_for_row(row, product)
     assert result.points_eligible is False
-    assert result.reason_code == 'clinical_form_mismatch'
+    assert result.reason_code == 'reference_only_clinical_record'
+    assert result.blocking_reasons == []
     artifact = build_scored_artifact(product)
     assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
     assert 'evidence_assessment_incomplete' not in artifact['assessment_readiness']['release_assessment']['blockers']
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
-    # The now-reviewed tartrate source is form-excluded too. Inspect each
-    # canonical decision: the valid-source branch need not expose the
-    # reference-only branch's aggregate diagnostic payload.
+    # Retain the exact completed reference beside the excluded broader sources.
     from clinical_applicability import assess_clinical_applicability, reviewed_entries
     decisions = {}
     for source_id in ('INGR_L_CARNITINE', 'INGR_ACETYL_L_CARNITINE', 'BRAND_CARNIPURE'):
@@ -1984,6 +1983,8 @@ def test_alcar_completed_reference_and_excluded_generic_source_finish_at_artifac
         'INGR_ACETYL_L_CARNITINE': 'reference_only_clinical_record',
         'BRAND_CARNIPURE': 'clinical_form_excluded',
     }
+    assert {item['id']: item['reason_code'] for item in
+            result.owner_facts['backed_clinical_studies']['assessments']} == decisions
 
 
 @pytest.mark.parametrize('reverse', [False, True])
@@ -2046,8 +2047,17 @@ def test_mixed_carnitine_product_keeps_unread_base_open_after_alcar_completion()
     ('elderberry', 'Elderberry', 'elderberry extract'),
     ('tmg_betaine', 'Betaine', 'betaine anhydrous'),
 ])
-def test_unfinished_positive_source_does_not_become_completed_noncredit(canonical, name, form):
+def test_unfinished_positive_source_does_not_become_completed_noncredit(monkeypatch, canonical, name, form):
     from assessment_readiness import _resolved_evidence_assessment
+    if canonical == 'tmg_betaine':
+        import copy
+        import clinical_applicability as ca
+        records = ca.reviewed_entries()
+        pending = copy.deepcopy(records['PRECLIN_BETAINE_ANHYDROUS'])
+        context = next(c for c in pending['study_contexts'] if c['source_pmids'] == ['39514262'])
+        context['review_status'] = 'source_verified_pending_clinical_review'
+        context['scoring_eligible'] = False
+        monkeypatch.setattr(ca, 'reviewed_entries', lambda: {**records, pending['id']: pending})
     row, product = _excluded_preparation_product(name, canonical, form)
     result = er.resolve_evidence_for_row(row, product)
     assert result.points_eligible is False

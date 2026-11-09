@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
     "last_updated": "2026-11-09",
-    "total_entries": 217,
+    "total_entries": 218,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -24451,17 +24451,18 @@
       "score_contribution": "tier_1",
       "key_endpoints": [
         "Body-fat percentage and fat-mass changes during supervised resistance training (PMID 30064450)",
-        "Fight Gone Bad repetitions in trained men; Wingate power and body-composition treatment contrasts null (PMID 37409757)"
+        "Fight Gone Bad repetitions in trained men; Wingate power and body-composition treatment contrasts null (PMID 37409757)",
+        "Limited published pooled lower-body maximal-strength finding (PMID39514262); not a general exercise-benefit claim"
       ],
       "health_goals_supported": [],
-      "notes": "The two earlier declared exercise RCTs report preparation- and outcome-specific findings, not general exercise or cardiovascular efficacy. PMID 30064450 studied BetaPower 2.5 g/day in untrained young women undertaking resistance training: body-fat outcomes improved, while strength/power did not show superior between-group effects. PMID 37409757 studied Medicaline capsules in trained men: Fight Gone Bad repetitions improved, while Wingate power/body composition did not. Those two contexts remain approved non-scoring. The 2024 meta-analysis lower-body-strength question remains under source/method reconciliation; neither a generic credit conclusion nor a categorical no-efficacy conclusion is established by this note. PMID 36501070 is additionally recorded as a completed bounded non-credit primary-source review: parallel 9 BET/9 placebo, VPX 6 g/day for 14 days, day 12 one-leg 1 RM and subsequent exercise-repetition supplement comparisons null; within-participant leg/exercise conditions are not supplement-period crossover. This additional source does not resolve the signed pooled lower-body-strength hold. PMID 36009767 remains valid human intervention research. Its published allocation description does not establish randomization, so the bounded completed review excludes unsupported RCT qualification and causal transfer only; it does not reject the study or infer no possible efficacy. The signed pooled-method hold remains open. November 8 source-method follow-up by Codex /root/betaine_review, independently checked by Codex /root: PMID 39514262 states its extracted analysis data are available from the corresponding author on request. Published marginal summaries and the inspected Lee figure do not supply the missing paired/composite variance; connected within-block plotting points are not an identified across-treatment participant map. The existing signed paired-analysis hold remains unchanged. Trepanowski PMID 22080324 full Methods remain unavailable to this review; no correlation, re-analysis, pool eligibility or completed zero finding is invented.",
-      "study_type": "rct_multiple",
+      "notes": "Limited evidence for lower-body strength. The published review reports a small positive pooled finding, but results vary by study and test and lose statistical significance when several individual studies are removed. Upper-body strength, power and endurance were not consistently improved. This is not general exercise or cardiovascular efficacy. The research includes adolescent and adult cohorts; an adult-only effect was not reported. Study regimens differed, so no single effective dose is established. Earlier primary findings remain source-specific: body-fat benefits during supervised resistance training did not establish superior strength/power, and a separate trial reported Fight Gone Bad improvements with null Wingate/body-composition comparisons. This assessment applies to ordinary oral betaine anhydrous (TMG), not betaine hydrochloride or unstudied delivery preparations.",
+      "study_type": "systematic_review_meta",
       "published_studies": [
         "RCT",
         "meta-analysis"
       ],
-      "last_updated": "2026-11-06",
-      "notable_studies": "PMID 30064450: 23 young women completed; BetaPower 2.5 g/day with supervised resistance training; primary body-fat percentage surrogate positive, secondary squat/bench 1 RM and power null between groups. PMID 37409757: 43 male recreational CrossFit practitioners; Medicaline capsules 2.5 or 5 g/day for 21-day crossover periods; Fight Gone Bad repetitions positive, Wingate/body-composition null, and hormone findings mixed. Neither of those trials establishes homocysteine reduction, cardiovascular-event prevention or a generic energy benefit. PMID 39514262 is retained in the private source-review packet with a fragile positive lower-body pooled signal and unresolved primary-source/method discrepancies; it is not yet a new credit-bearing record. PMID 36501070: 18 men, parallel 9/9, VPX 6 g/day for 14 days; day 12 one-leg 1 RM and later total-repetition supplement contrasts null; B-vitamin complex in 16/18. No generic efficacy or preparation equivalence follows. PMID 36009767: 5 g/day for six weeks; 16 performance participants (9/7) and 14 blood participants (7/7). Assignment was described according to baseline half-squat 1 RM, without established randomized allocation. Within-arm improvements and nonsignificant between-group comparisons remain distinct. The synthesis table lists 2.5 g/day; this discrepancy is preserved, without silently reanalyzing the pool.",
+      "last_updated": "2026-11-09",
+      "notable_studies": "PMID 39514262: One published synthesis reports lower-body strength SMD 0.49 (95% CI 0.01–0.98), I2=69%, p=.05; the finding is sensitive to individual studies. Upper-body strength, power and endurance pools were not consistently positive. PMID 30064450: Body-fat benefits during resistance training; strength/power did not show superior between-group effects. PMID 37409757: Fight Gone Bad repetitions positive; Wingate/body-composition null. PMID 36501070: Null supplement contrasts in a parallel 9/9 design. PMID 36009767: Randomized allocation and a between-group strength benefit are not established; human findings are retained. PMID 21744011: Betaine monotherapy did not improve strength/power versus placebo; creatine findings are not assigned to betaine.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -24557,16 +24558,32 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "europe_pmc_med_api_and_official_pmc_full_text"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39514262",
+          "doi": "10.1080/02640414.2024.2423578",
+          "title": "Effects of chronic betaine supplementation on exercise performance: Systematic review and meta-analysis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39514262/",
+          "publication_types": [
+            "Meta-Analysis",
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "existing_live_med_identity_and_retained_primary_content_agent_review"
         }
       ],
       "external_ids": {
         "unii": "3SCV180C9W"
       },
-      "effect_direction": "positive_strong",
-      "total_enrollment": 100,
+      "effect_direction": "positive_weak",
+      "total_enrollment": null,
       "registry_completed_trials_count": 46,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Historical automated positive_strong/high fields are retained pending explicit qualification; they are not a current approved efficacy grade. The two earlier declared trials measured exercise/body-composition outcomes, not primary cardiovascular, energy, homocysteine, stress/mood, glycemic-control or recovery benefits. Their approved contexts remain non-scoring. The specific lower-body meta-analysis source/method hold remains unresolved. Legacy registry and enrollment counts are not independently qualified trial-family or efficacy-participant totals. Additional primary PMID 36501070 is a completed non-credit bounded source review; it neither requalifies historical positive_strong/high fields nor supplies the unresolved pooled-strength decision. The completed source-to-RCT transfer exclusion for PMID 36009767 preserves genuine research and uncertainty; it does not supply a new efficacy grade or resolve the pooled-strength hold.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "The published lower-body strength pool supports a limited positive finding, with low confidence because results vary across studies and are sensitive to individual studies. Upper-body strength, power and endurance pools were not consistently positive. The source does not establish general exercise, cardiovascular, energy or recovery benefits, betaine-HCl equivalence, or an adult-only pooled effect.",
       "endpoint_relevance_tags": [],
       "study_contexts": [
         {
@@ -24619,7 +24636,7 @@
           "limitations": [
             "Small sample of untrained young women during supervised resistance training; dietary intake suboptimal (Conclusions); no transfer to weight loss without training.",
             "Betaine anhydrous (BetaPower); betaine HCl transfer rejected by Dr. Pham (A127).",
-            "Not scoring eligible on its own: the record's cardiovascular/homocysteine and energy claims are not measured, and generic credit is excluded by Dr. Pham's 2026-10-28 ruling. Outcome-scoped lower-body strength credit (2024 SR/MA, PMID 39514262) is still being assessed; this is not a categorical zero.",
+            "Not scoring eligible on its own: the record's cardiovascular/homocysteine and energy claims are not measured, and generic credit is excluded by Dr. Pham's 2026-10-28 ruling. The separate published lower-body synthesis (PMID39514262) has a completed limited review; this earlier primary context retains its original non-scoring decision.",
             "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
           ],
           "dose": {
@@ -24714,7 +24731,7 @@
           "limitations": [
             "No primary outcome designated in the article; outcome hierarchy not_reported, so it cannot supply primary-outcome credit.",
             "Doses were not blinded between parallel groups; 3-week exposure; trained men only.",
-            "Not scoring eligible on its own: the record's cardiovascular/homocysteine and energy claims are not measured, and generic credit is excluded by Dr. Pham's 2026-10-28 ruling. Outcome-scoped lower-body strength credit (2024 SR/MA, PMID 39514262) is still being assessed; this is not a categorical zero.",
+            "Not scoring eligible on its own: the record's cardiovascular/homocysteine and energy claims are not measured, and generic credit is excluded by Dr. Pham's 2026-10-28 ruling. The separate published lower-body synthesis (PMID39514262) has a completed limited review; this earlier primary context retains its original non-scoring decision.",
             "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
           ],
           "dose": {
@@ -24829,7 +24846,7 @@
           ],
           "limitations": [
             "1 RM assessed on day 12 as a pre-exercise load assessment, not a pre/post training-strength change; the 14-day assigned regimen is distinct from endpoint timing.",
-            "Meta-analysis 39514262 forest 18/18 reflects two legs from 9/9 men. Primary mixed ANOVA includes leg within participant. Combining legs requires undisclosed covariance handling; do not invent a correlation.",
+            "Meta-analysis 39514262 forest 18/18 reflects two legs from 9/9 men. Primary mixed ANOVA includes leg within participant. Published combination variance has not been independently reconstructed; no correlation is invented. This is a limitation,not a routine published-finding review gate.",
             "B-vitamin coadministration and exercise-condition effects cannot become isolated betaine efficacy.",
             "Other endocrine, lactate and gene-expression outcomes are not qualified by this bounded lower-body review; no blanket all-endpoint null finding or new grade."
           ]
@@ -24863,7 +24880,7 @@
             "The primary reports assignment according to baseline half-squat 1 RM and does not establish a random allocation procedure. Randomization is unverified, not proven absent. This source cannot supply affirmative direct-RCT qualification on that reporting basis. No observational or uncontrolled role is invented.",
             "The studied regimen was 5 g/day for six weeks; the synthesis table lists 2.5 g/day. Preserve the source discrepancy rather than silently repairing or reanalyzing the published pool. No general Dose benchmark or lower-dose equivalence follows.",
             "Reported within-arm improvements are retained as within-arm findings. Between-group comparisons were not statistically significant; neither a causal betaine benefit nor proof of no possible efficacy follows from this bounded review.",
-            "This is only a source-to-RCT/affirmative-transfer exclusion. Other source reviews, pooled-method questions and the signed parent strength hold remain open. The genuine human study and its scientific provenance remain available."
+            "This is only a source-to-RCT/affirmative-transfer exclusion. Other source-specific findings remain separate; the published pooled-strength finding is now reviewed as limited without an independent reanalysis. The genuine human study and its scientific provenance remain available."
           ]
         },
         {
@@ -24925,7 +24942,7 @@
             "Although Statistical analysis states intention-to-treat irrespective of compliance, published Figure2 states that two betaine participants missed the postintervention MRS assessment and were excluded from that endpoint. The PCr analysis cannot be described as complete data for every randomized participant.",
             "The earlier public author draft omitted explicit arm sizes and said four familiarization sessions. The publisher-typeset paper specifies three sessions and9/9/8/8 arms; the published source controls these facts. Source labels, null effects and the assigned regimen are preserved.",
             "This primary is included in PMID39514262. It counts as one clinical family, never an additional independent trial alongside the synthesis.",
-            "The signed lower-body pooled-method/application hold remains: correlated legs/exercises, crossover pairing/period handling and source-regimen discrepancies are not resolved by this parallel-study review.",
+            "An earlier agent audit described the separate pooled-method question as signed. The inspected original A127 return does not establish a signed public-data or paired-covariance requirement. PMID 39514262 is now independently assessed as a limited published finding; actual preparation and source-specific rulings remain. The original primary-source review attribution is retained as historical provenance.",
             "No transfer to homocysteine clinical benefit, cardiovascular outcomes, generic energy or betaine HCl. All existing Dose and safety decisions are preserved.",
             "Published full paper was content-read through the Academia web reader; direct local retrieval was403. No local published-body hash is claimed. The retained author draft remains separately bound and is not silently relabeled as the final paper."
           ],
@@ -24956,8 +24973,128 @@
               "location": "Publisher-typeset Amino Acids42:2299–2305: Materials and methods pp2300–2301; Results/Tables1–2 p2302; Figure2 MRS attrition p2303; Discussion/Acknowledgments pp2303–2305. Public author draft retained separately."
             }
           }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_betaine_anhydrous_39514262_lower_body",
+          "components": [
+            "PRECLIN_BETAINE_ANHYDROUS"
+          ],
+          "source_pmids": [
+            "39514262"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "Oral betaine anhydrous / trimethylglycine in trial-specific capsules, powders or drinks. No betaine hydrochloride, liposomal preparation or whole botanical-matrix equivalence is inferred."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "lower_body_maximal_strength",
+          "purpose": "challenge",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_39514262",
+          "population": {
+            "age_group": "mixed",
+            "description": "The published review eligibility criterion was ages 15–60 years. Included studies involved adolescent and adult cohorts, trained and untrained participants, and mostly men. The complete observed participant age range was not established, and the lower-body estimate is not an adult-only subgroup estimate."
+          },
+          "study_design": "One published systematic review and random-effects meta-analysis. Seventeen publication labels overall and nine lower-body forest labels are not independent replication counts or unique enrollment. Lower-body measurements include1RM,3RM and isometric tests; both parallel and crossover designs are represented.",
+          "outcomes": [
+            {
+              "name": "Lower-body maximal strength: published pooled SMD 0.49 (95% CI 0.01–0.98; p=.05; I2=69%). This is a limited positive published finding, not an independently recalculated effect or a general exercise-benefit finding.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Upper-body maximal strength: published SMD 0.50 (95% CI −0.25–1.25; p=.19). Sprint cycling, bench-throw power and muscular-endurance pools were not statistically significant; these null findings are retained.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "The full vertical-jump pool was not significant; a positive result appeared after excluding Yang2022. This sensitivity result is not primary whole-pool efficacy.",
+              "hierarchy": "post_hoc",
+              "kind": "patient_important",
+              "direction": "mixed",
+              "outcome_role": "post_hoc_subgroup"
+            }
+          ],
+          "limitations": [
+            "The lower-body finding is limited: its confidence interval nearly includes zero, heterogeneity is substantial, and removal of Cholewa 2018, Nobari 2021, Trepanowski 2011 or Yang 2022 individually removes statistical significance. This does not establish a robust benefit across all exercise outcomes.",
+            "The source pools different strength tests and mixed adolescent/adult and training populations. It does not establish an adult-only effect, benefit for children or pregnancy, cardiovascular-event prevention, homocysteine clinical benefit, generic energy or recovery.",
+            "Crossover carryover and correlated leg/exercise observations limit confidence in the published estimate. Paired/composite variance has not been independently reconstructed; such reconstruction is not required to finish this bounded review of the published findings. No correlation or corrected estimate is invented.",
+            "Machek (PMID 36501070) has parallel groups of 9 men each, not 18 independent men per group; right/left-leg observations are correlated. The assigned regimen was 6 g/day for 14 days and 1RM testing occurred on day 12, not as a measured pre/post strength-training change.",
+            "Yang36009767 reports5g/day6weeks while the synthesis table prints2.5g/day. Its random allocation is not established, and within-arm gains do not establish between-group efficacy. Preserve this source discrepancy rather than silently repairing the published pool.",
+            "Trepanowski22080324 full Methods were not retrieved for its own independent trial review. Its primary abstract reports no significant between-condition performance effects; this does not make its estimated effect zero or contradict a positive aggregate by itself. Reading the published synthesis does not activate an unreviewed underlying trial.",
+            "The source reports moderate certainty for strength overall; its supplementary GRADE/risk-of-bias worksheets were not independently audited. The PharmaGuide weak-positive classification proposed here is the existing effect-direction category, not a new formal GRADE rating.",
+            "The synthesis and its constituent reports are not independent confirmations. Earlier approved non-scoring primary contexts and source-specific exclusions remain separate; none is silently made scoring eligible.",
+            "No new effective minimum, optimum, continuous Dose curve, salt conversion or safety ceiling follows from these descriptive regimens.",
+            "The legacy parent enrollment aggregate of 100 is not a verified participant count for this synthesis; no qualified total enrollment is assigned. The discovery registry count is not a published-trial count."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "duration_days": null,
+            "administration_frequency": "Trial-specific schedules; the synthesis does not report one pooled administration frequency.",
+            "dosage_forms": [
+              "Trial-specific oral capsules, dissolved powder and sports drinks"
+            ],
+            "co_therapies": [
+              "Trial-specific exercise/training protocols; no common regimen."
+            ],
+            "reported_regimen": "Trial-specific nominal regimens reported as 2–6 g/day over 7–98 days; primary Yang 2022 reports 5 g/day rather than the synthesis table’s 2.5 g/day. No single pooled dose, duration or effective minimum is established.",
+            "source_provenance": {
+              "pmid": "39514262",
+              "location": "Retained author-shared publisher-layout primary article,Methods2.1/2.5–2.8,Results3.1–3.6,Tables2–3,Figure2,sensitivity analyses and limitations. PMID/title/DOI verified in existing liveMED receipts. Primary Machek/Yang content checked separately. This is not publisher-open-access provenance or an independently reanalyzed pool.",
+              "source_url": "https://doi.org/10.1080/02640414.2024.2423578"
+            }
+          },
+          "included_study_pmids": [
+            "23967897",
+            "30064450",
+            "21744011",
+            "20642826",
+            "36501070",
+            "32516959",
+            "34663363",
+            "22080324",
+            "36009767"
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/betaine_review; independently source/rubric checked by Codex /root/grouped_correctness_check and Codex /root. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Retained complete primary synthesis Methods/Results, forest results, sensitivity analyses and limitations were checked against the existing pooled-unranked outcome rubric. The reported lower-body strength finding is positive but limited by a near-zero confidence bound, heterogeneity and sensitivity to individual studies. Null upper-body, power and endurance pools remain. No independent recalculation, assumed covariance, general efficacy threshold or Dose benchmark is claimed. Review eligibility ages 15–60 are not an observed participant range. Existing primary-source rulings and anhydrous/HCl boundaries remain separate. Public raw-data retrieval is not a completion gate."
+          }
         }
-      ]
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "supported_outcomes": [
+          "lower_body_maximal_strength"
+        ],
+        "excluded_form_terms": [
+          "hydrochloride",
+          "hcl",
+          "liposomal"
+        ],
+        "source_pmids": [
+          "39514262"
+        ],
+        "reviewed_at": "2026-11-09",
+        "reason": "Source-reviewed oral anhydrous/trimethylglycine strength findings only. No betaineHCl or unstudied liposomal delivery equivalence; source exposure/population limitations remain descriptive,not a Dose benchmark or marketing gate."
+      }
     },
     {
       "id": "PRECLIN_ASTAXANTHIN_GENERIC",
@@ -39231,7 +39368,7 @@
         "Muscle Growth & Recovery"
       ],
       "notes": "The accepted A062 finding concerns creatine monohydrate with full-body resistance training and body-composition outcomes in the studied populations (PMID 39074168). The pooled strength review 39519498 includes other creatine forms and is retained as noncontributing context, not exact-monohydrate qualification. Trial regimens, populations and source reporting discrepancies are retained in the source context; no universal regimen or minimum is inferred. Sean attests Dr. Pham signed the explicit limited A062 decision on 2026-10-26; source acceptance does not establish every retail product or purpose.",
-      "last_updated": "2026-10-27",
+      "last_updated": "2026-11-09",
       "notable_studies": "PMID39074168:monohydrate plus full-body resistance training,12trials;lean-body-mass increase1.14kg(95%CI0.69–1.59) with preparation,population,bias and heterogeneous-regimen limits. PMID39519498:contextual strength synthesis with mixed creatine forms;not independent exact-monohydrate qualification.",
       "references_structured": [
         {
@@ -39319,15 +39456,18 @@
           "creatin monohydrate",
           "creapure"
         ],
-        "reviewed_at": "2026-10-07",
+        "reviewed_at": "2026-11-09",
         "source_pmids": [
           "39074168"
         ],
-        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms. Existing curated source aliases Creatin Monohydrate and Creapure identify monohydrate; the Creapure manufacturer independently confirms that preparation. This identity correspondence adds no branded efficacy or safety claim.",
+        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms. Existing curated source aliases Creatin Monohydrate and Creapure identify monohydrate; the Creapure manufacturer independently confirms that preparation. This identity correspondence adds no branded efficacy or safety claim. Exact Kre-Alkalyn identifies the separately reviewed buffered preparation, not the ordinary monohydrate preparation qualified here. Its limited active-comparator research is retained in its own reference record; neither monohydrate efficacy transfer nor absence of buffered-creatine efficacy is inferred.",
         "excluded_form_terms": [
           "creatine hydrochloride",
           "creatine HCl",
-          "Con-Cret"
+          "Con-Cret",
+          "Kre-Alkalyn",
+          "Kre Alkalyn",
+          "KreAlkalyn"
         ],
         "supported_outcomes": [
           "Muscle Growth & Recovery"
@@ -48625,7 +48765,7 @@
       "health_goals_supported": [],
       "notes": "The exact free-L-glutamine trial is qualified for its narrow patient-important IBS endpoint. Other known studies and modified preparations remain unfinished; earned source credit must coexist with incomplete ingredient review. No general IBS, sports-performance, muscle-recovery, lower-dose-equivalence or safety claim is established.",
       "notable_studies": "PMID 30108163: 115 randomized, 106 completers; 43/54 active versus 3/52 whey placebo met the prespecified primary IBS symptom threshold after 15 g/day for 8 weeks. Permeability was a secondary surrogate. All other listed sources retain their own reviewed-exclusion or pending status; do not count their citations as independent positive replications.",
-      "last_updated": "2026-11-06",
+      "last_updated": "2026-11-09",
       "references_structured": [
         {
           "type": "pubmed",
@@ -49029,24 +49169,27 @@
           "source_pmids": [
             "35106632"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
-          },
           "dose": {
             "source_provenance": {
               "pmid": "35106632",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/35106632/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+              "location": "Official PMC9279189 full Methods and Results were read and independently content checked. The trial used cystine plus glutamine, not isolated glutamine."
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Combined-intervention results cannot establish isolated free-L-glutamine benefit.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
-          ]
+            "Only combination-to-isolated-L-glutamine causal transfer is excluded. The study has no isolated glutamine arm; its positive combined-preparation findings remain. It does not establish clinical symptom, performance or general safety benefits for glutamine alone.",
+            "Sixteen active Japanese men underwent randomized, counterbalanced, double-blind crossover periods separated by 14–22 days. Days 1–5 used 0.23 g cystine, 1 g glutamine and 1.23 g maltodextrin three times daily versus 2.46 g maltodextrin three times daily. Day 6 used one corresponding dose 30 minutes before one hour of running at 75% VO2max. The day-6 glutamine exposure was 1 g, not the earlier 3 g/day.",
+            "Primary plasma lactulose:mannitol and I-FABP modeled comparisons were positive (p=.0090 and .0035); an additional lactulose:mannitol change comparison had p=.0096. Fasting lipids/glucose and exercise intensity, heart rate and temperature did not differ.",
+            "This completed standalone-transfer review does not qualify any combination product. Other source, preparation, Dose and safety obligations remain separate."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/scientific_review; independently primary-content checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official PMC9279189 full Methods and Results were read and independently content checked. The trial used cystine plus glutamine, not isolated glutamine. Only this bounded transfer is excluded; valid positive/null observations and unrelated clinical decisions remain."
+          }
         },
         {
           "context_schema_version": "1.1.0",
@@ -49057,24 +49200,27 @@
           "source_pmids": [
             "39397201"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
-          },
           "dose": {
             "source_provenance": {
               "pmid": "39397201",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/39397201/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+              "location": "Retained full primary Methods, Results and Tables 1–2 were independently content checked. Published quantitative contradictions and mixed preparations prevent the stated generic-pool/threshold transfer; reported findings are retained."
             }
           },
           "limitations": [
-            "Full text has been read; source-specific qualification remains unfinished. Heterogeneous populations, pooling and reporting contradictions require reconciliation; neither generic null efficacy nor a dose threshold is established.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
-          ]
+            "The published pool does not establish a reliable quantitative threshold or a broad generic oral efficacy or no-effect conclusion. Its reported pooled null and favorable subgroup claims remain recorded with the source inconsistencies; no universal ineffectiveness, retraction or fraud is inferred.",
+            "Overall permeability was reported as WMD −0.00 (95% CI −0.04 to 0.03), I2=83.6%. Diseases, preparations including alanyl-glutamine and active controls differ. The abstract reports 10 studies/352 people, the body 11 studies, and the table 12 effect rows with repeated Noyer dose arms and 216+212 arm counts. No unique participant total is assigned.",
+            "The printed high-dose WMD −0.01 falls outside its printed CI −0.10 to −0.08; 30 g/day is elsewhere printed as 30 mg/day. Model/table and duration statements also differ. No corrected values, dosing threshold or new efficacy minimum are invented.",
+            "Independent reconstruction is not needed to finish this bounded quantitative/generic-transfer exclusion. No underlying trial is newly qualified, and the separately qualified PI-IBS-D finding in PMID 30108163 remains intact."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/scientific_review; independently primary-content checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Retained full primary Methods, Results and Tables 1–2 were independently content checked. Published quantitative contradictions and mixed preparations prevent the stated generic-pool/threshold transfer; reported findings are retained. Only this bounded transfer is excluded; valid positive/null observations and unrelated clinical decisions remain."
+          }
         },
         {
           "context_schema_version": "1.1.0",
@@ -49197,24 +49343,27 @@
           "source_pmids": [
             "40748005"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
-          },
           "dose": {
             "source_provenance": {
               "pmid": "40748005",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/40748005/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+              "location": "The official MED/PubMed abstract was independently content checked and explicitly limits glutamine to combination with arginine. This is an abstract-supported composition/causal-transfer exclusion, not full-article review."
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Combined-intervention results cannot establish isolated free-L-glutamine benefit.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
-          ]
+            "The official abstract explicitly describes glutamine only in combination with arginine. Arginine and combination outcomes cannot be assigned to isolated oral L-glutamine. Positive combination research is retained; no absence of effect or wound-healing null is inferred.",
+            "The narrative review reports 15 studies and 1085 participants. Seven studies had nonsignificant or unreported wound-size results and six had nonsignificant or unreported healing-time results; recurrence and pain were not reported. These are reported review counts, not newly verified independent trial or participant totals.",
+            "The full article was not retrieved. This completed causal-transfer exclusion relies on the composition explicitly reported in the verified abstract, not a claim of full Methods/Results review. Detailed combination efficacy, preparation, trial overlap and dose questions are not approved.",
+            "This decision adds no isolated-glutamine efficacy credit, Dose benchmark or safety reassurance. Other source and derivative holds remain separate."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/scientific_review; independently primary-content checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "The official MED/PubMed abstract was independently content checked and explicitly limits glutamine to combination with arginine. This is an abstract-supported composition/causal-transfer exclusion, not full-article review. Only this bounded transfer is excluded; valid positive/null observations and unrelated clinical decisions remain."
+          }
         }
       ],
       "applicability": {
@@ -50536,6 +50685,181 @@
           }
         }
       ]
+    },
+    {
+      "id": "BRAND_KRE_ALKALYN",
+      "standard_name": "Kre-Alkalyn Buffered Creatine",
+      "aliases": [
+        "kre-alkalyn",
+        "kre alkalyn",
+        "krealkalyn"
+      ],
+      "category": "sports_performance",
+      "evidence_level": "reference",
+      "study_type": "reference",
+      "published_studies": [
+        "controlled trial",
+        "ingredient-form"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "Source-specific buffered-versus-monohydrate physiological and training comparisons; no significant efficacy superiority and selected positive time effects (PMID 22971354)."
+      ],
+      "health_goals_supported": [],
+      "notes": "Limited evidence for Kre-Alkalyn. One 28-day study compared two buffered-creatine regimens with creatine monohydrate; there was no untreated or placebo-only comparator. The buffered form did not show superiority in muscle creatine, body composition, strength or sprint-cycling outcomes. Some measures improved over time across the active groups. These findings do not establish absence of benefit, equivalence, lower-dose equivalence or fewer side effects. They do not establish the effect of every retail dose or other buffered-creatine preparation.",
+      "last_updated": "2026-11-09",
+      "notable_studies": "Jagim 2012 (22971354): KA-L 1.5 g/day for 28 days or KA-H 20 g/day for 7 days then 5 g/day for 21 days, compared with Creapure at the same nominal loading/maintenance schedule; no no-creatine placebo.",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "22971354",
+          "doi": "10.1186/1550-2783-9-43",
+          "title": "A buffered form of creatine does not promote greater changes in muscle creatine content, body composition, or training adaptations than creatine monohydrate.",
+          "citation": "Journal of the International Society of Sports Nutrition (2012-09-13)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/22971354/",
+          "published_date": "2012-09-13",
+          "publication_types": [
+            "Journal Article"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "notes": "Original full source identifies Kre-Alkalyn and two tested regimens in a randomized active-comparator design. Efficacy superiority contrasts are null and selected time effects positive; no no-creatine placebo arm, equivalence or standalone placebo-controlled efficacy finding. Source is valid, not a source-integrity exclusion."
+        }
+      ],
+      "total_enrollment": null,
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "brand_kre_alkalyn_22971354_bounded_noncredit_source",
+          "components": [
+            "BRAND_KRE_ALKALYN"
+          ],
+          "source_pmids": [
+            "22971354"
+          ],
+          "identity_scope": "branded_material",
+          "identity": {
+            "branded_material": "Kre-Alkalyn",
+            "manufacturer": "All American Pharmaceutical",
+            "preparation": "Exact source-identified buffered creatine material, lot 1067000; no generic creatine or retail material equivalence inferred."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "creatine_comparator_physiology",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_22971354",
+          "population": {
+            "sample_size": 36,
+            "description": "Apparently healthy resistance-trained men, mean age 20.2 years. Body: 41 recruited/consented/familiarized, 36 completed (12 per active group); abstract describes36 randomized. Muscle-creatine analysis used 25, with two missing day 7 values carried forward; no reconstructed randomized denominator. Individual age ranges were not stated; the mean must not be converted into a verified minimum/maximum age."
+          },
+          "study_design": "Randomized double-blind three-active-arm parallel comparison over 28 days, matched on body weight, training history and age. Kre-Alkalyn low-dose and nominal dose-matched high-dose regimens compared with Creapure monohydrate; no no-creatine placebo arm. Usual resistance training continued and was logged.",
+          "outcomes": [
+            {
+              "name": "Muscle free-creatine, body composition, bench/leg-press strength and Wingate variables: no significant treatment-by-time differences between active creatine preparations; muscle-creatine interaction Wilks p = .55 and body-composition interaction p = .90.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Muscle free-creatine, body mass/fat-free mass, bench press and selected Wingate measures increased over time across active groups; these time effects have no untreated/no-creatine control.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "Low-dose buffered-creatine versus Creapure post-hoc muscle-creatine trend p = .053; not a statistically significant superiority contrast.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "post_hoc_subgroup"
+            },
+            {
+              "name": "Serum creatinine rose more with the higher nominal doses (interaction p = .03); transient LDL contrast was reported during loading. These selected laboratory observations are not a clinical safety clearance or a new warning threshold.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "mixed",
+              "outcome_role": "companion_reported_context"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              1.5,
+              5,
+              20
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 28,
+            "administration_frequency": "KA-L: 1.5 g once daily for 28 days. KA-H: 5 g four times daily for 7 days, then 5 g once daily for 21 days.",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "co_therapies": [
+              "Habitual resistance training. KA-L packet of capsules included 3.5 g dextrose; three additional 5 g dextrose servings per day during the initial week maintained masking. Creapure comparator used 20 g/day loading then 5 g/day maintenance."
+            ],
+            "reported_regimen": "Two distinct assigned regimens: KA-L 1.5 g/day for 28 days; KA-H 20 g/day for 7 days then 5 g/day for 21 days. No studied continuous 1.5–20 g effective interval.",
+            "normalization": {
+              "basis": "Retain nominal assigned Kre-Alkalyn regimens. Covance Table 2 reports 1.56 g creatine monohydrate per eight KA-L capsules and 5.19 g per eight KA-H capsules, with a KA-H assay percentage of 102.0 as printed. Do not repair the percentage or infer universally interchangeable creatine-base exposure."
+            },
+            "source_provenance": {
+              "pmid": "22971354",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/22971354/",
+              "location": "Full primary Methods, Results, tables and competing interests; official NCBI BioC full text 22971354_BIOC.xml. No abstract-only qualification."
+            }
+          },
+          "limitations": [
+            "The exact buffered preparation has human randomized active-comparator research. Lack of statistically significant superiority versus monohydrate does not demonstrate placebo inefficacy, equivalence, noninferiority, lower-dose equivalence, superior absorption or superior safety.",
+            "Positive time-related muscle-creatine/body-composition/strength/power observations remain recorded; no isolated Kre-Alkalyn-versus-no-creatine causal efficacy contrast exists. No unreported primary hierarchy or new grade is assigned.",
+            "AlzChem funded the study; investigator consultancy disclosed. Commercially supported comparison, not independent funding replication.",
+            "This is the same source family as the completed Creapure reference context. Two buffered arms and one monohydrate arm are one trial; do not count them as three independent studies or duplicate pooled enrollment.",
+            "Abstract describes 36 randomized, body 41 recruited/consented/familiarized and 36 completed. Muscle subset 25, two carried-forward day 7 values; KA-H bench/Wingate n = 11. Do not use 36 as every endpoint denominator.",
+            "Phosphocreatine measures were not reliable; muscle free creatine is the reported assay. KA-L versus monohydrate p = .053 remains a post-hoc trend, not superiority.",
+            "The exact studied population is apparently healthy resistance-trained men. No disease, pregnancy, untrained-population or universal safety conclusion follows.",
+            "This finished limited reference assessment is preparation-specific, not automatic whole-product completion; Dose, safety, hidden amounts, other ingredients and identity holds remain independent.",
+            "No general Dose benchmark, efficacious minimum, assay-to-retail dose conversion or continuous dose-response range is established."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/creapure_source_review; independently primary-content checked by Codex /root/grouped_correctness_check and Codex /root. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "The retained complete primary Methods, Results and tables support one exact source-identified Kre-Alkalyn active-comparator family, with both assigned regimens, null efficacy interactions and selected positive time changes. No placebo-only efficacy, superiority, equivalence, low-dose equivalence or safety benefit is inferred. Independent checks confirmed the study formulation and actual Kre-Alkalyn names on the three frozen labels. This is a finished limited, noncredit source assessment, not a new Formulation grade or Dose benchmark."
+          }
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "kre-alkalyn",
+          "kre alkalyn",
+          "krealkalyn"
+        ],
+        "reviewed_at": "2026-11-09",
+        "source_pmids": [
+          "22971354"
+        ],
+        "reason": "Exact source-identified Kre-Alkalyn brand preparation only. Do not transfer from generic creatine, default monohydrate, Creapure, PEG, hydrochloride, ethyl ester, or another unspecified buffered mixture. No standalone efficacy equivalence is inferred.",
+        "supported_outcomes": [
+          "Muscle Growth & Recovery"
+        ],
+        "studied_population": "Apparently healthy resistance-trained men in the source comparison; the reported mean age does not establish an individual minimum or maximum age."
+      }
     }
   ]
 }
