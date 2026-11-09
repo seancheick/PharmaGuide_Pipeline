@@ -206,3 +206,22 @@ def test_sugar_bound_survives_warning_and_export_copy(operator, amount, unit, ex
         assert expected + ' sugar per serving' in text
     else:
         assert 'exact amount' in text
+
+
+@pytest.mark.parametrize('level', [None, ''])
+def test_unverified_sugar_is_not_a_positive_sugar_finding_from_carrier(level):
+    sugar = {'amount_g': None, 'level': level, 'contains_sugar': False,
+             'has_added_sugar': False, 'sugar_sources': []}
+    detail = _dietary_sugar_penalty_detail(_product(sugar, {'high_glycemic': ['maltodextrin']}))
+    assert detail['penalty'] == 0
+    assert detail['canonical_finds_no_sugar'] is False
+    assert detail['level'] == ''
+
+
+def test_unverified_sugar_amount_keeps_separately_identified_syrup_penalty():
+    detail = _dietary_sugar_penalty_detail(_product(
+        {'amount_g': None, 'level': None, 'contains_sugar': True,
+         'has_added_sugar': True, 'sugar_sources': ['corn syrup']},
+        {'high_glycemic': ['corn syrup']}))
+    assert detail['penalty'] > 0
+    assert detail['reason'] == 'high_glycemic_or_syrup'
