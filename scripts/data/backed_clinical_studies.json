@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
     "last_updated": "2026-11-09",
-    "total_entries": 218,
+    "total_entries": 220,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -28325,18 +28325,20 @@
         "digestive betaine"
       ],
       "category": "digestive_gut",
-      "evidence_level": "reference",
+      "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
-      "key_endpoints": [],
+      "key_endpoints": [
+        "Aligned-clock postprandial time to baseline gastric pH (PMID 31485804; physiological surrogate only)"
+      ],
       "health_goals_supported": [],
-      "notes": "23980906 measures transient gastric pH in drug-induced hypochlorhydria;25274610 measures dasatinib exposure. Neither tests protein-digestion or general digestive-symptom benefit. Drug-exposure findings are not a self-treatment recommendation. Reference context only; no affirmative ingredient-level clinical credit or clinician approval established.",
-      "study_type": "reference",
+      "notes": "Limited human evidence supports a faster return to baseline stomach acidity after a standardized meal at the studied4,500mg challenge. This physiological result does not establish relief of digestive symptoms, better protein digestion or a routine dosing recommendation. Earlier pH and drug-exposure experiments have condition-specific positive and null findings; they are not medication-management recommendations. Anhydrous betaine/TMG is a different preparation.",
+      "study_type": "rct_single",
       "published_studies": [
         "mechanistic",
         "RCT"
       ],
-      "last_updated": "2026-03-07",
-      "notable_studies": "A pilot human study showed that 1500 mg betaine HCl rapidly lowered gastric pH in rabeprazole-induced hypochlorhydria (PMID 23980906). A randomized crossover study then demonstrated that this re-acidification restored dasatinib exposure under hypochlorhydric conditions (PMID 25274610). These are meaningful human mechanism studies, but not direct digestive-symptom efficacy trials. Source disposition: 23980906 measures transient gastric pH in drug-induced hypochlorhydria;25274610 measures dasatinib exposure. Neither tests protein-digestion or general digestive-symptom benefit. Drug-exposure findings are not a self-treatment recommendation.",
+      "last_updated": "2026-11-09",
+      "notable_studies": "PMID31485804: nine healthy adults; aligned-clock4,500mg pH contrast positive, lower doses/AUCpH/maximum pH null. PMID23980906: six-person uncontrolled transient pH experiment. PMID25274610: dasatinib-exposure finding under drug-induced hypochlorhydria. PMID28028768: no significant atazanavir-exposure rescue under fed conditions. Do not infer digestive-symptom benefit, general medication rescue or safety clearance.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -28416,19 +28418,313 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "28028768",
+          "doi": "10.1007/s11095-016-2090-2",
+          "title": "Meal Effects Confound Attempts to Counteract Rabeprazole-Induced Hypochlorhydria Decreases in Atazanavir Absorption.",
+          "citation": "Pharmaceutical research (2016-12-27)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/28028768/",
+          "published_date": "2016-12-27",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article",
+            "Research Support, N.I.H., Extramural"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Achlorhydria",
+            "Betaine",
+            "Ritonavir",
+            "HIV Protease Inhibitors",
+            "Administration, Oral",
+            "Cross-Over Studies",
+            "Drug Interactions",
+            "Food-Drug Interactions",
+            "Adult",
+            "Middle Aged",
+            "Female",
+            "Male",
+            "Proton Pump Inhibitors",
+            "Young Adult",
+            "Rabeprazole",
+            "Absorption, Physiological",
+            "Atazanavir Sulfate"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "31485804",
+          "doi": "10.1007/s11095-019-2693-5",
+          "title": "Food, Acid Supplementation and Drug Absorption - a Complicated Gastric Mix: a Randomized Control Trial.",
+          "citation": "Pharmaceutical research (2019-09-04)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31485804/",
+          "published_date": "2019-09-04",
+          "publication_types": [
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "mesh_terms": [
+            "Gastric Acid",
+            "Humans",
+            "Betaine",
+            "Gastrointestinal Agents",
+            "Pharmaceutical Preparations",
+            "Gastric Acidity Determination",
+            "Administration, Oral",
+            "Prospective Studies",
+            "Cross-Over Studies",
+            "Food-Drug Interactions",
+            "Hydrogen-Ion Concentration",
+            "Food",
+            "Adolescent",
+            "Adult",
+            "Middle Aged",
+            "Female",
+            "Male",
+            "Gastric Absorption"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
         }
       ],
       "external_ids": {
-        "unii": "3SCV180C9W"
+        "unii": "JK8U8K4D6K"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "positive_weak",
       "primary_outcome": "",
       "total_enrollment": null,
       "registry_completed_trials_count": null,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Limited evidence for faster return to baseline gastric pH after a standardized meal from one small randomized crossover. Only aligned-clock 4,500 mg contrast qualifies; lower doses, AUCpH and maximum pH were null. No digestive-symptom, nutrient-digestion, medication-management or clinical safety benefit follows.",
       "endpoint_relevance_tags": [],
-      "scoring_eligible": false
+      "scoring_eligible": true,
+      "applicability": {
+        "scope": "ingredient",
+        "source_pmids": [
+          "31485804"
+        ],
+        "supported_outcomes": [
+          "postprandial_time_to_baseline_gastric_ph"
+        ],
+        "required_form_terms": [
+          "betaine hydrochloride",
+          "betaine hcl"
+        ],
+        "require_source_label_form": true,
+        "excluded_form_terms": [
+          "liposomal",
+          "enteric coated",
+          "sustained release",
+          "extended release"
+        ],
+        "dose_unit": "mg",
+        "studied_population": "Nine healthy normochlorhydric male and female volunteers, observed ages 21–59 (protocol eligibility 18–64). Current or past gastrointestinal disease, concomitant medication use and relevant gastrointestinal intolerances were excluded.",
+        "reviewed_at": "2026-11-09",
+        "reason": "Exact source-labelled ordinary oral BHCl physiology research; requested amount assessment corresponds only to nominal 4,500 mg assigned challenge. Ingredient Evidence without amount assessment credits research, not retail dose equivalence. No chronic Dose benchmark or clinical digestive-benefit claim.",
+        "minimum_daily_dose": 4500,
+        "maximum_daily_dose": 4500
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_betaine_hcl_23980906_bounded_review",
+          "components": [
+            "PRECLIN_BETAINE_HCL"
+          ],
+          "source_pmids": [
+            "23980906"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "23980906",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/23980906/",
+              "location": "Official PMC3946491 full Methods/Results/table text reviewed; uncontrolled pH-to-clinical-benefit transfer exclusion."
+            }
+          },
+          "limitations": [
+            "Six healthy adults, single-period/single-treatment pH experiment after rabeprazole. The paired pH reduction is retained; it is not placebo-controlled digestive-symptom efficacy.",
+            "The abstract reports90mL water whereas full Methods report250mL. No chosen repair, universal dose or safety inference."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex source review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official PMC3946491 full Methods/Results/table text reviewed; uncontrolled pH-to-clinical-benefit transfer exclusion."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_betaine_hcl_25274610_bounded_review",
+          "components": [
+            "PRECLIN_BETAINE_HCL"
+          ],
+          "source_pmids": [
+            "25274610"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "25274610",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/25274610/",
+              "location": "Live official PubMed/PMC abstract content; measured PK outcomes alone are sufficient for this bounded transfer exclusion."
+            }
+          },
+          "limitations": [
+            "The official abstract reports a randomized crossover dasatinib-exposure benefit with1,500mgBHCl after rabeprazole. It does not establish protein digestion, symptom benefit, general medication-management effectiveness or safety.",
+            "This is an abstract-supported PK-to-clinical-digestive-benefit exclusion. Full Methods/Results were not retrieved and no full-article-review claim is made."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex source review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live official PubMed/PMC abstract content; measured PK outcomes alone are sufficient for this bounded transfer exclusion."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_betaine_hcl_28028768_bounded_review",
+          "components": [
+            "PRECLIN_BETAINE_HCL"
+          ],
+          "source_pmids": [
+            "28028768"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "28028768",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/28028768/",
+              "location": "Official PMC7179955 full Methods/Results independently checked; actual drug-specific contrast retained."
+            }
+          },
+          "limitations": [
+            "Eight healthy volunteers completed; seven PK analyses after one suspected sample-swap exclusion. Open-label three-period study; control first, B/C order randomized, at least seven-day washout.",
+            "Under fed conditions1,500mgBHCl restored about13%Cmax/12%AUC of lost atazanavir exposure without statistical significance. Preserve this null, not universal ineffectiveness or a contradiction of the separate dasatinib result. No clinical digestive efficacy or safety clearance."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex source review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official PMC7179955 full Methods/Results independently checked; actual drug-specific contrast retained."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "preclin_betaine_hcl_31485804_postprandial_ph",
+          "components": [
+            "PRECLIN_BETAINE_HCL"
+          ],
+          "source_pmids": [
+            "31485804"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Betaine hydrochloride (BHCl), not anhydrous betaine/trimethylglycine.",
+            "preparation": "Source-reported 750 mg BHCl capsules with hypromellose shells; supplier/brand and quantitative dose assay not established. No modified-delivery or retail manufacturing equivalence."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "postprandial_time_to_baseline_gastric_ph",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_31485804",
+          "population": {
+            "age_group": "adult",
+            "description": "Nine healthy normochlorhydric male and female volunteers, observed ages 21–59 (protocol eligibility 18–64). Current or past gastrointestinal disease, concomitant medication use and relevant gastrointestinal intolerances were excluded."
+          },
+          "study_design": "Randomized prospective open-label four-period Latin-square crossover; meal-only control and 1,500/3,000/4,500 mg BHCl arms; at least 48-hour washout. One cohort, not three independent dose trials.",
+          "outcomes": [
+            {
+              "name": "Aligned-clock primary time to return to baseline gastric pH after a standardized meal: 4,500 mg BHCl versus meal-only, published difference 17.3 minutes (90% CI 5.50–29.2), p=.017 (Table III comparison 2).",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Aligned-clock time to baseline at 1,500 mg (p=.611) and 3,000 mg (p=.689) did not differ significantly from meal-only control.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "AUCpH p=.990 and maximum pH p=.670 did not differ significantly across arms.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              4500
+            ],
+            "dose_status": "verified",
+            "dose_basis": "single_challenge",
+            "duration_basis": "endpoint_followup_only",
+            "duration_days": null,
+            "administration_frequency": "One assigned dose, 15 minutes after standardized meal, on the corresponding crossover visit.",
+            "dosage_forms": [
+              "Oral hypromellose capsule"
+            ],
+            "co_therapies": [
+              "Standardized 310 kcal yogurt plus egg-and-cheese sandwich meal; 250 mL water with BHCl, with up to another 250 mL if required to swallow capsules. No acid-reducing medication administered in this study."
+            ],
+            "reported_regimen": "Six nominal 750 mg BHCl capsules once (4,500 mg), 15 minutes after the meal; the 1,500/3,000 mg arms were not positive on the aligned-clock contrast.",
+            "normalization": {
+              "basis": "6 x 750 mg = nominal 4,500 mg source dose; quantitative assay not performed. Not an effective minimum, continuous interval or general Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "31485804",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC7484952/",
+              "location": "Official full primary Methods, Results, Tables II–V and limitations; retained BioC text. Comparison 2 Table III is the qualified contrast, not the misaligned clock comparison 1."
+            }
+          },
+          "sample_size": 9,
+          "limitations": [
+            "Small open-label crossover with objective physiological outcome; not digestive symptoms, protein/nutrient digestion, clinical benefit, drug absorption or PPI-treatment efficacy.",
+            "Published monitoring amended after interim analysis from three to two hours after BHCl; technical single-second pH artifacts were removed and one-minute medians analyzed. No claim of independently audited raw signals or registered analysis-plan reproduction.",
+            "Aligned-clock 4,500 mg primary contrast only; null lower-dose comparisons, AUCpH and maximum pH preserved. No general gastric-efficacy or all-dose inference.",
+            "Supplier/brand and exact capsule excipient list not established; capsules reported as 750 mg BHCl with hypromellose shells from a GMP-compliant facility. No quantitative dose assay performed.",
+            "Six large capsules were difficult to swallow; extra water varied and disintegration/food effects may contribute variability. No general safety clearance, medication recommendation or retail exposure equivalence.",
+            "One randomized family of nine; do not add three dose arms or other HCl PK studies as independent replications. Existing other source assessments stay completed non-scoring within their actual scopes.",
+            "Comparison 1 reports all three doses significant but starts the control clock at food administration and treated clocks 15 minutes later; it does not supply aligned-clock low-dose credit."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root source review; independent full-primary/rubric check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full source identifies time-to-baseline gastric pH as primary; Table III aligned-clock comparison 2 supports only the 4,500 mg contrast. Existing positive-primary-surrogate rule qualifies only that physiological outcome. Actual source population, preparation limits, nulls and protocol amendment retained; no clinical digestive-benefit or Dose benchmark inferred."
+          }
+        }
+      ]
     },
     {
       "id": "PRECLIN_SAFFRON",
@@ -49141,24 +49437,26 @@
           "source_pmids": [
             "38193521"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
-          },
           "dose": {
             "source_provenance": {
               "pmid": "38193521",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/38193521/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+              "location": "Official full primary body, tables, hormone figure and supplementary bundle read in retained independent381 packet; source-design and comparison interpretation independently reassessed under existing rubric."
             }
           },
           "limitations": [
-            "Full text has been read; source-specific qualification remains unfinished. Crossover period/washout and reported URTI denominator/analysis ambiguity remain unresolved; retain reported positive and null findings, not generic credit.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
-          ]
+            "Finished limited review of the published source, not a null-efficacy determination. The paper calls the design crossover but reports two groups without auditable treatment-period accounting. URTI counts12/5 do not establish event units, denominators or a verified paired clinical contrast; no causal URTI or recovery credit follows.",
+            "Preserve reported between-treatment percentage changes in testosterone and testosterone/cortisol ratio, cortisol null, within-arm IgA/NO findings, total-protein text/table discrepancy, ambiguous mood contrast, and null soreness/sleep/stress comparisons. Hormonal findings do not establish performance or clinical recovery.",
+            "Clarification would be needed for future affirmative qualification, not to finish this published-design/contrast assessment. No public participant-level data or new protocol is a universal review-completion gate. Original30108163 credit, Dose and safety decisions remain independent."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex source review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official full primary body, tables, hormone figure and supplementary bundle read in retained independent381 packet; source-design and comparison interpretation independently reassessed under existing rubric."
+          }
         },
         {
           "context_schema_version": "1.1.0",
@@ -49259,24 +49557,26 @@
           "source_pmids": [
             "42366260"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
-          },
           "dose": {
             "source_provenance": {
               "pmid": "42366260",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/42366260/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+              "location": "Official PMC13582768 full Methods/Results/tables/conclusion and live primary22235107 abstract checked; bounded narrative-synthesis attribution review independently checked."
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished. Oral and parenteral source scopes and overlapping trial families require separate review.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
-          ]
+            "Finished assessment of this registered narrative systematic review; it reports six heterogeneous RCTs and no pooled estimate. Mixed routes, diseases and preparations cannot supply a generic oral free-L-glutamine anti-inflammatory or antioxidant effect.",
+            "Preserve the review's oral perioperative CRP positive and parenteral positives, alongside oral/null findings. The cited four-arm primary22235107 abstract reports GLN plus carbohydrate and a glutathione contrast against carbohydrate/control, differing from the review's summary. Its CRP/albumin comparison is not proof of an isolated GLN effect. This is an attributed primary-abstract cross-check, not full primary-article qualification.",
+            "Source dose/unit, participant-count and risk-of-bias reporting discrepancies remain explicit. No new pure-oral estimate, independent trial count, corrected number or clinical/Dose conclusion is invented. Future primary-specific qualification is unapproved; reading every citation is not required to finish this synthesis review."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex source review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official PMC13582768 full Methods/Results/tables/conclusion and live primary22235107 abstract checked; bounded narrative-synthesis attribution review independently checked."
+          }
         },
         {
           "context_schema_version": "1.1.0",
@@ -49287,24 +49587,26 @@
           "source_pmids": [
             "41053591"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
-          },
           "dose": {
             "source_provenance": {
               "pmid": "41053591",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/41053591/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+              "location": "Official PMC12502349 full Methods/Results/Table1/discussion read and independently checked; source-bound mixed-pool transfer assessment, not new reanalysis or primary-trial approval."
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
-          ]
+            "Finished assessment of the published mixed-route/preparation synthesis. Reported diarrhea RR0.72 (95%CI0.60–0.87) and low-certainty positive finding in colorectal cancer treatment remain; the pool includes three oral trials, an oligomeric-diet comparison and IV alanyl-glutamine.",
+            "Do not transfer the whole mixed pool to generic oral free-L-glutamine or a Dose curve. Actual oral findings remain visible and potentially relevant, but no verified pure-oral effect is reported or reconstructed here. CRP direction/CI-order inconsistencies and heterogeneous definitions remain unrepaired.",
+            "This completes the registered synthesis review without declaring oral glutamine ineffective or creating mandatory new reviews for every cited trial. Narrow primary-specific or valid oral-pool qualification is unapproved, not silently inferred from the aggregate."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex source review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official PMC12502349 full Methods/Results/Table1/discussion read and independently checked; source-bound mixed-pool transfer assessment, not new reanalysis or primary-trial approval."
+          }
         },
         {
           "context_schema_version": "1.1.0",
@@ -50860,6 +51162,402 @@
         ],
         "studied_population": "Apparently healthy resistance-trained men in the source comparison; the reported mean age does not establish an individual minimum or maximum age."
       }
+    },
+    {
+      "id": "INGR_CREATINE_ETHYL_ESTER",
+      "standard_name": "Creatine Ethyl Ester",
+      "aliases": [
+        "creatine ethyl ester",
+        "creatine ethylester",
+        "creatine ethyl ester hcl",
+        "creatine ethyl ester hydrochloride",
+        "CEE"
+      ],
+      "category": "sports_performance",
+      "evidence_level": "ingredient-human",
+      "score_contribution": "tier_2",
+      "key_endpoints": [
+        "Reported higher muscle total-creatine content versus placebo, not a CEE-specific change or performance benefit"
+      ],
+      "health_goals_supported": [],
+      "notes": "Limited human research reports higher muscle creatine content, while strength, power and body-composition outcomes were not better than placebo. The paper contains conflicting statements about comparison with monohydrate. No superior performance, absorption, lower-dose equivalence or renal-safety conclusion follows.",
+      "study_type": "rct_single",
+      "published_studies": [
+        "RCT"
+      ],
+      "last_updated": "2026-11-09",
+      "notable_studies": "PMID19228401:42consented/familiarized,30completers,10per arm. CEE-versus-placebo muscle-content group contrast p=.041; day27 within-arm increase separate. Performance/body-composition nulls and conflicting Discussion retained. This report is already in the existing monohydrate review inventory; no independent replication or summed enrollment.",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "19228401",
+          "doi": "10.1186/1550-2783-6-6",
+          "title": "The effects of creatine ethyl ester supplementation combined with heavy resistance training on body composition, muscle performance, and serum and muscle creatine levels.",
+          "citation": "Journal of the International Society of Sports Nutrition (2009-02-19)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19228401/",
+          "published_date": "2009-02-19",
+          "publication_types": [
+            "research-article",
+            "Journal Article"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "external_ids": {},
+      "effect_direction": "mixed",
+      "total_enrollment": null,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Limited, mixed findings from one small trial: reported muscle-content group contrast alongside null physical performance/body-composition comparisons. Unranked biochemical findings are not performance, absorption or dose-superiority evidence.",
+      "endpoint_relevance_tags": [],
+      "scoring_eligible": true,
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "creatine ethyl ester",
+          "creatine ethylester",
+          "CEE"
+        ],
+        "excluded_form_terms": [
+          "polyethylene",
+          "PEG",
+          "nitrate",
+          "citrate",
+          "kre alkalyn"
+        ],
+        "supported_outcomes": [
+          "muscle_total_creatine_content"
+        ],
+        "studied_population": "Healthy recreationally active but not resistance-trained young adult men following the studied resistance-training program; no general population or performance efficacy inference.",
+        "source_pmids": [
+          "19228401"
+        ],
+        "reviewed_at": "2026-11-09",
+        "reason": "Ordinary CEE/CEE-HCl identity uses existing IQM form aliases. Plain creatine hydrochloride, monohydrate, PEG and other derivatives cannot borrow this source."
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "creatine_ethyl_ester_19228401_muscle_content",
+          "components": [
+            "INGR_CREATINE_ETHYL_ESTER"
+          ],
+          "source_pmids": [
+            "19228401"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Creatine ethyl ester hydrochloride (CEE-HCl); existing IQM ordinary CEE aliases apply. Not plain creatine hydrochloride.",
+            "preparation": "Labrada Nutritionals CEE material; source NMR reports100%CEE hydrochloride and no detectable creatine-HCl/creatinine-HCl. No brand-wide or manufacturing certification inferred."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "muscle_total_creatine_content",
+          "purpose": "physiology",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "desai_2024_creatine_resistance_training_review",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy recreationally active but not resistance-trained young adult men assigned the reported resistance-training program;30completers."
+          },
+          "study_design": "Randomized placebo/monohydrate/CEE trial with resistance training;30completers,10per arm;42consented/familiarized is not asserted as the randomized total.",
+          "outcomes": [
+            {
+              "name": "Reported higher muscle total-creatine content forCEE versus placebo across measurements, group main contrast p=.041; not a demonstrated CEE-specific change or superiority to monohydrate.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Physical strength/power,lean mass/body composition and most body-water between-group comparisons were not significant.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "CEE day27 muscle-creatine increase versus its baseline p=.043.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 48,
+            "administration_frequency": "Reported daily loading followed by maintenance; no universal absolute daily dose established.",
+            "dosage_forms": [
+              "Oral supplement"
+            ],
+            "co_therapies": [
+              "Assigned resistance training four days per week."
+            ],
+            "reported_regimen": "0.30g/kg FAT-FREE mass for five loading days, then0.075g/kg FAT-FREE mass maintenance. Body day6–48 schedule and abstract42maintenance-day wording are preserved as reported; no invented reconciliation.",
+            "normalization": {
+              "basis": "Source reports0.30/0.075g per kgFAT-FREE mass; a single absolute gram amount is not reported, so scalarvalues stayempty. Not a missing protocol or a zero-dose finding. Fat-free mass is not total body weight; no absolute conversion or general Dose curve. Protocol48days follows body, with abstract maintenance wording discrepancy preserved."
+            },
+            "source_provenance": {
+              "pmid": "19228401",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2649889/",
+              "location": "Full official primary Methods/Statistics/Results/Figure2/captions and Discussion; independent comparison-basis reassessment."
+            }
+          },
+          "sample_size": 30,
+          "limitations": [
+            "Published muscle-content group contrast and within-arm time finding are distinct. Retain baseline/contrast interpretation limits and the contradictory Discussion; do not require unprovided raw data merely to finish review or invent a corrected effect.",
+            "Serum creatinine was higher inCEE; this does not by itself establish renal injury or renal safety. No new warning threshold or safety decision.",
+            "Conservative existing Desai aggregate evidence-family group is reused solely because this trial is already in its accepted included-study inventory. Source192identity is preserved; this does not mean all pooled studies are one cohort or preparations are equivalent. It prevents adding the same witness twice beside monohydrate.",
+            "Source enrollment accounting and regimen wording limitations remain;30completers are not42randomized. No salt/free-creatine mass conversion or lower-dose equivalence."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/scientific_review; independently rechecked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full official PMC2649889 source read; reported unranked between-group biochemical finding and null physical outcomes qualified under existing rubric without a new interaction/ANCOVA or public-data requirement."
+          }
+        }
+      ]
+    },
+    {
+      "id": "INGR_PEG_CREATINE",
+      "standard_name": "Polyethylene Glycosylated Creatine",
+      "aliases": [
+        "PEG creatine",
+        "PEG-creatine",
+        "PEG-Creatine System",
+        "polyethylene glycosylated creatine"
+      ],
+      "category": "sports_performance",
+      "evidence_level": "reference",
+      "score_contribution": "tier_3",
+      "study_type": "reference",
+      "scoring_eligible": false,
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "total_enrollment": null,
+      "last_updated": "2026-11-09",
+      "notes": "Limited human research is recorded for PEG-creatine. One full source reports within-arm changes that do not establish placebo-controlled efficacy. Two other reports retain unread Methods and comparison/preparation gaps. These findings do not establish lower-dose equivalence, improved absorption, exact retail composition or monohydrate/plain-HCl equivalence.",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "19387397",
+          "doi": "10.1519/jsc.0b013e3181a2ed11",
+          "title": "Effects of creatine monohydrate and polyethylene glycosylated creatine supplementation on muscular strength, endurance, and power output.",
+          "citation": "Journal of strength and conditioning research (2009-05-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19387397/",
+          "published_date": "2009-05-01",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "mesh_terms": [
+            "Humans",
+            "Polyethylene Glycols",
+            "Creatine",
+            "Placebos",
+            "Exercise Test",
+            "Body Mass Index",
+            "Analysis of Variance",
+            "Cross-Sectional Studies",
+            "Double-Blind Method",
+            "Anaerobic Threshold",
+            "Physical Endurance",
+            "Weight Lifting",
+            "Dietary Supplements",
+            "Male",
+            "Muscle Strength",
+            "Young Adult"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "21068676",
+          "doi": "10.1519/jsc.0b013e3181fc5c5c",
+          "title": "The effects of polyethylene glycosylated creatine supplementation on muscular strength and power.",
+          "citation": "Journal of strength and conditioning research (2010-12-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21068676/",
+          "published_date": "2010-12-01",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "mesh_terms": [
+            "Muscle, Skeletal",
+            "Humans",
+            "Polyethylene Glycols",
+            "Creatine",
+            "Placebos",
+            "Exercise Test",
+            "Anthropometry",
+            "Administration, Oral",
+            "Analysis of Variance",
+            "Double-Blind Method",
+            "Reproducibility of Results",
+            "Energy Intake",
+            "Dietary Supplements",
+            "Male",
+            "Muscle Strength",
+            "Young Adult"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "23897021",
+          "doi": "10.1519/jsc.0b013e3182a361a5",
+          "title": "The effects of polyethylene glycosylated creatine supplementation on anaerobic performance measures and body composition.",
+          "citation": "Journal of strength and conditioning research (2014-03-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23897021/",
+          "published_date": "2014-03-01",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "mesh_terms": [
+            "Muscle, Skeletal",
+            "Humans",
+            "Polyethylene Glycols",
+            "Creatine",
+            "Exercise Test",
+            "Double-Blind Method",
+            "Body Composition",
+            "Anaerobic Threshold",
+            "Physical Endurance",
+            "Running",
+            "Weight Lifting",
+            "Dietary Supplements",
+            "Male",
+            "Muscle Strength",
+            "Athletic Performance",
+            "Young Adult"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        }
+      ],
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_peg_creatine_23897021_bounded_review",
+          "components": [
+            "INGR_PEG_CREATINE"
+          ],
+          "source_pmids": [
+            "23897021"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "23897021",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/23897021/",
+              "location": "Public author-copy full-text extraction read by source reviewer; retained23897021_WEB_PRIMARY_READING_RECEIPT. No local PDF or PDF-checksum claim."
+            }
+          },
+          "limitations": [
+            "Full author-copy Methods/Results/Table1 and legend read: favorable marked changes compare baseline/day14 within arms, not a demonstrated favorable placebo-controlled contrast. Preserve author claims and all null findings; not universal PEG ineffectiveness.",
+            "GNC funding does not prove an exact retail preparation or polymer chemistry. Two other known source reviews remain unfinished; no whole-ingredient completed zero."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root/scientific_review; independently primary-content checked by Codex /root using the public author-copy full text and Table1 legend. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Public author-copy full-text extraction read by source reviewer; retained23897021_WEB_PRIMARY_READING_RECEIPT. No local PDF or PDF-checksum claim."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "peg_creatine_19387397_source_review_pending",
+          "components": [
+            "INGR_PEG_CREATINE"
+          ],
+          "source_pmids": [
+            "19387397"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live source identity and official abstract checked; full Methods/preparation and between-treatment analysis remain unread. No affirmative or completed-zero claim."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "19387397",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/19387397/",
+              "location": "Live identity/abstract checked; full Methods/preparation and actual placebo comparison not retrieved."
+            }
+          },
+          "limitations": [
+            "Reported human findings remain visible; exact preparation and between-treatment analysis remain unqualified because full Methods were not retrieved. Not a negative efficacy or completed-zero determination."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "peg_creatine_21068676_source_review_pending",
+          "components": [
+            "INGR_PEG_CREATINE"
+          ],
+          "source_pmids": [
+            "21068676"
+          ],
+          "review_status": "source_verified_pending_clinical_review",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex scientific source inventory; clinical qualification pending",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live source identity and official abstract checked; full Methods/preparation and between-treatment analysis remain unread. No affirmative or completed-zero claim."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "21068676",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/21068676/",
+              "location": "Live identity/abstract checked; full Methods/preparation and actual placebo comparison not retrieved."
+            }
+          },
+          "limitations": [
+            "Reported human findings remain visible; exact preparation and between-treatment analysis remain unqualified because full Methods were not retrieved. Not a negative efficacy or completed-zero determination."
+          ]
+        }
+      ]
     }
   ]
 }
