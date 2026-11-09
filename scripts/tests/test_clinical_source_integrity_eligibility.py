@@ -1921,6 +1921,7 @@ def test_betaine_hcl_uses_its_salt_identifier_and_only_qualified_primary_ph_sour
     assert record['external_ids']['unii'] != entries['PRECLIN_BETAINE_ANHYDROUS']['external_ids']['unii']
     assert record['study_type'] == 'rct_single'
     assert record['effect_direction'] == 'positive_weak'
+    assert 'primary_outcome' not in record  # No coarse digestive-benefit category from a pH surrogate.
     assert record['effect_direction_confidence'] == 'low'
     eligible = [c for c in record['study_contexts'] if c['scoring_eligible']]
     assert len(eligible) == 1 and eligible[0]['source_pmids'] == ['31485804']
