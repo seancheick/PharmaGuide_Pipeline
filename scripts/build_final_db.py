@@ -7313,11 +7313,10 @@ def _qualify_identity_uncertainty_copy(enriched: Dict, ingredients: List[Dict],
                 continue
             warning.update(detail=notice, safety_warning=notice,
                            safety_warning_one_liner="Ingredient identity needs clarification before use.",
-                           title="Ingredient identity needs review", sources=sources,
+                           title="Ingredient identity needs review", sources=sources, source_urls=sources,
                            source="interaction_rules", matched_rule_id=rule["id"],
                            ingredient_name=alert.get("ingredient_name"), jurisdictions=[])
             if held_subject:
-                warning["source_urls"] = sources
                 warning["identifiers"] = {}
 
 

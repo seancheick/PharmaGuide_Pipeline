@@ -1966,3 +1966,31 @@ def test_authority_citations_can_export_without_clinical_match_enrichment():
         'metadata': {'source_references': [reference]}}}})
     blob = build_detail_blob(_base_enriched(evidence_data={}), scored)
     assert blob['evidence_data']['source_references'] == [reference]
+
+
+@pytest.mark.parametrize("held_subject", [False, True])
+def test_identity_uncertainty_copy_replaces_stale_species_citation(monkeypatch, held_subject):
+    from build_final_db import _identity_uncertainty_rules, _qualify_identity_uncertainty_copy
+    from scoring_v4 import scored_artifact
+
+    subject = "ADD_CASCARA_SAGRADA"
+    path = "ingredientRows[0]"
+    rule = _identity_uncertainty_rules()["RULE_CASCARA_UNRESOLVED_IDENTITY"]
+    held = {"safety_identity_id": subject, "safety_source_paths": [path],
+            "notes": "Source identity needs clarification.", "source_url": "https://example.test/held-label"}
+    monkeypatch.setattr(scored_artifact, "_held_assessment_label", lambda enriched: held if held_subject else {})
+    row = {"identity_disposition": "identity_conflict", "canonical_id": None,
+           "recognized_entry_id": subject, "raw_source_path": path,
+           "raw_source_text": "Cascara", "recognized_entry_name": "Cascara"}
+    enriched = {"dsld_id": "252441", "activeIngredients": [{"raw_source_path": path, "notes": "Rhamnus davurica bark"}],
+                "ingredient_quality_data": {"ingredients": [row]},
+                "interaction_profile": {"ingredient_alerts": [{"rule_id": rule["id"], "ingredient_name": "Cascara"}]}}
+    warning = {"matched_rule_id": subject, "ingredient_name": "Cascara",
+               "source_urls": [{"url": "https://example.test/species-specific"}], "identifiers": {"cas": "original"}}
+    _qualify_identity_uncertainty_copy(enriched, [], [warning])
+    expected = [held["source_url"]] if held_subject else sorted({
+        url for condition in rule["condition_rules"] for url in condition.get("sources", [])
+        if "/pdf/" not in url or "/252441.pdf" in url
+    })
+    assert warning["source_urls"] == warning["sources"] == expected
+    assert warning["identifiers"] == ({} if held_subject else {"cas": "original"})
