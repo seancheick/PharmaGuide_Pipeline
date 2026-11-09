@@ -10538,14 +10538,14 @@
         "scope": "General catalog Dose for identified chicory_root only. Existing source-specific exposures remain descriptive; no universal minimum, optimal interval, preparation conversion or safety ceiling is established by them. This is not absence of research or universal null efficacy.",
         "preparation": "Cichorium intybus standardized inulin / fructooligosaccharide extract",
         "purpose": "General catalog Dose only; exact clinical purpose, Evidence determination and independent safety applicability remain with existing owners.",
-        "population": "Otherwise healthy adults with constipation in the exact Orafti GR Inulin trial.",
+        "population": "Adults with constipation in the Orafti Inulin trial.",
         "exposure_basis": "minimum_directed_daily_use",
         "units": "As reported by sources and label; no mass, volume, marker or food-matrix conversion inferred.",
         "curve": "completed_no_benchmark_neutral",
         "source_ids": [
           "PMID:27492975"
         ],
-        "rationale": "Source PMID 27492975 tested Orafti GR Inulin 12 g/day for four weeks and increased primary stool frequency versus placebo, with null consistency/satisfaction findings and increased gas. A single assigned regimen does not establish a general efficacy minimum, optimal interval, raw-root equivalence or safety ceiling. Preserve the existing approved neutral Dose V4.1 decision and exact source-specific descriptive exposure; no new Dose policy or clinical approval is added.",
+        "rationale": "Source-backed case finding: PMID27492975 tested Orafti chicory inulin12g/day for4weeks, with increased stool frequency versus placebo. This does not establish5g/day efficacy or equivalence to raw chicory root. Preparation applicability remains unestablished without explicit reviewed inulin preparation. Existing October18 approved DoseV4.1 policy makes other discrete-regimen extrapolations descriptive/general completed neutral unless a distinct accepted exact formula policy applies. A study assignment, isolated positive endpoint, null comparison, missing abstract quantity or non-equivalent preparation is not an approved general efficacy minimum, optimal range or UL. Existing source-specific amounts/outcomes remain factual; no clinical approval, Evidence grade or general safety conclusion is added.",
         "owner": "scripts/data/literature_evidence_records.json::chicory_root",
         "review_date": "2026-10-27",
         "approval_status": "approved_existing_neutral_dose_v41_source_review"

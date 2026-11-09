@@ -1502,3 +1502,13 @@ def test_inulin_fernandes_pointer_keeps_actual_doi_and_unresolved_cohort():
     assert '10.1007/s11695-015-1574-x' not in text
     assert 'healthy' in text and 'RYGB' in text
     assert 'not established' in text
+
+
+def test_chicory_factual_source_update_preserves_approved_neutral_dose_proof():
+    from evidence_resolver import _load_literature_evidence
+    from dose_assessment import verified_reference_citations
+    from scoring_v4.modules.botanical_profile import _botanical_benchmark
+    record = _load_literature_evidence()['chicory_root']
+    assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
+    assert verified_reference_citations(record)
+    assert _botanical_benchmark({'canonical_id': 'chicory_root'}) == 'absent'
