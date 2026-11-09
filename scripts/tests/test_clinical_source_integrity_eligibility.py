@@ -1890,3 +1890,22 @@ def test_clinical_source_delivery_reads_retained_dsld_description(physical, elig
     matches, _ = filter_clinical_matches(product, [entry], assess_amount=False)
     assert bool(matches) is eligible
     assert (product, entry) == original
+
+
+@pytest.mark.parametrize('canonical,name,amount', [
+    ('hyaluronic_acid', 'Hyaluronic Acid', 150),
+    ('american_ginseng', 'American Ginseng', 1100),
+])
+def test_known_capsule_with_unestablished_preparation_is_not_a_completed_delivery_exclusion(canonical, name, amount):
+    row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
+           'canonical_id': canonical, 'mapped': True, 'quantity': amount, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': name, 'physicalState': {'langualCodeDescription': 'Capsule'},
+               'form_factor_canonical': 'capsule', 'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    original = copy.deepcopy((row, product))
+    resolution = er.resolve_evidence_for_row(row, product=product)
+    assert resolution.points_eligible is False
+    assert resolution.reason_code != 'clinical_delivery_mismatch'
+    assert resolution.applicability_status == 'applicability_unestablished'
+    assert (row, product) == original
