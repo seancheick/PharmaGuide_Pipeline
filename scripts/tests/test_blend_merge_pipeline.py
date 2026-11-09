@@ -865,8 +865,13 @@ def test_polyphenol_footnote_does_not_disclose_fruit_members(boundary_pipeline):
     assert blend['disclosure_level'] == 'partial'
     assert len(blend['child_ingredients']) == 6
     assert all(child.get('amount') is None for child in blend['child_ingredients'])
+    assert enriched['proprietary_data']['total_active_mg'] == 550  # calcium170+blend380; marker200 is not another active.
     artifact = build_scored_artifact(enriched)
     assert artifact['_v4_module_breakdown']['dimensions']['transparency']['penalties']['B5_proprietary_blend_opacity'] < 0
+    sugar = enriched['dietary_sensitivity_data']['sugar']
+    assert sugar['amount_g'] is None and sugar['level'] is None
+    formulation = artifact['_v4_module_breakdown']['dimensions']['formulation']
+    assert formulation['metadata']['formula_checks']['B1_dietary_sugar'] == 0
 
 
 @pytest.mark.parametrize('pid,change', [(64231, 'parent_amount'), (64232, 'child_identity'), (19069, 'child_identity')])
