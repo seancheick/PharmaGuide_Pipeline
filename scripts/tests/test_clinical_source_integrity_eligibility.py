@@ -1865,3 +1865,28 @@ def test_glycine_qualified_source_preserves_population_and_free_material_boundar
         assert artifact['quality_pillars_v4']['evidence']['score'] > 0
         product.pop('evidence_data')
     assert (product, entry) == original
+
+
+@pytest.mark.parametrize('physical,eligible', [
+    ({'langualCode': 'E0161', 'langualCodeDescription': 'Softgel Capsule'}, True),
+    ({'langualCode': 'E0159', 'langualCodeDescription': 'Capsule'}, True),
+    ({'langualCode': 'E0155', 'langualCodeDescription': 'Tablet or Pill'}, True),
+    ({'langualCode': 'E0162', 'langualCodeDescription': 'Powder'}, False),
+    ({'langualCodeDescription': 'Unknown'}, False),
+    ({}, False),
+])
+def test_clinical_source_delivery_reads_retained_dsld_description(physical, eligible):
+    from clinical_applicability import filter_clinical_matches, reviewed_entries
+    row = {'name': 'Plant Sterols', 'raw_source_text': 'Plant Sterols',
+           'source_label_name': 'Plant Sterols', 'canonical_id': 'phytosterols',
+           'mapped': True, 'quantity': 1800, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': 'Adult lipid supplement', 'physicalState': physical,
+               'form_factor_canonical': 'softgel',  # A stale guess must not override retained powder/unknown.
+               'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**reviewed_entries()['INGR_PLANT_STEROLS'], 'ingredient': 'Plant Sterols',
+             'matched_canonical_ids': ['phytosterols'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    original = copy.deepcopy((product, entry))
+    matches, _ = filter_clinical_matches(product, [entry], assess_amount=False)
+    assert bool(matches) is eligible
+    assert (product, entry) == original
