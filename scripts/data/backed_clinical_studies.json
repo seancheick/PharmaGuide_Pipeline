@@ -6967,12 +6967,13 @@
       "score_contribution": "tier_2",
       "key_endpoints": [
         "knee osteoarthritis pain and physical function (WOMAC) improved at 6 g/day for 12 weeks",
-        "knee quality of life (JKOM total score) improved at 2 g/day for 12 weeks in mild knee pain"
+        "knee quality of life (JKOM total score) improved at 2 g/day for 12 weeks in mild knee pain",
+        "main joint-mobility restriction improved versus placebo with isolated Healers-supplied MSM1.5g/day for12weeks in mild-to-moderate knee osteoarthritis; exact between-arm effect and p value unreported"
       ],
       "health_goals_supported": [
         "Joint & Bone Health"
       ],
-      "notes": "Human MSM research includes distinct knee populations and regimens. PMID 37447322 tested distilled OptiMSM at 2 g/day for 12 weeks in adults with mild knee discomfort, with a borderline positive primary JKOM score and null JOA and inflammatory-marker findings. The full primary paper for PMID 16309928 also identifies OptiMSM, supplied by Cardinal Nutrition, but used a one-week titration to 6 g/day in knee osteoarthritis. Pain and physical-function findings were positive, while stiffness, total WOMAC symptoms and global assessments were not significantly different. These studies do not establish a continuous 2–6 g/day efficacy range, a universal minimum, general anti-inflammatory benefit or long-term safety. PMID 21708034 now has a completed bounded RCT-transfer exclusion because allocation explicitly alternated; its positive and null controlled-human findings remain retained. PMID 17516722 retains the unresolved principal-outcome reporting hold after full-source recovery. The original signed finding for PMID 37447322 and all separate Dose and Safety decisions remain unchanged. PMIDs 37447322 and 16309928 are independently qualified through their separate source contexts, with different populations and regimens; they are not a continuous efficacy range. The source-level chemical identity/application check for this generic record was performed by Codex /root and independently by /root/grouped_correctness_check on 2026-11-08. This does not assert retail purity, manufacturing, altered-delivery, dose or safety equivalence. Dr. Pham's original limited OptiMSM decision and date remain intact in BRAND_OPTIMSM.",
+      "notes": "Human MSM research includes distinct knee populations and regimens. PMID 37447322 tested distilled OptiMSM at 2 g/day for 12 weeks in adults with mild knee discomfort, with a borderline positive primary JKOM score and null JOA and inflammatory-marker findings. The full primary paper for PMID 16309928 also identifies OptiMSM, supplied by Cardinal Nutrition, but used a one-week titration to 6 g/day in knee osteoarthritis. Pain and physical-function findings were positive, while stiffness, total WOMAC symptoms and global assessments were not significantly different. These studies do not establish a continuous 2–6 g/day efficacy range, a universal minimum, general anti-inflammatory benefit or long-term safety. PMID 21708034 now has a completed bounded RCT-transfer exclusion because allocation explicitly alternated; its positive and null controlled-human findings remain retained. PMID17516722 now has a completed narrow source assessment: the paper explicitly names joint mobility as a main outcome and reports significant standalone-MSM improvement versus placebo with Healers-supplied capsules at1.5g/day for12weeks. The principal composite responder counts/Fisher test remain unreported, not null or positive. Within-arm VAS/Lequesne changes, ambiguous global ratings and the swelling text/Figure2 conflict do not supply causal credit. No exact between-arm effect, p value, clinical-importance threshold, general anti-inflammatory benefit or OptiMSM manufacturing equivalence is invented. Full review of this documented nonreporting completes the source assessment; it does not claim that missing results became available. The1.5,2and titrated6g regimens remain discrete studied facts, never a continuous Dose curve or universal minimum. The original signed finding for PMID 37447322 and all separate Dose and Safety decisions remain unchanged. PMIDs 37447322 and 16309928 are independently qualified through their separate source contexts, with different populations and regimens; they are not a continuous efficacy range. The source-level chemical identity/application check for this generic record was performed by Codex /root and independently by /root/grouped_correctness_check on 2026-11-08. This does not assert retail purity, manufacturing, altered-delivery, dose or safety equivalence. Dr. Pham's original limited OptiMSM decision and date remain intact in BRAND_OPTIMSM.",
       "last_updated": "2026-10-27",
       "notable_studies": "Kim et al. (2006, PMID 16309928): 6 g/day MSM improved WOMAC pain and physical function in knee osteoarthritis over 12 weeks (pilot, n=50). Toguchi et al. (2023, PMID 37447322): 2 g/day MSM improved the JKOM total score in adults with mild knee pain over 12 weeks (n=88).",
       "references_structured": [
@@ -7064,8 +7065,8 @@
           "doi": "10.2165/00044011-200424060-00005",
           "title": "Randomised, Double-Blind, Parallel, Placebo-Controlled Study of Oral Glucosamine, Methylsulfonylmethane and their Combination in Osteoarthritis.",
           "url": "https://pubmed.ncbi.nlm.nih.gov/17516722/",
-          "scoring_eligible": false,
-          "notes": "Known relevant human source. Primary abstract read; full Methods and applicability qualification remain pending."
+          "scoring_eligible": true,
+          "notes": "Complete primary independently reviewed: only the explicitly main joint-mobility placebo comparison is qualified. Healers-supplied isolatedMSM500mg three times daily for12weeks,30MSM/28placebo within118overall. Unreported principal responder results, unclear causal pain/global contrasts and conflicting swelling values remain reporting limitations, not fabricated positive/null findings or brand/Dose equivalence."
         }
       ],
       "external_ids": {
@@ -7075,11 +7076,11 @@
       "primary_outcome": "Joint & Bone Health",
       "total_enrollment": 88,
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Original signed A015/A093 applies only to PMID 37447322: borderline primary JKOM benefit and null JOA/inflammatory findings at 2 g/day in mild knee discomfort. Independently source-qualified PMID 16309928 adds positive pain/function and null stiffness/total co-primary findings in knee OA with a titrated target 6 g/day. The existing mixed grade is preserved. The sources report 88 and 50 randomized participants separately, not a pooled enrollment. The existing largest-study enrollment remains 88; the OA outcome tables analyze 40 completers despite the stated ITT approach. No mirrored registry, source-record duplication or unfinished 17516722 study is added to this count.",
+      "effect_direction_rationale": "Original signed A015/A093 applies only to PMID 37447322: borderline primary JKOM benefit and null JOA/inflammatory findings at 2 g/day in mild knee discomfort. Independently source-qualified PMID 16309928 adds positive pain/function and null stiffness/total co-primary findings in knee OA with a titrated target 6 g/day. The existing mixed grade is preserved. The sources report 88 and 50 randomized participants separately, not a pooled enrollment. The existing largest-study enrollment remains 88; the OA outcome tables analyze 40 completers despite the stated ITT approach. PMID17516722 adds a source-identified main joint-mobility placebo comparison, without claiming its unreported composite responder analysis succeeded. Its isolatedMSM/placebo comparison has58assigned participants within the118-person four-arm trial, not118isolatedMSM participants. No enrollment is summed, and the existing mixed grade/largest-study88 remain unchanged.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ],
-      "min_clinical_dose": 2000,
+      "min_clinical_dose": 1500,
       "max_studied_clinical_dose": 6000,
       "dose_unit": "mg",
       "reference_semantics": {
@@ -7389,26 +7390,122 @@
           "source_pmids": [
             "17516722"
           ],
-          "review_status": "source_verified_pending_clinical_review",
-          "scoring_eligible": false,
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Isolated methylsulfonylmethane (MSM; dimethyl sulfone), not dimethyl sulfoxide or generic sulfur.",
+            "preparation": "Ordinary oral 500 mg MSM capsules supplied by Healers Limited, Chennai, India, with matching glucosamine-placebo capsules. No OptiMSM brand identity, purity assay or altered-delivery equivalence is asserted.",
+            "manufacturer": "Healers Limited (source supplier; capsule manufacturer not separately established)"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "knee_osteoarthritis",
+          "purpose": "treatment",
+          "population": {
+            "age_group": "adult",
+            "description": "Men and women aged 40–70 with mild-to-moderate radiographic knee osteoarthritis, symptoms for at least six months, Lequesne index 8–18 and mostly Kellgren–Lawrence grades 1–3. The standalone comparison randomized 30 to MSM and 28 to placebo within a four-arm 118-person trial; no claim that all 118 received isolated MSM."
+          },
+          "study_design": "Single-centre randomized, double-blind, parallel, placebo-controlled four-arm trial. Paper reports five blocks of 24 planned, with 118 actually allocated as 30 glucosamine, 30 MSM, 30 combination and 28 placebo. ITT with last observation carried forward; exact sequence generation/concealment details beyond block design are not reported.",
+          "trial_family": "msm_usha_naidu_17516722_hyderabad",
+          "sample_size": 58,
+          "review_status": "clinician_approved",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "scoring_eligible": true,
           "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              1500
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "One 500 mg MSM capsule three times daily, with one matching glucosamine-placebo capsule at each administration.",
+            "dosage_forms": [
+              "oral capsule"
+            ],
+            "reported_regimen": "500 mg isolated MSM three times daily for 12 weeks; separate combination and glucosamine arms do not supply isolated MSM findings.",
+            "normalization": {
+              "basis": "500 mg multiplied by three administrations equals 1,500 mg/day of the source MSM. This discrete regimen is not a universal minimum, continuous dose range or Dose benchmark."
+            },
+            "duration_as_printed": {
+              "value": 12,
+              "unit": "weeks"
+            },
+            "co_therapies": [
+              "Paracetamol rescue was permitted as 500 mg tablets, maximum four tablets daily. NSAIDs were withdrawn two weeks before enrolment; other anti-inflammatory drugs and physical therapy were prohibited during treatment."
+            ],
             "source_provenance": {
               "pmid": "17516722",
               "source_url": "https://assospharma.com/pdf/qr/kondromin/12-Usha2004.pdf",
-              "location": "Full primary journal PDF, pages 355-359: Methods, statistical analysis, participant flow, Results and Figures 1-4; live MED identity and DOI checked. Numerical outcome-hierarchy/reporting qualification remains pending."
+              "location": "Printed p355 Study Design and Drug Administration; p356 Efficacy Parameters; p357 Statistical Analysis/Results; p358 joint-mobility comparison continued across columns; p359 Figure 3."
             }
           },
+          "outcomes": [
+            {
+              "name": "Joint mobility, explicitly listed among the main outcome measures, improved with standalone MSM compared with placebo. Results p358 reports a statistically significant favorable comparison and Figure 3 shows its direction. No exact standalone contrast, confidence interval or p value is supplied.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "VAS pain intensity decreased within the MSM arm from 57 ± 9 mm to 38 ± 10 mm. An isolated MSM-versus-placebo significance estimate is not established from this numerical passage.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "Lequesne index decreased within the MSM arm from 12.48 ± 2.25 to 8.48 ± 1.89, reported p < 0.001. This baseline change is not the unreported composite-responder comparison.",
+              "hierarchy": "primary",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "within_group_change"
+            },
+            {
+              "name": "Walking time was reported to improve with standalone MSM compared with placebo in the same p358 sentence. Walking time is assessed in Methods but is not included in the explicit main-outcome list; it does not widen primary joint-mobility credit.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
           "limitations": [
-            "Full primary content is independently checked. The trial randomized 118 overall: 30 to standalone MSM, 30 glucosamine, 30 combination and 28 placebo. The isolated MSM/placebo comparison has 58 assigned participants, not 118; reported losses were 3/3/2/4 with ITT/LOCF analysis.",
-            "Standalone Healers-supplied MSM was 500 mg three times daily for 12 weeks. This is not the accepted 2 g/day OptiMSM regimen, a general Dose minimum or proof of manufacturing/preparation equivalence.",
-            "The principal composite responder analysis is specified, but responder counts and its Fisher comparison are unreported. The paper also lists main measures and reports positive placebo-controlled walking/joint-mobility findings. Their hierarchy/reporting qualification remains unresolved; do not erase positive research or manufacture a completed-zero conclusion.",
-            "Printed VAS and Lequesne changes are largely within-arm; do not invent isolated between-arm p-values. Figure 2 shows an MSM swelling endpoint near 0.75 while the text reports 0.39. Preserve that discrepancy rather than select the favorable value. Short trial tolerability does not establish general safety."
+            "Joint mobility is mapped to primary because p356 explicitly calls it a main outcome measure, not because of its favorable result. The paper does not use the term co-primary or establish prospective registration. The principal analysis on p357 does not expressly demote the other stated main measures to secondary.",
+            "The specified principal composite responder analysis combines a Lequesne decrease of at least three points with investigator good/fair efficacy. Responder counts and the Fisher comparison are unreported. No result or direction can be reconstructed; it is not null or positive, and this context does not claim that principal analysis succeeded. Its nonreporting is a completed source-reporting limitation, not an unresolved hierarchy review in this proposal.",
+            "Only the reported primary/main joint-mobility comparison supplies affirmative efficacy here. The narrative reports statistical significance without an exact isolated-MSM p value, confidence interval or numerical between-arm effect. Figure 3 is directional support, not a source of invented digitized values or clinical-importance thresholds.",
+            "VAS and Lequesne positive baseline changes remain within-group findings and do not supply affirmative placebo efficacy. Global patient ratings use different category descriptions from placebo, with no clear exact counts/test; physician-global results and the composite responder result are not reported. These cannot be assigned fabricated positive or null causal directions.",
+            "Walking time has no explicit primary rank and cannot bypass the known hierarchy. Swelling text reports an MSM endpoint of 0.39 while Figure 2 appears near 0.75; neither value is selected as the verified result, and no swelling/anti-inflammatory credit follows. Combination superiority and reduced rescue medication cannot be attributed to isolated MSM.",
+            "The study reports losses after four weeks of 3 MSM and 4 placebo participants, plus 3 glucosamine and 2 combination participants, handled with ITT/LOCF. Small unequal arms, incomplete principal-result reporting, limited precision and multiple outcome testing without a reported adjustment create substantial reporting/bias and clinical-importance uncertainty.",
+            "No interpretable standalone-MSM primary null comparison is established by the printed results. Placebo within-arm nonsignificance is not a causal MSM null, just as isolated-MSM within-arm improvement is not placebo efficacy. Do not manufacture a more favorable or less favorable profile.",
+            "Healers supplied research material, medication and a study grant. Minor gastrointestinal symptoms and diarrhea were reported without useful arm-specific counts; short-term tolerability is not general safety. Introductory water-like-toxicity and broad mechanism claims are not adopted.",
+            "This source qualification does not modify original signed374 findings, the independent163/217 decisions, parent grade, general Dose, safety rules or source identity requirements. No OptiMSM equivalence, universal daily minimum or automatic product completion is established.",
+            "Completed source-content and existing-rubric review by the named agents; this is agent research review, not clinician review. All independent source, Dose, identity and Safety obligations remain separate."
           ],
           "clinical_review": {
-            "reviewer": "Codex /root/scientific_review source-content research; source-content/identity check by Codex /root. The specific clinical/application work below remains unfinished; no physician review is asserted.",
+            "reviewer": "Codex /root/scientific_review source-hierarchy review; independently source/rubric-checked by Codex /root and /root/grouped_correctness_check. Agent review, not clinician review.",
             "reviewed_at": "2026-11-08",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full primary content/API identity reviewed by Codex /root/scientific_review and independently checked by Codex /root on 2026-11-08, including visual Figure 1-4 checks. Factual access/content review is finished; the specific principal-outcome and reporting interpretation remains pending under the existing scientific rubric. No physician approval, numerical eligibility, dose benchmark or source rejection is asserted."
+            "basis": "Retained complete primary paper reread without new retrieval. Methods p356 explicitly identifies joint mobility as a main outcome measure; Results p358 explicitly reports a favorable statistically significant standalone MSM/placebo mobility comparison, with Figure3 directional support. This meets existing any-positive-primary scope without promoting unranked walking, within-arm pain/Lequesne changes, or unreported composite success. Reporting flaws and unreported outcomes remain explicit limitations. Root and the independent correctness reviewer checked the complete primary and existing any-positive-primary rubric. Source-specific applicability is bound through the canonical owner; no new grade, benchmark or policy."
+          },
+          "applicability": {
+            "scope": "ingredient",
+            "source_pmids": [
+              "17516722"
+            ],
+            "minimum_daily_dose": 1500,
+            "maximum_daily_dose": 1500,
+            "dose_unit": "mg",
+            "supported_outcomes": [
+              "Joint & Bone Health"
+            ],
+            "studied_population": "Adults aged40–70 with mild-to-moderate radiographic knee osteoarthritis, symptoms for at least six months, Lequesne8–18 and mostly Kellgren–Lawrence1–3; ordinary oral Healers-supplied MSM500mg three times daily for12weeks. Only main joint-mobility placebo comparison qualifies, not general pain, inflammation or prevention.",
+            "reviewed_at": "2026-11-08",
+            "reason": "The source explicitly identifies joint mobility among its main outcome measures and reports significant standalone-MSM benefit versus placebo. The principal composite result is unreported and not claimed successful. This discrete1500mg regimen does not create a universal minimum, continuous dose range, OptiMSM manufacturing equivalence or general Dose benchmark. Ingredient Evidence remains amount-independent under the accepted research/Dose separation."
           }
         }
       ],
@@ -7422,12 +7519,13 @@
         ],
         "source_pmids": [
           "37447322",
-          "16309928"
+          "16309928",
+          "17516722"
         ],
         "supported_outcomes": [
           "Joint & Bone Health"
         ],
-        "studied_population": "Distinct source-specific contexts: mild knee discomfort at 2 g/day and symptomatic knee OA with a one-week titration to a 6 g/day maintenance target; not interchangeable populations or a continuous dose range.",
+        "studied_population": "Distinct source contexts: mild knee discomfort at2g/day, symptomatic knee OA after titration to6g/day, and mild-to-moderate radiographic knee OA with main joint-mobility findings at1.5g/day. These populations, outcomes, preparations and discrete regimens are not interchangeable or a continuous dose range.",
         "reviewed_at": "2026-11-08",
         "reason": "Source-specific preparation, population, outcome and requested amount correspondence are assessed separately for each independently reviewed context. Original 37447322 signed context remains intact. Ingredient Evidence credits qualified research without creating Dose adequacy or retail regimen equivalence.",
         "excluded_form_terms": [

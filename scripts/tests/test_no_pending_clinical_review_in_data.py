@@ -37,7 +37,7 @@ def test_no_data_file_holds_a_pending_review_context():
             "42366260", "41053591", "38243579", "40748005",
         },
         "INGR_GLYCINE": {"37851316"},
-        "INGR_MSM": {"17516722"},
+        "INGR_MSM": set(),
         "INGR_L_CARNITINE": {"32359762"},
         "INGR_PLANT_STEROLS": {"37739728"},
         "INGR_L_TYROSINE": {"25598314", "29980424", "38290812"},

@@ -8,7 +8,9 @@ at 6 g/day (PMID 16309928, 3 g twice daily) and 2 g/day (PMID 37447322, ten
 500 mg MSM/day at minimum use and read Evidence 15.6/20 "evaluated_applicable"
 after MSM became title-named (review, 2026-09-29).
 
-The returned A015/A093 finding retains one mild-knee-pain trial. Independent
+The returned A015/A093 finding retains one mild-knee-pain trial. The generic
+record also retains a separate Healers-supplied1.5g/day main-mobility finding;
+this does not identify that study material as OptiMSM. Independent
 source qualification confirms ordinary oral MSM chemical identity without
 transferring branded manufacturing or purity credit. Altered preparations stay
 outside that scope. The 2 g and historical 6 g amounts remain discrete source
@@ -35,21 +37,21 @@ def test_optimsm_is_the_brand_only_and_msm_is_ingredient_level():
     assert msm["evidence_level"] == "ingredient-human"
     assert {"msm", "methylsulfonylmethane"} <= set(msm["aliases"])
     for entry in (msm, entries["BRAND_OPTIMSM"]):
-        assert (entry["min_clinical_dose"], entry["max_studied_clinical_dose"], entry["dose_unit"]) == (2000, 6000, "mg")
+        assert (entry["min_clinical_dose"], entry["max_studied_clinical_dose"], entry["dose_unit"]) == (1500 if entry is msm else 2000, 6000, "mg")
         assert entry['study_type'] == 'rct_multiple'
-        assert set(entry['applicability']['source_pmids']) == {'37447322', '16309928'}
+        expected_pmids = {'37447322', '16309928'} | ({'17516722'} if entry is msm else set())
+        assert set(entry['applicability']['source_pmids']) == expected_pmids
         assert 'minimum_daily_dose' not in entry['applicability']
         accepted = [context for context in entry['study_contexts'] if context['scoring_eligible']]
-        assert {tuple(context['source_pmids']) for context in accepted} == {
-            ('37447322',), ('16309928',)}
-        assert {context['applicability']['minimum_daily_dose'] for context in accepted} == {2000, 6000}
+        assert {p for context in accepted for p in context['source_pmids']} == expected_pmids
+        assert {context['applicability']['minimum_daily_dose'] for context in accepted} == ({1500, 2000, 6000} if entry is msm else {2000, 6000})
         assert all(context['applicability']['minimum_daily_dose'] ==
                    context['applicability']['maximum_daily_dose'] for context in accepted)
     assert {r['pmid'] for r in entries['BRAND_OPTIMSM']['references_structured']} == {'16309928', '37447322'}
     assert {r['pmid'] for r in msm['references_structured']} == {
         '16309928', '37447322', '21708034', '17516722'}
     assert {p for c in msm['study_contexts'] if c['scoring_eligible']
-            for p in c['source_pmids']} == {'37447322', '16309928'}
+            for p in c['source_pmids']} == {'37447322', '16309928', '17516722'}
 
 
 def test_msm_source_reviews_preserve_mixed_oa_and_alternating_controlled_human_findings():
@@ -66,7 +68,7 @@ def test_msm_source_reviews_preserve_mixed_oa_and_alternating_controlled_human_f
     assert alternate['scoring_eligible'] is False
     text = ' '.join(alternate['limitations']).lower()
     assert 'alternation' in text and 'positive' in text and 'null' in text
-    assert contexts['17516722']['review_status'] == 'source_verified_pending_clinical_review'
+    assert contexts['17516722']['review_status'] == 'clinician_approved'
 
 
 def test_generic_msm_research_keeps_brand_and_general_dose_credit_separate():
@@ -82,15 +84,15 @@ def test_generic_msm_research_keeps_brand_and_general_dose_credit_separate():
     artifact = build_scored_artifact(enriched)
     evidence = artifact["_v4_module_breakdown"]["dimensions"]["evidence"]
     dose = artifact["_v4_module_breakdown"]["dimensions"]["dose"]
-    assert artifact['quality_assessment_status'] == 'partial'
-    assert 'evidence_assessment_incomplete' in artifact['assessment_readiness']['release_assessment']['blockers']
+    assert artifact['quality_assessment_status'] == 'complete'
+    assert 'evidence_assessment_incomplete' not in artifact['assessment_readiness']['release_assessment']['blockers']
     from clinical_applicability import assess_clinical_source_review
-    assert not assess_clinical_source_review(_entries()['INGR_MSM'])['is_complete']
-    # Discovery is separate from the native module's selected numerical path;
-    # an unfinished ingredient review remains a hold even if it earned no points.
+    assert assess_clinical_source_review(_entries()['INGR_MSM'])['is_complete']
+    # Completed source qualification is separate from amount adequacy; this
+    # real low-amount label still owns its neutral general Dose assessment.
     subject = next(r for r in artifact['assessment_readiness']['evidence']['ingredient_assessments']
                    if r['canonical_id'] == 'msm')
-    assert subject['state'] == 'not_yet_evaluated'
+    assert subject['state'] == 'evaluated_supported'
     assert "SUB_CLINICAL_DOSE_DETECTED" not in json.dumps(evidence)
     msm = next(
         item for item in dose["metadata"]["specialized_purpose_assessments"]

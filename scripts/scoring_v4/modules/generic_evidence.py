@@ -272,20 +272,15 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             else _canonical_from_entry(entry)
         )
         if canonical:
+            ingredient_points.setdefault(canonical, 0.0)
             families = _qualified_trial_families(entry) if raw > 0 else frozenset()
             identities = tuple(sorted(_matched_canonical_ids(entry))) or (canonical,)
             family_key = (identities, families) if families else None
-            prior = family_contributions.get(family_key) if family_key else None
-            if prior is None:
+            if family_key:
+                family_contributions.setdefault(identities, []).append(
+                    (families, raw, canonical, entry_id))
+            else:
                 ingredient_points[canonical] += raw
-                if family_key:
-                    family_contributions[family_key] = (raw, canonical, entry_id)
-            elif raw > prior[0] or (raw == prior[0] and entry_id < prior[2]):
-                ingredient_points[prior[1]] -= prior[0]
-                if ingredient_points[prior[1]] == 0:
-                    del ingredient_points[prior[1]]
-                ingredient_points[canonical] += raw
-                family_contributions[family_key] = (raw, canonical, entry_id)
             # Duplicate numerical witnesses still carry real source-review
             # obligations. Do not make their unfinished reviews disappear.
             if raw > 0:
@@ -293,6 +288,11 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 if family_key:
                     contributing_families[entry_id] = family_key
 
+    for candidates in family_contributions.values():
+        for _, raw, canonical, _ in _select_trial_family_contributions(candidates):
+            ingredient_points[canonical] += raw
+
+    ingredient_points = {canonical: points for canonical, points in ingredient_points.items() if points > 0}
     capped_scores = sorted(
         (min(CAP_PER_INGREDIENT, pts) for pts in ingredient_points.values()),
         reverse=True,
@@ -404,7 +404,9 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     dependency_families = {contributing_families[_entry_id(entry)] for entry in dependencies
                            if _entry_id(entry) in contributing_families}
     dependencies.extend(entry for entry_id, (_, entry) in contributing_entries.items()
-                        if contributing_families.get(entry_id) in dependency_families)
+                        if any(identities == own[0] and (families <= own[1] or own[1] <= families)
+                               for identities, families in dependency_families
+                               if (own := contributing_families.get(entry_id)) is not None))
     from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review, reviewed_entries
     receipts = []
     for entry in {_entry_id(entry): entry for entry in dependencies}.values():
@@ -1859,6 +1861,30 @@ def _effect_direction_assessment(entry: Dict[str, Any]) -> dict:
         return {"multiplier": EFFECT_DIRECTION_MULTIPLIERS.get(policy["multiplier_key"], 0.0),
                 "source_pmids": policy["source_pmids"]}
     return ordinary
+
+
+def _select_trial_family_contributions(candidates: list) -> list:
+    """Keep the best existing units when one witness contains another.
+
+    Independent trial sets retain their additive units. A broader aggregate
+    competes with the sum of contained, disjoint witnesses, never with an
+    invented per-trial fraction. Sorting makes containment order-independent.
+    """
+    selected = []
+    for candidate in sorted(candidates, key=lambda item: (len(item[0]), sorted(item[0]), item[3])):
+        families, raw, _, entry_id = candidate
+        contained = [prior for prior in selected if prior[0] <= families]
+        disjoint = all(left[0].isdisjoint(right[0])
+                       for index, left in enumerate(contained) for right in contained[index + 1:])
+        if not contained or not disjoint:
+            # Containment supplies no rule for reweighting partial overlaps.
+            selected.append(candidate)
+            continue
+        prior_total = sum(prior[1] for prior in contained)
+        if raw > prior_total or (raw == prior_total and entry_id < min(prior[3] for prior in contained)):
+            selected = [prior for prior in selected if prior not in contained]
+            selected.append(candidate)
+    return selected
 
 
 def _qualified_trial_families(entry: Dict[str, Any]) -> frozenset[str]:

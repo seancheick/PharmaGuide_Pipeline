@@ -282,7 +282,7 @@ def test_scoped_msm_claim_explanation_uses_best_supported_context_in_either_orde
                                             require_claim_alignment=False)
     assert decision['claim_alignment']['state'] == 'aligned'
     assert 'affirmative_exact_source_condition_claim' in json.dumps(decision['claim_alignment'])
-    assert len(decision['population_applicability']['context_ids']) == 2
+    assert len(decision['population_applicability']['context_ids']) == 3
 
 
 @pytest.mark.parametrize('entry_id', ['INGR_MSM', 'BRAND_OPTIMSM'])
