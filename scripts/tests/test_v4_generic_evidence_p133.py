@@ -890,8 +890,8 @@ def test_held_ashwagandha_cannot_recover_affirmative_evidence() -> None:
     assert payload["score"] == 0.0
 
 
-def test_l_glycine_alias_cannot_bypass_source_review_hold() -> None:
-    """Known identity cannot override the unresolved human-efficacy review."""
+def test_l_glycine_alias_cannot_bypass_retained_source_identity() -> None:
+    """An alias without retained source text cannot establish free glycine."""
     from scoring_v4.modules.generic_evidence import score_evidence
 
     product = _product(
@@ -912,7 +912,7 @@ def test_l_glycine_alias_cannot_bypass_source_review_hold() -> None:
     from clinical_applicability import reviewed_entries
     entry = reviewed_entries()["INGR_GLYCINE"]
     assert "l-glycine" in entry["aliases"]
-    assert entry["scoring_eligible"] is False
+    assert entry["scoring_eligible"] is True
     assert payload["metadata"]["recovered_matches"] == []
     assert payload["metadata"]["matched_entries"] == 0
     assert payload["score"] == 0.0
