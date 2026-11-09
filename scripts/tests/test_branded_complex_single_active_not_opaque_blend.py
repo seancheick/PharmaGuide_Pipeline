@@ -314,3 +314,21 @@ def test_citrus_source_exception_does_not_hide_real_or_unresolved_formulas(chang
         for form in raw["forms"]:
             form["prefix"] = "not from"
     assert EnhancedDSLDNormalizer()._is_dsld_active_blend_total_row(raw) is True
+
+
+def test_verified_excipient_does_not_emit_opacity(enricher):
+    product = _single_active_product("Fruit Blend", "Fruit Blend", qty=20)
+    product["activeIngredients"][0]["is_excipient"] = True
+    result = enricher._collect_proprietary_data(product)
+    assert result["blends"] == []
+
+
+def test_excipient_child_does_not_exempt_active_parent(enricher):
+    product = _single_active_product("Proprietary Energy Blend", "Proprietary Energy Blend", qty=500)
+    product["activeIngredients"][0]["nestedIngredients"] = [
+        {"name": "Caffeine", "quantity": None},
+        {"name": "Natural Flavor", "is_excipient": True},
+    ]
+    result = enricher._collect_proprietary_data(product)
+    assert result["blends"]
+    assert any(blend["disclosure_level"] != "full" for blend in result["blends"])

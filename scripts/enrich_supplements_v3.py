@@ -15261,7 +15261,8 @@ class SupplementEnricherV3:
                 # Source descriptors are the cleaner's provenance decision,
                 # not independently formulated hidden actives. Their elemental
                 # profile can remain unknown without creating B5 opacity.
-                if row.get("cleaner_row_role") == "source_descriptor":
+                if (row.get("cleaner_row_role") == "source_descriptor"
+                        or row.get("is_excipient") is True):
                     non_opaque_source_fields.add(f"{section}[{index}]")
                     continue
                 ref = str(row.get("raw_source_path") or "")
@@ -15479,6 +15480,7 @@ class SupplementEnricherV3:
 
             for idx, ingredient in enumerate(ingredient_list):
                 if (ingredient.get("cleaner_row_role") in CLEANER_NON_EFFICACY_ROLES
+                        or ingredient.get("is_excipient") is True
                         or ingredient.get("raw_source_path") in source_only_preparations):
                     continue
                 is_nested = bool(ingredient.get('isNestedIngredient', False))
