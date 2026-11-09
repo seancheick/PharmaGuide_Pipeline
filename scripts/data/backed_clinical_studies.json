@@ -3183,7 +3183,7 @@
         "alzchem creapure"
       ],
       "category": "sports_performance",
-      "evidence_level": "branded-rct",
+      "evidence_level": "reference",
       "published_studies": [
         "controlled trial",
         "ingredient-form"
@@ -3195,8 +3195,8 @@
       "health_goals_supported": [
         "Muscle Growth & Recovery"
       ],
-      "notes": "Two retained primary reports explicitly identify Creapure but do not provide isolated Creapure-versus-no-creatine efficacy contrasts. Jagim 22971354 compares three active creatine regimens:abstract 36 randomized, body 41 recruited/36 completed, muscle subset 25. Oliver 24568653 compares tarragon versus tarragon placebo with identical Creapure in both crossover periods:Figure 1 shows 20 eligible/12 started/10 completers; performance 9. Time-related gains and null active-comparator/add-on contrasts remain distinct. No unique brand superiority, equivalence or general Dose benchmark follows. The separately qualified monohydrate body-composition owner remains independent. The historical automated count of five completed registry trials had no identified NCT/source receipt and is not retained as verified evidence; no replacement count is invented.",
-      "study_type": "rct_single",
+      "notes": "Two retained primary reports explicitly identify Creapure but do not provide isolated Creapure-versus-no-creatine efficacy contrasts. Jagim 22971354 compares three active creatine regimens:abstract 36 randomized, body 41 recruited/36 completed, muscle subset 25. Oliver 24568653 compares tarragon versus tarragon placebo with identical Creapure in both crossover periods:Figure 1 shows 20 eligible/12 started/10 completers; performance 9. Time-related gains and null active-comparator/add-on contrasts remain distinct. No unique brand superiority, equivalence or general Dose benchmark follows. The separately qualified monohydrate body-composition owner remains independent. The historical automated count of five completed registry trials had no identified NCT/source receipt and is not retained as verified evidence; no replacement count is invented. The existing reference-only classification records these qualified active-comparator/add-on studies as non-affirmative for isolated branded efficacy; their actual randomized designs and reported findings remain in the study contexts. Both context numerical flags stay false. The original references are valid sources, not source-integrity exclusions. This completed brand-source assessment cannot suppress separately qualified creatine-monohydrate research.",
+      "study_type": "reference",
       "last_updated": "2026-10-11",
       "notable_studies": "Jagim 2012 (22971354):Creapure loading 20 g/day for 7 days then 5 g/day for 21 days, versus two Kre-Alkalyn active regimens; no significant treatment-by-time efficacy differences, with selected time-related gains. Oliver 2014 (24568653):all periods receive Creapure 5 g twice daily for 5 days, with tarragon or tarragon placebo pre-dose; add-on contrasts null, selected time-related retention/performance gains retained. Neither is an isolated branded placebo-controlled efficacy trial.",
       "references_structured": [
@@ -3218,7 +3218,6 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils",
-          "scoring_eligible": false,
           "notes": "Full primary source reviewed: active-comparator or add-on design, without a no-creatine control. Within-time improvements and null between-active contrasts do not establish standalone Creapure efficacy or equivalence."
         },
         {
@@ -3239,7 +3238,6 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils",
-          "scoring_eligible": false,
           "notes": "Full primary source reviewed: active-comparator or add-on design, without a no-creatine control. Within-time improvements and null between-active contrasts do not establish standalone Creapure efficacy or equivalence."
         }
       ],

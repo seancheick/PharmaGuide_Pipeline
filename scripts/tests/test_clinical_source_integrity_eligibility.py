@@ -1512,3 +1512,61 @@ def test_chicory_factual_source_update_preserves_approved_neutral_dose_proof():
     assert record['reference_semantics']['curve'] == 'completed_no_benchmark_neutral'
     assert verified_reference_citations(record)
     assert _botanical_benchmark({'canonical_id': 'chicory_root'}) == 'absent'
+
+
+def _creapure_scoring_product():
+    product = _tyrosine_scoring_product(name='Creapure')
+    product['activeIngredients'][0].update(canonical_id='creatine_monohydrate',
+        standard_name='Creatine', matched_form='creatine monohydrate', quantity=5000)
+    return product
+
+
+def test_completed_creapure_reference_preserves_generic_trial_credit():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from evidence_resolver import resolve_evidence_for_row
+    from assessment_readiness import _resolved_evidence_assessment, EVIDENCE_EVALUATED_SUPPORTED
+    entries = reviewed_entries()
+    brand = entries['BRAND_CREAPURE']
+    assert brand['study_type'] == brand['evidence_level'] == 'reference'
+    assert brand['effect_direction'] == 'positive_strong'  # Historical description retained.
+    assert all('scoring_eligible' not in ref for ref in brand['references_structured'])
+    assert all(c['scoring_eligible'] is False for c in brand['study_contexts'])
+    assert assess_clinical_source_review(brand)['is_complete']
+    product = _creapure_scoring_product()
+    row = product['activeIngredients'][0]
+    def measured(ids):
+        candidate = copy.deepcopy(product)
+        matches = [{**entries[key], 'ingredient': row['name'],
+                    'matched_source_row_refs': [row['raw_source_path']],
+                    'matched_canonical_ids': ['creatine_monohydrate']} for key in ids]
+        candidate['evidence_data'] = {'clinical_matches': matches}
+        return score_evidence(candidate, accepted_matches=matches)
+    ingredient = measured(['INGR_CREATINE_MONOHYDRATE'])
+    both = measured(['INGR_CREATINE_MONOHYDRATE', 'BRAND_CREAPURE'])
+    assert ingredient['score'] > 0
+    assert both['score'] == ingredient['score']
+    assert both['metadata']['ingredient_points'] == ingredient['metadata']['ingredient_points']
+    assert measured(['BRAND_CREAPURE'])['score'] == 0
+    resolution = resolve_evidence_for_row(row, product)
+    assert resolution.points_eligible and resolution.blocking_reasons == []
+    assert _resolved_evidence_assessment(resolution)[0] == EVIDENCE_EVALUATED_SUPPORTED
+
+
+@pytest.mark.parametrize('change', ['pending', 'malformed'])
+def test_creapure_reference_cannot_hide_unfinished_or_invalid_source(monkeypatch, change):
+    import clinical_applicability as ca
+    from evidence_resolver import resolve_evidence_for_row
+    entries = copy.deepcopy(ca.reviewed_entries())
+    brand = entries['BRAND_CREAPURE']
+    if change == 'pending':
+        extra = copy.deepcopy(brand['study_contexts'][0])
+        extra['context_id'] += '_pending_control'
+        extra['review_status'] = 'source_verified_pending_clinical_review'
+        brand['study_contexts'].append(extra)
+    else:
+        brand['study_contexts'][0]['clinical_review'] = {}
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: entries)
+    assert not ca.assess_clinical_source_review(brand)['is_complete']
+    product = _creapure_scoring_product()
+    assert 'clinical_sources_ineligible' in resolve_evidence_for_row(
+        product['activeIngredients'][0], product).blocking_reasons
