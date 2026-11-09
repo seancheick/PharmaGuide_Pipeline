@@ -13840,18 +13840,16 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "memory ↑",
-        "attention ↑",
-        "learning ↑"
+        "Selected planned adult visual-processing and verbal-learning task findings (PMID 11498727), alongside multiple null tests.",
+        "One-trial Trail B change estimate in PMID 24252493; overall choice-reaction-time pool was null."
       ],
       "health_goals_supported": [
-        "Focus & Mental Clarity",
-        "Healthy Aging/Longevity"
+        "Focus & Mental Clarity"
       ],
-      "notes": "Human evidence supports Bacopa monnieri for memory-related outcomes, particularly after longer supplementation periods, though not every cognitive domain improves consistently.",
+      "notes": "Limited, mixed adult research on standardized oral Bacopa extract preparations. Some planned cognitive task findings were positive, while many tests were null. These findings do not establish general memory improvement, dementia treatment, longevity or pediatric benefit. The retained source descriptions do not establish equivalence or efficacy of every retail formulation.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
-      "notable_studies": "Bacopa monnieri has systematic-review-level support for selected cognition outcomes. The 2014 meta-analysis of randomized controlled trials (PMID 24252493) found benefits for attention and processing, and a later systematic review in child and adolescent populations (PMID 27912958) confirmed that the evidence is positive but heterogeneous by extract and population.",
+      "last_updated": "2026-11-09",
+      "notable_studies": "PMID 11498727 reports selected visual-processing and verbal-learning findings in 46 healthy adults. Its corrected protocol used 320 mg/day for 12 weeks; this is a studied regimen, not a Dose benchmark. PMID 24252493 reports a positive one-trial Trail B change estimate but a null overall choice-reaction-time pool. Its historical 300 mg subgroup predates the 2015 dose corrections. The pediatric review PMID 27912958 cannot establish adult benefit.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -13909,6 +13907,27 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "11498727",
+          "doi": "10.1007/s002130100815",
+          "title": "The chronic effects of an extract of Bacopa monniera (Brahmi) on cognitive function in healthy human subjects.",
+          "citation": "Psychopharmacology(Berl).2001;156(4):481–484;2015erratumDOI10.1007/s00213-015-3965-3",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11498727/",
+          "published_date": "2001-08-01",
+          "publication_types": [
+            "Clinical Trial",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "evidence_grade": "rct",
+          "retracted": false,
+          "supports_claims": [
+            "Selected planned unranked adult cognitive test outcomes; mixed overall findings"
+          ],
+          "verification_source": "LiveEuropePMCcorecontent plusactualprimaryfullbody andcompleteindexed2001erratum;agentreview"
         }
       ],
       "external_ids": {
@@ -13916,14 +13935,321 @@
       },
       "effect_direction": "mixed",
       "primary_outcome": "Focus & Mental Clarity",
-      "total_enrollment": 310,
-      "registry_completed_trials_count": 12,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained mixed classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Focus & Mental Clarity; published_tags=systematic_review,meta-analysis,RCT; registry_completed_trials_count=12; total_enrollment=310; endpoint_tags=focus_memory; notes/citations include mixed-evidence language.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Mixed findings with low confidence under the existing rubric: selected planned, unranked findings from PMID 11498727 and the review estimate in PMID 24252493 coexist with null outcomes, heterogeneity, small-study limitations and source corrections. One conservative overlapping witness family is counted for the direct trial and review, without asserting that all reviewed cohorts are the same participants. The unverified aggregate enrollment and registry counts are removed; the reviews are not additional independent replication.",
       "endpoint_relevance_tags": [
         "focus_memory"
       ],
-      "study_contexts": []
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_BACOPA"
+          ],
+          "identity_scope": "ingredient_general",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "component_registration_status": "fully_registered",
+          "condition": "healthy_cognition",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/tyrosine_sources source-content review; independently checked by /root/parallel_scientific_check. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Actual source Methods, Results, tables and referenced corrections read and live identifiers checked. Root and independent reviewer read the manuscripts and complete indexed 2001 erratum; the 2008 official corrigendum was also content-checked. Independent existing-rubric source/applicability assessment completed November 9 with mixed/low grading, one conservative overlapping witness family, narrow material/population scope and no new Dose benchmark. Compatibility review-status wording does not assert physician review."
+          },
+          "trial_family": "bacopa_11498727_conservative_overlapping_witness",
+          "context_id": "ingr_bacopa_11498727_corrected_adult_cognition",
+          "source_pmids": [
+            "11498727"
+          ],
+          "identity": {
+            "preparation": "Standardized ethanolic Bacopa monniera extract (KeenMind/CDRI08), originally reporting at least 55% combined bacosides A and B. The 2015 erratum corrects each capsule to 160 mg extract, equivalent to 4 g dried herb, and identifies 75% ethanol extraction. This does not establish equivalence of all retail extracts."
+          },
+          "source_integrity": "corrected",
+          "population": {
+            "age_group": "adult",
+            "description": "46 healthy volunteers, 11 men and 35 women, aged 18-60; 23 participants per parallel arm. Participants had no pre-existing physical or psychiatric condition and took no medication."
+          },
+          "study_design": "Computer-randomized, double-blind, placebo-controlled parallel trial with baseline, five-week and twelve-week tests. Weekly calls and capsule counts monitored adherence; over 10% noncompliance was an exclusion criterion.",
+          "comparator": "Identical placebo capsules",
+          "applicability": {
+            "scope": "ingredient",
+            "require_source_label_form": true,
+            "required_form_terms": [
+              "extract",
+              "KeenMind",
+              "CDRI-08",
+              "CDRI 08"
+            ],
+            "dosage_forms": [
+              "capsule"
+            ],
+            "supported_outcomes": [
+              "healthy_cognition"
+            ],
+            "source_pmids": [
+              "11498727"
+            ],
+            "studied_population": "Adults in source-specific healthy cognition trials; not children or diagnosed dementia. Observed trial ages do not establish universal age cutoffs.",
+            "reviewed_at": "2026-11-09"
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              320
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "Two capsules daily for twelve weeks",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "Two corrected 160 mg capsules daily for twelve weeks (320 mg/day); the original 300 mg description was superseded by the 2015 erratum.",
+            "normalization": {
+              "basis": "160 mg/capsule x 2 = 320 mg/day; 12 weeks x 7 = 84 days. This corrected assigned protocol is not a minimum effective dose or general Dose benchmark."
+            },
+            "source_provenance": {
+              "pmid": "11498727",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/11498727/",
+              "location": "Original Materials and Methods, Procedures, Results and Table 1, plus complete erratum DOI 10.1007/s00213-015-3965-3 read as indexed publisher-layout text at https://www.academia.edu/104859702/The_chronic_effects_of_an_extract_of_Bacopa_monniera_Brahmi_on_cognitive_function_in_healthy_human_subjects . Official Springer correction identity verified; successful official full-body retrieval is not claimed."
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Planned cognitive visual-processing task (inspection time) improved: time-by-group F=4.5, p=.018; largest reported difference at twelve weeks.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Planned cognitive verbal-learning tasks (AVLT learning, forgetting and proactive interference) improved, with p=.042, .03 and .042 respectively.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Trail Making A/B, choice and simple reaction time, digit span/symbol, comprehension and working-memory tests had no significant treatment effects reported in the primary Results or Table 1.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "State-anxiety scores improved in healthy volunteers (p=.001); this is not an anxiety-disorder treatment finding.",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "One small, industry-funded study in healthy adults, with many tests and no established formal primary hierarchy or battery-wide multiplicity correction. Planned unranked findings are retained without claiming general cognitive or disease-treatment efficacy.",
+            "The original 300 mg/day and 20:1 preparation description was corrected in the complete 2015 erratum (DOI 10.1007/s00213-015-3965-3): 160 mg per capsule, equivalent to 4 g dried herb, manufactured with 75% ethanol. Two daily capsules give 320 mg/day. The correction does not create a Dose benchmark.",
+            "The primary paper reports no significant Trail B time-by-group result. Review PMID 24252493 instead reports a positive difference-in-change estimate from the same trial. Preserve both reported analyses; this is not independent replication or a fabricated trial identifier. Both publications print Trail B units as ms; no unit correction is invented.",
+            "This primary trial and its review share one conservatively grouped witness for clinical depth. The grouping does not assert that all nine review cohorts used identical participants.",
+            "No transfer to children, diagnosed dementia, longevity, whole-herb powders, active combinations or an assumption that every retail extract is equivalent. The positive state-anxiety result in healthy volunteers is not treatment evidence for an anxiety disorder.",
+            "Source-content review was performed by agents, not a physician. The full primary copy was read at a public distributor archive; the complete erratum was read through a public indexed manuscript. Neither is represented as successful official publisher full-text retrieval."
+          ],
+          "evidence_role": "direct_rct"
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "components": [
+            "INGR_BACOPA"
+          ],
+          "identity_scope": "ingredient_general",
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "component_registration_status": "fully_registered",
+          "condition": "healthy_cognition",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/tyrosine_sources source-content review; independently checked by /root/parallel_scientific_check. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Actual source Methods, Results, tables and referenced corrections read and live identifiers checked. Root and independent reviewer read the manuscripts and complete indexed 2001 erratum; the 2008 official corrigendum was also content-checked. Independent existing-rubric source/applicability assessment completed November 9 with mixed/low grading, one conservative overlapping witness family, narrow material/population scope and no new Dose benchmark. Compatibility review-status wording does not assert physician review."
+          },
+          "trial_family": "bacopa_11498727_conservative_overlapping_witness",
+          "context_id": "ingr_bacopa_24252493_bounded_adult_extract_review",
+          "source_pmids": [
+            "24252493"
+          ],
+          "identity": {
+            "preparation": "Standardized oral Bacopa monnieri extracts in capsule or tablet studies, including KeenMind, BacoMind, MediHerb and other studied preparations. Extraction, dose and composition differed; no universal retail equivalence is established."
+          },
+          "source_integrity": "none",
+          "evidence_role": "meta_analysis",
+          "included_study_pmids": [
+            "18611150",
+            "20590480",
+            "23320031",
+            "20703343",
+            "12093601",
+            "23354535",
+            "11498727",
+            "18683852"
+          ],
+          "population": {
+            "age_group": "adult",
+            "description": "Adult healthy andmemory-complaint trial populations;9studyinventory518subjects;Morgan2010excludedactualpool forattrition,resulting437subjects. PositiveTrailBsource11498727healthyadult;doesnotestablishdementia/ADHDbenefit."
+          },
+          "study_design": "Systematicreview of randomizedplacebocontrolled single standardizedextract trials,>=12weekexposure;random-effects same-test outcome pools;Table2reviewoutcomesprespecified,noformalprimarydesignated.",
+          "comparator": "Placebo in constituent randomized trials",
+          "applicability": {
+            "scope": "ingredient",
+            "require_source_label_form": true,
+            "required_form_terms": [
+              "extract",
+              "KeenMind",
+              "CDRI-08",
+              "CDRI 08"
+            ],
+            "dosage_forms": [
+              "capsule",
+              "tablet"
+            ],
+            "supported_outcomes": [
+              "healthy_cognition"
+            ],
+            "source_pmids": [
+              "24252493"
+            ],
+            "studied_population": "Adults in source-specific healthy cognition trials; not children or diagnosed dementia. Observed trial ages do not establish universal age cutoffs.",
+            "reviewed_at": "2026-11-09"
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "not_recorded",
+            "duration_days": null,
+            "administration_frequency": null,
+            "dosage_forms": [
+              "capsule",
+              "tablet"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "No single aggregate assigned regimen: the review historically reports extract-specific doses of 250-600 mg/day with at least twelve weeks of exposure. The nominal 300 mg Stough subgroup predates the 2015 capsule-strength corrections; it is not a current Dose benchmark.",
+            "source_provenance": {
+              "pmid": "24252493",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24252493/",
+              "location": "Actual publisher-layout manuscript at https://magistralbr.caldic.com/storage/product-files/1219933901.pdf : Methods 2.2-2.4, Results 3.3-3.6, Tables 1-4 and bibliography. Related corrections: DOI 10.1007/s00213-015-3965-3 and DOI 10.1002/ptr.5441."
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Cognitive Trail B task difference-in-change estimate favored Bacopa: -17.9 printed ms (95% CI -24.6 to -11.2), p<.001, from one trial (PMID 11498727). This is not a replicated pooled endpoint.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Overall choice reaction time across three studies was null (p=.24; I2=98.3%).",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Cognitive choice-reaction-time subgroup, historically described as 300 mg/day in two Stough trials, favored Bacopa (-10.6 ms; 95% CI -12.1 to -9.2). Dose descriptions were corrected later; subgroup pre-specification was not established.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Most memory outcomes, choice accuracy, simple reaction time, Trail A, digit span and digit-vigilance pools showed no significant benefit; many were highly heterogeneous.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Nine publications and 518 participants were inventoried; the actual quantitative analysis used 437 participants after excluding Morgan 2010 for attrition concerns. Neither number is an independently qualified parent trial-family count or additional replication.",
+            "The overall choice-reaction-time pool was null. The positive two-trial dose subgroup and one-trial Trail B estimate do not establish a general memory or attention benefit. Formal primary hierarchy and dose-subgroup pre-specification were not established; no formal primary designation is invented.",
+            "Trail B derives from PMID 11498727. The review reports a difference-in-change estimate, whereas the original trial did not report a significant Trail B time-by-group ANOVA result. These are distinct reported analyses, not independent confirmation. Printed ms units are retained without an invented correction.",
+            "The nominal 300 mg subgroup predates the 2015 corrections to Stough 2001 (DOI 10.1007/s00213-015-3965-3) and Stough 2008 (DOI 10.1002/ptr.5441). Corrected capsules contained 160 mg, giving 320 mg/day with two daily capsules. The corrected solvent concentration is 75% ethanol. Do not turn historical subgroup doses into a minimum or optimal Dose benchmark.",
+            "The direct trial and review are not independent positive witnesses: one conservative overlap family is used. This does not assert that every included publication shared participants. Included-study membership is not individual qualification of all source trials.",
+            "The unindexed Barbhaiya 2008 publication is retained by exact DOI 10.3923/jpt.2008.425.434, not an invented PMID. Morgan 2010 is in the review inventory but was excluded from the actual quantitative analysis.",
+            "Most memory results were null or inconclusive, heterogeneity was often high, concealment was incompletely documented and some trials had substantial attrition. No dementia, longevity, pediatric or universal-safety conclusion follows.",
+            "No single assigned regimen exists for this synthesis. dose_status=source_not_reported refers only to that absent aggregate regimen; known constituent regimens and later corrections remain recorded above. No requirement for exact-brand proof or a new preparation threshold is introduced."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_bacopa_27912958_pediatric_to_adult_transfer_exclusion",
+          "components": [
+            "INGR_BACOPA"
+          ],
+          "source_pmids": [
+            "27912958"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/tyrosine_sources source-content review; independently checked by /root/parallel_scientific_check. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Actual full institutional manuscript, Methods, Results, Tables 1-2 and references 40-44 read. Independently checked November 9 under the existing rubric. Completed scoped rejection of pediatric-review transfer to generic adult efficacy or safety; reported pediatric positives and source limitations remain. This does not assert no pediatric benefit."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "27912958",
+              "source_url": "https://researchmgt.monash.edu/ws/portalfiles/portal/251222495/251029958_oa.pdf",
+              "location": "Methods eligibility/effect-size computation;Results;Tables1–2;Discussion and references40–44."
+            }
+          },
+          "limitations": [
+            "The review concerns participants aged 4-18 in healthy, ADHD and low-IQ cohorts. It cannot establish generic adult cognition, longevity or universal safety. Single-extract inclusion excluded active combinations; it is not evidence for polyherbal efficacy.",
+            "Five studies had different designs: Sharma 1987 syrup was open-label placebo-controlled in Table 1; Negi 2000 and an unpublished CDRI 2001 report were randomized double-blind placebo-controlled; Dave 2008/2014 were uncontrolled open-label responder analyses. The narrative describes three RCTs, which conflicts with the Sharma table classification. No resolution or independent trial count is invented.",
+            "Effect sizes were calculated only for significant results, mixing between-group effects with treated-arm pre/post effects. Positive language, some memory, attention and hyperactivity findings remain; reasoning did not improve, nor did some impulsivity and peer-relation measures. Behavioral reports came from parents rather than teachers. No general pediatric efficacy or ADHD-treatment claim follows.",
+            "One included report was unpublished and two studies were uncontrolled. The published inventory is not an independently qualified clinical-depth or enrollment total. Separately unqualified primary studies are not erased or described as negative.",
+            "Sparse safety reporting, including one study without safety data and reports of transient gastrointestinal symptoms, does not establish universal pediatric, pregnancy or chronic-use safety. This scoped adult-transfer exclusion is not a determination of no pediatric benefit."
+          ]
+        }
+      ],
+      "published_studies_count": 1,
+      "scoring_eligible": true,
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "extract",
+          "KeenMind",
+          "CDRI-08",
+          "CDRI 08"
+        ],
+        "dosage_forms": [
+          "capsule",
+          "tablet"
+        ],
+        "supported_outcomes": [
+          "healthy_cognition"
+        ],
+        "source_pmids": [
+          "11498727",
+          "24252493"
+        ],
+        "studied_population": "Adults in source-specific healthy cognition trials; not children or diagnosed dementia. Observed trial ages do not establish universal age cutoffs.",
+        "reviewed_at": "2026-11-09"
+      }
     },
     {
       "id": "INGR_COQ10",
@@ -23196,9 +23522,9 @@
       "health_goals_supported": [
         "Reduce Stress/Anxiety"
       ],
-      "notes": "The retained source PMID 34449930 synthesizes randomized trials of lemon balm for depressive and anxiety symptoms. Pooled effects favored lemon balm, but heterogeneity, few trials and differing acute/chronic methods limit certainty and transfer. It does not establish cognitive-performance efficacy or a universal preparation/dose threshold. Exact source preparation and product applicability remain unreviewed.",
+      "notes": "PMID 34449930 reports pooled depression/anxiety symptom findings favoring lemon balm, with substantial heterogeneity and differing acute/chronic methods. It does not establish cognitive-performance efficacy or a universal preparation/dose threshold. Its abstract reports searching 12 databases, not 12 independently verified trials. The historical 123 enrollment and 12 registry-trial counts were not reconciled to source trial families and have been removed. Actual full Methods, Results and included-study tables remain unread: publisher access was denied and the exact Deakin repository record is embargoed without public files as of November 9, 2026. Preparation, population and product applicability remain unqualified; metadata or abstract access does not complete this review.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-09",
       "notable_studies": "PMID 34449930 reports pooled improvements in anxiety and depression scores versus placebo, with substantial heterogeneity and methodological differences across a small number of trials. The present retained reference does not supply a cognitive-performance determination.",
       "references_structured": [
         {
@@ -23236,10 +23562,8 @@
       },
       "effect_direction": "positive_weak",
       "primary_outcome": "Reduce Stress/Anxiety",
-      "total_enrollment": 123,
-      "registry_completed_trials_count": 12,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction_rationale": "Descriptive positive_weak direction retained from the declared PMID 34449930 abstract; existing medium confidence is not a source-qualified efficacy approval. Full-methods, preparation and applicability review remains pending. No independent trial-family count or aggregate enrollment is established by the retained material; searched-database counts cannot supply clinical depth.",
       "endpoint_relevance_tags": [
         "stress_mood"
       ],

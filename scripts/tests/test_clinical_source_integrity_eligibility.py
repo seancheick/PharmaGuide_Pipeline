@@ -11,6 +11,104 @@ from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.scored_artifact import build_scored_artifact
 
 
+def test_bacopa_review_keeps_primary_correction_and_shared_witness_explicit():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_BACOPA']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    assert set(contexts) == {'11498727', '24252493', '27912958'}
+    primary = contexts['11498727']
+    assert validate_ingredient_context(primary, require_complete_review=True) == []
+    assert primary['source_integrity'] == 'corrected'
+    assert primary['dose']['values'] == [320]
+    assert primary['dose']['duration_days'] == 84
+    assert '10.1007/s00213-015-3965-3' in primary['dose']['source_provenance']['location']
+    assert primary['trial_family'] == contexts['24252493']['trial_family']
+    assert record['effect_direction'] == 'mixed'
+    assert record['effect_direction_confidence'] == 'low'
+    assert record['published_studies_count'] == 1
+    assert 'total_enrollment' not in record and 'registry_completed_trials_count' not in record
+    assert 'min_clinical_dose' not in record
+    assert 'Healthy Aging/Longevity' not in record['health_goals_supported']
+    assert assess_clinical_source_review(record)['is_complete']
+
+
+def test_bacopa_syntheses_retain_nulls_and_pediatric_transfer_exclusion():
+    from clinical_applicability import reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    contexts = {c['source_pmids'][0]: c for c in reviewed_entries()['INGR_BACOPA']['study_contexts']}
+    adult = contexts['24252493']
+    assert validate_ingredient_context(adult, require_complete_review=True) == []
+    assert any(o['direction'] == 'null' and 'choice reaction' in o['name'].lower()
+               for o in adult['outcomes'])
+    text = ' '.join(adult['limitations'])
+    assert '11498727' in text and '10.1002/ptr.5441' in text
+    assert 'not independent' in text.lower()
+    pediatric = contexts['27912958']
+    assert pediatric['review_status'] == 'rejected_source'
+    assert pediatric['scoring_eligible'] is False
+    assert validate_ingredient_context(pediatric, require_complete_review=True) == []
+    text = ' '.join(pediatric['limitations']).lower()
+    assert 'unpublished' in text and 'uncontrolled' in text and 'adult' in text
+
+
+@pytest.mark.parametrize('name,title,physical,eligible', [
+    ('Bacopa monnieri extract', 'Adult cognition supplement', 'Capsule', True),
+    ('Bacopa monnieri extract', 'Adult cognition supplement', 'Tablet', True),
+    ('Bacopa monnieri', 'Adult cognition supplement', 'Capsule', False),
+    ('Bacopa whole herb powder', 'Adult cognition supplement', 'Capsule', False),
+    ('Bacopa monnieri extract', 'Kids cognition ages 6-12', 'Capsule', False),
+    ('Bacopa monnieri extract', 'Adult cognition supplement', 'Powder', False),
+])
+def test_bacopa_studied_extract_class_keeps_material_delivery_and_population_limits(name, title, physical, eligible):
+    from clinical_applicability import filter_clinical_matches, reviewed_entries
+    row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
+           'canonical_id': 'bacopa', 'mapped': True, 'quantity': 100, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': title, 'physicalState': {'langualCodeDescription': physical},
+               'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**reviewed_entries()['INGR_BACOPA'], 'ingredient': name,
+             'matched_canonical_ids': ['bacopa'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    original = copy.deepcopy((product, entry))
+    matches, _ = filter_clinical_matches(product, [entry], assess_amount=False,
+                                          require_claim_alignment=False)
+    assert bool(matches) is eligible
+    if eligible:
+        product['evidence_data'] = {'clinical_matches': matches}
+        artifact = build_scored_artifact(product)
+        assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+        product.pop('evidence_data')
+    assert (product, entry) == original
+
+
+def test_lemon_balm_unread_methods_do_not_turn_unverified_counts_into_depth():
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    record = reviewed_entries()['INGR_LEMON_BALM']
+    assert 'total_enrollment' not in record and 'registry_completed_trials_count' not in record
+    assert record['study_contexts'] == []
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert '34449930' in record['notes'] and '12 databases' in record['notes']
+
+
+def test_bacopa_positive_task_names_keep_cognition_claim_alignment():
+    from clinical_applicability import assess_clinical_applicability, reviewed_entries
+    name = 'Bacopa monnieri extract'
+    row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
+           'canonical_id': 'bacopa', 'mapped': True, 'quantity': 100, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': 'Adult cognition supplement',
+               'physicalState': {'langualCodeDescription': 'Capsule'},
+               'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**reviewed_entries()['INGR_BACOPA'], 'ingredient': name,
+             'matched_canonical_ids': ['bacopa'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    result = assess_clinical_applicability(product, entry, assess_amount=False,
+                                         require_claim_alignment=True)
+    assert result['status'] == 'applicable'
+    assert result['claim_alignment']['state'] == 'aligned'
+
+
 def _entry(refs, **extra):
     return {"id": "INGR_AUDIT_MATERIAL", "standard_name": "Audit Material",
             "study_type": "rct_single", "evidence_level": "ingredient-human",
