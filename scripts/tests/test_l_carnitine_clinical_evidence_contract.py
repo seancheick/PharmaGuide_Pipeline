@@ -412,22 +412,27 @@ def test_brand_and_generic_carnitine_evidence_share_one_ingredient_group(
     assert payload["metadata"]["top_n_applied"] == 1
 
 
-def test_reviewed_tartrate_source_cannot_lend_credit_to_unreviewed_base():
+@pytest.mark.parametrize('name, expected', [
+    ('L-Carnitine', 'not_yet_evaluated'),
+    ('L-Carnitine (Free Base)', 'evaluated_limited_or_negative'),
+])
+def test_finished_base_review_does_not_borrow_tartrate_credit(name, expected):
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from evidence_resolver import resolve_evidence_for_row
     from assessment_readiness import _resolved_evidence_assessment
-    assert assess_clinical_source_review(reviewed_entries()["INGR_L_CARNITINE"])["is_complete"] is False
+    assert assess_clinical_source_review(reviewed_entries()["INGR_L_CARNITINE"])["is_complete"] is True
     assert assess_clinical_source_review(reviewed_entries()["BRAND_CARNIPURE"])["is_complete"] is True
-    product = _single_l_carnitine_product(name="L-Carnitine", matched_form="L-Carnitine Base")
+    product = _single_l_carnitine_product(name=name, matched_form="L-Carnitine Base")
     result = score_evidence(product, apply_primary_floor=True)
     assert result["score"] == 0
     assert result["metadata"]["recovered_matches"] == []
-    # A completed tartrate exclusion must not hide the base's unread sources.
+    # A printed base can finish its own noncredit review. A bare label retains
+    # the independent preparation hold; an enriched form is not label proof.
     resolution = resolve_evidence_for_row(
         product["ingredient_quality_data"]["ingredients_scorable"][0], product,
     )
     assert resolution.points_eligible is False
-    assert _resolved_evidence_assessment(resolution)[0] == "not_yet_evaluated"
+    assert _resolved_evidence_assessment(resolution)[0] == expected
 
 
 @pytest.mark.parametrize("name, eligible", [

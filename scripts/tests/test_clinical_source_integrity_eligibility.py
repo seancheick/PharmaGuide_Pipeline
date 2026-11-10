@@ -1,5 +1,6 @@
 """Integrity holds must survive both evidence resolution and public scoring."""
 import copy
+import re
 import sys
 from pathlib import Path
 
@@ -774,14 +775,14 @@ def test_elderberry_completed_synthesis_review_does_not_invent_generic_credit():
     assert record['health_goals_supported'] == ['Immune Support']
     assert contexts['ingr_elderberry_33827515_scoped_source']['clinical_review']['reviewer'] == 'Dr. Pham'
     assert not er.clinical_record_sources_eligible(record)
-    assert not assess_clinical_source_review(record)['is_complete']
+    assert assess_clinical_source_review(record)['is_complete']
     assert reviewed['trial_family'] == 'elderberry_respiratory_trials_1995_2016'
     assert reviewed['dose']['values'] == []
     assert '176' in reviewed['population']['description'] and '180' in reviewed['population']['description']
     assert 'Cochrane/GRADE review' not in ' '.join(reviewed['limitations'])
 
 
-def test_taurine_integrity_review_preserves_hold_without_inferred_longevity_or_pool_contamination():
+def test_taurine_bounded_transfer_preserves_integrity_without_inferred_longevity_or_pool_contamination():
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     record = reviewed_entries()['INGR_TAURINE']
     text = record['notes'] + ' ' + record['notable_studies']
@@ -791,10 +792,16 @@ def test_taurine_integrity_review_preserves_hold_without_inferred_longevity_or_p
     assert 'Healthy Aging/Longevity' not in record['health_goals_supported']
     assert not {'focus_memory', 'digestive_health'} & set(record['endpoint_relevance_tags'])
     assert record['effect_direction'] == 'positive_weak'
-    assert record['study_contexts'] == []
-    assert not assess_clinical_source_review(record)['is_complete']
-    assert {ref['pmid'] for ref in record['references_structured']} == {'32871172', '41275513'}
-    assert not er.resolve_evidence_for_canonical('taurine', name='Taurine').points_eligible
+    contexts = {p: c for c in record['study_contexts'] for p in c['source_pmids']}
+    assert assess_clinical_source_review(record)['is_complete']
+    assert set(contexts) == {'26781281', '32871172', '41275513', '39148075'}
+    assert {ref['pmid'] for ref in record['references_structured']} == set(contexts)
+    assert [p for p, c in contexts.items() if c['scoring_eligible']] == ['26781281']
+    for pmid in ['32871172', '41275513', '39148075']:
+        assert contexts[pmid]['review_status'] == 'rejected_source'
+        assert contexts[pmid]['scoring_eligible'] is False
+    assert er.resolve_evidence_for_canonical('taurine', name='Taurine').points_eligible
+
 
 
 def _glutamine_scoring_product(name='L-Glutamine', claim='', amount=500):
@@ -1242,7 +1249,7 @@ def test_glutamine_bounded_transfer_reviews_finish_without_lending_combination_o
     assert record['effect_direction'] == 'positive_moderate'
 
 
-def test_l_carnitine_finished_recovery_source_keeps_weight_and_preparation_holds():
+def test_l_carnitine_finished_sources_keep_integrity_and_preparation_exclusions():
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from clinical_evidence_schema import validate_ingredient_context
     record = reviewed_entries()["INGR_L_CARNITINE"]
@@ -1253,10 +1260,11 @@ def test_l_carnitine_finished_recovery_source_keeps_weight_and_preparation_holds
     assert any(o["direction"] == "positive" for o in recovery["outcomes"])
     assert "Codex" in recovery["clinical_review"]["reviewer"]
     weight = contexts["ingr_l_carnitine_32359762_weight_source_review"]
-    assert weight["review_status"] == "source_verified_pending_clinical_review"
+    assert validate_ingredient_context(weight, require_complete_review=True) == []
+    assert weight["scoring_eligible"] is False
     assert weight["source_integrity"] == "none"
     assert "36852455" in " ".join(weight["limitations"])
-    assert not assess_clinical_source_review(record)["is_complete"]
+    assert assess_clinical_source_review(record)["is_complete"]
     assert not er.clinical_record_sources_eligible(record)
 
 
@@ -2677,3 +2685,128 @@ def test_calcium_caseinate_acute_unranked_source_never_becomes_fixed_dose_or_oth
                                                  assess_amount=False, require_claim_alignment=False)
         assert decision['status'] == 'not_applicable'
         assert decision['reason_code'] in {'clinical_form_excluded', 'clinical_preparation_mismatch'}
+
+
+def test_taurine_primary_qualifies_only_adult_bp_without_borrowing_unread_pools():
+    from clinical_applicability import reviewed_entries
+    from clinical_evidence_schema import validate_ingredient_context
+    record = reviewed_entries()['INGR_TAURINE']
+    contexts = {p: c for c in record['study_contexts'] for p in c['source_pmids']}
+    primary = contexts['26781281']
+    assert validate_ingredient_context(primary, require_complete_review=True) == []
+    assert {p for c in record['study_contexts'] if c['scoring_eligible'] for p in c['source_pmids']} == {'26781281'}
+    assert primary['dose']['values'] == [1600] and primary['dose']['duration_days'] == 84
+    assert primary['population']['age_group'] == 'adult'
+    assert primary['outcomes'][0]['hierarchy'] == 'primary'
+    assert primary['outcomes'][0]['direction'] == 'positive'
+    assert primary['trial_family'] == 'taurine_sun_2016_NCT01816698'
+    assert '97' in primary['study_design'] and '120' in primary['study_design']
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['effect_direction_confidence'] == 'low'
+    assert record['total_enrollment'] == 120 and record['published_studies_count'] == 1
+    assert record['registry_completed_trials_count'] is None
+    assert record['health_goals_supported'] == ['Cardiovascular/Heart Health']
+    assert 'amino sulfonic acid' not in record['aliases']
+    assert '2-aminoethanesulfonic acid' in record['aliases']
+    for pmid in ['32871172', '41275513']:
+        assert contexts[pmid]['scoring_eligible'] is False
+    assert {'liposomal taurine', 'magnesium taurate', 'homotaurine'} <= set(record['applicability']['excluded_form_terms'])
+
+
+def test_carnitine_weight_source_finishes_limited_review_without_clearing_constituent_integrity():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_L_CARNITINE']
+    weight = next(c for c in record['study_contexts'] if c['source_pmids'] == ['32359762'])
+    assert context_review_finished(weight)
+    assert weight['scoring_eligible'] is False and weight['source_integrity'] == 'none'
+    assert any(o['direction'] == 'positive' for o in weight['outcomes'])
+    text = weight['clinical_review']['basis'] + ' '.join(weight['limitations'])
+    assert '36852455' in text and '26666519' in text
+    assert 'leave-one' in text and 'chemical' in text
+    assert assess_clinical_source_review(record)['is_complete']
+    assert not er.clinical_record_sources_eligible(record)
+
+
+def test_rice_training_comparisons_finish_without_inventing_placebo_efficacy_or_equivalence():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_RICE_PROTEIN']
+    assert record['study_type'] == record['evidence_level'] == 'reference'
+    assert record.get('effect_direction') is None and record['total_enrollment'] is None
+    assert {p for c in record['study_contexts'] for p in c['source_pmids']} == {'23782948', '33261645'}
+    assert all(context_review_finished(c) and c['scoring_eligible'] is False for c in record['study_contexts'])
+    assert assess_clinical_source_review(record)['is_complete']
+    contexts = {c['source_pmids'][0]: c for c in record['study_contexts']}
+    first = ' '.join(contexts['23782948']['limitations'])
+    second = ' '.join(contexts['33261645']['limitations'])
+    assert '48 g' in first and 'Training-session' in first
+    assert '33.6' in second and '34 randomized' in second and '24 analyzed' in second
+    assert re.search(r'p\s*=\s*\.02\b', second) and 'bone' in second
+    assert 'equivalence' in first and 'equivalence' in second
+    row = {'name': 'Brown Rice Protein', 'raw_source_text': 'Brown Rice Protein',
+           'canonical_id': 'rice_protein', 'raw_source_path': 'ingredientRows[0]',
+           'quantity': 24000, 'unit': 'mg', 'mapped': True, 'identity_disposition': 'clean'}
+    result = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
+    assert result.points_eligible is False
+
+
+@pytest.mark.parametrize('mutation', ['pending', 'missing_source', 'unbound', 'invalid_context', 'parent_hold', 'missing_eligibility', 'undeclared_source', 'sources_none', 'sources_string'])
+def test_finite_noncredit_review_cannot_hide_unfinished_or_unbound_source(monkeypatch, mutation):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_L_CARNITINE']
+    context = record['study_contexts'][-1]
+    if mutation == 'pending':
+        context['review_status'] = 'source_verified_pending_clinical_review'
+    elif mutation == 'missing_source':
+        record['study_contexts'].pop()
+    elif mutation == 'unbound':
+        context['clinical_review'] = {}
+    elif mutation == 'invalid_context':
+        context['components'] = ['INGR_TAURINE']
+    elif mutation == 'parent_hold':
+        record['scoring_eligible'] = False
+    elif mutation == 'missing_eligibility':
+        context.pop('scoring_eligible')
+    elif mutation == 'sources_none':
+        context['source_pmids'] = None
+    elif mutation == 'sources_string':
+        context['source_pmids'] = '32359762'
+    else:
+        context['source_pmids'] = ['30108163']  # deliberate synthetic mismatch, never production.
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    assert not ca.assess_clinical_source_review(record)['is_complete']
+
+
+def test_noncredit_source_rejection_cannot_append_foreign_ingredient(monkeypatch):
+    import clinical_applicability as ca
+    records = copy.deepcopy(ca.reviewed_entries())
+    record = records['INGR_RICE_PROTEIN']
+    record['study_contexts'][0]['components'].append('INGR_TAURINE')
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    result = ca.assess_clinical_source_review(record)
+    assert not result['is_complete']
+    assert any('components_unknown' in error for error in result['errors'])
+
+
+def test_grape_seed_bounded_transfer_retains_findings_without_automated_depth_credit():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from assessment_readiness import _resolved_evidence_assessment
+    record = reviewed_entries()['INGR_GRAPE_SEED_EXTRACT']
+    assert record['study_type'] == record['evidence_level'] == 'reference'
+    assert record['effect_direction'] is None
+    assert record['published_studies_count'] is None
+    assert record['total_enrollment'] is None
+    assert record['registry_completed_trials_count'] is None
+    contexts = {p: c for c in record['study_contexts'] for p in c['source_pmids']}
+    assert set(contexts) == {'33671310', '34798267'}
+    assert all(context_review_finished(c) and c['scoring_eligible'] is False
+               for c in contexts.values())
+    assert assess_clinical_source_review(record)['is_complete']
+    synthesis = contexts['34798267']
+    assert synthesis['review_status'] == 'rejected_source'
+    assert 'NOT been read' in synthesis['clinical_review']['basis']
+    assert 'positive DBP/HR and null SBP/FMD' in synthesis['clinical_review']['basis']
+    assert contexts['33671310']['clinical_review']['reviewer'] == 'Dr. Pham'
+    result = er.resolve_evidence_for_canonical('grape_seed_extract', name='Grape Seed Extract')
+    assert not result.points_eligible
+    assert _resolved_evidence_assessment(result)[0] == 'evaluated_limited_or_negative'

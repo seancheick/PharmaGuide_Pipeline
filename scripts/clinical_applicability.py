@@ -972,8 +972,8 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
                     and context.get("scoring_eligible") is not False
                     and context.get("review_status") != "rejected_source"]
     if reference_only and not contributing:
-        # Completed negative reference findings need no point-eligible arm.
-        # Do not promote pending or rejected history to a completed review.
+        # Preserve the existing approved reference scope: a bibliography is
+        # not an instruction to reopen a previously assessed limited finding.
         contributing = [context for context in contexts
                         if context.get("scoring_eligible") is False
                         and context.get("review_status") == "clinician_approved"]
@@ -992,34 +992,25 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
     eligible_pmids = declared_pmids - excluded_pmids
     errors = [str(context.get("context_id") or "unknown") + ":review.approval_required"
               for context in contexts if not context_review_finished(context)]
-    if reference_only and not contributing:
-        # A source-transfer rejection is a completed non-affirmative decision,
-        # not an affirmative trial with an invented regimen or primary outcome.
-        # Every declared source must be covered by an attributable exclusion;
-        # a pending sibling context or explicit record hold still blocks.
-        rejected_sources = set()
-        for context in contexts:
-            prefix = str(context.get("context_id") or "unknown") + ":"
-            sources = context.get("source_pmids")
-            sources = {str(pmid) for pmid in sources} if isinstance(sources, list) else set()
-            if context.get("review_status") != "rejected_source" or sources - declared_pmids:
-                errors.append(prefix + "clinical_source_rejection_incomplete")
-            errors.extend(prefix + error for error in validate_ingredient_context(
-                context, known_component_ids={reference.get("id")}, require_complete_review=True))
-            if not clinical_review_provenance_valid(context):
-                errors.append(prefix + "clinical_review_source_unbound")
-            rejected_sources.update(sources)
-        if not declared_pmids or declared_pmids - rejected_sources:
+    noncredit_scope = (not contributing and all(
+        context.get("scoring_eligible") is False for context in contexts))
+    if noncredit_scope:
+        # A finite, attributable noncredit decision can finish review without
+        # inventing an affirmative arm or relabelling real human research.
+        # Validate every declared source, including completed mixed/negative
+        # and source-transfer decisions; unread or unbound history stays open.
+        contributing = contexts
+        reviewed_sources = {str(pmid) for context in contexts
+                            for pmid in (context.get("source_pmids")
+                                         if isinstance(context.get("source_pmids"), list) else [])}
+        if not declared_pmids or declared_pmids - reviewed_sources:
             errors.append("clinical_source_rejection_coverage_incomplete")
-        # A fully covered source exclusion finishes review without lifting the
-        # parent's credit exclusion. Mixed classifications and affirmative
-        # held contexts must retain their ordinary incomplete treatment.
+        # An explicit parent eligibility hold still wins. The existing exact
+        # reference/reference exclusion is its already-defined exception.
         if (reference.get("scoring_eligible") is False
                 and not (reference.get("study_type") == "reference"
                          and reference.get("evidence_level") == "reference")):
             errors.append("clinical_context_eligible_source_missing")
-        return {"is_complete": not errors, "errors": errors,
-                "context_ids": [context.get("context_id") for context in contexts]}
     if not contributing:
         errors.append("clinical_contributing_contexts_missing")
     for context in contributing:
@@ -1036,7 +1027,8 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
         # Reference-only is a reviewed non-affirmative scope, not missing
         # source review. It still needs an eligible source and full approval;
         # an explicit eligibility hold cannot be cleared by that classification.
-        if ((not reference_only and not clinical_record_sources_eligible(reference))
+        if not noncredit_scope and (
+                (not reference_only and not clinical_record_sources_eligible(reference))
                 or reference.get("scoring_eligible") is False
                 or not (context_pmids & eligible_pmids)):
             errors.append(prefix + "clinical_context_eligible_source_missing")
@@ -1047,7 +1039,9 @@ def assess_clinical_source_review(entry: Mapping) -> dict:
             if not valid_native_study_context(context, reference.get("id")):
                 context_errors.append("clinical_native_context_invalid")
         else:
-            context_errors = validate_ingredient_context(context, require_complete_review=True)
+            context_errors = validate_ingredient_context(
+                context, require_complete_review=True,
+                known_component_ids={reference.get("id")} if noncredit_scope else None)
         errors.extend(str(context.get("context_id") or "unknown") + ":" + error
                       for error in context_errors)
     return {"is_complete": not errors, "errors": errors,

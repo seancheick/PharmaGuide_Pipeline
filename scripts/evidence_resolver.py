@@ -1329,7 +1329,9 @@ def _resolve_evidence_for_row(
         noncontributing_complete = [
             (decision.get("status") == "not_applicable"
              and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
-            or (is_reference_only(study)
+            or ((is_reference_only(study)
+                 or (not clinical_record_sources_eligible(study)
+                     and decision.get("reason_code") == "clinical_sources_ineligible"))
                 and assess_clinical_source_review(study)["is_complete"])
             for study, decision in zip(deduped_studies, scope_decisions)
         ]

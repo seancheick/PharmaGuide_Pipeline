@@ -1558,7 +1558,7 @@ def test_source_context_malformed_record_sources_fail_closed(monkeypatch, field,
 
 
 @pytest.mark.parametrize('case,expected', [
-    ('completed_reference', True), ('ordinary_affirmative', False),
+    ('completed_reference', True), ('finished_noncredit_ingredient', True),
     ('record_hold', False), ('pending_approval', False),
     ('missing_provenance', False), ('retracted_source', False),
     ('unfinished_outcome', False), ('excluded_source', False),
@@ -1574,7 +1574,7 @@ def test_completed_negative_calendar_review_is_separate_from_scoring_eligibility
     context['outcomes'][0]['direction'] = 'null'
     record = {'id': 'used', 'study_type': 'reference', 'evidence_level': 'reference',
               'study_contexts': [context], 'references_structured': [{'pmid':context['source_pmids'][0]}]}
-    if case == 'ordinary_affirmative': record.update(study_type='rct_single', evidence_level='ingredient-human')
+    if case == 'finished_noncredit_ingredient': record.update(study_type='rct_single', evidence_level='ingredient-human')
     elif case == 'record_hold': record['scoring_eligible'] = False
     elif case == 'pending_approval': context['review_status']='source_verified_pending_clinical_review'
     elif case == 'missing_provenance': context.pop('clinical_review')
@@ -1589,7 +1589,7 @@ def test_completed_negative_calendar_review_is_separate_from_scoring_eligibility
 @pytest.mark.parametrize('case,expected', [
     ('reviewed_exclusion', True), ('missing_review', False), ('foreign_source', False),
     ('missing_locator', False), ('missing_reason', False), ('missing_identity', False),
-    ('unreviewed_reference', False), ('completed_exclusion_no_points', True), ('affirmative', False),
+    ('unreviewed_reference', False), ('completed_exclusion_no_points', True), ('noncredit_ingredient', True),
     ('pending_context', False),
 ])
 def test_reference_source_rejection_can_complete_without_invented_trial_facts(monkeypatch, case, expected):
@@ -1622,7 +1622,7 @@ def test_reference_source_rejection_can_complete_without_invented_trial_facts(mo
         record['references_structured'].append({'pmid': '12345678'})
     elif case == 'completed_exclusion_no_points':
         record['scoring_eligible'] = False
-    elif case == 'affirmative':
+    elif case == 'noncredit_ingredient':
         record.update(study_type='rct', evidence_level='ingredient-human')
     elif case == 'pending_context':
         record['study_contexts'].append({**context, 'review_status': 'source_verified_pending_clinical_review'})

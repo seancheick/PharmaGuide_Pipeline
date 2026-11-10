@@ -29378,21 +29378,21 @@
     {
       "canonical_id": "rice_protein",
       "material_form": "Oryza sativa brown rice protein nutritional macronutrient",
-      "search_query": "(\"rice protein\"[tiab]) AND (randomized controlled trial[pt]) AND humans[mh]",
-      "search_date": "2026-09-21",
+      "search_query": "(EXT_ID:23782948 OR EXT_ID:33261645) AND SRC:MED",
+      "search_date": "2026-11-10",
       "databases_searched": [
-        "PubMed"
+        "PubMed / EuropePMC MED"
       ],
-      "records_screened": 12,
+      "records_screened": 2,
       "qualifying_human_studies": [],
       "effect_direction": null,
-      "population_context": "dietary macronutrient, carrier vehicle, or tableting excipient",
+      "population_context": "Culinary/carrier nutritional-matrix role only; distinct supplemental rice-protein human comparisons are reviewed in the existing backed-clinical owner.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Dietary macronutrient, lipid carrier vehicle, or excipient substrate (Oryza sativa brown rice protein nutritional macronutrient); not evaluated as standalone therapeutic active.",
+      "applicability_decision": "Culinary or carrier/excipient rice-protein use does not claim standalone therapeutic benefit. Valid human training comparisons23782948/33261645 are separately assessed by INGR_RICE_PROTEIN; this matrix decision does not mean no human research or ineffective protein. No extra clinical grade, dose equivalence or benchmark follows.",
       "applicability_status": "not_efficacy_relevant",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+        "verified_at": "2026-11-10T17:09:43.121552+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },

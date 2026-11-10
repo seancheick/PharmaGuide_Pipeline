@@ -4,9 +4,9 @@ Independently checked source inventories may retain exact non-scoring holds
 beside completed source reviews. Glutamine biomarker eligibility is now finished
 as secondary noncredit evidence; its numerical hold is separate. Pending plant-sterol
 source-only stubs make no regimen/population/outcome assertions. Glycine has a completed scoped transfer
-exclusion beside its qualified human primary. The carnitine weight synthesis has
-verified source content but unresolved constituent-integrity/applicability.
-These contexts must remain unfinished; all other pending drafts stay excluded.
+exclusion beside its qualified human primary. The carnitine weight synthesis has a finished limited noncredit transfer review;
+its constituent-integrity concern remains, without requiring pooled numerical credit.
+Only the explicitly pending contexts below remain unfinished; other drafts stay excluded.
 Tyrosine's remaining 29980424 hold has no extracted common regimen; completed
 source-specific assessments are checked in the source-integrity owner tests.
 """
@@ -37,7 +37,7 @@ def test_no_data_file_holds_a_pending_review_context():
         "INGR_GLYCINE": set(),
         "INGR_MSM": set(),
         "INGR_PEG_CREATINE": set(),
-        "INGR_L_CARNITINE": {"32359762"},
+        "INGR_L_CARNITINE": set(),
         "INGR_PLANT_STEROLS": {"37739728"},
         "INGR_L_TYROSINE": {"29980424"},
     }
