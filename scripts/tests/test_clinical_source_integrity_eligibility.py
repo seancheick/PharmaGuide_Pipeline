@@ -2613,6 +2613,55 @@ def test_carnosine_glycemic_sources_cannot_lend_credit_to_other_preparations(nam
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
 
 
+def test_fenugreek_known_precision_hold_does_not_invent_counts_or_finished_zero():
+    """A read source with disputed precision remains an unfinished review."""
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from evidence_resolver import clinical_record_sources_eligible
+    record = reviewed_entries()['INGR_FENUGREEK']
+    assert 'total_enrollment' not in record and 'registry_completed_trials_count' not in record
+    refs = {r['pmid']: r for r in record['references_structured']}
+    assert set(refs) == {'32048383', '42688439'}
+    assert all(r['scoring_eligible'] is False for r in refs.values())
+    assert all(r['retracted'] is False for r in refs.values())
+    assert not any(r.get('expression_of_concern') for r in refs.values())
+    assert not clinical_record_sources_eligible(record)
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert record['study_contexts'] == []
+    assert record['study_type'] == 'systematic_review_meta'
+    assert record['evidence_level'] == 'ingredient-human'
+    assert record['effect_direction'] == 'mixed'
+    assert record['effect_direction_confidence'] == 'low'
+    assert 'primary_outcome' not in record and record['health_goals_supported'] == []
+    text = ' '.join([record['notes'], record['notable_studies'], record['effect_direction_rationale']])
+    assert 'Guo' in text and '35' in text and '70' in text
+    assert 'free testosterone' in text and 'very low' in text
+    assert 'not a finding of ineffectiveness' in text
+    assert '41531421' not in str(record)
+
+
+def test_fenugreek_stale_positive_match_cannot_bypass_quantitative_or_testofen_holds():
+    """Canonical holds win over a positive stale enriched match."""
+    from clinical_applicability import reviewed_entries
+    from evidence_resolver import clinical_record_sources_eligible
+    record = reviewed_entries()['INGR_FENUGREEK']
+    row = {'name': 'Fenugreek seed extract', 'raw_source_text': 'Fenugreek seed extract',
+           'canonical_id': 'fenugreek', 'mapped': True, 'quantity': 500, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
+    product = {'fullName': 'Fenugreek seed extract', 'targetGroups': ['Adults'],
+               'physicalState': {'langualCodeDescription': 'Capsule'}, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]},
+               'evidence_data': {'clinical_matches': [{**record, 'effect_direction': 'positive_strong',
+                   'scoring_eligible': True, 'ingredient': row['name'],
+                   'matched_canonical_ids': ['fenugreek'],
+                   'matched_source_row_refs': ['ingredientRows[0]']}]}}
+    original = copy.deepcopy(product)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+    assert not clinical_record_sources_eligible(reviewed_entries()['BRAND_TESTOFEN'])
+    assert product == original
+
+
 def test_guanidinoacetate_reference_finishes_source_disposition_without_primary_or_efficacy_invention():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     from assessment_readiness import _resolved_evidence_assessment
