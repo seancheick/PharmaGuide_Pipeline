@@ -6975,7 +6975,7 @@
         "Joint & Bone Health"
       ],
       "notes": "Human MSM research includes distinct knee populations and regimens. PMID 37447322 tested distilled OptiMSM at 2 g/day for 12 weeks in adults with mild knee discomfort, with a borderline positive primary JKOM score and null JOA and inflammatory-marker findings. The full primary paper for PMID 16309928 also identifies OptiMSM, supplied by Cardinal Nutrition, but used a one-week titration to 6 g/day in knee osteoarthritis. Pain and physical-function findings were positive, while stiffness, total WOMAC symptoms and global assessments were not significantly different. These studies do not establish a continuous 2–6 g/day efficacy range, a universal minimum, general anti-inflammatory benefit or long-term safety. PMID 21708034 now has a completed bounded RCT-transfer exclusion because allocation explicitly alternated; its positive and null controlled-human findings remain retained. PMID17516722 now has a completed narrow source assessment: the paper explicitly names joint mobility as a main outcome and reports significant standalone-MSM improvement versus placebo with Healers-supplied capsules at1.5g/day for12weeks. The principal composite responder counts/Fisher test remain unreported, not null or positive. Within-arm VAS/Lequesne changes, ambiguous global ratings and the swelling text/Figure2 conflict do not supply causal credit. No exact between-arm effect, p value, clinical-importance threshold, general anti-inflammatory benefit or OptiMSM manufacturing equivalence is invented. Full review of this documented nonreporting completes the source assessment; it does not claim that missing results became available. The1.5,2and titrated6g regimens remain discrete studied facts, never a continuous Dose curve or universal minimum. The original signed finding for PMID 37447322 and all separate Dose and Safety decisions remain unchanged. PMIDs 37447322 and 16309928 are independently qualified through their separate source contexts, with different populations and regimens; they are not a continuous efficacy range. The source-level chemical identity/application check for this generic record was performed by Codex /root and independently by /root/grouped_correctness_check on 2026-11-08. This does not assert retail purity, manufacturing, altered-delivery, dose or safety equivalence. Dr. Pham's original limited OptiMSM decision and date remain intact in BRAND_OPTIMSM.",
-      "last_updated": "2026-11-09",
+      "last_updated": "2026-11-10",
       "notable_studies": "Kim et al. (2006, PMID 16309928): 6 g/day MSM improved WOMAC pain and physical function in knee osteoarthritis over 12 weeks (pilot, n=50). Toguchi et al. (2023, PMID 37447322): 2 g/day MSM improved the JKOM total score in adults with mild knee pain over 12 weeks (n=88).",
       "references_structured": [
         {
@@ -7516,7 +7516,13 @@
         "required_form_terms": [
           "OptiMSM",
           "MSM",
-          "methylsulfonylmethane"
+          "methylsulfonylmethane",
+          "methyl sulfonyl methane",
+          "methylsulfonyl methane",
+          "methyl sulphonyl methane",
+          "methylsulphonylmethane",
+          "methysulfonylmethane",
+          "dimethyl sulfone"
         ],
         "source_pmids": [
           "37447322",
@@ -7527,8 +7533,8 @@
           "Joint & Bone Health"
         ],
         "studied_population": "Distinct source contexts: mild knee discomfort at 2 g/day, symptomatic knee OA after titration to 6 g/day, and mild-to-moderate radiographic knee OA with main joint-mobility findings at 1.5 g/day. These populations, outcomes, preparations and discrete regimens are not interchangeable or a continuous dose range.",
-        "reviewed_at": "2026-11-09",
-        "reason": "Source-specific preparation, population, outcome and requested amount correspondence are assessed separately for each independently reviewed context. Original 37447322 signed context remains intact. Ingredient Evidence credits qualified research without creating Dose adequacy or retail regimen equivalence.",
+        "reviewed_at": "2026-11-10",
+        "reason": "Source-specific preparation, population, outcome and requested amount correspondence are assessed separately for each independently reviewed context. Original 37447322 signed context remains intact. Ingredient Evidence credits qualified research without creating Dose adequacy or retail regimen equivalence. Same-chemistry label spellings of methylsulfonylmethane (dimethyl sulfone, PubChem CID 6213, CAS 67-71-0), already mapped by the identity owner, satisfy the form term; DMSO stays excluded.",
         "excluded_form_terms": [
           "dimethyl sulfoxide",
           "DMSO",
@@ -10598,9 +10604,9 @@
       "health_goals_supported": [
         "Skin, Hair & Nails"
       ],
-      "notes": "The three retained references assess oral hyaluronic acid for skin hydration, elasticity and wrinkle outcomes, not osteoarthritis or joint-lubrication efficacy. PMID 28761365 and PMID 34203487 used specific 120 mg/day preparations for 12 weeks in selected adult skin populations. PMID 40911749 pools seven skin trials; hydration, elasticity and wrinkle depth improved, while firmness, wrinkle volume and transepidermal water loss did not differ significantly. Source preparation, molecular weight and clinical applicability remain distinct; this review does not establish that no joint research exists elsewhere.",
+      "notes": "ADR-0007 one-pass review (agent review by Claude with an independent agent check, 2026-11-10): oral hyaluronic acid has limited human research. Skin: a 2025 meta-analysis of 7 small, heterogeneous RCTs (PMID 40911749) reported improved hydration, elasticity and wrinkle depth, with no significant change in firmness, wrinkle volume or transepidermal water loss. Joint: a 2024 systematic review (PMID 39886281) found 11 small studies (597 adults, mostly knee OA, 30-300 mg/day); 9 reported improvement and its authors concluded that oral HA seems safe and effective for OA, but only 2 studies gave HA alone, nothing was pooled or graded for bias, and 2 found no difference. A 2026 review (PMID 42914415) finds that undefined molecular weight, heterogeneous doses and multi-ingredient products prevent HA-specific attribution. EFSA (2012, doi:10.2903/j.efsa.2012.2806) found no cause-and-effect relationship for protecting skin against dehydration, and no NIH ODS, NCCIH or MedlinePlus monograph covers oral HA. Conclusion: limited research and no ingredient-level points; a label that does not name the studied preparation finishes here with no points. The signed A077 exact Hyabest (S) LF-P 120 mg/day capsule skin context (PMID 34203487) stays the only credit-bearing scope, and PMID 28761365 remains a separate preparation context. This does not claim that hyaluronic acid is ineffective.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID 28761365 randomized 60 adults with crow-feet wrinkles to two molecular-weight hyaluronan preparations or placebo for12weeks. PMID 34203487 randomized 40 adults to120mg/day hyaluronan or placebo for12weeks for skin outcomes. PMID 40911749 is a seven-RCT skin meta-analysis with heterogeneous and partly null outcomes. None of these retained references studies OA symptoms.",
       "references_structured": [
         {
@@ -10690,6 +10696,59 @@
           "verification_source": "pubmed_eutils",
           "scoring_eligible": false,
           "notes": "Retained separate preparation/review context; not the accepted exact 34203487 Hyabest (S) LF-P source relationship. Do not transfer molecular-weight-specific or heterogeneous pooled outcomes without its own qualifying scoped assessment."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "39886281",
+          "doi": "10.31138/mjr.240724.oha",
+          "title": "Oral Hyaluronic Acid in Osteoarthritis and Low Back Pain: A Systematic Review.",
+          "citation": "Mediterranean journal of rheumatology (2024-12-31)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39886281/",
+          "published_date": "2024-12-31",
+          "publication_types": [
+            "Journal Article",
+            "Review"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "ADR-0007 ingredient-level conclusion source: limited research, no points. 2 of 11 studies gave HA alone; not pooled."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "42914415",
+          "doi": "10.1016/j.foodres.2026.120695",
+          "title": "Hyaluronic acid in functional foods and oral supplements: linking molecular weight, bioavailability, and food matrix effects to clinical translation.",
+          "citation": "Food research international (2026-12-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42914415/",
+          "published_date": "2026-12-01",
+          "publication_types": [
+            "Journal Article",
+            "Review"
+          ],
+          "mesh_terms": [
+            "Hyaluronic Acid",
+            "Humans",
+            "Biological Availability",
+            "Molecular Weight",
+            "Dietary Supplements",
+            "Functional Food",
+            "Administration, Oral",
+            "Animals"
+          ],
+          "supplementary_concepts": [],
+          "evidence_grade": "review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Narrative review cited only for the limitation that HA-specific attribution is not established."
         }
       ],
       "effect_direction": "mixed",
@@ -10853,6 +10912,105 @@
             "reviewed_at": "2026-10-26",
             "scope": "identity_dose_outcome_applicability"
           }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_hyaluronic_acid_v1_39886281_oral_joint_review",
+          "source_pmids": [
+            "39886281"
+          ],
+          "components": [
+            "INGR_HYALURONIC_ACID"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Oral hyaluronic acid in 11 human studies at 30-300 mg/day; 2 of 11 gave HA alone, 9 combined it with other actives (glucosamine/chondroitin, Boswellia serrata, krill oil and astaxanthin, chondroitin and keratin peptides, collagen matrix with MSM) or procedures."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "systematic_review",
+          "component_registration_status": "fully_registered",
+          "condition": "knee_osteoarthritis",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "clinical_review": {
+            "reviewer": "Claude agent source review with independent agent check; Sean-approved ADR-0007 V1 policy",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "ADR-0007 one-pass review (Sean accepted 2026-11-10). Agent review, not clinician review; clinician_approved is the existing compatibility status. Full text read on PMC11778613."
+          },
+          "scoring_eligible": false,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "source_39886281",
+          "population": {
+            "age_group": "adult",
+            "description": "597 adults aged about 40-80 in 11 studies: knee OA (9), knee and hip OA (1), low back pain (1); follow-up 4 weeks to 12 months (Results; Table 1)."
+          },
+          "study_design": "Systematic review without meta-analysis or formal risk-of-bias grading; PubMed, EMBASE and SciELO searched 1966 to May 2024 per full-text Methods (the abstract names PubMed only). Included 6 randomized double-blind placebo-controlled trials, 4 randomized controlled trials and 1 double-blind placebo-controlled trial.",
+          "outcomes": [
+            {
+              "name": "9 of 11 studies reported improvement in pain, WOMAC, function, Lequesne, stiffness or SF-36, within or between groups; 2 found no between-group difference; results were not pooled",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "mixed"
+            }
+          ],
+          "limitations": [
+            "ADR-0007 one-pass conclusion: limited research for oral hyaluronic acid in general. This context records the ingredient-level conclusion and earns no points.",
+            "The review's authors concluded that oral HA seems safe and effective for OA; this record does not adopt that conclusion because only 2 of 11 studies gave HA alone and 9 used multi-ingredient products or procedures, so the reported improvements are not attributable to HA.",
+            "No meta-analysis, risk-of-bias assessment or certainty grading; small samples (20-100), short follow-up in most studies, and heterogeneous doses, comparators and preparations.",
+            "PMID 42914415 (2026 review) likewise finds that incomplete molecular characterization, heterogeneous doses and formulations, short trials and multi-ingredient products prevent HA-specific attribution.",
+            "No NIH ODS, NCCIH or MedlinePlus monograph covers oral HA, and EFSA (2012, doi:10.2903/j.efsa.2012.2806) found no cause-and-effect relationship for protection of the skin against dehydration.",
+            "The signed A077 exact Hyabest (S) LF-P skin context remains separate and is not transferred."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              30,
+              50,
+              80,
+              120,
+              150,
+              200,
+              300
+            ],
+            "dose_status": "verified",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "duration_days": null,
+            "administration_frequency": "Mostly once daily (Table 1)",
+            "dosage_forms": [
+              "capsule",
+              "oral liquid"
+            ],
+            "co_therapies": [
+              "Co-actives in 9 of 11 studies; comparators included placebo, no treatment, intra-articular HA, arthrocentesis, kinesiotherapy and a glucosamine-chondroitin product (Table 1)"
+            ],
+            "source_provenance": {
+              "pmid": "39886281",
+              "location": "Methods (search, PRISMA screening); Results; Table 1 (design, HA dosage/day, comparator, outcome)",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11778613/"
+            },
+            "reported_regimen": "30-300 mg/day oral HA for 4 weeks to 12 months (Table 1)",
+            "normalization": {
+              "basis": "Per-study HA mass only; co-active amounts are not normalized."
+            }
+          },
+          "included_study_pmids": [
+            "37686801",
+            "33592868",
+            "34622845",
+            "33213125",
+            "27681813",
+            "26550817",
+            "24899570",
+            "23226979",
+            "18208600",
+            "33568038",
+            "38707049"
+          ]
         }
       ],
       "applicability": {
@@ -10874,8 +11032,9 @@
         "supported_outcomes": [
           "Skin, Hair & Nails"
         ],
-        "reviewed_at": "2026-10-26",
-        "reason": "Signed A077 limited source interpretation for the exact Hyabest (S) LF-P oral material. Equal bounds describe correspondence to one tested 120 mg/day regimen, not a universal efficacy minimum, optimal dose or safety ceiling. Unspecified oral HA and different molecular-weight preparations are not assumed equivalent."
+        "reviewed_at": "2026-11-10",
+        "reason": "Signed A077 limited source interpretation for the exact Hyabest (S) LF-P oral material. Equal bounds describe correspondence to one tested 120 mg/day regimen, not a universal efficacy minimum, optimal dose or safety ceiling. Unspecified oral HA and different molecular-weight preparations are not assumed equivalent. ADR-0007 (2026-11-10): preparation uncertainty reviewed; a label that does not name the studied preparation finishes as limited research with no points, never as Hyabest credit.",
+        "preparation_uncertainty_reviewed": true
       }
     },
     {

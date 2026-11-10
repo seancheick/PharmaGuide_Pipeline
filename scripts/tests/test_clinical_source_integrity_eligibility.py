@@ -453,7 +453,11 @@ def test_hyaluronic_retained_skin_sources_do_not_award_joint_or_longevity_scope(
     assert row['primary_outcome'] == 'Skin, Hair & Nails'
     assert row['endpoint_relevance_tags'] == ['skin_health']
     assert not any('joint' in endpoint.lower() for endpoint in row['key_endpoints'])
-    assert 'no joint research exists elsewhere' in row['notes']
+    # ADR-0007 review read the joint research: limited, no points, not "no research".
+    assert 'limited research and no ingredient-level points' in row['notes']
+    assert 'does not claim that hyaluronic acid is ineffective' in row['notes']
+    joint = [c for c in row['study_contexts'] if c.get('condition') == 'knee_osteoarthritis']
+    assert joint and all(c['scoring_eligible'] is False for c in joint)
     assert 'registry_completed_trials_count' not in row
 
 
@@ -1653,7 +1657,12 @@ def test_msm_keeps_three_distinct_generic_trials_without_inventing_a_dose_range(
         assert entries[key]['effect_direction'] == 'mixed'
         assert entries[key]['total_enrollment'] == 88  # Largest study, never 88 + 50.
     source = entries['INGR_MSM']
-    assert source['applicability']['required_form_terms'] == ['OptiMSM', 'MSM', 'methylsulfonylmethane']
+    # Same-chemistry spellings (PubChem CID 6213) joined 2026-11-10; DMSO never qualifies.
+    assert source['applicability']['required_form_terms'] == [
+        'OptiMSM', 'MSM', 'methylsulfonylmethane', 'methyl sulfonyl methane', 'methylsulfonyl methane',
+        'methyl sulphonyl methane', 'methylsulphonylmethane', 'methysulfonylmethane', 'dimethyl sulfone']
+    assert not any('sulfoxide' in t.lower() or t.lower() == 'dmso'
+                   for t in source['applicability']['required_form_terms'])
     assert 'minimum_daily_dose' not in source['applicability']
     assert {context['applicability']['minimum_daily_dose'] for context in source['study_contexts']
             if context['scoring_eligible']} == {1500, 2000, 6000}
@@ -2886,3 +2895,58 @@ def test_v1_preparation_completion_requires_explicit_canonical_review(monkeypatc
     product = _product(ingredients=[row], matches=[match])
     assert not resolver.resolve_product_evidence(product).is_assessment_complete
     assert score_evidence(product)['score'] == 0
+
+
+def _joint_row_product(record_id, canonical, label, amount):
+    from clinical_applicability import reviewed_entries
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    record = reviewed_entries()[record_id]
+    row = _ingredient(name=label, canonical_id=canonical, quantity=amount)
+    row.update(raw_source_path='ingredientRows[0]', raw_source_text=label)
+    match = {**record, 'ingredient': label, 'matched_canonical_ids': [canonical],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    # Source-only delivery reads the label's own physical state (clinical_applicability).
+    return record, _product(ingredients=[row], matches=[match], product_name='Joint supplement',
+                            physicalState={'name': 'Capsule'})
+
+
+@pytest.mark.parametrize('general_context', ['reviewed', 'absent', 'unattributed', 'invalid'])
+def test_hyaluronic_acid_unknown_preparation_finishes_on_reviewed_general_conclusion(
+        monkeypatch, general_context):
+    """ADR-0007 joint batch: plain oral hyaluronic acid finishes as limited research with
+    no points. Branded Hyabest credit stays exact. The attestation alone, or a general
+    context whose review is unattributed or schema-invalid, cannot finish the row."""
+    import clinical_applicability as ca
+    import evidence_resolver as resolver
+    record, product = _joint_row_product('INGR_HYALURONIC_ACID', 'hyaluronic_acid', 'Hyaluronic Acid', 100)
+    if general_context != 'reviewed':
+        record = copy.deepcopy(record)
+        general = [c for c in record['study_contexts'] if c.get('identity_scope') == 'ingredient_general']
+        assert general
+        for context in general:
+            if general_context == 'unattributed':
+                context['clinical_review'] = {**context['clinical_review'], 'reviewer': 'pending'}
+            elif general_context == 'invalid':
+                context['route'] = 'not_a_route'
+        if general_context == 'absent':
+            record['study_contexts'] = [c for c in record['study_contexts']
+                                        if c.get('identity_scope') != 'ingredient_general']
+        product['evidence_data']['clinical_matches'][0]['study_contexts'] = record['study_contexts']
+        monkeypatch.setattr(ca, 'reviewed_entries', lambda: {record['id']: record})
+        monkeypatch.setattr(resolver, '_backed_studies_index', lambda: {'hyaluronic_acid': [record]})
+    resolution = resolver.resolve_product_evidence(product)
+    assert resolution.is_assessment_complete is (general_context == 'reviewed')
+    assert score_evidence(product)['score'] == 0
+
+
+@pytest.mark.parametrize('label', [
+    'Methyl Sulfonyl Methane', 'Methylsulfonyl Methane', 'Methylsulfonyl-Methane',
+    'Methysulfonylmethane', 'Methyl Sulphonyl Methane', 'Methylsulphonylmethane',
+])
+def test_msm_same_chemistry_spellings_reach_reviewed_msm_evidence(label):
+    """The IQM already maps these spellings to MSM (dimethyl sulfone, CAS 67-71-0); the
+    Evidence form check must accept the same chemical name, never DMSO."""
+    _, product = _joint_row_product('INGR_MSM', 'msm', label, 1500)
+    assert score_evidence(product)['score'] > 0
+    _, control = _joint_row_product('INGR_MSM', 'msm', 'MSM', 1500)
+    assert score_evidence(control)['score'] > 0
