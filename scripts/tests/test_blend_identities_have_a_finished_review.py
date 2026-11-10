@@ -369,8 +369,9 @@ def test_blend_identity_cannot_complete_held_source(enriched, pid, canonical):
 
 
 def test_golden_milk_compatibility_projection_retains_original_child_source(enriched):
-    """A legacy index is not the provenance of an undosed botanical child."""
-    from scoring_input_contract import get_evidence_subject_rows
+    """A legacy index stays the projection's provenance (main's blend contract), but its
+    lineage must resolve to the undosed child's retained source row for Evidence."""
+    from scoring_input_contract import get_evidence_subject_rows, _resolve_source_tree_path
     from dose_assessment import positive_clinical_benchmark
 
     product = enriched['243271']
@@ -381,9 +382,9 @@ def test_golden_milk_compatibility_projection_retains_original_child_source(enri
     assert original['unit'] == 'NP'
     rows = [row for row in get_evidence_subject_rows(product)
             if row.get('canonical_id') == 'ashwagandha']
-    assert rows
-    assert all(row.get('raw_source_path') == original['raw_source_path'] for row in rows)
-    for row in rows:
-        if row.get('scoring_input_kind') == 'product_level_evidence':
-            assert original['raw_source_path'] in row['linked_rows']
-            assert positive_clinical_benchmark(product, row) is None
+    projections = [row for row in rows if row.get('scoring_input_kind') == 'product_level_evidence']
+    assert projections
+    for row in projections:
+        lineage = {_resolve_source_tree_path(product, path) for path in row['linked_rows']}
+        assert original['raw_source_path'] in lineage
+        assert positive_clinical_benchmark(product, row) is None

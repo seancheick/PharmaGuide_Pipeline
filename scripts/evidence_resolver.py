@@ -1279,11 +1279,14 @@ def _resolve_evidence_for_row(
     unresolved_clinical_source = False
     if deduped_studies:
         matched_owners.append("backed_clinical_studies")
-        # Recognition and source attribution survive unresolved applicability;
-        # this inventory does not grant clinical credit or finish its review.
-        owner_facts["backed_clinical_studies"] = _clinical_owner_facts(deduped_studies)
         # Check study types, effect directions, and applicability
         valid_studies = [s for s in deduped_studies if clinical_record_sources_eligible(s)]
+        # Recognition and source attribution survive unresolved applicability and
+        # reference-only records; this inventory grants no credit. A record under
+        # an explicit hold (scoring_eligible False) never re-enters it.
+        inventory = [s for s in deduped_studies if s.get("scoring_eligible") is not False]
+        if inventory:
+            owner_facts["backed_clinical_studies"] = _clinical_owner_facts(inventory)
         from clinical_applicability import assess_clinical_applicability, assess_clinical_source_review
         # The shared scope owner checks known preparation exclusions before
         # a source hold. A finished material mismatch grants no credit and

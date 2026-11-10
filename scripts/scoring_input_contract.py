@@ -1988,14 +1988,9 @@ def _derive_top_level_botanical_blend_evidence(
             or blend.get("source_field")
             or f"proprietary_blends[{index}]"
         )
-        # Legacy blend metadata indexes the enriched active list. Preserve the
-        # actual retained source-row binding through the existing path owner,
-        # rather than emitting that temporary list position as label provenance.
-        source_path = _resolve_source_tree_path(product, source_path)
         linked_paths = {
             source_path,
-            *{_resolve_source_tree_path(product, str(path))
-              for path in _safe_list(blend.get("source_fields")) if path},
+            *{str(path) for path in _safe_list(blend.get("source_fields")) if path},
         }
         if linked_paths & blocked_paths:
             continue
@@ -2037,7 +2032,7 @@ def _derive_top_level_botanical_blend_evidence(
             and _norm(active.get("name")) == _norm(child_name)
             and active.get("plantPart")
             and (
-                _resolve_source_tree_path(product, f"activeIngredients[{active_index}]") in linked_paths
+                f"activeIngredients[{active_index}]" in linked_paths
                 or (
                     blend.get("source_row_ref")
                     and str(active.get("raw_source_path") or "").startswith(

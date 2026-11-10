@@ -116,6 +116,14 @@ def _evidence_subject_refs(product: Mapping, *, include_undosed: bool = False,
     )
 
 
+def _anchor_lineage(product: Mapping, anchor: Mapping) -> set:
+    """Printed source rows behind a provider anchor. Blend lineage may carry flattened
+    ``activeIngredients[i]`` indexes; the path owner resolves them to retained rows."""
+    from scoring_input_contract import _resolve_source_tree_path
+    return {path for ref in anchor.get("linked_rows") or [] if isinstance(ref, str) and ref.strip()
+            for path in (ref, _resolve_source_tree_path(product, ref))}
+
+
 def _build_evidence_subject_refs(product: Mapping, *, include_undosed: bool,
                                  include_anchor_lineage: bool) -> set:
     iqd = product.get("ingredient_quality_data")
@@ -132,7 +140,7 @@ def _build_evidence_subject_refs(product: Mapping, *, include_undosed: bool,
             # The shared provider already records the exact printed lineage
             # behind an anchor. Admit those source rows for Evidence only;
             # their blend total remains unavailable as a member dose.
-            candidates.extend(row.get("linked_rows") or [])
+            candidates.extend(_anchor_lineage(product, row))
         refs.update(ref for ref in candidates if isinstance(ref, str) and ref.strip())
     return refs
 
@@ -306,7 +314,7 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
             if len(anchors) == 1:
                 anchor = anchors[0]
                 anchor_ref = anchor.get("raw_source_path")
-                linked = anchor.get("linked_rows") or []
+                linked = _anchor_lineage(product, anchor)
                 children = [r for r in rows
                             if (r.get("raw_source_path") != anchor_ref
                                 and (r.get("parent_source_path") == anchor_ref
