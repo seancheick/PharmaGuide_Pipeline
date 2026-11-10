@@ -724,8 +724,9 @@ def test_bounded_carnosine_sources_do_not_reinstate_beta_alanine_or_establish_ge
     record = records["l_carnosine"]
     studies = {s["pmid"]: s for s in record["qualifying_human_studies"]}
     assert set(studies) == {"39919936", "39599686", "34174842"}
-    assert record["effect_direction"] is None
+    assert record["effect_direction"] is None  # Screening provenance does not grade clinical research.
     assert record["applicability_status"] == "applicability_unestablished"
+    assert "INGR_L_CARNOSINE" in record["applicability_decision"]
     assert "N-acetyl" in record["material_form"]
     assert "absolute" in str(studies["34174842"]).lower()
     assert "percent" in str(studies["34174842"]).lower()

@@ -2415,7 +2415,7 @@ def test_glutamine_biomarker_publications_share_conservative_family_and_remain_h
 @pytest.mark.parametrize('name', ['Creatine Ethyl Ester', 'Creatine Ethyl Ester HCl',
     'Creatine Ethylester', 'PEG-Creatine System', 'Polyethylene Glycosylated Creatine',
     'Creatine Citrate', 'Dicreatine Malate', 'Creatine Nitrate (as NO3-T®)',
-    'Creatine AKG', 'Creatine Alpha Ketoglutarate'])
+    'Creatine AKG', 'Creatine Alpha Ketoglutarate', 'Creatine MagnaPower', 'OT2(TM) Creatine'])
 def test_explicit_distinct_creatine_preparations_finish_monohydrate_scope_without_transfer(name):
     from clinical_applicability import assess_clinical_applicability, reviewed_entries
     row = {'name': name, 'canonical_id': 'creatine_monohydrate',
@@ -2441,7 +2441,7 @@ def test_explicit_distinct_creatine_preparations_finish_monohydrate_scope_withou
 
 
 @pytest.mark.parametrize('name', ['Creatine', 'Micronized Creatine', 'Creatine Complex',
-                                 'Creatine MagnaPower', 'OT2(TM) Creatine'])
+                                 'Unspecified Proprietary Creatine', 'Unspecified Release Creatine'])
 def test_unspecified_creatine_and_unverified_brand_still_require_preparation(name):
     row = {'name': name, 'canonical_id': 'creatine_monohydrate', 'raw_source_text': name,
            'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
@@ -2547,3 +2547,45 @@ def test_psyllium_lipid_research_keeps_material_route_and_population_scope(name,
         assert rejected[0]["status"] == "not_applicable"
         assert rejected[0]["reason_code"] == "clinical_form_excluded"
     assert (product, entry) == original
+
+
+def test_carnosine_primary_glycemic_sources_have_scoped_native_credit_without_replication_inflation():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review, qualifying_purpose_outcomes
+    record = reviewed_entries().get('INGR_L_CARNOSINE')
+    assert record is not None
+    assert record['effect_direction'] == 'mixed'
+    assert record['effect_direction_confidence'] == 'low'
+    eligible = [c for c in record['study_contexts'] if c['scoring_eligible']]
+    assert {p for c in eligible for p in c['source_pmids']} == {'27040154', '38172006'}
+    assert len({c['trial_family'] for c in eligible}) == 2
+    assert all(qualifying_purpose_outcomes(c)[0] for c in eligible)
+    assert assess_clinical_source_review(record)['is_complete']
+    assert record['total_enrollment'] is None
+    assert record['health_goals_supported'] == []
+    assert all(validate_ingredient_context(c, require_complete_review=True) == []
+               for c in record['study_contexts'])
+    primary = next(c for c in eligible if c['source_pmids'] == ['27040154'])
+    assert 'both arms' in str(primary['outcomes']).lower()
+    assert 'attenuat' in str(primary['outcomes']).lower()
+    main = next(c for c in eligible if c['source_pmids'] == ['38172006'])
+    assert '0.055' in str(main['limitations'])  # Imputed AUC result is not uniformly significant.
+    assert main['sample_size'] == 49
+    assert 'not pregnant or lactating' in main['population']['description']
+    row = {'name':'L-Carnosine', 'canonical_id':'l_carnosine', 'raw_source_text':'L-Carnosine',
+           'raw_source_path':'ingredientRows[0]', 'source_section':'active', 'quantity':500,'unit':'mg'}
+    product = {'fullName':'L-Carnosine', 'targetGroups':['Adults'], 'activeIngredients':[row],
+               'ingredient_quality_data':{'ingredients_scorable':[row]}}
+    before = copy.deepcopy(product)
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    assert product == before
+
+
+@pytest.mark.parametrize('name', ['N-Acetyl L-Carnosine', 'Zinc Carnosine', 'Anserine Carnosine Blend'])
+def test_carnosine_glycemic_sources_cannot_lend_credit_to_other_preparations(name):
+    row = {'name':name, 'canonical_id':'l_carnosine', 'raw_source_text':name,
+           'raw_source_path':'ingredientRows[0]','source_section':'active','quantity':2000,'unit':'mg'}
+    product = {'fullName':name,'activeIngredients':[row],
+               'ingredient_quality_data':{'ingredients_scorable':[row]}}
+    assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
