@@ -2489,6 +2489,7 @@ def test_creatine_form_exclusions_stay_with_their_own_row_and_preserve_mono_cred
 
 
 def test_psyllium_qualified_lipid_review_does_not_borrow_unread_review_or_counts():
+    """Qualify one lipid source without lending unread bibliography or counts."""
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from evidence_resolver import clinical_record_sources_eligible
     record = reviewed_entries()['INGR_PSYLLIUM_HUSK']
@@ -2527,6 +2528,7 @@ def test_psyllium_qualified_lipid_review_does_not_borrow_unread_review_or_counts
     ('Psyllium husk', 'Pregnancy fiber', 'Powder', False),
 ])
 def test_psyllium_lipid_research_keeps_material_route_and_population_scope(name, title, physical, eligible):
+    """Bind research to source material and population without mutating inputs."""
     from clinical_applicability import filter_clinical_matches, reviewed_entries
     row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
            'canonical_id': 'psyllium', 'mapped': True, 'quantity': 100, 'unit': 'mg',
@@ -2537,7 +2539,11 @@ def test_psyllium_lipid_research_keeps_material_route_and_population_scope(name,
     entry = {**reviewed_entries()['INGR_PSYLLIUM_HUSK'], 'ingredient': name,
              'matched_canonical_ids': ['psyllium'], 'matched_source_row_refs': ['ingredientRows[0]']}
     original = copy.deepcopy((product, entry))
-    matches, _ = filter_clinical_matches(product, [entry], assess_amount=False,
+    matches, rejected = filter_clinical_matches(product, [entry], assess_amount=False,
                                           require_claim_alignment=False)
     assert bool(matches) is eligible
+    if "whole seed" in name:
+        assert len(rejected) == 1
+        assert rejected[0]["status"] == "not_applicable"
+        assert rejected[0]["reason_code"] == "clinical_form_excluded"
     assert (product, entry) == original
