@@ -13914,7 +13914,7 @@
           "pmid": "11498727",
           "doi": "10.1007/s002130100815",
           "title": "The chronic effects of an extract of Bacopa monniera (Brahmi) on cognitive function in healthy human subjects.",
-          "citation": "Psychopharmacology(Berl).2001;156(4):481–484;2015erratumDOI10.1007/s00213-015-3965-3",
+          "citation": "Psychopharmacology (Berl). 2001;156(4):481–484; 2015 erratum DOI 10.1007/s00213-015-3965-3",
           "url": "https://pubmed.ncbi.nlm.nih.gov/11498727/",
           "published_date": "2001-08-01",
           "publication_types": [
@@ -13927,7 +13927,7 @@
           "supports_claims": [
             "Selected planned unranked adult cognitive test outcomes; mixed overall findings"
           ],
-          "verification_source": "LiveEuropePMCcorecontent plusactualprimaryfullbody andcompleteindexed2001erratum;agentreview"
+          "verification_source": "Live Europe PMC core content plus actual primary full body and complete indexed 2001 erratum; agent review"
         }
       ],
       "external_ids": {
@@ -14104,9 +14104,9 @@
           ],
           "population": {
             "age_group": "adult",
-            "description": "Adult healthy andmemory-complaint trial populations;9studyinventory518subjects;Morgan2010excludedactualpool forattrition,resulting437subjects. PositiveTrailBsource11498727healthyadult;doesnotestablishdementia/ADHDbenefit."
+            "description": "Adult healthy and memory-complaint trial populations; 9 study inventory 518 subjects; Morgan 2010 excluded actual pool for attrition, resulting 437 subjects. Positive Trail B source 11498727 healthy adult; does not establish dementia/ADHD benefit."
           },
-          "study_design": "Systematicreview of randomizedplacebocontrolled single standardizedextract trials,>=12weekexposure;random-effects same-test outcome pools;Table2reviewoutcomesprespecified,noformalprimarydesignated.",
+          "study_design": "Systematic review of randomized placebo controlled single standardized extract trials, >=12 week exposure; random-effects same-test outcome pools; Table 2 review outcomes prespecified, no formal primary designated.",
           "comparator": "Placebo in constituent randomized trials",
           "applicability": {
             "scope": "ingredient",
@@ -14213,7 +14213,7 @@
             "source_provenance": {
               "pmid": "27912958",
               "source_url": "https://researchmgt.monash.edu/ws/portalfiles/portal/251222495/251029958_oa.pdf",
-              "location": "Methods eligibility/effect-size computation;Results;Tables1–2;Discussion and references40–44."
+              "location": "Methods eligibility/effect-size computation; Results; Tables 1–2; Discussion and references 40–44."
             }
           },
           "limitations": [
