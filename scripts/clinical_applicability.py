@@ -165,6 +165,9 @@ def _valid_policy(policy: Any) -> bool:
             return False
     if "require_source_label_form" in policy and not isinstance(policy["require_source_label_form"], bool):
         return False
+    if ("preparation_uncertainty_reviewed" in policy
+            and not isinstance(policy["preparation_uncertainty_reviewed"], bool)):
+        return False
     if (policy.get("require_source_label_form")
             and not (policy.get("required_form_terms") or policy.get("required_form_groups"))):
         return False
@@ -1624,10 +1627,18 @@ def _assess_policy_rows(product: Mapping, entry: Mapping, reference: Mapping, po
         prepared_source = bool(set(text.split()) & {
             "extract", "extracts", "concentrate", "concentrated", "standardized", "standardised",
         }) if documented_scope else False
+        group_exclusion_text = ""
+        if form_groups:
+            # Same rule for conjunction scopes, bound to the words themselves:
+            # "extract powder" is the extract's physical form, while any other
+            # powder on the row (crude root powder beside an extract) still excludes.
+            group_exclusion_text = re.sub(
+                r"\bextracts? powders?\b", "extract",
+                re.sub(r"[^a-z0-9.;!?\r\n]+", " ", normalize_text(exclusion_text)))
         if any(
             (bool(find_affirmative_label_match(
                 re.compile(r"(?<!\w)" + re.escape(_key(term)) + r"(?!\w)", re.I),
-                re.sub(r"[^a-z0-9.;!?\r\n]+", " ", normalize_text(exclusion_text))))
+                group_exclusion_text))
              if form_groups else " " + _key(term) + " " in exclusion_text)
             and not (prepared_source and "powder" in _key(term).split())
             for term in policy.get("excluded_form_terms", [])

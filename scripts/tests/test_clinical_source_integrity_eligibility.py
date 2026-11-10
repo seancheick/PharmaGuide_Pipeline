@@ -2755,6 +2755,12 @@ def test_ashwagandha_v1_has_bounded_research_without_rewriting_signed_history():
 @pytest.mark.parametrize('label,credit', [
     ('Ashwagandha root extract standardized withanolides', True),
     ('Ashwagandha root powder', False),
+    # PR433 review: a standardized extract supplied as a powder is the extract,
+    # not crude root powder; crude powder beside an extract still never qualifies.
+    ('Ashwagandha root extract powder, standardized to 5% withanolides', True),
+    ('Ashwagandha powdered root extract standardized withanolides', True),
+    ('Ashwagandha root powder and root extract standardized withanolides', False),
+    ('Ashwagandha root powder with withanolides', False),
     ('Ashwagandha', False),
     ('Ashwagandha root and leaf extract standardized withanolides', False),
     ('Ashwagandha root extract 5:1', False),
@@ -2827,3 +2833,26 @@ def test_v1_clinical_match_does_not_borrow_rejected_synthesis_counts():
     assert record['published_rct_count'] == 2
     assert record['published_meta_review_count'] == 0
     assert len(record['references_structured']) == 4  # Historical inventory remains intact.
+
+
+@pytest.mark.parametrize('opt_in', [False, 'missing', 'true', None])
+def test_v1_preparation_completion_requires_explicit_canonical_review(monkeypatch, opt_in):
+    import clinical_applicability as ca
+    import evidence_resolver as resolver
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    source = copy.deepcopy(ca.reviewed_entries()['INGR_ASHWAGANDHA'])
+    if opt_in == 'missing':
+        source['applicability'].pop('preparation_uncertainty_reviewed')
+    else:
+        source['applicability']['preparation_uncertainty_reviewed'] = opt_in
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {source['id']: source})
+    monkeypatch.setattr(resolver, '_backed_studies_index', lambda: {'ashwagandha': [source]})
+    row = _ingredient(name='Ashwagandha', canonical_id='ashwagandha')
+    row.update(raw_source_path='ingredientRows[0]', raw_source_text='Ashwagandha')
+    match = {**source, 'ingredient': 'Ashwagandha', 'matched_canonical_ids': ['ashwagandha'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    # A stale enriched true flag cannot replace the canonical review decision.
+    match['applicability'] = {**source['applicability'], 'preparation_uncertainty_reviewed': True}
+    product = _product(ingredients=[row], matches=[match])
+    assert not resolver.resolve_product_evidence(product).is_assessment_complete
+    assert score_evidence(product)['score'] == 0

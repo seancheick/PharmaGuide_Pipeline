@@ -321,3 +321,68 @@ def test_informational_research_does_not_restore_unresolved_identity(enricher):
     result = enricher._collect_evidence_data(unknown, unknown['ingredient_quality_data'])
     assert result['ingredient_research'] == []
     assert result['clinical_matches'] == []
+
+
+def test_gingever_resolver_does_not_reopen_a_reconciled_structural_total(enricher):
+    """Individual research reviews do not acquire a duplicate blend-total obligation."""
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from evidence_resolver import resolve_product_evidence
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    raw = json.loads((SCRIPTS_DIR.parent / 'manual_labels/product_submissions'
+                      / 'PG_SUB_C29FA5677C794795B2B3FC2185790AA7.json').read_text())
+    product, errors = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    assert not errors
+    resolution = resolve_product_evidence(product, owner_scoped=True, module='generic')
+    assert not any(row.reason_code == 'clinical_source_row_unresolved'
+                   for row in resolution.resolutions)
+    assert resolution.assessable_ingredients_count == 3
+    assert build_scored_artifact(product)['assessment_readiness']['release_assessment']['is_complete'] is True
+
+
+def test_resolver_retains_unreconciled_totals_and_real_unknown_subjects(monkeypatch):
+    """No partial disclosure or unknown real member disappears with a duplicate total."""
+    import evidence_resolver as resolver
+    import scoring_input_contract as contract
+
+    real = {'canonical_id': 'unknown_material', 'name': 'Unknown material',
+            'raw_source_path': 'ingredientRows[0].nestedRows[0]',
+            'amount': None, 'unit': 'NP'}
+    aggregate = {'canonical_id': 'unknown_material', 'name': 'Blend total',
+                 'raw_source_path': 'ingredientRows[0]',
+                 'scoring_input_kind': 'product_level_evidence',
+                 'evidence_type': 'blend_anchor_mass', 'amount': 1000, 'unit': 'mg',
+                 'linked_rows': ['ingredientRows[0].nestedRows[0]']}
+    subjects = [real, aggregate]
+    monkeypatch.setattr(contract, 'get_evidence_subject_rows', lambda product: subjects)
+    monkeypatch.setattr(contract, 'get_assessable_evidence_ingredients', lambda product: subjects)
+    monkeypatch.setattr(resolver, 'evidence_owner_canonicals', lambda *a, **k: {'unknown_material'})
+    monkeypatch.setattr(resolver, 'evidence_required_canonicals', lambda *a, **k: {'unknown_material'})
+    seen = []
+    original = resolver.resolve_evidence_for_row
+    def recording(row, product):
+        seen.append(row)
+        return original(row, product)
+    monkeypatch.setattr(resolver, 'resolve_evidence_for_row', recording)
+    result = resolver.resolve_product_evidence({'ingredientRows': [{'name': 'Blend total',
+        'nestedRows': [{'name': 'Unknown material'}]}]}, owner_scoped=True, module='generic')
+    assert seen == subjects
+    assert result.assessable_ingredients_count == 2
+    assert result.is_assessment_complete is False
+
+
+def test_plain_resolver_composition_does_not_derive_projection_reconciliation(monkeypatch):
+    """The additional lineage view is needed only when a projection exists."""
+    import evidence_resolver as resolver
+    import scoring_input_contract as contract
+    row = {'canonical_id': 'synthetic_material', 'name': 'Synthetic material',
+           'raw_source_path': 'ingredientRows[0]'}
+    monkeypatch.setattr(contract, 'get_assessable_evidence_ingredients', lambda product: [row])
+    def unexpected_reconciliation(*args, **kwargs):
+        raise AssertionError('Plain source rows have no redundant product projection')
+    monkeypatch.setattr(contract, 'profile_owner_candidate_rows', unexpected_reconciliation)
+    monkeypatch.setattr(resolver, 'resolve_evidence_for_row', lambda *a, **kw:
+        resolver.EvidenceResolution('synthetic_material', 'Synthetic material', [],
+            resolver.EvidenceDisposition.NOT_EFFICACY_RELEVANT.value, False,
+            'not_applicable', 'synthetic_source_scope'))
+    assert resolver.resolve_product_evidence({'product_name': 'Fixture'}).is_assessment_complete

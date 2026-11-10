@@ -398,14 +398,20 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
         state = (EVIDENCE_EVALUATED_SUPPORTED if resolution.points_eligible
                  else EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE)
         return state, resolution.reason_code, None
+    if (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+            and resolution.reason_code == "clinical_source_label_unresolved"):
+        # Consume the canonical resolver's completed V1 review attestation,
+        # not a coincident reason emitted by an unfinished literature path.
+        reviewed = _safe_dict(resolution.owner_facts.get("backed_clinical_studies"))
+        if (reviewed.get("preparation_uncertainty_reviewed") is True
+                and not resolution.blocking_reasons):
+            return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
+        return EVIDENCE_NOT_YET_EVALUATED, "no_reviewed_evidence_assessment", None
     completed_scope_reasons = {
         "clinical_form_mismatch", "clinical_delivery_mismatch",
         "clinical_identity_excluded", "clinical_form_excluded",
         "formula_reference_not_individual_evidence", "clinical_population_mismatch",
         "label_purpose_evidence_mismatch",
-        # The resolver emits this terminal disposition only after every
-        # bounded source review finishes; preparation uncertainty is explicit.
-        "clinical_source_label_unresolved",
     }
     if (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
             and (("backed_clinical_studies" in resolution.matched_owners

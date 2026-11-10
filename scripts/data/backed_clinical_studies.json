@@ -1011,6 +1011,7 @@
           "source_integrity": "none",
           "trial_family": "ksm66_32021735",
           "population": {
+            "age_group": "adult",
             "description": "60 enrolled 58 analyzed adults PSS>=20 without other psychiatric or chronic systemic disease"
           },
           "study_design": "randomized double-blind placebo-controlled three-arm parallel trial",
@@ -18305,7 +18306,7 @@
       "health_goals_supported": [
         "Reduce Stress / Anxiety"
       ],
-      "notes": "Limited short-term stress findings across heterogeneous preparations. Anxiety findings are mixed; PMID36017529 rates certainty low with substantial heterogeneity. Exact KSM-66/Shoden trial results cannot establish equivalence for generic1.5/2.5%-withanolide extracts,5:1 extracts or root powder. PMID39348746 full preparation table remains unverified and must not supply affirmative eligibility. Current generic-material correspondence is not established; retain branded source holds. Existing pregnancy, liver, thyroid/autoimmune, medication and long-term-safety qualifications remain controlling. Dr. Pham's signed ruling of 2026-10-28 resolves the former record-level eligibility hold: the generic record is a completed no-credit reference (no transfer from standardized extracts); KSM-66, Sensoril and Shoden brand records carry stress credit. The KSM-66 trial contexts (23439798, 32021735, 31517876) were removed from this record because those PMIDs are not its references.\n\nNEW Sean Evidence V1 decision (2026-11-10), superseding only the generic trademark prerequisite: limited ingredient-level stress support may apply to identified standardized root extracts without a named trademark. Both retained primary trials actually used KSM-66; this is conservative analogical preparation-class support, not product proof. Historical signed exact-preparation decisions above and rejected synthesis-transfer contexts are retained unchanged. Root powder, unknown, ratio-only, root+leaf and novel delivery preparations do not borrow the root-extract grade. Bounded reviewed research can finish without asserting exhaustive literature completion. Sleep findings are descriptive and do not expand numerical stress scope. Dose, Formulation, Safety and GLN numerical HOLD remain separate and unchanged.",
+      "notes": "[HISTORICAL, superseded in part by the 2026-11-10 V1 paragraph below; signed text retained verbatim. No longer current: 'completed no-credit reference' (the record is now ingredient-human and can award limited stress credit to qualified root extracts) and 'KSM-66 trial contexts ... were removed' (PMIDs 23439798 and 32021735 are now cited as V1 preparation-class contexts).] Limited short-term stress findings across heterogeneous preparations. Anxiety findings are mixed; PMID36017529 rates certainty low with substantial heterogeneity. Exact KSM-66/Shoden trial results cannot establish equivalence for generic1.5/2.5%-withanolide extracts,5:1 extracts or root powder. PMID39348746 full preparation table remains unverified and must not supply affirmative eligibility. Current generic-material correspondence is not established; retain branded source holds. Existing pregnancy, liver, thyroid/autoimmune, medication and long-term-safety qualifications remain controlling. Dr. Pham's signed ruling of 2026-10-28 resolves the former record-level eligibility hold: the generic record is a completed no-credit reference (no transfer from standardized extracts); KSM-66, Sensoril and Shoden brand records carry stress credit. The KSM-66 trial contexts (23439798, 32021735, 31517876) were removed from this record because those PMIDs are not its references.\n\nNEW Sean Evidence V1 decision (2026-11-10), superseding only the generic trademark prerequisite: limited ingredient-level stress support may apply to identified standardized root extracts without a named trademark. Both retained primary trials actually used KSM-66; this is conservative analogical preparation-class support, not product proof. Historical signed exact-preparation decisions above and rejected synthesis-transfer contexts are retained unchanged. Root powder, unknown, ratio-only, root+leaf and novel delivery preparations do not borrow the root-extract grade. Bounded reviewed research can finish without asserting exhaustive literature completion. Sleep findings are descriptive and do not expand numerical stress scope. Dose, Formulation, Safety and GLN numerical HOLD remain separate and unchanged.",
       "notable_studies": "Two distinct primary trial families: PMID23439798 (64 randomized, 61 efficacy analysis; 60 days) and PMID32021735 (60 randomized, 58 completed; 8 weeks). Both used KSM-66 root extract. Perceived-stress outcomes favored extract over placebo; anxiety results depended on assigned arm in the latter trial. Self-reported sleep research in PMID32021735 is descriptive, not insomnia-treatment proof or separate numerical credit. Actual study regimens are source facts, not generic Dose targets. Prior synthesis exact-transfer rejections remain historical; unread preparation tables are not affirmed.",
       "study_type": "rct_multiple",
       "last_updated": "2026-11-10",
@@ -18586,6 +18587,7 @@
           "source_integrity": "none",
           "trial_family": "ksm66_32021735",
           "population": {
+            "age_group": "adult",
             "description": "60 enrolled 58 analyzed adults PSS>=20 without other psychiatric or chronic systemic disease"
           },
           "study_design": "randomized double-blind placebo-controlled three-arm parallel trial",
@@ -18646,6 +18648,7 @@
       "applicability": {
         "scope": "ingredient",
         "require_source_label_form": true,
+        "preparation_uncertainty_reviewed": true,
         "required_form_groups": [
           [
             "root"
