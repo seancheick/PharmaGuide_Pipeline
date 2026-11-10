@@ -1052,7 +1052,7 @@ def test_glutamine_older_women_review_finishes_without_borrowing_ibs_credit():
     assert qualifying_purpose_outcomes(context) == ([], False)
     assert not assess_clinical_source_review(record)['is_complete']
     assert {c['source_pmids'][0] for c in record['study_contexts'] if not context_review_finished(c)} == {
-        '34844156', '38243579'}
+        '34844156'}
 
 
 def test_betaine_limited_published_finding_finishes_with_scoped_positive_and_null_outcomes():
@@ -1907,7 +1907,7 @@ def test_registered_glutamine_review_finishes_without_raw_data_or_recursive_prim
     assert validate_ingredient_context(context, require_complete_review=True) == []
     assert not assess_clinical_source_review(record)['is_complete']
     assert {p for c in record['study_contexts'] if not context_review_finished(c)
-            for p in c['source_pmids']} == {'34844156', '38243579'}
+            for p in c['source_pmids']} == {'34844156'}
     original = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
     assert original['scoring_eligible'] is True
     assert record['effect_direction'] == 'positive_moderate'
@@ -1948,7 +1948,7 @@ def test_cee_retains_mixed_published_findings_without_new_salt_prefix_or_trial_c
     assert assess_clinical_source_review(record)['is_complete']
 
 
-def test_peg_finished_within_arm_review_keeps_unread_sources_open():
+def test_peg_finished_bounded_reviews_preserve_noncredit_findings():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     record = reviewed_entries()['INGR_PEG_CREATINE']
     assert record['scoring_eligible'] is False
@@ -1956,8 +1956,8 @@ def test_peg_finished_within_arm_review_keeps_unread_sources_open():
     assert completed['review_status'] == 'rejected_source'
     assert context_review_finished(completed)
     assert {p for c in record['study_contexts'] if not context_review_finished(c)
-            for p in c['source_pmids']} == {'19387397', '21068676'}
-    assert not assess_clinical_source_review(record)['is_complete']
+            for p in c['source_pmids']} == set()
+    assert assess_clinical_source_review(record)['is_complete']
 
 
 def test_hcl_primary_ph_research_credit_is_independent_of_claim_and_lower_retail_amount():
@@ -2009,7 +2009,7 @@ def test_new_hcl_and_cee_findings_use_existing_physical_scope_without_dose_curve
     assert product == before
 
 
-def test_real_peg_reference_cannot_finish_its_two_unread_sources():
+def test_ambiguous_peg_system_label_retains_independent_identity_hold():
     from assessment_readiness import _resolved_evidence_assessment
     row = {'canonical_id': 'creatine_monohydrate', 'name': 'PEG-Creatine System',
            'raw_source_text': 'PEG-Creatine System', 'source_label_name': 'PEG-Creatine System',
@@ -2017,6 +2017,7 @@ def test_real_peg_reference_cannot_finish_its_two_unread_sources():
     product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
     resolution = er.resolve_evidence_for_row(row, product)
     assert not resolution.points_eligible
+    assert resolution.reason_code == 'clinical_source_label_unresolved'
     assert _resolved_evidence_assessment(resolution)[0] == 'not_yet_evaluated'
 
 
@@ -2241,3 +2242,66 @@ def test_sterol_source_limitations_keep_full_verifiable_identifiers():
     assert 'PMID 24144075' in exact
     assert 'Exact242preparation' not in pooled and 'unread377 source' not in pooled
     assert 'qualified241capsule' not in exact
+
+
+@pytest.mark.parametrize('pmid', ['19387397', '21068676'])
+def test_peg_reported_abstract_findings_can_finish_limited_without_causal_strength_credit(pmid):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_PEG_CREATINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == [pmid])
+    assert context['review_status'] == 'rejected_source'
+    assert context['scoring_eligible'] is False
+    assert context_review_finished(context)
+    assert 'abstract' in context['clinical_review']['basis'].casefold()
+    assert 'within' in ' '.join(context['limitations']).casefold()
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert assess_clinical_source_review(record)['is_complete']
+    assert record['scoring_eligible'] is False
+    assert record['total_enrollment'] is None
+
+
+def test_glutamine_burn_abstract_review_does_not_invent_route_or_erase_reported_benefits():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['38243579'])
+    assert context['review_status'] == 'rejected_source'
+    assert context['scoring_eligible'] is False
+    assert context_review_finished(context)
+    assert 'abstract' in context['clinical_review']['basis'].casefold()
+    text = ' '.join(context['limitations']).casefold()
+    assert 'wound' in text and 'mortality' in text
+    assert 'not specified' in text and 'route' in text
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    # A finished limited source cannot lend the one existing numerical approval to a sibling.
+    assert record['effect_direction'] == 'positive_moderate'
+    assert {p for c in record['study_contexts'] if c.get('scoring_eligible') is True
+            for p in c['source_pmids']} == {'30108163'}
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
+@pytest.mark.parametrize('name', ['Creatine', 'Creatine Complex', 'Creatine Nitrate'])
+def test_finished_peg_reference_cannot_finish_unestablished_other_creatine_preparations(name):
+    from assessment_readiness import _resolved_evidence_assessment
+    row = {'canonical_id': 'creatine_monohydrate', 'name': name, 'raw_source_text': name,
+           'source_label_name': name, 'raw_source_path': 'activeIngredients[0]',
+           'source_section': 'activeIngredients', 'role': 'primary'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    before = copy.deepcopy(product)
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert not resolution.points_eligible
+    assert _resolved_evidence_assessment(resolution)[0] == 'not_yet_evaluated'
+    assert product == before
+
+
+def test_glutamine_biomarker_publications_share_conservative_family_and_remain_held():
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['34844156'])
+    assert 'one overlapping trial family' in ' '.join(context['limitations'])
+    assert context['scoring_eligible'] is False
+    assert not context_review_finished(context)
+    assert 'favorable between-group biomarker findings' in ' '.join(context['limitations'])
+    assert 'explicitly withheld' in ' '.join(context['limitations'])
+    assert 'Later publication alone does not establish' in ' '.join(context['limitations'])
+    eligible = [c for c in record['study_contexts'] if c.get('scoring_eligible')]
+    assert [c['source_pmids'] for c in eligible] == [['30108163']]

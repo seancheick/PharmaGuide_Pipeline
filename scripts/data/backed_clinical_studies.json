@@ -49119,7 +49119,7 @@
         "Prespecified reduction of at least50points in IBS symptom severity in post-infectious IBS-D with intestinal hyperpermeability"
       ],
       "health_goals_supported": [],
-      "notes": "The exact free-L-glutamine trial is qualified for its narrow patient-important IBS endpoint. Other known studies and modified preparations remain unfinished; earned source credit must coexist with incomplete ingredient review. No general IBS, sports-performance, muscle-recovery, lower-dose-equivalence or safety claim is established.",
+      "notes": "The exact free-L-glutamine IBS trial retains its original source label and narrow approved numerical interpretation. Other declared sources now have their own bounded assessments. Reported young-male biomarker findings in PMID 34844156 are independently source-reviewed, but numerical integration is explicitly on HOLD by Sean. Conservatively group its report with PMID 31849453 as one trial family without additional replication or enrollment credit; registered primary outcomes remain unverified. It does not inherit the PMID 30108163 approval. No general IBS,sports-performance,muscle-recovery,atherosclerosis-prevention,lower-dose-equivalence or safety claim is established. Independent preparation/identity/Dose/safety holds remain separate.",
       "notable_studies": "PMID 30108163: 115 randomized, 106 completers; 43/54 active versus 3/52 whey placebo met the prespecified primary IBS symptom threshold after 15 g/day for 8 weeks. Permeability was a secondary surrogate. All other listed sources retain their own reviewed-exclusion or pending status; do not count their citations as independent positive replications.",
       "last_updated": "2026-11-09",
       "references_structured": [
@@ -49592,9 +49592,10 @@
           "review_status": "source_verified_pending_clinical_review",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
+            "reviewer": "Codex /root official primary-abstract content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary-abstract reported between-group positive and null biomarker findings independently verified,plus bounded publisher study-design excerpt. Scientific assessment supports narrow positive findings under the existing unranked-surrogate rubric; numerical source-specific interpretation is pending Sean. No full-article review or broader disease/performance claim. Independently checked against the full primary PMID 31849453 (PMC6912001), including Methods, Results and tables, and the 2022 publisher-indexed ethics and baseline summaries. Conservative family grouping; registration reported by the paper, not independently verified from the registry. Numerical integration explicitly held by Sean."
           },
           "dose": {
             "source_provenance": {
@@ -49604,8 +49605,14 @@
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
+            "The available primary Results explicitly report between-group biomarker comparisons,not merely within-arm change. These narrow short-term surrogate findings do not establish atherosclerosis prevention,clinical cardiovascular outcomes,performance or muscle recovery.",
+            "Source confidence is limited by small sample,multiple outcomes,unreported formal primary hierarchy and unread full analysis/attrition details; no multiplicity adjustment or effect-size uncertainty is invented.",
+            "The conclusion mentions adiponectin but the available Results do not provide its comparison; no adiponectin efficacy is credited.",
+            "Sean explicitly withheld authorization for numerical integration of PMID 34844156. The parent record’s original positive_moderate label is preserved; its existing 0.85 interpretation applies only to the distinct IBS-D trial PMID 30108163. No numerical grade is authorized for PMID 34844156. This context remains noneligible pending the source- and endpoint-specific decision.",
+            "No general Dose benchmark,lower-dose equivalence,derivative equivalence or new safety conclusion.",
+            "Conservatively group PMID 34844156 with PMID 31849453 as one overlapping trial family: both report ethics approval IR.ARUMS.REC.1394.112, the same regimen and group sizes, and identical baseline age and weight means and standard deviations. Individual participant identity is not proven. Do not award additional replication or enrollment credit for two publications.",
+            "The full 2019 report states registration IRCT2016092129895N1. The actual registry record, enrollment dates and prespecified primary hierarchy were not retrieved or verified. Later publication alone does not establish that the 2022 biomarker analyses were post hoc. The 2019 ancillary exercise-duration comparison is not authorization for performance credit.",
+            "Reported favorable between-group biomarker findings in healthy young men at 0.3 g/kg/day for 14 days are preserved; pre-exercise IL6 was not statistically significant. No general clinical, performance or Dose benefit is inferred."
           ]
         },
         {
@@ -49677,24 +49684,27 @@
           "source_pmids": [
             "38243579"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-06",
-            "scope": "identity_dose_outcome_applicability"
-          },
           "dose": {
             "source_provenance": {
               "pmid": "38243579",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/38243579/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+              "location": "Abstract-only content assessment of official PubMed/Europe PMC primary publication: pooled population, reported positive and null outcomes, and small-study caveat verified. The available abstract leaves route/preparation-specific oral transfer unestablished; no full-article review or corrected reanalysis is claimed."
             }
           },
           "limitations": [
-            "Bibliographic identity and abstract checked; full-methods and clinical applicability remain unfinished.",
-            "This unfinished context grants no clinical credit and cannot complete ingredient research. N-acetyl-L-glutamine, alanyl-glutamine/Sustamine and unspecified complexes retain separate preparation-specific research obligations."
-          ]
+            "Official primary abstract reports 22 randomized trials and 2170 burn patients. Preserve its reported favorable hospital length-of-stay, wound-healing and wound-infection findings; preserve null mortality, nonwound infection and ICU-stay findings and reported small-study effects.",
+            "Routes and preparations are not specified in the available abstract. It does not establish an isolated, preparation-qualified oral-glutamine pool for transfer to a generic oral supplement. Do not assert that the actual pool is proven mixed-route, and do not turn unestablished oral applicability into oral inefficacy.",
+            "Complete only this bounded abstract-reported aggregate-to-generic-oral transfer assessment. Full Methods, Results, tables and trial-level route data were not retrieved or claimed as read. No re-meta-analysis, public raw data or recursive review of every bibliography item is required to finish this limited decision.",
+            "No generic Dose benchmark, clinical-burn-treatment recommendation or safety clearance follows from this source assessment."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root official primary-abstract content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Abstract-only content assessment of official PubMed/Europe PMC primary publication: pooled population, reported positive and null outcomes, and small-study caveat verified. The available abstract leaves route/preparation-specific oral transfer unestablished; no full-article review or corrected reanalysis is claimed."
+          }
         },
         {
           "context_schema_version": "1.1.0",
@@ -51414,7 +51424,7 @@
       "health_goals_supported": [],
       "total_enrollment": null,
       "last_updated": "2026-11-09",
-      "notes": "Limited human research is recorded for PEG-creatine. One full source reports within-arm changes that do not establish placebo-controlled efficacy. Two other reports retain unread Methods and comparison/preparation gaps. These findings do not establish lower-dose equivalence, improved absorption, exact retail composition or monohydrate/plain-HCl equivalence.",
+      "notes": "Limited human PEG-creatine research is recorded. One full primary source and two official primary abstracts have completed bounded assessments of the reported comparisons. Within-arm strength changes are retained but do not establish favorable placebo-controlled efficacy in the findings assessed. Full Methods/Results of the two abstract-only reports were not read. No lower-dose equivalence, improved absorption, exact retail composition or monohydrate/plain-HCl equivalence is established.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -51552,7 +51562,7 @@
           },
           "limitations": [
             "Full author-copy Methods/Results/Table1 and legend read: favorable marked changes compare baseline/day14 within arms, not a demonstrated favorable placebo-controlled contrast. Preserve author claims and all null findings; not universal PEG ineffectiveness.",
-            "GNC funding does not prove an exact retail preparation or polymer chemistry. Two other known source reviews remain unfinished; no whole-ingredient completed zero."
+            "GNC funding does not prove an exact retail preparation or polymer chemistry. The two other declared reports now have separately completed abstract-only comparison assessments; no lower-dose, chemical-equivalence or broad inefficacy conclusion follows."
           ],
           "clinical_review": {
             "reviewer": "Codex /root/scientific_review; independently primary-content checked by Codex /root using the public author-copy full text and Table1 legend. Agent review, not clinician review.",
@@ -51570,24 +51580,27 @@
           "source_pmids": [
             "19387397"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-09",
-            "scope": "identity_dose_outcome_applicability",
-            "basis": "Live source identity and official abstract checked; full Methods/preparation and between-treatment analysis remain unread. No affirmative or completed-zero claim."
-          },
           "dose": {
             "source_provenance": {
               "pmid": "19387397",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/19387397/",
-              "location": "Live identity/abstract checked; full Methods/preparation and actual placebo comparison not retrieved."
+              "location": "Abstract-only content assessment of official PubMed/Europe PMC primary publication: identity, randomized arms, reported regimen and actual stated comparisons read. No full-article Methods/Results/table review claimed. The reported within-arm positives do not establish an affirmative causal strength or dose-equivalence finding."
             }
           },
           "limitations": [
-            "Reported human findings remain visible; exact preparation and between-treatment analysis remain unqualified because full Methods were not retrieved. Not a negative efficacy or completed-zero determination."
-          ]
+            "Official primary abstract reports 58 healthy men randomized to placebo (15), monohydrate (13), PEG1.25 (14) or PEG2.50 (16), with testing before and after 30 days. Preserve reported within-arm bench/leg-strength increases in the creatine groups and multiple improvements in all groups.",
+            "The abstract explicitly reports no placebo-comparison benefit for power output or muscular endurance. It does not establish a favorable between-group strength contrast. Significant change in selected arms does not establish a treatment difference; this is not a conclusion of clinical inefficacy.",
+            "PEG arms are described as 1.25 or 2.50 g creatine per day, versus 5 g creatine monohydrate and 3.6 g microcrystalline-cellulose placebo as reported. No inference of PEG polymer mass, absorption, chemical/retail equivalence, noninferiority or a lower effective Dose benchmark.",
+            "This bounded review assesses the verified abstract-reported findings. Full Methods, Results and tables were not retrieved or represented as read; future affirmative or preparation-specific claims would need their own source qualification. No permanent unavailability claim."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root official primary-abstract content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Abstract-only content assessment of official PubMed/Europe PMC primary publication: identity, randomized arms, reported regimen and actual stated comparisons read. No full-article Methods/Results/table review claimed. The reported within-arm positives do not establish an affirmative causal strength or dose-equivalence finding."
+          }
         },
         {
           "context_schema_version": "1.1.0",
@@ -51598,24 +51611,27 @@
           "source_pmids": [
             "21068676"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
-          "clinical_review": {
-            "reviewer": "Codex scientific source inventory; clinical qualification pending",
-            "reviewed_at": "2026-11-09",
-            "scope": "identity_dose_outcome_applicability",
-            "basis": "Live source identity and official abstract checked; full Methods/preparation and between-treatment analysis remain unread. No affirmative or completed-zero claim."
-          },
           "dose": {
             "source_provenance": {
               "pmid": "21068676",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/21068676/",
-              "location": "Live identity/abstract checked; full Methods/preparation and actual placebo comparison not retrieved."
+              "location": "Abstract-only content assessment of official PubMed/Europe PMC primary publication: randomized design, 22-person arms, regimen, within-group bench finding and stated nulls read. No full-article review claimed. Difference-in-significance reasoning cannot qualify a favorable causal treatment effect."
             }
           },
           "limitations": [
-            "Reported human findings remain visible; exact preparation and between-treatment analysis remain unqualified because full Methods were not retrieved. Not a negative efficacy or completed-zero determination."
-          ]
+            "Official primary abstract reports a randomized double-blind parallel study in 22 untrained men: 10 received PEG-creatine 5 g/day and 12 received maltodextrin 5 g/day for 28 days; testing occurred on days 0, 7 and 28.",
+            "Retain the reported bench-press increase within the PEG group from day0 to day28 and its absence of significance within placebo. A difference in significance is not a significant between-group difference; no favorable causal bench-strength contrast is established in this abstract.",
+            "Retain reported null changes for leg-extension strength, mean/peak Wingate power and body weight in both groups. Do not recast the paper as proof of no effect, add an absorption claim, infer exact retail composition or derive a Dose benchmark.",
+            "This completed assessment is limited to verified abstract-reported findings. Full Methods, Results and tables were not retrieved or claimed as read. Their availability would support future affirmative qualification, not a universal gate to this bounded noncredit comparison assessment."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root official primary-abstract content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-09",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Abstract-only content assessment of official PubMed/Europe PMC primary publication: randomized design, 22-person arms, regimen, within-group bench finding and stated nulls read. No full-article review claimed. Difference-in-significance reasoning cannot qualify a favorable causal treatment effect."
+          }
         }
       ]
     }
