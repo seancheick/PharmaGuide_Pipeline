@@ -3975,7 +3975,25 @@ def _build_evidence_subject_rows(product: Mapping[str, Any]) -> List[Dict[str, A
             aggregate["scoring_input_kind"] = "product_level_evidence"
             rows.append(aggregate)
             covered.add(aggregate["canonical_id"])
-    return rows
+    # The physical total remains available to Dose, safety and profile owners.
+    # Evidence assesses the explicitly disclosed component preparations. Require
+    # every original descendant, so an omitted/undosed member cannot disappear
+    # merely because the visible positive quantities happen to add to the total.
+    declared = None
+    redundant_totals = set()
+    for parent, children, leaves in _reconciled_identity_partitions(rows):
+        if len(leaves) < 2:
+            continue
+        if declared is None:
+            declared = _source_tree_rows(dict(product))
+        parent_path = str(parent.get("raw_source_path") or "")
+        component_paths = {str(row.get("raw_source_path") or "") for row in children}
+        declared_paths = [str(row.get("raw_source_path") or "") for row in declared
+                          if _path_is_nested_under(parent_path, str(row.get("raw_source_path") or ""))]
+        if (declared_paths and len(declared_paths) == len(set(declared_paths))
+                and set(declared_paths) == component_paths):
+            redundant_totals.add(id(parent))
+    return [row for row in rows if id(row) not in redundant_totals]
 
 
 def _is_ineligible_evidence_subject(row: Mapping[str, Any]) -> bool:
@@ -5775,42 +5793,21 @@ def _profile_material_blocking_mass(row: Dict[str, Any], botanical_mass_mg: floa
     return other_mass >= (_PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION * botanical_mass_mg)
 
 
-def profile_owner_candidate_rows(
-    rows: List[Dict[str, Any]], *, product: Optional[Dict[str, Any]] = None
-) -> List[Dict[str, Any]]:
-    """Remove only physically reconciled duplicate totals/components from owner selection.
+def _reconciled_identity_partitions(rows: List[Dict[str, Any]]) -> list:
+    """Reuse physical source/mass reconciliation without deciding consumer ownership.
 
-    A declared active parent owns its same-identity components only when
-    their source lineage and disclosed masses reconcile. Product-level blend
-    totals remain valid conservative fallback evidence. A projection becomes
-    redundant for identity/profile ownership only when real
-    label rows account for the same canonical exposure or linked source rows
-    and their disclosed masses reconcile to the projection total.  This keeps
-    opaque or partially disclosed aggregates while preventing a duplicate
-    rollup from outranking its own fully disclosed children. Only immediate
-    independently dosed members reconcile a blend: descendant constituents
-    are not additional mass partitions, and source/ledger NP members prevent
-    a positive-row subset from proving complete disclosure.
+    Profile ownership retains the declared total. Evidence can instead assess
+    the separately named preparations without treating that total as another
+    ingredient or lending its mass to any component.
     """
-    label_rows = [
-        row
-        for row in rows
-        if _norm(row.get("scoring_input_kind")) != "product_level_evidence"
-    ]
-    if not label_rows:
-        return list(rows)
-
-    # A declared active parent can own quantified components of the same
-    # canonical substance. Require actual nested provenance and reconciled
-    # mass; separate rows or incomplete/different identities remain visible.
-    reconciled_components = set()
-    for parent in label_rows:
+    partitions = []
+    for parent in rows:
         parent_path = str(parent.get("raw_source_path") or "").strip()
         parent_canonical = _norm(parent.get("canonical_id"))
         parent_mass = _role_mass_mg(parent)
         if not parent_path or not parent_canonical or parent_mass is None or parent_mass <= 0:
             continue
-        children = [row for row in label_rows if _path_is_nested_under(
+        children = [row for row in rows if _path_is_nested_under(
             parent_path, str(row.get("raw_source_path") or "").strip(),
         )]
         if not children or any(
@@ -5842,7 +5839,40 @@ def profile_owner_candidate_rows(
                 totals_reconcile = False
                 break
         if totals_reconcile:
-            reconciled_components.update(id(row) for row in children)
+            partitions.append((parent, children, leaves))
+    return partitions
+
+
+def profile_owner_candidate_rows(
+    rows: List[Dict[str, Any]], *, product: Optional[Dict[str, Any]] = None
+) -> List[Dict[str, Any]]:
+    """Remove only physically reconciled duplicate totals/components from owner selection.
+
+    A declared active parent owns its same-identity components only when
+    their source lineage and disclosed masses reconcile. Product-level blend
+    totals remain valid conservative fallback evidence. A projection becomes
+    redundant for identity/profile ownership only when real
+    label rows account for the same canonical exposure or linked source rows
+    and their disclosed masses reconcile to the projection total.  This keeps
+    opaque or partially disclosed aggregates while preventing a duplicate
+    rollup from outranking its own fully disclosed children. Only immediate
+    independently dosed members reconcile a blend: descendant constituents
+    are not additional mass partitions, and source/ledger NP members prevent
+    a positive-row subset from proving complete disclosure.
+    """
+    label_rows = [
+        row
+        for row in rows
+        if _norm(row.get("scoring_input_kind")) != "product_level_evidence"
+    ]
+    if not label_rows:
+        return list(rows)
+
+    reconciled_components = {
+        id(child)
+        for _parent, children, _leaves in _reconciled_identity_partitions(label_rows)
+        for child in children
+    }
     rows = [row for row in rows if id(row) not in reconciled_components]
     label_rows = [row for row in label_rows if id(row) not in reconciled_components]
 

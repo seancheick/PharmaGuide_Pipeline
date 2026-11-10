@@ -3,7 +3,7 @@
     "description": "Phase 4 shadow literature resolution registry for high-impact canonical actives",
     "purpose": "literature_evidence_resolution",
     "schema_version": "5.0.0",
-    "last_updated": "2026-11-09",
+    "last_updated": "2026-11-10",
     "total_entries": 845,
     "verification_pipeline": "scripts/api_audit/verify_literature_records.py",
     "verified_studies_count": 280,
@@ -2603,7 +2603,7 @@
       "effect_direction": null,
       "population_context": "Source-specific healthy adult NEAT posthoc cognition, prediabetes/well-controlledT2D secondary inflammation, and diabetic-nephropathy biomarker cohorts; not interchangeable populations.",
       "studied_dose_exposure": {},
-      "applicability_decision": "The previous PMID 20091069 beta-alanine citation remains rejected because it studied a different administered substance. Verified oral L-carnosine research now includes PMID 39919936 (NEAT, registry NCT03314987), PMID 39599686 (secondary analysis, registry NCT02917928), and PMID 34174842. These three bounded reviews record source-specific mixed/null outcomes, not general efficacy or a grade. Companion reports from NCT02917928, including primary glycemic findings, represent the same cohort rather than independent confirmations. Other positive, null, combination and disease-context sources identified by existing screening still require content/applicability review; this review does not exhaust the literature. N-acetyl-L-carnosine and other derivatives do not borrow plain oral L-carnosine findings. Preparation/population boundaries and source-family review remain unfinished; no product completion, general Dose benchmark or safety threshold is established.",
+      "applicability_decision": "The three retained screening-source summaries alone do not establish general ingredient efficacy. The beta-alanine citation20091069 remains rejected: it administered a different substance. Existing verified screening summaries are preserved. Bounded primary and companion source review is now completed through the canonical clinical record INGR_L_CARNOSINE in backed_clinical_studies.json, which alone owns source eligibility and numerical grading. Two independent primary adult glycemic-surrogate families qualify narrowly; secondary, post-hoc, mixed and null findings remain recorded with conservative family grouping and the noted demographic discrepancy. This screening record adds no independent replication, general efficacy, Dose benchmark, safety clearance or exhaustive-literature claim. Plain oral L-carnosine findings do not establish derivative, zinc-carnosine, anserine-mixture, eye-drop or beta-alanine efficacy.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
         "verified_by": "Codex source reviewer /root/betaine_review; independent content double-check /root/scientific_review on 2026-11-06",
