@@ -19937,13 +19937,14 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "Serum testosterone in a four-trial extract synthesis (PMID: 32048383)"
+        "Published pooled total testosterone finding in a four-trial extract synthesis; quantitative qualification held (PMID: 32048383)",
+        "Very-low-certainty small total testosterone signal and null/imprecise free testosterone finding; count reconciliation pending (PMID: 42688439)"
       ],
       "health_goals_supported": [],
-      "notes": "The retained32048383source synthesizes testosterone measurements. It does not establish glycemic or libido benefit for arbitrary fenugreek preparations. Clinical applicability remains unreviewed.",
+      "notes": "Source-content review by Codex with an independent Codex check on November 10, 2026 retains the reported hormone findings while leaving quantitative qualification incomplete. The 2020 and 2026 reviews overlap; they are not independent replications, and their participant or trial totals must not be summed. Guo 2018 describes 40 randomized and 35 total completers, but has a 35-per-group table footnote; the newer review reports 35 in Table 1 while its pooled total of 385 implies 70 for Guo. The older review also lists a different dose and subset count. The specific denominator, unit and precision questions remain open; this is not a finding of ineffectiveness or absence of human research. The studied proprietary seed extracts and fractions cannot establish equivalence for plain seed, leaf, oil or arbitrary retail formulations. Related symptom and sexual-function findings are contextual and do not establish a testosterone-mediated clinical benefit. No general Dose benchmark, glycemic treatment, fertility, hypogonadism-treatment or safety conclusion follows. Existing Testofen decisions and named source holds remain separate and unchanged.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
-      "notable_studies": "Testosterone-related evidence is summarized in PMID 32048383, which found modest androgen-related effects in men.",
+      "last_updated": "2026-11-10",
+      "notable_studies": "PMID 32048383 reports a positive pooled total testosterone WMD of 0.85 (95% CI 0.10 to 1.60), with no common absolute unit identified in the main result and I2 of 81.6%. PMID 42688439 reports a small total testosterone SMD of 0.25 (95% CI 0.02 to 0.48), and a null/imprecise free testosterone SMD of 0.08 (95% CI -0.48 to 0.63); both outcomes were graded very low certainty. These are published surrogate findings, not clinically meaningful testosterone-boosting evidence. Its 13 review units include eight hormone-domain studies and five contextual studies; six total testosterone and five free testosterone comparisons are not 13 independent hormone trials or verified unique enrollment. Source-specific count reconciliation remains pending.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -19974,17 +19975,37 @@
           "evidence_grade": "meta_analysis",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Quantitative qualification remains on a source-specific hold. The published four-trial pooled total testosterone finding is retained, but its WMD has no common absolute unit identified in the main result. Guo 2018 is listed as 250 mg/day and 12/12 participants; the original report describes 250 mg twice daily (500 mg/day), 40 randomized and 35 total completers, with inconsistent subgroup/table labels. These extraction and denominator questions have not been resolved. This is not a formal retraction, expression of concern or finding of ineffectiveness."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "42688439",
+          "doi": "10.3389/fnut.2026.1903508",
+          "title": "Effects of oral fenugreek-derived preparations on testosterone-related outcomes in adult men: a systematic review and meta-analysis of randomized placebo-controlled trials.",
+          "citation": "Frontiers in nutrition (2026-08-19)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42688439/",
+          "published_date": "2026-08-19",
+          "publication_types": [
+            "Systematic Review",
+            "Journal Article"
+          ],
+          "evidence_grade": "systematic_review",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Main Methods, Results, tables and sensitivity descriptions were read and live identity verified. Quantitative qualification remains held: Table 1 reports 35 total Guo completers, but the reported total testosterone comparison count of 385 implies 70 Guo participants after subtracting the other five comparison denominators. The original Guo report itself has conflicting total/per-group labels. This is a material unresolved precision/weighting question, not a proven meta-analysis calculation error. Supplement S5 was not retrieved. A wrong-topic bibliography PMID is not imported; Rao calisthenics is identified by DOI 10.1002/tsm2.153. Published small total testosterone and null/imprecise free testosterone findings remain descriptive, not clinical or commercial testosterone-boosting proof."
         }
       ],
       "external_ids": {
         "unii": "654825W09Z"
       },
-      "effect_direction": "positive_weak",
-      "total_enrollment": 107,
-      "registry_completed_trials_count": 18,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_weak. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction": "mixed",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Descriptive mixed direction reflects the published small positive total testosterone signal and null/imprecise free testosterone result, with very low certainty in the newer review. Low confidence and the specific Guo denominator/unit/extraction hold do not establish ineffectiveness. Both references are excluded from affirmative clinical credit pending that reconciliation; empty native contexts retain incomplete source-review status. This is agent source-content research, not clinician approval, a finished clinical-transfer rejection, a new numerical rubric or a new Dose threshold.",
       "endpoint_relevance_tags": [],
       "study_contexts": []
     },
