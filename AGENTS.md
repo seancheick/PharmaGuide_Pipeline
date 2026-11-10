@@ -294,6 +294,11 @@ verification and application of the existing rubric are engineering/research wor
 `clinician_approved` enum values are compatibility data, not proof of who reviewed a context.
 
 
+- **Evidence completion is finite (ADR-0007, Sean, November 10, 2026).** Evidence is
+  ingredient-based and claim-independent; an ingredient is finished after one documented,
+  source-supported review, which may end at limited or zero credit. Unknown identity, missing
+  safety-relevant amounts and unfinished source reviews still hold. Reopen only on the ADR's
+  triggers, never because another paper exists.
 - **No unverified clinical claim or identifier.** Every mechanism, severity or interaction needs a
   citable source; PMID/CUI/RXCUI/UNII/NCT/CAS/CID are content-verified against the live API. A real
   PMID about the wrong topic is a ghost reference — a defect. Details: `.claude/rules/clinical-data.md`.
