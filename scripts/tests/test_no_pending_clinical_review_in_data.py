@@ -1,8 +1,9 @@
 """Unqualified clinical drafts stay outside production decisions.
 
 Independently checked source inventories may retain exact non-scoring holds
-beside completed source reviews. Pending glutamine and plant-sterol source-only stubs
-make no regimen/population/outcome assertions. Glycine has a completed scoped transfer
+beside completed source reviews. Glutamine biomarker eligibility is now finished
+as secondary noncredit evidence; its numerical hold is separate. Pending plant-sterol
+source-only stubs make no regimen/population/outcome assertions. Glycine has a completed scoped transfer
 exclusion beside its qualified human primary. The carnitine weight synthesis has
 verified source content but unresolved constituent-integrity/applicability.
 These contexts must remain unfinished; all other pending drafts stay excluded.
@@ -32,9 +33,7 @@ def test_no_data_file_holds_a_pending_review_context():
     from clinical_evidence_schema import validate_ingredient_context
     from probiotic_measurements import context_review_finished
     known_unfinished_sources = {
-        "INGR_L_GLUTAMINE": {
-            "34844156",
-        },
+        "INGR_L_GLUTAMINE": set(),
         "INGR_GLYCINE": set(),
         "INGR_MSM": set(),
         "INGR_PEG_CREATINE": set(),

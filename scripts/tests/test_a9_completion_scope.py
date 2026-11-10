@@ -354,13 +354,31 @@ def test_a_finished_label_stays_complete(pipeline):
 
 @pytest.mark.parametrize("label, open_row, hidden", [
     ("a9_hidden_amount_2219_raw.json", "l_phenylalanine", "creatine"),
-    # TMG is now reviewed; guanidinoacetate still supplies this label's unread-row case.
+    # These are source/amount mechanics controls, independent of current review progress.
     ("a9_hidden_amount_2221_raw.json", "guanidinoacetate", "creatine"),
     ("a9_hidden_amount_25712_raw.json", "l_isoleucine", "bcaa"),
 ])
 def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, label, open_row, hidden, monkeypatch):
     import assessment_readiness
     from scoring_v4.scored_artifact import build_scored_artifact
+
+    import copy
+    import evidence_resolver
+
+    # Inject one explicitly unread owner response. The real ingredient may
+    # have completed its review since these physical labels were frozen.
+    real_resolve = evidence_resolver.resolve_evidence_for_row
+    def pending_owner(row, product=None):
+        result = copy.deepcopy(real_resolve(row, product))
+        if row.get("canonical_id") == open_row:
+            result.disposition = evidence_resolver.EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+            result.points_eligible = False
+            result.reason_code = "synthetic_source_review_pending"
+            result.blocking_reasons = ["synthetic_source_review_pending"]
+            result.owner_facts.pop("nutrition_authority", None)
+            result.matched_owners = [key for key in result.matched_owners if key != "nutrition_authority"]
+        return result
+    monkeypatch.setattr(evidence_resolver, "resolve_evidence_for_row", pending_owner)
 
     # This hold alone: the blend rules below can hold these labels as well.
     monkeypatch.setattr(assessment_readiness, "_hidden_amount_blockers", lambda *_: [])
@@ -376,20 +394,13 @@ def test_an_unread_row_holds_while_a_hidden_amount_could_move_dose(pipeline, lab
     # The hold is status alone: the hidden amount keeps its neutral Dose either way.
     monkeypatch.setattr(assessment_readiness, "_dose_rests_on_a_hidden_amount", lambda *_: False)
     unheld = build_scored_artifact(json.loads(json.dumps(enriched)))
-    # Leucine's reviewed no-credit conclusion is independent of the amount
-    # hold. The neutral dose and the existing numeric outputs stay unchanged.
-    if label in {"a9_hidden_amount_2219_raw.json", "a9_hidden_amount_2221_raw.json"}:
-        assessments = unheld["assessment_readiness"]["evidence"]["ingredient_assessments"]
-        assert any(row["canonical_id"] == "l_leucine"
-                   and row["reason_code"] == "literature_reviewed_null_or_unfavorable"
-                   and row["state"] == "evaluated_limited_or_negative"
-                   for row in assessments)
-    if label in {"a9_hidden_amount_2219_raw.json", "a9_hidden_amount_2221_raw.json"}:
-        # Removing an amount blocker cannot close the other principal reviews.
-        assert unheld["quality_assessment_status"] == "partial"
-        assert "evidence_assessment_incomplete" in _release_blockers(unheld)
-    else:
-        assert unheld["quality_assessment_status"] == "complete"
+    # Removing one amount-dependent reason must not close another required
+    # review. The two creatine labels still require the injected source review;
+    # the BCAA label can finish while retaining its nonblocking unread rows.
+    assert open_row in {row["canonical_id"] for row in _unreviewed_rows(unheld)}
+    still_required = hidden == "creatine"
+    assert ("evidence_assessment_incomplete" in _release_blockers(unheld)) is still_required
+    assert unheld["quality_assessment_status"] == ("partial" if still_required else "complete")
     for field in ("quality_score_v4_100", "quality_tier", "quality_score_status", "product_safety_status",
                   "safety_assessment_status", "verdict"):
         assert held[field] == unheld[field]

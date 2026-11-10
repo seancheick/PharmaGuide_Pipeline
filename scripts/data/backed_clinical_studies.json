@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
     "last_updated": "2026-11-10",
-    "total_entries": 221,
+    "total_entries": 223,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -49589,7 +49589,7 @@
       "study_type": "rct_single",
       "effect_direction": "positive_moderate",
       "effect_direction_confidence": "low",
-      "effect_direction_rationale": "Retain the observed positive_moderate label from PMID30108163. Sean authorized only this independently verified context to use the existing weak-positive multiplier on2026-11-06; no other study, preparation, population or outcome inherits it. One narrow trial with completer-only analysis does not establish general efficacy.",
+      "effect_direction_rationale": "Retain the observed positive_moderate label from PMID 30108163. Sean authorized only this independently verified context to use the existing weak-positive multiplier on2026-11-06; no other study, preparation, population or outcome inherits it. One narrow trial with completer-only analysis does not establish general efficacy.",
       "published_studies": [
         "30108163",
         "32992440",
@@ -49610,9 +49610,9 @@
         "Prespecified reduction of at least50points in IBS symptom severity in post-infectious IBS-D with intestinal hyperpermeability"
       ],
       "health_goals_supported": [],
-      "notes": "The exact free-L-glutamine IBS trial retains its original source label and narrow approved numerical interpretation. Other declared sources now have their own bounded assessments. Reported young-male biomarker findings in PMID 34844156 are independently source-reviewed, but numerical integration is explicitly on HOLD by Sean. Conservatively group its report with PMID 31849453 as one trial family without additional replication or enrollment credit; registered primary outcomes remain unverified. It does not inherit the PMID 30108163 approval. No general IBS,sports-performance,muscle-recovery,atherosclerosis-prevention,lower-dose-equivalence or safety claim is established. Independent preparation/identity/Dose/safety holds remain separate.",
-      "notable_studies": "PMID 30108163: 115 randomized, 106 completers; 43/54 active versus 3/52 whey placebo met the prespecified primary IBS symptom threshold after 15 g/day for 8 weeks. Permeability was a secondary surrogate. All other listed sources retain their own reviewed-exclusion or pending status; do not count their citations as independent positive replications.",
-      "last_updated": "2026-11-09",
+      "notes": "The exact free-L-glutamine IBS trial retains its original source label and narrow approved numerical interpretation. Every listed source now has a finished bounded source-level assessment. Official retrospective IRCT2016092129895N1 identifies exercise time as primary and the disputed biomarker panel as secondary. Favorable PMID 34844156 biomarker findings remain but earn no numerical credit under the existing primary-outcome rule; Sean's numerical HOLD is unchanged and the distinct 30108163 authorization is not extended. Conservatively group34844156/31849453 as one family without additional replication/enrollment. This is not general IBS, sports, muscle-recovery, cardiovascular-prevention, lower-dose-equivalence or safety approval. Independent preparation/identity/Dose/safety holds remain.",
+      "notable_studies": "PMID 30108163: 115 randomized,106 completers; 43/54 active versus3/52 whey placebo met the prespecified primary IBS symptom threshold after 15 g/day for 8 weeks; permeability secondary. All other listed sources retain bounded noncredit assessments with actual favorable/null findings. The retrospective exercise family does not provide extra numerical or replication credit.",
+      "last_updated": "2026-11-10",
       "references_structured": [
         {
           "type": "pubmed",
@@ -50080,31 +50080,31 @@
           "source_pmids": [
             "34844156"
           ],
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "rejected_source",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex /root official primary-abstract content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
-            "reviewed_at": "2026-11-09",
+            "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Official primary-abstract reported between-group positive and null biomarker findings independently verified,plus bounded publisher study-design excerpt. Scientific assessment supports narrow positive findings under the existing unranked-surrogate rubric; numerical source-specific interpretation is pending Sean. No full-article review or broader disease/performance claim. Independently checked against the full primary PMID 31849453 (PMC6912001), including Methods, Results and tables, and the 2022 publisher-indexed ethics and baseline summaries. Conservative family grouping; registration reported by the paper, not independently verified from the registry. Numerical integration explicitly held by Sean."
+            "basis": "Official registry primary/secondary hierarchy and retrospective registration independently verified alongside existing primary-abstract/companion content. Finish only numerical eligibility of the biomarker report under the existing primary-outcome rule. Numerical HOLD remains; no new multiplier or performance conclusion."
           },
           "dose": {
             "source_provenance": {
               "pmid": "34844156",
               "source_url": "https://pubmed.ncbi.nlm.nih.gov/34844156/",
-              "location": "Source identity/abstract inventory; exact regimen and applicable clinical findings not yet qualified"
+              "location": "Bounded official primary abstract/publisher-indexed Methods and baseline excerpts; full 2019 companion PMC6912001; official IRCT2016092129895N1 record https://irct.ir/trial/23914 and XML independently retrieved. This does not claim a full 2022 article review."
             }
           },
           "limitations": [
-            "The available primary Results explicitly report between-group biomarker comparisons,not merely within-arm change. These narrow short-term surrogate findings do not establish atherosclerosis prevention,clinical cardiovascular outcomes,performance or muscle recovery.",
-            "Source confidence is limited by small sample,multiple outcomes,unreported formal primary hierarchy and unread full analysis/attrition details; no multiplicity adjustment or effect-size uncertainty is invented.",
-            "The conclusion mentions adiponectin but the available Results do not provide its comparison; no adiponectin efficacy is credited.",
-            "Sean explicitly withheld authorization for numerical integration of PMID 34844156. The parent record’s original positive_moderate label is preserved; its existing 0.85 interpretation applies only to the distinct IBS-D trial PMID 30108163. No numerical grade is authorized for PMID 34844156. This context remains noneligible pending the source- and endpoint-specific decision.",
-            "No general Dose benchmark,lower-dose equivalence,derivative equivalence or new safety conclusion.",
-            "Conservatively group PMID 34844156 with PMID 31849453 as one overlapping trial family: both report ethics approval IR.ARUMS.REC.1394.112, the same regimen and group sizes, and identical baseline age and weight means and standard deviations. Individual participant identity is not proven. Do not award additional replication or enrollment credit for two publications.",
-            "The full 2019 report states registration IRCT2016092129895N1. The actual registry record, enrollment dates and prespecified primary hierarchy were not retrieved or verified. Later publication alone does not establish that the 2022 biomarker analyses were post hoc. The 2019 ancillary exercise-duration comparison is not authorization for performance credit.",
-            "Reported favorable between-group biomarker findings in healthy young men at 0.3 g/kg/day for 14 days are preserved; pre-exercise IL6 was not statistically significant. No general clinical, performance or Dose benefit is inferred."
-          ]
+            "Reported favorable between-group biomarker findings at 0.3 g/kg/day for 14 days in healthy young men remain; pre-exercise IL6 was not significant. These are surrogate findings, not demonstrated atherosclerosis prevention, cardiovascular events, exercise performance or muscle recovery.",
+            "Official IRCT2016092129895N1 (https://irct.ir/trial/23914) names Exhaustive exercise time as the primary outcome. The secondary list includes MMP2, MMP9, IL6, adiponectin, hsCRP, MDA, TAC, TNF-alpha, leptin, oxidized LDL and lipid measures. The derived oxidized-LDL/HDL ratio is not individually listed and cannot bypass the known primary hierarchy. Favorable secondary/unranked biomarker findings do not establish a qualifying primary clinical result.",
+            "Registration dated 2016-10-13 is explicitly retrospective. Expected recruitment 2016-04-20 to 2016-07-20, target 30; actual recruitment and completion dates are blank. Do not label this prospective prespecification, infer actual enrollment dates, or claim post-hoc analysis merely from later publication. The registry says placebo not used but describes a sugar-water placebo group; retain that reporting discrepancy without reconstructing masking or allocation.",
+            "Conservatively group PMID 34844156 with PMID 31849453 as one overlapping trial family: matching ethics IR.ARUMS.REC.1394.112, regimen/group sizes and baseline summaries support grouping. Individual participant identity is not proven; do not add replication or enrollment credit.",
+            "Sean explicitly withheld authorization for numerical integration of PMID 34844156. The original positive_moderate source label remains preserved on the parent record; its existing 0.85 interpretation applies only to the distinct IBS-D trial PMID 30108163. This completed secondary-outcome assessment grants no numerical credit for 34844156 and does not lift that HOLD.",
+            "Later publication alone does not establish post-hoc analysis. Registry access now resolves the recorded primary-versus-biomarker hierarchy; it does not independently authorize the 2019 exercise-duration finding or its analysis. No new performance credit, Dose benchmark, lower-dose or derivative equivalence, or safety conclusion.",
+            "The full 2022 article was not retrieved or claimed as read. Formal attrition/multiplicity/effect-size details not established by the verified abstract/excerpts remain limited. This finishes a bounded source-level eligibility decision, not every possible future qualification of this family."
+          ],
+          "trial_family": "glutamine_irct2016092129895n1_conservative"
         },
         {
           "context_schema_version": "1.1.0",
@@ -52772,6 +52772,544 @@
       ],
       "notes": "Bounded adult oral L-carnosine source review; two qualifying primary glycemic families, plus separately assessed companion/null/post-hoc findings. Not an exhaustive census of every carnosine paper, a diabetes-prevention or general-performance claim, a Dose benchmark, preparation equivalence or safety clearance. The existing literature screening record retains its source summaries; this canonical clinical registry owns numerical source eligibility.",
       "notable_studies": "2016 pilot primary HOMA-IR rise attenuated versus placebo, not an absolute decline;2023 Monash primary OGTT glucose improved with sensitivity limitations. Reports bearing the Monash registration generated secondary inflammation,vascular,musculoskeletal,cognition and mood analyses, conservatively grouped with the noted demographic discrepancy; NEAT cognition/physical papers are one additional noncredit family. Renal primary mean-change null/additional percent positive retained.",
+      "last_updated": "2026-11-10"
+    },
+    {
+      "id": "INGR_GUANIDINOACETATE",
+      "standard_name": "Guanidinoacetic Acid",
+      "canonical_id": "guanidinoacetate",
+      "aliases": [
+        "guanidinoacetic acid",
+        "guanidinoacetate",
+        "guanidino acetate"
+      ],
+      "category": "sports_performance",
+      "evidence_level": "reference",
+      "study_type": "reference",
+      "scoring_eligible": false,
+      "published_studies": [
+        "23329885",
+        "24535415",
+        "26079223",
+        "23351309",
+        "27497517",
+        "27560540"
+      ],
+      "score_contribution": "tier_1",
+      "health_goals_supported": [],
+      "total_enrollment": null,
+      "key_endpoints": [
+        "Source-specific creatine-availability surrogates and reported exercise findings; no currently qualified numerical clinical transfer."
+      ],
+      "notes": "Limited source-specific research on oral guanidinoacetic acid. Reported favorable creatine and exercise findings remain alongside null/dose-response limitations and homocysteine/creatinine increases. The known publication/registration primary-hierarchy discrepancy is unresolved, so this record adds no numerical clinical credit. This completed bounded eligibility assessment does not mean that GAA is ineffective or that all research questions are resolved. No independent trial/enrollment sum, chemical/preparation equivalence, dose benchmark, performance recommendation or safety clearance.",
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "guanidinoacetate_23329885_bounded_noncredit",
+          "components": [
+            "INGR_GUANIDINOACETATE"
+          ],
+          "source_pmids": [
+            "23329885"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "trial_family": "gaa_nct01133899_conservative_witness",
+          "dose": {
+            "source_provenance": {
+              "pmid": "23329885",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/23329885/",
+              "location": "Full primary Methods/Results/tables: 24 randomized, 23 completed; 2.4 g/day oral GAA capsules for six weeks versus inulin. Published primary efficacy outcome is serum creatine, with a favorable between-group AUC comparison; homocysteine and creatinine also rose. The cited NCT01133899 currently lists muscle power as primary, muscle mass secondary, actual enrollment 40 and a longer schedule. Preserve this material publication/registration hierarchy discrepancy without manufacturing prospective mapping or patient-important benefit. No performance, renal-injury or safety-clearance inference."
+            }
+          },
+          "limitations": [
+            "Full primary Methods/Results/tables: 24 randomized, 23 completed; 2.4 g/day oral GAA capsules for six weeks versus inulin. Published primary efficacy outcome is serum creatine, with a favorable between-group AUC comparison; homocysteine and creatinine also rose. The cited NCT01133899 currently lists muscle power as primary, muscle mass secondary, actual enrollment 40 and a longer schedule. Preserve this material publication/registration hierarchy discrepancy without manufacturing prospective mapping or patient-important benefit. No performance, renal-injury or safety-clearance inference.",
+            "Finished bounded source-level numerical-transfer assessment, not resolution of every remaining scientific question or an exhaustive literature census. Actual reported positive findings remain; no generic inefficacy/null, grade, Dose benchmark or safety reassurance is created. Full source review is asserted only where explicitly stated."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Source-specific content scope above and official NCT01133899 record reviewed. Known primary-hierarchy discrepancy is retained; no numerical activation or unsupported replication count."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "guanidinoacetate_24535415_bounded_noncredit",
+          "components": [
+            "INGR_GUANIDINOACETATE"
+          ],
+          "source_pmids": [
+            "24535415"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "trial_family": "gaa_nct01133899_conservative_witness",
+          "dose": {
+            "source_provenance": {
+              "pmid": "24535415",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24535415/",
+              "location": "Official primary abstract: 48 adults, 1.2/2.4/4.8 g/day for six weeks versus placebo. Serum/urine creatine-related markers increased; homocysteine rose, B vitamins were not significantly changed. The paper cites NCT01133899, whose current enrollment/timepoint/hierarchy descriptions differ. No independent trial/enrollment count, general effective minimum or assumed clinical benefit."
+            }
+          },
+          "limitations": [
+            "Official primary abstract: 48 adults, 1.2/2.4/4.8 g/day for six weeks versus placebo. Serum/urine creatine-related markers increased; homocysteine rose, B vitamins were not significantly changed. The paper cites NCT01133899, whose current enrollment/timepoint/hierarchy descriptions differ. No independent trial/enrollment count, general effective minimum or assumed clinical benefit.",
+            "Finished bounded source-level numerical-transfer assessment, not resolution of every remaining scientific question or an exhaustive literature census. Actual reported positive findings remain; no generic inefficacy/null, grade, Dose benchmark or safety reassurance is created. Full source review is asserted only where explicitly stated."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Source-specific content scope above and official NCT01133899 record reviewed. Known primary-hierarchy discrepancy is retained; no numerical activation or unsupported replication count."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "guanidinoacetate_26079223_bounded_noncredit",
+          "components": [
+            "INGR_GUANIDINOACETATE"
+          ],
+          "source_pmids": [
+            "26079223"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "trial_family": "gaa_nct01133899_conservative_witness",
+          "dose": {
+            "source_provenance": {
+              "pmid": "26079223",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/26079223/",
+              "location": "Official primary abstract: 48 young adults randomized to three GAA doses or placebo for six weeks. Reported between-group handgrip positives at 1.2/2.4 g/day and bench-press repetition positives at 1.2/4.8 g/day remain; no dose-response difference was reported. The full primary Methods/Results were not retrieved. Exact measurement mapping to the known registered muscle-power primary and independence from the matching 48-person metabolic report are not established. Do not upgrade selected positives, assert post-hoc analysis, or invent null overall efficacy."
+            }
+          },
+          "limitations": [
+            "Official primary abstract: 48 young adults randomized to three GAA doses or placebo for six weeks. Reported between-group handgrip positives at 1.2/2.4 g/day and bench-press repetition positives at 1.2/4.8 g/day remain; no dose-response difference was reported. The full primary Methods/Results were not retrieved. Exact measurement mapping to the known registered muscle-power primary and independence from the matching 48-person metabolic report are not established. Do not upgrade selected positives, assert post-hoc analysis, or invent null overall efficacy.",
+            "Finished bounded source-level numerical-transfer assessment, not resolution of every remaining scientific question or an exhaustive literature census. Actual reported positive findings remain; no generic inefficacy/null, grade, Dose benchmark or safety reassurance is created. Full source review is asserted only where explicitly stated."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Source-specific content scope above and official NCT01133899 record reviewed. Known primary-hierarchy discrepancy is retained; no numerical activation or unsupported replication count."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "guanidinoacetate_23351309_bounded_noncredit",
+          "components": [
+            "INGR_GUANIDINOACETATE"
+          ],
+          "source_pmids": [
+            "23351309"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "trial_family": "gaa_nct01133899_conservative_witness",
+          "dose": {
+            "source_provenance": {
+              "pmid": "23351309",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/23351309/",
+              "location": "Official primary abstract: 20 adults randomized to GAA alone versus GAA plus betaine HCl/B6/B12/folate for eight weeks. Both groups showed within-group creatine increases; the methyl-donor combination had less reported hyperhomocysteinaemia. This active-comparator combination cannot establish an isolated placebo-controlled GAA clinical benefit, a general safety claim, or a recommendation to co-supplement methyl donors. No independent enrollment total is added."
+            }
+          },
+          "limitations": [
+            "Official primary abstract: 20 adults randomized to GAA alone versus GAA plus betaine HCl/B6/B12/folate for eight weeks. Both groups showed within-group creatine increases; the methyl-donor combination had less reported hyperhomocysteinaemia. This active-comparator combination cannot establish an isolated placebo-controlled GAA clinical benefit, a general safety claim, or a recommendation to co-supplement methyl donors. No independent enrollment total is added.",
+            "Finished bounded source-level numerical-transfer assessment, not resolution of every remaining scientific question or an exhaustive literature census. Actual reported positive findings remain; no generic inefficacy/null, grade, Dose benchmark or safety reassurance is created. Full source review is asserted only where explicitly stated."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary abstract reviewed for the GAA versus GAA plus betaine HCl/B-vitamin comparison and its biochemical findings. This abstract does not establish an isolated placebo-controlled functional benefit or independent replication; no numerical activation."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "guanidinoacetate_27497517_bounded_noncredit",
+          "components": [
+            "INGR_GUANIDINOACETATE"
+          ],
+          "source_pmids": [
+            "27497517"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "trial_family": "gaa_small_pilots_conservative_witness",
+          "dose": {
+            "source_provenance": {
+              "pmid": "27497517",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/27497517/",
+              "location": "Official primary abstract: uncontrolled five-man eight-week case study, 36 mg/kg/day for four weeks then up to 60 mg/kg/day. Brain creatine rose in some regions; the thalamic four-week decrease and nonsignificant later change remain. This uncontrolled physiological report establishes neither functional cognitive benefit nor disease treatment or general safety."
+            }
+          },
+          "limitations": [
+            "Official primary abstract: uncontrolled five-man eight-week case study, 36 mg/kg/day for four weeks then up to 60 mg/kg/day. Brain creatine rose in some regions; the thalamic four-week decrease and nonsignificant later change remain. This uncontrolled physiological report establishes neither functional cognitive benefit nor disease treatment or general safety.",
+            "Finished bounded source-level numerical-transfer assessment, not resolution of every remaining scientific question or an exhaustive literature census. Actual reported positive findings remain; no generic inefficacy/null, grade, Dose benchmark or safety reassurance is created. Full source review is asserted only where explicitly stated."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary abstract reviewed for the uncontrolled five-man GAA pilot, tissue-creatine findings and later null findings. No randomized functional benefit, independent replication or long-term safety conclusion is established; no numerical activation."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "guanidinoacetate_27560540_bounded_noncredit",
+          "components": [
+            "INGR_GUANIDINOACETATE"
+          ],
+          "source_pmids": [
+            "27560540"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "trial_family": "gaa_small_pilots_conservative_witness",
+          "dose": {
+            "source_provenance": {
+              "pmid": "27560540",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/27560540/",
+              "location": "Official primary abstract: five-man randomized double-blind four-week crossover comparing 3 g/day GAA with creatine. Reported tissue-creatine increases favored GAA in selected muscle/brain regions. Active-comparator surrogate findings do not establish clinical superiority, general performance benefit, equivalence or safety. Independence from the other small pilot is not established and no extra replication/enrollment is awarded."
+            }
+          },
+          "limitations": [
+            "Official primary abstract: five-man randomized double-blind four-week crossover comparing 3 g/day GAA with creatine. Reported tissue-creatine increases favored GAA in selected muscle/brain regions. Active-comparator surrogate findings do not establish clinical superiority, general performance benefit, equivalence or safety. Independence from the other small pilot is not established and no extra replication/enrollment is awarded.",
+            "Finished bounded source-level numerical-transfer assessment, not resolution of every remaining scientific question or an exhaustive literature census. Actual reported positive findings remain; no generic inefficacy/null, grade, Dose benchmark or safety reassurance is created. Full source review is asserted only where explicitly stated."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary abstract reviewed for the five-person crossover comparison with creatine and selected tissue-creatine findings. No demonstrated clinical superiority, preparation equivalence or independent replication is established; no numerical activation."
+          }
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "23329885",
+          "doi": "10.7150/ijms.5125",
+          "title": "Creatine metabolism and safety profiles after six-week oral guanidinoacetic acid administration in healthy humans.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23329885/",
+          "verification_source": "Live official MED identity and source-specific content check; full-text versus abstract-only scope retained in context."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "24535415",
+          "doi": "10.1007/s00394-014-0669-0",
+          "title": "Dose-response effects of oral guanidinoacetic acid on serum creatine, homocysteine and B vitamins levels.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24535415/",
+          "verification_source": "Live official MED identity and source-specific content check; full-text versus abstract-only scope retained in context."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "26079223",
+          "doi": "10.1097/jim.0000000000000212",
+          "title": "Six-Week Oral Guanidinoacetic Acid Administration Improves Muscular Performance in Healthy Volunteers.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26079223/",
+          "verification_source": "Live official MED identity and source-specific content check; full-text versus abstract-only scope retained in context."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "23351309",
+          "doi": "10.1017/s0007114512005879",
+          "title": "Co-administration of methyl donors along with guanidinoacetic acid reduces the incidence of hyperhomocysteinaemia compared with guanidinoacetic acid administration alone.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23351309/",
+          "verification_source": "Live official MED identity and source-specific content check; full-text versus abstract-only scope retained in context."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "27497517",
+          "doi": "10.1016/j.nut.2016.06.001",
+          "title": "Dietary guanidinoacetic acid increases brain creatine levels in healthy men.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27497517/",
+          "verification_source": "Live official MED identity and source-specific content check; full-text versus abstract-only scope retained in context."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "27560540",
+          "doi": "10.1139/apnm-2016-0178",
+          "title": "Guanidinoacetic acid versus creatine for improved brain and muscle creatine levels: a superiority pilot trial in healthy men.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27560540/",
+          "verification_source": "Live official MED identity and source-specific content check; full-text versus abstract-only scope retained in context."
+        }
+      ],
+      "last_updated": "2026-11-10"
+    },
+    {
+      "id": "INGR_CALCIUM_CASEINATE",
+      "standard_name": "Calcium Caseinate",
+      "canonical_id": "casein",
+      "aliases": [
+        "calcium caseinate"
+      ],
+      "category": "sports_performance",
+      "evidence_level": "ingredient-human",
+      "study_type": "rct_single",
+      "effect_direction": "positive_weak",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "One small controlled acute MPS source reports calcium-caseinate-family greater than noncaloric control; preparation confirmed by its full companion. Retain active-comparator nulls and source-scope limits; no independent positive replication or long-term strength finding.",
+      "published_studies": [
+        "21045172"
+      ],
+      "published_studies_count": 1,
+      "total_enrollment": null,
+      "score_contribution": "tier_1",
+      "health_goals_supported": [],
+      "key_endpoints": [
+        "Source-specific acute postexercise myofibrillar protein synthesis versus noncaloric control; surrogate only."
+      ],
+      "notes": "Limited evidence for exact calcium caseinate and acute postexercise muscle-protein synthesis. This source does not establish long-term strength, hypertrophy, superiority, general casein equivalence, a fixed daily Dose threshold or safety clearance.",
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "calcium caseinate"
+        ],
+        "excluded_form_terms": [
+          "micellar casein",
+          "sodium caseinate",
+          "casein hydrolysate",
+          "hydrolyzed casein",
+          "lactium",
+          "alpha s1 casein",
+          "peptopro"
+        ],
+        "supported_outcomes": [
+          "acute_postexercise_muscle_protein_synthesis"
+        ],
+        "studied_population": "Healthy young men after heavy resistance exercise; no transfer to chronic strength, hypertrophy, clinical disease or pediatric/pregnancy efficacy.",
+        "source_pmids": [
+          "21045172"
+        ],
+        "reviewed_at": "2026-11-10"
+      },
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose of identified calcium caseinate; not an efficacy recommendation.",
+        "preparation": "Exact calcium caseinate; no transfer to micellar/sodium/hydrolyzed or unidentified casein.",
+        "purpose": "General catalog Dose only; clinical Evidence is independently source qualified.",
+        "population": "Healthy young men after heavy resistance exercise in the qualifying source.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:21045172",
+          "PMID:24957889"
+        ],
+        "rationale": "One acute0.30g/kg lean-body-mass regimen does not establish a fixed absolute/daily minimum, an optimal interval,lower-dose equivalence or an interpolation curve. Keep the existing completed-neutral Dose policy.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_CALCIUM_CASEINATE",
+        "review_date": "2026-11-10",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "calcium_caseinate_21045172_acute_mps",
+          "components": [
+            "INGR_CALCIUM_CASEINATE"
+          ],
+          "source_pmids": [
+            "21045172"
+          ],
+          "identity_scope": "exact_form",
+          "identity": {
+            "chemical_form": "Calcium caseinate",
+            "preparation": "Exact calcium caseinate milk-protein fraction; not micellar casein, sodium caseinate, hydrolysate, Lactium, whey or an unqualified mixed-protein preparation."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "acute_postexercise_muscle_protein_synthesis",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "calcium_caseinate_reitelseder_21045172_24957889",
+          "population": {
+            "age_group": "adult",
+            "description": "Healthy young men after heavy resistance exercise. Primary abstract describes9 men in two protein trials and8 controls; the companion describes12 initial protein-period participants with3 completing only one period. No pooled/reconstructed enrollment or proven identical analyzed participant count."
+          },
+          "study_design": "Random assignment to two protein trials or noncaloric control; calcium caseinate versus whey in protein periods. A single postexercise drink; acute myofibrillar protein synthesis assessed1–6hours. No long-term training outcomes.",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary PMID21045172 abstract explicitly reports randomized assignment and calcium-caseinate-family postexercise MPS versus noncaloric control; full official companion24957889/PMC3901252 establishes exact preparation, protocol and shared-family linkage. Indexed primary Methods independently corroborate calcium caseinate. Full primary21045172 article was not retrieved; no full-article or explicit primary-rank claim. Existing approved-unranked surrogate rule; no new scoring policy."
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "verified",
+            "dose_basis": "single_challenge",
+            "duration_basis": "endpoint_followup_only",
+            "duration_days": null,
+            "co_therapies": [],
+            "dosage_forms": [
+              "oral protein drink"
+            ],
+            "administration_frequency": "0.30 g/kg lean body mass as a single drink immediately after heavy resistance exercise; no fixed absolute gram dose is represented by values.",
+            "source_provenance": {
+              "pmid": "21045172",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/21045172/",
+              "location": "Official primary PMID21045172 abstract explicitly reports randomized assignment and calcium-caseinate-family postexercise MPS versus noncaloric control; full official companion24957889/PMC3901252 establishes exact preparation, protocol and shared-family linkage. Indexed primary Methods independently corroborate calcium caseinate. Full primary21045172 article was not retrieved; no full-article or explicit primary-rank claim."
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Acute postexercise myofibrillar muscle protein synthesis1–6hours versus noncaloric control",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Official primary abstract reports both calcium-caseinate-family and whey MPS higher than noncaloric control(P<.05), with no overall difference between those proteins. This is an acute surrogate, not demonstrated strength, hypertrophy, recovery, long-term body composition or disease benefit.",
+            "Formal primary-versus-secondary rank is not reported in the retrieved primary abstract. The declared objective and direct controlled result support only an approved-unranked acute MPS finding under the existing rubric. No hidden registered hierarchy, prospective registration or full primary Methods review is asserted.",
+            "The precise source regimen is 0.30 g/kg LEAN body mass once after exercise. Absolute fixed dose values are intentionally empty; do not treat0.30g as an absolute dose, substitute total body weight, invent a daily minimum or use a reported mean as an efficacy threshold.",
+            "The full companion establishes calcium caseinate and the shared study; it adds no independent clinical replication. Primary/companion participant-count differences are retained without adding enrollment.",
+            "Whey-versus-caseinate equality is not formal equivalence, superior nutrition or universal interchangeable digestion. Milk allergy and every independent amount/Dose/safety hold remain separate."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "calcium_caseinate_24957889_bounded_noncredit",
+          "components": [
+            "INGR_CALCIUM_CASEINATE"
+          ],
+          "source_pmids": [
+            "24957889"
+          ],
+          "trial_family": "calcium_caseinate_reitelseder_21045172_24957889",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "24957889",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/24957889/",
+              "location": "Full official PMC3901252 companion: exact calcium caseinate and0.30 g/kg LBM exposure confirmed;12initial protein-period participants and8controls differ from primary abstract9protein-completers/8controls. Exploratory metabolomic findings do not independently establish lipid benefit or a second trial."
+            }
+          },
+          "limitations": [
+            "Full official PMC3901252 companion: exact calcium caseinate and0.30 g/kg LBM exposure confirmed;12initial protein-period participants and8controls differ from primary abstract9protein-completers/8controls. Exploratory metabolomic findings do not independently establish lipid benefit or a second trial.",
+            "Finished source-specific transfer assessment, not a universal null or a positive long-term training conclusion."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full official PMC3901252 companion: exact calcium caseinate and0.30 g/kg LBM exposure confirmed;12initial protein-period participants and8controls differ from primary abstract9protein-completers/8controls. Exploratory metabolomic findings do not independently establish lipid benefit or a second trial."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "calcium_caseinate_31152658_bounded_noncredit",
+          "components": [
+            "INGR_CALCIUM_CASEINATE"
+          ],
+          "source_pmids": [
+            "31152658"
+          ],
+          "trial_family": "calcium_caseinate_31152658",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "31152658",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/31152658/",
+              "location": "Official primary abstract and indexed Methods:30healthy men18–35 randomized double-blind to25g modified milk concentrate,standard concentrate or calcium caseinate after exercise. Four-hour MPS response not different between active groups(P=.548), while all arms rose from baseline. No no-protein placebo; preserve comparative-null and within-arm findings without inferring absence of caseinate benefit or independent positive replication. Full main Methods/Results not retrieved."
+            }
+          },
+          "limitations": [
+            "Official primary abstract and indexed Methods:30healthy men18–35 randomized double-blind to25g modified milk concentrate,standard concentrate or calcium caseinate after exercise. Four-hour MPS response not different between active groups(P=.548), while all arms rose from baseline. No no-protein placebo; preserve comparative-null and within-arm findings without inferring absence of caseinate benefit or independent positive replication. Full main Methods/Results not retrieved.",
+            "Finished source-specific transfer assessment, not a universal null or a positive long-term training conclusion."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary abstract and indexed Methods:30healthy men18–35 randomized double-blind to25g modified milk concentrate,standard concentrate or calcium caseinate after exercise. Four-hour MPS response not different between active groups(P=.548), while all arms rose from baseline. No no-protein placebo; preserve comparative-null and within-arm findings without inferring absence of caseinate benefit or independent positive replication. Full main Methods/Results not retrieved."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "calcium_caseinate_32751788_bounded_noncredit",
+          "components": [
+            "INGR_CALCIUM_CASEINATE"
+          ],
+          "source_pmids": [
+            "32751788"
+          ],
+          "trial_family": "calcium_caseinate_32751788",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "32751788",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/32751788/",
+              "location": "Full official PMC7468913:15healthy young men in randomized three-period double-blind crossover;40g calcium caseinate,micellar casein or cross-linked sodium caseinate. Amino-acid absorption differed by exact preparation. Absorption is not a strength/hypertrophy clinical outcome; cross-linked sodium caseinate is not generic sodium caseinate. No universal casein equivalence or general clinical credit."
+            }
+          },
+          "limitations": [
+            "Full official PMC7468913:15healthy young men in randomized three-period double-blind crossover;40g calcium caseinate,micellar casein or cross-linked sodium caseinate. Amino-acid absorption differed by exact preparation. Absorption is not a strength/hypertrophy clinical outcome; cross-linked sodium caseinate is not generic sodium caseinate. No universal casein equivalence or general clinical credit.",
+            "Finished source-specific transfer assessment, not a universal null or a positive long-term training conclusion."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independently checked by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full official PMC7468913:15healthy young men in randomized three-period double-blind crossover;40g calcium caseinate,micellar casein or cross-linked sodium caseinate. Amino-acid absorption differed by exact preparation. Absorption is not a strength/hypertrophy clinical outcome; cross-linked sodium caseinate is not generic sodium caseinate. No universal casein equivalence or general clinical credit."
+          }
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "32751788",
+          "doi": "10.3390/nu12082299",
+          "title": "Casein Protein Processing Strongly Modulates Post-Prandial Plasma Amino Acid Responses In Vivo in Humans.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32751788/",
+          "verification_source": "Live official MED content and source-specific original material; actual abstract/full-text scope retained in contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "31152658",
+          "doi": "10.1093/jn/nxz099",
+          "title": "The Degree of Aminoacidemia after Dairy Protein Ingestion Does Not Modulate the Postexercise Anabolic Response in Young Men: A Randomized Controlled Trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31152658/",
+          "verification_source": "Live official MED content and source-specific original material; actual abstract/full-text scope retained in contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "24957889",
+          "doi": "10.3390/metabo3010033",
+          "title": "Metabonomic Response to Milk Proteins after a Single Bout of Heavy Resistance Exercise Elucidated by 1H Nuclear Magnetic Resonance Spectroscopy.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24957889/",
+          "verification_source": "Live official MED content and source-specific original material; actual abstract/full-text scope retained in contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "21045172",
+          "doi": "10.1152/ajpendo.00513.2010",
+          "title": "Whey and casein labeled with L-[1-13C]leucine and muscle protein synthesis: effect of resistance exercise and protein ingestion.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21045172/",
+          "verification_source": "Live official MED content and source-specific original material; actual abstract/full-text scope retained in contexts."
+        }
+      ],
       "last_updated": "2026-11-10"
     }
   ]

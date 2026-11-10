@@ -609,8 +609,7 @@ def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, An
             authority = {**authority, "source_references": reference["source_references"]}
         return authority
     reference = nutritional_role_reference(canonical)
-    if (not reference or _norm(row.get("form_match_status")) != "mapped"
-            or any(row.get(key) is False for key in ("mapped", "mapped_identity", "scoreable_identity"))
+    if (not reference
             or _norm(row.get("identity_disposition")) in {"ambiguous", "identity_conflict"}):
         return None
     # The original label identity outranks an inferred standard name/form.
@@ -619,18 +618,48 @@ def nutrition_authority_for_row(row: Mapping[str, Any]) -> Optional[Dict[str, An
     tokens = source_key.split("_")
     if not source_key or any(token in {"d", "dl", "racemic"} for token in tokens):
         return None
-    forms = (iqm_reference_entry(canonical) or {}).get("forms") or {}
+    identity = iqm_reference_entry(canonical) or {}
+    forms = identity.get("forms") or {}
     form_name = _norm(row.get("matched_form"))
-    form = forms.get(form_name)
-    if not isinstance(form, dict) or parent_relationship(form):
-        return None
-    form_key = make_normalized_key(form_name)
-    if not form_key.startswith("l_"):
-        return None
-    aliases = [form_name, *(form.get("aliases") or [])]
-    qualified_keys = {make_normalized_key(value) for value in aliases if isinstance(value, str)}
     qualified_source = make_normalized_key(strip_label_identity_qualifiers(source))
-    if not qualified_source.startswith("l_") or qualified_source not in qualified_keys:
+    if not qualified_source.startswith("l_"):
+        return None
+    mapped_form = (_norm(row.get("form_match_status")) == "mapped"
+                   and not any(row.get(key) is False for key in
+                               ("mapped", "mapped_identity", "scoreable_identity")))
+    if mapped_form:
+        candidates = [(form_name, forms.get(form_name))]
+    elif (row.get("canonical_source_db") == "ingredient_quality_map"
+          and row.get("identity_disposition") == "clean"
+          and row.get("cleaner_row_role") == "nested_display_only"
+          and row.get("fallback_class") == "clinical_fail_safe"
+          and row.get("fallback_reason") == "nested_under_non_therapeutic_parent"
+          and re.fullmatch(r"ingredientRows\[\d+\](?:\.nestedRows\[\d+\])+",
+                           str(row.get("raw_source_path") or ""))
+          and row.get("dose_class") == "zero_or_np" and row.get("quantity") in (None, 0)
+          and _norm(row.get("form_match_status")) in {"", "n/a"}
+          and not any(row.get(key) for key in ("matched_form", "form_id", "matched_forms", "extracted_forms",
+                                               "source_label_form", "label_display_form", "unmapped_forms"))):
+        # D31 retains named undosed members for research even when the parent
+        # suppresses their Formulation/Dose projection. Resolve only the exact
+        # authored L-identity's nutritional role; never promote form or mass.
+        taxonomy = row.get("raw_taxonomy") or {}
+        if not isinstance(taxonomy, Mapping) or taxonomy.get("forms"):
+            return None
+        source_unii = str(row.get("uniiCode") or taxonomy.get("uniiCode") or "").strip().upper()
+        known_unii = str((identity.get("external_ids") or {}).get("unii") or "").strip().upper()
+        if source_unii and known_unii and source_unii != known_unii:
+            return None
+        candidates = list(forms.items())
+    else:
+        return None
+    qualified_forms = [key for key, form in candidates
+                       if isinstance(form, dict) and not parent_relationship(form)
+                       and make_normalized_key(key).startswith("l_")
+                       and qualified_source in {
+                           make_normalized_key(value) for value in [key, *(form.get("aliases") or [])]
+                           if isinstance(value, str)}]
+    if len(qualified_forms) != 1:
         return None
     return {"nutrient": canonical, "is_essential": True,
             "authority": reference["id"], "scope": "established_nutritional_role",
