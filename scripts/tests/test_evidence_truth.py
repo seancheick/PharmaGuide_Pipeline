@@ -36,7 +36,6 @@ def _enrich(pipeline, label):
 # Open review, Evidence 0: read "not established" before this, across the routes that had it.
 @pytest.mark.parametrize("label, module", [
     pytest.param("evidence_truth_252423_raw.json", "generic", id="generic"),
-    pytest.param("evidence_truth_253729_raw.json", "fiber_digestive", id="fiber"),
     pytest.param("evidence_truth_18174_raw.json", "probiotic", id="probiotic"),
 ])
 def test_an_open_review_reads_as_open(pipeline, label, module):
@@ -54,6 +53,27 @@ def test_an_open_review_reads_as_open(pipeline, label, module):
     assert evidence["display_state"] == "not_yet_reviewed"
     assert "review pending" in evidence["reason"]
     assert NOT_ESTABLISHED not in evidence["reason"]
+
+
+
+def test_completed_hcl_source_review_has_qualified_ph_research(pipeline):
+    from assessment_readiness import evidence_review_open
+    from clinical_applicability import reviewed_entries
+    from scoring_v4.scored_artifact import build_scored_artifact
+
+    scored = build_scored_artifact(_enrich(pipeline, "evidence_truth_253729_raw.json"))
+    evidence = scored["quality_pillars_v4"]["evidence"]
+    assert scored["_v4_module_breakdown"]["module"] == "fiber_digestive"
+    assert scored["quality_assessment_status"] == "complete"
+    assert not evidence_review_open(scored["assessment_readiness"]["release_assessment"])
+    assert evidence["score"] > 0
+    assert evidence["evidence_result_state"] == "evaluated_applicable"
+    assert evidence["display_state"] == "assessed"
+    assert "review pending" not in evidence["reason"]
+    record = reviewed_entries()["PRECLIN_BETAINE_HCL"]
+    assert record["health_goals_supported"] == []
+    assert {p for c in record["study_contexts"] if c["scoring_eligible"]
+            for p in c["source_pmids"]} == {"31485804"}
 
 
 def test_coq10_credit_is_independent_of_the_advertised_purpose(pipeline):

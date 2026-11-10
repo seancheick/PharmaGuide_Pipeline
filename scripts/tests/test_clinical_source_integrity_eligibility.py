@@ -7,6 +7,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import evidence_resolver as er
+from clinical_evidence_schema import validate_ingredient_context
+from probiotic_measurements import context_review_finished
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.scored_artifact import build_scored_artifact
 
@@ -279,7 +281,7 @@ def test_completed_source_facts_remove_unrelated_benefit_endpoints(completion_so
     assert wrong not in ' '.join(completion_source_records[rid]['key_endpoints'])
 
 
-@pytest.mark.parametrize('rid', ['INGR_SLIPPERY_ELM', 'INGR_MOLYBDENUM', 'INGR_PROPOLIS', 'INGR_VITAMIN_E', 'PRECLIN_BETAINE_HCL'])
+@pytest.mark.parametrize('rid', ['INGR_SLIPPERY_ELM', 'INGR_MOLYBDENUM', 'INGR_PROPOLIS', 'INGR_VITAMIN_E'])
 def test_no_generic_benefit_from_combination_topical_risk_or_pk_reference(completion_source_records, rid):
     r = completion_source_records[rid]
     assert r['study_type'] == 'reference'
@@ -1155,7 +1157,7 @@ def test_glutamine_older_women_review_finishes_without_borrowing_ibs_credit():
     assert qualifying_purpose_outcomes(context) == ([], False)
     assert not assess_clinical_source_review(record)['is_complete']
     assert {c['source_pmids'][0] for c in record['study_contexts'] if not context_review_finished(c)} == {
-        '38193521', '34844156', '42366260', '41053591', '38243579'}
+        '34844156', '38243579'}
 
 
 def test_betaine_limited_published_finding_finishes_with_scoped_positive_and_null_outcomes():
@@ -2000,6 +2002,181 @@ def test_msm_documented_population_exclusions_use_existing_population_owner(reco
     assert assess_context_population(product, context) == expected
 
 
+@pytest.mark.parametrize('pmid', ['38193521', '42366260', '41053591'])
+def test_registered_glutamine_review_finishes_without_raw_data_or_recursive_primary_gate(pmid):
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_L_GLUTAMINE']
+    context = next(c for c in record['study_contexts'] if c['source_pmids'] == [pmid])
+    assert context['review_status'] == 'rejected_source'
+    assert context['scoring_eligible'] is False
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert not assess_clinical_source_review(record)['is_complete']
+    assert {p for c in record['study_contexts'] if not context_review_finished(c)
+            for p in c['source_pmids']} == {'34844156', '38243579'}
+    original = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
+    assert original['scoring_eligible'] is True
+    assert record['effect_direction'] == 'positive_moderate'
+
+
+def test_betaine_hcl_uses_its_salt_identifier_and_only_qualified_primary_ph_source():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    entries = reviewed_entries()
+    record = entries['PRECLIN_BETAINE_HCL']
+    assert record['external_ids']['unii'] == 'JK8U8K4D6K'
+    assert record['external_ids']['unii'] != entries['PRECLIN_BETAINE_ANHYDROUS']['external_ids']['unii']
+    assert record['study_type'] == 'rct_single'
+    assert record['effect_direction'] == 'positive_weak'
+    assert 'primary_outcome' not in record  # No coarse digestive-benefit category from a pH surrogate.
+    assert record['effect_direction_confidence'] == 'low'
+    eligible = [c for c in record['study_contexts'] if c['scoring_eligible']]
+    assert len(eligible) == 1 and eligible[0]['source_pmids'] == ['31485804']
+    assert eligible[0]['dose']['values'] == [4500]
+    assert eligible[0]['dose']['dose_basis'] == 'single_challenge'
+    assert all(validate_ingredient_context(c, require_complete_review=True) == []
+               for c in record['study_contexts'])
+    assert assess_clinical_source_review(record)['is_complete']
+
+
+def test_cee_retains_mixed_published_findings_without_new_salt_prefix_or_trial_count():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_CREATINE_ETHYL_ESTER']
+    assert record['effect_direction'] == 'mixed'
+    assert record['effect_direction_confidence'] == 'low'
+    assert record['total_enrollment'] is None
+    context = record['study_contexts'][0]
+    assert context['source_pmids'] == ['19228401'] and context['scoring_eligible']
+    assert context['sample_size'] == 30  # Three arms of ten completers; not nine.
+    assert 'matched' not in context['study_design'].casefold()
+    assert context['trial_family'] == 'desai_2024_creatine_resistance_training_review'
+    assert {o['direction'] for o in context['outcomes']} >= {'positive', 'null'}
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert assess_clinical_source_review(record)['is_complete']
+
+
+def test_peg_finished_within_arm_review_keeps_unread_sources_open():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_PEG_CREATINE']
+    assert record['scoring_eligible'] is False
+    completed = next(c for c in record['study_contexts'] if c['source_pmids'] == ['23897021'])
+    assert completed['review_status'] == 'rejected_source'
+    assert context_review_finished(completed)
+    assert {p for c in record['study_contexts'] if not context_review_finished(c)
+            for p in c['source_pmids']} == {'19387397', '21068676'}
+    assert not assess_clinical_source_review(record)['is_complete']
+
+
+def test_hcl_primary_ph_research_credit_is_independent_of_claim_and_lower_retail_amount():
+    from copy import deepcopy
+    from clinical_applicability import reviewed_entries
+    from scoring_v4.modules.generic_evidence import score_evidence
+    row = {'name': 'Betaine Hydrochloride', 'standard_name': 'Betaine Hydrochloride',
+           'canonical_id': 'tmg_betaine', 'quantity': 750, 'unit': 'mg',
+           'raw_source_text': 'Betaine Hydrochloride', 'source_label_name': 'Betaine Hydrochloride',
+           'raw_source_path': 'activeIngredients[0]', 'source_section': 'activeIngredients', 'role': 'primary'}
+    product = {'fullName': 'Betaine HCl', 'targetGroups': ['Adults'], 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    match = {**deepcopy(reviewed_entries()['PRECLIN_BETAINE_HCL']), 'ingredient': row['name'],
+             'matched_source_row_refs': [row['raw_source_path']], 'matched_canonical_ids': ['tmg_betaine']}
+    before = deepcopy(product)
+    result = score_evidence(product, accepted_matches=[match], apply_primary_floor=False)
+    assert result['score'] > 0
+    receipt = next(r for r in result['metadata']['contributing_record_assessments']
+                   if r['id'] == 'PRECLIN_BETAINE_HCL')
+    assert {str(r['pmid']) for r in receipt['source_references']} == {'31485804'}
+    assert receipt['source_review']['is_complete'] is True
+    assert product == before
+
+
+@pytest.mark.parametrize('record_id,canonical,name,groups,eligible', [
+    ('PRECLIN_BETAINE_HCL', 'tmg_betaine', 'Betaine Hydrochloride', ['Adults'], True),
+    ('PRECLIN_BETAINE_HCL', 'tmg_betaine', 'Betaine Anhydrous', ['Adults'], False),
+    ('PRECLIN_BETAINE_HCL', 'tmg_betaine', 'Betaine Hydrochloride', ['Children 4–8'], False),
+    ('INGR_CREATINE_ETHYL_ESTER', 'creatine_monohydrate', 'Creatine Ethyl Ester', ['Adults'], True),
+    ('INGR_CREATINE_ETHYL_ESTER', 'creatine_monohydrate', 'Creatine Ethyl Ester HCl', ['Adults'], True),
+    ('INGR_CREATINE_ETHYL_ESTER', 'creatine_monohydrate', 'Creatine Hydrochloride', ['Adults'], False),
+    ('INGR_CREATINE_ETHYL_ESTER', 'creatine_monohydrate', 'Creatine Monohydrate', ['Adults'], False),
+])
+def test_new_hcl_and_cee_findings_use_existing_physical_scope_without_dose_curve(record_id, canonical, name, groups, eligible):
+    from clinical_applicability import reviewed_entries
+    from dose_assessment import positive_clinical_benchmark
+    product = _tyrosine_scoring_product(name=name)
+    row = product['activeIngredients'][0]
+    row.update(canonical_id=canonical, standard_name=name, matched_form=name)
+    product['targetGroups'] = groups
+    record = reviewed_entries()[record_id]
+    matches = [{**record, 'ingredient': name, 'matched_canonical_ids': [canonical],
+                'matched_source_row_refs': [row['raw_source_path']]}]
+    product['evidence_data'] = {'clinical_matches': matches}
+    before = copy.deepcopy(product)
+    result = score_evidence(product, accepted_matches=matches, apply_primary_floor=False)
+    assert (result['score'] > 0) is eligible
+    assert positive_clinical_benchmark(product, row) is None
+    assert product == before
+
+
+def test_real_peg_reference_cannot_finish_its_two_unread_sources():
+    from assessment_readiness import _resolved_evidence_assessment
+    row = {'canonical_id': 'creatine_monohydrate', 'name': 'PEG-Creatine System',
+           'raw_source_text': 'PEG-Creatine System', 'source_label_name': 'PEG-Creatine System',
+           'raw_source_path': 'activeIngredients[0]', 'source_section': 'activeIngredients'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert not resolution.points_eligible
+    assert _resolved_evidence_assessment(resolution)[0] == 'not_yet_evaluated'
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+def test_cee_and_monohydrate_overlap_does_not_add_independent_research_units(reverse):
+    from clinical_applicability import reviewed_entries
+    entries = reviewed_entries()
+
+    def evaluate(items):
+        rows, matches = [], []
+        for index, (record_id, canonical, name) in enumerate(items):
+            path = f'activeIngredients[{index}]'
+            row = {'name': name, 'standard_name': name, 'canonical_id': canonical,
+                   'raw_source_text': name, 'source_label_name': name, 'raw_source_path': path,
+                   'source_section': 'activeIngredients', 'quantity': 3000, 'unit': 'mg', 'role': 'primary'}
+            rows.append(row)
+            matches.append({**copy.deepcopy(entries[record_id]), 'ingredient': name,
+                            'matched_canonical_ids': [canonical], 'matched_source_row_refs': [path]})
+        product = {'fullName': 'Ingredient research control', 'targetGroups': ['Adults 18–45'],
+                   'activeIngredients': rows, 'ingredient_quality_data': {'ingredients_scorable': rows},
+                   'evidence_data': {'clinical_matches': matches}}
+        before = copy.deepcopy(product)
+        result = score_evidence(product, accepted_matches=matches, apply_primary_floor=False)
+        assert product == before
+        return result
+
+    mono = ('INGR_CREATINE_MONOHYDRATE', 'creatine_monohydrate', 'Creatine Monohydrate')
+    cee = ('INGR_CREATINE_ETHYL_ESTER', 'creatine_monohydrate', 'Creatine Ethyl Ester')
+    hcl = ('PRECLIN_BETAINE_HCL', 'tmg_betaine', 'Betaine Hydrochloride')
+    single_mono, single_cee = evaluate([mono]), evaluate([cee])
+    assert single_mono['score'] > 0 and single_cee['score'] > 0
+    pair = [mono, cee]
+    independent = [cee, hcl]
+    if reverse:
+        pair.reverse()
+        independent.reverse()
+    combined = evaluate(pair)
+    for component in ('clinical_evidence_pipeline', 'depth_bonus'):
+        assert combined['components'][component] <= max(
+            single_mono['components'][component], single_cee['components'][component])
+    assert combined['score'] <= max(single_mono['score'], single_cee['score'])
+    assert evaluate(independent)['components']['clinical_evidence_pipeline'] > single_cee['components']['clinical_evidence_pipeline']
+
+
+def test_hcl_pk_references_stay_noneligible_beside_the_new_primary_ph_finding():
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()['PRECLIN_BETAINE_HCL']
+    assert record['health_goals_supported'] == []
+    for context in record['study_contexts']:
+        expected = context['source_pmids'] == ['31485804']
+        assert er.clinical_record_sources_eligible(
+            record, context=context, source_pmids=context['source_pmids']) is expected
+        if not expected:
+            assert context_review_finished(context)
+            assert context['scoring_eligible'] is False
 def test_glycine_bounded_human_assessment_finishes_without_borrowed_review_depth():
     from clinical_applicability import assess_clinical_source_review, reviewed_entries
     from clinical_evidence_schema import validate_ingredient_context
