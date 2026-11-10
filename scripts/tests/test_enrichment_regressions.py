@@ -23,16 +23,13 @@ def _reviewed_studies(monkeypatch, *studies):
     record without reviewed contexts never scores
     (clinical_applicability: clinical_source_contexts_missing), and the
     applicability owner reads records from the registry, so the synthetic
-    records are registered there too."""
+    records are registered there too. Since 2026-11-06 an approved context
+    earns credit only when it is bound to that registered row (a68ba9a61) and
+    passes the complete scientific schema (12dcf71b1), so contexts come from
+    the shared synthetic-approval fixture."""
     import clinical_applicability
-    reviewed = [{**study, "published_studies": ["1"], "study_contexts": [{
-        "review_status": "clinician_approved", "scoring_eligible": True,
-        "clinical_review": {"reviewer": "Synthetic test reviewer", "reviewed_at": "2026-10-28",
-                            "scope": "identity_dose_outcome_applicability"},
-        "source_pmids": ["1"], "condition": "general_health",
-        "population": {"description": "healthy adults"},
-        "outcomes": [{"name": "Primary outcome", "hierarchy": "primary", "direction": "positive"}],
-    }]} for study in studies]
+    from test_evidence_resolver import _approved_test_source
+    reviewed = [_approved_test_source(study) for study in studies]
     monkeypatch.setattr(clinical_applicability, "reviewed_entries",
                         lambda: {study["id"]: study for study in reviewed})
     return reviewed
