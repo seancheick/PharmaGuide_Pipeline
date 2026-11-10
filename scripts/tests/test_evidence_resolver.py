@@ -1717,11 +1717,11 @@ def test_unfinished_mixed_literature_reviews_remain_pending(canonical):
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
 
 
-def test_glutamine_known_source_does_not_finish_unread_siblings_or_infer_source_form():
+def test_glutamine_finished_source_review_does_not_infer_missing_source_form():
     result = er.resolve_evidence_for_canonical("l_glutamine")
     assert result.owner_facts["backed_clinical_studies"]["effect_directions"] == ["positive_moderate"]
     assert not result.points_eligible
-    assert "clinical_sources_ineligible" in result.blocking_reasons
+    assert "clinical_sources_ineligible" not in result.blocking_reasons
     assert "clinical_source_row_unresolved" in result.blocking_reasons
 
 
@@ -2425,7 +2425,10 @@ def test_principal_protein_source_without_projection_marker_remains_unfinished(c
                'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
     result = er.resolve_evidence_for_row(row, product)
     assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
-    assert result.reason_code == 'primary_nutritional_ingredient_requires_source_review'
+    # A reviewed calcium-caseinate source cannot identify an unspecified casein label.
+    expected = ('clinical_source_label_unresolved' if canonical == 'casein'
+                else 'primary_nutritional_ingredient_requires_source_review')
+    assert result.reason_code == expected
     assert _resolved_evidence_assessment(result)[0] == EVIDENCE_NOT_YET_EVALUATED
     assert result.points_eligible is False
 
@@ -2519,3 +2522,60 @@ def test_glutathione_canonical_alone_does_not_invent_label_preparation():
     assert not result.points_eligible
     assert result.blocking_reasons == ["clinical_source_row_unresolved"]
     assert result.owner_facts["backed_clinical_studies"]
+
+
+def _named_undosed_eaa(canonical='l_isoleucine', name='L-Isoleucine', **changes):
+    # Actual25592 D31 subject: identity retained, form scoring deliberately suppressed by its parent.
+    return {'canonical_id': canonical, 'canonical_source_db': 'ingredient_quality_map',
+            'name': name, 'raw_source_text': name, 'raw_source_path': 'ingredientRows[24].nestedRows[2]',
+            'source_section': 'active', 'cleaner_row_role': 'nested_display_only',
+            'fallback_class': 'clinical_fail_safe', 'fallback_reason': 'nested_under_non_therapeutic_parent',
+            'identity_disposition': 'clean', 'cleaner_match_method': 'unii_exact_match',
+            'mapped': False, 'mapped_identity': False, 'scoreable_identity': False,
+            'matched_form': None, 'form_match_status': 'n/a', 'quantity': 0, 'unit': 'NP',
+            'dose_class': 'zero_or_np', **changes}
+
+
+@pytest.mark.parametrize('canonical,name,_form', _EAA_FORMS)
+def test_named_undosed_eaa_keeps_established_role_without_form_or_amount_promotion(canonical, name, _form):
+    import copy
+    row = _named_undosed_eaa(canonical, name)
+    before = copy.deepcopy(row)
+    facts = er.nutrition_authority_for_row(row)
+    assert facts and facts['nutrient'] == canonical
+    assert facts['source_references'][0]['doi'] == '10.17226/10490'
+    result = er.resolve_evidence_for_row(row, {'activeIngredients': [row]})
+    assert result.points_eligible is False
+    assert result.owner_facts['nutrition_authority']['scope'] == 'established_nutritional_role'
+    assert row == before
+    assert row['quantity'] == 0 and row['mapped'] is False and row['matched_form'] is None
+
+
+@pytest.mark.parametrize('changes', [
+    {'raw_source_text': 'Isoleucine'}, {'raw_source_text': 'D-Isoleucine'},
+    {'raw_source_text': 'DL-Isoleucine'}, {'raw_source_text': 'L-Alloisoleucine'},
+    {'raw_source_text': '4-Hydroxy-L-Isoleucine'}, {'raw_source_text': 'L-Isoleucine nitrate'},
+    {'source_section': 'inactive'}, {'is_excipient': True}, {'identity_disposition': 'ambiguous'},
+    {'identity_disposition': 'identity_conflict'}, {'raw_source_path': None},
+    {'cleaner_row_role': 'active_scorable'}, {'fallback_reason': 'identity_unresolved'},
+    {'canonical_source_db': 'unverified'}, {'matched_form': 'different derivative'},
+    {'form_match_status': 'unmapped'}, {'quantity': 150, 'unit': 'mg', 'dose_class': 'therapeutic_mass'},
+    {'raw_taxonomy': ['invalid']}, {'raw_taxonomy': {'forms': [{'name': 'D-Isoleucine'}]}},
+    {'source_label_form': 'D-Isoleucine'}, {'raw_taxonomy': {'uniiCode': 'conflicting identity'}},
+])
+def test_named_undosed_eaa_never_rescues_generic_conflicted_or_different_preparations(changes):
+    assert er.nutrition_authority_for_row(_named_undosed_eaa(**changes)) is None
+
+
+def test_calcium_glucarate_finished_search_keeps_mixture_rct_and_case_findings_noncausal():
+    from assessment_readiness import _resolved_evidence_assessment
+    record = er._load_literature_evidence()['calcium_d_glucarate']
+    assert record['applicability_status'] == 'no_qualifying_human_evidence'
+    assert record['effect_direction'] is None and record['qualifying_human_studies'] == []
+    assert '21234288' in str(record) and '24103703' in str(record) and '41103795' in str(record)
+    assert 'standalone' in record['applicability_decision'].lower()
+    row, product = _excluded_preparation_product('Calcium D-Glucarate', 'calcium_d_glucarate', None)
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert result.disposition == EvidenceDisposition.NO_QUALIFYING_HUMAN_EVIDENCE.value
+    assert _resolved_evidence_assessment(result)[0] == 'evaluated_limited_or_negative'

@@ -13772,12 +13772,12 @@
     {
       "canonical_id": "calcium_d_glucarate",
       "material_form": "Calcium D-Glucarate",
-      "search_query": "calcium d-glucarate clinical trial randomized human",
-      "search_date": "2026-09-20",
+      "search_query": "(\"calcium D-glucarate\" OR \"calcium glucarate\")",
+      "search_date": "2026-11-10",
       "databases_searched": [
-        "PubMed"
+        "Europe PMC MED and indexed primary sources"
       ],
-      "records_screened": 14,
+      "records_screened": 91,
       "qualifying_human_studies": [],
       "effect_direction": null,
       "population_context": "adults",
@@ -13785,15 +13785,16 @@
         "values": [],
         "unit": "mg"
       },
-      "applicability_decision": "Preclinical beta-glucuronidase inhibition and hepatic glucuronidation data; reproducible search found zero qualifying randomized human clinical trials; applicability unestablished.",
+      "applicability_decision": "Limited bounded search identified no qualifying standalone randomized oral calcium D-glucarate efficacy trial. Human research exists: PMID21234288 is a multi-ingredient randomized trial, PMID24103703 a retrospective multi-nutrient comparison, and PMID41103795 a multi-intervention case report. Their reported favorable and null hormone-surrogate changes cannot isolate calcium D-glucarate or establish cancer prevention. The21234288 erratum corrects other formula components; calcium D-glucarate remains75mg/capsule, two/day, not a general Dose benchmark. Body98recruited/68analyzed differs from abstract96; printed within-arm p-values do not become a new between-group treatment effect. PMID41155501 does not establish administered calcium D-glucarate merely because urinary D-glucaric acid changed. Preclinical, in-vitro and mechanistic reports do not supply standalone oral clinical efficacy. This is no qualifying isolated trial identified within this search, not no human research or a demonstrated universal null.",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+        "verified_at": "2026-11-10T15:04:18.331707+00:00",
         "all_pmids_verified": true,
-        "retractions_found": false
+        "retractions_found": false,
+        "notes": "Actual live indexed identifiers/content and 91-record exact-name search retained; full primary24103703 and21234288/correctionPMC3366864 independently read;41103795 abstract only;41155501 full Methods/Table8 shows no established CDG exposure. Primary references: https://pubmed.ncbi.nlm.nih.gov/21234288/ ; https://pubmed.ncbi.nlm.nih.gov/24103703/ ; https://pubmed.ncbi.nlm.nih.gov/41103795/ . This supersedes the automated empty-list verification; old receipt remains in git/private source snapshot. No standalone efficacy grade, Dose curve or safety clearance."
       },
-      "applicability_status": "applicability_unestablished"
+      "applicability_status": "no_qualifying_human_evidence"
     },
     {
       "canonical_id": "organ_extracts",

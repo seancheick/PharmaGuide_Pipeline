@@ -1070,7 +1070,18 @@ def test_tyrosine_unread_methods_remain_open_until_their_own_review(monkeypatch)
 
 
 @pytest.mark.parametrize('claim', ['', 'L-Glutamine Muscle Recovery', 'L-Glutamine IBS Support'])
-def test_approved_glutamine_context_earns_claim_independent_credit_while_other_review_stays_open(claim):
+def test_approved_glutamine_context_earns_claim_independent_credit_while_other_review_stays_open(claim, monkeypatch):
+    import clinical_applicability as ca
+    entries = ca.reviewed_entries()
+    pending = copy.deepcopy(entries['INGR_L_GLUTAMINE'])
+    sibling = next(c for c in pending['study_contexts'] if c['source_pmids'] == ['34844156'])
+    sibling['review_status'] = 'source_verified_pending_clinical_review'
+    sibling['clinical_review']['reviewer'] = 'Synthetic unread-sibling mechanics control, not current scientific status'
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {**entries, pending['id']: pending})
+    index = er._backed_studies_index()
+    patched = {key: [pending if r.get('id') == pending['id'] else r for r in rows]
+               for key, rows in index.items()}
+    monkeypatch.setattr(er, '_backed_studies_index', lambda: patched)
     from clinical_applicability import reviewed_entries, assess_clinical_source_review
     record = reviewed_entries().get('INGR_L_GLUTAMINE')
     assert record is not None
@@ -1096,12 +1107,12 @@ def test_approved_glutamine_context_earns_claim_independent_credit_while_other_r
 @pytest.mark.parametrize('name', ['N-Acetyl-L-Glutamine', 'Sustamine L-Alanyl-L-Glutamine',
                                   'Glutamine Complex', 'D-Glutamine', 'L-Glutamine Hydrochloride',
                                   'L-Glutamine HCl', 'L-Glutamine Ethyl Ester', 'Glutamine AKG', 'Glutamine Peptide'])
-def test_glutamine_derivatives_do_not_borrow_trial_or_finish_their_pending_research(name):
+def test_glutamine_derivatives_finish_only_parent_transfer_scope_without_borrowing_ibs_trial(name):
     product = _glutamine_scoring_product(name=name)
     artifact = build_scored_artifact(product)
     assert artifact['quality_pillars_v4']['evidence']['score'] == 0
-    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
-    assert artifact['quality_assessment_status'] == 'partial'
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    assert 'evidence_assessment_incomplete' not in artifact['assessment_readiness']['release_assessment']['blockers']
 
 
 def test_glutamine_interpretation_needs_exact_verified_selected_context():
@@ -1155,9 +1166,8 @@ def test_glutamine_older_women_review_finishes_without_borrowing_ibs_credit():
     assert context['dose']['duration_days'] == 30
     assert {o['outcome_role'] for o in context['outcomes']} == {'within_group_change'}
     assert qualifying_purpose_outcomes(context) == ([], False)
-    assert not assess_clinical_source_review(record)['is_complete']
-    assert {c['source_pmids'][0] for c in record['study_contexts'] if not context_review_finished(c)} == {
-        '34844156'}
+    assert assess_clinical_source_review(record)['is_complete']
+    assert all(context_review_finished(c) for c in record['study_contexts'])
 
 
 def test_betaine_limited_published_finding_finishes_with_scoped_positive_and_null_outcomes():
@@ -1226,7 +1236,7 @@ def test_glutamine_bounded_transfer_reviews_finish_without_lending_combination_o
     if pmid == '40748005':
         assert 'abstract' in context['clinical_review']['basis'].lower()
     # Other source obligations and the original narrow IBS decision remain separate.
-    assert not assess_clinical_source_review(record)['is_complete']
+    assert assess_clinical_source_review(record)['is_complete']
     ibs = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
     assert ibs['scoring_eligible'] is True
     assert record['effect_direction'] == 'positive_moderate'
@@ -2010,9 +2020,8 @@ def test_registered_glutamine_review_finishes_without_raw_data_or_recursive_prim
     assert context['review_status'] == 'rejected_source'
     assert context['scoring_eligible'] is False
     assert validate_ingredient_context(context, require_complete_review=True) == []
-    assert not assess_clinical_source_review(record)['is_complete']
-    assert {p for c in record['study_contexts'] if not context_review_finished(c)
-            for p in c['source_pmids']} == {'34844156'}
+    assert assess_clinical_source_review(record)['is_complete']
+    assert all(context_review_finished(c) for c in record['study_contexts'])
     original = next(c for c in record['study_contexts'] if c['source_pmids'] == ['30108163'])
     assert original['scoring_eligible'] is True
     assert record['effect_direction'] == 'positive_moderate'
@@ -2381,7 +2390,7 @@ def test_glutamine_burn_abstract_review_does_not_invent_route_or_erase_reported_
     assert record['effect_direction'] == 'positive_moderate'
     assert {p for c in record['study_contexts'] if c.get('scoring_eligible') is True
             for p in c['source_pmids']} == {'30108163'}
-    assert not assess_clinical_source_review(record)['is_complete']
+    assert assess_clinical_source_review(record)['is_complete']
 
 
 @pytest.mark.parametrize('name', ['Creatine', 'Creatine Complex', 'Micronized Creatine'])
@@ -2398,13 +2407,18 @@ def test_finished_peg_reference_cannot_finish_unestablished_other_creatine_prepa
     assert product == before
 
 
-def test_glutamine_biomarker_publications_share_conservative_family_and_remain_held():
+def test_glutamine_registered_secondary_review_finishes_with_numerical_hold_preserved():
     from clinical_applicability import reviewed_entries
     record = reviewed_entries()['INGR_L_GLUTAMINE']
     context = next(c for c in record['study_contexts'] if c['source_pmids'] == ['34844156'])
     assert 'one overlapping trial family' in ' '.join(context['limitations'])
     assert context['scoring_eligible'] is False
-    assert not context_review_finished(context)
+    assert context_review_finished(context)
+    assert context['review_status'] == 'rejected_source'
+    assert 'IRCT2016092129895N1' in str(context)
+    assert 'secondary' in str(context).lower()
+    assert 'retrospective' in str(context).lower()
+    assert 'Exhaustive exercise time' in str(context)
     assert 'favorable between-group biomarker findings' in ' '.join(context['limitations'])
     assert 'explicitly withheld' in ' '.join(context['limitations'])
     assert 'Later publication alone does not establish' in ' '.join(context['limitations'])
@@ -2589,3 +2603,74 @@ def test_carnosine_glycemic_sources_cannot_lend_credit_to_other_preparations(nam
     product = {'fullName':name,'activeIngredients':[row],
                'ingredient_quality_data':{'ingredients_scorable':[row]}}
     assert build_scored_artifact(product)['quality_pillars_v4']['evidence']['score'] == 0
+
+
+def test_guanidinoacetate_reference_finishes_source_disposition_without_primary_or_efficacy_invention():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    from assessment_readiness import _resolved_evidence_assessment
+    record = reviewed_entries()['INGR_GUANIDINOACETATE']
+    assert record['evidence_level'] == record['study_type'] == 'reference'
+    assert record.get('effect_direction') is None
+    assert record['total_enrollment'] is None
+    assert record['health_goals_supported'] == []
+    assert len(record['study_contexts']) == 6
+    assert all(context_review_finished(c) and c['scoring_eligible'] is False for c in record['study_contexts'])
+    assert assess_clinical_source_review(record)['is_complete']
+    serum = next(c for c in record['study_contexts'] if c['source_pmids'] == ['23329885'])
+    assert 'serum creatine' in str(serum).lower()
+    assert 'muscle power' in str(serum).lower()
+    assert 'homocysteine' in str(serum).lower()
+    row = {'canonical_id': 'guanidinoacetate', 'name': 'Guanidinoacetic Acid',
+           'raw_source_text': 'Guanidinoacetic Acid', 'raw_source_path': 'ingredientRows[0]',
+           'source_section': 'active', 'quantity': 500, 'unit': 'mg',
+           'mapped': True, 'mapped_identity': True, 'identity_disposition': 'clean'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    before = copy.deepcopy(product)
+    result = er.resolve_evidence_for_row(row, product)
+    assert result.points_eligible is False
+    assert _resolved_evidence_assessment(result)[0] == 'evaluated_limited_or_negative'
+    assert product == before
+
+
+def test_completed_glutamine_source_review_retains_only_original_ibs_credit():
+    from clinical_applicability import reviewed_entries, assess_clinical_source_review
+    record = reviewed_entries()['INGR_L_GLUTAMINE']
+    assert assess_clinical_source_review(record)['is_complete']
+    product = _glutamine_scoring_product()
+    result = score_evidence(product, apply_primary_floor=True)
+    receipt = next(r for r in result['metadata']['contributing_record_assessments'] if r['id'] == record['id'])
+    assert receipt['source_review']['is_complete']
+    assert {str(r['pmid']) for r in receipt['source_references']} == {'30108163'}
+    assert build_scored_artifact(product)['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+def test_calcium_caseinate_acute_unranked_source_never_becomes_fixed_dose_or_other_casein_credit():
+    from clinical_applicability import reviewed_entries
+    from dose_assessment import positive_clinical_benchmark
+    record = reviewed_entries()['INGR_CALCIUM_CASEINATE']
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['effect_direction_confidence'] == 'low'
+    eligible = [c for c in record['study_contexts'] if c['scoring_eligible']]
+    assert len(eligible) == 1 and eligible[0]['source_pmids'] == ['21045172']
+    context = eligible[0]
+    assert context['outcomes'][0]['hierarchy'] == 'not_reported'
+    assert context['outcomes'][0]['kind'] == 'surrogate'
+    assert context['dose']['values'] == []  # No invented absolute dose from the LBM-normalized protocol.
+    assert '0.30 g/kg lean body mass' in context['dose']['administration_frequency']
+    assert record['reference_semantics']['reference_type'] == 'no_benchmark'
+    row = {'canonical_id': 'casein', 'name': 'Calcium Caseinate', 'raw_source_text': 'Calcium Caseinate',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active',
+           'mapped': True, 'mapped_identity': True, 'identity_disposition': 'clean',
+           'quantity': 12000, 'unit': 'mg'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    assert er.resolve_evidence_for_row(row, product).points_eligible
+    assert positive_clinical_benchmark(product, row) is None
+    for other in ['Micellar Casein', 'Sodium Caseinate', 'Casein Hydrolysate']:
+        different = {**row, 'name': other, 'raw_source_text': other}
+        from clinical_applicability import assess_clinical_applicability
+        source = {**record, 'ingredient': other, 'matched_canonical_ids': ['casein'],
+                  'matched_source_row_refs': [different['raw_source_path']]}
+        decision = assess_clinical_applicability({'activeIngredients': [different]}, source,
+                                                 assess_amount=False, require_claim_alignment=False)
+        assert decision['status'] == 'not_applicable'
+        assert decision['reason_code'] in {'clinical_form_excluded', 'clinical_preparation_mismatch'}
