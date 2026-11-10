@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-11-09",
+    "last_updated": "2026-11-10",
     "total_entries": 220,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
@@ -38489,15 +38489,15 @@
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "Conventional/alternative lipid markers (PMID: 30239559; 18985059)"
+        "Lipid markers: LDL cholesterol, calculated non-HDL cholesterol and apolipoprotein B (qualified PMID: 30239559)"
       ],
       "health_goals_supported": [
         "Cardiovascular/Heart Health"
       ],
-      "notes": "Strong evidence base for LDL-lowering and bowel-regularity outcomes; supports cardiometabolic and GI-health use. Retained-source scope and limitations: Conventional/alternative lipid markers in psyllium syntheses; retained sources do not themselves establish bowel/glycemia endpoints (PMID: 30239559; 18985059)",
-      "notable_studies": "Systematic review/meta-analysis evidence shows psyllium lowers LDL cholesterol and related lipid targets. Key pooled analyses include PMID 30239559 and PMID 18985059, which support cardiometabolic use when soluble-fiber dosing is adequate.",
+      "notes": "Qualified retained-source findings concern LDL cholesterol, calculated non-HDL cholesterol and apolipoprotein B. These lipid-marker results do not establish cardiovascular event prevention, bowel regularity or glycemic treatment from this source set. The older 18985059 review remains unqualified bibliography; see source-specific limitations.",
+      "notable_studies": "PMID 30239559 reports positive pooled lipid-marker effects with moderate GRADE certainty for LDL/non-HDL and high certainty for apoB. Mixed adult and pediatric populations, heterogeneous preparations, background therapies and source discrepancies remain explicit. No minimum effective amount or universal regimen was established.",
       "study_type": "systematic_review_meta",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-10",
       "references_structured": [
         {
           "type": "pubmed",
@@ -38567,19 +38567,174 @@
           "evidence_grade": "meta_analysis",
           "retracted": false,
           "supports_claims": [],
-          "verification_source": "pubmed_eutils"
+          "verification_source": "pubmed_eutils",
+          "scoring_eligible": false,
+          "notes": "Full primary Methods and included-study membership remain unread after publisher and repository access attempts. Retained as bibliography only; not a rejected or negative study. No independent clinical credit or summed trial count until source qualification. The independently reviewed 30239559 lipid synthesis alone contributes."
         }
       ],
       "effect_direction": "positive_strong",
       "primary_outcome": "Cardiovascular/Heart Health",
-      "total_enrollment": 200,
-      "registry_completed_trials_count": 68,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Source-content attribution reconciled against retained primary references on2026-10-23. Current descriptive direction: positive_strong. Actual measured outcomes and source limitations are recorded separately. This is not attributable clinician approval; existing clinical context holds remain.",
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Positive pooled lipid-marker direction in independently source-reviewed PMID 30239559; moderate LDL/non-HDL certainty and substantial heterogeneity constrain confidence. This is one contributing review family, not 28 independently qualified cohorts or clinical-event evidence. Agent review under existing policy, not physician approval. PMID 18985059 remains unread and excluded from clinical credit.",
       "endpoint_relevance_tags": [
         "cardiovascular"
       ],
-      "study_contexts": []
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_psyllium_30239559_lipid_marker_review",
+          "components": [
+            "INGR_PSYLLIUM_HUSK"
+          ],
+          "source_pmids": [
+            "30239559"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Soluble, viscous, gel-forming fiber from the seed husk of Plantago ovata. The reviewed material is psyllium husk fiber, not established whole-seed or other-fiber equivalence. Seventeen trials administered powder mixed with liquids; eleven used baked food vehicles (eight cereals, two cookies, one bread)."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "meta_analysis",
+          "component_registration_status": "fully_registered",
+          "condition": "blood_lipid_parameters",
+          "purpose": "physiology",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "population": {
+            "age_group": "mixed",
+            "description": "Mixed adult and pediatric cohorts with and without hypercholesterolemia; most cohorts were hypercholesterolemic, while others were healthy or had hyperlipidemia, type 2 diabetes or metabolic syndrome. Constituent PMID 8391569 studied children aged 5-17 years; PMID 25391814 studied children and adolescents aged 6-19 years. The paper incompletely identifies pediatric membership, and its reported 6.8-70 age range includes study means rather than verified eligibility bounds. The lipid estimates are not adult-only or child-only subgroup estimates. Infant, pregnancy and lactation populations were not established."
+          },
+          "study_design": "Systematic review and random-effects meta-analysis of 28 randomized controlled trials, including parallel and crossover designs, with published eligibility of at least three weeks. Appropriate controls were free of or low in fiber or contained insoluble fiber. Multiple arms were combined where appropriate to reduce unit-of-analysis error; crossover pairing used an assumed correlation of 0.50.",
+          "trial_family": "psyllium_30239559_lipid_review",
+          "comparator": "Trial-specific low/no-fiber or insoluble-fiber controls with varying background diets and, in some trials, background medications.",
+          "included_study_pmids": [
+            "7661492",
+            "21736815",
+            "3277558",
+            "1872664",
+            "1319110",
+            "10837282",
+            "2724486",
+            "8604676",
+            "9497178",
+            "8391569",
+            "1431597",
+            "11930385",
+            "9129487",
+            "2203322",
+            "7804477",
+            "2218650",
+            "28146065",
+            "25391814",
+            "9747644",
+            "9853540",
+            "20413122",
+            "8363164",
+            "11566640",
+            "8586774",
+            "16154305"
+          ],
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "clinical_review": {
+            "reviewer": "Codex /root and /root/tyrosine_sources source-content review; independently checked by /root/parallel_scientific_check. Agent reviews, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Actual main Methods, Table 1, Results, GRADE, discussion and bibliography read, with live source/member identities checked. Independent existing-policy adjudication completed November 10. Three pooled lipid-marker findings qualify narrowly; source-specific discrepancies, mixed ages and preparation variability remain explicit. This is not high-certainty evidence for every outcome or a new Dose benchmark."
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [],
+            "dose_status": "source_not_reported",
+            "dose_basis": "not_applicable",
+            "duration_basis": "participant_specific",
+            "duration_days": null,
+            "administration_frequency": "Varies by constituent trial; the review assigns no single administration frequency.",
+            "dosage_forms": [
+              "Powder mixed with liquids",
+              "Psyllium fiber baked into cereals, cookies or bread"
+            ],
+            "co_therapies": [
+              "Background diet varied, including habitual diets and AHA/NCEP or other modified diets.",
+              "Some constituent comparisons included background medications; Maciejko PMID 7804477 used adjunctive cholestyramine. Spence PMID 7661492 contained several arms; the review identifies the psyllium-alone versus cellulose comparison, not all combination arms as isolated psyllium effects."
+            ],
+            "reported_regimen": "No single assigned regimen exists for this aggregate review. Known constituent psyllium amounts were 2.4–20.4 g/day, with median 10.2 g/day; apoB trials used 7–15 g/day. Reported median duration was eight weeks, with a reported range of 3–52 weeks. These are descriptive study exposures, not a minimum effective amount, universal regimen or Dose benchmark.",
+            "source_provenance": {
+              "pmid": "30239559",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/30239559/",
+              "location": "Main Methods, Table 1 (pp. 925-926), Results and GRADE (pp. 926-929), discussion and references (pp. 929-932), read in the coauthor-profile-hosted publisher-typeset manuscript with matching DOI, title and authors. No single aggregate assigned regimen exists; known constituent doses remain reported in the main article."
+            }
+          },
+          "outcomes": [
+            {
+              "name": "LDL cholesterol decreased by a pooled mean difference of -0.33 mmol/L (95% CI -0.38 to -0.27; P < 0.00001); 28 trials, 29 comparisons; I2 = 62%. Published GRADE: moderate due to inconsistency.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Calculated non-HDL cholesterol decreased by -0.39 mmol/L (95% CI -0.50 to -0.27; P < 0.00001); 27 trials, 28 comparisons; I2 = 87%. No constituent reported non-HDL directly; values were derived from total minus HDL cholesterol. Published GRADE: moderate due to inconsistency.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Apolipoprotein B decreased by -0.05 g/L (95% CI -0.08 to -0.03; P < 0.0001); nine trials; I2 = 49%. Published GRADE: high.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Dose-response and most subgroup analyses did not establish significant modification of lipid effects; no significant difference between below 10 and at least 10 g/day strata. These null modifiers do not negate the positive pooled lipid-marker effects.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "companion_reported_context"
+            }
+          ],
+          "limitations": [
+            "This completed main-source assessment concerns lipid biomarkers. It does not establish fewer cardiovascular events, bowel regularity, glycemic efficacy, pregnancy/lactation use, infant use or universal safety. Source GRADE classifications do not automatically determine a catalog score or a new numerical policy.",
+            "The aggregate includes adults and children. Pediatric membership is explicit, not a generic pediatric product qualification. No child-to-adult transfer claim, invented mean-age cutoff or adult-only pooled estimate is made.",
+            "The 25 included_study_pmids are the verified indexed member publications. Three additional included publications have no matching PMID established: Asghar 2011, Pakistan Journal of Medical and Health Sciences 5(4):654–657 (institutional bibliography corroborated; DOI not established); Cicero 2010, DOI 10.1007/s12349-009-0056-1; Summerbell 1994, DOI 10.1111/j.1365-277X.1994.tb00423.x. This is the complete 28-publication inventory, not a claim that all members have PMIDs. Membership verification is not individual primary Methods/Results qualification.",
+            "The paper reports 1924 participants for LDL, 1899 for non-HDL and 895 for apoB. Table 1 defines participant counts as trial completers; these are not independently verified randomized enrollment or additional catalog depth. The review overlaps the earlier PMID 18985059 synthesis; do not sum their trial counts or treat reviews as independent randomized replications.",
+            "Substantial unexplained LDL and non-HDL heterogeneity remains. Sequence generation and allocation concealment were commonly unclear; 25% had high performance-bias risk. Non-HDL reductions were larger in trials at high risk from incomplete outcome data. ApoB had fewer than ten trials, precluding its planned subgroup/publication-bias assessments.",
+            "The main publication does not formally rank the three lipid endpoints. Current official registry NCT03346733 lists all three as primary, but first submission/posting occurred in November 2017 after the final October 2017 search; registry timeframes state at least three months whereas published eligibility is at least three weeks. Preserve these differences without claiming prospective registration or inventing a primary hierarchy.",
+            "Table 1 prints 30 weeks for Vega-Lopez 2001, but PMID 11566640 reports 30-day treatment periods. Retain this source-specific unit discrepancy rather than inventing a fixed aggregate duration. Median and range exposures are descriptive; minimum effective amount was not established, and no new Dose threshold is authorized.",
+            "Husk-fiber properties differed with crop and processing. Studied administrations included powder mixed with liquids and fiber baked into foods. This review does not establish capsule-specific outcomes or equivalent clinical effects for every retail formulation.",
+            "Background diets and medications vary. Spence PMID 7661492 includes combination-treatment arms but the relevant comparison must remain psyllium alone versus cellulose; Maciejko PMID 7804477 is adjunctive to cholestyramine. Whole-paper membership does not establish isolated causality for every arm.",
+            "Funding across constituent studies was agency, industry, mixed or unreported. Review disclosures include viscous-fiber patent/research interests and food-industry relationships for some authors; do not describe all investigators as having no financial ties.",
+            "Main article content was read from a coauthor-profile-hosted publisher-typeset copy whose DOI/title/authors match live official metadata. Official publisher/direct PDF access was blocked; no local original-PDF SHA or independently read supplemental tables/raster forest row transcription is claimed. Published main-text estimates and captions are retained without independent reanalysis."
+          ]
+        }
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "husk",
+          "psyllium fiber",
+          "ispaghula husk"
+        ],
+        "excluded_form_terms": [
+          "whole seed",
+          "whole seeds",
+          "whole-seed"
+        ],
+        "supported_outcomes": [
+          "blood_lipid_parameters"
+        ],
+        "source_pmids": [
+          "30239559"
+        ],
+        "studied_population": "Mixed adult and pediatric cohorts with source-specific ages and lipid outcomes; not infant, pregnancy or lactation qualification.",
+        "reviewed_at": "2026-11-10"
+      },
+      "published_studies_count": 1
     },
     {
       "id": "INGR_BORON",
