@@ -89,3 +89,40 @@ def test_quality_join_matches_through_one_identity_field(discovery, ingredient_f
     found = discovery({"activeIngredients": [ingredient]}, rows)
     assert len(found) == 1
     assert [value for value in found[0] if value.startswith("prepared-")] == ["prepared-only-match"]
+
+
+def test_reviewed_ingredient_research_survives_preparation_rejection(monkeypatch):
+    """Research visibility never turns rejected product applicability into credit."""
+    enricher = enrichment.SupplementEnricherV3.__new__(enrichment.SupplementEnricherV3)
+    research = {
+        'summary': 'Some studied preparations have limited human support.',
+        'applicability_note': 'The exact preparation in this product was not studied.',
+        'studied_uses': [{'outcome': 'Stress', 'summary': 'Limited short-term research.'}],
+        'references_structured': [{'pmid': '23439798', 'title': 'Retained source'}],
+    }
+    study = {'id': 'INGR_RESEARCH_TEST', 'standard_name': 'Recognized ingredient',
+             'evidence_level': 'ingredient-human', 'study_type': 'rct_single',
+             'consumer_research': research}
+    enricher.databases = {'backed_clinical_studies': {'backed_clinical_studies': [study]}}
+    monkeypatch.setattr(enricher, '_evidence_subject_ingredients_for_enrichment',
+                        lambda *a, **kw: [{'name': 'Recognized ingredient', 'canonical_id': 'recognized',
+                                         'raw_source_path': 'activeIngredients[0]'}])
+    monkeypatch.setattr(enricher, '_candidate_clinical_studies', lambda *a: [study])
+    monkeypatch.setattr(enricher, '_get_all_product_text', lambda _: '')
+    monkeypatch.setattr(enricher, '_check_unsubstantiated_claims', lambda _: {})
+    monkeypatch.setattr(enricher, '_has_bcaa_mixture_evidence_identity', lambda *a: False)
+    monkeypatch.setattr(enricher, '_product_context_branded_token_for_ingredient', lambda *a: None)
+    monkeypatch.setattr('clinical_applicability.filter_clinical_matches',
+                        lambda p, matches, **kw: ([], [{'id': study['id'], 'status': 'unresolved',
+                                                       'reason_code': 'clinical_source_label_unresolved'}]))
+    result = enricher._collect_evidence_data({'activeIngredients': []})
+    assert result['clinical_matches'] == []
+    assert result['match_count'] == 0
+    assert result['ingredient_research'] == [{'ingredient': 'Recognized ingredient', **research}]
+    # Source discovery, rather than a label claim or a copied research payload,
+    # must establish the ingredient before any research is exported.
+    monkeypatch.setattr(enricher, '_candidate_clinical_studies', lambda *a: [])
+    assert enricher._collect_evidence_data({'activeIngredients': []})['ingredient_research'] == []
+    monkeypatch.setattr(enricher, '_candidate_clinical_studies', lambda *a: [study])
+    study['consumer_research'] = {**research, 'references_structured': [{}]}
+    assert enricher._collect_evidence_data({'activeIngredients': []})['ingredient_research'] == []

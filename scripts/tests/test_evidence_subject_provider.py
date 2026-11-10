@@ -301,3 +301,23 @@ def test_explicit_blend_forms_reach_evidence_without_lending_total(enricher, nam
     # hold; exposing a subject must not manufacture a public scored result.
     assert artifact["quality_score_status"] == "not_scored"
     assert artifact["quality_pillars_v4"] is None
+
+
+def test_informational_research_does_not_restore_unresolved_identity(enricher):
+    from copy import deepcopy
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    raw = json.loads((FIXTURES / 'raw_ashwagandha_powder_329949.json').read_text())
+    product, _ = enricher.enrich_product(EnhancedDSLDNormalizer().normalize_product(raw))
+    known = enricher._collect_evidence_data(product, product['ingredient_quality_data'])
+    assert known['ingredient_research']
+    unknown = deepcopy(product)
+    for container in ('ingredients', 'ingredients_scorable'):
+        for row in unknown['ingredient_quality_data'].get(container, []):
+            row.update(canonical_id=None, mapped=False, mapped_identity=False,
+                       identity_disposition='unresolved', identity_confidence=0,
+                       score_eligible_by_cleaner=False)
+    for row in unknown['activeIngredients']:
+        row.update(canonical_id=None, mapped=False, score_eligible_by_cleaner=False)
+    result = enricher._collect_evidence_data(unknown, unknown['ingredient_quality_data'])
+    assert result['ingredient_research'] == []
+    assert result['clinical_matches'] == []

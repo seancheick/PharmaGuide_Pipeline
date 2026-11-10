@@ -3305,3 +3305,361 @@ def test_row_bound_delivery_does_not_treat_negated_exclusion_as_present(notes, a
              'ingredient': row['name'], 'matched_source_row_refs': ['ingredientRows[0]']}
     result = assess_clinical_applicability(product, entry, assess_amount=False)
     assert (result['status'] == 'applicable') is accepted
+
+
+@pytest.fixture
+def scoped_noncredit_rice_reference(monkeypatch):
+    """A complete synthetic comparative review, never affirmative efficacy."""
+    import clinical_applicability as ca
+    import evidence_resolver as er
+    from clinical_evidence_schema import validate_ingredient_context
+    records = deepcopy(reviewed_entries())
+    record = {'id': 'INGR_RICE_SCOPE_CONTROL', 'standard_name': 'Rice Protein',
+              'canonical_id': 'rice_protein', 'aliases': ['rice protein'],
+              'study_type': 'reference', 'evidence_level': 'reference',
+              'published_studies': ['RCT'], 'effect_direction': 'null',
+              'references_structured': [{'pmid': p, 'retracted': False}
+                                       for p in ['23782948', '33261645']],
+              'study_contexts': [], 'applicability': {
+                  'scope': 'ingredient', 'require_source_label_form': True,
+                  'required_form_terms': ['concentrate', 'isolate'],
+                  'excluded_form_terms': ['hydrolyzed', 'whole grain'],
+                  'source_pmids': ['23782948', '33261645']}}
+    for pmid, form in [('23782948', 'isolate'), ('33261645', 'concentrate')]:
+        context = deepcopy(records['BRAND_CREAPURE']['study_contexts'][0])
+        context.update(context_id='rice_control_' + pmid, components=[record['id']],
+                       source_pmids=[pmid], identity_scope='ingredient_general',
+                       identity={'preparation': 'Rice protein ' + form},
+                       trial_family='rice_control_' + pmid, scoring_eligible=False,
+                       population={'age_group': 'adult', 'description': 'Adult men in a synthetic mechanics control.'})
+        context['clinical_review'] = {
+            'reviewer': 'Synthetic mechanics control, not clinical approval',
+            'reviewed_at': '2026-11-10', 'scope': 'identity_dose_outcome_applicability',
+            'basis': 'Synthetic source-bound noncredit completion control, not a clinical finding.'}
+        context['dose']['source_provenance'].update(
+            pmid=pmid, source_url=f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/',
+            location='Synthetic completed source-scope control.')
+        context['outcomes'] = [{'name': 'No demonstrated advantage versus active protein comparator.',
+                                'hierarchy': 'primary', 'kind': 'surrogate', 'direction': 'null',
+                                'outcome_role': 'direct_between_group_effect'}]
+        context['applicability'] = {**record['applicability'], 'required_form_terms': [form],
+                                    'source_pmids': [pmid]}
+        assert validate_ingredient_context(context, known_component_ids={record['id']},
+                                           require_complete_review=True) == []
+        record['study_contexts'].append(context)
+    records[record['id']] = record
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    original = er._load_backed_studies()
+    monkeypatch.setattr(er, '_load_backed_studies', lambda: original + (record,))
+    er._backed_studies_index.cache_clear()
+    yield record
+    er._backed_studies_index.cache_clear()
+
+
+def _noncredit_rice_case(record, name, *, ref='ingredientRows[0]', extra=None):
+    row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
+           'canonical_id': 'rice_protein', 'mapped': True, 'quantity': 0, 'unit': 'NP',
+           'raw_source_path': ref, 'source_section': 'active', **(extra or {})}
+    product = {'fullName': 'Rice protein supplement', 'targetGroups': ['Adults'],
+               'physicalState': {'langualCodeDescription': 'Powder'}, 'activeIngredients': [deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**record, 'ingredient': name, 'matched_canonical_ids': ['rice_protein'],
+             'matched_source_row_refs': [ref]}
+    return row, product, entry
+
+
+@pytest.mark.parametrize('scope_mode', ['parent', 'child', 'both'])
+@pytest.mark.parametrize('name,expected', [
+    ('Rice protein concentrate', 'not_applicable'), ('Rice protein isolate', 'not_applicable'),
+    ('Rice protein', 'unresolved'), ('Hydrolyzed rice protein', 'not_applicable'),
+    ('Whole grain rice protein', 'not_applicable'), ('Rice protein, not concentrate or isolate', 'not_applicable'),
+])
+def test_scoped_reference_completion_requires_actual_row_preparation(scoped_noncredit_rice_reference,
+                                                                    scope_mode, name, expected):
+    import clinical_applicability as ca
+    from evidence_resolver import resolve_evidence_for_row
+    from scoring_v4.scored_artifact import build_scored_artifact
+    record = scoped_noncredit_rice_reference
+    if scope_mode == 'parent':
+        for context in record['study_contexts']:
+            context.pop('applicability')
+    elif scope_mode == 'child':
+        record.pop('applicability')
+    row, product, entry = _noncredit_rice_case(record, name)
+    before = deepcopy((product, entry))
+    decision = ca.assess_clinical_applicability(product, entry, assess_amount=False,
+                                               require_claim_alignment=False)
+    assert decision['status'] == expected
+    if name == 'Rice protein':
+        assert decision['reason_code'] == 'clinical_source_label_unresolved'
+    result = resolve_evidence_for_row(row, product)
+    assert not result.points_eligible
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+    assert (artifact['assessment_readiness']['evidence']['readiness'] == 'complete') is (expected != 'unresolved')
+    assert (product, entry) == before
+
+
+@pytest.mark.parametrize('invalid', ['pending', 'schema'])
+def test_scoped_reference_cannot_finish_invalid_source(scoped_noncredit_rice_reference, invalid):
+    record = scoped_noncredit_rice_reference
+    if invalid == 'pending':
+        record['study_contexts'][0]['review_status'] = 'source_verified_pending_clinical_review'
+    else:
+        record['study_contexts'][0]['dose']['values'] = ['bad']
+    _, product, entry = _noncredit_rice_case(record, 'Rice protein concentrate')
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == 'unresolved'
+
+
+def test_reference_children_cannot_broaden_parent_or_borrow_sibling(scoped_noncredit_rice_reference):
+    record = scoped_noncredit_rice_reference
+    record['applicability']['required_form_terms'] = ['concentrate']
+    _, product, entry = _noncredit_rice_case(record, 'Rice protein isolate')
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == 'unresolved'
+    for index in [0, 1]:
+        _, product, entry = _noncredit_rice_case(record, 'Rice protein', ref=f'ingredientRows[{index}]',
+                                               extra={'matched_form': 'concentrate'})
+        sibling = {'name': 'Rice protein concentrate', 'raw_source_text': 'Rice protein concentrate',
+                   'canonical_id': 'rice_protein', 'quantity': 24, 'unit': 'g',
+                   'raw_source_path': f'ingredientRows[{1-index}]', 'source_section': 'active'}
+        product['activeIngredients'].append(deepcopy(sibling))
+        for rows in product['ingredient_quality_data'].values():
+            rows.append(deepcopy(sibling))
+        assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == 'unresolved'
+
+
+@pytest.mark.parametrize('label,expected', [
+    ('Ashwagandha root extract standardized to withanolides', 'not_applicable'),
+    ('Ashwagandha root powder with withanolides', 'unresolved'),
+    ('Ashwagandha extract standardized to withanolides', 'unresolved'),
+    ('Ashwagandha root extract', 'unresolved'),
+    ('Ashwagandha root extract, not standardized withanolides', 'not_applicable'),
+    ('Ashwagandha root extract with withanolides and leaf', 'not_applicable'),
+])
+def test_preparation_groups_require_each_affirmative_group_on_one_source_row(
+        scoped_noncredit_rice_reference, label, expected):
+    record = scoped_noncredit_rice_reference
+    record['standard_name'] = 'Ashwagandha'
+    record['aliases'] = ['ashwagandha']
+    record['applicability'].update(required_form_terms=[],
+        required_form_groups=[['root'], ['extract'], ['withanolide', 'withanolides']],
+        excluded_form_terms=['leaf'])
+    for context in record['study_contexts']:
+        context.pop('applicability')
+    _, product, entry = _noncredit_rice_case(record, label,
+                                           extra={'matched_form': 'root extract withanolides'})
+    before = deepcopy((product, entry))
+    decision = assess_clinical_applicability(product, entry, assess_amount=False,
+                                            require_claim_alignment=False)
+    assert decision['status'] == expected
+    if 'leaf' in label:
+        assert decision == {'status': 'not_applicable', 'reason_code': 'reference_only_clinical_record'}
+    elif expected == 'unresolved':
+        assert decision['reason_code'] == 'clinical_source_label_unresolved'
+    elif 'not standardized' in label:
+        assert decision == {'status': 'not_applicable', 'reason_code': 'reference_only_clinical_record'}
+    assert (product, entry) == before
+
+
+@pytest.mark.parametrize('groups', [None, [], [[]], ['root'], [['']], [[1]], [['root'], []]])
+def test_malformed_preparation_groups_fail_closed(scoped_noncredit_rice_reference, groups):
+    record = scoped_noncredit_rice_reference
+    record['applicability']['required_form_groups'] = groups
+    _, product, entry = _noncredit_rice_case(record, 'Rice protein concentrate')
+    decision = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert decision == {'status': 'unresolved', 'reason_code': 'invalid_applicability_contract'}
+
+
+def test_preparation_groups_do_not_combine_sibling_rows(scoped_noncredit_rice_reference):
+    record = scoped_noncredit_rice_reference
+    record['applicability'].update(required_form_terms=[],
+        required_form_groups=[['root'], ['extract'], ['withanolides']])
+    for context in record['study_contexts']:
+        context.pop('applicability')
+    _, product, entry = _noncredit_rice_case(record, 'Rice protein root extract')
+    sibling = {'name': 'Rice protein withanolides', 'raw_source_text': 'Rice protein withanolides',
+               'canonical_id': 'rice_protein', 'quantity': 1, 'unit': 'g',
+               'raw_source_path': 'ingredientRows[1]', 'source_section': 'active'}
+    product['activeIngredients'].append(deepcopy(sibling))
+    for rows in product['ingredient_quality_data'].values():
+        rows.append(deepcopy(sibling))
+    decision = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert decision['status'] == 'unresolved'
+    assert decision['reason_code'] == 'clinical_source_label_unresolved'
+
+
+def test_preparation_groups_cannot_use_inferred_form_without_source_flag(scoped_noncredit_rice_reference):
+    record = scoped_noncredit_rice_reference
+    record['applicability'].update(require_source_label_form=False, required_form_terms=[],
+        required_form_groups=[['concentrate']])
+    for context in record['study_contexts']:
+        context.pop('applicability')
+    _, product, entry = _noncredit_rice_case(record, 'Rice protein',
+                                           extra={'matched_form': 'concentrate'})
+    decision = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert decision['status'] == 'unresolved'
+    assert decision['reason_code'] == 'clinical_source_label_unresolved'
+
+
+@pytest.mark.parametrize('extra,expected', [
+    ({'raw_taxonomy': {'source_notes': 'Plant Part: Root. Standardized to 1.5% Withanolides = 7 mg.'}}, 'not_applicable'),
+    ({'notes': 'Standardized to 1.5% Withanolides = 7 mg.'}, 'unresolved'),
+    ({'raw_taxonomy': {'source_notes': None}, 'notes': 'Withanolides'}, 'unresolved'),
+    ({'raw_taxonomy': {'source_notes': ['Withanolides']}}, 'unresolved'),
+    ({'raw_taxonomy': {'source_notes': 'Not standardized to withanolides.'}}, 'not_applicable'),
+])
+def test_preparation_groups_use_only_colocated_original_source_notes(
+        scoped_noncredit_rice_reference, extra, expected):
+    from clinical_applicability import _row_text
+    record = scoped_noncredit_rice_reference
+    record['applicability'].update(required_form_terms=[],
+        required_form_groups=[['root'], ['extract'], ['withanolides']])
+    for context in record['study_contexts']:
+        context.pop('applicability')
+    row, product, entry = _noncredit_rice_case(record, 'Rice protein root extract', extra=extra)
+    before = deepcopy((product, entry))
+    decision = assess_clinical_applicability(product, entry, assess_amount=False)
+    assert decision['status'] == expected
+    assert 'withanolides' not in _row_text(row, source_only=True).lower()
+    assert (product, entry) == before
+
+
+def test_source_notes_do_not_broaden_legacy_or_policy(scoped_noncredit_rice_reference):
+    record = scoped_noncredit_rice_reference
+    record['applicability'].update(required_form_terms=['concentrate'])
+    for context in record['study_contexts']:
+        context.pop('applicability')
+    _, product, entry = _noncredit_rice_case(record, 'Rice protein',
+        extra={'raw_taxonomy': {'source_notes': 'Concentrate'}})
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == 'unresolved'
+
+
+def test_preparation_group_notes_cannot_be_borrowed_from_sibling(scoped_noncredit_rice_reference):
+    record = scoped_noncredit_rice_reference
+    record['applicability'].update(required_form_terms=[], required_form_groups=[['concentrate']])
+    for context in record['study_contexts']:
+        context.pop('applicability')
+    _, product, entry = _noncredit_rice_case(record, 'Rice protein')
+    sibling = {'name': 'Rice protein', 'raw_source_text': 'Rice protein',
+               'raw_taxonomy': {'source_notes': 'Concentrate'}, 'canonical_id': 'rice_protein',
+               'quantity': 24, 'unit': 'g', 'raw_source_path': 'ingredientRows[1]', 'source_section': 'active'}
+    product['activeIngredients'].append(deepcopy(sibling))
+    for rows in product['ingredient_quality_data'].values():
+        rows.append(deepcopy(sibling))
+    assert assess_clinical_applicability(product, entry, assess_amount=False)['status'] == 'unresolved'
+
+
+@pytest.mark.parametrize('parent_groups,child_groups', [
+    ([['root'], ['withanolides']], [['extract']]),
+    ([['root']], [['extract'], ['withanolides']]),
+    ([[]], [['extract']]),
+])
+def test_child_preparation_groups_cannot_replace_parent_requirements(monkeypatch, parent_groups, child_groups):
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    record = records['BRAND_KSM66']
+    context = next(c for c in record['study_contexts'] if c.get('scoring_eligible') is True)
+    record['study_contexts'] = [context]
+    record['applicability'].update(required_form_terms=[], required_form_groups=parent_groups,
+                                   source_pmids=context['source_pmids'])
+    context['applicability'] = {'scope': 'ingredient', 'require_source_label_form': True,
+                                'required_form_groups': child_groups,
+                                'source_pmids': context['source_pmids']}
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    row = {'name': 'KSM-66 extract withanolides', 'raw_source_text': 'KSM-66 extract withanolides',
+           'canonical_id': 'ashwagandha', 'quantity': 300, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
+    product = {'fullName': 'KSM-66', 'targetGroups': ['Adults'], 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**record, 'ingredient': row['name'], 'matched_canonical_ids': ['ashwagandha'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    before = deepcopy((product, entry))
+    decision = assess_clinical_applicability(product, entry, assess_amount=False,
+                                            require_claim_alignment=False)
+    assert decision['status'] == 'unresolved'
+    assert decision['reason_code'] == ('invalid_applicability_contract' if parent_groups == [[]]
+                                        else 'clinical_source_label_unresolved')
+    assert (product, entry) == before
+
+
+def test_child_groups_preserve_parent_flat_requirement_and_reject_invalid_parent():
+    from clinical_applicability import _context_applicability_policy
+    context = {'source_pmids': ['23782948'], 'applicability': {
+        'scope': 'ingredient', 'source_pmids': ['23782948'],
+        'required_form_terms': [], 'required_form_groups': [['extract']]}}
+    parent = {'scope': 'ingredient', 'source_pmids': ['23782948'],
+              'required_form_terms': ['root', 'root extract']}
+    merged = _context_applicability_policy(parent, context)
+    assert ['root', 'root extract'] in merged['required_form_groups']
+    parent['required_form_groups'] = [[]]
+    assert _context_applicability_policy(parent, context) is None
+
+
+@pytest.mark.parametrize('notes,expected', [
+    ('Root and leaf extract standardized to1.5% withanolides.', 'not_applicable'),
+    ('Root extract standardized to1.5% withanolides. No leaf.', 'applicable'),
+    ('Root extract standardized to1.5% withanolides. Not whole plant.', 'applicable'),
+    ('No leaf. Root and leaf extract standardized to1.5% withanolides.', 'not_applicable'),
+])
+def test_preparation_groups_apply_exclusions_to_the_same_original_notes(
+        monkeypatch, notes, expected):
+    import clinical_applicability as ca
+    records = deepcopy(reviewed_entries())
+    record = records['BRAND_KSM66']
+    context = next(c for c in record['study_contexts'] if c.get('scoring_eligible') is True)
+    record['study_contexts'] = [context]
+    record['applicability'].update(required_form_terms=[],
+        required_form_groups=[['root'], ['extract'], ['withanolides']],
+        excluded_form_terms=['leaf', 'whole plant'], source_pmids=context['source_pmids'])
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: records)
+    row = {'name': 'KSM-66 root extract', 'raw_source_text': 'KSM-66 root extract',
+           'raw_taxonomy': {'source_notes': notes}, 'canonical_id': 'ashwagandha',
+           'quantity': 300, 'unit': 'mg', 'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
+    product = {'fullName': 'KSM-66', 'targetGroups': ['Adults'], 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**record, 'ingredient': row['name'], 'matched_canonical_ids': ['ashwagandha'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    before = deepcopy((product, entry))
+    decision = assess_clinical_applicability(product, entry, assess_amount=False,
+                                            require_claim_alignment=False)
+    assert decision['status'] == expected
+    if expected == 'not_applicable':
+        assert decision['reason_code'] == 'clinical_form_excluded'
+    else:
+        assert decision['status'] == 'applicable'
+    assert (product, entry) == before
+
+
+def test_conjunctive_child_scope_keeps_parent_exclusions_and_delivery():
+    from clinical_applicability import _context_applicability_policy
+    parent = {'scope': 'ingredient', 'source_pmids': ['23782948'],
+              'required_form_groups': [['root']], 'excluded_form_terms': ['leaf'],
+              'excluded_canonical_ids': ['leaf_extract'], 'dosage_forms': ['capsule', 'tablet']}
+    context = {'source_pmids': ['23782948'], 'applicability': {
+        'scope': 'ingredient', 'source_pmids': ['23782948'], 'required_form_groups': [['extract']],
+        'excluded_form_terms': ['liposomal'], 'excluded_canonical_ids': ['other_extract'],
+        'dosage_forms': ['tablet', 'powder']}}
+    merged = _context_applicability_policy(parent, context)
+    assert merged['excluded_form_terms'] == ['leaf', 'liposomal']
+    assert merged['excluded_canonical_ids'] == ['leaf_extract', 'other_extract']
+    assert merged['dosage_forms'] == ['tablet']
+    context['applicability']['dosage_forms'] = []
+    assert _context_applicability_policy(parent, context)['dosage_forms'] == ['capsule', 'tablet']
+    context['applicability']['dosage_forms'] = ['powder']
+    assert _context_applicability_policy(parent, context) is None
+    parent['excluded_form_terms'] = [None]
+    assert _context_applicability_policy(parent, context) is None
+
+
+def test_flat_or_child_policy_keeps_legacy_merge_semantics():
+    from clinical_applicability import _context_applicability_policy
+    parent = {'scope': 'ingredient', 'source_pmids': ['23782948'],
+              'required_form_terms': ['root'], 'excluded_form_terms': ['leaf'],
+              'dosage_forms': ['capsule']}
+    context = {'source_pmids': ['23782948'], 'applicability': {
+        'scope': 'ingredient', 'source_pmids': ['23782948'], 'required_form_terms': ['extract'],
+        'excluded_form_terms': ['liposomal'], 'dosage_forms': ['powder']}}
+    merged = _context_applicability_policy(parent, context)
+    assert merged['required_form_terms'] == ['extract']
+    assert merged['excluded_form_terms'] == ['liposomal']
+    assert merged['dosage_forms'] == ['powder']

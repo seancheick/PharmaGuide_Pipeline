@@ -1330,6 +1330,7 @@ def _resolve_evidence_for_row(
             (decision.get("status") == "not_applicable"
              and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
             or (is_reference_only(study)
+                and decision.get("status") == "not_applicable"
                 and assess_clinical_source_review(study)["is_complete"])
             for study, decision in zip(deduped_studies, scope_decisions)
         ]
@@ -1433,6 +1434,26 @@ def _resolve_evidence_for_row(
                     points_eligible=False, applicability_status="applicability_unestablished",
                     reason_code="label_purpose_evidence_mismatch", owner_facts=owner_facts,
                     blocking_reasons=["label_purpose_evidence_mismatch"],
+                )
+            if (not has_applicable
+                    and set(unresolved_reasons) == {"clinical_source_label_unresolved"}
+                    and all(assess_clinical_source_review(study)["is_complete"]
+                            and any(context.get("scoring_eligible") is True
+                                    for context in study.get("study_contexts") or [])
+                            and all(context.get("identity_scope") == "ingredient_general"
+                                    for context in study.get("study_contexts") or []
+                                    if context.get("scoring_eligible") is True)
+                            for study in deduped_studies)):
+                # V1: a bounded ingredient-general review can finish while the label's
+                # preparation correspondence remains unknown. This is no
+                # efficacy credit and no claim the product was studied. Missing
+                # identity, source rows or unfinished siblings still hold below.
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name,
+                    matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code="clinical_source_label_unresolved", owner_facts=owner_facts,
                 )
             if not has_applicable and unresolved_reasons:
                 return EvidenceResolution(

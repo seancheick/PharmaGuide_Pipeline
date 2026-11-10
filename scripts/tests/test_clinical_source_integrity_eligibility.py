@@ -2726,3 +2726,104 @@ def test_calcium_caseinate_acute_unranked_source_never_becomes_fixed_dose_or_oth
                                                  assess_amount=False, require_claim_alignment=False)
         assert decision['status'] == 'not_applicable'
         assert decision['reason_code'] in {'clinical_form_excluded', 'clinical_preparation_mismatch'}
+
+
+def test_ashwagandha_v1_has_bounded_research_without_rewriting_signed_history():
+    from clinical_applicability import reviewed_entries
+    record = reviewed_entries()['INGR_ASHWAGANDHA']
+    assert record['evidence_level'] == 'ingredient-human'
+    assert record['effect_direction'] == 'positive_weak'
+    assert record['effect_direction_confidence'] == 'low'
+    assert record['consumer_research']['studied_uses']
+    assert record['applicability']['source_pmids'] == ['23439798', '32021735']
+    assert record['applicability']['required_form_groups']
+    assert 'min_clinical_dose' not in record
+    new = [c for c in record['study_contexts'] if '_v1_' in c['context_id']]
+    assert len(new) == 2
+    for context in new:
+        assert validate_ingredient_context(context, require_complete_review=True) == []
+        assert context['clinical_review']['reviewer'] != 'Dr. Pham'
+        assert 'V1' in context['clinical_review']['basis']
+        assert context['trial_family'].startswith('ksm66_')
+        assert 'KSM-66' in context['identity']['preparation']
+    prior = [c for c in record['study_contexts'] if 'rejected_generic_transfer' in c['context_id']]
+    assert len(prior) == 2
+    assert all(c['review_status'] == 'rejected_source' and not c['scoring_eligible'] for c in prior)
+    assert all(c['clinical_review']['reviewer'] == 'Dr. Pham' for c in prior)
+
+
+@pytest.mark.parametrize('label,credit', [
+    ('Ashwagandha root extract standardized withanolides', True),
+    ('Ashwagandha root powder', False),
+    ('Ashwagandha', False),
+    ('Ashwagandha root and leaf extract standardized withanolides', False),
+    ('Ashwagandha root extract 5:1', False),
+    ('Liposomal ashwagandha root extract standardized withanolides', False),
+])
+def test_ashwagandha_v1_credit_is_preparation_qualified_and_claim_independent(label, credit):
+    from clinical_applicability import reviewed_entries, assess_clinical_applicability
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    row = _ingredient(name='Ashwagandha', canonical_id='ashwagandha')
+    row.update(raw_source_path='activeIngredients[0]', raw_source_text=label)
+    record = reviewed_entries()['INGR_ASHWAGANDHA']
+    match = {**record, 'ingredient': 'Ashwagandha', 'matched_canonical_ids': ['ashwagandha'],
+             'matched_source_row_refs': ['activeIngredients[0]']}
+    product = _product(ingredients=[row], matches=[match], product_name='Unpositioned supplement')
+    decision = assess_clinical_applicability(product, match, assess_amount=False,
+                                             require_claim_alignment=False)
+    assert (decision['status'] == 'applicable') is credit
+    assert (score_evidence(product)['score'] > 0) is credit
+
+
+def test_v1_reviewed_research_with_unknown_preparation_is_not_unread_literature():
+    from clinical_applicability import reviewed_entries
+    from evidence_resolver import resolve_product_evidence
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    row = _ingredient(name='Ashwagandha', canonical_id='ashwagandha')
+    row.update(raw_source_path='ingredientRows[0]', raw_source_text='Ashwagandha')
+    record = reviewed_entries()['INGR_ASHWAGANDHA']
+    product = _product(ingredients=[row], matches=[{**record, 'ingredient': 'Ashwagandha',
+        'matched_canonical_ids': ['ashwagandha'], 'matched_source_row_refs': ['ingredientRows[0]']}])
+    resolution = resolve_product_evidence(product)
+    assert resolution.is_assessment_complete
+    assert resolution.overall_disposition == 'research_present_applicability_unestablished'
+    scored = build_scored_artifact(product)
+    assert scored['quality_pillars_v4']['evidence']['score'] == 0
+    assert scored['quality_pillars_v4']['evidence']['display_state'] == 'applicability_unestablished'
+    assert scored['assessment_readiness']['evidence']['readiness'] == 'complete'
+
+
+def test_v1_preparation_uncertainty_cannot_finish_an_unreviewed_sibling(monkeypatch):
+    from clinical_applicability import reviewed_entries
+    from evidence_resolver import resolve_product_evidence
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    record = reviewed_entries()['INGR_ASHWAGANDHA']
+    contexts = copy.deepcopy(record['study_contexts'])
+    contexts[-1]['review_status'] = 'source_verified_pending_clinical_review'
+    contexts[-1]['scoring_eligible'] = False
+    monkeypatch.setitem(record, 'study_contexts', contexts)
+    row = _ingredient(name='Ashwagandha', canonical_id='ashwagandha')
+    row.update(raw_source_path='ingredientRows[0]', raw_source_text='Ashwagandha')
+    product = _product(ingredients=[row], matches=[{**record, 'ingredient': 'Ashwagandha',
+        'matched_canonical_ids': ['ashwagandha'], 'matched_source_row_refs': ['ingredientRows[0]']}])
+    assert not resolve_product_evidence(product).is_assessment_complete
+    assert score_evidence(product)['score'] == 0
+
+
+def test_v1_clinical_match_does_not_borrow_rejected_synthesis_counts():
+    from clinical_applicability import reviewed_entries, filter_clinical_matches
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    record = reviewed_entries()['INGR_ASHWAGANDHA']
+    row = _ingredient(name='Ashwagandha', canonical_id='ashwagandha')
+    row.update(raw_source_path='ingredientRows[0]',
+               raw_source_text='Ashwagandha root extract standardized withanolides')
+    match = {**record, 'ingredient': 'Ashwagandha',
+             'matched_canonical_ids': ['ashwagandha'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    accepted, _ = filter_clinical_matches(_product(ingredients=[row], matches=[match]),
+                                         [match], assess_amount=False, require_claim_alignment=False)
+    assert len(accepted) == 1
+    assert {r['pmid'] for r in accepted[0]['references_structured']} == {'23439798','32021735'}
+    assert record['published_studies'] == ['RCT']
+    assert record['published_rct_count'] == 2
+    assert record['published_meta_review_count'] == 0
+    assert len(record['references_structured']) == 4  # Historical inventory remains intact.

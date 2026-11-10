@@ -403,6 +403,9 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
         "clinical_identity_excluded", "clinical_form_excluded",
         "formula_reference_not_individual_evidence", "clinical_population_mismatch",
         "label_purpose_evidence_mismatch",
+        # The resolver emits this terminal disposition only after every
+        # bounded source review finishes; preparation uncertainty is explicit.
+        "clinical_source_label_unresolved",
     }
     if (disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
             and (("backed_clinical_studies" in resolution.matched_owners

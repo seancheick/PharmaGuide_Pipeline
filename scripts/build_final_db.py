@@ -8569,6 +8569,7 @@ def build_detail_blob(
         blob["evidence_data"] = {
             "match_count": evidence_data.get("match_count"),
             "clinical_matches": safe_list(evidence_data.get("clinical_matches")),
+            "ingredient_research": safe_list(evidence_data.get("ingredient_research")),
             "source_references": evidence_sources,
             "unsubstantiated_claims": (
                 safe_list(evidence_data["unsubstantiated_claims"].get("claims"))

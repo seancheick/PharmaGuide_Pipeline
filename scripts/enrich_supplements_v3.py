@@ -738,6 +738,7 @@ _CLINICAL_MATCH_PASSTHROUGH_FIELDS = (
     "aggregate_canonical_ids",
     "notes",
     "notable_studies",
+    "consumer_research",
     "references_structured",
 )
 
@@ -16795,6 +16796,38 @@ class SupplementEnricherV3:
                         existing_study_ids.add(study_id)
                     matches.append(match_payload)
 
+        # Research attribution is informational, separate from the following
+        # product-preparation applicability filter and numerical Evidence owner.
+        # Only records reached through the existing identity discovery can supply
+        # reviewed consumer copy; rejected applicability does not erase research.
+        from scoring_reference_resolver import unique_source_references
+
+        ingredient_research = []
+        for match in matches:
+            research = match.get("consumer_research")
+            if not isinstance(research, dict):
+                continue
+            if not all(isinstance(research.get(field), str) and research[field].strip()
+                       for field in ("summary", "applicability_note")):
+                continue
+            references = research.get("references_structured")
+            if not isinstance(references, list):
+                continue
+            references = unique_source_references(references)
+            if not references:
+                continue
+            ingredient_research.append({
+                "ingredient": match.get("ingredient") or match.get("standard_name"),
+                "summary": research["summary"],
+                "applicability_note": research["applicability_note"],
+                "studied_uses": [use for use in research.get("studied_uses", [])
+                                 if isinstance(use, dict)
+                                 and isinstance(use.get("outcome"), str)
+                                 and isinstance(use.get("summary"), str)]
+                    if isinstance(research.get("studied_uses"), list) else [],
+                "references_structured": [ref for ref in references if isinstance(ref, dict)],
+            })
+
         # Check for unsubstantiated claims
         all_text = self._get_all_product_text(product)
         unsubstantiated = self._check_unsubstantiated_claims(all_text)
@@ -16806,6 +16839,7 @@ class SupplementEnricherV3:
         return {
             "clinical_matches": matches,
             "rejected_clinical_matches": rejected,
+            "ingredient_research": ingredient_research,
             "match_count": len(matches),
             "unsubstantiated_claims": unsubstantiated
         }
