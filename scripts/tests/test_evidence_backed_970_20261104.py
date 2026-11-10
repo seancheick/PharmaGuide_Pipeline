@@ -68,7 +68,8 @@ def test_packet_drafts_pass_the_authoring_rules_and_carry_no_approval():
 def test_packet_drafts_stay_outside_the_data_file():
     packeted = {path.stem for path in (AUDIT / "packet").glob("*.json")}
     # The original packet remains unsigned. Only its independently qualified
-    # successor may enter production, with unfinished sibling sources retained.
+    # successor may enter production; source completion and numerical credit
+    # remain separate, and genuinely unfinished sibling sources stay visible.
     qualified = {"INGR_L_GLUTAMINE": {"30108163"},
                  "INGR_L_TYROSINE": {"24433977", "25598314", "36548401", "42275440"},
                  "INGR_NATTOKINASE": {"26109079"}}
@@ -81,7 +82,12 @@ def test_packet_drafts_stay_outside_the_data_file():
         assert {p for context in approved for p in context["source_pmids"]} == pmids
         assert all(context["review_status"] == "clinician_approved" for context in approved)
         assert all("Codex" in context["clinical_review"]["reviewer"] for context in approved)
-        assert assess_clinical_source_review(record)["is_complete"] == (record_id == "INGR_NATTOKINASE")
+        assert assess_clinical_source_review(record)["is_complete"] == (
+            record_id in {"INGR_NATTOKINASE", "INGR_L_GLUTAMINE"})
+        if record_id == "INGR_L_GLUTAMINE":
+            secondary = next(c for c in record["study_contexts"] if "34844156" in c["source_pmids"])
+            assert secondary["review_status"] == "rejected_source"
+            assert secondary["scoring_eligible"] is False
 
 
 def _audit_module(name):
