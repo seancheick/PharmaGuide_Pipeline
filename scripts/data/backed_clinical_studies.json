@@ -51981,7 +51981,7 @@
         "carnosine",
         "beta-alanyl-l-histidine"
       ],
-      "category": "amino_acids",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "study_type": "rct_multiple",
