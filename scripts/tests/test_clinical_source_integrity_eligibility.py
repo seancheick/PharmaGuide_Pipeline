@@ -2950,3 +2950,26 @@ def test_msm_same_chemistry_spellings_reach_reviewed_msm_evidence(label):
     assert score_evidence(product)['score'] > 0
     _, control = _joint_row_product('INGR_MSM', 'msm', 'MSM', 1500)
     assert score_evidence(control)['score'] > 0
+
+
+def test_milk_thistle_record_text_matches_signed_a092(completion_source_records):
+    """ADR-0007 liver batch: signed A092 rejected 'liver protection and enzyme normalization'
+    and kept only a narrow NAFLD/NASH research reading with no credit. The record's own
+    exported text and benefit chips must say the same thing (no stale positive claim)."""
+    r = completion_source_records['INGR_MILK_THISTLE']
+    assert r['study_type'] == 'reference' and not er.clinical_record_sources_eligible(r)
+    assert 'Clinical studies support liver protection' not in r['notes']
+    assert 'A092' in r['notes'] and 'does not establish a qualifying benefit' in r['notes']
+    assert r['key_endpoints'] == [] and r['health_goals_supported'] == []
+    assert r['primary_outcome'] == '' and r['endpoint_relevance_tags'] == []
+    assert r['effect_direction'] == 'mixed'
+    assert all(t in r['effect_direction_rationale'] for t in ('38579127', '17943794', 'A092'))
+    assert 'Kalopitas' not in r['notable_studies'] and 'Li et al.' in r['notable_studies']
+    assert r['total_enrollment'] is None and r['registry_completed_trials_count'] is None
+    assert r['published_studies'] == ['38579127', '17943794']
+
+
+def test_nac_oxidative_stress_sentence_stays_within_its_exercise_source(completion_source_records):
+    notes = completion_source_records['INGR_NAC']['notes']
+    assert 'measurably lowers oxidative-stress markers' not in notes
+    assert 'after exercise' in notes and '39632267' in notes and '9230243' in notes
