@@ -2114,7 +2114,7 @@ def test_new_hcl_and_cee_findings_use_existing_physical_scope_without_dose_curve
     assert product == before
 
 
-def test_ambiguous_peg_system_label_retains_independent_identity_hold():
+def test_named_peg_system_finishes_its_noncredit_preparation_assessment():
     from assessment_readiness import _resolved_evidence_assessment
     row = {'canonical_id': 'creatine_monohydrate', 'name': 'PEG-Creatine System',
            'raw_source_text': 'PEG-Creatine System', 'source_label_name': 'PEG-Creatine System',
@@ -2122,8 +2122,8 @@ def test_ambiguous_peg_system_label_retains_independent_identity_hold():
     product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
     resolution = er.resolve_evidence_for_row(row, product)
     assert not resolution.points_eligible
-    assert resolution.reason_code == 'clinical_source_label_unresolved'
-    assert _resolved_evidence_assessment(resolution)[0] == 'not_yet_evaluated'
+    assert resolution.reason_code == 'reference_only_clinical_record'
+    assert _resolved_evidence_assessment(resolution)[0] == 'evaluated_limited_or_negative'
 
 
 @pytest.mark.parametrize('reverse', [False, True])
@@ -2384,7 +2384,7 @@ def test_glutamine_burn_abstract_review_does_not_invent_route_or_erase_reported_
     assert not assess_clinical_source_review(record)['is_complete']
 
 
-@pytest.mark.parametrize('name', ['Creatine', 'Creatine Complex', 'Creatine Nitrate'])
+@pytest.mark.parametrize('name', ['Creatine', 'Creatine Complex', 'Micronized Creatine'])
 def test_finished_peg_reference_cannot_finish_unestablished_other_creatine_preparations(name):
     from assessment_readiness import _resolved_evidence_assessment
     row = {'canonical_id': 'creatine_monohydrate', 'name': name, 'raw_source_text': name,
@@ -2410,3 +2410,79 @@ def test_glutamine_biomarker_publications_share_conservative_family_and_remain_h
     assert 'Later publication alone does not establish' in ' '.join(context['limitations'])
     eligible = [c for c in record['study_contexts'] if c.get('scoring_eligible')]
     assert [c['source_pmids'] for c in eligible] == [['30108163']]
+
+
+@pytest.mark.parametrize('name', ['Creatine Ethyl Ester', 'Creatine Ethyl Ester HCl',
+    'Creatine Ethylester', 'PEG-Creatine System', 'Polyethylene Glycosylated Creatine',
+    'Creatine Citrate', 'Dicreatine Malate', 'Creatine Nitrate (as NO3-T®)',
+    'Creatine AKG', 'Creatine Alpha Ketoglutarate'])
+def test_explicit_distinct_creatine_preparations_finish_monohydrate_scope_without_transfer(name):
+    from clinical_applicability import assess_clinical_applicability, reviewed_entries
+    row = {'name': name, 'canonical_id': 'creatine_monohydrate',
+           'raw_source_text': name, 'raw_source_path': 'ingredientRows[0]',
+           'source_section': 'active', 'quantity': 3000, 'unit': 'mg'}
+    product = {'fullName': name, 'activeIngredients': [row],
+               'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    before = copy.deepcopy(product)
+    record = {**reviewed_entries()['INGR_CREATINE_MONOHYDRATE'],
+              'ingredient': name, 'matched_canonical_ids': ['creatine_monohydrate'],
+              'matched_source_row_refs': ['ingredientRows[0]']}
+    decision = assess_clinical_applicability(product, record, assess_amount=False,
+                                             require_claim_alignment=False)
+    assert decision['status'] == 'not_applicable'
+    assert decision['reason_code'] == 'clinical_form_excluded'
+    resolution = er.resolve_evidence_for_row(row, product)
+    assert 'clinical_source_label_unresolved' not in resolution.blocking_reasons
+    assert product == before
+    artifact = build_scored_artifact(product)
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'complete'
+    if 'ethyl' not in name.casefold():
+        assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('name', ['Creatine', 'Micronized Creatine', 'Creatine Complex',
+                                 'Creatine MagnaPower', 'OT2(TM) Creatine'])
+def test_unspecified_creatine_and_unverified_brand_still_require_preparation(name):
+    row = {'name': name, 'canonical_id': 'creatine_monohydrate', 'raw_source_text': name,
+           'raw_source_path': 'ingredientRows[0]', 'source_section': 'active'}
+    product = {'activeIngredients': [row], 'ingredient_quality_data': {'ingredients_scorable': [row]}}
+    artifact = build_scored_artifact(product)
+    assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+    assert artifact['quality_pillars_v4']['evidence']['score'] == 0
+
+
+@pytest.mark.parametrize('reverse', [False, True])
+@pytest.mark.parametrize('other_name', ['Creatine Ethyl Ester HCl', 'PEG-Creatine System',
+                                       'Creatine Citrate', 'Creatine'])
+def test_creatine_form_exclusions_stay_with_their_own_row_and_preserve_mono_credit(reverse, other_name):
+    from clinical_applicability import assess_clinical_applicability, reviewed_entries
+    from scoring_input_contract import get_evidence_subject_rows
+    names = ['Creatine Monohydrate', other_name]
+    if reverse:
+        names.reverse()
+    rows = [{'name': name, 'canonical_id': 'creatine_monohydrate', 'raw_source_text': name,
+             'raw_source_path': f'ingredientRows[{i}]', 'source_section': 'active',
+             'quantity': 3000, 'unit': 'mg'} for i, name in enumerate(names)]
+    product = {'fullName': 'Mixed creatine preparation control', 'targetGroups': ['Adults'],
+               'activeIngredients': rows, 'ingredient_quality_data': {'ingredients_scorable': rows}}
+    reference = reviewed_entries()['INGR_CREATINE_MONOHYDRATE']
+    mono_row = next(row for row in rows if row['name'] == 'Creatine Monohydrate')
+    product['evidence_data'] = {'clinical_matches': [{**copy.deepcopy(reference),
+        'ingredient': mono_row['name'], 'matched_canonical_ids': ['creatine_monohydrate'],
+        'matched_source_row_refs': [mono_row['raw_source_path']]}]}
+    before = copy.deepcopy(product)
+    decisions = []
+    for row in get_evidence_subject_rows(product):
+        scoped = {**reference, 'ingredient': row['name'],
+                  'matched_canonical_ids': ['creatine_monohydrate'],
+                  'matched_source_row_refs': [row['raw_source_path']]}
+        decisions.append((row['name'], assess_clinical_applicability(
+            product, scoped, assess_amount=False, require_claim_alignment=False)))
+    by_name = dict(decisions)
+    assert by_name['Creatine Monohydrate']['status'] == 'applicable'
+    assert by_name[other_name]['status'] == ('unresolved' if other_name == 'Creatine' else 'not_applicable')
+    artifact = build_scored_artifact(product)
+    assert artifact['quality_pillars_v4']['evidence']['score'] > 0
+    if other_name == 'Creatine':
+        assert artifact['assessment_readiness']['evidence']['readiness'] == 'incomplete'
+    assert product == before

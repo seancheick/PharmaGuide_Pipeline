@@ -40138,14 +40138,25 @@
         "source_pmids": [
           "39074168"
         ],
-        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms. Existing curated source aliases Creatin Monohydrate and Creapure identify monohydrate; the Creapure manufacturer independently confirms that preparation. This identity correspondence adds no branded efficacy or safety claim. Exact Kre-Alkalyn identifies the separately reviewed buffered preparation, not the ordinary monohydrate preparation qualified here. Its limited active-comparator research is retained in its own reference record; neither monohydrate efficacy transfer nor absence of buffered-creatine efficacy is inferred.",
+        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms. Existing curated source aliases Creatin Monohydrate and Creapure identify monohydrate; the Creapure manufacturer independently confirms that preparation. This identity correspondence adds no branded efficacy or safety claim. Exact Kre-Alkalyn identifies the separately reviewed buffered preparation, not the ordinary monohydrate preparation qualified here. Its limited active-comparator research is retained in its own reference record; neither monohydrate efficacy transfer nor absence of buffered-creatine efficacy is inferred. Explicit ethyl ester/CEE, PEG-prepared creatine, citrate, malate, nitrate and alpha-ketoglutarate declarations also do not establish the ordinary monohydrate preparation reviewed by this record. These are source-preparation exclusions, not findings of clinical inefficacy or absence of research. The existing CEE and PEG records retain their own source findings and eligibility. Generic creatine, micronized wording and unverified branded preparations remain unresolved; no identity, absorption, dose or efficacy equivalence is inferred.",
         "excluded_form_terms": [
           "creatine hydrochloride",
           "creatine HCl",
           "Con-Cret",
           "Kre-Alkalyn",
           "Kre Alkalyn",
-          "KreAlkalyn"
+          "KreAlkalyn",
+          "creatine ethyl ester",
+          "creatine ethylester",
+          "CEE",
+          "PEG",
+          "polyethylene glycosylated creatine",
+          "creatine citrate",
+          "dicreatine malate",
+          "creatine malate",
+          "creatine nitrate",
+          "creatine AKG",
+          "creatine alpha ketoglutarate"
         ],
         "supported_outcomes": [
           "Muscle Growth & Recovery"
