@@ -2835,6 +2835,36 @@ def test_v1_clinical_match_does_not_borrow_rejected_synthesis_counts():
     assert len(record['references_structured']) == 4  # Historical inventory remains intact.
 
 
+@pytest.mark.parametrize('label,complete,credit', [
+    ('Synthetic herb', True, False),                                  # preparation unknown
+    ('Synthetic herb leaf extract standardized to marker', True, True),  # studied class
+    ('Synthetic herb root extract standardized to marker', True, False),  # named non-equivalent
+])
+def test_v1_ingredient_general_path_is_record_driven_not_ashwagandha_specific(
+        monkeypatch, label, complete, credit):
+    """ADR-0007: any record carrying ingredient_general contexts and the reviewed
+    preparation-uncertainty attestation takes the same V1 path. No ingredient
+    name is special-cased in the resolver, applicability or scorer."""
+    import json as _json
+    import clinical_applicability as ca
+    import evidence_resolver as resolver
+    from tests.test_v4_generic_evidence_p133 import _product, _ingredient
+    source = _json.loads(_json.dumps(ca.reviewed_entries()['INGR_ASHWAGANDHA'])
+                         .replace('INGR_ASHWAGANDHA', 'INGR_SYNTHETIC_HERB'))
+    source.update(standard_name='Synthetic herb', aliases=['synthetic herb'])
+    source['applicability'].update(required_form_groups=[['leaf'], ['extract'], ['marker']],
+                                   excluded_form_terms=['root', 'liposomal'])
+    monkeypatch.setattr(ca, 'reviewed_entries', lambda: {source['id']: source})
+    monkeypatch.setattr(resolver, '_backed_studies_index', lambda: {'synthetic_herb': [source]})
+    row = _ingredient(name='Synthetic herb', canonical_id='synthetic_herb')
+    row.update(raw_source_path='ingredientRows[0]', raw_source_text=label)
+    match = {**source, 'ingredient': 'Synthetic herb', 'matched_canonical_ids': ['synthetic_herb'],
+             'matched_source_row_refs': ['ingredientRows[0]']}
+    product = _product(ingredients=[row], matches=[match], product_name='Unpositioned supplement')
+    assert resolver.resolve_product_evidence(product).is_assessment_complete is complete
+    assert (score_evidence(product)['score'] > 0) is credit
+
+
 @pytest.mark.parametrize('opt_in', [False, 'missing', 'true', None])
 def test_v1_preparation_completion_requires_explicit_canonical_review(monkeypatch, opt_in):
     import clinical_applicability as ca
