@@ -2488,6 +2488,67 @@ def test_creatine_form_exclusions_stay_with_their_own_row_and_preserve_mono_cred
     assert product == before
 
 
+def test_psyllium_qualified_lipid_review_does_not_borrow_unread_review_or_counts():
+    """Qualify one lipid source without lending unread bibliography or counts."""
+    from clinical_applicability import assess_clinical_source_review, reviewed_entries
+    from evidence_resolver import clinical_record_sources_eligible
+    record = reviewed_entries()['INGR_PSYLLIUM_HUSK']
+    assert len(record['study_contexts']) == 1
+    context = record['study_contexts'][0]
+    assert context['source_pmids'] == ['30239559']
+    assert validate_ingredient_context(context, require_complete_review=True) == []
+    assert assess_clinical_source_review(record)['is_complete']
+    assert clinical_record_sources_eligible(record, context=context, source_pmids=['30239559'])
+    assert not clinical_record_sources_eligible(record, context=context, source_pmids=['18985059'])
+    old = next(r for r in record['references_structured'] if r['pmid'] == '18985059')
+    assert old['scoring_eligible'] is False
+    assert 'unread' in old['notes'].lower()
+    assert record['published_studies_count'] == 1
+    assert 'total_enrollment' not in record and 'registry_completed_trials_count' not in record
+    assert record['primary_outcome'] == 'Cardiovascular/Heart Health'
+    assert record['effect_direction_confidence'] == 'medium'
+    assert context['population']['age_group'] == 'mixed'
+    assert len(context['included_study_pmids']) == 25
+    assert context['dose']['values'] == [] and 'min_clinical_dose' not in record
+    assert sum(o['direction'] == 'positive' for o in context['outcomes']) == 3
+    assert all(o['kind'] == 'surrogate' for o in context['outcomes'])
+    assert 'not clinician review' in context['clinical_review']['reviewer']
+
+
+@pytest.mark.parametrize('name,title,physical,eligible', [
+    ('Psyllium husk', 'Fiber supplement', 'Powder', True),
+    ('Psyllium husk', 'Fiber supplement', 'Capsule', True),
+    ('Psyllium husk', 'Fiber supplement', 'Softgel', True),
+    ('Plantago ovata whole seed', 'Fiber supplement', 'Powder', False),
+    ('Psyllium fiber (whole seed)', 'Fiber supplement', 'Powder', False),
+    ('Psyllium husk and whole seed', 'Fiber supplement', 'Powder', False),
+    ('Psyllium', 'Fiber supplement', 'Powder', False),
+    ('Other soluble fiber', 'Fiber supplement', 'Powder', False),
+    ('Psyllium husk', 'Infant fiber', 'Powder', False),
+    ('Psyllium husk', 'Pregnancy fiber', 'Powder', False),
+])
+def test_psyllium_lipid_research_keeps_material_route_and_population_scope(name, title, physical, eligible):
+    """Bind research to source material and population without mutating inputs."""
+    from clinical_applicability import filter_clinical_matches, reviewed_entries
+    row = {'name': name, 'raw_source_text': name, 'source_label_name': name,
+           'canonical_id': 'psyllium', 'mapped': True, 'quantity': 100, 'unit': 'mg',
+           'raw_source_path': 'ingredientRows[0]'}
+    product = {'fullName': title, 'physicalState': {'langualCodeDescription': physical},
+               'activeIngredients': [copy.deepcopy(row)],
+               'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
+    entry = {**reviewed_entries()['INGR_PSYLLIUM_HUSK'], 'ingredient': name,
+             'matched_canonical_ids': ['psyllium'], 'matched_source_row_refs': ['ingredientRows[0]']}
+    original = copy.deepcopy((product, entry))
+    matches, rejected = filter_clinical_matches(product, [entry], assess_amount=False,
+                                          require_claim_alignment=False)
+    assert bool(matches) is eligible
+    if "whole seed" in name:
+        assert len(rejected) == 1
+        assert rejected[0]["status"] == "not_applicable"
+        assert rejected[0]["reason_code"] == "clinical_form_excluded"
+    assert (product, entry) == original
+
+
 def test_carnosine_primary_glycemic_sources_have_scoped_native_credit_without_replication_inflation():
     from clinical_applicability import reviewed_entries, assess_clinical_source_review, qualifying_purpose_outcomes
     record = reviewed_entries().get('INGR_L_CARNOSINE')

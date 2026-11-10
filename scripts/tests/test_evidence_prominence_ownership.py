@@ -365,12 +365,20 @@ def test_real_blend_total_never_becomes_an_undisclosed_members_floor(fixture, me
     """The member remains an owner; only qualified research may earn points.
     An undisclosed member amount can never borrow the blend total for a floor.
     """
-    evidence = _evidence(_enrich(fixture))
+    product = _enrich(fixture)
+    evidence = _evidence(product)
     assert member in evidence["metadata"]["evidence_owner_canonicals"]
     assert evidence["metadata"]["primary_evidence_floor"] == 0.0
     if member == "psyllium":
-        from clinical_applicability import reviewed_entries
-        assert not reviewed_entries()["INGR_PSYLLIUM_HUSK"].get("study_contexts")
+        from clinical_applicability import assess_clinical_source_review, reviewed_entries
+        assert assess_clinical_source_review(reviewed_entries()["INGR_PSYLLIUM_HUSK"])["is_complete"]
+        # The qualified source is husk-specific; this label declares bare
+        # Psyllium with no member amount. Neither identity nor amount may be
+        # supplied by the fiber blend's 3.1 g total.
+        row = next(r for r in product["ingredient_quality_data"]["ingredients"]
+                   if r.get("canonical_id") == "psyllium")
+        assert row["raw_source_text"] == "Psyllium"
+        assert row["quantity"] == 0 and row["unit"] == "NP"
         assert evidence["components"]["clinical_evidence_pipeline"] == 0
     else:
         assert evidence["components"]["clinical_evidence_pipeline"] > 0
