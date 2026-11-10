@@ -1,6 +1,6 @@
 # ADR-0007 — Evidence V1: a finite, ingredient-first completion standard
 
-**Status:** PROPOSED (direction approved by Sean 2026-11-10; this record needs his acceptance)
+**Status:** ACCEPTED (Sean, 2026-11-10)
 **Date:** 2026-11-10
 **Owners:** `scripts/evidence_resolver.py::resolve_product_evidence` / `_resolve_evidence_for_row`;
 `scripts/clinical_applicability.py::assess_clinical_applicability`;
