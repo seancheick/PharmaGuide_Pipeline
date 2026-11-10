@@ -5314,3 +5314,55 @@ Validation: fail-first shared classes and named source/owner/consumer guards pas
 Controlled performance: 35 identical frozen inputs across seven routes, eight observations each; warm Score 11.119915→12.368930 s (+11.232%, +1.249 s per 35), process peak 478,953,472→493,633,536 bytes (+3.065%). The increase is real and independently explained: completion activates existing confidence/clinical-match checks that previously returned early, especially complex labels. No scientific check, scope guard or input isolation was removed. Four-label profiles are diagnostic only; line-number-based profile keys can falsely identify moved functions as new, so the explanation uses unchanged confidence functions and file/function comparisons. Blob/Core also execute outside the timer; no full-pipeline speed or universal neutrality claim. Independent final source/output/performance and annotation-reuse review approved; exact final CI 42852759319 passed all eight groups, Validation scope and Merge readiness. The redundant manual run 42852764398 was cancelled when the delayed automatic run appeared; it is not a pass. PR #431 integrated as `f4f7f1c4f2dfa6c49c87f2628fff17fa05e8f64b` at 2026-11-10T16:31:16Z. Fetched-main containment and identical merge/candidate trees were verified. No rebuild, release, global census or installed-app qualification.
 
 Evidence: existing private `evidence-completion-20261106` receipts `GAA_GLN_COMPLETION_AND_BLOCKERS`, `GAA_GLN_CLOSURE_CAUSES`, `GAA_GLN_ALL_PATH_DIFFERENCES`, `GAA_GLN_CORE_CONSUMER_COMPARISON`, `GAA_GLN_BASELINE_SOURCE_MAP`, `GAA_GLN_FINAL_SOURCE_BINDING`, `GAA_GLN_ANNOTATION_PARITY_BRIDGE`, `GAA_GLN_PERFORMANCE` and independent final review `ed8db3bc63af0d531c42719b79b1245cf9f4a776d72cc10c953a3c98f236e942`. Prior source-bound batches remain intact.
+
+
+November 10 — Four-group Evidence V1 candidate, not yet qualified or integrated.
+Owner: clinical_applicability::assess_clinical_source_review and existing Evidence,
+readiness and curated-data owners; matrix/glossary/function/caller inspection.
+Will NOT create another engine, registry, status, scoring scale or tracker.
+Baseline fetched d06f06d18; branch codex/taurine-ranked-scientific-batch.
+Qualified source packets cover taurine primary26781281 and bounded2024screen39148075,
+exact approved32871172/41275513/34798267noncredit transfers, carnitine32359762
+noncredit completion and rice23782948/33261645active-comparator assessments.
+Unchanged carnitine contexts, prior clinical attribution and glutamine hold preserved.
+
+Fail-first source/owner tests reproduce missing source integration and finished
+noncredit reviews incorrectly remaining incomplete. Owner-only same-data audit
+finds six closures and zero reopenings after preserving old approved-reference
+scope; this is NOT six product completions. Initial overbroad reference coverage
+probe and failures remain retained, superseded before candidate measurement.
+
+Original1,308frozen IDs expanded to1,520 with212disjoint ashwagandha/control IDs;
+manual PG_SUB raw sources are retained from actual product_submissions, never NIH
+API substitutes. Comparison cohorts and source-bound baselines are preserved.
+Actual product transitions, final tests/local/CI, performance, independent final
+review and integration remain NOT ESTABLISHED. No global numerator increment,
+rebuild, release, export activation or installed-app delivery claimed.
+Ashwagandha pipeline/preparation/Flutter implementation belongs to the concurrent
+V1 consumer lane; no duplicate implementation or competing corpus build.
+
+
+Four-group native measurement completed: all1,520 raw Clean→Enrich→Score→Blob
+captures exit0/source_unchangedTrue, outputSHA1a1c5662fe77a2310e8e38bc6ccfe87bad3dd355144740e35e9193b4a82cdabf.
+Paired full-path and native Core comparison:1,517catalog+3excludedcontrols;
+734complete→complete,187partial→scored-complete,596partial→partial,0reopenings,
+0finished-unrated additions. Original1,308 selection contains all187closures;
+additional212Ashwa/ownercontrols contain79unchangedcomplete/133unchangedpartial.
+All7routes,45Evidence-only numerical movements,other5pillars/Clean/physical
+identity/amount/roles/warnings/safety unchanged,0Core/Blob contract findings.
+Core enumerates187completion/share and45score/Evidence changes,40tierchanges,
+438retainedBlobhashes,derivedhighlights and1,520executiontimestamps. Actual Core
+projections use retained compact-JSON Blob hashes; this is not a built/released DB.
+Remaining596have overlapping581Evidence,40hidden-amount quality,15hidden-amount
+safety,4nativeprobiotic,16identity,18Dose and3contributingtyrosine-review holds.
+L-carnitine has51sole-Evidence opportunities in this bounded ranking; these are
+not promised closures and will be reconciled with the separate V1 preparation
+policy. No bounded count is added to historical whole-catalog totals.
+
+Final named stable owner/consumer1073passed104.75s; finalsource guards394passed
+4.61s; exact4backed/1literature data checks0problems andPython0new/10existing.
+52provenance prose paths now clarify spacing and the already approved historical
+A114supersession; a35label all-route/affected/held correction proof is underway.
+Clinical population/outcome text still receives canonical applicability checks;
+this remains the behavioral batch rung, not a claim that strings cannot matter.
+Performance/final independent review/local/exactCI/integration remain pending.

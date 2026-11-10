@@ -2348,3 +2348,46 @@ Controlled identical final-enriched inputs, 16 representative affected/complex/h
 
 
 Psyllium hosted follow-up: exact ca3b360f6 run 42767419528 passed seven fast groups but failed group 2 on one stale ownership assertion that INGR_PSYLLIUM_HUSK had no native contexts. Native fixture 219048 independently remains bare Psyllium, 0/NP member amount, zero clinical credit and zero primary floor; neither husk identity nor a disclosed amount is borrowed from the 3.1 g blend. The test now asserts the completed source assessment plus those actual material/amount/output boundaries. Whole-seed regressions additionally assert not_applicable/clinical_form_excluded, and the two new source tests have docstrings. This is a test-only correction: every production code/data byte is unchanged from qualified runtime 017d3f662. Source/107-output/Core/performance and local564/24 receipts retain their original identities and remain applicable through that exact runtime bridge; no production replay or broad local rerun is warranted. The failed CI remains failed; final qualification requires the corrected candidate's new complete hosted run.
+
+
+### November 10 — Evidence V1 / four-group scientific batch (in progress)
+
+Owner: `scripts/clinical_applicability.py::assess_clinical_source_review` and existing
+Evidence/readiness/scoring/data owners — evidence: matrix, glossary and callers;
+source packets and exact-entry proposals retained in the existing private evidence
+completion directory. Will NOT create another engine, registry, status, grading
+scale or completion tracker. Ashwagandha preparation and consumer presentation are
+owned by the concurrent V1 consumer lane; this batch preserves that work.
+
+- [x] Independently qualify taurine 26781281 primary evidence; retain its adult
+  prehypertension, free-taurine preparation and 1.6 g/day for 12 weeks boundaries.
+  Screen 39148075 membership/integrity without adding pooled credit or replication.
+- [x] Apply Sean's exact A114/A073 noncredit-transfer supersession for three
+  syntheses, retaining unread Methods and reported positive/null findings.
+- [x] Finish bounded carnitine 32359762 and two rice-protein active-comparator
+  source assessments without unsupported generic efficacy or Dose credit.
+- [x] Reproduce and repair the shared all-noncredit source-completion defect;
+  preserve unfinished-source/provenance/parent-hold guards and valid prior scopes.
+- [x] Freeze 1,520 unique comparison IDs: original 1,308 plus 212 additional
+  ashwagandha/control labels. Preserve manual submissions and excluded controls.
+  These are comparison reach, not promised completions or a new global census.
+- [x] Measure 1,520 native frozen-label pairs across all seven routes: 1,517
+  catalog products plus three excluded controls. **187 become scored-complete,
+  zero reopen, 734 remain complete and 596 remain partial.** Forty-five Evidence
+  scores change; all other pillar scores, Clean, identities, quantities, roles,
+  warnings and safety are unchanged. Actual paired Core/Blob projections find
+  zero consumer-contract problems. These results bind the measured d06-based
+  candidate, not current global totals or the separate ashwagandha lane.
+- [ ] Finish provenance-format correction parity, controlled performance and
+  independent final output review. Named stable owner/consumer checks pass
+  1,073 cases; final source guards pass 394. Broad qualification is pending.
+- [ ] Qualify exact final source with applicable local checks and green CI,
+  integrate under existing authorization and reconcile the consumer lane.
+- [ ] Inspect integrated stage fingerprints, run one necessary nonpublishing
+  pipeline candidate, and establish one coherent 15,447-product census with
+  intentionally unrated products separate. Verify actual export/app consumers.
+
+Finite V1 review and incremental maintenance are recorded in ADR-0004. Preserve
+PMID 34844156's numerical hold and 30108163's separate approval. No prior bounded
+closure count is added to the historical census; no rebuilt catalog or app
+activation is established by the source work above.
