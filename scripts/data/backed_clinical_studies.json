@@ -3,8 +3,8 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
-    "last_updated": "2026-11-09",
-    "total_entries": 220,
+    "last_updated": "2026-11-10",
+    "total_entries": 221,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -40138,7 +40138,7 @@
         "source_pmids": [
           "39074168"
         ],
-        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms. Existing curated source aliases Creatin Monohydrate and Creapure identify monohydrate; the Creapure manufacturer independently confirms that preparation. This identity correspondence adds no branded efficacy or safety claim. Exact Kre-Alkalyn identifies the separately reviewed buffered preparation, not the ordinary monohydrate preparation qualified here. Its limited active-comparator research is retained in its own reference record; neither monohydrate efficacy transfer nor absence of buffered-creatine efficacy is inferred. Explicit ethyl ester/CEE, PEG-prepared creatine, citrate, malate, nitrate and alpha-ketoglutarate declarations also do not establish the ordinary monohydrate preparation reviewed by this record. These are source-preparation exclusions, not findings of clinical inefficacy or absence of research. The existing CEE and PEG records retain their own source findings and eligibility. Generic creatine, micronized wording and unverified branded preparations remain unresolved; no identity, absorption, dose or efficacy equivalence is inferred.",
+        "reason": "This existing record describes creatine monohydrate. The source label must identify that preparation; a shared creatine canonical, an enrichment-derived default form, or Con-Cret/creatine hydrochloride wording does not establish correspondence. This form scope adds no dose threshold or grade and does not conclude that hydrochloride, another salt or an unspecified preparation is ineffective. PMID 39519498 discusses monohydrate but uses broadly worded inclusion criteria; it is not evidence of universal equivalence among forms. Existing curated source aliases Creatin Monohydrate and Creapure identify monohydrate; the Creapure manufacturer independently confirms that preparation. This identity correspondence adds no branded efficacy or safety claim. Exact Kre-Alkalyn identifies the separately reviewed buffered preparation, not the ordinary monohydrate preparation qualified here. Its limited active-comparator research is retained in its own reference record; neither monohydrate efficacy transfer nor absence of buffered-creatine efficacy is inferred. Explicit ethyl ester/CEE, PEG-prepared creatine, citrate, malate, nitrate and alpha-ketoglutarate declarations also do not establish the ordinary monohydrate preparation reviewed by this record. These are source-preparation exclusions, not findings of clinical inefficacy or absence of research. The existing CEE and PEG records retain their own source findings and eligibility. Generic creatine, micronized wording and unverified branded preparations remain unresolved; no identity, absorption, dose or efficacy equivalence is inferred. Source labels separately identify the Creatine MagnaPower prepared component and OT2 modified-release preparation. These named preparations do not by themselves establish ordinary monohydrate clinical correspondence. This does not assign one chemistry to every manufacturer variant; an explicitly declared separate monohydrate component retains its own research. No absorption, modified-release equivalence, efficacy-null or safety claim follows.",
         "excluded_form_terms": [
           "creatine hydrochloride",
           "creatine HCl",
@@ -40156,7 +40156,10 @@
           "creatine malate",
           "creatine nitrate",
           "creatine AKG",
-          "creatine alpha ketoglutarate"
+          "creatine alpha ketoglutarate",
+          "Creatine MagnaPower",
+          "OT2(TM) Creatine",
+          "OT2 Creatine"
         ],
         "supported_outcomes": [
           "Muscle Growth & Recovery"
@@ -51967,6 +51970,654 @@
           }
         }
       ]
+    },
+    {
+      "id": "INGR_L_CARNOSINE",
+      "standard_name": "L-Carnosine",
+      "canonical_id": "l_carnosine",
+      "aliases": [
+        "l-carnosine",
+        "l carnosine",
+        "carnosine",
+        "beta-alanyl-l-histidine"
+      ],
+      "category": "amino_acids",
+      "evidence_level": "ingredient-human",
+      "score_contribution": "tier_1",
+      "study_type": "rct_multiple",
+      "published_studies": [
+        "RCT"
+      ],
+      "published_studies_count": 2,
+      "key_endpoints": [
+        "Source-specific primary HOMA-IR and OGTT glucose findings, with mixed/null other outcomes"
+      ],
+      "health_goals_supported": [],
+      "effect_direction": "mixed",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Two independent small primary glycemic trial families report favorable surrogate contrasts with important nulls, attrition and analysis limitations. Companion publications and exploratory subgroups do not add independent replication. Existing mixed multiplier only; no positive_moderate interpretation.",
+      "total_enrollment": null,
+      "endpoint_relevance_tags": [
+        "glycemic_control"
+      ],
+      "scoring_eligible": true,
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "required_form_terms": [
+          "carnosine"
+        ],
+        "excluded_form_terms": [
+          "n acetyl",
+          "acetyl carnosine",
+          "zinc carnosine",
+          "zinc l carnosine",
+          "polaprezinc",
+          "anserine",
+          "beta alanine",
+          "balenine",
+          "ophidine"
+        ],
+        "supported_outcomes": [
+          "glycemic_control"
+        ],
+        "studied_population": "Source-specific adult overweight/obesity or prediabetes/well-controlled type2 diabetes cohorts; no universal glucose, disease-prevention or performance claim.",
+        "source_pmids": [
+          "27040154",
+          "38172006"
+        ],
+        "reviewed_at": "2026-11-10",
+        "reason": "Plain oral L-carnosine research is qualified only for the source-specific primary glycemic surrogates. Different administered substances, mixtures, eye drops and derivatives cannot borrow these findings. Ingredient Evidence does not require advertising a diabetes claim; Dose and safety remain independent."
+      },
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_27040154_primary_glycemic",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "27040154"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "Unmodified L-carnosine (beta-alanyl-L-histidine), not beta-alanine or acetyl/zinc/anserine preparations.",
+            "preparation": "Oral carnosine supplied by Flamma SpA, Italy; do not infer a brand-wide assay or equivalence to derivatives."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "glycemic_control",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "de_courten_2016_slovak_pilot",
+          "population": {
+            "age_group": "adult",
+            "description": "Sedentary nondiabetic adults with overweight/obesity, mean age43years;30randomized15perarm,26analyzed15carnosine/11placebo. Not diagnosed diabetes or universal healthy-adult benefit."
+          },
+          "study_design": "Single-center randomized double-blind placebo-controlled12-week pilot, September–December2013; primary HOMA-IR stated in sample-size Methods.",
+          "sample_size": 30,
+          "outcomes": [
+            {
+              "name": "Primary HOMA-IR: both arms rose, with a smaller rise in carnosine; adjusted intervention estimate -0.89,SE0.41,p=.038(Table2). This is attenuation, not an absolute HOMA-IR reduction.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Whole-group fasting and2-hour glucose and2-hour insulin did not differ; glucose-tolerance subgroup findings are additional population-specific results, not the whole-cohort primary finding.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Additional impaired-glucose-tolerance subgroup glucose/insulin findings favored carnosine; prespecified subgroup status not established here.",
+              "hierarchy": "not_reported",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Blood pressure, lipids and inflammatory markers were not significantly different.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              2
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "1 g twice daily.",
+            "dosage_forms": [
+              "oral supplement"
+            ],
+            "co_therapies": [
+              "Identical-looking sucrose placebo2g/day; no baseline medication/supplement use reported."
+            ],
+            "reported_regimen": "2 g/day oral L-carnosine in two divided doses for 12 weeks. Descriptive studied regimen, not a general Dose benchmark.",
+            "normalization": {
+              "basis": "Retain nominal assigned ingredient mass; no carnosinase, metabolite, marker or body-weight conversion."
+            },
+            "source_provenance": {
+              "pmid": "27040154",
+              "source_url": "https://onlinelibrary.wiley.com/doi/full/10.1002/oby.21434",
+              "location": "Full published primary Methods, Results, tables and limitations; source-specific comparisons and trial-family boundaries independently checked."
+            }
+          },
+          "limitations": [
+            "One dropout and three placebo participants excluded after randomization for substantial weight loss. Small complete-case analysis and postrandomization exclusions limit confidence.",
+            "HOMA-IR is indirect; seasonal/lifestyle changes could contribute to the rise in both arms. Do not claim absolute insulin-resistance improvement or proven prevention.",
+            "Small, limited adult trials with surrogate outcomes do not demonstrate diabetes prevention, reduced clinical events, general athletic benefit, a universal effective dose or safety clearance."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary content and reported endpoint hierarchy verified; existing primary/unranked rubric applied, no new numerical interpretation or clinical policy."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_38172006_primary_glycemic",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "38172006"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "Unmodified L-carnosine (beta-alanyl-L-histidine), not beta-alanine or acetyl/zinc/anserine preparations.",
+            "preparation": "Flamma Group oral carnosine,1g twice daily; independently laboratory-tested powder in indistinguishable capsules as reported, no numerical purity or general retail equivalence inferred."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "glycemic_control",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "monash_nct02917928_carnosine",
+          "population": {
+            "age_group": "adult",
+            "description": "Adults18–70 with prediabetes or well-controlledT2DM(HbA1c<8%),BMI<40; untreated or metformin only, stable medication; participants were not pregnant or lactating.49randomized,43completed20carnosine/23placebo."
+          },
+          "study_design": "Parallel randomized double-blind14-week trial; sex-stratified computer blocks of4, pharmacist concealment; registeredNCT02917928. Primary plasma glucose on2-hourOGTT; complete-case analysis plus multiple-imputation sensitivity.",
+          "sample_size": 49,
+          "outcomes": [
+            {
+              "name": "Primary OGTT glucose:90- and120-minute between-group findings favored carnosine; reported glucose AUC difference -3.30,p=.04 in complete cases.",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Fasting glucose,HbA1c,insulin andHOMA-derived outcomes were not significantly improved.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            },
+            {
+              "name": "Most body-composition/anthropometric findings were null; initial weight/BMI differences did not remain significant in reported covariate models.",
+              "hierarchy": "secondary",
+              "kind": "surrogate",
+              "direction": "null",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "g",
+            "values": [
+              2
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 98,
+            "administration_frequency": "1 g twice daily.",
+            "dosage_forms": [
+              "oral supplement"
+            ],
+            "co_therapies": [
+              "Matching methylcellulose1g twice daily; usual diet/activity and stable prescribed medication retained."
+            ],
+            "reported_regimen": "2 g/day oral L-carnosine in two divided doses for 14 weeks. Descriptive studied regimen, not a general Dose benchmark.",
+            "normalization": {
+              "basis": "Retain nominal assigned ingredient mass; no carnosinase, metabolite, marker or body-weight conversion."
+            },
+            "source_provenance": {
+              "pmid": "38172006",
+              "source_url": "https://vuir.vu.edu.au/48125/1/1-s2.0-S0939475323004192-main.pdf",
+              "location": "Full published primary Methods, Results, tables and limitations; source-specific comparisons and trial-family boundaries independently checked."
+            }
+          },
+          "limitations": [
+            "Six randomized participants did not complete, including one medication-change withdrawal. The source has49randomized/43completed, not43randomized.",
+            "Abstract, narrative and table values for individual glucose-timepoint estimates differ; do not invent a single corrected estimate. Table3 imputed AUC p-values range0.024–0.055, so not every sensitivity analysis is significant.90/120-minute glucose findings remain positive in the reported imputation ranges.",
+            "Inflammation,vascular,musculoskeletal,cognitive and mood reports bearingNCT02917928 are conservatively grouped as one family, not independent replication or added enrollment; the cognitive-report count discrepancy is retained separately.",
+            "Small, limited adult trials with surrogate outcomes do not demonstrate diabetes prevention, reduced clinical events, general athletic benefit, a universal effective dose or safety clearance."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary content and reported endpoint hierarchy verified; existing primary/unranked rubric applied, no new numerical interpretation or clinical policy."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_39919936_bounded_noncredit",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "39919936"
+          ],
+          "trial_family": "neat_nct03314987",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "39919936",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12014415/",
+              "location": "FullPMC12014415: explicitly post-hoc secondary cognition analysis ofNEAT. Whole-cohort aggregate nulls coexist with selected age/domain positives and negatives; postrandomization compliance/biochemical-response exclusions. No qualifying primary cognitive benefit or independent replication."
+            }
+          },
+          "limitations": [
+            "FullPMC12014415: explicitly post-hoc secondary cognition analysis ofNEAT. Whole-cohort aggregate nulls coexist with selected age/domain positives and negatives; postrandomization compliance/biochemical-response exclusions. No qualifying primary cognitive benefit or independent replication.",
+            "Finished source-specific assessment for numerical eligibility under the existing primary-outcome rubric, not an inference of global inefficacy. Secondary or post-hoc findings remain factual; source-specific clinical/dose/safety claims beyond this bounded scope are not authorized."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/tables and source-family linkage checked; preserve actual positive/null findings and their hierarchy, no invented primary success."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_42308284_bounded_noncredit",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "42308284"
+          ],
+          "trial_family": "neat_nct03314987",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "42308284",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13276806/",
+              "location": "FullPMC13276806: same299-randomized NEAT family,283baseline physical assessments and fewer analyzed per visit. Mostly null whole-cohort/adjusted performance findings and selected age/sex subgroup positives; compliance/nonresponder exclusions. Preserve reported positives without general performance credit or a second trial count."
+            }
+          },
+          "limitations": [
+            "FullPMC13276806: same299-randomized NEAT family,283baseline physical assessments and fewer analyzed per visit. Mostly null whole-cohort/adjusted performance findings and selected age/sex subgroup positives; compliance/nonresponder exclusions. Preserve reported positives without general performance credit or a second trial count.",
+            "Finished source-specific assessment for numerical eligibility under the existing primary-outcome rubric, not an inference of global inefficacy. Secondary or post-hoc findings remain factual; source-specific clinical/dose/safety claims beyond this bounded scope are not authorized."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/tables and source-family linkage checked; preserve actual positive/null findings and their hierarchy, no invented primary success."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_34174842_bounded_noncredit",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "34174842"
+          ],
+          "trial_family": "thai_diabetic_nephropathy_34174842",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "34174842",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8235831/",
+              "location": "FullPMC8235831:40-person diabetic-nephropathy trial,2g/day12weeks. Primary absolute mean-change urinaryTGF-beta contrast was not significant; additional percentage-change analysis favored carnosine,p=.03,CI3.48–64.54. Albuminuria and renal-function measures null; preserve both scales without primary success or clinical renoprotection."
+            }
+          },
+          "limitations": [
+            "FullPMC8235831:40-person diabetic-nephropathy trial,2g/day12weeks. Primary absolute mean-change urinaryTGF-beta contrast was not significant; additional percentage-change analysis favored carnosine,p=.03,CI3.48–64.54. Albuminuria and renal-function measures null; preserve both scales without primary success or clinical renoprotection.",
+            "Finished source-specific assessment for numerical eligibility under the existing primary-outcome rubric, not an inference of global inefficacy. Secondary or post-hoc findings remain factual; source-specific clinical/dose/safety claims beyond this bounded scope are not authorized."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/tables and source-family linkage checked; preserve actual positive/null findings and their hierarchy, no invented primary success."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_39599686_bounded_noncredit",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "39599686"
+          ],
+          "trial_family": "monash_nct02917928_carnosine",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "39599686",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11597812/",
+              "location": "FullPMC11597812: secondary inflammation/adipokine analysis ofNCT02917928,49randomized/41completers;2g/day14weeks. No significant between-group inflammatory/adipokine benefit. This does not erase the primary glycemic findings or constitute a separate trial."
+            }
+          },
+          "limitations": [
+            "FullPMC11597812: secondary inflammation/adipokine analysis ofNCT02917928,49randomized/41completers;2g/day14weeks. No significant between-group inflammatory/adipokine benefit. This does not erase the primary glycemic findings or constitute a separate trial.",
+            "Finished source-specific assessment for numerical eligibility under the existing primary-outcome rubric, not an inference of global inefficacy. Secondary or post-hoc findings remain factual; source-specific clinical/dose/safety claims beyond this bounded scope are not authorized."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/tables and source-family linkage checked; preserve actual positive/null findings and their hierarchy, no invented primary success."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_38004228_bounded_noncredit",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "38004228"
+          ],
+          "trial_family": "monash_nct02917928_carnosine",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "38004228",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10674211/",
+              "location": "FullPMC10674211: companion vascular/metabolic outcomes fromNCT02917928,2g/day14weeks. Blood pressure,heart rate,endothelial function,arterial stiffness,lipids and hepatic/renal outcomes not significantly improved; no general cardiovascular-event inference or independent trial credit."
+            }
+          },
+          "limitations": [
+            "FullPMC10674211: companion vascular/metabolic outcomes fromNCT02917928,2g/day14weeks. Blood pressure,heart rate,endothelial function,arterial stiffness,lipids and hepatic/renal outcomes not significantly improved; no general cardiovascular-event inference or independent trial credit.",
+            "Finished source-specific assessment for numerical eligibility under the existing primary-outcome rubric, not an inference of global inefficacy. Secondary or post-hoc findings remain factual; source-specific clinical/dose/safety claims beyond this bounded scope are not authorized."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/tables and source-family linkage checked; preserve actual positive/null findings and their hierarchy, no invented primary success."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_39770949_bounded_noncredit",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "39770949"
+          ],
+          "trial_family": "monash_nct02917928_carnosine",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "39770949",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11677094/",
+              "location": "FullPMC11677094: secondary musculoskeletal analysis of the same49-randomized/43-completed Monash family. Strength,body-composition and bone outcomes not significantly improved over placebo; no independent replication or performance claim."
+            }
+          },
+          "limitations": [
+            "FullPMC11677094: secondary musculoskeletal analysis of the same49-randomized/43-completed Monash family. Strength,body-composition and bone outcomes not significantly improved over placebo; no independent replication or performance claim.",
+            "Finished source-specific assessment for numerical eligibility under the existing primary-outcome rubric, not an inference of global inefficacy. Secondary or post-hoc findings remain factual; source-specific clinical/dose/safety claims beyond this bounded scope are not authorized."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/tables and source-family linkage checked; preserve actual positive/null findings and their hierarchy, no invented primary success."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_41767833_bounded_noncredit",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "41767833"
+          ],
+          "trial_family": "monash_nct02917928_carnosine",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "41767833",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12935567/",
+              "location": "FullPMC12935567: secondary analysis of the same Monash trial,38participants with mood/QoL measures. Adjusted PHQ-8 total difference favored carnosine(-2.0,95%CI-3.9to-0.2,p=.03); individual domains and quality-of-life measures null. Preserve favorable secondary finding without promoting it to the registered glycemic primary or adding independent enrollment."
+            }
+          },
+          "limitations": [
+            "FullPMC12935567: secondary analysis of the same Monash trial,38participants with mood/QoL measures. Adjusted PHQ-8 total difference favored carnosine(-2.0,95%CI-3.9to-0.2,p=.03); individual domains and quality-of-life measures null. Preserve favorable secondary finding without promoting it to the registered glycemic primary or adding independent enrollment.",
+            "Finished source-specific assessment for numerical eligibility under the existing primary-outcome rubric, not an inference of global inefficacy. Secondary or post-hoc findings remain factual; source-specific clinical/dose/safety claims beyond this bounded scope are not authorized."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/tables and source-family linkage checked; preserve actual positive/null findings and their hierarchy, no invented primary success."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "l_carnosine_40430451_bounded_noncredit",
+          "components": [
+            "INGR_L_CARNOSINE"
+          ],
+          "source_pmids": [
+            "40430451"
+          ],
+          "trial_family": "monash_nct02917928_carnosine",
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "40430451",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12114902/",
+              "location": "FullPMC12114902: secondary cognition report bearingNCT02917928; DSST,Stroop,trail-making andCANTAB findings were not significantly different. Reported42participants/19women differs from the primary43completers/13women; preserve this unreconciled reporting discrepancy and conservatively group the family, without claiming proven identical participants, new primary cognitive credit or added enrollment."
+            }
+          },
+          "limitations": [
+            "FullPMC12114902: secondary cognition report bearingNCT02917928; DSST,Stroop,trail-making andCANTAB findings were not significantly different. Reported42participants/19women differs from the primary43completers/13women; preserve this unreconciled reporting discrepancy and conservatively group the family, without claiming proven identical participants, new primary cognitive credit or added enrollment.",
+            "Finished source-specific assessment for numerical eligibility under the existing primary-outcome rubric, not an inference of global inefficacy. Secondary or post-hoc findings remain factual; source-specific clinical/dose/safety claims beyond this bounded scope are not authorized."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root primary-content review; independent source check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/tables and source-family linkage checked; preserve actual positive/null findings and their hierarchy, no invented primary success."
+          }
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "27040154",
+          "doi": "10.1002/oby.21434",
+          "title": "Effects of carnosine supplementation on glucose metabolism: Pilot clinical trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27040154/",
+          "published_date": "2016-04-04",
+          "publication_types": [
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "38172006",
+          "doi": "10.1016/j.numecd.2023.10.012",
+          "title": "Carnosine supplementation improves glucose control in adults with pre-diabetes and type 2 diabetes: A randomised controlled trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38172006/",
+          "published_date": "2023-10-14",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "39919936",
+          "doi": "10.1016/j.neurot.2025.e00541",
+          "title": "Carnosine supplementation improves cognitive outcomes in younger participants of the NEAT trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39919936/",
+          "published_date": "2025-02-06",
+          "publication_types": [
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "42308284",
+          "doi": "10.1080/15502783.2026.2679716",
+          "title": "Effects of carnosine supplementation on physical endurance: a placebo-controlled randomized clinical trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/42308284/",
+          "published_date": "2026-06-17",
+          "publication_types": [
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "34174842",
+          "doi": "10.1186/s12882-021-02434-7",
+          "title": "Effect of Oral carnosine supplementation on urinary TGF-β in diabetic nephropathy: a randomized controlled trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34174842/",
+          "published_date": "2021-06-26",
+          "publication_types": [
+            "Research Support, Non-U.S. Gov't",
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "39599686",
+          "doi": "10.3390/nu16223900",
+          "title": "Carnosine Supplementation Has No Effect on Inflammatory Markers in Adults with Prediabetes and Type 2 Diabetes: A Randomised Controlled Trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39599686/",
+          "published_date": "2024-11-15",
+          "publication_types": [
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "38004228",
+          "doi": "10.3390/nu15224835",
+          "title": "Carnosine Did Not Affect Vascular and Metabolic Outcomes in Patients with Prediabetes and Type 2 Diabetes: A 14-Week Randomized Controlled Trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38004228/",
+          "published_date": "2023-11-19",
+          "publication_types": [
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "39770949",
+          "doi": "10.3390/nu16244328",
+          "title": "The Effect of Carnosine Supplementation on Musculoskeletal Health in Adults with Prediabetes and Type 2 Diabetes: A Secondary Analysis of a Randomized Controlled Trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39770949/",
+          "published_date": "2024-12-15",
+          "publication_types": [
+            "research-article",
+            "Randomized Controlled Trial",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "41767833",
+          "doi": "10.1002/fsn3.71514",
+          "title": "The Effect of Carnosine Supplementation on Depressive Symptoms and Health-Related Quality of Life in Individuals With Prediabetes and Well-Controlled Type 2 Diabetes: A Randomized Controlled Trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/41767833/",
+          "published_date": "2026-02-25",
+          "publication_types": [
+            "research-article",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / Europe PMC MED",
+          "pmid": "40430451",
+          "doi": "10.3390/ph18050630",
+          "title": "Effects of Carnosine Supplementation on Cognitive Outcomes in Prediabetes and Well-Controlled Type 2 Diabetes: A Randomised Placebo-Controlled Clinical Trial.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40430451/",
+          "published_date": "2025-04-26",
+          "publication_types": [
+            "research-article",
+            "Journal Article"
+          ],
+          "verification_source": "Official live MED API identity and primary content review; source-specific review scope recorded in study_contexts."
+        }
+      ],
+      "notes": "Bounded adult oral L-carnosine source review; two qualifying primary glycemic families, plus separately assessed companion/null/post-hoc findings. Not an exhaustive census of every carnosine paper, a diabetes-prevention or general-performance claim, a Dose benchmark, preparation equivalence or safety clearance. The existing literature screening record retains its source summaries; this canonical clinical registry owns numerical source eligibility.",
+      "notable_studies": "2016 pilot primary HOMA-IR rise attenuated versus placebo, not an absolute decline;2023 Monash primary OGTT glucose improved with sensitivity limitations. Reports bearing the Monash registration generated secondary inflammation,vascular,musculoskeletal,cognition and mood analyses, conservatively grouped with the noted demographic discrepancy; NEAT cognition/physical papers are one additional noncredit family. Renal primary mean-change null/additional percent positive retained.",
+      "last_updated": "2026-11-10"
     }
   ]
 }

@@ -1995,3 +1995,78 @@ def test_pine_source_does_not_turn_isolated_phytosterols_into_whole_herb():
     assert ingredient['botanical_source']['value'] is True
     assert ingredient['ingredient_domain'] == 'botanical_marker'
     assert ingredient['profile_eligibility']['botanical']['eligible'] is False
+
+
+@pytest.mark.parametrize('second_amount,expected_parent', [(2500, False), (2000, True), (None, True)])
+def test_evidence_assesses_disclosed_preparations_instead_of_reconciled_material_total(second_amount, expected_parent):
+    from copy import deepcopy
+    from scoring_input_contract import get_evidence_subject_rows
+    parent = _row('creatine_monohydrate', 'Creatine', 5000, raw_source_path='ingredientRows[0]')
+    first = _row('creatine_monohydrate', 'Creatine Monohydrate', 2500,
+                 raw_source_path='ingredientRows[0].nestedRows[0]')
+    second = _row('creatine_monohydrate', 'Creatine MagnaPower', second_amount,
+                  raw_source_path='ingredientRows[0].nestedRows[1]')
+    rows = [parent, first, second]
+    product = {'activeIngredients': rows, 'ingredient_quality_data': {'ingredients_scorable': rows}}
+    before = deepcopy(product)
+    subjects = get_evidence_subject_rows(product)
+    paths = {row['raw_source_path'] for row in subjects}
+    assert ('ingredientRows[0]' in paths) is expected_parent
+    assert first['raw_source_path'] in paths and second['raw_source_path'] in paths
+    assert profile_owner_candidate_rows(rows) == ([parent] if not expected_parent else rows)
+    assert product == before
+
+
+def test_unknown_source_member_cannot_be_hidden_by_equal_visible_component_mass():
+    from scoring_input_contract import get_evidence_subject_rows
+    parent = _row('creatine_monohydrate', 'Creatine', 5000, raw_source_path='ingredientRows[0]')
+    first = _row('creatine_monohydrate', 'Creatine Monohydrate', 2500,
+                 raw_source_path='ingredientRows[0].nestedRows[0]')
+    second = _row('creatine_monohydrate', 'Creatine MagnaPower', 2500,
+                  raw_source_path='ingredientRows[0].nestedRows[1]')
+    hidden = {'name': 'Unidentified active', 'raw_source_path':'ingredientRows[0].nestedRows[2]'}
+    product = {'activeIngredients':[parent,first,second,hidden],
+               'ingredient_quality_data':{'ingredients_scorable':[parent,first,second]}}
+    assert any(row['raw_source_path']=='ingredientRows[0]' for row in get_evidence_subject_rows(product))
+
+
+def test_evidence_without_material_partitions_does_not_derive_another_source_tree(monkeypatch):
+    from types import SimpleNamespace
+    import scoring_input_contract as sic
+    row = _row('creatine_monohydrate', 'Creatine Monohydrate', 5000,
+               raw_source_path='ingredientRows[0]')
+    monkeypatch.setattr(sic, 'get_assessable_evidence_ingredients', lambda product: [])
+    monkeypatch.setattr(sic, 'get_scoring_ingredients', lambda product, strict: SimpleNamespace(rows=[row]))
+    monkeypatch.setattr(sic, '_derive_explicit_eaa_aggregate_evidence', lambda *args: [])
+    def forbidden_tree(product):
+        pytest.fail('An unpartitioned Evidence view must not derive a new source tree')
+    monkeypatch.setattr(sic, '_source_tree_rows', forbidden_tree)
+    assert sic._build_evidence_subject_rows({'activeIngredients':[row]}) == [row]
+
+
+def test_partitioned_evidence_view_derives_once_per_scoring_scope_and_detaches_results(monkeypatch):
+    from copy import deepcopy
+    import scoring_input_contract as sic
+    parent = _row('creatine_monohydrate', 'Creatine', 5000, raw_source_path='ingredientRows[0]')
+    first = _row('creatine_monohydrate', 'Creatine Monohydrate', 2500,
+                 raw_source_path='ingredientRows[0].nestedRows[0]')
+    second = _row('creatine_monohydrate', 'Creatine MagnaPower', 2500,
+                  raw_source_path='ingredientRows[0].nestedRows[1]')
+    rows = [parent,first,second]
+    product = {'activeIngredients':rows,'ingredient_quality_data':{'ingredients_scorable':rows}}
+    before = deepcopy(product)
+    calls = 0
+    original = sic._build_evidence_subject_rows
+    def counted(item):
+        nonlocal calls
+        calls += 1
+        return original(item)
+    monkeypatch.setattr(sic,'_build_evidence_subject_rows',counted)
+    with sic.scoring_input_scope(product):
+        one = sic.get_evidence_subject_rows(product)
+        one[0]['quantity'] = 99999
+        two = sic.get_evidence_subject_rows(dict(product))
+    assert calls == 1
+    assert len(two) == 2
+    assert [r['quantity'] for r in two] == [2500,2500]
+    assert product == before
