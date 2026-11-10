@@ -52920,7 +52920,7 @@
             "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
             "reviewed_at": "2026-11-10",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Source-specific content scope above and official NCT01133899 record reviewed. Known primary-hierarchy discrepancy is retained; no numerical activation or unsupported replication count."
+            "basis": "Official primary abstract reviewed for the GAA versus GAA plus betaine HCl/B-vitamin comparison and its biochemical findings. This abstract does not establish an isolated placebo-controlled functional benefit or independent replication; no numerical activation."
           }
         },
         {
@@ -52950,7 +52950,7 @@
             "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
             "reviewed_at": "2026-11-10",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Source-specific content scope above and official NCT01133899 record reviewed. Known primary-hierarchy discrepancy is retained; no numerical activation or unsupported replication count."
+            "basis": "Official primary abstract reviewed for the uncontrolled five-man GAA pilot, tissue-creatine findings and later null findings. No randomized functional benefit, independent replication or long-term safety conclusion is established; no numerical activation."
           }
         },
         {
@@ -52980,7 +52980,7 @@
             "reviewer": "Codex /root source-content review; independent source/applicability check by Codex /root/grouped_correctness_check. Agent review, not clinician review.",
             "reviewed_at": "2026-11-10",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Source-specific content scope above and official NCT01133899 record reviewed. Known primary-hierarchy discrepancy is retained; no numerical activation or unsupported replication count."
+            "basis": "Official primary abstract reviewed for the five-person crossover comparison with creatine and selected tissue-creatine findings. No demonstrated clinical superiority, preparation equivalence or independent replication is established; no numerical activation."
           }
         }
       ],

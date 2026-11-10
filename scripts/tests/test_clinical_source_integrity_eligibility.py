@@ -2616,6 +2616,9 @@ def test_guanidinoacetate_reference_finishes_source_disposition_without_primary_
     assert len(record['study_contexts']) == 6
     assert all(context_review_finished(c) and c['scoring_eligible'] is False for c in record['study_contexts'])
     assert assess_clinical_source_review(record)['is_complete']
+    for context in record['study_contexts']:
+        if context['source_pmids'][0] in {'23351309', '27497517', '27560540'}:
+            assert 'NCT01133899' not in context['clinical_review']['basis']
     serum = next(c for c in record['study_contexts'] if c['source_pmids'] == ['23329885'])
     assert 'serum creatine' in str(serum).lower()
     assert 'muscle power' in str(serum).lower()
