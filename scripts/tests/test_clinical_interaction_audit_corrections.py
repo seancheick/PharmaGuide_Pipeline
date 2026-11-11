@@ -368,3 +368,154 @@ def test_nac_nitroglycerin_keeps_its_nac_canonical_id_through_verification():
     normalized = vi.verify_entry(dict(_pairs()['DSI_NITROGLYCERIN_NAC']), ctx, report)
     assert normalized is not None
     assert normalized['agent2_canonical_id'] == 'nac'
+
+
+# Batch 3a of Dr. Pham's 2026-11-11 review: anticoagulant scope (rows A2, A4-A10).
+WARFARIN_LABEL = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7'
+UK_WARFARIN = 'https://www.medicines.org.uk/emc/product/14333/smpc'
+LOVAZA = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=21cfa4ce-0b05-47ed-b268-339eb1b83b75'
+APP_SEVERITY = {'Contraindicated': 'contraindicated', 'Major': 'avoid', 'Moderate': 'caution', 'Minor': 'monitor'}
+ANTICOAGULANT_ROWS = (
+    # pair, rule, sub-rule class, reviewed severity, warfarin-specific evidence
+    ('DSI_WAR_SJW', 'RULE_INGREDIENT_ST_JOHNS_WORT', 'anticoagulants', 'avoid', True),
+    ('DSI_WAR_COQ10', 'RULE_IQM_COQ10_HEART_DISEASE_STATINS', 'anticoagulants', 'monitor', True),
+    ('DSI_WAR_GINKGO', 'RULE_IQM_GINKGO_HYPERTENSION', 'anticoagulants', 'caution', False),
+    ('DSI_WAR_GARLIC', 'RULE_INGREDIENT_GARLIC', 'anticoagulants', 'caution', False),
+    ('DSI_WAR_GLUCOSAMINE', 'RULE_INGREDIENT_GLUCOSAMINE', 'anticoagulants', 'caution', True),
+    ('DSI_WAR_CRANBERRY', 'RULE_INGREDIENT_CRANBERRY', 'anticoagulants', 'caution', True),
+    ('DSI_WAR_GINGER', 'RULE_IQM_GINGER_BLEEDING', 'anticoagulants', 'caution', False),
+    ('DSI_NSAID_FISHOIL', 'RULE_INGREDIENT_FISH_OIL', 'nsaids', 'monitor', False),
+)
+
+
+def _sub(rule_id, drug_class):
+    return next(r for r in _rules()[rule_id]['drug_class_rules'] if r['drug_class_id'] == drug_class)
+
+
+def _rule_text(sub):
+    return ' '.join(sub.get(k) or '' for k in (
+        'mechanism', 'action', 'alert_headline', 'alert_body', 'informational_note')).lower()
+
+
+def test_anticoagulant_pairs_and_rules_agree_on_the_reviewed_severity_and_scope():
+    import profile_gate_evaluator as pge
+
+    pairs = _pairs()
+    warfarin = {'drug_classes': ['anticoagulants', 'vitamin_k_antagonists']}
+    unknown_blood_thinner = {'drug_classes': ['anticoagulants']}
+    apixaban = {'drug_classes': ['anticoagulants', 'doacs']}
+    for pair_id, rule_id, drug_class, severity, warfarin_only in ANTICOAGULANT_ROWS:
+        pair, sub = pairs[pair_id], _sub(rule_id, drug_class)
+        assert APP_SEVERITY[pair['severity']] == severity, pair_id
+        assert sub['severity'] == severity, rule_id
+        # Minor pairs sit in the background lane (pipeline label, not exported); the rest never do.
+        assert (pair.get('display_layer') == 'background') == (pair['severity'] == 'Minor'), pair_id
+        assert sub['clinical_review']['file'] == REVIEW_FILE, rule_id
+        if drug_class != 'anticoagulants':
+            continue
+        fires = {
+            name: pge.evaluate_profile_gate(sub['profile_gate'], profile, {}, base_severity=severity).fires
+            for name, profile in (('warfarin', warfarin), ('unknown', unknown_blood_thinner), ('doac', apixaban))
+        }
+        # Warfarin-specific evidence never reaches a DOAC user; an unknown blood thinner still gets it.
+        assert fires == {'warfarin': True, 'unknown': True, 'doac': not warfarin_only}, rule_id
+
+
+def test_reviewed_anticoagulant_records_drop_unsupported_floors_and_instructions():
+    import re
+
+    pairs = _pairs()
+    for rule_id in ('RULE_INGREDIENT_GARLIC', 'RULE_IQM_GINKGO_HYPERTENSION'):
+        for drug_class in ('anticoagulants', 'antiplatelets'):
+            sub = _sub(rule_id, drug_class)
+            assert sub.get('min_effective_dose') is None, (rule_id, drug_class)
+            assert sub['materiality'] == 'presence'
+            assert '600' not in _rule_text(sub) and '120 mg' not in _rule_text(sub)
+    # A rule-level dose tier replaces the sub-rule severity in the enricher, so none may remain
+    # on a reviewed (rule, class): garlic's > 1200 mg avoid / otherwise monitor tier had no source.
+    for pair_id, rule_id, drug_class, _, _ in ANTICOAGULANT_ROWS:
+        tiers = [t for t in _rules()[rule_id].get('dose_thresholds') or []
+                 if t.get('scope') == 'drug_class' and t.get('target_id') == drug_class]
+        assert not tiers, (rule_id, drug_class)
+    assert 'do not combine' not in _rule_text(_sub('RULE_IQM_GINKGO_HYPERTENSION', 'anticoagulants'))
+    glucosamine = _rule_text(_sub('RULE_INGREDIENT_GLUCOSAMINE', 'anticoagulants'))
+    assert '2-4 weeks' not in glucosamine and '2–4 weeks' not in glucosamine
+    assert 'with food' not in _rule_text(_sub('RULE_INGREDIENT_FISH_OIL', 'nsaids'))
+    assert 'with food' not in _pair_text(pairs['DSI_NSAID_FISHOIL'])
+    cranberry = _rule_text(_sub('RULE_INGREDIENT_CRANBERRY', 'anticoagulants'))
+    assert '1 l' not in cranberry and 'increase warfarin levels' not in cranberry
+    assert 'small amounts' not in _pair_text(pairs['DSI_WAR_CRANBERRY'])
+    assert not re.search(r'\bsafe\b', _pair_text(pairs['DSI_WAR_GARLIC']))
+    assert 'other vitamin-k antagonists' not in _rule_text(_sub('RULE_INGREDIENT_ST_JOHNS_WORT', 'anticoagulants'))
+    assert 'mild antiplatelet' not in _rule_text(_sub('RULE_IQM_GINGER_BLEEDING', 'anticoagulants'))
+
+
+def test_reviewed_anticoagulant_records_cite_the_sources_that_support_them():
+    pairs = _pairs()
+    sjw = _sub('RULE_INGREDIENT_ST_JOHNS_WORT', 'anticoagulants')
+    assert UK_WARFARIN in pairs['DSI_WAR_SJW']['source_urls'] and UK_WARFARIN in sjw['sources']
+    for pair_id in ('DSI_WAR_COQ10', 'DSI_WAR_GINKGO', 'DSI_WAR_GARLIC'):
+        assert WARFARIN_LABEL in pairs[pair_id]['source_urls'], pair_id
+    cranberry = pairs['DSI_WAR_CRANBERRY']
+    assert {'18516070', '19553405'} <= set(cranberry['source_pmids'])
+    assert UK_WARFARIN in cranberry['source_urls'] and not any('mhra.gov.uk' in u for u in cranberry['source_urls'])
+    assert 'avoid cranberry products' in cranberry['evidence_notes'].lower(), 'the UK instruction is recorded'
+    ginger_rule = _sub('RULE_IQM_GINGER_BLEEDING', 'anticoagulants')
+    for urls in (pairs['DSI_WAR_GINGER']['source_urls'], ginger_rule['sources']):
+        assert not any('nccih.nih.gov/health/ginger' in u for u in urls), 'NCCIH ginger never mentions bleeding'
+    assert {'17723077', '15801937'} <= set(pairs['DSI_WAR_GINGER']['source_pmids'])
+    glucosamine = pairs['DSI_WAR_GLUCOSAMINE']
+    assert '18363538' in glucosamine['source_pmids'] and UK_WARFARIN in glucosamine['source_urls']
+    # The glucosamine-chondroitin teaching case (PMC3743701) is kept: Dr. Pham counts those reports.
+    assert any('23946031' in u for u in _sub('RULE_INGREDIENT_GLUCOSAMINE', 'anticoagulants')['sources'])
+    fish_oil = pairs['DSI_NSAID_FISHOIL']
+    assert LOVAZA in fish_oil['source_urls'] and LOVAZA in _sub('RULE_INGREDIENT_FISH_OIL', 'nsaids')['sources']
+    assert 'extrapolation' in _pair_text(fish_oil) and 'icosapent ethyl' in _pair_text(fish_oil)
+
+
+def test_anticoagulant_rule_evidence_matches_the_verified_pair_tier():
+    # One interaction, one evidence tier: the rule states what verify_interactions.py derives for its pair.
+    import sys
+    sys.path.insert(0, str(DATA.parent / 'api_audit'))
+    import verify_interactions as vi
+
+    load = lambda name: json.loads((DATA / name).read_text())
+    index = vi.build_iqm_cui_index(
+        load('ingredient_quality_map.json'), botanicals=load('botanical_ingredients.json'),
+        banned_recalled=load('banned_recalled_ingredients.json'),
+        harmful_additives=load('harmful_additives.json'), other_ingredients=load('other_ingredients.json'))
+    ctx = vi.VerifyContext(iqm_cui_index=index, drug_classes=load('drug_classes.json'))
+    pairs = _pairs()
+    tiers = {}
+    for pair_id, rule_id, drug_class, _, _ in ANTICOAGULANT_ROWS:
+        normalized = vi.verify_entry(dict(pairs[pair_id]), ctx, vi.VerificationReport())
+        tiers[pair_id] = normalized['evidence_level']
+        assert _sub(rule_id, drug_class)['evidence_level'] == tiers[pair_id], (pair_id, rule_id)
+    # The warfarin label's CoQ10 line is an example ("may"), with mixed clinical data: not established.
+    assert tiers['DSI_WAR_COQ10'] == 'probable'
+
+
+def test_sibling_floor_removals_are_not_attributed_to_the_clinical_review():
+    # Dr. Pham decided the anticoagulant rows; removing the same unsupported floor from the
+    # antiplatelet siblings is the agent's correction and must not carry her review record.
+    for rule_id in ('RULE_INGREDIENT_GARLIC', 'RULE_IQM_GINKGO_HYPERTENSION'):
+        assert 'clinical_review' in _sub(rule_id, 'anticoagulants')
+        assert 'clinical_review' not in _sub(rule_id, 'antiplatelets'), rule_id
+
+
+def test_garlic_with_a_blood_thinner_is_caution_at_every_amount():
+    # The production path: the enricher's interaction profile for a garlic product.
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    enricher = SupplementEnricherV3()
+
+    def severity(quantity):
+        row = {'name': 'Garlic Extract', 'raw_source_text': 'Garlic Extract', 'standard_name': 'Garlic',
+               'canonical_id': 'garlic', 'raw_source_path': 'ingredientRows[0]', 'quantity': quantity, 'unit': 'mg'}
+        product = {'dsld_id': 'TEST_GARLIC', 'product_name': 'Garlic', 'ingredient_quality_data': {
+            'ingredients_scorable': [row], 'ingredients': [row], 'ingredients_skipped': []}}
+        profile = enricher._collect_interaction_profile(product)
+        [alert] = [a for a in profile['ingredient_alerts'] if a['rule_id'] == 'RULE_INGREDIENT_GARLIC']
+        return next(h['severity'] for h in alert['drug_class_hits'] if h['drug_class_id'] == 'anticoagulants')
+
+    assert {q: severity(q) for q in (300.0, 1500.0, None)} == {300.0: 'caution', 1500.0: 'caution', None: 'caution'}

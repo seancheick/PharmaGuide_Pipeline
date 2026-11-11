@@ -3262,16 +3262,17 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "monitor",
-          "evidence_level": "established",
-          "mechanism": "Allicin/ajoene give garlic mild antiplatelet activity at supplement doses (≥600 mg/day extract). Standalone risk modest; severity escalates when combined with antiplatelets.",
-          "action": "If you take warfarin or an antiplatelet, monitor for bruising or bleeding when adding a garlic supplement.",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Garlic supplements can affect platelet function. The warfarin label names garlic among botanicals whose bleeding effects would be expected to add to warfarin's; the risk rises further with antiplatelets.",
+          "action": "If you take a blood thinner, talk to your prescriber before starting, stopping or changing a garlic supplement, and report unusual bruising or bleeding.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://www.nccih.nih.gov/health/garlic"
           ],
-          "alert_headline": "Mild bleeding risk with blood thinners",
-          "alert_body": "High-dose garlic supplements can mildly thin the blood. Combined with warfarin or aspirin-type drugs, this can increase bleeding risk.",
-          "informational_note": "Garlic supplements at high dose can affect platelet function — relevant to anyone on blood thinners.",
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Garlic supplements may increase bleeding risk with blood thinners such as warfarin. Talk to your prescriber before using them.",
+          "informational_note": "Garlic supplements can affect platelet function — relevant to anyone on blood thinners.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -3291,15 +3292,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 600,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
-            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
           }
         },
         {
@@ -3333,16 +3331,8 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 600,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
-            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
-          }
+          "materiality": "presence",
+          "min_effective_dose": null
         },
         {
           "drug_class_id": "antihypertensives",
@@ -3455,42 +3445,6 @@
               "severity_if_not_met": "monitor"
             }
           }
-        },
-        {
-          "scope": "drug_class",
-          "target_id": "anticoagulants",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 1200,
-          "unit": "mg",
-          "severity_if_met": "avoid",
-          "severity_if_not_met": "monitor",
-          "note": "Garlic supplements may have antiplatelet effects. Evidence is dose-dependent; caution is advised with anticoagulants. https://www.nccih.nih.gov/health/garlic",
-          "profile_gate": {
-            "gate_type": "combination",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "anticoagulants"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": {
-              "basis": "per_day",
-              "comparator": ">",
-              "value": 1200,
-              "unit": "mg",
-              "severity_if_met": "avoid",
-              "severity_if_not_met": "monitor"
-            }
-          }
         }
       ],
       "pregnancy_lactation": {
@@ -3587,15 +3541,16 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Potential additive bleeding risk with anticoagulants.",
-          "action": "Use with monitoring and clinician input.",
+          "evidence_level": "limited",
+          "mechanism": "In people taking warfarin, ginger use was associated with self-reported bleeding; a small single-dose study in healthy men found no change in INR or platelet aggregation. Evidence is limited and conflicting.",
+          "action": "If you take a blood thinner, talk to your prescriber before using ginger supplements or concentrates, and report unusual bruising or bleeding.",
           "sources": [
-            "https://www.nccih.nih.gov/health/ginger"
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/",
+            "https://pubmed.ncbi.nlm.nih.gov/15801937/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Ginger has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding ginger and ask about INR or bleeding checks.",
-          "informational_note": "Ginger can affect clotting — relevant to people on anticoagulants.",
+          "alert_body": "Ginger supplements may add to bleeding risk with blood thinners; the evidence is limited and conflicting. Talk to your prescriber before adding ginger and report unusual bruising or bleeding.",
+          "informational_note": "Ginger supplements may affect bleeding risk — relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -3616,7 +3571,12 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3875,14 +3835,15 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "Ginkgo inhibits platelet aggregation (PAF antagonism). Bleeding risk amplified with warfarin or antiplatelet therapy.",
-          "action": "If you take warfarin, aspirin, or another antiplatelet/anticoagulant, avoid ginkgo unless your prescriber clears it.",
+          "evidence_level": "moderate",
+          "mechanism": "Ginkgo may increase the risk of bleeding in people taking anticoagulants such as warfarin. The warfarin label names Ginkgo biloba among botanicals whose effects would be expected to add to warfarin's.",
+          "action": "If you take a blood thinner, talk to your prescriber before using ginkgo and ask how bleeding should be monitored.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://www.nccih.nih.gov/health/ginkgo"
           ],
           "alert_headline": "Bleeding risk with blood thinners",
-          "alert_body": "If you take anticoagulants, do not combine with this product. Ginkgo can thin the blood and may increase bleeding when combined with warfarin or antiplatelet medication.",
+          "alert_body": "Ginkgo may increase bleeding with blood thinners such as warfarin. Talk to your prescriber before using it, and report unusual bruising or bleeding.",
           "informational_note": "Ginkgo has antiplatelet activity — relevant to anyone on blood-thinning medication.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -3903,15 +3864,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.nccih.nih.gov/health/ginkgo",
-            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
           }
         },
         {
@@ -3945,16 +3903,8 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.nccih.nih.gov/health/ginkgo",
-            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
-          }
+          "materiality": "presence",
+          "min_effective_dose": null
         }
       ],
       "pregnancy_lactation": {
@@ -6753,16 +6703,18 @@
         },
         {
           "drug_class_id": "anticoagulants",
-          "severity": "contraindicated",
+          "severity": "avoid",
           "evidence_level": "established",
           "mechanism": "St John’s wort can induce drug metabolism and reduce warfarin anticoagulation. S-warfarin is predominantly metabolized by CYP2C9, while other pathways contribute to R-warfarin; primary work found increased clearance of both enantiomers.",
-          "action": "Do not combine St. John's Wort with warfarin or other vitamin-K antagonists. Discuss alternatives with your prescriber.",
+          "action": "If you take warfarin, avoid St. John's wort. If you already take both, tell your anticoagulation team before stopping either, because starting or stopping it can change your INR.",
           "sources": [
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://pubmed.ncbi.nlm.nih.gov/15089812/",
             "https://www.nccih.nih.gov/health/st-johns-wort"
           ],
-          "alert_headline": "Do not combine with warfarin",
-          "alert_body": "St John’s wort can reduce warfarin’s anticoagulant effect. Tell your anticoagulant prescriber about any use or change and ask about INR monitoring.",
+          "alert_headline": "Avoid St. John's wort with warfarin",
+          "alert_body": "If you take warfarin, avoid St. John's wort: it can reduce warfarin's effect. Tell your prescriber about any use or change so INR checks can be planned.",
           "informational_note": "St. John's Wort is a strong CYP3A4 inducer — relevant to anyone on warfarin or many other prescription drugs.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -6775,7 +6727,9 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "doacs"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -6783,7 +6737,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -10465,9 +10424,10 @@
           "drug_class_id": "nsaids",
           "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "The retained sources do not establish a direct clinical NSAID interaction or a universal combined gastrointestinal-bleeding risk from omega-3 (EPA/DHA) supplements. A possible interaction remains a precaution.",
-          "action": "Monitor for GI symptoms when combining omega-3 (EPA/DHA) with NSAIDs. Take NSAIDs with food.",
+          "mechanism": "Omega-3 fatty acids (EPA/DHA) may prolong bleeding time. The prescription omega-3 label asks for periodic monitoring with drugs that affect coagulation; applying it to supplements and NSAIDs is an extrapolation.",
+          "action": "If you take an NSAID regularly, mention omega-3 supplements to your clinician or pharmacist, especially if you have other bleeding risks.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=21cfa4ce-0b05-47ed-b268-339eb1b83b75",
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
@@ -10493,7 +10453,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         }
       ],
       "dose_thresholds": [],
@@ -11714,13 +11679,14 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "Multiple case reports and pharmacovigilance data document glucosamine-associated INR elevation in patients on stable warfarin therapy. A systematic pharmacovigilance review (Knudsen & Sokol, 2008) identified 20 FDA MedWatch reports and 21 WHO reports of altered coagulation (increased INR, bleeding) with glucosamine and warfarin, including one case of intraventricular bleed and subdural hematoma. A dose-response relationship was observed: one patient's INR rose from 2.3 to 3.9 after dose escalation from 1000 to 3000 mg/day, then to 4.7 on further dose reduction delay, normalizing after glucosamine discontinuation. The mechanism is unknown — glucosamine is not a known inhibitor of CYP2C9 or CYP3A4.",
-          "action": "Inform your prescriber if taking glucosamine while on warfarin. Check INR within 2-4 weeks of starting or stopping glucosamine. Dose escalation of glucosamine may destabilize previously stable anticoagulation control.",
+          "evidence_level": "moderate",
+          "mechanism": "An FDA pharmacovigilance review (Knudsen and Sokol 2008) found 20 reports of altered coagulation, such as a higher INR or bleeding, with glucosamine or glucosamine-chondroitin and warfarin, including one intraventricular bleed and subdural hematoma. The UK warfarin label says the combination is not recommended. The mechanism is unknown.",
+          "action": "Tell your anticoagulation team before you start, stop or change glucosamine while taking warfarin, so they can decide how to check your INR.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/",
             "https://pubmed.ncbi.nlm.nih.gov/14986566/",
-            "https://pubmed.ncbi.nlm.nih.gov/23946031/"
+            "https://pubmed.ncbi.nlm.nih.gov/23946031/",
+            "https://www.medicines.org.uk/emc/product/14333/smpc"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Case reports describe INR changes with warfarin and glucosamine, sometimes with chondroitin. Tell your prescriber before starting, stopping or increasing them and ask about INR monitoring.",
@@ -11736,7 +11702,9 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "doacs"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -11745,7 +11713,12 @@
           },
           "direction": "harmful",
           "materiality": "presence",
-          "min_effective_dose": null
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "antiplatelets",
@@ -12067,16 +12040,19 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "Warfarin-associated INR reports involving cranberry do not establish CYP2C9 inhibition as their clinical mechanism. Studies and preparations differ; retain prescriber and INR review.",
-          "action": "If you take warfarin, monitor INR when using cranberry extract or drinking ≥1 L cranberry juice/day.",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Human evidence is mixed: cranberry concentrate capsules raised the INR response to warfarin in healthy men, while cranberry juice did not cause a clinically important change in people on stable warfarin. Preparations differ, and no dose has been shown to remove the concern.",
+          "action": "If you take warfarin, contact your anticoagulation team before starting, stopping or materially changing cranberry supplements or concentrates.",
           "sources": [
-            "https://www.nccih.nih.gov/health/cranberry"
+            "https://www.nccih.nih.gov/health/cranberry",
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://pubmed.ncbi.nlm.nih.gov/18516070/",
+            "https://pubmed.ncbi.nlm.nih.gov/19553405/"
           ],
           "alert_headline": "May raise INR on warfarin",
-          "alert_body": "High-dose cranberry extracts or large amounts of cranberry juice can raise INR in people on warfarin. Mention cranberry use to your prescriber.",
-          "informational_note": "Cranberry may increase warfarin levels at high doses — UK MHRA issued an advisory.",
+          "alert_body": "Cranberry supplements and concentrates may raise INR in people taking warfarin; the evidence is mixed. Talk to your anticoagulation team before starting or changing them.",
+          "informational_note": "Cranberry may change INR in people taking warfarin; UK warfarin labeling advises avoiding cranberry products.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -12088,7 +12064,9 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "doacs"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -12096,7 +12074,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "antiplatelets",
@@ -14177,15 +14160,16 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "Case reports raise possible warfarin concerns with CoQ10, but a randomized study of 100 mg/day in 24 stable warfarin users found no INR or warfarin-dose effect. The retained content does not establish a universal 100 mg interaction threshold.",
-          "action": "Tell your warfarin prescriber about CoQ10 and ask about monitoring when starting, stopping or changing it.",
+          "evidence_level": "probable",
+          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed.",
+          "action": "Tell your anticoagulation team before you start, stop or substantially change CoQ10 while taking warfarin, so they can decide whether your INR needs extra checks.",
           "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
             "https://www.nccih.nih.gov/health/coenzyme-q10"
           ],
           "alert_headline": "May mildly reduce warfarin effect",
           "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. Tell your prescriber about CoQ10 and ask whether INR checks are needed when use changes.",
-          "informational_note": "CoQ10 may affect INR at high doses — relevant to anyone on warfarin.",
+          "informational_note": "CoQ10 may reduce warfarin's effect — relevant to anyone on warfarin.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -14197,7 +14181,9 @@
             },
             "excludes": {
               "conditions_any": [],
-              "drug_classes_any": [],
+              "drug_classes_any": [
+                "doacs"
+              ],
               "profile_flags_any": [],
               "product_forms_any": [],
               "nutrient_forms_any": []
@@ -14205,7 +14191,12 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
         },
         {
           "drug_class_id": "statins",

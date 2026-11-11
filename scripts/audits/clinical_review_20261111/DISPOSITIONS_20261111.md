@@ -35,8 +35,9 @@ Batches follow her sequence: 2 = label-backed corrections (this PR), 3 = scope, 
 
 Data consistency check for the exact-over-class rule: an authored exact pair that overlaps a class pair for the same
 two agents must never be the weaker warning (`test_an_exact_pair_that_hides_a_class_pair_is_never_the_weaker_warning`).
-It checks records only; how the app matches combination medicines is covered by the app checker tests (an exact pair
-replaces a class pair only for two single-ingredient medicines). Overlaps today: simvastatin + gemfibrozil
+It checks records only; how the app matches medicines is covered by the app checker tests: an exact pair replaces a
+class pair for the same two medicines only when each class side contains the exact pair's medicine in `drug_class_map`,
+so a combination product keeps a class warning another ingredient matches, even with a partial saved ingredient list. Overlaps today: simvastatin + gemfibrozil
 (Contraindicated over Major), tranylcypromine + SAMe (Contraindicated over Contraindicated) and warfarin + turmeric
 (Moderate over Moderate). Equal severity alone does not make two findings interchangeable; each overlap is the same
 concern for the same two agents.
@@ -98,6 +99,32 @@ concern for the same two agents.
 | G3 calcium carbonate with food | Approve once form matching works (citrate distinct) |
 | G3 EGCG/tea–iron | Keep the capsule/extract rule held |
 
+### Batch 3a implemented: anticoagulant scope (`apply_batch3a_anticoagulant_scope.py`)
+
+"Warfarin only" is gated as `anticoagulants` minus `doacs`: warfarin users and people whose blood thinner is not
+identified keep the finding; a DOAC user does not. Each rule's evidence level equals the tier
+`verify_interactions.py` derives for its pair (one interaction, one tier).
+
+| Row | Implemented as |
+|---|---|
+| A2 SJW + warfarin | Pair Major; rule contraindicated → avoid, warfarin only; UK SmPC 4.5 and DailyMed warfarin label cited; "other vitamin-K antagonists" removed (not verified) |
+| A4 CoQ10 + warfarin | Pair Moderate → Minor (background lane, a pipeline label), label evidence with low confidence (tier probable: the label's "may" example and mixed trials); rule monitor, warfarin only |
+| A5 ginkgo + warfarin | Pair Major → Moderate; rule caution on presence (120 mg floor removed); "do not combine" removed |
+| A6 garlic + warfarin | Pair Moderate; rule monitor → caution on presence. Removed the 600 mg floor **and** a rule-level tier the packet did not show (> 1200 mg avoid, otherwise monitor), which replaced the sub-rule severity in the enricher; its source (NCCIH garlic) states no dose. Caution now ships at every amount |
+| A7 glucosamine + warfarin | Pair Minor → Moderate; rule caution, warfarin only; "2–4 weeks" removed; PMID 18363538 and the UK SmPC cited; PMID 23946031 kept (teaching case, INR 3.9 after a glucosamine–chondroitin supplement; full text read 2026-11-11) |
+| A8 cranberry + warfarin | Pair Moderate, rule monitor → caution, warfarin only; mixed evidence (PMIDs 18516070, 19553405); UK avoid instruction recorded in evidence_notes; MHRA link removed |
+| A9 ginger + warfarin | Pair Minor → Moderate; rule caution; cohort (17723077) and crossover (15801937) cited with limits; NCCIH ginger page removed (it does not mention bleeding) |
+| A10 fish oil + NSAIDs | Pair Moderate → Minor (background lane); rule monitor; LOVAZA label with the extrapolation stated; icosapent ethyl named as separate; "with food" removed |
+
+Agent dispositions in the same batch (not Dr. Pham's decisions, no review record on them):
+- The 600 mg (garlic) and 120 mg (ginkgo) floors also sat on the antiplatelet sub-rules; same unsupported floor, removed.
+- The same floors on the antihypertensive sub-rules (garlic 600 mg, ginkgo 120 mg) and garlic's diabetes tier stay for
+  batch 4 with the other noise rows.
+- `DSI_WAR_GINGER` left the high-dose exemption list (its text no longer mentions high-dose use); two gold profile-gate
+  cases that pinned the removed garlic tier were replaced by cases on live gates (garlic on presence; the
+  warfarin-only gate for a DOAC user and for an unknown blood thinner). The app's copy of that fixture moves with it.
+- April "clinician-locked" severities W2, W3, W6 and W12 in tests now follow this review.
+
 ## Batch 4: noise reductions (after quantity checks)
 
 | Row | Decision |
@@ -126,3 +153,5 @@ concern for the same two agents.
    label language (contraindicated), a precautionary class inference (which severity), or pending? Until then the
    class pair stays Contraindicated and the class profile rule stays avoid.
 2. **Vitamin E.** What counts as "ordinary nutrient exposure" for the less prominent note (form, amount, frequency)?
+3. **Glucosamine with warfarin.** The UK warfarin SmPC (section 4.5) says the combination is not recommended, which is
+   closer to avoid than to the caution you chose. Keep caution, or align with the UK label? Batch 3a ships caution.
