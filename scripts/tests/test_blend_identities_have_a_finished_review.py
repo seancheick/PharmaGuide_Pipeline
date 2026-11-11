@@ -388,3 +388,6 @@ def test_golden_milk_compatibility_projection_retains_original_child_source(enri
         lineage = {_resolve_source_tree_path(product, path) for path in row['linked_rows']}
         assert original['raw_source_path'] in lineage
         assert positive_clinical_benchmark(product, row) is None
+    # The production Evidence seam must admit that retained child row through the anchor.
+    from clinical_applicability import _evidence_subject_refs
+    assert original['raw_source_path'] in _evidence_subject_refs(product, include_anchor_lineage=True)
