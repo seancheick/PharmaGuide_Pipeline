@@ -2599,7 +2599,7 @@
         "A10BH",
         "A10BX16"
       ],
-      "notes": "Tier per the signed drug_class_vocab (metformin, GLP-1 receptor agonists, SGLT2 and DPP-4 inhibitors). Tirzepatide added per Dr. Pham D3 (2026-11-11): lower intrinsic risk alone; MOUNJARO 5.3 places the hypoglycemia risk on use with an insulin secretagogue or insulin, which carry the high-risk tier themselves. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+      "notes": "Tier per the signed drug_class_vocab (metformin, GLP-1 receptor agonists, SGLT2 and DPP-4 inhibitors). Tirzepatide added per Dr. Pham D3 (2026-11-11): lower intrinsic risk alone; per MOUNJARO 5.3, use with an insulin secretagogue or insulin may increase the risk of hypoglycemia, including severe hypoglycemia, and those medicines carry the high-risk tier themselves. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
     },
     "class:hypoglycemics_unknown": {
       "display_name": "Other diabetes medicines",

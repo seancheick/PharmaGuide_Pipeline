@@ -6751,6 +6751,47 @@
           "min_effective_dose": null
         },
         {
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "St John’s wort can induce drug metabolism and reduce warfarin anticoagulation. S-warfarin is predominantly metabolized by CYP2C9, while other pathways contribute to R-warfarin; primary work found increased clearance of both enantiomers.",
+          "action": "If you take warfarin, avoid St. John's wort. If you already take both, tell your anticoagulation team before stopping either, because starting or stopping it can change your INR.",
+          "sources": [
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
+            "https://pubmed.ncbi.nlm.nih.gov/15089812/",
+            "https://www.nccih.nih.gov/health/st-johns-wort"
+          ],
+          "alert_headline": "Avoid St. John's wort with warfarin",
+          "alert_body": "If you take warfarin, avoid St. John's wort: it can reduce warfarin's effect. Tell your prescriber about any use or change so INR checks can be planned.",
+          "informational_note": "St. John's Wort is a strong CYP3A4 inducer — relevant to anyone on warfarin or many other prescription drugs.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
           "drug_class_id": "anticoagulants",
           "severity": "avoid",
           "evidence_level": "established",
@@ -6777,7 +6818,8 @@
             "excludes": {
               "conditions_any": [],
               "drug_classes_any": [
-                "doacs"
+                "doacs",
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -11726,6 +11768,48 @@
       ],
       "drug_class_rules": [
         {
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "caution",
+          "evidence_level": "moderate",
+          "mechanism": "An FDA pharmacovigilance review (Knudsen and Sokol 2008) found 20 reports of altered coagulation, such as a higher INR or bleeding, with glucosamine or glucosamine-chondroitin and warfarin, including one intraventricular bleed and subdural hematoma. The UK warfarin label says the combination is not recommended. The mechanism is unknown.",
+          "action": "Tell your anticoagulation team before you start, stop or change glucosamine while taking warfarin, so they can decide how to check your INR.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/18363538/",
+            "https://pubmed.ncbi.nlm.nih.gov/14986566/",
+            "https://pubmed.ncbi.nlm.nih.gov/23946031/",
+            "https://www.medicines.org.uk/emc/product/14333/smpc"
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Case reports describe INR changes with warfarin and glucosamine, sometimes with chondroitin. Tell your prescriber before starting, stopping or increasing them and ask about INR monitoring.",
+          "informational_note": "Glucosamine can affect clotting — relevant to people on anticoagulants.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "moderate",
@@ -11752,7 +11836,8 @@
             "excludes": {
               "conditions_any": [],
               "drug_classes_any": [
-                "doacs"
+                "doacs",
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -12088,6 +12173,47 @@
       ],
       "drug_class_rules": [
         {
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Human evidence is mixed: cranberry concentrate capsules raised the INR response to warfarin in healthy men, while cranberry juice did not cause a clinically important change in people on stable warfarin. Preparations differ, and no dose has been shown to remove the concern.",
+          "action": "If you take warfarin, contact your anticoagulation team before starting, stopping or materially changing cranberry supplements or concentrates.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/cranberry",
+            "https://www.medicines.org.uk/emc/product/14333/smpc",
+            "https://pubmed.ncbi.nlm.nih.gov/18516070/",
+            "https://pubmed.ncbi.nlm.nih.gov/19553405/"
+          ],
+          "alert_headline": "May raise INR on warfarin",
+          "alert_body": "Cranberry supplements and concentrates may raise INR in people taking warfarin; the evidence is mixed. Talk to your anticoagulation team before starting or changing them.",
+          "informational_note": "Cranberry may change INR in people taking warfarin; UK warfarin labeling advises avoiding cranberry products.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
           "evidence_level": "probable",
@@ -12114,7 +12240,8 @@
             "excludes": {
               "conditions_any": [],
               "drug_classes_any": [
-                "doacs"
+                "doacs",
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],
@@ -14207,16 +14334,57 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
+          "drug_class_id": "vitamin_k_antagonists",
           "severity": "monitor",
           "evidence_level": "probable",
-          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed.",
+          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed. In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause.",
           "action": "Tell your anticoagulation team before you start, stop or substantially change CoQ10 while taking warfarin, so they can decide whether your INR needs extra checks.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
-            "https://www.nccih.nih.gov/health/coenzyme-q10"
+            "https://www.nccih.nih.gov/health/coenzyme-q10",
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/"
           ],
-          "alert_headline": "May mildly reduce warfarin effect",
+          "alert_headline": "May reduce warfarin effect",
+          "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. Tell your prescriber about CoQ10 and ask whether INR checks are needed when use changes.",
+          "informational_note": "CoQ10 may reduce warfarin's effect — relevant to anyone on warfarin.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "vitamin_k_antagonists"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence",
+          "clinical_review": {
+            "reviewer": "Dr. Pham",
+            "reviewed_at": "2026-11-11",
+            "file": "audits/clinical_review_20261111/DR_PHAM_REVIEW_20261111.md"
+          }
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "The warfarin label lists coenzyme Q10 among botanicals that may decrease warfarin's effect and asks for more frequent INR checks when a botanical is started or stopped. Clinical evidence is mixed. In one cohort of warfarin users, CoQ10 use was associated with self-reported bleeding; that observational finding does not establish cause.",
+          "action": "Tell your anticoagulation team before you start, stop or substantially change CoQ10 while taking warfarin, so they can decide whether your INR needs extra checks.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ab98f729-31b4-2b6d-e053-2995a90afed7",
+            "https://www.nccih.nih.gov/health/coenzyme-q10",
+            "https://pubmed.ncbi.nlm.nih.gov/17723077/"
+          ],
+          "alert_headline": "May reduce warfarin effect",
           "alert_body": "Evidence for a CoQ10–warfarin interaction is mixed. Tell your prescriber about CoQ10 and ask whether INR checks are needed when use changes.",
           "informational_note": "CoQ10 may reduce warfarin's effect — relevant to anyone on warfarin.",
           "profile_gate": {
@@ -14231,7 +14399,8 @@
             "excludes": {
               "conditions_any": [],
               "drug_classes_any": [
-                "doacs"
+                "doacs",
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": [],
               "product_forms_any": [],

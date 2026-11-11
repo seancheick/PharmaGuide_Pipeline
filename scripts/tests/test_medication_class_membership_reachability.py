@@ -117,7 +117,12 @@ SEVERITY_RANK = {"monitor": 1, "caution": 2, "avoid": 3, "contraindicated": 4}
 
 
 def strongest_severity(rule_id: str, rxcuis: list[str]) -> str | None:
-    """The strongest drug-class sub-rule of a rule that a medication list reaches."""
+    """The strongest severity among a rule's drug-class sub-rules whose `requires` a medication list reaches.
+
+    This proves the medication-class branch only. It ignores `excludes`, condition and profile-flag gates, dose
+    gates, and how the app shows or dedupes a finding, so it says which sub-rule a list can reach, not what a
+    user sees.
+    """
     rule = next(r for r in _load("ingredient_interaction_rules.json")["interaction_rules"] if r["id"] == rule_id)
     reached = set().union(*(rule_classes_for(rxcui) for rxcui in rxcuis))
     hits = [
@@ -130,16 +135,17 @@ def strongest_severity(rule_id: str, rxcuis: list[str]) -> str | None:
 @pytest.mark.parametrize(
     "partner", ["274783", "4821", "73044"], ids=["insulin glargine", "glipizide", "repaglinide"]
 )
-def test_tirzepatide_regimen_with_insulin_or_a_secretagogue_gets_the_high_risk_severity(partner):
-    """D3: tirzepatide alone gets the lower-risk severity; with insulin or an insulin
-    secretagogue the regimen gets the high-risk one (MOUNJARO 5.3)."""
+def test_tirzepatide_with_insulin_or_a_secretagogue_reaches_the_high_risk_sub_rule(partner):
+    """D3: tirzepatide alone reaches only the lower-risk sub-rule; with insulin or an insulin secretagogue
+    the list also reaches the high-risk one (MOUNJARO 5.3). Medication-class branch only."""
     rule = "RULE_IQM_ALPHA_LIPOIC_ACID_DIABETES"  # monitor for lower risk, caution for high risk and unknown
     assert strongest_severity(rule, ["2601723"]) == "monitor"
     assert strongest_severity(rule, ["2601723", partner]) == "caution"
 
 
-def test_pramlintide_without_insulin_is_not_treated_as_low_risk():
-    """D3: pramlintide is indicated with mealtime insulin (SYMLIN 5.2)."""
+def test_pramlintide_without_insulin_reaches_the_unknown_tier_sub_rule():
+    """D3: pramlintide is indicated with mealtime insulin (SYMLIN 5.2), so alone it reaches the conservative
+    unknown-tier sub-rule, not the lower-risk one. Medication-class branch only."""
     assert strongest_severity("RULE_IQM_ALPHA_LIPOIC_ACID_DIABETES", ["139953"]) == "caution"
 
 
@@ -158,6 +164,8 @@ COMBINATIONS = {
 
 @pytest.mark.parametrize("scd", COMBINATIONS, ids=lambda scd: COMBINATIONS[scd][0])
 def test_combination_sleep_and_cold_products_reach_anticholinergic_rules(scd):
+    """The products' ingredients join the anticholinergic rule class. This proves the class join only; the
+    app's resolution of a saved product to these ingredients is tested in the app repo."""
     ingredients = COMBINATIONS[scd][1]
     reached = set().union(*(rule_classes_for(rxcui) for rxcui in ingredients))
     assert reached & sub_rule_gate("RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS", "anticholinergics")

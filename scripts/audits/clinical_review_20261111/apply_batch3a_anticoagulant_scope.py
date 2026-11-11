@@ -9,8 +9,9 @@ label (setid ab98f729-31b4-2b6d-e053-2995a90afed7, section 7) and LOVAZA label (
 service, the UK warfarin 5 mg SmPC (emc 14333, section 4.5, last updated 4 Jul 2025), and PubMed abstracts
 17723077, 15801937, 18516070, 19553405 and 18363538.
 
-Warfarin-specific evidence is gated on `anticoagulants` minus `doacs`: warfarin users and people whose blood
-thinner is unknown keep the finding; a DOAC user no longer gets a warfarin card.
+Warfarin-specific evidence was gated on `anticoagulants` minus `doacs`: warfarin users and people whose blood
+thinner is unknown keep the finding; a DOAC user no longer gets a warfarin card. apply_batch3a_vka_scope.py
+replaced that gate, because a DOAC anywhere in the medicine list also vetoed an identified warfarin.
 """
 
 from __future__ import annotations
