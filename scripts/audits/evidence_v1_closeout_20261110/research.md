@@ -76,3 +76,17 @@ a record-level hold, which would turn curcumin's finished zero into a hold).
 
 Red yeast rice, GABA, ginseng, echinacea, lutein, phosphatidylserine, huperzine A, saw palmetto:
 text consistent enough with their signed decisions; reference-only text is not exported.
+
+## 5. Measured replay (2026-11-10)
+
+`replay.py` on 793 frozen labels (every product containing a touched ingredient, plus 40 unaffected
+controls), base b47db48cc vs candidate c68f6ba63, `--full --blob`. Outputs in
+`~/pg_quality/evidence-v1-closeout-20261110/replay/`.
+
+- 135 labels changed (scored 135, blob 134); 0 total-score changes, 0 pillar-score changes,
+  0 `status` changes, 0 controls changed.
+- Every first difference is an Evidence review completion: 55 `evidence_review_incomplete` →
+  `evidence_review_complete_limited_or_negative`; `not_yet_evaluated_count` decrements; 87 blob
+  `quality_assessment_status` partial → complete; finishing rows expose their existing no-credit
+  drivers (`product_specific_nct_absent`, `nutrition_authority_evidence_floor`).
+- The change finishes reviews at no credit; it grants and removes no points.
