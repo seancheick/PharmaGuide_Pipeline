@@ -13,8 +13,9 @@ D2  Diphenhydramine joins class:anticholinergics (its label: "anticholinergic (d
     of the nine below states anticholinergic properties or atropine-like action. Maprotiline has no current DailyMed
     label and is not added. Membership is by ingredient: RxNorm combination sleep aids resolve to diphenhydramine
     (3498), so they are reached; other antihistamines and antidepressants are not.
-D3  Tirzepatide moves to the lower-risk tier: MOUNJARO 5.3 places the hypoglycemia risk on use with an insulin
-    secretagogue or insulin, and those medicines carry the high-risk tier themselves. Pramlintide stays in the
+D3  Tirzepatide moves to the lower-risk tier: per MOUNJARO 5.3, use with an insulin secretagogue or insulin may
+    increase the risk of hypoglycemia, including severe hypoglycemia, and those medicines carry the high-risk tier
+    themselves. Pramlintide stays in the
     conservative unknown tier: SYMLIN 5.2 says it does not cause hypoglycemia alone but is indicated with mealtime
     insulin, where severe hypoglycemia risk rises; without insulin entered the regimen is incomplete, not low risk.
 
@@ -100,9 +101,10 @@ def lower_risk(cls: dict) -> None:
     cls["atc_codes"] = [*cls["atc_codes"], "A10BX16"]
     cls["notes"] = (
         "Tier per the signed drug_class_vocab (metformin, GLP-1 receptor agonists, SGLT2 and DPP-4 inhibitors). "
-        "Tirzepatide added per Dr. Pham D3 (2026-11-11): lower intrinsic risk alone; MOUNJARO 5.3 places the "
-        "hypoglycemia risk on use with an insulin secretagogue or insulin, which carry the high-risk tier "
-        "themselves. All rxcuis content-verified against RxNorm (ingredient, Active) 2026-11-11."
+        "Tirzepatide added per Dr. Pham D3 (2026-11-11): lower intrinsic risk alone; per MOUNJARO 5.3, use with an "
+        "insulin secretagogue or insulin may increase the risk of hypoglycemia, including severe hypoglycemia, and "
+        "those medicines carry the high-risk tier themselves. All rxcuis content-verified against RxNorm "
+        "(ingredient, Active) 2026-11-11."
     )
 
 
