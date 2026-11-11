@@ -1348,6 +1348,9 @@ def _resolve_evidence_for_row(
         noncontributing_complete = [
             (decision.get("status") == "not_applicable"
              and decision.get("reason_code") in _CLINICAL_PREPARATION_REJECTIONS)
+            # A signed context with scoring_eligible False is a hold (the
+            # 2026-10-28 register: omega-3, vitamin D3, elderberry, AstaREAL,
+            # Testofen), not a finished zero; only reference-only records finish.
             or (is_reference_only(study)
                 and decision.get("status") == "not_applicable"
                 and assess_clinical_source_review(study)["is_complete"])
@@ -1772,7 +1775,9 @@ def _resolve_evidence_for_row(
         # A documented source review states its preparation, purpose, sources and
         # scope once for reuse, and earns no credit here. Dose reads ``applicability``,
         # so this scope is separate. A row that declares no preparation matches
-        # neither list and stays open: an unresolved match is not a conclusion.
+        # neither list and stays open: an unresolved match is not a conclusion,
+        # unless the record attests (ADR-0007 rule 3) that its no-credit
+        # conclusion was reviewed for every preparation it could be.
         documented_scope = lit_entry.get("documented_review_scope")
         if documented_scope is not None:
             from clinical_applicability import assess_clinical_applicability
@@ -1791,6 +1796,18 @@ def _resolve_evidence_for_row(
                     points_eligible=False, applicability_status="applicability_unestablished",
                     reason_code=decision["reason_code"], owner_facts=owner_facts,
                     blocking_reasons=["literature_applicability_unestablished"],
+                )
+            elif (decision["reason_code"] == "clinical_source_label_unresolved"
+                  and documented_scope.get("preparation_uncertainty_reviewed") is True
+                  # A held or unfinished clinical source for this ingredient is
+                  # an unresolved fact; a literature zero cannot close it.
+                  and not unresolved_clinical_source):
+                owner_facts.setdefault("literature_evidence", {})["preparation_uncertainty_reviewed"] = True
+                return EvidenceResolution(
+                    canonical_id=canonical, ingredient_name=name, matched_owners=matched_owners,
+                    disposition=EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value,
+                    points_eligible=False, applicability_status="applicability_unestablished",
+                    reason_code="clinical_source_label_unresolved", owner_facts=owner_facts,
                 )
             else:
                 # An unresolved preparation uses the existing open-applicability

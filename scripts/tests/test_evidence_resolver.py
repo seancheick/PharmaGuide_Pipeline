@@ -100,6 +100,7 @@ def test_nonpositive_projection_does_not_complete_an_unqualified_generic_source(
         "effect_direction": "negative"}, name="Reviewed Test Material")
     source["study_contexts"][0]["outcomes"][0]["direction"] = "negative"
     if change == "held":
+        source["scoring_eligible"] = False
         source["study_contexts"][0]["scoring_eligible"] = False
     elif change == "source_hold":
         source["references_structured"][0]["scoring_eligible"] = False
@@ -1735,7 +1736,9 @@ def test_primary_protein_source_does_not_delegate_to_itself(canonical):
     product = {"product_name": canonical, "activeIngredients": [row],
                "ingredient_quality_data": {"ingredients_scorable": [row]}}
     result = er.resolve_evidence_for_row(row, product)
-    assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
+    expected = (EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+                if canonical == "rice_protein" else EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value)
+    assert result.disposition == expected
     assert not result.points_eligible
 
 
@@ -1834,7 +1837,15 @@ def test_carnitine_fumarate_exclusion_remains_finished_despite_noncredit_source(
 
 
 @pytest.mark.parametrize("form", ["l-carnitine base (free form)", "l-carnitine tartrate (lclt)"])
-def test_carnitine_unreviewed_positive_source_scope_stays_pending(form):
+def test_carnitine_unreviewed_positive_source_scope_stays_pending(monkeypatch, form):
+    import copy
+    import clinical_applicability as ca
+    records = ca.reviewed_entries()
+    record = copy.deepcopy(records["INGR_L_CARNITINE"])
+    record["study_contexts"][-1]["review_status"] = "source_verified_pending_clinical_review"
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {**records, record["id"]: record})
+    original = er._backed_studies_index()
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {key: [record if s.get("id") == record["id"] else s for s in value] for key, value in original.items()})
     from assessment_readiness import _resolved_evidence_assessment
     row, product = _excluded_preparation_product("L-Carnitine", "l_carnitine", form)
     result = er.resolve_evidence_for_row(row, product)
@@ -1851,6 +1862,9 @@ def test_noncredit_source_consumes_only_current_preparation_exclusions(monkeypat
     source = _approved_test_source({"id": "TEST_NONCREDIT_PREPARATION", "study_type": "rct_single",
                                    "effect_direction": "mixed"}, name="Synthetic Material")
     source["study_contexts"][0]["scoring_eligible"] = False
+    # Keep this a genuinely unfinished source so a stale exclusion cannot
+    # masquerade as its independent, finished noncredit review.
+    source["study_contexts"][0]["review_status"] = "source_verified_pending_clinical_review"
     source["exclude_aliases"] = ["synthetic excluded form"]
     if case == "malformed_policy": source["applicability"] = {"scope": "ingredient", "excluded_form_terms": "bad shape"}
     if case == "stale_enriched_exclusion": source.pop("exclude_aliases")
@@ -2030,7 +2044,15 @@ def test_mixed_exclusion_reference_completion_requires_each_record_finished(monk
     assert _resolved_evidence_assessment(result)[0] == expected
 
 
-def test_mixed_carnitine_product_keeps_unread_base_open_after_alcar_completion():
+def test_mixed_carnitine_product_keeps_unread_base_open_after_alcar_completion(monkeypatch):
+    import copy
+    import clinical_applicability as ca
+    records = ca.reviewed_entries()
+    record = copy.deepcopy(records["INGR_L_CARNITINE"])
+    record["study_contexts"][-1]["review_status"] = "source_verified_pending_clinical_review"
+    monkeypatch.setattr(ca, "reviewed_entries", lambda: {**records, record["id"]: record})
+    original = er._backed_studies_index()
+    monkeypatch.setattr(er, "_backed_studies_index", lambda: {key: [record if s.get("id") == record["id"] else s for s in value] for key, value in original.items()})
     from assessment_readiness import evaluate_assessment_readiness
     row, product = _excluded_preparation_product('Acetyl L-Carnitine', 'l_carnitine', 'acetyl-l-carnitine (alcar)', pid='187545')
     base = {**row, 'name': 'L-Carnitine', 'raw_source_text': 'L-Carnitine',
@@ -2049,10 +2071,14 @@ def test_mixed_carnitine_product_keeps_unread_base_open_after_alcar_completion()
 ])
 def test_unfinished_positive_source_does_not_become_completed_noncredit(monkeypatch, canonical, name, form):
     from assessment_readiness import _resolved_evidence_assessment
+    import copy
+    import clinical_applicability as ca
+    records = ca.reviewed_entries()
+    if canonical == 'elderberry':
+        pending = copy.deepcopy(records['INGR_ELDERBERRY'])
+        pending['study_contexts'][-1]['review_status'] = 'source_verified_pending_clinical_review'
+        monkeypatch.setattr(ca, 'reviewed_entries', lambda: {**records, pending['id']: pending})
     if canonical == 'tmg_betaine':
-        import copy
-        import clinical_applicability as ca
-        records = ca.reviewed_entries()
         pending = copy.deepcopy(records['PRECLIN_BETAINE_ANHYDROUS'])
         context = next(c for c in pending['study_contexts'] if c['source_pmids'] == ['39514262'])
         context['review_status'] = 'source_verified_pending_clinical_review'
@@ -2424,6 +2450,12 @@ def test_principal_protein_source_without_projection_marker_remains_unfinished(c
                'activeIngredients': [row],
                'ingredient_quality_data': {'ingredients': [row], 'ingredients_scorable': [row]}}
     result = er.resolve_evidence_for_row(row, product)
+    if canonical == 'rice_protein':
+        assert result.disposition == EvidenceDisposition.RESEARCH_PRESENT_APPLICABILITY_UNESTABLISHED.value
+        assert result.reason_code == 'reference_only_clinical_record'
+        assert _resolved_evidence_assessment(result)[0] == 'evaluated_limited_or_negative'
+        assert result.points_eligible is False
+        return
     assert result.disposition == EvidenceDisposition.LITERATURE_RESOLUTION_REQUIRED.value
     # A reviewed calcium-caseinate source cannot identify an unspecified casein label.
     expected = ('clinical_source_label_unresolved' if canonical == 'casein'
@@ -2478,6 +2510,7 @@ def test_pending_source_preserves_only_previously_qualified_preparation_exclusio
     from assessment_readiness import _resolved_evidence_assessment
     record = copy.deepcopy(next(s for s in er._load_backed_studies() if s["id"] == "INGR_L_CARNITINE"))
     context = next(c for c in record["study_contexts"] if c["source_pmids"] == ["32359762"])
+    context["review_status"] = "source_verified_pending_clinical_review"
     if damage == "unscoped":
         context.pop("identity_scope")
     elif damage == "human_unknown":

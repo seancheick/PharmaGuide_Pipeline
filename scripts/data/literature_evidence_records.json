@@ -29378,21 +29378,21 @@
     {
       "canonical_id": "rice_protein",
       "material_form": "Oryza sativa brown rice protein nutritional macronutrient",
-      "search_query": "(\"rice protein\"[tiab]) AND (randomized controlled trial[pt]) AND humans[mh]",
-      "search_date": "2026-09-21",
+      "search_query": "(EXT_ID:23782948 OR EXT_ID:33261645) AND SRC:MED",
+      "search_date": "2026-11-10",
       "databases_searched": [
-        "PubMed"
+        "PubMed / EuropePMC MED"
       ],
-      "records_screened": 12,
+      "records_screened": 2,
       "qualifying_human_studies": [],
       "effect_direction": null,
-      "population_context": "dietary macronutrient, carrier vehicle, or tableting excipient",
+      "population_context": "Culinary/carrier nutritional-matrix role only; distinct supplemental rice-protein human comparisons are reviewed in the existing backed-clinical owner.",
       "studied_dose_exposure": {},
-      "applicability_decision": "Dietary macronutrient, lipid carrier vehicle, or excipient substrate (Oryza sativa brown rice protein nutritional macronutrient); not evaluated as standalone therapeutic active.",
+      "applicability_decision": "Culinary or carrier/excipient rice-protein use does not claim standalone therapeutic benefit. Valid human training comparisons23782948/33261645 are separately assessed by INGR_RICE_PROTEIN; this matrix decision does not mean no human research or ineffective protein. No extra clinical grade, dose equivalence or benchmark follows.",
       "applicability_status": "not_efficacy_relevant",
       "verification_provenance": {
-        "verified_by": "scripts/api_audit/verify_literature_records.py",
-        "verified_at": "2026-09-21T07:39:42.986936+00:00",
+        "verified_by": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+        "verified_at": "2026-11-10T17:09:43.121552+00:00",
         "all_pmids_verified": true,
         "retractions_found": false
       },
@@ -38766,7 +38766,8 @@
           "32926799",
           "34652861"
         ],
-        "reviewed_at": "2026-11-03"
+        "reviewed_at": "2026-11-10",
+        "preparation_uncertainty_reviewed": true
       },
       "material_form": "Curcuma longa (turmeric) extract, including curcumin preparations; curcuminoid content and bioavailability preparation vary. Whole root powder, ratio extracts and unspecified turmeric are not settled by these studies",
       "search_query": "(\"Curcuma\"[Mesh] OR turmeric[tiab] OR \"Curcuma longa\"[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (turmeric[ti] OR \"Curcuma longa\"[ti]) AND (randomized controlled trial[pt] OR clinical trial[pt]) AND humans[mh]",
@@ -38896,7 +38897,7 @@
       "effect_direction": null,
       "population_context": "Adults with knee osteoarthritis, functional dyspepsia or non-alcoholic fatty liver disease; source-specific populations only",
       "studied_dose_exposure": {},
-      "applicability_decision": "Human trials tested specific Curcuma longa extracts. Knee-pain syntheses favor them with low certainty and heterogeneous preparations (33511486, 40731001); one RCT improved pain but not effusion-synovitis (32926799), and a curcumin trial improved functional dyspepsia scores (34652861). One small trial used 3 g/day whole powder (28443702), which does not settle whole root or unspecified turmeric. Findings are outcome-specific and a label's curcuminoid content may differ, so this review earns no Evidence credit. A row declaring a studied extract finishes at no credit, a row declaring whole powder or a ratio extract finishes as outside these studies, and a row stating no preparation stays open. Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is recorded here and does not change any safety owner.",
+      "applicability_decision": "Human trials tested specific Curcuma longa extracts. Knee-pain syntheses favor them with low certainty and heterogeneous preparations (33511486, 40731001); one RCT improved pain but not effusion-synovitis (32926799), and a curcumin trial improved functional dyspepsia scores (34652861). One small trial used 3 g/day whole powder (28443702), which does not settle whole root or unspecified turmeric. Findings are outcome-specific and a label's curcuminoid content may differ, so this review earns no Evidence credit. A row declaring a studied extract finishes at no credit, a row declaring whole powder or a ratio extract finishes as outside these studies, and a row naming no preparation finishes at the same no-credit conclusion (ADR-0007; NCCIH: not enough evidence to conclude benefit). Case reports link high-bioavailability curcumin formulations to acute liver injury (32656820); that signal is recorded here and does not change any safety owner.",
       "applicability_status": "applicability_unestablished",
       "verification_result": "authoritative_pubmed_verified"
     },
@@ -41034,7 +41035,8 @@
           "36383762",
           "23744597"
         ],
-        "reviewed_at": "2026-11-03"
+        "reviewed_at": "2026-11-10",
+        "preparation_uncertainty_reviewed": true
       },
       "material_form": "Ginkgo biloba leaf extract, mainly standardized preparations such as EGb 761; undeclared extracts and crude leaf powder are not settled by these studies",
       "search_query": "(\"Ginkgo biloba\"[Mesh] OR ginkgo[tiab]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (\"Ginkgo biloba\"[Mesh] OR ginkgo[tiab]) AND (randomized controlled trial[pt]) AND (dementia[tiab] OR cognitive[tiab] OR memory[tiab]) AND humans[mh]",
@@ -41147,7 +41149,7 @@
       "effect_direction": null,
       "population_context": "Older adults with normal cognition, memory complaints, mild cognitive impairment or dementia; adults with tinnitus or intermittent claudication",
       "studied_dose_exposure": {},
-      "applicability_decision": "Large prevention trials of 120 mg twice daily found no reduction in Alzheimer's incidence or cognitive decline (20040554, 22959217). The 2026 Cochrane review (41641880) finds possible small to moderate benefits at six months in dementia and probably little or no effect in mild cognitive impairment. Reviews in tinnitus and intermittent claudication show little or no clinically significant benefit (36383762, 23744597). Findings concern standardized extracts, so this review earns no Evidence credit. A row declaring that standardization or a studied extract finishes at no credit, a row declaring crude powder or a ratio extract finishes as outside these studies, and an extract or plant name alone stays open. Interaction and bleeding warnings stay with their own owners.",
+      "applicability_decision": "Large prevention trials of 120 mg twice daily found no reduction in Alzheimer's incidence or cognitive decline (20040554, 22959217). The 2026 Cochrane review (41641880) finds possible small to moderate benefits at six months in dementia and probably little or no effect in mild cognitive impairment. Reviews in tinnitus and intermittent claudication show little or no clinically significant benefit (36383762, 23744597). Findings concern standardized extracts, so this review earns no Evidence credit. A row declaring that standardization or a studied extract finishes at no credit, a row declaring crude powder or a ratio extract finishes as outside these studies, and an extract or plant name alone finishes at the same no-credit conclusion (ADR-0007). Interaction and bleeding warnings stay with their own owners.",
       "applicability_status": "applicability_unestablished",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {
@@ -41190,7 +41192,8 @@
           "42342959",
           "39212129"
         ],
-        "reviewed_at": "2026-11-03"
+        "reviewed_at": "2026-11-10",
+        "preparation_uncertainty_reviewed": true
       },
       "material_form": "Oral hydrolyzed collagen or collagen peptides; unspecified collagen, plain gelatin, undenatured type II collagen and co-active complexes such as BioCell are not settled by these studies",
       "search_query": "(\"collagen peptides\"[tiab] OR \"collagen hydrolysate\"[tiab] OR \"hydrolyzed collagen\"[tiab] OR \"hydrolysed collagen\"[tiab] OR \"collagen supplementation\"[tiab] OR gelatin[ti]) AND (meta-analysis[pt] OR systematic review[pt]) AND humans[mh] || (\"collagen peptides\"[tiab] OR \"collagen hydrolysate\"[tiab] OR \"hydrolyzed collagen\"[tiab] OR \"hydrolysed collagen\"[tiab] OR \"collagen supplementation\"[tiab]) AND (oral[tiab] OR supplement*[tiab]) AND randomized controlled trial[pt] AND humans[mh]",
@@ -41298,7 +41301,7 @@
       "effect_direction": null,
       "population_context": "Mostly women aged 20 to 70 in skin trials; adults with knee osteoarthritis",
       "studied_dose_exposure": {},
-      "applicability_decision": "Pooled trials report favorable skin and knee-osteoarthritis measurements with high risk of bias, high heterogeneity or co-active formulations (33742704, 37432180, 42342959, 39212129). In one review those skin benefits were absent in non-pharmaceutical-funded and high-quality subgroups (40324552). This review does not change the clinician-signed limitation already on INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so this review earns no Evidence credit. A row declaring hydrolyzed collagen or peptides finishes at no credit, a row declaring undenatured collagen or a co-active complex finishes as outside these studies, and collagen or gelatin alone stays open.",
+      "applicability_decision": "Pooled trials report favorable skin and knee-osteoarthritis measurements with high risk of bias, high heterogeneity or co-active formulations (33742704, 37432180, 42342959, 39212129). In one review those skin benefits were absent in non-pharmaceutical-funded and high-quality subgroups (40324552). This review does not change the clinician-signed limitation already on INGR_COLLAGEN_PEPTIDES. Findings are outcome-specific, so this review earns no Evidence credit. A row declaring hydrolyzed collagen or peptides finishes at no credit, a row declaring undenatured collagen or a co-active complex finishes as outside this review's studies, and collagen or gelatin alone finishes at the same no-credit conclusion (ADR-0007).",
       "applicability_status": "applicability_unestablished",
       "verification_result": "authoritative_pubmed_verified",
       "verification_provenance": {

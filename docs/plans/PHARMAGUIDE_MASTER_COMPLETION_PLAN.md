@@ -2363,3 +2363,46 @@ Fail-first canonical metadata/source eligibility regression reproduced; two new 
 Fresh162same-raw full Clean/Enrich/Score/Blob and actual Core pairs versus53d5 (157manifest-discovered family labels+5controls, retained-census members): ZERO numeric, pillar, quality/safety status, completion, reopening or Blob changes;22remaincomplete/140remainpartial (one not_scored remains partial). Seven Enrich and two Score internal reasons now identify sources_ineligible more precisely; actual states remain unresolved/not_yet_evaluated, never a completed noncredit assessment.3078warning/safety structures, identities, amounts and roles unchanged. Actual Core uses compact retained Blob SHA; only162execution timestamps differ, all other columns identical and no consumer-contract findings. This is a factual correction with zero newly qualified clinical credit or scientific completions, not a global backlog increment.
 
 Quiet16identical final-enriched inputs×8 Score observations cover five controls, every changed-reason label and four complex held cases. Warm sum5.776973419→5.816228292s(+0.680%,39.3ms/16); process peak393379840→392282112bytes(−0.279%). Source/input/harness and scope guards pass; native Blob/Core also execute outside timed Score. No full-pipeline or performance-neutral claim. Independent applied-source and full-output/Core reviews approved; final performance/local review and exact hosted candidate qualification are recorded in the PR/final handoff. Durable source bodies, checksums, discrepancy holds and all comparison receipts: /Users/seancheick/pg_quality/fenugreek-source-completion-20261110. No source hold is lifted; no new PR merge, corpus/catalog rebuild, external publication or app observation is claimed.
+
+
+### November 10 — Evidence V1 / four-group scientific batch (in progress)
+
+Owner: `scripts/clinical_applicability.py::assess_clinical_source_review` and existing
+Evidence/readiness/scoring/data owners — evidence: matrix, glossary and callers;
+source packets and exact-entry proposals retained in the existing private evidence
+completion directory. Will NOT create another engine, registry, status, grading
+scale or completion tracker. Ashwagandha preparation and consumer presentation are
+owned by the concurrent V1 consumer lane; this batch preserves that work.
+
+- [x] Independently qualify taurine 26781281 primary evidence; retain its adult
+  prehypertension, free-taurine preparation and 1.6 g/day for 12 weeks boundaries.
+  Screen 39148075 membership/integrity without adding pooled credit or replication.
+- [x] Apply Sean's exact A114/A073 noncredit-transfer supersession for three
+  syntheses, retaining unread Methods and reported positive/null findings.
+- [x] Finish bounded carnitine 32359762 and two rice-protein active-comparator
+  source assessments without unsupported generic efficacy or Dose credit.
+- [x] Reproduce and repair the shared all-noncredit source-completion defect;
+  preserve unfinished-source/provenance/parent-hold guards and valid prior scopes.
+- [x] Freeze 1,520 unique comparison IDs: original 1,308 plus 212 additional
+  ashwagandha/control labels. Preserve manual submissions and excluded controls.
+  These are comparison reach, not promised completions or a new global census.
+- [x] Measure 1,520 native frozen-label pairs across all seven routes: 1,517
+  catalog products plus three excluded controls. **187 become scored-complete,
+  zero reopen, 734 remain complete and 596 remain partial.** Forty-five Evidence
+  scores change; all other pillar scores, Clean, identities, quantities, roles,
+  warnings and safety are unchanged. Actual paired Core/Blob projections find
+  zero consumer-contract problems. These results bind the measured d06-based
+  candidate, not current global totals or the separate ashwagandha lane.
+- [ ] Finish provenance-format correction parity, controlled performance and
+  independent final output review. Named stable owner/consumer checks pass
+  1,073 cases; final source guards pass 394. Broad qualification is pending.
+- [ ] Qualify exact final source with applicable local checks and green CI,
+  integrate under existing authorization and reconcile the consumer lane.
+- [ ] Inspect integrated stage fingerprints, run one necessary nonpublishing
+  pipeline candidate, and establish one coherent 15,447-product census with
+  intentionally unrated products separate. Verify actual export/app consumers.
+
+Finite V1 review and incremental maintenance are recorded in ADR-0004. Preserve
+PMID 34844156's numerical hold and 30108163's separate approval. No prior bounded
+closure count is added to the historical census; no rebuilt catalog or app
+activation is established by the source work above.

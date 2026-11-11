@@ -4,7 +4,7 @@
     "purpose": "evidence_scoring",
     "schema_version": "5.6.4",
     "last_updated": "2026-11-10",
-    "total_entries": 223,
+    "total_entries": 224,
     "changelog": [
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_BUTTERBUR_WHOLE_HERB, INGR_L_ORNITHINE_L_ASPARTATE). No credit; not clinician reviewed.",
       "2026-11-04: Added agent-reviewed preparation rejections for the 970-label Evidence review (INGR_N_ACETYL_L_TYROSINE). No credit; not clinician reviewed.",
@@ -4609,8 +4609,8 @@
         "Muscle Growth & Recovery",
         "Weight Management"
       ],
-      "notes": "Human evidence exists but is endpoint-, population-, form-, and dose-specific. A seven-RCT meta-analysis reported less post-exercise soreness and short-lived improvement in muscle-damage markers, especially in resistance-training and untrained groups. A 37-RCT meta-analysis reported a modest average body-weight effect, strongest in adults with overweight or obesity and around 2 g/day. A separate systematic review of prolonged use in healthy adults found effects only under specific conditions and raised unresolved long-term TMAO questions. This record is not broad proof of energy, cardiovascular, fat-burning, or athletic-performance efficacy.",
-      "last_updated": "2026-10-28",
+      "notes": "Human evidence exists but is endpoint-, population-, form-, and dose-specific. A seven-RCT meta-analysis reported less post-exercise soreness and short-lived improvement in muscle-damage markers, especially in resistance-training and untrained groups. A 37-RCT meta-analysis reported a modest average body-weight effect, strongest in adults with overweight or obesity and around 2 g/day. A separate systematic review of prolonged use in healthy adults found effects only under specific conditions and raised unresolved long-term TMAO questions. This record is not broad proof of energy, cardiovascular, fat-burning, or athletic-performance efficacy. The declared 32359762 published-synthesis review is now finished as a bounded noncredit preparation-transfer assessment. Its reported weight/BMI positives and leave-one-study-out robustness remain; the constituent 26666519 expression of concern is not cleared. No new raw-data/reanalysis prerequisite, chemical-form equivalence, pooled credit or individual-primary review claim.",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID 32154768 pooled seven randomized trials of exercise-induced muscle damage and reported improvements in soreness and some 24-hour biomarkers, while calling for further research. PMID 32359762 pooled 37 randomized trials (2,292 participants) and found modest weight and BMI changes, particularly in adults with overweight or obesity; its dose-response analysis suggested the largest body-weight effect near 2 g/day. PMID 32958033 reviewed 11 prolonged-supplementation studies in healthy adults using 1-4 g/day for 12-24 weeks and concluded that physical-performance effects occur only in specific conditions.",
       "min_clinical_dose": 1000,
       "max_studied_clinical_dose": 4000,
@@ -4970,13 +4970,13 @@
             "description": "37 adult trials, reported 2292 participants; heterogeneous healthy and clinical populations, with overweight/obesity common. Matched diet, exercise or drug cointerventions vary. Results must not be applied uniformly to healthy normal-weight adults or all carnitine forms."
           },
           "study_design": "Random-effects meta-analysis and dose-response analysis; mostly parallel trials plus one crossover. Search through January2019. Full retained copy is an uncorrected publisher proof from a public mirror, not an official OA/license assertion.",
-          "review_status": "source_verified_pending_clinical_review",
+          "review_status": "clinician_approved",
           "scoring_eligible": false,
           "clinical_review": {
-            "reviewer": "Codex source review /root/elderberry_review; independently checked /root/betaine_review2026-11-06; constituent qualification still pending",
-            "reviewed_at": "2026-11-06",
+            "reviewer": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+            "reviewed_at": "2026-11-10",
             "scope": "identity_dose_outcome_applicability",
-            "basis": "Full-body extraction and cited constituent linkage are available and inspected; no blanket unread claim. Positive pooled weight estimate is historical. FormalEOC36852455 applies to included26666519, not32359762. Precise integrity/sensitivity, preparation/subgroup and unresolved primary extraction disposition remains required; no current affirmative activation."
+            "basis": "Completed bounded review of the published synthesis, not independent reanalysis or qualification of each underlying trial. Full retained Methods/Results/Table1 and published sensitivity analysis inspected; live source and formal constituent-notice identities verified. Modest positive weight/BMI findings are retained, alongside overall null waist/body-fat-percent findings. Published leave-one-study-out analysis reports stable weight/BMI effects; no new raw-data or reanalysis requirement is imposed. The post-publication expression of concern concerns included26666519 alone and is not resolved by that earlier sensitivity analysis. This heterogeneous chemical/preparation pool does not provide an attributable estimate for the generic record while its excluded derivatives, varied clinical populations and matched cointerventions remain combined; completed noncredit applicability decision for this pooled source, not a no-efficacy conclusion, clinical source-integrity clearance or exclusion of separately qualified primary research. Compatibility status does not denote clinician authorship."
           },
           "outcomes": [
             {
@@ -5049,12 +5049,12 @@
           ],
           "limitations": [
             "The meta-analysis includes Samimi2016,PMID26666519,as source reference20. Live PubMed/EuropePMC and publisher notice confirm Expression of Concern36852455/DOI10.1111/cen.14891 published2023-02-27 due unresolved research-integrity concerns. The pooled estimate predates that notice.",
-            "Do not mark the meta-analysis itself retracted or expression_of_concern: the formal notice concerns an included primary trial. Current positive qualification requires an attributable constituent-integrity/sensitivity disposition, not a fabricated exclusion re-analysis.",
             "Formulations include ALCAR and glycine-propionyl material. The current generic record preparation exclusions are authored boundaries, not proof those forms are absent from this source. No pooled estimate may be transferred across these chemicals.",
             "Nearly90% of included trials have unclear allocation concealment, and only two have low-risk outcome-assessor blinding. Most trials did not make anthropometry primary; source high-quality sensitivity supported body weight only.",
             "Multiple source publications may share trial families; earlier review publication counts, included primary counts and trial strata must not be added as independent confirmations.",
-            "No new grade, generic efficacy claim, Dose benchmark, safety threshold or product closure is proposed. The current generic record remains mixed and held; approved Carnipure and completed ALCAR decisions stay intact.",
-            "Full included-publication map retains37citations:28primary PMIDs verified and six further exact primary/publisher identities resolved without new PMID; three remain secondary/citation-only. Publisher identity alone is not full content verification. Ref84isobservational despite all-RCT framing; ref70download was wrong paper and rejected. Exact source-access and extraction limits remain."
+            "Published section 3.6 reports weight and BMI effects stable under removal of each individual study. This is a published sensitivity finding, not a newly calculated exclusion result or assurance that constituent research-integrity concerns are resolved.",
+            "The source mixes L-carnitine, LCLT, acetyl-L-carnitine and glycine-propionyl-L-carnitine. Intervention subgroups are cointervention groupings, not a verified chemical-form-specific estimate; no source-derived generic Dose benchmark or chemical equivalence is established.",
+            "Completed review is limited to this synthesis and its documented boundaries; 37 source citations are not 37 independently content-verified or independent trial families. Prior primary identity/access discrepancies remain provenance limits, not a mandate to retrieve every constituent to report the published synthesis. Separate activation of any primary trial requires its own source-specific qualification."
           ]
         }
       ],
@@ -10862,7 +10862,8 @@
           "source_integrity": "none",
           "trial_family": "ingr_hyaluronic_acid_34203487",
           "population": {
-            "description": "40randomizedhealthyTaiwaneseadults35–64,20/arm"
+            "description": "40randomizedhealthyTaiwaneseadults35–64,20/arm",
+            "age_group": "adult"
           },
           "study_design": "randomized double-blind placebo-controlled trial",
           "outcomes": [
@@ -13431,7 +13432,8 @@
           "source_integrity": "none",
           "trial_family": "nac_exercise_soreness_review2024_oral_subset",
           "population": {
-            "description": "Six controlled oral-supplement reports in healthy active/recreationallytrained men or semielite male rugbyplayers undertaking damaging or repeatedexercise protocols;not infection,psychiatric or respiratorydisease cohorts."
+            "description": "Six controlled oral-supplement reports in healthy active/recreationallytrained men or semielite male rugbyplayers undertaking damaging or repeatedexercise protocols;not infection,psychiatric or respiratorydisease cohorts.",
+            "age_group": "adult"
           },
           "study_design": "Systematicreview/meta-analysis;oral muscle-soreness subset comprises sixreports including pairmatched and randomized/crossover designs,not six uniformly independentRCTs.",
           "included_study_pmids": [
@@ -17487,7 +17489,7 @@
       "notes": "The cited reviews concern curcumin preparations for osteoarthritis symptoms and inflammatory, oxidative-stress and endothelial biomarkers. Findings differ by outcome and preparation. They do not establish stress/anxiety or longevity benefits, or equivalence between generic turmeric powder and the studied curcumin formulations. Study preparation and product applicability remain unreviewed.",
       "notable_studies": "PMID 38576215 is an umbrella review of curcumin for osteoarthritis pain, stiffness and physical function. PMID 38945354 reviews inflammatory, oxidative-stress and endothelial biomarkers. PMID 40615851 reviews inflammatory biomarkers in knee osteoarthritis, with reported CRP and TNF-alpha reductions but no significant effects on ESR, IL-1 beta, IL-6 or PGE2; it is not the cited source for osteoarthritis pain outcomes. These studies do not establish stress/anxiety benefits.",
       "study_type": "reference",
-      "last_updated": "2026-10-28",
+      "last_updated": "2026-11-10",
       "references_structured": [
         {
           "type": "pubmed",
@@ -17580,12 +17582,12 @@
       "external_ids": {
         "unii": "IT942ZTH98"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "mixed",
       "primary_outcome": "Joint & Bone Health",
-      "total_enrollment": 90,
-      "registry_completed_trials_count": 216,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "The cited evidence concerns osteoarthritis outcomes and biomarkers, not stress/anxiety. The existing aggregate direction and confidence have not been reassessed in this factual attribution correction and do not establish preparation or product applicability. Completed-trial and enrollment aggregates require separate verification.",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Reference-only under signed A115 (Dr. Pham), which rejects broad preparation-wide approval. Descriptive direction mixed: the retained knee-osteoarthritis biomarker meta-analysis (PMID 40615851) reports lower CRP and TNF-alpha but no significant effect on ESR, IL-1 beta, IL-6 or PGE2. The earlier positive_strong and unverified registry/enrollment aggregates were removed; preparation applicability remains unestablished.",
       "endpoint_relevance_tags": [
         "joint_pain"
       ],
@@ -23804,7 +23806,7 @@
       "health_goals_supported": [],
       "notes": "Full review33352740 and original trial identities inspected. Limited short-term anxiety findings are retained; benzodiazepine active-comparator null differences do not establish equivalence. NEURAPAS combination and2g/250mLtea sleep evidence are not isolated-extract anxiety qualification. Current six saved labels contain undisclosed blends or Bulk4:1aerial extracts without established trial-material correspondence. The current general-catalog record is reference-only, not a universal no-benefit conclusion. No universal500mg benchmark or volume-to-mass conversion. Preserve pregnancy, sedation, perioperative and other independent safety warnings; NCCIH April2025 guidance checked.",
       "study_type": "reference",
-      "last_updated": "2026-10-27",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID33352740:9heterogeneous trials; limited scoped anxiety synthesis, not general focus, long-term anxiety treatment or exact extract equivalence. PMID21294203: separate tea sleep study, retained noncontributing history.",
       "references_structured": [
         {
@@ -23925,7 +23927,8 @@
           "source_integrity": "none",
           "trial_family": "janda_2020_passionflower_review",
           "population": {
-            "description": "Adults in short procedural anxiety studies or one28daygeneralizedanxiety pilot; not chronic universal-use or long-term safety evidence."
+            "description": "Adults in short procedural anxiety studies or one28daygeneralizedanxiety pilot; not chronic universal-use or long-term safety evidence.",
+            "age_group": "adult"
           },
           "study_design": "Systematicreviewof9heterogeneoustrials; scopedanxietyassessment excludes isolated-component attribution fromNEURAPAScombination and separates tea sleep context.",
           "included_study_pmids": [
@@ -24725,31 +24728,28 @@
       "standard_name": "Taurine",
       "aliases": [
         "taurine",
-        "amino sulfonic acid",
-        "l-taurine"
+        "l-taurine",
+        "2-aminoethanesulfonic acid"
       ],
       "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "systolic blood pressure ↓",
-        "diastolic blood pressure ↓",
-        "triglycerides ↓",
-        "insulin resistance markers ↓ (subset)"
+        "Clinic systolic blood-pressure change in untreated prehypertensive adults; surrogate outcome, not clinical events."
       ],
       "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Blood Sugar Support"
+        "Cardiovascular/Heart Health"
       ],
-      "notes": "Human randomized and meta-analytic research reports modest blood-pressure and selected cardiometabolic-marker changes, with effects varying by population and regimen. These surrogate findings do not establish prevention of cardiovascular events or extended human lifespan. The specific full-methods source-review hold remains: included trials, preparations, populations, regimens and outcome applicability have not been fully qualified for the two declared syntheses. As of 2026-11-06, the publisher-deposited bibliography for PMID 41275513 cites the retracted heart-failure trial PMID 28118062 (DOI 10.1080/19390211.2016.1267059; retraction notice PMID 41943494, DOI 10.1080/19390211.2026.2656044). This verifies a citation link, not contribution to any particular pooled estimate. Pool membership, weighting and the effect on surviving findings remain unverified. No new Evidence credit or categorical no-benefit conclusion follows from this factual update.",
-      "study_type": "systematic_review_meta",
+      "notes": "Limited source-specific adult prehypertension research exists. One randomized oral taurine trial reports lower clinic blood pressure versus placebo at 8 and 12 weeks. Published metabolic-marker/pooled findings remain in the bibliography but do not independently establish generic-product credit. As of 2026-11-06, the newer synthesis bibliography cites retracted PMID 28118062 (notice 41943494, 2026-04-06). This verifies citation membership, not contribution to any particular pooled estimate; that integrity question remains explicit. No human longevity, cardiovascular-event prevention, lower-dose equivalence, general optimal Dose or universal safety conclusion. Sean superseded A114 only for completed limited noncredit numerical-transfer assessments of 32871172/41275513 on 2026-11-10; their full Methods, membership and preparation-specific pooled applicability remain unverified. This is not full scientific-review completion or an inefficacy finding.",
+      "study_type": "rct_single",
       "published_studies": [
-        "RCT",
-        "systematic_review",
-        "meta-analysis"
+        "26781281",
+        "32871172",
+        "41275513",
+        "39148075"
       ],
-      "last_updated": "2026-11-06",
-      "notable_studies": "PMID 32871172 (2020) reports blood-pressure, total-cholesterol and triglyceride reductions across heterogeneous clinical populations, with null pooled findings for fasting glucose, HDL-C, LDL-C, BMI and body weight. PMID 41275513, first published online in 2025, reports 34 eligible RCTs and additional cardiometabolic-marker pools; that source-reported count is not an independently reconciled trial-family count. Both syntheses still require full-methods and source-applicability review. The newer bibliography cites PMID 28118062, retracted on 2026-04-06 under notice PMID 41943494; reference membership alone does not establish which outcomes used its data or invalidate the entire synthesis. No human longevity finding is established by these sources.",
+      "last_updated": "2026-11-10",
+      "notable_studies": "PMID 26781281: 120 randomized, 97 complete; modified-ITT definition with last observation carried forward. Table S1 has 55 placebo/56 taurine, ambulatory subset 44/42. Authors report clinic BP improvements versus placebo at 8/12 weeks, null nighttime ambulatory findings; printed dropout/block-size/eligibility discrepancies are retained. The two syntheses 32871172/41275513 are not counted as independent replication or enrollment; newer bibliography citation of retracted 28118062 is not evidence of a specific pool contribution. PMID 39148075/PMC11325608 full-body membership/forest-plot screen reports 20 trials/808 participants but includes the same Sun 2016 family and retracted 28118062 in HR/SBP/DBP pools; it adds no qualified pooled credit or replication. Printed member-denominator and preparation discrepancies remain explicit.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -24799,6 +24799,24 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / EuropePMC MED",
+          "pmid": "26781281",
+          "doi": "10.1161/hypertensionaha.115.06624",
+          "title": "Taurine Supplementation Lowers Blood Pressure and Improves Vascular Function in Prehypertension: Randomized, Double-Blind, Placebo-Controlled Study.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/26781281/",
+          "verification_source": "LiveofficialMEDcontent plus fullprimaryandsupplement independentlychecked."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed / EuropePMC MED",
+          "pmid": "39148075",
+          "doi": "10.1186/s12937-024-00995-5",
+          "title": "Insights into the cardiovascular benefits of taurine: a systematic review and meta-analysis.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39148075/",
+          "verification_source": "LiveofficialMEDidentity, fullPMC11325608Methods/membertables and actualforestplots read; boundedmembership/integrityscreen only."
         }
       ],
       "external_ids": {
@@ -24806,15 +24824,204 @@
       },
       "effect_direction": "positive_weak",
       "primary_outcome": "Cardiovascular/Heart Health",
-      "total_enrollment": 240,
-      "registry_completed_trials_count": 88,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Existing positive_weak description retained pending full-methods, trial-family and source-integrity qualification. The declared syntheses concern blood-pressure and cardiometabolic markers, not memory, digestive benefit or human lifespan. The newer synthesis bibliography cites a subsequently retracted trial; pool contribution and the effect of its removal remain unverified. No new scoring or clinical conclusion is inferred.",
+      "total_enrollment": 120,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "One source-qualified primary adult prehypertension trial supports a weak-positive blood-pressure surrogate finding. The two declared syntheses remain separately unqualified for numerical transfer; neither animal longevity nor general energy, performance, glycemic or cardiovascular-event benefit is established.",
       "endpoint_relevance_tags": [
-        "cardiovascular",
-        "glycemic_control"
+        "cardiovascular"
       ],
-      "study_contexts": []
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_taurine_26781281_prehypertension_bp",
+          "components": [
+            "INGR_TAURINE"
+          ],
+          "source_pmids": [
+            "26781281"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "chemical_form": "Taurine (2-aminoethanesulfonic acid)",
+            "preparation": "Plain oral taurine particles/granules, not magnesium taurate, homotaurine, derivatives or multi-ingredient energy drinks."
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "prehypertension",
+          "purpose": "treatment",
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "taurine_sun_2016_NCT01816698",
+          "population": {
+            "age_group": "adult",
+            "description": "Untreated adults with prehypertension. Paper eligibility 18–75 years versus registry 25–75 years discrepancy retained; excludes diabetes, hypertension, major vascular/renal conditions, pregnancy and other medications. Normotensive 58 baseline comparators are not randomized treatment participants."
+          },
+          "study_design": "Single-center randomized1:1 double-blind placebo-controlled12week trial.120randomized,97completed;modified-ITT definition and LOCF. Supplement says6blocks×30 despite120randomized; no invented reconciliation.",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "clinical_review": {
+            "reviewer": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full primary Methods/Results/Figure 1 and complete online supplement read from a publicly accessible publisher-formatted copy; official PMID 26781281 API identity and NCT01816698 registry independently cross-checked. Main Methods powers change in SBP; supplement describes clinic SBP/DBP and 24 h BP as primary; registry umbrella 12-week BP outcome. No prospective prespecification inferred: registration first posted 2013-03-22 after study start 2012-12."
+          },
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              1600
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 84,
+            "administration_frequency": "Once daily08:00–09:00 for12weeks; registry describesone1.6ggranulepackageaftermeals. No general minimum or optimum.",
+            "dosage_forms": [
+              "oral granules"
+            ],
+            "co_therapies": [],
+            "source_provenance": {
+              "pmid": "26781281",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/26781281/",
+              "location": "Full primary Methods/Results/Figure 1 and complete online supplement read from a publicly accessible publisher-formatted copy; official PMID 26781281 API identity and NCT01816698 registry independently cross-checked. Main Methods powers change in SBP; supplement describes clinic SBP/DBP and 24 h BP as primary; registry umbrella 12-week BP outcome. No prospective prespecification inferred: registration first posted 2013-03-22 after study start 2012-12."
+            }
+          },
+          "outcomes": [
+            {
+              "name": "Change in clinic systolic blood pressure over 12 weeks; direct taurine-versus-placebo comparison at 8/12 weeks positive (Figure 1E).",
+              "hierarchy": "primary",
+              "kind": "surrogate",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "1.6 g/day for 12 weeks is studied exposure only, not an optimal range, lower-dose equivalence, safety threshold or general Dose benchmark.",
+            "Clinic SBP changes 7.2 vs 2.6 mmHg and DBP 4.7 vs 1.3 are within-arm changes; do not mislabel 7.2 mmHg as between-group net effect. Figure 1E/F reports improvements directly versus placebo at 8/12 weeks; no exact unprinted primary-effect p-value invented.",
+            "Nighttime ambulatory BP did not improve; do not call all vascular/metabolic findings positive. Animal/ex vivo mechanisms and normal baseline comparisons are not additional human trials or clinical benefits.",
+            "120 randomized/97 complete; baseline Table S1 n 55/56 and ambulatory subset n 44/42 differ. Authors use modified ITT definition/LOCF. Supplement 6 blocks×30 does not match 120 randomized; no fabricated allocation count or raw-data reanalysis.",
+            "Source eligibility 18–75 versus registry 25–75; registration after study initiation; SBP-powered primary versus multiple BP primary endpoints in the supplement and broad BP in the registry preserved. No proof of prospective prespecification or automatic post hoc exclusion.",
+            "One source family only; overlapping meta-analyses do not create replication or enrollment credit. Small condition-specific surrogate effect does not prove clinical-event prevention, human longevity, athletic performance or general glycemic benefit.",
+            "No serious adverse events reported is not general safety clearance; all independent warnings/Dose/preparation/amount holds remain."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_taurine_32871172_bounded_noncredit_transfer",
+          "components": [
+            "INGR_TAURINE"
+          ],
+          "source_pmids": [
+            "32871172"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "32871172",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/32871172/",
+              "location": "Official primary abstract reports pooled reductions in SBP/DBP, total cholesterol, triglycerides, with null fasting glucose, HDL-C, LDL-C, BMI/body-weight findings. Full main Methods, member tables and exact preparations have not been retrieved; do not award pool-specific credit, depth or exposure benchmark. Historical A114 full-content requirement was superseded by Sean on 2026-11-10 only for this completed limited noncredit numerical-transfer assessment; unread Methods, membership and preparation-specific limits remain."
+            }
+          },
+          "limitations": [
+            "Official primary abstract reports pooled reductions in SBP/DBP, total cholesterol, triglycerides, with null fasting glucose, HDL-C, LDL-C, BMI/body-weight findings. Full main Methods, member tables and exact preparations have not been retrieved; do not award pool-specific credit, depth or exposure benchmark.",
+            "Historical A114 source-content hold is preserved in its original decision record. Sean superseded that dependency only for current bounded noncredit numerical transfer on 2026-11-10; full Methods and preparation-specific research qualification remain incomplete.",
+            "This source has real published human findings. It adds no pooled numerical credit, independent-trial depth, enrollment credit, general Dose benchmark, warning or prevention claim. The separately qualified 26781281 primary adds no proof of this synthesis's Methods or integrity."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary abstract reports pooled reductions in SBP/DBP, total cholesterol, triglycerides, with null fasting glucose, HDL-C, LDL-C, BMI/body-weight findings. Full main Methods, member tables and exact preparations have not been retrieved; do not award pool-specific credit, depth or exposure benchmark. Sean 2026-11-10 specifically superseded the prior A114 full-Methods dependency ONLY for this completed limited noncredit numerical-transfer decision. Full Methods, trial membership, preparation matching and pooled methodological/integrity verification remain incomplete. No claim of full scientific review, inefficacy or absence of human research."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_taurine_41275513_bounded_noncredit_transfer",
+          "components": [
+            "INGR_TAURINE"
+          ],
+          "source_pmids": [
+            "41275513"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "dose": {
+            "source_provenance": {
+              "pmid": "41275513",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/41275513/",
+              "location": "Official primary abstract reports 34 eligible RCTs and positive cardiometabolic-marker pooled findings; 34 is not an independently reconciled family count. Full main Methods, member tables and forest-plot material not read. Publisher bibliography cites retracted 28118062; which pool, weight and robustness remain unverified, so neither whole-review invalidation nor integrity-cleared pooled credit. Historical A114 full-content requirement was superseded by Sean on 2026-11-10 only for this completed limited noncredit numerical-transfer assessment; unread Methods, membership and preparation-specific limits remain."
+            }
+          },
+          "limitations": [
+            "Official primary abstract reports 34 eligible RCTs and positive cardiometabolic-marker pooled findings; 34 is not an independently reconciled family count. Full main Methods, member tables and forest-plot material not read. Publisher bibliography cites retracted 28118062; which pool, weight and robustness remain unverified, so neither whole-review invalidation nor integrity-cleared pooled credit.",
+            "Historical A114 source-content hold is preserved in its original decision record. Sean superseded that dependency only for current bounded noncredit numerical transfer on 2026-11-10; full Methods and preparation-specific research qualification remain incomplete.",
+            "This source has real published human findings. It adds no pooled numerical credit, independent-trial depth, enrollment credit, general Dose benchmark, warning or prevention claim. The separately qualified 26781281 primary adds no proof of this synthesis's Methods or integrity."
+          ],
+          "clinical_review": {
+            "reviewer": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary abstract reports 34 eligible RCTs and positive cardiometabolic-marker pooled findings; 34 is not an independently reconciled family count. Full main Methods, member tables and forest-plot material not read. Publisher bibliography cites retracted 28118062; which pool, weight and robustness remain unverified, so neither whole-review invalidation nor integrity-cleared pooled credit. Sean 2026-11-10 specifically superseded the prior A114 full-Methods dependency ONLY for this completed limited noncredit numerical-transfer decision. Full Methods, trial membership, preparation matching and pooled methodological/integrity verification remain incomplete. No claim of full scientific review, inefficacy or absence of human research."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_taurine_39148075_bounded_membership_screen",
+          "components": [
+            "INGR_TAURINE"
+          ],
+          "source_pmids": [
+            "39148075"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Full official PMC11325608 Methods, Tables 1/2 and forest Figures 2–5 screened; source-reported 20 trials/808 participants are not independently qualified families. Sun 2016/26781281 is the existing NCT01816698 family; no extra replication. Retracted 28118062 is Ahmadian 2017 ref 37 and contributes to HR/SBP/DBP pools, not LVEF/NYHA. Related 28580833 is not separately listed; cohort linkage not established. Mixed preparations/active comparators and Aminoven exposure plus printed member-count discrepancies prevent blanket isolated-oral-taurine transfer. No pooled qualification or new exclusion reanalysis."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "39148075",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11325608/",
+              "location": "Full official PMC11325608 Methods, Tables 1/2 and forest Figures 2–5 screened; source-reported 20 trials/808 participants are not independently qualified families. Sun 2016/26781281 is the existing NCT01816698 family; no extra replication. Retracted 28118062 is Ahmadian 2017 ref 37 and contributes to HR/SBP/DBP pools, not LVEF/NYHA. Related 28580833 is not separately listed; cohort linkage not established. Mixed preparations/active comparators and Aminoven exposure plus printed member-count discrepancies prevent blanket isolated-oral-taurine transfer. No pooled qualification or new exclusion reanalysis."
+            }
+          },
+          "limitations": [
+            "Full official PMC11325608 Methods, Tables 1/2 and forest Figures 2–5 screened; source-reported 20 trials/808 participants are not independently qualified families. Sun 2016/26781281 is the existing NCT01816698 family; no extra replication. Retracted 28118062 is Ahmadian 2017 ref 37 and contributes to HR/SBP/DBP pools, not LVEF/NYHA. Related 28580833 is not separately listed; cohort linkage not established. Mixed preparations/active comparators and Aminoven exposure plus printed member-count discrepancies prevent blanket isolated-oral-taurine transfer. No pooled qualification or new exclusion reanalysis.",
+            "The meta-analysis is not itself declared retracted or invalid. Reported positive HR/BP/LVEF/NYHA findings remain historical source findings; no unqualified pooled estimate, trial-depth or enrollment increment. Published dose-regression coefficients have nonsignificant p-values and do not establish dose-response/optimal Dose.",
+            "Table 1 Sun N 86 differs from Table 2 arms 42/20; primary 120 randomized/97 complete is not reconstructed from these secondary counts. Spohr/Sedova counts also differ across tables. Full individual constituent qualification was not performed; use only the separately reviewed primary context for any eligible credit."
+          ]
+        }
+      ],
+      "published_studies_count": 1,
+      "applicability": {
+        "scope": "ingredient",
+        "supported_outcomes": [
+          "prehypertension_blood_pressure"
+        ],
+        "studied_population": "Untreated adults with prehypertension. Paper eligibility 18–75 years versus registry 25–75 years discrepancy retained; excludes diabetes, hypertension, major vascular/renal conditions, pregnancy and other medications. Normotensive 58 baseline comparators are not randomized treatment participants.",
+        "excluded_form_terms": [
+          "homotaurine",
+          "magnesium taurate",
+          "taurine chloramine",
+          "acetyltaurine",
+          "liposomal taurine",
+          "liposome-encapsulated taurine",
+          "taurine with magnesium",
+          "taurine magnesium complex",
+          "taurine-magnesium chelate"
+        ],
+        "source_pmids": [
+          "26781281"
+        ],
+        "reviewed_at": "2026-11-10"
+      }
     },
     {
       "id": "PRECLIN_QUERCETIN_PHYTOSOME",
@@ -31371,14 +31578,9 @@
       "category": "anti_inflammatory",
       "evidence_level": "reference",
       "score_contribution": "tier_1",
-      "key_endpoints": [
-        "inflammation ↓",
-        "antioxidant ↑"
-      ],
-      "health_goals_supported": [
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Curcumin has one of the largest human supplement trial literatures, with broad meta-analytic support for inflammatory, osteoarthritis, and some metabolic endpoints. However, formulation quality and bioavailability matter materially, and the strongest effects are generally seen with enhanced-delivery products rather than unformulated spice-level curcumin (PMID 39478418, PMID 38945354, PMID 38576215, PMID 40615851).",
+      "key_endpoints": [],
+      "health_goals_supported": [],
+      "notes": "Signed A130 (Dr. Pham, 2026-10-28) rejects broad superiority and generic benefit language for curcumin, so the multi-outcome syntheses (PMIDs 39478418, 38945354, 38576215) carry no credit for a generic healthy-aging claim. The retained context is a meta-analysis of 21 RCTs in 1,705 knee-osteoarthritis patients (PMID 40615851) reporting lower CRP and TNF-alpha, with no significant effect on ESR, IL-1 beta, IL-6 or PGE2. Effects depend on preparation and outcome. Agent reconciliation of this text with A130, 2026-11-10; not clinician review.",
       "study_type": "reference",
       "published_studies": [
         "mechanistic",
@@ -31387,8 +31589,8 @@
         "systematic_review",
         "meta-analysis"
       ],
-      "last_updated": "2026-10-28",
-      "notable_studies": "A comprehensive 103-trial meta-analysis found high-credibility evidence for improvements in fasting glucose, CRP, HDL, and body weight, with significant effects across 23 of 42 pooled outcomes (PMID 39478418). Additional umbrella-style work supports anti-inflammatory and endothelial-function biomarker effects (PMID 38945354) and osteoarthritis symptom benefit (PMID 38576215), while newer disease-specific syntheses continue to show reductions in CRP and TNF-alpha in knee osteoarthritis (PMID 40615851).",
+      "last_updated": "2026-11-10",
+      "notable_studies": "Under signed A130 these syntheses are noncredit context, not support for a generic curcumin benefit: PMID 39478418 (103-trial multi-outcome meta-analysis), PMID 38945354 (inflammatory, oxidative-stress and endothelial biomarker review) and PMID 38576215 (osteoarthritis umbrella review). PMID 40615851 (21 RCTs in knee osteoarthritis) reports lower CRP and TNF-alpha, with no significant effect on ESR, IL-1 beta, IL-6 or PGE2.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -31508,15 +31710,12 @@
       "external_ids": {
         "unii": "IT942ZTH98"
       },
-      "effect_direction": "positive_strong",
-      "primary_outcome": "Healthy Aging/Longevity",
-      "total_enrollment": 90,
-      "registry_completed_trials_count": 216,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Healthy Aging/Longevity; published_tags=mechanistic,animal,RCT,systematic_review,meta-analysis; registry_completed_trials_count=216; total_enrollment=90; endpoint_tags=stress_mood; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood"
-      ],
+      "effect_direction": "mixed",
+      "total_enrollment": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "medium",
+      "effect_direction_rationale": "Reference-only under signed A130 (Dr. Pham, 2026-10-28). Descriptive direction mixed: the retained knee-osteoarthritis biomarker meta-analysis (PMID 40615851) reports lower CRP and TNF-alpha but no significant effect on ESR, IL-1 beta, IL-6 or PGE2. The earlier positive_strong, healthy-aging and stress/mood tags and unverified registry/enrollment aggregates were removed because A130 rejected them.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -39883,7 +40082,7 @@
       "notes": "Systematic-review-level evidence supports honey for acute upper-respiratory symptom relief, especially cough severity, cough frequency, and sleep disruption in children. The evidence is for short-term symptomatic relief and does not justify broader immune or anti-infective claims (PMID 32817011, PMID 22419319, PMID 22869830, PMID 36126325). Limited pediatric short-term nocturnal cough findings are retained as reference. They do not qualify arbitrary adult or combination honey products for immune/infection benefit. Current293387and304687 age/preparation/regimens differ from verified single10g plainhoney trial. Existing infant-under-one and all productlabel warnings remain.",
       "notable_studies": "A BMJ systematic review and meta-analysis found honey superior to usual care for combined URTI symptoms, cough frequency, and cough severity (PMID 32817011). Cochrane review and pediatric randomized trials also support short-term nocturnal cough relief relative to no treatment or some comparators (PMID 22419319; PMID 22869830; PMID 36126325).",
       "study_type": "reference",
-      "last_updated": "2026-03-07",
+      "last_updated": "2026-11-10",
       "references_structured": [
         {
           "type": "pubmed",
@@ -40058,7 +40257,8 @@
           "source_integrity": "none",
           "trial_family": "cohen_2012_honey_child_nocturnal_cough",
           "population": {
-            "description": "300 children aged1–5 with URI, nocturnal cough and illness<=7days in six community pediatric clinics; asthma,pneumonia,laryngotracheobronchitis,sinusitis,allergicrhinitis and cough/coldmedication the precedingnight excluded."
+            "description": "300 children aged1–5 with URI, nocturnal cough and illness<=7days in six community pediatric clinics; asthma,pneumonia,laryngotracheobronchitis,sinusitis,allergicrhinitis and cough/coldmedication the precedingnight excluded.",
+            "age_group": "child"
           },
           "study_design": "randomized double-blind four-arm parallel placebo-controlled trial;three separate honey varieties versus silan date-extract placebo",
           "outcomes": [
@@ -40680,7 +40880,7 @@
         "Muscle Growth & Recovery"
       ],
       "notes": "The accepted A062 finding concerns creatine monohydrate with full-body resistance training and body-composition outcomes in the studied populations (PMID 39074168). The pooled strength review 39519498 includes other creatine forms and is retained as noncontributing context, not exact-monohydrate qualification. Trial regimens, populations and source reporting discrepancies are retained in the source context; no universal regimen or minimum is inferred. Sean attests Dr. Pham signed the explicit limited A062 decision on 2026-10-26; source acceptance does not establish every retail product or purpose.",
-      "last_updated": "2026-11-09",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID39074168:monohydrate plus full-body resistance training,12trials;lean-body-mass increase1.14kg(95%CI0.69–1.59) with preparation,population,bias and heterogeneous-regimen limits. PMID39519498:contextual strength synthesis with mixed creatine forms;not independent exact-monohydrate qualification.",
       "references_structured": [
         {
@@ -40831,7 +41031,8 @@
           "source_integrity": "none",
           "trial_family": "desai_2024_creatine_resistance_training_review",
           "population": {
-            "description": "Review intended apparently healthy adults aged18–50 undertaking full-body resistance training, trained and untrained; predominantly men. Included Burke2003 report itself recruited19–55, so the stated under50 criterion must not be presented as verified for every participant."
+            "description": "Review intended apparently healthy adults aged18–50 undertaking full-body resistance training, trained and untrained; predominantly men. Included Burke2003 report itself recruited19–55, so the stated under50 criterion must not be presented as verified for every participant.",
+            "age_group": "adult"
           },
           "study_design": "systematic review and random-effects meta-analysis of12 randomized trials; carbohydrate coadministration permitted; no other additional nutritional interventions intended",
           "included_study_pmids": [
@@ -43292,7 +43493,7 @@
       ],
       "health_goals_supported": [],
       "notes": "Limited disease-context monotherapy and add-on research,nothealthyadultcognitiveenhancement.Four ASCOMALVA publications are overlapping trial-familyreports,notfourindependentRCTs.Moreno2003monotherapyRCT is separate;no universal nootropicdose. Signed A035 accepts only a limited disease-context finding. This catalog record is reference-only to prevent that finding from becoming healthy-person focus credit. Explicit source contexts and overlap limitations remain traceable; reference classification does not mean the ingredient has no disease-context research.",
-      "last_updated": "2026-10-27",
+      "last_updated": "2026-11-10",
       "notable_studies": "PMID 36683513 includes Moreno 2003 (PMID 12637119) monotherapy and overlapping ASCOMALVA add-on publications. These are not four independent confirmatory trials. The exact accepted subset and reporting limitations are retained in study_contexts.",
       "references_structured": [
         {
@@ -43359,7 +43560,8 @@
           "source_integrity": "none",
           "trial_family": "moreno_2003_alzheimer_monotherapy",
           "population": {
-            "description": "261patients aged60–80withmild-to-moderateAlzheimer-type dementia,132active129placebo;nothealthyadultscognitiveenhancement."
+            "description": "261patients aged60–80withmild-to-moderateAlzheimer-type dementia,132active129placebo;nothealthyadultscognitiveenhancement.",
+            "age_group": "adult"
           },
           "study_design": "Source review reports one180day placebo-controlled monotherapyRCT;underlyingprimary12637119liveabstractalsoverified. This is not the pooleddonepeziladd-onanalysis.",
           "included_study_pmids": [
@@ -44622,61 +44824,58 @@
         "grape seed opc"
       ],
       "category": "antioxidant",
-      "evidence_level": "ingredient-human",
-      "study_type": "rct_multiple",
+      "evidence_level": "reference",
+      "study_type": "reference",
       "published_studies": [
-        "RCT"
+        "33671310",
+        "34798267"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
-        "systolic blood pressure ↓",
-        "diastolic blood pressure ↓",
-        "insulin resistance (HOMA-IR)",
-        "oxidized LDL ↓",
-        "postprandial triglycerides ↓",
-        "oxidative stress markers"
+        "Reported pooled DBP/heart-rate positives and null SBP/FMD; no qualified generic extract-level pooled credit.",
+        "Exact Enovita primary overall SBP/DBP null; exploratory and secondary positives retained in the original context."
       ],
-      "health_goals_supported": [
-        "Cardiovascular/Heart Health",
-        "Blood Sugar Support",
-        "Healthy Aging/Longevity"
-      ],
-      "notes": "Proanthocyanidin-rich extract from Vitis vinifera seeds with 52 completed clinical trials on ClinicalTrials.gov. Primary evidence in blood pressure reduction (NCT00869193, n=70 placebo-controlled RCT), insulin resistance in metabolic syndrome (NCT01889368, UC Davis), and cardiovascular biomarkers. Phase 1 data in diastolic heart failure (NCT01185067, Michigan) and breast cancer chemoprevention (NCT00100893, City of Hope). Dose-response data available for glucose control at 300-900mg (NCT02254317).",
-      "last_updated": "2026-11-06",
-      "notable_studies": "NCT00869193 (n=70 RCT): Unilever/Edinburgh double-blind placebo-controlled 8-week trial of GSE on ambulatory blood pressure in subjects with elevated BP. NCT01889368 (n=19 RCT): UC Davis study of 300mg GSE for insulin resistance and oxidized LDL in metabolic syndrome, 30-day intervention. NCT01185067 (n=15 Phase 1): University of Michigan MegaNatural-BP GSE in heart failure with preserved ejection fraction. NCT01688154 (n=16 RCT): Grape seed proanthocyanidins for postprandial triglyceride reduction.",
+      "health_goals_supported": [],
+      "notes": "Human grape-seed research exists. The completed exact Enovita primary assessment and limited 34798267 numerical-transfer assessment do not establish pooled efficacy for every retail extract. Sean 2026-11-10 superseded A073 ONLY for this limited noncredit transfer decision; full Methods, included-study membership and preparation-specific pooled applicability remain unverified. Four retained NCT records verify study protocols/registration status, not observed effects; none has a resultsSection. Unsupported historical 52-completed-trial and 275-enrollment totals are removed without replacement counts. No no-human-research, inefficacy, generic glucose-control dose-response, cancer-prevention or longevity claim.",
+      "last_updated": "2026-11-10",
+      "notable_studies": "PMID 34798267 primary abstract: 19 controlled trials, reported DBP −2.20 mmHg (95% CI −3.79 to −.60, I² 88.8%) and HR −1.25 bpm (−2.32 to −.19, I² 59.5%); SBP −3.55 (−7.59 to +.49, I² 97.4%) and FMD +1.02% (−.62 to +2.66, I² 92.0%) not significant. Actual publication/preparations/membership not fully extracted; no pooled numerical credit. PMID 33671310 original source-specific null/exploratory findings remain in its context. Registered studies are not efficacy replications.",
       "references_structured": [
         {
           "type": "clinical_trial",
           "nct_id": "NCT00869193",
-          "title": "Effect of Grape Seed Extract High in Polyphenols on Blood Pressure",
+          "title": "Effect of Grape Seed Extract on Blood Pressure",
           "evidence_grade": "rct",
           "enrollment": 70,
-          "sponsor": "Unilever R&D / University of Edinburgh"
+          "sponsor": "Unilever R&D",
+          "notes": "Official registration/protocol verified; no resultsSection in the retrieved record. No observed efficacy, independent trial-family or general dose claim inferred."
         },
         {
           "type": "clinical_trial",
           "nct_id": "NCT01889368",
-          "title": "Effect of Grape Seed Extract on Insulin Resistance in Metabolic Syndrome",
+          "title": "Effect of a Grape Seed Extract (GSE) on Insulin Resistance",
           "evidence_grade": "rct",
           "enrollment": 19,
-          "sponsor": "University of California, Davis"
+          "sponsor": "University of California, Davis",
+          "notes": "Official registration/protocol verified; no resultsSection in the retrieved record. No observed efficacy, independent trial-family or general dose claim inferred."
         },
         {
           "type": "clinical_trial",
           "nct_id": "NCT01185067",
-          "title": "Grape Seed Extract in Heart Failure with Preserved Ejection Fraction",
+          "title": "Physiological Effects of Grape Seed Extract in Diastolic Heart Failure",
           "evidence_grade": "phase_1",
           "enrollment": 15,
           "phase": "Phase 1",
-          "sponsor": "University of Michigan"
+          "sponsor": "University of Michigan",
+          "notes": "Official registration/protocol verified; no resultsSection in the retrieved record. No observed efficacy, independent trial-family or general dose claim inferred."
         },
         {
           "type": "clinical_trial",
           "nct_id": "NCT01688154",
-          "title": "Grape Seed Proanthocyanidins to Reduce Postprandial Triglycerides",
+          "title": "Ability of Grape Seed Proanthocyanidins to Reduce Postprandial Triglycerides in Humans",
           "evidence_grade": "rct",
           "enrollment": 16,
-          "sponsor": "Technological Centre of Nutrition and Health, Spain"
+          "sponsor": "Technological Centre of Nutrition and Health, Spain",
+          "notes": "Official registration/protocol verified; no resultsSection in the retrieved record. No observed efficacy, independent trial-family or general dose claim inferred."
         },
         {
           "pmid": "34798267",
@@ -44691,18 +44890,14 @@
           "verified": true
         }
       ],
-      "effect_direction": "positive_strong",
+      "effect_direction": null,
       "primary_outcome": "Cardiovascular/Heart Health",
-      "total_enrollment": 275,
-      "published_studies_count": 52,
-      "registry_completed_trials_count": 52,
-      "effect_direction_confidence": "high",
-      "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=ingredient-human; primary_outcome=Cardiovascular/Heart Health; published_tags=RCT; published_studies_count=52; registry_completed_trials_count=52; total_enrollment=275; endpoint_tags=stress_mood,cardiovascular,glycemic_control; notes/citations contain no automated downgrade signals.",
-      "endpoint_relevance_tags": [
-        "stress_mood",
-        "cardiovascular",
-        "glycemic_control"
-      ],
+      "total_enrollment": null,
+      "published_studies_count": null,
+      "registry_completed_trials_count": null,
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "Previous autogenerated positive_strong/high classification depended on unverified 52-trial/275-enrollment metadata; it is not an attributable clinical grade. Preserve that history in original decisions, not as active generic efficacy. Current reference-only entry records finished limited noncredit numerical-transfer assessments, while real positive/null human findings remain and full 34798267 Methods/members/preparation qualification is incomplete.",
+      "endpoint_relevance_tags": [],
       "study_contexts": [
         {
           "context_schema_version": "1.1.0",
@@ -44769,8 +44964,8 @@
             "Whole-cohort primary and secondary BP results were null; the positive men-only analysis followed an interaction finding and cannot replace the primary result.",
             "Exact Enovita material only; not transferable to all grape seed extracts.",
             "No assigned co-therapy; pharmacological BP treatment excluded at entry.",
-            "Not scoring eligible: a single branded null-primary trial cannot carry the generic record's cardiovascular claim while the pooled meta-analysis (34798267) remains unverified.",
-            "Returned decision A073: source-content hold; methods now verified for 33671310 only.",
+            "Not scoring eligible: the exact branded overall null-primary trial does not establish generic positive efficacy. The separately completed 34798267 bounded noncredit transfer assessment adds no pooled credit.",
+            "Historical returned decision A073 required source-content Methods for 34798267; 33671310 Methods were verified. Sean superseded that dependency ONLY for current limited noncredit numerical transfer on 2026-11-10; unread Methods/preparations/membership remain explicit, and the original decision record is preserved.",
             "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
           ],
           "dose": {
@@ -44807,6 +45002,37 @@
             "reviewed_at": "2026-10-28",
             "scope": "identity_dose_outcome_applicability"
           }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_grape_seed_extract_34798267_bounded_transfer_assessment",
+          "components": [
+            "INGR_GRAPE_SEED_EXTRACT"
+          ],
+          "source_pmids": [
+            "34798267"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Official primary 34798267 abstract and live MED identity read; full main Methods, included-trial table and supplements have NOT been read. Sean 2026-11-10 specifically superseded A073 only for this completed limited noncredit numerical-transfer assessment. Reported positive DBP/HR and null SBP/FMD findings remain; no claim full scientific review, no-human-research, invalidity, inefficacy, pooled applicability or independent trial counts."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "34798267",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/34798267/",
+              "location": "Official primary 34798267 abstract and live MED identity read; full main Methods, included-trial table and supplements have NOT been read. Sean 2026-11-10 specifically superseded A073 only for this completed limited noncredit numerical-transfer assessment. Reported positive DBP/HR and null SBP/FMD findings remain; no claim full scientific review, no-human-research, invalidity, inefficacy, pooled applicability or independent trial counts."
+            }
+          },
+          "limitations": [
+            "Official primary 34798267 abstract and live MED identity read; full main Methods, included-trial table and supplements have NOT been read. Sean 2026-11-10 specifically superseded A073 only for this completed limited noncredit numerical-transfer assessment. Reported positive DBP/HR and null SBP/FMD findings remain; no claim full scientific review, no-human-research, invalidity, inefficacy, pooled applicability or independent trial counts.",
+            "Abstract reports DBP −2.20 mmHg/HR −1.25 bpm favorable pools with substantial heterogeneity, while SBP/FMD pools are not significant; these are source-reported results, not a numerically qualified generic retail finding.",
+            "Actual population, preparation-specific exposure, trial membership/overlap, risk-of-bias and pooled methodology remain incomplete. No phantom member PMIDs, all-human-research absence, general extract equivalence, minimum Dose, threshold, warning or disease-prevention conclusion.",
+            "The original 33671310 context, actual reviewer, null primary and positive exploratory/secondary outcomes remain. Only its historical hold annotations were updated to the scoped Sean decision; no inherited pooled replication/enrollment credit."
+          ]
         }
       ]
     },
@@ -53790,6 +54016,145 @@
         }
       ],
       "last_updated": "2026-11-10"
+    },
+    {
+      "id": "INGR_RICE_PROTEIN",
+      "standard_name": "Rice Protein",
+      "aliases": [
+        "rice protein",
+        "brown rice protein",
+        "rice protein isolate",
+        "rice protein concentrate",
+        "oryzatein"
+      ],
+      "category": "sports_performance",
+      "evidence_level": "reference",
+      "study_type": "reference",
+      "published_studies": [
+        "23782948",
+        "33261645"
+      ],
+      "score_contribution": "tier_1",
+      "key_endpoints": [
+        "Rice-versus-whey training comparisons; positive time changes and mainly null between-active differences"
+      ],
+      "health_goals_supported": [],
+      "notes": "Valid controlled human training research exists for defined rice protein preparations. Two full primary reports support a completed limited noncredit numerical-transfer assessment: active-whey comparative null findings coexist with positive time changes and a secondary bone-content difference. Neither isolated rice-versus-placebo efficacy nor formal equivalence is established. Nutritional role, preparation-specific Formulation, Dose and safety remain separate.",
+      "last_updated": "2026-11-10",
+      "references_structured": [
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "23782948",
+          "doi": "10.1186/1475-2891-12-86",
+          "title": "The effects of 8 weeks of whey or rice protein supplementation on body composition and exercise performance.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23782948/",
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "notes": "Valid human active-comparator research; limited noncredit transfer assessment completed, not source-integrity rejection."
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "33261645",
+          "doi": "10.1186/s12970-020-00394-1",
+          "title": "Effects of daily 24-gram doses of rice or whey protein on resistance training adaptations in trained males.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33261645/",
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "notes": "Valid human active-comparator research; limited noncredit transfer assessment completed, not source-integrity rejection."
+        }
+      ],
+      "total_enrollment": null,
+      "study_contexts": [
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_rice_protein_23782948_bounded_transfer_assessment",
+          "components": [
+            "INGR_RICE_PROTEIN"
+          ],
+          "source_pmids": [
+            "23782948"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live core identity and original full primary PMC 3698202 Methods, Results, Tables 2–3 and figures/Discussion/Conclusion read. Independent root content and correctness check completed for this bounded transfer scope."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "23782948",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/23782948/",
+              "location": "Live core identity and original full primary PMC 3698202 Methods, Results, Tables 2–3 and figures/Discussion/Conclusion read."
+            }
+          },
+          "limitations": [
+            "Rice versus whey active-comparator randomized double-blind trial: 24 resistance-trained healthy men, 12 per arm, mean 21.3 years. No no-protein placebo or unsupplemented arm; no equivalence/noninferiority margin. Null between-arm differences cannot establish either placebo inefficacy or formal equivalence.",
+            "Growing Naturals chocolate rice protein ISOLATE made with Oryzatein/Axiom, 48 g assigned post-exercise in 500 mL water, versus 48 g NutraBio whey isolate. Training-session dosing over 8 weeks, not verified 48 g every rest day. Source calls doses protein, not universal powder/marker conversion. Supervised nonlinear training, diet 25% protein/50% carbohydrate/25% fat. No daily minimum or lower-dose equivalence inferred.",
+            "Phase 1: no condition×time differences in soreness/recovery/readiness 48 h after a high-volume bout; soreness rose and perceived recovery fell over time. Phase 2: lean mass, muscle thickness, strength and peak power rose, fat mass declined over time; no reported condition×time differences. Actual positive time observations remain, not isolated rice causal efficacy.",
+            "No uniquely prespecified primary endpoint hierarchy established. Source valid; only unsupported isolated causal/equivalence transfer is excluded. Exact preparation scope, all Dose/safety and other ingredient reviews remain independent.",
+            "Authors declare no competing interests; material/supplier described. No invented independent-funding statement. This source is a different report from 33261645, not evidence that all reviews/samples can be summed as independent replications."
+          ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_rice_protein_33261645_bounded_transfer_assessment",
+          "components": [
+            "INGR_RICE_PROTEIN"
+          ],
+          "source_pmids": [
+            "33261645"
+          ],
+          "review_status": "rejected_source",
+          "scoring_eligible": false,
+          "clinical_review": {
+            "reviewer": "Codex /root and source-research agents; independently checked by Codex /root/grouped_correctness_check. Agent source/applicability review, not clinician review.",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "Live core identity and original full primary PMC 7706190 Methods, Results, Tables 2–5, flow and Discussion/disclosures read; live NCT 04411173 identity/protocol dates checked. Independent root content and correctness check completed for this bounded transfer scope."
+          },
+          "dose": {
+            "source_provenance": {
+              "pmid": "33261645",
+              "source_url": "https://pubmed.ncbi.nlm.nih.gov/33261645/",
+              "location": "Live core identity and original full primary PMC 7706190 Methods, Results, Tables 2–5, flow and Discussion/disclosures read; live NCT 04411173 identity/protocol dates checked."
+            }
+          },
+          "limitations": [
+            "34 randomized (16 whey/18 rice), 24 analyzed (12 each), not 24 randomized; 10 lost/noncompliant. Healthy trained adult men, mean 32.8 years. No unsupplemented/placebo arm or formal equivalence design.",
+            "Growing Naturals/Axiom chocolate rice protein CONCENTRATE: 24 g nominal protein = 33.6 g flavored powder; whey 24 g = 32.6 g powder. Daily 8 weeks, within 60 min after workout, or within 60 min before bed on rest days; four training days/week after 2 week training-only run-in (total 10 weeks). Methods accidental sentence first 8 weeks no supplementation conflicts detailed 2+8 week protocol; retain typo rather than adopt it.",
+            "Primary fat-free-mass interaction p = .32 and leg press 1RM p = .80 null; time improvements remain. Secondary lean mass interaction p = .37, bench press p = .51 null; most endurance/power interactions null. Do not transform absence of rice-versus-whey differences into equivalence or isolated protein efficacy.",
+            "Exception: secondary DXA bone-content interaction p = .02, with whey 3.05→3.08 kg and rice 3.13→3.10 kg. Not all measured outcomes null. Paper text/Table 5 Wingate peak-interaction p = .76 vs .60 differs; no invented reconciliation. FFM figure percent-change inconsistencies and printed body-fat differences retained, no reanalysis demanded for this limited transfer conclusion.",
+            "NCT04411173 first posted June 2, 2020 after completion February 12, 2020; registry actual enrollment 24 conflicts 34 randomized body. Source retrospectively registered; paper Methods declares primary hierarchy but not proof of prospective registration.",
+            "Axiom unrestricted grant; author RJ patent relationship, not involved in data collection/analysis/manuscript; source reports sponsor no collection/analysis/interpretation/manuscript role. Preserve commercial disclosure. No label certification/safety clearance from third-party screen.",
+            "Clinical comparison review finished with independent check; no ordinary rice powder/isolate/concentrate/retail blend dose/formulation equivalence, new grade, minimum or general safety conclusion."
+          ]
+        }
+      ],
+      "canonical_id": "rice_protein",
+      "reference_semantics": {
+        "reference_type": "no_benchmark",
+        "scope": "General catalog Dose of identified rice protein; no efficacy recommendation.",
+        "preparation": "Rice protein isolate/concentrate; culinary food/carrier role remains separate.",
+        "purpose": "General Dose only; clinical Evidence uses source-specific comparative assessments.",
+        "population": "Healthy trained adult men in the reviewed trials.",
+        "exposure_basis": "minimum_directed_daily_use",
+        "units": "mg",
+        "curve": "completed_no_benchmark_neutral",
+        "source_ids": [
+          "PMID:23782948",
+          "PMID:33261645"
+        ],
+        "rationale": "Two different preparations/regimens and active comparators do not establish one minimum, optimal interval, daily floor, safety ceiling or lower-dose equivalence. Existing completed-neutral Dose policy; studied exposures remain descriptive.",
+        "owner": "scripts/data/backed_clinical_studies.json::INGR_RICE_PROTEIN",
+        "review_date": "2026-11-10",
+        "approval_status": "approved_existing_neutral_dose_v41_source_review"
+      }
     }
   ]
 }

@@ -295,9 +295,11 @@ def test_golden_milk_whole_turmeric_does_not_inherit_curcumin_identity(enriched)
     assert cinnamon.reason_code == "clinical_sources_ineligible"
     _assert_empty_automated_source_is_unfinished("cardamom")
     turmeric = next(r for r in resolution.resolutions if r.canonical_id == "turmeric")
-    # Reviewed literature exists, but it does not establish applicability to this row.
+    # Reviewed literature exists but establishes no applicability; the record's attested
+    # no-credit conclusion finishes this unnamed preparation (ADR-0007 rule 3).
     assert turmeric.disposition == "research_present_applicability_unestablished"
-    assert turmeric.reason_code == "literature_applicability_unestablished"
+    assert turmeric.reason_code == "clinical_source_label_unresolved"
+    assert not turmeric.blocking_reasons
     assert turmeric.points_eligible is False
     assert not resolution.is_assessment_complete
     evidence = build_scored_artifact(product)["quality_pillars_v4"]["evidence"]
