@@ -144,3 +144,13 @@ def test_incomplete_or_conflicting_reishi_source_form_cannot_supply_identity(nor
     elif mutation == 'multiple': row['forms'].append({'name': 'Shiitake mushroom extract'})
     else: row['nestedRows'] = [{'name': 'Shiitake'}]
     assert normalizer._single_declared_source_form_identity(row) is None
+
+
+def test_cleaner_preserves_literal_source_notes_separate_from_enrichment_prose(normalizer):
+    raw = _raw('Ashwagandha Root Extract', qty=470)
+    raw['notes'] = 'Ashwagandha Root Extract PlantPart: Root Note: 1.5% Withanolides = 7 mg'
+    out = normalizer._process_single_ingredient_enhanced(raw, True)
+    if isinstance(out, list):
+        out = out[0]
+    assert out['raw_taxonomy']['source_notes'] == raw['notes']
+    assert out['raw_source_text'] == raw['name']

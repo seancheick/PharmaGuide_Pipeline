@@ -300,3 +300,13 @@ Pillar fact audience: each fact in `quality_pillars_v4.<pillar>.explanation.fact
 Dose explanation context: `quality_pillars_v4.dose.explanation.assessment` projects the existing Dose module method, source-owned RDA/UL assessments, configured credit thresholds and actual cross-pillar deductions. Reference rows are context, not extra scored ingredients; eligibility and ownership remain in the original assessments. A dietary reference proxy is not a preparation-specific clinical efficacy range. `rda_ul_data` reference provenance carries the curated UL scope/source, with grade applicability unknown unless the source owner establishes an authoritative safety reference.
 
 **Reviewed unrated form:** an exact IQM preparation with a complete, dated, source-bound `form_quality_assessment` but no numerical `bio_score`. The shared reference resolver permits the existing route rubric to assess Formulation; the record grants neither a bioavailability grade nor Evidence or Dose credit.
+
+## Evidence V1 research attribution
+
+**Ingredient research:** `backed_clinical_studies.json::consumer_research` owns reviewed consumer `summary`, `studied_uses` (outcome and summary), `applicability_note` and `references_structured`. Existing identity discovery projects these as `evidence_data.ingredient_research`. Informational research survives preparation rejection; it supplies no score, dose, safety conclusion or clinical approval. Flutter renders these producer strings and citations. Numerical eligibility remains with clinical_applicability and the existing Evidence scorer.
+
+**Required form groups:** optional `applicability.required_form_groups` is an AND of nonempty OR term lists, established affirmatively on one linked raw source row by clinical_applicability. It never joins unrelated rows or infers preparation from an enrichment form. Existing required_form_terms retains OR semantics.
+
+**Source notes:** `enhanced_normalizer` retains original DSLD row notes verbatim as `raw_taxonomy.source_notes`; clinical preparation conjunctions can read them from that same source row. Enrichment `notes` is curation prose and never supplies source proof. Existing exact-form policies are not widened by this V1 conjunction input.
+
+**Reviewed preparation uncertainty:** optional canonical `applicability.preparation_uncertainty_reviewed` is a strict boolean attesting that a defined ingredient-general review explicitly considered unknown preparation correspondence. Only literal true, complete declared source reviews and exclusively ingredient-general affirmative contexts can finish with applicability unestablished and zero points. It never supplies product eligibility, physician approval or a generic Dose target; absent/false/malformed preserve holds.

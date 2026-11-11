@@ -399,6 +399,10 @@ def _reviewed_blend_child_source(monkeypatch, product):
                         lambda: {**current, source["id"]: source})
     review = clinical_applicability.assess_clinical_source_review({"id": source["id"]})
     assert review["is_complete"], review["errors"]
+    # This fixture tests blend mechanics, not the live botanical registry.
+    # Keep canonical recovery on the same explicitly qualified synthetic source.
+    monkeypatch.setattr("evidence_resolver._backed_studies_index",
+                        lambda: {"ashwagandha": [source]})
     product["evidence_data"]["clinical_matches"] = [source]
 
 

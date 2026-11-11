@@ -55,7 +55,8 @@ def _number(value: Any) -> float | None:
         return None
 
 
-def _row_text(row: Mapping, *, source_only: bool = False, preserve_punctuation: bool = False) -> str:
+def _row_text(row: Mapping, *, source_only: bool = False, preserve_punctuation: bool = False,
+              include_source_notes: bool = False) -> str:
     if source_only:
         label = row.get("raw_source_text") or row.get("source_label_name")
         if not isinstance(label, str) or not label.strip():
@@ -67,6 +68,11 @@ def _row_text(row: Mapping, *, source_only: bool = False, preserve_punctuation: 
         taxonomy = row.get("raw_taxonomy")
         source_forms = taxonomy.get("forms") if isinstance(taxonomy, Mapping) else None
         forms = source_forms if isinstance(source_forms, list) else []
+        # Only opt-in preparation groups consume the cleaner's original,
+        # colocated label notes. Curated/generated row.notes is never proof.
+        source_notes = taxonomy.get("source_notes") if isinstance(taxonomy, Mapping) else None
+        if include_source_notes and isinstance(source_notes, str):
+            values.append(source_notes)
     else:
         values = [row.get(k) for k in ("name", "raw_source_text", "matched_form", "form_id")]
         forms = row.get("forms")
@@ -110,6 +116,14 @@ def _evidence_subject_refs(product: Mapping, *, include_undosed: bool = False,
     )
 
 
+def _anchor_lineage(product: Mapping, anchor: Mapping) -> set:
+    """Printed source rows behind a provider anchor. Blend lineage may carry flattened
+    ``activeIngredients[i]`` indexes; the path owner resolves them to retained rows."""
+    from scoring_input_contract import _resolve_source_tree_path
+    return {path for ref in anchor.get("linked_rows") or [] if isinstance(ref, str) and ref.strip()
+            for path in (ref, _resolve_source_tree_path(product, ref))}
+
+
 def _build_evidence_subject_refs(product: Mapping, *, include_undosed: bool,
                                  include_anchor_lineage: bool) -> set:
     iqd = product.get("ingredient_quality_data")
@@ -126,7 +140,7 @@ def _build_evidence_subject_refs(product: Mapping, *, include_undosed: bool,
             # The shared provider already records the exact printed lineage
             # behind an anchor. Admit those source rows for Evidence only;
             # their blend total remains unavailable as a member dose.
-            candidates.extend(row.get("linked_rows") or [])
+            candidates.extend(_anchor_lineage(product, row))
         refs.update(ref for ref in candidates if isinstance(ref, str) and ref.strip())
     return refs
 
@@ -150,9 +164,20 @@ def _valid_policy(policy: Any) -> bool:
             not _key(value) for value in policy.get(field, [])
         ):
             return False
+    if "required_form_groups" in policy:
+        groups = policy["required_form_groups"]
+        if (not isinstance(groups, list) or not groups
+                or any(not isinstance(group, list) or not group
+                       or any(not isinstance(term, str) or not term.strip() or not _key(term)
+                              for term in group) for group in groups)):
+            return False
     if "require_source_label_form" in policy and not isinstance(policy["require_source_label_form"], bool):
         return False
-    if policy.get("require_source_label_form") and not policy.get("required_form_terms"):
+    if ("preparation_uncertainty_reviewed" in policy
+            and not isinstance(policy["preparation_uncertainty_reviewed"], bool)):
+        return False
+    if (policy.get("require_source_label_form")
+            and not (policy.get("required_form_terms") or policy.get("required_form_groups"))):
         return False
     bounds = []
     for field in ("minimum_daily_dose", "maximum_daily_dose"):
@@ -289,7 +314,7 @@ def _linked_rows(product: Mapping, entry: Mapping, *, source_only: bool = False,
             if len(anchors) == 1:
                 anchor = anchors[0]
                 anchor_ref = anchor.get("raw_source_path")
-                linked = anchor.get("linked_rows") or []
+                linked = _anchor_lineage(product, anchor)
                 children = [r for r in rows
                             if (r.get("raw_source_path") != anchor_ref
                                 and (r.get("parent_source_path") == anchor_ref
@@ -1074,7 +1099,7 @@ def reviewed_exact_form_source_scope(reference: Mapping) -> bool:
     if (not _valid_policy(policy)
             or policy.get("scope") != "ingredient"
             or policy.get("require_source_label_form") is not True
-            or not policy.get("required_form_terms")):
+            or not (policy.get("required_form_terms") or policy.get("required_form_groups"))):
         return False
     contexts = _accepted_condition_scopes(reference, policy)
     return bool(contexts) and all(
@@ -1259,9 +1284,31 @@ def _assess_legacy_signed_scope(product: Mapping, entry: Mapping, reference: Map
 def _context_applicability_policy(policy: Mapping, context: Mapping) -> dict | None:
     """Bind an existing applicability vocabulary to this context's sources."""
     scoped = context.get("applicability")
-    if not isinstance(scoped, Mapping) or scoped.get("scope") != "ingredient":
+    if (not isinstance(scoped, Mapping) or scoped.get("scope") != "ingredient"
+            or not _valid_policy(scoped) or (policy and not _valid_policy(policy))):
         return None
     merged = {**policy, **scoped}
+    # A source-specific child may add required preparation evidence but cannot
+    # replace its parent's conjunction. Existing flat OR terms keep their
+    # legacy merge behavior; when a child supplies groups, retain the parent's
+    # flat OR requirement alongside them as another conjunctive group.
+    groups = list(policy.get("required_form_groups") or []) + list(scoped.get("required_form_groups") or [])
+    if groups:
+        if policy.get("required_form_terms") and "required_form_terms" in scoped:
+            groups.append(list(policy["required_form_terms"]))
+        merged["required_form_groups"] = groups
+        for field in ("excluded_form_terms", "excluded_canonical_ids"):
+            if policy.get(field) or scoped.get(field):
+                merged[field] = list(dict.fromkeys([*(policy.get(field) or []),
+                                                   *(scoped.get(field) or [])]))
+        parent_delivery, child_delivery = policy.get("dosage_forms"), scoped.get("dosage_forms")
+        if parent_delivery and child_delivery:
+            allowed = {_key(form) for form in child_delivery}
+            merged["dosage_forms"] = [form for form in parent_delivery if _key(form) in allowed]
+            if not merged["dosage_forms"]:
+                return None
+        elif parent_delivery:
+            merged["dosage_forms"] = list(parent_delivery)
     sources = scoped.get("source_pmids")
     context_sources = context.get("source_pmids")
     if (not _valid_policy(merged) or not isinstance(sources, list) or not sources
@@ -1346,7 +1393,8 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
     # The curated owner can retain research for context while withdrawing
     # numerical credit. An old enriched positive stamp cannot reverse that.
     if is_reference_only(reference):
-        return {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
+        return _assess_scoped_reference(product, entry, reference, assess_amount=assess_amount,
+                                        require_claim_alignment=require_claim_alignment)
     from evidence_resolver import clinical_record_sources_eligible
     # Enrichment and downstream consumers share the hold. Known preparation
     # exclusions are still checked first, so a hold cannot erase that finding.
@@ -1387,12 +1435,87 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
         return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
     if policy.get("scope") != "ingredient":
         return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
+    return _assess_policy_rows(
+        product, entry, reference, policy, source_block=source_block,
+        assess_amount=assess_amount, require_claim_alignment=require_claim_alignment)
+
+
+def _assess_scoped_reference(product: Mapping, entry: Mapping, reference: Mapping, *,
+                             assess_amount: bool, require_claim_alignment: bool) -> dict:
+    """Finish noncredit research only for the preparation its review describes."""
+    reference_decision = {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
+    # A canonical record-only query has no product preparation to adjudicate.
+    # Source-bound calls, including missing/stale row references, still pass
+    # through the row proof checks below.
+    if not product and not entry.get("matched_source_row_refs"):
+        return reference_decision
+    contexts = reference.get("study_contexts") or []
+    parent = reference.get("applicability")
+    children = [context for context in contexts
+                if isinstance(context, Mapping) and "applicability" in context]
+    if parent is None and not children:
+        return {"status": "not_applicable", "reason_code": "reference_only_clinical_record"}
+    policy = parent if parent is not None else {"scope": "ingredient"}
+    if not _valid_policy(policy):
+        return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+    if policy.get("scope") == "formula_context_only":
+        return {"status": "not_applicable", "reason_code": "formula_reference_not_individual_evidence"}
+    if policy.get("scope") != "ingredient":
+        return {"status": "unresolved", "reason_code": "unsupported_applicability_scope"}
+    # This canonical check includes schema, provenance, source binding and all
+    # pending siblings. Noncredit contexts must not pretend to be affirmative.
+    complete = assess_clinical_source_review(reference)["is_complete"]
+    reviewed = contexts if complete else []
+    blocked = None if complete else {
+        "status": "unresolved", "reason_code": "clinical_sources_ineligible"}
+
+    def assess(own_policy, own_contexts):
+        return _assess_policy_rows(
+            product, entry, reference, own_policy, source_block=blocked,
+            assess_amount=assess_amount, require_claim_alignment=require_claim_alignment,
+            accepted_scopes=own_contexts)
+
+    def finish(decision):
+        # Reference records retain their compact public noncredit contract.
+        # Unknown proof never reaches this normalization.
+        if complete and decision.get("status") == "not_applicable":
+            return reference_decision
+        return decision
+
+    def matched(decision):
+        return (decision.get("status") == "applicable" or
+                decision.get("reason_code") == "clinical_outcome_not_qualified")
+
+    # Parent and child requirements are conjunctive, not a dictionary override
+    # that can silently drop the parent's required preparation or exclusions.
+    decision = assess(policy, reviewed)
+    if not matched(decision):
+        return finish(decision)
+    if children:
+        decisions = []
+        for context in children:
+            own_policy = _context_applicability_policy(policy, context)
+            if own_policy is None:
+                return {"status": "unresolved", "reason_code": "invalid_applicability_contract"}
+            decisions.append(assess(own_policy, [context] if complete else []))
+        accepted = [result for result in decisions if matched(result)]
+        if not accepted:
+            return finish(next((result for result in decisions if result.get("status") == "unresolved"),
+                               decisions[0]))
+    return reference_decision
+
+
+def _assess_policy_rows(product: Mapping, entry: Mapping, reference: Mapping, policy: Mapping, *,
+                        source_block: dict | None, assess_amount: bool,
+                        require_claim_alignment: bool, accepted_scopes: list | None = None) -> dict:
+    """One row/preparation matcher for affirmative and noncredit source scopes."""
     excluded_terms = _matched_excluded_claim_terms(product, policy.get("excluded_claim_terms", []))
     if require_claim_alignment and (excluded_terms or _claim_excluded_when_alone(product, policy)):
         return {"status": "not_applicable", "reason_code": "label_purpose_evidence_mismatch"}
     # Review scope and population qualify the research. Advertising is
     # evaluated separately, including exclusions on claim substantiation.
-    accepted_scopes = _accepted_condition_scopes(reference, policy)
+    if accepted_scopes is None:
+        accepted_scopes = _accepted_condition_scopes(reference, policy)
     if ((reference.get("study_contexts") and not accepted_scopes)
             or (not reference.get("study_contexts")
                 and isinstance(reference.get("scoring_eligible"), bool)
@@ -1425,7 +1548,7 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
 
     lower, upper, frequency_defaulted = resolve_daily_serving_range(dict(product))
     reasons = []
-    source_only = policy.get("require_source_label_form", False)
+    source_only = policy.get("require_source_label_form", False) or bool(policy.get("required_form_groups"))
     if source_only:
         # A generated/stale canonical form cannot establish source-only delivery.
         # Reuse the physical-form owner on the retained label, not on its guess.
@@ -1433,7 +1556,7 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
         dosage_form = _key(canonicalize_form_factor(physical)) if physical else ""
     excluded_canonicals = {_key(value) for value in policy.get("excluded_canonical_ids", [])}
     row_constraints = any(policy.get(field) for field in (
-            "required_form_terms", "require_source_label_form", "dosage_forms",
+            "required_form_terms", "required_form_groups", "require_source_label_form", "dosage_forms",
             "minimum_daily_dose", "maximum_daily_dose", "dose_unit",
         ))
     exclusion_only = bool(excluded_canonicals or policy.get("excluded_form_terms")) and not row_constraints
@@ -1451,11 +1574,14 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
                               and {_key(value) for value in row.get("verified_child_canonicals") or []} == components]
         if len(composition_owners) != 1:
             return {"status": "unresolved", "reason_code": "clinical_source_row_unresolved"}
+    form_terms = list(policy.get("required_form_terms") or [])
+    form_groups = policy.get("required_form_groups") or []
+    discriminating_terms = form_terms + [term for group in form_groups for term in group]
     linked_rows = _linked_rows(product, entry, source_only=source_only, evidence_only=not exposure_required,
-                               discriminating_terms=policy.get("required_form_terms"))
+                               discriminating_terms=discriminating_terms)
     preparation_rows = (_linked_rows(
         product, entry, source_only=True, evidence_only=True,
-        discriminating_terms=policy.get("required_form_terms"), source_preparation=True,
+        discriminating_terms=discriminating_terms, source_preparation=True,
     ) if source_only and not exposure_required else [])
     explicit_refs = entry.get("matched_source_row_refs") or []
     # Explicit repeated declarations may share review provenance only when
@@ -1490,6 +1616,13 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
         # absent and incorrectly satisfy the broader cranberry scope.
         documented_scope = reference.get("documented_review_scope") == policy
         exclusion_text = text if not source_only or documented_scope else text + _row_text(row)
+        group_source_text = (_row_text(
+            row, source_only=True, preserve_punctuation=True, include_source_notes=True)
+            if form_groups else "")
+        if form_groups:
+            # New conjunction scopes use the same authentic row proof for
+            # exclusions and requirements, retaining clause negation.
+            exclusion_text += " " + group_source_text
         if (source_only and policy.get("excluded_form_terms")
                 and (product.get("delivery_data") or {}).get("systems")):
             # Reuse the delivery owner's label/row binding and negation checks.
@@ -1502,8 +1635,19 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
         prepared_source = bool(set(text.split()) & {
             "extract", "extracts", "concentrate", "concentrated", "standardized", "standardised",
         }) if documented_scope else False
+        group_exclusion_text = ""
+        if form_groups:
+            # Same rule for conjunction scopes, bound to the words themselves:
+            # "extract powder" is the extract's physical form, while any other
+            # powder on the row (crude root powder beside an extract) still excludes.
+            group_exclusion_text = re.sub(
+                r"\bextracts? powders?\b", "extract",
+                re.sub(r"[^a-z0-9.;!?\r\n]+", " ", normalize_text(exclusion_text)))
         if any(
-            " " + _key(term) + " " in exclusion_text
+            (bool(find_affirmative_label_match(
+                re.compile(r"(?<!\w)" + re.escape(_key(term)) + r"(?!\w)", re.I),
+                group_exclusion_text))
+             if form_groups else " " + _key(term) + " " in exclusion_text)
             and not (prepared_source and "powder" in _key(term).split())
             for term in policy.get("excluded_form_terms", [])
         ):
@@ -1511,6 +1655,7 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
             continue
         forms = policy.get("required_form_terms") or []
         preparation_text = _row_text(row, source_only=source_only, preserve_punctuation=True)
+        group_preparation_text = group_source_text if form_groups else preparation_text
         if len(linked_rows) == len(preparation_rows) == 1:
             heading = preparation_rows[0]
             heading_ref = heading.get("raw_source_path") or heading.get("source_row_ref")
@@ -1518,20 +1663,27 @@ def _assess_reference_applicability(product: Mapping, entry: Mapping, reference:
             if (isinstance(heading_ref, str) and isinstance(row_ref, str)
                     and row_ref.startswith(heading_ref + ".")):
                 preparation_text += " " + _row_text(heading, source_only=True, preserve_punctuation=True)
-        literal_source = normalize_text(preparation_text)
-        preparation_key = " " + _key(preparation_text).replace(" as ", " ") + " "
-        required_patterns = [
-            (re.compile(r"(?<!\w)" + re.escape(normalize_text(form) if "+" in form else _key(form))
-                        + r"(?!\w)", re.I), literal_source if "+" in form else preparation_key)
-            for form in forms
-        ]
-        if forms and not any(find_affirmative_label_match(pattern, source)
-                             for pattern, source in required_patterns):
-            # A negated preparation is a known nonmatch. Mere absence of its
-            # label proof is unknown and cannot finish a zero-credit review.
-            explicitly_denied = any(pattern.search(source) for pattern, source in required_patterns)
+        # Existing terms remain one OR group. Additional groups are ANDed,
+        # and every added group must be proved by this one source row.
+        requirements = [(forms, preparation_text, False)] if forms else []
+        requirements += [(group, group_preparation_text, True) for group in form_groups]
+        failed_groups = []
+        for terms, source_text, preserve_clauses in requirements:
+            literal = normalize_text(source_text)
+            keyed = " " + (re.sub(r"[^a-z0-9.;!?\r\n]+", " ", literal)
+                           if preserve_clauses else _key(source_text)).replace(" as ", " ") + " "
+            patterns = [
+                (re.compile(r"(?<!\w)" + re.escape(normalize_text(term) if "+" in term else _key(term))
+                            + r"(?!\w)", re.I), literal if "+" in term else keyed)
+                for term in terms
+            ]
+            if not any(find_affirmative_label_match(pattern, source) for pattern, source in patterns):
+                failed_groups.append(any(pattern.search(source) for pattern, source in patterns))
+        if failed_groups:
+            # An explicitly denied required group is a known nonmatch. Mere
+            # absence of label proof remains unknown, never a finished zero.
             reasons.append("clinical_source_label_unresolved"
-                           if source_only and not explicitly_denied else "clinical_form_mismatch")
+                           if source_only and not any(failed_groups) else "clinical_form_mismatch")
             continue
         amount = _number(row.get("quantity"))
         unit_scale = _mass_unit_scale(row.get("unit_normalized") or row.get("unit"))
@@ -1654,6 +1806,18 @@ def filter_clinical_matches(
                 from scoring_v4.modules.generic_evidence import _clinical_source_id
                 reference = reviewed_entries().get(_clinical_source_id(dict(entry)), {})
                 qualified_ids = decision.get("population_applicability", {}).get("context_ids", [])
+                if qualified_ids:
+                    # Consumer study attribution follows the selected contexts,
+                    # not rejected or unfinished siblings in the canonical
+                    # research inventory. Completeness still reads that owner.
+                    qualified_pmids = {str(pmid)
+                        for context in reference.get("study_contexts") or []
+                        if context.get("context_id") in qualified_ids
+                        for pmid in context.get("source_pmids") or []}
+                    if isinstance(scoped_entry.get("references_structured"), list):
+                        scoped_entry["references_structured"] = [ref
+                            for ref in scoped_entry["references_structured"]
+                            if isinstance(ref, dict) and str(ref.get("pmid")) in qualified_pmids]
                 if (scoped_entry.get("study_type") != decision["qualifying_study_type"]
                         or len(qualified_ids) < len(reference.get("study_contexts") or [])):
                     # A stronger record or excluded sibling cannot lend its

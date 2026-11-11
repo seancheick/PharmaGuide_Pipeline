@@ -1011,6 +1011,7 @@
           "source_integrity": "none",
           "trial_family": "ksm66_32021735",
           "population": {
+            "age_group": "adult",
             "description": "60 enrolled 58 analyzed adults PSS>=20 without other psychiatric or chronic systemic disease"
           },
           "study_design": "randomized double-blind placebo-controlled three-arm parallel trial",
@@ -18293,11 +18294,9 @@
         "indian ginseng"
       ],
       "category": "adaptogen_stress",
-      "evidence_level": "reference",
+      "evidence_level": "ingredient-human",
       "published_studies": [
-        "RCT",
-        "meta-analysis",
-        "systematic_review"
+        "RCT"
       ],
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -18307,10 +18306,10 @@
       "health_goals_supported": [
         "Reduce Stress / Anxiety"
       ],
-      "notes": "Limited short-term stress findings across heterogeneous preparations. Anxiety findings are mixed; PMID36017529 rates certainty low with substantial heterogeneity. Exact KSM-66/Shoden trial results cannot establish equivalence for generic1.5/2.5%-withanolide extracts,5:1 extracts or root powder. PMID39348746 full preparation table remains unverified and must not supply affirmative eligibility. Current generic-material correspondence is not established; retain branded source holds. Existing pregnancy, liver, thyroid/autoimmune, medication and long-term-safety qualifications remain controlling. Dr. Pham's signed ruling of 2026-10-28 resolves the former record-level eligibility hold: the generic record is a completed no-credit reference (no transfer from standardized extracts); KSM-66, Sensoril and Shoden brand records carry stress credit. The KSM-66 trial contexts (23439798, 32021735, 31517876) were removed from this record because those PMIDs are not its references.",
-      "notable_studies": "PMID36017529 is low-certainty heterogeneous synthesis, not a universal dose authority. Primary KSM-66 trials23439798/32021735 and Shoden31517876 have exact-material, outcome-specific findings; branded decisions remain separate. PMID39348746 abstract only; no complete table appraisal claimed.",
-      "study_type": "reference",
-      "last_updated": "2026-10-28",
+      "notes": "[HISTORICAL, superseded in part by the 2026-11-10 V1 paragraph below; signed text retained verbatim. No longer current: 'completed no-credit reference' (the record is now ingredient-human and can award limited stress credit to qualified root extracts) and 'KSM-66 trial contexts ... were removed' (PMIDs 23439798 and 32021735 are now cited as V1 preparation-class contexts).] Limited short-term stress findings across heterogeneous preparations. Anxiety findings are mixed; PMID36017529 rates certainty low with substantial heterogeneity. Exact KSM-66/Shoden trial results cannot establish equivalence for generic1.5/2.5%-withanolide extracts,5:1 extracts or root powder. PMID39348746 full preparation table remains unverified and must not supply affirmative eligibility. Current generic-material correspondence is not established; retain branded source holds. Existing pregnancy, liver, thyroid/autoimmune, medication and long-term-safety qualifications remain controlling. Dr. Pham's signed ruling of 2026-10-28 resolves the former record-level eligibility hold: the generic record is a completed no-credit reference (no transfer from standardized extracts); KSM-66, Sensoril and Shoden brand records carry stress credit. The KSM-66 trial contexts (23439798, 32021735, 31517876) were removed from this record because those PMIDs are not its references.\n\nNEW Sean Evidence V1 decision (2026-11-10), superseding only the generic trademark prerequisite: limited ingredient-level stress support may apply to identified standardized root extracts without a named trademark. Both retained primary trials actually used KSM-66; this is conservative analogical preparation-class support, not product proof. Historical signed exact-preparation decisions above and rejected synthesis-transfer contexts are retained unchanged. Root powder, unknown, ratio-only, root+leaf and novel delivery preparations do not borrow the root-extract grade. Bounded reviewed research can finish without asserting exhaustive literature completion. Sleep findings are descriptive and do not expand numerical stress scope. Dose, Formulation, Safety and GLN numerical HOLD remain separate and unchanged.",
+      "notable_studies": "Two distinct primary trial families: PMID23439798 (64 randomized, 61 efficacy analysis; 60 days) and PMID32021735 (60 randomized, 58 completed; 8 weeks). Both used KSM-66 root extract. Perceived-stress outcomes favored extract over placebo; anxiety results depended on assigned arm in the latter trial. Self-reported sleep research in PMID32021735 is descriptive, not insomnia-treatment proof or separate numerical credit. Actual study regimens are source facts, not generic Dose targets. Prior synthesis exact-transfer rejections remain historical; unread preparation tables are not affirmed.",
+      "study_type": "rct_multiple",
+      "last_updated": "2026-11-10",
       "references_structured": [
         {
           "type": "pubmed",
@@ -18371,15 +18370,53 @@
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "23439798",
+          "doi": "10.4103/0253-7176.106022",
+          "title": "A prospective, randomized double-blind, placebo-controlled study of safety and efficacy of a high-concentration full-spectrum extract of ashwagandha root in reducing stress and anxiety in adults.",
+          "citation": "Indian journal of psychological medicine (2012-07-01)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23439798/",
+          "published_date": "2012-07-01",
+          "publication_types": [
+            "Journal Article"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
+        },
+        {
+          "type": "pubmed",
+          "authority": "NCBI PubMed",
+          "pmid": "32021735",
+          "doi": "10.7759/cureus.6466",
+          "title": "Adaptogenic and Anxiolytic Effects of Ashwagandha Root Extract in Healthy Adults: A Double-blind, Randomized, Placebo-controlled Clinical Study.",
+          "citation": "Cureus (2019-12-25)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32021735/",
+          "published_date": "2019-12-25",
+          "publication_types": [
+            "Journal Article"
+          ],
+          "mesh_terms": [],
+          "supplementary_concepts": [],
+          "evidence_grade": "journal_article",
+          "retracted": false,
+          "supports_claims": [],
+          "verification_source": "pubmed_eutils"
         }
       ],
       "external_ids": {
         "unii": "V038D626IF"
       },
-      "effect_direction": "positive_strong",
+      "effect_direction": "positive_weak",
       "total_enrollment": null,
-      "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Signed limited source-specific findings retained; no universal preparation, population, purpose or regimen equivalence. scoring_eligible=false newly enforces unresolved current-product qualification; it adds no penalty, declares no inefficacy and does not override separate branded or safety holds.",
+      "effect_direction_confidence": "low",
+      "effect_direction_rationale": "NEW Sean Evidence V1 policy, 2026-11-10: limited ingredient-level short-term perceived-stress support for identified standardized Withania somnifera root extracts, conservatively inferred from two verified KSM-66 trials. This is a preparation-class inference, not evidence of bioequivalence or direct testing of every extract. Existing positive_weak classification uses the unchanged Evidence rubric. Exact branded grades remain separate. Ordinary powder, unknown or non-equivalent preparations receive no borrowed extract grade.",
       "endpoint_relevance_tags": [
         "stress_mood"
       ],
@@ -18442,8 +18479,261 @@
             "Dr. Pham's 2026-10-28 ruling: stress credit only with the exact studied standardized extract (KSM-66, Sensoril root+leaf, Shoden); no transfer to generic ashwagandha powder or unspecified extracts. Brand records carry the credit.",
             "Context authored and source-verified by agent review (Claude) on 2026-10-28; Dr. Pham's pre-approval of fully source-verified contexts attested by Sean on 2026-10-28."
           ]
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_ashwagandha_v1_23439798_rootclass",
+          "components": [
+            "INGR_ASHWAGANDHA"
+          ],
+          "source_pmids": [
+            "23439798"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Actual studied material: KSM-66 standardized root extract from Ixoreal Biomed. Root-only extract, at least 5%withanolides HPLC; no alcohol or synthetic solvents",
+            "canonical_id": "ashwagandha"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "perceived_stress",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ksm66_23439798",
+          "population": {
+            "age_group": "adult",
+            "description": "64 adults aged 18-54 with chronic stress (PSS >=14, WHO-5 <15), free of psychiatric conditions other than stress; 61 protocol-compliant in efficacy analysis; 41 men, 23 women."
+          },
+          "study_design": "single-center randomized double-blind placebo-controlled parallel trial",
+          "outcomes": [
+            {
+              "name": "PSS between-group reduction P<.0001",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Outcome hierarchy not explicitly established by extracted paper sections; do not invent prespecified primary designation.",
+            "Different doses/outcomes not universal benchmark; study does not approve other ashwagandha materials.",
+            "Small short Indian adult trials; diagnosed psychiatric conditions not covered.",
+            "The primary objective was stress reduction, but no single primary scale is designated; PSS, DASS and GHQ-28 all favored KSM-66 (P<0.0001). Per-protocol efficacy analysis (61/64).",
+            "Mann-Whitney/t-test analysis of a 60-day single-centre trial; long-term effects not studied.",
+            "NEW Sean V1 policy permits limited ingredient-level standardized-root support without a trademark; both underlying trials used KSM-66, so generalization is analogical and uncertain.",
+            "Numerical qualification is limited to perceived stress. Sleep findings are descriptive; no diagnosed-anxiety treatment, sleep-treatment or athletic-performance credit is inferred.",
+            "Actual trial family and dose facts retained; no generic Dose benchmark or minimum marker-percentage cutoff is created."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              600
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 60,
+            "administration_frequency": "one 300 mg capsule twice a day for 60 days",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "[600]mg/day root extract in assigned arms",
+            "normalization": {
+              "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+            },
+            "source_provenance": {
+              "pmid": "23439798",
+              "location": "Abstract Materials and Methods; Methods (KSM-66 extract from Ixoreal, >=5% withanolides by HPLC; inclusion criteria); Results Tables 1-2",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3573577/"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Codex source review with independent agent review; Sean-approved V1 policy",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "NEW Sean Evidence V1 policy approval (2026-11-10); bounded agent source verification and independent review. clinician_approved is the existing compatibility status, not a claim of new physician review. Limited standardized-root class inference, not chemical or product equivalence."
+          }
+        },
+        {
+          "context_schema_version": "1.1.0",
+          "context_id": "ingr_ashwagandha_v1_32021735_rootclass",
+          "components": [
+            "INGR_ASHWAGANDHA"
+          ],
+          "source_pmids": [
+            "32021735"
+          ],
+          "identity_scope": "ingredient_general",
+          "identity": {
+            "preparation": "Actual studied material: KSM-66 standardized root extract from Ixoreal Biomed. Aqueous root extract, KSM-66 batch KSM/VG/18/1085; independent withanolide assay not established here",
+            "canonical_id": "ashwagandha"
+          },
+          "exposure_basis": "supplement_dose",
+          "route": "oral",
+          "evidence_role": "direct_rct",
+          "component_registration_status": "fully_registered",
+          "condition": "perceived_stress",
+          "purpose": "treatment",
+          "review_status": "clinician_approved",
+          "scoring_eligible": true,
+          "human_status": "confirmed",
+          "source_integrity": "none",
+          "trial_family": "ksm66_32021735",
+          "population": {
+            "age_group": "adult",
+            "description": "60 enrolled 58 analyzed adults PSS>=20 without other psychiatric or chronic systemic disease"
+          },
+          "study_design": "randomized double-blind placebo-controlled three-arm parallel trial",
+          "outcomes": [
+            {
+              "name": "PSS both doses versus placebo",
+              "hierarchy": "not_reported",
+              "kind": "patient_important",
+              "direction": "positive",
+              "outcome_role": "direct_between_group_effect"
+            }
+          ],
+          "limitations": [
+            "Outcome hierarchy not explicitly established by extracted paper sections; do not invent prespecified primary designation.",
+            "Different doses/outcomes not universal benchmark; study does not approve other ashwagandha materials.",
+            "Small short Indian adult trials; diagnosed psychiatric conditions not covered.",
+            "The retained full article does not designate a primary outcome/endpoint; recorded hierarchy not_reported. This is a reporting limitation, not invented primary status or completion of any separate approval.",
+            "Two of three arms showed PSS benefit; anxiety (HAM-A) benefit was significant at 600 mg/day but not 250 mg/day; sleep used a seven-point scale.",
+            "Product gifted by the manufacturer; 58 of 60 completed.",
+            "NEW Sean V1 policy permits limited ingredient-level standardized-root support without a trademark; both underlying trials used KSM-66, so generalization is analogical and uncertain.",
+            "Numerical qualification is limited to perceived stress. Sleep findings are descriptive; no diagnosed-anxiety treatment, sleep-treatment or athletic-performance credit is inferred.",
+            "Actual trial family and dose facts retained; no generic Dose benchmark or minimum marker-percentage cutoff is created."
+          ],
+          "dose": {
+            "measurement_type": "mass",
+            "unit": "mg",
+            "values": [
+              250,
+              600
+            ],
+            "dose_status": "verified",
+            "dose_basis": "nominal_assigned_arm",
+            "duration_basis": "fixed_protocol",
+            "duration_days": 56,
+            "administration_frequency": "one 125 mg or 300 mg capsule twice daily after food with milk or water",
+            "dosage_forms": [
+              "capsule"
+            ],
+            "co_therapies": [],
+            "reported_regimen": "[250, 600]mg/day root extract in assigned arms",
+            "normalization": {
+              "basis": "Whole assigned material daily mass from primary Methods; not a marker or active-equivalent conversion."
+            },
+            "source_provenance": {
+              "pmid": "32021735",
+              "location": "Methods (KSM-66 batch KSM/VG/18/1085 gifted by Ixoreal; capsules 125 or 300 mg twice daily, starch placebo; ages 18-55); Results PSS, HAM-A, cortisol and sleep",
+              "source_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6979308/"
+            }
+          },
+          "clinical_review": {
+            "reviewer": "Codex source review with independent agent review; Sean-approved V1 policy",
+            "reviewed_at": "2026-11-10",
+            "scope": "identity_dose_outcome_applicability",
+            "basis": "NEW Sean Evidence V1 policy approval (2026-11-10); bounded agent source verification and independent review. clinician_approved is the existing compatibility status, not a claim of new physician review. Limited standardized-root class inference, not chemical or product equivalence."
+          }
         }
-      ]
+      ],
+      "applicability": {
+        "scope": "ingredient",
+        "require_source_label_form": true,
+        "preparation_uncertainty_reviewed": true,
+        "required_form_groups": [
+          [
+            "root"
+          ],
+          [
+            "extract"
+          ],
+          [
+            "withanolides",
+            "withanolide"
+          ]
+        ],
+        "excluded_form_terms": [
+          "leaf",
+          "leaves",
+          "whole plant",
+          "liposomal",
+          "fermented",
+          "powder"
+        ],
+        "supported_outcomes": [
+          "stress_mood"
+        ],
+        "studied_population": "Adults with elevated perceived stress, without diagnosed psychiatric disorders; two small short-term KSM-66 root-extract trials. V1 class inference does not establish other preparations as equivalent.",
+        "source_pmids": [
+          "23439798",
+          "32021735"
+        ]
+      },
+      "published_rct_count": 2,
+      "published_meta_review_count": 0,
+      "consumer_research": {
+        "summary": "Some studied ashwagandha extracts may help with short-term stress.",
+        "applicability_note": "The retained trials studied particular extracts, including KSM-66. Ingredient research does not prove that this finished product works the same way. Preparation, population and study duration limit how the findings apply; ordinary root powder and unknown preparations do not inherit extract-specific evidence.",
+        "studied_uses": [
+          {
+            "outcome": "Stress",
+            "summary": "Limited short-term human support: two small placebo-controlled root-extract trials reported improvements in perceived stress in stressed adults."
+          },
+          {
+            "outcome": "Sleep quality",
+            "summary": "Some self-reported improvement was observed in a small root-extract trial. This does not establish treatment of insomnia or equivalent effects for every preparation."
+          }
+        ],
+        "references_structured": [
+          {
+            "type": "pubmed",
+            "authority": "NCBI PubMed",
+            "pmid": "23439798",
+            "doi": "10.4103/0253-7176.106022",
+            "title": "A prospective, randomized double-blind, placebo-controlled study of safety and efficacy of a high-concentration full-spectrum extract of ashwagandha root in reducing stress and anxiety in adults.",
+            "citation": "Indian journal of psychological medicine (2012-07-01)",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/23439798/",
+            "published_date": "2012-07-01",
+            "publication_types": [
+              "Journal Article"
+            ],
+            "mesh_terms": [],
+            "supplementary_concepts": [],
+            "evidence_grade": "journal_article",
+            "retracted": false,
+            "supports_claims": [],
+            "verification_source": "pubmed_eutils"
+          },
+          {
+            "type": "pubmed",
+            "authority": "NCBI PubMed",
+            "pmid": "32021735",
+            "doi": "10.7759/cureus.6466",
+            "title": "Adaptogenic and Anxiolytic Effects of Ashwagandha Root Extract in Healthy Adults: A Double-blind, Randomized, Placebo-controlled Clinical Study.",
+            "citation": "Cureus (2019-12-25)",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/32021735/",
+            "published_date": "2019-12-25",
+            "publication_types": [
+              "Journal Article"
+            ],
+            "mesh_terms": [],
+            "supplementary_concepts": [],
+            "evidence_grade": "journal_article",
+            "retracted": false,
+            "supports_claims": [],
+            "verification_source": "pubmed_eutils"
+          }
+        ]
+      }
     },
     {
       "id": "INGR_GREEN_TEA",
