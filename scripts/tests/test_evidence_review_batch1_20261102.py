@@ -112,19 +112,52 @@ def test_declared_preparation_outside_the_review_is_a_conclusion(cid, name):
     assert _review_state(resolution) == "evaluated_limited_or_negative"
 
 
-@pytest.mark.parametrize("cid, name", [
+UNDECLARED_PREPARATIONS = [
     ("turmeric", "Turmeric"),
     ("turmeric", "Organic Turmeric"),
     ("ginkgo", "Ginkgo Biloba Leaf Extract"),
     ("ginkgo", "Ginkgo Biloba"),
     ("collagen", "Collagen"),
     ("collagen", "Gelatin"),
-])
-def test_undeclared_preparation_stays_open(cid, name):
+]
+
+
+@pytest.mark.parametrize("cid, name", UNDECLARED_PREPARATIONS)
+def test_undeclared_preparation_finishes_on_the_attested_no_credit_conclusion(cid, name):
+    """ADR-0007 rule 3: every preparation this review covers ends at no credit, and the
+    record attests that, so an unnamed preparation finishes at zero instead of waiting."""
+    resolution = _resolve_label_row(cid, name)
+    assert resolution.reason_code == "clinical_source_label_unresolved"
+    assert resolution.points_eligible is False
+    assert not resolution.blocking_reasons
+    assert resolution.owner_facts["literature_evidence"]["preparation_uncertainty_reviewed"] is True
+    assert _review_state(resolution) == "evaluated_limited_or_negative"
+
+
+@pytest.mark.parametrize("attestation", ["absent", "true", 1, False])
+@pytest.mark.parametrize("cid, name", UNDECLARED_PREPARATIONS)
+def test_undeclared_preparation_stays_open_without_a_valid_attestation(monkeypatch, cid, name, attestation):
     """An unresolved preparation match cannot be renamed a finished non-applicability."""
+    import copy
+    import evidence_resolver
+    records = copy.deepcopy(evidence_resolver._load_literature_evidence())
+    scope = records[cid]["documented_review_scope"]
+    scope.pop("preparation_uncertainty_reviewed", None)
+    if attestation != "absent":
+        scope["preparation_uncertainty_reviewed"] = attestation
+    monkeypatch.setattr(evidence_resolver, "_load_literature_evidence", lambda: records)
     resolution = _resolve_label_row(cid, name)
     assert resolution.reason_code == "literature_applicability_unestablished"
     assert resolution.points_eligible is False
+    assert resolution.blocking_reasons
+    assert _review_state(resolution) == "not_yet_evaluated"
+
+
+def test_positive_sprout_review_is_not_attested_and_stays_open(records):
+    """A sprout beverage could earn credit, so an unnamed broccoli preparation is undecided."""
+    assert "preparation_uncertainty_reviewed" not in records["broccoli"]["documented_review_scope"]
+    resolution = _resolve_label_row("broccoli", "Broccoli")
+    assert resolution.blocking_reasons
     assert _review_state(resolution) == "not_yet_evaluated"
 
 
@@ -173,11 +206,9 @@ def test_fiber_review_stays_out_of_the_data():
 
 
 @pytest.mark.parametrize("cid, name, reason", [
-    ("l_carnitine", "L-Carnitine", "clinical_sources_ineligible"),
-    ("elderberry", "Elderberry", "clinical_sources_ineligible"),
+    # Bare L-carnitine keeps its preparation hold after the 2026-11-10 four-group batch.
+    ("l_carnitine", "L-Carnitine", "clinical_source_row_unresolved"),
     ("phytosterols", "Plant Sterols", "clinical_sources_ineligible"),
-    ("taurine", "Taurine", "clinical_source_contexts_missing"),
-    ("grape_seed_extract", "Grape Seed Extract", "clinical_sources_ineligible"),
 ])
 def test_records_with_unfinished_source_reviews_stay_held(cid, name, reason):
     from evidence_resolver import resolve_evidence_for_canonical
@@ -185,7 +216,27 @@ def test_records_with_unfinished_source_reviews_stay_held(cid, name, reason):
     resolution = resolve_evidence_for_canonical(cid, name=name)
     assert resolution.reason_code == reason
     assert resolution.points_eligible is False
+    assert resolution.blocking_reasons
     assert _review_state(resolution) == "not_yet_evaluated"
+
+
+@pytest.mark.parametrize("cid, name, reason, state, points", [
+    # Finished by the 2026-11-10 four-group batch (independently checked source reviews):
+    # elderberry and grape seed finish without credit; taurine qualifies its adult
+    # blood-pressure context only.
+    ("elderberry", "Elderberry", "reference_only_clinical_record", "evaluated_limited_or_negative", False),
+    ("grape_seed_extract", "Grape Seed Extract", "reference_only_clinical_record",
+     "evaluated_limited_or_negative", False),
+    ("taurine", "Taurine", "reviewed_human_clinical_evidence_matched", "evaluated_supported", True),
+])
+def test_four_group_batch_finished_source_reviews(cid, name, reason, state, points):
+    from evidence_resolver import resolve_evidence_for_canonical
+    logging.disable(logging.WARNING)
+    resolution = resolve_evidence_for_canonical(cid, name=name)
+    assert resolution.reason_code == reason
+    assert resolution.points_eligible is points
+    assert not resolution.blocking_reasons
+    assert _review_state(resolution) == state
 
 
 def test_source_qualified_tmg_supersedes_the_older_unfinished_literature_review():

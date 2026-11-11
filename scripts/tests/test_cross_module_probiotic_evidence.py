@@ -242,11 +242,16 @@ class TestCrossModuleSpeciesOnlyDisposition:
 
         ev = score_generic_evidence(p, apply_primary_floor=True)
         assert ev["score"] == 0.0
-        # The unresolved collagen preparation remains independent of the species-only zero.
+        # The label prints only "Collagen": the collagen review attests that every
+        # preparation it covers ends at no credit (ADR-0007 rule 3), so the row
+        # finishes at zero independently of the species-only probiotic zero.
         assert ev["metadata"]["evidence_result_state"] == "research_present_applicability_unestablished"
         from evidence_resolver import resolve_product_evidence
-        assert any(row.canonical_id == "collagen" and row.blocking_reasons
-                   for row in resolve_product_evidence(p, owner_scoped=True).resolutions)
+        [collagen] = [row for row in resolve_product_evidence(p, owner_scoped=True).resolutions
+                      if row.canonical_id == "collagen"]
+        assert collagen.reason_code == "clinical_source_label_unresolved"
+        assert not collagen.blocking_reasons and collagen.points_eligible is False
+        assert collagen.owner_facts["literature_evidence"]["preparation_uncertainty_reviewed"] is True
 
     def test_ora_break_it_down_bacillus_subtilis(self):
         """Ora Break it Down (208587) has species-only Bacillus subtilis."""

@@ -402,8 +402,9 @@ def _resolved_evidence_assessment(resolution: Any) -> tuple[str, str, str | None
             and resolution.reason_code == "clinical_source_label_unresolved"):
         # Consume the canonical resolver's completed V1 review attestation,
         # not a coincident reason emitted by an unfinished literature path.
-        reviewed = _safe_dict(resolution.owner_facts.get("backed_clinical_studies"))
-        if (reviewed.get("preparation_uncertainty_reviewed") is True
+        reviewed = [_safe_dict(resolution.owner_facts.get(owner))
+                    for owner in ("backed_clinical_studies", "literature_evidence")]
+        if (any(facts.get("preparation_uncertainty_reviewed") is True for facts in reviewed)
                 and not resolution.blocking_reasons):
             return EVIDENCE_EVALUATED_LIMITED_OR_NEGATIVE, resolution.reason_code, None
         return EVIDENCE_NOT_YET_EVALUATED, "no_reviewed_evidence_assessment", None
